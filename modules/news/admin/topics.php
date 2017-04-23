@@ -47,8 +47,18 @@ if (! empty($savecat)) {
 
     $array['alias'] = ($array['alias'] == '') ? get_mod_alias($array['title'], 'topics', $array['topicid']) : get_mod_alias($array['alias'], 'topics', $array['topicid']);
 
+    // Kiểm tra trùng
+    $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE (title=:title OR alias=:alias)" . ($array['topicid'] ? ' AND topicid!=' . $array['topicid'] : '');
+    $sth = $db->prepare($sql);
+    $sth->bindParam(':title', $array['title'], PDO::PARAM_STR);
+    $sth->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
+    $sth->execute();
+    $is_exists = $sth->fetchColumn();
+
     if (empty($array['title'])) {
         $error = $lang_module['topics_error_title'];
+    } elseif ($is_exists) {
+        $error = $lang_module['errorexists'];
     } elseif ($array['topicid'] == 0) {
         $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics")->fetchColumn();
         $weight = intval($weight) + 1;
