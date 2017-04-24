@@ -21,7 +21,7 @@ if (! defined('NV_IS_FILE_SEOTOOLS')) {
  */
 function nv_sitemapPing($module, $link)
 {
-    global $sys_info, $lang_module;
+    global $sys_info, $lang_module, $global_config;
 
     $md5 = md5($link . $module . NV_LANG_DATA);
     $cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/sitemapPing_' . $md5 . '.cache';
