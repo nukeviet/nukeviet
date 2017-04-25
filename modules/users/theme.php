@@ -1234,13 +1234,12 @@ function user_info_exit_redirect($info, $nv_redirect)
  */
 function nv_avatar($array)
 {
-    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $module_file;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config;
 
     $xtpl = new XTemplate('avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('MODULE_FILE', $module_info['module_file']);
-
 
     $xtpl->assign('NV_AVATAR_WIDTH', $global_config['avatar_width']);
     $xtpl->assign('NV_AVATAR_HEIGHT', $global_config['avatar_height']);
