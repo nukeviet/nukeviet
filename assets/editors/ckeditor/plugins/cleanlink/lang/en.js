@@ -3,7 +3,7 @@ CKEDITOR.plugins.setLang('cleanlink', 'en', {
 	about : 'About',
     guide : 'Guide',
     guide_info : '<strong>Unlink</strong> - Only removes the link in the text containing it<br /><strong>Delete link</strong> - removing all links and text in the paragraph containing the link',
-    copyright : 'Copyright &copy; <a target="_blank" href="http://volvox.vn">Volvox Company</a>.',
+    copyright : 'GNU/GPL License. Developed by <a target="_blank" href="http://volvox.vn">Volvox Company</a>.',
 	nolink : 'Content <b style="color:green">has no linkout</b>, good !',
 	info : 'List of link out',
 	type_normal : 'Normal Link',

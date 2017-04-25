@@ -7,7 +7,7 @@
 
 CKEDITOR.plugins.setLang('tbvdownload', 'en', {
 	title : 'Rehost External Images',
-    copyright : 'Copyright &copy; <a target="_blank" href="http://volvox.vn">Volvox Company</a>. All rights reserved.',
+    copyright : 'GNU/GPL License Developed by <a target="_blank" href="mailto:kid.apt@gmail.com">Mr.Thang - kid.apt@gmail.com.</a>',
 	url_path_save : 'Store Folder',
 	filename : 'New filename (no change if blank)',
 	imageurl : 'Found Image with the alt',
