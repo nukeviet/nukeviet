@@ -1234,7 +1234,7 @@ function user_info_exit_redirect($info, $nv_redirect)
  */
 function nv_avatar($array)
 {
-    global $module_info, $module_name, $lang_module, $lang_global, $global_config;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $module_file;
 
     $xtpl = new XTemplate('avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
