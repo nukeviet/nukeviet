@@ -101,7 +101,7 @@ $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';
 $install_lang['groups']['NukeViet-Programmers'] = 'NukeViet-Programmers';
 
 $install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock Company";
-$install_lang['vinades_address'] = "Room 2004 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam";
+$install_lang['vinades_address'] = "Room 1706 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam";
 $install_lang['nukeviet_description'] = 'Sharing success, connect passions';
 $install_lang['disable_site_content'] = 'For technical reasons Web site temporary not available. we are very sorry for that inconvenience!';
 
