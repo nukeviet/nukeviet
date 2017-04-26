@@ -378,12 +378,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     // Xử lý liên kết tĩnh
     $alias = $nv_Request->get_title('alias', 'post', '');
     if (empty($alias)) {
-        $alias = change_alias($rowcontent['title']);
+        $alias = get_mod_alias($rowcontent['title']);
         if ($module_config[$module_name]['alias_lower']) {
             $alias = strtolower($alias);
         }
     } else {
-        $alias = change_alias($alias);
+        $alias = get_mod_alias($alias);
     }
 
     if (empty($alias) or !preg_match("/^([a-zA-Z0-9\_\-]+)$/", $alias)) {
@@ -501,7 +501,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
             $weightopic = intval($weightopic) + 1;
-            $aliastopic = change_alias($rowcontent['topictext']);
+            $aliastopic = get_mod_alias($rowcontent['topictext'], 'topics');
             $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
             $data_insert = array();
             $data_insert['title'] = $rowcontent['topictext'];
@@ -820,8 +820,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $keywords = array_unique($keywords);
                 foreach ($keywords as $keyword) {
                     $keyword = str_replace('&', ' ', $keyword);
-                    if (!in_array($keyword, $array_keywords_old) || $copy) {
-                        $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
+                    if (!in_array($keyword, $array_keywords_old)) {
+                        $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($keyword) : str_replace(' ', '-', $keyword);
                         $alias_i = nv_strtolower($alias_i);
                         $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                         $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);

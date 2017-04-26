@@ -35,7 +35,7 @@ $lang_module['userVersion'] = 'Phiên bản đang sử dụng';
 $lang_module['onlineVersion'] = 'Phiên bản mới nhất';
 $lang_module['newVersion_detail'] = 'Số phiên bản: %s; Tên phiên bản: %s; Cập nhật: %s';
 $lang_module['newVersion_info1'] = 'NukeViet CMS mà bạn đang sử dụng cần được nâng cấp lên phiên bản mới. Hãy click <a href="%s">Vào đây</a> để tiến hành nâng cấp';
-$lang_module['newVersion_info2'] = 'NukeViet CMS mà bạn đang sử dụng cần được nâng cấp lên phiên bản mới, tuy nhiên phiển bản bạn đang sử dụng không thể trực tiếp nâng cấp lên phiên bản mới nhất mà chỉ có thể nâng cấp tối đa lên phiên bản %s. Hãy click <a href="%s">Vào đây</a> để nâng cấp';
+$lang_module['newVersion_info2'] = 'NukeViet CMS mà bạn đang sử dụng cần được nâng cấp lên phiên bản mới, tuy nhiên phiên bản bạn đang sử dụng không thể trực tiếp nâng cấp lên phiên bản mới nhất mà chỉ có thể nâng cấp tối đa lên phiên bản %s. Hãy click <a href="%s">Vào đây</a> để nâng cấp';
 $lang_module['newVersion_info3'] = 'NukeViet CMS mà bạn đang sử dụng cần được nâng cấp lên phiên bản mới, tuy nhiên phiên bản bạn đang sử dụng không được hỗ trợ nâng cấp tự động lên phiên bản này. Hãy click <a href="%s">Vào đây</a> để xem hướng dẫn chi tiết hơn';
 $lang_module['reCheck'] = 'Cập nhật lại thông tin';
 $lang_module['extName'] = 'Tên ứng dụng';

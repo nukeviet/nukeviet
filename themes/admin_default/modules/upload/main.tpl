@@ -352,6 +352,18 @@ var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DAT
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom"></em><br />{LANG.waiting}...</p>';
+
+// Resize images on clientside if we can
+var nv_resize = {
+    width : {NV_MAX_WIDTH},
+    height : {NV_MAX_HEIGHT},
+    quality : 99,
+    crop: false // crop to exact dimensions
+};
+<!-- BEGIN: no_auto_resize -->
+var nv_resize = false;
+<!-- END: no_auto_resize -->
+
 var nv_alt_require = {UPLOAD_ALT_REQUIRE};
 var nv_auto_alt = {UPLOAD_AUTO_ALT};
 //]]>

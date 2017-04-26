@@ -89,7 +89,7 @@ if (! empty($savecat)) {
 
     // Xử lý liên kết tĩnh
     $_alias = $nv_Request->get_title('alias', 'post', '');
-    $_alias = ($_alias == '') ? change_alias($title) : change_alias($_alias);
+    $_alias = ($_alias == '') ? get_mod_alias($title, 'cat', $catid) : get_mod_alias($_alias, 'cat', $catid);
 
     if (empty($_alias) or !preg_match("/^([a-zA-Z0-9\_\-]+)$/", $_alias)) {
         if (empty($alias)) {
@@ -113,7 +113,7 @@ if (! empty($savecat)) {
     $groups_view = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 	
 	$_ad_block_cat = $nv_Request->get_array( 'ad_block_cat', 'post', array() );
-	$ad_block_cat = !empty( $_ad_block_cat ) ? implode( ',', $_ad_block_cat ) : array();
+	$ad_block_cat = !empty($_ad_block_cat) ? implode(',', $_ad_block_cat) : '';
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
