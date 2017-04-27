@@ -26,7 +26,7 @@
 		<div id="wrapper">
 			<div id="logo">
 				<!-- BEGIN: image -->
-				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img src="{LOGO}" width="{WIDTH}" height="{HEIGHT}" alt="{SITE_NAME}" /></a>
+				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img src="{LOGO}" class="img-responsive" width="{WIDTH}" height="{HEIGHT}" alt="{SITE_NAME}" /></a>
 				<!-- END: image -->
 				<!-- BEGIN: swf -->
 				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="{WIDTH}" height="{HEIGHT}" >
