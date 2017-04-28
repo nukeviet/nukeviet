@@ -90,7 +90,7 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $item_array_other = array();
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
                 ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') and publtime < ' . $end_publtime)
                 ->order('publtime DESC')

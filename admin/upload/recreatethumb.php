@@ -22,6 +22,7 @@ if (!isset($check_allow_upload_dir['create_dir']) or $check_allow_upload_dir['cr
 if (empty($path)) {
     die('ERROR_' . $lang_module['notlevel']);
 }
+
 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['recreatethumb'], $path, $admin_info['userid']);
 $_array_filename = array();
 $idf = $nv_Request->get_int('idf', 'post', -1);
@@ -49,7 +50,7 @@ if ($idf < 0) {
     if ($number_file > 0) {
         $content_config = "<?php" . "\n\n";
         $content_config .= NV_FILEHEAD . "\n\n";
-        $content_config .= "if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );\n\n";
+        $content_config .= "if (!defined('NV_IS_FILE_ADMIN'))\n    die('Stop!!!');\n\n";
         $content_config .= "\$_array_filename=" . var_export($_array_filename, true) . ";\n";
         $listfile = file_put_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/recreatethumb_' . md5($path . '_' . NV_CHECK_SESSION) . '.php', trim($content_config), LOCK_EX);
     }
@@ -78,4 +79,5 @@ if ($idf < 0) {
         die('COMPLETE_' . $number_file);
     }
 }
+
 die('ERROR_' . $lang_module['folder_exists']);

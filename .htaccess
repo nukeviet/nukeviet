@@ -42,7 +42,7 @@
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-#RewriteBase /
+#RewriteBase /nukeviet/
 RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
 RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]
 RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
@@ -52,11 +52,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)(\/|\.html)$ index.php
 RewriteRule (.*)tag\/([^?]+)$ index.php
-RewriteRule ^seek\/q\=([^?]+)$ index.php?nv=seek&q=$1 [L]
-RewriteRule ^search\/q\=([^?]+)$ index.php?nv=news&op=search&q=$1 [L]
-RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=([^?]+)$ index.php?nv=$1&op=search&q=$2 [L]
-RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]
-RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
+RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /nukeviet/$1/$2/ [L,R=301]
+RewriteRule ^([a-zA-Z0-9-]+)$ /nukeviet/$1/ [L,R=301]
 </IfModule>
 
 #nukeviet_rewrite_end
