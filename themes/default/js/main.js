@@ -41,28 +41,32 @@ function fix_banner_center() {
 }
 
 function timeoutsesscancel() {
-    clearInterval(myTimersecField);
-    $.ajax({
-        url: nv_base_siteurl + "index.php?second=statimg",
-        cache: !1
-    }).done(function() {
-        $("#timeoutsess").hide();
-        myTimerPage = setTimeout(function() {
-            timeoutsessrun()
-        }, nv_check_pass_mstime)
-    })
+	$("#timeoutsess").hide("slow", function() {
+		clearInterval(myTimersecField);
+		myTimerPage = setTimeout(function() {
+			timeoutsessrun()
+		}, nv_check_pass_mstime)
+	})
 }
 
 function timeoutsessrun() {
-    clearInterval(myTimerPage);
-    document.getElementById("secField").innerHTML = 60;
-    jQuery("#timeoutsess").show();
-    var a = (new Date).getTime();
-    myTimersecField = setInterval(function() {
-        var b = (new Date).getTime(),
-            b = 60 - Math.round((b - a) / 1E3);
-        0 <= b ? document.getElementById("secField").innerHTML = b : -3 > b && (clearInterval(myTimersecField), $(window).unbind(), window.location.reload())
-    }, 1E3)
+	clearInterval(myTimerPage);
+	$("#secField").text("60");
+	jQuery("#timeoutsess").show();
+	var b = (new Date).getTime();
+	myTimersecField = setInterval(function() {
+		var a = (new Date).getTime(),
+			a = 60 - Math.round((a - b) / 1E3);
+		0 <= a ? $("#secField").text(a) : -3 > a && (clearInterval(myTimersecField), $(window).unbind(), $.ajax({
+			type: "POST",
+			cache: !1,
+			url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
+			data: "nv_ajax_login=1",
+			success: function(a) {
+				window.location.href = window.location.href
+			}
+		}))
+	}, 1E3)
 }
 
 function locationReplace(url) {
