@@ -164,6 +164,26 @@ $array_register['checkss'] = NV_CHECK_SESSION;
 $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
+//Check email address for AJAX
+if ($nv_Request->isset_request('checkMail', 'post') AND $checkss == $array_register['checkss']) {
+    $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
+    $check_email = nv_check_email_reg($email);
+    if (!empty($check_email)) {
+        die(json_encode(array('status' => 'error','mess' => $check_email)));
+    }
+    die(json_encode(array('status' => 'success','mess' => 'OK')));
+}
+
+//Check Login for AJAX
+if ($nv_Request->isset_request('checkLogin', 'post') AND $checkss == $array_register['checkss']) {
+    $login = $nv_Request->get_title('login', 'post', '', 1);
+    $check_login = nv_check_username_reg($login);
+    if (!empty($check_login)) {
+        die(json_encode(array('status' => 'error','mess' => $check_login)));
+    }
+    die(json_encode(array('status' => 'success','mess' => 'OK')));
+}
+
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
     $lang_module['register'] = $lang_module['add_users'];
     $lang_module['info'] = $lang_module['info_user'];
