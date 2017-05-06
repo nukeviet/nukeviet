@@ -1085,8 +1085,14 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             return false;
         }
 
+        $AltBody = strip_tags($message);
+        if(function_exists("nv_mailHTML")) {
+            $message = nv_mailHTML($subject,$message);
+            $AddEmbeddedImage = true;
+        }
         $message = nv_url_rewrite($message);
-        $message = nv_change_buffer($message);
+        $optimizer = new NukeViet\Core\Optimizer($message,  NV_BASE_SITEURL);
+        $message = $optimizer->process(false);
         $message = nv_unhtmlspecialchars($message);
 
         $mail->From = $global_config['site_email'];
@@ -1113,7 +1119,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->Subject = nv_unhtmlspecialchars($subject);
         $mail->WordWrap = 120;
         $mail->Body = $message;
-        $mail->AltBody = strip_tags($message);
+        $mail->AltBody = $AltBody;
         $mail->IsHTML(true);
 
         if($AddEmbeddedImage) {
