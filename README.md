@@ -1,4 +1,7 @@
 #Introduction about NukeViet
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df293881813d4fde9cab1d7fb6b0af1b)](https://www.codacy.com/app/nukeviet/nukeviet?utm_source=github.com&utm_medium=referral&utm_content=nukeviet/nukeviet&utm_campaign=badger)
+
 NukeViet is the first opensource CMS in Vietnam. The lastest version - NukeViet 4 coding ground up support lastest web technologies, include reponsive web design (use HTML 5, CSS 3, Composer, XTemplate), jQuery, Ajax...) enables you to build websites and online applications rapidly.
 
 With it own core libraries built in, NukeViet 4 is cross platforms and frameworks independent. By basic knowledge of PHP and MySQL, you can easily extend NukeViet for your purposes.
