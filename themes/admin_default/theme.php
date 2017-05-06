@@ -12,6 +12,21 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+function nv_mailHTML($title,$content,$footer='')
+{
+    global $global_config, $lang_global;
+    
+    $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
+    $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
+    $xtpl->assign('GCONFIG', $global_config);
+    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('MESSAGE_TITLE', $title);
+    $xtpl->assign('MESSAGE_CONTENT', $content);
+    $xtpl->assign('MESSAGE_FOOTER', $footer);
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
 /**
  * nv_get_submenu()
  * 
