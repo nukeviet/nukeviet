@@ -165,7 +165,7 @@ $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 //Check email address for AJAX
-if ($nv_Request->isset_request('checkMail', 'post') AND $checkss == $array_register['checkss']) {
+if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_register['checkss']) {
     $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
     $check_email = nv_check_email_reg($email);
     if (!empty($check_email)) {
@@ -175,7 +175,7 @@ if ($nv_Request->isset_request('checkMail', 'post') AND $checkss == $array_regis
 }
 
 //Check Login for AJAX
-if ($nv_Request->isset_request('checkLogin', 'post') AND $checkss == $array_register['checkss']) {
+if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_register['checkss']) {
     $login = $nv_Request->get_title('login', 'post', '', 1);
     $check_login = nv_check_username_reg($login);
     if (!empty($check_login)) {
