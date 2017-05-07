@@ -13,8 +13,8 @@ if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 }
 
-function plural($n,$w)
+function plural($number, $word)
 {
-    $w = array_map("trim",explode(",",$w));
-    return $n . " " . $w[0];
+    $wordObj = array_map("trim", explode(",", $word));
+    return $number . " " . $wordObj[0];
 }
