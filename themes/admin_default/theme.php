@@ -12,7 +12,7 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-function nv_mailHTML($title,$content,$footer='')
+function nv_mailHTML($title, $content, $footer='')
 {
     global $global_config, $lang_global;
     
