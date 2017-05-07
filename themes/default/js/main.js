@@ -55,16 +55,15 @@ function timeoutsessrun() {
 	jQuery("#timeoutsess").show();
 	var b = (new Date).getTime();
 	myTimersecField = setInterval(function() {
-		var a = (new Date).getTime(),
-			a = 60 - Math.round((a - b) / 1E3);
+		var a = (new Date).getTime();
+		a = 60 - Math.round((a - b) / 1E3);
 		0 <= a ? $("#secField").text(a) : -3 > a && (clearInterval(myTimersecField), $(window).unbind(), $.ajax({
 			type: "POST",
 			cache: !1,
 			url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
-			data: "nv_ajax_login=1",
-			success: function(a) {
-				window.location.href = window.location.href
-			}
+			data: "nv_ajax_login=1"
+		}).done(function(a) {
+			window.location.href = window.location.href
 		}))
 	}, 1E3)
 }
