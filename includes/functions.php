@@ -1091,7 +1091,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             $AddEmbeddedImage = true;
         }
         $message = nv_url_rewrite($message);
-        $optimizer = new NukeViet\Core\Optimizer($message,  NV_BASE_SITEURL);
+        $optimizer = new NukeViet\Core\Optimizer($message, NV_BASE_SITEURL);
         $message = $optimizer->process(false);
         $message = nv_unhtmlspecialchars($message);
 
