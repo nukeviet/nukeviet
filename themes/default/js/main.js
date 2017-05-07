@@ -64,7 +64,7 @@ function timeoutsessrun() {
 			data: "nv_ajax_login=1"
 		}).done(function(a) {
 			window.location.href = window.location.href
-		}))
+		})
 	}, 1E3)
 }
 
