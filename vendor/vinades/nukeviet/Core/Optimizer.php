@@ -199,7 +199,7 @@ class Optimizer
             if (! empty($this->_htmlforFooter)) {
                 $this->_content = preg_replace('/\s*<\/body>/', $this->eol . $this->_htmlforFooter . $this->eol . '</body>', $this->_content, 1);
             }
-            if($jquery) {
+            if ($jquery) {
                 $_jsAfter = '<script src="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
                 $this->_content = preg_replace('/\s*<\/body>/', $this->eol . $_jsAfter . $this->eol . '</body>', $this->_content, 1);
             }
