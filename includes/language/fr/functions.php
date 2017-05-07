@@ -13,9 +13,9 @@ if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 }
 
-function plural($n,$w)
+function plural($number, $word)
 {
-    $w = array_map("trim",explode(",",$w));
-    $w = $n > 1 ? $w[1] : $w[0];
-    return $n . " " . $w;
+    $wordObj = array_map("trim", explode(",", $word));
+    $word = $number > 1 ? $wordObj[1] : $wordObj[0];
+    return $number . " " . $word;
 }
