@@ -203,19 +203,19 @@ function nv_convertfromSec($sec = 0)
         return '';
     }
     if ($sec < $min) {
-        return $sec . ' ' . $lang_global['sec'];
+        return plural($sec, $lang_global['plural_sec']);
     }
     if ($sec < $hour) {
-        return trim(floor($sec / $min) . ' ' . ' ' . $lang_global['min'] . (($sd = $sec % $min) ? ' ' . nv_convertfromSec($sd) : ''));
+        return trim(plural(floor($sec / $min), $lang_global['plural_min']) . (($sd = $sec % $min) ? ' ' . nv_convertfromSec($sd) : ''));
     }
     if ($sec < $day) {
-        return trim(floor($sec / $hour) . ' ' . $lang_global['hour'] . (($sd = $sec % $hour) ? ' ' . nv_convertfromSec($sd) : ''));
+        return trim(plural(floor($sec / $hour), $lang_global['plural_hour']) . (($sd = $sec % $hour) ? ' ' . nv_convertfromSec($sd) : ''));
     }
     if ($sec < $year) {
-        return trim(floor($sec / $day) . ' ' . $lang_global['day'] . (($sd = $sec % $day) ? ' ' . nv_convertfromSec($sd) : ''));
+        return trim(plural(floor($sec / $day), $lang_global['plural_day']) . (($sd = $sec % $day) ? ' ' . nv_convertfromSec($sd) : ''));
     }
 
-    return trim(floor($sec / $year) . ' ' . $lang_global['year'] . (($sd = $sec % $year) ? ' ' . nv_convertfromSec($sd) : ''));
+    return trim(plural(floor($sec / $year), $lang_global['plural_year']) . (($sd = $sec % $year) ? ' ' . nv_convertfromSec($sd) : ''));
 }
 
 /**
@@ -1085,8 +1085,14 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             return false;
         }
 
+        $AltBody = strip_tags($message);
+        if (function_exists("nv_mailHTML")) {
+            $message = nv_mailHTML($subject, $message);
+            $AddEmbeddedImage = true;
+        }
         $message = nv_url_rewrite($message);
-        $message = nv_change_buffer($message);
+        $optimizer = new NukeViet\Core\Optimizer($message, NV_BASE_SITEURL);
+        $message = $optimizer->process(false);
         $message = nv_unhtmlspecialchars($message);
 
         $mail->From = $global_config['site_email'];
@@ -1113,7 +1119,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->Subject = nv_unhtmlspecialchars($subject);
         $mail->WordWrap = 120;
         $mail->Body = $message;
-        $mail->AltBody = strip_tags($message);
+        $mail->AltBody = $AltBody;
         $mail->IsHTML(true);
 
         if($AddEmbeddedImage) {

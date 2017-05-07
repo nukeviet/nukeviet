@@ -76,3 +76,5 @@ $lang_global['multi_note'] = 'Có thể khai báo hơn 1 giá trị, được ph
 $lang_global['multi_email_note'] = 'Có thể khai báo hơn 1 giá trị, được phân cách bởi dấu phẩy. Email đầu tiên được coi là email chính, được sử dụng để gửi, nhận thư.';
 
 $lang_global['view_all'] = 'Xem tất cả';
+$lang_global['email'] = 'Email';
+$lang_global['phonenumber'] = 'Điện thoại';
