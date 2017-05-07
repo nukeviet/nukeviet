@@ -203,7 +203,7 @@ function nv_convertfromSec($sec = 0)
         return '';
     }
     if ($sec < $min) {
-        return plural($sec,$lang_global['plural_sec']);
+        return plural($sec, $lang_global['plural_sec']);
     }
     if ($sec < $hour) {
         return trim(plural(floor($sec / $min), $lang_global['plural_min']) . (($sd = $sec % $min) ? ' ' . nv_convertfromSec($sd) : ''));
