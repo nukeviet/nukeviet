@@ -1086,8 +1086,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         $AltBody = strip_tags($message);
-        if(function_exists("nv_mailHTML")) {
-            $message = nv_mailHTML($subject,$message);
+        if (function_exists("nv_mailHTML")) {
+            $message = nv_mailHTML($subject, $message);
             $AddEmbeddedImage = true;
         }
         $message = nv_url_rewrite($message);
