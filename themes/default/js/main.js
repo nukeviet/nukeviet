@@ -41,7 +41,7 @@ function fix_banner_center() {
 }
 
 function timeoutsesscancel() {
-	$("#timeoutsess").hide("slow", function() {
+	$("#timeoutsess").slideUp("slow", function() {
 		clearInterval(myTimersecField);
 		myTimerPage = setTimeout(function() {
 			timeoutsessrun()
