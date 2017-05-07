@@ -15,7 +15,6 @@ if (! defined('NV_SYSTEM') or ! defined('NV_MAINFILE')) {
 function nv_mailHTML($title, $content, $footer='')
 {
     global $global_config, $lang_global;
-    
     $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
     $xtpl->assign('GCONFIG', $global_config);
