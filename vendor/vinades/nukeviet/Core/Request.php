@@ -1001,12 +1001,40 @@ class Request
                     }
                     unset($_SESSION[$name2]);
                 }
-            } else {
+            } elseif ($arr == 'post') {
                 foreach ($names as $name) {
                     if (empty($name)) {
                         continue;
                     }
-                    eval("unset(\$_" . strtoupper($arr) . "['" . $name . "']);");
+                    unset($_POST[$name]);
+                }
+            } elseif ($arr == 'get') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_GET[$name]);
+                }
+            } elseif ($arr == 'request') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_REQUEST[$name]);
+                }
+            } elseif ($arr == 'env') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_ENV[$name]);
+                }
+            } elseif ($arr == 'server') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_SERVER[$name]);
                 }
             }
         }
