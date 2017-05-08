@@ -118,7 +118,6 @@ function main_theme($contents)
             $xtpl->parse('main.delete');
         }
 
-        $a = 0;
         foreach ($values['detail'] as $key => $value) {
             $xtpl->assign('ROW', array(
                 'key' => $key,
