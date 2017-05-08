@@ -971,8 +971,25 @@ class Request
             return false;
         }
         $mode = $this->parse_mode($mode);
+        if (in_array('session', $mode) and ! $this->is_session_start) {
+            $this->sessionStart();
+        }
         foreach ($mode as $arr) {
-            if ($arr == 'cookie') {
+            if ($arr == 'get') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_GET[$name]);
+                }
+            } elseif ($arr == 'post') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_POST[$name]);
+                }
+            } elseif ($arr == 'cookie') {
                 foreach ($names as $name) {
                     if (empty($name)) {
                         continue;
@@ -988,9 +1005,6 @@ class Request
                     unset($_COOKIE[$name2]);
                 }
             } elseif ($arr == 'session') {
-                if (! $this->is_session_start) {
-                    $this->sessionStart();
-                }
                 foreach ($names as $name) {
                     if (empty($name)) {
                         continue;
@@ -1000,20 +1014,6 @@ class Request
                         continue;
                     }
                     unset($_SESSION[$name2]);
-                }
-            } elseif ($arr == 'post') {
-                foreach ($names as $name) {
-                    if (empty($name)) {
-                        continue;
-                    }
-                    unset($_POST[$name]);
-                }
-            } elseif ($arr == 'get') {
-                foreach ($names as $name) {
-                    if (empty($name)) {
-                        continue;
-                    }
-                    unset($_GET[$name]);
                 }
             } elseif ($arr == 'request') {
                 foreach ($names as $name) {
@@ -1062,30 +1062,28 @@ class Request
         }
         $names = array_flip($names);
         $mode = $this->parse_mode($mode);
+        if (in_array('session', $mode) and ! $this->is_session_start) {
+            $this->sessionStart();
+        }
         foreach ($mode as $arr) {
             $array_keys = array_keys($names);
             foreach ($array_keys as $name) {
-                if ($arr == 'cookie' and isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
+                if ($arr == 'get' and isset($_GET[$name])) {
                     if (empty($all)) {
                         return true;
                     }
                     unset($names[$name]);
-                } elseif ($arr == 'session') {
-                    if (! $this->is_session_start) {
-                        $this->sessionStart();
-                    }
-                    if (isset($_SESSION[$this->session_prefix . '_' . $name])) {
-                        if (empty($all)) {
-                            return true;
-                        }
-                        unset($names[$name]);
-                    }
                 } elseif ($arr == 'post' and isset($_POST[$name])) {
                     if (empty($all)) {
                         return true;
                     }
                     unset($names[$name]);
-                } elseif ($arr == 'get' and isset($_GET[$name])) {
+                } elseif ($arr == 'cookie' and isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'session' and isset($_SESSION[$this->session_prefix . '_' . $name])) {
                     if (empty($all)) {
                         return true;
                     }
