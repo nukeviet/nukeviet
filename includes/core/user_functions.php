@@ -51,7 +51,7 @@ function nv_create_submenu()
  */
 function nv_blocks_content($sitecontent)
 {
-    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $user_info, $client_info, $themeConfig;
+    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $client_info, $themeConfig;
 
     $_posAllowed = array();
 
@@ -266,7 +266,7 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property;
+    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property;
 
     $return = array();
     $site_description = $home ? $global_config['site_description'] : (! empty($description) ? $description : (empty($module_info['description']) ? '' : $module_info['description']));
