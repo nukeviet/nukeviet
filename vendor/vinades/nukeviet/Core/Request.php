@@ -1063,38 +1063,48 @@ class Request
         $names = array_flip($names);
         $mode = $this->parse_mode($mode);
         foreach ($mode as $arr) {
-            if ($arr == 'cookie') {
-                $array_keys = array_keys($names);
-                foreach ($array_keys as $name) {
-                    if (isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
-                        if (empty($all)) {
-                            return true;
-                        }
-                        unset($names[$name]);
+            $array_keys = array_keys($names);
+            foreach ($array_keys as $name) {
+                if ($arr == 'cookie' and isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
+                    if (empty($all)) {
+                        return true;
                     }
-                }
-            } elseif ($arr == 'session') {
-                if (! $this->is_session_start) {
-                    $this->sessionStart();
-                }
-                $array_keys = array_keys($names);
-                foreach ($array_keys as $name) {
+                    unset($names[$name]);
+                } elseif ($arr == 'session') {
+                    if (! $this->is_session_start) {
+                        $this->sessionStart();
+                    }
                     if (isset($_SESSION[$this->session_prefix . '_' . $name])) {
                         if (empty($all)) {
                             return true;
                         }
                         unset($names[$name]);
                     }
-                }
-            } else {
-                $array_keys = array_keys($names);
-                foreach ($array_keys as $name) {
-                    $eval = "if (isset(\$_" . strtoupper($arr) . "['" . $name . "']))\n";
-                    $eval .= "{\n";
-                    $eval .= "if(empty(\$all)) return true;\n";
-                    $eval .= "\tunset(\$names['" . $name . "']);\n";
-                    $eval .= "}";
-                    eval($eval);
+                } elseif ($arr == 'post' and isset($_POST[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'get' and isset($_GET[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'request' and isset($_REQUEST[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'env' and isset($_ENV[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'server' and isset($_SERVER[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
                 }
             }
         }
