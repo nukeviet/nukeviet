@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -34,9 +34,9 @@ function nv_admin_write_lang($dirlang, $idfile)
 {
     global $db, $language_array, $global_config, $include_lang, $lang_module, $array_lang_exit, $array_lang_no_check;
 
-    list($module, $admin_file, $langtype, $author_lang) = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . intval($idfile))->fetch(3);
+    list ($module, $admin_file, $langtype, $author_lang) = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . intval($idfile))->fetch(3);
 
-    if (! empty($dirlang) and ! empty($module)) {
+    if (!empty($dirlang) and !empty($module)) {
         if (empty($author_lang)) {
             $array_translator = array();
             $array_translator['author'] = '';
@@ -45,7 +45,7 @@ function nv_admin_write_lang($dirlang, $idfile)
             $array_translator['info'] = '';
             $array_translator['langtype'] = $langtype;
         } else {
-            eval('$array_translator = ' . $author_lang . ';');
+            $array_translator = unserialize($author_lang);
         }
 
         $include_lang = '';
@@ -114,7 +114,7 @@ function nv_admin_write_lang($dirlang, $idfile)
 
             if (in_array('vi', $array_lang_exit) and in_array('en', $array_lang_exit) and $dirlang != 'vi' and $dirlang != 'en') {
                 $result = $db->query('SELECT lang_key, lang_vi, lang_en, lang_' . $dirlang . ', update_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
-                while (list($lang_key, $lang_value_vi, $lang_value_en, $lang_value, $update_time) = $result->fetch(3)) {
+                while (list ($lang_key, $lang_value_vi, $lang_value_en, $lang_value, $update_time) = $result->fetch(3)) {
                     if ($lang_value != '') {
                         $numrows++;
                         $lang_value = nv_unhtmlspecialchars($lang_value);
@@ -133,14 +133,14 @@ function nv_admin_write_lang($dirlang, $idfile)
                     }
                 }
 
-                if (! empty($content_lang_no_check)) {
+                if (!empty($content_lang_no_check)) {
                     $content_lang .= "\n\n/*---------------------------------------- Language untested ----------------------------------------------*/\n";
                     $content_lang .= $content_lang_no_check;
                     $array_lang_no_check[] = $include_lang;
                 }
             } else {
                 $result = $db->query('SELECT lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
-                while (list($lang_key, $lang_value) = $result->fetch(3)) {
+                while (list ($lang_key, $lang_value) = $result->fetch(3)) {
                     if ($lang_value != '') {
                         $numrows++;
                         $lang_value = nv_unhtmlspecialchars($lang_value);
@@ -210,10 +210,10 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
         $array_filename = array();
 
         $result = $db->query('SELECT idfile, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
-        while (list($idfile, $author_lang) = $result->fetch(3)) {
+        while (list ($idfile, $author_lang) = $result->fetch(3)) {
             $content = nv_admin_write_lang($dirlang, $idfile);
 
-            if (! empty($content)) {
+            if (!empty($content)) {
                 break;
             } else {
                 $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
