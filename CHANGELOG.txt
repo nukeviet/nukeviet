@@ -1,6 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.1.03 (not yet released)
+- Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard 
+
 NUKEVIET 4.1.02 Final Releases Apr 23, 2017
 - Jquery 3.2.1
 - Module News: Add feature copy article
