@@ -149,8 +149,6 @@ function nv_check_allow_upload_dir($dir)
  */
 function nv_check_path_upload($path)
 {
-    global $global_config;
-
     $path = htmlspecialchars(trim($path), ENT_QUOTES);
     $path = rtrim($path, '/');
     if (empty($path)) {
@@ -379,7 +377,7 @@ function nv_getFileInfo($pathimg, $file)
  */
 function nv_filesListRefresh($pathimg)
 {
-    global $array_hidefolders, $admin_info, $module_data, $db, $array_dirname;
+    global $array_hidefolders, $admin_info, $db, $array_dirname;
 
     $results = array();
     $did = $array_dirname[$pathimg];

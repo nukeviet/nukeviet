@@ -115,7 +115,6 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                 break;
         }
 
-        $add_field = true;
         $array_lang_key = array();
         $array_lang_value = array();
 

@@ -15,7 +15,6 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_block_headline')) {
     function nv_block_config_news_headline($module, $data_block, $lang_block)
     {
-        global $lang_module;
         $html = '<tr>';
         $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
         $html .= '<td>';
@@ -46,7 +45,7 @@ if (! nv_function_exists('nv_block_headline')) {
 
     function nv_block_headline($block_config)
     {
-        global $nv_Cache, $module_name, $module_data, $db_slave, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
+        global $nv_Cache, $module_name, $module_data, $db_slave, $my_head, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
 
         $array_bid_content = array();
 

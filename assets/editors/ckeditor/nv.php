@@ -21,7 +21,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = '', $customtoolbar = '', $path = '', $currentpath = '' )
 {
-	global $global_config, $module_upload, $module_data, $admin_info, $client_info;
+	global $global_config, $module_upload, $module_data, $admin_info;
 
 	$return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
 	if( ! defined( 'CKEDITOR' ) )

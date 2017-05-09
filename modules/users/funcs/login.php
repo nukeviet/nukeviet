@@ -54,7 +54,7 @@ function signin_result($array)
  */
 function opidr($openid_info)
 {
-    global $lang_module, $nv_Request, $nv_redirect;
+    global $nv_Request, $nv_redirect;
 
     $nv_Request->unset_request('openid_attribs', 'session');
 
