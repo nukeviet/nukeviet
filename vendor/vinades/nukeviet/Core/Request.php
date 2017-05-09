@@ -983,7 +983,7 @@ class Request
                     }
                     $expire = NV_CURRENTTIME - 3600;
 
-                    $result = setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
+                    setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
 
                     unset($_COOKIE[$name2]);
                 }
