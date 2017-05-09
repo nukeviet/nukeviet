@@ -132,7 +132,7 @@ class Error
         }
 
         if ($ip2long === -1 and $ip2long === false) {
-            die(Error::INCORRECT_IP);
+            exit(Error::INCORRECT_IP);
         }
         $this->ip = $ip;
         $request = $this->get_request();
@@ -360,23 +360,23 @@ class Error
         }
 
         $size = @getimagesize(NV_ROOTDIR . '/' . $this->site_logo);
-        echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
-        echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-        echo "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";
-        echo "<head>\n";
-        echo "	<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n";
-        echo "	<meta http-equiv=\"expires\" content=\"0\" />\n";
-        echo "<title>" . $this->errortype[$this->errno] . "</title>\n";
-        echo "</head>\n\n";
-        echo "<body>\n";
-        echo "	<div style=\"width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;\"><span style=\"font-weight: bold;\">" . $this->errortype[$this->errno] . "</span><br />\n";
-        echo "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
-        echo "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
-        echo "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
-        echo "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
-        echo "</body>\n";
-        echo "</html>";
-        die();
+        $_info = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
+        $_info .= "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+        $_info .= "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";
+        $_info .= "<head>\n";
+        $_info .= "	<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n";
+        $_info .= "	<meta http-equiv=\"expires\" content=\"0\" />\n";
+        $_info .= "<title>" . $this->errortype[$this->errno] . "</title>\n";
+        $_info .= "</head>\n\n";
+        $_info .= "<body>\n";
+        $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;\"><span style=\"font-weight: bold;\">" . $this->errortype[$this->errno] . "</span><br />\n";
+        $_info .= "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
+        $_info .= "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
+        $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
+        $_info .= "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
+        $_info .= "</body>\n";
+        $_info .= "</html>";
+        exit($_info);
     }
 
     /**

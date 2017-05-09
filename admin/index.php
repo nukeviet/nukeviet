@@ -19,14 +19,14 @@ require NV_ROOTDIR .'/includes/mainfile.php';
 if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
     header("HTTP/1.1 301 Moved Permanently");
     header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-    exit();
+    exit(0);
 }
 
 // Admin dang nhap
 if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
     require NV_ROOTDIR . '/includes/core/admin_access.php';
     require NV_ROOTDIR . '/includes/core/admin_login.php';
-    exit();
+    exit(0);
 }
 
 // Khong cho xac dinh tu do cac variables

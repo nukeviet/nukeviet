@@ -166,7 +166,6 @@ class Array2XML
         @Header('Expires: 0');
         @Header('Pragma: no-cache');
         Header('Content-Encoding: none');
-        echo($content);
-        die();
+        exit($content);
     }
 }

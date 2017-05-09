@@ -705,8 +705,8 @@ class NvUpdate
         }
 
         $xtpl->parse('version_info');
-        echo($xtpl->text('version_info'));
-        exit();
+        $_info = $xtpl->text('version_info');
+        exit($_info);
     }
 
     /**
@@ -740,8 +740,8 @@ class NvUpdate
         }
 
         $xtpl->parse('module_info');
-        echo($xtpl->text('module_info'));
-        exit();
+        $_info = $xtpl->text('module_info');
+        exit($_info);
     }
 
     /**
@@ -773,8 +773,8 @@ class NvUpdate
         $xtpl->assign('LASTEST_VERSION', $lastest_version);
 
         $xtpl->parse('commodule');
-        echo($xtpl->text('commodule'));
-        exit();
+        $_info = $xtpl->text('commodule');
+        exit($_info);
     }
 
     /**
@@ -842,8 +842,8 @@ class NvUpdate
      */
     public function trigger_error($message)
     {
-        echo $this->call_error($message);
-        die();
+        $_info = $this->call_error($message);
+        die($_info);
     }
 }
 
