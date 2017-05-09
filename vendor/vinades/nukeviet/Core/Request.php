@@ -343,7 +343,7 @@ class Request
         }
         if ($this->str_referer_blocker and ! empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
             header('Location: ' . $this->site_url);
-            exit();
+            exit(0);
         }
 
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');

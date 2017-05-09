@@ -172,7 +172,6 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     include NV_ROOTDIR . '/includes/header.php';
     $xtpl->out('main');
     include NV_ROOTDIR . '/includes/footer.php';
-    die();
 }
 
 /**
@@ -187,8 +186,7 @@ function nv_jsonOutput($array_data)
     header('Content-type: application/json');
     
     ob_start('ob_gzhandler');
-    echo json_encode($array_data);
-    exit();
+    exit(json_encode($array_data));
 }
 
 /**

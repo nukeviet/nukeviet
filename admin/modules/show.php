@@ -24,16 +24,15 @@ function nv_show_funcs()
     $mod = $nv_Request->get_title('mod', 'get', '');
 
     if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
-        die();
+        exit(0);
     }
 
     $sth = $db->prepare('SELECT module_file, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :mod');
     $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
     $sth->execute();
     $row = $sth->fetch();
-
     if (empty($row)) {
-        die();
+        exit(0);
     }
 
     $custom_title = $row['custom_title'];
@@ -72,7 +71,7 @@ function nv_show_funcs()
             'modfuncs' => 'main',
             'is_sysmod' => 0,
             'virtual' => 0,
-            'version' => '4.0.00',
+            'version' => '4.1.00',
             'date' => date('D, j M Y H:i:s', $timestamp) . ' GMT',
             'author' => '',
             'note' => ''
