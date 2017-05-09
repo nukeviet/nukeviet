@@ -9,12 +9,12 @@
  */
 if (! defined('NV_IS_FILE_ADMIN'))
     die('Stop!!!');
-    
+
 // change status
 if ($nv_Request->isset_request('change_status', 'post, get')) {
     $id = $nv_Request->get_int('id', 'post, get', 0);
     $content = 'NO_' . $id;
-    
+
     $query = 'SELECT act FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id=' . $id;
     $row = $db->query($query)->fetch();
     if (isset($row['act'])) {
@@ -66,7 +66,7 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
         $sql = 'SELECT weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id =' . $db->quote($id) . ' AND departmentid=' . $departmentid;
         $result = $db->query($sql);
         list ($weight) = $result->fetch(3);
-        
+
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter  WHERE id = ' . $db->quote($id));
         if ($weight > 0) {
             $sql = 'SELECT id, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE weight >' . $weight . ' AND departmentid=' . $departmentid;
@@ -77,8 +77,7 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
             }
         }
         $nv_Cache->delMod($module_name);
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 }
 
@@ -90,31 +89,31 @@ $array_department = $nv_Cache->db($sql, 'id', $module_name);
 
 if (! empty($array_department)) {
     $departmentid = $nv_Request->get_int('departmentid', 'get', 0);
-    
+
     if(empty($departmentid)){
         $departmentid = array_keys($array_department)[0];
     }
-    
+
     $per_page = 20;
     $page = $nv_Request->get_int('page', 'post,get', 1);
     $db->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_supporter')
         ->where('departmentid=' . $departmentid);
-    
+
     $sth = $db->prepare($db->sql());
-    
+
     $sth->execute();
     $num_items = $sth->fetchColumn();
-    
+
     $db->select('*')
         ->order('weight ASC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
     $sth = $db->prepare($db->sql());
-    
+
     $sth->execute();
-    
+
     while ($view = $sth->fetch()) {
         $array_data[] = $view;
     }

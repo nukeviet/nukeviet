@@ -244,5 +244,4 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-die();
+nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

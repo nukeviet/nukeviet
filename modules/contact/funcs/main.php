@@ -245,8 +245,7 @@ $base_url_rewrite = nv_url_rewrite($base_url, true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    Header('Location: ' . $base_url_rewrite);
-    die();
+    nv_redirect_location($base_url_rewrite);
 } else {
     $canonicalUrl = $base_url_rewrite;
 }

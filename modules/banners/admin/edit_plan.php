@@ -17,8 +17,7 @@ $query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . $id;
 $row = $db->query($query)->fetch();
 
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $forms = nv_scandir(NV_ROOTDIR . '/modules/' . $module_name . '/forms', '/^form\_([a-zA-Z0-9\_\-]+)\.php$/');
@@ -69,8 +68,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_plan', 'planid ' . $id, $admin_info['userid']);
         nv_CreateXML_bannerPlan();
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id);
     }
 } else {
     $blang = $row['blang'];

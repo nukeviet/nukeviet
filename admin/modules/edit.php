@@ -17,8 +17,7 @@ $contents = array();
 $mod = $nv_Request->get_title('mod', 'get');
 
 if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $sth = $db->prepare('SELECT * FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
@@ -26,8 +25,7 @@ $sth->bindParam(':title', $mod, PDO::PARAM_STR);
 $sth->execute();
 $row = $sth->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $theme_site_array = $theme_mobile_array = array();
@@ -146,7 +144,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     }
                 }
             }
-            
+
             // Check module_theme
             $_theme_check = (!empty($theme)) ? $theme : $global_config['site_theme'];
             if (!empty($_theme_check) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_check . '/theme.php')) {
@@ -156,11 +154,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             } else {
                 $module_theme = $row['module_file'];
             }
-            
 
-            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET 
-                    module_theme=:module_theme, custom_title=:custom_title, site_title=:site_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, 
-                    keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' 
+
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET
+                    module_theme=:module_theme, custom_title=:custom_title, site_title=:site_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description,
+                    keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . '
                     WHERE title= :title');
             $sth->bindParam(':module_theme', $module_theme, PDO::PARAM_STR);
             $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
@@ -228,8 +226,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $nv_Cache->delAll();
             nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['edit'], $mod), '', $admin_info['userid']);
 
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-            exit();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         } else {
             $data['error'] = sprintf($lang_module['edit_error_update_theme'], implode(', ', $data['error']));
         }
