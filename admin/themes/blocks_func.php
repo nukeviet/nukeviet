@@ -44,8 +44,7 @@ if ($func_id > 0) {
 }
 
 if (empty($func_id) or empty($selectedmodule)) {
-    Header('Location: index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks');
-    exit();
+    v_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks');
 }
 
 $page_title = $lang_module['blocks_by_funcs'] . ': ' . $selectthemes;

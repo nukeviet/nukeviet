@@ -89,8 +89,7 @@ $post['mid'] = $nv_Request->get_int('mid', 'post,get', 0);
 $post['id'] = $nv_Request->get_int('id', 'get', 0);
 $post['parentid'] = $nv_Request->get_int('parentid', 'get', 0);
 if (empty($post['mid'])) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 // System groups user
@@ -190,7 +189,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     } else {
         $post['icon'] = '';
     }
-    
+
     $post['image'] = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($post['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
@@ -277,8 +276,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                 }
 
                 $nv_Cache->delMod($module_name);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
-                exit();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
             } else {
                 $error = $sql;
             }
@@ -354,8 +352,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                 }
 
                 $nv_Cache->delMod($module_name);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
-                exit();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
             } else {
                 $error = $lang_module['errorsave'];
             }

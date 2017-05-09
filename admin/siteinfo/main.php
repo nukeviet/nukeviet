@@ -96,8 +96,7 @@ if (! empty($info) or ! empty($pending_info)) {
     $arr_mod = array_keys($site_mods);
     $module_name = $arr_mod[0];
 
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 // Thong tin phien ban NukeViet

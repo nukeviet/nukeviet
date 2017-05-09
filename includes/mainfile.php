@@ -50,7 +50,7 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
         if (!empty($base_siteurl)) {
             $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
         }
-        Header('Location: ' . $base_siteurl . '/install/index.php');
+        nv_redirect_location($base_siteurl . '/install/index.php');
     }
     die();
 }
@@ -346,15 +346,13 @@ if (defined('NV_ADMIN')) {
         if ($global_config['lang_multi']) {
             $nv_Request->set_Cookie('data_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
         }
-        Header('Location: ' . NV_BASE_ADMINURL);
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL);
     }
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php')) {
         if ($global_config['lang_multi']) {
             $nv_Request->set_Cookie('int_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
         }
-        Header('Location: ' . NV_BASE_ADMINURL);
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL);
     }
 }
 
@@ -396,8 +394,7 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
         $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
         nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
-        Header('Location: ' . NV_BASE_SITEURL);
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL);
     }
 }
 unset($nv_check_update);

@@ -17,8 +17,7 @@ $userid = $nv_Request->get_int('userid', 'get', 0);
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $page_title = $lang_module['user_2step_of'] . ' ' . $row['username'];
@@ -40,8 +39,7 @@ if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] 
 }
 
 if (!$allow) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
@@ -50,7 +48,7 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     $xtpl->assign('SAFEMODE_DEACT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow');
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -72,23 +70,23 @@ if (empty($row['active2step'])) {
     if (!empty($global_config['two_step_verification'])) {
         $xtpl->parse('main.turnoff_info');
     }
-    
+
     // Tắt xác thực hai bước
     if ($nv_Request->isset_request('turnoff2step', 'post')) {
         $db->query("DELETE FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid']);
         $db->query("UPDATE " . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
-        
+
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_turnoff_user2step', 'userid ' . $row['userid'], $admin_info['userid']);
         $nv_Cache->delMod($module_name);
-        
+
         header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $row['userid']);
         die();
     }
-    
+
     // Tạo lại mã dự phòng
     if ($nv_Request->isset_request('resetbackupcodes', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
-        
+
         $new_code = array();
         while (sizeof($new_code) < 10) {
             $code = nv_strtolower(nv_genpass(8, 0));
@@ -96,26 +94,26 @@ if (empty($row['active2step'])) {
                 $new_code[] = $code;
             }
         }
-        
+
         foreach ($new_code as $code) {
             $db->query('INSERT INTO ' . NV_MOD_TABLE . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (
             ' . $row['userid'] . ', ' . $db->quote($code) . ', 0, 0, ' . NV_CURRENTTIME . ')');
         }
-        
+
         if ($nv_Request->get_int('sendmail', 'post', 0) == 1) {
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $subject = $lang_module['user_2step_newcodes'];
             $message = sprintf($lang_module['user_2step_bodymail'], $full_name, $global_config['site_name'], implode('<br />', $new_code));
             @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
         }
-        
+
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_reset_user2step_codes', 'userid ' . $row['userid'], $admin_info['userid']);
         $nv_Cache->delMod($module_name);
-        
+
         header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $row['userid']);
         die();
-    } 
-    
+    }
+
     $sql = "SELECT * FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid'];
     $result = $db->query($sql);
     while ($code = $result->fetch()) {
@@ -125,7 +123,7 @@ if (empty($row['active2step'])) {
         $xtpl->assign('CODE', $code);
         $xtpl->parse('main.code');
     }
-    
+
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 }

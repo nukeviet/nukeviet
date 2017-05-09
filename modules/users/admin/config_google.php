@@ -28,8 +28,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['config'], $page_title, $admin_info['userid']);
     nv_save_file_config_global();
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass());
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass());
 } else {
     $array_config['oauth_client_id'] = $global_config['google_client_id'];
     $array_config['oauth_client_secret'] = $global_config['google_client_secret'];
@@ -41,6 +40,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
-    
+
     $array_url_instruction['config'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:users:oauth#c%E1%BA%A5u_hinh_v%E1%BB%9Bi_oauth_google';
 }

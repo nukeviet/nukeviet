@@ -43,8 +43,7 @@ if (substr($alias, 0, 5) == 'page-') {
     $sth->execute();
     $rowdetail = $sth->fetch();
     if (empty($rowdetail)) {
-        Header('Location: ' . nv_url_rewrite($base_url, true));
-        die();
+        nv_redirect_location($base_url);
     }
     $id = $rowdetail['id'];
 }

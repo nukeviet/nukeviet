@@ -59,8 +59,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     if (empty($op) or $op == 'functions') {
         $op = 'main';
     } elseif (! preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     $site_mods = nv_site_mods();
@@ -68,8 +67,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
         $setup = $db->query($sql)->fetchColumn();
         if (empty($setup)) {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');
-            exit();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');
         }
     }
     $menu_top = array();

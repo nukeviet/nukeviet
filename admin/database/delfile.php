@@ -29,8 +29,7 @@ if (nv_is_file($path_filename, $log_dir) === true and $checkss == md5($filename 
 
     nv_deletefile(NV_DOCUMENT_ROOT . $path_filename);
 
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=file&rand=' . nv_genpass());
-    exit();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=file&rand=' . nv_genpass());
 } else {
     $contents = 'File not exist !';
 
