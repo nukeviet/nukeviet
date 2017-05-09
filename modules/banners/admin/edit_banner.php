@@ -17,8 +17,7 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $file_name = $row['file_name'];
@@ -66,8 +65,7 @@ while ($pl_row = $result->fetch()) {
 }
 
 if (empty($plans)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan');
 }
 
 $error = '';
@@ -179,7 +177,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $clid . ',
 				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
 				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
-				 click_url= :click_url, target= :target, bannerhtml=:bannerhtml, 
+				 click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
 				 publ_time=' . $publtime . ', exp_time=' . $exptime . ' WHERE id=' . $id);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
@@ -200,8 +198,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_banner', 'bannerid ' . $id, $admin_info['userid']);
             nv_CreateXML_bannerPlan();
 
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
         }
     }
 } else {

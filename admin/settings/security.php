@@ -127,7 +127,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     $array_config_global['recaptcha_sitekey'] = $nv_Request->get_title('recaptcha_sitekey', 'post', '');
     $array_config_global['recaptcha_secretkey'] = $nv_Request->get_title('recaptcha_secretkey', 'post', '');
     $array_config_global['recaptcha_type'] = $nv_Request->get_title('recaptcha_type', 'post', '');
-    
+
     if ($array_config_global['login_number_tracking'] < 1) {
         $array_config_global['login_number_tracking'] = 5;
     }
@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     if ($array_config_global['two_step_verification'] < 0 or $array_config_global['two_step_verification'] > 3) {
         $array_config_global['two_step_verification'] = 0;
     }
-    
+
     if ($array_config_global['captcha_type'] == 2 and (empty($array_config_global['recaptcha_sitekey']) or empty($array_config_global['recaptcha_secretkey']))) {
         $array_config_global['captcha_type'] = 0;
     }
@@ -148,7 +148,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     if (!empty($array_config_global['recaptcha_secretkey'])) {
         $array_config_global['recaptcha_secretkey'] = $crypt->encrypt($array_config_global['recaptcha_secretkey']);
     }
-    
+
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -183,8 +183,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
 
     nv_save_file_config_global();
     if (empty($errormess)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 }
 
@@ -265,8 +264,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
             $xtpl->parse('main.manual_save');
         } else {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
     } else {
         $xtpl->assign('ERROR', implode('<br/>', $error));

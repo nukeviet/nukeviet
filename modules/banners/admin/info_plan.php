@@ -18,8 +18,7 @@ $sql = 'SELECT title FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $page_title = $lang_module['info_plan'];

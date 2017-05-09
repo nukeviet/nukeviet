@@ -12,8 +12,7 @@ if (!defined('NV_IS_MOD_USER')) {
 }
 
 if (isset($array_op[0])) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $page_title = $module_info['site_title'];
@@ -29,8 +28,7 @@ if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
         if (!empty($nv_redirect)) {
             $url .= '&nv_redirect=' . $nv_redirect;
         }
-        Header('Location: ' . nv_url_rewrite($url, true));
-        exit();
+        nv_redirect_location($url);
     } else {
         // So nhom dang quan ly
         $user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();

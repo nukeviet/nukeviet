@@ -117,8 +117,7 @@ if ($submit) {
     $nv_Cache->delAll();
 
     if (empty($errormess)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . ($show_ssl_modules ? '&show_ssl_modules=1' : '') . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . ($show_ssl_modules ? '&show_ssl_modules=1' : '') . '&rand=' . nv_genpass());
     } else {
         $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
         $result = $db->query($sql);

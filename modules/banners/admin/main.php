@@ -40,11 +40,10 @@ if ($exp > 0) {
 }
 
 if (empty($contents['containerid']) or empty($contents['aj'])) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banners_list');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banners_list');
 }
 
-$contents = call_user_func("nv_main_theme", $contents);
+$contents = nv_main_theme($contents);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

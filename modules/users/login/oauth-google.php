@@ -37,7 +37,7 @@ if (!empty($_GET['code'])) {
 
     // Send a request with it
     $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-    
+
     if (isset($result['email'])) {
         $attribs = array(
             'identity' => $result['link'],
@@ -68,10 +68,8 @@ if (!empty($_GET['code'])) {
         $nv_redirect = '&nv_redirect=' . $nv_redirect;
     }
     $nv_Request->unset_request('nv_redirect_' . $module_data, 'session');
-    Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
 } else {
     $url = $googleService->getAuthorizationUri();
-    Header('Location: ' . $url);
-    exit();
+    nv_redirect_location($url);
 }
