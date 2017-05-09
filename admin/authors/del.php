@@ -35,7 +35,7 @@ if ($row['lev'] == 1 or (! defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
 
 function nv_checkAdmpass($adminpass)
 {
-    global $db, $admin_info, $crypt, $db_config;
+    global $db, $admin_info, $crypt;
 
     $sql = 'SELECT password FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_info['userid'];
     $pass = $db->query($sql)->fetchColumn();

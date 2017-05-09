@@ -262,7 +262,6 @@ function inet_to_bits($inet)
  */
 function nv_getCountry_from_file($ip)
 {
-    global $countries;
     if (preg_match('/^([0-9]{1,3}+)\.([0-9]{1,3}+)\.([0-9]{1,3}+)\.([0-9]{1,3}+)$/', $ip, $numbers)) {
         $code = ($numbers[1] * 16777216) + ($numbers[2] * 65536) + ($numbers[3] * 256) + ($numbers[4]);
         

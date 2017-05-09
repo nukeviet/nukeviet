@@ -270,8 +270,6 @@ function change_alias($alias)
  */
 function nv_clean60($string, $num = 60, $specialchars = false)
 {
-    global $global_config;
-
     $string = nv_unhtmlspecialchars($string);
 
     $len = nv_strlen($string);

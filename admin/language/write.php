@@ -82,7 +82,6 @@ function nv_admin_write_lang($dirlang, $idfile)
                 $createdate = time();
             }
 
-            $content_lang_no_tran = '';
             $content_lang = "<?php\n\n";
             $content_lang .= "/**\n";
             $content_lang .= "* @Project NUKEVIET 4.x\n";
@@ -112,46 +111,19 @@ function nv_admin_write_lang($dirlang, $idfile)
             $content_lang_no_check = '';
             $numrows = 0;
 
-            if (in_array('vi', $array_lang_exit) and in_array('en', $array_lang_exit) and $dirlang != 'vi' and $dirlang != 'en') {
-                $result = $db->query('SELECT lang_key, lang_vi, lang_en, lang_' . $dirlang . ', update_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
-                while (list ($lang_key, $lang_value_vi, $lang_value_en, $lang_value, $update_time) = $result->fetch(3)) {
-                    if ($lang_value != '') {
-                        $numrows++;
-                        $lang_value = nv_unhtmlspecialchars($lang_value);
-                        $lang_value = str_replace("\'", "'", $lang_value);
-                        $lang_value = str_replace("'", "\'", $lang_value);
-                        $lang_value = nv_nl2br($lang_value);
-                        $lang_value = str_replace('<br />', '<br />', $lang_value);
-
-                        $content_temp = "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
-
-                        if ($update_time > 0) {
-                            $content_lang .= $content_temp;
-                        } else {
-                            $content_lang_no_check .= $content_temp;
-                        }
-                    }
-                }
-
-                if (!empty($content_lang_no_check)) {
-                    $content_lang .= "\n\n/*---------------------------------------- Language untested ----------------------------------------------*/\n";
-                    $content_lang .= $content_lang_no_check;
-                    $array_lang_no_check[] = $include_lang;
-                }
-            } else {
-                $result = $db->query('SELECT lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
-                while (list ($lang_key, $lang_value) = $result->fetch(3)) {
-                    if ($lang_value != '') {
-                        $numrows++;
-                        $lang_value = nv_unhtmlspecialchars($lang_value);
-                        $lang_value = str_replace("\'", "'", $lang_value);
-                        $lang_value = str_replace("'", "\'", $lang_value);
-                        $lang_value = nv_nl2br($lang_value);
-                        $lang_value = str_replace('<br />', '<br />', $lang_value);
-                        $content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
-                    }
+            $result = $db->query('SELECT lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
+            while (list ($lang_key, $lang_value) = $result->fetch(3)) {
+                if ($lang_value != '') {
+                    $numrows++;
+                    $lang_value = nv_unhtmlspecialchars($lang_value);
+                    $lang_value = str_replace("\'", "'", $lang_value);
+                    $lang_value = str_replace("'", "\'", $lang_value);
+                    $lang_value = nv_nl2br($lang_value);
+                    $lang_value = str_replace('<br />', '<br />', $lang_value);
+                    $content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
                 }
             }
+            
             if ($numrows) {
                 $number_bytes = file_put_contents($include_lang, trim($content_lang), LOCK_EX);
                 if (empty($number_bytes)) {

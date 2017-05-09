@@ -46,20 +46,12 @@ if ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] 
  */
 function nv_extensions_is_installed($type, $name, $version)
 {
-    global $db;
-
     // Module
     if ($type == 1) {
         if (! is_dir(NV_ROOTDIR . '/modules/' . $name)) {
             return 0;
         }
-
         return 1;
-
-        //$stmt = $db->prepare( 'SELECT version FROM ' . NV_PREFIXLANG . '_setup_extensions WHERE basename= :basename AND basename=title AND type=\'module\'' );
-        //$stmt->bindParam( ':basename', $name, PDO::PARAM_STR );
-        //$stmt->execute();
-        //$row = $stmt->fetch();
     }
     // Theme
     elseif ($type == 2) {
