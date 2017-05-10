@@ -74,7 +74,7 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
+        global $client_info, $global_config, $module_name, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
 
         $content = '';
 
