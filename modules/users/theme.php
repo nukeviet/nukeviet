@@ -845,7 +845,7 @@ function openid_callback($openid_info)
  */
 function user_welcome()
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $module_config, $op;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $op;
 
     $xtpl = new XTemplate('userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
