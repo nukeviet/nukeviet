@@ -42,7 +42,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                 // Không hiển thị các bộ phận theo cấu hình trong quản trị
                 continue;
             }
-            
+
             $xtpl->assign('DEP', $dep);
 
             if (! empty($dep['note'])) {
@@ -165,7 +165,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
 /**
  * contact_form_theme()
- * 
+ *
  * @param mixed $array_content
  * @param mixed $catsName
  * @param mixed $base_url
@@ -182,7 +182,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
-    
+
     if ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
@@ -217,7 +217,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 
 /**
  * contact_sendcontact()
- * 
+ *
  * @param mixed $row_id
  * @param mixed $fcat
  * @param mixed $ftitle
@@ -231,7 +231,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
  */
 function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
 {
-    global $global_config, $module_name, $lang_global, $lang_module, $module_info, $array_department, $client_info;
+    global $global_config, $lang_global, $lang_module, $module_info, $array_department, $client_info;
 
     $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
