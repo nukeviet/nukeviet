@@ -560,7 +560,7 @@ function nv_css_setproperties($tag, $property_array)
  */
 function nv_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5)
 {
-    global $global_config, $module_file, $module_info, $lang_module, $page_title;
+    global $global_config, $module_info, $lang_module, $page_title;
 
     if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/alert.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
