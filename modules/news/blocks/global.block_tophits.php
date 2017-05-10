@@ -56,7 +56,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         }
         foreach ($list as $l) {
             $xtitle_i = '';
-            
+
             if ($l['lev'] > 0) {
                 for ($i = 1; $i <= $l['lev']; ++$i) {
                     $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -67,7 +67,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $html .= '</div>';
         $html .= '</td>';
         $html .= '</tr>';
-        
+
         return $html;
     }
 
@@ -88,18 +88,18 @@ if (!nv_function_exists('nv_news_block_tophits')) {
 
     function nv_news_block_tophits($block_config, $mod_data)
     {
-        global $module_array_cat, $site_mods, $module_info, $db_slave, $module_config, $global_config;
-        
+        global $module_array_cat, $site_mods, $db_slave, $module_config, $global_config;
+
         $module = $block_config['module'];
         $mod_file = $site_mods[$module]['module_file'];
-        
+
         $blockwidth = $module_config[$module]['blockwidth'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
-        
+
         $array_block_news = array();
         $db_slave->sqlreset()
-            ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
+            ->select('id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
             ->order('hitstotal DESC')
             ->limit($block_config['numrow']);
@@ -108,30 +108,26 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         } else {
             $db_slave->where('status= 1 AND publtime > ' . $publtime . ' AND catid NOT IN (' . implode(',', $block_config['nocatid']) . ')');
         }
-        
+
         $result = $db_slave->query($db_slave->sql());
-        while (list ($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
+        while (list ($id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
-                
                 $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
             } elseif ($homeimgthumb == 2) {
                 // image file
-                
                 $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
             } elseif ($homeimgthumb == 3) {
                 // image url
-                
                 $imgurl = $homeimgfile;
             } elseif (!empty($show_no_image)) {
                 // no image
-                
                 $imgurl = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $imgurl = '';
             }
             $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
-            
+
             $array_block_news[] = array(
                 'id' => $id,
                 'title' => $title,
@@ -142,43 +138,43 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                 'external_link' => $external_link
             );
         }
-        
+
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block_tophits.tpl')) {
             $block_theme = $global_config['module_theme'];
         } else {
             $block_theme = 'default';
         }
-        
+
         $xtpl = new XTemplate('block_tophits.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $block_theme);
-        
+
         foreach ($array_block_news as $array_news) {
             $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
             $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
-            
+
             if ($array_news['external_link']) {
                 $array_news['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('blocknews', $array_news);
-            
+
             if (!empty($array_news['imgurl'])) {
                 $xtpl->parse('main.newloop.imgblock');
             }
-            
+
             if (!$block_config['showtooltip']) {
                 $xtpl->assign('TITLE', 'title="' . $array_news['title'] . '"');
             }
-            
+
             $xtpl->parse('main.newloop');
         }
-        
+
         if ($block_config['showtooltip']) {
             $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
             $xtpl->parse('main.tooltip');
         }
-        
+
         $xtpl->parse('main');
         return $xtpl->text('main');
     }

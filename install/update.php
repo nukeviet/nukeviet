@@ -148,7 +148,7 @@ class NvUpdate
             return array();
         }
 
-        global $global_config, $nv_update_config;
+        global $nv_update_config;
 
         $tasklist = array();
 
