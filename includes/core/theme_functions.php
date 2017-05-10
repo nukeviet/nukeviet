@@ -132,7 +132,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
-    
+
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
     if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
@@ -184,7 +184,7 @@ function nv_jsonOutput($array_data)
 {
     header('Cache-Control: no-cache, must-revalidate');
     header('Content-type: application/json');
-    
+
     ob_start('ob_gzhandler');
     exit(json_encode($array_data));
 }
@@ -255,7 +255,7 @@ function nv_xmlOutput($content, $lastModified)
 
 /**
  * nv_rss_generate()
- * 
+ *
  * @param mixed $channel
  * @param mixed $items
  * @param string $timemode
@@ -263,7 +263,7 @@ function nv_xmlOutput($content, $lastModified)
  */
 function nv_rss_generate($channel, $items, $timemode = 'GMT')
 {
-    global $db, $global_config, $client_info;
+    global $global_config, $client_info;
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     //Chi co tac dung voi IE6 va Chrome
@@ -300,7 +300,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 
     $channel['pubDate'] = 0;
     $channel['modified'] = 0;
-    
+
     if (! empty($items)) {
         foreach ($items as $item) {
             if (! empty($item['title']) and ! empty($item['link'])) {
@@ -365,7 +365,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
                         $xtpl->assign('MODIFIED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['modifydate']));
                         $xtpl->parse('main.item.content.modifydate');
                     }
-                    
+
                     $xtpl->parse('main.item.content');
                 }
 
@@ -384,11 +384,11 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
             $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
         }
     }
-    
+
     if ($channel['modified'] > $lastModified) {
         $lastModified = $channel['modified'];
     }
-    
+
     $xtpl->assign('CHANNEL', $channel);
 
     if (! empty($channel['description'])) {
