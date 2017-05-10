@@ -248,7 +248,6 @@ function nv_show_tables_theme($contents)
 
     $xtpl->assign('SUBMIT', $contents['submit']);
 
-    $a = 0;
     foreach ($contents['rows'] as $key => $values) {
         $xtpl->assign('ROW', array(
             'tag' => (empty($values[3])) ? 'td' : 'th',
