@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_comment_new')) {
     function nv_block_comment_new($module, $data_block, $lang_block)
     {
-        global $module_config, $db;
+        global  $db;
 
         $html = '<tr>';
         $html .= '	<td>' . $lang_block['titlelength'] . '</td>';
