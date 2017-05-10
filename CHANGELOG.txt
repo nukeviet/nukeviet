@@ -1,6 +1,19 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.1.03 (not yet released)
+- Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard 
+
+NUKEVIET 4.1.02 Final Releases Apr 23, 2017
+- Jquery 3.2.1
+- Module News: Add feature copy article
+- Module Page: Add feature copy article
+- Fix creat alias module news
+- Language: Add go back link for read, write lang
+- Fix auto resize image (fix bug of plupload 2.3.1)
+- Module News: Fix image Facebook Instant Articles
+- Fix error link from function nv_alias_page
+
 NUKEVIET 4.1.01 Beta 2 Releases Apr 9, 2017
 - Jquery 3.2.0, Plupload 2.3.1
 - Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File

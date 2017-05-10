@@ -26,18 +26,30 @@ if (! empty($savecat)) {
     $alias = $nv_Request->get_title('alias', 'post', '');
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
-    $alias = ($alias == '') ? change_alias($title) : change_alias($alias);
+    $alias = ($alias == '') ? get_mod_alias($title, 'blockcat', $bid) : get_mod_alias($alias, 'blockcat', $bid);
 
     $image = $nv_Request->get_string('image', 'post', '');
-    if (is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
-        $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
-        $image = substr($image, $lu);
-    } else {
-        $image = '';
+    if (!empty($image)) {
+        if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload) === true) {
+            $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
+            $image = substr($image, $lu);
+        } else {
+            $image = '';
+        }
     }
+
+    // Kiểm tra trùng
+    $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE (title=:title OR alias=:alias)" . ($bid ? ' AND bid!=' . $bid : '');
+    $sth = $db->prepare($sql);
+    $sth->bindParam(':title', $title, PDO::PARAM_STR);
+    $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
+    $sth->execute();
+    $is_exists = $sth->fetchColumn();
 
     if (empty($title)) {
         $error = $lang_module['error_name'];
+    } elseif ($is_exists) {
+        $error = $lang_module['errorexists'];
     } elseif ($bid == 0) {
         $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat")->fetchColumn();
         $weight = intval($weight) + 1;
@@ -53,8 +65,7 @@ if (! empty($savecat)) {
 
         if ($db->insert_id($sql, 'bid', $data_insert)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid']);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
             $error = $lang_module['errorsave'];
         }
@@ -68,8 +79,7 @@ if (! empty($savecat)) {
         $stmt->execute();
         if ($stmt->execute()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid']);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
             $error = $lang_module['errorsave'];
         }

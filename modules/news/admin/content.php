@@ -217,8 +217,7 @@ if ($rowcontent['id'] > 0) {
     }
 
     if (!$check_permission) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     $page_title = $lang_module['content_edit'];
@@ -378,12 +377,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     // Xử lý liên kết tĩnh
     $alias = $nv_Request->get_title('alias', 'post', '');
     if (empty($alias)) {
-        $alias = change_alias($rowcontent['title']);
+        $alias = get_mod_alias($rowcontent['title']);
         if ($module_config[$module_name]['alias_lower']) {
             $alias = strtolower($alias);
         }
     } else {
-        $alias = change_alias($alias);
+        $alias = get_mod_alias($alias);
     }
 
     if (empty($alias) or !preg_match("/^([a-zA-Z0-9\_\-]+)$/", $alias)) {
@@ -501,7 +500,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
             $weightopic = intval($weightopic) + 1;
-            $aliastopic = change_alias($rowcontent['topictext']);
+            $aliastopic = get_mod_alias($rowcontent['topictext'], 'topics');
             $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
             $data_insert = array();
             $data_insert['title'] = $rowcontent['topictext'];
@@ -820,8 +819,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $keywords = array_unique($keywords);
                 foreach ($keywords as $keyword) {
                     $keyword = str_replace('&', ' ', $keyword);
-                    if (!in_array($keyword, $array_keywords_old) || $copy) {
-                        $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
+                    if (!in_array($keyword, $array_keywords_old)) {
+                        $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($keyword) : str_replace(' ', '-', $keyword);
                         $alias_i = nv_strtolower($alias_i);
                         $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                         $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
@@ -876,14 +875,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             }
 
             if (isset($module_config['seotools']['prcservice']) and !empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
             } else {
 
                 $referer = $crypt->decrypt($rowcontent['referer']);
                 if (!empty($referer)) {
-                    Header('Location: ' . $referer);
-                    //$url = referer;
+                    nv_redirect_location($referer);
                 } else {
                     $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
                     $msg1 = $lang_module['content_saveok'];
@@ -921,8 +918,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $takeover = md5($rowcontent['id'] . '_takeover_' . NV_CHECK_SESSION);
                 if ($takeover == $nv_Request->get_title('takeover', 'get', '')) {
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '	WHERE id=' . $rowcontent['id']);
-                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
-                    die();
+                    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 }
                 $contents = sprintf($lang_module['dulicate_edit_admin'], $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
                 $contents .= '<br><a type="button" class="btn btn-danger" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&takeover=' . $takeover . '">' . $lang_module['dulicate_takeover'] . '</a>';

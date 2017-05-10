@@ -121,15 +121,6 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
 	KEY name (name)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
-	lang char(2) NOT NULL,
-	module varchar(50) NOT NULL,
-	tables varchar(255) NOT NULL,
-	version varchar(100) NOT NULL,
-	setup_time int(11) unsigned NOT NULL DEFAULT '0',
-	UNIQUE KEY lang (lang,module)
-) ENGINE=MyISAM";
-
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
 	lang char(2) NOT NULL,
 	setup tinyint(1) NOT NULL DEFAULT '0',

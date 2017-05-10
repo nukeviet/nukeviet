@@ -15,8 +15,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 $topicid = $nv_Request->get_int('topicid', 'get');
 $topictitle = $db_slave->query('SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid =' . $topicid)->fetchColumn();
 if (empty($topictitle)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics');
 }
 
 $page_title = $lang_module['topic_page'] . ': ' . $topictitle;

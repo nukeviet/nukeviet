@@ -1,4 +1,4 @@
-#Introduction about NukeViet
+# Introduction about NukeViet
 NukeViet is the first opensource CMS in Vietnam. The lastest version - NukeViet 4 coding ground up support lastest web technologies, include reponsive web design (use HTML 5, CSS 3, Composer, XTemplate), jQuery, Ajax...) enables you to build websites and online applications rapidly.
 
 With it own core libraries built in, NukeViet 4 is cross platforms and frameworks independent. By basic knowledge of PHP and MySQL, you can easily extend NukeViet for your purposes.
@@ -11,12 +11,12 @@ NukeViet fully supports multi-languages for internationalization and localizatio
 
 Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikipedia.org/wiki/NukeViet
 
-##Licensing
+## Licensing
 NukeViet is released under GNU/GPL version 2 or any later version.
 
 See [LICENSE.txt](LICENSE.txt) for the full license.
 
-##NukeViet official website
+## NukeViet official website
   - Home page - link to all resources NukeViet: http://nukeviet.vn (select Vietnamese to have the latest information).
   - NukeViet official Coding: http://code.nukeviet.vn
   - Theme, Module and more add-ons for NukeViet: http://nukeviet.vn/vi/store/
@@ -27,7 +27,7 @@ See [LICENSE.txt](LICENSE.txt) for the full license.
   - NukeViet Education Center: http://nukeviet.edu.vn
   - NukeViet SaaS: http://nukeviet.com (testing)
 
-##Community
+## Community
   - NukeViet Fanpage: http://facebook.com/nukeviet
   - NukeViet group on FB: https://www.facebook.com/groups/nukeviet/
   - http://twitter.com/nukeviet
@@ -36,11 +36,11 @@ See [LICENSE.txt](LICENSE.txt) for the full license.
 
 
 
-##Nukeviet Centre for Research and Development
+## Nukeviet Centre for Research and Development
 VIETNAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY (VINADES.,JSC)
 
 Website: http://vinades.vn | http://nukeviet.vn | http://nukeviet.com
 
 Head Office:
-  - Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai st, Ha Dong dist, Hanoi, Vietnam.
+  - Room 1706 - CT2 Nang Huong Building, 583 Nguyen Trai st, Ha Dong dist, Hanoi, Vietnam.
   - Phone: +84-4-85872007, Fax: +84-4-35500914, Email: contact (at) vinades.vn

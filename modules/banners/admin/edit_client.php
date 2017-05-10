@@ -17,8 +17,7 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $error = '';
@@ -100,8 +99,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $stmt->execute();
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid']);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id);
             }
         }
     }

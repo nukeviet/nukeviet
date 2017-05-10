@@ -15,7 +15,6 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_block_headline')) {
     function nv_block_config_news_headline($module, $data_block, $lang_block)
     {
-        global $lang_module;
         $html = '<tr>';
         $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
         $html .= '<td>';
@@ -46,7 +45,7 @@ if (! nv_function_exists('nv_block_headline')) {
 
     function nv_block_headline($block_config)
     {
-        global $nv_Cache, $module_name, $module_data, $db_slave, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
+        global $nv_Cache, $module_name, $module_data, $db_slave, $my_head, $module_info, $module_upload, $global_array_cat, $global_config;
 
         $array_bid_content = array();
 
@@ -112,11 +111,11 @@ if (! nv_function_exists('nv_block_headline')) {
             $hot_news = $array_bid_content[1]['content'];
             $a = 0;
             foreach ($hot_news as $hot_news_i) {
-                
+
                 if ($hot_news_i['external_link']) {
                     $hot_news_i['target_blank'] = 'target="_blank"';
                 }
-                
+
                 if (! empty($hot_news_i['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'])) {
                     $images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'];
                 } elseif (nv_is_url($hot_news_i['homeimgfile'])) {
@@ -156,11 +155,11 @@ if (! nv_function_exists('nv_block_headline')) {
 
                     $lastest['hometext_clean'] = strip_tags($lastest['hometext']);
                     $lastest['hometext_clean'] = nv_clean60($lastest['hometext_clean'], $block_config['tooltip_length'], true);
-                    
+
                     if ($lastest['external_link']) {
                         $lastest['target_blank'] = 'target="_blank"';
                     }
-                    
+
                     $xtpl->assign('LASTEST', $lastest);
                     $xtpl->parse('main.loop_tabs_content.content.loop');
                 }

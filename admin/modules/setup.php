@@ -36,8 +36,7 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
 
         if (! empty($modrow)) {
             if (! empty($array_site_cat_module) and ! in_array($modrow['basename'], $array_site_cat_module)) {
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
 
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MODULES_TABLE)->fetchColumn();
@@ -81,14 +80,12 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
                 $sth->execute();
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid']);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
             }
         }
     }
 
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
 $page_title = $lang_module['modules'];

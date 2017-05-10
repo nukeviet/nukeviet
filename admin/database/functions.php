@@ -136,8 +136,7 @@ function nv_show_tab()
     $item = $sth->fetch();
 
     if (empty($item)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     if (in_array($nv_Request->get_title('show_highlight', 'post'), array( 'php', 'sql' ))) {

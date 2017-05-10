@@ -101,7 +101,7 @@ $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';
 $install_lang['groups']['NukeViet-Programmers'] = 'NukeViet-Programmeurs';
 
 $install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock Company";
-$install_lang['vinades_address'] = "Номер 2004/CT2, здание Nang Huong, д. 583, ул. Nguyen Trai, г. Ханой, Вьетнам";
+$install_lang['vinades_address'] = "Номер 1706/CT2, здание Nang Huong, д. 583, ул. Nguyen Trai, г. Ханой, Вьетнам";
 $install_lang['nukeviet_description'] = 'Partager le succès, connectez passions';
 $install_lang['disable_site_content'] = 'Notre site est fermé temporairement pour la maintenance. Veuillez revenir plus tard. Merci!';
 

@@ -48,6 +48,7 @@ $lang_module['status_8'] = 'Chuyển đăng bài';
 $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại liên kết tĩnh tiêu đề bài viết có thể bị trùng';
+$lang_module['errorexists'] = 'Lỗi: Tiêu đề hoặc liên kết tĩnh bị trùng, hãy nhập giá trị khác';
 $lang_module['saveok'] = 'Cập nhật bài viết thành công';
 $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang quản lý bài viết.';
 $lang_module['alias'] = 'Liên kết tĩnh';
