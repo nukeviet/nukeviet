@@ -76,7 +76,7 @@ function cron_auto_del_error_log()
 
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
-            if (preg_match("/^([0-9]{2}\-[0-9]{4})\_\_([a-zA-Z0-9]{32})\_\_([a-zA-Z0-9]{32})\.(" . $error_log_fileext . ")$/", $file, $mc)) {
+            if (preg_match("/^([0-9]{2}\-[0-9]{4})\_\_([a-zA-Z0-9]{32})\_\_([a-zA-Z0-9]{32})\.(" . $error_log_fileext . ")$/", $file, $m)) {
                 if ($m[1] != $month) {
                     if (! @unlink($dir . '/' . $file)) {
                         $result = false;
