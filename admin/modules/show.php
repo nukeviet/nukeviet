@@ -35,7 +35,6 @@ function nv_show_funcs()
         exit(0);
     }
 
-    $custom_title = $row['custom_title'];
     $mod_file = $row['module_file'];
     $admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/admin.functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/admin/main.php')) ? 1 : 0;
 
