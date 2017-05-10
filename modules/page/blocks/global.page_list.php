@@ -46,7 +46,7 @@ if (! nv_function_exists('nv_page_list')) {
      */
     function nv_page_list($block_config)
     {
-        global $nv_Cache, $global_config, $site_mods, $db, $module_name;
+        global $nv_Cache, $global_config, $site_mods, $db;
         $module = $block_config['module'];
 
         if (! isset($site_mods[$module])) {
