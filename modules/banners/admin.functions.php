@@ -90,7 +90,7 @@ function nv_CreateXML_bannerPlan()
  */
 function nv_fix_banner_weight($pid)
 {
-    global $db, $global_config;
+    global $db;
     list($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval($pid))->fetch(3);
     if ($pid > 0 and $form == 'sequential') {
         $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid=' . $pid . ' ORDER BY weight ASC, id DESC';
