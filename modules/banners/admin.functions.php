@@ -167,7 +167,6 @@ function nv_cl_list_theme($contents)
         $xtpl->assign('THEAD', $thead);
         $xtpl->parse('main.thead');
     }
-    $a = 0;
     if (! empty($contents['rows'])) {
         foreach ($contents['rows'] as $cl_id => $values) {
             $values['checked'] = $values['act'][1] ? ' checked="checked"' : '';
