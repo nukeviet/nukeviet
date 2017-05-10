@@ -19,7 +19,7 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
  */
 function nv_theme_statistics_referer($cts, $total)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $lang_module;
 
     $xtpl = new XTemplate('referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
