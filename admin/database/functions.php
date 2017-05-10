@@ -28,7 +28,7 @@ define('NV_IS_FILE_DATABASE', true);
 
 function nv_show_tables()
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name;
+    global $db, $db_config, $lang_module, $module_name;
 
     $tables = array();
 
@@ -194,16 +194,13 @@ function main_theme($contents)
     global $global_config, $module_file;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
     $xtpl->assign('CAPTION', $contents['captions']['database_info']);
 
-    $a = 0;
     foreach ($contents['database'] as $key => $value) {
         $xtpl->assign('ROW', array(
             'key' => $key,
             'value' => $value
         ));
-
         $xtpl->parse('main.loop');
     }
 

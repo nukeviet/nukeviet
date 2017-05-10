@@ -29,8 +29,6 @@ if (! defined('NV_MAINFILE')) {
  */
 function phpinfo_array($option = 1, $return = false)
 {
-    global $sys_info;
-
     $pi = array();
     if (nv_function_exists('phpinfo')) {
         ob_start();

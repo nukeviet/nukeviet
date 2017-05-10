@@ -71,7 +71,7 @@ if (!nv_function_exists('nv_news_category')) {
 
     function nv_news_category($block_config)
     {
-        global $module_array_cat, $module_info, $lang_module, $global_config;
+        global $module_array_cat, $lang_module, $global_config;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_category.tpl')) {
             $block_theme = $global_config['module_theme'];
