@@ -23,7 +23,7 @@ if (! defined('NV_MAINFILE')) {
  */
 function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_url)
 {
-    global $db_slave, $global_config, $module_config, $db_config;
+    global $db_slave, $module_config, $db_config;
 
     $comment_array = array();
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
