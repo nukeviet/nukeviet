@@ -23,7 +23,6 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_config_login($module, $data_block, $lang_block)
     {
-        global $site_mods;
         $html = '';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['display_mode'] . '</td>';
