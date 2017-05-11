@@ -486,8 +486,6 @@ function viewcat_two_column($array_content, $array_catpage)
             $xtpl->assign('CAT', $array_catpage_i);
             $xtpl->assign('ID', ($a + 1));
 
-            $k = 0;
-
             $array_content_i = $array_catpage_i['content'][0];
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
             $array_content_i['hometext'] = nv_clean60(strip_tags($array_content_i['hometext']), 200);
