@@ -420,7 +420,6 @@ class NvUpdate
      */
     public function step1($array)
     {
-        global $global_config;
 
         $xtpl = new XTemplate('updatestep1.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', $this->lang);
