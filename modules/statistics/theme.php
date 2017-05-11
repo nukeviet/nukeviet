@@ -63,7 +63,7 @@ function nv_theme_statistics_referer($cts, $total)
  */
 function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $lang_module;
 
     $xtpl = new XTemplate('allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 

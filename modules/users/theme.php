@@ -827,7 +827,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
  */
 function openid_callback($openid_info)
 {
-    global $module_info, $module_file;
+    global $module_info;
 
     $xtpl = new XTemplate('openid_callback.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('OPIDRESULT', $openid_info);
@@ -999,7 +999,7 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
  */
 function user_openid_administrator($data)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $global_config;
+    global $lang_module, $module_info, $module_name, $global_config;
 
     $groups_list = nv_groups_list_pub($module_info['module_data']);
 
@@ -1288,7 +1288,7 @@ function nv_avatar($array)
  */
 function safe_deactivate($data)
 {
-    global $user_info, $module_info, $module_name, $lang_module, $lang_global, $global_config, $op;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $op;
 
     $xtpl = new XTemplate('safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');

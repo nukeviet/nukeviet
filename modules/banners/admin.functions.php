@@ -203,7 +203,6 @@ function nv_info_cl_theme($contents)
     global $global_config, $module_file;
     $xtpl = new XTemplate('info_cl.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $a = 0;
     foreach ($contents['rows'] as $row) {
         $xtpl->assign('ROW', $row);
         $xtpl->parse('main.loop');

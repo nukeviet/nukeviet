@@ -97,7 +97,6 @@ function nv_admin_write_lang($dirlang, $idfile)
             $content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
             $content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
             $content_lang .= "\n";
-            $content_lang_no_check = '';
             $numrows = 0;
 
             $result = $db->query('SELECT lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');

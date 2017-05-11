@@ -466,7 +466,7 @@ function nv_xmlSitemap_generate($url)
  */
 function nv_xmlSitemapIndex_generate()
 {
-    global $db_config, $db, $global_config, $sys_info;
+    global $db_config, $db, $global_config;
 
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);

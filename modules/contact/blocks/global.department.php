@@ -23,7 +23,6 @@ if (! nv_function_exists('nv_department_info')) {
     {
         global $site_mods, $nv_Cache;
 
-        $html_input = '';
         $html = '';
         $html .= '<tr>';
         $html .= '<td>' . $lang_block['departmentid'] . '</td>';

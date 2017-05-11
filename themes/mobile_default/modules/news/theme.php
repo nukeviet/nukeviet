@@ -14,7 +14,7 @@ if (! defined('NV_IS_MOD_NEWS')) {
 
 /**
  * viewcat_grid_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $catid
  * @param mixed $generate_page
@@ -97,7 +97,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
 
 /**
  * viewcat_list_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $catid
  * @param mixed $page
@@ -158,7 +158,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 
 /**
  * viewcat_page_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $array_cat_other
  * @param mixed $generate_page
@@ -166,7 +166,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
  */
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
-    global $global_array_cat, $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global $global_array_cat, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
     $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -269,14 +269,14 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 
 /**
  * viewcat_top()
- * 
+ *
  * @param mixed $array_catcontent
  * @param mixed $generate_page
  * @return
  */
 function viewcat_top($array_catcontent, $generate_page)
 {
-    global $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global  $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
     $xtpl = new XTemplate('viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -334,14 +334,14 @@ function viewcat_top($array_catcontent, $generate_page)
 
 /**
  * viewsubcat_main()
- * 
+ *
  * @param mixed $viewcat
  * @param mixed $array_cat
  * @return
  */
 function viewsubcat_main($viewcat, $array_cat)
 {
-    global $module_name, $global_array_cat, $lang_module, $module_config, $module_info;
+    global $module_name, $global_array_cat, $lang_module, $module_info;
 
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -420,7 +420,7 @@ function viewsubcat_main($viewcat, $array_cat)
 
 /**
  * viewcat_two_column()
- * 
+ *
  * @param mixed $array_content
  * @param mixed $array_catpage
  * @return
@@ -486,8 +486,6 @@ function viewcat_two_column($array_content, $array_catpage)
             $xtpl->assign('CAT', $array_catpage_i);
             $xtpl->assign('ID', ($a + 1));
 
-            $k = 0;
-
             $array_content_i = $array_catpage_i['content'][0];
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
             $array_content_i['hometext'] = nv_clean60(strip_tags($array_content_i['hometext']), 200);
@@ -542,7 +540,7 @@ function viewcat_two_column($array_content, $array_catpage)
 
 /**
  * detail_theme()
- * 
+ *
  * @param mixed $news_contents
  * @param mixed $array_keyword
  * @param mixed $related_new_array
@@ -553,7 +551,7 @@ function viewcat_two_column($array_content, $array_catpage)
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $user_info, $admin_info, $client_info;
+    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $admin_info, $client_info;
 
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
@@ -714,7 +712,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
 /**
  * no_permission()
- * 
+ *
  * @return
  */
 function no_permission()
@@ -730,7 +728,7 @@ function no_permission()
 
 /**
  * topic_theme()
- * 
+ *
  * @param mixed $topic_array
  * @param mixed $topic_other_array
  * @param mixed $generate_page
@@ -741,7 +739,7 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $lang_module, $module_info, $module_name, $topicalias, $module_config, $topicid;
+    global $lang_module, $module_info, $module_name, $module_config, $topicid;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -796,7 +794,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
 
 /**
  * sendmail_themme()
- * 
+ *
  * @param mixed $sendmail
  * @return
  */
@@ -842,7 +840,7 @@ function sendmail_themme($sendmail)
 
 /**
  * news_print()
- * 
+ *
  * @param mixed $result
  * @return
  */
@@ -896,7 +894,7 @@ function news_print($result)
 // Search
 /**
  * search_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $check_num
  * @param mixed $date_array
@@ -905,7 +903,7 @@ function news_print($result)
  */
 function search_theme($key, $check_num, $date_array, $array_cat_search)
 {
-    global $module_name, $module_info, $lang_module, $module_name, $my_head;
+    global $module_name, $module_info, $lang_module, $module_name;
 
     $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -939,7 +937,7 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
 
 /**
  * search_result_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $numRecord
  * @param mixed $per_pages

@@ -369,7 +369,7 @@ function nv_check_valid_login($login, $max, $min)
  */
 function nv_check_valid_pass($pass, $max, $min)
 {
-    global $lang_global, $global_config, $db_config, $db;
+    global $lang_global, $db_config, $db;
 
     $pass = trim(strip_tags($pass));
 
@@ -449,7 +449,7 @@ function nv_check_valid_email($mail)
  */
 function nv_capcha_txt($seccode)
 {
-    global $sys_info, $global_config, $nv_Request, $client_info, $crypt;
+    global $global_config, $nv_Request, $client_info, $crypt;
 
     if ($global_config['captcha_type'] == 2) {
         if (!empty($global_config['recaptcha_secretkey'])) {
@@ -559,7 +559,7 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
  */
 function nv_user_groups($in_groups)
 {
-    global $nv_Cache, $db, $db_config, $global_config;
+    global $nv_Cache, $db, $global_config;
 
     $_groups = array();
     if (!empty($in_groups)) {
@@ -972,7 +972,6 @@ function nv_get_keywords($content, $keyword_limit = 20)
         require NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php';
 
         $content_array = explode(' ', $content);
-        $a = 0;
         $b = sizeof($content_array);
 
         for ($i = 0; $i < $b - 3; ++$i) {
@@ -1772,7 +1771,7 @@ function nv_site_mods()
  */
 function nv_insert_notification($module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1)
 {
-    global $db_config, $db, $global_config;
+    global  $db, $global_config;
 
     /* $area
      * 0: Khu vuc ngoai site
