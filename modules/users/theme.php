@@ -999,7 +999,7 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
  */
 function user_openid_administrator($data)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $global_config;
+    global $lang_module, $module_info, $module_name, $global_config;
 
     $groups_list = nv_groups_list_pub($module_info['module_data']);
 
