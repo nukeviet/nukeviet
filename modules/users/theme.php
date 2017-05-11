@@ -1288,7 +1288,7 @@ function nv_avatar($array)
  */
 function safe_deactivate($data)
 {
-    global $user_info, $module_info, $module_name, $lang_module, $lang_global, $global_config, $op;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $op;
 
     $xtpl = new XTemplate('safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
