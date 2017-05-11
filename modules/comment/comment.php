@@ -325,7 +325,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 
 function nv_comment_module_data($module, $comment_array, $is_delete)
 {
-    global $global_config, $module_file, $module_config, $lang_module_comment;
+    global $global_config, $module_config, $lang_module_comment;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
 
