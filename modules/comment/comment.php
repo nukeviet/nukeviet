@@ -197,7 +197,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
  */
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '')
 {
-    global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
+    global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $lang_module_comment, $module_name;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
     $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
