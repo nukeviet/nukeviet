@@ -95,7 +95,7 @@ function urlencode_rfc_3986($string)
  */
 function search_result_theme($result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $num_items)
 {
-    global $module_info, $lang_global, $lang_module, $db, $module_name;
+    global $module_info, $lang_module, $db, $module_name;
     $xtpl = new XTemplate('result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('SEARCH_RESULT_NUM', $num_items);
