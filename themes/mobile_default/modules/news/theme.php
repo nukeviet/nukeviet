@@ -276,7 +276,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
  */
 function viewcat_top($array_catcontent, $generate_page)
 {
-    global $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global  $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
     $xtpl = new XTemplate('viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
