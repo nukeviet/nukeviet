@@ -27,7 +27,7 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
 
     $comment_array = array();
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
-    
+
     $_where = 'a.module=' .$db_slave->quote($module);
     if ($area) {
         $_where .= ' AND a.area= ' . $area;
@@ -143,7 +143,6 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
 
             $page_title = $module_info['site_title'];
             $key_words = $module_info['keywords'];
-            $array_data = array();
 
             $sortcomm_old = $nv_Request->get_int('sortcomm', 'cookie', $module_config[$module]['sortcomm']);
             $sortcomm = $nv_Request->get_int('sortcomm', 'post,get', $sortcomm_old);
@@ -198,7 +197,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
  */
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '')
 {
-    global $global_config, $module_file, $module_data, $module_config, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
+    global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
     $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
