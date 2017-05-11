@@ -89,7 +89,7 @@ class dumpsave
  */
 function nv_dump_save($params)
 {
-    global $db, $sys_info, $global_config, $db_config;
+    global $db, $sys_info, $db_config;
 
     if ($sys_info['allowed_set_time_limit']) {
         set_time_limit(1200);
