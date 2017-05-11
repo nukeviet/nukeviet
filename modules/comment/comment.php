@@ -111,7 +111,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 
 function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '')
 {
-    global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info;
+    global $module_config, $nv_Request, $lang_module_comment, $module_info;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (! empty($module) and isset($module_config[$module]['activecomm'])) {
