@@ -56,9 +56,8 @@ function nv_list_menu()
  */
 function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
+    global $db, $lang_global, $module_name, $module_data, $op;
 
-    $array = array();
     $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
 

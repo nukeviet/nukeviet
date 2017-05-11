@@ -64,7 +64,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
      */
     function nv_menu_site_mods($block_config)
     {
-        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
+        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];

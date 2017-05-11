@@ -139,8 +139,6 @@ class Optimizer
 
         if (! empty($this->_jsMatches)) {
             foreach ($this->_jsMatches as $key => $value) {
-                unset($matches2, $matches3);
-
                 if (preg_match("/<\s*\bscript\b[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2)) {
                     // Chi cho phep ket noi 1 lan doi voi 1 file JS
                     $external = trim($matches2[1]);

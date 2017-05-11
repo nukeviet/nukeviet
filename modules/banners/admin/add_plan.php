@@ -54,8 +54,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $id = $db->insert_id($_sql, 'id', $data_insert);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id, $admin_info['userid']);
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id);
     }
 } else {
     $blang = $title = $description = '';

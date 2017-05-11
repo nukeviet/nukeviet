@@ -343,7 +343,7 @@ class Request
         }
         if ($this->str_referer_blocker and ! empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
             header('Location: ' . $this->site_url);
-            exit();
+            exit(0);
         }
 
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
@@ -1000,7 +1000,7 @@ class Request
                     }
                     $expire = NV_CURRENTTIME - 3600;
 
-                    $result = setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
+                    setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
 
                     unset($_COOKIE[$name2]);
                 }

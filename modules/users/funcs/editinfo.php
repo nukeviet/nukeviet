@@ -13,8 +13,7 @@ if (!defined('NV_IS_MOD_USER')) {
 }
 
 if (!defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 if (defined('NV_IS_USER_FORUM')) {
@@ -30,7 +29,7 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function nv_check_username_change($login, $edit_userid)
 {
-    global $db, $lang_module, $user_info, $global_users_config;
+    global $db, $lang_module, $global_users_config;
 
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
@@ -128,7 +127,6 @@ function get_field_config()
             $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
             $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
             $result = $db->query($query);
-            $weight = 0;
             while (list($key, $val) = $result->fetch(3)) {
                 $row_field['field_choices'][$key] = $val;
             }

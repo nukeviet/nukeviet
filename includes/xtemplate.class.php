@@ -662,7 +662,7 @@ class XTemplate {
 
 		/* from there we should have no more {FILE } directives */
 		if (!isset($copy)) {
-			die('Block: ' . $bname);
+			exit('Block: ' . $bname);
 		}
 
 		$copy = preg_replace($this->filevar_delim_nl, '', $copy);
