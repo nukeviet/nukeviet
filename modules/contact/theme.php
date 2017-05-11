@@ -231,7 +231,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
  */
 function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
 {
-    global $global_config, $lang_global, $lang_module, $module_info, $array_department, $client_info;
+    global $global_config, $lang_module, $module_info, $array_department, $client_info;
 
     $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);

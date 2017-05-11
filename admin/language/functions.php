@@ -60,7 +60,7 @@ $dirlang = $nv_Request->get_title('dirlang', 'get', '');
  */
 function nv_admin_add_field_lang($dirlang)
 {
-    global $db_config, $db, $language_array;
+    global $db, $language_array;
 
     if (isset($language_array[$dirlang]) and ! empty($language_array[$dirlang])) {
         $add_field = true;

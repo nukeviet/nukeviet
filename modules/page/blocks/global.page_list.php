@@ -15,7 +15,6 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_page_list')) {
     function nv_block_config_page_list($module, $data_block, $lang_block)
     {
-        global $site_mods;
         $html = '';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['title_length'] . '</td>';
