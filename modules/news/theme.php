@@ -941,7 +941,7 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $lang_module, $module_info, $module_name, $topicalias, $module_config, $topicid;
+    global $lang_module, $module_info, $module_name, $module_config, $topicid;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
