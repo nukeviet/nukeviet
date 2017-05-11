@@ -827,7 +827,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
  */
 function openid_callback($openid_info)
 {
-    global $module_info, $module_file;
+    global $module_info;
 
     $xtpl = new XTemplate('openid_callback.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('OPIDRESULT', $openid_info);
