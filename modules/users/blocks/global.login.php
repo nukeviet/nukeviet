@@ -23,7 +23,6 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_config_login($module, $data_block, $lang_block)
     {
-        global $db, $site_mods;
         $html = '';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['display_mode'] . '</td>';
@@ -74,7 +73,7 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
+        global $client_info, $global_config, $module_name, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
 
         $content = '';
 
@@ -213,7 +212,7 @@ if (!nv_function_exists('nv_block_login')) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
                     	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
-                    	 
+
                         $data_questions = array();
                         $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
                         $result = $db->query($sql);
@@ -240,7 +239,6 @@ if (!nv_function_exists('nv_block_login')) {
                                 $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
                                 $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
                                 $result = $db->query($query);
-                                $weight = 0;
                                 while (list($key, $val) = $result->fetch(3)) {
                                     $row_field['field_choices'][$key] = $val;
                                 }
@@ -348,7 +346,7 @@ if (!nv_function_exists('nv_block_login')) {
                             }
                             $xtpl->parse('main.allowuserreg.field');
                         }
-                    
+
                         if ($global_config['allowuserreg'] == 2) {
                             $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostactivelink');
                             $xtpl->parse('main.allowuserreg.lostactivelink');

@@ -13,16 +13,14 @@ if (!defined('NV_IS_MOD_USER')) {
 }
 
 if (defined('NV_IS_USER_FORUM')) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $userid = $nv_Request->get_int('userid', 'get', '', 1);
 $checknum = $nv_Request->get_title('checknum', 'get', '', 1);
 
 if (empty($userid) or empty($checknum)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $del = NV_CURRENTTIME - 86400;
@@ -33,8 +31,7 @@ $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $page_title = $mod_title = $lang_module['register'];
@@ -46,7 +43,7 @@ $is_change_email = false;
 if ($checknum == $row['checknum']) {
     if (empty($row['password']) and substr($row['username'], 0, 20) == 'CHANGE_EMAIL_USERID_') {
         $is_change_email = true;
-        
+
         $userid_change_email = intval(substr($row['username'], 20));
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email= :email WHERE userid=' . $userid_change_email);
         $stmt->bindParam(':email', $row['email'], PDO::PARAM_STR);
@@ -58,17 +55,17 @@ if ($checknum == $row['checknum']) {
         }
     } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-                group_id, username, md5username, password, email, first_name, last_name, 
-                gender, photo, birthday, regdate, question, answer, 
+                group_id, username, md5username, password, email, first_name, last_name,
+                gender, photo, birthday, regdate, question, answer,
                 passlostkey, view_mail, remember, in_groups,
-                active, checknum, last_login, last_ip, last_agent, last_openid, idsite) 
+                active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
             VALUES (
                 :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
                 '', '', 0, :regdate, :question, :answer,
-                '', 0, 1, :in_groups, 
+                '', 0, 1, :in_groups,
                 1, '', 0, '', '', '', " . $global_config['idsite'] . "
             )";
-        
+
         $data_insert = array();
         $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
         $data_insert['username'] = $row['username'];
@@ -81,7 +78,7 @@ if ($checknum == $row['checknum']) {
         $data_insert['question'] = $row['question'];
         $data_insert['answer'] = $row['answer'];
         $data_insert['in_groups'] = $data_insert['group_id'];
-        
+
         $userid = $db->insert_id($sql, 'userid', $data_insert);
         if ($userid) {
             $users_info = unserialize(nv_base64_decode($row['users_info']));
@@ -91,7 +88,7 @@ if ($checknum == $row['checknum']) {
             while ($row_f = $result_field->fetch()) {
                 $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
             }
-            
+
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
                 if (!empty($global_users_config['active_group_newusers'])) {
                     nv_groups_add_user(7, $row['userid'], 1, $module_data);
@@ -104,7 +101,7 @@ if ($checknum == $row['checknum']) {
             } else {
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             }
-            
+
             $nv_Cache->delMod($module_name);
         }
     }

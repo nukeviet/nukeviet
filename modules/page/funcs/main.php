@@ -20,8 +20,7 @@ if ($id) {
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
     } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
         if (! empty($array_op) and $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-            Header('Location: ' . $base_url_rewrite);
-            die();
+            nv_redirect_location($base_url_rewrite);
         }
         $canonicalUrl = $base_url_rewrite;
     }

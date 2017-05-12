@@ -72,3 +72,5 @@ $lang_global['phone_note_content'] = '<ul><li>Phone number is divided into two p
 $lang_global['multi_note'] = 'You can enter more than one value, separated by comma';
 $lang_global['multi_email_note'] = 'You can enter more than one value, separated by comma. The first e-mail is considered to be the main email and is used to send and receive mail.';
 $lang_global['view_all'] = 'View all';
+$lang_global['email'] = 'Email';
+$lang_global['phonenumber'] = 'Phone';

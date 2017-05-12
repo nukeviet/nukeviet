@@ -140,7 +140,7 @@ function nv_menu_blocks_active($cat)
  */
 function nv_menu_check_current($url, $type = 0)
 {
-    global $module_name, $home, $client_info, $global_config;
+    global $home, $client_info, $global_config;
 
     $url = nv_unhtmlspecialchars($url);
 

@@ -50,7 +50,7 @@ if ($id > 0 and $catid > 0) {
                     $link = NV_MY_DOMAIN . $link;
                 }
                 $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
-                
+
                 if ($global_config['captcha_type'] == 2) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                 } else {
@@ -107,5 +107,4 @@ if ($id > 0 and $catid > 0) {
         }
     }
 }
-Header('Location: ' . $global_config['site_url']);
-exit();
+nv_redirect_location($global_config['site_url']);

@@ -44,7 +44,7 @@ class Optimizer
      * @return
      *
      */
-    public function process()
+    public function process($jquery = true)
     {
         $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
         $this->_content = preg_replace_callback($conditionRegex, array(
@@ -139,8 +139,6 @@ class Optimizer
 
         if (! empty($this->_jsMatches)) {
             foreach ($this->_jsMatches as $key => $value) {
-                unset($matches2, $matches3);
-
                 if (preg_match("/<\s*\bscript\b[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2)) {
                     // Chi cho phep ket noi 1 lan doi voi 1 file JS
                     $external = trim($matches2[1]);
@@ -199,8 +197,10 @@ class Optimizer
             if (! empty($this->_htmlforFooter)) {
                 $this->_content = preg_replace('/\s*<\/body>/', $this->eol . $this->_htmlforFooter . $this->eol . '</body>', $this->_content, 1);
             }
-            $_jsAfter = '<script src="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
-            $this->_content = preg_replace('/\s*<\/body>/', $this->eol . $_jsAfter . $this->eol . '</body>', $this->_content, 1);
+            if ($jquery) {
+                $_jsAfter = '<script src="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
+                $this->_content = preg_replace('/\s*<\/body>/', $this->eol . $_jsAfter . $this->eol . '</body>', $this->_content, 1);
+            }
         } else {
             if (! empty($this->_htmlforFooter)) {
                 $this->_content .= $this->eol . $this->_htmlforFooter;

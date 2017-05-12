@@ -51,7 +51,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (nv_check_valid_email($site_email) == '') {
         $array_config_site['site_email'] = $site_email;
     }
-    
+
     $array_config_site['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
 
     $preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
@@ -62,7 +62,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (preg_match('/[^a-zA-Z0-9\:\-\_\.]/', $array_config_site['searchEngineUniqueID'])) {
         $array_config_site['searchEngineUniqueID'] = '';
     }
-    
+
     $array_config_site['googleMapsAPI'] = $nv_Request->get_title('googleMapsAPI', 'post', '');
     if (preg_match('/[^a-zA-Z0-9]/', $array_config_site['googleMapsAPI'])) {
         $array_config_site['googleMapsAPI'] = 'AIzaSyC8ODAzZ75hsAufVBSffnwvKfTOT6TnnNQ';
@@ -188,8 +188,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $nv_Cache->delAll(false);
     }
     if (empty($errormess)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 }
 
@@ -219,17 +218,17 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_REWRITE_OPTIONAL', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
-    
+
     foreach ($site_mods as $mod => $row) {
         $xtpl->assign('MODE_VALUE', $mod);
         $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : "");
         $xtpl->assign('MODE_NAME', $row['custom_title']);
         $xtpl->parse('main.system.rewrite_op_mod');
     }
-    
+
     $xtpl->assign('SHOW_REWRITE_OPTIONAL', ($lang_multi == 0 and $array_config_global['rewrite_enable']) ? '' : ' style="display:none"');
     $xtpl->assign('SHOW_REWRITE_OP_MOD', ($array_config_global['rewrite_optional'] == 1) ? '' : ' style="display:none"');
-    
+
     if (sizeof($global_config['allow_sitelangs']) > 1) {
         foreach ($allow_sitelangs as $lang_i) {
             $xtpl->assign('LANGOP', $lang_i);

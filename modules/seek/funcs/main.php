@@ -40,7 +40,7 @@ if ($nv_Request->isset_request('q', 'get')) {
     if (! isset($array_mod[$search['mod']])) {
         $search['mod'] = 'all';
     }
-    
+
     $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode($search['key']);
     if ($search['mod'] != 'all') {
         $base_url_rewrite .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
@@ -54,8 +54,7 @@ if ($nv_Request->isset_request('q', 'get')) {
     $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
     $request_uri = $_SERVER['REQUEST_URI'];
     if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-        Header('Location: ' . $base_url_rewrite);
-        die();
+        nv_redirect_location($base_url_rewrite);
     }
 
     if (! empty($search['key'])) {

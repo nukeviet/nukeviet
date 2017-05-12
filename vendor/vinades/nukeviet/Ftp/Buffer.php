@@ -13,6 +13,7 @@ namespace NukeViet\Ftp;
 class Buffer
 {
     public $position = 0;
+
     public $varname = null;
 
     /**
@@ -50,7 +51,7 @@ class Buffer
      */
     public function stream_write($data)
     {
-        if (! isset($GLOBALS[$this->varname])) {
+        if (!isset($GLOBALS[$this->varname])) {
             $GLOBALS[$this->varname] = '';
         }
 
@@ -137,7 +138,7 @@ class Buffer
             $url = parse_url($path);
             $varname = $url["host"];
 
-            if (! isset($GLOBALS[$varname])) {
+            if (!isset($GLOBALS[$varname])) {
                 $GLOBALS[$varname] = '';
             }
 

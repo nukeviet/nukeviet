@@ -19,8 +19,7 @@ if (empty($global_config['lang_multi'])) {
         define('NV_LANG_INTERFACE', $global_config['site_lang']);
         define('NV_LANG_DATA', $global_config['site_lang']);
     } else {
-        Header('Location: ' . NV_BASE_SITEURL);
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL);
     }
 } elseif (defined('NV_ADMIN')) {
     $cookie = $nv_Request->get_string('data_lang', 'cookie');

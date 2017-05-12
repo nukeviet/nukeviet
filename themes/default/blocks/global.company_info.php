@@ -258,7 +258,7 @@ if (! nv_function_exists('nv_company_info')) {
         if (! empty($block_config['company_website'])) {
             $webs = array_map('trim', explode(',', $block_config['company_website']));
             foreach ($webs as $k => $web) {
-                if (! preg_match("/^http\:\/\//", $web)) {
+                if (! preg_match("/^https?\:\/\//", $web)) {
                     $web = 'http://' . $web;
                 }
                 $xtpl->assign('WEBSITE', $web);

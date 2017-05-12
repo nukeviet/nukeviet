@@ -19,24 +19,22 @@ if (! defined('NV_IS_FILE_MODULES')) {
  */
 function nv_show_funcs()
 {
-    global $nv_Cache, $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file, $module_upload;
+    global $nv_Cache, $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
 
     $mod = $nv_Request->get_title('mod', 'get', '');
 
     if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
-        die();
+        exit(0);
     }
 
     $sth = $db->prepare('SELECT module_file, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :mod');
     $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
     $sth->execute();
     $row = $sth->fetch();
-
     if (empty($row)) {
-        die();
+        exit(0);
     }
 
-    $custom_title = $row['custom_title'];
     $mod_file = $row['module_file'];
     $admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/admin.functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/admin/main.php')) ? 1 : 0;
 
@@ -72,7 +70,7 @@ function nv_show_funcs()
             'modfuncs' => 'main',
             'is_sysmod' => 0,
             'virtual' => 0,
-            'version' => '4.0.00',
+            'version' => '4.1.00',
             'date' => date('D, j M Y H:i:s', $timestamp) . ' GMT',
             'author' => '',
             'note' => ''
@@ -257,8 +255,7 @@ if ($nv_Request->isset_request('aj', 'get')) {
 $mod = $nv_Request->get_title('mod', 'get', '');
 
 if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $sth = $db->prepare('SELECT custom_title FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
@@ -267,8 +264,7 @@ $sth->execute();
 $row = $sth->fetch();
 
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $page_title = sprintf($lang_module['funcs_list'], $row['custom_title']);

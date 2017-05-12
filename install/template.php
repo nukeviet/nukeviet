@@ -79,7 +79,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
  */
 function nv_step_1()
 {
-    global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
+    global $lang_module, $languageslist, $language_array, $sys_info;
 
     $xtpl = new XTemplate('step1.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
