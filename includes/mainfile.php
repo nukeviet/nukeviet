@@ -50,7 +50,7 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
         if (!empty($base_siteurl)) {
             $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
         }
-        nv_redirect_location($base_siteurl . '/install/index.php');
+        Header('Location: ' . $base_siteurl . '/install/index.php');
     }
     die();
 }
