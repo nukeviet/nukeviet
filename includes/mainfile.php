@@ -27,9 +27,6 @@ $editor = false;
 
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
-if (file_exists(NV_ROOTDIR . '/includes/other_constants.php')) {
-    require NV_ROOTDIR . '/includes/other_constants.php';
-}
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
     require realpath(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME);
 } else {
