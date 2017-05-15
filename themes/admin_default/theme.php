@@ -35,7 +35,7 @@ function nv_mailHTML($title, $content, $footer='')
  */
 function nv_get_submenu($mod)
 {
-    global $module_name, $global_config, $admin_mods;
+    global $module_name, $global_config, $admin_mods, $lang_global;
 
     $submenu = array();
 
