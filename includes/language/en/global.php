@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_global';
 
+$lang_global['locale'] = 'en_US.utf8';
 $lang_global['Content_Language'] = 'en';
 $lang_global['LanguageName'] = 'english';
 $lang_global['site_info'] = 'Notifications from the system';
