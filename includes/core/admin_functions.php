@@ -208,7 +208,7 @@ function nv_save_file_config_global()
             }
             $content_config .= "\$global_config['" . $c_config_name . "']=array(" . $c_config_value . ");\n";
         } else {
-            if (preg_match('/^\d+$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
+            if (preg_match('/^(0|[1-9][0-9]*)$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
                 $content_config .= "\$global_config['" . $c_config_name . "']=" . $c_config_value . ";\n";
             } else {
                 $c_config_value = nv_unhtmlspecialchars($c_config_value);
