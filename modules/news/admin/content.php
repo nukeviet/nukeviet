@@ -245,7 +245,7 @@ if ($rowcontent['id'] > 0) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'post_queue', $rowcontent['id']);
     }
 
-    if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR)) {
+    if (!empty($rowcontent['homeimgfile']) and !nv_is_url($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR)) {
         $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . dirname($rowcontent['homeimgfile']);
     }
 
