@@ -21,7 +21,7 @@ define('NV_MAINFILE', true);
 define('NV_START_TIME', microtime(true));
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -167,6 +167,7 @@ define('NV_USER_AGENT', $nv_Request->user_agent);
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 $domains = explode(',', $global_config['my_domains']);
 if (!in_array(NV_SERVER_NAME, $domains)) {
@@ -345,15 +346,13 @@ if (defined('NV_ADMIN')) {
         if ($global_config['lang_multi']) {
             $nv_Request->set_Cookie('data_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
         }
-        Header('Location: ' . NV_BASE_ADMINURL);
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL);
     }
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php')) {
         if ($global_config['lang_multi']) {
             $nv_Request->set_Cookie('int_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
         }
-        Header('Location: ' . NV_BASE_ADMINURL);
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL);
     }
 }
 
@@ -395,8 +394,7 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
         $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
         nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
-        Header('Location: ' . NV_BASE_SITEURL);
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL);
     }
 }
 unset($nv_check_update);

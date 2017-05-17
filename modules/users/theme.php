@@ -24,7 +24,7 @@ if (! defined('NV_IS_MOD_USER')) {
  */
 function user_register($gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields, $group_id)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
 
     $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -403,7 +403,7 @@ function user_lostpass($data)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('DATA', $data);
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
-    
+
     if ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
@@ -417,7 +417,7 @@ function user_lostpass($data)
         $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
         $xtpl->parse('main.captcha');
     }
-    
+
     if (! empty($nv_redirect)) {
         $xtpl->assign('REDIRECT', $nv_redirect);
         $xtpl->parse('main.redirect');
@@ -470,7 +470,7 @@ function user_lostactivelink($data, $question)
         $xtpl->parse('main.step2');
     } else {
         $xtpl->assign('FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
-        
+
         if ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
@@ -584,7 +584,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.edit_password');
         $xtpl->parse('main.tab_edit_password');
     }
-    
+
     if (in_array('2step', $types)) {
         $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
         $xtpl->parse('main.2step');
@@ -828,7 +828,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
  */
 function openid_callback($openid_info)
 {
-    global $module_info, $module_file;
+    global $module_info;
 
     $xtpl = new XTemplate('openid_callback.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('OPIDRESULT', $openid_info);
@@ -846,7 +846,7 @@ function openid_callback($openid_info)
  */
 function user_welcome()
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $module_config, $op;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $op;
 
     $xtpl = new XTemplate('userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -961,9 +961,9 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
     global $lang_global, $lang_module, $module_info, $module_name, $nv_redirect, $global_config;
 
     $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    
+
     $lang_module['openid_confirm_info'] = sprintf($lang_module['openid_confirm_info'], $attribs['contact/email'], $user['username']);
-    
+
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
@@ -1000,7 +1000,7 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
  */
 function user_openid_administrator($data)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $global_config;
+    global $lang_module, $module_info, $module_name, $global_config;
 
     $groups_list = nv_groups_list_pub($module_info['module_data']);
 
@@ -1139,7 +1139,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     $item['last_login'] = empty($item['last_login']) ? '' : nv_date('l, d/m/Y H:i', $item['last_login']);
 
     $xtpl->assign('USER', $item);
-    
+
     if ($item['is_admin']) {
         if ($item['allow_edit']) {
             $xtpl->assign('LINK_EDIT', $item['link_edit']);
@@ -1289,7 +1289,7 @@ function nv_avatar($array)
  */
 function safe_deactivate($data)
 {
-    global $user_info, $module_info, $module_name, $lang_module, $lang_global, $global_config, $op;
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config, $op;
 
     $xtpl = new XTemplate('safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');

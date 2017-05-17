@@ -73,8 +73,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
 	    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
 	    $row = $db->query($sql)->fetch();
 	    if (empty($row)) {
-	        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-	        die();
+	        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 	    }
 
 	    $sql = "INSERT INTO " . NV_MOD_TABLE . " (
@@ -494,8 +493,7 @@ $xtpl->assign('OP', $op);
 if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
     $group_id = $array_op[1];
     if (! isset($groupsList[$group_id]) or ! ($group_id < 4 or $group_id > 9)) {
-        Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true));
-        die();
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 
 	// Kiem tra lai quyen truong nhom

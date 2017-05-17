@@ -363,7 +363,7 @@ class Download
     public function download_file()
     {
         if (! $this->properties['path']) {
-            die('Nothing to download!');
+            exit('Nothing to download!');
         }
 
         $seek_start = 0;
@@ -406,7 +406,7 @@ class Download
         $res = fopen($this->properties['path'], 'rb');
 
         if (! $res) {
-            die('File error');
+            exit('File error');
         }
 
         if ($seek_start) {
@@ -458,6 +458,6 @@ class Download
         if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit(ini_get('max_execution_time'));
         }
-        exit();
+        exit(0);
     }
 }

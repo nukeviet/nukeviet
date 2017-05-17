@@ -44,19 +44,16 @@ $step = $nv_Request->get_int('step', 'post,get', 1);
 $maxstep = $nv_Request->get_int('maxstep', 'session', 1);
 
 if ($step <= 0 or $step > 7) {
-    Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
 }
 
 if ($step > $maxstep and $step > 2) {
     $step = $maxstep;
-    Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 }
 
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 7) {
-    Header('Location: ' . NV_BASE_SITEURL . 'index.php');
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php');
 }
 if (empty($sys_info['supports_rewrite'])) {
     if (isset($_COOKIE['supports_rewrite']) and $_COOKIE['supports_rewrite'] == NV_CHECK_SESSION) {
@@ -657,8 +654,7 @@ if ($step == 1) {
                         ++ $step;
                         $nv_Request->set_Session('maxstep', $step);
 
-                        Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-                        exit();
+                        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                     }
                 }
             }
@@ -901,8 +897,7 @@ if ($step == 1) {
                             }
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)");
 
-                            Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-                            exit();
+                            nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                         } else {
                             $error = sprintf($lang_module['file_not_writable'], NV_DATADIR . '/config_global.php');
                         }

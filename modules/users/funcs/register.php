@@ -14,8 +14,7 @@ if (! defined('NV_IS_MOD_USER')) {
 
 // Dang nhap thanh vien thi khong duoc truy cap
 if (defined('NV_IS_USER') and ! defined('ACCESS_ADDUS')) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 // Chuyen trang dang ki neu tich hop dien dan
@@ -163,6 +162,26 @@ $array_register = array();
 $array_register['checkss'] = NV_CHECK_SESSION;
 $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
+
+//Check email address for AJAX
+if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_register['checkss']) {
+    $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
+    $check_email = nv_check_email_reg($email);
+    if (!empty($check_email)) {
+        die(json_encode(array('status' => 'error','mess' => $check_email)));
+    }
+    die(json_encode(array('status' => 'success','mess' => 'OK')));
+}
+
+//Check Login for AJAX
+if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_register['checkss']) {
+    $login = $nv_Request->get_title('login', 'post', '', 1);
+    $check_login = nv_check_username_reg($login);
+    if (!empty($check_login)) {
+        die(json_encode(array('status' => 'error','mess' => $check_login)));
+    }
+    die(json_encode(array('status' => 'success','mess' => 'OK')));
+}
 
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
     $lang_module['register'] = $lang_module['add_users'];
@@ -430,7 +449,7 @@ if ($checkss == $array_register['checkss']) {
                 }
             }
             $nv_Cache->delMod($module_name);
-            
+
             $nv_redirect = '';
             die(reg_result(array(
                 'status' => 'ok',

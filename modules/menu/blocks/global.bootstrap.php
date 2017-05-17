@@ -28,7 +28,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
      */
     function nv_menu_bootstrap_check_current($url, $type = 0)
     {
-        global $module_name, $home, $client_info, $global_config;
+        global $home, $client_info, $global_config;
 
         // Chinh xac tuyet doi
         if ($client_info['selfurl'] == $url) {
@@ -63,7 +63,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
      */
     function nv_menu_bootstrap($block_config)
     {
-        global $nv_Cache, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
+        global $nv_Cache, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];

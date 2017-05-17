@@ -37,17 +37,17 @@ $array_config = array();
 $oauth_config = $nv_Request->get_title('oauth_config', 'post,get');
 if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php')) {
     $page_title = sprintf($lang_module['oauth_config'], $oauth_config);
-    
+
     require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
 } else {
     if ($nv_Request->isset_request('submit', 'post')) {
         $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
-        
+
         $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post', 0);
         if (!$array_config['is_user_forum'] or !is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
             $array_config['dir_forum'] = '';
         }
-        
+
         // Kiểm tra cấu trúc thư mục diễn đàn mới cho lưu
         if ($array_config['dir_forum']) {
             $forum_files = @scandir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet');
@@ -58,12 +58,12 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         } else {
             $array_config['is_user_forum'] = 0;
         }
-        
+
         $array_config['nv_unickmin'] = $nv_Request->get_int('nv_unickmin', 'post', 3);
         $array_config['nv_unickmax'] = $nv_Request->get_int('nv_unickmax', 'post', 100);
         $array_config['nv_upassmin'] = $nv_Request->get_int('nv_upassmin', 'post', 5);
         $array_config['nv_upassmax'] = $nv_Request->get_int('nv_upassmax', 'post', 255);
-        
+
         $array_config['nv_upass_type'] = $nv_Request->get_int('nv_upass_type', 'post', 0);
         $array_config['nv_unick_type'] = $nv_Request->get_int('nv_unick_type', 'post', 0);
         $array_config['allowmailchange'] = $nv_Request->get_int('allowmailchange', 'post', 0);
@@ -78,10 +78,10 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
-        
+
         $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', array());
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
-        
+
         if ($array_config['user_check_pass_time'] < 120) {
             $array_config['user_check_pass_time'] = 120;
         }
@@ -91,47 +91,47 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
             $sth->execute();
         }
-        
+
         $array_config['name_show'] = $nv_Request->get_int('name_show', 'post', 0);
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
         $sth->bindValue(':config_name', 'name_show', PDO::PARAM_STR);
         $sth->bindParam(':config_value', $array_config['name_show'], PDO::PARAM_INT);
         $sth->execute();
-        
+
         if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
             // Cau hinh kich thuoc avatar
             $array_config['avatar_width'] = $nv_Request->get_int('avatar_width', 'post', 120);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'");
             $stmt->bindParam(':content', $array_config['avatar_width'], PDO::PARAM_STR);
             $stmt->execute();
-            
+
             $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 120);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
             $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
             $stmt->execute();
-            
+
             // Kich hoat chuc nang xet duyet thanh vien moi dang ky
             $array_config['active_group_newusers'] = ($nv_Request->get_int('active_group_newusers', 'post', 0) ? 1 : 0);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
             $stmt->bindParam(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
             $stmt->execute();
-            
+
             $array_config['active_user_logs'] = ($nv_Request->get_int('active_user_logs', 'post', 0) ? 1 : 0);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_user_logs'");
             $stmt->bindParam(':content', $array_config['active_user_logs'], PDO::PARAM_STR);
             $stmt->execute();
-            
+
             $array_config['deny_email'] = $nv_Request->get_title('deny_email', 'post', '', 1);
-            
+
             if (!empty($array_config['deny_email'])) {
                 $array_config['deny_email'] = valid_name_config(explode(',', $array_config['deny_email']));
                 $array_config['deny_email'] = implode('|', $array_config['deny_email']);
             }
-            
+
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'");
             $stmt->bindParam(':content', $array_config['deny_email'], PDO::PARAM_STR, strlen($array_config['deny_email']));
             $stmt->execute();
-            
+
             $array_config['deny_name'] = $nv_Request->get_title('deny_name', 'post', '', 1);
             if (!empty($array_config['deny_name'])) {
                 $array_config['deny_name'] = valid_name_config(explode(',', $array_config['deny_name']));
@@ -140,7 +140,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'");
             $stmt->bindParam(':content', $array_config['deny_name'], PDO::PARAM_STR, strlen($array_config['deny_name']));
             $stmt->execute();
-            
+
             $array_config['password_simple'] = $nv_Request->get_title('password_simple', 'post', '', 1);
             if (!empty($array_config['password_simple'])) {
                 $array_config['password_simple'] = array_map('trim', explode(',', $array_config['password_simple']));
@@ -151,7 +151,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'");
             $stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen($array_config['password_simple']));
             $stmt->execute();
-            
+
             $access_admin = array();
             $access_admin['access_addus'] = $nv_Request->get_typed_array('access_addus', 'post', 'bool');
             $access_admin['access_waiting'] = $nv_Request->get_typed_array('access_waiting', 'post', 'bool');
@@ -165,12 +165,11 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid']);
         $nv_Cache->delAll();
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     } else {
         $array_config = $global_config;
     }
-    
+
     $array_config['allowmailchange'] = !empty($array_config['allowmailchange']) ? ' checked="checked"' : '';
     $array_config['allowuserpublic'] = !empty($array_config['allowuserpublic']) ? ' checked="checked"' : '';
     $array_config['allowquestion'] = !empty($array_config['allowquestion']) ? ' checked="checked"' : '';
@@ -179,9 +178,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['allowuserloginmulti'] = !empty($array_config['allowuserloginmulti']) ? ' checked="checked"' : '';
     $array_config['is_user_forum'] = !empty($array_config['is_user_forum']) ? ' checked="checked"' : '';
     $array_config['auto_login_after_reg'] = !empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
-    
-    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE 
-        config='deny_email' OR config='deny_name' OR config='password_simple' OR 
+
+    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE
+        config='deny_email' OR config='deny_name' OR config='password_simple' OR
         config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR config='active_user_logs'
     ";
     $result = $db->query($sql);
@@ -190,15 +189,15 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config[$config] = implode(', ', $content);
     }
     $result->closeCursor();
-    
+
     $array_config['active_group_newusers'] = !empty($array_config['active_group_newusers']) ? ' checked="checked"' : '';
     $array_config['active_user_logs'] = !empty($array_config['active_user_logs']) ? ' checked="checked"' : '';
-    
+
     $array_name_show = array(
         0 => $lang_module['lastname_firstname'],
         1 => $lang_module['firstname_lastname']
     );
-    
+
     $array_registertype = array(
         0 => $lang_module['active_not_allow'],
         1 => $lang_module['active_all'],
@@ -210,7 +209,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         3 => $lang_module['openid_processing_3'],
         4 => $lang_module['openid_processing_4']
     );
-    
+
     $ignorefolders = array(
         '',
         '.',
@@ -218,21 +217,21 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         'index.html',
         '.htaccess'
     );
-    
+
     $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('DATA', $array_config);
     $xtpl->assign('USER_CHECK_PASS_TIME', round($global_config['user_check_pass_time'] / 60));
-    
+
     if (!in_array($global_config['dir_forum'], $ignorefolders) and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet')) {
         $forum_files = @scandir(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet');
         if (!empty($forum_files) and in_array('is_user.php', $forum_files) and in_array('changepass.php', $forum_files) and in_array('editinfo.php', $forum_files) and in_array('login.php', $forum_files) and in_array('logout.php', $forum_files) and in_array('lostpass.php', $forum_files) and in_array('register.php', $forum_files)) {
             $xtpl->parse('main.user_forum');
         }
     }
-    
+
     for ($id = 3; $id < 20; $id++) {
         $array = array(
             'id' => $id,
@@ -251,7 +250,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unickmax');
     }
-    
+
     $lang_global['unick_type_0'] = $lang_module['unick_type_0'];
     for ($id = 0; $id < 5; $id++) {
         $array = array(
@@ -262,7 +261,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unick_type');
     }
-    
+
     for ($id = 5; $id < 20; $id++) {
         $array = array(
             'id' => $id,
@@ -281,7 +280,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upassmax');
     }
-    
+
     $lang_global['upass_type_0'] = $lang_module['upass_type_0'];
     for ($id = 0; $id < 5; $id++) {
         $array = array(
@@ -292,7 +291,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upass_type');
     }
-    
+
     foreach ($array_registertype as $id => $titleregister) {
         $array = array(
             'id' => $id,
@@ -302,7 +301,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('REGISTERTYPE', $array);
         $xtpl->parse('main.registertype');
     }
-    
+
     $nv_files = @scandir(NV_ROOTDIR);
     foreach ($nv_files as $value) {
         if (!in_array($value, $ignorefolders) and is_dir(NV_ROOTDIR . '/' . $value)) {
@@ -317,7 +316,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             }
         }
     }
-    
+
     foreach ($array_name_show as $id => $titleregister) {
         $array = array(
             'id' => $id,
@@ -327,7 +326,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('NAME_SHOW', $array);
         $xtpl->parse('main.name_show');
     }
-    
+
     $array_config['whoviewuser'] = explode(',', $array_config['whoviewuser']);
     foreach ($groups_list as $group_id => $group_name) {
         $whoview = array(
@@ -338,7 +337,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('WHOVIEW', $whoview);
         $xtpl->parse('main.whoviewlistuser');
     }
-    
+
     foreach ($array_openid_processing as $id => $titleregister) {
         $select = ($array_config['openid_processing'] == $id) ? ' selected="selected"' : '';
         $array = array(
@@ -349,15 +348,15 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPENID_PROCESSING', $array);
         $xtpl->parse('main.openid_processing');
     }
-    
+
     $servers = $array_config['openid_servers'];
-    
+
     $openid_files = @scandir(NV_ROOTDIR . '/modules/users/login');
     foreach ($openid_files as $server) {
         if (preg_match('/^(cas|oauth)\-([a-z0-9\-\_]+)\.php$/', $server, $m)) {
             $checked = (!empty($servers) and in_array($m[2], $servers)) ? ' checked="checked"' : '';
             $disabled = '';
-            
+
             if ($server == 'cas-single-sign-on.php' and !isset($global_config['config_sso']['cas_hostname'])) {
                 $disabled = ' disabled="disabled" ';
             } elseif ($server == 'oauth-facebook.php' and (empty($global_config['facebook_client_id']) or empty($global_config['facebook_client_secret']))) {
@@ -365,7 +364,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             } elseif ($server == 'oauth-google.php' and (empty($global_config['google_client_id']) or empty($global_config['google_client_secret']))) {
                 $disabled = ' disabled="disabled" ';
             }
-            
+
             $openid_assign = array(
                 'name' => $m[2],
                 'title' => $m[1] . ' ' . $m[2],
@@ -374,7 +373,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
                 'note' => sprintf($lang_module['oauth_config'], $m[1] . ' ' . $m[2])
             );
-            
+
             $xtpl->assign('OPENID', $openid_assign);
             if (file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')) {
                 $xtpl->parse('main.openid_servers.config');
@@ -384,7 +383,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $xtpl->parse('main.openid_servers');
         }
     }
-    
+
     $array_access = array(
         array(
             'id' => 1,
@@ -399,7 +398,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             'title' => $lang_global['level3']
         )
     );
-    
+
     if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
         $xtpl->parse('main.avatar_size');
         $xtpl->parse('main.active_group_newusers');
@@ -418,10 +417,10 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.access');
         $xtpl->parse('main.deny_config');
     }
-    
+
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
-    
+
     $page_title = $lang_module['config'];
 }
 

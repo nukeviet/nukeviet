@@ -49,8 +49,7 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
     if ($checksess != md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid'])) {
         nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['filter_check_log'], $op), $admin_info['username'] . ' - ' . $admin_info['userid'], 0);
 
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 
     $data_search = array(

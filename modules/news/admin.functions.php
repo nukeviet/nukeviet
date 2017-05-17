@@ -388,15 +388,15 @@ function nv_show_cat_list($parentid = 0)
 function nv_show_topics_list( $page = 1)
 {
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $module_config, $global_config, $module_file, $module_info;
-    
+
     $per_page = $module_config[$module_name]['per_page'];
     $db_slave->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_topics' );
-    
+
     $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
-    
-    $db_slave->select('*')    
+
+    $db_slave->select('*')
         ->order('weight ASC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
@@ -627,12 +627,12 @@ function nv_show_block_list($bid)
 
             $xtpl->parse('main.loop');
         }
-        
+
         if(defined('NV_IS_SPADMIN'))
         {
             $xtpl->assign('ORDER_PUBLTIME', md5($bid . NV_CHECK_SESSION));
             $xtpl->parse('main.order_publtime');
-        }        
+        }
 
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
@@ -696,7 +696,7 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
         $xtpl->assign('AUTOSAVEKEY', $autoSaveKey);
         $xtpl->parse('main.removelocalstorage');
     }
-    
+
     if (nv_strlen($msg1) > 255) {
         $xtpl->assign('REDRIECT_T1', 20);
         $xtpl->assign('REDRIECT_T2', 20000);
@@ -704,7 +704,7 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
         $xtpl->assign('REDRIECT_T1', 5);
         $xtpl->assign('REDRIECT_T2', 5000);
     }
-    
+
     if ($go_back) {
         $xtpl->parse('main.go_back');
     } else {
@@ -721,7 +721,7 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
 
 /**
  * get_mod_alias()
- * 
+ *
  * @param mixed $title
  * @param string $mod
  * @param integer $id
@@ -729,18 +729,18 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
  */
 function get_mod_alias($title, $mod = '', $id = 0)
 {
-    global $module_data, $module_config, $module_name, $db_slave, $db; 
-    
+    global $module_data, $module_config, $module_name, $db_slave;
+
     if (empty($title)) {
         return '';
     }
-    
+
     $alias = change_alias($title);
     if ($module_config[$module_name]['alias_lower']) {
         $alias = strtolower($alias);
     }
     $id = intval($id);
-    
+
     if ($mod == 'cat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
         $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias');
@@ -749,7 +749,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $nb = $stmt->fetchColumn();
         if (! empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
-    
+
             $alias .= '-' . (intval($nb) + 1);
         }
     } elseif ($mod == 'topics') {
@@ -760,7 +760,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $nb = $stmt->fetchColumn();
         if (! empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
-    
+
             $alias .= '-' . (intval($nb) + 1);
         }
     } elseif ($mod == 'blockcat') {
@@ -771,10 +771,10 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $nb = $stmt->fetchColumn();
         if (! empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
-    
+
             $alias .= '-' . (intval($nb) + 1);
         }
     }
-    
+
     return $alias;
 }
