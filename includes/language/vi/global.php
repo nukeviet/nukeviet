@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_global';
 
+$lang_global['locale'] = 'vi_VN.utf8';
 $lang_global['Content_Language'] = 'vi';
 $lang_global['LanguageName'] = 'vietnamese';
 $lang_global['site_info'] = 'Thông báo từ hệ thống';
