@@ -21,7 +21,7 @@ define('NV_MAINFILE', true);
 define('NV_START_TIME', microtime(true));
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -50,7 +50,7 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
         if (!empty($base_siteurl)) {
             $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
         }
-        nv_redirect_location($base_siteurl . '/install/index.php');
+        Header('Location: ' . $base_siteurl . '/install/index.php');
     }
     die();
 }
