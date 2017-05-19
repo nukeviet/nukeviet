@@ -69,7 +69,7 @@
 					<label for="custom_fields[{RADIO_SYSTEM.field}]" class="col-sm-8 control-label {RADIO_SYSTEM.required}" title="{RADIO_SYSTEM.description}"> {RADIO_SYSTEM.title} </label>
 					<div class="btn-group col-sm-16">
 						<!-- BEGIN: loop -->
-						<label for="lb_{FIELD_CHOICES.id}" class="radio-box"> <input type="radio" name="custom_fields[{RADIO_SYSTEM.field}]" value="{FIELD_CHOICES.key}" class="{RADIO_SYSTEM.class}" onclick="validErrorHidden(this,5);" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+						<label for="lb_{FIELD_CHOICES.id}" class="radio-box"> <input type="radio" name="gender[]" value="{FIELD_CHOICES.key}" class="{RADIO_SYSTEM.class}" onclick="validErrorHidden(this,5);" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
 						<!-- END: loop -->
 					</div>
 				</div>
@@ -79,11 +79,18 @@
 		<!-- BEGIN: show_date -->
 		<div class="form-group">
 			<div class="input-group">
-				<input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess=""/>
+				<input type="text" class="form-control datepicker {BIRTH_SYSTEM.required} {BIRTH_SYSTEM.class}" data-provide="datepicker" placeholder="{BIRTH_SYSTEM.title}" value="{BIRTH_SYSTEM.value}" name="birthday" readonly="readonly" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess=""/>
 				<span class="input-group-addon pointer" onclick="button_datepickerShow(this);"> <em class="fa fa-calendar"></em> </span>
 			</div>
 		</div>
 		<!-- END: show_date -->
+		<!-- BEGIN: show_textarea -->
+		<div class="form-group">
+			<div>
+				<textarea class="form-control {TEXTAREA_SYSTEM.required} {TEXTAREA_SYSTEM.class}" placeholder="{TEXTAREA_SYSTEM.title}" name="sig" onkeypress="validErrorHidden(this);" data-mess="">{FIELD.value}</textarea>
+			</div>
+		</div>
+		<!-- END: show_textarea -->
 		<!-- BEGIN: field -->
 		<!-- BEGIN: loop -->
 		<!-- BEGIN: textbox -->

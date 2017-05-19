@@ -62,7 +62,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
         $lang_system = '';
         foreach ($array_field_config as $_k => $row) {
             if ($row['system'] == 1) {
-                if ($row['field'] == 'question' || $row['field'] == 'answer' || $row['field_type'] == 'radio' || $row['field_type'] == 'date') {
+                if ($row['field'] == 'question' || $row['field'] == 'answer' || $row['field'] == 'gender' || $row['field'] == 'birthday' || $row['field'] == 'sig') {
                     if ($row['field'] == 'question') {
                         $row['required'] = ($row['required']) ? 'required' : '';
                         $xtpl->assign('QUESTION_REQUIRED', $row['required']);
@@ -75,7 +75,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         if (!empty($row['show_register']))
                             $xtpl->parse('main.show_answer');
                     }
-                    if ($row['field_type'] == 'radio') {
+                    if ($row['field'] == 'gender') {
                         $row['required'] = ($row['required']) ? 'required' : '';
                         $number = 0;
                         foreach ($row['field_choices'] as $key => $value) {
@@ -90,15 +90,21 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $xtpl->assign('RADIO_SYSTEM', $row);
                         $xtpl->parse('main.show_radio');
                     }
-                    if ($row['field_type'] == 'date') {
+                    if ($row['field'] == 'birthday') {
+                    	$row['required'] = ($row['required']) ? 'required' : '';
                         if (!empty($row['field_choices'])) {
                             $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
                         }
                         $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
-                        $xtpl->assign('FIELD', $row);
+                        $xtpl->assign('BIRTH_SYSTEM', $row);
                         $xtpl->parse('main.show_date');
                         $datepicker = true;
                     }
+					if ($row['field'] == 'sig') {
+                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+                    $xtpl->assign('TEXTAREA_SYSTEM', $row);
+                    $xtpl->parse('main.show_textarea');
+                }
                 } else {
                     $i++;
                     $row['required'] = ($row['required']) ? 'required' : '';
