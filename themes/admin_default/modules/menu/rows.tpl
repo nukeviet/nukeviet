@@ -217,7 +217,7 @@
 var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
 $(document).ready(function() {
-	$("#parentid, #module_name_page").select2();
+	$("#parentid, #module_name_page, select[name='module_name']").select2();
 });
 </script>
 <!-- END: main -->
