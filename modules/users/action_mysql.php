@@ -33,7 +33,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	edit_time int(11) unsigned NOT NULL DEFAULT '0',
     	PRIMARY KEY (config)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_question (
     	qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
     	title varchar(240) NOT NULL DEFAULT '',
@@ -44,7 +44,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	PRIMARY KEY (qid),
     	UNIQUE KEY title (title,lang)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . " (
     	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
         group_id smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -82,7 +82,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	UNIQUE KEY email (email),
     	KEY idsite (idsite)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_backupcodes (
         userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
         code varchar(20) NOT NULL,
@@ -91,7 +91,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
         time_creat int(11) unsigned NOT NULL DEFAULT '0',
         UNIQUE KEY userid (userid, code)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups (
     	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
     	title varchar(240) NOT NULL,
@@ -114,7 +114,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	UNIQUE KEY ktitle (title,idsite),
     	KEY exp_time (exp_time)
     ) ENGINE=MyISAM AUTO_INCREMENT=10";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups_users (
     	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
     	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -123,7 +123,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	data text NOT NULL,
     	PRIMARY KEY (group_id,userid)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_reg (
     	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     	username varchar(100) NOT NULL DEFAULT '',
@@ -132,6 +132,9 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	email varchar(100) NOT NULL DEFAULT '',
     	first_name varchar(255) NOT NULL DEFAULT '',
     	last_name varchar(255) NOT NULL DEFAULT '',
+    	gender CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+    	birthday INT(11) NOT NULL,
+    	sig TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
     	regdate int(11) unsigned NOT NULL DEFAULT '0',
     	question varchar(255) NOT NULL,
     	answer varchar(255) NOT NULL DEFAULT '',
@@ -143,7 +146,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	UNIQUE KEY md5username (md5username),
     	UNIQUE KEY email (email)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_openid (
     	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
     	openid varchar(255) NOT NULL DEFAULT '',
@@ -153,7 +156,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	KEY userid (userid),
     	KEY email (email)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field (
     	fid mediumint(8) NOT NULL AUTO_INCREMENT,
     	field varchar(25) NOT NULL,
@@ -173,15 +176,16 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	class varchar(50) NOT NULL,
     	language text NOT NULL,
     	default_value varchar(255) NOT NULL DEFAULT '',
+    	system TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
     	PRIMARY KEY (fid),
     	UNIQUE KEY field (field)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info (
     	userid mediumint(8) unsigned NOT NULL,
     	PRIMARY KEY (userid)
     ) ENGINE=MyISAM";
-    
+
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462)";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('password_simple', '000000|1234|2000|12345|111111|123123|123456|11223344|654321|696969|1234567|12345678|87654321|123456789|23456789|1234567890|66666666|68686868|66668888|88888888|99999999|999999999|1234569|12345679|aaaaaa|abc123|abc123@|abc@123|admin123|admin123@|admin@123|nuke123|nuke123@|nuke@123|adobe1|adobe123|azerty|baseball|dragon|football|harley|iloveyou|jennifer|jordan|letmein|macromedia|master|michael|monkey|mustang|password|photoshop|pussy|qwerty|shadow|superman|hoilamgi|khongbiet|khongco|khongcopass', " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . ")";
@@ -189,9 +193,20 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_group_newusers', '0', " . NV_CURRENTTIME . ")";
-    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_user_logs', '1', " . NV_CURRENTTIME . ")";
-    
-    $a = 0;
+	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('min_old_user', '16', " . NV_CURRENTTIME . ")";
+
+
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('first_name', 2, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:4:\"Tên\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('last_name', 5, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:20:\"Họ và tên đệm\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('gender', 6, 'radio', 'a:2:{s:1:\"M\";s:3:\"Nam\";s:1:\"F\";s:4:\"Nữ\";}', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:12:\"Giới tính\";i:1;s:0:\"\";}}', '1', 1)";
+	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('birthday', 7, 'date', 'a:1:{s:12:\"current_date\";i:0;}', '', 'none', '', '', 0, 0, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:10:\"Ngày sinh\";i:1;s:0:\"\";}}', '0', 1)";
+	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('sig', 8, 'textarea', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:9:\"Chữ ký\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('answer', 4, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:11:\"Trả lời\";i:1;s:0:\"\";}}', '', 1)";
+	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('question', 3, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:22:\"Câu hỏi bảo mật\";i:1;s:0:\"\";}}', '', 1)";
+
+
+
+    $a=0;
     if ($module_data == 'users') {
         $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (1, 'Super admin', '', 'Super Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
         $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (2, 'General admin', '', 'General Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
