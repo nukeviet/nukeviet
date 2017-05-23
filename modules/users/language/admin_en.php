@@ -451,3 +451,4 @@ $lang_module['user_oauthmanager_empty'] = 'This user does not have any OpenID or
 $lang_module['user_oauthmanager_gate'] = 'Port name';
 $lang_module['user_oauthmanager_email'] = 'Email use';
 $lang_module['user_oauthmanager_deleteall'] = 'Delete all';
+$lang_module['min_old_user'] = 'Minimum age to join members';

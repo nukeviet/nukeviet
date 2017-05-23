@@ -471,3 +471,4 @@ $lang_module['user_oauthmanager_empty'] = 'Thành viên này chưa có OpenID ha
 $lang_module['user_oauthmanager_gate'] = 'Tên cổng';
 $lang_module['user_oauthmanager_email'] = 'Email sử dụng';
 $lang_module['user_oauthmanager_deleteall'] = 'Xóa tất cả';
+$lang_module['min_old_user'] = 'Số tuổi thành viên ít nhất để tham gia';

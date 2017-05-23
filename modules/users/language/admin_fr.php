@@ -451,3 +451,4 @@ $lang_module['user_oauthmanager_empty'] = 'Ce membre n\'a pas ou OAuth OpenID';
 $lang_module['user_oauthmanager_gate'] = 'nom du port';
 $lang_module['user_oauthmanager_email'] = 'Utiliser la messagerie électronique';
 $lang_module['user_oauthmanager_deleteall'] = 'supprimer tout';
+$lang_module['min_old_user'] = 'Au moins les membres de lâge de participer';
