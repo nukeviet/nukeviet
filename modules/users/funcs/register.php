@@ -257,9 +257,9 @@ if ($checkss == $array_register['checkss']) {
 
     $array_register['agreecheck'] = $nv_Request->get_int('agreecheck', 'post', 0);
     $array_gender = $nv_Request->get_array('gender', 'post', array());
-	 $array_register['gender'] =$array_gender[0];
+    $array_register['gender'] = $array_gender[0];
     $array_register['birthday'] = $nv_Request->get_title('birthday', 'post', '');
-	$array_register['sig'] = $nv_Request->get_title('sig', 'post', '');
+    $array_register['sig'] = $nv_Request->get_title('sig', 'post', '');
 
     if ($global_config['captcha_type'] == 2) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
@@ -410,7 +410,13 @@ if ($checkss == $array_register['checkss']) {
             if ($row_f['field'] == 'birthday') {
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array_register[$row_f['field']], $m)) {
                     $array_register[$row_f['field']] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-
+                    if ((floor((NV_CURRENTTIME - $array_register[$row_f['field']])/31536000)) < $global_users_config['min_old_user']) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => 'custom_fields[' . $row_f['field'] . ']',
+                            'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
+                        )));
+                    }
                     if ($row_f['min_length'] > 0 and ($array_register[$row_f['field']] < $row_f['min_length'] or $array_register[$row_f['field']] > $row_f['max_length'])) {
                         die(json_encode(array(
                             'status' => 'error',
@@ -573,8 +579,8 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['your_question'] = $your_question;
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['gender'] = $array_register['gender'];
-		$data_insert['birthday'] = $array_register['birthday'];
-		$data_insert['sig'] = $array_register['sig'];
+        $data_insert['birthday'] = $array_register['birthday'];
+        $data_insert['sig'] = $array_register['sig'];
 
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 

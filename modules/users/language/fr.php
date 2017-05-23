@@ -352,3 +352,4 @@ $lang_module['2step_status'] = 'L\'authentification à deux étapes';
 $lang_module['2step_link'] = 'Réglage';
 $lang_module['userlogout'] = 'Compte de membre sortie';
 $lang_module['userloginviaopt'] = 'Connectez-vous au port';
+$lang_module['old_min_user_error'] ='Votre âge% s, l\'enregistrement des mineurs';
