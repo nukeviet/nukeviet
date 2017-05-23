@@ -490,13 +490,16 @@ if ($checkss == $array_register['checkss']) {
     }
 
     if (!defined('ACCESS_ADDUS') and ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info) VALUES (
 			:username,
 			:md5username,
 			:password,
 			:email,
 			:first_name,
 			:last_name,
+			:gender,
+			:birthday,
+			:sig,
 			" . NV_CURRENTTIME . ",
 			:your_question,
 			:answer,
@@ -511,6 +514,9 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['email'] = $array_register['email'];
         $data_insert['first_name'] = $array_register['first_name'];
         $data_insert['last_name'] = $array_register['last_name'];
+		$data_insert['gender'] = $array_register['gender'];
+        $data_insert['birthday'] = $array_register['birthday'];
+        $data_insert['sig'] = $array_register['sig'];
         $data_insert['your_question'] = $your_question;
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
