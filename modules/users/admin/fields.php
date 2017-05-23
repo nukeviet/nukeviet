@@ -451,6 +451,8 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
+			if($row['system'] == 1) $xtpl->assign('DISABLED_CLASS', 'class="disabled"');
+			else $xtpl->assign('DISABLED_CLASS', '');
             $xtpl->assign('ROW', array(
                 'fid' => $row['fid'],
                 'field' => $row['field'],
