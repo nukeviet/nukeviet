@@ -392,6 +392,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
 }
 
 //Basic
+//print_r($array_field_config);die('pass');
 if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $array_data['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $array_data['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);

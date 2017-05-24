@@ -75,7 +75,7 @@
 				<!-- BEGIN: show_first_name -->
                 <tr>
                     <td colspan="2"> {LANG.first_name} <!-- BEGIN: show_required_first_name --> (<span style="color:#FF0000">*</span>) <!-- END: show_required_first_name -->  </td>
-                    <td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
+                    <td><input class="form-control {FIRST_NAME_REQUIRED}" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
                 </tr>
                 <!-- END: show_first_name -->
                 <!-- BEGIN: show_last_name-->
