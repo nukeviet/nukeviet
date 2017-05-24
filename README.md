@@ -1,4 +1,6 @@
 # Introduction about NukeViet
+
+[![Join the chat at https://gitter.im/nukeviet/nukeviet](https://badges.gitter.im/nukeviet/nukeviet.svg)](https://gitter.im/nukeviet/nukeviet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 NukeViet is the first opensource CMS in Vietnam. The lastest version - NukeViet 4 coding ground up support lastest web technologies, include reponsive web design (use HTML 5, CSS 3, Composer, XTemplate), jQuery, Ajax...) enables you to build websites and online applications rapidly.
 
 With it own core libraries built in, NukeViet 4 is cross platforms and frameworks independent. By basic knowledge of PHP and MySQL, you can easily extend NukeViet for your purposes.
