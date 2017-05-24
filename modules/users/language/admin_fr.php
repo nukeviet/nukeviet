@@ -452,3 +452,5 @@ $lang_module['user_oauthmanager_gate'] = 'nom du port';
 $lang_module['user_oauthmanager_email'] = 'Utiliser la messagerie électronique';
 $lang_module['user_oauthmanager_deleteall'] = 'supprimer tout';
 $lang_module['min_old_user'] = 'Au moins les membres de lâge de participer';
+$lang_module['error_system'] = '% S ne peut pas être vide';
+$lang_module['old_min_user_error'] ='Votre âge% s, l\'enregistrement des mineurs';

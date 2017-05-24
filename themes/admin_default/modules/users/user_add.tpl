@@ -33,49 +33,68 @@
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
 					<td><input class="form-control required password" type="password" name="password2" value="{DATA.password2}" style="width: 300px" id="password2" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
 				</tr>
+				<!-- BEGIN: show_question -->
 				<tr>
 					<td> {LANG.question} </td>
 					<td style="width:10px">
+					<!-- BEGIN: show_required_question -->
 						(<span style="color:#FF0000">*</span>)
+					<!-- END: show_required_question -->
 					</td>
-					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
+					<td><input class="form-control {QUESTION_REQUIRED}" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
+				<!-- END: show_question -->
+				<!-- BEGIN: show_answer -->
 				<tr>
 					<td> {LANG.answer} </td>
 					<td style="width:10px">
+						<!-- BEGIN: show_required_answer -->
 						(<span style="color:#FF0000">*</span>)
+						<!-- END: show_required_answer -->
 					</td>
-					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
+					<td>
+						<input class="form-control {ANSWER_REQUIRED}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" />
+					</td>
 				</tr>
+				<!-- END: show_answer -->
 				<!-- BEGIN: name_show_0 -->
+               <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td colspan="2"> {LANG.last_name} </td>
-                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
+                    <td colspan="2"> {LANG.last_name} <!-- BEGIN: show_required_last_name --> (<span style="color:#FF0000">*</span>) <!-- END: show_required_last_name --></td>
+                    <td><input class="form-control {LAST_NAME_REQUIRED}" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
                 </tr>
+                 <!-- END: show_last_name -->
+                <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td colspan="2"> {LANG.first_name} </td>
-                    <td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
+                    <td colspan="2"> {LANG.first_name}<!-- BEGIN: show_required_first_name --> (<span style="color:#FF0000">*</span>) <!-- END: show_required_first_name --> </td>
+                    <td><input class="form-control {FIRST_NAME_REQUIRED}" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
                 </tr>
+                <!-- END: show_first_name -->
                 <!-- END: name_show_0 -->
 				<!-- BEGIN: name_show_1 -->
+				<!-- BEGIN: show_first_name -->
                 <tr>
-                    <td colspan="2"> {LANG.first_name} </td>
+                    <td colspan="2"> {LANG.first_name} <!-- BEGIN: show_required_first_name --> (<span style="color:#FF0000">*</span>) <!-- END: show_required_first_name -->  </td>
                     <td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
                 </tr>
+                <!-- END: show_first_name -->
+                <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td colspan="2"> {LANG.last_name} </td>
-                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
+                    <td colspan="2"> {LANG.last_name} <!-- BEGIN: show_required_last_name --> (<span style="color:#FF0000">*</span>) <!-- END: show_required_last_name --></td>
+                    <td><input class="form-control {LAST_NAME_REQUIRED}" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
                 </tr>
+                 <!-- END: show_last_name -->
                 <!-- END: name_show_1 -->
+                <!-- BEGIN: show_radio -->
 				<tr>
-					<td colspan="2"> {LANG.gender} </td>
+					<td colspan="2"> {LANG.gender} <!-- BEGIN: show_required_radio --> (<span style="color:#FF0000">*</span>) <!-- END: show_required_radio --> </td>
 					<td>
-					<select class="form-control" name="gender">
-						<!-- BEGIN: gender -->
-						<option value="{GENDER.key}"{GENDER.selected}>{GENDER.title}</option>
-						<!-- END: gender -->
-					</select></td>
+						<!-- BEGIN: loop -->
+						<label for="lb_{FIELD_CHOICES.id}"> <input type="radio" name="gender[]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked} > {FIELD_CHOICES.value} </label>
+						<!-- END: loop -->
+					</td>
 				</tr>
+				<!-- END: show_radio -->
 				<tr>
 					<td colspan="2"> {LANG.avatar} </td>
 					<td>
@@ -87,18 +106,24 @@
 					   </div>
                     </td>
 				</tr>
+				<!-- BEGIN: show_date -->
 				<tr>
-					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
+					<td colspan="2">
+					{LANG.birthday}<!-- BEGIN: show_required_date -->(<span style="color:#FF0000">*</span>) <!-- END: show_required_date -->
+					</td>
+					<td><input name="birthday" id="birthday" class="form-control {BIRTH_SYSTEM.required}" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
 				</tr>
+				<!-- END: show_date -->
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
 					<td><input type="checkbox" name="view_mail" value="1"{DATA.view_mail} /></td>
 				</tr>
+				<!-- BEGIN: show_sig -->
 				<tr>
-					<td style="vertical-align:top" colspan="2"> {LANG.sig} </td>
-					<td><textarea name="sig" class="form-control" cols="70" rows="5" style="width: 300px">{DATA.sig}</textarea></td>
+					<td style="vertical-align:top" colspan="2"> {LANG.sig} <!-- BEGIN: show_required_sig -->(<span style="color:#FF0000">*</span>) <!-- END: show_required_sig --> </td>
+					<td><textarea name="sig" class="form-control {TEXTAREA_SYSTEM.required}" cols="70" rows="5" style="width: 300px">{DATA.sig}</textarea></td>
 				</tr>
+				<!-- END: show_sig -->
 				<!-- BEGIN: group -->
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
@@ -197,7 +222,7 @@ $(function() {
 	$.toggleShowPassword({
 	    field: '#password2',
 	    control: '#methods'
-	})
+	});
 });
 //]]>
 </script>
