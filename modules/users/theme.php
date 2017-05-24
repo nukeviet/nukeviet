@@ -88,6 +88,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             $xtpl->parse('main.show_radio.loop');
                         }
                         $xtpl->assign('RADIO_SYSTEM', $row);
+						if (!empty($row['show_register']))
                         $xtpl->parse('main.show_radio');
                     }
                     if ($row['field'] == 'birthday') {
@@ -97,12 +98,14 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         }
                         $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
                         $xtpl->assign('BIRTH_SYSTEM', $row);
+						 if (!empty($row['show_register']))
                         $xtpl->parse('main.show_date');
                         $datepicker = true;
                     }
 					if ($row['field'] == 'sig') {
                     $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
                     $xtpl->assign('TEXTAREA_SYSTEM', $row);
+					if (!empty($row['show_register']))
                     $xtpl->parse('main.show_textarea');
                 }
                 } else {
