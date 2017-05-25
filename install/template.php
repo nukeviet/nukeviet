@@ -79,7 +79,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
  */
 function nv_step_1()
 {
-    global $lang_module, $languageslist, $language_array, $sys_info;
+    global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
 
     $xtpl = new XTemplate('step1.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
@@ -98,10 +98,16 @@ function nv_step_1()
 
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
     $xtpl->assign('LANG', $lang_module);
+
+    if ($global_config['unofficial_mode']) {
+        $xtpl->parse('step.unofficial_mode');
+    }
+
     if (empty($sys_info['supports_rewrite'])) {
         $xtpl->assign('SUPPORTS_REWRITE', NV_CHECK_SESSION);
         $xtpl->parse('step.check_supports_rewrite');
     }
+
     $xtpl->parse('step');
     return $xtpl->text('step');
 }
