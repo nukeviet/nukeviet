@@ -679,7 +679,23 @@ if ($step == 1) {
         $array_data['question'] = $nv_Request->get_title('question', 'post', $array_data['question'], 1);
         $array_data['answer_question'] = $nv_Request->get_title('answer_question', 'post', $array_data['answer_question'], 1);
 
-        $global_config['site_email'] = $array_data['nv_email'];
+        if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL))
+        {
+            $global_config['site_email'] = $_SERVER['SERVER_ADMIN'];
+        }
+        elseif (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL))
+        {
+            $global_config['site_email'] = $php_email;
+        }
+        elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL))
+        {
+            $global_config['site_email'] = $matches[0];
+        } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A"))
+        {
+            $global_config['site_email'] = "webmaster@" . $_SERVER['SERVER_NAME'];
+        } else {
+            $global_config['site_email'] = $array_data['nv_email'];
+        }
 
         if ($nv_Request->isset_request('nv_login,nv_password', 'post')) {
             // Bat dau phien lam viec cua MySQL
