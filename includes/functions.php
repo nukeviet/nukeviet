@@ -1076,10 +1076,34 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                 default:
                     $mail->SMTPSecure = '';
             }
+
+            if (filter_var($global_config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
+                $mail->From = $global_config['smtp_username'];
+            } else {
+                $mail->From = $global_config['site_email'];
+            }
         } elseif ($mailer_mode == 'sendmail') {
             $mail->IsSendmail();
+
+            if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
+                $mail->From = $_SERVER['SERVER_ADMIN'];
+            } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
+                $mail->From = "webmaster@" . $_SERVER['SERVER_NAME'];
+            } else {
+                $mail->From = $global_config['site_email'];
+            }
         } elseif (! in_array('mail', $sys_info['disable_functions'])) {
             $mail->IsMail();
+
+            if (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
+                $mail->From = $php_email;
+            } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
+                $mail->From = $matches[0];
+            } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
+                $mail->From = "webmaster@" . $_SERVER['SERVER_NAME'];
+            } else {
+                $mail->From = $global_config['site_email'];
+            }
         } else {
             return false;
         }
@@ -1094,7 +1118,6 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $message = $optimizer->process(false);
         $message = nv_unhtmlspecialchars($message);
 
-        $mail->From = $global_config['site_email'];
         $mail->FromName = $global_config['site_name'];
 
         if (is_array($from)) {
