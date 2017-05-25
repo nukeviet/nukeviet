@@ -369,7 +369,7 @@ function nv_check_valid_login($login, $max, $min)
  */
 function nv_check_valid_pass($pass, $max, $min)
 {
-    global $lang_global, $db_config, $db;
+    global $lang_global, $db_config, $db, $global_config;
 
     $pass = trim(strip_tags($pass));
 
