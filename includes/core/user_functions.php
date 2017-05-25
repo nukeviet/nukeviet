@@ -148,7 +148,7 @@ function nv_blocks_content($sitecontent)
     if (! empty($blocks)) {
         $unact = array();
         global $blockID;
-        
+
         $array_position = array_keys($_posReal);
         foreach ($blocks as $_key => $_row) {
             if ($_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME) {
@@ -180,7 +180,7 @@ function nv_blocks_content($sitecontent)
                 $blockTitle = $_row['blockTitle'];
                 $content = '';
                 $blockID = 'nv' . $_key;
-                
+
                 if ($_row['module'] == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'])) {
                     include NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'];
                 } elseif (isset($sys_mods[$_row['module']]['module_file']) and ! empty($sys_mods[$_row['module']]['module_file']) and file_exists(NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'])) {
@@ -385,10 +385,12 @@ function nv_html_meta_tags($html = true)
             'content' => 'width=device-width, initial-scale=1' );
     }
 
-    if ($home) {
-        $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $global_config['site_home_module'], true);
-    } elseif (empty($canonicalUrl)) {
-        $canonicalUrl = str_replace(NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl']);
+    if (empty($canonicalUrl)) {
+        if ($home) {
+            $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $global_config['site_home_module'], true);
+        } else {
+            $canonicalUrl = str_replace(NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl']);
+        }
     }
     if (substr($canonicalUrl, 0, 4) != 'http') {
         if (substr($canonicalUrl, 0, 1) != '/') {
@@ -566,7 +568,7 @@ function nv_html_css($html = true)
         } else {
             return array( array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) );
         }
-    }    
+    }
 
     return $html ? '' : array();
 }
@@ -713,7 +715,7 @@ function nv_groups_list_pub($mod_data = 'users')
     global $nv_Cache, $db, $db_config, $global_config;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-    
+
     $query = 'SELECT group_id, title, group_type, exp_time FROM ' . $_mod_table . '_groups WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
     $list = $nv_Cache->db($query, '', $mod_data);
 
