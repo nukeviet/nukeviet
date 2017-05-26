@@ -64,7 +64,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $array_config_site['googleMapsAPI'] = $nv_Request->get_title('googleMapsAPI', 'post', '');
-    if (preg_match('/[^a-zA-Z0-9]/', $array_config_site['googleMapsAPI'])) {
+    if (preg_match('/[^a-zA-Z0-9\-_]/', $array_config_site['googleMapsAPI'])) {
         $array_config_site['googleMapsAPI'] = 'AIzaSyC8ODAzZ75hsAufVBSffnwvKfTOT6TnnNQ';
     }
 
