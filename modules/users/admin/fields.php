@@ -140,7 +140,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $dataform = array();
     $dataform['sql_choices'] = '';
-    
+
     $dataform['fid'] = $nv_Request->get_int('fid', 'post', 0);
 
     $dataform['title'] = $nv_Request->get_title('title', 'post', '');
@@ -284,7 +284,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $choicesql_table = $nv_Request->get_string('choicesql_table', 'post', ''); //table trong module
             $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', ''); //cot value cho fields
             $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', ''); //cot key cho fields
-            
+
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
             } else {
@@ -383,8 +383,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         }
         if ($save) {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
     }
 }

@@ -14,7 +14,7 @@ if (! defined('NV_MAINFILE')) {
 
 function nv_getRPC($url, $data)
 {
-    global $module_file, $lang_module, $sys_info;
+    global $lang_module, $sys_info;
 
     $userAgents = array( 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1) Gecko/20090624 Firefox/3.5 (.NET CLR 3.5.30729)', 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', 'Mozilla/4.8 [en] (Windows NT 6.0; U)', 'Opera/9.25 (Windows NT 6.0; U; en)' );
 

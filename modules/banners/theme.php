@@ -20,7 +20,7 @@ if (! defined('NV_SYSTEM')) {
  */
 function nv_banner_theme_main($contents, $manament)
 {
-    global $global_config, $module_name, $module_info, $lang_module, $lang_global;
+    global $module_info, $lang_module, $lang_global;
 
     $xtpl = new XTemplate('home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -69,7 +69,7 @@ function nv_banner_theme_main($contents, $manament)
  */
 function logininfo_theme($contents)
 {
-    global $global_config, $module_name, $module_info, $lang_global;
+    global $global_config, $module_info, $lang_global;
 
     $xtpl = new XTemplate('logininfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('CLIENT_LOGIN_INFO', $contents['client_info']);
@@ -112,7 +112,7 @@ function logininfo_theme($contents)
  */
 function clientinfo_theme($contents)
 {
-    global $global_config, $module_name, $module_info;
+    global $module_info;
 
     $xtpl = new XTemplate('clientinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('CONTAINERID', $contents['containerid']);
@@ -131,7 +131,7 @@ function clientinfo_theme($contents)
  */
 function clinfo_theme($contents, $manament)
 {
-    global $global_config, $module_name, $module_info, $lang_module, $lang_global;
+    global $module_info, $lang_module, $lang_global;
 
     $xtpl = new XTemplate('clinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -171,7 +171,7 @@ function clinfo_theme($contents, $manament)
  */
 function cledit_theme($contents)
 {
-    global $global_config, $module_name, $module_info;
+    global $module_info;
     $xtpl = new XTemplate('cledit.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     foreach ($contents['rows'] as $row) {

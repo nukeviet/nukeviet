@@ -75,7 +75,7 @@ if (! nv_function_exists('nv_block_news_cat')) {
 
     function nv_block_news_cat($block_config)
     {
-        global $nv_Cache, $module_array_cat, $module_info, $site_mods, $module_config, $global_config, $db;
+        global $nv_Cache, $module_array_cat, $site_mods, $module_config, $global_config, $db;
         $module = $block_config['module'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $blockwidth = $module_config[$module]['blockwidth'];
@@ -127,13 +127,13 @@ if (! nv_function_exists('nv_block_news_cat')) {
                 if (! $block_config['showtooltip']) {
                     $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');
                 }
-                
+
                 $l['title_clean'] = nv_clean60($l['title'], $block_config['title_length']);
 
                 if ($l['external_link']) {
                     $l['target_blank'] = 'target="_blank"';
                 }
-                
+
                 $xtpl->assign('ROW', $l);
                 if (! empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');

@@ -14,7 +14,7 @@ if (! defined('NV_MAINFILE')) {
 
 function nv_referer_update()
 {
-    global $nv_Request, $client_info, $global_config, $db, $prefix;
+    global $nv_Request, $client_info, $global_config, $db;
 
     if ($client_info['is_myreferer'] == 0) {
         $host = $nv_Request->referer_host;

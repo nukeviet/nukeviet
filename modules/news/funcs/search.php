@@ -14,18 +14,18 @@ if (!defined('NV_IS_MOD_NEWS')) {
 
 /**
  * GetSourceNews()
- * 
+ *
  * @param mixed $sourceid
  * @return
  */
 function GetSourceNews($sourceid)
 {
     global $db_slave, $module_data;
-    
+
     if ($sourceid > 0) {
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
-        
+
         if (list ($title) = $re->fetch(3)) {
             return $title;
         }
@@ -35,7 +35,7 @@ function GetSourceNews($sourceid)
 
 /**
  * BoldKeywordInStr()
- * 
+ *
  * @param mixed $str
  * @param mixed $keyword
  * @return
@@ -121,14 +121,14 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     if (strpos($canonicalUrl, NV_MY_DOMAIN) !== 0) {
         $canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
     }
-    
+
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
-    
+
     if ($module_config[$module_name]['elas_use'] == 1) {
-        //ket noi den csdl elastic 
+        //ket noi den csdl elastic
         $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
-        
+
         $dbkeyhtml = nv_EncString($dbkeyhtml);
         if ($choose == 1) {
             $search_elastic = [
@@ -158,7 +158,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     ]
                 ]
             ];
-        
+
         } else if ($choose == 3) {
             $qurl = $key;
             $url_info = @parse_url($qurl);
@@ -173,7 +173,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         } else {
-            
+
             $search_elastic = [
                 'should' => [
                     'multi_match' => [ //dung multi_match:tim kiem theo nhieu truong
@@ -203,7 +203,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         }
-        
+
         $todate_elastic = array();
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
             $todate_elastic = [
@@ -216,12 +216,12 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'gte' => mktime(0, 0, 0, $m[2], $m[1], $m[3])
             ];
         }
-        
+
         $array_query_elastic = array();
         $array_query_elastic['query']['bool'] = $search_elastic;
         $array_query_elastic['size'] = $per_page;
         $array_query_elastic['from'] = ($page - 1) * $per_page;
-        
+
         if ($date_elastic = array_merge($todate_elastic, $fromdate_elastic)) {
             $array_query_elastic['query']['bool']['must']['range']['publtime'] = $date_elastic;
             $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
@@ -235,7 +235,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
         }
         $numRecord = $response['hits']['total'];
-        
+
         foreach ($response['hits']['hits'] as $key => $value) {
             $homeimgthumb = $value['_source']['homeimgthumb'];
             if ($homeimgthumb == 1) {
@@ -265,7 +265,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'sourceid' => $value['_source']['sourceid'],
                 'external_link' => $value['_source']['external_link']
             );
-        
+
         }
         $contents .= search_result_theme($key, $numRecord, $per_page, $page, $array_content, $catid);
     } else {
@@ -291,38 +291,38 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $where = " AND ( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' ";
             $where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
         }
-        
+
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
             $where .= ' AND publtime <=' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
         }
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m)) {
             $where .= ' AND publtime >=' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         }
-        
+
         if ($catid > 0) {
             $table_search = NV_PREFIXLANG . '_' . $module_data . '_' . $catid;
         } else {
             $table_search = NV_PREFIXLANG . '_' . $module_data . '_rows';
         }
-        
+
         $db_slave->sqlreset()
             ->select('COUNT(*)')
             ->from($table_search . ' as tb1 ' . $tbl_src)
             ->where('tb1.status=1 ' . $where);
-        
+
         $numRecord = $db_slave->query($db_slave->sql())
             ->fetchColumn();
-        
+
         $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.publtime DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
-        
+
         $result = $db_slave->query($db_slave->sql());
-        
+
         $array_content = array();
         $show_no_image = $module_config[$module_name]['show_no_image'];
-        
+
         while (list ($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
@@ -353,7 +353,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             );
         }
     }
-    
+
     $contents .= search_result_theme($key, $numRecord, $per_page, $page, $array_content, $catid);
 }
 

@@ -23,8 +23,6 @@ $page_title = $lang_module['clearsystem'];
  */
 function nv_clear_files($dir, $base)
 {
-    global $client_info;
-
     $dels = array();
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {

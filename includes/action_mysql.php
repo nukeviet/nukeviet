@@ -16,13 +16,13 @@ define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,ab
 
 function nv_copy_structure_table($table_des, $table_src)
 {
-    global $db, $db_config;
+    global $db;
     return $db->exec('CREATE TABLE ' . $table_des . ' LIKE ' . $table_src);
 }
 
 function nv_delete_table_sys($lang)
 {
-    global $db_config, $global_config;
+    global $db_config;
 
     $sql_drop_table = array();
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modules';

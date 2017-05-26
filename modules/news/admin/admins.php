@@ -143,8 +143,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
             }
         }
         $base_url = str_replace('&amp;', '&', $base_url) . '&userid=' . $userid;
-        Header('Location: ' . $base_url);
-        die();
+        nv_redirect_location($base_url);
     }
     $users_list = array();
     if (! empty($module_info['admins'])) {
@@ -235,8 +234,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
 
                 $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
                 if ($db->query($sql)->fetchColumn() == 0) {
-                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
-                    die();
+                    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
                 }
 
                 $xtpl->assign('ADMINDISPLAY', ($admin_module > 0) ? 'display:none;' : '');
@@ -275,8 +273,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
     $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 
     if ($db->query($sql)->fetchColumn() == 0) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
     }
     $xtpl = new XTemplate('admin.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);

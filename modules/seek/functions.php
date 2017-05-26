@@ -21,7 +21,7 @@ define('NV_IS_MOD_SEARCH', true);
  */
 function LoadModulesSearch()
 {
-    global $site_mods, $global_config;
+    global $site_mods;
 
     $arrayfolder = array();
     foreach ($site_mods as $mod => $arr_mod) {

@@ -28,7 +28,7 @@ define('NV_IS_FILE_DATABASE', true);
 
 function nv_show_tables()
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name;
+    global $db, $db_config, $lang_module, $module_name;
 
     $tables = array();
 
@@ -136,8 +136,7 @@ function nv_show_tab()
     $item = $sth->fetch();
 
     if (empty($item)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     if (in_array($nv_Request->get_title('show_highlight', 'post'), array( 'php', 'sql' ))) {
@@ -195,16 +194,13 @@ function main_theme($contents)
     global $global_config, $module_file;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
     $xtpl->assign('CAPTION', $contents['captions']['database_info']);
 
-    $a = 0;
     foreach ($contents['database'] as $key => $value) {
         $xtpl->assign('ROW', array(
             'key' => $key,
             'value' => $value
         ));
-
         $xtpl->parse('main.loop');
     }
 
@@ -252,7 +248,6 @@ function nv_show_tables_theme($contents)
 
     $xtpl->assign('SUBMIT', $contents['submit']);
 
-    $a = 0;
     foreach ($contents['rows'] as $key => $values) {
         $xtpl->assign('ROW', array(
             'tag' => (empty($values[3])) ? 'td' : 'th',
