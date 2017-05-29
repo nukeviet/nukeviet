@@ -35,7 +35,7 @@ while ($row_field = $result_field->fetch()) {
         $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
         $result = $db->query($query);
         $weight = 0;
-        while (list($key, $val) = $result->fetch(3)) {
+        while (list ($key, $val) = $result->fetch(3)) {
             $row_field['field_choices'][$key] = $val;
         }
     }
@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
     $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
-	$array_gender = $nv_Request->get_array('gender', 'post', array());
+    $array_gender = $nv_Request->get_array('gender', 'post', array());
     $_user['gender'] = $array_gender[0];
     $_user['view_mail'] = $nv_Request->get_int('view_mail', 'post', 0);
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
@@ -155,7 +155,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-   /* if ($_user['password1'] != $_user['password2']) {
+    if ($_user['password1'] != $_user['password2']) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'password1',
@@ -163,33 +163,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-    if (empty($_user['answer'])) {
-        die(json_encode(array(
-            'status' => 'error',
-            'input' => 'answer',
-            'mess' => $lang_module['edit_error_answer']
-        )));
-    }
 
-    if (empty($_user['first_name'])) {
-        $_user['first_name'] = $_user['username'];
-    }*/
 
-    $query_field = array('userid' => 0);
+    $query_field = array(
+        'userid' => 0
+    );
     if (!empty($array_field_config)) {
         require NV_ROOTDIR . '/modules/users/fields.check.php';
     }
-
-   /* $_user['sig'] = nv_nl2br($_user['sig'], '<br />');
-    if ($_user['gender'] != 'M' and $_user['gender'] != 'F') {
-        $_user['gender'] = '';
-    }
-
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user['birthday'], $m)) {
-        $_user['birthday'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $_user['birthday'] = 0;
-    }*/
 
     $in_groups = array();
     foreach ($_user['in_groups'] as $_group_id) {
@@ -221,7 +202,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => $row_f['field'],
-                    'mess' => sprintf($lang_module['error_system'],$row_f['title'])
+                    'mess' => sprintf($lang_module['error_system'], $row_f['title'])
                 )));
             }
 
@@ -299,6 +280,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             if ($row_f['field'] == 'birthday') {
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user[$row_f['field']], $m)) {
                     $_user[$row_f['field']] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+                    // Kiểm tra xem lớn hơn số tuổi cấu hình
                     if ((floor((NV_CURRENTTIME - $_user[$row_f['field']]) / 31536000)) < $global_users_config['min_old_user']) {
                         die(json_encode(array(
                             'status' => 'error',
@@ -551,27 +533,24 @@ if (defined('NV_IS_USER_FORUM')) {
     }
 
     if (!empty($array_field_config)) {
+        $_show_fields = false;
         foreach ($array_field_config as $row) {
             if ($row['system'] == 1) {
                 if ($row['field'] == 'question') {
                     $row['required'] = ($row['required']) ? 'required' : '';
                     $xtpl->assign('QUESTION_REQUIRED', $row['required']);
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.show_question.show_required_question');
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.show_question');
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.show_question.show_required_question');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.show_question');
                 }
                 if ($row['field'] == 'answer') {
                     $row['required'] = ($row['required']) ? 'required' : '';
                     $xtpl->assign('ANSWER_REQUIRED', $row['required']);
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.show_answer.show_required_answer');
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.show_answer');
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.show_answer.show_required_answer');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.show_answer');
                 }
                 if ($row['field'] == 'gender') {
                     $row['required'] = ($row['required']) ? 'required' : '';
-					if(!empty($row['default_value'])) $row['default_value'] = 'M';
+                    if (!empty($row['default_value'])) $row['default_value'] = 'M';
                     $number = 0;
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', array(
@@ -582,11 +561,9 @@ if (defined('NV_IS_USER_FORUM')) {
                         ));
                         $xtpl->parse('main.edit_user.show_radio.loop');
                     }
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.show_radio.show_required_radio');
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.show_radio.show_required_radio');
                     $xtpl->assign('RADIO_SYSTEM', $row);
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.show_radio');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.show_radio');
                 }
                 if ($row['field'] == 'birthday') {
                     $row['required'] = ($row['required']) ? 'required' : '';
@@ -595,35 +572,26 @@ if (defined('NV_IS_USER_FORUM')) {
                     }
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
                     $xtpl->assign('BIRTH_SYSTEM', $row);
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.show_date.show_required_date');
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.show_date');
-                    $datepicker = true;
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.show_date.show_required_date');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.show_date');
                 }
                 if ($row['field'] == 'sig') {
                     $row['required'] = ($row['required']) ? 'required' : '';
                     $xtpl->assign('TEXTAREA_SYSTEM', $row);
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.show_sig.show_required_sig');
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.show_sig');
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.show_sig.show_required_sig');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.show_sig');
                 }
                 if ($row['field'] == 'first_name') {
                     $row['required'] = ($row['required']) ? 'required' : '';
                     $xtpl->assign('FIRST_NAME_REQUIRED', $row['required']);
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_first_name.show_required_first_name');
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_first_name');
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_first_name.show_required_first_name');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_first_name');
                 }
                 if ($row['field'] == 'last_name') {
                     $row['required'] = ($row['required']) ? 'required' : '';
                     $xtpl->assign('LAST_NAME_REQUIRED', $row['required']);
-                    if (!empty($row['required']))
-                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name.show_required_last_name');
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name');
+                    if (!empty($row['required'])) $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name.show_required_last_name');
+                    if (!empty($row['show_register'])) $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name');
                 }
                 continue;
             }
@@ -719,9 +687,12 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->parse('main.edit_user.field.loop.multiselect');
                 }
                 $xtpl->parse('main.edit_user.field.loop');
+                $_show_fields = true;
             }
         }
-        $xtpl->parse('main.edit_user.field');
+        if ($_show_fields) {
+            $xtpl->parse('main.edit_user.field');
+        }
     }
     $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
     $xtpl->parse('main.edit_user');

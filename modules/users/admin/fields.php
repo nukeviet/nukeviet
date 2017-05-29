@@ -21,9 +21,11 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $fid = $nv_Request->get_int('fid', 'post', 0);
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid;
+    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid . ' AND system=0';
     $numrows = $db->query($query)->fetchColumn();
-    if ($numrows != 1) {
+
+    $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE system=1')->fetchColumn();
+    if ($numrows != 1 or $new_vid < $weightsystem) {
         die('NO');
     }
 
@@ -412,9 +414,9 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
 
-    list ($fid, $field, $weight) = $db->query('SELECT fid, field, weight FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
+    list ($fid, $field, $weight, $system) = $db->query('SELECT fid, field, weight, system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
 
-    if ($fid and !empty($field)) {
+    if ($fid and !empty($field) and empty($system)) {
         $query1 = 'DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid;
         $query2 = 'ALTER TABLE ' . NV_MOD_TABLE . '_info DROP ' . $field;
         if ($db->query($query1) and $db->query($query2)) {
