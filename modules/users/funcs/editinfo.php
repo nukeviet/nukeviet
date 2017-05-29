@@ -148,24 +148,42 @@ function opidr($openid_info)
     global $lang_module;
 
     if ($openid_info == 1) {
-        $openid_info = array('status' => 'error', 'mess' => $lang_module['canceled_authentication']);
+        $openid_info = array(
+            'status' => 'error',
+            'mess' => $lang_module['canceled_authentication']
+        );
     } elseif ($openid_info == 2) {
-        $openid_info = array('status' => 'error', 'mess' => $lang_module['not_logged_in']);
+        $openid_info = array(
+            'status' => 'error',
+            'mess' => $lang_module['not_logged_in']
+        );
     } elseif ($openid_info == 3) {
-        $openid_info = array('status' => 'error', 'mess' => $lang_module['logged_in_failed']);
+        $openid_info = array(
+            'status' => 'error',
+            'mess' => $lang_module['logged_in_failed']
+        );
     } elseif ($openid_info == 4) {
-        $openid_info = array('status' => 'error', 'mess' => $lang_module['openid_is_exists']);
+        $openid_info = array(
+            'status' => 'error',
+            'mess' => $lang_module['openid_is_exists']
+        );
     } elseif ($openid_info == 5 or $openid_info == 6) {
-        $openid_info = array('status' => 'error', 'mess' => $lang_module['email_is_exists']);
+        $openid_info = array(
+            'status' => 'error',
+            'mess' => $lang_module['email_is_exists']
+        );
     } else {
-        $openid_info = array('status' => 'success', 'mess' => $lang_module['openid_added']);
+        $openid_info = array(
+            'status' => 'success',
+            'mess' => $lang_module['openid_added']
+        );
     }
     $contents = openid_callback($openid_info);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit;
+    exit ;
 }
 
 /**
@@ -218,13 +236,19 @@ if ((int)$row['safemode'] > 0) {
                 'status' => 'error',
                 'input' => 'nv_password',
                 'mess' => $lang_global['incorrect_password']
-                )));
+            )));
         }
 
         if ($nv_Request->isset_request('resend', 'post')) {
             $ss_safesend = $nv_Request->get_int('safesend', 'session', 0);
             if ($ss_safesend < NV_CURRENTTIME) {
-                $name = $global_config['name_show'] ? array($row['first_name'], $row['last_name']) : array($row['last_name'], $row['first_name']);
+                $name = $global_config['name_show'] ? array(
+                    $row['first_name'],
+                    $row['last_name']
+                ) : array(
+                    $row['last_name'],
+                    $row['first_name']
+                );
                 $name = array_filter($name);
                 $name = implode(' ', $name);
                 $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
@@ -271,7 +295,7 @@ if ((int)$row['safemode'] > 0) {
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit;
+    exit ;
 }
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
@@ -282,11 +306,11 @@ $groups_list = array();
 
 $types = array('basic');
 
-if (!defined('ACCESS_EDITUS')) { // quyền sửa
+if (!defined('ACCESS_EDITUS')) {// quyền sửa
     $types[] = 'avatar';
     $types[] = 'question';
 }
-if (!defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_PASSUS'))) { //quyền đổi mk
+if (!defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_PASSUS'))) {//quyền đổi mk
     $types[] = 'password';
 }
 if (!defined('ACCESS_EDITUS')) {
@@ -314,7 +338,7 @@ if (!empty($array_field_config) and !defined('ACCESS_EDITUS')) {
     $types[] = 'safemode';
 }
 
-if (defined('ACCESS_EDITUS')) { //trường hợp trưởng nhóm truy cập sửa thông tin member
+if (defined('ACCESS_EDITUS')) {//trường hợp trưởng nhóm truy cập sửa thông tin member
     $array_data['group_id'] = $group_id;
     $array_data['userid'] = $edit_userid;
     $array_data['type'] = (isset($array_op[3]) and !empty($array_op[3]) and in_array($array_op[3], $types)) ? $array_op[3] : ((isset($array_op[3]) and !empty($array_op[3]) and $array_op[3] == 'password') ? $array_op[3] : 'basic');
@@ -392,11 +416,12 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
 }
 
 //Basic
-//print_r($array_field_config);die('pass');
 if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $array_data['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $array_data['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
-    $array_data['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
+    //$array_data['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
+	$array_gender = $nv_Request->get_array('gender', 'post', array());
+    $array_data['gender'] = $array_gender[0];
     $array_data['birthday'] = nv_substr($nv_Request->get_title('birthday', 'post', '', 0), 0, 10);
     $array_data['view_mail'] = (int)$nv_Request->get_bool('view_mail', 'post', false);
 
@@ -412,6 +437,106 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     if (empty($array_data['first_name'])) {
         $array_data['first_name'] = !empty($row['first_name']) ? $row['first_name'] : $row['username'];
+    }
+
+    foreach ($array_field_config as $_k => $row_f) {
+        if ($row_f['system'] == 1) {
+            if ($row_f['field'] == 'first_name' || $row_f['field'] == 'last_name') {
+                if ($row_f['match_type'] == 'alphanumeric') {
+                    if (!preg_match('/^[a-zA-Z0-9\_]+$/', $array_data[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'email') {
+                    if (($error = nv_check_valid_email($array_data[$row_f['field']])) != '') {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => $error
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'url') {
+                    if (!nv_is_url($array_data[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'regex') {
+                    if (!preg_match('/' . $row_f['match_regex'] . '/', $array_data[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'callback') {
+                    if (function_exists($row_f['func_callback'])) {
+                        if (!call_user_func($row_f['func_callback'], $array_data[$row_f['field']])) {
+                            die(json_encode(array(
+                                'status' => 'error',
+                                'input' => $row_f['field'],
+                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            )));
+                        }
+                    } else {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => 'error function not exists ' . $row_f['func_callback']
+                        )));
+                    }
+                } else {
+                    $array_data[$row_f['field']] = nv_htmlspecialchars($array_data[$row_f['field']]);
+                }
+                $strlen = nv_strlen($array_data[$row_f['field']]);
+
+                if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                    )));
+                }
+            }
+            if ($row_f['field'] == 'gender') {
+                if (!isset($row_f['field_choices'][$array_data[$row_f['field']]])) {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
+                }
+            }
+            if ($row_f['field'] == 'birthday') {
+                if (!empty($array_data['birthday'])) {
+                    if ((floor((NV_CURRENTTIME - $array_data[$row_f['field']]) / 31536000)) < $global_users_config['min_old_user']) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
+                        )));
+                    }
+                    if ($row_f['min_length'] > 0 and ($array_data[$row_f['field']] < $row_f['min_length'] or $array_data[$row_f['field']] > $row_f['max_length'])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
+                        )));
+                    }
+                } else {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
+                }
+            }
+        }
     }
 
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET first_name= :first_name, last_name= :last_name, gender= :gender, birthday=' . $array_data['birthday'] . ', view_mail=' . $array_data['view_mail'] . ' WHERE userid=' . $edit_userid);
@@ -461,7 +586,13 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username'
     $stmt->bindParam(':md5username', $md5_username, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? array($row['first_name'], $row['last_name']) : array($row['last_name'], $row['first_name']);
+    $name = $global_config['name_show'] ? array(
+        $row['first_name'],
+        $row['last_name']
+    ) : array(
+        $row['last_name'],
+        $row['first_name']
+    );
     $name = array_filter($name);
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
@@ -539,7 +670,13 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
         }
 
         $p = nv_date('H:i d/m/Y', $p);
-        $name = $global_config['name_show'] ? array($row['first_name'], $row['last_name']) : array($row['last_name'], $row['first_name']);
+        $name = $global_config['name_show'] ? array(
+            $row['first_name'],
+            $row['last_name']
+        ) : array(
+            $row['last_name'],
+            $row['first_name']
+        );
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
@@ -589,7 +726,13 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
         $stmt->bindParam(':email', $nv_email, PDO::PARAM_STR);
         $stmt->execute();
 
-        $name = $global_config['name_show'] ? array($row['first_name'], $row['last_name']) : array($row['last_name'], $row['first_name']);
+        $name = $global_config['name_show'] ? array(
+            $row['first_name'],
+            $row['last_name']
+        ) : array(
+            $row['last_name'],
+            $row['first_name']
+        );
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
@@ -599,7 +742,8 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
         die(json_encode(array(
             'status' => 'ok',
             'input' => nv_url_rewrite($base_url . '/email', true),
-            'mess' => $lang_module['editinfo_ok'])));
+            'mess' => $lang_module['editinfo_ok']
+        )));
     }
 }
 //Password
@@ -647,7 +791,13 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? array($row['first_name'], $row['last_name']) : array($row['last_name'], $row['first_name']);
+    $name = $global_config['name_show'] ? array(
+        $row['first_name'],
+        $row['last_name']
+    ) : array(
+        $row['last_name'],
+        $row['first_name']
+    );
     $name = array_filter($name);
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
@@ -763,7 +913,10 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
                     if (!empty($array_leader)) {
                         $array_leader = array_unique($array_leader);
                         foreach ($array_leader as $email) {
-                            $mail_from = array($global_config['site_name'], $global_config['site_email']);
+                            $mail_from = array(
+                                $global_config['site_name'],
+                                $global_config['site_email']
+                            );
                             $url_group = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
                             if (strpos($url_group, NV_MY_DOMAIN) !== 0) {
                                 $url_group = NV_MY_DOMAIN . $url_group;
@@ -826,7 +979,13 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
 
         $ss_safesend = $nv_Request->get_int('safesend', 'session', 0);
         if ($ss_safesend < NV_CURRENTTIME) {
-            $name = $global_config['name_show'] ? array($row['first_name'], $row['last_name']) : array($row['last_name'], $row['first_name']);
+            $name = $global_config['name_show'] ? array(
+                $row['first_name'],
+                $row['last_name']
+            ) : array(
+                $row['last_name'],
+                $row['first_name']
+            );
             $name = array_filter($name);
             $name = implode(' ', $name);
             $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
@@ -842,8 +1001,8 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
         die(json_encode(array(
             'status' => 'ok',
             'input' => '',
-            'mess' => sprintf($lang_module['safe_send_ok'], $ss_safesend
-        ))));
+            'mess' => sprintf($lang_module['safe_send_ok'], $ss_safesend)
+        )));
     }
 
     $safe_key = nv_substr($nv_Request->get_title('safe_key', 'post', '', 1), 0, 32);
@@ -923,7 +1082,10 @@ $data_questions = array();
 $sql = "SELECT qid, title FROM " . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 $result = $db->query($sql);
 while ($row2 = $result->fetch()) {
-    $data_questions[$row2['qid']] = array('qid' => $row2['qid'], 'title' => $row2['title']);
+    $data_questions[$row2['qid']] = array(
+        'qid' => $row2['qid'],
+        'title' => $row2['title']
+    );
 }
 
 $data_openid = array();
@@ -935,7 +1097,8 @@ if (in_array('openid', $types)) {
             'opid' => $row3['opid'],
             'openid' => $row3['openid'],
             'email' => $row3['email'],
-            'disabled' => ((!empty($user_info['current_openid']) and $user_info['current_openid'] == $row3['opid']) ? true : false));
+            'disabled' => ((!empty($user_info['current_openid']) and $user_info['current_openid'] == $row3['opid']) ? true : false)
+        );
     }
 }
 

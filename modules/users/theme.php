@@ -1323,6 +1323,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     if (!empty($array_field_config)) {
         //var_dump($array_field_config); die();
         foreach ($array_field_config as $row) {
+        	if ($row['system'] == 1) continue;
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'checkbox') {
