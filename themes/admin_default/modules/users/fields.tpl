@@ -31,7 +31,7 @@
 				<td class="text-center"><i class="fa fa-lg {ROW.show_profile}" aria-hidden="true"></i></td>
 				<td>
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})" {DISABLED_CLASS}>{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->

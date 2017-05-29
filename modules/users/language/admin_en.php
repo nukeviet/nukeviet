@@ -451,3 +451,6 @@ $lang_module['user_oauthmanager_empty'] = 'This user does not have any OpenID or
 $lang_module['user_oauthmanager_gate'] = 'Port name';
 $lang_module['user_oauthmanager_email'] = 'Email use';
 $lang_module['user_oauthmanager_deleteall'] = 'Delete all';
+$lang_module['min_old_user'] = 'Minimum age to join members';
+$lang_module['error_system'] = '%s can not be empty';
+$lang_module['old_min_user_error'] ='Your age is under %s so it is not old enough to register';
