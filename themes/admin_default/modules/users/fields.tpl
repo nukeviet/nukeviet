@@ -18,9 +18,9 @@
 			<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">
-				<select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});">
+				<select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});" {DISABLED_WEIGHT}>
 					<!-- BEGIN: weight -->
-					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
+					<option value="{WEIGHT.key}"{WEIGHT.selected} >{WEIGHT.title}</option>
 					<!-- END: weight -->
 				</select></td>
 				<td>{ROW.field}</td>
@@ -30,8 +30,10 @@
 				<td class="text-center"><i class="fa fa-lg {ROW.required}" aria-hidden="true"></i></td>
 				<td class="text-center"><i class="fa fa-lg {ROW.show_profile}" aria-hidden="true"></i></td>
 				<td>
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})" {DISABLED_CLASS}>{LANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a>
+					<!-- BEGIN: show_delete -->
+					- <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<!-- END: show_delete -->
 				</td>
 			</tr>
 			<!-- END: loop -->
