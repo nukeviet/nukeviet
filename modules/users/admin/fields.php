@@ -249,9 +249,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if ($dataform['min_length'] >= $dataform['max_length']) {
             $error = $lang_module['field_number_error'];
         } else {
-            $dataform['field_choices'] = serialize(array(
-                'number_type' => $dataform['number_type']
-            ));
+            $dataform['field_choices'] = serialize(array('number_type' => $dataform['number_type']));
         }
     } elseif ($dataform['field_type'] == 'date') {
         $date_fields = 1;
@@ -278,9 +276,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if ($dataform['min_length'] >= $dataform['max_length'] and $dataform['min_length'] != 0) {
             $error = $lang_module['field_date_error'];
         } else {
-            $dataform['field_choices'] = serialize(array(
-                'current_date' => $dataform['current_date']
-            ));
+            $dataform['field_choices'] = serialize(array('current_date' => $dataform['current_date']));
         }
     } else {
         $dataform['choicetypes'] = $nv_Request->get_string('choicetypes', 'post', '');
@@ -301,10 +297,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $error = $lang_module['field_choices_empty'];
             }
         } else {
-            $choicesql_module = $nv_Request->get_string('choicesql_module', 'post', ''); //module data
-            $choicesql_table = $nv_Request->get_string('choicesql_table', 'post', ''); //table trong module
-            $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', ''); //cot value cho fields
-            $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', ''); //cot key cho fields
+            $choicesql_module = $nv_Request->get_string('choicesql_module', 'post', '');
+            //module data
+            $choicesql_table = $nv_Request->get_string('choicesql_table', 'post', '');
+            //table trong module
+            $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', '');
+            //cot value cho fields
+            $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', '');
+            //cot key cho fields
 
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
@@ -414,7 +414,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
 
-    list ($fid, $field, $weight, $system) = $db->query('SELECT fid, field, weight, system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
+    list($fid, $field, $weight, $system) = $db->query('SELECT fid, field, weight, system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
 
     if ($fid and !empty($field) and empty($system)) {
         $query1 = 'DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid;
@@ -474,9 +474,12 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
             if ($row['system'] == 1)
-                $xtpl->assign('DISABLED_CLASS', 'class="disabled"');
-            else
-                $xtpl->assign('DISABLED_CLASS', '');
+                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
+            else {
+                $xtpl->assign('DISABLED_WEIGHT', '');
+				$xtpl->parse('main.data.loop.show_delete');
+            }
+
             $xtpl->assign('ROW', array(
                 'fid' => $row['fid'],
                 'field' => $row['field'],
