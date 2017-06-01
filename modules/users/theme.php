@@ -103,7 +103,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $datepicker = true;
                     }
                     if ($row['field'] == 'sig') {
-                        $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+                        $row['value'] = nv_htmlspecialchars(nv_br2nl($row['default_value']));
                         $xtpl->assign('TEXTAREA_SYSTEM', $row);
                         if (!empty($row['show_register']))
                             $xtpl->parse('main.show_textarea');
@@ -124,7 +124,6 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
             $row['customID'] = $_k;
 
             if (($row['show_register'] and $userid == 0) or $userid > 0) {
-                $row['tbodyclass'] = ($a % 2) ? ' class="second"' : '';
                 if ($userid == 0 and empty($custom_fields)) {
                     if (!empty($row['field_choices'])) {
                         if ($row['field_type'] == 'date') {
@@ -811,7 +810,6 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             if ($row['system'] == 1) {
                 continue;
             }
-            $row['tbodyclass'] = ($a % 2) ? ' class="second"' : '';
 
             if ($userid == 0 and empty($custom_fields)) {
                 if (!empty($row['field_choices'])) {

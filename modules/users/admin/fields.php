@@ -431,6 +431,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
     die('NO');
 }
+
 $array_field_type = array(
     'number' => $lang_module['field_type_number'],
     'date' => $lang_module['field_type_date'],
