@@ -109,8 +109,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
     $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
-	$array_gender = $nv_Request->get_array('gender', 'post', array());
-	$_user['gender'] = $array_gender[0];
+    $array_gender = $nv_Request->get_array('gender', 'post', array());
+    $_user['gender'] = $array_gender[0];
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
     $_user['view_mail'] = $nv_Request->get_int('view_mail', 'post', 0);
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
@@ -273,8 +273,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-	//Check tính hợp lệ của first_name, last_name
-	 foreach ($array_field_config as $_k => $row_f) {
+    //Check tính hợp lệ của first_name, last_name
+     foreach ($array_field_config as $_k => $row_f) {
         if ($row_f['system'] == 1) {
             if (empty($_user[$row_f['field']]) and !empty($row_f['required'])) {
 
@@ -804,7 +804,7 @@ if (defined('NV_IS_USER_FORUM')) {
         }
         $xtpl->parse('main.edit_user.field');
     }
- 	$xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
+    $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
     $xtpl->parse('main.edit_user');
 }
 
