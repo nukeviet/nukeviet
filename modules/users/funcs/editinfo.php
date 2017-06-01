@@ -420,7 +420,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $array_data['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $array_data['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
     //$array_data['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
-	$array_gender = $nv_Request->get_array('gender', 'post', array());
+    $array_gender = $nv_Request->get_array('gender', 'post', array());
     $array_data['gender'] = $array_gender[0];
     $array_data['birthday'] = nv_substr($nv_Request->get_title('birthday', 'post', '', 0), 0, 10);
     $array_data['view_mail'] = (int)$nv_Request->get_bool('view_mail', 'post', false);

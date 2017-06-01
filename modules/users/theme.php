@@ -34,7 +34,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
-    //print_r($array_field_config);die('pass');
+
     if ($group_id != 0) {
         $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
     } else {
@@ -120,13 +120,6 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                 }
                 continue;
             }
-            /* if ($row['field'] == 'last_name' and $row['system'] == 1) {
-             $row['required'] = ($row['required']) ? 'required' : '';
-             $xtpl->assign('LAST_NAME_REQUIRED', $row['required']);
-             if (!empty($row['show_register']))
-             $xtpl->parse('main.show_last_name');
-             continue;
-             }*/
 
             $row['customID'] = $_k;
 
@@ -1323,7 +1316,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     if (!empty($array_field_config)) {
         //var_dump($array_field_config); die();
         foreach ($array_field_config as $row) {
-        	if ($row['system'] == 1) continue;
+            if ($row['system'] == 1) continue;
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'checkbox') {

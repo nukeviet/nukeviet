@@ -322,15 +322,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $weight = intval($weight) + 1;
 
                 $sql = "INSERT INTO " . NV_MOD_TABLE . "_field
-					(field, weight, field_type, field_choices, sql_choices, match_type,
-					match_regex, func_callback, min_length, max_length,
-					required, show_register, user_editable,
-					show_profile, class, language, default_value) VALUES
-					('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
-					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
-					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
-					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
-					" . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
+                    (field, weight, field_type, field_choices, sql_choices, match_type,
+                    match_regex, func_callback, min_length, max_length,
+                    required, show_register, user_editable,
+                    show_profile, class, language, default_value) VALUES
+                    ('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
+                    '" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
+                    " . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
+                    " . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
+                    " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
 
                 $data_insert = array();
                 $data_insert['class'] = $dataform['class'];
@@ -359,19 +359,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $query = "UPDATE " . NV_MOD_TABLE . "_field SET";
             if ($text_fields == 1) {
                 $query .= " match_type='" . $dataform['match_type'] . "',
-				match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
+                match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
             }
             $query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
-				required = '" . $dataform['required'] . "',
-				field_choices='" . $dataform['field_choices'] . "',
-				sql_choices = '" . $dataform['sql_choices'] . "',
-				show_register = '" . $dataform['show_register'] . "',
-				user_editable = '" . $dataform['user_editable'] . "',
-				show_profile = '" . $dataform['show_profile'] . "',
-				class = :class,
-				language='" . serialize($language) . "',
-				default_value= :default_value
-				WHERE fid = " . $dataform['fid'];
+                required = '" . $dataform['required'] . "',
+                field_choices='" . $dataform['field_choices'] . "',
+                sql_choices = '" . $dataform['sql_choices'] . "',
+                show_register = '" . $dataform['show_register'] . "',
+                user_editable = '" . $dataform['user_editable'] . "',
+                show_profile = '" . $dataform['show_profile'] . "',
+                class = :class,
+                language='" . serialize($language) . "',
+                default_value= :default_value
+                WHERE fid = " . $dataform['fid'];
 
             $stmt = $db->prepare($query);
             $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
@@ -477,7 +477,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 $xtpl->assign('DISABLED_WEIGHT', 'disabled');
             else {
                 $xtpl->assign('DISABLED_WEIGHT', '');
-				$xtpl->parse('main.data.loop.show_delete');
+                $xtpl->parse('main.data.loop.show_delete');
             }
 
             $xtpl->assign('ROW', array(
