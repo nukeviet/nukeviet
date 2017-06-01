@@ -110,8 +110,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt->bindParam(':content', $array_config['min_old_user'], PDO::PARAM_STR);
             $stmt->execute();
 
-			//Cấu hình số tuổi nhỏ nhất để thành viên có thể tham gia
-			$array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 16);
+            // Cấu hình số tuổi nhỏ nhất để thành viên có thể tham gia
+            $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 16);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
             $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
             $stmt->execute();
