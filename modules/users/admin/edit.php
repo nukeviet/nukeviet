@@ -82,7 +82,7 @@ while ($row_field = $result_field->fetch()) {
         $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
         $result = $db->query($query);
         $weight = 0;
-        while (list ($key, $val) = $result->fetch(3)) {
+        while (list($key, $val) = $result->fetch(3)) {
             $row_field['field_choices'][$key] = $val;
         }
     }
@@ -109,6 +109,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
     $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
+    $array_gender = $nv_Request->get_array('gender', 'post', array());
+    $_user['gender'] = $array_gender[0];
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
     $_user['view_mail'] = $nv_Request->get_int('view_mail', 'post', 0);
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
@@ -137,8 +139,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))
-        ->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'username',
@@ -154,8 +155,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
-        ->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'email',
@@ -163,8 +163,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email=' . $db->quote($_user['email']))
-        ->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email=' . $db->quote($_user['email']))->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'email',
@@ -172,8 +171,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
-        ->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'email',
@@ -197,7 +195,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-    if (empty($_user['question'])) {
+   /* if (empty($_user['question'])) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'question',
@@ -211,14 +209,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'input' => 'answer',
             'mess' => $lang_module['edit_error_answer']
         )));
-    }
+    }*/
 
     $query_field = array();
     if (!empty($array_field_config)) {
         require NV_ROOTDIR . '/modules/users/fields.check.php';
     }
 
-    if (empty($_user['first_name'])) {
+   /* if (empty($_user['first_name'])) {
         $_user['first_name'] = $_user['username'];
     }
 
@@ -231,7 +229,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $_user['birthday'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $_user['birthday'] = 0;
-    }
+    }*/
 
     $password = !empty($_user['password1']) ? $crypt->hash_password($_user['password1'], $global_config['hashprefix']) : $row['password'];
 
@@ -273,6 +271,158 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'input' => 'group_default',
             'mess' => $lang_module['edit_error_group_default']
         )));
+    }
+
+    //Check tính hợp lệ của first_name, last_name
+     foreach ($array_field_config as $_k => $row_f) {
+        if ($row_f['system'] == 1) {
+            if (empty($_user[$row_f['field']]) and !empty($row_f['required'])) {
+
+                die(json_encode(array(
+                    'status' => 'error',
+                    'input' => $row_f['field'],
+                    'mess' => sprintf($lang_module['error_system'],$row_f['title'])
+                )));
+            }
+
+            if ($row_f['field'] == 'first_name' || $row_f['field'] == 'last_name' || $row_f['field'] == 'question' || $row_f['field'] == 'answer') {
+                if ($row_f['match_type'] == 'alphanumeric') {
+                    if (!preg_match('/^[a-zA-Z0-9\_]+$/', $_user[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'email') {
+                    if (($error = nv_check_valid_email($_user[$row_f['field']])) != '') {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => $error
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'url') {
+                    if (!nv_is_url($_user[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'regex') {
+                    if (!preg_match('/' . $row_f['match_regex'] . '/', $_user[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'callback') {
+                    if (function_exists($row_f['func_callback'])) {
+                        if (!call_user_func($row_f['func_callback'], $_user[$row_f['field']])) {
+                            die(json_encode(array(
+                                'status' => 'error',
+                                'input' => $row_f['field'],
+                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            )));
+                        }
+                    } else {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => 'error function not exists ' . $row_f['func_callback']
+                        )));
+                    }
+                } else {
+                    $array_register[$row_f['field']] = nv_htmlspecialchars($array_register[$row_f['field']]);
+                }
+                $strlen = nv_strlen($_user[$row_f['field']]);
+
+                if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                    )));
+                }
+            }
+            if ($row_f['field'] == 'gender') {
+                if (!isset($row_f['field_choices'][$_user[$row_f['field']]])) {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
+                }
+            }
+            if ($row_f['field'] == 'birthday') {
+                if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user[$row_f['field']], $m)) {
+                    $_user[$row_f['field']] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+                    if ((floor((NV_CURRENTTIME - $_user[$row_f['field']]) / 31536000)) < $global_users_config['min_old_user']) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
+                        )));
+                    }
+                    if ($row_f['min_length'] > 0 and ($_user[$row_f['field']] < $row_f['min_length'] or $_user[$row_f['field']] > $row_f['max_length'])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
+                        )));
+                    }
+                } else {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
+                }
+            }
+            if ($row_f['field'] == 'sig') {
+                $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
+                $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
+                $_user[$row_f['field']] = strip_tags($_user[$row_f['field']], $allowed_html_tags);
+                if ($row_f['match_type'] == 'regex') {
+                    if (!preg_match('/' . $row_f['match_regex'] . '/', $_user[$row_f['field']])) {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
+                    }
+                } elseif ($row_f['match_type'] == 'callback') {
+                    if (function_exists($row_f['func_callback'])) {
+                        if (!call_user_func($row_f['func_callback'], $_user[$row_f['field']])) {
+                            die(json_encode(array(
+                                'status' => 'error',
+                                'input' => $row_f['field'],
+                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            )));
+                        }
+                    } else {
+                        die(json_encode(array(
+                            'status' => 'error',
+                            'input' => $row_f['field'],
+                            'mess' => 'error function not exists ' . $row_f['func_callback']
+                        )));
+                    }
+                }
+
+                $_user[$row_f['field']] = ($row_f['field_type'] == 'textarea') ? nv_nl2br($_user[$row_f['field']], '<br />') : $_user[$row_f['field']];
+                $strlen = nv_strlen($_user[$row_f['field']]);
+
+                if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $row_f['field'],
+                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                    )));
+                }
+            }
+        }
     }
 
     // Check photo
@@ -434,7 +584,7 @@ $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
 } else {
-    $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
+
 
     foreach ($genders as $gender) {
         $xtpl->assign('GENDER', $gender);
@@ -482,6 +632,82 @@ if (defined('NV_IS_USER_FORUM')) {
 
     if (!empty($array_field_config)) {
         foreach ($array_field_config as $row) {
+            if ($row['system'] == 1) {
+                if ($row['field'] == 'question') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    $xtpl->assign('QUESTION_REQUIRED', $row['required']);
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.show_question.show_required_question');
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.show_question');
+                }
+                if ($row['field'] == 'answer') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    $xtpl->assign('ANSWER_REQUIRED', $row['required']);
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.show_answer.show_required_answer');
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.show_answer');
+                }
+                if ($row['field'] == 'gender') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    if (!empty($row['default_value']))
+                        $row['default_value'] = 'M';
+                    $number = 0;
+                    foreach ($row['field_choices'] as $key => $value) {
+                        $xtpl->assign('FIELD_CHOICES', array(
+                            'id' => $row['fid'] . '_' . $number++,
+                            'key' => $key,
+                            'checked' => ($key == $row['default_value']) ? ' checked="checked"' : '',
+                            'value' => $value
+                        ));
+                        $xtpl->parse('main.edit_user.show_radio.loop');
+                    }
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.show_radio.show_required_radio');
+                    $xtpl->assign('RADIO_SYSTEM', $row);
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.show_radio');
+                }
+                if ($row['field'] == 'birthday') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    if (!empty($row['field_choices'])) {
+                        $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+                    }
+                    $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                    $xtpl->assign('BIRTH_SYSTEM', $row);
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.show_date.show_required_date');
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.show_date');
+                    $datepicker = true;
+                }
+                if ($row['field'] == 'sig') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    $xtpl->assign('TEXTAREA_SYSTEM', $row);
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.show_sig.show_required_sig');
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.show_sig');
+                }
+                if ($row['field'] == 'first_name') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    $xtpl->assign('FIRST_NAME_REQUIRED', $row['required']);
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_first_name.show_required_first_name');
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_first_name');
+                }
+                if ($row['field'] == 'last_name') {
+                    $row['required'] = ($row['required']) ? 'required' : '';
+                    $xtpl->assign('LAST_NAME_REQUIRED', $row['required']);
+                    if (!empty($row['required']))
+                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name.show_required_last_name');
+                    if (!empty($row['show_register']))
+                        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name');
+                }
+                continue;
+            }
             if (($row['show_register'] and $userid == 0) or $userid > 0) {
                 if ($userid == 0 and !$nv_Request->isset_request('confirm', 'post')) {
                     if (!empty($row['field_choices'])) {
@@ -578,7 +804,7 @@ if (defined('NV_IS_USER_FORUM')) {
         }
         $xtpl->parse('main.edit_user.field');
     }
-
+    $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
     $xtpl->parse('main.edit_user');
 }
 

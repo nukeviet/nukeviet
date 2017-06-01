@@ -38,14 +38,14 @@ if (! nv_admin_checkfirewall()) {
  */
 function validUserLog($array_user)
 {
-    global $db, $global_config, $nv_Request;
+    global $db, $global_config, $nv_Request, $client_info;
 
     $checknum = md5(nv_genpass(10));
     $user = array(
         'userid' => $array_user['userid'],
         'current_mode' => 0,
         'checknum' => $checknum,
-        'checkhash' => md5($array_user['userid'] . $checknum . $global_config['sitekey'] . NV_USER_AGENT),
+        'checkhash' => md5($array_user['userid'] . $checknum . $global_config['sitekey'] . $client_info['browser']['key']),
         'current_agent' => NV_USER_AGENT,
         'last_agent' => $array_user['last_agent'],
         'current_ip' => NV_CLIENT_IP,

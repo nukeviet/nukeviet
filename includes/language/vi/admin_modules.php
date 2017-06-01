@@ -56,6 +56,7 @@ $lang_module['funcs_layout'] = 'Sử dụng layout';
 $lang_module['funcs_in_submenu'] = 'Menu';
 $lang_module['funcs_subweight'] = 'Thứ tự';
 $lang_module['activate_rss'] = 'Kích hoạt chức năng rss';
+$lang_module['activate_sitemap'] = 'Kích hoạt chức năng sitemap';
 $lang_module['module_sys'] = 'Các module hệ thống';
 $lang_module['vmodule'] = 'Các module ảo';
 $lang_module['vmodule_add'] = 'Thêm module ảo';
