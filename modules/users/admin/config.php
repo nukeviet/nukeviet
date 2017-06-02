@@ -105,7 +105,13 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt->bindParam(':content', $array_config['avatar_width'], PDO::PARAM_STR);
             $stmt->execute();
 
-            $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 120);
+            $array_config['min_old_user'] = $nv_Request->get_int('min_old_user', 'post', 120);
+            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='min_old_user'");
+            $stmt->bindParam(':content', $array_config['min_old_user'], PDO::PARAM_STR);
+            $stmt->execute();
+
+            // Cấu hình số tuổi nhỏ nhất để thành viên có thể tham gia
+            $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 16);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
             $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
             $stmt->execute();
@@ -181,7 +187,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE
         config='deny_email' OR config='deny_name' OR config='password_simple' OR
-        config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR config='active_user_logs'
+        config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR config='active_user_logs' OR config='min_old_user'
     ";
     $result = $db->query($sql);
     while (list ($config, $content) = $result->fetch(3)) {

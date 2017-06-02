@@ -265,3 +265,4 @@ $lang_module['thanks_text'] = 'gestion NuKeViets denvoyer nos sincères Muon gr�
 $lang_module['thanks_list_member_all'] = 'Liste des membres:';
 $lang_module['thanks_list_member_other_version'] = 'La liste des membres Contribution de chaque version';
 $lang_module['thanks_other_version'] = 'Version';
+$lang_module['is_unofficial_mode'] = 'Note: Cette version est utilisée pour le développement et les tests, vous ne devriez pas être utilisé pour rendre le site officiel';

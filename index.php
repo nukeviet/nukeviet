@@ -219,6 +219,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Doc file cau hinh giao dien
             $themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini'));
+            if (isset($themeConfig['positions']['position']['name'])) {
+                $themeConfig['positions']['position'] = array($themeConfig['positions']['position']);
+            }
             require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme.php';
 
             // Ket noi ngon ngu theo theme

@@ -353,3 +353,4 @@ $lang_module['2step_require_directgo'] = 'Click here if the system did not redir
 $lang_module['2step_error_opt_backup'] = 'Please enter confirmation code from the Google Authenticator app or redundant code saved';
 $lang_module['2step_status'] = 'Two-step authentication';
 $lang_module['2step_link'] = 'Settings';
+$lang_module['old_min_user_error'] ='Your age is under% s so it is not old enough to register';

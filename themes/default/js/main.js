@@ -64,7 +64,7 @@ function timeoutsessrun() {
 			data: "nv_ajax_login=1"
 		}).done(function(a) {
 			window.location.href = location.reload()
-		})
+		}));
 	}, 1E3)
 }
 

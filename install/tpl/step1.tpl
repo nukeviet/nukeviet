@@ -12,6 +12,9 @@
         }
     }
 </script>
+<!-- BEGIN: unofficial_mode -->
+<div class="infoalert">{LANG.is_unofficial_mode}.</div>
+<!-- END: unofficial_mode -->
 <p>{LANG.select_lang_des}</p>
 <form action="#" id="checklang">
     <p>
