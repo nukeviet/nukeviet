@@ -281,8 +281,7 @@ p {
     padding:5px;
 }
 
-.fb-like,
-.fb-share-button {
+.fb-like {
     margin:0 25px 0 10px;
     top:-5px;
 }

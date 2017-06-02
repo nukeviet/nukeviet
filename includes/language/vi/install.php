@@ -265,3 +265,4 @@ $lang_module['thanks_text'] = 'Ban quản trị NuKeViet xin được gửi lờ
 $lang_module['thanks_list_member_all'] = 'Danh sách thành viên:';
 $lang_module['thanks_list_member_other_version'] = 'Danh sách các thành viên đã đóng góp theo từng phiên bản';
 $lang_module['thanks_other_version'] = 'Phiên bản';
+$lang_module['is_unofficial_mode'] = 'Chú ý: Đây là phiên bản dùng để phát triển và thử nghiệm, bạn không nên sử dụng để làm website chính thức';

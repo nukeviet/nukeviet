@@ -15,7 +15,7 @@ if (!defined('NV_MAINFILE')) {
 if (!nv_function_exists('nv_block_voting_select')) {
     /**
      * nv_block_voting_select_config()
-     * 
+     *
      * @param mixed $module
      * @param mixed $data_block
      * @param mixed $lang_block
@@ -23,7 +23,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
      */
     function nv_block_voting_select_config($module, $data_block, $lang_block)
     {
-        global $nv_Cache, $language_array, $site_mods;
+        global $nv_Cache, $site_mods;
 
         $html = '';
         $html .= '<tr>';
@@ -42,7 +42,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
 
     /**
      * nv_block_voting_select_config_submit()
-     * 
+     *
      * @param mixed $module
      * @param mixed $lang_block
      * @return
@@ -60,14 +60,14 @@ if (!nv_function_exists('nv_block_voting_select')) {
 
     /**
      * nv_block_voting_select()
-     * 
+     *
      * @param mixed $block_config
      * @param mixed $global_array_cat
      * @return
      */
     function nv_block_voting_select($block_config, $global_array_cat)
     {
-        global $nv_Cache, $module_info, $global_config, $site_mods, $module_name, $my_footer, $client_info, $lang_global;
+        global $nv_Cache, $global_config, $site_mods, $module_name, $my_footer, $client_info, $lang_global;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -115,7 +115,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
                 $xtpl->assign('VOTING', $voting_array);
                 $xtpl->assign('LANG', $lang_module);
-                
+
                 foreach ($list as $row) {
                     if (!empty($row['url'])) {
                         $row['title'] = '<a target="_blank" href="' . $row['url'] . '">' . $row['title'] . '</a>';

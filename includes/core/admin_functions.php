@@ -178,11 +178,6 @@ function nv_save_file_config_global()
     $content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
     $content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . floatval($upload_max_filesize) . ");\n";
 
-
-    if (! empty($config_variable['openid_servers'])) {
-        $content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
-    }
-
     $my_domains = array_map('trim', explode(',', $config_variable['my_domains']));
     $my_domains[] = NV_SERVER_NAME;
     $config_variable['my_domains'] = implode(',', array_unique($my_domains));
@@ -213,7 +208,7 @@ function nv_save_file_config_global()
             }
             $content_config .= "\$global_config['" . $c_config_name . "']=array(" . $c_config_value . ");\n";
         } else {
-            if (preg_match('/^\d+$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
+            if (preg_match('/^(0|[1-9][0-9]*)$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
                 $content_config .= "\$global_config['" . $c_config_name . "']=" . $c_config_value . ";\n";
             } else {
                 $c_config_value = nv_unhtmlspecialchars($c_config_value);
@@ -417,7 +412,7 @@ function nv_check_rewrite_file()
  */
 function nv_rewrite_change($array_config_global)
 {
-    global $sys_info, $lang_module;
+    global $sys_info;
     $rewrite_rule = $filename = '';
     $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . '|' . nv_preg_quote($array_config_global['rewrite_exturl']);
 
@@ -456,12 +451,12 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " 	</conditions>\n";
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
-		
+
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite_tag\">\n";
         $rewrite_rule .= " 	<match url=\"(.*)tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
-		
+
         $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
@@ -495,7 +490,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap [L]\n";
-        
+
         // Rewrite for other module's rule
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";

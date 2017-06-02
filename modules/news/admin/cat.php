@@ -59,8 +59,7 @@ if ($catid > 0 and isset($global_array_cat[$catid])) {
 
     if (! defined('NV_IS_ADMIN_MODULE')) {
         if (!(isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
         }
     }
 
@@ -89,7 +88,7 @@ if (! empty($savecat)) {
 
     // Xử lý liên kết tĩnh
     $_alias = $nv_Request->get_title('alias', 'post', '');
-    $_alias = ($_alias == '') ? change_alias($title) : change_alias($_alias);
+    $_alias = ($_alias == '') ? get_mod_alias($title, 'cat', $catid) : get_mod_alias($_alias, 'cat', $catid);
 
     if (empty($_alias) or !preg_match("/^([a-zA-Z0-9\_\-]+)$/", $_alias)) {
         if (empty($alias)) {
@@ -111,9 +110,9 @@ if (! empty($savecat)) {
 
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
     $groups_view = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-	
+
 	$_ad_block_cat = $nv_Request->get_array( 'ad_block_cat', 'post', array() );
-	$ad_block_cat = !empty( $_ad_block_cat ) ? implode( ',', $_ad_block_cat ) : array();
+	$ad_block_cat = !empty($_ad_block_cat) ? implode(',', $_ad_block_cat) : '';
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
@@ -125,8 +124,7 @@ if (! empty($savecat)) {
 
     if (! defined('NV_IS_ADMIN_MODULE')) {
         if (!(isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
         }
     }
 
@@ -166,7 +164,7 @@ if (! empty($savecat)) {
             if (! defined('NV_IS_ADMIN_MODULE')) {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $admin_id . ', ' . $newcatid . ', 1, 1, 1, 1, 1)');
             }
-			
+
 			if( in_array('1', $check_ad_block_cat ) ){
 				$ini_edit = nv_add_block_topcat_news( $newcatid );
 			}
@@ -176,8 +174,7 @@ if (! empty($savecat)) {
 
             $nv_Cache->delMod($module_name);
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid']);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
         } else {
             $error = $lang_module['errorsave'];
         }
@@ -199,7 +196,7 @@ if (! empty($savecat)) {
 
         if ($stmt->rowCount()) {
 			$check_ad_block_cat = explode(',', $ad_block_cat);
-			
+
 			$_r_b = nv_remove_block_botcat_news( $catid );
 			$_r_t = nv_remove_block_topcat_news( $catid );
             if ($parentid != $parentid_old) {
@@ -212,7 +209,7 @@ if (! empty($savecat)) {
                 nv_fix_cat_order();
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid']);
             }
-			
+
 			if( in_array('1', $check_ad_block_cat ) ){
 				$ini_edit = nv_add_block_topcat_news( $catid );
 			}
@@ -221,8 +218,7 @@ if (! empty($savecat)) {
 			}
 
             $nv_Cache->delMod($module_name);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
         } else {
             $error = $lang_module['errorsave'];
         }
@@ -278,7 +274,7 @@ if (!empty($array_cat_list)) {
             'title' => $grtl
         );
     }
-	
+
 	$ad_block_cats = array();
 	$ad_block_list = array(
 		1 => $lang_module['ad_block_top'],
@@ -375,13 +371,13 @@ if (!empty($array_cat_list)) {
         $xtpl->assign('groups_views', $data);
         $xtpl->parse('main.content.groups_views');
     }
-	
+
 	foreach( $ad_block_cats as $ads )
 	{
 		$xtpl->assign( 'ad_block_cats', $ads );
 		$xtpl->parse( 'main.content.ad_block_cats' );
 	}
-	
+
     $descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl($descriptionhtml));
     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
         $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;

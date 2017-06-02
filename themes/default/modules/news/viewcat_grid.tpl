@@ -68,7 +68,7 @@
 </div>
 <!-- END: generate_page -->
 <script type="text/javascript">
-$(window).load(function(){
+$(window).on('load', function() {	
 	$.each( $('.thumbnail'), function(k,v){
 		var height1 = $($('.thumbnail')[k]).height();
 		var height2 = $($('.thumbnail')[k+1]).height();

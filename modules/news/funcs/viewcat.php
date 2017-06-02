@@ -22,8 +22,7 @@ if ($page > 1) {
 }
 $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
 if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    Header('Location: ' . $base_url_rewrite);
-    die();
+    nv_redirect_location($base_url_rewrite);
 }
 
 $set_view_page = ($page > 1 and substr($viewcat, 0, 13) == 'viewcat_main_') ? true : false;
@@ -129,7 +128,7 @@ if (empty($contents)) {
         }
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, listcatid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, listcatid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
                 ->order($order_by)
                 ->limit($st_links);

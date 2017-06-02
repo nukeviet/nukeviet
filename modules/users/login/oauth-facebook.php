@@ -29,10 +29,10 @@ $facebookService = $serviceFactory->createService('facebook', $credentials, $sto
 
 if (!empty($_GET['code'])) {
     // This was a callback request from facebook, get the token
-    $token = $facebookService->requestAccessToken($_GET['code']);
+    $token = $facebookService->requestAccessToken($_GET['code'])->getAccessToken();
 
     // Send a request with it: /me?fields=id,name,email
-    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true); 
+    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true);
     if (isset($result['id'])) {
         $attribs = array(
             'identity' => $result['link'],
@@ -63,10 +63,8 @@ if (!empty($_GET['code'])) {
         $nv_redirect = '&nv_redirect=' . $nv_redirect;
     }
     $nv_Request->unset_request('nv_redirect_' . $module_data, 'session');
-    Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
 } else {
     $url = $facebookService->getAuthorizationUri();
-    Header('Location: ' . $url);
-    exit();
+    nv_redirect_location($url);
 }

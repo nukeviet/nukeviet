@@ -13,20 +13,20 @@ define('NV_ADMIN', true);
 //Xac dinh thu muc goc cua site
 define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
 
-require NV_ROOTDIR .'/includes/mainfile.php';
+require NV_ROOTDIR . '/includes/mainfile.php';
 
 // SSL
 if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
     header("HTTP/1.1 301 Moved Permanently");
     header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-    exit();
+    exit(0);
 }
 
 // Admin dang nhap
 if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
     require NV_ROOTDIR . '/includes/core/admin_access.php';
     require NV_ROOTDIR . '/includes/core/admin_login.php';
-    exit();
+    exit(0);
 }
 
 // Khong cho xac dinh tu do cac variables
@@ -59,8 +59,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     if (empty($op) or $op == 'functions') {
         $op = 'main';
     } elseif (! preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     $site_mods = nv_site_mods();
@@ -68,8 +67,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
         $setup = $db->query($sql)->fetchColumn();
         if (empty($setup)) {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');
-            exit();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');
         }
     }
     $menu_top = array();

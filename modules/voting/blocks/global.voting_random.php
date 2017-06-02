@@ -20,7 +20,7 @@ if (!nv_function_exists('nv_block_voting')) {
      */
     function nv_block_voting()
     {
-        global $nv_Cache, $db, $my_footer, $site_mods, $global_config, $client_info, $lang_global;
+        global $nv_Cache, $db, $my_footer, $site_mods, $global_config, $lang_global;
 
         $content = '';
 
@@ -102,7 +102,7 @@ if (!nv_function_exists('nv_block_voting')) {
             $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
             $xtpl->assign('LANG', $lang_module);
             $xtpl->assign('VOTING', $voting_array);
-            
+
             foreach ($list as $row) {
                 if (!empty($row['url'])) {
                     $row['title'] = '<a target="_blank" href="' . $row['url'] . '">' . $row['title'] . '</a>';

@@ -12,13 +12,11 @@ if (! defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
-$contents = array();
-
+$data = array();
 $mod = $nv_Request->get_title('mod', 'get');
 
 if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $sth = $db->prepare('SELECT * FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
@@ -26,8 +24,7 @@ $sth->bindParam(':title', $mod, PDO::PARAM_STR);
 $sth->execute();
 $row = $sth->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $theme_site_array = $theme_mobile_array = array();
@@ -87,6 +84,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
     $act = $nv_Request->get_int('act', 'post', 0);
     $rss = $nv_Request->get_int('rss', 'post', 0);
+    $sitemap = $nv_Request->get_int('sitemap', 'post', 0);
 
     if (! empty($theme) and ! in_array($theme, $theme_list)) {
         $theme = '';
@@ -146,7 +144,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     }
                 }
             }
-            
+
             // Check module_theme
             $_theme_check = (!empty($theme)) ? $theme : $global_config['site_theme'];
             if (!empty($_theme_check) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_check . '/theme.php')) {
@@ -156,12 +154,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             } else {
                 $module_theme = $row['module_file'];
             }
-            
 
-            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET 
-                    module_theme=:module_theme, custom_title=:custom_title, site_title=:site_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, 
-                    keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' 
-                    WHERE title= :title');
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET
+                module_theme=:module_theme, custom_title=:custom_title, site_title=:site_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description,
+                keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ', sitemap=' . $sitemap . ' 
+            WHERE title= :title');
             $sth->bindParam(':module_theme', $module_theme, PDO::PARAM_STR);
             $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
             $sth->bindParam(':site_title', $site_title, PDO::PARAM_STR);
@@ -228,8 +225,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $nv_Cache->delAll();
             nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['edit'], $mod), '', $admin_info['userid']);
 
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-            exit();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         } else {
             $data['error'] = sprintf($lang_module['edit_error_update_theme'], implode(', ', $data['error']));
         }
@@ -247,6 +243,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $description = $row['description'];
     $keywords = $row['keywords'];
     $rss = $row['rss'];
+    $sitemap = $row['sitemap'];
 }
 
 $groups_view = explode(',', $row['groups_view']);
@@ -258,7 +255,10 @@ if (empty($custom_title)) {
 $page_title = sprintf($lang_module['edit'], $mod);
 
 if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/rss.php')) {
-    $data['rss'] = array( $lang_module['activate_rss'], $rss );
+    $data['rss'] = array($lang_module['activate_rss'], $rss);
+}
+if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/sitemap.php')) {
+    $data['sitemap'] = array($lang_module['activate_sitemap'], $sitemap);
 }
 
 $data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $mod;
@@ -322,6 +322,10 @@ $xtpl->assign('ACTIVE', ($act == 1) ? ' checked="checked"' : '');
 if (isset($data['rss'])) {
     $xtpl->assign('RSS', ($data['rss'][1] == 1) ? ' checked="checked"' : '');
     $xtpl->parse('main.rss');
+}
+if (isset($data['sitemap'])) {
+    $xtpl->assign('SITEMAP', ($data['sitemap'][1] == 1) ? ' checked="checked"' : '');
+    $xtpl->parse('main.sitemap');
 }
 
 $xtpl->parse('main');

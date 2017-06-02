@@ -120,6 +120,15 @@
     </div>
 </div>
 
+
+<div id="recreatethumb" class="upload-hide" title="{LANG.recreatethumb}">
+    <div class="form-horizontal" role="form">
+        <div class="form-group" id="recreatethumb_loading">
+        	{LANG.recreatethumb_note}
+        </div>
+    </div>
+</div>
+
 <div id="errorInfo" class="upload-hide" title="{LANG.errorInfo}"></div>
 
 <div id="imgpreview" title="{LANG.preview}">
@@ -293,6 +302,8 @@ LANG.move_multiple = "{LANG.move_multiple}";
 LANG.rename = "{LANG.rename}";
 LANG.upload_delfile = "{LANG.upload_delfile}";
 LANG.createfolder = "{LANG.createfolder}";
+LANG.recreatethumb = "{LANG.recreatethumb}";
+LANG.recreatethumb_note = "{LANG.recreatethumb_note}";
 LANG.renamefolder = "{LANG.renamefolder}";
 LANG.deletefolder = "{LANG.deletefolder}";
 LANG.delete_folder = "{LANG.delete_folder}";
@@ -342,7 +353,7 @@ var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom"></em><br />{LANG.waiting}...</p>';
 
-//Resize images on clientside if we can
+// Resize images on clientside if we can
 var nv_resize = {
     width : {NV_MAX_WIDTH},
     height : {NV_MAX_HEIGHT},

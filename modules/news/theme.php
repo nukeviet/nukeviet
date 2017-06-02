@@ -14,7 +14,7 @@ if (! defined('NV_IS_MOD_NEWS')) {
 
 /**
  * viewcat_grid_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $catid
  * @param mixed $generate_page
@@ -50,7 +50,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
         if ($array_row_i['external_link']) {
             $array_row_i['target_blank'] = 'target="_blank"';
         }
-        
+
         $xtpl->clear_autoreset();
         if ($module_config[$module_name]['showtooltip']) {
             $array_row_i['hometext_clean'] = nv_clean60($array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true);
@@ -117,7 +117,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
 
 /**
  * viewcat_list_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $catid
  * @param mixed $page
@@ -149,7 +149,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
         if ($module_config[$module_name]['showtooltip']) {
             $array_row_i['hometext_clean'] = nv_clean60(strip_tags($array_row_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
         }
-        
+
         if ($array_row_i['external_link']) {
             $array_row_i['target_blank'] = 'target="_blank"';
         }
@@ -192,7 +192,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 
 /**
  * viewcat_page_new()
- * 
+ *
  * @param mixed $array_catpage
  * @param mixed $array_cat_other
  * @param mixed $generate_page
@@ -230,14 +230,14 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
             $xtpl->parse('main.viewcatloop.cat');
             ++$n;
         }
-        
+
         if ($a == 0) {
             $xtpl->clear_autoreset();
-            
-            if($array_row_i['external_link']){
+
+            if ($array_row_i['external_link']) {
                 $array_row_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('CONTENT', $array_row_i);
 
             if (defined('NV_IS_MODADMIN')) {
@@ -262,13 +262,13 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
             $xtpl->parse('main.viewcatloop.featured');
         } else {
             $xtpl->clear_autoreset();
-            
-            if($array_row_i['external_link']){
+
+            if ($array_row_i['external_link']) {
                 $array_row_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('CONTENT', $array_row_i);
-            
+
             if (defined('NV_IS_MODADMIN')) {
                 $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
                 $xtpl->parse('main.viewcatloop.news.adminlink');
@@ -301,13 +301,13 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         foreach ($array_cat_other as $array_row_i) {
             $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
             $array_row_i['publtime'] = nv_date("d/m/Y", $array_row_i['publtime']);
-            
-            if($array_row_i['external_link']){
+
+            if ($array_row_i['external_link']) {
                 $array_row_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('RELATED', $array_row_i);
-            
+
             if ($newday >= NV_CURRENTTIME) {
                 $xtpl->parse('main.related.loop.newday');
             }
@@ -328,7 +328,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 
 /**
  * viewcat_top()
- * 
+ *
  * @param mixed $array_catcontent
  * @param mixed $generate_page
  * @return
@@ -353,14 +353,14 @@ function viewcat_top($array_catcontent, $generate_page)
     // Cac bai viet phan dau
     if (! empty($array_catcontent)) {
         $a = 0;
-        foreach ($array_catcontent as $key => $array_catcontent_i) {
+        foreach ($array_catcontent as $array_catcontent_i) {
             $newday = $array_catcontent_i['publtime'] + (86400 * $array_catcontent_i['newday']);
             $array_catcontent_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_catcontent_i['publtime']);
-            
-            if($array_catcontent_i['external_link']){
+
+            if ($array_catcontent_i['external_link']) {
                 $array_catcontent_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('CONTENT', $array_catcontent_i);
 
             if ($a == 0) {
@@ -403,7 +403,7 @@ function viewcat_top($array_catcontent, $generate_page)
 
 /**
  * viewsubcat_main()
- * 
+ *
  * @param mixed $viewcat
  * @param mixed $array_cat
  * @return
@@ -411,12 +411,12 @@ function viewcat_top($array_catcontent, $generate_page)
 function viewsubcat_main($viewcat, $array_cat)
 {
     global $module_name, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
-	
+
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
     $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
-    
+
     // Hien thi cac chu de con
     foreach ($array_cat as $key => $array_row_i) {
         if (isset($array_cat[$key]['content'])) {
@@ -477,7 +477,7 @@ function viewsubcat_main($viewcat, $array_cat)
                 $newday = isset($array_row_i['newday']) ? $array_row_i['publtime'] + (86400 * $array_row_i['newday']) : 0;
                 $array_row_i['publtime'] = nv_date('d/m/Y H:i', $array_row_i['publtime']);
                 ++$a;
-                
+
                 if ($array_row_i['external_link']) {
                     $array_row_i['target_blank'] = 'target="_blank"';
                 }
@@ -538,7 +538,7 @@ function viewsubcat_main($viewcat, $array_cat)
 
 /**
  * viewcat_two_column()
- * 
+ *
  * @param mixed $array_content
  * @param mixed $array_catpage
  * @return
@@ -550,7 +550,7 @@ function viewcat_two_column($array_content, $array_catpage)
     $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
-    
+
     if ($catid and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
@@ -565,11 +565,11 @@ function viewcat_two_column($array_content, $array_catpage)
         foreach ($array_content as $key => $array_content_i) {
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
             $array_content_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_content_i['publtime']);
-          
+
             if ($array_content_i['external_link']) {
                 $array_content_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('NEWSTOP', $array_content_i);
 
             if ($key == 0) {
@@ -621,17 +621,15 @@ function viewcat_two_column($array_content, $array_catpage)
             $xtpl->assign('CAT', $array_catpage_i);
             $xtpl->assign('ID', ($a + 1));
 
-            $k = 0;
-
             $array_content_i = $array_catpage_i['content'][0];
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
             $array_content_i['hometext'] = nv_clean60(strip_tags($array_content_i['hometext']), 200);
             $array_content_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_content_i['publtime']);
-          
+
             if ($array_content_i['external_link']) {
                 $array_content_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('CONTENT', $array_content_i);
 
             if ($array_content_i['imghome'] != '') {
@@ -666,12 +664,12 @@ function viewcat_two_column($array_content, $array_catpage)
 
                     $array_catpage_i['content'][$index]['hometext_clean'] = nv_clean60(strip_tags($array_catpage_i['content'][$index]['hometext']), $module_config[$module_name]['tooltip_length'], true);
                     $xtpl->assign('CONTENT', $array_catpage_i['content'][$index]);
-                    
+
                     if ($module_config[$module_name]['showtooltip']) {
                         $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
                         $xtpl->parse('main.loopcat.other.tooltip');
                     }
-                    
+
                     $xtpl->parse('main.loopcat.other');
                 }
             }
@@ -692,7 +690,7 @@ function viewcat_two_column($array_content, $array_catpage)
 
 /**
  * detail_theme()
- * 
+ *
  * @param mixed $news_contents
  * @param mixed $array_keyword
  * @param mixed $related_new_array
@@ -703,7 +701,7 @@ function viewcat_two_column($array_content, $array_catpage)
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $user_info, $admin_info, $client_info;
+    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $admin_info, $client_info;
 
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
@@ -711,7 +709,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
-    
+
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
 
     $xtpl->assign('NEWSID', $news_contents['id']);
@@ -827,8 +825,8 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
                 if ($related_new_array_i['external_link']) {
                     $related_new_array_i['target_blank'] = 'target="_blank"';
                 }
-                
-                $newday = $related_new_array_i['time'] + (86400 * $related_new_array_i['newday']);                
+
+                $newday = $related_new_array_i['time'] + (86400 * $related_new_array_i['newday']);
                 if ($newday >= NV_CURRENTTIME) {
                     $xtpl->parse('main.others.related_new.loop.newday');
                 }
@@ -855,7 +853,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
                 if ($related_array_i['external_link']) {
                     $related_array_i['target_blank'] = 'target="_blank"';
                 }
-                
+
                 $newday = $related_array_i['time'] + (86400 * $related_array_i['newday']);
                 if ($newday >= NV_CURRENTTIME) {
                     $xtpl->parse('main.others.related.loop.newday');
@@ -877,7 +875,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
                 if ($module_config[$module_name]['showtooltip']) {
                     $topic_array_i['hometext_clean'] = nv_clean60(strip_tags($topic_array_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
                 }
-                
+
                 if ($topic_array_i['external_link']) {
                     $topic_array_i['target_blank'] = 'target="_blank"';
                 }
@@ -916,7 +914,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
 /**
  * no_permission()
- * 
+ *
  * @return
  */
 function no_permission()
@@ -932,7 +930,7 @@ function no_permission()
 
 /**
  * topic_theme()
- * 
+ *
  * @param mixed $topic_array
  * @param mixed $topic_other_array
  * @param mixed $generate_page
@@ -943,7 +941,7 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $lang_module, $module_info, $module_name, $topicalias, $module_config, $topicid;
+    global $lang_module, $module_info, $module_name, $module_config, $topicid;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -959,11 +957,11 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     }
     if (! empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {
-            
+
             if ($topic_array_i['external_link']) {
                 $topic_array_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('TOPIC', $topic_array_i);
             $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
             $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));
@@ -988,7 +986,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
             if ($topic_other_array_i['external_link']) {
                 $topic_other_array_i['target_blank'] = 'target="_blank"';
             }
-            
+
             $xtpl->assign('TOPIC_OTHER', $topic_other_array_i);
             $xtpl->parse('main.other.loop');
         }
@@ -1007,7 +1005,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
 
 /**
  * sendmail_themme()
- * 
+ *
  * @param mixed $sendmail
  * @return
  */
@@ -1053,7 +1051,7 @@ function sendmail_themme($sendmail)
 
 /**
  * news_print()
- * 
+ *
  * @param mixed $result
  * @return
  */
@@ -1106,7 +1104,7 @@ function news_print($result)
 
 /**
  * search_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $check_num
  * @param mixed $date_array
@@ -1149,7 +1147,7 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
 
 /**
  * search_result_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $numRecord
  * @param mixed $per_pages
@@ -1182,7 +1180,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
             if ($value['external_link']) {
                 $xtpl->assign('TARGET_BLANK', 'target="blank"');
             }
-            
+
             if (! empty($value['homeimgfile'])) {
                 $xtpl->assign('IMG_SRC', $value['homeimgfile']);
                 $xtpl->parse('results.result.result_img');

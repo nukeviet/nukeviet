@@ -41,8 +41,7 @@ if (!empty($alias)) {
         }
         $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url_rewrite), true);
         if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-            Header('Location: ' . $base_url_rewrite);
-            die();
+            nv_redirect_location($base_url_rewrite);
         }
 
         $array_mod_title[] = array(
@@ -119,8 +118,7 @@ if (!empty($alias)) {
 
         $contents = topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image);
     } else {
-        Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'], true));
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']);
     }
 } else {
     $page_title = $module_info['site_title'];

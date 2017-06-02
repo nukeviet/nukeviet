@@ -22,6 +22,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['per_page'] = $nv_Request->get_int('per_page', 'post', '0');
     $array_config['related_articles'] = $nv_Request->get_int('related_articles', 'post', '0');
     $array_config['news_first'] = $nv_Request->get_int('news_first', 'post', 0);
+	$array_config['copy_page'] = $nv_Request->get_int('copy_page', 'post', 0);
 
     $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
     foreach ($array_config as $config_name => $config_value) {
@@ -31,8 +32,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $nv_Cache->delMod($module_name);
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
 $array_config['viewtype'] = 0;
@@ -40,6 +40,7 @@ $array_config['facebookapi'] = '';
 $array_config['per_page'] = '5';
 $array_config['related_articles'] = '5';
 $array_config['news_first'] = 0;
+$array_config['copy_page'] = 0;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query($sql);
@@ -51,6 +52,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' : '');
+$xtpl->assign('COPY_PAGE', $array_config['copy_page'] ? ' checked="checked"' : '');
 
 $view_array = array( $lang_module['config_view_type_0'], $lang_module['config_view_type_1'] );
 foreach ($view_array as $key => $title) {

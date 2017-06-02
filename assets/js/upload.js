@@ -558,6 +558,7 @@ function folderMouseup(folder, e) {
             $("span#foldervalue").attr("title", folderPath);
             $("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
             $("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
+            $("span#recreatethumb").attr("title", $(folder).is(".recreatethumb") ? "1" : "0");
             $("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
             $("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
             $("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
@@ -596,7 +597,9 @@ function folderMouseup(folder, e) {
         if ($(folder).is(".create_dir")) {
             html += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
         }
-
+        if ($(folder).is(".recreatethumb")) {
+            html += '<li id="recreatethumb"><em class="fa fa-lg ' + ICON.recreatethumb + '">&nbsp;</em>' + LANG.recreatethumb + '</li>'
+        }
         if ($(folder).is(".rename_dir")) {
             html += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
         }
@@ -626,6 +629,13 @@ function renamefolder() {
 function createfolder() {
     $("input[name=createfoldername]").val("");
     $("div#createfolder").dialog("open")
+}
+
+// Tạo lại ảnh Thumb
+function recreatethumb() {
+    $("div#recreatethumb").dialog("open")
+	$("#recreatethumb_ok").show();
+	$("#recreatethumb_loading").html(LANG.recreatethumb_note);
 }
 
 // Xoa thu muc
@@ -992,6 +1002,7 @@ ICON.select = 'fa-check-square-o';
 ICON.download = 'fa-download';
 ICON.preview = 'fa-eye';
 ICON.create = 'fa-files-o';
+ICON.recreatethumb = 'fa-refresh';
 ICON.move = 'fa-arrows';
 ICON.rename = 'fa-pencil-square-o';
 ICON.filedelete = 'fa-trash-o';
@@ -1185,6 +1196,54 @@ $("div#createfolder").dialog({
             $(this).dialog("close")
         }
     }
+});
+
+var timer_recreatethumb = 0;
+function nv_recreatethumb_loop(a, idf) {
+	clearTimeout(timer_recreatethumb);
+	$.ajax({
+		type : "POST",
+		url : nv_module_url + "recreatethumb&random=" + nv_randomNum(10),
+		data : "path=" + a + "&idf=" + idf,
+		success : function(d) {
+			var e = d.split("_");
+			if (e[0] == "ERROR") {
+				alert(e[1])
+			} else if (e[0] == "OK") {
+				timer_recreatethumb = setTimeout(function() {
+					$("#recreatethumb_loading").html(nv_loading_data + "<h3 class=\"text-center\">"+LANG.recreatethumb+": " + e[1] + " / " + e[2]+" file.</h3>");
+					nv_recreatethumb_loop(a, e[1]);
+				}, 1000);
+			} else if (e[0] == "COMPLETE") {
+				$("div#recreatethumb").dialog("close");
+			}
+		}
+	});
+}
+
+$("div#recreatethumb").dialog({
+	autoOpen : false,
+	width : 500,
+	height : 250,
+	modal : true,
+	position : {
+		my : "center",
+		at : "center",
+		of : window
+	},
+	buttons : [ {
+		text : "OK",
+		id : "recreatethumb_ok",
+		click : function() {
+			$("#recreatethumb_ok").hide();
+			$("#recreatethumb_loading").html(nv_loading_data);
+			var b = $("span[name=current]").attr("title");
+			timer_recreatethumb = setTimeout(function() {
+				nv_recreatethumb_loop(b, -1);
+			}, 500);
+		}
+
+	} ]
 });
 
 $("input[name=newWidth], input[name=newHeight]").keyup(function() {
@@ -1728,7 +1787,6 @@ var NVUPLOAD = {
                 silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
-                resize: nv_resize,
                 multipart: true,
                 init: {
                     // Event on init uploader
@@ -1745,6 +1803,39 @@ var NVUPLOAD = {
                         }
 
                         NVUPLOAD.updateList();
+                        
+                        // Xác định resize ảnh (bug plupload 2.3.1)
+                        if (nv_resize != false) {
+                            var lastKey = NVUPLOAD.uploader.files.length - 1;
+                            $.each(NVUPLOAD.uploader.files, function(k, file) {
+                                $('#upload-start').prop('disabled', true).html('<i class="fa fa-circle-o-notch fa-spin"></i> ' + LANG.upload_file);
+                                file.clientResize = false;
+                                var img = new moxie.image.Image();
+                                try {
+                                	img.onload = function() {
+                                		if (this.width > nv_resize.width || this.height > nv_resize.height) {
+                                            file.clientResize = true;
+                                		}
+                                        if (k == lastKey) {
+                                            setTimeout(function() {
+                                                $('#upload-start').prop('disabled', false).html(LANG.upload_file);
+                                            }, 1500);
+                                        }
+                                	};
+                                    img.onerror = function() {
+                                        if (k == lastKey) {
+                                            setTimeout(function() {
+                                                $('#upload-start').prop('disabled', false).html(LANG.upload_file);
+                                            }, 1500);
+                                        }
+                                    }
+                                	img.load(file.getSource());
+                                } catch(ex) {
+                                    // Nothing
+                                }
+                                NVUPLOAD.uploader.files[k] = file;
+                            });
+                        }
 
                         $('#upload-start').click(function() {
                             // Check file before start upload
@@ -1880,6 +1971,14 @@ var NVUPLOAD = {
                         NVUPLOAD.uploader.settings.multipart_params = {
                             "filealt": filealt
                         };
+                        // Xác định resize ảnh (bug plupload 2.3.1)
+                        if (nv_resize != false) {
+                            if (typeof file.clientResize != "undefined" && file.clientResize) {
+                                NVUPLOAD.uploader.settings.resize = nv_resize;
+                            } else {
+                                NVUPLOAD.uploader.settings.resize = {};
+                            }
+                        }
                     }
                 }
             });
@@ -1898,7 +1997,7 @@ var NVUPLOAD = {
 
         // Add some button
         $('#upload-button-area .buttons').append(
-            '<input id="upload-start" type="button" class="btn btn-primary" value="' + LANG.upload_file + '"/> ' +
+            '<button id="upload-start" type="button" class="btn btn-primary">' + LANG.upload_file + '</button> ' +
             '<input id="upload-cancel" type="button" class="btn btn-default" value="' + LANG.upload_cancel + '"/> '
         );
 
@@ -2068,8 +2167,11 @@ var NVUPLOAD = {
         } else {
             // Nothing to do
         }
-
-        $('#' + file.id + ' .file-action').html('<i class="' + actionClass + '"></i>');
+        
+        var actionHTML = '<i class="' + actionClass + '"></i>';
+        if ($('#' + file.id + ' .file-action').html() != actionHTML) {
+            $('#' + file.id + ' .file-action').html(actionHTML);
+        }
 
         if (file.hint) {
             $('#' + file.id).attr('title', file.hint);
@@ -2123,7 +2225,7 @@ var NVCMENU = {
         margin: '0px',
         backgroundColor: '#fff',
         border: '1px solid #999',
-        width: '120px'
+        width: '150px'
     },
     itemStyle: {
         margin: '0px',
@@ -2176,6 +2278,9 @@ var NVCMENU = {
         },
         createfolder: function() {
             createfolder()
+        },
+        recreatethumb: function() {
+        	recreatethumb()
         },
         deletefolder: function() {
             deletefolder()

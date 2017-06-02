@@ -44,19 +44,16 @@ $step = $nv_Request->get_int('step', 'post,get', 1);
 $maxstep = $nv_Request->get_int('maxstep', 'session', 1);
 
 if ($step <= 0 or $step > 7) {
-    Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
 }
 
 if ($step > $maxstep and $step > 2) {
     $step = $maxstep;
-    Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 }
 
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 7) {
-    Header('Location: ' . NV_BASE_SITEURL . 'index.php');
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php');
 }
 if (empty($sys_info['supports_rewrite'])) {
     if (isset($_COOKIE['supports_rewrite']) and $_COOKIE['supports_rewrite'] == NV_CHECK_SESSION) {
@@ -657,8 +654,7 @@ if ($step == 1) {
                         ++ $step;
                         $nv_Request->set_Session('maxstep', $step);
 
-                        Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-                        exit();
+                        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                     }
                 }
             }
@@ -683,7 +679,17 @@ if ($step == 1) {
         $array_data['question'] = $nv_Request->get_title('question', 'post', $array_data['question'], 1);
         $array_data['answer_question'] = $nv_Request->get_title('answer_question', 'post', $array_data['answer_question'], 1);
 
-        $global_config['site_email'] = $array_data['nv_email'];
+        if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
+            $global_config['site_email'] = $_SERVER['SERVER_ADMIN'];
+        } elseif (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
+            $global_config['site_email'] = $php_email;
+        } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
+            $global_config['site_email'] = $matches[0];
+        } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
+            $global_config['site_email'] = "webmaster@" . $_SERVER['SERVER_NAME'];
+        } else {
+            $global_config['site_email'] = $array_data['nv_email'];
+        }
 
         if ($nv_Request->isset_request('nv_login,nv_password', 'post')) {
             // Bat dau phien lam viec cua MySQL
@@ -901,8 +907,7 @@ if ($step == 1) {
                             }
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)");
 
-                            Header('Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-                            exit();
+                            nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                         } else {
                             $error = sprintf($lang_module['file_not_writable'], NV_DATADIR . '/config_global.php');
                         }

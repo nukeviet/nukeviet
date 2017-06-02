@@ -265,3 +265,4 @@ $lang_module['thanks_text'] = 'NuKeViets management would like to send our since
 $lang_module['thanks_list_member_all'] = 'Members list:';
 $lang_module['thanks_list_member_other_version'] = 'The list of members contributed by each version';
 $lang_module['thanks_other_version'] = 'Version';
+$lang_module['is_unofficial_mode'] = 'Note: This version is for development and testing, you should not use to be the official website';

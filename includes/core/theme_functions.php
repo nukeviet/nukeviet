@@ -132,7 +132,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
-    
+
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
     if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
@@ -172,7 +172,6 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     include NV_ROOTDIR . '/includes/header.php';
     $xtpl->out('main');
     include NV_ROOTDIR . '/includes/footer.php';
-    die();
 }
 
 /**
@@ -185,10 +184,9 @@ function nv_jsonOutput($array_data)
 {
     header('Cache-Control: no-cache, must-revalidate');
     header('Content-type: application/json');
-    
+
     ob_start('ob_gzhandler');
-    echo json_encode($array_data);
-    exit();
+    exit(json_encode($array_data));
 }
 
 /**
@@ -257,7 +255,7 @@ function nv_xmlOutput($content, $lastModified)
 
 /**
  * nv_rss_generate()
- * 
+ *
  * @param mixed $channel
  * @param mixed $items
  * @param string $timemode
@@ -265,7 +263,7 @@ function nv_xmlOutput($content, $lastModified)
  */
 function nv_rss_generate($channel, $items, $timemode = 'GMT')
 {
-    global $db, $global_config, $client_info;
+    global $global_config, $client_info;
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     //Chi co tac dung voi IE6 va Chrome
@@ -302,7 +300,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 
     $channel['pubDate'] = 0;
     $channel['modified'] = 0;
-    
+
     if (! empty($items)) {
         foreach ($items as $item) {
             if (! empty($item['title']) and ! empty($item['link'])) {
@@ -367,7 +365,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
                         $xtpl->assign('MODIFIED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['modifydate']));
                         $xtpl->parse('main.item.content.modifydate');
                     }
-                    
+
                     $xtpl->parse('main.item.content');
                 }
 
@@ -386,11 +384,11 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
             $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
         }
     }
-    
+
     if ($channel['modified'] > $lastModified) {
         $lastModified = $channel['modified'];
     }
-    
+
     $xtpl->assign('CHANNEL', $channel);
 
     if (! empty($channel['description'])) {
@@ -468,7 +466,7 @@ function nv_xmlSitemap_generate($url)
  */
 function nv_xmlSitemapIndex_generate()
 {
-    global $db_config, $db, $global_config, $nv_Request, $sys_info;
+    global $db_config, $db, $global_config;
 
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
@@ -477,7 +475,7 @@ function nv_xmlSitemapIndex_generate()
 
     if ($global_config['lang_multi']) {
         foreach ($global_config['allow_sitelangs'] as $lang) {
-            $sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
+            $sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
             while (list($modname) = $result->fetch(3)) {
                 $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
@@ -489,7 +487,7 @@ function nv_xmlSitemapIndex_generate()
         $site_mods = nv_site_mods();
 
         foreach ($site_mods as $modname => $values) {
-            if (isset($values['funcs']) and isset($values['funcs']['sitemap'])) {
+            if (isset($values['funcs']) and isset($values['funcs']['sitemap']) and !empty($values['sitemap'])) {
                 $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
                 $row = $xml->addChild('sitemap');
                 $row->addChild('loc', $link);
@@ -562,7 +560,7 @@ function nv_css_setproperties($tag, $property_array)
  */
 function nv_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5)
 {
-    global $global_config, $module_file, $module_info, $lang_module, $page_title;
+    global $global_config, $module_info, $lang_module, $page_title;
 
     if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/alert.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';

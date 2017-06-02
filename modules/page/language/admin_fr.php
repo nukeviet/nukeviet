@@ -67,3 +67,6 @@ $lang_module['add_time'] = 'Date affichée';
 $lang_module['edit_time'] = 'dernière mise à jour';
 $lang_module['group_post'] = 'Articles de rubrique';
 $lang_module['hot_post'] = 'Sélection';
+
+$lang_module['setting_copy_page']= 'Page de copie';
+$lang_module['title_copy_page']= 'Copier l\'article';

@@ -125,3 +125,7 @@
 .twostepp {
     padding-left: 15px!important;
 }
+.disabled {
+   pointer-events: none;
+   cursor: default;
+}

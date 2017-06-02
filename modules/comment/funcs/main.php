@@ -29,5 +29,4 @@ if (! empty($module) and isset($module_config[$module]['activecomm'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true));
-die();
+nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);

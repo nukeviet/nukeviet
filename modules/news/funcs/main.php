@@ -19,8 +19,9 @@ $contents = '';
 $cache_file = '';
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-$base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url), true);
-$page_url_rewrite = ($page > 1) ? nv_url_rewrite($base_url . '/page-' . $page, true) : $base_url_rewrite;
+$base_url_internal = str_replace('&amp;', '&', $base_url);
+$base_url_rewrite = nv_url_rewrite($base_url_internal, true);
+$page_url_rewrite = ($page > 1) ? nv_url_rewrite($base_url_internal . '/page-' . $page, true) : $base_url_rewrite;
 $request_uri = $_SERVER['REQUEST_URI'];
 if (! ($home or $request_uri == $base_url_rewrite or $request_uri == $page_url_rewrite or NV_MAIN_DOMAIN . $request_uri == $base_url_rewrite or NV_MAIN_DOMAIN . $request_uri == $page_url_rewrite)) {
     $redirect = '<meta http-equiv="Refresh" content="3;URL=' . $base_url_rewrite . '" />';
@@ -41,6 +42,10 @@ if (empty($contents)) {
 
     if ($viewcat == 'viewcat_none') {
         $contents = '';
+        if ($home == 1) {
+            $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+            $meta_property['og:url'] = $canonicalUrl;
+        }
     } elseif ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old') {
         $order_by = ($viewcat == 'viewcat_page_new') ? 'publtime DESC, addtime DESC' : 'publtime ASC, addtime ASC';
         $db_slave->sqlreset()
@@ -83,7 +88,7 @@ if (empty($contents)) {
 
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, catid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows');
 
             if ($viewcat == 'viewcat_page_new') {

@@ -1,12 +1,25 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.1.03 (not yet released)
+- Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard 
+
+NUKEVIET 4.1.02 Final Releases Apr 23, 2017
+- Jquery 3.2.1
+- Module News: Add feature copy article
+- Module Page: Add feature copy article
+- Fix creat alias module news
+- Language: Add go back link for read, write lang
+- Fix auto resize image (fix bug of plupload 2.3.1)
+- Module News: Fix image Facebook Instant Articles
+- Fix error link from function nv_alias_page
+
 NUKEVIET 4.1.01 Beta 2 Releases Apr 9, 2017
 - Jquery 3.2.0, Plupload 2.3.1
-- Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File1
+- Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File
 - Add function nv_jsonOutput
 - Change encrypt data use Openssl
-- Change rewrite Thank Hoaquynhtim99
+- Change rewrite rule
 - SPADMIN can access module seotools
 - Module Upload: Crop image and save original image
 - Mail filter: Allow uppercase
@@ -25,12 +38,12 @@ NUKEVIET 4.1.01 Beta 2 Releases Apr 9, 2017
 - Fix checkupdate for system and extensions
 - Fix create virtual module
 - Fix function nv_is_url, check_domain
-- Fix Assign variable syntax error	Thank hiidemo
-- Module news: Update block news cat Thank Hồ Ngọc Triển
-- Module news: config external link Thank Hồ Ngọc Triển
-- Module menu: add image field Thank mynukeviet
-- Fix googleAnalytics Thank phongaz
-- Fix IIS rewrite Thank anhyeuviolet
+- Fix Assign variable syntax error
+- Module news: Update block news cat
+- Module news: config external link
+- Module menu: add image field
+- Fix googleAnalytics
+- Fix IIS rewrite
 - Module news: Fix setup step 5, Field 'description' doesn't have a default value
 - theme: fixes interface Set default configuration
 - Module users: fix list customization data, active users

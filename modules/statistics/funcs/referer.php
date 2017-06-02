@@ -15,8 +15,7 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
 $host = $nv_Request->get_string('host', 'get', '');
 
 if (! isset($host) or ! preg_match('/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/', $host)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_MOD_URL, true));
-    die();
+    nv_redirect_location(NV_BASE_MOD_URL);
 }
 
 $sth = $db->prepare('SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host= :host');
@@ -25,8 +24,7 @@ $sth->execute();
 
 $row = $sth->fetch();
 if (empty($row)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_MOD_URL, true));
-    die();
+    nv_redirect_location(NV_BASE_MOD_URL);
 }
 
 $contents = '';
