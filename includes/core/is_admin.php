@@ -41,7 +41,7 @@ if (! empty($admin_cookie)) {
 
     $admin_info = nv_admin_checkdata($admin_cookie);
 
-    if ($admin_info == array()) {
+    if ($admin_info == array() or !empty($admin_info['2step_require'])) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: You are not signed in as admin!<br />Session Expired! Please Re-Login!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
@@ -61,16 +61,13 @@ if (! empty($admin_cookie)) {
     }
 
     define('NV_IS_ADMIN', true);
-    $admin_info['in_groups'][] = 3;
 
     if ($admin_info['level'] == 1 or $admin_info['level'] == 2) {
         define('NV_IS_SPADMIN', true);
-        $admin_info['in_groups'][] = 2;
     }
 
     if ($admin_info['level'] == 1 and $global_config['idsite'] == 0) {
         define('NV_IS_GODADMIN', true);
-        $admin_info['in_groups'][] = 1;
     }
 
     if (! defined('ADMIN_LOGIN_MODE')) {

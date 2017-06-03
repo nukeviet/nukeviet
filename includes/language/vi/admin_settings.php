@@ -252,6 +252,7 @@ $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Khu vực quản trị';
 $lang_module['two_step_verification2'] = 'Khu vực ngoài site';
 $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+$lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụng cho toàn bộ tài khoản của các nhóm, nếu cần cấu hình riêng cho từng nhóm hãy chọn giá trị này là <strong>%s</strong> sau đó sửa <a href="%s">nhóm</a> rồi chọn khu vực bắt buộc kích hoạt xác thực hai bước theo ý muốn';
 
 $lang_module['site_phone'] = 'Số điện thoại của site';
 $lang_module['googleMapsAPI'] = 'Google Maps API key';
