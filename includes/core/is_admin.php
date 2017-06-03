@@ -41,7 +41,7 @@ if (! empty($admin_cookie)) {
 
     $admin_info = nv_admin_checkdata($admin_cookie);
 
-    if ($admin_info == array() or !empty($admin_info['2step_require'])) {
+    if ($admin_info == array()) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: You are not signed in as admin!<br />Session Expired! Please Re-Login!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
