@@ -90,7 +90,7 @@
        	<hr />
        	<div class="text-center">
       		<!-- BEGIN: server -->
-      		<a title="{OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
+      		<a title="{LANG.login_with} {OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
       		<!-- END: server -->
        	</div>
        	<!-- END: openid -->
