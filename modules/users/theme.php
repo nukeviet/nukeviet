@@ -366,6 +366,7 @@ function user_login($is_ajax = false)
             if (!empty($nv_redirect)) {
                 $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
             }
+            $assigns['server'] = $server;
             $assigns['title'] = ucfirst($server);
             $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
             $assigns['img_width'] = $assigns['img_height'] = 24;
