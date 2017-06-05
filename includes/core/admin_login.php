@@ -82,7 +82,7 @@ $blocker->trackLogin($rules);
 $error = '';
 $login = '';
 $login_step = 1;
-$array_gfx_chk = array( 1, 5, 6, 7 );
+$array_gfx_chk = array(1, 5, 6, 7);
 if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
     $global_config['gfx_chk'] = 1;
 } else {
@@ -315,6 +315,8 @@ if ($login_step == 1) {
     $xtpl->assign('SHOW_STEP1', ' hidden');
     $xtpl->assign('SHOW_STEP2', ' hidden');
     $xtpl->assign('SHOW_LANG', ' hidden');
+    $xtpl->assign('SHOW_SUBMIT', ' hidden');
+    $xtpl->assign('SHOW_LOSTPASS', ' hidden');
 } else {
     $xtpl->assign('SHOW_STEP1', ' hidden');
     $xtpl->assign('SHOW_STEP2', '');
