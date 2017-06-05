@@ -103,6 +103,18 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
         $_GET[NV_NAME_VARIABLE] = $matches[2];
         $_GET[NV_OP_VARIABLE] = 'tag';
         $_GET['alias'] = urldecode($matches[3]);
+    } elseif (isset($_GET[NV_NAME_VARIABLE])) {
+        if (strpos($_GET[NV_NAME_VARIABLE], '/') !== false) {
+            if (isset($_GET[NV_OP_VARIABLE])) {
+                header('HTTP/1.1 301 Moved Permanently');
+                nv_redirect_location($base_siteurl);
+            }
+            $name_variable = explode('/', $_GET[NV_NAME_VARIABLE]);
+            $_GET[NV_NAME_VARIABLE] = $name_variable[0];
+            unset($name_variable[0]);
+            $_GET[NV_OP_VARIABLE] = implode('/', $name_variable);
+            unset($name_variable);
+        }
     }
 }
 

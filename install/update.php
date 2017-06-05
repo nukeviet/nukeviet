@@ -211,7 +211,6 @@ class NvUpdate
         $content_config .= "if( ! defined( 'NV_IS_UPDATE' ) ) die( 'Stop!!!' );\n\n";
         $content_config .= "\$nv_update_config['updatelog'] = " . var_export($data, true) . ";";
         $content_config .= "\n\n";
-        $content_config .= "?>";
 
         $return = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/config_update_' . $this->config['packageID'] . '.php', $content_config, LOCK_EX);
 
@@ -224,7 +223,7 @@ class NvUpdate
             include NV_ROOTDIR . '/includes/footer.php';
         }
 
-        //Resets the contents of the opcode cache
+        // Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
@@ -335,7 +334,7 @@ class NvUpdate
             }
         }
 
-        //Resets the contents of the opcode cache
+        // Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
@@ -786,7 +785,7 @@ class NvUpdate
      */
     public function log($nv_update_config, $content, $status)
     {
-        global $client_info;
+        global $client_info, $admin_info;
 
         // Danh dau phien bat dau khoi tao
         if (! isset($nv_update_config['updatelog']['starttime'])) {
@@ -795,7 +794,6 @@ class NvUpdate
         }
 
         $file_log = 'log-update-' . nv_date('H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime']) . '-' . NV_CHECK_SESSION . '.log';
-
         $time = nv_date('H:i:s_d-m-Y');
 
         if (! is_array($content)) {
@@ -804,13 +802,15 @@ class NvUpdate
         }
 
         $contents = '';
+        if (! file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log)) {
+            $contents .= $this->lang['update_log_start'] . ': ' . $time . "\n";
+            nv_insert_logs(NV_LANG_UPDATE, 'update', $this->lang['update_log_start'], $time, $admin_info['userid']);
+        }
+
         foreach ($content as $key => $mess) {
             $st = empty($status[$key]) ? 'FAILURE' : 'SUCCESS';
             $contents .= $time . ' | ' . $client_info['ip'] . ' | ' . $mess . ' | ' . $st . "\n";
-        }
-
-        if (! file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log)) {
-            $contents = $this->lang['update_log_start'] . ': ' . $time . "\n" . $contents;
+            nv_insert_logs(NV_LANG_UPDATE, 'update', $mess, $st, $admin_info['userid']);
         }
 
         file_put_contents(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log, $contents, FILE_APPEND);

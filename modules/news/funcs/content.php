@@ -19,12 +19,22 @@ if (defined('NV_EDITOR')) {
     define('NV_IS_CKEDITOR', true);
     $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
 
+    /**
+     * nv_aleditor()
+     * 
+     * @param mixed $textareaname
+     * @param string $width
+     * @param string $height
+     * @param string $val
+     * @param string $customtoolbar
+     * @return
+     */
     function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '', $customtoolbar = '')
     {
-        global  $module_data;
+        global $module_data;
         $return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
         $return .= "<script type=\"text/javascript\">
-		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (! empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',});
+		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (! empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
 		</script>";
         return $return;
     }

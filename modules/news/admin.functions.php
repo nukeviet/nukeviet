@@ -385,7 +385,7 @@ function nv_show_cat_list($parentid = 0)
  *
  * @return
  */
-function nv_show_topics_list( $page = 1)
+function nv_show_topics_list($page = 1)
 {
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $module_config, $global_config, $module_file, $module_info;
 
@@ -395,6 +395,10 @@ function nv_show_topics_list( $page = 1)
         ->from(NV_PREFIXLANG . '_' . $module_data . '_topics' );
 
     $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
+    $max_height = $page * $per_page;
+    if ($max_height > $num_items) {
+        $max_height = $num_items;
+    }
 
     $db_slave->select('*')
         ->order('weight ASC')
@@ -420,7 +424,7 @@ function nv_show_topics_list( $page = 1)
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics&amp;topicid=' . $row['topicid'] . '#edit'
             ));
 
-            for ($i = ($page-1)* $per_page; $i <= $page * $per_page; ++$i) {
+            for ($i = (($page-1)* $per_page) + 1; $i <= $max_height; ++$i) {
                 $xtpl->assign('WEIGHT', array(
                     'key' => $i,
                     'title' => $i,

@@ -13,7 +13,7 @@ define('NV_ADMIN', true);
 //Xac dinh thu muc goc cua site
 define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
 
-require NV_ROOTDIR .'/includes/mainfile.php';
+require NV_ROOTDIR . '/includes/mainfile.php';
 
 // SSL
 if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {

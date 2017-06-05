@@ -78,6 +78,7 @@ $lang_module['avatar_news_copy_error'] = 'Không thể lưu hình đại diện'
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['showmail'] = 'Hiển thị email';
 $lang_module['login'] = 'Thành viên đăng nhập';
+$lang_module['login_with'] = 'Đăng nhập với';
 $lang_module['login_submit'] = 'Đăng nhập';
 $lang_module['user_info'] = 'Thông tin thành viên';
 $lang_module['regdate'] = 'Ngày tham gia';
@@ -229,6 +230,7 @@ $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s k
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['errorMessage'] = 'Thông báo từ hệ thống';
 $lang_module['login_info'] = 'Hãy đăng nhập thành viên để trải nghiệm đầy đủ các tiện ích trên site';
+$lang_module['old_min_user_error'] = 'Tuổi của bạn dưới %s nên chưa đủ tuổi đăng ký';
 
 $lang_module['edit_basic'] = 'Cơ bản';
 $lang_module['edit_others'] = 'Khác';

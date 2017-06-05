@@ -369,7 +369,7 @@ function nv_check_valid_login($login, $max, $min)
  */
 function nv_check_valid_pass($pass, $max, $min)
 {
-    global $lang_global, $db_config, $db;
+    global $lang_global, $db_config, $db, $global_config;
 
     $pass = trim(strip_tags($pass));
 
@@ -1614,6 +1614,15 @@ function nv_url_rewrite_callback($matches)
         }
         unset($query_array[NV_LANG_VARIABLE]);
         if (isset($query_array[NV_NAME_VARIABLE])) {
+            if (strpos($query_array[NV_NAME_VARIABLE], '/') !== false) {
+                if (isset($query_array[NV_OP_VARIABLE])) {
+                    return $matches[0];
+                }
+                $name_variable = explode('/', $query_array[NV_NAME_VARIABLE]);
+                $query_array[NV_NAME_VARIABLE] = $name_variable[0];
+                unset($name_variable[0]);
+                $query_array[NV_OP_VARIABLE] = implode('/', $name_variable);
+            }
             if ($global_config['rewrite_op_mod'] != $query_array[NV_NAME_VARIABLE]) {
                 $op_rewrite[] = $query_array[NV_NAME_VARIABLE];
                 $op_rewrite_count++;

@@ -95,7 +95,7 @@ if (!empty($alias)) {
         $topic_other_array = array();
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
                 ->where('status=1 AND topicid = ' . $topicid . ' AND publtime < ' . $end_publtime)
                 ->order('publtime DESC')
