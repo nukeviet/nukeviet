@@ -361,9 +361,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $query .= " match_type='" . $dataform['match_type'] . "',
                 match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
             }
+			$update_field_choices = ($dataform['fid'] != 3) ? 'field_choices='.$db->quote($dataform['field_choices']) .',' : '';
             $query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
                 required = '" . $dataform['required'] . "',
-                field_choices='" . $dataform['field_choices'] . "',
+                ".$update_field_choices."
                 sql_choices = '" . $dataform['sql_choices'] . "',
                 show_register = '" . $dataform['show_register'] . "',
                 user_editable = '" . $dataform['user_editable'] . "',
