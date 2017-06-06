@@ -592,12 +592,15 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         $number = 1;
         if (!empty($field_choices)) {
             foreach ($field_choices as $key => $value) {
-                $xtpl->assign('FIELD_CHOICES', array(
+            	$disabled = ($key == 'M' || $key == 'F') ? ' disabled' : '';
+				$xtpl->assign('FIELD_CHOICES', array(
                     'checked' => ($number == $dataform['default_value']) ? ' checked="checked"' : '',
                     "number" => $number++,
                     'key' => $key,
-                    'value' => $value
+                    'value' => $value,
+                    'disabled' =>$disabled
                 ));
+
                 $xtpl->parse('main.load.loop_field_choice');
             }
         }
