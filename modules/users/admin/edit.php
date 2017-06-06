@@ -195,41 +195,41 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
 
-   /* if (empty($_user['question'])) {
-        die(json_encode(array(
-            'status' => 'error',
-            'input' => 'question',
-            'mess' => $lang_module['edit_error_question']
-        )));
-    }
+    /* if (empty($_user['question'])) {
+     die(json_encode(array(
+     'status' => 'error',
+     'input' => 'question',
+     'mess' => $lang_module['edit_error_question']
+     )));
+     }
 
-    if (empty($_user['answer'])) {
-        die(json_encode(array(
-            'status' => 'error',
-            'input' => 'answer',
-            'mess' => $lang_module['edit_error_answer']
-        )));
-    }*/
+     if (empty($_user['answer'])) {
+     die(json_encode(array(
+     'status' => 'error',
+     'input' => 'answer',
+     'mess' => $lang_module['edit_error_answer']
+     )));
+     }*/
 
     $query_field = array();
     if (!empty($array_field_config)) {
         require NV_ROOTDIR . '/modules/users/fields.check.php';
     }
 
-   /* if (empty($_user['first_name'])) {
-        $_user['first_name'] = $_user['username'];
-    }
+    /* if (empty($_user['first_name'])) {
+     $_user['first_name'] = $_user['username'];
+     }
 
-    $_user['sig'] = nv_nl2br($_user['sig'], '<br />');
-    if ($_user['gender'] != 'M' and $_user['gender'] != 'F') {
-        $_user['gender'] = '';
-    }
+     $_user['sig'] = nv_nl2br($_user['sig'], '<br />');
+     if ($_user['gender'] != 'M' and $_user['gender'] != 'F') {
+     $_user['gender'] = '';
+     }
 
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user['birthday'], $m)) {
-        $_user['birthday'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $_user['birthday'] = 0;
-    }*/
+     if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user['birthday'], $m)) {
+     $_user['birthday'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+     } else {
+     $_user['birthday'] = 0;
+     }*/
 
     $password = !empty($_user['password1']) ? $crypt->hash_password($_user['password1'], $global_config['hashprefix']) : $row['password'];
 
@@ -274,14 +274,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     //Check tính hợp lệ của first_name, last_name
-     foreach ($array_field_config as $_k => $row_f) {
+    foreach ($array_field_config as $_k => $row_f) {
         if ($row_f['system'] == 1) {
             if (empty($_user[$row_f['field']]) and !empty($row_f['required'])) {
 
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => $row_f['field'],
-                    'mess' => sprintf($lang_module['error_system'],$row_f['title'])
+                    'mess' => sprintf($lang_module['error_system'], $row_f['title'])
                 )));
             }
 
@@ -497,7 +497,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         in_groups='" . implode(',', $in_groups) . "'
     WHERE userid=" . $userid);
 
-    if (!empty($array_field_config)) {
+    if (!empty($array_field_config) and !empty($query_field)) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
     }
 
@@ -584,7 +584,6 @@ $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
 } else {
-
 
     foreach ($genders as $gender) {
         $xtpl->assign('GENDER', $gender);
@@ -707,102 +706,103 @@ if (defined('NV_IS_USER_FORUM')) {
                         $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show'] . '.show_last_name');
                 }
                 continue;
-            }
-            if (($row['show_register'] and $userid == 0) or $userid > 0) {
-                if ($userid == 0 and !$nv_Request->isset_request('confirm', 'post')) {
-                    if (!empty($row['field_choices'])) {
-                        if ($row['field_type'] == 'date') {
-                            $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
-                        } elseif ($row['field_type'] == 'number') {
-                            $row['value'] = $row['default_value'];
+            } else {
+                if (($row['show_register'] and $userid == 0) or $userid > 0) {
+                    if ($userid == 0 and !$nv_Request->isset_request('confirm', 'post')) {
+                        if (!empty($row['field_choices'])) {
+                            if ($row['field_type'] == 'date') {
+                                $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+                            } elseif ($row['field_type'] == 'number') {
+                                $row['value'] = $row['default_value'];
+                            } else {
+                                $temp = array_keys($row['field_choices']);
+                                $tempkey = intval($row['default_value']) - 1;
+                                $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
+                            }
                         } else {
-                            $temp = array_keys($row['field_choices']);
-                            $tempkey = intval($row['default_value']) - 1;
-                            $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
+                            $row['value'] = $row['default_value'];
                         }
                     } else {
-                        $row['value'] = $row['default_value'];
+                        $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
                     }
-                } else {
-                    $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
-                }
-                $row['required'] = ($row['required']) ? 'required' : '';
+                    $row['required'] = ($row['required']) ? 'required' : '';
 
-                $xtpl->assign('FIELD', $row);
-                if ($row['required']) {
-                    $xtpl->parse('main.edit_user.field.loop.required');
-                }
-                if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
-                    $xtpl->parse('main.edit_user.field.loop.textbox');
-                } elseif ($row['field_type'] == 'date') {
-                    $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
                     $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.edit_user.field.loop.date');
-                } elseif ($row['field_type'] == 'textarea') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.edit_user.field.loop.textarea');
-                } elseif ($row['field_type'] == 'editor') {
-                    $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
-                    if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-                        $array_tmp = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
-                        $xtpl->assign('EDITOR', $edits);
-                        $xtpl->parse('main.edit_user.field.loop.editor');
-                    } else {
-                        $row['class'] = '';
+                    if ($row['required']) {
+                        $xtpl->parse('main.edit_user.field.loop.required');
+                    }
+                    if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
+                        $xtpl->parse('main.edit_user.field.loop.textbox');
+                    } elseif ($row['field_type'] == 'date') {
+                        $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                        $xtpl->assign('FIELD', $row);
+                        $xtpl->parse('main.edit_user.field.loop.date');
+                    } elseif ($row['field_type'] == 'textarea') {
+                        $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
                         $xtpl->assign('FIELD', $row);
                         $xtpl->parse('main.edit_user.field.loop.textarea');
+                    } elseif ($row['field_type'] == 'editor') {
+                        $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
+                        if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+                            $array_tmp = explode('@', $row['class']);
+                            $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
+                            $xtpl->assign('EDITOR', $edits);
+                            $xtpl->parse('main.edit_user.field.loop.editor');
+                        } else {
+                            $row['class'] = '';
+                            $xtpl->assign('FIELD', $row);
+                            $xtpl->parse('main.edit_user.field.loop.textarea');
+                        }
+                    } elseif ($row['field_type'] == 'select') {
+                        foreach ($row['field_choices'] as $key => $value) {
+                            $xtpl->assign('FIELD_CHOICES', array(
+                                'key' => $key,
+                                'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
+                                'value' => $value
+                            ));
+                            $xtpl->parse('main.edit_user.field.loop.select.loop');
+                        }
+                        $xtpl->parse('main.edit_user.field.loop.select');
+                    } elseif ($row['field_type'] == 'radio') {
+                        $number = 0;
+                        foreach ($row['field_choices'] as $key => $value) {
+                            $xtpl->assign('FIELD_CHOICES', array(
+                                'id' => $row['fid'] . '_' . $number++,
+                                'key' => $key,
+                                'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
+                                'value' => $value
+                            ));
+                            $xtpl->parse('main.edit_user.field.loop.radio');
+                        }
+                    } elseif ($row['field_type'] == 'checkbox') {
+                        $number = 0;
+                        $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                        foreach ($row['field_choices'] as $key => $value) {
+                            $xtpl->assign('FIELD_CHOICES', array(
+                                'id' => $row['fid'] . '_' . $number++,
+                                'key' => $key,
+                                'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                                'value' => $value
+                            ));
+                            $xtpl->parse('main.edit_user.field.loop.checkbox');
+                        }
+                    } elseif ($row['field_type'] == 'multiselect') {
+                        $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                        foreach ($row['field_choices'] as $key => $value) {
+                            $xtpl->assign('FIELD_CHOICES', array(
+                                'key' => $key,
+                                'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
+                                'value' => $value
+                            ));
+                            $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
+                        }
+                        $xtpl->parse('main.edit_user.field.loop.multiselect');
                     }
-                } elseif ($row['field_type'] == 'select') {
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
-                            'key' => $key,
-                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => $value
-                        ));
-                        $xtpl->parse('main.edit_user.field.loop.select.loop');
-                    }
-                    $xtpl->parse('main.edit_user.field.loop.select');
-                } elseif ($row['field_type'] == 'radio') {
-                    $number = 0;
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
-                            'id' => $row['fid'] . '_' . $number++,
-                            'key' => $key,
-                            'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                            'value' => $value
-                        ));
-                        $xtpl->parse('main.edit_user.field.loop.radio');
-                    }
-                } elseif ($row['field_type'] == 'checkbox') {
-                    $number = 0;
-                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
-                            'id' => $row['fid'] . '_' . $number++,
-                            'key' => $key,
-                            'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
-                            'value' => $value
-                        ));
-                        $xtpl->parse('main.edit_user.field.loop.checkbox');
-                    }
-                } elseif ($row['field_type'] == 'multiselect') {
-                    $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
-                            'key' => $key,
-                            'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
-                            'value' => $value
-                        ));
-                        $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
-                    }
-                    $xtpl->parse('main.edit_user.field.loop.multiselect');
+                    $xtpl->parse('main.edit_user.field.loop');
                 }
-                $xtpl->parse('main.edit_user.field.loop');
+                $xtpl->parse('main.edit_user.field');
             }
         }
-        $xtpl->parse('main.edit_user.field');
     }
     $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
     $xtpl->parse('main.edit_user');
