@@ -178,7 +178,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
         $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('fieldid', 'post', '', 0, $preg_replace), 0, 50);
     } else {
-        $dataform['field'] = nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50);
+        $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50);
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
@@ -287,7 +287,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['default_value'] = $nv_Request->get_int('default_value_choice', 'post', 0);
 
         if ($dataform['choicetypes'] == 'field_choicetypes_text') {
-            $field_choice_value = $nv_Request->get_array('field_choice', 'post');
+            if ($dataform['fid'] and $dataform['fieldid'] == 'gender') {
+                $field_choice_value = array(1 => 'M', 2 => 'F');
+            } else {
+                $field_choice_value = $nv_Request->get_array('field_choice', 'post');
+            }
             $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
             $field_choices = array_combine(array_map('strip_punctuation', $field_choice_value), array_map('strip_punctuation', $field_choice_text));
             if (sizeof($field_choices)) {
@@ -588,6 +592,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     }
     if ($fid == 0 or $text_fields == 0) {
         $number = 1;
+        $disable_editkey_choose = ($dataform['fieldid'] == 'gender' and !empty($dataform['fid']));
+        
+        $xtpl->assign('FIELD_CHOICES_READONLYKEY', $disable_editkey_choose ? ' readonly="readonly"' : '');
+        
         if (!empty($field_choices)) {
             foreach ($field_choices as $key => $value) {
                 $xtpl->assign('FIELD_CHOICES', array(
@@ -599,12 +607,15 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 $xtpl->parse('main.load.loop_field_choice');
             }
         }
-        $xtpl->assign('FIELD_CHOICES', array(
-            'number' => $number,
-            'key' => '',
-            'value' => ''
-        ));
-        $xtpl->parse('main.load.loop_field_choice');
+        if (!$disable_editkey_choose) {
+            $xtpl->assign('FIELD_CHOICES', array(
+                'number' => $number,
+                'key' => '',
+                'value' => ''
+            ));
+            $xtpl->parse('main.load.loop_field_choice');
+            $xtpl->parse('main.load.add_field_choice');
+        }
         $xtpl->assign('FIELD_CHOICES_NUMBER', $number);
     }
     $dataform['display_textfields'] = ($text_fields) ? '' : 'style="display: none;"';

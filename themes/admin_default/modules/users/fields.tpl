@@ -245,16 +245,18 @@
 					<th class="text-center">{LANG.field_default_value}</th>
 				</tr>
 			</thead>
+			<!-- BEGIN: add_field_choice -->
 			<tfoot>
 				<tr>
 					<td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
 				</tr>
 			</tfoot>
+			<!-- END: add_field_choice -->
 			<tbody>
 				<!-- BEGIN: loop_field_choice -->
 				<tr class="text-center">
 					<td>{FIELD_CHOICES.number}</td>
-					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}"/></td>
+					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}"{FIELD_CHOICES_READONLYKEY}/></td>
 					<td><input class="form-control w300" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
 					<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
 				</tr>
