@@ -8,7 +8,7 @@
  * @Createdate 3/25/2010 18:6
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
@@ -38,7 +38,7 @@ if ($global_config['allowuserlogin']) {
     $xtpl->assign('BLOCKID', $blockID);
 
     if (defined('NV_IS_USER')) {
-        if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and ! empty($user_info['photo'])) {
+        if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
             $avata = NV_BASE_SITEURL . $user_info['photo'];
         } else {
             $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
@@ -76,7 +76,7 @@ if ($global_config['allowuserlogin']) {
             if (defined('NV_IS_SPADMIN')) {
                 $xtpl->parse('signed.admintoolbar.is_spadadmin');
             }
-            if (defined('NV_IS_MODADMIN') and ! empty($module_info['admin_file'])) {
+            if (defined('NV_IS_MODADMIN') and !empty($module_info['admin_file'])) {
                 $xtpl->parse('signed.admintoolbar.is_modadmin');
             }
             $xtpl->parse('signed.admintoolbar');
@@ -108,7 +108,7 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('USERNAME_RULE', $username_rule);
         $xtpl->assign('PASSWORD_RULE', $password_rule);
 
-        if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
+        if (in_array($global_config['gfx_chk'], array( 2, 4,5,7))) {
             if ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->parse('main.recaptcha.default');
@@ -118,7 +118,7 @@ if ($global_config['allowuserlogin']) {
             }
         }
 
-        if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7 ))) {
+        if (in_array($global_config['gfx_chk'], array( 3, 4, 6,7))) {
             if ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
@@ -143,13 +143,16 @@ if ($global_config['allowuserlogin']) {
         }
 
         if ($global_config['allowuserreg']) {
-        	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
-        	 
+            $_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
+
             $data_questions = array();
             $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
             $result = $db->query($sql);
             while ($row = $result->fetch()) {
-                $data_questions[$row['qid']] = array( 'qid' => $row['qid'], 'title' => $row['title'] );
+                $data_questions[$row['qid']] = array(
+                    'qid' => $row['qid'],
+                    'title' => $row['title']
+                );
             }
 
             foreach ($data_questions as $array_question_i) {
@@ -165,9 +168,9 @@ if ($global_config['allowuserlogin']) {
                 $language = unserialize($row_field['language']);
                 $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
                 $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
-                if (! empty($row_field['field_choices'])) {
+                if (!empty($row_field['field_choices'])) {
                     $row_field['field_choices'] = unserialize($row_field['field_choices']);
-                } elseif (! empty($row_field['sql_choices'])) {
+                } elseif (!empty($row_field['sql_choices'])) {
                     $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
                     $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
                     $result = $db->query($query);
@@ -179,14 +182,71 @@ if ($global_config['allowuserlogin']) {
                 $array_field_config[] = $row_field;
             }
 
-            if (! empty($array_field_config)) {
+            if (!empty($array_field_config)) {
                 $userid = 0;
                 foreach ($array_field_config as $_k => $row) {
+                    if ($row['system'] == 1) {
+                        if ($row['field'] == 'question' || $row['field'] == 'answer' || $row['field'] == 'gender' || $row['field'] == 'birthday' || $row['field'] == 'sig') {
+                            if ($row['field'] == 'question') {
+                                $row['required'] = ($row['required']) ? 'required' : '';
+                                $xtpl->assign('QUESTION_REQUIRED', $row['required']);
+                                if (!empty($row['show_register']))
+                                    $xtpl->parse('main.allowuserreg.show_question');
+                            }
+                            if ($row['field'] == 'answer') {
+                                $row['required'] = ($row['required']) ? 'required' : '';
+                                $xtpl->assign('ANSWER_REQUIRED', $row['required']);
+                                if (!empty($row['show_register']))
+                                    $xtpl->parse('main.allowuserreg.show_answer');
+                            }
+                            if ($row['field'] == 'gender') {
+                                $row['required'] = ($row['required']) ? 'required' : '';
+                                $number = 0;
+                                foreach ($row['field_choices'] as $key => $value) {
+                                    $xtpl->assign('FIELD_CHOICES', array(
+                                        'id' => $row['fid'] . '_' . $number++,
+                                        'key' => $key,
+                                        'checked' => ($key == $row['default_value']) ? ' checked="checked"' : '',
+                                        'value' => $value
+                                    ));
+                                    $xtpl->parse('main.allowuserreg.show_radio.loop');
+                                }
+                                $xtpl->assign('RADIO_SYSTEM', $row);
+                                if (!empty($row['show_register']))
+                                    $xtpl->parse('main.allowuserreg.show_radio');
+                            }
+                            if ($row['field'] == 'birthday') {
+                                $row['required'] = ($row['required']) ? 'required' : '';
+                                if (!empty($row['field_choices'])) {
+                                    $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+                                }
+                                $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                                $xtpl->assign('BIRTH_SYSTEM', $row);
+                                if (!empty($row['show_register']))
+                                    $xtpl->parse('main.allowuserreg.show_date');
+                                $datepicker = true;
+                            }
+                            if ($row['field'] == 'sig') {
+                                $row['value'] = nv_htmlspecialchars(nv_br2nl($row['default_value']));
+                                $xtpl->assign('TEXTAREA_SYSTEM', $row);
+                                if (!empty($row['show_register']))
+                                    $xtpl->parse('main.allowuserreg.show_textarea');
+                            }
+                        } else {
+                            $row['required'] = ($row['required']) ? 'required' : '';
+                            $lang_system = $lang_module[$row['field']];
+                            $xtpl->assign('LANG_SYSTEM', $lang_system);
+                            $xtpl->assign('SYSTEM', $row);
+                            if (!empty($row['show_register']))
+                                $xtpl->parse('main.allowuserreg.show_system.loop');
+                        }
+                        continue;
+                    }
                     $row['customID'] = $_k;
 
                     if (($row['show_register'] and $userid == 0) or $userid > 0) {
                         if ($userid == 0 and empty($custom_fields)) {
-                            if (! empty($row['field_choices'])) {
+                            if (!empty($row['field_choices'])) {
                                 if ($row['field_type'] == 'date') {
                                     $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
                                 } elseif ($row['field_type'] == 'number') {
@@ -236,7 +296,8 @@ if ($global_config['allowuserlogin']) {
                                 $xtpl->assign('FIELD_CHOICES', array(
                                     'key' => $key,
                                     'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                                    'value' => $value ));
+                                    'value' => $value
+                                ));
                                 $xtpl->parse('main.allowuserreg.field.loop.select.loop');
                             }
                             $xtpl->parse('main.allowuserreg.field.loop.select');
@@ -247,29 +308,32 @@ if ($global_config['allowuserlogin']) {
                                     'id' => $row['fid'] . '_' . $number++,
                                     'key' => $key,
                                     'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                                    'value' => $value ));
+                                    'value' => $value
+                                ));
                                 $xtpl->parse('main.allowuserreg.field.loop.radio.loop');
                             }
                             $xtpl->parse('main.allowuserreg.field.loop.radio');
                         } elseif ($row['field_type'] == 'checkbox') {
                             $number = 0;
-                            $valuecheckbox = (! empty($row['value'])) ? explode(',', $row['value']) : array();
+                            $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
                             foreach ($row['field_choices'] as $key => $value) {
                                 $xtpl->assign('FIELD_CHOICES', array(
                                     'id' => $row['fid'] . '_' . $number++,
                                     'key' => $key,
                                     'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
-                                    'value' => $value ));
+                                    'value' => $value
+                                ));
                                 $xtpl->parse('main.allowuserreg.field.loop.checkbox.loop');
                             }
                             $xtpl->parse('main.allowuserreg.field.loop.checkbox');
                         } elseif ($row['field_type'] == 'multiselect') {
-                            $valueselect = (! empty($row['value'])) ? explode(',', $row['value']) : array();
+                            $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
                             foreach ($row['field_choices'] as $key => $value) {
                                 $xtpl->assign('FIELD_CHOICES', array(
                                     'key' => $key,
                                     'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
-                                    'value' => $value ));
+                                    'value' => $value
+                                ));
                                 $xtpl->parse('main.allowuserreg.field.loop.multiselect.loop');
                             }
                             $xtpl->parse('main.allowuserreg.field.loop.multiselect');
@@ -277,9 +341,10 @@ if ($global_config['allowuserlogin']) {
                         $xtpl->parse('main.allowuserreg.field.loop');
                     }
                 }
+                $xtpl->parse('main.allowuserreg.show_system');
                 $xtpl->parse('main.allowuserreg.field');
             }
-        
+
             if ($global_config['allowuserreg'] == 2) {
                 $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostactivelink');
                 $xtpl->parse('main.allowuserreg.lostactivelink');

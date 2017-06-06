@@ -4,7 +4,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr class="text-center">
-				<th class="100">{LANG.weight}</th>
+				<th class="w100">{LANG.weight}</th>
 				<th>{LANG.field_id}</th>
 				<th>{LANG.field_title}</th>
 				<th>{LANG.field_type}</th>
@@ -29,12 +29,7 @@
 				<td class="text-center"><i class="fa fa-lg {ROW.show_register}" aria-hidden="true"></i></td>
 				<td class="text-center"><i class="fa fa-lg {ROW.required}" aria-hidden="true"></i></td>
 				<td class="text-center"><i class="fa fa-lg {ROW.show_profile}" aria-hidden="true"></i></td>
-				<td>
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a>
-					<!-- BEGIN: show_delete -->
-					- <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
-					<!-- END: show_delete -->
-				</td>
+				<td><em class="fa fa-edit fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a><!-- BEGIN: show_delete --> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a><!-- END: show_delete --></td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -42,19 +37,25 @@
 </div>
 <!-- END: data -->
 <!-- BEGIN: load -->
-<div id="module_show_list">&nbsp;</div>
+<div id="module_show_list">
+	&nbsp;
+</div>
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
+<div class="alert alert-danger">
+	{ERROR}
+</div>
 <!-- END: error -->
 <form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields" autocomplete="off">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM} </caption>
+			<caption>
+				<em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM}
+			</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -72,7 +73,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.field_description}:</td>
-					<td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;" class="form-control">{DATAFORM.description}</textarea></td>
+					<td>					<textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;" class="form-control">{DATAFORM.description}</textarea></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_required}</td>
@@ -92,17 +93,14 @@
 				</tr>
 				<tr>
 					<td>{LANG.field_type}:</td>
-					<td>
-					<!-- BEGIN: field_type -->
+					<td><!-- BEGIN: field_type -->
 					<ul style="list-style: none">
 						<!-- BEGIN: loop -->
 						<li>
 							<label for="f_{FIELD_TYPE.key}"> <input type="radio" {FIELD_TYPE.checked} id="f_{FIELD_TYPE.key}" value="{FIELD_TYPE.key}" name="field_type"> {FIELD_TYPE.value}</label>
 						</li>
 						<!-- END: loop -->
-					</ul>{LANG.field_type_note}
-					<!-- END: field_type -->
-					{FIELD_TYPE_TEXT} </td>
+					</ul>{LANG.field_type_note} <!-- END: field_type --> {FIELD_TYPE_TEXT} </td>
 				</tr>
 				<tr id="classfields" {DATAFORM.classdisabled}>
 					<td>{LANG.field_class}</td>
@@ -115,7 +113,9 @@
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="textfields" {DATAFORM.display_textfields}>
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_text}</caption>
+			<caption>
+				<em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_text}
+			</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -147,7 +147,9 @@
 		</table>
 
 		<table class="table table-striped table-bordered table-hover" id="numberfields" {DATAFORM.display_numberfields}>
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_number}</caption>
+			<caption>
+				<em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_number}
+			</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -169,7 +171,9 @@
 		</table>
 
 		<table class="table table-striped table-bordered table-hover" id="datefields" {DATAFORM.display_datefields}>
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_date}</caption>
+			<caption>
+				<em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_date}
+			</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -181,11 +185,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.field_min_date}:</td>
-					<td>
-                        <input class="form-control datepicker validatefield" style="width:100px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10">
-                        <span style="margin-left: 50px;">{LANG.field_max_date}:</span>
-                        <input class="form-control datepicker validatefield" style="width:100px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10">
-                    </td>
+					<td><input class="form-control datepicker validatefield" style="width:100px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="form-control datepicker validatefield" style="width:100px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -196,22 +196,18 @@
 			</colgroup>
 			<tr>
 				<td>{LANG.field_choicetypes_title}</td>
-				<td>
-				<!-- BEGIN: choicetypes_add -->
+				<td><!-- BEGIN: choicetypes_add -->
 				<select class="form-control" name="choicetypes">
 					<!-- BEGIN: choicetypes -->
 					<option {CHOICE_TYPES.selected} value="{CHOICE_TYPES.key}"> {CHOICE_TYPES.value}</option>
 					<!-- END: choicetypes -->
-				</select>
-				<!-- END: choicetypes_add -->
-				<!-- BEGIN: choicetypes_add_hidden -->
-				{FIELD_TYPE_SQL}<input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" />
-				<!-- END: choicetypes_add_hidden -->
-				</td>
+				</select><!-- END: choicetypes_add --><!-- BEGIN: choicetypes_add_hidden --> {FIELD_TYPE_SQL}<input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" /><!-- END: choicetypes_add_hidden --></td>
 			</tr>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="choicesql" {DATAFORM.display_choicesql} >
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choicesql}</caption>
+			<caption>
+				<em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choicesql}
+			</caption>
 			<colgroup>
 				<col class="w250" />
 				<col span="2"/>
@@ -232,7 +228,9 @@
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="choiceitems" {DATAFORM.display_choiceitems} >
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choice}</caption>
+			<caption>
+				<em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choice}
+			</caption>
 			<colgroup>
 				<col class="w250" />
 				<col span="3"/>
@@ -254,7 +252,7 @@
 				<!-- BEGIN: loop_field_choice -->
 				<tr class="text-center">
 					<td>{FIELD_CHOICES.number}</td>
-					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}"/></td>
+					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}" {FIELD_CHOICES.disabled}/></td>
 					<td><input class="form-control w300" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
 					<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
 				</tr>
@@ -269,53 +267,53 @@
 	</div>
 </form>
 <script type="text/javascript">
-var items = '{FIELD_CHOICES_NUMBER}';
+	var items = '{FIELD_CHOICES_NUMBER}';
 
-$(document).ready(function() {
-	if ($("input[name=fid]").val() == 0) {
-		nv_show_list_field();
-	}
-	nv_load_current_date();
-
-	$.validator.addMethod('validalphanumeric', function(str) {
-		if (str == '') {
-			return true;
+	$(document).ready(function() {
+		if ($("input[name=fid]").val() == 0) {
+			nv_show_list_field();
 		}
-		var fieldCheck_rule = /^([a-zA-Z0-9_-])+$/;
-		return (fieldCheck_rule.test(str) ) ? true : false;
-	}, '{LANG.field_match_type_alphanumeric}');
+		nv_load_current_date();
 
-	$.validator.addMethod('validatefield', function(str) {
-		if (str == '') {
-			return true
-		}
-        var re = new RegExp(/^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{MATCH2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{MATCH2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{MATCH2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/)
-        var m = str.match(re)
-        return (m ? true : false)
-	}, '{LANG.field_match_type_date}');
+		$.validator.addMethod('validalphanumeric', function(str) {
+			if (str == '') {
+				return true;
+			}
+			var fieldCheck_rule = /^([a-zA-Z0-9_-])+$/;
+			return (fieldCheck_rule.test(str) ) ? true : false;
+		}, '{LANG.field_match_type_alphanumeric}');
 
-	$('#ffields').validate();
-});
+		$.validator.addMethod('validatefield', function(str) {
+			if (str == '') {
+				return true
+			}
+			var re = new RegExp(/^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{MATCH2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{MATCH2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{MATCH2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/)
+			var m = str.match(re)
+			return ( m ? true : false)
+		}, '{LANG.field_match_type_date}');
 
-function nv_load_sqlchoice(choice_name_select, choice_seltected) {
-	var getval = "";
-	if (choice_name_select == "table") {
-		var choicesql_module = $("select[name=choicesql_module]").val();
-		var module_selected = (choicesql_module == "" || choicesql_module == undefined ) ? '{SQL_DATA_CHOICE.0}' : choicesql_module;
-		getval = "&module=" + module_selected;
-		$("#choicesql_column").html("");
-	} else if (choice_name_select == "column") {
-		var choicesql_module = $("select[name=choicesql_module]").val();
-		var module_selected = (choicesql_module == "" || choicesql_module == undefined ) ? '{SQL_DATA_CHOICE.0}' : choicesql_module;
-		var choicesql_table = $("select[name=choicesql_table]").val();
-		var table_selected = (choicesql_table == "" || choicesql_table == undefined ) ? '{SQL_DATA_CHOICE.1}' : choicesql_table;
-		getval = "&module=" + module_selected + "&table=" + table_selected;
-	}
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected, function(res) {
-		$('#choicesql_' + choice_name_select).html(res);
-
+		$('#ffields').validate();
 	});
-}
+
+	function nv_load_sqlchoice(choice_name_select, choice_seltected) {
+		var getval = "";
+		if (choice_name_select == "table") {
+			var choicesql_module = $("select[name=choicesql_module]").val();
+			var module_selected = (choicesql_module == "" || choicesql_module == undefined ) ? '{SQL_DATA_CHOICE.0}' : choicesql_module;
+			getval = "&module=" + module_selected;
+			$("#choicesql_column").html("");
+		} else if (choice_name_select == "column") {
+			var choicesql_module = $("select[name=choicesql_module]").val();
+			var module_selected = (choicesql_module == "" || choicesql_module == undefined ) ? '{SQL_DATA_CHOICE.0}' : choicesql_module;
+			var choicesql_table = $("select[name=choicesql_table]").val();
+			var table_selected = (choicesql_table == "" || choicesql_table == undefined ) ? '{SQL_DATA_CHOICE.1}' : choicesql_table;
+			getval = "&module=" + module_selected + "&table=" + table_selected;
+		}
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected, function(res) {
+			$('#choicesql_' + choice_name_select).html(res);
+
+		});
+	}
 </script>
 <!-- END: load -->
 <!-- BEGIN: nv_load_sqlchoice -->
