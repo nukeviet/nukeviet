@@ -34,7 +34,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
-    //print_r($array_field_config);die('pass');
+
     if ($group_id != 0) {
         $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
     } else {
@@ -103,7 +103,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $datepicker = true;
                     }
                     if ($row['field'] == 'sig') {
-                        $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+                        $row['value'] = nv_htmlspecialchars(nv_br2nl($row['default_value']));
                         $xtpl->assign('TEXTAREA_SYSTEM', $row);
                         if (!empty($row['show_register']))
                             $xtpl->parse('main.show_textarea');
@@ -120,18 +120,10 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                 }
                 continue;
             }
-            /* if ($row['field'] == 'last_name' and $row['system'] == 1) {
-             $row['required'] = ($row['required']) ? 'required' : '';
-             $xtpl->assign('LAST_NAME_REQUIRED', $row['required']);
-             if (!empty($row['show_register']))
-             $xtpl->parse('main.show_last_name');
-             continue;
-             }*/
 
             $row['customID'] = $_k;
 
             if (($row['show_register'] and $userid == 0) or $userid > 0) {
-                $row['tbodyclass'] = ($a % 2) ? ' class="second"' : '';
                 if ($userid == 0 and empty($custom_fields)) {
                     if (!empty($row['field_choices'])) {
                         if ($row['field_type'] == 'date') {
@@ -374,6 +366,7 @@ function user_login($is_ajax = false)
             if (!empty($nv_redirect)) {
                 $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
             }
+            $assigns['server'] = $server;
             $assigns['title'] = ucfirst($server);
             $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
             $assigns['img_width'] = $assigns['img_height'] = 24;
@@ -818,7 +811,6 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             if ($row['system'] == 1) {
                 continue;
             }
-            $row['tbodyclass'] = ($a % 2) ? ' class="second"' : '';
 
             if ($userid == 0 and empty($custom_fields)) {
                 if (!empty($row['field_choices'])) {
@@ -1323,7 +1315,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     if (!empty($array_field_config)) {
         //var_dump($array_field_config); die();
         foreach ($array_field_config as $row) {
-        	if ($row['system'] == 1) continue;
+            if ($row['system'] == 1) continue;
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'checkbox') {

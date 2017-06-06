@@ -474,3 +474,7 @@ $lang_module['user_oauthmanager_deleteall'] = 'Xóa tất cả';
 $lang_module['min_old_user'] = 'Số tuổi thành viên ít nhất để tham gia';
 $lang_module['error_system'] = '%s không được để trống';
 $lang_module['old_min_user_error'] = 'Tuổi của bạn dưới %s nên chưa đủ tuổi đăng ký';
+$lang_module['two_step_verification_require_admin'] = 'Bắt buộc xác thực hai bước khu vực quản trị';
+$lang_module['two_step_verification_require_site'] = 'Bắt buộc xác thực hai bước ngoài site';
+$lang_module['two_step_verification_require_admindefault'] = 'Thiết lập an ninh đang yêu cầu bật tại khu vực quản trị, dù không bật ở đây quản trị vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
+$lang_module['two_step_verification_require_sitedefault'] = 'Thiết lập an ninh đang yêu cầu bật ngoài site, dù không bật ở đây thành viên trong nhóm vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';

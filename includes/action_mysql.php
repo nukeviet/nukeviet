@@ -66,6 +66,7 @@ function nv_create_table_sys($lang)
 		 act tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 admins varchar(255) DEFAULT '',
 		 rss tinyint(4) NOT NULL DEFAULT '1',
+		 sitemap tinyint(4) NOT NULL DEFAULT '1',
 		 gid smallint(5) NOT NULL DEFAULT '0',
 		 PRIMARY KEY (title)
 	) ENGINE=MyISAM";

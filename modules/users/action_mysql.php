@@ -28,59 +28,59 @@ if ($module_data != 'users') {
 $sql_create_module = $sql_drop_module;
 if ($module_data != 'users' or empty($_arr_table_module)) {
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_config (
-    	config varchar(100) NOT NULL,
-    	content text,
-    	edit_time int(11) unsigned NOT NULL DEFAULT '0',
-    	PRIMARY KEY (config)
+        config varchar(100) NOT NULL,
+        content text,
+        edit_time int(11) unsigned NOT NULL DEFAULT '0',
+        PRIMARY KEY (config)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_question (
-    	qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-    	title varchar(240) NOT NULL DEFAULT '',
-    	lang char(2) NOT NULL DEFAULT '',
-    	weight mediumint(8) unsigned NOT NULL DEFAULT '0',
-    	add_time int(11) unsigned NOT NULL DEFAULT '0',
-    	edit_time int(11) unsigned NOT NULL DEFAULT '0',
-    	PRIMARY KEY (qid),
-    	UNIQUE KEY title (title,lang)
+        qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(240) NOT NULL DEFAULT '',
+        lang char(2) NOT NULL DEFAULT '',
+        weight mediumint(8) unsigned NOT NULL DEFAULT '0',
+        add_time int(11) unsigned NOT NULL DEFAULT '0',
+        edit_time int(11) unsigned NOT NULL DEFAULT '0',
+        PRIMARY KEY (qid),
+        UNIQUE KEY title (title,lang)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . " (
-    	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+        userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
         group_id smallint(5) unsigned NOT NULL DEFAULT '0',
-    	username varchar(100) NOT NULL DEFAULT '',
-    	md5username char(32) NOT NULL DEFAULT '',
-    	password varchar(150) NOT NULL DEFAULT '',
-    	email varchar(100) NOT NULL DEFAULT '',
-    	first_name varchar(100) NOT NULL DEFAULT '',
-    	last_name varchar(100) NOT NULL DEFAULT '',
-    	gender char(1) DEFAULT '',
-    	photo varchar(255) DEFAULT '',
-    	birthday int(11) NOT NULL,
-    	sig text,
-    	regdate int(11) NOT NULL DEFAULT '0',
-    	question varchar(255) NOT NULL,
-    	answer varchar(255) NOT NULL DEFAULT '',
-    	passlostkey varchar(50) DEFAULT '',
-    	view_mail tinyint(1) unsigned NOT NULL DEFAULT '0',
-    	remember tinyint(1) unsigned NOT NULL DEFAULT '0',
-    	in_groups varchar(255) DEFAULT '',
-    	active tinyint(1) unsigned NOT NULL DEFAULT '0',
-    	active2step tinyint(1) unsigned NOT NULL DEFAULT '0',
-    	secretkey varchar(20) DEFAULT '',
-    	checknum varchar(40) DEFAULT '',
-    	last_login int(11) unsigned NOT NULL DEFAULT '0',
-    	last_ip varchar(45) DEFAULT '',
-    	last_agent varchar(255) DEFAULT '',
-    	last_openid varchar(255) DEFAULT '',
-    	idsite int(11) NOT NULL DEFAULT '0',
+        username varchar(100) NOT NULL DEFAULT '',
+        md5username char(32) NOT NULL DEFAULT '',
+        password varchar(150) NOT NULL DEFAULT '',
+        email varchar(100) NOT NULL DEFAULT '',
+        first_name varchar(100) NOT NULL DEFAULT '',
+        last_name varchar(100) NOT NULL DEFAULT '',
+        gender char(1) DEFAULT '',
+        photo varchar(255) DEFAULT '',
+        birthday int(11) NOT NULL,
+        sig text,
+        regdate int(11) NOT NULL DEFAULT '0',
+        question varchar(255) NOT NULL,
+        answer varchar(255) NOT NULL DEFAULT '',
+        passlostkey varchar(50) DEFAULT '',
+        view_mail tinyint(1) unsigned NOT NULL DEFAULT '0',
+        remember tinyint(1) unsigned NOT NULL DEFAULT '0',
+        in_groups varchar(255) DEFAULT '',
+        active tinyint(1) unsigned NOT NULL DEFAULT '0',
+        active2step tinyint(1) unsigned NOT NULL DEFAULT '0',
+        secretkey varchar(20) DEFAULT '',
+        checknum varchar(40) DEFAULT '',
+        last_login int(11) unsigned NOT NULL DEFAULT '0',
+        last_ip varchar(45) DEFAULT '',
+        last_agent varchar(255) DEFAULT '',
+        last_openid varchar(255) DEFAULT '',
+        idsite int(11) NOT NULL DEFAULT '0',
         safemode tinyint(1) unsigned NOT NULL DEFAULT '0',
         safekey varchar(40) DEFAULT '',
-    	PRIMARY KEY (userid),
-    	UNIQUE KEY username (username),
-    	UNIQUE KEY md5username (md5username),
-    	UNIQUE KEY email (email),
-    	KEY idsite (idsite)
+        PRIMARY KEY (userid),
+        UNIQUE KEY username (username),
+        UNIQUE KEY md5username (md5username),
+        UNIQUE KEY email (email),
+        KEY idsite (idsite)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_backupcodes (
@@ -93,97 +93,99 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups (
-    	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-    	title varchar(240) NOT NULL,
-    	email varchar(100) DEFAULT '',
+        group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(240) NOT NULL,
+        email varchar(100) DEFAULT '',
         description text,
-    	content text,
-    	group_type tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '0:Sys, 1:approval, 2:public',
+        content text,
+        group_type tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '0:Sys, 1:approval, 2:public',
         group_color varchar(10) NOT NULL,
         group_avatar varchar(255) NOT NULL,
+        require_2step_admin tinyint(1) unsigned NOT NULL DEFAULT '0',
+        require_2step_site tinyint(1) unsigned NOT NULL DEFAULT '0',
         is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
-    	add_time int(11) NOT NULL,
-    	exp_time int(11) NOT NULL,
-    	weight int(11) unsigned NOT NULL DEFAULT '0',
-    	act tinyint(1) unsigned NOT NULL,
-    	idsite int(11) unsigned NOT NULL DEFAULT '0',
-    	numbers mediumint(9) unsigned NOT NULL DEFAULT '0',
-    	siteus tinyint(4) unsigned NOT NULL DEFAULT '0',
-    	config varchar(250) DEFAULT '',
-    	PRIMARY KEY (group_id),
-    	UNIQUE KEY ktitle (title,idsite),
-    	KEY exp_time (exp_time)
+        add_time int(11) NOT NULL,
+        exp_time int(11) NOT NULL,
+        weight int(11) unsigned NOT NULL DEFAULT '0',
+        act tinyint(1) unsigned NOT NULL,
+        idsite int(11) unsigned NOT NULL DEFAULT '0',
+        numbers mediumint(9) unsigned NOT NULL DEFAULT '0',
+        siteus tinyint(4) unsigned NOT NULL DEFAULT '0',
+        config varchar(250) DEFAULT '',
+        PRIMARY KEY (group_id),
+        UNIQUE KEY ktitle (title,idsite),
+        KEY exp_time (exp_time)
     ) ENGINE=MyISAM AUTO_INCREMENT=10";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups_users (
-    	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
-    	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+        group_id smallint(5) unsigned NOT NULL DEFAULT '0',
+        userid mediumint(8) unsigned NOT NULL DEFAULT '0',
         is_leader tinyint(1) unsigned NOT NULL DEFAULT '0',
         approved tinyint(1) unsigned NOT NULL DEFAULT '0',
-    	data text NOT NULL,
-    	PRIMARY KEY (group_id,userid)
+        data text NOT NULL,
+        PRIMARY KEY (group_id,userid)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_reg (
-    	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-    	username varchar(100) NOT NULL DEFAULT '',
-    	md5username char(32) NOT NULL DEFAULT '',
-    	password varchar(150) NOT NULL DEFAULT '',
-    	email varchar(100) NOT NULL DEFAULT '',
-    	first_name varchar(255) NOT NULL DEFAULT '',
-    	last_name varchar(255) NOT NULL DEFAULT '',
-    	gender CHAR(1) NOT NULL DEFAULT '',
-    	birthday INT(11) NOT NULL,
-    	sig TEXT NULL DEFAULT NULL,
-    	regdate int(11) unsigned NOT NULL DEFAULT '0',
-    	question varchar(255) NOT NULL,
-    	answer varchar(255) NOT NULL DEFAULT '',
-    	checknum varchar(50) NOT NULL DEFAULT '',
-    	users_info text,
+        userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+        username varchar(100) NOT NULL DEFAULT '',
+        md5username char(32) NOT NULL DEFAULT '',
+        password varchar(150) NOT NULL DEFAULT '',
+        email varchar(100) NOT NULL DEFAULT '',
+        first_name varchar(255) NOT NULL DEFAULT '',
+        last_name varchar(255) NOT NULL DEFAULT '',
+        gender CHAR(1) NOT NULL DEFAULT '',
+        birthday INT(11) NOT NULL,
+        sig TEXT NULL DEFAULT NULL,
+        regdate int(11) unsigned NOT NULL DEFAULT '0',
+        question varchar(255) NOT NULL,
+        answer varchar(255) NOT NULL DEFAULT '',
+        checknum varchar(50) NOT NULL DEFAULT '',
+        users_info text,
         openid_info text,
-    	PRIMARY KEY (userid),
-    	UNIQUE KEY login (username),
-    	UNIQUE KEY md5username (md5username),
-    	UNIQUE KEY email (email)
+        PRIMARY KEY (userid),
+        UNIQUE KEY login (username),
+        UNIQUE KEY md5username (md5username),
+        UNIQUE KEY email (email)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_openid (
-    	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
-    	openid varchar(255) NOT NULL DEFAULT '',
-    	opid varchar(50) NOT NULL DEFAULT '',
-    	email varchar(100) NOT NULL DEFAULT '',
-    	PRIMARY KEY (opid),
-    	KEY userid (userid),
-    	KEY email (email)
+        userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+        openid varchar(255) NOT NULL DEFAULT '',
+        opid varchar(50) NOT NULL DEFAULT '',
+        email varchar(100) NOT NULL DEFAULT '',
+        PRIMARY KEY (opid),
+        KEY userid (userid),
+        KEY email (email)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field (
-    	fid mediumint(8) NOT NULL AUTO_INCREMENT,
-    	field varchar(25) NOT NULL,
-    	weight int(10) unsigned NOT NULL DEFAULT '1',
-    	field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
-    	field_choices text NOT NULL,
-    	sql_choices text NOT NULL,
-    	match_type enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
-    	match_regex varchar(250) NOT NULL DEFAULT '',
-    	func_callback varchar(75) NOT NULL DEFAULT '',
-    	min_length int(11) NOT NULL DEFAULT '0',
-    	max_length bigint(20) unsigned NOT NULL DEFAULT '0',
-    	required tinyint(3) unsigned NOT NULL DEFAULT '0',
-    	show_register tinyint(3) unsigned NOT NULL DEFAULT '0',
-    	user_editable tinyint(3) unsigned NOT NULL DEFAULT '0',
-    	show_profile tinyint(4) NOT NULL DEFAULT '1',
-    	class varchar(50) NOT NULL,
-    	language text NOT NULL,
-    	default_value varchar(255) NOT NULL DEFAULT '',
-    	system TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-    	PRIMARY KEY (fid),
-    	UNIQUE KEY field (field)
+        fid mediumint(8) NOT NULL AUTO_INCREMENT,
+        field varchar(25) NOT NULL,
+        weight int(10) unsigned NOT NULL DEFAULT '1',
+        field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
+        field_choices text NOT NULL,
+        sql_choices text NOT NULL,
+        match_type enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
+        match_regex varchar(250) NOT NULL DEFAULT '',
+        func_callback varchar(75) NOT NULL DEFAULT '',
+        min_length int(11) NOT NULL DEFAULT '0',
+        max_length bigint(20) unsigned NOT NULL DEFAULT '0',
+        required tinyint(3) unsigned NOT NULL DEFAULT '0',
+        show_register tinyint(3) unsigned NOT NULL DEFAULT '0',
+        user_editable tinyint(3) unsigned NOT NULL DEFAULT '0',
+        show_profile tinyint(4) NOT NULL DEFAULT '1',
+        class varchar(50) NOT NULL,
+        language text NOT NULL,
+        default_value varchar(255) NOT NULL DEFAULT '',
+        system TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+        PRIMARY KEY (fid),
+        UNIQUE KEY field (field)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info (
-    	userid mediumint(8) unsigned NOT NULL,
-    	PRIMARY KEY (userid)
+        userid mediumint(8) unsigned NOT NULL,
+        PRIMARY KEY (userid)
     ) ENGINE=MyISAM";
 
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462)";
@@ -193,20 +195,17 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_group_newusers', '0', " . NV_CURRENTTIME . ")";
-	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('min_old_user', '16', " . NV_CURRENTTIME . ")";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('min_old_user', '16', " . NV_CURRENTTIME . ")";
 
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('first_name', 1, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:4:\"Tên\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('last_name', 2, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:20:\"Họ và tên đệm\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('gender', 3, 'radio', 'a:2:{s:1:\"M\";s:3:\"Nam\";s:1:\"F\";s:4:\"Nữ\";}', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:12:\"Giới tính\";i:1;s:0:\"\";}}', '1', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('birthday', 4, 'date', 'a:1:{s:12:\"current_date\";i:0;}', '', 'none', '', '', 0, 0, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:10:\"Ngày sinh\";i:1;s:0:\"\";}}', '0', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('sig', 5, 'textarea', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:9:\"Chữ ký\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('question', 6, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:22:\"Câu hỏi bảo mật\";i:1;s:0:\"\";}}', '', 1)";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('answer', 7, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:11:\"Trả lời\";i:1;s:0:\"\";}}', '', 1)";
 
-    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('first_name', 2, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:4:\"Tên\";i:1;s:0:\"\";}}', '', 1)";
-    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('last_name', 5, 'textbox', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:20:\"Họ và tên đệm\";i:1;s:0:\"\";}}', '', 1)";
-    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('gender', 6, 'radio', 'a:2:{s:1:\"M\";s:3:\"Nam\";s:1:\"F\";s:4:\"Nữ\";}', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:12:\"Giới tính\";i:1;s:0:\"\";}}', '1', 1)";
-	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('birthday', 7, 'date', 'a:1:{s:12:\"current_date\";i:0;}', '', 'none', '', '', 0, 0, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:10:\"Ngày sinh\";i:1;s:0:\"\";}}', '0', 1)";
-	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('sig', 8, 'textarea', '', '', 'none', '', '', 0, 255, 0, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:9:\"Chữ ký\";i:1;s:0:\"\";}}', '', 1)";
-    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('answer', 4, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:11:\"Trả lời\";i:1;s:0:\"\";}}', '', 1)";
-	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_field ( field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('question', 3, 'textbox', '', '', 'none', '', '', 0, 255, 1, 1, 1, 1, 'input', 'a:1:{s:2:\"vi\";a:2:{i:0;s:22:\"Câu hỏi bảo mật\";i:1;s:0:\"\";}}', '', 1)";
-
-
-
-    $a=0;
+    $a = 0;
     if ($module_data == 'users') {
         $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (1, 'Super admin', '', 'Super Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
         $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (2, 'General admin', '', 'General Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";

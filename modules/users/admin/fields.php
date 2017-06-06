@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-// Chinh thu tu
+// Chỉnh thứ tự các trường tùy chỉnh. Không cho phép chỉnh các trường mặc định
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -25,7 +25,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $numrows = $db->query($query)->fetchColumn();
 
     $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE system=1')->fetchColumn();
-    if ($numrows != 1 or $new_vid < $weightsystem) {
+    if ($numrows != 1 or $new_vid <= $weightsystem) {
         die('NO');
     }
 
@@ -322,15 +322,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $weight = intval($weight) + 1;
 
                 $sql = "INSERT INTO " . NV_MOD_TABLE . "_field
-					(field, weight, field_type, field_choices, sql_choices, match_type,
-					match_regex, func_callback, min_length, max_length,
-					required, show_register, user_editable,
-					show_profile, class, language, default_value) VALUES
-					('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
-					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
-					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
-					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
-					" . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
+                    (field, weight, field_type, field_choices, sql_choices, match_type,
+                    match_regex, func_callback, min_length, max_length,
+                    required, show_register, user_editable,
+                    show_profile, class, language, default_value) VALUES
+                    ('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
+                    '" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
+                    " . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
+                    " . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
+                    " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
 
                 $data_insert = array();
                 $data_insert['class'] = $dataform['class'];
@@ -359,19 +359,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $query = "UPDATE " . NV_MOD_TABLE . "_field SET";
             if ($text_fields == 1) {
                 $query .= " match_type='" . $dataform['match_type'] . "',
-				match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
+                match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
             }
             $query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
-				required = '" . $dataform['required'] . "',
-				field_choices='" . $dataform['field_choices'] . "',
-				sql_choices = '" . $dataform['sql_choices'] . "',
-				show_register = '" . $dataform['show_register'] . "',
-				user_editable = '" . $dataform['user_editable'] . "',
-				show_profile = '" . $dataform['show_profile'] . "',
-				class = :class,
-				language='" . serialize($language) . "',
-				default_value= :default_value
-				WHERE fid = " . $dataform['fid'];
+                required = '" . $dataform['required'] . "',
+                field_choices='" . $dataform['field_choices'] . "',
+                sql_choices = '" . $dataform['sql_choices'] . "',
+                show_register = '" . $dataform['show_register'] . "',
+                user_editable = '" . $dataform['user_editable'] . "',
+                show_profile = '" . $dataform['show_profile'] . "',
+                class = :class,
+                language='" . serialize($language) . "',
+                default_value= :default_value
+                WHERE fid = " . $dataform['fid'];
 
             $stmt = $db->prepare($query);
             $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
@@ -431,6 +431,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
     die('NO');
 }
+
 $array_field_type = array(
     'number' => $lang_module['field_type_number'],
     'date' => $lang_module['field_type_date'],
@@ -470,14 +471,19 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
     $_rows = $db->query($sql)->fetchAll();
     $num = sizeof($_rows);
+    
+    // Các trường hệ thống luôn ở trên đầu, do đó bắt đầu weight từ khi có trường tùy chỉnh
+    $fieldsys_offset = 0;
+    
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
-            if ($row['system'] == 1)
+            if ($row['system'] == 1) {
                 $xtpl->assign('DISABLED_WEIGHT', 'disabled');
-            else {
+                $fieldsys_offset++;
+            } else {
                 $xtpl->assign('DISABLED_WEIGHT', '');
-				$xtpl->parse('main.data.loop.show_delete');
+                $xtpl->parse('main.data.loop.show_delete');
             }
 
             $xtpl->assign('ROW', array(
@@ -490,7 +496,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 'show_profile' => ($row['show_profile']) ? 'fa-check-square-o' : 'fa fa-square-o'
             ));
 
-            for ($i = 1; $i <= $num; ++$i) {
+            for ($i = ($row['system'] == 1 ? $row['weight'] : $fieldsys_offset + 1); $i <= ($row['system'] == 1 ? $row['weight'] : $num); ++$i) {
                 $xtpl->assign('WEIGHT', array(
                     'key' => $i,
                     'title' => $i,
@@ -687,6 +693,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $page_title = $lang_module['fields'];
     $contents = nv_admin_theme($contents);
 }
+
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';

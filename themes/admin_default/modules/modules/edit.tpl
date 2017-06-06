@@ -16,7 +16,7 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td>{LANG.module_name} <span class="text-danger">(*)</span>:</td>
+					<td class="w200">{LANG.module_name} <span class="text-danger">(*)</span>:</td>
 					<td><input class="w300 form-control" name="mod_name" id="mod_name" type="text" value="{DATA.mod_name}" maxlength="55" readonly="readonly"/></td>
 				</tr>
 				<tr>
@@ -70,6 +70,12 @@
 					<td><input name="rss" id="rss" type="checkbox" value="1"{RSS} /></td>
 				</tr>
 				<!-- END: rss -->
+				<!-- BEGIN: sitemap -->
+				<tr>
+					<td>{DATA.sitemap.0}:</td>
+					<td><input name="sitemap" id="sitemap" type="checkbox" value="1"{SITEMAP} /></td>
+				</tr>
+				<!-- END: sitemap -->
 				<!-- BEGIN: groups_view -->
 				<tr>
 					<td>{DATA.groups_view.0}:</td>
