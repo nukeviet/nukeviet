@@ -50,7 +50,7 @@ class Blocker
      * @param string $ip
      * @return void
      */
-    public function __construct($logs_path, $rules = array(), $ip = '')
+    public function __construct($logs_path, $ip = '')
     {
         if (!is_dir($logs_path)) {
             trigger_error(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, E_USER_ERROR);
