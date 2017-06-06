@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-// Chỉnh thứ tự các trường tùy chỉnh. Không cho phép chỉnh các trường mặc định
+// Chinh thu tu
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -25,7 +25,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $numrows = $db->query($query)->fetchColumn();
 
     $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE system=1')->fetchColumn();
-    if ($numrows != 1 or $new_vid <= $weightsystem) {
+    if ($numrows != 1 or $new_vid < $weightsystem) {
         die('NO');
     }
 
@@ -471,17 +471,12 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
     $_rows = $db->query($sql)->fetchAll();
     $num = sizeof($_rows);
-    
-    // Các trường hệ thống luôn ở trên đầu, do đó bắt đầu weight từ khi có trường tùy chỉnh
-    $fieldsys_offset = 0;
-    
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
-            if ($row['system'] == 1) {
+            if ($row['system'] == 1)
                 $xtpl->assign('DISABLED_WEIGHT', 'disabled');
-                $fieldsys_offset++;
-            } else {
+            else {
                 $xtpl->assign('DISABLED_WEIGHT', '');
                 $xtpl->parse('main.data.loop.show_delete');
             }
@@ -495,19 +490,31 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 'show_register' => ($row['show_register']) ? 'fa-check-square-o' : 'fa fa-square-o',
                 'show_profile' => ($row['show_profile']) ? 'fa-check-square-o' : 'fa fa-square-o'
             ));
+            $initweight = 0;
+            if ($row['system'] != 1) {
+                $weghtmax = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE system=1')->fetchColumn();
+                if (!empty($weghtmax))
+                    $initweight = $weghtmax;
+                for ($i = $initweight + 1; $i <= $num; ++$i) {
+                    $xtpl->assign('WEIGHT', array(
+                        'key' => $i,
+                        'title' => $i,
+                        'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
+                    ));
+                    $xtpl->parse('main.data.loop.weight');
+                }
 
-            for ($i = ($row['system'] == 1 ? $row['weight'] : $fieldsys_offset + 1); $i <= ($row['system'] == 1 ? $row['weight'] : $num); ++$i) {
+            } else {
                 $xtpl->assign('WEIGHT', array(
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
+                    'key' => $row['weight'],
+                    'title' => $row['weight'],
+                    'selected' => ' selected="selected"'
                 ));
                 $xtpl->parse('main.data.loop.weight');
             }
 
             $xtpl->parse('main.data.loop');
         }
-
         $xtpl->parse('main.data');
     }
     $xtpl->parse('main');
@@ -693,7 +700,6 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $page_title = $lang_module['fields'];
     $contents = nv_admin_theme($contents);
 }
-
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
