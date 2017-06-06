@@ -474,13 +474,6 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
-            if ($row['system'] == 1)
-                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
-            else {
-                $xtpl->assign('DISABLED_WEIGHT', '');
-                $xtpl->parse('main.data.loop.show_delete');
-            }
-
             $xtpl->assign('ROW', array(
                 'fid' => $row['fid'],
                 'field' => $row['field'],
@@ -492,6 +485,8 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             ));
             $initweight = 0;
             if ($row['system'] != 1) {
+                $xtpl->assign('DISABLED_WEIGHT', '');
+                $xtpl->parse('main.data.loop.show_delete');
                 $weghtmax = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE system=1')->fetchColumn();
                 if (!empty($weghtmax))
                     $initweight = $weghtmax;
@@ -503,16 +498,16 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                     ));
                     $xtpl->parse('main.data.loop.weight');
                 }
-
             } else {
+                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
                 $xtpl->assign('WEIGHT', array(
                     'key' => $row['weight'],
                     'title' => $row['weight'],
                     'selected' => ' selected="selected"'
                 ));
                 $xtpl->parse('main.data.loop.weight');
-            }
 
+            }
             $xtpl->parse('main.data.loop');
         }
         $xtpl->parse('main.data');
