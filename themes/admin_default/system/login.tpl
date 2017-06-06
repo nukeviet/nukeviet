@@ -126,12 +126,12 @@
                         </script>
                     </div>
                     <!-- END: recaptcha -->
-					<div id="smb">
+					<div id="smb" class="{SHOW_SUBMIT}">
 						<input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
 						<input class="btn btn-primary" type="submit" value="{GLANG.loginsubmit}" />
 					</div>
 				</form>
-				<p class="lostpass">
+				<p class="lostpass{SHOW_LOSTPASS}">
 					<a title="{LANGLOSTPASS}" href="{LINKLOSTPASS}">{LANGLOSTPASS}?</a>
 				</p>
 			</div>

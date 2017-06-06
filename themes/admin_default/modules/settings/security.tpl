@@ -45,6 +45,7 @@
                 <tr>
                     <td><strong>{LANG.two_step_verification}</strong></td>
                     <td>
+                        <span class="help-block">{LANG.two_step_verification_note}</span>
                         <select name="two_step_verification" class="form-control w200">
                             <!-- BEGIN: two_step_verification --><option value="{TWO_STEP_VERIFICATION.key}"{TWO_STEP_VERIFICATION.selected}>{TWO_STEP_VERIFICATION.title}</option><!-- END: two_step_verification -->
                         </select>

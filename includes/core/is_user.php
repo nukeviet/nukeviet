@@ -17,7 +17,7 @@ $user_info = array();
 if (defined('NV_IS_ADMIN')) {
     $user_info = $admin_info;
 
-    if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], array(1, 3))) {
+    if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], array(1, 3)) or !empty($user_info['2step_require']))) {
         define('NV_IS_1STEP_USER', true);
     } else {
         define('NV_IS_USER', true);
@@ -27,7 +27,7 @@ if (defined('NV_IS_ADMIN')) {
 
     if (isset($user_info['userid']) and $user_info['userid'] > 0) {
         $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
-			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password, safemode 
+			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password, safemode
 			FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval($user_info['userid']) . ' AND active=1';
 
         $user_info = $db->query($_sql)->fetch();
@@ -57,7 +57,7 @@ if (defined('NV_IS_ADMIN')) {
                 if ($user['checkhash'] == md5($user['userid'] . $user['checknum'] . $global_config['sitekey'] . $client_info['browser']['key'])) {
                     $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, active2step, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
-						last_openid AS current_openid, password, question, answer, safemode 
+						last_openid AS current_openid, password, question, answer, safemode
 						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
                     $user_info = $db->query($_sql)->fetch();
@@ -68,7 +68,6 @@ if (defined('NV_IS_ADMIN')) {
                             isset($user['current_ip']) and strcasecmp($user['current_ip'], $user_info['current_ip']) == 0 and //current IP
                             isset($user['current_login']) and strcasecmp($user['current_login'], intval($user_info['current_login'])) == 0) {
                                 //current login
-
                                 $checknum = true;
                             } else {
                                 $checknum = false;
@@ -79,7 +78,9 @@ if (defined('NV_IS_ADMIN')) {
 
                         if ($checknum) {
                             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
-                            $user_info['in_groups'] = nv_user_groups($user_info['in_groups']);
+                            $check_in_groups = nv_user_groups($user_info['in_groups'], true);
+                            $user_info['in_groups'] = $check_in_groups[0];
+                            $user_info['2step_require'] = $check_in_groups[1];
                             $user_info['last_login'] = intval($user['last_login']);
                             $user_info['last_agent'] = $user['last_agent'];
                             $user_info['last_ip'] = $user['last_ip'];
@@ -88,7 +89,7 @@ if (defined('NV_IS_ADMIN')) {
                             $user_info['valid_question'] = (! empty($user_info['question']) and ! empty($user_info['answer'])) ? true : false;
                             $user_info['current_mode'] = isset($user['current_mode']) ? $user['current_mode'] : 0;
 
-                            unset($user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer']);
+                            unset($user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer'], $check_in_groups);
 
                             if (! empty($user_info['current_openid'])) {
                                 $sth = $db->prepare('SELECT openid, email FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid');
@@ -112,7 +113,7 @@ if (defined('NV_IS_ADMIN')) {
         }
 
         if (! empty($user_info) and isset($user_info['userid']) and $user_info['userid'] > 0) {
-            if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], array(2, 3))) {
+            if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], array(2, 3)) or !empty($user_info['2step_require']))) {
                 define('NV_IS_1STEP_USER', true);
             } else {
                 define('NV_IS_USER', true);
