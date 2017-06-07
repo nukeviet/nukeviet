@@ -101,6 +101,8 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
         group_type tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '0:Sys, 1:approval, 2:public',
         group_color varchar(10) NOT NULL,
         group_avatar varchar(255) NOT NULL,
+        require_2step_admin tinyint(1) unsigned NOT NULL DEFAULT '0',
+        require_2step_site tinyint(1) unsigned NOT NULL DEFAULT '0',
         is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
         add_time int(11) NOT NULL,
         exp_time int(11) NOT NULL,
