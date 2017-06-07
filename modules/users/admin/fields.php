@@ -410,7 +410,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-// DEL
+// Xóa trường
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -482,13 +482,6 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
-            if ($row['system'] == 1) {
-                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
-                $fieldsys_offset++;
-            } else {
-                $xtpl->assign('DISABLED_WEIGHT', '');
-                $xtpl->parse('main.data.loop.show_delete');
-            }
 
             $xtpl->assign('ROW', array(
                 'fid' => $row['fid'],
@@ -507,6 +500,14 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
                 ));
                 $xtpl->parse('main.data.loop.weight');
+            }
+            
+            if ($row['system'] == 1) {
+                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
+                $fieldsys_offset++;
+            } else {
+                $xtpl->assign('DISABLED_WEIGHT', '');
+                $xtpl->parse('main.data.loop.show_delete');
             }
 
             $xtpl->parse('main.data.loop');
