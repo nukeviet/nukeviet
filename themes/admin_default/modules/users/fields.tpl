@@ -248,7 +248,7 @@
 			<!-- BEGIN: add_field_choice -->
 			<tfoot>
 				<tr>
-					<td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
+					<td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem('{LANG.field_match_type_alphanumeric}');" /></td>
 				</tr>
 			</tfoot>
 			<!-- END: add_field_choice -->
