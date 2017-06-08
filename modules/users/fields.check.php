@@ -11,11 +11,14 @@
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
+
+if (empty($query_field)) {
+    $query_field = array();
+}
+
 foreach ($array_field_config as $row_f) {
     $value = (isset($custom_fields[$row_f['field']])) ? $custom_fields[$row_f['field']] : '';
-    if ($row_f['system'] == 1) {
-        continue;
-    }
+    $field_input_name = empty($row_f['system']) ? 'custom_fields[' . $row_f['field'] . ']' : $row_f['field'];
     if ($value != '') {
         if ($row_f['field_type'] == 'number') {
             $number_type = $row_f['field_choices']['number_type'];
@@ -24,7 +27,7 @@ foreach ($array_field_config as $row_f) {
             if (!preg_match($pattern, $value)) {
                 die(json_encode(array(
                     'status' => 'error',
-                    'input' => 'custom_fields[' . $row_f['field'] . ']',
+                    'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                 )));
             } else {
@@ -33,7 +36,7 @@ foreach ($array_field_config as $row_f) {
                 if ($value < $row_f['min_length'] or $value > $row_f['max_length']) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                     )));
                 }
@@ -45,14 +48,14 @@ foreach ($array_field_config as $row_f) {
                 if ($row_f['min_length'] > 0 and ($value < $row_f['min_length'] or $value > $row_f['max_length'])) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
                     )));
                 }
             } else {
                 die(json_encode(array(
                     'status' => 'error',
-                    'input' => 'custom_fields[' . $row_f['field'] . ']',
+                    'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                 )));
             }
@@ -61,7 +64,7 @@ foreach ($array_field_config as $row_f) {
                 if (!preg_match('/^[a-zA-Z0-9\_]+$/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                     )));
                 }
@@ -69,7 +72,7 @@ foreach ($array_field_config as $row_f) {
                 if (($error = nv_check_valid_email($value)) != '') {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => $error
                     )));
                 }
@@ -77,7 +80,7 @@ foreach ($array_field_config as $row_f) {
                 if (!nv_is_url($value)) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                     )));
                 }
@@ -85,7 +88,7 @@ foreach ($array_field_config as $row_f) {
                 if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                     )));
                 }
@@ -94,14 +97,14 @@ foreach ($array_field_config as $row_f) {
                     if (!call_user_func($row_f['func_callback'], $value)) {
                         die(json_encode(array(
                             'status' => 'error',
-                            'input' => 'custom_fields[' . $row_f['field'] . ']',
+                            'input' => $field_input_name,
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                         )));
                     }
                 } else {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => 'error function not exists ' . $row_f['func_callback']
                     )));
                 }
@@ -114,7 +117,7 @@ foreach ($array_field_config as $row_f) {
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
                 die(json_encode(array(
                     'status' => 'error',
-                    'input' => 'custom_fields[' . $row_f['field'] . ']',
+                    'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                 )));
             }
@@ -126,7 +129,7 @@ foreach ($array_field_config as $row_f) {
                 if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                     )));
                 }
@@ -135,14 +138,14 @@ foreach ($array_field_config as $row_f) {
                     if (!call_user_func($row_f['func_callback'], $value)) {
                         die(json_encode(array(
                             'status' => 'error',
-                            'input' => 'custom_fields[' . $row_f['field'] . ']',
+                            'input' => $field_input_name,
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                         )));
                     }
                 } else {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $field_input_name,
                         'mess' => 'error function not exists ' . $row_f['func_callback']
                     )));
                 }
@@ -154,7 +157,7 @@ foreach ($array_field_config as $row_f) {
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
                 die(json_encode(array(
                     'status' => 'error',
-                    'input' => 'custom_fields[' . $row_f['field'] . ']',
+                    'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                 )));
             }
@@ -171,7 +174,7 @@ foreach ($array_field_config as $row_f) {
             if (!isset($row_f['field_choices'][$value])) {
                 die(json_encode(array(
                     'status' => 'error',
-                    'input' => 'custom_fields[' . $row_f['field'] . ']',
+                    'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                 )));
             }
@@ -183,14 +186,16 @@ foreach ($array_field_config as $row_f) {
     if (empty($value) and $row_f['required']) {
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'custom_fields[' . $row_f['field'] . ']',
+            'input' => $field_input_name,
             'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title'])
         )));
     }
 
-    if ($userid) {
-        $query_field[] = $row_f['field'] . '=' . $db->quote($value);
-    } else {
-        $query_field[$row_f['field']] = $db->quote($value);
+    if (empty($row_f['system'])) {
+        if ($userid) {
+            $query_field[] = $row_f['field'] . '=' . $db->quote($value);
+        } else {
+            $query_field[$row_f['field']] = $db->quote($value);
+        }
     }
 }

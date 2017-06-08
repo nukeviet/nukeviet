@@ -20,7 +20,7 @@ function user_validForm(a) {
             $('[type="submit"]', $(a)).prop('disabled', false);
             if( b.status == "error" ) {
                 alert(b.mess);
-                $("[name=" + b.input + "]", a).focus();
+                $("[name=\"" + b.input + "\"]", a).focus();
             } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
                 if( b.admin_add == "yes" ) {
