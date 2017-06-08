@@ -156,6 +156,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $dataform['sql_choices'] = '';
 
     $dataform['fid'] = $nv_Request->get_int('fid', 'post', 0);
+    $dataform['system'] = $nv_Request->get_int('system', 'post', 0);
 
     $dataform['title'] = $nv_Request->get_title('title', 'post', '');
     $dataform['description'] = $nv_Request->get_title('description', 'post', '');
@@ -383,26 +384,33 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
             $save = $stmt->execute();
 
-            if ($save and $dataform['max_length'] != $dataform_old['max_length']) {
-                $type_date = '';
-                if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
-                    $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
-                } elseif ($dataform['max_length'] <= 255) {
-                    $type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
-                } elseif ($dataform['max_length'] <= 65536) {
-                    //2^16 TEXT
-
-                    $type_date = 'TEXT NOT NULL';
-                } elseif ($dataform['max_length'] <= 16777216) {
-                    //2^24 MEDIUMTEXT
-
-                    $type_date = 'MEDIUMTEXT NOT NULL';
-                } elseif ($dataform['max_length'] <= 4294967296) {
-                    //2^32 LONGTEXT
-
-                    $type_date = 'LONGTEXT NOT NULL';
+            if (empty($dataform['system'])) {
+                if ($save and $dataform['max_length'] != $dataform_old['max_length']) {
+                    $type_date = '';
+                    if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
+                        $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+                    } elseif ($dataform['max_length'] <= 255) {
+                        $type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
+                    } elseif ($dataform['max_length'] <= 65536) {
+                        //2^16 TEXT
+    
+                        $type_date = 'TEXT NOT NULL';
+                    } elseif ($dataform['max_length'] <= 16777216) {
+                        //2^24 MEDIUMTEXT
+    
+                        $type_date = 'MEDIUMTEXT NOT NULL';
+                    } elseif ($dataform['max_length'] <= 4294967296) {
+                        //2^32 LONGTEXT
+    
+                        $type_date = 'LONGTEXT NOT NULL';
+                    }
+                    $save = false;
+                    try {
+                        $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
+                    } catch (PDOException $e) {
+                        trigger_error($e->getMessage());
+                    }
                 }
-                $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
             }
         }
         if ($save) {
@@ -563,6 +571,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['max_number'] = 1000;
             $dataform['number_type_1'] = ' checked="checked"';
             $dataform['current_date_0'] = ' checked="checked"';
+            $dataform['system'] = 0;
         }
     }
 

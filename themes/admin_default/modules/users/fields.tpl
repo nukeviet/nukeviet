@@ -265,6 +265,7 @@
 		</table>
 	</div>
 	<div style="margin-left: 350px;">
+		<input type="hidden" value="{DATAFORM.system}" name="system">
 		<input type="hidden" value="{DATAFORM.fid}" name="fid">
 		<input type="hidden" value="{DATAFORM.field}" name="fieldid">
 		<input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit">
