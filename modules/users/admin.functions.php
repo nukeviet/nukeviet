@@ -30,3 +30,21 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
     $cache = serialize($global_users_config);
     $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
 }
+
+$global_array_genders = array(
+    'N' => array(
+        'key' => 'N',
+        'title' => $lang_module['NA'],
+        'selected' => ''
+    ),
+    'M' => array(
+        'key' => 'M',
+        'title' => $lang_module['male'],
+        'selected' => ''
+    ),
+    'F' => array(
+        'key' => 'F',
+        'title' => $lang_module['female'],
+        'selected' => ''
+    )
+);

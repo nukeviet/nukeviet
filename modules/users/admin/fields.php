@@ -288,11 +288,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         if ($dataform['choicetypes'] == 'field_choicetypes_text') {
             if ($dataform['fid'] and $dataform['fieldid'] == 'gender') {
-                $field_choice_value = array(1 => 'M', 2 => 'F');
+                $field_choice_value = array(1 => 'N', 2 => 'M', 3 => 'F');
+                $field_choice_text = array(1 => $global_array_genders['N']['title'], 2 => $global_array_genders['M']['title'], 3 => $global_array_genders['F']['title']);
             } else {
                 $field_choice_value = $nv_Request->get_array('field_choice', 'post');
+                $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
             }
-            $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
             $field_choices = array_combine(array_map('strip_punctuation', $field_choice_value), array_map('strip_punctuation', $field_choice_text));
             if (sizeof($field_choices)) {
                 unset($field_choices['']);
@@ -593,9 +594,9 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     }
     if ($fid == 0 or $text_fields == 0) {
         $number = 1;
-        $disable_editkey_choose = ($dataform['fieldid'] == 'gender' and !empty($dataform['fid']));
+        $disable_edit_choose = ($dataform['fieldid'] == 'gender' and !empty($dataform['fid']));
         
-        $xtpl->assign('FIELD_CHOICES_READONLYKEY', $disable_editkey_choose ? ' readonly="readonly"' : '');
+        $xtpl->assign('FIELD_CHOICES_READONLY', $disable_edit_choose ? ' readonly="readonly"' : '');
         
         if (!empty($field_choices)) {
             foreach ($field_choices as $key => $value) {
@@ -603,12 +604,12 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                     'checked' => ($number == $dataform['default_value']) ? ' checked="checked"' : '',
                     "number" => $number++,
                     'key' => $key,
-                    'value' => $value
+                    'value' => $disable_edit_choose ? $global_array_genders[$key]['title'] : $value
                 ));
                 $xtpl->parse('main.load.loop_field_choice');
             }
         }
-        if (!$disable_editkey_choose) {
+        if (!$disable_edit_choose) {
             $xtpl->assign('FIELD_CHOICES', array(
                 'number' => $number,
                 'key' => '',
