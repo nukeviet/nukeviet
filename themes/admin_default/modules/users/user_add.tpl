@@ -2,19 +2,17 @@
 <!-- BEGIN: is_forum -->
 <div class="alert alert-warning">{LANG.modforum}</div>
 <!-- END: is_forum -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
 <!-- BEGIN: edit_user -->
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<form action="{FORM_ACTION}" method="post" class="form-inline" onsubmit="return user_validForm(this);">
+<form role="form" action="{FORM_ACTION}" method="post" class="form-inline" onsubmit="return user_validForm(this);">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <colgroup>
                 <col class="w300"/>
                 <col class="w20"/>
+                <col />
             </colgroup>
             <tbody>
                 <tr>
@@ -193,7 +191,7 @@
                             <option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                             <!-- END: loop -->
                         </select>
-                        <!-- END: loopselect -->
+                        <!-- END: select -->
                         <!-- BEGIN: radio -->
                         <label for="lb_{FIELD_CHOICES.id}"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
                         <!-- END: radio -->

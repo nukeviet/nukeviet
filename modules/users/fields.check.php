@@ -15,6 +15,11 @@ if (!defined('NV_MAINFILE')) {
 if (empty($query_field)) {
     $query_field = array();
 }
+if (defined('NV_ADMIN') and (!isset($_user) or !is_array($_user))) {
+    $_user = array();
+} elseif (!isset($array_register) or !is_array($array_register)) {
+    $array_register = array();
+}
 
 foreach ($array_field_config as $row_f) {
     $value = (isset($custom_fields[$row_f['field']])) ? $custom_fields[$row_f['field']] : '';
@@ -197,5 +202,9 @@ foreach ($array_field_config as $row_f) {
         } else {
             $query_field[$row_f['field']] = $db->quote($value);
         }
+    } elseif (defined('NV_ADMIN')) {
+        $_user[$row_f['field']] = $value;
+    } else {
+        
     }
 }

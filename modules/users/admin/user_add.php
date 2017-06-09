@@ -41,12 +41,12 @@ while ($row_field = $result_field->fetch()) {
     }
     $array_field_config[$row_field['field']] = $row_field;
 }
-$custom_fields = $nv_Request->get_array('custom_fields', 'post');
+
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$_user = array();
+$_user = $custom_fields = array();
 $userid = 0;
 if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
@@ -67,6 +67,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
     $_user['adduser_email'] = $nv_Request->get_int('adduser_email', 'post', 0);
 
+    $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     $custom_fields['first_name'] = $_user['first_name'];
     $custom_fields['last_name'] = $_user['last_name'];
     $custom_fields['gender'] = $_user['gender'];
@@ -361,23 +362,21 @@ if (defined('NV_IS_USER_FORUM')) {
     $have_custom_fields = false;
     foreach ($array_field_config as $row) {
         if (($row['show_register'] and $userid == 0) or $userid > 0) {
-            if ($userid == 0 and empty($custom_fields)) {
-                if (!empty($row['field_choices'])) {
-                    if ($row['field_type'] == 'date') {
-                        $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
-                    } elseif ($row['field_type'] == 'number') {
-                        $row['value'] = $row['default_value'];
-                    } else {
-                        $temp = array_keys($row['field_choices']);
-                        $tempkey = intval($row['default_value']) - 1;
-                        $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
-                    }
-                } else {
+            // Value luôn là giá trị mặc định
+            if (!empty($row['field_choices'])) {
+                if ($row['field_type'] == 'date') {
+                    $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+                } elseif ($row['field_type'] == 'number') {
                     $row['value'] = $row['default_value'];
+                } else {
+                    $temp = array_keys($row['field_choices']);
+                    $tempkey = intval($row['default_value']) - 1;
+                    $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                 }
             } else {
-                $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
+                $row['value'] = $row['default_value'];
             }
+            
             $row['required'] = ($row['required']) ? 'required' : '';
             $xtpl->assign('FIELD', $row);
 
