@@ -98,6 +98,12 @@
 </script>
 <!-- END: main -->
 <!-- BEGIN: results -->
+
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{ERROR}</div>
+<!-- END: error -->
+
+<!-- BEGIN: results_content -->
 <div class="panel panel-default">
 	<div class="panel-body">
 		<h3 class="text-center"><em class="fa fa-filter">&nbsp;</em>{LANG.search_on} {TITLE_MOD}</h3>
@@ -167,4 +173,5 @@
 		</div>
 	</div>
 </div>
+<!-- END: results_content -->
 <!-- END: results -->
