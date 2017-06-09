@@ -555,24 +555,38 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
  * nv_user_groups()
  *
  * @param string $in_groups
+ * @param bool $res_2step
+ * @param array $manual_groups
  * @return
  */
-function nv_user_groups($in_groups)
+function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array())
 {
     global $nv_Cache, $db, $global_config;
 
     $_groups = array();
+    $_2step_require = false;
+
     if (!empty($in_groups)) {
-        $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+        $query = 'SELECT group_id, title, require_2step_admin, require_2step_site, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
         $list = $nv_Cache->db($query, '', 'users');
         if (!empty($list)) {
             $reload = array();
             $in_groups = explode(',', $in_groups);
+            if (!empty($manual_groups)) {
+                $in_groups = array_unique(array_merge_recursive($in_groups, $manual_groups));
+            }
             for ($i = 0, $count = sizeof($list); $i < $count; ++$i) {
                 if ($list[$i]['exp_time'] != 0 and $list[$i]['exp_time'] <= NV_CURRENTTIME) {
                     $reload[] = $list[$i]['group_id'];
                 } elseif (in_array($list[$i]['group_id'], $in_groups)) {
                     $_groups[] = $list[$i]['group_id'];
+                    if (defined('NV_ADMIN')) {
+                        if (!empty($list[$i]['require_2step_admin'])) {
+                            $_2step_require = true;
+                        }
+                    } elseif (!empty($list[$i]['require_2step_site'])) {
+                        $_2step_require = true;
+                    }
                 }
             }
 
@@ -581,6 +595,10 @@ function nv_user_groups($in_groups)
                 $nv_Cache->delMod('users');
             }
         }
+    }
+
+    if ($res_2step) {
+        return array($_groups, $_2step_require);
     }
 
     return $_groups;
