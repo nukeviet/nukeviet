@@ -48,6 +48,9 @@ foreach ($array_field_config as $row_f) {
             }
         } elseif ($row_f['field_type'] == 'date') {
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $value, $m)) {
+                $m[1] = intval($m[1]);
+                $m[2] = intval($m[2]);
+                $m[3] = intval($m[3]);
                 $value = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
 
                 if ($row_f['min_length'] > 0 and ($value < $row_f['min_length'] or $value > $row_f['max_length'])) {
@@ -55,6 +58,16 @@ foreach ($array_field_config as $row_f) {
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
+                    )));
+                } elseif ($row_f['field'] == 'birthday' and !empty($global_users_config['min_old_user']) and (
+                    $m[3] > (date('Y') - $global_users_config['min_old_user']) or (
+                    $m[3] == (date('Y') - $global_users_config['min_old_user']) and (
+                    $m[2] > date('n') or ($m[2] == date('n') and $m[1] > date('j'))
+                )))) {
+                    die(json_encode(array(
+                        'status' => 'error',
+                        'input' => $field_input_name,
+                        'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
                     )));
                 }
             } else {

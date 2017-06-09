@@ -105,7 +105,10 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt->bindParam(':content', $array_config['avatar_width'], PDO::PARAM_STR);
             $stmt->execute();
 
-            $array_config['min_old_user'] = $nv_Request->get_int('min_old_user', 'post', 120);
+            $array_config['min_old_user'] = $nv_Request->get_int('min_old_user', 'post', 0);
+            if ($array_config['min_old_user'] < 0) {
+                $array_config['min_old_user'] = 0;
+            }
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='min_old_user'");
             $stmt->bindParam(':content', $array_config['min_old_user'], PDO::PARAM_STR);
             $stmt->execute();
