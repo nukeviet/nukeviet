@@ -7,25 +7,25 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10-5-2010 0:14
  */
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
 /**
  * GetSourceNews()
  *
- * @param mixed $sourceid            
+ * @param mixed $sourceid
  * @return
  *
  */
 function GetSourceNews($sourceid)
 {
     global $db_slave, $module_data;
-    
+
     if ($sourceid > 0) {
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
-        
+
         if (list ($title) = $re->fetch(3)) {
             return $title;
         }
@@ -36,15 +36,15 @@ function GetSourceNews($sourceid)
 /**
  * BoldKeywordInStr()
  *
- * @param mixed $str            
- * @param mixed $keyword            
+ * @param mixed $str
+ * @param mixed $keyword
  * @return
  *
  */
 function BoldKeywordInStr($str, $keyword)
 {
     $str = nv_clean60($str, 300);
-    if (! empty($keyword)) {
+    if (!empty($keyword)) {
         $tmp = explode(' ', $keyword);
         foreach ($tmp as $k) {
             $tp = strtolower($k);
@@ -65,17 +65,17 @@ $keyhtml = nv_htmlspecialchars($key);
 $error = '';
 
 $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-if (! empty($key)) {
+if (!empty($key)) {
     $base_url_rewrite .= '&q=' . urlencode($key);
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
-if (! empty($choose)) {
+if (!empty($choose)) {
     $base_url_rewrite .= '&choose=' . $choose;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
-if (! empty($catid)) {
+if (!empty($catid)) {
     $base_url_rewrite .= '&catid=' . $catid;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
@@ -123,14 +123,14 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     if (strpos($canonicalUrl, NV_MY_DOMAIN) !== 0) {
         $canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
     }
-    
+
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
-    
+
     if ($module_config[$module_name]['elas_use'] == 1) {
         // ket noi den csdl elastic
         $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
-        
+
         $dbkeyhtml = nv_EncString($dbkeyhtml);
         if ($choose == 1) {
             $search_elastic = [
@@ -174,7 +174,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         } else {
-            
+
             $search_elastic = [
                 'should' => [
                     'multi_match' => [ // dung multi_match:tim kiem theo nhieu truong
@@ -204,7 +204,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         }
-        
+
         $todate_elastic = array();
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
             $todate_elastic = [
@@ -217,12 +217,12 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'gte' => mktime(0, 0, 0, $m[2], $m[1], $m[3])
             ];
         }
-        
+
         $array_query_elastic = array();
         $array_query_elastic['query']['bool'] = $search_elastic;
         $array_query_elastic['size'] = $per_page;
         $array_query_elastic['from'] = ($page - 1) * $per_page;
-        
+
         if ($date_elastic = array_merge($todate_elastic, $fromdate_elastic)) {
             $array_query_elastic['query']['bool']['must']['range']['publtime'] = $date_elastic;
             $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
@@ -236,7 +236,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
         }
         $numRecord = $response['hits']['total'];
-        
+
         foreach ($response['hits']['hits'] as $key => $value) {
             $homeimgthumb = $value['_source']['homeimgthumb'];
             if ($homeimgthumb == 1) {
@@ -248,7 +248,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             } elseif ($homeimgthumb == 3) {
                 // image url
                 $img_src = $value['_source']['homeimgfile'];
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 // no image
                 $img_src = NV_BASE_SITEURL . $show_no_image;
             } else {
@@ -271,34 +271,34 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     } else {
         $array_content = array();
         $numRecord = 0;
-        
+
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
             $to_date = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
         } else {
             $to_date = 0;
         }
-        
+
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m)) {
             $from_date = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         } else {
             $from_date = 0;
         }
-        
-        if (! empty($to_date) and ! empty($from_date) and $to_date < $from_date) {
+
+        if (!empty($to_date) and !empty($from_date) and $to_date < $from_date) {
             $error = $lang_module['error_search_from_date'];
         }
-        
+
         if (empty($error)) {
-            
-            if (! empty($to_date)) {
+
+            if (!empty($to_date)) {
                 $where .= ' AND publtime <=' . $to_date;
             }
-            
-            if (! empty($from_date)) {
+
+            if (!empty($from_date)) {
                 $where .= ' AND publtime >=' . $from_date;
             }
-            
-            if (! empty($key)) {
+
+            if (!empty($key)) {
                 if ($choose == 1) {
                     $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id ) ';
                     $where = "AND ( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%' ) ";
@@ -322,30 +322,30 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     $where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
                 }
             }
-            
+
             if ($catid > 0) {
                 $table_search = NV_PREFIXLANG . '_' . $module_data . '_' . $catid;
             } else {
                 $table_search = NV_PREFIXLANG . '_' . $module_data . '_rows';
             }
-            
+
             $db_slave->sqlreset()
                 ->select('COUNT(*)')
                 ->from($table_search . ' as tb1 ' . $tbl_src)
                 ->where('tb1.status=1 ' . $where);
-            
+
             $numRecord = $db_slave->query($db_slave->sql())
                 ->fetchColumn();
-            
+
             $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
                 ->order('tb1.publtime DESC')
                 ->limit($per_page)
                 ->offset(($page - 1) * $per_page);
-            
+
             $result = $db_slave->query($db_slave->sql());
-            
+
             $show_no_image = $module_config[$module_name]['show_no_image'];
-            
+
             while (list ($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
                 if ($homeimgthumb == 1) {
                     // image thumb
@@ -356,7 +356,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 } elseif ($homeimgthumb == 3) {
                     // image url
                     $img_src = $homeimgfile;
-                } elseif (! empty($show_no_image)) {
+                } elseif (!empty($show_no_image)) {
                     // no image
                     $img_src = NV_BASE_SITEURL . $show_no_image;
                 } else {
@@ -377,7 +377,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             }
         }
     }
-    
+
     $contents .= search_result_theme($key, $numRecord, $per_page, $page, $array_content, $catid, $error);
 }
 
