@@ -53,7 +53,8 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 
     $array_choicesql = array(
         'module' => 'table',
-        'table' => 'column'
+        'table' => 'column',
+        'column' => ''
     );
     $choice = $nv_Request->get_string('choice', 'post', '');
     $choice_seltected = $nv_Request->get_string('choice_seltected', 'post', '');
@@ -115,8 +116,8 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         if ($num_table > 0) {
             $choice_seltected = explode('|', $choice_seltected);
             foreach ($_items as $item) {
-                $_temp_choice['sl_key'] = ($choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
-                $_temp_choice['sl_val'] = ($choice_seltected[1] == $item['field']) ? ' selected="selected"' : '';
+                $_temp_choice['sl_key'] = (!empty($choice_seltected[0]) and $choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
+                $_temp_choice['sl_val'] = (!empty($choice_seltected[1]) and $choice_seltected[1] == $item['field']) ? ' selected="selected"' : '';
                 $_temp_choice['key'] = $item['field'];
                 $_temp_choice['val'] = $item['field'];
                 $xtpl->assign('SQL', $_temp_choice);
