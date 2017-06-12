@@ -48,7 +48,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-shield fa-lg"></em></span>
-                    <input type="text" class="form-control" placeholder="{LANG.lostpass_key}" value="" name="verifykey" maxlength="10" data-pattern="/^[A-Z0-9]{10,10}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.lostpass_active_error}">
+                    <input type="text" class="form-control" placeholder="{LANG.lostpass_key}" value="" name="verifykey" maxlength="10" data-pattern="/^[a-zA-Z0-9]{10,10}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.lostpass_active_error}">
                 </div>
             </div>
         </div>

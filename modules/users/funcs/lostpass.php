@@ -185,7 +185,7 @@ if ($checkss == $data['checkss']) {
         }
     }
 
-    $data['verifykey'] = $nv_Request->get_title('verifykey', 'post', '', 1);
+    $data['verifykey'] = strtoupper($nv_Request->get_title('verifykey', 'post', '', 1));
 
     unset($matches);
     $passlostkey = (! empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? array( $matches[1], $matches[2] ) : array();
