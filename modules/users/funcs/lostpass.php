@@ -67,7 +67,7 @@ if ($checkss == $data['checkss']) {
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
     if ($global_config['captcha_type'] == 2) {
-        $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
     } else {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
     }

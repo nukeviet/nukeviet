@@ -20,7 +20,10 @@
             <!-- BEGIN: recaptcha -->
             <div class="form-group">
                 <div class="middle text-right clearfix">
-                    <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                    <div class="nv-recaptcha-default">
+                        <div id="{RECAPTCHA_ELEMENT}"></div>
+                        <input type="hidden" value="" name="gcaptcha_session"/>
+                    </div>
                     <script type="text/javascript">
                     nv_recaptcha_elements.push({
                         id: "{RECAPTCHA_ELEMENT}",
