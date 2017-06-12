@@ -38,15 +38,22 @@ function lost_pass_sendMail($row)
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
 
-        $sql = "UPDATE " . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
         $name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['lostpass_email_content'], $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
-        @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['lostpass_email_subject'], $message);
+        if (!nv_sendmail($global_config['site_email'], $row['email'], $lang_module['lostpass_email_subject'], $message)) {
+            die(json_encode(array(
+                'status' => 'error',
+                'input' => '',
+                'step' => 'step1',
+                'mess' => $lang_module['lostpass_sendmail_error']
+            )));
+        }
+
+        $sql = "UPDATE " . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
+        $db->query($sql);
     }
 }
 
