@@ -31,20 +31,4 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
     $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
 }
 
-$global_array_genders = array(
-    'N' => array(
-        'key' => 'N',
-        'title' => $lang_module['NA'],
-        'selected' => ''
-    ),
-    'M' => array(
-        'key' => 'M',
-        'title' => $lang_module['male'],
-        'selected' => ''
-    ),
-    'F' => array(
-        'key' => 'F',
-        'title' => $lang_module['female'],
-        'selected' => ''
-    )
-);
+require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';

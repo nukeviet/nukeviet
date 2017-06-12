@@ -24,7 +24,7 @@ if (!defined('NV_IS_MOD_USER')) {
  */
 function user_register($gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields, $group_id)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect, $global_array_genders;
 
     $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -48,102 +48,67 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
 
-    foreach ($data_questions as $array_question_i) {
-        $xtpl->assign('QUESTION', $array_question_i['title']);
-        $xtpl->parse('main.frquestion');
-    }
-
     $datepicker = false;
+    $have_custom_fields = false;
 
-    if (!empty($array_field_config)) {
-        $a = 0;
-        $userid = 0;
-        $i = 0;
-        $lang_system = '';
-        foreach ($array_field_config as $_k => $row) {
-            if ($row['system'] == 1) {
-                if ($row['field'] == 'question' || $row['field'] == 'answer' || $row['field'] == 'gender' || $row['field'] == 'birthday' || $row['field'] == 'sig') {
-                    if ($row['field'] == 'question') {
-                        $row['required'] = ($row['required']) ? 'required' : '';
-                        $xtpl->assign('QUESTION_REQUIRED', $row['required']);
-                        if (!empty($row['show_register']))
-                            $xtpl->parse('main.show_question');
-                    }
-                    if ($row['field'] == 'answer') {
-                        $row['required'] = ($row['required']) ? 'required' : '';
-                        $xtpl->assign('ANSWER_REQUIRED', $row['required']);
-                        if (!empty($row['show_register']))
-                            $xtpl->parse('main.show_answer');
-                    }
-                    if ($row['field'] == 'gender') {
-                        $row['required'] = ($row['required']) ? 'required' : '';
-                        $number = 0;
-                        foreach ($row['field_choices'] as $key => $value) {
-                            $xtpl->assign('FIELD_CHOICES', array(
-                                'id' => $row['fid'] . '_' . $number++,
-                                'key' => $key,
-                                'checked' => ($key == $row['default_value']) ? ' checked="checked"' : '',
-                                'value' => $value
-                            ));
-                            $xtpl->parse('main.show_radio.loop');
-                        }
-                        $xtpl->assign('RADIO_SYSTEM', $row);
-                        if (!empty($row['show_register']))
-                            $xtpl->parse('main.show_radio');
-                    }
-                    if ($row['field'] == 'birthday') {
-                        $row['required'] = ($row['required']) ? 'required' : '';
-                        if (!empty($row['field_choices'])) {
-                            $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
-                        }
-                        $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
-                        $xtpl->assign('BIRTH_SYSTEM', $row);
-                        if (!empty($row['show_register']))
-                            $xtpl->parse('main.show_date');
-                        $datepicker = true;
-                    }
-                    if ($row['field'] == 'sig') {
-                        $row['value'] = nv_htmlspecialchars(nv_br2nl($row['default_value']));
-                        $xtpl->assign('TEXTAREA_SYSTEM', $row);
-                        if (!empty($row['show_register']))
-                            $xtpl->parse('main.show_textarea');
-                    }
+    foreach ($array_field_config as $_k => $row) {
+        $row['customID'] = $_k;
+
+        if ($row['show_register']) {
+            // Value luôn là giá trị mặc định
+            if (!empty($row['field_choices'])) {
+                if ($row['field_type'] == 'date') {
+                    $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+                } elseif ($row['field_type'] == 'number') {
+                    $row['value'] = $row['default_value'];
                 } else {
-                    $i++;
-                    $row['required'] = ($row['required']) ? 'required' : '';
-                    $lang_system = $lang_module[$row['field']];
-                    $xtpl->assign('LANG_SYSTEM', $lang_system);
-                    $xtpl->assign('SYSTEM', $row);
-                    if (!empty($row['show_register']))
-                        $xtpl->parse('main.show_system.loop');
-                    $xtpl->assign('I', $i);
+                    $temp = array_keys($row['field_choices']);
+                    $tempkey = intval($row['default_value']) - 1;
+                    $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                 }
-                continue;
+            } else {
+                $row['value'] = $row['default_value'];
             }
 
-            $row['customID'] = $_k;
+            $row['required'] = ($row['required']) ? 'required' : '';
+            $xtpl->assign('FIELD', $row);
 
-            if (($row['show_register'] and $userid == 0) or $userid > 0) {
-                if ($userid == 0 and empty($custom_fields)) {
-                    if (!empty($row['field_choices'])) {
-                        if ($row['field_type'] == 'date') {
-                            $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
-                        } elseif ($row['field_type'] == 'number') {
-                            $row['value'] = $row['default_value'];
-                        } else {
-                            $temp = array_keys($row['field_choices']);
-                            $tempkey = intval($row['default_value']) - 1;
-                            $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
-                        }
-                    } else {
-                        $row['value'] = $row['default_value'];
-                    }
-                } else {
-                    $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
+            // Các trường hệ thống xuất độc lập
+            if (!empty($row['system'])) {
+                if ($row['field'] == 'birthday') {
+                    $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                } elseif ($row['field'] == 'sig') {
+                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
                 }
-                $row['required'] = ($row['required']) ? 'required' : '';
-
                 $xtpl->assign('FIELD', $row);
+                if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
+                    $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
+                } else {
+                    $show_key = 'show_' . $row['field'];
+                }
+                if ($row['required']) {
+                    $xtpl->parse('main.' . $show_key . '.required');
+                }
+                if ($row['field'] == 'gender') {
+                    foreach ($global_array_genders as $gender) {
+                        $gender['checked'] = $row['value'] == $gender['key'] ? ' checked="checked"' : '';
+                        $xtpl->assign('GENDER', $gender);
+                        $xtpl->parse('main.' . $show_key . '.gender');
+                    }
+                } elseif ($row['field'] == 'question') {
+                    foreach ($data_questions as $array_question_i) {
+                        $xtpl->assign('QUESTION', $array_question_i['title']);
+                        $xtpl->parse('main.' . $show_key . '.frquestion');
+                    }
+                }
+                if ($row['description']) {
+                    $xtpl->parse('main.' . $show_key . '.description');
+                }
+                $xtpl->parse('main.' . $show_key);
+                if ($row['field'] == 'gender') {
+                    $xtpl->parse('main.name_show_' . $global_config['name_show']);
+                }
+            } else {
                 if ($row['required']) {
                     $xtpl->parse('main.field.loop.required');
                 }
@@ -218,9 +183,12 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                     $xtpl->parse('main.field.loop.multiselect');
                 }
                 $xtpl->parse('main.field.loop');
+                $have_custom_fields = true;
             }
         }
-        $xtpl->parse('main.show_system');
+    }
+
+    if ($have_custom_fields) {
         $xtpl->parse('main.field');
     }
 
@@ -612,7 +580,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
-    if (defined('ACCESS_EDITUS')) {//trường hợp trưởng nhóm truy cập sửa thông tin member
+    if (defined('ACCESS_EDITUS')) {//trÆ°Æ¡̀€ng hÆ¡̀£p trÆ°Æ¡̀‰ng nhòm truy cĂ¢̀£p sÆ°̀‰a thĂ´ng tin member
         $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $data['group_id'] . '/' . $data['userid']);
     } else {
         $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');

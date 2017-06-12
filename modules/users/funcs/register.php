@@ -159,12 +159,7 @@ while ($row = $result->fetch()) {
 }
 
 // Captcha
-$gfx_chk = (in_array($global_config['gfx_chk'], array(
-    3,
-    4,
-    6,
-    7
-))) ? 1 : 0;
+$gfx_chk = (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) ? 1 : 0;
 
 $array_register = array();
 $array_register['checkss'] = NV_CHECK_SESSION;
@@ -230,15 +225,15 @@ while ($row_field = $result_field->fetch()) {
             $row_field['field_choices'][$key] = $val;
         }
     }
-    $array_field_config[] = $row_field;
+    $array_field_config[$row_field['field']] = $row_field;
 }
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 $custom_fields = $nv_Request->get_array('custom_fields', 'post');
-if ($checkss == $array_register['checkss']) {
 
+if ($checkss == $array_register['checkss']) {
     $array_register['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
     $array_register['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
     $array_register['username'] = $nv_Request->get_title('username', 'post', '', 1);
@@ -256,8 +251,7 @@ if ($checkss == $array_register['checkss']) {
     $array_register['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
 
     $array_register['agreecheck'] = $nv_Request->get_int('agreecheck', 'post', 0);
-    $array_gender = $nv_Request->get_array('gender', 'post', array());
-    $array_register['gender'] = $array_gender[0];
+    $array_register['gender'] = $nv_Request->get_title('gender', 'post', '');
     $array_register['birthday'] = $nv_Request->get_title('birthday', 'post', '');
     $array_register['sig'] = $nv_Request->get_title('sig', 'post', '');
 
@@ -334,152 +328,11 @@ if ($checkss == $array_register['checkss']) {
             'mess' => $lang_global['agreecheck_empty']
         )));
     }
-    foreach ($array_field_config as $_k => $row_f) {
-        if ($row_f['system'] == 1) {
-            if ($row_f['field'] == 'first_name' || $row_f['field'] == 'last_name' || $row_f['field'] == 'question' || $row_f['field'] == 'answer') {
-                if ($row_f['match_type'] == 'alphanumeric') {
-                    if (!preg_match('/^[a-zA-Z0-9\_]+$/', $array_register[$row_f['field']])) {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        )));
-                    }
-                } elseif ($row_f['match_type'] == 'email') {
-                    if (($error = nv_check_valid_email($array_register[$row_f['field']])) != '') {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => $error
-                        )));
-                    }
-                } elseif ($row_f['match_type'] == 'url') {
-                    if (!nv_is_url($array_register[$row_f['field']])) {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        )));
-                    }
-                } elseif ($row_f['match_type'] == 'regex') {
-                    if (!preg_match('/' . $row_f['match_regex'] . '/', $array_register[$row_f['field']])) {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        )));
-                    }
-                } elseif ($row_f['match_type'] == 'callback') {
-                    if (function_exists($row_f['func_callback'])) {
-                        if (!call_user_func($row_f['func_callback'], $array_register[$row_f['field']])) {
-                            die(json_encode(array(
-                                'status' => 'error',
-                                'input' => $row_f['field'],
-                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                            )));
-                        }
-                    } else {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => 'error function not exists ' . $row_f['func_callback']
-                        )));
-                    }
-                } else {
-                    $array_register[$row_f['field']] = nv_htmlspecialchars($array_register[$row_f['field']]);
-                }
-                $strlen = nv_strlen($array_register[$row_f['field']]);
 
-                if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
-                    die(json_encode(array(
-                        'status' => 'error',
-                        'input' => $row_f['field'],
-                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                    )));
-                }
-            }
-            if ($row_f['field'] == 'gender') {
-                if (!isset($row_f['field_choices'][$array_register[$row_f['field']]])) {
-                    die(json_encode(array(
-                        'status' => 'error',
-                        'input' => $row_f['field'],
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    )));
-                }
-            }
-            if ($row_f['field'] == 'birthday') {
-                if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array_register[$row_f['field']], $m)) {
-                    $array_register[$row_f['field']] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-                    if ((floor((NV_CURRENTTIME - $array_register[$row_f['field']])/31536000)) < $global_users_config['min_old_user']) {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
-                        )));
-                    }
-                    if ($row_f['min_length'] > 0 and ($array_register[$row_f['field']] < $row_f['min_length'] or $array_register[$row_f['field']] > $row_f['max_length'])) {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
-                        )));
-                    }
-                } else {
-                    die(json_encode(array(
-                        'status' => 'error',
-                        'input' => $row_f['field'],
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    )));
-                }
-            }
-            if ($row_f['field'] == 'sig') {
-                $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
-                $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
-                $array_register[$row_f['field']] = strip_tags($array_register[$row_f['field']], $allowed_html_tags);
-                if ($row_f['match_type'] == 'regex') {
-                    if (!preg_match('/' . $row_f['match_regex'] . '/', $array_register[$row_f['field']])) {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        )));
-                    }
-                } elseif ($row_f['match_type'] == 'callback') {
-                    if (function_exists($row_f['func_callback'])) {
-                        if (!call_user_func($row_f['func_callback'], $array_register[$row_f['field']])) {
-                            die(json_encode(array(
-                                'status' => 'error',
-                                'input' => $row_f['field'],
-                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                            )));
-                        }
-                    } else {
-                        die(json_encode(array(
-                            'status' => 'error',
-                            'input' => $row_f['field'],
-                            'mess' => 'error function not exists ' . $row_f['func_callback']
-                        )));
-                    }
-                }
-
-                $array_register[$row_f['field']] = ($row_f['field_type'] == 'textarea') ? nv_nl2br($array_register[$row_f['field']], '<br />') : $array_register[$row_f['field']];
-                $strlen = nv_strlen($array_register[$row_f['field']]);
-
-                if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
-                    die(json_encode(array(
-                        'status' => 'error',
-                        'input' => $row_f['field'],
-                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                    )));
-                }
-            }
-        }
-    }
+    // Ki?m tra 
     $query_field = array('userid' => 0);
-    if (!empty($array_field_config)) {
-        $userid = 0;
-        require NV_ROOTDIR . '/modules/users/fields.check.php';
-    }
+    $userid = 0;
+    require NV_ROOTDIR . '/modules/users/fields.check.php';
 
     $password = $crypt->hash_password($array_register['password'], $global_config['hashprefix']);
     $your_question = !empty($array_register['your_question']) ? $array_register['your_question'] : $data_questions[$array_register['question']]['title'];
