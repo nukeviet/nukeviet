@@ -119,6 +119,8 @@ if ($checkss == $data['checkss']) {
             'mess' => $lang_module['lostpass_no_info2'] )));
     }
 
+    $email_hint = empty($check_email) ? $row['email'] : (substr($row['email'], 0, 3) . '***' . substr($row['email'], -6));
+
     if (empty($row['password'])) {
         $nv_Request->set_Session('lostpass_seccode', '');
 
@@ -165,8 +167,8 @@ if ($checkss == $data['checkss']) {
                 'status' => 'error',
                 'input' => 'verifykey',
                 'step' => 'step3',
-                'info' => $lang_module['lostpass_content_mess'],
-                'mess' => $lang_module['lostpass_content_mess'] )));
+                'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
+                'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint) )));
         }
     }
 
@@ -187,8 +189,8 @@ if ($checkss == $data['checkss']) {
                 'status' => 'error',
                 'input' => 'verifykey',
                 'step' => 'step3',
-                'info' => $lang_module['lostpass_content_mess'],
-                'mess' => $lang_module['lostpass_content_mess'] )));
+                'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
+                'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint) )));
         }
     }
 
@@ -203,8 +205,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
-            'info' => $lang_module['lostpass_content_mess'],
-            'mess' => $lang_module['lostpass_content_mess'] )));
+            'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
+            'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint) )));
     }
 
     if (empty($data['verifykey']) or $passlostkey[1] != md5($row['userid'] . $data['verifykey'] . $global_config['sitekey'])) {
@@ -212,7 +214,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
-            'info' => $lang_module['lostpass_content_mess'],
+            'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
             'mess' => $lang_module['lostpass_active_error'] )));
     }
 
