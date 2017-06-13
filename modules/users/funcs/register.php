@@ -171,15 +171,15 @@ if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_regis
     $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
     $check_email = nv_check_email_reg($email);
     if (!empty($check_email)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'mess' => $check_email
-        )));
+        ));
     }
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'success',
         'mess' => 'OK'
-    )));
+    ));
 }
 
 //Check Login for AJAX
@@ -187,15 +187,15 @@ if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_regi
     $login = $nv_Request->get_title('login', 'post', '', 1);
     $check_login = nv_check_username_reg($login);
     if (!empty($check_login)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'mess' => $check_login
-        )));
+        ));
     }
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'success',
         'mess' => 'OK'
-    )));
+    ));
 }
 
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
@@ -240,20 +240,20 @@ if ($checkss == $array_register['checkss']) {
     $array_register['password'] = $nv_Request->get_title('password', 'post', '');
     $array_register['re_password'] = $nv_Request->get_title('re_password', 'post', '');
     $array_register['email'] = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
-
-    $array_register['question'] = $nv_Request->get_int('question', 'post', 0);
-    if (!isset($data_questions[$array_register['question']])) {
-        $array_register['question'] = 0;
-    }
-    $data_questions[$array_register['question']]['selected'] = ' selected="selected"';
-
-    $array_register['your_question'] = $nv_Request->get_title('your_question', 'post', '', 1);
+    $array_register['question'] = $nv_Request->get_title('your_question', 'post', '', 1);
     $array_register['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
-
     $array_register['agreecheck'] = $nv_Request->get_int('agreecheck', 'post', 0);
     $array_register['gender'] = $nv_Request->get_title('gender', 'post', '');
     $array_register['birthday'] = $nv_Request->get_title('birthday', 'post', '');
     $array_register['sig'] = $nv_Request->get_title('sig', 'post', '');
+    
+    $custom_fields['first_name'] = $array_register['first_name'];
+    $custom_fields['last_name'] = $array_register['last_name'];
+    $custom_fields['gender'] = $array_register['gender'];
+    $custom_fields['birthday'] = $array_register['birthday'];
+    $custom_fields['sig'] = $array_register['sig'];
+    $custom_fields['question'] = $array_register['question'];
+    $custom_fields['answer'] = $array_register['answer'];
 
     if ($global_config['captcha_type'] == 2) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
@@ -262,8 +262,6 @@ if ($checkss == $array_register['checkss']) {
     }
 
     $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
-
-    $complete = '';
 
     if (!$check_seccode) {
         die(reg_result(array(
@@ -305,22 +303,6 @@ if ($checkss == $array_register['checkss']) {
         )));
     }
 
-    if (empty($array_register['your_question']) and empty($array_register['question'])) {
-        die(reg_result(array(
-            'status' => 'error',
-            'input' => 'your_question',
-            'mess' => $lang_global['your_question_empty']
-        )));
-    }
-
-    if (empty($array_register['answer'])) {
-        die(reg_result(array(
-            'status' => 'error',
-            'input' => 'answer',
-            'mess' => $lang_global['answer_empty']
-        )));
-    }
-
     if (empty($array_register['agreecheck']) and !defined('ACCESS_ADDUS')) {
         die(reg_result(array(
             'status' => 'error',
@@ -329,13 +311,12 @@ if ($checkss == $array_register['checkss']) {
         )));
     }
 
-    // Ki?m tra 
+    // Kiểm tra trường dữ liệu
     $query_field = array('userid' => 0);
     $userid = 0;
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
     $password = $crypt->hash_password($array_register['password'], $global_config['hashprefix']);
-    $your_question = !empty($array_register['your_question']) ? $array_register['your_question'] : $data_questions[$array_register['question']]['title'];
     $checknum = nv_genpass(10);
     $checknum = md5($checknum);
     if (empty($array_register['first_name'])) {
@@ -354,7 +335,7 @@ if ($checkss == $array_register['checkss']) {
             :birthday,
             :sig,
             " . NV_CURRENTTIME . ",
-            :your_question,
+            :question,
             :answer,
             :checknum,
             :users_info
@@ -370,7 +351,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['gender'] = $array_register['gender'];
         $data_insert['birthday'] = $array_register['birthday'];
         $data_insert['sig'] = $array_register['sig'];
-        $data_insert['your_question'] = $your_question;
+        $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
         $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
@@ -422,7 +403,7 @@ if ($checkss == $array_register['checkss']) {
         :birthday,
         :sig,
          " . NV_CURRENTTIME . ",
-        :your_question,
+        :question,
         :answer,
         '', 0, 1,
         '" . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . "',
@@ -435,7 +416,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['email'] = $array_register['email'];
         $data_insert['first_name'] = $array_register['first_name'];
         $data_insert['last_name'] = $array_register['last_name'];
-        $data_insert['your_question'] = $your_question;
+        $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['gender'] = $array_register['gender'];
         $data_insert['birthday'] = $array_register['birthday'];

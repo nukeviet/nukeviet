@@ -17,7 +17,7 @@ if (empty($query_field)) {
 }
 if (defined('NV_ADMIN') and (!isset($_user) or !is_array($_user))) {
     $_user = array();
-} elseif (!isset($array_register) or !is_array($array_register)) {
+} elseif ($op == 'register' and (!isset($array_register) or !is_array($array_register))) {
     $array_register = array();
 }
 
@@ -217,7 +217,7 @@ foreach ($array_field_config as $row_f) {
         }
     } elseif (defined('NV_ADMIN')) {
         $_user[$row_f['field']] = $value;
-    } else {
-        
+    } elseif ($op == 'register') {
+        $array_register[$row_f['field']] = $value;
     }
 }
