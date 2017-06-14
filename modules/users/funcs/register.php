@@ -240,7 +240,7 @@ if ($checkss == $array_register['checkss']) {
     $array_register['password'] = $nv_Request->get_title('password', 'post', '');
     $array_register['re_password'] = $nv_Request->get_title('re_password', 'post', '');
     $array_register['email'] = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
-    $array_register['question'] = $nv_Request->get_title('your_question', 'post', '', 1);
+    $array_register['question'] = $nv_Request->get_title('question', 'post', '', 1);
     $array_register['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
     $array_register['agreecheck'] = $nv_Request->get_int('agreecheck', 'post', 0);
     $array_register['gender'] = $nv_Request->get_title('gender', 'post', '');

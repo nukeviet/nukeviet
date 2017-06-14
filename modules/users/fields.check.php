@@ -19,6 +19,8 @@ if (defined('NV_ADMIN') and (!isset($_user) or !is_array($_user))) {
     $_user = array();
 } elseif ($op == 'register' and (!isset($array_register) or !is_array($array_register))) {
     $array_register = array();
+} elseif ($op == 'editinfo' and (!isset($array_data) or !is_array($array_data))) {
+    $array_data = array();
 }
 
 foreach ($array_field_config as $row_f) {
@@ -210,7 +212,7 @@ foreach ($array_field_config as $row_f) {
     }
 
     if (empty($row_f['system'])) {
-        if ($userid) {
+        if (!empty($userid)) {
             $query_field[] = $row_f['field'] . '=' . $db->quote($value);
         } else {
             $query_field[$row_f['field']] = $db->quote($value);
@@ -219,5 +221,7 @@ foreach ($array_field_config as $row_f) {
         $_user[$row_f['field']] = $value;
     } elseif ($op == 'register') {
         $array_register[$row_f['field']] = $value;
+    } elseif ($op == 'editinfo') {
+        $array_data[$row_f['field']] = $value;
     }
 }
