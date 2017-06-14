@@ -174,11 +174,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $language = array();
     if ($dataform['fid']) {
         $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
+        if (empty($dataform_old)) {
+            trigger_error('Data error!!!', 256);
+        }
         $dataform['field_type'] = $dataform_old['field_type'];
         if (!empty($dataform_old['language'])) {
             $language = unserialize($dataform_old['language']);
         }
-        $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('fieldid', 'post', '', 0, $preg_replace), 0, 50);
+        $dataform['field'] = $dataform['fieldid'] = $dataform_old['field'];
     } else {
         $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50);
 
@@ -223,8 +226,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
             $dataform['class'] = $dataform['editor_width'] . '@' . $dataform['editor_height'];
         }
-        $dataform['min_length'] = $nv_Request->get_int('min_length', 'post', 255);
+        $dataform['min_length'] = $nv_Request->get_int('min_length', 'post', 0);
+        if (isset($array_systemfield_cfg[$dataform['field']]) and $dataform['min_length'] < $array_systemfield_cfg[$dataform['field']][0]) {
+            $dataform['min_length'] = $array_systemfield_cfg[$dataform['field']][0];
+        } elseif ($dataform['min_length'] < 0) {
+            $dataform['min_length'] = 0;
+        }
         $dataform['max_length'] = $nv_Request->get_int('max_length', 'post', 255);
+        if (isset($array_systemfield_cfg[$dataform['field']]) and $dataform['max_length'] > $array_systemfield_cfg[$dataform['field']][1]) {
+            $dataform['max_length'] = $array_systemfield_cfg[$dataform['field']][1];
+        } elseif ($dataform['max_length'] < 0) {
+            $dataform['max_length'] = 255;
+        }
         $dataform['default_value'] = $nv_Request->get_title('default_value', 'post', '');
 
         if ($dataform['min_length'] >= $dataform['max_length']) {

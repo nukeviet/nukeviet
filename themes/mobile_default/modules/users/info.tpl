@@ -377,7 +377,7 @@
                                 <label for="question" class="control-label col-md-6 text-normal">{FIELD.title}</label>
                                 <div class="col-md-12">
                                     <div class="input-group">
-                                        <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="question" maxlength="{FIELD.max_length}" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
+                                        <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="question" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
                                         <span class="input-group-btn" onclick="showQlist(this);">
                                             <button type="button" class="btn btn-default pointer"><em class="fa fa-caret-down fa-lg"></em></button>
                                         </span>
@@ -399,7 +399,7 @@
                             <div class="form-group">
                                 <label for="answer" class="control-label col-md-6 text-normal">{FIELD.title}</label>
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="answer" maxlength="{FIELD.max_length}" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.answer_empty}">
+                                    <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="answer" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.answer_empty}">
                                 </div>
                             </div>
                             <!-- END: show_answer -->

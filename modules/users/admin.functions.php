@@ -32,3 +32,11 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
 }
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
+
+$array_systemfield_cfg = array(
+    'first_name' => array(0, 100),
+    'last_name' => array(0, 100),
+    'question' => array(3, 255),
+    'answer' => array(3, 255),
+    'sig' => array(0, 1000)
+);
