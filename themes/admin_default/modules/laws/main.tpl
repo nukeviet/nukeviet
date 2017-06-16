@@ -114,21 +114,18 @@
         $('#lawlist').load(rawurldecode(url));
     }
 
-    function nv_search_laws(){
+    function nv_search_laws() {
         var keywords = $('input[name="keywords"]').val();
         var cid = $('select[name="cid"]').val();
         var aid = $('select[name="aid"]').val();
         var sid = $('select[name="sid"]').val();
         var sgid = $('select[name="sgid"]').val();
 
-        if( keywords == '' && cid == '' && aid == '' && sid == '' && sgid == '' )
-        {
-            alert( '{LANG.search_error}' );
-        }
-        else
-        {
+        if (keywords == '' && cid == '' && aid == '' && sid == '' && sgid == '') {
+            alert('{LANG.search_error}');
+        } else {
             $('#lawlist').html('<div style="text-align: center"><em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}</div>');
-            $('#lawlist').load('{BASE_LOAD}&keywords=' + keywords + '&cat=' + cid + '&aid=' + aid + '&sid=' + sid + '&sgid=' + sgid);
+            $('#lawlist').load('{BASE_LOAD}&keywords=' + encodeURIComponent(keywords) + '&cat=' + cid + '&aid=' + aid + '&sid=' + sid + '&sgid=' + sgid);
         }
     }
 
