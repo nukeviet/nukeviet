@@ -73,7 +73,7 @@
 </div>
 <script defer src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.flexslider.js"></script>
 <script type="text/javascript">
-	$(window).load(function() {
+	$(window).on('load', function() {
 		$('#videotop').flexslider({
 			animation : "slide",
 			controlNav : false,
