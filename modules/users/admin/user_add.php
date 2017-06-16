@@ -172,9 +172,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
     $query_field = array();
-    if (!empty($array_field_config)) {
-        require NV_ROOTDIR . '/modules/users/fields.check.php';
-    }
+    require NV_ROOTDIR . '/modules/users/fields.check.php';
 
     $in_groups = array();
     foreach ($_user['in_groups'] as $_group_id) {
