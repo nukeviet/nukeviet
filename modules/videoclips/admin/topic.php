@@ -259,7 +259,7 @@ if ($nv_Request->isset_request('edit', 'get')) {
             }
             
             if (!$is_error) {
-                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id!=" . $tid . " AND alias=" . $db->quote($alias) . " AND parentid=" . $array['parentid'];
+                $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id!=" . $tid . " AND alias=" . $db->quote($array['alias']) . " AND parentid=" . $array['parentid'];
                 $result = $db->query($sql);
                 $count = $result->fetchColumn();
                 
