@@ -129,6 +129,7 @@ $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chủ đề';
 $lang_module['error_title'] = 'Lỗi: Bài viết chưa có tiêu đề';
 $lang_module['error_bodytext'] = 'Lỗi: Bài viết chưa có nội dung';
 $lang_module['error_captcha'] = 'Lỗi: Mã bảo mật chưa đúng';
+$lang_module['error_search_from_date'] = 'Lỗi: trường <strong>Đến ngày</strong> không hợp lệ';
 $lang_module['save_content_ok'] = 'Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về trang quản lý bài viết.';
 $lang_module['save_content_view_page'] = 'Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về bài viết bạn vừa đăng.';
 $lang_module['save_content_waite'] = 'Bài viết bạn gửi đã được hệ thống ghi nhận, <br />ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br />trình duyệt sẽ tự động chuyển về trang quản lý bài viết.';
