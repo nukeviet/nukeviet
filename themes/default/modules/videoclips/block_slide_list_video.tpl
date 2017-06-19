@@ -66,7 +66,7 @@
 		<!-- END: loop -->
 	</ul>
 </div>
-<div class="custom-navigation">
+<div class="custom-navigation col-md-24">
    <a href="#" class="flex-next">Sau <i class="fa fa-angle-right fa-lg"></i></a>
   <div class="custom-controls-container"></div>
   <a href="#" class="flex-prev"><i class="fa fa-angle-left fa-lg"></i> Trước</a>
