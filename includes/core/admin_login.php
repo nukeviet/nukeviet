@@ -148,6 +148,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             $error = $lang_global['loginincorrect'];
         } else {
             $row['admin_lev'] = intval($row['admin_lev']);
+            $step2_isvalid = true;
 
             // Check 2-step login
             $_2step_require = false;
@@ -176,12 +177,15 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 $login_step = 3;
                 $captcha_require = 0;
             } elseif (!empty($row['active2step'])) {
+                $step2_isvalid = false;
                 $login_step = 2;
                 $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
                 
                 if (!empty($nv_totppin)) {
                     if (!$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
                         $error = $lang_global['2teplogin_error_opt'];
+                    } else {
+                        $step2_isvalid = true;
                     }
                 }
                 
@@ -196,6 +200,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                     } else {
                         $code = $sth->fetchColumn();
                         $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_backupcodes SET is_used=1, time_used=" . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
+                        $step2_isvalid = true;
                     }
                 }
                 
@@ -203,7 +208,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 $nv_Request->set_Session('admin_dismiss_captcha', md5($nv_username));
             }
 
-            if (empty($error)) {
+            if (empty($error) and $step2_isvalid) {
                 if (! defined('ADMIN_LOGIN_MODE')) {
                     define('ADMIN_LOGIN_MODE', 3);
                 }

@@ -49,18 +49,24 @@ class Optimizer
         $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
         $this->_content = preg_replace_callback($conditionRegex, array($this, 'conditionCallback'), $this->_content);
 
-        $_jsAfter = $jquery ? '<script src="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol : '';
-        $_jsSrcPreload = $jquery ? '<link rel="preload" as="script" href="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js">' . $this->eol : '';
         $_jsSrc = array();
-        
+        // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
+        $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
+        if ($_isFullBuffer and $jquery) {
+            $_jsAfter = '<script src="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol;
+            $_jsSrcPreload = '<link rel="preload" as="script" href="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js">' . $this->eol;
+        } else {
+            $_jsAfter = $_jsSrcPreload = '';
+        }
+
         if (preg_match("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $this->_content, $matches)) {
             $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content);
-            if ($jquery) {
+            if ($jquery and $_isFullBuffer) {
                 $_jsAfter = $matches[0] . $this->eol;
                 $_jsSrcPreload = '<link rel="preload" as="script" href="' . $matches[1] . '">' . $this->eol;
             }
         }
-        
+
         $jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
         $this->_content = preg_replace_callback($jsRegex, array($this, 'jsCallback'), $this->_content);
 
@@ -173,7 +179,6 @@ class Optimizer
 
         $head = "";
         $this->_content = preg_replace('/>[\r\n\t ]+</', '><', $this->_content);
-        $this->_content = preg_replace(array('/\>[^\S ]+/s', '/[^\S ]+\</s', '/\s+/s', '/\s+\/\>/'), array('>', '<', ' ', '>'), $this->_content);
 
         if (! empty($meta)) {
             $head .= implode($this->eol, $meta) . $this->eol;
@@ -197,8 +202,8 @@ class Optimizer
         } else {
             $this->_content = $head . $this->_content;
         }
-        
-        if (preg_match('/\<\/body\>/', $this->_content)) {
+
+        if ($_isFullBuffer) {
             if (! empty($this->_htmlforFooter)) {
                 $this->_content = preg_replace('/\s*<\/body>/', $this->eol . $this->_htmlforFooter . $this->eol . '</body>', $this->_content, 1);
             }

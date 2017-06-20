@@ -38,15 +38,22 @@ function lost_pass_sendMail($row)
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
 
-        $sql = "UPDATE " . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
         $name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['lostpass_email_content'], $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
-        @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['lostpass_email_subject'], $message);
+        if (!nv_sendmail($global_config['site_email'], $row['email'], $lang_module['lostpass_email_subject'], $message)) {
+            die(json_encode(array(
+                'status' => 'error',
+                'input' => '',
+                'step' => 'step1',
+                'mess' => $lang_module['lostpass_sendmail_error']
+            )));
+        }
+
+        $sql = "UPDATE " . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
+        $db->query($sql);
     }
 }
 
@@ -67,7 +74,7 @@ if ($checkss == $data['checkss']) {
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
     if ($global_config['captcha_type'] == 2) {
-        $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
     } else {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
     }
@@ -111,6 +118,8 @@ if ($checkss == $data['checkss']) {
             'step' => 'step1',
             'mess' => $lang_module['lostpass_no_info2'] )));
     }
+
+    $email_hint = empty($check_email) ? $row['email'] : (substr($row['email'], 0, 3) . '***' . substr($row['email'], -6));
 
     if (empty($row['password'])) {
         $nv_Request->set_Session('lostpass_seccode', '');
@@ -158,8 +167,8 @@ if ($checkss == $data['checkss']) {
                 'status' => 'error',
                 'input' => 'verifykey',
                 'step' => 'step3',
-                'info' => $lang_module['lostpass_content_mess'],
-                'mess' => $lang_module['lostpass_content_mess'] )));
+                'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
+                'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint) )));
         }
     }
 
@@ -180,12 +189,12 @@ if ($checkss == $data['checkss']) {
                 'status' => 'error',
                 'input' => 'verifykey',
                 'step' => 'step3',
-                'info' => $lang_module['lostpass_content_mess'],
-                'mess' => $lang_module['lostpass_content_mess'] )));
+                'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
+                'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint) )));
         }
     }
 
-    $data['verifykey'] = $nv_Request->get_title('verifykey', 'post', '', 1);
+    $data['verifykey'] = strtoupper($nv_Request->get_title('verifykey', 'post', '', 1));
 
     unset($matches);
     $passlostkey = (! empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? array( $matches[1], $matches[2] ) : array();
@@ -196,8 +205,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
-            'info' => $lang_module['lostpass_content_mess'],
-            'mess' => $lang_module['lostpass_content_mess'] )));
+            'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
+            'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint) )));
     }
 
     if (empty($data['verifykey']) or $passlostkey[1] != md5($row['userid'] . $data['verifykey'] . $global_config['sitekey'])) {
@@ -205,7 +214,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
-            'info' => $lang_module['lostpass_content_mess'],
+            'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
             'mess' => $lang_module['lostpass_active_error'] )));
     }
 
