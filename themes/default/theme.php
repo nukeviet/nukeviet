@@ -138,6 +138,9 @@ function nv_site_theme($contents, $full = true)
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
             $xtpl->assign('LINKS', array( 'key' => $key, 'value' => $value ));
+            if (!empty($value)) {
+                $xtpl->parse('main.links.attr.val');
+            }
             $xtpl->parse('main.links.attr');
         }
         $xtpl->parse('main.links');
