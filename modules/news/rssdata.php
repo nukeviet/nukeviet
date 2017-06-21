@@ -12,8 +12,6 @@ if (! defined('NV_IS_MOD_RSS')) {
     die('Stop!!!');
 }
 
-global $db, $nv_Cache;
-
 $rssarray = array();
 $sql = "SELECT catid, parentid, title, alias FROM " . NV_PREFIXLANG . "_" . $mod_data . "_cat ORDER BY weight, sort";
 //$rssarray[] = array( 'catid' => 0, 'parentid' => 0, 'title' => '', 'link' => '');
