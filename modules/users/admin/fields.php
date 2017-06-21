@@ -53,7 +53,8 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 
     $array_choicesql = array(
         'module' => 'table',
-        'table' => 'column'
+        'table' => 'column',
+        'column' => ''
     );
     $choice = $nv_Request->get_string('choice', 'post', '');
     $choice_seltected = $nv_Request->get_string('choice_seltected', 'post', '');
@@ -115,8 +116,8 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         if ($num_table > 0) {
             $choice_seltected = explode('|', $choice_seltected);
             foreach ($_items as $item) {
-                $_temp_choice['sl_key'] = ($choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
-                $_temp_choice['sl_val'] = ($choice_seltected[1] == $item['field']) ? ' selected="selected"' : '';
+                $_temp_choice['sl_key'] = (!empty($choice_seltected[0]) and $choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
+                $_temp_choice['sl_val'] = (!empty($choice_seltected[1]) and $choice_seltected[1] == $item['field']) ? ' selected="selected"' : '';
                 $_temp_choice['key'] = $item['field'];
                 $_temp_choice['val'] = $item['field'];
                 $xtpl->assign('SQL', $_temp_choice);
@@ -156,6 +157,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $dataform['sql_choices'] = '';
 
     $dataform['fid'] = $nv_Request->get_int('fid', 'post', 0);
+    $dataform['system'] = $nv_Request->get_int('system', 'post', 0);
 
     $dataform['title'] = $nv_Request->get_title('title', 'post', '');
     $dataform['description'] = $nv_Request->get_title('description', 'post', '');
@@ -172,13 +174,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $language = array();
     if ($dataform['fid']) {
         $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
+        if (empty($dataform_old)) {
+            trigger_error('Data error!!!', 256);
+        }
         $dataform['field_type'] = $dataform_old['field_type'];
         if (!empty($dataform_old['language'])) {
             $language = unserialize($dataform_old['language']);
         }
-        $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('fieldid', 'post', '', 0, $preg_replace), 0, 50);
+        $dataform['field'] = $dataform['fieldid'] = $dataform_old['field'];
     } else {
-        $dataform['field'] = nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50);
+        $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50);
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
@@ -221,8 +226,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
             $dataform['class'] = $dataform['editor_width'] . '@' . $dataform['editor_height'];
         }
-        $dataform['min_length'] = $nv_Request->get_int('min_length', 'post', 255);
+        $dataform['min_length'] = $nv_Request->get_int('min_length', 'post', 0);
+        if (isset($array_systemfield_cfg[$dataform['field']]) and $dataform['min_length'] < $array_systemfield_cfg[$dataform['field']][0]) {
+            $dataform['min_length'] = $array_systemfield_cfg[$dataform['field']][0];
+        } elseif ($dataform['min_length'] < 0) {
+            $dataform['min_length'] = 0;
+        }
         $dataform['max_length'] = $nv_Request->get_int('max_length', 'post', 255);
+        if (isset($array_systemfield_cfg[$dataform['field']]) and $dataform['max_length'] > $array_systemfield_cfg[$dataform['field']][1]) {
+            $dataform['max_length'] = $array_systemfield_cfg[$dataform['field']][1];
+        } elseif ($dataform['max_length'] < 0) {
+            $dataform['max_length'] = 255;
+        }
         $dataform['default_value'] = $nv_Request->get_title('default_value', 'post', '');
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
@@ -287,8 +302,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['default_value'] = $nv_Request->get_int('default_value_choice', 'post', 0);
 
         if ($dataform['choicetypes'] == 'field_choicetypes_text') {
-            $field_choice_value = $nv_Request->get_array('field_choice', 'post');
-            $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
+            if ($dataform['fid'] and $dataform['fieldid'] == 'gender') {
+                $field_choice_value = array(1 => 'N', 2 => 'M', 3 => 'F');
+                $field_choice_text = array(1 => $global_array_genders['N']['title'], 2 => $global_array_genders['M']['title'], 3 => $global_array_genders['F']['title']);
+            } else {
+                $field_choice_value = $nv_Request->get_array('field_choice', 'post');
+                $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
+            }
             $field_choices = array_combine(array_map('strip_punctuation', $field_choice_value), array_map('strip_punctuation', $field_choice_text));
             if (sizeof($field_choices)) {
                 unset($field_choices['']);
@@ -378,26 +398,33 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
             $save = $stmt->execute();
 
-            if ($save and $dataform['max_length'] != $dataform_old['max_length']) {
-                $type_date = '';
-                if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
-                    $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
-                } elseif ($dataform['max_length'] <= 255) {
-                    $type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
-                } elseif ($dataform['max_length'] <= 65536) {
-                    //2^16 TEXT
-
-                    $type_date = 'TEXT NOT NULL';
-                } elseif ($dataform['max_length'] <= 16777216) {
-                    //2^24 MEDIUMTEXT
-
-                    $type_date = 'MEDIUMTEXT NOT NULL';
-                } elseif ($dataform['max_length'] <= 4294967296) {
-                    //2^32 LONGTEXT
-
-                    $type_date = 'LONGTEXT NOT NULL';
+            if (empty($dataform['system'])) {
+                if ($save and $dataform['max_length'] != $dataform_old['max_length']) {
+                    $type_date = '';
+                    if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
+                        $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+                    } elseif ($dataform['max_length'] <= 255) {
+                        $type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
+                    } elseif ($dataform['max_length'] <= 65536) {
+                        //2^16 TEXT
+    
+                        $type_date = 'TEXT NOT NULL';
+                    } elseif ($dataform['max_length'] <= 16777216) {
+                        //2^24 MEDIUMTEXT
+    
+                        $type_date = 'MEDIUMTEXT NOT NULL';
+                    } elseif ($dataform['max_length'] <= 4294967296) {
+                        //2^32 LONGTEXT
+    
+                        $type_date = 'LONGTEXT NOT NULL';
+                    }
+                    $save = false;
+                    try {
+                        $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
+                    } catch (PDOException $e) {
+                        trigger_error($e->getMessage());
+                    }
                 }
-                $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
             }
         }
         if ($save) {
@@ -406,7 +433,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-// DEL
+// Xóa trường
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -478,13 +505,6 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
-            if ($row['system'] == 1) {
-                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
-                $fieldsys_offset++;
-            } else {
-                $xtpl->assign('DISABLED_WEIGHT', '');
-                $xtpl->parse('main.data.loop.show_delete');
-            }
 
             $xtpl->assign('ROW', array(
                 'fid' => $row['fid'],
@@ -503,6 +523,14 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
                 ));
                 $xtpl->parse('main.data.loop.weight');
+            }
+            
+            if ($row['system'] == 1) {
+                $xtpl->assign('DISABLED_WEIGHT', 'disabled');
+                $fieldsys_offset++;
+            } else {
+                $xtpl->assign('DISABLED_WEIGHT', '');
+                $xtpl->parse('main.data.loop.show_delete');
             }
 
             $xtpl->parse('main.data.loop');
@@ -557,6 +585,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['max_number'] = 1000;
             $dataform['number_type_1'] = ' checked="checked"';
             $dataform['current_date_0'] = ' checked="checked"';
+            $dataform['system'] = 0;
         }
     }
 
@@ -588,23 +617,30 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     }
     if ($fid == 0 or $text_fields == 0) {
         $number = 1;
+        $disable_edit_choose = ($dataform['fieldid'] == 'gender' and !empty($dataform['fid']));
+        
+        $xtpl->assign('FIELD_CHOICES_READONLY', $disable_edit_choose ? ' readonly="readonly"' : '');
+        
         if (!empty($field_choices)) {
             foreach ($field_choices as $key => $value) {
                 $xtpl->assign('FIELD_CHOICES', array(
                     'checked' => ($number == $dataform['default_value']) ? ' checked="checked"' : '',
                     "number" => $number++,
                     'key' => $key,
-                    'value' => $value
+                    'value' => $disable_edit_choose ? $global_array_genders[$key]['title'] : $value
                 ));
                 $xtpl->parse('main.load.loop_field_choice');
             }
         }
-        $xtpl->assign('FIELD_CHOICES', array(
-            'number' => $number,
-            'key' => '',
-            'value' => ''
-        ));
-        $xtpl->parse('main.load.loop_field_choice');
+        if (!$disable_edit_choose) {
+            $xtpl->assign('FIELD_CHOICES', array(
+                'number' => $number,
+                'key' => '',
+                'value' => ''
+            ));
+            $xtpl->parse('main.load.loop_field_choice');
+            $xtpl->parse('main.load.add_field_choice');
+        }
         $xtpl->assign('FIELD_CHOICES_NUMBER', $number);
     }
     $dataform['display_textfields'] = ($text_fields) ? '' : 'style="display: none;"';
