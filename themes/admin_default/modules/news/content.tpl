@@ -329,13 +329,13 @@
 		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status_1 -->
 
-		<!-- BEGIN:status_6 -->
-		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
-		<!-- END:status_6 -->
+		<!-- BEGIN:status_12 -->
+		<input class="btn btn-primary submit-post" name="status12" type="submit" value="{LANG.save_send_admin}" />
+		<!-- END:status_12 -->
 
-		<!-- BEGIN:status_0 -->
-		<input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
-		<!-- END:status_0 -->
+		<!-- BEGIN:status_13 -->
+		<input class="btn btn-primary submit-post" name="status13" type="submit" value="{LANG.save_send_spadmin}" />
+		<!-- END:status_13 -->
 		<br />
 	</div>
 </form>

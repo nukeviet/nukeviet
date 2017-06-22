@@ -313,7 +313,15 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     } elseif ($nv_Request->isset_request('status4', 'post')) {
         $rowcontent['status'] = 4;
         //Luu tam
-    } else {
+    }elseif ($nv_Request->isset_request('status12', 'post')) {
+        $rowcontent['status'] = 12;
+        
+    }
+    elseif ($nv_Request->isset_request('status13', 'post')) {
+        $rowcontent['status'] = 13;
+        
+    }
+    else {
         $rowcontent['status'] = 6;
         //Gui, cho bien tap
     }
@@ -1189,9 +1197,9 @@ if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
     }
     if (!empty($array_censor_content)) {
         // neu co quyen duyet bai thi
-        $xtpl->parse('main.status_0');
+        $xtpl->parse('main.status_13');
     }
-    $xtpl->parse('main.status_6');
+    $xtpl->parse('main.status_12');
 }
 
 if (empty($rowcontent['alias'])) {
