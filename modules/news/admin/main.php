@@ -125,7 +125,9 @@ $array_status_class = array(
     '6' => 'warning',
     '4' => 'info',
     '2' => 'success',
-    '3' => 'danger'
+    '3' => 'danger',
+    '12' => 'warning',
+    '13' => 'warning'
 );
 
 $_permission_action = array();
