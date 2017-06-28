@@ -8,23 +8,24 @@
  * @Createdate Jan 10, 2011 6:04:30 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_data_config_banners')) {
+if (!nv_function_exists('nv_block_data_config_banners')) {
+
     function nv_block_data_config_banners($module, $data_block, $lang_block)
     {
         global $db, $language_array;
 
         $html = "<select name=\"config_idplanbanner\">\n";
         $html .= "<option value=\"\">" . $lang_block['idplanbanner'] . "</option>\n";
-        $query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
+        $query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
         $result = $db->query($query);
 
         while ($row_bpn = $result->fetch()) {
             $value = $row_bpn['title'] . " (";
-            $value .= ((! empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all']) . ", ";
+            $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all']) . ", ";
             $value .= $row_bpn['form'] . ", ";
             $value .= $row_bpn['width'] . "x" . $row_bpn['height'] . "px";
             $value .= ")";
@@ -62,7 +63,7 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
             $xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/bpl_' . $block_config['idplanbanner'] . '.xml';
         }
 
-        if (! file_exists($xmlfile)) {
+        if (!file_exists($xmlfile)) {
             return '';
         }
 
@@ -79,17 +80,17 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
         $array_banners_content = array();
 
         foreach ($array_banners as $banners) {
-            $banners = ( array )$banners;
+            $banners = (array) $banners;
             if ($banners['publ_time'] < NV_CURRENTTIME and ($banners['exp_time'] == 0 or $banners['exp_time'] > NV_CURRENTTIME)) {
                 $banners['file_height'] = empty($banners['file_height']) ? 0 : round($banners['file_height'] * $width_banners / $banners['file_width']);
                 $banners['file_width'] = $width_banners;
-                if (! empty($banners['imageforswf']) and ! empty($client_info['is_mobile'])) {
+                if (!empty($banners['imageforswf']) and !empty($client_info['is_mobile'])) {
                     $banners['file_name'] = $banners['imageforswf'];
                     $banners['file_ext'] = nv_getextension($banners['file_name']);
                 }
-                $banners['file_alt'] = (! empty($banners['file_alt'])) ? $banners['file_alt'] : $banners['title'];
+                $banners['file_alt'] = (!empty($banners['file_alt'])) ? $banners['file_alt'] : $banners['title'];
                 $banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $banners['file_name'];
-                $banners['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=banners&amp;' . NV_OP_VARIABLE . '=click&amp;id=' . $banners['id'];
+                $banners['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=banners&amp;' . NV_OP_VARIABLE . '=click&amp;id=' . $banners['id'] . '&amp;s=' . md5($banners['id'] . NV_CHECK_SESSION);
                 if (!empty($banners['bannerhtml'])) {
                     $banners['bannerhtml'] = html_entity_decode($banners['bannerhtml'], ENT_COMPAT | ENT_HTML401, strtoupper($global_config['site_charset']));
                 }
@@ -97,7 +98,7 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
             }
         }
 
-        if (! empty($array_banners_content)) {
+        if (!empty($array_banners_content)) {
             if ($xml->form == 'random') {
                 shuffle($array_banners_content);
             }
@@ -118,18 +119,18 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
 
                 if ($banners['file_name'] != 'no_image') {
                     if ($banners['file_ext'] == 'swf') {
-                        if (! empty($banners['file_click'])) {
+                        if (!empty($banners['file_click'])) {
                             $xtpl->parse('main.loop.type_swf.fix_link');
                         }
-    
+
                         $xtpl->parse('main.loop.type_swf');
-                    } elseif (! empty($banners['file_click'])) {
+                    } elseif (!empty($banners['file_click'])) {
                         $xtpl->parse('main.loop.type_image_link');
                     } else {
                         $xtpl->parse('main.loop.type_image');
                     }
                 }
-                
+
                 if (!empty($banners['bannerhtml'])) {
                     $xtpl->parse('main.loop.bannerhtml');
                 }
