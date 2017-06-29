@@ -50,14 +50,14 @@ $(document).ready(function(){
         <tr>
             <th scope="row" class="specalt"> {LANG.admin_pass} <span class="highlight_red">*</span></th>
             <td class="alt">
-            <input type="password" value="{DATA.nv_password}" id="nv_password_iavim" name="nv_password" class="required" />
+            <input autocomplete="off" type="password" value="{DATA.nv_password}" id="nv_password_iavim" name="nv_password" class="required" />
             </td>
             <td class="alt">{LANG.admin_pass_note}</td>
         </tr>
         <tr>
             <th scope="row" class="spec"> {LANG.admin_repass} <span class="highlight_red">*</span></th>
             <td>
-            <input type="password" value="{DATA.re_password}" id="re_password_iavim" name="re_password" class="required" />
+            <input autocomplete="off" type="password" value="{DATA.re_password}" id="re_password_iavim" name="re_password" class="required" />
             </td>
             <td>{LANG.admin_repass_note}</td>
         </tr>
