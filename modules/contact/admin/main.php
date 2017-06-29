@@ -72,8 +72,11 @@ if (! empty($contact_allowed['view'])) {
 
             if ($row['is_read'] == 1) {
             	$style = " style=\"cursor:pointer;white-space:nowrap;\"";
-	            if ($row['is_reply']) {
+	            if ($row['is_reply']==1) {
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
+	                $status = $lang_module['tt2_row_title'];
+	            }elseif ($row['is_reply']==2) {
+	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14 );
 	                $status = $lang_module['tt2_row_title'];
 	            }else{
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );

@@ -16,6 +16,7 @@ $id = $nv_Request->get_int('id', 'get', 0);
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
+$row['title'] = 'Re:' . $row['title'];
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -32,6 +33,7 @@ if (defined('NV_EDITOR')) {
 $xtpl = new XTemplate('reply.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('POST', $row);
 
 $is_read = intval($row['is_read']);
 if (!$is_read) {
@@ -91,7 +93,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         $mail->Content($mess_content);
-        $mail->Subject('Re: ' . $row['title']);
+        $mail->Subject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
