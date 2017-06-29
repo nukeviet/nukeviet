@@ -19,7 +19,7 @@ if (! defined('NV_IS_MOD_RSS')) {
  */
 function nv_get_rss_link()
 {
-    global  $module_data, $global_config, $site_mods;
+    global $db, $nv_Cache, $module_data, $global_config, $site_mods;
     $contentrss = '';
 
     foreach ($site_mods as $mod_name => $mod_info) {

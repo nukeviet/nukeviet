@@ -153,8 +153,19 @@ function nv_admin_checkdata($adm_session_value)
     if (empty($admin_info['first_name'])) {
         $admin_info['first_name'] = $admin_info['username'];
     }
-    $admin_info['in_groups'] = nv_user_groups($admin_info['in_groups']);
+    
+    // Thêm tự động nhóm của hệ thống
+    $manual_groups = array(3);
+    if ($admin_info['level'] == 1 or $admin_info['level'] == 2) {
+        $manual_groups[] = 2;
+    }
+    if ($admin_info['level'] == 1 and $global_config['idsite'] == 0) {
+        $manual_groups[] = 1;
+    }
 
+    $check_in_groups = nv_user_groups($admin_info['in_groups'], true, $manual_groups);
+    $admin_info['in_groups'] = $check_in_groups[0];
+    $admin_info['2step_require'] = $check_in_groups[1];
     $admin_info['current_openid'] = '';
     $admin_info['st_login'] = ! empty($admin_info['password']) ? true : false;
     $admin_info['valid_question'] = (! empty($admin_info['question']) and ! empty($admin_info['answer'])) ? true : false;

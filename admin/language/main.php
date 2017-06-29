@@ -355,9 +355,6 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         $weight = 0;
         while ($row = $result->fetch()) {
             ++$weight;
-            if ($weight == $new_weight)
-                ++$weight;
-
             $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($row['lang']);
             $db->query($sql);
         }

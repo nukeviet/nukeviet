@@ -82,7 +82,7 @@ $blocker->trackLogin($rules);
 $error = '';
 $login = '';
 $login_step = 1;
-$array_gfx_chk = array( 1, 5, 6, 7 );
+$array_gfx_chk = array(1, 5, 6, 7);
 if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
     $global_config['gfx_chk'] = 1;
 } else {
@@ -126,31 +126,48 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             }
         }
 
-        $userid = 0;
         if (nv_check_valid_email($nv_username) == '') {
-            $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email =' . $db->quote($nv_username);
+            $sql = 't2.email =' . $db->quote($nv_username);
             $login_email = true;
         } else {
-            $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
+            $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
             $login_email = false;
         }
         
+        $sql = 'SELECT t1.admin_id admin_id, t1.lev admin_lev, t1.last_agent admin_last_agent, t1.last_ip admin_last_ip, t1.last_login admin_last_login, 
+        t2.userid, t2.last_agent, t2.last_ip, t2.last_login, t2.last_openid, t2.username, t2.email, t2.password, t2.active2step, t2.in_groups, t2.secretkey 
+        FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1, ' . NV_USERS_GLOBALTABLE . ' t2 
+        WHERE t1.admin_id=t2.userid AND ' . $sql . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1';
+        
         $row = $db->query($sql)->fetch();
+        $error = '';
         
-        if (empty($row)) {
+        if (empty($row) or !((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password']))) {
             nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
+            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
+            $error = $lang_global['loginincorrect'];
         } else {
-            if ((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
-                $userid = $row['userid'];
-            }
-        }
-        
-        $error = $lang_global['loginincorrect'];
-        
-        if ($userid > 0) {
-            $valid_user = false;
+            $row['admin_lev'] = intval($row['admin_lev']);
+            $step2_isvalid = true;
+
             // Check 2-step login
-            if (in_array($global_config['two_step_verification'], array(1, 3)) and empty($row['active2step'])) {
+            $_2step_require = false;
+            if (empty($row['active2step'])) {
+                $_2step_require = in_array($global_config['two_step_verification'], array(1, 3));
+                if (!$_2step_require) {
+                    // Thêm tự động nhóm của hệ thống
+                    $manual_groups = array(3);
+                    if ($row['admin_lev'] == 1 or $row['admin_lev'] == 2) {
+                        $manual_groups[] = 2;
+                    }
+                    if ($row['admin_lev'] == 1 and $global_config['idsite'] == 0) {
+                        $manual_groups[] = 1;
+                    }
+                    $_2step_require = nv_user_groups($row['in_groups'], true, $manual_groups);
+                    $_2step_require = $_2step_require[1];
+                }
+            }
+            if ($_2step_require) {
                 $url_setup2step = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification&amp;' . NV_OP_VARIABLE . '=setup&amp;nv_redirect=' . nv_redirect_encrypt(NV_BASE_ADMINURL);
                 $error = '<a href="' . $url_setup2step . '">' . $lang_global['2teplogin_require'] . '</a>';
                 validUserLog($row);
@@ -160,15 +177,15 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 $login_step = 3;
                 $captcha_require = 0;
             } elseif (!empty($row['active2step'])) {
-                $error = '';
+                $step2_isvalid = false;
                 $login_step = 2;
                 $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
                 
                 if (!empty($nv_totppin)) {
-                    if ($GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
-                        $valid_user = true;
-                    } else {
+                    if (!$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
                         $error = $lang_global['2teplogin_error_opt'];
+                    } else {
+                        $step2_isvalid = true;
                     }
                 }
                 
@@ -181,83 +198,71 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                     if ($sth->rowCount() != 1) {
                         $error = $lang_global['2teplogin_error_backup'];
                     } else {
-                        $valid_user = true;
                         $code = $sth->fetchColumn();
                         $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_backupcodes SET is_used=1, time_used=" . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
+                        $step2_isvalid = true;
                     }
                 }
                 
                 $captcha_require = 0;
                 $nv_Request->set_Session('admin_dismiss_captcha', md5($nv_username));
-            } else {
-                $valid_user = true;
             }
-            
-            if ($valid_user === true) {
-                $row = $db->query('SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = ' . $userid . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1')->fetch();
-                if (! empty($row)) {
-                    $admin_lev = intval($row['admin_lev']);
-    
-                    if (! defined('ADMIN_LOGIN_MODE')) {
-                        define('ADMIN_LOGIN_MODE', 3);
-                    }
-                    if (ADMIN_LOGIN_MODE == 2 and ! in_array($admin_lev, array( 1, 2 ))) {
-                        $error = $lang_global['admin_access_denied2'];
-                    } elseif (ADMIN_LOGIN_MODE == 1 and $admin_lev != 1) {
-                        $error = $lang_global['admin_access_denied1'];
-                    } else {
-                        nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
-                        $admin_id = intval($row['admin_id']);
-                        $checknum = md5(nv_genpass(10));
-                        $array_admin = array(
-                            'admin_id' => $admin_id,
-                            'checknum' => $checknum,
-                            'current_agent' => NV_USER_AGENT,
-                            'last_agent' => $row['admin_last_agent'],
-                            'current_ip' => NV_CLIENT_IP,
-                            'last_ip' => $row['admin_last_ip'],
-                            'current_login' => NV_CURRENTTIME,
-                            'last_login' => intval($row['admin_last_login'])
-                        );
-                        $admin_serialize = serialize($array_admin);
-    
-                        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET check_num = :check_num, last_login = ' . NV_CURRENTTIME . ', last_ip = :last_ip, last_agent = :last_agent WHERE admin_id=' . $admin_id);
-                        $sth->bindValue(':check_num', $checknum, PDO::PARAM_STR);
-                        $sth->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
-                        $sth->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
-                        $sth->execute();
-    
-                        $nv_Request->set_Session('admin', $admin_serialize);
-                        $nv_Request->set_Session('online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0');
-    
-                        if ($global_config['lang_multi']) {
-                            $sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote(NV_LANG_INTERFACE);
-                            $setup = $db->query($sql)->fetchColumn();
-                            if ($setup) {
-                                $nv_Request->set_Cookie('data_lang', NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME);
-                            }
-                        }
-    
-                        define('NV_IS_ADMIN', true);
-                        $blocker->reset_trackLogin($nv_username);
-    
-                        $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-                        if (! empty($admin_login_redirect) and strpos($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification') == 0) {
-                            $redirect = $admin_login_redirect;
-                            $nv_Request->unset_request('admin_login_redirect', 'session');
-                        }
 
-                        $nv_Request->unset_request('admin_dismiss_captcha', 'session');
-                        nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />");
-                        die();
-                    }
-                } else {
-                    nv_insert_logs(NV_LANG_DATA, 'login', '[ ' . $nv_username . ' ] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
+            if (empty($error) and $step2_isvalid) {
+                if (! defined('ADMIN_LOGIN_MODE')) {
+                    define('ADMIN_LOGIN_MODE', 3);
                 }
-                $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
+                if (ADMIN_LOGIN_MODE == 2 and ! in_array($row['admin_lev'], array(1, 2))) {
+                    $error = $lang_global['admin_access_denied2'];
+                } elseif (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
+                    $error = $lang_global['admin_access_denied1'];
+                } else {
+                    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
+                    $admin_id = intval($row['admin_id']);
+                    $checknum = md5(nv_genpass(10));
+                    $array_admin = array(
+                        'admin_id' => $admin_id,
+                        'checknum' => $checknum,
+                        'current_agent' => NV_USER_AGENT,
+                        'last_agent' => $row['admin_last_agent'],
+                        'current_ip' => NV_CLIENT_IP,
+                        'last_ip' => $row['admin_last_ip'],
+                        'current_login' => NV_CURRENTTIME,
+                        'last_login' => intval($row['admin_last_login'])
+                    );
+                    $admin_serialize = serialize($array_admin);
+
+                    $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET check_num = :check_num, last_login = ' . NV_CURRENTTIME . ', last_ip = :last_ip, last_agent = :last_agent WHERE admin_id=' . $admin_id);
+                    $sth->bindValue(':check_num', $checknum, PDO::PARAM_STR);
+                    $sth->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
+                    $sth->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
+                    $sth->execute();
+
+                    $nv_Request->set_Session('admin', $admin_serialize);
+                    $nv_Request->set_Session('online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0');
+
+                    if ($global_config['lang_multi']) {
+                        $sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote(NV_LANG_INTERFACE);
+                        $setup = $db->query($sql)->fetchColumn();
+                        if ($setup) {
+                            $nv_Request->set_Cookie('data_lang', NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME);
+                        }
+                    }
+
+                    define('NV_IS_ADMIN', true);
+                    $blocker->reset_trackLogin($nv_username);
+
+                    $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
+                    if (! empty($admin_login_redirect) and strpos($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification') == 0) {
+                        $redirect = $admin_login_redirect;
+                        $nv_Request->unset_request('admin_login_redirect', 'session');
+                    }
+
+                    $nv_Request->unset_request('admin_dismiss_captcha', 'session');
+                    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />");
+                    die();
+                }
             }
-        } else {
-            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
         }
     }
 } else {
@@ -315,6 +320,8 @@ if ($login_step == 1) {
     $xtpl->assign('SHOW_STEP1', ' hidden');
     $xtpl->assign('SHOW_STEP2', ' hidden');
     $xtpl->assign('SHOW_LANG', ' hidden');
+    $xtpl->assign('SHOW_SUBMIT', ' hidden');
+    $xtpl->assign('SHOW_LOSTPASS', ' hidden');
 } else {
     $xtpl->assign('SHOW_STEP1', ' hidden');
     $xtpl->assign('SHOW_STEP2', '');

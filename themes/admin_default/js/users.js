@@ -20,7 +20,7 @@ function user_validForm(a) {
             $('[type="submit"]', $(a)).prop('disabled', false);
             if( b.status == "error" ) {
                 alert(b.mess);
-                $("[name=" + b.input + "]", a).focus();
+                $("[name=\"" + b.input + "\"]", a).focus();
             } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
                 if( b.admin_add == "yes" ) {
@@ -345,12 +345,12 @@ function nv_data_export(set_export) {
 
 // User field
 var items = ''; // fields.tpl
-function nv_choice_fields_additem() {
+function nv_choice_fields_additem(placeholder) {
     items++;
     var newitem = '<tr class="text-center">';
     newitem += '    <td>' + items + '</td>';
-    newitem += '    <td><input class="form-control w100 validalphanumeric" type="text" value="" name="field_choice[' + items + ']"></td>';
-    newitem += '    <td><input class="form-control" clas="w350" type="text" value="" name="field_choice_text[' + items + ']"></td>';
+    newitem += '    <td><input class="form-control w200 validalphanumeric" type="text" value="" name="field_choice[' + items + ']" placeholder="' + placeholder + '"></td>';
+    newitem += '    <td><input class="form-control w300" type="text" value="" name="field_choice_text[' + items + ']"></td>';
     newitem += '    <td><input type="radio" value="' + items + '" name="default_value_choice"></td>';
     newitem += '    </tr>';
     $('#choiceitems').append(newitem);

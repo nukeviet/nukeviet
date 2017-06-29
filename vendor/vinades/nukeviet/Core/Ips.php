@@ -47,7 +47,12 @@ class Ips
     private function nv_getenv($key)
     {
         if (isset($_SERVER[$key])) {
-            return $_SERVER[$key];
+            if (strpos($_SERVER[$key], ',')) {
+                $_arr = explode(',', $_SERVER[$key]);
+                return trim($_arr[0]);
+            } else {
+                return $_SERVER[$key];
+            }
         } elseif (isset($_ENV[$key])) {
             return $_ENV[$key];
         } elseif (@getenv($key)) {

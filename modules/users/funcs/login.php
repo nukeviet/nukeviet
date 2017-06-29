@@ -687,11 +687,18 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                 'status' => 'error',
                 'input' => '',
                 'mess' => $error1 )));
-        } elseif (in_array($global_config['two_step_verification'], array(2, 3)) and empty($row['active2step'])) {
-            die(signin_result(array(
-                'status' => '2steprequire',
-                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup' . ($nv_redirect ? '&nv_redirect=' . $nv_redirect : ''), true),
-                'mess' => $lang_global['2teplogin_require'] )));
+        } elseif (empty($row['active2step'])) {
+            $_2step_require = in_array($global_config['two_step_verification'], array(2, 3));
+            if (!$_2step_require) {
+                $_2step_require = nv_user_groups($row['in_groups'], true);
+                $_2step_require = $_2step_require[1];
+            }
+            if ($_2step_require) {
+                die(signin_result(array(
+                    'status' => '2steprequire',
+                    'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup' . ($nv_redirect ? '&nv_redirect=' . $nv_redirect : ''), true),
+                    'mess' => $lang_global['2teplogin_require'] )));
+            }
         }
     }
 

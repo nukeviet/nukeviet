@@ -464,6 +464,16 @@ div.radio-box,div.check-box{
     border-color: #de495b;
 }
 
+div.radio-box label,
+div.check-box label {
+    margin-bottom: 0;
+}
+
+div.radio-box label [type="radio"],
+div.check-box label [type="radio"] {
+    margin-top: -2px;
+}
+
 .display-inline-block{
     display: inline-block
 }
