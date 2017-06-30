@@ -35,7 +35,7 @@ if ($mark == 'unread') {
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
 
-    die(json_encode(array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name )));
+    nv_jsonOutput(array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name ));
 }
 
 if (! $is_read) {
