@@ -72,7 +72,7 @@
     					</p>
     					<p>
     						<label for="nv_password">{GLANG.password}:</label>
-    						<input class="form-control" name="nv_password" type="password" id="nv_password" value="{V_PASSWORD}"/>
+    						<input autocomplete="off" class="form-control" name="nv_password" type="password" id="nv_password" value="{V_PASSWORD}"/>
     					</p>
                     </div>
                     <div class="loginStep2{SHOW_STEP2}">

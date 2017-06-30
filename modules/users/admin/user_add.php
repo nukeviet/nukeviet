@@ -79,19 +79,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $md5username = nv_md5safe($_user['username']);
 
     if (($error_username = nv_check_valid_login($_user['username'], $global_config['nv_unickmax'], $global_config['nv_unickmin'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => $error_username
-        )));
+        ));
     }
 
     if ("'" . $_user['username'] . "'" != $db->quote($_user['username'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => sprintf($lang_module['account_deny_name'], $_user['username'])
-        )));
+        ));
     }
 
     // Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
@@ -100,19 +100,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
     if ($query_error_username) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => $lang_module['edit_error_username_exist']
-        )));
+        ));
     }
 
     if (($error_xemail = nv_check_valid_email($_user['email'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $error_xemail
-        )));
+        ));
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
@@ -121,11 +121,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_email = $stmt->fetchColumn();
     if ($query_error_email) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        )));
+        ));
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong nv4_users_reg  chưa.
@@ -134,11 +134,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_email_reg = $stmt->fetchColumn();
     if ($query_error_email_reg) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        )));
+        ));
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong nv3_users_openid chưa.
@@ -147,27 +147,27 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_email_openid = $stmt->fetchColumn();
     if ($query_error_email_openid) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        )));
+        ));
     }
 
     if (($check_pass = nv_check_valid_pass($_user['password1'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password1',
             'mess' => $check_pass
-        )));
+        ));
     }
 
     if ($_user['password1'] != $_user['password2']) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password1',
             'mess' => $lang_module['edit_error_password']
-        )));
+        ));
     }
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
@@ -190,11 +190,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     if (empty($_user['in_groups_default']) and sizeof($_user['in_groups'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'group_default',
             'mess' => $lang_module['edit_error_group_default']
-        )));
+        ));
     }
 
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
@@ -236,11 +236,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $userid = $db->insert_id($sql, 'userid', $data_insert);
 
     if (!$userid) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => '',
             'mess' => $lang_module['edit_add_error']
-        )));
+        ));
     }
 
     $query_field['userid'] = $userid;
@@ -302,13 +302,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         @nv_sendmail($global_config['site_email'], $_user['email'], $subject, $message);
     }
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => '',
         'username' => $_user['username'],
         'admin_add' => (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) ? 'yes' : 'no',
         'mess' => sprintf($lang_module['admin_add'], $_user['username'])
-    )));
+    ));
 }
 
 $_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
