@@ -107,20 +107,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 } else {
-    $mess_content .= '<br /><br />----------<br />Best regards,<br /><br />' . $admin_info['full_name'] . '<br />';
-    if (!empty($admin_info['position'])) {
-        $mess_content .= $admin_info['position'] . '<br />';
-    }
-    $mess_content .= '<br />';
-    $mess_content .= 'E-mail: ' . $admin_info['email'] . '<br />';
-    $mess_content .= 'Website: ' . $global_config['site_name'] . '<br />' . $global_config['site_url'] . '<br /><br />';
-
     $mess_content .= '--------------------------------------------------------------------------------<br />';
     $mess_content .= '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';
     $mess_content .= '<strong>Sent:</strong> ' . date('r', $row['send_time']) . '<br />';
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
+    
+    require_once NV_ROOTDIR . '/modules/contact/sign.php';
+    $mess_content .= $sign_content;
 }
 
 $mess_content = htmlspecialchars(nv_editor_br2nl($mess_content));

@@ -27,12 +27,17 @@ $mess_content = $error = '';
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
-
-    if (!empty($post['title']) and !empty($post['email']) and strip_tags($mess_content) != '') {
-
+    
+    if (empty($post['email'])) {
+        $error = $lang_module['error_mail_empty'];
+    } elseif (strip_tags($mess_content) == '') {
+        $error = $lang_module['no_content_send_title'];
+    } elseif (empty($post['title'])) {
+        $error = $lang_module['error_title'];
+    } else {
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
         $mail->Subject($post['title']);
-
+        
         $_arr_mail = explode(',', $post['email']);
         foreach ($_arr_mail as $_email) {
             $_email = nv_unhtmlspecialchars($_email);
@@ -40,7 +45,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $mail->addAddress($_email);
             }
         }
-
+        
         $mail->Content($mess_content);
         if ($mail->Send()) {
             $error = $lang_module['send_suc_send_title'];
@@ -48,14 +53,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $error = $lang_global['error_sendmail_admin'] . ': ' . $mail->ErrorInfo;
         }
     }
+
 } else {
-    $mess_content .= '<br /><br />----------<br />Best regards,<br /><br />' . $admin_info['full_name'] . '<br />';
-    if (!empty($admin_info['position'])) {
-        $mess_content .= $admin_info['position'] . '<br />';
-    }
-    $mess_content .= '<br />';
-    $mess_content .= 'E-mail: ' . $admin_info['email'] . '<br />';
-    $mess_content .= 'Website: ' . $global_config['site_name'] . '<br />' . $global_config['site_url'] . '<br /><br />';
+    require_once NV_ROOTDIR . '/modules/contact/sign.php';
+    $mess_content .= $sign_content;
 }
 
 $mess_content = htmlspecialchars(nv_editor_br2nl($mess_content));

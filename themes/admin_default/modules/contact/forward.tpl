@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     <td>{LANG.admin_send2mail_title}</td>
-                    <td class="text-center"><input name="email" type="text" class="w300 form-control pull-left"/></td>
+                    <td class="text-center"><input name="email" type="text" value="{POST.email}"  class="w300 form-control pull-left"/></td>
                 </tr>
 				<tr>
 					<td colspan="2">{MESS_CONTENT}</td>
