@@ -21,12 +21,12 @@
 				<tr>
 					<td>{CONTENTS.pass.0}:</td>
 					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="w300 form-control" name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" value="{CONTENTS.pass.2}" style="margin-right: 5px" maxlength="{CONTENTS.pass.3}" /><a href="javascript:void(0);" onclick="return_nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+					<td><input class="w300 form-control" name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" autocomplete="off" value="{CONTENTS.pass.2}" style="margin-right: 5px" maxlength="{CONTENTS.pass.3}" /><a href="javascript:void(0);" onclick="return_nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.re_pass.0}:</td>
 					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="w300 form-control" name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" value="{CONTENTS.re_pass.2}" style="margin-right: 5px" maxlength="{CONTENTS.re_pass.3}" /><input id="methods" type="checkbox"> {LANG.show_password}</td>
+					<td><input class="w300 form-control" name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" autocomplete="off" value="{CONTENTS.re_pass.2}" style="margin-right: 5px" maxlength="{CONTENTS.re_pass.3}" /><input id="methods" type="checkbox"> {LANG.show_password}</td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.email.0}:</td>

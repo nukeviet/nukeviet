@@ -143,8 +143,7 @@ function reg_result($array)
     global $nv_redirect;
 
     $array['redirect'] = nv_redirect_decrypt($nv_redirect);
-    $string = json_encode($array);
-    return $string;
+    nv_jsonOutput($array);
 }
 
 // Cau hoi lay lai mat khau
@@ -264,51 +263,51 @@ if ($checkss == $array_register['checkss']) {
     $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
     if (!$check_seccode) {
-        die(reg_result(array(
+        reg_result(array(
             'status' => 'error',
             'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
             'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
-        )));
+        ));
     }
 
     if ((($check_login = nv_check_username_reg($array_register['username']))) != '') {
-        die(reg_result(array(
+        reg_result(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => $check_login
-        )));
+        ));
     }
 
     if (($check_email = nv_check_email_reg($array_register['email'])) != '') {
-        die(reg_result(array(
+        reg_result(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $check_email
-        )));
+        ));
     }
 
     if (($check_pass = nv_check_valid_pass($array_register['password'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        die(reg_result(array(
+        reg_result(array(
             'status' => 'error',
             'input' => 'password',
             'mess' => $check_pass
-        )));
+        ));
     }
 
     if ($array_register['password'] != $array_register['re_password']) {
-        die(reg_result(array(
+        reg_result(array(
             'status' => 'error',
             'input' => 're_password',
             'mess' => $lang_global['passwordsincorrect']
-        )));
+        ));
     }
 
     if (empty($array_register['agreecheck']) and !defined('ACCESS_ADDUS')) {
-        die(reg_result(array(
+        reg_result(array(
             'status' => 'error',
             'input' => 'agreecheck',
             'mess' => $lang_global['agreecheck_empty']
-        )));
+        ));
     }
 
     // Kiểm tra trường dữ liệu
@@ -359,11 +358,11 @@ if ($checkss == $array_register['checkss']) {
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
-            die(reg_result(array(
+            reg_result(array(
                 'status' => 'error',
                 'input' => '',
                 'mess' => $lang_module['err_no_save_account']
-            )));
+            ));
         } else {
             if ($global_config['allowuserreg'] == 2) {
                 $subject = $lang_module['account_active'];
@@ -380,11 +379,11 @@ if ($checkss == $array_register['checkss']) {
             }
 
             $nv_redirect = '';
-            die(reg_result(array(
+            reg_result(array(
                 'status' => 'ok',
                 'input' => '',
                 'mess' => $info
-            )));
+            ));
         }
     } else {
         $sql = "INSERT INTO " . NV_MOD_TABLE . "
@@ -425,11 +424,11 @@ if ($checkss == $array_register['checkss']) {
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
-            die(reg_result(array(
+            reg_result(array(
                 'status' => 'error',
                 'input' => '',
                 'mess' => $lang_module['err_no_save_account']
-            )));
+            ));
         } else {
             $query_field['userid'] = $userid;
             $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
@@ -470,11 +469,11 @@ if ($checkss == $array_register['checkss']) {
             }
             $nv_Cache->delMod($module_name);
             $nv_redirect = '';
-            die(reg_result(array(
+            reg_result(array(
                 'status' => 'ok',
                 'input' => nv_url_rewrite($url, true),
                 'mess' => $lang_module['register_ok']
-            )));
+            ));
         }
     }
 }

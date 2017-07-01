@@ -21,7 +21,7 @@ if (intval($bid) > 0) {
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=' . $act . ' WHERE bid=' . $bid);
     $nv_Cache->delMod('themes');
 
-    die(json_encode(array( 'status' => 'ok', 'act' => $act ? 'act' : 'deact' )));
+    nv_jsonOutput(array( 'status' => 'ok', 'act' => $act ? 'act' : 'deact' ));
 } else {
-    die(json_encode(array( 'status' => 'error' )));
+    nv_jsonOutput(array( 'status' => 'error' ));
 }

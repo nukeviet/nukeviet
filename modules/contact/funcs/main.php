@@ -99,36 +99,36 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     if (empty($fname)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fname',
-            'mess' => $lang_module['error_fullname'] )));
+            'mess' => $lang_module['error_fullname'] ));
     }
 
     if (($check_valid_email = nv_check_valid_email($femail)) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'femail',
-            'mess' => $check_valid_email )));
+            'mess' => $check_valid_email ));
     }
 
     if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'ftitle',
-            'mess' => $lang_module['error_title'] )));
+            'mess' => $lang_module['error_title'] ));
     }
     if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fcon',
-            'mess' => $lang_module['error_content'] )));
+            'mess' => $lang_module['error_content'] ));
     }
     if (! nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) ));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -213,16 +213,16 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
         nv_insert_notification($module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1);
 
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'ok',
             'input' => '',
-            'mess' => $lang_module['sendcontactok'] )));
+            'mess' => $lang_module['sendcontactok'] ));
     }
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'error',
         'input' => '',
-        'mess' => $lang_module['sendcontactfailed'] )));
+        'mess' => $lang_module['sendcontactfailed'] ));
 }
 
 

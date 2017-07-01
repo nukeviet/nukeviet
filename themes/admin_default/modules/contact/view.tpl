@@ -39,11 +39,13 @@
 			<tr>
 				<td class="text-center">
 				<!-- BEGIN: reply -->
-				<a class="btn btn-default" href="{URL_REPLY}">{LANG.send_title}</a>
+				<a class="btn btn-default" href="{URL_REPLY}">{LANG.send_title}</a>&nbsp;
 				<!-- END: reply -->
-				<a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>
-				<a class="btn btn-default" href="{DATA.url_back}">{LANG.back_title}</a>
-                <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_unread();">{LANG.mark_as_unread}</a></td>
+				<a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>&nbsp;
+				<a class="btn btn-default" href="{DATA.url_back}">{LANG.back_title}</a>&nbsp;
+                <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_unread();">{LANG.mark_as_unread}</a>&nbsp;
+                <a class="btn btn-default" href="{URL_FORWARD}"><em class="fa fa-share">&nbsp;</em> {LANG.mark_as_forward}</a>
+                </td>
 			</tr>
 		</tbody>
 	</table>
