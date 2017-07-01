@@ -8,12 +8,15 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $select_options = array();
-$theme_array = nv_scandir(NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ));
+$theme_array = nv_scandir(NV_ROOTDIR . '/themes', array(
+    $global_config['check_theme'],
+    $global_config['check_theme_mobile']
+));
 
 foreach ($theme_array as $themes_i) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks_func&amp;selectthemes=' . $themes_i] = $themes_i;
@@ -22,7 +25,7 @@ foreach ($theme_array as $themes_i) {
 $selectthemes_old = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 $selectthemes = $nv_Request->get_string('selectthemes', 'get', $selectthemes_old);
 
-if (! in_array($selectthemes, $theme_array)) {
+if (!in_array($selectthemes, $theme_array)) {
     $selectthemes = $global_config['site_theme'];
 }
 
@@ -36,7 +39,7 @@ $func_id = $nv_Request->get_int('func', 'get', 0);
 
 if ($func_id > 0) {
     $selectedmodule = $db->query('SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id)->fetchColumn();
-} elseif (! empty($selectedmodule)) {
+} elseif (!empty($selectedmodule)) {
     $sth = $db->prepare("SELECT func_id FROM " . NV_MODFUNCS_TABLE . " WHERE func_name='main' AND in_module= :module");
     $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
     $sth->execute();
@@ -44,7 +47,7 @@ if ($func_id > 0) {
 }
 
 if (empty($func_id) or empty($selectedmodule)) {
-    v_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks');
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks');
 }
 
 $page_title = $lang_module['blocks_by_funcs'] . ': ' . $selectthemes;
@@ -63,7 +66,7 @@ $xtpl->assign('OP', $op);
 
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list($m_title, $m_custom_title) = $result->fetch(3)) {
+while (list ($m_title, $m_custom_title) = $result->fetch(3)) {
     $xtpl->assign('MODULE', array(
         'key' => $m_title,
         'selected' => ($selectedmodule == $m_title) ? ' selected="selected"' : '',
@@ -80,7 +83,7 @@ $sth = $db->prepare('SELECT func_id, func_custom_name
 $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
 $sth->execute();
 
-while (list($f_id, $f_custom_title) = $sth->fetch(3)) {
+while (list ($f_id, $f_custom_title) = $sth->fetch(3)) {
     $array_func_id[$f_id] = $f_custom_title;
 
     $xtpl->assign('FUNCTION', array(
@@ -102,7 +105,7 @@ $sth = $db->prepare('SELECT t1.position, COUNT(*)
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 
-while (list($position, $numposition) = $sth->fetch(3)) {
+while (list ($position, $numposition) = $sth->fetch(3)) {
     $blocks_positions[$position] = $numposition;
 }
 
@@ -133,15 +136,18 @@ while ($row = $sth->fetch()) {
     $numposition = $blocks_positions[$row['position']];
 
     for ($i = 1; $i <= $numposition; ++$i) {
-        $xtpl->assign('ORDER', array( 'key' => $i, 'selected' => ($row['bweight'] == $i) ? ' selected="selected"' : '' ));
+        $xtpl->assign('ORDER', array(
+            'key' => $i,
+            'selected' => ($row['bweight'] == $i) ? ' selected="selected"' : ''
+        ));
         $xtpl->parse('main.loop.order');
     }
 
     for ($i = 0, $count = sizeof($positions); $i < $count; ++$i) {
         $xtpl->assign('POSITION', array(
-            'key' => ( string )$positions[$i]->tag,
+            'key' => (string) $positions[$i]->tag,
             'selected' => ($row['position'] == $positions[$i]->tag) ? ' selected="selected"' : '',
-            'title' => ( string )$positions[$i]->name
+            'title' => (string) $positions[$i]->name
         ));
         $xtpl->parse('main.loop.position');
     }
