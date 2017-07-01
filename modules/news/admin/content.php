@@ -47,7 +47,7 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
             $return = 'ERROR_' . sprintf($lang_module['dulicate_edit_takeover'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
         }
     }
-    die($return);
+    nv_htmlOutput($return);
 }
 
 if (defined('NV_EDITOR')) {
@@ -996,7 +996,6 @@ if (empty($array_cat_check_content)) {
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    die();
 }
 $contents = '';
 

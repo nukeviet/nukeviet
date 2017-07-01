@@ -175,6 +175,25 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 }
 
 /**
+ * nv_htmlOutput()
+ *
+ * @param array $html
+ * @return void
+ */
+function nv_htmlOutput($html)
+{
+    header('Content-Type: text/html; charset=utf-8');
+    Header('Cache-Control: no-cache, must-revalidate');
+
+    Header('X-Frame-Options: SAMEORIGIN');
+    Header('X-Content-Type-Options: nosniff');
+    Header('X-XSS-Protection: 1; mode=block');
+
+    ob_start('ob_gzhandler');
+    exit($html);
+}
+
+/**
  * nv_jsonOutput()
  *
  * @param array $array_data

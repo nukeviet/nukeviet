@@ -8,7 +8,7 @@
  * @Createdate 11-10-2010 14:43
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('notification_reset', 'post')) {
 
 // Get count notification
 if ($nv_Request->isset_request('notification_get', 'get')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -45,9 +45,7 @@ if ($nv_Request->isset_request('notification_get', 'get')) {
             'timestamp' => $last_time
         );
     }
-    $json = json_encode($return);
-    echo $json;
-    die();
+    nv_jsonOutput($return);
 }
 
 // Hide (delete)
@@ -69,16 +67,17 @@ $per_page = $is_ajax ? 10 : 20;
 $array_data = array();
 
 $db->sqlreset()
-  ->select('COUNT(*)')
-  ->from(NV_NOTIFICATION_GLOBALTABLE)
-  ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+    ->select('COUNT(*)')
+    ->from(NV_NOTIFICATION_GLOBALTABLE)
+    ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
 
-$all_pages = $db->query($db->sql())->fetchColumn();
+$all_pages = $db->query($db->sql())
+    ->fetchColumn();
 
 $db->select('*')
-  ->order('id DESC')
-  ->limit($per_page)
-  ->offset(($page - 1) * $per_page);
+    ->order('id DESC')
+    ->limit($per_page)
+    ->offset(($page - 1) * $per_page);
 
 $result = $db->query($db->sql());
 $num_rows = $result->rowCount();
@@ -115,7 +114,7 @@ while ($data = $result->fetch()) {
                     $data['send_from'] = $lang_global['level5'];
                 }
 
-                if (! empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
+                if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
                     $data['photo'] = NV_BASE_SITEURL . $admin_info['photo'];
                 } else {
                     $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
