@@ -23,6 +23,10 @@
 <IfModule mod_headers.c>
   <FilesMatch "\.(js|css|xml|ttf)$">
     Header append Vary Accept-Encoding
+    Header set Access-Control-Allow-Origin "*"    
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
   </FilesMatch>
   
   <FilesMatch "\.(doc|pdf|swf)$">
