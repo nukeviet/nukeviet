@@ -182,8 +182,12 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
  */
 function nv_jsonOutput($array_data)
 {
-    header('Cache-Control: no-cache, must-revalidate');
-    header('Content-type: application/json');
+    Header('Cache-Control: no-cache, must-revalidate');
+    Header('Content-type: application/json');
+
+    Header('X-Frame-Options: SAMEORIGIN');
+    Header('X-Content-Type-Options: nosniff');
+    Header('X-XSS-Protection: 1; mode=block');
 
     ob_start('ob_gzhandler');
     exit(json_encode($array_data));
@@ -223,6 +227,10 @@ function nv_xmlOutput($content, $lastModified)
     } else {
         @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
     }
+
+    Header('X-Frame-Options: SAMEORIGIN');
+    Header('X-Content-Type-Options: nosniff');
+    Header('X-XSS-Protection: 1; mode=block');
 
     @Header('Pragma: no-cache');
 

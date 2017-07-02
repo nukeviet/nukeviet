@@ -18,6 +18,7 @@ $flb = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV
 $flb->trackFlood($rules);
 
 if ($flb->is_flooded) {
+    include NV_ROOTDIR . '/includes/header.php';
     if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
         $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
         $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);

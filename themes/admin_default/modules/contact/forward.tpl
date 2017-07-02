@@ -8,7 +8,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td class="text-center"><input name="submit1" type="submit" value="{LANG.send_title}" class="btn btn-primary" /></td>
+					<td colspan="2" class="text-center"><input name="submit1" type="submit" value="{LANG.send_title}" class="btn btn-primary" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     <td>{LANG.admin_send2mail_title}</td>
-                    <td class="text-center"><input name="email" type="text" value="{POST.sender_email}" class="w300 form-control pull-left" disabled="true"/></td>
+                    <td class="text-center"><input name="email" type="text" value="{POST.email}"  class="w300 form-control pull-left"/></td>
                 </tr>
 				<tr>
 					<td colspan="2">{MESS_CONTENT}</td>
