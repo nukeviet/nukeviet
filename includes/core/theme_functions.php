@@ -189,7 +189,8 @@ function nv_htmlOutput($html)
     Header('X-XSS-Protection: 1; mode=block');
 
     ob_start('ob_gzhandler');
-    exit($html);
+    echo $html;
+    exit(0);
 }
 
 /**
@@ -208,7 +209,8 @@ function nv_jsonOutput($array_data)
     Header('X-XSS-Protection: 1; mode=block');
 
     ob_start('ob_gzhandler');
-    exit(json_encode($array_data));
+    echo json_encode($array_data);
+    exit(0);
 }
 
 /**
@@ -276,7 +278,7 @@ function nv_xmlOutput($content, $lastModified)
     }
 
     print_r($content);
-    die();
+    exit(0);
 }
 
 /**
