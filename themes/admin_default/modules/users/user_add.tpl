@@ -28,12 +28,12 @@
                 <tr>
                     <td> {LANG.password} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="form-control required password w300" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+                    <td><input class="form-control required password w300" type="password" autocomplete="off" id="pass_iavim" name="password1" value="{DATA.password1}" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
                 </tr>
                 <tr>
                     <td> {LANG.repassword} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="form-control required password w300" type="password" name="password2" value="{DATA.password2}" id="password2" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
+                    <td><input class="form-control required password w300" type="password" autocomplete="off" name="password2" value="{DATA.password2}" id="password2" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
                 </tr>
                 <!-- BEGIN: name_show_0 -->
                 <!-- BEGIN: show_last_name-->

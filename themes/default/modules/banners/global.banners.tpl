@@ -23,11 +23,11 @@
         <!--> <![endif]-->
     </object>
     <!-- BEGIN: fix_link -->
-    <a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}" class="link" style="width:{DATA.file_width}px; height:{DATA.file_height}px">&nbsp;</a>
+    <a rel="nofollow" href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}" class="link" style="width:{DATA.file_width}px; height:{DATA.file_height}px">&nbsp;</a>
     <!-- END: fix_link -->
     <!-- END: type_swf -->
     <!-- BEGIN: type_image_link -->
-    <a href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}"> <img alt="{DATA.file_alt}" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" /> </a>
+    <a rel="nofollow" href="{DATA.link}" onclick="this.target='{DATA.target}'" title="{DATA.file_alt}"> <img alt="{DATA.file_alt}" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" /> </a>
     <!-- END: type_image_link -->
     <!-- BEGIN: type_image -->
     <img alt="{DATA.file_alt}" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" />

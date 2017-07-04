@@ -210,11 +210,11 @@ $array_data = array();
 $array_data['checkss'] = NV_CHECK_SESSION;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 if (isset($array_op[2]) and !defined('ACCESS_EDITUS')) {
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'error',
         'input' => '',
         'mess' => $lang_module['no_premission_leader']
-    )));
+    ));
 }
 
 // Nếu là trưởng nhóm sửa thì $edit_userid  = $userid được sửa còn không thì là $user_info['userid'] của thành viên tự sửa
@@ -232,11 +232,11 @@ if ((int)$row['safemode'] > 0) {
         $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
         if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password'])) {
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => 'nv_password',
                 'mess' => $lang_global['incorrect_password']
-            )));
+            ));
         }
 
         if ($nv_Request->isset_request('resend', 'post')) {
@@ -261,31 +261,31 @@ if ((int)$row['safemode'] > 0) {
 
             $ss_safesend = ceil(($ss_safesend - NV_CURRENTTIME) / 60);
 
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'ok',
                 'input' => '',
                 'mess' => sprintf($lang_module['safe_send_ok'], $ss_safesend)
-            )));
+            ));
         }
 
         $safe_key = nv_substr($nv_Request->get_title('safe_key', 'post', '', 1), 0, 32);
 
         if (empty($row['safekey']) or $safe_key != $row['safekey']) {
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => 'safe_key',
                 'mess' => $lang_module['verifykey_error']
-            )));
+            ));
         }
 
         $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET safemode=0, safekey='' WHERE userid=" . $edit_userid);
         $stmt->execute();
 
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'ok',
             'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true),
             'mess' => $lang_module['safe_deactivate_ok']
-        )));
+        ));
     }
 
     $array_data['safeshow'] = (isset($array_op[1]) and $array_op[1] == 'safeshow') ? true : false;
@@ -454,11 +454,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $stmt->bindParam(':sig', $array_data['sig'], PDO::PARAM_STR, strlen($array_data['sig']));
     $stmt->execute();
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/basic', true),
         'mess' => $lang_module['editinfo_ok']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'avatar') {
     // Avatar
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username') {
@@ -467,21 +467,21 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $nv_password = $nv_Request->get_title('password', 'post', '');
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password',
             'mess' => $lang_global['incorrect_password']
-        )));
+        ));
     }
 
     if ($nv_username != $row['username']) {
         $checkusername = nv_check_username_change($nv_username, $edit_userid);
         if (!empty($checkusername)) {
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => 'username',
                 'mess' => $checkusername
-            )));
+            ));
         }
     }
 
@@ -505,11 +505,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['username'], $nv_username);
     @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message);
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/username', true),
         'mess' => $lang_module['editinfo_ok']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
     // Email
     $nv_email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
@@ -520,28 +520,28 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     }
 
     if ($nv_email == $row['email']) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['email_not_change']
-        )));
+        ));
     }
 
     if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password',
             'mess' => $lang_global['incorrect_password']
-        )));
+        ));
     }
 
     $checkemail = nv_check_email_change($nv_email, $edit_userid);
     if (!empty($checkemail)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $checkemail
-        )));
+        ));
     }
 
     if ($nv_verikeysend) {
@@ -552,11 +552,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             $ss_verifykey = $nv_Request->get_title('verikey', 'session', '');
             $ss_verifykey = explode('|', $ss_verifykey);
             if ((int)$ss_verifykey[0] > NV_CURRENTTIME) {
-                die(json_encode(array(
+                nv_jsonOutput(array(
                     'status' => 'error',
                     'input' => 'verifykey',
                     'mess' => sprintf($lang_module['verifykey_issend'], ceil(((int)$ss_verifykey[0] - NV_CURRENTTIME) / 60))
-                )));
+                ));
             } else {
                 $p = (int)$ss_verifykey[1];
                 $verikey = $ss_verifykey[2];
@@ -588,20 +588,20 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $message = sprintf($lang_module['email_active_info'], $name, $sitename, $verikey, $p);
         @nv_sendmail($global_config['site_email'], $nv_email, $lang_module['email_active'], $message);
 
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'verifykey',
             'mess' => $lang_module['email_active_mes']
-        )));
+        ));
     } else {
         $nv_verifykey = $nv_Request->get_title('verifykey', 'post', '');
 
         if (empty($nv_verifykey)) {
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => 'verifykey',
                 'mess' => $lang_module['verifykey_empty']
-            )));
+            ));
         }
 
         $ss_verifykey = $nv_Request->get_title('verikey', 'session', '');
@@ -610,19 +610,19 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         if ((int)$ss_verifykey[1] < NV_CURRENTTIME) {
             $nv_Request->unset_request('verifykey', 'session');
 
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => 'verifykey',
                 'mess' => $lang_module['verifykey_exp']
-            )));
+            ));
         }
 
         if ($nv_verifykey != $ss_verifykey[2]) {
-            die(json_encode(array(
+            nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => 'verifykey',
                 'mess' => $lang_module['verifykey_error']
-            )));
+            ));
         }
 
         $nv_Request->unset_request('verifykey', 'session');
@@ -644,11 +644,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email);
         @nv_sendmail($global_config['site_email'], $nv_email, $lang_module['edit_mail_subject'], $message);
 
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'ok',
             'input' => nv_url_rewrite($base_url . '/email', true),
             'mess' => $lang_module['editinfo_ok']
-        )));
+        ));
     }
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password') {
     // Password
@@ -658,35 +658,35 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     // Kiểm tra lại quyền sửa mật khẩu
     if (!empty($group_id) and !empty($edit_userid) and !defined('ACCESS_PASSUS')) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => '',
             'mess' => $lang_module['no_premission_pass']
-        )));
+        ));
     }
 
     if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password']) and !defined('ACCESS_PASSUS')) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password',
             'mess' => $lang_global['incorrect_password']
-        )));
+        ));
     }
 
     if (($check_new_password = nv_check_valid_pass($new_password, $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'new_password',
             'mess' => $check_new_password
-        )));
+        ));
     }
 
     if ($new_password != $re_password) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 're_password',
             'mess' => $lang_global['passwordsincorrect']
-        )));
+        ));
     }
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
@@ -708,11 +708,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
     @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message);
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/password', true),
         'mess' => $lang_module['editinfo_ok']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
     // Question
     $array_data['question'] = nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255);
@@ -727,11 +727,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'nv_password',
             'mess' => $lang_global['incorrect_password']
-        )));
+        ));
     }
 
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET question= :question, answer= :answer WHERE userid=' . $edit_userid);
@@ -739,21 +739,21 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $stmt->bindParam(':answer', $array_data['answer'], PDO::PARAM_STR);
     $stmt->execute();
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => 'ok',
         'mess' => $lang_module['change_question_ok']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'openid') {
     // OpeniD Del
     $openid_del = $nv_Request->get_typed_array('openid_del', 'post', 'string', '');
     $openid_del = array_filter($openid_del);
     if (empty($openid_del)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => '',
             'mess' => $lang_module['openid_choose']
-        )));
+        ));
     }
 
     foreach ($openid_del as $opid) {
@@ -764,11 +764,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         }
     }
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/openid', true),
         'mess' => $lang_module['openid_deleted']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     // Groups
     $array_old_groups = array();
@@ -823,11 +823,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     }
 
     $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $edit_userid);
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/group', true),
         'mess' => $lang_module['in_group_ok']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'others') {
     // Others
     $query_field = array();
@@ -839,20 +839,20 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $edit_userid);
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/others', true),
         'mess' => $lang_module['editinfo_ok']
-    )));
+    ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode') {
     // Bat safemode
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'nv_password',
             'mess' => $lang_global['incorrect_password']
-        )));
+        ));
     }
 
     if ($nv_Request->isset_request('resend', 'post')) {
@@ -890,32 +890,32 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         $ss_safesend = ceil(($ss_safesend - NV_CURRENTTIME) / 60);
 
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'ok',
             'input' => '',
             'mess' => sprintf($lang_module['safe_send_ok'], $ss_safesend)
-        )));
+        ));
     }
 
     $safe_key = nv_substr($nv_Request->get_title('safe_key', 'post', '', 1), 0, 32);
 
     if (empty($row['safekey']) or $safe_key != $row['safekey']) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'safe_key',
             'mess' => $lang_module['verifykey_error']
-        )));
+        ));
     }
 
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safemode=1, safekey= :safekey WHERE userid=' . $edit_userid);
     $stmt->bindParam(':safekey', $row['safekey'], PDO::PARAM_STR);
     $stmt->execute();
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url, true),
         'mess' => $lang_module['safe_activate_ok']
-    )));
+    ));
 }
 
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];

@@ -37,7 +37,7 @@
     </tr>
     <tr>
         <th scope="row" class="specalt">{LANG.db_pass}</th>
-        <td class="alt"><input type="password" value="{DATADASE.dbpass}" name="dbpass"  class="w200" /></td>
+        <td class="alt"><input type="password" autocomplete="off" value="{DATADASE.dbpass}" name="dbpass"  class="w200" /></td>
         <td class="alt">{LANG.db_pass_note}</td>
     </tr>
     <tr>

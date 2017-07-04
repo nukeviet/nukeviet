@@ -10,7 +10,7 @@
 		<div class="form-group">
 			<label for="{PASS_INPUT_NAME}" class="col-sm-6 control-label">{PASSWORD_LANG}:</label>
 			<div class="col-sm-18">
-				<input name="{PASS_INPUT_NAME}" id="{PASS_INPUT_NAME}" type="password" maxlength="{PASS_INPUT_MAXLENGTH}" class="form-control"/>
+				<input name="{PASS_INPUT_NAME}" id="{PASS_INPUT_NAME}" type="password" autocomplete="off" maxlength="{PASS_INPUT_MAXLENGTH}" class="form-control"/>
 			</div>
 		</div>
 		<!-- BEGIN: captcha -->

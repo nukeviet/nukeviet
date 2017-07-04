@@ -50,7 +50,7 @@
 					</tr>
 					<tr>
 						<td>{LANG.smtp_pass}</td>
-						<td><input class="w250 form-control" type="password" name="smtp_password" value="{DATA.smtp_password}" /></td>
+						<td><input class="w250 form-control" type="password" autocomplete="off" name="smtp_password" value="{DATA.smtp_password}" /></td>
 					</tr>
 				</tbody>
 			</table>

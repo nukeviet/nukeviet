@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.password}</strong></td>
-					<td><input class="w250 form-control" type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" value="{VALUE.ftp_user_pass}" /></td>
+					<td><input class="w250 form-control" type="password" autocomplete="off" name="ftp_user_pass" id="ftp_user_pass_iavim" value="{VALUE.ftp_user_pass}" /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.ftp_path}</strong></td>

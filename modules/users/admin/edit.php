@@ -128,75 +128,75 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $custom_fields['answer'] = $_user['answer'];
 
     if ($_user['username'] != $row['username'] and ($error_username = nv_check_valid_login($_user['username'], $global_config['nv_unickmax'], $global_config['nv_unickmin'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => $error_username
-        )));
+        ));
     }
 
     if ("'" . $_user['username'] . "'" != $db->quote($_user['username'])) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => sprintf($lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>')
-        )));
+        ));
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
             'mess' => $lang_module['edit_error_username_exist']
-        )));
+        ));
     }
 
     if (($error_xemail = nv_check_valid_email($_user['email'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $error_xemail
-        )));
+        ));
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        )));
+        ));
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email=' . $db->quote($_user['email']))->fetchColumn()) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        )));
+        ));
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        )));
+        ));
     }
 
     if (!empty($_user['password1']) and ($check_pass = nv_check_valid_pass($_user['password1'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password1',
             'mess' => $check_pass
-        )));
+        ));
     }
 
     if (!empty($_user['password1']) and $_user['password1'] != $_user['password2']) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password2',
             'mess' => $lang_module['edit_error_password']
-        )));
+        ));
     }
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
@@ -240,11 +240,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     if (empty($_user['in_groups_default']) and sizeof($in_groups)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'group_default',
             'mess' => $lang_module['edit_error_group_default']
-        )));
+        ));
     }
 
     // Check photo
@@ -339,12 +339,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);
     $nv_Cache->delMod($module_name);
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'ok',
         'input' => '',
         'admin_add' => 'no',
         'mess' => ''
-    )));
+    ));
 }
 
 $_user = $row;
