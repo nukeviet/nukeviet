@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_MOD_2STEP_VERIFICATION')) {
+if (!defined('NV_MOD_2STEP_VERIFICATION')) {
     die('Stop!!!');
 }
 
@@ -27,24 +27,23 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 
 /**
  * nv_json_result()
- * 
+ *
  * @param mixed $array
  * @return
  */
 function nv_json_result($array)
 {
     global $nv_redirect;
-    
+
     $array['redirect'] = $nv_redirect ? nv_redirect_decrypt($nv_redirect) : '';
-    $string = json_encode($array);
-    return $string;
+    nv_jsonOutput($array);
 }
 
 // Show QR-Image
 if (isset($array_op[1]) and $array_op[1] == 'qr-image') {
     $qrCode = new Endroid\QrCode\QrCode();
     $url = 'otpauth://totp/' . $user_info['email'] . '?secret=' . $secretkey . '&issuer=' . urlencode(NV_SERVER_NAME . ' | ' . $user_info['username']);
-    
+
     header('Content-type: image/png');
     $qrCode->setText($url)
         ->setErrorCorrection('medium')
@@ -59,26 +58,28 @@ $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 if ($checkss == NV_CHECK_SESSION) {
     $opt = $nv_Request->get_title('opt', 'post', 6);
-    
+
     if (!$GoogleAuthenticator->verifyOpt($secretkey, $opt)) {
-        die(nv_json_result(array(
+        nv_json_result(array(
             'status' => 'error',
             'input' => 'opt',
-            'mess' => $lang_module['wrong_confirm'] )));
+            'mess' => $lang_module['wrong_confirm']
+        ));
     }
-    
+
     try {
         $db->query('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step=1 WHERE userid=' . $user_info['userid']);
     } catch (Exception $e) {
         trigger_error('Error active 2-step Auth!!!', 256);
     }
-    
+
     nv_creat_backupcodes();
-    
-    die(nv_json_result(array(
+
+    nv_json_result(array(
         'status' => 'ok',
         'input' => '',
-        'mess' => '' )));
+        'mess' => ''
+    ));
 }
 
 $contents = nv_theme_config_2step($secretkey, $nv_redirect);

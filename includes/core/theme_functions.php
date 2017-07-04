@@ -95,7 +95,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 {
     global $lang_global, $global_config;
 
-	http_response_code($error_code); // only (PHP 5 >= 5.4.0, PHP 7)
+	http_response_code($error_code);
 
     if (empty($page_title)) {
         $page_title = $global_config['site_description'];
@@ -103,7 +103,6 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 
     // Get theme
     $template = '';
-
     if (defined('NV_ADMIN') and isset($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
         $template = $global_config['admin_theme'];
@@ -175,6 +174,26 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 }
 
 /**
+ * nv_htmlOutput()
+ *
+ * @param array $html
+ * @return void
+ */
+function nv_htmlOutput($html)
+{
+    header('Content-Type: text/html; charset=utf-8');
+    Header('Cache-Control: no-cache, must-revalidate');
+
+    Header('X-Frame-Options: SAMEORIGIN');
+    Header('X-Content-Type-Options: nosniff');
+    Header('X-XSS-Protection: 1; mode=block');
+
+    ob_start('ob_gzhandler');
+    echo $html;
+    exit(0);
+}
+
+/**
  * nv_jsonOutput()
  *
  * @param array $array_data
@@ -190,7 +209,8 @@ function nv_jsonOutput($array_data)
     Header('X-XSS-Protection: 1; mode=block');
 
     ob_start('ob_gzhandler');
-    exit(json_encode($array_data));
+    echo json_encode($array_data);
+    exit(0);
 }
 
 /**
@@ -258,7 +278,7 @@ function nv_xmlOutput($content, $lastModified)
     }
 
     print_r($content);
-    die();
+    exit(0);
 }
 
 /**

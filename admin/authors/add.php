@@ -52,23 +52,23 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
     list($userid, $username, $active) = $db->query($sql)->fetch(3);
     if (empty($userid)) {
-        die($lang_module['add_error_choose']);
+        nv_htmlOutput($lang_module['add_error_choose']);
     }
 
     $sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
     $count = $db->query($sql)->fetchColumn();
     if ($count) {
-        die($lang_module['add_error_exist']);
+        nv_htmlOutput($lang_module['add_error_exist']);
     }
 
     if (empty($userid)) {
-        die($lang_module['add_error_notexist']);
+        nv_htmlOutput($lang_module['add_error_notexist']);
     }
     if (empty($position)) {
-        die($lang_module['position_incorrect']);
+        nv_htmlOutput($lang_module['position_incorrect']);
     }
     if (empty($active)) {
-        die(sprintf($lang_module['username_noactive'], $username));
+        nv_htmlOutput(sprintf($lang_module['username_noactive'], $username));
     }
 
     $lev = ($lev != 2 or ! defined('NV_IS_GODADMIN')) ? 3 : 2;
@@ -126,9 +126,9 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $nv_Request->set_Session('nv_admin_profile', $session_files);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['menuadd'], 'Username: ' . $username, $admin_info['userid']);
-        die('OK');
+        nv_htmlOutput('OK');
     } else {
-        die($lang_module['add_error_diff']);
+        nv_htmlOutput($lang_module['add_error_diff']);
     }
 } else {
     $position = '';
