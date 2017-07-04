@@ -52,7 +52,10 @@
 						<td>{LANG.setting_copy_page}</td>
 						<td><input type="checkbox" value="1" name="copy_page"{COPY_PAGE}/></td>
 					</tr>
-
+					<tr>
+						<td>{LANG.config_other_list}</td>
+						<td><label><input type="checkbox" value="1" name="other_list" {OTHER_LIST}/>{LANG.config_other_list_note}</label></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
