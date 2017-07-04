@@ -68,6 +68,8 @@ $lang_module['config_view_type_page'] = 'Số bài viết hiển thị trên m�
 $lang_module['config_view_related_articles'] = 'Số bài viết liên quan';
 $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
+$lang_module['config_other_list'] = 'Hiển thị danh sách tin khác';
+$lang_module['config_other_list_note'] = 'Hiển thị danh sách tin khác khi xem chi tiết tin';
 $lang_module['config_save'] = 'Lưu cấu hình';
 
 $lang_module['setting_copy_page'] = 'Cho phép copy bài viết';

@@ -56,7 +56,8 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('per_page', '20'),
 ('news_first', '0'),
 ('related_articles', '5'),
-('copy_page', '0')";
+('copy_page', '0'),
+('other_list', '1')";
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
