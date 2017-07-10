@@ -18,7 +18,7 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
     $sends = $nv_Request->get_array('sends', 'post', array());
     if (empty($sends)) {
-        die(json_encode(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] )));
+        nv_jsonOutput(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ));
     }
 
     foreach ($sends as $id) {
@@ -27,7 +27,7 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 
     $sends = implode(',', $sends);
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
-    die(json_encode(array( 'status' => 'ok', 'mess' => '' )));
+    nv_jsonOutput(array( 'status' => 'ok', 'mess' => '' ));
 }
 
 $page_title = $module_info['site_title'];
@@ -72,8 +72,11 @@ if (! empty($contact_allowed['view'])) {
 
             if ($row['is_read'] == 1) {
             	$style = " style=\"cursor:pointer;white-space:nowrap;\"";
-	            if ($row['is_reply']) {
+	            if ($row['is_reply']==1) {
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
+	                $status = $lang_module['tt2_row_title'];
+	            }elseif ($row['is_reply']==2) {
+	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14 );
 	                $status = $lang_module['tt2_row_title'];
 	            }else{
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );

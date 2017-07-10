@@ -93,8 +93,11 @@ $lang_module['cats'] = 'Các chủ đề liên quan';
 $lang_module['cat'] = 'Chủ đề';
 $lang_module['mark_as_unread'] = 'Đánh dấu là chưa đọc';
 $lang_module['mark_as_read'] = 'Đánh dấu là đã đọc';
+$lang_module['mark_as_forward'] = 'Chuyển tiếp';
 $lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh sách trên.';
 
 $lang_module['error_required_departmentid'] = 'Lỗi: bạn cần nhập dữ liệu cho Departmentid';
 $lang_module['error_required_full_name'] = 'Lỗi: bạn cần nhập dữ liệu cho Full name';
 $lang_module['error_required_phone'] = 'Lỗi: bạn cần nhập dữ liệu cho Phone';
+$lang_module['forwarded'] = 'Thư đã chuyển tiếp';
+$lang_module['error_mail_empty'] = 'Lỗi: Bạn chưa nhập email';

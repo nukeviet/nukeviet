@@ -48,8 +48,6 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
         'current_openid' => $opid
     );
 
-    $user = nv_base64_encode(serialize($user));
-
     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
 		checknum = :checknum,
 		last_login = " . NV_CURRENTTIME . ",
@@ -66,7 +64,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
     $stmt->execute();
     $live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
 
-    $nv_Request->set_Cookie('nvloginhash', $user, $live_cookie_time);
+    $nv_Request->set_Cookie('nvloginhash', serialize($user), $live_cookie_time);
 
     if (!empty($global_users_config['active_user_logs'])) {
         $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $opid) : $lang_module['st_login'];

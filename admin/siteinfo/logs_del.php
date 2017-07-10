@@ -46,5 +46,4 @@ if ($id > 0) {
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang_module['logs_title'], $number_del, $admin_info['userid']);
 
-echo $contents;
-exit();
+nv_htmlOutput($contents);

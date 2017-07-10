@@ -11,7 +11,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"><em class="fa fa-key fa-lg"></em></span>
-                                    <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100" data-pattern="/^(.){1,}$/" onkeypress="validErrorHidden(this);" data-mess="">
+                                    <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100" data-pattern="/^(.){1,}$/" onkeypress="validErrorHidden(this);" data-mess="">
                                 </div>
                             </div>
                         </div>
