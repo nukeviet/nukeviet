@@ -26,16 +26,16 @@ $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
 
 /**
  * nv_get_user_secretkey()
- * 
+ *
  * @return
  */
 function nv_get_user_secretkey()
 {
     global $db, $site_mods, $user_info, $db_config;
-    
+
     $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
     $secretkey = $db->query('SELECT secretkey FROM ' . $module_data . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
-    
+
     if (empty($secretkey)) {
         global $GoogleAuthenticator;
         while (1) {
@@ -50,22 +50,22 @@ function nv_get_user_secretkey()
             }
         }
     }
-    
+
     return $secretkey;
 }
 
 /**
  * nv_creat_backupcodes()
- * 
+ *
  * @return void
  */
 function nv_creat_backupcodes()
 {
     global $user_info, $db, $db_config, $site_mods;
-    
+
     $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
     $db->query('DELETE FROM ' . $module_data . '_backupcodes WHERE userid=' . $user_info['userid']);
-    
+
     $new_code = array();
     while (sizeof($new_code) < 10) {
         $code = nv_strtolower(nv_genpass(8, 0));
@@ -73,7 +73,7 @@ function nv_creat_backupcodes()
             $new_code[] = $code;
         }
     }
-    
+
     foreach ($new_code as $code) {
         $db->query('INSERT INTO ' . $module_data . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (
         ' . $user_info['userid'] . ', ' . $db->quote($code) . ', 0, 0, ' . NV_CURRENTTIME . ')');
