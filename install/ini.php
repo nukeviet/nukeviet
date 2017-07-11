@@ -51,6 +51,7 @@ $sys_info['zlib_support'] = (extension_loaded('zlib')) ? 1 : 0;
 $sys_info['session_support'] = (extension_loaded('session')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
 $sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
+$sys_info['json_support'] = (extension_loaded('json')) ? 1 : 0;
 $sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and ! in_array('curl_init', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
 

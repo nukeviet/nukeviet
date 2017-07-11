@@ -60,6 +60,7 @@ $lang_module['xml_support'] = 'PHP support XML library';
 $lang_module['openssl_support'] = 'PHP supported encryption openssl library';
 $lang_module['session_support'] = 'PHP support session';
 $lang_module['fileuploads_support'] = 'PHP support file upload';
+$lang_module['json_support'] = 'PHP support JSON';
 $lang_module['dir_noexit'] = 'Not exists derectory';
 $lang_module['dir_not_writable'] = 'Not writable';
 $lang_module['dir_not_writable_ip_files'] = 'Can not write files in %1$s folder';

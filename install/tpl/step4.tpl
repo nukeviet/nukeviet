@@ -47,6 +47,11 @@
         <td class="alt">{LANG.request}</td>
         <td class="alt"><span class="{DATA_REQUEST.class_fileuploads_support}">{DATA_REQUEST.fileuploads_support}</span></td>
     </tr>
+    <tr>
+        <th scope="row" class="specalt">{LANG.json_support}</th>
+        <td class="alt">{LANG.request}</td>
+        <td class="alt"><span class="{DATA_REQUEST.class_json_support}">{DATA_REQUEST.json_support}</span></td>
+    </tr>
 </table>
 <table id="recommend" cellspacing="0" summary="{LANG.recommnet}">
     <tr>
@@ -63,7 +68,7 @@
         <th scope="row" class="specalt">Extension Mbstring Support</th>
         <td class="alt">{LANG.is_support}</td>
         <td class="alt"><span class="{DATA_SUPPORT.class_mbstring_support}">{DATA_SUPPORT.mbstring_support}</span></td>
-    </tr>    
+    </tr>
     <tr>
         <th scope="row" class="spec">Output Buffering</th>
         <td>{LANG.turnoff}</td>
@@ -98,7 +103,7 @@
         <th scope="row" class="spec">Client URL Library (curl)</th>
         <td>{LANG.is_support}</td>
         <td><span class="{DATA_SUPPORT.class_curl_support}">{DATA_SUPPORT.curl_support}</span></td>
-    </tr>    
+    </tr>
 </table>
 <ul class="control_t fr">
     <li><span class="back_step"><a
