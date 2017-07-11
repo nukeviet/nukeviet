@@ -355,6 +355,13 @@ class Error
             $strEncodedEmail .= "&#" . ord(substr($this->error_send_mail, $i)) . ";";
         }
 
+        header('Content-Type: text/html; charset=utf-8');
+        if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
+            Header('X-Frame-Options: SAMEORIGIN');
+        }
+        header('X-Content-Type-Options: nosniff');
+        header('X-XSS-Protection: 1; mode=block');
+
         $_info = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
         $_info .= "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
         $_info .= "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";

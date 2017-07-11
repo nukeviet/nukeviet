@@ -12,6 +12,13 @@ if (! defined('NV_SYSTEM') or ! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+/**
+ *  nv_mailHTML()
+ *
+ * @param string $title
+ * @param string $content
+ * @param string $footer
+ */
 function nv_mailHTML($title, $content, $footer='')
 {
     global $global_config, $lang_global;
@@ -26,6 +33,12 @@ function nv_mailHTML($title, $content, $footer='')
     return $xtpl->text('main');
 }
 
+/**
+ *  nv_site_theme()
+ *
+ * @param string $contents
+ * @param bool $full
+ */
 function nv_site_theme($contents, $full = true)
 {
     global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op;
@@ -282,4 +295,16 @@ function nv_site_theme($contents, $full = true)
     }
 
     return $sitecontent;
+}
+
+/**
+ *  nv_error_theme()
+ *
+ * @param string $title
+ * @param string $content
+ * @param integer $code
+ */
+function nv_error_theme($title, $content, $code)
+{
+    nv_info_die($title, $title, $content, $code);
 }

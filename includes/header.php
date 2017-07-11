@@ -30,7 +30,10 @@ if ($sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get('out
 @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT");
 @Header('Expires: ' . gmdate('D, d M Y H:i:s', NV_CURRENTTIME - 60) . " GMT");
 
-@Header('X-Frame-Options: SAMEORIGIN');
+if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
+    Header('X-Frame-Options: SAMEORIGIN');
+}
+
 @Header('X-Content-Type-Options: nosniff');
 @Header('X-XSS-Protection: 1; mode=block');
 

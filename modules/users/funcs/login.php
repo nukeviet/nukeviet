@@ -186,7 +186,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'error',
             'mess' => $lang_module['logged_in_failed']
         ));
-        die();
     }
 
     if ($attribs['result'] == 'cancel') {
@@ -194,7 +193,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'error',
             'mess' => $lang_module['canceled_authentication']
         ));
-        die();
     }
 
     if ($attribs['result'] == 'notlogin') {
@@ -202,7 +200,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'error',
             'mess' => $lang_module['not_logged_in']
         ));
-        die();
     }
 
     $email = (isset($attribs['contact/email']) and nv_check_valid_email($attribs['contact/email']) == '') ? $attribs['contact/email'] : '';
@@ -211,7 +208,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'error',
             'mess' => $lang_module['logged_no_email']
         ));
-        die();
     }
     $email = nv_strtolower($email);
     $opid = $crypt->hash($attribs['id']);
@@ -236,7 +232,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['safe_deactivate_openidlogin']
             ));
-            die();
         }
 
         if (!$user_active) {
@@ -244,7 +239,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['login_no_active']
             ));
-            die();
         }
 
         if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php')) {
@@ -259,7 +253,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'success',
             'mess' => $lang_module['login_ok']
         ));
-        die();
     }
 
     /**
@@ -276,7 +269,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['safe_deactivate_openidreg']
             ));
-            die();
         }
 
         if (!$nv_row['active']) {
@@ -284,7 +276,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['login_no_active']
             ));
-            die();
         }
 
         if (!empty($nv_row['password'])) {
@@ -310,14 +301,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                             'status' => 'error',
                             'mess' => $lang_module['openid_confirm_failed']
                         ));
-                        die();
                     }
                 } elseif (!$crypt->validate_password($password, $nv_row['password']) or !$check_seccode) {
                     opidr(array(
                         'status' => 'error',
                         'mess' => $lang_module['openid_confirm_failed']
                     ));
-                    die();
                 }
             } else {
                 $page_title = $lang_global['openid_login'];
@@ -345,7 +334,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'success',
             'mess' => $lang_module['login_ok']
         ));
-        die();
     }
 
     /**
@@ -371,7 +359,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['securitycodeincorrect']
             ));
-            die();
         }
 
         if (empty($nv_username)) {
@@ -379,7 +366,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_global['username_empty']
             ));
-            die();
         }
 
         if (empty($nv_password)) {
@@ -387,7 +373,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['password_empty']
             ));
-            die();
         }
 
         if (defined('NV_IS_USER_FORUM')) {
@@ -398,7 +383,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     'status' => 'error',
                     'mess' => $error
                 ));
-                die();
             }
         } else {
             $error1 = $lang_global['loginincorrect'];
@@ -412,7 +396,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                         'status' => 'error',
                         'mess' => $lang_global['loginincorrect']
                     ));
-                    die();
                 }
 
                 if ($row['email'] != $nv_username) {
@@ -420,7 +403,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                         'status' => 'error',
                         'mess' => $lang_global['loginincorrect']
                     ));
-                    die();
                 }
             } else {
                 // Username login
@@ -431,7 +413,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                         'status' => 'error',
                         'mess' => $lang_global['loginincorrect']
                     ));
-                    die();
                 }
 
                 if ($row['username'] != $nv_username) {
@@ -439,7 +420,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                         'status' => 'error',
                         'mess' => $lang_global['loginincorrect']
                     ));
-                    die();
                 }
             }
 
@@ -448,7 +428,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     'status' => 'error',
                     'mess' => $lang_global['loginincorrect']
                 ));
-                die();
             }
 
             if ($row['safemode'] == 1) {
@@ -456,7 +435,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     'status' => 'error',
                     'mess' => $lang_module['safe_deactivate_openidreg']
                 ));
-                die();
             }
 
             if (!$row['active']) {
@@ -464,7 +442,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     'status' => 'error',
                     'mess' => $lang_global['login_no_active']
                 ));
-                die();
             }
 
             validUserLog($row, 1, '');
@@ -480,7 +457,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'success',
             'mess' => $lang_module['login_ok']
         ));
-        die();
     }
 
     /**
@@ -495,7 +471,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['logged_in_failed']
             ));
-            die();
         }
 
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
@@ -531,7 +506,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['err_no_save_account']
             ));
-            die();
         }
 
         // Cap nhat thong tin anh dai dien
@@ -572,7 +546,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'success',
             'mess' => $lang_module['login_ok']
         ));
-        die();
     }
 
     /**
@@ -585,7 +558,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['logged_in_failed']
             ));
-            die();
         }
 
         $query_field = array();
@@ -625,7 +597,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 'status' => 'error',
                 'mess' => $lang_module['err_no_save_account']
             ));
-            die();
         }
         $nv_Cache->delMod($module_name);
 
@@ -633,7 +604,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             'status' => 'success',
             'mess' => $lang_module['account_register_to_admin']
         ));
-        die();
     }
 
     $page_title = $lang_global['openid_login'];

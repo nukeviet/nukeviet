@@ -26,7 +26,7 @@ if ($sys_info['ini_set_support']) {
             trigger_error('Server does not support Redis Session handler!', 256);
         }
     }
-    
+
     if (! isset($_SESSION)) {
         //ini_set( 'session.save_handler', 'files' );
         ini_set('session.use_trans_sid', 0);
@@ -59,6 +59,7 @@ if ($sys_info['ini_set_support']) {
 $sys_info['zlib_support'] = (extension_loaded('zlib')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
 $sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
+$sys_info['json_support'] = (extension_loaded('json')) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['os'] = strtoupper((function_exists('php_uname') and ! in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
 

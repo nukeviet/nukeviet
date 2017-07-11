@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 2:13
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -100,11 +100,11 @@ function nv_save_file_config_global()
 
     $content_config = "<?php" . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
 
     //disable_classes
     $sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
-    if (! empty($sys_info['disable_classes'])) {
+    if (!empty($sys_info['disable_classes'])) {
         $disable_classes = "'" . implode("','", $sys_info['disable_classes']) . "'";
     } else {
         $disable_classes = '';
@@ -117,7 +117,7 @@ function nv_save_file_config_global()
     if (extension_loaded('suhosin')) {
         $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
     }
-    if (! empty($sys_info['disable_functions'])) {
+    if (!empty($sys_info['disable_functions'])) {
         $disable_functions = "'" . implode("','", $sys_info['disable_functions']) . "'";
     } else {
         $disable_functions = '';
@@ -125,7 +125,7 @@ function nv_save_file_config_global()
     $content_config .= "\$sys_info['disable_functions']=array(" . $disable_functions . ");\n";
 
     //ini_set_support
-    $sys_info['ini_set_support'] = (function_exists('ini_set') and ! in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
+    $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
     $ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
     $content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
     //Kiem tra ho tro rewrite
@@ -201,7 +201,7 @@ function nv_save_file_config_global()
             $config_sso = empty($c_config_value) ? '' : nv_var_export(unserialize($c_config_value));
             $content_config .= "\$global_config['" . $c_config_name . "']=" . $config_sso . ";\n";
         } elseif (in_array($c_config_name, $config_name_array)) {
-            if (! empty($c_config_value)) {
+            if (!empty($c_config_value)) {
                 $c_config_value = "'" . implode("','", array_map('trim', explode(',', $c_config_value))) . "'";
             } else {
                 $c_config_value = '';
@@ -212,7 +212,7 @@ function nv_save_file_config_global()
                 $content_config .= "\$global_config['" . $c_config_name . "']=" . $c_config_value . ";\n";
             } else {
                 $c_config_value = nv_unhtmlspecialchars($c_config_value);
-                if (! preg_match("/^[a-z0-9\-\_\.\,\;\:\@\/\\s]+$/i", $c_config_value) and $c_config_name != 'my_domains') {
+                if (!preg_match("/^[a-z0-9\-\_\.\,\;\:\@\/\\s]+$/i", $c_config_value) and $c_config_name != 'my_domains') {
                     $c_config_value = nv_htmlspecialchars($c_config_value);
                 }
                 $content_config .= "\$global_config['" . $c_config_name . "']='" . $c_config_value . "';\n";
@@ -221,7 +221,7 @@ function nv_save_file_config_global()
     }
 
     //allowed_html_tags
-    if (! empty($allowed_html_tags)) {
+    if (!empty($allowed_html_tags)) {
         $allowed_html_tags = "'" . implode("','", array_map('trim', explode(',', $allowed_html_tags))) . "'";
     } else {
         $allowed_html_tags = '';
@@ -304,18 +304,18 @@ function nv_geVersion($updatetime = 3600)
         );
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+        $array = !empty($array['body']) ? @unserialize($array['body']) : array();
 
         $error = '';
-        if (! empty(NukeViet\Http\Http::$error)) {
+        if (!empty(NukeViet\Http\Http::$error)) {
             $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-        } elseif (! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
+        } elseif (!isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
             $error = $lang_global['error_valid_response'];
-        } elseif (! empty($array['error']['message'])) {
+        } elseif (!empty($array['error']['message'])) {
             $error = $array['error']['message'];
         }
 
-        if (! empty($error)) {
+        if (!empty($error)) {
             return $error;
         }
 
@@ -382,7 +382,7 @@ function nv_check_rewrite_file()
     global $sys_info;
 
     if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-        if (! file_exists(NV_ROOTDIR . '/.htaccess')) {
+        if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
 
@@ -392,7 +392,7 @@ function nv_check_rewrite_file()
     }
 
     if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
-        if (! file_exists(NV_ROOTDIR . '/web.config')) {
+        if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
 
@@ -505,7 +505,7 @@ function nv_rewrite_change($array_config_global)
 
         if (file_exists($filename)) {
             $htaccess = @file_get_contents($filename);
-            if (! empty($htaccess)) {
+            if (!empty($htaccess)) {
                 $htaccess = preg_replace("/[\n\s]*[\#]+[\n\s]+\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end[\n\s]+[\#]+[\n\s]*/s", "\n", $htaccess);
                 $htaccess = trim($htaccess);
             }
@@ -514,7 +514,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule = $htaccess;
     }
     $return = true;
-    if (! empty($filename) and ! empty($rewrite_rule)) {
+    if (!empty($filename) and !empty($rewrite_rule)) {
         try {
             $filesize = file_put_contents($filename, $rewrite_rule, LOCK_EX);
             if (empty($filesize)) {
@@ -524,7 +524,95 @@ function nv_rewrite_change($array_config_global)
             $return = false;
         }
     }
-    return array( $return, NV_BASE_SITEURL . basename($filename) );
+    return array($return, NV_BASE_SITEURL . basename($filename));
+}
+
+/**
+ * nv_server_config_change()
+ *
+ * @param mixed $array_config
+ * @return
+ */
+function nv_server_config_change($array_config)
+{
+    global $sys_info;
+
+    $config_contents = $filename = '';
+
+    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+        $filename = NV_ROOTDIR . '/.htaccess';
+
+        $config_contents .= "##################################################################################\n";
+        $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
+        $config_contents .= "##################################################################################\n\n";
+        $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n\n";
+        $config_contents .= "ErrorDocument 400 /error.php?code=400\n";
+        $config_contents .= "ErrorDocument 403 /error.php?code=403\n";
+        $config_contents .= "ErrorDocument 404 /error.php?code=404\n";
+        $config_contents .= "ErrorDocument 405 /error.php?code=405\n";
+        $config_contents .= "ErrorDocument 408 /error.php?code=408\n";
+        $config_contents .= "ErrorDocument 500 /error.php?code=500\n";
+        $config_contents .= "ErrorDocument 502 /error.php?code=502\n";
+        $config_contents .= "ErrorDocument 504 /error.php?code=504\n\n";
+        $config_contents .= "<IfModule mod_deflate.c>\n";
+        $config_contents .= "  <FilesMatch \"\.(css|js|xml|ttf)$\">\n";
+        $config_contents .= "    SetOutputFilter DEFLATE\n";
+        $config_contents .= "  </FilesMatch>\n";
+        $config_contents .= "</IfModule>\n\n";
+        $config_contents .= "<IfModule mod_headers.c>\n";
+        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf)$\">\n";
+        $config_contents .= "    Header append Vary Accept-Encoding\n";
+        $config_contents .= "    Header set Access-Control-Allow-Origin \"*\"\n";
+        if (!empty($array_config['nv_anti_iframe'])) {
+            $config_contents .= "    Header set X-Frame-Options \"SAMEORIGIN\"\n";
+        }
+        $config_contents .= "    Header set X-Content-Type-Options \"nosniff\"\n";
+        $config_contents .= "    Header set X-XSS-Protection \"1; mode=block\"\n";
+        $config_contents .= "  </FilesMatch>\n\n";
+        $config_contents .= "  <FilesMatch \"\.(doc|pdf|swf)$\">\n";
+        $config_contents .= "    Header set X-Robots-Tag \"noarchive, nosnippet\"\n";
+        $config_contents .= "  </FilesMatch>\n\n";
+        $config_contents .= "  <FilesMatch \"\.(js|css|jpe?g|png|gif|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$\">\n";
+        $config_contents .= "	Header set Cache-Control \"max-age=2592000, public\"\n";
+        $config_contents .= "  </FilesMatch>\n";
+        $config_contents .= "</IfModule>\n\n";
+        $config_contents .= "#nukeviet_config_end\n";
+        $config_contents .= "##################################################################################\n";
+
+        $htaccess = '';
+        $config_rule_exists = false;
+
+        if (file_exists($filename)) {
+            $htaccess = @file_get_contents($filename);
+            if (!empty($htaccess)) {
+                $partten = "/[\n\s]*[\#]+[\n\s]+\#nukeviet\_config\_start(.*)\#nukeviet\_config\_end[\n\s]+[\#]+[\n\s]*/s";
+                if (preg_match($partten, $htaccess)) {
+                    $htaccess = preg_replace($partten, "\n\n" . $config_contents . "\n", $htaccess);
+                    $config_rule_exists = true;
+                }
+                $htaccess = trim($htaccess);
+            }
+        }
+
+        if (!$config_rule_exists) {
+            $htaccess .= "\n\n" . $config_contents;
+        }
+
+        $config_contents = $htaccess;
+    }
+
+    $return = true;
+    if (!empty($filename) and !empty($config_contents)) {
+        try {
+            $filesize = file_put_contents($filename, $config_contents, LOCK_EX);
+            if (empty($filesize)) {
+                $return = false;
+            }
+        } catch (exception $e) {
+            $return = false;
+        }
+    }
+    return array($return, basename($filename));
 }
 
 /**
@@ -536,12 +624,12 @@ function nv_rewrite_change($array_config_global)
 function nv_rewrite_rule_iis7($rewrite_rule = '')
 {
     $filename = NV_ROOTDIR . '/web.config';
-    if (! class_exists('DOMDocument')) {
+    if (!class_exists('DOMDocument')) {
         return false;
     }
 
     // If configuration file does not exist then we create one.
-    if (! file_exists($filename)) {
+    if (!file_exists($filename)) {
         $fp = fopen($filename, 'w');
         fwrite($fp, '<configuration/>');
         fclose($fp);
@@ -563,7 +651,7 @@ function nv_rewrite_rule_iis7($rewrite_rule = '')
         $parent = $child->parentNode;
         $parent->removeChild($child);
     }
-    if (! empty($rewrite_rule)) {
+    if (!empty($rewrite_rule)) {
         $rules_node = $doc->createElement('rules');
 
         $xmlnodes = $xpath->query('/configuration/system.webServer/rewrite');
@@ -645,12 +733,12 @@ function nv_getExtVersion($updatetime = 3600)
                 'origin' => false,
             );
 
-            if (! empty($row['id'])) {
+            if (!empty($row['id'])) {
                 $array_ext_ids[] = $row['id'];
             }
         }
 
-        if (! empty($array_ext_ids)) {
+        if (!empty($array_ext_ids)) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
             $args = array(
@@ -666,18 +754,18 @@ function nv_getExtVersion($updatetime = 3600)
             );
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = ! empty($apidata['body']) ? @unserialize($apidata['body']) : array();
+            $apidata = !empty($apidata['body']) ? @unserialize($apidata['body']) : array();
 
             $error = '';
-            if (! empty(NukeViet\Http\Http::$error)) {
+            if (!empty(NukeViet\Http\Http::$error)) {
                 $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-            } elseif (! isset($apidata['error']) or ! isset($apidata['data']) or ! isset($apidata['pagination']) or ! is_array($apidata['error']) or ! is_array($apidata['data']) or ! is_array($apidata['pagination']) or (! empty($apidata['error']) and (! isset($apidata['error']['level']) or empty($apidata['error']['message'])))) {
+            } elseif (!isset($apidata['error']) or !isset($apidata['data']) or !isset($apidata['pagination']) or !is_array($apidata['error']) or !is_array($apidata['data']) or !is_array($apidata['pagination']) or (!empty($apidata['error']) and (!isset($apidata['error']['level']) or empty($apidata['error']['message'])))) {
                 $error = $lang_global['error_valid_response'];
-            } elseif (! empty($apidata['error']['message'])) {
+            } elseif (!empty($apidata['error']['message'])) {
                 $error = $apidata['error']['message'];
             }
 
-            if (! empty($error)) {
+            if (!empty($error)) {
                 return $error;
             }
 
@@ -719,7 +807,7 @@ function nv_getExtVersion($updatetime = 3600)
             $content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
             $content .= "\t\t<updateable>\n";
 
-            if (! empty($row['updateable'])) {
+            if (!empty($row['updateable'])) {
                 $content .= "\t\t\t<upds>\n";
 
                 foreach ($row['updateable'] as $updateable) {
@@ -761,15 +849,15 @@ function nv_http_get_lang($input)
 {
     global $lang_global;
 
-    if (! isset($input['code']) or ! isset($input['message'])) {
+    if (!isset($input['code']) or !isset($input['message'])) {
         return '';
     }
 
-    if (! empty($lang_global['error_code_' . $input['code']])) {
+    if (!empty($lang_global['error_code_' . $input['code']])) {
         return $lang_global['error_code_' . $input['code']];
     }
 
-    if (! empty($input['message'])) {
+    if (!empty($input['message'])) {
         return $input['message'];
     }
 
