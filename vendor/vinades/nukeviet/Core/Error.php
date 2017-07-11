@@ -356,7 +356,9 @@ class Error
         }
 
         header('Content-Type: text/html; charset=utf-8');
-        header('X-Frame-Options: SAMEORIGIN');
+        if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
+            Header('X-Frame-Options: SAMEORIGIN');
+        }
         header('X-Content-Type-Options: nosniff');
         header('X-XSS-Protection: 1; mode=block');
 
