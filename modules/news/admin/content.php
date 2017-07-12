@@ -202,7 +202,9 @@ if ($rowcontent['id'] > 0) {
                     } else {
                         if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
                             ++$check_edit;
-                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status = 2)) {
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 and $status == 5) {
+                            ++$check_edit;
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status == 8 or $status == 2)) {
                             ++$check_edit;
                         } elseif (($status == 0 or $status == 4 or $status == 5) and $rowcontent['admin_id'] == $admin_id) {
                             ++$check_edit;
@@ -1190,11 +1192,14 @@ if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
         // neu co quyen dang bai
         $xtpl->parse('main.status_1');
     }
-    if (!empty($array_censor_content)) {
+    if (!empty($array_censor_content) and $rowcontent['status'] != 8) {
         // neu co quyen duyet bai thi
         $xtpl->parse('main.status_8');
     }
-    $xtpl->parse('main.status_5');
+    
+    if($rowcontent['status'] != 5){
+        $xtpl->parse('main.status_5');
+    }
 }
 
 if (empty($rowcontent['alias'])) {
