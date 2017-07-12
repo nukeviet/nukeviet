@@ -184,7 +184,10 @@ function nv_htmlOutput($html)
     header('Content-Type: text/html; charset=utf-8');
     Header('Cache-Control: no-cache, must-revalidate');
 
-    Header('X-Frame-Options: SAMEORIGIN');
+    if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
+        Header('X-Frame-Options: SAMEORIGIN');
+    }
+
     Header('X-Content-Type-Options: nosniff');
     Header('X-XSS-Protection: 1; mode=block');
 
@@ -204,7 +207,10 @@ function nv_jsonOutput($array_data)
     Header('Cache-Control: no-cache, must-revalidate');
     Header('Content-type: application/json');
 
-    Header('X-Frame-Options: SAMEORIGIN');
+    if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
+        Header('X-Frame-Options: SAMEORIGIN');
+    }
+
     Header('X-Content-Type-Options: nosniff');
     Header('X-XSS-Protection: 1; mode=block');
 
@@ -248,7 +254,10 @@ function nv_xmlOutput($content, $lastModified)
         @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
     }
 
-    Header('X-Frame-Options: SAMEORIGIN');
+    if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
+        Header('X-Frame-Options: SAMEORIGIN');
+    }
+
     Header('X-Content-Type-Options: nosniff');
     Header('X-XSS-Protection: 1; mode=block');
 

@@ -277,7 +277,7 @@ if ($step == 1) {
     $array_resquest['php_required'] = $sys_info['php_required'];
     $array_resquest['php_version'] = PHP_VERSION;
     $sys_info['php_support'] = (version_compare(PHP_VERSION, $sys_info['php_required']) < 0) ? 0 : 1;
-    $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support' );
+    $array_resquest_key = array('php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support');
     foreach ($array_resquest_key as $key) {
         $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
         $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];

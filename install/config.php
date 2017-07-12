@@ -101,7 +101,7 @@ define('NV_LIVE_SESSION_TIME', 0);
 define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
 
 //Chống IFRAME
-define('NV_ANTI_IFRAME', 0);
+define('NV_ANTI_IFRAME', 1);
 
 //Chặn các bots nếu agent không có
 define('NV_ANTI_AGENT', 0);

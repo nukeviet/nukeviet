@@ -60,6 +60,7 @@ $lang_module['xml_support'] = 'PHP hỗ trợ thư viện xử lý XML';
 $lang_module['openssl_support'] = 'PHP hỗ trợ thư viện mã hóa Openssl';
 $lang_module['session_support'] = 'PHP hỗ trợ session';
 $lang_module['fileuploads_support'] = 'PHP hỗ trợ uploads file';
+$lang_module['json_support'] = 'PHP hỗ trợ JSON';
 $lang_module['dir_noexit'] = 'Không tồn tại';
 $lang_module['dir_not_writable'] = 'Không ghi được';
 $lang_module['dir_not_writable_ip_files'] = 'Không ghi được các file trong thư mục %1$s';
