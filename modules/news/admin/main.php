@@ -572,10 +572,12 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                             if ($status) {
                                 $_permission_action['exptime'] = true;
                             }
-                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and $status == 0) {
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status == 8 or $status == 2)) {
                             ++$check_edit;
                             $_permission_action['publtime'] = true;
                             $_permission_action['re-published'] = true;
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 and $status == 5) {
+                            ++$check_edit;
                         } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
                             ++$check_edit;
                             $_permission_action['waiting'] = true;
