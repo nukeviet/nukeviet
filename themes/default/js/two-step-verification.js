@@ -86,8 +86,8 @@ function confirmpass_validForm(a) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
             if (d.status == "error") {
-                $("input,button", a).not("[type=submit]").prop("disabled", !1), 
-                $(".tooltip-current", a).removeClass("tooltip-current"), 
+                $("input,button", a).not("[type=submit]").prop("disabled", !1),
+                $(".tooltip-current", a).removeClass("tooltip-current"),
                 "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
                     $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                     validErrorShow(this)
@@ -120,8 +120,8 @@ function opt_validForm(a) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
             if (d.status == "error") {
-                $("input,button", a).not("[type=submit]").prop("disabled", !1), 
-                $(".tooltip-current", a).removeClass("tooltip-current"), 
+                $("input,button", a).not("[type=submit]").prop("disabled", !1),
+                $(".tooltip-current", a).removeClass("tooltip-current"),
                 "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
                     $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                     validErrorShow(this)
@@ -147,4 +147,36 @@ $(document).ready(function() {
         e.preventDefault();
         modalShowByObj($(this).attr('href'));
     });
-})
+    // Tắt xác thực 2 bước
+    $('[data-toggle="turnoff2step"]').click(function() {
+        $(this).prop('disabled', true);
+        var tokend = $(this).data('tokend');
+        $.post(
+            nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            'turnoff2step=1&tokend=' + tokend,
+            function(res) {
+                if (res == 'OK') {
+                    window.location.reload(true);
+                } else {
+                    alert(res);
+                }
+            }
+        );
+    });
+    // Đổi mã
+    $('[data-toggle="changecode2step"]').click(function() {
+        $(this).prop('disabled', true);
+        var tokend = $(this).data('tokend');
+        $.post(
+            nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            'changecode2step=1&tokend=' + tokend,
+            function(res) {
+                if (res == 'OK') {
+                    window.location.reload(true);
+                } else {
+                    alert(res);
+                }
+            }
+        );
+    });
+});

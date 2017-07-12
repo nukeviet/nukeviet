@@ -61,7 +61,7 @@ function nv_save_file_banip()
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
     $content_config .= "\$array_banip_site = array();\n";
     $content_config .= $content_config_site;
     $content_config .= "\n";
@@ -110,10 +110,14 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     $gfx_chk = $nv_Request->get_int('gfx_chk', 'post');
     if (isset($captcha_array[$gfx_chk])) {
         $array_config_global['gfx_chk'] = $gfx_chk;
+    } else {
+        $array_config_global['gfx_chk'] = 0;
     }
     $captcha_type = $nv_Request->get_int('captcha_type', 'post');
     if (isset($captcha_type_array[$captcha_type])) {
         $array_config_global['captcha_type'] = $captcha_type;
+    } else {
+        $array_config_global['captcha_type'] = $captcha_type_array[0];
     }
     $array_config_global['str_referer_blocker'] = (int)$nv_Request->get_bool('str_referer_blocker', 'post');
     $array_config_global['is_flood_blocker'] = (int)$nv_Request->get_bool('is_flood_blocker', 'post');
@@ -182,9 +186,24 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     }
 
     nv_save_file_config_global();
+    $save_config = nv_server_config_change($array_config_define);
+
+    if ($save_config[0] !== true) {
+        $errormess = sprintf($lang_module['err_save_sysconfig'], $save_config[1]);
+    }
+
     if (empty($errormess)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
+} else {
+    $array_config_global = $global_config;
+    $array_config_define = array();
+    $array_config_define['nv_anti_agent'] = NV_ANTI_AGENT;
+    $array_config_define['nv_gfx_num'] = NV_GFX_NUM;
+    $array_config_define['nv_gfx_width'] = NV_GFX_WIDTH;
+    $array_config_define['nv_gfx_height'] = NV_GFX_HEIGHT;
+    $array_config_define['nv_anti_iframe'] = NV_ANTI_IFRAME;
+    $array_config_define['nv_allowed_html_tags'] = NV_ALLOWED_HTML_TAGS;
 }
 
 $lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_verification_note'], $lang_module['two_step_verification0'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
@@ -276,28 +295,33 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $id = $ip = $mask = $area = $begintime = $endtime = $notice = '';
 }
 
-$xtpl->assign('ANTI_AGENT', (NV_ANTI_AGENT) ? ' checked="checked"' : '');
+if (!empty($errormess)) {
+    $xtpl->assign('ERROR_SAVE', $errormess);
+    $xtpl->parse('main.error_save');
+}
+
+$xtpl->assign('ANTI_AGENT', $array_config_define['nv_anti_agent'] ? ' checked="checked"' : '');
 foreach ($proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v) {
-    $xtpl->assign('PROXYSELECTED', ($global_config['proxy_blocker'] == $proxy_blocker_i) ? ' selected="selected"' : '');
+    $xtpl->assign('PROXYSELECTED', ($array_config_global['proxy_blocker'] == $proxy_blocker_i) ? ' selected="selected"' : '');
     $xtpl->assign('PROXYOP', $proxy_blocker_i);
     $xtpl->assign('PROXYVALUE', $proxy_blocker_v);
     $xtpl->parse('main.proxy_blocker');
 }
-$xtpl->assign('REFERER_BLOCKER', ($global_config['str_referer_blocker']) ? ' checked="checked"' : '');
-$xtpl->assign('IS_FLOOD_BLOCKER', ($global_config['is_flood_blocker']) ? ' checked="checked"' : '');
-$xtpl->assign('MAX_REQUESTS_60', $global_config['max_requests_60']);
-$xtpl->assign('MAX_REQUESTS_300', $global_config['max_requests_300']);
-$xtpl->assign('ANTI_IFRAME', (NV_ANTI_IFRAME) ? ' checked="checked"' : '');
+$xtpl->assign('REFERER_BLOCKER', ($array_config_global['str_referer_blocker']) ? ' checked="checked"' : '');
+$xtpl->assign('IS_FLOOD_BLOCKER', ($array_config_global['is_flood_blocker']) ? ' checked="checked"' : '');
+$xtpl->assign('MAX_REQUESTS_60', $array_config_global['max_requests_60']);
+$xtpl->assign('MAX_REQUESTS_300', $array_config_global['max_requests_300']);
+$xtpl->assign('ANTI_IFRAME', $array_config_define['nv_anti_iframe'] ? ' checked="checked"' : '');
 
-$xtpl->assign('IS_LOGIN_BLOCKER', ($global_config['is_login_blocker']) ? ' checked="checked"' : '');
-$xtpl->assign('LOGIN_NUMBER_TRACKING', $global_config['login_number_tracking']);
-$xtpl->assign('LOGIN_TIME_TRACKING', $global_config['login_time_tracking']);
-$xtpl->assign('LOGIN_TIME_BAN', $global_config['login_time_ban']);
+$xtpl->assign('IS_LOGIN_BLOCKER', ($array_config_global['is_login_blocker']) ? ' checked="checked"' : '');
+$xtpl->assign('LOGIN_NUMBER_TRACKING', $array_config_global['login_number_tracking']);
+$xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']);
+$xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);
 
 foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang) {
     $array = array(
         "value" => $gfx_chk_i,
-        "select" => ($global_config['gfx_chk'] == $gfx_chk_i) ? ' selected="selected"' : '',
+        "select" => ($array_config_global['gfx_chk'] == $gfx_chk_i) ? ' selected="selected"' : '',
         "text" => $gfx_chk_lang
     );
     $xtpl->assign('OPTION', $array);
@@ -307,23 +331,23 @@ foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang) {
 foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
     $array = array(
         'value' => $captcha_type_i,
-        'select' => ($global_config['captcha_type'] == $captcha_type_i) ? ' selected="selected"' : '',
+        'select' => ($array_config_global['captcha_type'] == $captcha_type_i) ? ' selected="selected"' : '',
         'text' => $captcha_type_lang
     );
     $xtpl->assign('OPTION', $array);
     $xtpl->parse('main.captcha_type');
 }
 
-$xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
-$xtpl->assign('RECAPTCHA_SECRETKEY', $global_config['recaptcha_secretkey'] ? $crypt->decrypt($global_config['recaptcha_secretkey']) : '');
+$xtpl->assign('RECAPTCHA_SITEKEY', $array_config_global['recaptcha_sitekey']);
+$xtpl->assign('RECAPTCHA_SECRETKEY', $array_config_global['recaptcha_secretkey'] ? $crypt->decrypt($array_config_global['recaptcha_secretkey']) : '');
 
-$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($global_config['captcha_type'] == 2) ? ' style="display:none;"' : '');
-$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($global_config['captcha_type'] == 2) ? '' : ' style="display:none;"');
+$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_global['captcha_type'] == 2) ? ' style="display:none;"' : '');
+$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_global['captcha_type'] == 2) ? '' : ' style="display:none;"');
 
 foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
     $array = array(
         'value' => $recaptcha_type_key,
-        'select' => ($global_config['recaptcha_type'] == $recaptcha_type_key) ? ' selected="selected"' : '',
+        'select' => ($array_config_global['recaptcha_type'] == $recaptcha_type_key) ? ' selected="selected"' : '',
         'text' => $recaptcha_type_title
     );
     $xtpl->assign('RECAPTCHA_TYPE', $array);
@@ -333,15 +357,15 @@ foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) 
 for ($i = 2; $i < 10; $i++) {
     $array = array(
         'value' => $i,
-        'select' => ($i == NV_GFX_NUM) ? ' selected="selected"' : '',
+        'select' => ($i == $array_config_define['nv_gfx_num']) ? ' selected="selected"' : '',
         'text' => $i
     );
     $xtpl->assign('OPTION', $array);
     $xtpl->parse('main.nv_gfx_num');
 }
-$xtpl->assign('NV_GFX_WIDTH', NV_GFX_WIDTH);
-$xtpl->assign('NV_GFX_HEIGHT', NV_GFX_HEIGHT);
-$xtpl->assign('NV_ALLOWED_HTML_TAGS', NV_ALLOWED_HTML_TAGS);
+$xtpl->assign('NV_GFX_WIDTH', $array_config_define['nv_gfx_width']);
+$xtpl->assign('NV_GFX_HEIGHT', $array_config_define['nv_gfx_height']);
+$xtpl->assign('NV_ALLOWED_HTML_TAGS', $array_config_define['nv_allowed_html_tags']);
 
 $mask_text_array = array();
 $mask_text_array[0] = '255.255.255.255';
@@ -403,7 +427,7 @@ for ($i = 0; $i <= 3; $i++) {
     $two_step_verification = array(
         'key' => $i,
         'title' => $lang_module['two_step_verification' . $i],
-        'selected' => $i == $global_config['two_step_verification'] ? ' selected="selected"' : ''
+        'selected' => $i == $array_config_global['two_step_verification'] ? ' selected="selected"' : ''
     );
     $xtpl->assign('TWO_STEP_VERIFICATION', $two_step_verification);
     $xtpl->parse('main.two_step_verification');

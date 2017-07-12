@@ -56,7 +56,7 @@ function validUserLog($array_user)
         'current_openid' => ''
     );
 
-    $user = nv_base64_encode(serialize($user));
+    $user = serialize($user);
 
     $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET
 		checknum = :checknum,
@@ -64,7 +64,7 @@ function validUserLog($array_user)
 		last_ip = :last_ip,
 		last_agent = :last_agent,
 		last_openid = '',
-		remember = 1 
+		remember = 1
 		WHERE userid=" . $array_user['userid']);
 
     $stmt->bindValue(':checknum', $checknum, PDO::PARAM_STR);
@@ -94,18 +94,18 @@ $admin_login_redirect = $nv_Request->get_string('admin_login_redirect', 'session
 if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    
+
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
-    
+
     $captcha_require = ($global_config['gfx_chk'] == 1 and $nv_Request->get_title('admin_dismiss_captcha', 'session', '') != md5($nv_username));
-    
+
     if ($global_config['captcha_type'] == 2) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
-    
+
     if (empty($nv_username)) {
         $error = $lang_global['username_empty'];
     } elseif ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
@@ -133,15 +133,15 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
             $login_email = false;
         }
-        
-        $sql = 'SELECT t1.admin_id admin_id, t1.lev admin_lev, t1.last_agent admin_last_agent, t1.last_ip admin_last_ip, t1.last_login admin_last_login, 
-        t2.userid, t2.last_agent, t2.last_ip, t2.last_login, t2.last_openid, t2.username, t2.email, t2.password, t2.active2step, t2.in_groups, t2.secretkey 
-        FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1, ' . NV_USERS_GLOBALTABLE . ' t2 
+
+        $sql = 'SELECT t1.admin_id admin_id, t1.lev admin_lev, t1.last_agent admin_last_agent, t1.last_ip admin_last_ip, t1.last_login admin_last_login,
+        t2.userid, t2.last_agent, t2.last_ip, t2.last_login, t2.last_openid, t2.username, t2.email, t2.password, t2.active2step, t2.in_groups, t2.secretkey
+        FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1, ' . NV_USERS_GLOBALTABLE . ' t2
         WHERE t1.admin_id=t2.userid AND ' . $sql . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1';
-        
+
         $row = $db->query($sql)->fetch();
         $error = '';
-        
+
         if (empty($row) or !((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password']))) {
             nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
             $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
@@ -180,7 +180,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 $step2_isvalid = false;
                 $login_step = 2;
                 $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
-                
+
                 if (!empty($nv_totppin)) {
                     if (!$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
                         $error = $lang_global['2teplogin_error_opt'];
@@ -188,13 +188,13 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                         $step2_isvalid = true;
                     }
                 }
-                
+
                 if (!empty($nv_backupcodepin)) {
                     $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
                     $sth = $db->prepare('SELECT code FROM ' . NV_USERS_GLOBALTABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $row['userid']);
                     $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
                     $sth->execute();
-                    
+
                     if ($sth->rowCount() != 1) {
                         $error = $lang_global['2teplogin_error_backup'];
                     } else {
@@ -203,7 +203,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                         $step2_isvalid = true;
                     }
                 }
-                
+
                 $captcha_require = 0;
                 $nv_Request->set_Session('admin_dismiss_captcha', md5($nv_username));
             }
