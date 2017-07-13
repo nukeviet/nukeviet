@@ -1093,6 +1093,13 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                     break;
                 default:
                     $mail->SMTPSecure = '';
+                    $this->SMTPOptions = array(
+                        'ssl' => array(
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true
+                        )
+                    );
             }
 
             if (filter_var($global_config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
