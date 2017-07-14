@@ -1143,7 +1143,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $message = $optimizer->process(false);
         $message = nv_unhtmlspecialchars($message);
 
-        $mail->FromName = $global_config['site_name'];
+        $mail->FromName = nv_unhtmlspecialchars($global_config['site_name']);
 
         if (is_array($from)) {
             $mail->addReplyTo($from[1], $from[0]);
