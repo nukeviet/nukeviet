@@ -99,7 +99,7 @@ function showQlist(a) {
 
 function addQuestion(a) {
     var b = $(a).parent().parent().parent().parent();
-    $("[name=your_question]", b).val($(a).text());
+    $("[name=question]", b).val($(a).text());
     $(".qlist", b).attr("data-show", "no").hide();
     return !1
 }
