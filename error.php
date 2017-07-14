@@ -99,6 +99,9 @@ if (isset($lang_global['error_' . $error_code . '_content'])) {
         case 502:
             $content = 'Bad Gateway';
             break;
+        case 503:
+            $content = 'Service Temporarily Unavailable';
+            break;
         case 504:
             $content = 'Gateway Time-out';
             break;
