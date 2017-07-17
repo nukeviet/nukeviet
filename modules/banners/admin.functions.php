@@ -130,9 +130,10 @@ function nv_add_client_theme($contents)
  */
 function nv_edit_client_theme($contents)
 {
-    global $global_config, $module_file;
+    global $global_config, $module_file, $lang_module;
     $xtpl = new XTemplate('edit_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
+    $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
     $xtpl->parse('main');
     return $xtpl->text('main');
