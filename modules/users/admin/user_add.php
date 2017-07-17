@@ -210,7 +210,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         :first_name,
         :last_name,
         :gender,
-        " . $_user['birthday'] . ",
+        " . intval($_user['birthday']) . ",
         :sig,
         " . NV_CURRENTTIME . ",
         :question,
@@ -374,7 +374,7 @@ if (defined('NV_IS_USER_FORUM')) {
             } else {
                 $row['value'] = $row['default_value'];
             }
-            
+
             $row['required'] = ($row['required']) ? 'required' : '';
             $xtpl->assign('FIELD', $row);
 

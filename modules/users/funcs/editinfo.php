@@ -424,7 +424,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $array_data['birthday'] = nv_substr($nv_Request->get_title('birthday', 'post', '', 0), 0, 10);
     $array_data['view_mail'] = (int)$nv_Request->get_bool('view_mail', 'post', false);
     $array_data['sig'] = $nv_Request->get_title('sig', 'post', '');
-    
+
     $custom_fields = array();
     $custom_fields['first_name'] = $array_data['first_name'];
     $custom_fields['last_name'] = $array_data['last_name'];
@@ -432,20 +432,20 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $custom_fields['birthday'] = $array_data['birthday'];
     $custom_fields['sig'] = $array_data['sig'];
     $array_field_config = array_intersect_key($array_field_config, array('first_name' => 1, 'last_name' => 1, 'gender' => 1, 'birthday' => 1, 'sig' => 1));
-    
+
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
     if (empty($array_data['first_name'])) {
         $array_data['first_name'] = !empty($row['first_name']) ? $row['first_name'] : $row['username'];
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET 
-        first_name= :first_name, 
-        last_name= :last_name, 
-        gender= :gender, 
-        sig= :sig, 
-        birthday=' . $array_data['birthday'] . ', 
-        view_mail=' . $array_data['view_mail'] . ' 
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET
+        first_name= :first_name,
+        last_name= :last_name,
+        gender= :gender,
+        sig= :sig,
+        birthday=' . intval($array_data['birthday']). ',
+        view_mail=' . $array_data['view_mail'] . '
     WHERE userid=' . $edit_userid);
 
     $stmt->bindParam(':first_name', $array_data['first_name'], PDO::PARAM_STR);
@@ -723,7 +723,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $custom_fields['question'] = $array_data['question'];
     $custom_fields['answer'] = $array_data['answer'];
     $array_field_config = array_intersect_key($array_field_config, array('question' => 1, 'answer' => 1));
-    
+
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {

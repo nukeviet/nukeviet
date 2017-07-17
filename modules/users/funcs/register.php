@@ -245,7 +245,7 @@ if ($checkss == $array_register['checkss']) {
     $array_register['gender'] = $nv_Request->get_title('gender', 'post', '');
     $array_register['birthday'] = $nv_Request->get_title('birthday', 'post', '');
     $array_register['sig'] = $nv_Request->get_title('sig', 'post', '');
-    
+
     $custom_fields['first_name'] = $array_register['first_name'];
     $custom_fields['last_name'] = $array_register['last_name'];
     $custom_fields['gender'] = $array_register['gender'];
@@ -348,7 +348,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['first_name'] = $array_register['first_name'];
         $data_insert['last_name'] = $array_register['last_name'];
         $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = $array_register['birthday'];
+        $data_insert['birthday'] = intval($array_register['birthday']);
         $data_insert['sig'] = $array_register['sig'];
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
@@ -365,8 +365,11 @@ if ($checkss == $array_register['checkss']) {
             ));
         } else {
             if ($global_config['allowuserreg'] == 2) {
+
+                $register_active_time = isset($global_users_config[register_active_time]) ? $global_users_config[register_active_time] : 86400;
+
                 $subject = $lang_module['account_active'];
-                $message = sprintf($lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + 86400));
+                $message = sprintf($lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
 
                 if ($send) {
@@ -418,7 +421,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = $array_register['birthday'];
+        $data_insert['birthday'] = intval($array_register['birthday']);
         $data_insert['sig'] = $array_register['sig'];
 
         $userid = $db->insert_id($sql, 'userid', $data_insert);
