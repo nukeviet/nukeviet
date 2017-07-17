@@ -311,7 +311,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         last_name=" . $db->quote($_user['last_name']) . ",
         gender=" . $db->quote($_user['gender']) . ",
         photo=" . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ",
-        birthday=" . $_user['birthday'] . ",
+        birthday=" . intval($_user['birthday']) . ",
         sig=" . $db->quote($_user['sig']) . ",
         question=" . $db->quote($_user['question']) . ",
         answer=" . $db->quote($_user['answer']) . ",
@@ -432,7 +432,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $row['required'] = ($row['required']) ? 'required' : '';
 
         $xtpl->assign('FIELD', $row);
-        
+
         // Các trường hệ thống xuất độc lập
         if (!empty($row['system'])) {
             if ($row['field'] == 'birthday') {

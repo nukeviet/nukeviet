@@ -23,9 +23,12 @@ if (empty($userid) or empty($checknum)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$del = NV_CURRENTTIME - 86400;
-$sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE regdate < ' . $del;
-$db->query($sql);
+$register_active_time = isset($global_users_config[register_active_time]) ? $global_users_config[register_active_time] : 86400;
+if ($register_active_time > 0) {
+    $del = NV_CURRENTTIME - $register_active_time;
+    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE regdate < ' . $del;
+    $db->query($sql);
+}
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
