@@ -325,17 +325,16 @@
 		<!-- BEGIN:status_4 -->
 		<input class="btn btn-warning submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
 		<!-- END:status_4 -->
-		<!-- BEGIN:status_1 -->
-		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
-		<!-- END:status_1 -->
+		<!-- BEGIN:status_5 -->
+		<input class="btn btn-primary submit-post" name="status5" type="submit" value="{LANG.status_5}" />
+		<!-- END:status_5 -->
 
-		<!-- BEGIN:status_6 -->
-		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
-		<!-- END:status_6 -->
-
-		<!-- BEGIN:status_0 -->
-		<input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
-		<!-- END:status_0 -->
+		<!-- BEGIN:status_8 -->
+		<input class="btn btn-primary submit-post" name="status8" type="submit" value="{LANG.status_8}" />
+		<!-- END:status_8 -->
+        <!-- BEGIN:status_1 -->
+        <input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
+        <!-- END:status_1 -->
 		<br />
 	</div>
 </form>
