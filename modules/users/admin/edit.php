@@ -319,7 +319,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         in_groups='" . implode(',', $in_groups) . "'
     WHERE userid=" . $userid);
 
-    if (!empty($array_field_config)) {
+    if (!empty($query_field)) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
     }
 
