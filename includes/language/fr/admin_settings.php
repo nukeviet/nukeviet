@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -47,6 +47,7 @@ $lang_module['nv_allowed_html_tags'] = 'Code HTML est accepté par le système';
 $lang_module['captcha_type'] = 'Type de captcha';
 $lang_module['captcha_type_0'] = 'Défaut captcha';
 $lang_module['captcha_type_1'] = 'Bon php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Configuration de captcha';
 $lang_module['captcha_0'] = 'Masqué';
 $lang_module['captcha_1'] = 'Lors de l\'identification de l\'admin';
@@ -58,6 +59,12 @@ $lang_module['captcha_6'] = 'Lors de l\'identification de l\'admin ou l\'inscrip
 $lang_module['captcha_7'] = 'Toujours';
 $lang_module['captcha_num'] = 'Le nombre de caractères de captcha';
 $lang_module['captcha_size'] = 'Dimension du captcha';
+$lang_module['recaptcha_sitekey'] = 'Clé du site';
+$lang_module['recaptcha_secretkey'] = 'Clef secrète';
+$lang_module['recaptcha_type'] = 'Exemple confirmé';
+$lang_module['recaptcha_type_image'] = 'Images (recommandé)';
+$lang_module['recaptcha_type_audio'] = 'son';
+$lang_module['recaptcha_guide'] = 'Cliquez ici pour obtenir la clé des paramètres du site clé et secret.';
 $lang_module['ftp_config'] = 'Configuration de FTP';
 $lang_module['smtp_config'] = 'Configuration de SMTP';
 $lang_module['server'] = 'Serveur ou Lien';
@@ -237,10 +244,5 @@ $lang_module['two_step_verification3'] = 'Toutes les zones';
 $lang_module['site_phone'] = 'Nom du fichier Téléphone';
 $lang_module['googleMapsAPI'] = 'Google Maps API key';
 $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guides obtiennent clé API</a>';
-$lang_module['captcha_type_2'] = 'reCAPTCHA';
-$lang_module['recaptcha_sitekey'] = 'Clé du site';
-$lang_module['recaptcha_secretkey'] = 'Clef secrète';
-$lang_module['recaptcha_type'] = 'Exemple confirmé';
-$lang_module['recaptcha_type_image'] = 'Images (recommandé)';
-$lang_module['recaptcha_type_audio'] = 'son';
-$lang_module['recaptcha_guide'] = 'Cliquez ici pour obtenir la clé des paramètres du site clé et secret.';
+$lang_module['err_save_sysconfig'] = 'Les modifications ont été enregistrées, mais le système est pas configuré pour enregistrer le fichier. Écrivons les autorisations pour le fichier% s puis refaisons';
+$lang_module['two_step_verification_note'] = 'Remarque: Cette configuration applique à l\'ensemble du compte du groupe, le cas échéant être configuré individuellement pour chaque groupe de choisir cette valeur est <strong />%s puis modifiez le <a href="%" /> puis sélectionnez l\'authentification obligatoire en deux étapes du groupe de la zone activée à volonté';
