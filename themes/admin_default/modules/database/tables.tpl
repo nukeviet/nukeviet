@@ -26,7 +26,7 @@
 						</select>
 						<select id="ext_name" name="{EXT_NAME}" class="form-control pull-left w200" style="margin-right: 5px">
 							<!-- BEGIN: ext -->
-							<option value="{KEY}">{VAL}</option>
+							<option value="{KEY}" {SELECTED}>{VAL}</option>
 							<!-- END: ext -->
 						</select>
 						<input name="checkss" type="hidden" value="{NV_CHECK_SESSION}" />
