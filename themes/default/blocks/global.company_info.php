@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 17, 2011 11:34:27 AM
@@ -101,17 +101,6 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="row">';
-        $html .= '<div class="col-xs-12">';
-        $html .= '<div class="input-group">
-				  	<span class="input-group-addon">' . $lang_block['cominfo_map_key'] . '</span>
-				  	<input type="text" class="form-control" name="config_company_mapapikey" id="config_company_mapapikey" value="' . $data_block['company_mapapikey'] . '">
-				  </div>';
-        $html .= '</div>';
-        $html .= '<div class="col-xs-12">';
-        $html .= '<a class="btn btn-default" href="http://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">' . $lang_block['cominfo_map_key_guide'] . '</a>';
-        $html .= '</div>';
-        $html .= '</div>';
         $html .= '</td>';
         $html .= '</tr>';
         $html .= '<tr>';
@@ -159,7 +148,6 @@ if (! nv_function_exists('nv_company_info')) {
         $return['config']['company_maplat'] = $nv_Request->get_float('config_company_maplat', 'post', 20.984516000000013);
         $return['config']['company_maplng'] = $nv_Request->get_float('config_company_maplng', 'post', 105.79547500000001);
         $return['config']['company_mapzoom'] = $nv_Request->get_int('config_company_mapzoom', 'post', 17);
-        $return['config']['company_mapapikey'] = $nv_Request->get_title('config_company_mapapikey', 'post', '', true);
         $return['config']['company_phone'] = $nv_Request->get_title('config_company_phone', 'post');
         $return['config']['company_fax'] = $nv_Request->get_title('config_company_fax', 'post');
         $return['config']['company_email'] = $nv_Request->get_title('config_company_email', 'post');
@@ -186,6 +174,8 @@ if (! nv_function_exists('nv_company_info')) {
             $block_theme = 'default';
         }
 
+        $block_config['company_mapapikey'] = $global_config['googleMapsAPI'];
+        
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -268,7 +258,7 @@ if (! nv_function_exists('nv_company_info')) {
         if (! empty($block_config['company_website'])) {
             $webs = array_map('trim', explode(',', $block_config['company_website']));
             foreach ($webs as $k => $web) {
-                if (! preg_match("/^http\:\/\//", $web)) {
+                if (! preg_match("/^https?\:\/\//", $web)) {
                     $web = 'http://' . $web;
                 }
                 $xtpl->assign('WEBSITE', $web);

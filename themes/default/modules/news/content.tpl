@@ -107,6 +107,7 @@
 		</div>
 	</div>
 
+    <!-- BEGIN: captcha -->
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.captcha} <span class="txtrequired">(*)</span></label>
 		<div class="col-sm-20">
@@ -115,8 +116,23 @@
             <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
 		</div>
 	</div>
-
-	<br />
+    <!-- END: captcha -->
+    
+    <!-- BEGIN: recaptcha -->
+    <div class="form-group">
+        <label class="col-sm-4 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
+        <div class="col-sm-20">
+            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+            <script type="text/javascript">
+            nv_recaptcha_elements.push({
+                id: "{RECAPTCHA_ELEMENT}",
+                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+            })
+            </script>
+        </div>
+    </div>
+    <!-- END: recaptcha -->
+    
 	<ul class="list-inline text-center">
 		<input type="hidden" name="contentid" value="{DATA.id}" />
 		<input type="hidden" name="checkss" value="{CHECKSS}" />

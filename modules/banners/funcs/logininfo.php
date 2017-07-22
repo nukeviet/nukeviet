@@ -17,15 +17,15 @@ if (defined('NV_IS_BANNER_CLIENT')) {
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $login = strip_tags($nv_Request->get_string('login', 'post', ''));
-    $password = strip_tags($nv_Request->get_string('password', 'post', ''));
+    $login = $nv_Request->get_title('login', 'post', '');
+    $password = $nv_Request->get_title('password', 'post', '');
 
     if ($global_config['gfx_chk']) {
-        $seccode = strip_tags($nv_Request->get_string('seccode', 'post', ''));
+        $seccode = $nv_Request->get_title('seccode', 'post', '');
     }
 
-    $check_login = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
-    $check_pass = nv_check_valid_pass($password, NV_UPASSMAX, NV_UPASSMIN);
+    $check_login = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
+    $check_pass = nv_check_valid_pass($password, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
 
     if (! empty($check_login)) {
         die('action');
@@ -41,7 +41,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         if (empty($row)) {
             die('action');
         } else {
-            if (! $crypt->validate_password($password, $row['pass'])) {
+            if (!$crypt->validate_password($password, $row['pass'])) {
                 die('action');
             } else {
                 $checknum = md5(nv_genpass(10));
@@ -80,10 +80,10 @@ $contents = array();
 $contents['client_info'] = sprintf($lang_module['client_info'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact');
 $contents['login'] = $lang_module['login'];
 $contents['login_input_name'] = 'lg_iavim';
-$contents['login_input_maxlength'] = NV_UNICKMAX;
+$contents['login_input_maxlength'] = $global_config['nv_unickmax'];
 $contents['password'] = $lang_module['password'];
 $contents['pass_input_name'] = 'pw_iavim';
-$contents['pass_input_maxlength'] = NV_UPASSMAX;
+$contents['pass_input_maxlength'] = $global_config['nv_upassmax'];
 $contents['gfx_chk'] = $global_config['gfx_chk'];
 $contents['captcha'] = $lang_global['securitycode'];
 $contents['captcha_name'] = 'seccode_iavim';
@@ -93,7 +93,8 @@ $contents['captcha_refresh'] = $lang_global['captcharefresh'];
 $contents['captcha_refr_src'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png';
 $contents['submit'] = $lang_global['loginsubmit'];
 $contents['sm_button_name'] = 'sm_button';
-$contents['sm_button_onclick'] = "nv_cl_login_submit(" . NV_UNICKMAX . ", " . NV_UNICKMIN . ", " . NV_UPASSMAX . ", " . NV_UPASSMIN . ", " . NV_GFX_NUM . ", " . $global_config['gfx_chk'] . ",'lg_iavim','pw_iavim','seccode_iavim','sm_button');";
+$captcha_num = ($global_config['captcha_type'] == 2 ? -1 : NV_GFX_NUM);
+$contents['sm_button_onclick'] = "nv_cl_login_submit(" . $global_config['nv_unickmax'] . ", " . $global_config['nv_unickmin'] . ", " . $global_config['nv_upassmax'] . ", " . $global_config['nv_upassmin'] . ", " . $captcha_num . ", " . $global_config['gfx_chk'] . ",'lg_iavim','pw_iavim','seccode_iavim','sm_button');";
 
 $contents = logininfo_theme($contents);
 

@@ -2,8 +2,8 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -21,6 +21,8 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['notallowuserlogin'] = 'Désolé, cette fonction est désactivée  pour ce moment';
 $lang_module['register'] = 'Créer un compte';
+$lang_module['userlogout'] = 'Compte de membre sortie';
+$lang_module['userloginviaopt'] = 'Connectez-vous au port';
 $lang_module['login_title'] = 'Si vous avez un compte';
 $lang_module['lostpass_title'] = 'Si vous oubliez le mot de passe';
 $lang_module['memberlist'] = 'Liste des utilisateurs';
@@ -34,6 +36,7 @@ $lang_module['male'] = 'Homme';
 $lang_module['female'] = 'Femelle';
 $lang_module['na'] = 'Non déclaré';
 $lang_module['account'] = 'Identifiant';
+$lang_module['sig'] = 'Signature';
 $lang_module['email'] = 'E-mail';
 $lang_module['check'] = 'Vérifier';
 $lang_module['page'] = 'Page';
@@ -44,7 +47,7 @@ $lang_module['question'] = 'Question secrète';
 $lang_module['select_question'] = 'Sélectionnez une question';
 $lang_module['your_question'] = 'Ou poser une question';
 $lang_module['answer_question'] = 'Votre réponse';
-$lang_module['answer_your_question'] = 'Répondre';
+$lang_module['answer'] = 'Répondre';
 $lang_module['captcha'] = 'Code de sécurité';
 $lang_module['retype_captcha'] = 'Entrez le code de sécurité';
 $lang_module['usage_terms'] = 'Les termes et conditions générales de l\'inscription et l\'utilisation de notre site';
@@ -76,6 +79,7 @@ $lang_module['avatar_news_copy_error'] = 'Ne peux pas sauvegarder l\'image de pr
 $lang_module['birthday'] = 'Date de naissance';
 $lang_module['showmail'] = 'Afficher l’émail';
 $lang_module['login'] = 'Se connecter';
+$lang_module['login_with'] = 'Connectez-vous avec';
 $lang_module['login_submit'] = 'Soumettre';
 $lang_module['user_info'] = 'Infos de \'utilisateur';
 $lang_module['regdate'] = 'Date d\'inscription';
@@ -350,3 +354,5 @@ $lang_module['2step_require_directgo'] = 'Cliquez ici si pas système d\'auto-na
 $lang_module['2step_error_opt_backup'] = 'S\'il vous plaît entrez le code de confirmation de l\'application Google Authenticator ou code redondant sauvé';
 $lang_module['2step_status'] = 'L\'authentification à deux étapes';
 $lang_module['2step_link'] = 'Réglage';
+$lang_module['old_min_user_error'] = 'Votre âge% s, l\'enregistrement des mineurs';
+$lang_module['lostpass_sendmail_error'] = 'Les systèmes actuels ne peuvent pas envoyer des courriels afin que vous ne pouvez pas récupérer un mot de passe temporaire, s\'il vous plaît contacter l\'administrateur du site d\'assistance. Nos sincères excuses pour la gêne occasionnée!';

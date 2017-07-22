@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -12,9 +12,36 @@ if (! defined('NV_SYSTEM') or ! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+/**
+ *  nv_mailHTML()
+ *
+ * @param string $title
+ * @param string $content
+ * @param string $footer
+ */
+function nv_mailHTML($title, $content, $footer='')
+{
+    global $global_config, $lang_global;
+    $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
+    $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
+    $xtpl->assign('GCONFIG', $global_config);
+    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('MESSAGE_TITLE', $title);
+    $xtpl->assign('MESSAGE_CONTENT', $content);
+    $xtpl->assign('MESSAGE_FOOTER', $footer);
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ *  nv_site_theme()
+ *
+ * @param string $contents
+ * @param bool $full
+ */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $rewrite_keys;
+    global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op;
 
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
@@ -124,6 +151,9 @@ function nv_site_theme($contents, $full = true)
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
             $xtpl->assign('LINKS', array( 'key' => $key, 'value' => $value ));
+            if (!empty($value)) {
+                $xtpl->parse('main.links.attr.val');
+            }
             $xtpl->parse('main.links.attr');
         }
         $xtpl->parse('main.links');
@@ -180,7 +210,7 @@ function nv_site_theme($contents, $full = true)
         $xtpl->assign('NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH);
         $xtpl->assign('NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH);
 
-        if (empty($rewrite_keys)) {
+        if (!$global_config['rewrite_enable']) {
             $xtpl->assign('THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&amp;q=');
         } else {
             $xtpl->assign('THEME_SEARCH_URL', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek', true) . '?q=');
@@ -265,4 +295,16 @@ function nv_site_theme($contents, $full = true)
     }
 
     return $sitecontent;
+}
+
+/**
+ *  nv_error_theme()
+ *
+ * @param string $title
+ * @param string $content
+ * @param integer $code
+ */
+function nv_error_theme($title, $content, $code)
+{
+    nv_info_die($title, $title, $content, $code);
 }

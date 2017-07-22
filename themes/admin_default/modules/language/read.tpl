@@ -2,7 +2,7 @@
 <br />
 <br />
 <p class="text-center">
-	<strong>{LANG.nv_lang_readok}</strong>
+	<strong><a href="{URL}">{LANG.nv_lang_readok}</a></strong>
 </p>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">

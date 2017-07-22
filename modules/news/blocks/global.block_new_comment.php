@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
@@ -15,8 +15,6 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_comment_new')) {
     function nv_block_comment_new($module, $data_block, $lang_block)
     {
-        global $module_config, $db;
-
         $html = '<tr>';
         $html .= '	<td>' . $lang_block['titlelength'] . '</td>';
         $html .= '	<td><input type="text" name="config_titlelength" class="form-control w200" size="5" value="' . $data_block['titlelength'] . '"/><span class="help-block">' . $lang_block['titlenote'] . '</span></td>';

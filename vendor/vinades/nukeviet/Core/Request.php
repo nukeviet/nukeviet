@@ -194,7 +194,7 @@ class Request
         if (sizeof($_POST)) {
             $array_keys = array_keys($_POST);
             foreach ($array_keys as $k) {
-                if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
+                if ((!preg_match('/^[a-zA-Z0-9\_]+$/', $k) and $k != 'g-recaptcha-response') or is_numeric($k)) {
                     unset($_POST[$k]);
                 }
             }
@@ -343,7 +343,7 @@ class Request
         }
         if ($this->str_referer_blocker and ! empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
             header('Location: ' . $this->site_url);
-            exit();
+            exit(0);
         }
 
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
@@ -971,8 +971,25 @@ class Request
             return false;
         }
         $mode = $this->parse_mode($mode);
+        if (in_array('session', $mode) and ! $this->is_session_start) {
+            $this->sessionStart();
+        }
         foreach ($mode as $arr) {
-            if ($arr == 'cookie') {
+            if ($arr == 'get') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_GET[$name]);
+                }
+            } elseif ($arr == 'post') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_POST[$name]);
+                }
+            } elseif ($arr == 'cookie') {
                 foreach ($names as $name) {
                     if (empty($name)) {
                         continue;
@@ -983,14 +1000,11 @@ class Request
                     }
                     $expire = NV_CURRENTTIME - 3600;
 
-                    $result = setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
+                    setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
 
                     unset($_COOKIE[$name2]);
                 }
             } elseif ($arr == 'session') {
-                if (! $this->is_session_start) {
-                    $this->sessionStart();
-                }
                 foreach ($names as $name) {
                     if (empty($name)) {
                         continue;
@@ -1001,12 +1015,26 @@ class Request
                     }
                     unset($_SESSION[$name2]);
                 }
-            } else {
+            } elseif ($arr == 'request') {
                 foreach ($names as $name) {
                     if (empty($name)) {
                         continue;
                     }
-                    eval("unset(\$_" . strtoupper($arr) . "['" . $name . "']);");
+                    unset($_REQUEST[$name]);
+                }
+            } elseif ($arr == 'env') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_ENV[$name]);
+                }
+            } elseif ($arr == 'server') {
+                foreach ($names as $name) {
+                    if (empty($name)) {
+                        continue;
+                    }
+                    unset($_SERVER[$name]);
                 }
             }
         }
@@ -1034,39 +1062,47 @@ class Request
         }
         $names = array_flip($names);
         $mode = $this->parse_mode($mode);
+        if (in_array('session', $mode) and ! $this->is_session_start) {
+            $this->sessionStart();
+        }
         foreach ($mode as $arr) {
-            if ($arr == 'cookie') {
-                $array_keys = array_keys($names);
-                foreach ($array_keys as $name) {
-                    if (isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
-                        if (empty($all)) {
-                            return true;
-                        }
-                        unset($names[$name]);
+            $array_keys = array_keys($names);
+            foreach ($array_keys as $name) {
+                if ($arr == 'get' and isset($_GET[$name])) {
+                    if (empty($all)) {
+                        return true;
                     }
-                }
-            } elseif ($arr == 'session') {
-                if (! $this->is_session_start) {
-                    $this->sessionStart();
-                }
-                $array_keys = array_keys($names);
-                foreach ($array_keys as $name) {
-                    if (isset($_SESSION[$this->session_prefix . '_' . $name])) {
-                        if (empty($all)) {
-                            return true;
-                        }
-                        unset($names[$name]);
+                    unset($names[$name]);
+                } elseif ($arr == 'post' and isset($_POST[$name])) {
+                    if (empty($all)) {
+                        return true;
                     }
-                }
-            } else {
-                $array_keys = array_keys($names);
-                foreach ($array_keys as $name) {
-                    $eval = "if (isset(\$_" . strtoupper($arr) . "['" . $name . "']))\n";
-                    $eval .= "{\n";
-                    $eval .= "if(empty(\$all)) return true;\n";
-                    $eval .= "\tunset(\$names['" . $name . "']);\n";
-                    $eval .= "}";
-                    eval($eval);
+                    unset($names[$name]);
+                } elseif ($arr == 'cookie' and isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'session' and isset($_SESSION[$this->session_prefix . '_' . $name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'request' and isset($_REQUEST[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'env' and isset($_ENV[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
+                } elseif ($arr == 'server' and isset($_SERVER[$name])) {
+                    if (empty($all)) {
+                        return true;
+                    }
+                    unset($names[$name]);
                 }
             }
         }

@@ -6,8 +6,12 @@
  * @Createdate 3 - 24 - 2010 23 : 41
  */
 
-function nv_login_info(containerid) {
-    $('#' + containerid).load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime());
+function nv_login_info(containerid, ccap) {
+    $('#' + containerid).load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime(), function() {
+        if (ccap === true) {
+            change_captcha();
+        }
+    });
     return false;
 }
 
@@ -28,7 +32,7 @@ function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, g
 
     var pass = document.getElementById(pass_id);
 
-    if (pass.value.length > pass_max || pass.value.length < pass_min || ! nv_namecheck.test(pass.value)) {
+    if (pass.value.length > pass_max || pass.value.length < pass_min) {
         error = nv_error_password.replace(/\[max\]/g, pass_max);
         error = error.replace(/\[min\]/g, pass_min);
         alert(error);
@@ -38,15 +42,18 @@ function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, g
 
     request_query += '&password=' + pass.value;
     if (gfx_chk) {
-        var sec = document.getElementById(sec_id);
-        if (sec.value.length != gfx_count) {
-            error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
-            alert(error);
-            sec.focus();
-            return false;
+        if (gfx_count > 0) {
+            var sec = document.getElementById(sec_id);
+            if (sec.value.length != gfx_count) {
+                error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
+                alert(error);
+                sec.focus();
+                return false;
+            }
+            request_query += '&seccode=' + sec.value;
+        } else {
+            request_query += '&seccode=' + $('[name="g-recaptcha-response"]', $('#client_login')).val();
         }
-
-        request_query += '&seccode=' + sec.value;
     }
     var nv_timer = nv_settimeout_disable(button_id, 5000);
     $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime(), request_query, function(res) {
@@ -55,7 +62,7 @@ function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, g
             return false;
         }
         alert(nv_login_failed);
-        nv_login_info(res);
+        nv_login_info(res, true);
     });
     return false;
 }

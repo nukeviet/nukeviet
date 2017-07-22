@@ -7,7 +7,7 @@
                 <h3 class="modal-title">&nbsp;</h3>
             </div>
             <div class="modal-body">
-                    <em class="fa fa-spinner fa-spin">&nbsp;</em>
+                <em class="fa fa-spinner fa-spin">&nbsp;</em>
             </div>
         </div>
     </div>
@@ -26,6 +26,7 @@
 
 <!-- BEGIN: ckeditor -->
 <script type="text/javascript">
+if (typeof CKEDITOR != "undefined") {
 	for (var i in CKEDITOR.instances) {
 		CKEDITOR.instances[i].on('key', function(e) {
 			$(window).bind('beforeunload', function() {
@@ -33,6 +34,7 @@
 			});
 		});
 	}
+}
 </script>
 <!-- END: ckeditor -->
 </body>

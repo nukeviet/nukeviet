@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jul 31, 2015, 09:30:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jul 31, 2015, 09:30:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
@@ -91,5 +91,6 @@ $lang_module['action_menu_sys_1'] = 'Les menus sont les modules';
 $lang_module['action_menu_sys_2'] = 'Les menus sont les modules, sous-menus sont les sujets ou les fonctionnements';
 $lang_module['action_menu_sys_3'] = 'Les menus sont les sujets ou les fonctionnement des modules';
 $lang_module['icon'] = 'Icone de menu';
+$lang_module['image'] = 'Image de menu';
 $lang_module['action_form'] = 'Exécuter';
 $lang_module['msgnocheck'] = 'Il faut sélectionner au moins un article';

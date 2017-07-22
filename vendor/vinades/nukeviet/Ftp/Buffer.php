@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2/3/2012, 19:53
@@ -13,6 +13,7 @@ namespace NukeViet\Ftp;
 class Buffer
 {
     public $position = 0;
+
     public $varname = null;
 
     /**
@@ -50,7 +51,7 @@ class Buffer
      */
     public function stream_write($data)
     {
-        if (! isset($GLOBALS[$this->varname])) {
+        if (!isset($GLOBALS[$this->varname])) {
             $GLOBALS[$this->varname] = '';
         }
 
@@ -137,7 +138,7 @@ class Buffer
             $url = parse_url($path);
             $varname = $url["host"];
 
-            if (! isset($GLOBALS[$varname])) {
+            if (!isset($GLOBALS[$varname])) {
                 $GLOBALS[$varname] = '';
             }
 

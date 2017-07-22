@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @copyright 2010
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010 20:40
@@ -29,8 +29,6 @@ if (! defined('NV_MAINFILE')) {
  */
 function phpinfo_array($option = 1, $return = false)
 {
-    global $sys_info;
-
     $pi = array();
     if (nv_function_exists('phpinfo')) {
         ob_start();

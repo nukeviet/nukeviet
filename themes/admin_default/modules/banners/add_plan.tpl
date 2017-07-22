@@ -40,6 +40,13 @@
 					</select></td>
 				</tr>
 				<tr>
+					<td>{CONTENTS.require_image}</td>
+					<td>&nbsp;</td>
+					<td>
+						<input type="checkbox" value="1" name="require_image" />
+					</td>
+				</tr>
+				<tr>
 					<td colspan="3">{CONTENTS.description.0}:</td>
 				</tr>
 			</tbody>

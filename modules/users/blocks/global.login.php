@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 18:6
@@ -23,7 +23,6 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_config_login($module, $data_block, $lang_block)
     {
-        global $db, $site_mods;
         $html = '';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['display_mode'] . '</td>';
@@ -74,7 +73,7 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
+        global $client_info, $global_config, $module_name, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
 
         $content = '';
 
@@ -151,10 +150,10 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login');
                 $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
                 $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass');
-                $xtpl->assign('NICK_MAXLENGTH', NV_UNICKMAX);
-                $xtpl->assign('NICK_MINLENGTH', NV_UNICKMIN);
-                $xtpl->assign('PASS_MAXLENGTH', NV_UPASSMAX);
-                $xtpl->assign('PASS_MINLENGTH', NV_UPASSMIN);
+                $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
+                $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
+                $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+                $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
                 $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
@@ -165,8 +164,8 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('NV_REDIRECT', '');
                 $xtpl->assign('CHECKSS', NV_CHECK_SESSION);
 
-                $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
-                $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
+                $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
+                $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
 
                 $display_layout = empty($block_config['display_mode']) ? 'display_form' : 'display_button';
 
@@ -174,11 +173,24 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('PASSWORD_RULE', $password_rule);
 
                 if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
-                    $xtpl->parse('main.' . $display_layout . '.captcha');
+                    if ($global_config['captcha_type'] == 2) {
+                        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha.compact');
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha.smallbtn');
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha');
+                    } else {
+                        $xtpl->parse('main.' . $display_layout . '.captcha');
+                    }
                 }
 
                 if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) {
-                    $xtpl->parse('main.allowuserreg.reg_captcha');
+                    if ($global_config['captcha_type'] == 2) {
+                        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                        $xtpl->parse('main.allowuserreg.reg_recaptcha');
+                    } else {
+                        $xtpl->parse('main.allowuserreg.reg_captcha');
+                    }
                 }
 
                 if (defined('NV_OPENID_ALLOWED')) {
@@ -200,7 +212,7 @@ if (!nv_function_exists('nv_block_login')) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
                     	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
-                    	 
+
                         $data_questions = array();
                         $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
                         $result = $db->query($sql);
@@ -227,7 +239,6 @@ if (!nv_function_exists('nv_block_login')) {
                                 $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
                                 $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
                                 $result = $db->query($query);
-                                $weight = 0;
                                 while (list($key, $val) = $result->fetch(3)) {
                                     $row_field['field_choices'][$key] = $val;
                                 }
@@ -334,6 +345,11 @@ if (!nv_function_exists('nv_block_login')) {
                                 }
                             }
                             $xtpl->parse('main.allowuserreg.field');
+                        }
+
+                        if ($global_config['allowuserreg'] == 2) {
+                            $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostactivelink');
+                            $xtpl->parse('main.allowuserreg.lostactivelink');
                         }
 
                         $xtpl->parse('main.allowuserreg.agreecheck');

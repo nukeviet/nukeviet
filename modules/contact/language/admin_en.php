@@ -1,19 +1,19 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -23,6 +23,7 @@ $lang_module['edit_title'] = 'Preview';
 $lang_module['add_row_title'] = 'Add department';
 $lang_module['department_title'] = 'List of departments';
 $lang_module['department_no_home'] = 'Not shown in the main page module';
+$lang_module['department_parent'] = 'Parent department';
 $lang_module['alias'] = 'Alias';
 $lang_module['image'] = 'Image';
 $lang_module['error_alias'] = 'Error: no static links';
@@ -74,6 +75,13 @@ $lang_module['delall'] = 'Delete all';
 $lang_module['siteinfo_new'] = 'Unread contact';
 $lang_module['no_row_contact'] = 'Any Contact';
 $lang_module['url_for_iframe'] = 'Url for iframe';
+$lang_module['supporter'] = 'Supporter';
+$lang_module['supporter_add'] = 'Add Supporter';
+$lang_module['supporter_edit'] = 'Edit Supporter';
+$lang_module['supporter_contact_add'] = 'Add information';
+$lang_module['add'] = 'Add';
+$lang_module['active'] = 'Active';
+$lang_module['full_name'] = 'Full name';
 $lang_module['notification_contact_new'] = '<strong />%s mailing contact title<strong />%s';
 $lang_module['is_default'] = 'Default';
 $lang_module['otherContacts'] = 'Other contact';
@@ -84,4 +92,10 @@ $lang_module['cats'] = 'Related categories';
 $lang_module['cat'] = 'Category';
 $lang_module['mark_as_unread'] = 'Mark as unread';
 $lang_module['mark_as_read'] = 'Mark as read';
+$lang_module['mark_as_forward'] = 'Forward';
 $lang_module['please_choose'] = 'Please choose at least one  letter in the list.';
+$lang_module['error_required_departmentid'] = 'Error: Departmentid field is required';
+$lang_module['error_required_full_name'] = 'Error: Full name field is required';
+$lang_module['error_required_phone'] = 'Error: Phone field is required';
+$lang_module['forwarded'] = 'Forwarded';
+$lang_module['error_mail_empty'] = 'Error: Empty email';

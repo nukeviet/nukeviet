@@ -121,3 +121,11 @@
 #change-photo{
 	display: none;
 }
+
+.twostepp {
+    padding-left: 15px!important;
+}
+.disabled {
+   pointer-events: none;
+   cursor: default;
+}

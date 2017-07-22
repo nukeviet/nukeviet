@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
@@ -21,7 +21,7 @@ define('NV_IS_MOD_SEARCH', true);
  */
 function LoadModulesSearch()
 {
-    global $site_mods, $global_config;
+    global $site_mods;
 
     $arrayfolder = array();
     foreach ($site_mods as $mod => $arr_mod) {

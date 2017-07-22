@@ -1,10 +1,11 @@
 /* *
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+
 // NukeViet Default Custom JS
 var myTimerPage = "",
     myTimersecField = "",
@@ -20,7 +21,8 @@ var myTimerPage = "",
     cRangeY = 0,
     docX = 0,
     docY = 0,
-    brcb = $('.breadcrumbs-wrap');
+    brcb = $('.breadcrumbs-wrap'),
+    reCapIDs = [];
 
 function winResize() {
     oldWinX = winX;
@@ -39,33 +41,35 @@ function fix_banner_center() {
 }
 
 function timeoutsesscancel() {
-    clearInterval(myTimersecField);
-    $.ajax({
-        url: nv_base_siteurl + "index.php?second=statimg",
-        cache: !1
-    }).done(function() {
-        $("#timeoutsess").hide();
-        myTimerPage = setTimeout(function() {
-            timeoutsessrun()
-        }, nv_check_pass_mstime)
-    })
+	$("#timeoutsess").slideUp("slow", function() {
+		clearInterval(myTimersecField);
+		myTimerPage = setTimeout(function() {
+			timeoutsessrun()
+		}, nv_check_pass_mstime)
+	})
 }
 
 function timeoutsessrun() {
-    clearInterval(myTimerPage);
-    document.getElementById("secField").innerHTML = 60;
-    jQuery("#timeoutsess").show();
-    var a = (new Date).getTime();
-    myTimersecField = setInterval(function() {
-        var b = (new Date).getTime(),
-            b = 60 - Math.round((b - a) / 1E3);
-        0 <= b ? document.getElementById("secField").innerHTML = b : -3 > b && (clearInterval(myTimersecField), $(window).unbind(), window.location.reload())
-    }, 1E3)
+	clearInterval(myTimerPage);
+	$("#secField").text("60");
+	jQuery("#timeoutsess").show();
+	var b = (new Date).getTime();
+	myTimersecField = setInterval(function() {
+		var a = (new Date).getTime();
+		a = 60 - Math.round((a - b) / 1E3);
+		0 <= a ? $("#secField").text(a) : -3 > a && (clearInterval(myTimersecField), $(window).unbind(), $.ajax({
+			type: "POST",
+			cache: !1,
+			url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
+			data: "nv_ajax_login=1"
+		}).done(function(a) {
+			window.location.href = location.reload()
+		}));
+	}, 1E3)
 }
 
-function locationReplace(url)
-{
-    if(history.pushState) {
+function locationReplace(url) {
+    if (history.pushState) {
         history.pushState(null, null, url);
     }
 }
@@ -122,24 +126,104 @@ function ftipAutoClose(a) {
     ftip_autoclose = a
 }
 
-function tipShow(a, b) {
+function tipShow(a, b, callback) {
     if ($(a).is(".pa")) switchTab(".guest-sign", a);
     tip_active && tipHide();
     ftip_active && ftipHide();
     $("[data-toggle=tip]").removeClass("active");
     $(a).attr("data-click", "n").addClass("active");
-    $("#tip").attr("data-content", b).show("fast");
-    tip_active = !0
+    if (typeof callback != "undefined") {
+        $("#tip").attr("data-content", b).show("fast", function() {
+            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
+                $('[data-toggle="recaptcha"]', $(this)).each(function() {
+                    var parent = $(this).parent();
+                    var oldID = $(this).attr('id');
+                    var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+                    var ele;
+                    var btn = false, pnum = 0, btnselector = '';
+
+                    $(this).remove();
+                    parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
+
+                    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+                        ele = nv_recaptcha_elements[i];
+                        if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
+                            pnum = ele.pnum;
+                            btnselector = ele.btnselector;
+                            btn = $('#' + id);
+                            for (k = 1; k <= ele.pnum; k ++) {
+                                btn = btn.parent();
+                            }
+                            btn = $(ele.btnselector, btn);
+                            break;
+                        }
+                    }
+                    var newEle = {};
+                    newEle.id = id;
+                    if (btn != false) {
+                        newEle.btn = btn;
+                        newEle.pnum = pnum;
+                        newEle.btnselector = btnselector;
+                    }
+                    nv_recaptcha_elements.push(newEle);
+                });
+                reCaptchaLoadCallback();
+            }
+        });
+    } else {
+        $("#tip").attr("data-content", b).show("fast");
+    }
+    tip_active = 1;
 }
 
-function ftipShow(a, b) {
+function ftipShow(a, b, callback) {
     if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) return qrcodeLoad(a), !1;
     tip_active && tipHide();
     ftip_active && ftipHide();
     $("[data-toggle=ftip]").removeClass("active");
     $(a).attr("data-click", "n").addClass("active");
-    $("#ftip").attr("data-content", b).show("fast");
-    ftip_active = !0
+    if (typeof callback != "undefined") {
+        $("#ftip").attr("data-content", b).show("fast", function() {
+            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
+                $('[data-toggle="recaptcha"]', $(this)).each(function() {
+                    var parent = $(this).parent();
+                    var oldID = $(this).attr('id');
+                    var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+                    var ele;
+                    var btn = false, pnum = 0, btnselector = '';
+
+                    $(this).remove();
+                    parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
+
+                    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+                        ele = nv_recaptcha_elements[i];
+                        if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
+                            pnum = ele.pnum;
+                            btnselector = ele.btnselector;
+                            btn = $('#' + id);
+                            for (k = 1; k <= ele.pnum; k ++) {
+                                btn = btn.parent();
+                            }
+                            btn = $(ele.btnselector, btn);
+                            break;
+                        }
+                    }
+                    var newEle = {};
+                    newEle.id = id;
+                    if (btn != false) {
+                        newEle.btn = btn;
+                        newEle.pnum = pnum;
+                        newEle.btnselector = btnselector;
+                    }
+                    nv_recaptcha_elements.push(newEle);
+                });
+                reCaptchaLoadCallback();
+            }
+        });
+    } else {
+        $("#ftip").attr("data-content", b).show("fast");
+    }
+    ftip_active = 1;
 };
 
 function openID_load(a) {
@@ -157,7 +241,6 @@ function openID_result() {
 }
 
 // QR-code
-
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
@@ -167,8 +250,8 @@ function qrcodeLoad(a) {
     });
     b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
 };
-// Switch tab
 
+// Switch tab
 function switchTab(a) {
     if ($(a).is(".current")) return !1;
     var b = $(a).data("switch").split(/\s*,\s*/),
@@ -178,19 +261,32 @@ function switchTab(a) {
     $(c + " " + b[0]).removeClass("hidden");
     for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 };
-// Change Captcha
 
+// Change Captcha
 function change_captcha(a) {
-    $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-    "undefined" != typeof a && "" != a && $(a).val("");
+    if (typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
+        for (i = 0, j = reCapIDs.length; i < j; i++) {
+            var ele = reCapIDs[i];
+            var btn = nv_recaptcha_elements[ele[0]];
+            if ($('#' + btn.id).length) {
+                if (typeof btn.btn != "undefined" && btn.btn != "") {
+                    btn.btn.prop('disabled', true);
+                }
+                grecaptcha.reset(ele[1]);
+            }
+        }
+        reCaptchaLoadCallback();
+    } else {
+        $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+        "undefined" != typeof a && "" != a && $(a).val("");
+    }
     return !1
 }
 
 //Form Ajax-login
-function loginForm(redirect)
-{
-    if(nv_is_user == 1) return!1;
-    if(redirect != '') redirect = '&nv_redirect=' + redirect;
+function loginForm(redirect) {
+    if (nv_is_user == 1) return !1;
+    if (redirect != '') redirect = '&nv_redirect=' + redirect;
     $.ajax({
         type: 'POST',
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login' + redirect,
@@ -200,34 +296,87 @@ function loginForm(redirect)
     }).done(function(a) {
         modalShow('', a)
     });
-    return!1
+    return !1
 }
 
 
 // ModalShow
-
-function modalShow(a, b) {
+function modalShow(a, b, callback) {
     "" != a && 'undefined' != typeof a && $("#sitemodal .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + a + '</h2></div>');
     $("#sitemodal").find(".modal-title").html(a);
     $("#sitemodal").find(".modal-body").html(b);
-    $('#sitemodal').on('hidden.bs.modal', function () {
-            $("#sitemodal .modal-content").find(".modal-header").remove()
+    var scrollTop = false;
+    if (typeof callback != "undefined") {
+        if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
+            scrollTop = $(window).scrollTop();
+            $('#sitemodal').on('show.bs.modal', function() {
+                $('[data-toggle="recaptcha"]', $(this)).each(function() {
+                    var parent = $(this).parent();
+                    var oldID = $(this).attr('id');
+                    var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+                    var ele;
+                    var btn = false, pnum = 0, btnselector = '';
+
+                    $(this).remove();
+                    parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
+
+                    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+                        ele = nv_recaptcha_elements[i];
+                        if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
+                            pnum = ele.pnum;
+                            btnselector = ele.btnselector;
+                            btn = $('#' + id);
+                            for (k = 1; k <= ele.pnum; k ++) {
+                                btn = btn.parent();
+                            }
+                            btn = $(ele.btnselector, btn);
+                            break;
+                        }
+                    }
+                    var newEle = {};
+                    newEle.id = id;
+                    if (btn != false) {
+                        newEle.btn = btn;
+                        newEle.pnum = pnum;
+                        newEle.btnselector = btnselector;
+                    }
+                    nv_recaptcha_elements.push(newEle);
+                });
+                reCaptchaLoadCallback();
+            });
+        }
+    }
+    if (scrollTop) {
+        $("html,body").animate({scrollTop: 0}, 200, function() {
+            $("#sitemodal").modal({
+                backdrop: "static"
+            });
         });
-    $("#sitemodal").modal({backdrop: "static"})
+        $('#sitemodal').on('hide.bs.modal', function() {
+            $("html,body").animate({scrollTop: scrollTop}, 200);
+        });
+    } else {
+        $("#sitemodal").modal({
+            backdrop: "static"
+        });
+    }
+    $('#sitemodal').on('hidden.bs.modal', function() {
+        $("#sitemodal .modal-content").find(".modal-header").remove();
+    });
 }
 
-function modalShowByObj(a) {
+function modalShowByObj(a, callback) {
     var b = $(a).attr("title"),
         c = $(a).html();
-    modalShow(b, c)
+    modalShow(b, c, callback)
 }
-// Build google map for block Company Info
 
+// Build google map for block Company Info
 function initializeMap() {
     var ele = false
-    $('.company-map-modal').each(function(){
+    $('.company-map-modal').each(function() {
         if ($(this).data('trigger')) {
-            ele = $('.company-map', $(this)).attr('id') 
+            ele = $('.company-map', $(this)).attr('id')
             return
         }
     })
@@ -256,37 +405,89 @@ function initializeMap() {
 
 // Breadcrumbs
 function nvbreadcrumbs() {
-  if (brcb.length) {
-    var g = $(".display", brcb).innerWidth() - 40, b = $(".breadcrumbs", brcb), h = $(".temp-breadcrumbs", brcb), e = $(".subs-breadcrumbs", brcb), f = $(".show-subs-breadcrumbs", brcb), a = [], c = !1;
-    h.find("a").each(function() {
-      a.push([$(this).attr("title"), $(this).attr("href")]);
-    });
-    b.html("");
-    e.html("");
-    for (i = a.length - 1;0 <= i;i--) {
-      if (!c) {
-        var d = 0;
-        b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>");
-        b.find("li").each(function() {
-          d += $(this).outerWidth(!0);
+    if (brcb.length) {
+        var g = $(".display", brcb).innerWidth() - 40,
+            b = $(".breadcrumbs", brcb),
+            h = $(".temp-breadcrumbs", brcb),
+            e = $(".subs-breadcrumbs", brcb),
+            f = $(".show-subs-breadcrumbs", brcb),
+            a = [],
+            c = !1;
+        h.find("a").each(function() {
+            a.push([$(this).attr("title"), $(this).attr("href")]);
         });
-        d > g && (c = !0, $("#brcr_" + i, b).remove());
-      }
-      c && e.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>");
+        b.html("");
+        e.html("");
+        for (i = a.length - 1; 0 <= i; i--) {
+            if (!c) {
+                var d = 0;
+                b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>");
+                b.find("li").each(function() {
+                    d += $(this).outerWidth(!0);
+                });
+                d > g && (c = !0, $("#brcr_" + i, b).remove());
+            }
+            c && e.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>");
+        }
+        c ? f.removeClass("hidden") : f.addClass("hidden");
     }
-    c ? f.removeClass("hidden") : f.addClass("hidden");
-  }
 }
 
 function showSubBreadcrumbs(a, b) {
-  b.preventDefault();
-  b.stopPropagation();
-  var c = $(".subs-breadcrumbs", brcb);
-  $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
-  c.toggleClass("open");
-  $(document).on("click", function() {
-    $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), c.removeClass("open"));
-  });
+    b.preventDefault();
+    b.stopPropagation();
+    var c = $(".subs-breadcrumbs", brcb);
+    $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
+    c.toggleClass("open");
+    $(document).on("click", function() {
+        $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), c.removeClass("open"));
+    });
+}
+
+function add_hint(type, url) {
+	if (!type || !url) return;
+	var el = document.createElement("link");
+	el.setAttribute("rel", type);
+	el.setAttribute("href", url);
+	document.getElementsByTagName("head")[0].appendChild(el)
+}
+
+var reCaptchaLoadCallback = function() {
+    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+        var ele = nv_recaptcha_elements[i];
+        if ($('#' + ele.id).length && typeof reCapIDs[i] == "undefined") {
+            var size = '';
+            if (typeof ele.btn != "undefined" && ele.btn != "") {
+                ele.btn.prop('disabled', true);
+            }
+            if (typeof ele.size != "undefined" && ele.size == "compact") {
+                size = 'compact';
+            }
+            reCapIDs.push([
+                i, grecaptcha.render(ele.id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': reCaptchaResCallback
+                })
+            ]);
+        }
+    }
+}
+
+var reCaptchaResCallback = function() {
+    for (i = 0, j = reCapIDs.length; i < j; i++) {
+        var ele = reCapIDs[i];
+        var btn = nv_recaptcha_elements[ele[0]];
+        if ($('#' + btn.id).length) {
+            var res = grecaptcha.getResponse(ele[1]);
+            if (res != "") {
+                if (typeof btn.btn != "undefined" && btn.btn != "") {
+                    btn.btn.prop('disabled', false);
+                }
+            }
+        }
+    }
 }
 
 $(function() {
@@ -373,7 +574,8 @@ $(function() {
             d = $(a).html(),
             b = $(this).attr("data-toggle"),
             c = "tip" == b ? $("#tip").attr("data-content") : $("#ftip").attr("data-content");
-        a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), "tip" == b ? ($("#tip .bg").html(d), tipShow(this, a)) : ($("#ftip .bg").html(d), ftipShow(this, a))) : "n" == $(this).attr("data-click") ? "tip" == b ? tipHide() : ftipHide() : "tip" == b ? tipShow(this, a) : ftipShow(this, a);
+        var callback = $(this).data("callback");
+        a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), "tip" == b ? ($("#tip .bg").html(d), tipShow(this, a, callback)) : ($("#ftip .bg").html(d), ftipShow(this, a, callback))) : "n" == $(this).attr("data-click") ? "tip" == b ? tipHide() : ftipHide() : "tip" == b ? tipShow(this, a, callback) : ftipShow(this, a, callback);
         return !1
     });
     // Google map
@@ -411,9 +613,18 @@ $(function() {
         return !1
     });
     //Change Localtion
-    $("[data-location]").on("click",function(){
+    $("[data-location]").on("click", function() {
         locationReplace($(this).data("location"))
-    })
+    });
+    //Add preload: link rel="prefetch", link rel="prerender"
+    /*
+    $(document).bind("mousemove", function(e) {
+    	if (!e.target.href || e.target.href.indexOf(location.host) == -1 || e.target.hintAdded) return;
+        add_hint("prefetch", e.target.href);
+    	add_hint("prerender", e.target.href);
+    	e.target.hintAdded = true
+    });
+    */
 });
 // Fix bootstrap multiple modal
 $(document).on({
@@ -441,7 +652,7 @@ $(window).on("resize", function() {
 // Load Social script - lasest
 $(window).on('load', function() {
     nvbreadcrumbs();
-    (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
         var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
         var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
@@ -458,11 +669,19 @@ $(window).on('load', function() {
         b.parentNode.insertBefore(a, b);
     }());
     0 < $(".twitter-share-button").length &&
-    function() {
+        function() {
+            var a = document.createElement("script");
+            a.type = "text/javascript";
+            a.src = "//platform.twitter.com/widgets.js";
+            var b = document.getElementsByTagName("script")[0];
+            b.parentNode.insertBefore(a, b);
+        }();
+    if (typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha && nv_recaptcha_elements.length > 0) {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "//platform.twitter.com/widgets.js";
+        a.async = !0;
+        a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
-    }();
+    }
 });

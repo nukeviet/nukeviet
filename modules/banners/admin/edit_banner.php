@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/14/2010 0:50
@@ -17,8 +17,7 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $file_name = $row['file_name'];
@@ -66,8 +65,7 @@ while ($pl_row = $result->fetch()) {
 }
 
 if (empty($plans)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan');
 }
 
 $error = '';
@@ -84,6 +82,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (! isset($targets[$target])) {
         $target = '_blank';
     }
+    $bannerhtml = $nv_Request->get_editor('bannerhtml', '', NV_ALLOWED_HTML_TAGS);
 
     if (! empty($publ_date) and ! preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
         $publ_date = '';
@@ -99,12 +98,17 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $click_url = '';
     }
 
+	$sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE. '_plans where id = ' . $pid;
+	$result = $db->query($sql);
+	$array_require_image = $result->fetchAll();
     if (empty($title)) {
         $error = $lang_module['title_empty'];
     } elseif (empty($pid) or ! isset($plans[$pid])) {
         $error = $lang_module['plan_not_selected'];
     } elseif (! empty($click_url) and ! nv_is_url($click_url)) {
         $error = $lang_module['click_url_invalid'];
+    } elseif (! is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 && empty($file_name) ) {
+    	$error = $lang_module['file_upload_empty'];
     } else {
         if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
             $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
@@ -173,7 +177,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $clid . ',
 				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
 				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
-				 click_url= :click_url, target= :target,
+				 click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
 				 publ_time=' . $publtime . ', exp_time=' . $exptime . ' WHERE id=' . $id);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
@@ -183,6 +187,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $stmt->bindParam(':imageforswf', $imageforswf, PDO::PARAM_STR);
             $stmt->bindParam(':click_url', $click_url, PDO::PARAM_STR);
             $stmt->bindParam(':target', $target, PDO::PARAM_STR);
+            $stmt->bindParam(':bannerhtml', $bannerhtml, PDO::PARAM_STR, strlen($bannerhtml));
             $stmt->execute();
 
             if ($pid_old != $pid) {
@@ -193,8 +198,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_banner', 'bannerid ' . $id, $admin_info['userid']);
             nv_CreateXML_bannerPlan();
 
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
         }
     }
 } else {
@@ -204,6 +208,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $file_alt = $row['file_alt'];
     $click_url = $row['click_url'];
     $target = $row['target'];
+    $bannerhtml = $row['bannerhtml'];
     $publ_date = ! empty($row['publ_time']) ? date('d/m/Y', $row['publ_time']) : '';
     $exp_date = ! empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : '';
 }
@@ -219,7 +224,11 @@ $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid 
 
 $imageforswf = (! empty($imageforswf)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
-$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . "", NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif" );
+if($file_ext != 'no_image'){
+	$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . "", NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif" );
+}else{
+	$contents['file_name'] = array( $lang_module['file_name'],'');
+}
 
 $contents['upload'] = array( sprintf($lang_module['re_upload'], $contents['file_allowed_ext']), 'banner', $lang_module['imageforswf'], 'imageforswf' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
@@ -229,6 +238,18 @@ $contents['target'] = array( $lang_module['target'], 'target', $targets, $target
 
 $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
+
+$contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
+
+if (defined('NV_EDITOR')) {
+    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $contents['bannerhtml'] = nv_aleditor('bannerhtml', '100%', '300px', $contents['bannerhtml']);
+} else {
+    $contents['bannerhtml'] = '<textarea style="width:100%;height:300px" name="bannerhtml">' . $contents['bannerhtml'] . '</textarea>';
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme(nv_edit_banner_theme($contents));

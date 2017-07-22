@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -32,6 +32,7 @@ $lang_module['caption_badmod'] = 'Danh sách các module ngưng hoạt động v
 $lang_module['caption_newmod'] = 'Danh sách các module chưa cài đặt';
 $lang_module['module_name'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
+$lang_module['site_title'] = 'Giá trị cho tiêu đề site';
 $lang_module['admin_title'] = 'Tên gọi khu vực quản trị';
 $lang_module['weight'] = 'Thứ tự';
 $lang_module['in_menu'] = 'Top Menu';
@@ -55,6 +56,7 @@ $lang_module['funcs_layout'] = 'Sử dụng layout';
 $lang_module['funcs_in_submenu'] = 'Menu';
 $lang_module['funcs_subweight'] = 'Thứ tự';
 $lang_module['activate_rss'] = 'Kích hoạt chức năng rss';
+$lang_module['activate_sitemap'] = 'Kích hoạt chức năng sitemap';
 $lang_module['module_sys'] = 'Các module hệ thống';
 $lang_module['vmodule'] = 'Các module ảo';
 $lang_module['vmodule_add'] = 'Thêm module ảo';
@@ -64,8 +66,10 @@ $lang_module['vmodule_note'] = 'Ghi chú';
 $lang_module['vmodule_select'] = 'Chọn module';
 $lang_module['vmodule_blockquote'] = 'Ghi chú: Tên module mới chỉ gồm các chữ cái, số và dấu gạch ngang.';
 $lang_module['vmodule_exit'] = 'Lỗi: Module bạn đặt đã có trong hệ thống.';
+$lang_module['vmodule_maxlength'] = 'Tối đa 50 ký tự';
 $lang_module['back'] = 'Quay lại';
 $lang_module['change_func_name'] = 'Đổi tên function "%s" của module "%s"';
+$lang_module['change_func_sitetitle'] = 'Đổi tiêu đề site funtion "%s" của module "%s"';
 $lang_module['change_fun_alias'] = 'Đổi tên alias "%s" của module "%s"';
 $lang_module['description'] = 'Mô tả';
 $lang_module['reinstall_module'] = 'Cài lại module';

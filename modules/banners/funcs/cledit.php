@@ -33,7 +33,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mobile = strip_tags($nv_Request->get_string('mobile', 'post', ''));
 
     $check_email = nv_check_valid_email($email);
-    $check_pass = nv_check_valid_pass($pass, NV_UPASSMAX, NV_UPASSMIN);
+    $check_pass = nv_check_valid_pass($pass, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
 
     if ($website == 'http://') {
         $website = '';
@@ -98,8 +98,8 @@ $contents['rows']['phone'] = array( $lang_global['phonenumber'], 'phone', $banne
 $contents['rows']['fax'] = array( $lang_module['fax'], 'fax', $banner_client_info['fax'], 100 );
 $contents['rows']['mobile'] = array( $lang_module['mobile'], 'mobile', $banner_client_info['mobile'], 100 );
 
-$contents['npass']['pass'] = array( $lang_module['new_pass'], 'pass_iavim', NV_UPASSMAX );
-$contents['npass']['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', NV_UPASSMAX );
+$contents['npass']['pass'] = array( $lang_module['new_pass'], 'pass_iavim', $global_config['nv_upassmax'] );
+$contents['npass']['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $global_config['nv_upassmax'] );
 
 $contents['edit_name'] = $lang_global['submit'];
 $contents['edit_onclick'] = "nv_cl_edit_save('full_name','email_iavim','website_iavim','location','yim_iavim','phone','fax','mobile','pass_iavim','re_pass_iavim','submit_button');";

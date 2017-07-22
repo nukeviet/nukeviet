@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
@@ -20,21 +20,25 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $news_contents = $query->fetch();
 
     if ($news_contents['id'] > 0) {
-        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
+        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
         if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
             $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
         } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
             //chuyen huong neu doi alias
             header('HTTP/1.1 301 Moved Permanently');
-            Header('Location: ' . $base_url_rewrite);
-            die();
+            nv_redirect_location($base_url_rewrite);
         } else {
             $canonicalUrl = $base_url_rewrite;
         }
+        $canonicalUrl = str_replace('&', '&amp;', $canonicalUrl);
 
         $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
+
+        if ($news_contents['external_link']) {
+            nv_redirect_location($news_contents['sourcetext']);
+        }
 
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
@@ -147,7 +151,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $related_array = array();
     if ($st_links > 0) {
         $db_slave->sqlreset()
-            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1 AND publtime > ' . $publtime)
             ->order('id ASC')
@@ -178,7 +182,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'link' => $link,
                 'newday' => $global_array_cat[$catid]['newday'],
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
         $related->closeCursor();
@@ -186,7 +191,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         sort($related_new_array, SORT_NUMERIC);
 
         $db_slave->sqlreset()
-            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1 AND publtime < ' . $publtime)
             ->order('id DESC')
@@ -217,7 +222,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'link' => $link,
                 'newday' => $global_array_cat[$catid]['newday'],
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
 
@@ -232,7 +238,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
         $db_slave->sqlreset()
-            ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
             ->where('status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id)
             ->order('id DESC')
@@ -264,7 +270,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'topiclink' => $topiclink,
                 'topictitle' => $topic_title,
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
         $topic->closeCursor();

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
@@ -47,7 +47,12 @@ class Ips
     private function nv_getenv($key)
     {
         if (isset($_SERVER[$key])) {
-            return $_SERVER[$key];
+            if (strpos($_SERVER[$key], ',')) {
+                $_arr = explode(',', $_SERVER[$key]);
+                return trim($_arr[0]);
+            } else {
+                return $_SERVER[$key];
+            }
         } elseif (isset($_ENV[$key])) {
             return $_ENV[$key];
         } elseif (@getenv($key)) {

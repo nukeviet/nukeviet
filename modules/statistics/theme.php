@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10/03/2010 10:51
@@ -19,9 +19,10 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
  */
 function nv_theme_statistics_referer($cts, $total)
 {
-    global $module_info, $module_file, $lang_module, $lang_global, $module_name;
+    global $module_info, $lang_module;
 
-    $xtpl = new XTemplate('referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
 
     if ($total) {
         $xtpl->assign('CTS', $cts);
@@ -62,9 +63,9 @@ function nv_theme_statistics_referer($cts, $total)
  */
 function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
 {
-    global $module_info, $module_file, $lang_module, $lang_global, $module_name;
+    global $module_info, $lang_module;
 
-    $xtpl = new XTemplate('allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
         if (! empty($host_list)) {
@@ -109,9 +110,9 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
  */
 function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
 {
-    global $module_info, $module_file, $lang_module, $lang_global, $module_name;
+    global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
         if (! empty($bot_list)) {
@@ -156,9 +157,9 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
  */
 function nv_theme_statistics_allos($num_items, $os_list, $cts)
 {
-    global $module_info, $module_file, $lang_module, $lang_global, $module_name;
+    global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
         if (! empty($os_list)) {
@@ -205,9 +206,9 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
  */
 function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
 {
-    global $module_info, $module_file, $lang_module, $lang_global, $module_name;
+    global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
         if (! empty($browsers_list)) {
@@ -217,7 +218,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
             foreach ($cts['rows'] as $key => $value) {
                 $const = 'BROWSER_' . strtoupper($key);
                 $key = defined($const) ? constant($const) : $key;
-                
+
                 $class = ($a % 2 == 0) ? " class=\"second\"" : "";
                 $xtpl->assign('CLASS', $class);
                 $xtpl->assign('KEY', $key);
@@ -255,9 +256,9 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
  */
 function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
 {
-    global $module_info, $module_file, $lang_module, $lang_global, $module_name;
+    global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
         if (! empty($countries_list)) {
@@ -305,9 +306,9 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
  */
 function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh)
 {
-    global $module_info, $module_name, $module_file, $lang_module, $lang_global;
+    global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     $xtpl->assign('CTS', $ctsy);
 
@@ -514,7 +515,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     foreach ($ctsb['rows'] as $key => $value) {
         $const = 'BROWSER_' . strtoupper($key);
         $key = defined($const) ? constant($const) : $key;
-        
+
         $class = ($a % 2 == 0) ? " class=\"second\"" : "";
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('KEY', $key);

@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -23,6 +23,8 @@ $lang_module['list'] = 'List of articles';
 $lang_module['add'] = 'Add a new article';
 $lang_module['send'] = 'Send';
 $lang_module['title'] = 'Title';
+$lang_module['add_time'] = 'Add time';
+$lang_module['edit_time'] = 'Edit time';
 $lang_module['order'] = 'Order';
 $lang_module['status'] = 'Status';
 $lang_module['active'] = 'Active';
@@ -49,6 +51,8 @@ $lang_module['imgposition'] = 'Imag position';
 $lang_module['imgposition_0'] = 'Hidden';
 $lang_module['imgposition_1'] = 'Left description';
 $lang_module['imgposition_2'] = 'Bellow description';
+$lang_module['group_post'] = 'Group of post';
+$lang_module['hot_post'] = 'Featured post';
 $lang_module['layout_func'] = 'Layout';
 $lang_module['layout_default'] = 'Default';
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';
@@ -63,3 +67,6 @@ $lang_module['config_view_related_articles'] = 'Number of posts related articles
 $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
 $lang_module['config_save'] = 'Save config';
+
+$lang_module['setting_copy_page'] = 'Allowed to copy the article';
+$lang_module['title_copy_page'] = 'Copy the article';

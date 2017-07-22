@@ -1,19 +1,19 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 29, 2010, 02:24:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 29, 2010, 02:24:00 AM
+ */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '29/06/2010, 09:24';
 $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -57,9 +57,10 @@ $lang_module['supports_rewrite'] = 'Supports rewrite';
 $lang_module['opendir_support'] = 'PHP support opendir';
 $lang_module['gd_support'] = 'PHP support GD library';
 $lang_module['xml_support'] = 'PHP support XML library';
-$lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
+$lang_module['openssl_support'] = 'PHP supported encryption openssl library';
 $lang_module['session_support'] = 'PHP support session';
 $lang_module['fileuploads_support'] = 'PHP support file upload';
+$lang_module['json_support'] = 'PHP support JSON';
 $lang_module['dir_noexit'] = 'Not exists derectory';
 $lang_module['dir_not_writable'] = 'Not writable';
 $lang_module['dir_not_writable_ip_files'] = 'Can not write files in %1$s folder';
@@ -259,3 +260,10 @@ $lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind databas
 $lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';
 $lang_module['update_error_check_version_sys'] = 'Error: Unable to check the version of the system';
 $lang_module['update_error_check_version_ext'] = 'Error: Unable to check the version of the extension';
+
+$lang_module['thanks'] = 'Thanks Member';
+$lang_module['thanks_text'] = 'NuKeViets management would like to send our sincere thanks to our fellow members as well as for their contribution to the development of NuKeViet so far, hope you continue to promote and always support As well as continue building hands NuKeViets growing.';
+$lang_module['thanks_list_member_all'] = 'Members list:';
+$lang_module['thanks_list_member_other_version'] = 'The list of members contributed by each version';
+$lang_module['thanks_other_version'] = 'Version';
+$lang_module['is_unofficial_mode'] = 'Note: This version is for development and testing, you should not use to be the official website';

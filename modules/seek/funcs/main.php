@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 24/8/2010, 2:0
@@ -40,9 +40,8 @@ if ($nv_Request->isset_request('q', 'get')) {
     if (! isset($array_mod[$search['mod']])) {
         $search['mod'] = 'all';
     }
-    
-    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-    $base_url_rewrite .= (empty($rewrite_keys) ? '&' : '?') . 'q=' . htmlspecialchars(nv_unhtmlspecialchars($search['key']));
+
+    $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode($search['key']);
     if ($search['mod'] != 'all') {
         $base_url_rewrite .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
     }
@@ -52,11 +51,10 @@ if ($nv_Request->isset_request('q', 'get')) {
     if ($search['page'] > 1) {
         $base_url_rewrite .= '&page=' . $search['page'];
     }
-
-    $request_uri = urldecode($_SERVER['REQUEST_URI']);
+    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+    $request_uri = $_SERVER['REQUEST_URI'];
     if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-        Header('Location: ' . $base_url_rewrite);
-        die();
+        nv_redirect_location($base_url_rewrite);
     }
 
     if (! empty($search['key'])) {
@@ -105,7 +103,7 @@ if ($nv_Request->isset_request('q', 'get')) {
 
 $contents = search_main_theme($is_search, $search, $array_mod);
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 if (! empty($search['key'])) {
     $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];

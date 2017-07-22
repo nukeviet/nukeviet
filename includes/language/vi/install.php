@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
 $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -57,9 +57,10 @@ $lang_module['supports_rewrite'] = 'Hỗ trợ rewrite';
 $lang_module['opendir_support'] = 'PHP hỗ trợ opendir';
 $lang_module['gd_support'] = 'PHP hỗ trợ thư viện xử lý ảnh GD';
 $lang_module['xml_support'] = 'PHP hỗ trợ thư viện xử lý XML';
-$lang_module['mcrypt_support'] = 'PHP hỗ trợ thư viện mã hóa mcrypt';
+$lang_module['openssl_support'] = 'PHP hỗ trợ thư viện mã hóa Openssl';
 $lang_module['session_support'] = 'PHP hỗ trợ session';
 $lang_module['fileuploads_support'] = 'PHP hỗ trợ uploads file';
+$lang_module['json_support'] = 'PHP hỗ trợ JSON';
 $lang_module['dir_noexit'] = 'Không tồn tại';
 $lang_module['dir_not_writable'] = 'Không ghi được';
 $lang_module['dir_not_writable_ip_files'] = 'Không ghi được các file trong thư mục %1$s';
@@ -259,3 +260,10 @@ $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại C
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này, vui lòng chọn loại khác';
 $lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
 $lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';
+
+$lang_module['thanks'] = 'Lời cảm ơn';
+$lang_module['thanks_text'] = 'Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đồng hành cũng như đóng góp công sức của mình cho công cuộc phát triển NuKeViet từ trước cho đến nay, mong các bạn tiếp tục phát huy và luôn luôn ủng hộ cũng như tiếp tục chung tay xây dựng NuKeViet ngày càng lớn mạnh.';
+$lang_module['thanks_list_member_all'] = 'Danh sách thành viên:';
+$lang_module['thanks_list_member_other_version'] = 'Danh sách các thành viên đã đóng góp theo từng phiên bản';
+$lang_module['thanks_other_version'] = 'Phiên bản';
+$lang_module['is_unofficial_mode'] = 'Chú ý: Đây là phiên bản dùng để phát triển và thử nghiệm, bạn không nên sử dụng để làm website chính thức';

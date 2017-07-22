@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
@@ -32,15 +32,15 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     $array_config['captcha'] = $nv_Request->get_int('captcha', 'post', 0);
     $array_config['perpagecomm'] = $nv_Request->get_int('perpagecomm', 'post', 0);
     $array_config['timeoutcomm'] = $nv_Request->get_int('timeoutcomm', 'post', 0);
-    
+
     if ($array_config['perpagecomm'] < 1 or $array_config['perpagecomm'] > 1000) {
         $array_config['perpagecomm'] = 5;
     }
-    
+
     if ($array_config['timeoutcomm'] < 0) {
         $array_config['timeoutcomm'] = 360;
     }
-    
+
     $_groups_com = $nv_Request->get_array('allowed_comm', 'post', array());
     if (in_array(-1, $_groups_com)) {
         $array_config['allowed_comm'] = '-1';
@@ -70,8 +70,7 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
         $sth->execute();
     }
     $nv_Cache->delMod('settings');
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

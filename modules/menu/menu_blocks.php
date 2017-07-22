@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
@@ -140,7 +140,7 @@ function nv_menu_blocks_active($cat)
  */
 function nv_menu_check_current($url, $type = 0)
 {
-    global $module_name, $home, $client_info, $global_config;
+    global $home, $client_info, $global_config;
 
     $url = nv_unhtmlspecialchars($url);
 

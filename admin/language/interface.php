@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -30,7 +30,7 @@ foreach ($columns_array as $row) {
     }
 }
 
-if (empty($array_lang_exit) or ! in_array($dirlang, $array_lang_exit)) {
+if (empty($array_lang_exit) or !in_array($dirlang, $array_lang_exit)) {
     $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5('readallfile' . NV_CHECK_SESSION));
 
     $xtpl->parse('empty');
@@ -46,7 +46,7 @@ foreach ($array_lang_exit as $langkey) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
 }
 
-if (! in_array($dirlang, $array_lang_exit)) {
+if (!in_array($dirlang, $array_lang_exit)) {
     $dirlang = $global_config['site_lang'];
 }
 
@@ -58,7 +58,7 @@ $a = 0;
 
 $sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query($sql);
-while (list($idfile, $module, $admin_file, $langtype, $author_lang) = $result->fetch(3)) {
+while (list ($idfile, $module, $admin_file, $langtype, $author_lang) = $result->fetch(3)) {
     switch ($admin_file) {
         case '1':
             $langsitename = $lang_module['nv_lang_admin'];
@@ -79,7 +79,7 @@ while (list($idfile, $module, $admin_file, $langtype, $author_lang) = $result->f
         $array_translator['info'] = '';
         $array_translator['langtype'] = '';
     } else {
-        eval('$array_translator = ' . $author_lang . ';');
+        $array_translator = unserialize($author_lang);
     }
 
     $xtpl->assign('ROW', array(

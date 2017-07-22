@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 5/12/2010, 1:34
@@ -42,10 +42,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     file_put_contents($cache_file, $content_config, LOCK_EX);
 
-    $check_rewrite_file = nv_check_rewrite_file();
-
     $redirect = false;
-    if (empty($global_config['check_rewrite_file'])) {
+    if (!$global_config['check_rewrite_file'] or !$global_config['rewrite_enable']) {
         $rbcontents = array();
         $rbcontents[] = 'User-agent: *';
 
@@ -57,7 +55,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         }
 
-        $rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+        $rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 
         $rbcontents = implode("\n", $rbcontents);
 
@@ -72,8 +70,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if ($redirect) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 }
 

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -19,8 +19,7 @@ if (empty($global_config['lang_multi'])) {
         define('NV_LANG_INTERFACE', $global_config['site_lang']);
         define('NV_LANG_DATA', $global_config['site_lang']);
     } else {
-        Header('Location: ' . NV_BASE_SITEURL);
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL);
     }
 } elseif (defined('NV_ADMIN')) {
     $cookie = $nv_Request->get_string('data_lang', 'cookie');

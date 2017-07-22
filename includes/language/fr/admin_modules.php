@@ -2,8 +2,8 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 10:30:00 AM
@@ -79,3 +79,7 @@ $lang_module['reinstall_note4'] = 'Ce modèle de données n\'est pas compatible 
 $lang_module['setup_option'] = 'Choisir une solution';
 $lang_module['setup_option_0'] = 'Ne configurer que le module';
 $lang_module['setup_option_1'] = 'Configurer le module et installer le modèle de données';
+$lang_module['vmodule_maxlength'] = 'Un maximum de 50 caractères';
+$lang_module['site_title'] = 'Valeur pour le titre du site';
+$lang_module['change_func_sitetitle'] = 'Changer de site titre funtion module "% s" "% s"';
+$lang_module['activate_sitemap'] = 'activer plan du site';

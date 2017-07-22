@@ -101,7 +101,7 @@
 
 /*Login-box*/
 .login-box{
-    width:400px
+    width:334px
 }
 @media (max-width:399px) {
     .login-box{

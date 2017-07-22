@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
@@ -60,6 +60,7 @@ if (empty($dpDefault) and ! empty($array_department)) {
 $fname = '';
 $femail = '';
 $fphone = '';
+$faddress = '';
 
 if (defined('NV_IS_USER')) {
     $fname = ! empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
@@ -98,36 +99,36 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     if (empty($fname)) {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fname',
-            'mess' => $lang_module['error_fullname'] )));
+            'mess' => $lang_module['error_fullname'] ));
     }
 
     if (($check_valid_email = nv_check_valid_email($femail)) != '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'femail',
-            'mess' => $check_valid_email )));
+            'mess' => $check_valid_email ));
     }
 
     if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'ftitle',
-            'mess' => $lang_module['error_title'] )));
+            'mess' => $lang_module['error_title'] ));
     }
     if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fcon',
-            'mess' => $lang_module['error_content'] )));
+            'mess' => $lang_module['error_content'] ));
     }
-    if (! nv_capcha_txt($nv_Request->get_title('fcode', 'post', ''))) {
-        die(json_encode(array(
+    if (! nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
+        nv_jsonOutput(array(
             'status' => 'error',
-            'input' => 'fcode',
-            'mess' => $lang_module['error_captcha'] )));
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) ));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -146,12 +147,13 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
+	$faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
 	$fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
-    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)';
+    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
+    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)';
     $data_insert = array();
     $data_insert['cat'] = $fcat;
     $data_insert['title'] = $ftitle;
@@ -159,6 +161,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_name'] = $fname;
     $data_insert['sender_email'] = $femail;
     $data_insert['sender_phone'] = $fphone;
+	$data_insert['sender_address'] = $faddress;
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
@@ -210,20 +213,20 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
         nv_insert_notification($module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1);
 
-        die(json_encode(array(
+        nv_jsonOutput(array(
             'status' => 'ok',
             'input' => '',
-            'mess' => $lang_module['sendcontactok'] )));
+            'mess' => $lang_module['sendcontactok'] ));
     }
 
-    die(json_encode(array(
+    nv_jsonOutput(array(
         'status' => 'error',
         'input' => '',
-        'mess' => $lang_module['sendcontactfailed'] )));
+        'mess' => $lang_module['sendcontactfailed'] ));
 }
 
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
@@ -242,8 +245,7 @@ $base_url_rewrite = nv_url_rewrite($base_url, true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    Header('Location: ' . $base_url_rewrite);
-    die();
+    nv_redirect_location($base_url_rewrite);
 } else {
     $canonicalUrl = $base_url_rewrite;
 }

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -30,7 +30,10 @@ if ($sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get('out
 @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT");
 @Header('Expires: ' . gmdate('D, d M Y H:i:s', NV_CURRENTTIME - 60) . " GMT");
 
-@Header('X-Frame-Options: SAMEORIGIN');
+if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
+    Header('X-Frame-Options: SAMEORIGIN');
+}
+
 @Header('X-Content-Type-Options: nosniff');
 @Header('X-XSS-Protection: 1; mode=block');
 

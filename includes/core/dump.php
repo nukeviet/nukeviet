@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @copyright 2010
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/20/2010 20:48
@@ -89,7 +89,7 @@ class dumpsave
  */
 function nv_dump_save($params)
 {
-    global $db, $sys_info, $global_config, $db_config;
+    global $db, $sys_info, $db_config;
 
     if ($sys_info['allowed_set_time_limit']) {
         set_time_limit(1200);

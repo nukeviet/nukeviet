@@ -2,8 +2,8 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -47,6 +47,7 @@ $lang_module['nv_allowed_html_tags'] = 'HTML code was approved in the system';
 $lang_module['captcha_type'] = 'Captcha type';
 $lang_module['captcha_type_0'] = 'Default captcha';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Captcha display method';
 $lang_module['captcha_0'] = 'Hide';
 $lang_module['captcha_1'] = 'When admin login';
@@ -58,6 +59,12 @@ $lang_module['captcha_6'] = 'When admin login or guest register';
 $lang_module['captcha_7'] = 'Display at all';
 $lang_module['captcha_num'] = 'Number characters of captcha';
 $lang_module['captcha_size'] = 'Size of captcha';
+$lang_module['recaptcha_sitekey'] = 'Site key';
+$lang_module['recaptcha_secretkey'] = 'Secret key';
+$lang_module['recaptcha_type'] = 'Recaptcha type';
+$lang_module['recaptcha_type_image'] = 'Image';
+$lang_module['recaptcha_type_audio'] = 'Audio';
+$lang_module['recaptcha_guide'] = 'Guide';
 $lang_module['ftp_config'] = 'FTP Configuration';
 $lang_module['smtp_config'] = 'SMTP Configuration';
 $lang_module['server'] = 'Server or Url';
@@ -234,3 +241,8 @@ $lang_module['two_step_verification0'] = 'Not required';
 $lang_module['two_step_verification1'] = 'Admin Area';
 $lang_module['two_step_verification2'] = 'Site area';
 $lang_module['two_step_verification3'] = 'All areas';
+$lang_module['site_phone'] = 'Site\'s phone';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guide to get Google Maps API key</a>';
+$lang_module['err_save_sysconfig'] = 'The changes have been saved but the system does not write to the configuration file. Please grant write permission to file %s and then execute again';
+$lang_module['two_step_verification_note'] = 'Note: This configuration applies to all accounts of groups, if you need to configure each group individually, select this value as <strong />%s then edit the <a href="%s"> group </a>, then select the required two-step authentication trigger field as desired';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
@@ -52,6 +52,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config_site['site_email'] = $site_email;
     }
 
+    $array_config_site['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
+
     $preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
     $array_config_site['date_pattern'] = nv_substr($nv_Request->get_title('date_pattern', 'post', '', 0, $preg_replace), 0, 255);
     $array_config_site['time_pattern'] = nv_substr($nv_Request->get_title('time_pattern', 'post', '', 0, $preg_replace), 0, 255);
@@ -59,6 +61,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config_site['searchEngineUniqueID'] = $nv_Request->get_title('searchEngineUniqueID', 'post', '');
     if (preg_match('/[^a-zA-Z0-9\:\-\_\.]/', $array_config_site['searchEngineUniqueID'])) {
         $array_config_site['searchEngineUniqueID'] = '';
+    }
+
+    $array_config_site['googleMapsAPI'] = $nv_Request->get_title('googleMapsAPI', 'post', '');
+    if (preg_match('/[^a-zA-Z0-9\_\-]/', $array_config_site['googleMapsAPI'])) {
+        $array_config_site['googleMapsAPI'] = '';
     }
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
@@ -116,11 +123,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $array_config_global['site_lang'] = $site_lang;
         }
 
+        $array_config_global['rewrite_enable'] = $nv_Request->get_int('rewrite_enable', 'post', 0);
         if ($array_config_global['lang_multi'] == 0) {
-            $array_config_global['rewrite_optional'] = $nv_Request->get_int('rewrite_optional', 'post', 0);
+            if ($array_config_global['rewrite_enable']) {
+                $array_config_global['rewrite_optional'] = $nv_Request->get_int('rewrite_optional', 'post', 0);
+            } else {
+                $array_config_global['rewrite_optional'] = 0;
+            }
             $array_config_global['lang_geo'] = 0;
             $array_config_global['rewrite_op_mod'] = $nv_Request->get_title('rewrite_op_mod', 'post');
-            if (! isset($site_mods[$array_config_global['rewrite_op_mod']]) or $array_config_global['rewrite_optional'] ==0) {
+            if (! isset($site_mods[$array_config_global['rewrite_op_mod']]) or $array_config_global['rewrite_optional'] == 0) {
                 $array_config_global['rewrite_op_mod'] = '';
             }
         } else {
@@ -161,6 +173,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         nv_save_file_config_global();
 
         $array_config_rewrite = array(
+            'rewrite_enable' => $array_config_global['rewrite_enable'],
             'rewrite_optional' => $array_config_global['rewrite_optional'],
             'rewrite_endurl' => $global_config['rewrite_endurl'],
             'rewrite_exturl' => $global_config['rewrite_exturl'],
@@ -175,8 +188,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $nv_Cache->delAll(false);
     }
     if (empty($errormess)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 }
 
@@ -202,23 +214,21 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_LANG_MULTI', ($array_config_global['lang_multi']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_NOTIFI_ACTIVE', ($array_config_global['notification_active']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_ERROR_SET_LOGS', ($array_config_global['error_set_logs']) ? ' checked="checked"' : '');
+    $xtpl->assign('CHECKED_REWRITE_ENABLE', ($array_config_global['rewrite_enable'] == 1) ? ' checked ' : '');
+    $xtpl->assign('CHECKED_REWRITE_OPTIONAL', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
 
-    if ($lang_multi == 0) {
-        $xtpl->assign('CHECKED2', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
-
-        foreach ($site_mods as $mod => $row) {
-            if ($row['module_file'] != 'page') {
-                $xtpl->assign('MODE_VALUE', $mod);
-                $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : "");
-                $xtpl->assign('MODE_NAME', $row['custom_title']);
-                $xtpl->parse('main.system.rewrite_optional.rewrite_op_mod');
-            }
-        }
-
-        $xtpl->parse('main.system.rewrite_optional');
+    foreach ($site_mods as $mod => $row) {
+        $xtpl->assign('MODE_VALUE', $mod);
+        $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : "");
+        $xtpl->assign('MODE_NAME', $row['custom_title']);
+        $xtpl->parse('main.system.rewrite_op_mod');
     }
+
+    $xtpl->assign('SHOW_REWRITE_OPTIONAL', ($lang_multi == 0 and $array_config_global['rewrite_enable']) ? '' : ' style="display:none"');
+    $xtpl->assign('SHOW_REWRITE_OP_MOD', ($array_config_global['rewrite_optional'] == 1) ? '' : ' style="display:none"');
+
     if (sizeof($global_config['allow_sitelangs']) > 1) {
         foreach ($allow_sitelangs as $lang_i) {
             $xtpl->assign('LANGOP', $lang_i);

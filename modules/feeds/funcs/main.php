@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
@@ -19,7 +19,7 @@ if (! defined('NV_IS_MOD_RSS')) {
  */
 function nv_get_rss_link()
 {
-    global $nv_Cache, $db, $module_data, $global_config, $site_mods;
+    global $db, $nv_Cache, $module_data, $global_config, $site_mods;
     $contentrss = '';
 
     foreach ($site_mods as $mod_name => $mod_info) {
@@ -78,7 +78,7 @@ function nv_get_sub_rss_link($rssarray, $id)
     return $content;
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 $array = '';
 $content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';

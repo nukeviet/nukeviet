@@ -38,9 +38,8 @@
 </div>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<col span="6" style="white-space: nowrap;" />
+		<col span="2" style="white-space: nowrap;" />
 		<col class="w250" />
-		<col style="white-space: nowrap;" />
 		<thead>
 			<tr>
 				<th class="text-center">{LANG.block_title}</th>

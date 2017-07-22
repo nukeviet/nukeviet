@@ -1,6 +1,6 @@
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu,17 Apr 2014 04:03:46 GMT
@@ -462,6 +462,16 @@ div.radio-box,div.check-box{
 }
 .has-error div.radio-box,.has-error div.check-box{
     border-color: #de495b;
+}
+
+div.radio-box label,
+div.check-box label {
+    margin-bottom: 0;
+}
+
+div.radio-box label [type="radio"],
+div.check-box label [type="radio"] {
+    margin-top: -2px;
 }
 
 .display-inline-block{
@@ -1730,6 +1740,18 @@ a.btn {
     vertical-align:middle;
 }
 
+.nv-recaptcha-default {
+    margin: 0 auto;
+    width: 304px;
+    height: 78px;
+}
+
+.nv-recaptcha-compact {
+    margin: 0 auto;
+    width: 164px;
+    height: 144px;
+}
+
 /* List item */
 
 .nv-list-item {
@@ -2254,4 +2276,17 @@ button.close {
 {
 	height: 32px !important;
     padding-top: 2px;
+}
+.voting-col-2 {
+    border-left: 1px solid #ccc;
+    padding: 0px 10px;
+}
+.padding-voting ul li {
+    margin: 0px 10px;
+    padding: 10px 0px;
+    list-style: disc;
+     text-align: justify;
+}
+.sum-voting {
+	margin-top:5px;
 }

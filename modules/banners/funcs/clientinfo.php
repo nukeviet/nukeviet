@@ -21,7 +21,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
     $contents['aj'] = "nv_login_info('action');";
 }
 
-$page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['funcs'][$op]['func_custom_name'];
+$page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['funcs'][$op]['func_site_title'];
 
 $contents = clientinfo_theme($contents);
 
