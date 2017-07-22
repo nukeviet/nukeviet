@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jul 2, 2017 2:06:56 PM
@@ -98,6 +98,9 @@ if (isset($lang_global['error_' . $error_code . '_content'])) {
             break;
         case 502:
             $content = 'Bad Gateway';
+            break;
+        case 503:
+            $content = 'Service Temporarily Unavailable';
             break;
         case 504:
             $content = 'Gateway Time-out';

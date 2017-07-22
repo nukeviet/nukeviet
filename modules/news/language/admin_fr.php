@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @Language Français
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -47,6 +47,8 @@ $lang_module['status_7'] = 'En cours d\'examiner d\'article';
 $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
+$lang_module['status_12'] = 'Sauvegarder l\'article, passer à la rédacteur';
+$lang_module['status_13'] = 'Sauvegarder l\'article, passer à la rédacteur en chef';
 $lang_module['errorsave'] = 'Erreur: il est impossible de mettre à jour, vérifiez si le titre ou l\'alias a été utilisé';
 $lang_module['errorexists'] = 'Erreur: le titre ou le lien statique est dupliqué, entrez une valeur différente';
 $lang_module['saveok'] = 'Mise à jour réussie';
