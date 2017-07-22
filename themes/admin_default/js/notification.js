@@ -47,9 +47,8 @@ function nv_get_notification(timestamp) {
                 url: script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
                 data: queryString,
                 success: function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    if (obj.data_from_file > 0) {
-                        $('#notification').show().html(obj.data_from_file);
+                    if (data.data_from_file > 0) {
+                        $('#notification').show().html(data.data_from_file);
                     } else {
                         $('#notification').hide();
                     }
@@ -64,7 +63,7 @@ function nv_get_notification(timestamp) {
 $(function() {
     nv_get_notification();
     notification_get_more();
-    
+
     // Notification
     $('#notification-area').on('show.bs.dropdown', function() {
         $.get(script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&ajax=1&nocache=' + new Date().getTime(), function(result) {
@@ -76,13 +75,13 @@ $(function() {
             $('#notification_waiting').hide();
         });
     });
-    
+
     $('#notification-area').on('show.bs.dropdown', function() {
         page = 1;
         $('#notification_load').html('');
         $('#notification_waiting').show();
     });
-    
+
     // Hide notification
     $('.notify_item .ntf-hide').click(function(e) {
         e.preventDefault();
