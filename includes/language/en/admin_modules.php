@@ -2,8 +2,8 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -79,3 +79,7 @@ $lang_module['reinstall_note4'] = 'This sample data is not currently available f
 $lang_module['setup_option'] = 'Choose the option';
 $lang_module['setup_option_0'] = 'Just setup module';
 $lang_module['setup_option_1'] = 'Setup module and install the sample data';
+$lang_module['vmodule_maxlength'] = 'Maximum 50 characters';
+$lang_module['site_title'] = 'Value for site title';
+$lang_module['change_func_sitetitle'] = 'Rename site funtion "% s" of module "% s"';
+$lang_module['activate_sitemap'] = 'Activate the sitemap';

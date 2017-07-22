@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 18:6
@@ -23,7 +23,6 @@ if (! nv_function_exists('nv_department_info')) {
     {
         global $site_mods, $nv_Cache;
 
-        $html_input = '';
         $html = '';
         $html .= '<tr>';
         $html .= '<td>' . $lang_block['departmentid'] . '</td>';

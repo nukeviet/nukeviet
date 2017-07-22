@@ -99,7 +99,7 @@ function showQlist(a) {
 
 function addQuestion(a) {
     var b = $(a).parent().parent().parent().parent();
-    $("[name=your_question]", b).val($(a).text());
+    $("[name=question]", b).val($(a).text());
     $(".qlist", b).attr("data-show", "no").hide();
     return !1
 }
@@ -217,7 +217,10 @@ function login_validForm(a) {
                     $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                     validErrorShow(this)
                 }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                    $("[type=submit]", a).prop("disabled", !1)
+                    $("[type=submit]", a).prop("disabled", !1);
+                    if (nv_is_recaptcha) {
+                        change_captcha();
+                    }
                 }, 1E3)
             } else if (d.status == "ok") {
                 $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), 
@@ -264,7 +267,7 @@ function reg_validForm(a) {
                 validErrorShow(this)
             }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
                 scrollTop: $(".nv-info", a).offset().top
-            }, 800))) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+            }, 800)), (nv_is_recaptcha && change_captcha())) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
                 $(".nv-info", a).fadeOut();
                 $("input,button,select,textarea", a).prop("disabled", !1);
                 $("[onclick*=validReset]", a).click()
@@ -297,36 +300,52 @@ function lostpass_validForm(a) {
         "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
-    d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
-        type: c.type,
-        cache: !1,
-        url: c.url,
-        data: c.data,
-        dataType: "json",
-        success: function(b) {
-            if (b.status == "error") {
-                $("[name=step]",a).val(b.step);
-                 if(b.step == 'step1') $("[onclick*='change_captcha']", a).click();
-                 if("undefined" != typeof b.info && "" != b.info) $(".nv-info",a).removeClass('error success').text(b.info);
-                $("input,button", a).prop("disabled", !1);
-                $(".required",a).removeClass("required");
-                $(".tooltip-current", a).removeClass("tooltip-current");
-                $("[class*=step]", a).hide();
-                $("." + b.step + " input", a).addClass("required");
-                $("." + b.step, a).show();
-                $(a).find("[name=" + b.input + "]").each(function() {
-                    $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                    validErrorShow(this)
-                })
-            } else {
-                 $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
-                 setTimeout(function() {
-                window.location.href = b.input
-                }, 6E3)
-            }
+    if (!d) {
+        if (nv_is_recaptcha && $("[name=step]",a).val() == 'step1') {
+            $("[name=gcaptcha_session]",a).val($("[name=g-recaptcha-response]",a).val());
         }
-    }));
-    return !1
+        c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0);
+        $.ajax({
+            type: c.type,
+            cache: !1,
+            url: c.url,
+            data: c.data,
+            dataType: "json",
+            success: function(b) {
+                if (b.status == "error") {
+                    $("[name=step]",a).val(b.step);
+                    if("undefined" != typeof b.info && "" != b.info) $(".nv-info",a).removeClass('error success').text(b.info);
+                    $("input,button", a).prop("disabled", !1);
+                    $(".required",a).removeClass("required");
+                    $(".tooltip-current", a).removeClass("tooltip-current");
+                    $("[class*=step]", a).hide();
+                    $("." + b.step + " input", a).addClass("required");
+                    $("." + b.step, a).show();
+                    if (b.input == '') {
+                        $(".nv-info", a).html(b.mess).addClass("error").show();
+                    } else {
+                        $(a).find("[name=\"" + b.input + "\"]").each(function() {
+                            $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                            validErrorShow(this);
+                        });
+                    }
+                    if(b.step == 'step1') {
+                        $("[onclick*='change_captcha']", a).click();
+                        if (nv_is_recaptcha) {
+                            change_captcha();
+                            $("[name=gcaptcha_session]",a).val('');
+                        }
+                    }
+                } else {
+                    $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
+                    setTimeout(function() {
+                        window.location.href = b.input;
+                    }, 6E3);
+                }
+            }
+        });
+    }
+    return !1;
 }
 
 function changemail_validForm(a) {
@@ -349,7 +368,7 @@ function changemail_validForm(a) {
             "error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
                 $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                 validErrorShow(this)
-            })) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.status ? setTimeout(function() {
+            }), (nv_is_recaptcha && change_captcha())) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.status ? setTimeout(function() {
                 $(".nv-info", a).fadeOut();
                 $("input,button,select,textarea", a).prop("disabled", !1)
             }, 6E3) : $("html, body").animate({
@@ -413,12 +432,10 @@ UAV.config = {
     target: 'preview',
     uploadInfo: 'uploadInfo',
     uploadGuide: 'guide',
-    x1: 'x1',
-    y1: 'y1',
-    x2: 'x2',
-    y2: 'y2',
-    w: 'w',
-    h: 'h',
+    x: 'crop_x',
+    y: 'crop_y',
+    w: 'crop_width',
+    h: 'crop_height',
     originalDimension: 'original-dimension',
     displayDimension: 'display-dimension',
     imageType: 'image-type',
@@ -438,7 +455,7 @@ UAV.lang = {
 UAV.data = {
     error: false,
     busy: false,
-    jcropApi: null
+    cropperApi: null
 };
 UAV.tool = {
     bytes2Size: function(bytes) {
@@ -448,19 +465,19 @@ UAV.tool = {
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     },
     update: function(e) {
-        $('#' + UAV.config.x1).val(e.x);
-        $('#' + UAV.config.y1).val(e.y);
-        $('#' + UAV.config.x2).val(e.x2);
-        $('#' + UAV.config.y2).val(e.y2);
+        $('#' + UAV.config.x).val(e.x);
+        $('#' + UAV.config.y).val(e.y);
+        $('#' + UAV.config.w).val(e.width);
+        $('#' + UAV.config.h).val(e.height);
     },
     clear: function(e) {
-        $('#' + UAV.config.x1).val(0);
-        $('#' + UAV.config.y1).val(0);
-        $('#' + UAV.config.x2).val(0);
-        $('#' + UAV.config.y2).val(0);
+        $('#' + UAV.config.x).val(0);
+        $('#' + UAV.config.y).val(0);
+        $('#' + UAV.config.w).val(0);
+        $('#' + UAV.config.h).val(0);
     }
 };
-// Please use this package with Jcrop http://deepliquid.com/content/Jcrop.html
+// Please use this package with fengyuanchen/cropper https://fengyuanchen.github.io/cropper
 UAV.common = {
     read: function(file) {
         $('#' + UAV.config.uploadIcon).hide();
@@ -472,6 +489,8 @@ UAV.common = {
                 var img = document.getElementById(UAV.config.target);
                 var boxWidth = $('#' + UAV.config.target).innerWidth();
                 var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
+                var minCropBoxWidth = UAV.config.avatar_width / (img.naturalWidth / boxWidth);
+                var minCropBoxHeight = UAV.config.avatar_height / (img.naturalHeight / boxHeight);
                 if (img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height) {
                     UAV.common.error(UAV.lang.bigsize);
                     UAV.data.error = true;
@@ -489,29 +508,54 @@ UAV.common = {
                     $('#' + UAV.config.imageType).html(file.type);
                     $('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
                     $('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
-                    console.log()
-                    $('#' + UAV.config.target).Jcrop({
-                        minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
-                        setSelect: [300, 300, 55, 55],
+                    
+                    UAV.data.cropperApi = $('#' + UAV.config.target).cropper({
+                        viewMode: 3,
+                        dragMode: 'crop',
                         aspectRatio: 1,
-                        bgFade: true,
-                        bgOpacity: .3,
-                        boxWidth: boxWidth,
-                        boxHeight: boxHeight,
-                        onChange: function(e) {
+                        responsive: true,
+                        modal: true,
+                        guides: false,
+                        highlight: true,
+                        autoCrop: false,
+                        autoCropArea: 0.1,
+                        movable: false,
+                        rotatable: false,
+                        scalable: false,
+                        zoomable: false,
+                        zoomOnTouch: false,
+                        zoomOnWheel: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        minCropBoxWidth: minCropBoxWidth,
+                        minCropBoxHeight: minCropBoxHeight,
+                        minContainerWidth: 10,
+                        minContainerHeight: 10,
+                        crop: function(e) {
                             UAV.tool.update(e);
                         },
-                        onSelect: function(e) {
-                            UAV.tool.update(e);
-                        },
-                        onRelease: function(e) {
-                            UAV.tool.clear(e);
+                        built: function(e) {
+                            var imageData = $(this).cropper('getImageData');
+                            var cropBoxScale = imageData.naturalWidth / imageData.width;
+                            imageData.width = parseInt(Math.floor(imageData.width));
+                            imageData.height = parseInt(Math.floor(imageData.height));
+                            var cropBoxSize = {
+                                width: 80 / cropBoxScale,
+                                height: 80 / cropBoxScale
+                            };
+                            cropBoxSize.left = (imageData.width - cropBoxSize.width) / 2;
+                            cropBoxSize.top = (imageData.height - cropBoxSize.height) / 2;
+                            $(this).cropper('crop');
+                            $(this).cropper('setCropBoxData', {
+                                left: cropBoxSize.left,
+                                top: cropBoxSize.top,
+                                width: cropBoxSize.width,
+                                height: cropBoxSize.height
+                            });
+                            $('#' + UAV.config.w).val(imageData.width);
+                            $('#' + UAV.config.h).val(imageData.height);
+                            $('#' + UAV.config.displayDimension).html(imageData.width + ' x ' + imageData.height);
                         }
-                    }, function() {
-                        $('#' + UAV.config.w).val(boxWidth);
-                        $('#' + UAV.config.h).val(boxHeight);
-                        $('#' + UAV.config.displayDimension).html(boxWidth + ' x ' + boxHeight);
-                        UAV.data.jcropApi = this;
                     });
                 } else {
                     $('#' + UAV.config.uploadIcon).show();
@@ -546,8 +590,9 @@ UAV.common = {
         alert(e);
     },
     reset: function() {
-        if (UAV.data.jcropApi != null) {
-            UAV.data.jcropApi.destroy();
+        if (UAV.data.cropperApi != null) {
+            UAV.data.cropperApi.cropper('destroy');
+            UAV.data.cropperApi = null;
         }
         UAV.data.error = false;
         UAV.data.busy = false;
@@ -565,7 +610,7 @@ UAV.common = {
     },
     submit: function() {
         if (!UAV.data.busy) {
-            if ($('#' + UAV.config.x2).val() == '' || $('#' + UAV.config.x2).val() == '0') {
+            if ($('#' + UAV.config.w).val() == '' || $('#' + UAV.config.w).val() == '0') {
                 alert(UAV.lang.upload);
                 return false;
             }

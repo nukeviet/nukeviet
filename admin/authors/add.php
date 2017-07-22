@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 21:13
@@ -13,21 +13,18 @@ if (! defined('NV_IS_FILE_AUTHORS')) {
 }
 
 if (! (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['spadmin_add_admin'] == 1))) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 if ($nv_Request->get_int('result', 'get', 0)) {
     $checksess = $nv_Request->get_title('checksess', 'get', '');
     if ($checksess != NV_CHECK_SESSION) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     $session_files = $nv_Request->get_string('nv_admin_profile', 'session', '');
     if (empty($session_files)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     $session_files = unserialize($session_files);
@@ -55,23 +52,23 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
     list($userid, $username, $active) = $db->query($sql)->fetch(3);
     if (empty($userid)) {
-        die($lang_module['add_error_choose']);
+        nv_htmlOutput($lang_module['add_error_choose']);
     }
 
     $sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
     $count = $db->query($sql)->fetchColumn();
     if ($count) {
-        die($lang_module['add_error_exist']);
+        nv_htmlOutput($lang_module['add_error_exist']);
     }
 
     if (empty($userid)) {
-        die($lang_module['add_error_notexist']);
+        nv_htmlOutput($lang_module['add_error_notexist']);
     }
     if (empty($position)) {
-        die($lang_module['position_incorrect']);
+        nv_htmlOutput($lang_module['position_incorrect']);
     }
     if (empty($active)) {
-        die(sprintf($lang_module['username_noactive'], $username));
+        nv_htmlOutput(sprintf($lang_module['username_noactive'], $username));
     }
 
     $lev = ($lev != 2 or ! defined('NV_IS_GODADMIN')) ? 3 : 2;
@@ -129,9 +126,9 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $nv_Request->set_Session('nv_admin_profile', $session_files);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['menuadd'], 'Username: ' . $username, $admin_info['userid']);
-        die('OK');
+        nv_htmlOutput('OK');
     } else {
-        die($lang_module['add_error_diff']);
+        nv_htmlOutput($lang_module['add_error_diff']);
     }
 } else {
     $position = '';
@@ -195,7 +192,7 @@ $xtpl->assign('INFO', $contents['info']);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
-$xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, NV_CHECK_SESSION)));
+$xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 $xtpl->assign('ACTION', $contents['action']);
 
 if (isset($contents['editor'])) {

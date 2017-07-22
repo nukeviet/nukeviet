@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -76,3 +76,5 @@ $lang_global['multi_note'] = 'Có thể khai báo hơn 1 giá trị, được ph
 $lang_global['multi_email_note'] = 'Có thể khai báo hơn 1 giá trị, được phân cách bởi dấu phẩy. Email đầu tiên được coi là email chính, được sử dụng để gửi, nhận thư.';
 
 $lang_global['view_all'] = 'Xem tất cả';
+$lang_global['email'] = 'Email';
+$lang_global['phonenumber'] = 'Điện thoại';

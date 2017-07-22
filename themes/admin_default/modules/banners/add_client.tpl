@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="alert alert-info">{CONTENTS.info}</div>
-<form method="post" id="form_add_client" action="{CONTENTS.action}">
+<form method="post" id="form_add_client" class="form-inline" action="{CONTENTS.action}">
 	<input type="hidden" value="1" name="save" id="save" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
@@ -16,17 +16,17 @@
 				<tr>
 					<td>{CONTENTS.login.0}:</td>
 					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="w300 form-control" name="{CONTENTS.login.1}" id="{CONTENTS.login.1}" type="text" value="{CONTENTS.login.2}" maxlength="{CONTENTS.login.3}" /></td>
+					<td><input class="w300 form-control" name="{CONTENTS.login.1}" id="{CONTENTS.login.1}" type="text" value="{CONTENTS.login.2}" onblur="find_User()" maxlength="{CONTENTS.login.3}" /></td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.pass.0}:</td>
 					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="w300 form-control" name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" value="{CONTENTS.pass.2}" maxlength="{CONTENTS.pass.3}" /></td>
+					<td><input class="w300 form-control" name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" autocomplete="off" value="{CONTENTS.pass.2}" style="margin-right: 5px" maxlength="{CONTENTS.pass.3}" /><a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.re_pass.0}:</td>
 					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="w300 form-control" name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" value="{CONTENTS.re_pass.2}" maxlength="{CONTENTS.re_pass.3}" /></td>
+					<td><input class="w300 form-control" name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" autocomplete="off" value="{CONTENTS.re_pass.2}" style="margin-right: 5px" maxlength="{CONTENTS.re_pass.3}" /><input id="methods" type="checkbox"> {LANG.show_password}</td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.email.0}:</td>
@@ -73,9 +73,19 @@
 					<td>&nbsp;</td>
 					<td><label><input name="{CONTENTS.uploadtype.1}[]" type="checkbox" value="images"/>images</label>&nbsp;<label><input name="{CONTENTS.uploadtype.1}[]" type="checkbox" value="flash"/>flash</label></td>
 				</tr>
-	
+
 			</tbody>
 		</table>
 	</div>
 </form>
+<script type="text/javascript">
+//<![CDATA[
+$(function() {
+	$.toggleShowPassword({
+	    field: '#re_pass_iavim',
+	    control: '#methods'
+	})
+});
+//]]>
+</script>
 <!-- END: main -->

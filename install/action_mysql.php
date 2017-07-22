@@ -49,7 +49,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 	mid mediumint(8) NOT NULL AUTO_INCREMENT,
-	module varchar(55) NOT NULL,
+	module varchar(50) NOT NULL,
 	lang_key varchar(50) NOT NULL DEFAULT '',
 	weight mediumint(8) NOT NULL DEFAULT '0',
 	act_1 tinyint(4) NOT NULL DEFAULT '0',
@@ -62,7 +62,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
 	lang varchar(3) NOT NULL DEFAULT 'sys',
-	module varchar(25) NOT NULL DEFAULT 'global',
+	module varchar(50) NOT NULL DEFAULT 'global',
 	config_name varchar(30) NOT NULL DEFAULT '',
 	config_value text,
 	UNIQUE KEY lang (lang,module,config_name)
@@ -119,15 +119,6 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
 	secure tinyint(1) NOT NULL DEFAULT '0',
 	UNIQUE KEY cookiename (name, domain, path),
 	KEY name (name)
-) ENGINE=MyISAM";
-
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
-	lang char(2) NOT NULL,
-	module varchar(50) NOT NULL,
-	tables varchar(255) NOT NULL,
-	version varchar(100) NOT NULL,
-	setup_time int(11) unsigned NOT NULL DEFAULT '0',
-	UNIQUE KEY lang (lang,module)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
@@ -187,7 +178,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
 	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	login varchar(60) NOT NULL,
-	pass varchar(80) NOT NULL,
+	pass varchar(200) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
 	full_name varchar(250) NOT NULL,
 	email varchar(100) NOT NULL,
@@ -213,11 +204,12 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
 	title varchar(250) NOT NULL,
-	description varchar(255) DEFAULT '',
+	description text,    
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',
 	height smallint(4) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL DEFAULT '0',
+	require_image tinyint(1) unsigned NOT NULL DEFAULT '1',
 	PRIMARY KEY (id),
 	KEY title (title)
 ) ENGINE=MyISAM";
@@ -236,6 +228,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
 	imageforswf varchar(255) DEFAULT '',
 	click_url varchar(255) DEFAULT '',
 	target varchar(10) NOT NULL DEFAULT '_blank',
+    bannerhtml mediumtext NOT NULL,
 	add_time int(11) unsigned NOT NULL DEFAULT '0',
 	publ_time int(11) unsigned NOT NULL DEFAULT '0',
 	exp_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -262,7 +255,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banip (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 	id int(11) NOT NULL AUTO_INCREMENT,
 	lang varchar(10) NOT NULL,
-	module_name varchar(150) NOT NULL,
+	module_name varchar(50) NOT NULL,
 	name_key varchar(255) NOT NULL,
 	note_action text NOT NULL,
 	link_acess varchar(255) DEFAULT '',

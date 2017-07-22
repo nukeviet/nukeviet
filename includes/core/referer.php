@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 11/6/2010, 20:9
@@ -14,7 +14,7 @@ if (! defined('NV_MAINFILE')) {
 
 function nv_referer_update()
 {
-    global $nv_Request, $client_info, $global_config, $db, $prefix;
+    global $nv_Request, $client_info, $global_config, $db;
 
     if ($client_info['is_myreferer'] == 0) {
         $host = $nv_Request->referer_host;

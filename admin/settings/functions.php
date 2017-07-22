@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 1:58
@@ -118,7 +118,6 @@ function main_theme($contents)
             $xtpl->parse('main.delete');
         }
 
-        $a = 0;
         foreach ($values['detail'] as $key => $value) {
             $xtpl->assign('ROW', array(
                 'key' => $key,

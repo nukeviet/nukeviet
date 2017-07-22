@@ -234,6 +234,14 @@ $(document).ready(function() {
     } else {
         $('#adv-form').collapse('hide');
     }
+    
+    $('input[name="open_source"]').change(function() {
+    	if ($(this).is(':checked')) {
+    		$('#content_bodytext_required').addClass('hidden');
+    	} else {
+    		$('#content_bodytext_required').removeClass('hidden');
+    	}
+	});
 });
 
 function formatRepo (repo) {
@@ -248,5 +256,22 @@ function formatRepoSelection (repo) {
 function nv_add_element( idElment, key, value ){
    var html = "<span title=\"" + value + "\" class=\"uiToken removable\" ondblclick=\"$(this).remove();\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";
     $("#" + idElment).append( html );
+	return false;
+}
+
+var timer_check_takeover = '';
+function nv_timer_check_takeover(id) {
+	clearTimeout(timer_check_takeover);
+    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'id='+id+'&check_edit=1', function(res) {
+		res = res.split("_");
+		if (res[0] != 'OK') {// thông báo bị chiếm quyền sửa
+			alert(res[1]);
+			$('.submit-post').remove();
+		} else {
+			timer_check_takeover = setTimeout(function() {
+				nv_timer_check_takeover(id);
+			}, 30000);
+		}
+	});
 	return false;
 }

@@ -7,6 +7,8 @@
  */
 
 function user_validForm(a) {
+    $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+    $('[type="submit"]', $(a)).prop('disabled', true);
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -14,13 +16,12 @@ function user_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-            if( b.status == "error" )
-            {
+            $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
                 alert(b.mess);
-                $("[name=" + b.input + "]", a).focus();
-            }
-            else
-            {
+                $("[name=\"" + b.input + "\"]", a).focus();
+            } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
                 if( b.admin_add == "yes" ) {
                     if (confirm( b.mess )) {
@@ -344,12 +345,12 @@ function nv_data_export(set_export) {
 
 // User field
 var items = ''; // fields.tpl
-function nv_choice_fields_additem() {
+function nv_choice_fields_additem(placeholder) {
     items++;
     var newitem = '<tr class="text-center">';
     newitem += '    <td>' + items + '</td>';
-    newitem += '    <td><input class="form-control w100 validalphanumeric" type="text" value="" name="field_choice[' + items + ']"></td>';
-    newitem += '    <td><input class="form-control" clas="w350" type="text" value="" name="field_choice_text[' + items + ']"></td>';
+    newitem += '    <td><input class="form-control w200 validalphanumeric" type="text" value="" name="field_choice[' + items + ']" placeholder="' + placeholder + '"></td>';
+    newitem += '    <td><input class="form-control w300" type="text" value="" name="field_choice_text[' + items + ']"></td>';
     newitem += '    <td><input type="radio" value="' + items + '" name="default_value_choice"></td>';
     newitem += '    </tr>';
     $('#choiceitems').append(newitem);
@@ -424,11 +425,10 @@ function nv_users_check_choicetypes(elemnet) {
 function control_theme_groups() {
     var ingroup = $('[name="group[]"]:checked').length,
         gdefault = $('[name="group_default"]:checked').val(),
-        groups = [],
-        ioff = $('[name="is_official"]').is(':checked')
+        groups = []
     
     $('[name="group[]"]').each(function(){
-        if ($(this).is(':checked') && ingroup > 1 && ioff) {
+        if ($(this).is(':checked') && ingroup > 1) {
             $('.group_default', $(this).parent().parent()).show()
             
             if (typeof gdefault == 'undefined') {
@@ -449,21 +449,46 @@ function control_theme_groups() {
     }
 }
 
+function nv_del_oauthall(userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
+function nv_del_oauthone(opid, userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
 $(document).ready(function(){
     // Edit user
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
-
     $("#btn_upload").click(function() {
         nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
         return false;
     });
-    $('#current-photo-btn').click(function(){
+    $('#current-photo-btn').click(function() {
         $('#current-photo').hide();
         $('#photo_delete').val('1');
         $('#change-photo').show();
+    });
+    $('#imageresource').click(function() {
+        $('#current-photo-btn').click();
+        $("#btn_upload").click();
     });
 
     if ($.fn.validate){

@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 11-10-2010 14:43
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('notification_reset', 'post')) {
 
 // Get count notification
 if ($nv_Request->isset_request('notification_get', 'get')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -45,20 +45,19 @@ if ($nv_Request->isset_request('notification_get', 'get')) {
             'timestamp' => $last_time
         );
     }
-    $json = json_encode($return);
-    echo $json;
-    die();
+
+    nv_jsonOutput($return);
 }
 
 // Hide (delete)
 if ($nv_Request->isset_request('delete', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
-    
+
     if ($id) {
         $db->query("DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id=" . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
         die('OK');
     }
-    
+
     die('ERROR');
 }
 
@@ -69,16 +68,17 @@ $per_page = $is_ajax ? 10 : 20;
 $array_data = array();
 
 $db->sqlreset()
-  ->select('COUNT(*)')
-  ->from(NV_NOTIFICATION_GLOBALTABLE)
-  ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+    ->select('COUNT(*)')
+    ->from(NV_NOTIFICATION_GLOBALTABLE)
+    ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
 
-$all_pages = $db->query($db->sql())->fetchColumn();
+$all_pages = $db->query($db->sql())
+    ->fetchColumn();
 
 $db->select('*')
-  ->order('id DESC')
-  ->limit($per_page)
-  ->offset(($page - 1) * $per_page);
+    ->order('id DESC')
+    ->limit($per_page)
+    ->offset(($page - 1) * $per_page);
 
 $result = $db->query($db->sql());
 $num_rows = $result->rowCount();
@@ -115,7 +115,7 @@ while ($data = $result->fetch()) {
                     $data['send_from'] = $lang_global['level5'];
                 }
 
-                if (! empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
+                if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
                     $data['photo'] = NV_BASE_SITEURL . $admin_info['photo'];
                 } else {
                     $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
@@ -124,10 +124,10 @@ while ($data = $result->fetch()) {
                 $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
                 $data['send_from'] = $lang_global['level5'];
             }
-            
+
             include NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php';
         }
-        
+
         $data['add_time_iso'] = nv_date(DATE_ISO8601, $data['add_time']);
         $data['add_time'] = nv_date('H:i d/m/Y', $data['add_time']);
 
@@ -145,7 +145,7 @@ if (!empty($array_data)) {
         $xtpl->assign('DATA', $data);
         $xtpl->parse('main.loop');
     }
-    
+
     if ($is_ajax) {
         $contents = $xtpl->text('main.loop');
     } else {
@@ -154,7 +154,7 @@ if (!empty($array_data)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.generate_page');
         }
-        
+
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
     }
@@ -162,10 +162,9 @@ if (!empty($array_data)) {
     $contents = $page == 1 ? $lang_module['notification_empty'] : '';
 } else {
     if ($page != 1) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
-    
+
     $xtpl->parse('empty');
     $contents = $xtpl->text('empty');
 }

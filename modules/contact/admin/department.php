@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 22, 2010 3:00:20 PM
@@ -28,7 +28,7 @@ foreach ($array_department as $row) {
         'phone' => preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", "", $row['phone']),
         'fax' => $row['fax'],
         'id' => $row['id'],
-        'url_department' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '/0', 
+        'url_department' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '/0',
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id']
     ));
 
@@ -52,14 +52,13 @@ foreach ($array_department as $row) {
 
         $xtpl->parse('main.row.status');
     }
-    
+
     $xtpl->parse($row['is_default'] ? 'main.row.check' : 'main.row.notcheck');
 
     $xtpl->parse('main.row');
 }
 if (empty($a)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row');
 }
 
 $xtpl->assign('URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row');

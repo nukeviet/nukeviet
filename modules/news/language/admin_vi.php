@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -48,6 +48,7 @@ $lang_module['status_8'] = 'Chuyển đăng bài';
 $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại liên kết tĩnh tiêu đề bài viết có thể bị trùng';
+$lang_module['errorexists'] = 'Lỗi: Tiêu đề hoặc liên kết tĩnh bị trùng, hãy nhập giá trị khác';
 $lang_module['saveok'] = 'Cập nhật bài viết thành công';
 $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang quản lý bài viết.';
 $lang_module['alias'] = 'Liên kết tĩnh';
@@ -64,6 +65,11 @@ $lang_module['newday'] = 'Icon tin mới (ngày)';
 $lang_module['hitstotal'] = 'Số lượt xem';
 $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
+$lang_module['cat_instant_view'] = 'Xem URL nguồn cấp RSS bài viết tức thời';
+$lang_module['cat_instant_viewsimple'] = 'Xem URL RSS';
+$lang_module['cat_instant_title'] = 'URL nguồn cấp RSS tức thời';
+$lang_module['show_hide_pass'] = 'Hiển thị/Ẩn mật khẩu';
+$lang_module['gen_rand_pass'] = 'Tạo ngẫu nhiên';
 
 $lang_module['description'] = 'Miêu tả';
 $lang_module['viewdescription'] = 'Hiển thị nội dung chi tiết khi xem chủ đề';
@@ -111,6 +117,27 @@ $lang_module['setting_post'] = 'Cấu hình đăng bài';
 $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
 $lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
+$lang_module['setting_elasticseach'] = 'Cấu hình sử dụng máy chủ tìm kiếm Elasticseach';
+$lang_module['setting_elas_use'] = 'Sử dụng Elasticsearch';
+$lang_module['setting_elas_host'] = 'Địa chỉ máy chủ cài đặt Elasticsearch';
+$lang_module['setting_elas_port'] = 'Cổng kết nối với máy chủ Elasticseach';
+$lang_module['setting_elas_index'] = 'CSDL lưu trữ tại máy chủ Elasticsearch';
+$lang_module['error_elas_host_connect'] = 'Không thể kết nối đến máy chủ Elasticsearch!';
+$lang_module['use_setup_elasticseach'] = 'Hướng dẫn cài đặt Elasticsearch';
+$lang_module['use_dev_elasticseach'] = 'Hướng dẫn tích hợp Elasticsearch vào NukeViet';
+$lang_module['setting_insart_caption'] = 'Cấu hình bài viết tức thời';
+$lang_module['setting_active_instant_articles'] = 'Kích hoạt chức năng bài viết tức thời';
+$lang_module['setting_instant_articles_template'] = 'Mẫu bài viết được sử dụng mặc định nếu mỗi bài viết không chỉ định mẫu riêng';
+$lang_module['setting_instant_articles_httpauth'] = 'Kích hoạt xác thực HTTP cho nguồn cấp RSS';
+$lang_module['setting_instant_articles_username'] = 'Tài khoản xác thực';
+$lang_module['setting_instant_articles_password'] = 'Mật khẩu xác thực';
+$lang_module['setting_instant_articles_livetime'] = 'Thời gian (phút) tạo lại RSS';
+$lang_module['setting_instant_articles_livetime1'] = 'Nhập 0 để tạo ngay RSS mới khi có truy vấn vào nguồn cấp. RSS cũng sẽ được tự động tạo lại ngay có truy vấn tới nguồn cấp nếu bộ nhớ tạm (Cache) bị xóa mà không cần chờ hến hạn';
+$lang_module['setting_instant_articles_gettime'] = 'Giới hạn thời gian (phút) lấy bài viết mới đăng và bài viết mới cập nhật tính từ thời điểm tạo RSS về trước';
+$lang_module['setting_instant_articles_gettime1'] = 'Chú ý: Facebook truy vấn vào nguồn cấp nhiều giờ một lần tuy nhiên để chắc chắn là bài viết mới cập nhật hoặc tạo mới có thể hiển thị giữa các khoảng thời gian chờ truy vấn từ facebook nên chọn giá trị này từ 60 phút trở lên. Cũng cần chú ý, nếu chọn giá trị này nhỏ hơn thời gian tạo lại RSS một số bài viết có thể sẽ không được hiển thị';
+$lang_module['setting_instant_articles_defaulturl'] = 'URL nguồn cấp RSS để khai báo nếu sử dụng tính năng bài viết tức thời';
+$lang_module['setting_instant_articles_defaulturl1'] = 'Chú ý: URL này là URL chứa toàn bộ bài viết của module. Để lấy URL của nguồn cấp cho từng chuyên mục, sau khi kích hoạt sử dụng tính năng bài viết tức thời xong, bạn cần di chuyển vào phần quản lý chuyên mục, nhấp chọn nút hiển thị URL của nguồn cấp RSS bài viết tức thời tại mỗi chuyên mục tương ứng.';
+$lang_module['setting_instant_articles_auto'] = 'Mặc định bài viết được đăng là bài viết tức thời nếu chức năng này kích hoạt';
 
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';
@@ -158,6 +185,7 @@ $lang_module['content_clickhere'] = 'vào đây';
 $lang_module['content_showmore'] = '(Mở rộng để xem chi tiết)';
 $lang_module['content_notetime'] = '(Ngày/tháng/năm giờ:phút)';
 $lang_module['content_publ_date'] = 'Thời gian đăng';
+$lang_module['order_publtime'] = 'Sắp xếp lại theo Thời gian đăng';
 $lang_module['content_exp_date'] = 'Thời gian hết hạn';
 $lang_module['content_extra'] = 'Tính năng mở rộng';
 $lang_module['content_inhome'] = 'Hiển thị trên trang chủ';
@@ -177,6 +205,7 @@ $lang_module['content_admin'] = 'Người tạo';
 $lang_module['content_author'] = 'Tác giả bài viết';
 $lang_module['content_sourceid'] = 'Nguồn tin';
 $lang_module['content_copyright'] = 'Giữ bản quyền bài viết';
+$lang_module['content_external_link'] = 'Mở liên kết nguồn tin (nếu có)';
 $lang_module['content_saveok'] = 'Đã ghi dữ liệu thành công';
 $lang_module['content_main'] = 'Quay lại trang quản lý';
 $lang_module['content_back'] = 'Quay lại trang sửa bài viết';
@@ -188,6 +217,11 @@ $lang_module['content_tags_empty'] = 'Chú ý: Bài viết chưa có từ khóa 
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu bài viết này, có thể tắt tính năng tự động tạo từ khóa ở phần quản lý module';
 $lang_module['content_advfeature'] = 'Tùy chọn nâng cao';
 $lang_module['content_description'] = 'Mô tả của site';
+$lang_module['content_insart'] = 'Bài viết tức thời';
+$lang_module['content_instant_active'] = 'Đây là bài viết tức thời';
+$lang_module['content_instant_template'] = 'Mẫu';
+$lang_module['content_instant_templatenote'] = 'Để trống tức là sử dụng mẫu mặc định';
+$lang_module['content_instant_creatauto'] = 'Tự động tạo bài viết tức thời từ bài viết thường';
 
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
@@ -304,3 +338,15 @@ $lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s
 $lang_module['ad_block_show'] = 'Hiển thị các block phụ';
 $lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
 $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
+
+$lang_module['fbinsartmgs_100'] = 'Lỗi: Bài viết có các thẻ HTML: <strong>%s</strong> không được hỗ trở bởi bài viết tức thời. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng, thay thế bằng các thẻ được hỗ trợ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
+$lang_module['fbinsartmgs_101'] = 'Lỗi: Bài viết không có nội dung';
+$lang_module['fbinsartmgs_102'] = 'Lỗi: Bài viết của bạn có các thuộc tính cho các thẻ. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng khỏi thẻ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
+
+$lang_module['dulicate_edit'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn không được sửa bài viết này đến khi người đó sửa xong.';
+$lang_module['dulicate_edit_admin'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn có muốn <b>chiếm quyền sửa bài viết</b> này không ?';
+$lang_module['dulicate_takeover'] = 'Chiếm quyền sửa bài viết';
+$lang_module['dulicate_edit_takeover'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này bởi  tài khoản %s lúc %s. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';
+
+$lang_module['setting_copy_news'] = 'Cho phép copy bài viết';
+$lang_module['title_copy_news'] = 'Sao chép bài viết';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
@@ -103,9 +103,9 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
 
     function nv_news_block_newscenter($block_config)
     {
-        global $nv_Cache, $module_data, $module_name, $module_file, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
+        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
 
-        $db->sqlreset()->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->order('publtime DESC')->limit($block_config['numrow']);
+        $db->sqlreset()->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile, external_link')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->order('publtime DESC')->limit($block_config['numrow']);
         if (empty($block_config['nocatid'])) {
             $db->where('status= 1');
         } else {
@@ -114,7 +114,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
 
         $list = $nv_Cache->db($db->sql(), 'id', $module_name);
         if (! empty($list)) {
-            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
             $xtpl->assign('lang', $lang_module);
             $xtpl->assign('TEMPLATE', $module_info['template']);
 
@@ -122,6 +122,11 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
             foreach ($list as $row) {
                 $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
                 $row['titleclean60'] = nv_clean60($row['title'], $block_config['length_title']);
+
+                if ($row['external_link']) {
+                    $row['target_blank'] = 'target="_blank"';
+                }
+
                 if ($_first) {
                     $_first = false;
                     $width = isset($block_config['width']) ? $block_config['width'] : 400;
@@ -159,11 +164,11 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
                         $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                         $row['width'] = $width;
                     }
-                    
+
                     if (!empty($block_config['length_hometext'])) {
                         $row['hometext'] = nv_clean60(strip_tags($row['hometext']), $block_config['length_hometext']);
                     }
-                    
+
                     $xtpl->assign('main', $row);
                 } else {
                     if ($row['homeimgthumb'] == 1) {

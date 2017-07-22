@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 23/8/2010, 0:13
@@ -270,8 +270,6 @@ function change_alias($alias)
  */
 function nv_clean60($string, $num = 60, $specialchars = false)
 {
-    global $global_config;
-
     $string = nv_unhtmlspecialchars($string);
 
     $len = nv_strlen($string);

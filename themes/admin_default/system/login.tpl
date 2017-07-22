@@ -26,7 +26,7 @@
 		<div id="wrapper">
 			<div id="logo">
 				<!-- BEGIN: image -->
-				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img src="{LOGO}" width="{WIDTH}" height="{HEIGHT}" alt="{SITE_NAME}" /></a>
+				<a title="{SITE_NAME}" href="{NV_BASE_SITEURL}"><img src="{LOGO}" class="img-responsive" width="{WIDTH}" height="{HEIGHT}" alt="{SITE_NAME}" /></a>
 				<!-- END: image -->
 				<!-- BEGIN: swf -->
 				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="{WIDTH}" height="{HEIGHT}" >
@@ -72,7 +72,7 @@
     					</p>
     					<p>
     						<label for="nv_password">{GLANG.password}:</label>
-    						<input class="form-control" name="nv_password" type="password" id="nv_password" value="{V_PASSWORD}"/>
+    						<input autocomplete="off" class="form-control" name="nv_password" type="password" id="nv_password" value="{V_PASSWORD}"/>
     					</p>
                     </div>
                     <div class="loginStep2{SHOW_STEP2}">
@@ -107,12 +107,31 @@
 						</div>
 					</p>
 					<!-- END: captcha -->
-					<div id="smb">
+                    <!-- BEGIN: recaptcha -->
+                    <div class="m-bottom">
+                        <label>{N_CAPTCHA}:</label>
+                        <div id="reCaptcha"></div>
+                        <script src="https://www.google.com/recaptcha/api.js?hl={SITELANG}&onload=onloadCallback&render=explicit"></script>
+                        <script type="text/javascript">
+                        var onloadCallback = function() {
+                            $('[type="submit"]').prop('disabled', true);
+                            grecaptcha.render('reCaptcha', {
+                                'sitekey': '{RECAPTCHA_SITEKEY}',
+                                'type': '{RECAPTCHA_TYPE}',
+                                'callback': function(res) {
+                                    $('[type="submit"]').prop('disabled', false);
+                                }
+                            });
+                        };
+                        </script>
+                    </div>
+                    <!-- END: recaptcha -->
+					<div id="smb" class="{SHOW_SUBMIT}">
 						<input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
 						<input class="btn btn-primary" type="submit" value="{GLANG.loginsubmit}" />
 					</div>
 				</form>
-				<p class="lostpass">
+				<p class="lostpass{SHOW_LOSTPASS}">
 					<a title="{LANGLOSTPASS}" href="{LINKLOSTPASS}">{LANGLOSTPASS}?</a>
 				</p>
 			</div>

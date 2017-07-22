@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
@@ -30,8 +30,7 @@ if (isset($array_op[1])) {
         }
         $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
         if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-            Header('Location: ' . $base_url_rewrite);
-            die();
+            nv_redirect_location($base_url_rewrite);
         }
 
         $array_mod_title[] = array(
@@ -51,7 +50,7 @@ if (isset($array_op[1])) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight')
+        $db_slave->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight')
             ->order('t2.weight ASC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -124,7 +123,7 @@ if (isset($array_op[1])) {
         );
 
         $db_slave->sqlreset()
-            ->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating')
+            ->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
             ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')
             ->where('t2.bid= ' . $bid . ' AND t1.status= 1')
@@ -160,12 +159,12 @@ if (isset($array_op[1])) {
     $viewcat = $module_config[$module_name]['indexfile'];
 
     if ($viewcat != 'viewcat_main_left' and $viewcat != 'viewcat_main_bottom') {
-        $viewcat == 'viewcat_main_right';
+        $viewcat = 'viewcat_main_right';
     }
 
     $contents = viewsubcat_main($viewcat, $array_cat);
 
-    $page_title = $module_info['funcs']['groups']['func_custom_name'];
+    $page_title = $module_info['funcs']['groups']['func_site_title'];
     $key_words = $module_info['keywords'];
 }
 

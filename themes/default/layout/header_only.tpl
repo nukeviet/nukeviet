@@ -6,7 +6,7 @@
 		<!-- END: metatags -->
 		<link rel="shortcut icon" href="{SITE_FAVICON}">
 		<!-- BEGIN: links -->
-		<link<!-- BEGIN: attr --> {LINKS.key}="{LINKS.value}"<!-- END: attr -->>
+		<link<!-- BEGIN: attr --> {LINKS.key}<!-- BEGIN: val -->="{LINKS.value}"<!-- END: val --><!-- END: attr -->>
 		<!-- END: links -->
 		<!-- BEGIN: js -->
 		<script<!-- BEGIN: ext --> src="{JS_SRC}"<!-- END: ext -->><!-- BEGIN: int -->{JS_CONTENT}<!-- END: int --></script>

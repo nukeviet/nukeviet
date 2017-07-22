@@ -17,7 +17,7 @@
 							<em class="fa fa-key fa-lg fa-fix">
 							</em>
 						</span>
-						<input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100"/>
+						<input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100"/>
 					</div>
 				</div>
 				<!-- BEGIN: captcha -->
@@ -30,6 +30,19 @@
 					</div>
 				</div>
 				<!-- END: captcha -->
+                <!-- BEGIN: recaptcha -->
+                <div class="form-group">
+                    <div class="middle text-center clearfix">
+                        <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                        <script type="text/javascript">
+                        nv_recaptcha_elements.push({
+                            id: "{RECAPTCHA_ELEMENT}",
+                            btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                        })
+                        </script>
+                    </div>
+                </div>
+                <!-- END: recaptcha -->
 				<div class="text-center margin-bottom-lg">
 					<input name="openid_account_confirm" value="1" type="hidden" />
                     <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->

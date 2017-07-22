@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
@@ -71,7 +71,7 @@ if (!nv_function_exists('nv_news_category')) {
 
     function nv_news_category($block_config)
     {
-        global $module_array_cat, $module_info, $lang_module, $global_config;
+        global $module_array_cat, $lang_module, $global_config;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_category.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -86,7 +86,6 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('LANG', $lang_module);
             $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
-            $html = '';
             foreach ($module_array_cat as $cat) {
                 if ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid'])) {
                     $cat['title0'] = nv_clean60($cat['title'], $title_length);

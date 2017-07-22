@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 9:32
@@ -57,10 +57,7 @@ if ($nv_Request->isset_request('module', 'post')) {
         }
     }
 
-    include NV_ROOTDIR . '/includes/header.php';
-    echo json_encode($contents);
-    include NV_ROOTDIR . '/includes/footer.php';
+    nv_jsonOutput($contents);
 }
 
-Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-die();
+nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

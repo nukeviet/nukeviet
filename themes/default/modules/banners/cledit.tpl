@@ -12,7 +12,7 @@
 	<div class="form-group">
 		<label for="{NPASS_ID}" class="col-sm-6 control-label">{NPASS_NAME}:</label>
 		<div class="col-sm-18">
-			<input class="form-control" name="{NPASS_ID}" id="{NPASS_ID}" value="" type="password" maxlength="{NPASS_MAXLENGTH}" />
+			<input class="form-control" name="{NPASS_ID}" id="{NPASS_ID}" value="" type="password" autocomplete="off" maxlength="{NPASS_MAXLENGTH}" />
 		</div>
 	</div>	
 	<!-- END: npass -->

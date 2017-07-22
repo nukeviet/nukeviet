@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 1:58
@@ -60,7 +60,7 @@ $dirlang = $nv_Request->get_title('dirlang', 'get', '');
  */
 function nv_admin_add_field_lang($dirlang)
 {
-    global $module_name, $db_config, $db, $language_array;
+    global $db, $language_array;
 
     if (isset($language_array[$dirlang]) and ! empty($language_array[$dirlang])) {
         $add_field = true;
@@ -83,29 +83,29 @@ function nv_admin_add_field_lang($dirlang)
 
 /**
  * nv_update_config_allow_sitelangs()
- * 
+ *
  * @param mixed $allow_sitelangs
  * @return void
  */
 function nv_update_config_allow_sitelangs($allow_sitelangs = array())
 {
     global $global_config, $db_config, $db;
-    
+
     if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
         if (empty($allow_sitelangs)) {
             $allow_sitelangs = $global_config['allow_sitelangs'];
         }
-        
+
         $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language ORDER BY weight ASC';
         $result = $db->query($sql);
-        
+
         $sitelangs = array();
         while ($row = $result->fetch()) {
             if (in_array($row['lang'], $allow_sitelangs)) {
                 $sitelangs[] = $row['lang'];
             }
         }
-        
+
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'");
         $sth->bindValue(':config_value', implode(',', $sitelangs), PDO::PARAM_STR);
         $sth->execute();

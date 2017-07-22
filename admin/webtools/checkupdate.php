@@ -105,7 +105,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                     'support' => (string)$values->support,
                     'updateable' => array(),
                     'origin' => ((string)$values->origin) == 'true' ? true : false,
-                    );
+                );
 
                 // Xu ly update
                 $updateables = $values->xpath('updateable/upds/upd');
@@ -116,7 +116,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                             'fid' => (string)$updateable->upd_fid,
                             'old' => explode(',', (string)$updateable->upd_old),
                             'new' => (string)$updateable->upd_new,
-                            );
+                        );
                     }
                 }
                 unset($updateables, $updateable);

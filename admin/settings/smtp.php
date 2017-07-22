@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
 
 if ($nv_Request->isset_request('mailer_mode', 'post')) {
     $smtp_password = $array_config['smtp_password'];
-    $array_config['smtp_password'] = nv_base64_encode($crypt->aes_encrypt($smtp_password));
+    $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
@@ -53,8 +53,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
     }
 
     if (empty($errormess)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
     $array_config['smtp_password'] = $smtp_password;
 }

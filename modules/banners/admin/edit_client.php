@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -17,8 +17,7 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $error = '';
@@ -38,9 +37,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $uploadtype = $nv_Request->get_array('uploadtype', 'post');
     $uploadtype = implode(',', $uploadtype);
 
-    $check_login = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
+    $check_login = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     $check_email = nv_check_valid_email($email);
-    $check_pass = nv_check_valid_pass($pass, NV_UPASSMAX, NV_UPASSMIN);
+    $check_pass = nv_check_valid_pass($pass, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
 
     if ($website == 'http://') {
         $website = '';
@@ -100,8 +99,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $stmt->execute();
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid']);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id);
             }
         }
     }
@@ -134,9 +132,9 @@ $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['edit_client_submit'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_client&amp;id=' . $id;
-$contents['login'] = array( $lang_module['login'], 'login_iavim', $login, NV_UNICKMAX );
-$contents['pass'] = array( $lang_global['password'], 'pass_iavim', $pass, NV_UPASSMAX );
-$contents['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $re_pass, NV_UPASSMAX );
+$contents['login'] = array( $lang_module['login'], 'login_iavim', $login, $global_config['nv_unickmax']);
+$contents['pass'] = array( $lang_global['password'], 'pass_iavim', $pass, $global_config['nv_upassmax'] );
+$contents['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $re_pass, $global_config['nv_upassmax'] );
 $contents['full_name'] = array( $lang_module['full_name'], 'full_name', $full_name, 255 );
 $contents['email'] = array( $lang_module['email'], 'email_iavim', $email, 70 );
 $contents['website'] = array( $lang_module['website'], 'website_iavim', $website, 255 );

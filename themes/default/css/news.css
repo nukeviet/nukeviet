@@ -281,8 +281,7 @@ p {
     padding:5px;
 }
 
-.fb-like,
-.fb-share-button {
+.fb-like {
     margin:0 25px 0 10px;
     top:-5px;
 }
@@ -295,6 +294,10 @@ p {
 .featured p {
     font-size:14px !important;
     padding-left:5px !important;
+}
+
+ul.related h4{
+     display: inline-block;
 }
 
 /* Responsive news */

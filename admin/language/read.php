@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -60,24 +60,23 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         $sth->bindParam(':module', $module, PDO::PARAM_STR);
         $sth->bindParam(':admin_file', $admin_file, PDO::PARAM_STR);
         $sth->execute();
-        list($idfile, $langtype) = $sth->fetch(3);
+        list ($idfile, $langtype) = $sth->fetch(3);
 
         if (empty($idfile)) {
             $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
 
             $lang_translator_save = array();
-            $lang_translator_save['author'] = isset($lang_translator['author']) ? strip_tags($lang_translator['author']) : 'VINADES.,JSC (contact@vinades.vn)';
+            $lang_translator_save['author'] = isset($lang_translator['author']) ? strip_tags($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
             $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? strip_tags($lang_translator['createdate']) : date('d/m/Y, H:i');
             $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? strip_tags($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
             $lang_translator_save['info'] = isset($lang_translator['info']) ? strip_tags($lang_translator['info']) : '';
             $lang_translator_save['langtype'] = $langtype;
 
-            $author = var_export($lang_translator_save, true);
             $data = array();
             $data['module'] = $module;
             $data['admin_file'] = $admin_file;
             $data['langtype'] = $langtype;
-            $data['author'] = $author;
+            $data['author'] = serialize($lang_translator_save);
             $idfile = $db->insert_id('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)', 'idfile', $data);
             if (empty($idfile)) {
                 nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang), 404);
@@ -87,13 +86,13 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 
             $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
 
-            $lang_translator_save['author'] = isset($lang_translator['author']) ? strip_tags($lang_translator['author']) : 'VINADES.,JSC (contact@vinades.vn)';
+            $lang_translator_save['author'] = isset($lang_translator['author']) ? strip_tags($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
             $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? strip_tags($lang_translator['createdate']) : date('d/m/Y, H:i');
-            $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? strip_tags($lang_translator['copyright']) : 'Copyright (C) '.date('Y').' VINADES.,JSC. All rights reserved';
+            $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? strip_tags($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
             $lang_translator_save['info'] = isset($lang_translator['info']) ? strip_tags($lang_translator['info']) : '';
             $lang_translator_save['langtype'] = $langtype;
 
-            $author = var_export($lang_translator_save, true);
+            $author = serialize($lang_translator_save);
             try {
                 $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= ' . $idfile);
                 $sth->bindParam(':author', $author, PDO::PARAM_STR, strlen($author));
@@ -116,7 +115,6 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                 break;
         }
 
-        $add_field = true;
         $array_lang_key = array();
         $array_lang_value = array();
 
@@ -142,7 +140,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         $sth_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ', update_' . $dirlang . ') VALUES (:idfile, :lang_key, :lang_value, ' . NV_CURRENTTIME . ')');
         $sth_ud = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $dirlang . ' = :lang_value, update_' . $dirlang . ' = ' . NV_CURRENTTIME . ' WHERE idfile = :idfile AND lang_key = :lang_key');
 
-        while (list($lang_key, $lang_value) = each($temp_lang)) {
+        while (list ($lang_key, $lang_value) = each($temp_lang)) {
             $check_type_update = false;
             $lang_key = trim($lang_key);
             $lang_value = nv_nl2br($lang_value);
@@ -155,7 +153,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                     $sth_is->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
                     $sth_is->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
                     $sth_is->execute();
-                    if ($read_type == 0 and ! $sth_is->rowCount()) {
+                    if ($read_type == 0 and !$sth_is->rowCount()) {
                         $check_type_update = true;
                     }
                 } catch (PDOException $e) {
@@ -229,7 +227,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
     $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 
     foreach ($array_filename as $name) {
-        if (! $name) {
+        if (!$name) {
             continue;
         }
 
@@ -245,4 +243,4 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

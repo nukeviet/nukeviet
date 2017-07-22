@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 21:24
@@ -24,8 +24,7 @@ if ($nv_Request->isset_request('id', 'get')) {
     $numrows = sizeof($adminrows);
 
     if ($numrows != 1) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 } else {
     $sql = 'SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
@@ -91,15 +90,13 @@ if ($numrows) {
                 $thead['chg_is_suspend'] = 0;
                 $thead['del'] = 0;
             } elseif ($row['lev'] == 2) {
-                if ($row['admin_id'] == $admin_info['admin_id']) {
+                if ($row['admin_id'] == $admin_info['admin_id'] or $admin_info['level'] == 1) {
                     $thead['edit'] = 1;
-                    $thead['chg_is_suspend'] = 0;
-                    $thead['del'] = 0;
                 } else {
                     $thead['edit'] = 0;
-                    $thead['chg_is_suspend'] = 0;
-                    $thead['del'] = 0;
                 }
+                $thead['chg_is_suspend'] = 0;
+                $thead['del'] = 0;
             } elseif ($global_config['spadmin_add_admin'] == 1) {
                 $thead['edit'] = 1;
                 $thead['chg_is_suspend'] = 1;

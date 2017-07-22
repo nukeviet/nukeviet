@@ -18,20 +18,22 @@
 			<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">
-				<select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});">
+				<select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});" {DISABLED_WEIGHT}>
 					<!-- BEGIN: weight -->
-					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
+					<option value="{WEIGHT.key}"{WEIGHT.selected} >{WEIGHT.title}</option>
 					<!-- END: weight -->
 				</select></td>
 				<td>{ROW.field}</td>
 				<td>{ROW.field_lang}</td>
 				<td>{ROW.field_type} </td>
-				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></td>
-				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
-				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
+				<td class="text-center"><i class="fa fa-lg {ROW.show_register}" aria-hidden="true"></i></td>
+				<td class="text-center"><i class="fa fa-lg {ROW.required}" aria-hidden="true"></i></td>
+				<td class="text-center"><i class="fa fa-lg {ROW.show_profile}" aria-hidden="true"></i></td>
 				<td>
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a>
+					<!-- BEGIN: show_delete -->
+					- <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<!-- END: show_delete -->
 				</td>
 			</tr>
 			<!-- END: loop -->
@@ -243,17 +245,19 @@
 					<th class="text-center">{LANG.field_default_value}</th>
 				</tr>
 			</thead>
+			<!-- BEGIN: add_field_choice -->
 			<tfoot>
 				<tr>
-					<td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
+					<td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem('{LANG.field_match_type_alphanumeric}');" /></td>
 				</tr>
 			</tfoot>
+			<!-- END: add_field_choice -->
 			<tbody>
 				<!-- BEGIN: loop_field_choice -->
 				<tr class="text-center">
 					<td>{FIELD_CHOICES.number}</td>
-					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}"/></td>
-					<td><input class="form-control w300" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
+					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}"{FIELD_CHOICES_READONLY}/></td>
+					<td><input class="form-control w300" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" {FIELD_CHOICES_READONLY}/></td>
 					<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
 				</tr>
 				<!-- END: loop_field_choice -->
@@ -261,6 +265,7 @@
 		</table>
 	</div>
 	<div style="margin-left: 350px;">
+		<input type="hidden" value="{DATAFORM.system}" name="system">
 		<input type="hidden" value="{DATAFORM.fid}" name="fid">
 		<input type="hidden" value="{DATAFORM.field}" name="fieldid">
 		<input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit">

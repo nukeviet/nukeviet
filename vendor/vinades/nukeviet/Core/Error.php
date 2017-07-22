@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 4/10/2010 19:43
@@ -11,26 +11,25 @@
 namespace NukeViet\Core;
 
 if (!defined('E_STRICT')) {
-    define('E_STRICT', 2048);
-} //khong sua
+    define('E_STRICT', 2048); //khong sua
+}
 if (!defined('E_RECOVERABLE_ERROR')) {
-    define('E_RECOVERABLE_ERROR', 4096);
-} //khong sua
+    define('E_RECOVERABLE_ERROR', 4096); //khong sua
+}
 if (!defined('E_DEPRECATED')) {
-    define('E_DEPRECATED', 8192);
-} //khong sua
+    define('E_DEPRECATED', 8192); //khong sua
+}
 if (!defined('E_USER_DEPRECATED')) {
-    define('E_USER_DEPRECATED', 16384);
-} //khong sua
+    define('E_USER_DEPRECATED', 16384); //khong sua
+}
 
 class Error
 {
     const INCORRECT_IP = 'Incorrect IP address specified';
     const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
     const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
-    
+
     private $log_errors_list;
-    private $site_logo = 'assets/images/logo.png';
     private $display_errors_list;
     private $send_errors_list;
     private $error_send_mail;
@@ -97,9 +96,6 @@ class Error
         $this->error_log_path = $this->get_error_log_path((string )$config['error_log_path']);
         $this->error_send_mail = (string )$config['error_send_email'];
         $this->error_set_logs = $config['error_set_logs'];
-        if (!empty($config['site_logo'])) {
-            $this->site_logo = $config['site_logo'];
-        }
 
         if (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) {
             $this->error_log_filename = $config['error_log_filename'];
@@ -132,7 +128,7 @@ class Error
         }
 
         if ($ip2long === -1 and $ip2long === false) {
-            die(Error::INCORRECT_IP);
+            exit(Error::INCORRECT_IP);
         }
         $this->ip = $ip;
         $request = $this->get_request();
@@ -268,7 +264,7 @@ class Error
 
     /**
      * Error::get_request()
-     * 
+     *
      * @return
      */
     public function get_request()
@@ -293,7 +289,7 @@ class Error
 
     /**
      * Error::fixQuery()
-     * 
+     *
      * @param mixed $key
      * @param mixed $value
      * @return
@@ -322,7 +318,7 @@ class Error
 
     /**
      * Error::info_die()
-     * 
+     *
      * @return void
      */
     private function info_die()
@@ -359,29 +355,35 @@ class Error
             $strEncodedEmail .= "&#" . ord(substr($this->error_send_mail, $i)) . ";";
         }
 
-        $size = @getimagesize(NV_ROOTDIR . '/' . $this->site_logo);
-        echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
-        echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-        echo "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";
-        echo "<head>\n";
-        echo "	<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n";
-        echo "	<meta http-equiv=\"expires\" content=\"0\" />\n";
-        echo "<title>" . $this->errortype[$this->errno] . "</title>\n";
-        echo "</head>\n\n";
-        echo "<body>\n";
-        echo "	<div style=\"width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;\"><span style=\"font-weight: bold;\">" . $this->errortype[$this->errno] . "</span><br />\n";
-        echo "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
-        echo "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
-        echo "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
-        echo "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
-        echo "</body>\n";
-        echo "</html>";
-        die();
+        header('Content-Type: text/html; charset=utf-8');
+        if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
+            Header('X-Frame-Options: SAMEORIGIN');
+        }
+        header('X-Content-Type-Options: nosniff');
+        header('X-XSS-Protection: 1; mode=block');
+
+        $_info = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
+        $_info .= "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+        $_info .= "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";
+        $_info .= "<head>\n";
+        $_info .= "	<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n";
+        $_info .= "	<meta http-equiv=\"expires\" content=\"0\" />\n";
+        $_info .= "<title>" . $this->errortype[$this->errno] . "</title>\n";
+        $_info .= "</head>\n\n";
+        $_info .= "<body>\n";
+        $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;\"><span style=\"font-weight: bold;\">" . $this->errortype[$this->errno] . "</span><br />\n";
+        $_info .= "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
+        $_info .= "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
+        $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
+        $_info .= "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
+        $_info .= "</body>\n";
+        $_info .= "</html>";
+        exit($_info);
     }
 
     /**
      * Error::_log()
-     * 
+     *
      * @return void
      */
     private function _log()
@@ -407,7 +409,7 @@ class Error
 
     /**
      * Error::_send()
-     * 
+     *
      * @return void
      */
     private function _send()
@@ -436,13 +438,13 @@ class Error
 
     /**
      * Error::_display()
-     * 
+     *
      * @return void
      */
     private function _display()
     {
         global $error_info;
-        
+
         $display = true;
         foreach ($this->error_excluded as $pattern) {
             if (preg_match($pattern, $this->errstr)) {
@@ -450,7 +452,7 @@ class Error
                 break;
             }
         }
-        
+
         if ($display) {
             $info = $this->errstr;
             if ($this->errno != E_USER_ERROR and $this->errno != E_USER_WARNING and $this->errno != E_USER_NOTICE) {
@@ -461,7 +463,7 @@ class Error
                     $info .= ' on line ' . $this->errline;
                 }
             }
-    
+
             $error_info[] = array('errno' => $this->errno, 'info' => $info);
         }
     }
@@ -479,16 +481,16 @@ class Error
     {
         $this->errno = $errno;
         $this->errstr = $errstr;
-        
+
         if (!empty($errfile)) {
             $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errfile));
         }
         if (!empty($errline)) {
             $this->errline = $errline;
         }
-        
+
         $this->log_control();
-        
+
         if ($this->errno == 256) {
             $this->info_die();
         }
@@ -496,7 +498,7 @@ class Error
 
     /**
      * Error::shutdown()
-     * 
+     *
      * @return void
      */
     public function shutdown()
@@ -526,9 +528,9 @@ class Error
                     break;
                 }
             }
-            
+
             $this->log_control();
-            
+
             // Only display some track fatal error!
             if ($finded_track) {
                 $this->info_die();
@@ -540,7 +542,7 @@ class Error
 
     /**
      * Error::fix_path()
-     * 
+     *
      * @param mixed $path
      * @return
      */
@@ -551,7 +553,7 @@ class Error
 
     /**
      * Error::get_fixed_path()
-     * 
+     *
      * @param mixed $realpath
      * @return
      */
@@ -562,7 +564,7 @@ class Error
 
     /**
      * Error::log_control()
-     * 
+     *
      * @return void
      */
     private function log_control()

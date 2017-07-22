@@ -20,14 +20,6 @@ function nv_is_del_cron(cronid) {
 	return false;
 }
 
-function show_rewrite_op() {
-	if ($("input[name=rewrite_optional]").is(":checked")) {
-		$('#tr_rewrite_op_mod').show();
-	} else {
-		$('#tr_rewrite_op_mod').hide();
-	}
-}
-
 function nv_chang_weight(pid) {
 	window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&pid=' + pid + '&weight=' + $('#weight_' + pid).val();
 }
@@ -37,6 +29,26 @@ $(document).ready(function(){
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
 	});
+    $('[data-toggle="controlrw1"]').change(function() {
+        var rewrite_optional = $(this).is(':checked');
+        if (rewrite_optional) {
+            $('#tr_rewrite_op_mod').show();
+        } else {
+            $('#tr_rewrite_op_mod').hide();
+            $('[name="rewrite_op_mod"]').find('option').prop('selected', false);
+        }
+    });
+    $('[data-toggle="controlrw"]').change(function() {
+        var lang_multi = $('[name="lang_multi"]').is(':checked');
+        var rewrite_enable = $('[name="rewrite_enable"]').is(':checked');
+        if (!lang_multi && rewrite_enable) {
+            $('#tr_rewrite_optional').show();
+        } else {
+            $('#tr_rewrite_optional').hide();
+            $('[name="rewrite_optional"]').prop('checked', false);
+        }
+        $('[data-toggle="controlrw1"]').change();
+    });
 	
 	// Smtp
 	$("input[name=mailer_mode]").click(function() {
@@ -89,6 +101,15 @@ $(document).ready(function(){
 		}
 		return false;
 	});
+    $('[data-toggle="ctcaptcha"]').change(function() {
+        if ($(this).val() == '2') {
+            $('[data-captcha="typebasic"]').hide();
+            $('[data-captcha="typerecaptcha"]').show();
+        } else {
+            $('[data-captcha="typebasic"]').show();
+            $('[data-captcha="typerecaptcha"]').hide();
+        }
+    });
 	
 	// Site setting
 	$(".selectimg").click(function() {

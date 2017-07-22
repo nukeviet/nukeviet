@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 17, 2011 11:34:27 AM
@@ -44,7 +44,7 @@ if (! nv_function_exists('nv_menu_theme_default_footer')) {
      */
     function nv_menu_theme_default_footer($block_config)
     {
-        global $global_config, $site_mods, $lang_global, $module_name, $home;
+        global $global_config, $site_mods, $lang_global;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.menu_footer.tpl')) {
             $block_theme = $global_config['module_theme'];

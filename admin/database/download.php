@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 21:49
  */
 
-if (! defined('NV_IS_FILE_DATABASE')) {
+if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 
@@ -17,12 +17,14 @@ $checkss = $nv_Request->get_title('checkss', 'post,get');
 if ($checkss == NV_CHECK_SESSION) {
     $tables = $nv_Request->get_array('tables', 'post', array());
     $type = $nv_Request->get_title('type', 'post', '');
-    $ext = $nv_Request->get_title('ext', 'post', '');
+    $ext = $nv_Request->get_title('ext', 'post', $global_config['dump_backup_ext']);
 
     if (empty($tables)) {
         $tables = array();
-    } elseif (! is_array($tables)) {
-        $tables = array( $tables );
+    } elseif (!is_array($tables)) {
+        $tables = array(
+            $tables
+        );
     }
 
     $tab_list = array();
@@ -39,10 +41,10 @@ if ($checkss == NV_CHECK_SESSION) {
     $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
     $contents['filename'] = tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX);
 
-    include NV_ROOTDIR . '/includes/core/dump.php' ;
+    include NV_ROOTDIR . '/includes/core/dump.php';
 
     $result = nv_dump_save($contents);
-    if (! empty($result)) {
+    if (!empty($result)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename($contents['filename']), $admin_info['userid']);
 
         $content['mime'] = ($contents['savetype'] == 'gz') ? 'application/x-gzip' : 'text/x-sql';

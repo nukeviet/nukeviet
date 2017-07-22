@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <form  class="form-inline" role="form" action="{FORM_ACTION}" method="post">
     <div class="table-responsive">
+    	<!-- BEGIN: access -->
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_caption} </caption>
             <thead>
@@ -15,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- BEGIN: access -->
+                <!-- BEGIN: loop -->
                 <tr>
                     <td><strong>{ACCESS.title}</strong></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_addus} value="1" name="access_addus[{ACCESS.id}]"></td>
@@ -25,9 +26,10 @@
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_passus} value="1" name="access_passus[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_groups} value="1" name="access_groups[{ACCESS.id}]"></td>
                 </tr>
-                <!-- END: access -->
+                <!-- END: loop -->
             </tbody>
         </table>
+        <!-- END: access -->
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_register} </caption>
             <colgroup>
@@ -96,10 +98,12 @@
                     <td>{LANG.auto_login_after_reg}</td>
                     <td><input type="checkbox" value="1" name="auto_login_after_reg"{DATA.auto_login_after_reg}/></td>
                 </tr>
+                <!-- BEGIN: active_group_newusers -->
                 <tr>
                     <td>{LANG.active_group_newusers}</td>
                     <td><input type="checkbox" value="1" name="active_group_newusers"{DATA.active_group_newusers}/> <small>{LANG.active_group_newusers_note}</small></td>
                 </tr>
+                <!-- END: active_group_newusers -->
             </tbody>
         </table>
 
@@ -125,6 +129,7 @@
                         </select>
                     </td>
                 </tr>
+                <!-- BEGIN: avatar_size -->
                 <tr>
                     <td>{LANG.avatar_size}</td>
                     <td>
@@ -134,7 +139,8 @@
                         </label>
                     </td>
                 </tr>
-                <!-- BEGIN: user_forum -->
+                <!-- BEGIN: avatar_size -->
+                <!-- END: user_forum -->
                 <tr>
                     <td>{LANG.is_user_forum}</td>
                     <td><input name="is_user_forum" value="1" type="checkbox"{DATA.is_user_forum} /></td>
@@ -157,7 +163,7 @@
                         <div class="clearfix group-allow-area">
                             <!-- BEGIN: whoviewlistuser -->
                             <p>
-                                <input type="checkbox" id="whoviewuser{WHOVIEW.key}" name="whoviewuser[]" value="{WHOVIEW.key}"{WHOVIEW.checked}/> 
+                                <input type="checkbox" id="whoviewuser{WHOVIEW.key}" name="whoviewuser[]" value="{WHOVIEW.key}"{WHOVIEW.checked}/>
                                 <label for="whoviewuser{WHOVIEW.key}">{WHOVIEW.title}</label>
                             </p>
                             <!-- END: whoviewlistuser -->
@@ -176,6 +182,16 @@
                     <td>{LANG.allow_login}</td>
                     <td><input name="allowuserlogin" value="1" type="checkbox"{DATA.allowuserlogin} /></td>
                 </tr>
+                <tr>
+                    <td>{LANG.min_old_user}</td>
+                    <td><input class="form-control pull-left"  name="min_old_user" value="{DATA.min_old_user}" type="text" style="width: 50px" /></td>
+                </tr>
+                <!-- BEGIN: active_user_logs -->
+                <tr>
+                    <td>{LANG.active_user_logs}</td>
+                    <td><input name="active_user_logs" value="1" type="checkbox"{DATA.active_user_logs} /></td>
+                </tr>
+                <!-- END: active_user_logs -->
                 <tr>
                     <td>{LANG.allow_public}</td>
                     <td><input name="allowuserpublic" value="1" type="checkbox"{DATA.allowuserpublic} /></td>
@@ -217,7 +233,8 @@
                             <!-- END: openid_processing -->
                         </select>
                     </td>
-                </tr>            
+                </tr>
+                <!-- BEGIN: deny_config -->
                 <tr>
                     <td>{LANG.deny_email}</td>
                     <td><textarea name="deny_email" rows="7" cols="70" class="form-control">{DATA.deny_email}</textarea></td>
@@ -230,6 +247,7 @@
                     <td>{LANG.password_simple}</td>
                     <td><textarea name="password_simple" rows="7" cols="70" class="form-control">{DATA.password_simple}</textarea></td>
                 </tr>
+                <!-- END: deny_config -->
             </tbody>
         </table>
     </div>

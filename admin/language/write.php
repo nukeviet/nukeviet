@@ -2,25 +2,14 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
-}
-
-$array_lang_no_check = array();
-
-$array_lang_exit = array();
-
-$columns_array = $db->columns_array(NV_LANGUAGE_GLOBALTABLE . '_file');
-foreach ($columns_array as $row) {
-    if (substr($row['field'], 0, 7) == 'author_') {
-        $array_lang_exit[] .= trim(substr($row['field'], 7, 2));
-    }
 }
 
 /**
@@ -32,11 +21,11 @@ foreach ($columns_array as $row) {
  */
 function nv_admin_write_lang($dirlang, $idfile)
 {
-    global $db, $language_array, $global_config, $include_lang, $lang_module, $array_lang_exit, $array_lang_no_check;
+    global $db, $language_array, $global_config, $include_lang, $lang_module;
 
-    list($module, $admin_file, $langtype, $author_lang) = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . intval($idfile))->fetch(3);
+    list ($module, $admin_file, $langtype, $author_lang) = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . intval($idfile))->fetch(3);
 
-    if (! empty($dirlang) and ! empty($module)) {
+    if (!empty($dirlang) and !empty($module)) {
         if (empty($author_lang)) {
             $array_translator = array();
             $array_translator['author'] = '';
@@ -45,7 +34,7 @@ function nv_admin_write_lang($dirlang, $idfile)
             $array_translator['info'] = '';
             $array_translator['langtype'] = $langtype;
         } else {
-            eval('$array_translator = ' . $author_lang . ';');
+            $array_translator = unserialize($author_lang);
         }
 
         $include_lang = '';
@@ -82,11 +71,10 @@ function nv_admin_write_lang($dirlang, $idfile)
                 $createdate = time();
             }
 
-            $content_lang_no_tran = '';
             $content_lang = "<?php\n\n";
             $content_lang .= "/**\n";
             $content_lang .= "* @Project NUKEVIET 4.x\n";
-            $content_lang .= "* @Author VINADES.,JSC (contact@vinades.vn)\n";
+            $content_lang .= "* @Author VINADES.,JSC <contact@vinades.vn>\n";
             $content_lang .= "* @Copyright (C) " . date("Y") . " VINADES.,JSC. All rights reserved\n";
             $content_lang .= "* @Language " . $language_array[$dirlang]['name'] . "\n";
             $content_lang .= "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n";
@@ -109,49 +97,21 @@ function nv_admin_write_lang($dirlang, $idfile)
             $content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
             $content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
             $content_lang .= "\n";
-            $content_lang_no_check = '';
             $numrows = 0;
 
-            if (in_array('vi', $array_lang_exit) and in_array('en', $array_lang_exit) and $dirlang != 'vi' and $dirlang != 'en') {
-                $result = $db->query('SELECT lang_key, lang_vi, lang_en, lang_' . $dirlang . ', update_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
-                while (list($lang_key, $lang_value_vi, $lang_value_en, $lang_value, $update_time) = $result->fetch(3)) {
-                    if ($lang_value != '') {
-                        $numrows++;
-                        $lang_value = nv_unhtmlspecialchars($lang_value);
-                        $lang_value = str_replace("\'", "'", $lang_value);
-                        $lang_value = str_replace("'", "\'", $lang_value);
-                        $lang_value = nv_nl2br($lang_value);
-                        $lang_value = str_replace('<br />', '<br />', $lang_value);
-
-                        $content_temp = "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
-
-                        if ($update_time > 0) {
-                            $content_lang .= $content_temp;
-                        } else {
-                            $content_lang_no_check .= $content_temp;
-                        }
-                    }
-                }
-
-                if (! empty($content_lang_no_check)) {
-                    $content_lang .= "\n\n/*---------------------------------------- Language untested ----------------------------------------------*/\n";
-                    $content_lang .= $content_lang_no_check;
-                    $array_lang_no_check[] = $include_lang;
-                }
-            } else {
-                $result = $db->query('SELECT lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
-                while (list($lang_key, $lang_value) = $result->fetch(3)) {
-                    if ($lang_value != '') {
-                        $numrows++;
-                        $lang_value = nv_unhtmlspecialchars($lang_value);
-                        $lang_value = str_replace("\'", "'", $lang_value);
-                        $lang_value = str_replace("'", "\'", $lang_value);
-                        $lang_value = nv_nl2br($lang_value);
-                        $lang_value = str_replace('<br />', '<br />', $lang_value);
-                        $content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
-                    }
+            $result = $db->query('SELECT lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC');
+            while (list ($lang_key, $lang_value) = $result->fetch(3)) {
+                if ($lang_value != '') {
+                    $numrows++;
+                    $lang_value = nv_unhtmlspecialchars($lang_value);
+                    $lang_value = str_replace("\'", "'", $lang_value);
+                    $lang_value = str_replace("'", "\'", $lang_value);
+                    $lang_value = nv_nl2br($lang_value);
+                    $lang_value = str_replace('<br />', '<br />', $lang_value);
+                    $content_lang .= "\$" . $langtype . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
                 }
             }
+
             if ($numrows) {
                 $number_bytes = file_put_contents($include_lang, trim($content_lang), LOCK_EX);
                 if (empty($number_bytes)) {
@@ -210,10 +170,10 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
         $array_filename = array();
 
         $result = $db->query('SELECT idfile, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
-        while (list($idfile, $author_lang) = $result->fetch(3)) {
+        while (list ($idfile, $author_lang) = $result->fetch(3)) {
             $content = nv_admin_write_lang($dirlang, $idfile);
 
-            if (! empty($content)) {
+            if (!empty($content)) {
                 break;
             } else {
                 $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
@@ -244,6 +204,5 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main&dirlang=' . $dirlang);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main&dirlang=' . $dirlang);
 }

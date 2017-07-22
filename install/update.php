@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 29-03-2012 03:29
@@ -18,19 +18,16 @@ require NV_ROOTDIR .'/includes/mainfile.php';
 
 // Kiem tra tu cach admin
 if (! defined('NV_IS_GODADMIN')) {
-    Header('Location:' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 }
 
 // Kiem tra ton tai goi update
 if (! file_exists(NV_ROOTDIR . '/install/update_data.php')) {
-    Header('Location:' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 }
 require NV_ROOTDIR . '/install/update_data.php';
 if (empty($nv_update_config)) {
-    Header('Location:' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 }
 
 // Ham cua admin
@@ -151,7 +148,7 @@ class NvUpdate
             return array();
         }
 
-        global $global_config, $nv_update_config;
+        global $nv_update_config;
 
         $tasklist = array();
 
@@ -214,7 +211,6 @@ class NvUpdate
         $content_config .= "if( ! defined( 'NV_IS_UPDATE' ) ) die( 'Stop!!!' );\n\n";
         $content_config .= "\$nv_update_config['updatelog'] = " . var_export($data, true) . ";";
         $content_config .= "\n\n";
-        $content_config .= "?>";
 
         $return = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/config_update_' . $this->config['packageID'] . '.php', $content_config, LOCK_EX);
 
@@ -227,7 +223,7 @@ class NvUpdate
             include NV_ROOTDIR . '/includes/footer.php';
         }
 
-        //Resets the contents of the opcode cache
+        // Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
@@ -338,7 +334,7 @@ class NvUpdate
             }
         }
 
-        //Resets the contents of the opcode cache
+        // Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
@@ -423,7 +419,6 @@ class NvUpdate
      */
     public function step1($array)
     {
-        global $global_config;
 
         $xtpl = new XTemplate('updatestep1.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', $this->lang);
@@ -708,8 +703,8 @@ class NvUpdate
         }
 
         $xtpl->parse('version_info');
-        echo($xtpl->text('version_info'));
-        exit();
+        $_info = $xtpl->text('version_info');
+        exit($_info);
     }
 
     /**
@@ -729,7 +724,7 @@ class NvUpdate
 
         $i = 0;
         foreach ($exts as $mod) {
-            if (($mod['type'] == 'module' and in_array($mod['name'], array('banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting'))) or ($mod['type'] == 'theme' and in_array($mod['name'], array('default', 'mobile_default')))) {
+            if (($mod['type'] == 'module' and in_array($mod['name'], array('banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'))) or ($mod['type'] == 'theme' and in_array($mod['name'], array('default', 'mobile_default')))) {
                 $mod['note'] = $this->lang['update_mod_uptodate'];
             } else {
                 $mod['note'] = $this->lang['update_mod_othermod'];
@@ -743,8 +738,8 @@ class NvUpdate
         }
 
         $xtpl->parse('module_info');
-        echo($xtpl->text('module_info'));
-        exit();
+        $_info = $xtpl->text('module_info');
+        exit($_info);
     }
 
     /**
@@ -776,8 +771,8 @@ class NvUpdate
         $xtpl->assign('LASTEST_VERSION', $lastest_version);
 
         $xtpl->parse('commodule');
-        echo($xtpl->text('commodule'));
-        exit();
+        $_info = $xtpl->text('commodule');
+        exit($_info);
     }
 
     /**
@@ -790,7 +785,7 @@ class NvUpdate
      */
     public function log($nv_update_config, $content, $status)
     {
-        global $client_info;
+        global $client_info, $admin_info;
 
         // Danh dau phien bat dau khoi tao
         if (! isset($nv_update_config['updatelog']['starttime'])) {
@@ -799,7 +794,6 @@ class NvUpdate
         }
 
         $file_log = 'log-update-' . nv_date('H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime']) . '-' . NV_CHECK_SESSION . '.log';
-
         $time = nv_date('H:i:s_d-m-Y');
 
         if (! is_array($content)) {
@@ -808,13 +802,15 @@ class NvUpdate
         }
 
         $contents = '';
+        if (! file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log)) {
+            $contents .= $this->lang['update_log_start'] . ': ' . $time . "\n";
+            nv_insert_logs(NV_LANG_UPDATE, 'update', $this->lang['update_log_start'], $time, $admin_info['userid']);
+        }
+
         foreach ($content as $key => $mess) {
             $st = empty($status[$key]) ? 'FAILURE' : 'SUCCESS';
             $contents .= $time . ' | ' . $client_info['ip'] . ' | ' . $mess . ' | ' . $st . "\n";
-        }
-
-        if (! file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log)) {
-            $contents = $this->lang['update_log_start'] . ': ' . $time . "\n" . $contents;
+            nv_insert_logs(NV_LANG_UPDATE, 'update', $mess, $st, $admin_info['userid']);
         }
 
         file_put_contents(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log, $contents, FILE_APPEND);
@@ -845,8 +841,8 @@ class NvUpdate
      */
     public function trigger_error($message)
     {
-        echo $this->call_error($message);
-        die();
+        $_info = $this->call_error($message);
+        die($_info);
     }
 }
 
@@ -1127,15 +1123,13 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
 
                 if (file_exists(NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html')) {
                     // Chuyen buoc 2/2 - Nang cap thu cong
-                    Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=2&substep=2');
-                    exit();
+                    nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=2');
                 } else {
                     // Chuyen buoc 3
                     $nv_update_config['updatelog']['step'] = 2;
                     $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                    Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=3');
-                    exit();
+                    nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
                 }
             } elseif (file_exists(NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html')) {
                 // Neu nguoc lai kiem tra file ton tai chuyen buoc 5/2
@@ -1143,16 +1137,14 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 $nv_update_config['updatelog']['substep'] = 4;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
-                exit();
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
             } else {
                 // Chuyen buoc 3
 
                 $nv_update_config['updatelog']['step'] = 2;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=3');
-                exit();
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
             }
         }
     } elseif ($nv_update_config['substep'] == 2) {
@@ -1171,7 +1163,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 $nv_update_config['updatelog']['step'] = 2;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=3');
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
                 exit();
             }
 
@@ -1223,16 +1215,14 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 $nv_update_config['updatelog']['step'] = 2;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=3');
-                exit();
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
             }
             // Chuyen den buoc 5 de xem huong dan nang cap
             elseif (empty($nv_update_config['updatelog']['data_list'])) {
                 $nv_update_config['updatelog']['substep'] = 4;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
-                exit();
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
             }
         }
 
@@ -1241,8 +1231,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
             $nv_update_config['updatelog']['substep'] = 3;
             $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-            Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=2&substep=4');
-            exit();
+            nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=4');
         }
 
         if (! $array['errorStepMoveFile']) {
@@ -1468,16 +1457,14 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 $nv_update_config['updatelog']['step'] = 2;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=3');
-                exit();
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
             } else {
                 // Chuyen den buoc 2/5
 
                 $nv_update_config['updatelog']['substep'] = 4;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                Header('Location:' . NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
-                exit();
+                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
             }
         }
 

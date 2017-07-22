@@ -2,8 +2,8 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate May 30, 2010, 05:07:00 PM
@@ -13,7 +13,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die( 'Stop!!!' );
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
 $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -52,7 +52,7 @@ $lang_module['answer'] = 'Answer';
 $lang_module['gender'] = 'Gender';
 $lang_module['male'] = 'Male';
 $lang_module['female'] = 'Female';
-$lang_module['NA'] = 'N/A';
+$lang_module['na'] = 'N/A';
 $lang_module['name_show'] = 'Type display name';
 $lang_module['firstname_lastname'] = 'Firstname and Lastname';
 $lang_module['lastname_firstname'] = 'Lastname and Firstname';
@@ -421,3 +421,40 @@ $lang_module['group_description_empty'] = 'Take a brief description of the group
 $lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
 $lang_module['active_group_newusers'] = 'Enable new member';
 $lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';
+$lang_module['adduser_email1'] = 'Send email notification';
+$lang_module['adduser_email1_note'] = 'If selected, after creating a successful account the member who created the account will receive an email notification that the account has been created, including login details and password.';
+$lang_module['adduser_email1_note1'] = 'If selected, after successfully updating the account members will receive an email notification of account changes, including login information and password (if the password is replaced).';
+$lang_module['adduser_register1'] = 'Your account has been updated';
+$lang_module['adduser_register_info1'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been created. Here are the logins: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s<br /> < Password: %5$s<br /><br />We recommend that you change your password before using your account. <br /> <br /> This is an automated message sent to Your email box from %2$s. website. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
+$lang_module['adduser_register_info2'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been updated. Here are the new login information: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s';
+$lang_module['adduser_register_info3'] = '<br /> Password: %1$s';
+$lang_module['adduser_register_info4'] = '<br /> <br /> This is an automated message sent to your email from %1$s. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
+$lang_module['active_user_logs'] = 'Log the log, log out of the member';
+$lang_module['user_openid_mamager'] = 'Manage OpenID & Oauth';
+$lang_module['user_2step_mamager'] = 'Manage two-step authentication';
+$lang_module['user_2step_of'] = 'Manage two-step member authentication:';
+$lang_module['user_2step_off'] = 'Two-step authentication is off';
+$lang_module['user_2step_turnoff'] = 'Turn off two-step authentication';
+$lang_module['user_2step_turnoff_info'] = 'Two-step authentication is required for some regions. If you turn off, the member will have to force it back on';
+$lang_module['user_2step_codes'] = 'Backup code';
+$lang_module['user_2step_newcodes'] = 'New backup code';
+$lang_module['user_2step_codes_timecreat'] = 'Creation time';
+$lang_module['user_2step_codes_timeuse'] = 'Time to use';
+$lang_module['user_2step_codes_s0'] = 'Not used yet';
+$lang_module['user_2step_codes_s1'] = 'Used';
+$lang_module['user_2step_reset'] = 'Generate backup codes';
+$lang_module['user_2step_sendmail'] = 'Email a new backup code for members';
+$lang_module['user_2step_bodymail'] = 'Hello %1$s,<br /><br /> backup code to your account at the website %2$s has been changed. Here is a new backup code: <br /><br />%3$s<br /><br /> You keep your backup safe. If you lose your phone and lose your backup code, you will no longer be able to access your account. <br /><br /> This is an automated message sent to your e-mail from website %2$s. If you do not understand the content of this letter, simply delete it. <br /><br /> Site Admin';
+$lang_module['user_oauthmanager'] = 'Manage Oauth, OpenID members';
+$lang_module['user_oauthmanager_list'] = 'Oauth list, OpenID is using the member';
+$lang_module['user_oauthmanager_empty'] = 'This user does not have any OpenID or Oauth';
+$lang_module['user_oauthmanager_gate'] = 'Port name';
+$lang_module['user_oauthmanager_email'] = 'Email use';
+$lang_module['user_oauthmanager_deleteall'] = 'Delete all';
+$lang_module['min_old_user'] = 'Minimum age to join members';
+$lang_module['error_system'] = '%s can not be empty';
+$lang_module['old_min_user_error'] = 'Your age is under %s so it is not old enough to register';
+$lang_module['two_step_verification_require_admin'] = 'Mandatory two-step authentication of the admin area';
+$lang_module['two_step_verification_require_site'] = 'Two-step authentication is required outside the site';
+$lang_module['two_step_verification_require_admindefault'] = 'Security settings are required to be enabled in the admin area, though not enabled here. Administrators still have to enable two-step authentication to log in.';
+$lang_module['two_step_verification_require_sitedefault'] = 'The security setting is asking to be enabled outside the site, even if not enabled. The team member must still enable two-step authentication to log in.';

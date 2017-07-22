@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
@@ -12,6 +12,12 @@ if (! defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
+/**
+ * nv_src_href_callback()
+ *
+ * @param mixed $matches
+ * @return
+ */
 function nv_src_href_callback($matches)
 {
     if (! empty($matches[2]) and ! preg_match("/^http\:\/\//", $matches[2]) and ! preg_match("/^https\:\/\//", $matches[2]) and ! preg_match("/^mailto\:/", $matches[2]) and ! preg_match("/^tel\:/", $matches[2]) and ! preg_match("/^javascript/", $matches[2])) {
@@ -50,8 +56,7 @@ if ($id > 0 and $catid > 0) {
         if ($content['allowed_save'] == 1 and (defined('NV_IS_MODADMIN') or ($content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ($content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME)))) {
             $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
             if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-                Header('Location: ' . $base_url_rewrite);
-                die();
+                nv_redirect_location($base_url_rewrite);
             }
 
             $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 18:6
@@ -15,7 +15,6 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_page_list')) {
     function nv_block_config_page_list($module, $data_block, $lang_block)
     {
-        global $db, $site_mods;
         $html = '';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['title_length'] . '</td>';
@@ -46,7 +45,7 @@ if (! nv_function_exists('nv_page_list')) {
      */
     function nv_page_list($block_config)
     {
-        global $nv_Cache, $global_config, $site_mods, $db, $module_name;
+        global $nv_Cache, $global_config, $site_mods, $db;
         $module = $block_config['module'];
 
         if (! isset($site_mods[$module])) {

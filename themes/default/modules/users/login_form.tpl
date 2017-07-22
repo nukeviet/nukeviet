@@ -11,7 +11,7 @@
         <div class="form-group loginstep1">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
             </div>
         </div>
         
@@ -45,6 +45,24 @@
         </div>
         <!-- END: captcha -->
         
+        <!-- BEGIN: recaptcha -->
+        <div class="form-group loginCaptcha">
+            <div class="middle text-center clearfix">
+                <!-- BEGIN: default --><div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div><!-- END: default -->
+                <!-- BEGIN: compact --><div class="nv-recaptcha-compact"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div><!-- END: compact -->
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    <!-- BEGIN: smallbtn -->size: "compact",<!-- END: smallbtn -->
+                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
+                    pnum: 4,
+                    btnselector: '[type="submit"]'
+                })
+                </script>
+            </div>
+        </div>
+        <!-- END: recaptcha -->
+        
         <div class="text-center margin-bottom-lg">
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
@@ -72,7 +90,7 @@
        	<hr />
        	<div class="text-center">
       		<!-- BEGIN: server -->
-      		<a title="{OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
+      		<a title="{LANG.login_with} {OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
       		<!-- END: server -->
        	</div>
        	<!-- END: openid -->

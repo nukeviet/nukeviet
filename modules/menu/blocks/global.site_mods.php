@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 17, 2011 11:34:27 AM
@@ -64,7 +64,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
      */
     function nv_menu_site_mods($block_config)
     {
-        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
+        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];

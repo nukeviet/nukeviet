@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -38,6 +38,7 @@ $lang_module['disable_content'] = 'Nội dung thông báo site ngưng hoạt đ�
 $lang_module['submit'] = 'Lưu cấu hình';
 $lang_module['err_writable'] = 'Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.';
 $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không hỗ trợ module rewrite';
+$lang_module['err_save_sysconfig'] = 'Các thay đổi đã được lưu lại tuy nhiên hệ thống không ghi được cấu hình ra file. Hãy cấp quyền ghi cho file %s sau đó thực hiện lại';
 
 $lang_module['security'] = 'Thiết lập an ninh';
 $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
@@ -50,6 +51,7 @@ $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử d�
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Cấu hình hiển thị captcha';
 $lang_module['captcha_0'] = 'Không hiển thị';
 $lang_module['captcha_1'] = 'Khi admin đăng nhập';
@@ -61,6 +63,12 @@ $lang_module['captcha_6'] = 'Khi admin đăng nhập hoặc khách đăng ký';
 $lang_module['captcha_7'] = 'Hiển thị trong mọi trường hợp';
 $lang_module['captcha_num'] = 'Số ký tự của captcha';
 $lang_module['captcha_size'] = 'Kích thước của captcha';
+$lang_module['recaptcha_sitekey'] = 'Site key';
+$lang_module['recaptcha_secretkey'] = 'Secret key';
+$lang_module['recaptcha_type'] = 'Kiểu xác nhận';
+$lang_module['recaptcha_type_image'] = 'Hình ảnh (nên chọn)';
+$lang_module['recaptcha_type_audio'] = 'Âm thanh';
+$lang_module['recaptcha_guide'] = 'Nhấp vào đây để lấy thông số Site key và Secret key.';
 
 $lang_module['ftp_config'] = 'Cấu hình FTP';
 $lang_module['smtp_config'] = 'Cấu hình SMTP';
@@ -245,3 +253,10 @@ $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Khu vực quản trị';
 $lang_module['two_step_verification2'] = 'Khu vực ngoài site';
 $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+$lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụng cho toàn bộ tài khoản của các nhóm, nếu cần cấu hình riêng cho từng nhóm hãy chọn giá trị này là <strong>%s</strong> sau đó sửa <a href="%s">nhóm</a> rồi chọn khu vực bắt buộc kích hoạt xác thực hai bước theo ý muốn';
+
+$lang_module['site_phone'] = 'Số điện thoại của site';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+
