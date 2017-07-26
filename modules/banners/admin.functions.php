@@ -238,7 +238,7 @@ function nv_banners_client_theme($contents)
  */
 function nv_add_plan_theme($contents)
 {
-    global $global_config, $module_file;
+    global $global_config, $module_file, $module_upload;
     $xtpl = new XTemplate('add_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
@@ -259,7 +259,7 @@ function nv_add_plan_theme($contents)
         $xtpl->parse('main.form');
     }
     if ($contents['description'][5] and nv_function_exists('nv_aleditor')) {
-        $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2]);
+        $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
     } else {
         $description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
     }
@@ -275,8 +275,8 @@ function nv_add_plan_theme($contents)
  */
 function nv_edit_plan_theme($contents)
 {
-    global $global_config, $module_file;
-//print_r($contents);die();
+    global $global_config, $module_file, $module_upload;
+
     $xtpl = new XTemplate('edit_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
@@ -302,7 +302,7 @@ function nv_edit_plan_theme($contents)
         $xtpl->parse('main.form');
     }
     if ($contents['description'][5] and nv_function_exists('nv_aleditor')) {
-        $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2]);
+        $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
     } else {
         $description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
     }

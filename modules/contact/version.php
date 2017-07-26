@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
@@ -17,8 +17,8 @@ $module_version = array(
     'modfuncs' => 'main',
     'is_sysmod' => 0,
     'virtual' => 1,
-    'version' => '4.1.02',
-    'date' => 'Sun, 23 Apr 2017 16:59:59 GMT',
+    'version' => '4.2.00',
+    'date' => 'Sat, 22 Jul 2017 16:00:00 GMT',
     'author' => 'VINADES (contact@vinades.vn)',
     'note' => '',
     'uploads_dir' => array( $module_upload )
