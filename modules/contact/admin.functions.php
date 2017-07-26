@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
@@ -12,6 +12,8 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
     die('Stop!!!');
 }
 
+//Tài liệu hướng dẫn
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact';
 /**
  * nv_getAllowed()
  *

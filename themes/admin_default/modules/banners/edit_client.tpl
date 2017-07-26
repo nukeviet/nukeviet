@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="alert alert-info">{CONTENTS.info}</div>
-<form method="post" action="{CONTENTS.action}">
+<form method="post" action="{CONTENTS.action}" class="form-inline">
 	<input type="hidden" value="1" name="save" id="save" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
@@ -68,15 +68,25 @@
 				<tr>
 					<td>{CONTENTS.pass.0}:</td>
 					<td>&nbsp;</td>
-					<td><input class="w300 form-control" name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" autocomplete="off" value="{CONTENTS.pass.2}" maxlength="{CONTENTS.pass.3}" /></td>
+					<td><input class="w300 form-control" name="{CONTENTS.pass.1}" id="{CONTENTS.pass.1}" type="password" autocomplete="off" value="{CONTENTS.pass.2}" maxlength="{CONTENTS.pass.3}" style="margin-right: 5px" /><a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.re_pass.0}:</td>
 					<td>&nbsp;</td>
-					<td><input class="w300 form-control" name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" autocomplete="off" value="{CONTENTS.re_pass.2}" maxlength="{CONTENTS.re_pass.3}" /></td>
+					<td><input class="w300 form-control" name="{CONTENTS.re_pass.1}" id="{CONTENTS.re_pass.1}" type="password" autocomplete="off" value="{CONTENTS.re_pass.2}" maxlength="{CONTENTS.re_pass.3}" style="margin-right: 5px" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </form>
+<script type="text/javascript">
+//<![CDATA[
+$(function() {
+    $.toggleShowPassword({
+        field: '#re_pass_iavim',
+        control: '#methods'
+    })
+});
+//]]>
+</script>
 <!-- END: main -->

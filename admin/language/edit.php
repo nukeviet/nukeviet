@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -31,7 +31,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
 
     $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
 
-    $lang_translator_save['author'] = isset($lang_translator['author']) ? nv_htmlspecialchars(strip_tags($lang_translator['author'])) : 'VINADES.,JSC (contact@vinades.vn)';
+    $lang_translator_save['author'] = isset($lang_translator['author']) ? nv_htmlspecialchars(strip_tags($lang_translator['author'])) : 'VINADES.,JSC <contact@vinades.vn>';
     $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? nv_unhtmlspecialchars(strip_tags($lang_translator['createdate'])) : date('d/m/Y, H:i');
     $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? nv_htmlspecialchars(strip_tags($lang_translator['copyright'])) : '@Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
     $lang_translator_save['info'] = isset($lang_translator['info']) ? nv_htmlspecialchars(strip_tags($lang_translator['info'])) : '';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
@@ -54,20 +54,20 @@ if ($nv_Request->isset_request('act', 'get')) {
      :answer,
      '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
-     $data_insert = array();
-     $data_insert['username'] = $row['username'];
-     $data_insert['md5_username'] = nv_md5safe($row['username']);
-     $data_insert['password'] = $row['password'];
-     $data_insert['email'] = nv_strtolower($row['email']);
-     $data_insert['first_name'] = $row['first_name'];
-     $data_insert['last_name'] = $row['last_name'];
-     $data_insert['gender'] = $row['gender'];
-     $data_insert['birthday'] = $row['birthday'];
-     $data_insert['sig'] = $row['sig'];
-     $data_insert['question'] = $row['question'];
-     $data_insert['answer'] = $row['answer'];
+    $data_insert = array();
+    $data_insert['username'] = $row['username'];
+    $data_insert['md5_username'] = nv_md5safe($row['username']);
+    $data_insert['password'] = $row['password'];
+    $data_insert['email'] = nv_strtolower($row['email']);
+    $data_insert['first_name'] = $row['first_name'];
+    $data_insert['last_name'] = $row['last_name'];
+    $data_insert['gender'] = $row['gender'];
+    $data_insert['birthday'] = $row['birthday'];
+    $data_insert['sig'] = $row['sig'];
+    $data_insert['question'] = $row['question'];
+    $data_insert['answer'] = $row['answer'];
 
-     $userid = $db->insert_id($sql, 'userid', $data_insert);
+    $userid = $db->insert_id($sql, 'userid', $data_insert);
 
     if ($userid) {
         // Luu vao bang OpenID
@@ -85,7 +85,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         $query_field['userid'] = $userid;
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
-        	if ($row_f['system'] == 1) continue;
+            if ($row_f['system'] == 1) continue;
             $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
         }
 
@@ -156,7 +156,9 @@ if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
 
-$db->sqlreset()->select('COUNT(*)')->from(NV_MOD_TABLE . '_reg');
+$db->sqlreset()
+    ->select('COUNT(*)')
+    ->from(NV_MOD_TABLE . '_reg');
 
 if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
@@ -169,9 +171,12 @@ if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
 
-$num_items = $db->query($db->sql())->fetchColumn();
+$num_items = $db->query($db->sql())
+    ->fetchColumn();
 
-$db->select('*')->limit($per_page)->offset(($page - 1) * $per_page);
+$db->select('*')
+    ->limit($per_page)
+    ->offset(($page - 1) * $per_page);
 
 if (!empty($orderby) and in_array($orderby, $orders)) {
     $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");

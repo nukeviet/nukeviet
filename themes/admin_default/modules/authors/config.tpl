@@ -106,12 +106,12 @@
 				</tr>
 				<tr>
 					<td>{GLANG.password} (<span style="color:red">*</span>)</td>
-					<td><input class="w200 form-control" type="password" name="password" value="{FIREWALLDATA.password}" /></td>
+					<td><input class="w200 form-control" type="password" autocomplete="off" name="password" value="{FIREWALLDATA.password}" /></td>
 				</tr>
 
 				<tr>
 					<td>{GLANG.password2} (<span style="color:red">*</span>)</td>
-					<td><input class="w200 form-control" type="password" name="password2" value="{FIREWALLDATA.password2}" /></td>
+					<td><input class="w200 form-control" type="password" autocomplete="off" name="password2" value="{FIREWALLDATA.password2}" /></td>
 				</tr>
 				<tr>
 					<td>{LANG.adminip_begintime}</td>

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -93,8 +93,11 @@ $lang_module['cats'] = 'Các chủ đề liên quan';
 $lang_module['cat'] = 'Chủ đề';
 $lang_module['mark_as_unread'] = 'Đánh dấu là chưa đọc';
 $lang_module['mark_as_read'] = 'Đánh dấu là đã đọc';
+$lang_module['mark_as_forward'] = 'Chuyển tiếp';
 $lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh sách trên.';
 
 $lang_module['error_required_departmentid'] = 'Lỗi: bạn cần nhập dữ liệu cho Departmentid';
 $lang_module['error_required_full_name'] = 'Lỗi: bạn cần nhập dữ liệu cho Full name';
 $lang_module['error_required_phone'] = 'Lỗi: bạn cần nhập dữ liệu cho Phone';
+$lang_module['forwarded'] = 'Thư đã chuyển tiếp';
+$lang_module['error_mail_empty'] = 'Lỗi: Bạn chưa nhập email';

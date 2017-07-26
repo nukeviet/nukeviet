@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (@) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -16,6 +16,7 @@ $id = $nv_Request->get_int('id', 'get', 0);
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
+$row['title'] = 'Re:' . $row['title'];
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -32,6 +33,7 @@ if (defined('NV_EDITOR')) {
 $xtpl = new XTemplate('reply.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('POST', $row);
 
 $is_read = intval($row['is_read']);
 if (!$is_read) {
@@ -91,7 +93,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         $mail->Content($mess_content);
-        $mail->Subject('Re: ' . $row['title']);
+        $mail->Subject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
@@ -105,20 +107,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 } else {
-    $mess_content .= '<br /><br />----------<br />Best regards,<br /><br />' . $admin_info['full_name'] . '<br />';
-    if (!empty($admin_info['position'])) {
-        $mess_content .= $admin_info['position'] . '<br />';
-    }
-    $mess_content .= '<br />';
-    $mess_content .= 'E-mail: ' . $admin_info['email'] . '<br />';
-    $mess_content .= 'Website: ' . $global_config['site_name'] . '<br />' . $global_config['site_url'] . '<br /><br />';
-
     $mess_content .= '--------------------------------------------------------------------------------<br />';
     $mess_content .= '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';
     $mess_content .= '<strong>Sent:</strong> ' . date('r', $row['send_time']) . '<br />';
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
+    
+    require_once NV_ROOTDIR . '/modules/contact/sign.php';
+    $mess_content .= $sign_content;
 }
 
 $mess_content = htmlspecialchars(nv_editor_br2nl($mess_content));

@@ -11,7 +11,7 @@
         <div class="form-group loginstep1">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
             </div>
         </div>
         

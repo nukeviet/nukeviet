@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @Language English
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -92,7 +92,10 @@ $lang_module['cats'] = 'Related categories';
 $lang_module['cat'] = 'Category';
 $lang_module['mark_as_unread'] = 'Mark as unread';
 $lang_module['mark_as_read'] = 'Mark as read';
+$lang_module['mark_as_forward'] = 'Forward';
 $lang_module['please_choose'] = 'Please choose at least one  letter in the list.';
 $lang_module['error_required_departmentid'] = 'Error: Departmentid field is required';
 $lang_module['error_required_full_name'] = 'Error: Full name field is required';
 $lang_module['error_required_phone'] = 'Error: Phone field is required';
+$lang_module['forwarded'] = 'Forwarded';
+$lang_module['error_mail_empty'] = 'Error: Empty email';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
 $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -60,6 +60,7 @@ $lang_module['xml_support'] = 'PHP hỗ trợ thư viện xử lý XML';
 $lang_module['openssl_support'] = 'PHP hỗ trợ thư viện mã hóa Openssl';
 $lang_module['session_support'] = 'PHP hỗ trợ session';
 $lang_module['fileuploads_support'] = 'PHP hỗ trợ uploads file';
+$lang_module['json_support'] = 'PHP hỗ trợ JSON';
 $lang_module['dir_noexit'] = 'Không tồn tại';
 $lang_module['dir_not_writable'] = 'Không ghi được';
 $lang_module['dir_not_writable_ip_files'] = 'Không ghi được các file trong thư mục %1$s';

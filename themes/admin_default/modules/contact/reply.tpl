@@ -13,7 +13,15 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td>{MESS_CONTENT}</td>
+                    <td>{LANG.title_send_title}</td>
+                    <td class="text-center"><input name="title" type="text" value="{POST.title}" class="w300 form-control pull-left" disabled="true"/></td>
+                </tr>
+                <tr>
+                    <td>{LANG.admin_send2mail_title}</td>
+                    <td class="text-center"><input name="email" type="text" value="{POST.sender_email}" class="w300 form-control pull-left" disabled="true"/></td>
+                </tr>
+				<tr>
+					<td colspan="2">{MESS_CONTENT}</td>
 				</tr>
 			</tbody>
 		</table>

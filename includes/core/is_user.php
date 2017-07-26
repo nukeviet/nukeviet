@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/29/2009 4:15
@@ -48,9 +48,8 @@ if (defined('NV_IS_ADMIN')) {
 } else {
     if ($nv_Request->get_bool('nvloginhash', 'cookie', false)) {
         $user = $nv_Request->get_string('nvloginhash', 'cookie', '');
-
         if (! empty($user) and $global_config['allowuserlogin']) {
-            $user = unserialize(nv_base64_decode($user));
+            $user = unserialize($user);
 
             if (isset($user['userid']) and isset($user['checknum']) and isset($user['checkhash'])) {
                 $user['userid'] = intval($user['userid']);
