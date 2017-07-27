@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
@@ -6,10 +7,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 2:29
  */
+
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
-$allow_func = array( 'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' );
+
+$allow_func = array('main', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner');
 define('NV_IS_FILE_ADMIN', true);
 $targets = array(
     '_blank' => $lang_module['target_blank'],
@@ -17,6 +20,7 @@ $targets = array(
     '_self' => $lang_module['target_self'],
     '_parent' => $lang_module['target_parent']
 );
+
 /**
  * nv_CreateXML_bannerPlan()
  *
@@ -82,6 +86,7 @@ function nv_CreateXML_bannerPlan()
         }
     }
 }
+
 /**
  * nv_fix_banner_weight()
  *
@@ -106,130 +111,7 @@ function nv_fix_banner_weight($pid)
         $db->query($sql);
     }
 }
-/**
- * nv_add_client_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_add_client_theme($contents)
-{
-    global $global_config, $module_file, $lang_module;
-    $xtpl = new XTemplate('add_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-	$xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-/**
- * nv_edit_client_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_edit_client_theme($contents)
-{
-    global $global_config, $module_file, $lang_module;
-    $xtpl = new XTemplate('edit_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-/**
- * nv_client_list_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_client_list_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('client_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-/**
- * nv_cl_list_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_cl_list_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('cl_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    foreach ($contents['thead'] as $key => $thead) {
-        $xtpl->assign('THEAD', $thead);
-        $xtpl->parse('main.thead');
-    }
-    if (! empty($contents['rows'])) {
-        foreach ($contents['rows'] as $cl_id => $values) {
-            $values['checked'] = $values['act'][1] ? ' checked="checked"' : '';
-            $xtpl->assign('ROW', $values);
-            $xtpl->parse('main.loop');
-        }
-    }
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-/**
- * nv_info_client_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_info_client_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('info_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-/**
- * nv_info_cl_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_info_cl_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('info_cl.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    foreach ($contents['rows'] as $row) {
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.loop');
-    }
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-/**
- * nv_banners_client_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_banners_client_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('banners_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    if (! empty($contents['info'])) {
-        $xtpl->parse('main.info');
-    } else {
-        $xtpl->parse('main.empty');
-    }
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
+
 /**
  * nv_add_plan_theme()
  *
@@ -267,6 +149,7 @@ function nv_add_plan_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_edit_plan_theme()
  *
@@ -310,6 +193,7 @@ function nv_edit_plan_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_plans_list_theme()
  *
@@ -325,6 +209,7 @@ function nv_plans_list_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_plist_theme()
  *
@@ -351,6 +236,7 @@ function nv_plist_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_info_plan_theme()
  *
@@ -366,6 +252,7 @@ function nv_info_plan_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_info_pl_theme()
  *
@@ -393,6 +280,7 @@ function nv_info_pl_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_add_banner_theme()
  *
@@ -401,15 +289,20 @@ function nv_info_pl_theme($contents)
  */
 function nv_add_banner_theme($contents)
 {
-    global $global_config, $module_file;
+    global $global_config, $module_file, $lang_module;
+
     $xtpl = new XTemplate('add_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+
     if (! empty($contents['upload_blocked'])) {
         $xtpl->parse('upload_blocked');
         return $xtpl->text('upload_blocked');
     }
+
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
 
     foreach ($contents['plan'][2] as $pid => $ptitle) {
@@ -421,14 +314,7 @@ function nv_add_banner_theme($contents)
         ));
         $xtpl->parse('main.plan');
     }
-    foreach ($contents['client'][2] as $clid => $clname) {
-        $xtpl->assign('CLIENT', array(
-            'key' => $clid,
-            'title' => $clname,
-            'selected' => $clid == $contents['client'][3] ? ' selected="selected"' : ''
-        ));
-        $xtpl->parse('main.client');
-    }
+
     foreach ($contents['target'][2] as $target => $ptitle) {
         $xtpl->assign('TARGET', array(
             'key' => $target,
@@ -437,9 +323,11 @@ function nv_add_banner_theme($contents)
         ));
         $xtpl->parse('main.target');
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_edit_banner_theme()
  *
@@ -449,15 +337,19 @@ function nv_add_banner_theme($contents)
 function nv_edit_banner_theme($contents)
 {
     global $global_config, $module_file, $lang_module;
+
     $xtpl = new XTemplate('edit_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+
     if (! empty($contents['upload_blocked'])) {
         $xtpl->parse('upload_blocked');
         return $xtpl->text('upload_blocked');
     }
+
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
     foreach ($contents['plan'][2] as $pid => $ptitle) {
         $xtpl->assign('PLAN', array(
@@ -466,14 +358,6 @@ function nv_edit_banner_theme($contents)
             'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
         ));
         $xtpl->parse('main.plan');
-    }
-    foreach ($contents['client'][2] as $clid => $clname) {
-        $xtpl->assign('CLIENT', array(
-            'key' => $clid,
-            'title' => $clname,
-            'selected' => $clid == $contents['client'][3] ? ' selected="selected"' : ''
-        ));
-        $xtpl->parse('main.client');
     }
     foreach ($contents['target'][2] as $target => $ptitle) {
         $xtpl->assign('TARGET', array(
@@ -495,6 +379,7 @@ function nv_edit_banner_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_banners_list_theme()
  *
@@ -510,46 +395,64 @@ function nv_banners_list_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_b_list_theme()
  *
  * @param mixed $contents
+ * @param array $array_users
  * @return
  */
-function nv_b_list_theme($contents)
+function nv_b_list_theme($contents, $array_users = array())
 {
-    global $global_config, $module_file, $lang_module, $module_name;
+    global $global_config, $module_file, $lang_module, $module_name, $global_config;
+
     $xtpl = new XTemplate('b_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('MODULE_NAME', $module_name);
+
     if (defined('NV_BANNER_WEIGHT')) {
         $xtpl->parse('main.nv_banner_weight');
     }
+
     foreach ($contents['thead'] as $key => $thead) {
         $xtpl->assign('THEAD', $thead);
         $xtpl->parse('main.thead');
     }
+
+    $is_allowed_viewuser = nv_user_in_groups($global_config['whoviewuser']);
     $a = 0;
-    if (! empty($contents['rows'])) {
+
+    if (!empty($contents['rows'])) {
         foreach ($contents['rows'] as $b_id => $values) {
             $values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del_banner&amp;id=' . $b_id;
             $values['checked'] = $values['act'][1] == '1' ? ' checked="checked"' : '';
             $xtpl->assign('ROW', $values);
+
             if (defined('NV_BANNER_WEIGHT')) {
                 $xtpl->parse('main.loop.nv_banner_weight');
             }
-            if (! empty($values['clid'])) {
-                $xtpl->parse('main.loop.t1');
-            } else {
-                $xtpl->parse('main.loop.t2');
+
+            if (!empty($values['clid']) and isset($array_users[$values['clid']])) {
+                $user = $array_users[$values['clid']];
+                if ($is_allowed_viewuser) {
+                    $user['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=memberlist/' . change_alias($user['username']) . '-' . $user['md5username'];
+                } else {
+                    $user['link'] = 'javascript:void(0);';
+                }
+                $xtpl->assign('USER', $user);
+                $xtpl->parse('main.loop.user');
             }
+
             $xtpl->parse('main.loop');
         }
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_info_b_theme()
  *
@@ -587,6 +490,7 @@ function nv_info_b_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_show_stat_theme()
  *
@@ -620,6 +524,7 @@ function nv_show_stat_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_show_list_stat_theme()
  *
@@ -652,6 +557,7 @@ function nv_show_list_stat_theme($contents)
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
 /**
  * nv_main_theme()
  *
@@ -674,4 +580,44 @@ function nv_main_theme($contents)
     }
     $xtpl->parse('main');
     return $xtpl->text('main');
+}
+
+// Tìm kiếm thành viên AJAX
+if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != NV_CHECK_SESSION or !defined('NV_IS_AJAX')) {
+        die('Wrong URL');
+    }
+    $username = $nv_Request->get_title('ajaxqueryusername', 'post', '');
+    $return = array();
+
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png')) {
+        $default_photo = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png';
+    } else {
+        $default_photo = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+    }
+
+    if (nv_strlen($username) >= 3) {
+        if (preg_match('/^\=(.*)$/', $username, $m)) {
+            $username = $m[1];
+            $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=' . $db->quote($username) . ' ORDER BY username ASC LIMIT 0,10';
+        } else {
+            $dbkey = $db->dblikeescape($username);
+            $sql = "SELECT username, first_name, last_name, photo FROM " . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
+                username LIKE '%" . $dbkey . "%' OR CONCAT(first_name,' ',last_name) LIKE '%" . $dbkey . "%'
+            ) ORDER BY username ASC LIMIT 0,10";
+        }
+        $result = $db->query($sql);
+        while ($row = $result->fetch()) {
+            if (!empty($row['photo'])) {
+                $row['photo'] = NV_BASE_SITEURL . $row['photo'];
+            } else {
+                $row['photo'] = $default_photo;
+            }
+            $row['fullname'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+            $return[] = $row;
+        }
+    }
+
+    nv_jsonOutput($return);
 }

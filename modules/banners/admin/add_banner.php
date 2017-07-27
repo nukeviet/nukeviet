@@ -34,14 +34,6 @@ if (empty($contents['file_allowed_ext'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE . '_clients ORDER BY login ASC';
-$result = $db->query($sql);
-
-$clients = array();
-while ($row = $result->fetch()) {
-    $clients[$row['id']] = $row['full_name'] . ' (' . $row['login'] . ')';
-}
-
 $plans = array();
 $plans_form = array();
 $sql = 'SELECT id, title, blang, form, require_image FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
@@ -61,7 +53,6 @@ $error = '';
 if ($nv_Request->get_int('save', 'post') == '1') {
     $title = nv_htmlspecialchars(strip_tags($nv_Request->get_string('title', 'post', '')));
     $pid = $nv_Request->get_int('pid', 'post', 0);
-    $clid = $nv_Request->get_int('clid', 'post', 0);
     $file_alt = nv_htmlspecialchars(strip_tags($nv_Request->get_string('file_alt', 'post', '')));
     $target = $nv_Request->get_string('target', 'post', '');
     if (!isset($targets[$target])) {
@@ -71,6 +62,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $click_url = strip_tags($nv_Request->get_string('click_url', 'post', ''));
     $publ_date = strip_tags($nv_Request->get_string('publ_date', 'post', ''));
     $exp_date = strip_tags($nv_Request->get_string('exp_date', 'post', ''));
+    $assign_user = $nv_Request->get_title('assign_user', 'post', '');
+    $assign_user_id = $admin_info['userid'];
 
     if (!empty($publ_date) and !preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
         $publ_date = '';
@@ -79,9 +72,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $exp_date = '';
     }
 
-    if (!empty($clid) and !isset($clients[$clid])) {
-        $clid = 0;
-    }
     if ($click_url == 'http://') {
         $click_url = '';
     }
@@ -90,10 +80,25 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $result = $db->query($sql);
     $array_require_image = $result->fetchAll();
 
+    $error_assign_user = '';
+    if (!empty($assign_user)) {
+        $sql = 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=:username';
+        $sth = $db->prepare($sql);
+        $sth->bindParam(':username', $assign_user, PDO::PARAM_STR);
+        $sth->execute();
+        if ($sth->rowCount() != 1) {
+            $error_assign_user = sprintf($lang_module['assign_to_user_err'], $assign_user);
+        } else {
+            $assign_user_id = $sth->fetchColumn();
+        }
+    }
+
     if (empty($title)) {
         $error = $lang_module['title_empty'];
     } elseif (empty($pid) or !isset($plans[$pid])) {
         $error = $lang_module['plan_not_selected'];
+    } elseif (!empty($error_assign_user)) {
+        $error = $error_assign_user;
     } elseif (!empty($click_url) and !nv_is_url($click_url)) {
         $error = $lang_module['click_url_invalid'];
     } elseif (!is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1) {
@@ -134,7 +139,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $width = 0;
             $height = 0;
             $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-					( :title, " . $pid . ", " . $clid . ", :file_name, :file_ext, :file_mime,
+					( :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
 					" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 					0, 1, " . $_weight . ")";
 
@@ -164,7 +169,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $height = $upload_info['img_info'][1];
 
                 $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-					( :title, " . $pid . ", " . $clid . ", :file_name, :file_ext, :file_mime,
+					( :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
 					" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 					0, 1, " . $_weight . ")";
 
@@ -186,18 +191,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op2 . '&id=' . $id);
     }
 } else {
-    $pid = $clid = 0;
+    $pid = 0;
     $title = $file_alt = $click_url = $exp_date = '';
     $target = '_blank';
     $bannerhtml = '';
     $publ_date = date('d/m/Y', NV_CURRENTTIME);
+    $assign_user = '';
 
     if ($nv_Request->get_bool('pid', 'get') and isset($plans[$nv_Request->get_int('pid', 'get')])) {
         $pid = $nv_Request->get_int('pid', 'get');
-    }
-
-    if ($nv_Request->get_bool('clid', 'get') and isset($clients[$nv_Request->get_int('clid', 'get')])) {
-        $clid = $nv_Request->get_int('clid', 'get');
     }
 }
 
@@ -219,12 +221,6 @@ $contents['plan'] = array(
     $pid,
     $row,
     $require_image
-);
-$contents['client'] = array(
-    $lang_module['of_client'],
-    'clid',
-    $clients,
-    $clid
 );
 $contents['upload'] = array(
     sprintf($lang_module['upload'], $contents['file_allowed_ext']),
@@ -261,6 +257,7 @@ $contents['exp_date'] = array(
     10
 );
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
+$contents['assign_user'] = $assign_user;
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

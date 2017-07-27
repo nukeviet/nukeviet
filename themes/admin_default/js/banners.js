@@ -354,3 +354,51 @@ function find_User() {
         },
     });
 }
+
+$(function() {
+    // Auto complete search
+    var autoSearchTimer = null;
+    var autosearchpersion = $('.autosearchpersion');
+    if (autosearchpersion.length == 1) {
+        $('[name="assign_user"]', autosearchpersion).keyup(function(e) {
+            $('.searchloading', autosearchpersion).addClass('hidden');
+            $('.searchresultaj', autosearchpersion).html('').hide();
+            if (autoSearchTimer) {
+                clearTimeout(autoSearchTimer);
+            }
+            if (e.keyCode != 13) {
+                var valu = $(this).val();
+                valu = trim(valu);
+                if (valu.length >= 3) {
+                    $('.searchloading', autosearchpersion).removeClass('hidden');
+                    autoSearchTimer = setTimeout(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&nocache=" + new Date().getTime(),
+                            data: "checkss=" + autosearchpersion.data('checkss') + "&ajaxqueryusername=" + encodeURIComponent(valu),
+                            success: function(res) {
+                                if (res.length) {
+                                    var html = '<ul>';
+                                    $.each(res, function(k, v) {
+                                        html += '<li class="clearfix" data-value="' + v.username + '">';
+                                        html += '<img class="left pull-left" src="' + v.photo + '" width="40" height="40"/>';
+                                        html += '' + v.fullname + '<br />';
+                                        html += '<small>' + v.username + '</small>';
+                                        html += '</li>';
+                                    });
+                                    html += '</ul>';
+                                    $('.searchresultaj', autosearchpersion).html(html).show();
+                                }
+                                $('.searchloading', autosearchpersion).addClass('hidden');
+                            }
+                        });
+                    }, 300);
+                }
+            }
+        });
+        $(document).delegate('.autosearchpersion ul li', 'click', function() {
+            $('[name="assign_user"]', autosearchpersion).val($(this).data('value')).focus();
+            $('.searchresultaj', autosearchpersion).html('').hide();
+        });
+    }
+});

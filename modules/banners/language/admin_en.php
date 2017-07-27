@@ -1,46 +1,25 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
  * @Language English
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 08:22:00 AM
  */
+
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
-$lang_module['add_client'] = 'Add client';
-$lang_module['edit_client'] = 'Edit client';
-$lang_module['full_name_empty'] = 'Client name has not been declared';
-$lang_module['website_incorrect'] = 'Website incorrect';
-$lang_module['yim_incorrect'] = 'YIM incorrect';
-$lang_module['add_client_info'] = 'Complete all fields below to create a new customer account';
-$lang_module['edit_client_info'] = 'Box marked with an asterisk to be required to declare';
-$lang_module['random_password'] = 'Random password';
-$lang_module['show_password'] = 'Show password';
-$lang_module['login'] = 'Login';
-$lang_module['full_name'] = 'Full name';
-$lang_module['email'] = 'Email';
-$lang_module['website'] = 'Website';
-$lang_module['location'] = 'Location';
-$lang_module['yim'] = 'YIM';
-$lang_module['phone'] = 'Phone';
-$lang_module['fax'] = 'Fax';
-$lang_module['mobile'] = 'Mobile';
+
 $lang_module['uploadtype'] = 'Upload file type allowed';
-$lang_module['add_client_submit'] = 'Create';
-$lang_module['edit_client_submit'] = 'Submit';
-$lang_module['login_is_already_in_use'] = 'Account &ldquo;<strong>%s</strong>&rdquo; already exist';
-$lang_module['email_is_already_in_use'] = 'Email &ldquo;<strong>%s</strong>&rdquo; already exist';
-$lang_module['client_list'] = 'Client';
-$lang_module['client_list2'] = 'List client';
-$lang_module['reg_time'] = 'Registration date';
 $lang_module['is_act'] = 'Active';
 $lang_module['require_image'] = 'Require image';
 $lang_module['act0'] = 'Wait for active';
@@ -48,12 +27,7 @@ $lang_module['act1'] = 'Active';
 $lang_module['act2'] = 'Expire';
 $lang_module['act3'] = 'Suspend';
 $lang_module['change_act'] = 'Suspend/Active';
-$lang_module['info_client_title'] = 'Client information';
-$lang_module['info_client_caption'] = 'Personal information &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['banners_client_caption'] = 'List client\'s advertising &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['banners_client_empty'] = 'There are no client\'s advertising &ldquo;<strong>%s</strong>&rdquo; to be accepted';
 $lang_module['add_banner'] = 'Add advertising';
-$lang_module['add_banner_client'] = 'Add client\'s advertising &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Block advertising';
 $lang_module['plans_list2'] = 'List Block Advertising';
 $lang_module['in_plan'] = 'Block';
@@ -78,7 +52,6 @@ $lang_module['click_url_invalid'] = 'Invalid url';
 $lang_module['file_upload_empty'] = 'Invalid advertising image';
 $lang_module['upload_blocked'] = 'System have been reject to upload image and flash file, So you can\'t advertise. Please check your configuration system or the types of file are not allow to upload';
 $lang_module['add_banner_info'] = 'T add advertising, Please declare fully the box below';
-$lang_module['of_client'] = 'Client';
 $lang_module['upload'] = 'Image file for advertising (%s)';
 $lang_module['re_upload'] = 'Replace advertising image(%s)';
 $lang_module['imageforswf'] = 'Images for mobile browser';
@@ -95,7 +68,7 @@ $lang_module['banners_list1'] = 'List active advertising';
 $lang_module['banners_list2'] = 'List expire advertising';
 $lang_module['banners_list3'] = 'List suspend advertising';
 $lang_module['banners_list4'] = 'List advertising for activation';
-$lang_module['banners_list_cl'] = 'of client &ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['banners_list_cl'] = 'of user &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['banners_list_pl'] = 'in block &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['unlimited'] = 'Unlimited';
 $lang_module['info_banner_title'] = 'Advertising information';
@@ -140,3 +113,4 @@ $lang_module['target_top'] = 'Topmost Window (_top)';
 $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
 $lang_module['bannerhtml'] = 'Advertising content';
+$lang_module['assign_to_user'] = 'Assign to a user';

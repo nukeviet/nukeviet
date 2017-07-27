@@ -33,17 +33,18 @@
 						<!-- END: plan -->
 					</select></td>
 				</tr>
-				<tr>
-					<td>{CONTENTS.client.0}:</td>
-					<td>&nbsp;</td>
-					<td>
-					<select name="{CONTENTS.client.1}" class="form-control w200">
-						<option value="">&nbsp;</option>
-						<!-- BEGIN: client -->
-						<option value="{CLIENT.key}"{CLIENT.selected}>{CLIENT.title}</option>
-						<!-- END: client -->
-					</select></td>
-				</tr>
+                <tr>
+                    <td>{LANG.assign_to_user}:</td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <div class="autosearchpersion w300 pull-left" data-checkss="{NV_CHECK_SESSION}">
+                            <span class="searchloading hidden"><i class="fa fa-spin fa-spinner"></i></span>
+                            <input type="text" class="form-control" name="assign_user" value="{CONTENTS.assign_user}" autocomplete="off"/>
+                            <div class="searchresultaj"></div>
+                        </div>
+                        <a href="javascript:void(0);" title="{LANG.assign_to_user_tip}" data-toggle="tooltip" class="form-info-circle"><i class="fa fa-info-circle"></i></a>
+                    </td>
+                </tr>
 				<tr>
 					<td>{CONTENTS.file_name.0}:</td>
 					<td>&nbsp;</td>

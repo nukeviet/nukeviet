@@ -48,14 +48,6 @@ if (empty($contents['file_allowed_ext'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE. '_clients ORDER BY login ASC';
-$result = $db->query($sql);
-
-$clients = array();
-while ($cl_row = $result->fetch()) {
-    $clients[$cl_row['id']] = $cl_row['full_name'] . ' (' . $cl_row['login'] . ')';
-}
-
 $sql = 'SELECT id, title, blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 
@@ -73,7 +65,6 @@ $error = '';
 if ($nv_Request->get_int('save', 'post') == '1') {
     $title = nv_htmlspecialchars(strip_tags($nv_Request->get_string('title', 'post', '')));
     $pid = $nv_Request->get_int('pid', 'post', 0);
-    $clid = $nv_Request->get_int('clid', 'post', 0);
     $file_alt = nv_htmlspecialchars(strip_tags($nv_Request->get_string('file_alt', 'post', '')));
     $click_url = strip_tags($nv_Request->get_string('click_url', 'post', ''));
     $publ_date = strip_tags($nv_Request->get_string('publ_date', 'post', ''));
@@ -83,6 +74,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $target = '_blank';
     }
     $bannerhtml = $nv_Request->get_editor('bannerhtml', '', NV_ALLOWED_HTML_TAGS);
+    $assign_user = $nv_Request->get_title('assign_user', 'post', '');
+    $assign_user_id = $admin_info['userid'];
 
     if (! empty($publ_date) and ! preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
         $publ_date = '';
@@ -91,9 +84,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $exp_date = '';
     }
 
-    if (! empty($clid) and ! isset($clients[$clid])) {
-        $clid = 0;
-    }
     if ($click_url == 'http://') {
         $click_url = '';
     }
@@ -101,10 +91,26 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 	$sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE. '_plans where id = ' . $pid;
 	$result = $db->query($sql);
 	$array_require_image = $result->fetchAll();
+
+    $error_assign_user = '';
+    if (!empty($assign_user)) {
+        $sql = 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=:username';
+        $sth = $db->prepare($sql);
+        $sth->bindParam(':username', $assign_user, PDO::PARAM_STR);
+        $sth->execute();
+        if ($sth->rowCount() != 1) {
+            $error_assign_user = sprintf($lang_module['assign_to_user_err'], $assign_user);
+        } else {
+            $assign_user_id = $sth->fetchColumn();
+        }
+    }
+
     if (empty($title)) {
         $error = $lang_module['title_empty'];
     } elseif (empty($pid) or ! isset($plans[$pid])) {
         $error = $lang_module['plan_not_selected'];
+    } elseif (!empty($error_assign_user)) {
+        $error = $error_assign_user;
     } elseif (! empty($click_url) and ! nv_is_url($click_url)) {
         $error = $lang_module['click_url_invalid'];
     } elseif (! is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 && empty($file_name) ) {
@@ -174,7 +180,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
             $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . intval($id))->fetchColumn();
 
-            $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $clid . ',
+            $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
 				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
 				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
 				 click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
@@ -204,13 +210,20 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 } else {
     $title = $row['title'];
     $pid = $row['pid'];
-    $clid = $row['clid'];
     $file_alt = $row['file_alt'];
     $click_url = $row['click_url'];
     $target = $row['target'];
     $bannerhtml = $row['bannerhtml'];
     $publ_date = ! empty($row['publ_time']) ? date('d/m/Y', $row['publ_time']) : '';
     $exp_date = ! empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : '';
+
+    $assign_user = '';
+    if (!empty($row['clid']) and $row['clid'] != $admin_info['userid']) {
+        $user = $db->query('SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['clid'])->fetch();
+        if (!empty($user)) {
+            $assign_user = $user['username'];
+        }
+    }
 }
 
 $contents['info'] = (! empty($error)) ? $error : $lang_module['edit_banner_info'];
@@ -220,7 +233,7 @@ $contents['submit'] = $lang_module['edit_banner'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id;
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['plan'] = array( $lang_module['in_plan'], 'pid', $plans, $pid );
-$contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid );
+$contents['assign_user'] = $assign_user;
 
 $imageforswf = (! empty($imageforswf)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
