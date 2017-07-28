@@ -2,10 +2,8 @@
 <!-- BEGIN: management -->
 <ul class="nav nav-tabs m-bottom">
 	<li class="active"><a href="{MANAGEMENT.main}">{LANG.plan_info}</a></li>
-	<li><a href="{MANAGEMENT.link}">{LANG.client_info}</a></li>
 	<li><a href="{MANAGEMENT.addads}">{LANG.client_addads}</a></li>
 	<li><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
-	<li><a href="{MANAGEMENT.logout}">{GLANG.logout}</a></li>
 </ul>
 <!-- END: management -->
 <!-- BEGIN: if_banner_plan -->
@@ -28,13 +26,17 @@
 				<td><strong>{PLAN_LANG_TITLE}</strong>: {PLAN_LANG_NAME}, <strong>{PLAN_SIZE_TITLE}</strong>: {PLAN_SIZE_NAME}, <strong>{PLAN_FORM_TITLE}</strong>: {PLAN_FORM_NAME}</td>
 				<td>{PLAN_DESCRIPTION_NAME}</td>
 			</tr>
-			<!-- END: banner_plan -->			
+			<!-- END: banner_plan -->
 		</tbody>
 	</table>
 </div>
 <!-- END: if_banner_plan -->
-<div id="{CONTAINERID}"></div>
-<script type="text/javascript">
-{AJ}
-</script>
+<!-- BEGIN: login_check -->
+<div class="alert alert-info">
+    <a href="javascript:void(0);" onclick="loginForm('');">{LANG.login_to_check}.</a>
+</div>
+<!-- END: login_check -->
+<!-- BEGIN: no_permission -->
+<div class="alert alert-warning">{LANG.no_permission}.</div>
+<!-- END: no_permission -->
 <!-- END: main -->

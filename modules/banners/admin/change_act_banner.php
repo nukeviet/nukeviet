@@ -40,6 +40,7 @@ if ($act == 0) {
 $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=' . $act . ' WHERE id=' . $id;
 $return = ($db->exec($sql)) ? 'OK' : 'NO';
 
+$nv_Cache->delMod($module_name);
 nv_CreateXML_bannerPlan();
 
 include NV_ROOTDIR . '/includes/header.php';

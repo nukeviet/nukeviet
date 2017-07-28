@@ -60,6 +60,8 @@ $db->query('OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_plans');
 $db->query('OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_click');
 $db->query('OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_rows');
 
+$nv_Cache->delMod($module_name);
+
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK|plans_list|plans_list';
 include NV_ROOTDIR . '/includes/footer.php';
