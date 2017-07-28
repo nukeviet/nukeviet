@@ -401,4 +401,13 @@ $(function() {
             $('.searchresultaj', autosearchpersion).html('').hide();
         });
     }
+    // Custom plan exp
+    $('#plan_exp_time').change(function() {
+        var val = $(this).val();
+        if (val == -1) {
+            $('#plan_exp_time_custom').show();
+        } else {
+            $('#plan_exp_time_custom').hide();
+        }
+    });
 });

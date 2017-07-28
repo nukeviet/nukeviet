@@ -21,7 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['uploadtype'] = 'Upload file type allowed';
 $lang_module['is_act'] = 'Active';
-$lang_module['require_image'] = 'Require image';
+$lang_module['require_image'] = 'Banner type';
 $lang_module['act0'] = 'Wait for active';
 $lang_module['act1'] = 'Active';
 $lang_module['act2'] = 'Expire';

@@ -185,6 +185,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	height smallint(4) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL DEFAULT '0',
 	require_image tinyint(1) unsigned NOT NULL DEFAULT '1',
+	uploadtype varchar(255) NOT NULL DEFAULT '',
+	uploadgroup varchar(255) NOT NULL DEFAULT '',
+	exp_time int(11) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (id),
 	KEY title (title)
 ) ENGINE=MyISAM";

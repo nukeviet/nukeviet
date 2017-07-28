@@ -21,7 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['uploadtype'] = 'Types de fichiers autorisés';
 $lang_module['is_act'] = 'Activer';
-$lang_module['require_image'] = 'Besoin d\'image';
+$lang_module['require_image'] = 'Bannière genre';
 $lang_module['act0'] = 'En suspens';
 $lang_module['act1'] = 'Actif';
 $lang_module['act2'] = 'Expiré';
