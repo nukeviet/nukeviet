@@ -8,11 +8,30 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
-$allow_func = array('main', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner');
+$allow_func = array(
+    'main',
+    'plans_list',
+    'plist',
+    'change_act_plan',
+    'add_plan',
+    'edit_plan',
+    'del_plan',
+    'info_plan',
+    'info_pl',
+    'banners_list',
+    'add_banner',
+    'edit_banner',
+    'b_list',
+    'change_act_banner',
+    'info_banner',
+    'show_stat',
+    'show_list_stat',
+    'del_banner'
+);
 define('NV_IS_FILE_ADMIN', true);
 $targets = array(
     '_blank' => $lang_module['target_blank'],
@@ -42,12 +61,12 @@ function nv_CreateXML_bannerPlan()
     global $db, $global_config;
     $pattern = ($global_config['idsite']) ? '/^site\_' . $global_config['idsite'] . '\_bpl\_([0-9]+)\.xml$/' : '/^bpl\_([0-9]+)\.xml$/';
     $files = nv_scandir(NV_ROOTDIR . '/' . NV_DATADIR, $pattern);
-    if (! empty($files)) {
+    if (!empty($files)) {
         foreach ($files as $file) {
             nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file);
         }
     }
-    $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE act = 1';
+    $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE act = 1';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $id = intval($row['id']);
@@ -60,13 +79,13 @@ function nv_CreateXML_bannerPlan()
         $plan['id'] = $id;
         $plan['lang'] = $row['blang'];
         $plan['title'] = $row['title'];
-        if (! empty($row['description'])) {
+        if (!empty($row['description'])) {
             $plan['description'] = $row['description'];
         }
         $plan['form'] = $row['form'];
         $plan['width'] = $row['width'];
         $plan['height'] = $row['height'];
-        $query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid = ' . $id . ' AND (exp_time > ' . NV_CURRENTTIME . ' OR exp_time = 0 ) AND act = 1';
+        $query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = ' . $id . ' AND (exp_time > ' . NV_CURRENTTIME . ' OR exp_time = 0) AND act = 1';
         if ($row['form'] == 'sequential') {
             $query2 .= ' ORDER BY weight ASC';
         }
@@ -107,18 +126,18 @@ function nv_CreateXML_bannerPlan()
 function nv_fix_banner_weight($pid)
 {
     global $db;
-    list($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval($pid))->fetch(3);
+    list($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . intval($pid))->fetch(3);
     if ($pid > 0 and $form == 'sequential') {
-        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid=' . $pid . ' ORDER BY weight ASC, id DESC';
+        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' ORDER BY weight ASC, id DESC';
         $result = $db->query($query_weight);
         $weight = 0;
         while ($row = $result->fetch()) {
             ++$weight;
-            $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
+            $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
             $db->query($sql);
         }
     } elseif ($pid > 0 and $form == 'random') {
-        $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET weight=0 WHERE pid=' . $pid;
+        $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE pid=' . $pid;
         $db->query($sql);
     }
 }
@@ -145,8 +164,8 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('BLANG', array(
             'key' => $key,
             'title' => $blang['name'],
-            'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : ''
-        ));
+            'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.blang');
     }
 
@@ -154,8 +173,8 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('FORM', array(
             'key' => $form,
             'title' => $form,
-            'selected' => $form == $contents['form'][3] ? ' selected="selected"' : ''
-        ));
+            'selected' => $form == $contents['form'][3] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.form');
     }
 
@@ -192,8 +211,8 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('UPLOADGROUP', array(
             'key' => $_group_id,
             'checked' => in_array($_group_id, $uploadgroup) ? ' checked="checked"' : '',
-            'title' => $_title
-        ));
+            'title' => $_title)
+        );
         $xtpl->parse('main.uploadgroup');
     }
 
@@ -234,8 +253,8 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('BLANG', array(
             'key' => $key,
             'title' => $blang['name'],
-            'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : ''
-        ));
+            'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.blang');
     }
 
@@ -243,8 +262,8 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('FORM', array(
             'key' => $form,
             'title' => $form,
-            'selected' => $form == $contents['form'][3] ? ' selected="selected"' : ''
-        ));
+            'selected' => $form == $contents['form'][3] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.form');
     }
 
@@ -281,8 +300,8 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('UPLOADGROUP', array(
             'key' => $_group_id,
             'checked' => in_array($_group_id, $uploadgroup) ? ' checked="checked"' : '',
-            'title' => $_title
-        ));
+            'title' => $_title)
+        );
         $xtpl->parse('main.uploadgroup');
     }
 
@@ -333,7 +352,7 @@ function nv_plist_theme($contents)
         $xtpl->parse('main.thead');
     }
     $a = 0;
-    if (! empty($contents['rows'])) {
+    if (!empty($contents['rows'])) {
         foreach ($contents['rows'] as $pl_id => $values) {
             $values['checked'] = $values['act'][1] ? ' checked="checked"' : '';
             $xtpl->assign('ROW', $values);
@@ -405,7 +424,7 @@ function nv_add_banner_theme($contents)
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
-    if (! empty($contents['upload_blocked'])) {
+    if (!empty($contents['upload_blocked'])) {
         $xtpl->parse('upload_blocked');
         return $xtpl->text('upload_blocked');
     }
@@ -417,8 +436,8 @@ function nv_add_banner_theme($contents)
             'key' => $pid,
             'title' => $ptitle,
             'require_image' => $contents['plan'][5][$pid] == 1 ? 'require_image' : '',
-            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
-        ));
+            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.plan');
     }
 
@@ -426,8 +445,8 @@ function nv_add_banner_theme($contents)
         $xtpl->assign('TARGET', array(
             'key' => $target,
             'title' => $ptitle,
-            'selected' => $target == $contents['target'][3] ? ' selected="selected"' : ''
-        ));
+            'selected' => $target == $contents['target'][3] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.target');
     }
 
@@ -452,7 +471,7 @@ function nv_edit_banner_theme($contents)
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
-    if (! empty($contents['upload_blocked'])) {
+    if (!empty($contents['upload_blocked'])) {
         $xtpl->parse('upload_blocked');
         return $xtpl->text('upload_blocked');
     }
@@ -462,22 +481,22 @@ function nv_edit_banner_theme($contents)
         $xtpl->assign('PLAN', array(
             'key' => $pid,
             'title' => $ptitle,
-            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
-        ));
+            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.plan');
     }
     foreach ($contents['target'][2] as $target => $ptitle) {
         $xtpl->assign('TARGET', array(
             'key' => $target,
             'title' => $ptitle,
-            'selected' => $target == $contents['target'][3] ? ' selected="selected"' : ''
-        ));
+            'selected' => $target == $contents['target'][3] ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.target');
     }
-	if (! empty($contents['file_name'][1])) {
+    if (!empty($contents['file_name'][1])) {
         $xtpl->parse('main.img_info');
     }
-    if (! empty($contents['file_name'][5])) {
+    if (!empty($contents['file_name'][5])) {
         $xtpl->parse('main.imageforswf1');
     }
     if (substr($contents['file_name'][1], -3) == 'swf') {
@@ -577,9 +596,9 @@ function nv_info_b_theme($contents)
         $xtpl->parse('main.act');
     }
     $a = 0;
-	if($contents['rows'][5][1] == ''){
-			$contents['rows'][4][1] = '';
-	}
+    if ($contents['rows'][5][1] == '') {
+        $contents['rows'][4][1] = '';
+    }
     foreach ($contents['rows'] as $row) {
         $xtpl->assign('ROW1', $row);
         $xtpl->parse('main.loop1');
@@ -611,17 +630,17 @@ function nv_show_stat_theme($contents)
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('MODULE_NAME', $module_name);
-    if (! empty($contents[2])) {
+    if (!empty($contents[2])) {
         $a = 0;
         foreach ($contents[2] as $key => $value) {
             $xtpl->assign('KEY', $key);
             $xtpl->assign('ROW', $value);
-            if (! preg_match('/^[0-9]+$/', $key)) {
+            if (!preg_match('/^[0-9]+$/', $key)) {
                 $xtpl->parse('main.loop.t1');
             } else {
                 $xtpl->parse('main.loop.t2');
             }
-            if (! empty($value[1])) {
+            if (!empty($value[1])) {
                 $xtpl->assign('WIDTH', $value[1] * 3);
                 $xtpl->parse('main.loop.t3');
             }
@@ -658,7 +677,7 @@ function nv_show_list_stat_theme($contents)
         }
         $xtpl->parse('main.loop');
     }
-    if (! empty($contents['generate_page'])) {
+    if (!empty($contents['generate_page'])) {
         $xtpl->parse('main.generate_page');
     }
     $xtpl->parse('main');

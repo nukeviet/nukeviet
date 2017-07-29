@@ -74,24 +74,26 @@
                     <td>{CONTENTS.publ_date.0}:</td>
                     <td>&nbsp;</td>
                     <td>
-                        <div class="input-group pull-left" style="margin-right: 10px">
+                        <div class="input-group pull-left">
                             <input name="{CONTENTS.publ_date.1}" id="publ_date" value="{CONTENTS.publ_date.2}" maxlength="{CONTENTS.publ_date.3}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
                             <span class="input-group-btn pull-left">
                                 <button class="btn btn-default" type="button" id="publ_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
                             </span>
                         </div>
+                        <a href="javascript:void(0);" class="form-info-circle" data-toggle="delval" data-target="#publ_date"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                     </td>
                 </tr>
                 <tr>
                     <td>{CONTENTS.exp_date.0}:</td>
                     <td>&nbsp;</td>
                     <td>
-                        <div class="input-group pull-left" style="margin-right: 10px">
+                        <div class="input-group pull-left">
                             <input name="{CONTENTS.exp_date.1}" id="exp_date" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
                             <span class="input-group-btn pull-left">
                                 <button class="btn btn-default" type="button" id="exp_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
                             </span>
                         </div>
+                        <a href="javascript:void(0);" class="form-info-circle" data-toggle="delval" data-target="#exp_date"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                     </td>
                 </tr>
                 <tr>
@@ -109,32 +111,32 @@
     <div id="demo"></div>
 </form>
 <script type="text/javascript">
-    $(document).ready(function() {
-        chancePlan();
-        $('#frm').validate();
-        $("#publ_time,#exp_date").datepicker({
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            showOn: 'focus'
-        });
-
-        $('#publ_time-btn').click(function(){
-            $("#publ_time").datepicker('show');
-        });
-
-        $('#exp_date-btn').click(function(){
-            $("#exp_date").datepicker('show');
-        });
+$(document).ready(function() {
+    chancePlan();
+    $('#frm').validate();
+    $("#publ_date,#exp_date").datepicker({
+        dateFormat : "dd/mm/yy",
+        changeMonth : true,
+        changeYear : true,
+        showOtherMonths : true,
+        showOn: 'focus'
     });
-    function chancePlan() {
-        var x =    $('select option:selected').attr('class');
-           if (x == 'require_image') {
-           document.getElementById("require_image").innerHTML = "&lowast;";
-        }else{
-               document.getElementById("require_image").innerHTML = "&nbsp;";
-        };
+
+    $('#publ_time-btn').click(function(){
+        $("#publ_time").datepicker('show');
+    });
+
+    $('#exp_date-btn').click(function(){
+        $("#exp_date").datepicker('show');
+    });
+});
+function chancePlan() {
+    var x =    $('select option:selected').attr('class');
+       if (x == 'require_image') {
+       document.getElementById("require_image").innerHTML = "&lowast;";
+    }else{
+           document.getElementById("require_image").innerHTML = "&nbsp;";
+    };
 }
 </script>
 <!-- END: main -->

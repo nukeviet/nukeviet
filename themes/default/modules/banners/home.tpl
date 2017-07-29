@@ -14,9 +14,10 @@
 	<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
-				<td>{LANG.plan_title}</td>
-				<td>{LANG.plan_info}</td>
-				<td>{LANG.description}</td>
+				<td class="min-w100">{LANG.plan_title}</td>
+				<td class="min-w100">{LANG.plan_info}</td>
+				<td class="min-w100">{LANG.description}</td>
+				<td class="min-w100 text-center">{LANG.plan_allowed}</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -25,6 +26,14 @@
 				<td>{PLAN_TITLE}</td>
 				<td><strong>{PLAN_LANG_TITLE}</strong>: {PLAN_LANG_NAME}, <strong>{PLAN_SIZE_TITLE}</strong>: {PLAN_SIZE_NAME}, <strong>{PLAN_FORM_TITLE}</strong>: {PLAN_FORM_NAME}</td>
 				<td>{PLAN_DESCRIPTION_NAME}</td>
+                <td class="text-center">
+                    <!-- BEGIN: allowed -->
+                    <a class="btn btn-xs btn-success">{LANG.plan_allowed_yes}</a>
+                    <!-- END: allowed -->
+                    <!-- BEGIN: notallowed -->
+                    <a class="btn btn-xs btn-danger">{LANG.plan_allowed_no}</a>
+                    <!-- END: notallowed -->
+                </td>
 			</tr>
 			<!-- END: banner_plan -->
 		</tbody>

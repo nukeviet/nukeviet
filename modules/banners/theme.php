@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
@@ -26,7 +26,7 @@ function nv_banner_theme_main($contents, $manament)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    if (! empty($contents['rows'])) {
+    if (!empty($contents['rows'])) {
         $xtpl->assign('MAIN_PAGE_INFO', $contents['info']);
         $xtpl->parse('main.if_banner_plan.info');
 
@@ -43,6 +43,11 @@ function nv_banner_theme_main($contents, $manament)
             $xtpl->assign('PLAN_DESCRIPTION_NAME', $row['description'][1]);
             $xtpl->assign('PLAN_DETAIL', $contents['detail']);
             $xtpl->set_autoreset();
+            if ($row['allowed']) {
+                $xtpl->parse('main.if_banner_plan.banner_plan.allowed');
+            } else {
+                $xtpl->parse('main.if_banner_plan.banner_plan.notallowed');
+            }
             $xtpl->parse('main.if_banner_plan.banner_plan');
         }
 

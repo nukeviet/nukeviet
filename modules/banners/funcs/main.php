@@ -24,9 +24,10 @@ foreach ($global_array_plans as $row) {
     $contents['rows'][$row['id']]['size'] = array($lang_module['size'], $row['width'] . ' x ' . $row['height'] . 'px');
     $contents['rows'][$row['id']]['form'] = array($lang_module['form'], $row['form']);
     $contents['rows'][$row['id']]['description'] = array($lang_module['description'], $row['description']);
+    $contents['rows'][$row['id']]['allowed'] = isset($global_array_uplans[$row['id']]) ? true : false;
 }
 
-$page_title = $module_info['custom_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['funcs'][$op]['func_site_title'];
+$page_title = $module_info['site_title'];
 $contents = nv_banner_theme_main($contents, $manament);
 
 include NV_ROOTDIR . '/includes/header.php';
