@@ -61,12 +61,12 @@
 <script type='text/javascript'>
 	$(function() {
 		$('#checkall').click(function() {
-			$('input:checkbox').each(function() {
+			$('input:checkbox.ck').each(function() {
 				$(this).attr('checked', 'checked');
 			});
 		});
 		$('#uncheckall').click(function() {
-			$('input:checkbox').each(function() {
+			$('input:checkbox.ck').each(function() {
 				$(this).removeAttr('checked');
 			});
 		});

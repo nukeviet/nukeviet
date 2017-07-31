@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 04 May 2014 12:41:32 GMT
+ * @Createdate 04/18/2017 09:47
  */
 
 if (!defined('NV_IS_MOD_SHOPS')) {
@@ -1203,14 +1203,13 @@ function viewcat_page_list($data_content, $compare_id, $pages, $sort = 0, $viewt
             if (defined('NV_IS_MODADMIN')) {
                 $xtpl->assign('ADMINLINK', nv_link_edit_page($data_row['id']) . '&nbsp;-&nbsp;' . nv_link_delete_page($data_row['id']));
                 $xtpl->parse('main.row.adminlink');
-            } else {
-                if ($pro_config['show_compare'] == 1) {
-                    if (!empty($compare_id)) {
-                        $ch = (in_array($data_row['id'], $compare_id)) ? ' checked="checked"' : '';
-                        $xtpl->assign('ch', $ch);
-                    }
-                    $xtpl->parse('main.row.compare');
+            }
+            if ($pro_config['show_compare'] == 1) {
+                if (!empty($compare_id)) {
+                    $ch = (in_array($data_row['id'], $compare_id)) ? ' checked="checked"' : '';
+                    $xtpl->assign('ch', $ch);
                 }
+                $xtpl->parse('main.row.compare');
             }
 
             if ($data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice']) {
@@ -2066,7 +2065,7 @@ function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro
         $xtpl->parse('main.actpay');
     }
 
-    if ($data_content['transaction_status'] != 4) {
+    if ($data_content['transaction_status'] == -1 or $data_content['transaction_status'] == 0) {
         $action = empty($_SESSION[$module_data . '_order_info']) ? 'edit' : 'unedit';
         $xtpl->assign('url_action', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=payment&' . $action . '&order_id=' . $data_content['order_id'] . '&checkss=' . md5($data_content['order_id'] . $global_config['sitekey'] . session_id()));
         $xtpl->parse('main.order_action');

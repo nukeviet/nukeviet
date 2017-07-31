@@ -2,10 +2,10 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 12/5/2012 11:29
+ * @Createdate 04/18/2017 09:47
  */
 
 if (!defined('NV_MAINFILE')) {
@@ -104,7 +104,6 @@ if ($idtemplate) {
                 $allowed_html_tags = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
                 $allowed_html_tags = "<" . implode("><", $allowed_html_tags) . ">";
                 $value = strip_tags($value, $allowed_html_tags);
-                $value = nv_nl2br($value, '<br />');
 
                 if ($row['match_type'] == 'regex') {
                     if (!preg_match("/" . $row['match_regex'] . "/", $value)) {

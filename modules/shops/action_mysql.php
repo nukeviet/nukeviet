@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 20:59
+ * @Createdate 04/18/2017 09:47
  */
 
 if (! defined('NV_IS_FILE_MODULES')) {
@@ -431,7 +431,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  listgroupid VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
  proid mediumint(9) NOT NULL,
  num mediumint(9) NOT NULL,
- price int(11) NOT NULL,
+ price float NOT NULL DEFAULT '0',
  discount_id smallint(6) NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY orderid (order_id, id)
@@ -482,15 +482,16 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id mediumint(11) NOT NULL,
  code char(3) NOT NULL,
  currency varchar(250) NOT NULL,
- symbol varchar(3) NOT NULL,
+ symbol varchar(3) NOT NULL default '',
  exchange float NOT NULL default '0',
  round varchar(10) NOT NULL,
  number_format varchar(5) NOT NULL DEFAULT ',||.',
  PRIMARY KEY (id),
  UNIQUE KEY code (code)
 ) ENGINE=MyISAM";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (840, 'USD', 'US Dollar', 21000, '0.01', ',||.')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (704, 'VND', 'Vietnam Dong', 1, '100', ',||.')";
+
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, symbol, exchange, round, number_format) VALUES (840, 'USD', 'US Dollar', '$', 21000, '0.01', ',||.')";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, symbol, exchange, round, number_format) VALUES (704, 'VND', 'Vietnam Dong', 'đ', 1, '100', ',||.')";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (
  id tinyint(2) unsigned NOT NULL AUTO_INCREMENT,

@@ -2,10 +2,10 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES., JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Dec 29, 2010 10:42:00 PM
+ * @Createdate 04/18/2017 09:47
  */
 
 if (! defined('NV_IS_MOD_SHOPS')) {

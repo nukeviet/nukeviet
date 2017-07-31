@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2009
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 2:29
+ * @Createdate 04/18/2017 09:47
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
@@ -23,7 +23,6 @@ $allow_func = array(
     'custom_form',
     'keywords',
     'del_content',
-    'detemplate',
     'cat',
     'change_cat',
     'list_cat',
@@ -42,11 +41,6 @@ $allow_func = array(
     'or_view',
     'money',
     'delmoney',
-    'active_pay',
-    'payport',
-    'changepay',
-    'actpay',
-    'docpay',
     'group',
     'del_group',
     'list_group',
@@ -57,7 +51,6 @@ $allow_func = array(
     'view',
     'tags',
     'tagsajax',
-    'template',
     'seller',
     'copy_product',
     'order_seller',
@@ -80,13 +73,21 @@ $allow_func = array(
     'warehouse',
     'warehouse_logs',
     'download',
-    'tabs',
-    'field_tab',
     'updateprice'
 );
+
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'setting';
     $allow_func[] = 'fields';
+    $allow_func[] = 'tabs';
+    $allow_func[] = 'field_tab';
+    $allow_func[] = 'template';
+    $allow_func[] = 'detemplate';
+    $allow_func[] = 'active_pay';
+    $allow_func[] = 'payport';
+    $allow_func[] = 'changepay';
+    $allow_func[] = 'actpay';
+    $allow_func[] = 'docpay';
 }
 
 $array_viewcat_full = array(
