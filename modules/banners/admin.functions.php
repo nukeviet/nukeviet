@@ -435,9 +435,10 @@ function nv_add_banner_theme($contents)
         $xtpl->assign('PLAN', array(
             'key' => $pid,
             'title' => $ptitle,
-            'require_image' => $contents['plan'][5][$pid] == 1 ? 'require_image' : '',
-            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : '')
-        );
+            'require_image' => $contents['plan'][5][$pid] == 1 ? 'true' : 'false',
+            'exp_time' => $contents['plan'][6][$pid] > 0 ? 'true' : 'false',
+            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
+        ));
         $xtpl->parse('main.plan');
     }
 
@@ -445,9 +446,31 @@ function nv_add_banner_theme($contents)
         $xtpl->assign('TARGET', array(
             'key' => $target,
             'title' => $ptitle,
-            'selected' => $target == $contents['target'][3] ? ' selected="selected"' : '')
-        );
+            'selected' => $target == $contents['target'][3] ? ' selected="selected"' : ''
+        ));
         $xtpl->parse('main.target');
+    }
+
+    for ($i = 0; $i <= 23; $i++) {
+        $xtpl->assign('HOUR', array(
+            'key' => $i,
+            'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
+            'pub_selected' => $i == $contents['publ_date'][3] ? ' selected="selected"' : '',
+            'exp_selected' => $i == $contents['exp_date'][3] ? ' selected="selected"' : ''
+        ));
+        $xtpl->parse('main.h_pub');
+        $xtpl->parse('main.h_exp');
+    }
+
+    for ($i = 0; $i <= 59; $i++) {
+        $xtpl->assign('MIN', array(
+            'key' => $i,
+            'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
+            'pub_selected' => $i == $contents['publ_date'][4] ? ' selected="selected"' : '',
+            'exp_selected' => $i == $contents['exp_date'][4] ? ' selected="selected"' : ''
+        ));
+        $xtpl->parse('main.m_pub');
+        $xtpl->parse('main.m_exp');
     }
 
     $xtpl->parse('main');
@@ -477,14 +500,18 @@ function nv_edit_banner_theme($contents)
     }
 
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
+
     foreach ($contents['plan'][2] as $pid => $ptitle) {
         $xtpl->assign('PLAN', array(
             'key' => $pid,
             'title' => $ptitle,
-            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : '')
-        );
+            'require_image' => $contents['plan'][4][$pid] == 1 ? 'true' : 'false',
+            'exp_time' => $contents['plan'][5][$pid] > 0 ? 'true' : 'false',
+            'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
+        ));
         $xtpl->parse('main.plan');
     }
+
     foreach ($contents['target'][2] as $target => $ptitle) {
         $xtpl->assign('TARGET', array(
             'key' => $target,
@@ -493,15 +520,41 @@ function nv_edit_banner_theme($contents)
         );
         $xtpl->parse('main.target');
     }
+
     if (!empty($contents['file_name'][1])) {
         $xtpl->parse('main.img_info');
     }
+
     if (!empty($contents['file_name'][5])) {
         $xtpl->parse('main.imageforswf1');
     }
+
     if (substr($contents['file_name'][1], -3) == 'swf') {
         $xtpl->parse('main.imageforswf2');
     }
+
+    for ($i = 0; $i <= 23; $i++) {
+        $xtpl->assign('HOUR', array(
+            'key' => $i,
+            'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
+            'pub_selected' => $i == $contents['publ_date'][3] ? ' selected="selected"' : '',
+            'exp_selected' => $i == $contents['exp_date'][3] ? ' selected="selected"' : ''
+        ));
+        $xtpl->parse('main.h_pub');
+        $xtpl->parse('main.h_exp');
+    }
+
+    for ($i = 0; $i <= 59; $i++) {
+        $xtpl->assign('MIN', array(
+            'key' => $i,
+            'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
+            'pub_selected' => $i == $contents['publ_date'][4] ? ' selected="selected"' : '',
+            'exp_selected' => $i == $contents['exp_date'][4] ? ' selected="selected"' : ''
+        ));
+        $xtpl->parse('main.m_pub');
+        $xtpl->parse('main.m_exp');
+    }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

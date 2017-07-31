@@ -381,5 +381,8 @@ $(function() {
     $('[data-toggle="delval"]').click(function(e) {
         e.preventDefault();
         $($(this).data('target')).val('');
+        if ($(this).data('select') != '' && typeof $(this).data('select') != 'undefined') {
+            $($(this).data('select')).val('0');
+        }
     });
 });

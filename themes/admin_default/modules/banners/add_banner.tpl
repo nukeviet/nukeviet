@@ -27,11 +27,12 @@
                     <td>{CONTENTS.plan.0}:</td>
                     <td><sup class="required">&lowast;</sup></td>
                     <td>
-                    <select name="{CONTENTS.plan.1}" id="{CONTENTS.plan.1}" class="form-control w300" onchange="chancePlan()" onload="chancePlan()" >
-                        <!-- BEGIN: plan -->
-                        <option value="{PLAN.key}" class="{PLAN.require_image}" {PLAN.selected}>{PLAN.title}</option>
-                        <!-- END: plan -->
-                    </select></td>
+                        <select id="banner_plan" name="{CONTENTS.plan.1}" class="form-control w300 pull-left" onchange="chancePlan()" onload="chancePlan()">
+                            <!-- BEGIN: plan -->
+                            <option value="{PLAN.key}" data-exp="{PLAN.exp_time}" data-rimage="{PLAN.require_image}" {PLAN.selected}>{PLAN.title}</option>
+                            <!-- END: plan -->
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td>{LANG.assign_to_user}:</td>
@@ -74,26 +75,49 @@
                     <td>{CONTENTS.publ_date.0}:</td>
                     <td>&nbsp;</td>
                     <td>
-                        <div class="input-group pull-left">
-                            <input name="{CONTENTS.publ_date.1}" id="publ_date" value="{CONTENTS.publ_date.2}" maxlength="{CONTENTS.publ_date.3}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
-                            <span class="input-group-btn pull-left">
-                                <button class="btn btn-default" type="button" id="publ_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
-                            </span>
+                        <div class="clearfix">
+                            <div class="input-group pull-left">
+                                <input name="{CONTENTS.publ_date.1}" id="publ_date" value="{CONTENTS.publ_date.2}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
+                                <span class="input-group-btn pull-left">
+                                    <button class="btn btn-default" type="button" id="publ_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
+                                </span>
+                            </div>
+                            <select class="form-control pull-left margin-left w70" name="publ_date_h" id="publ_date_h">
+                                <!-- BEGIN: h_pub --><option value="{HOUR.key}"{HOUR.pub_selected}>{HOUR.title}</option><!-- END: h_pub -->
+                            </select>
+                            <select class="form-control pull-left margin-left w70" name="publ_date_m" id="publ_date_m">
+                                <!-- BEGIN: m_pub --><option value="{MIN.key}"{MIN.pub_selected}>{MIN.title}</option><!-- END: m_pub -->
+                            </select>
+                            <a href="javascript:void(0);" class="form-info-circle" data-toggle="delval" data-target="#publ_date" data-select="#publ_date_h,#publ_date_m"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                         </div>
-                        <a href="javascript:void(0);" class="form-info-circle" data-toggle="delval" data-target="#publ_date"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                        <span class="help-block help-block-bottom">{LANG.publ_time_info}</span>
                     </td>
                 </tr>
                 <tr>
                     <td>{CONTENTS.exp_date.0}:</td>
                     <td>&nbsp;</td>
                     <td>
-                        <div class="input-group pull-left">
-                            <input name="{CONTENTS.exp_date.1}" id="exp_date" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
-                            <span class="input-group-btn pull-left">
-                                <button class="btn btn-default" type="button" id="exp_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
-                            </span>
+                        <div class="clearfix" id="exp_date_manual">
+                            <div class="clearfix">
+                                <div class="input-group pull-left">
+                                    <input name="{CONTENTS.exp_date.1}" id="exp_date" value="{CONTENTS.exp_date.2}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
+                                    <span class="input-group-btn pull-left">
+                                        <button class="btn btn-default" type="button" id="exp_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
+                                    </span>
+                                </div>
+                                <select class="form-control pull-left margin-left w70" name="exp_date_h" id="exp_date_h">
+                                    <!-- BEGIN: h_exp --><option value="{HOUR.key}"{HOUR.exp_selected}>{HOUR.title}</option><!-- END: h_exp -->
+                                </select>
+                                <select class="form-control pull-left margin-left w70" name="exp_date_m" id="exp_date_m">
+                                    <!-- BEGIN: m_exp --><option value="{MIN.key}"{MIN.exp_selected}>{MIN.title}</option><!-- END: m_exp -->
+                                </select>
+                                <a href="javascript:void(0);" class="form-info-circle" data-toggle="delval" data-target="#exp_date" data-select="#exp_date_h,#exp_date_m"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                            </div>
+                            <span class="help-block help-block-bottom">{LANG.exp_date_nochoose}</span>
                         </div>
-                        <a href="javascript:void(0);" class="form-info-circle" data-toggle="delval" data-target="#exp_date"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                        <div class="clearfix" id="exp_date_auto">
+                            <p class="text-info">{LANG.exp_date_auto}</p>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -122,8 +146,8 @@ $(document).ready(function() {
         showOn: 'focus'
     });
 
-    $('#publ_time-btn').click(function(){
-        $("#publ_time").datepicker('show');
+    $('#publ_date-btn').click(function(){
+        $("#publ_date").datepicker('show');
     });
 
     $('#exp_date-btn').click(function(){
@@ -131,12 +155,19 @@ $(document).ready(function() {
     });
 });
 function chancePlan() {
-    var x =    $('select option:selected').attr('class');
-       if (x == 'require_image') {
-       document.getElementById("require_image").innerHTML = "&lowast;";
-    }else{
-           document.getElementById("require_image").innerHTML = "&nbsp;";
-    };
+    var plsel = $('#banner_plan option:selected');
+    if (plsel.data('rimage')) {
+        document.getElementById("require_image").innerHTML = "&lowast;";
+    } else {
+        document.getElementById("require_image").innerHTML = "&nbsp;";
+    }
+    if (plsel.data('exp')) {
+        $('#exp_date_manual').hide();
+        $('#exp_date_auto').show();
+    } else {
+        $('#exp_date_manual').show();
+        $('#exp_date_auto').hide();
+    }
 }
 </script>
 <!-- END: main -->

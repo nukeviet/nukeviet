@@ -48,12 +48,14 @@ if (empty($contents['file_allowed_ext'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$sql = 'SELECT id, title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
+$sql = 'SELECT id, title, blang, require_image, exp_time FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 
-$plans = array();
+$plans = $require_image = $plans_exp = array();
 while ($pl_row = $result->fetch()) {
     $plans[$pl_row['id']] = $pl_row['title'] . ' (' . (!empty($pl_row['blang']) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all']) . ')';
+    $require_image[$pl_row['id']] = $pl_row['require_image'];
+    $plans_exp[$pl_row['id']] = $pl_row['exp_time'];
 }
 
 if (empty($plans)) {
@@ -68,7 +70,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $file_alt = nv_htmlspecialchars(strip_tags($nv_Request->get_string('file_alt', 'post', '')));
     $click_url = strip_tags($nv_Request->get_string('click_url', 'post', ''));
     $publ_date = strip_tags($nv_Request->get_string('publ_date', 'post', ''));
+    $publ_date_h = $nv_Request->get_int('publ_date_h', 'post', 0);
+    $publ_date_m = $nv_Request->get_int('publ_date_m', 'post', 0);
     $exp_date = strip_tags($nv_Request->get_string('exp_date', 'post', ''));
+    $exp_date_h = $nv_Request->get_int('exp_date_h', 'post', 0);
+    $exp_date_m = $nv_Request->get_int('exp_date_m', 'post', 0);
     $target = $nv_Request->get_string('target', 'post', '');
     if (!isset($targets[$target])) {
         $target = '_blank';
@@ -161,30 +167,54 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
         if (empty($error)) {
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
-                $publtime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-                if ($publtime < $row['add_time']) {
-                    $publtime = $row['add_time'];
-                }
+                $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
+                // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
+                //if ($publtime < $row['add_time']) {
+                //    $publtime = $row['add_time'];
+                //}
             } else {
                 $publtime = $publtime = $row['add_time'];
             }
 
-            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
-                $exptime = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
-                if ($exptime <= $publtime) {
+            if (!empty($plans_exp[$pid])) {
+                $exptime = $publtime + $plans_exp[$pid];
+            } else {
+                if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
+                    $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
+                    if ($exptime <= $publtime) {
+                        $exptime = $publtime;
+                    }
+                } else {
+                    $exptime = 0;
+                }
+                if ($exptime != 0 and $exptime <= $publtime) {
                     $exptime = $publtime;
                 }
-            } else {
-                $exptime = 0;
+            }
+
+            $act = $row['act'];
+            // Quảng cáo đang chờ duyệt và bị đình chỉ thì sửa cái này không làm thay đổi trạng thái
+            if ($publtime > NV_CURRENTTIME) {
+                // Chờ hoạt động
+                $act = ($act != 3 and $act != 4) ? 0 : $act;
+            } elseif ($publtime <= NV_CURRENTTIME and ($exptime <= 0 or $exptime > NV_CURRENTTIME)) {
+                // Hoạt động
+                $act = ($act != 3 and $act != 4) ? 1 : $act;
+            } elseif ($exptime > 0 and $exptime <= NV_CURRENTTIME) {
+                // Hết hạn
+                $act = ($act != 3 and $act != 4) ? 2 : $act;
             }
 
             $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . intval($id))->fetchColumn();
 
-            $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
-				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
-				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
-				 click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
-				 publ_time=' . $publtime . ', exp_time=' . $exptime . ' WHERE id=' . $id);
+            $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET
+                title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
+                file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
+                width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
+                click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
+                publ_time=' . $publtime . ', exp_time=' . $exptime . ', act=' . $act . '
+            WHERE id=' . $id);
+
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
             $stmt->bindParam(':file_ext', $file_ext, PDO::PARAM_STR);
@@ -215,8 +245,26 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $click_url = $row['click_url'];
     $target = $row['target'];
     $bannerhtml = $row['bannerhtml'];
-    $publ_date = !empty($row['publ_time']) ? date('d/m/Y', $row['publ_time']) : '';
-    $exp_date = !empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : '';
+
+    if (!empty($row['publ_time'])) {
+        $publ_date = date('d/m/Y', $row['publ_time']);
+        $publ_date_h = date('G', $row['publ_time']);
+        $publ_date_m = intval(date('i', $row['publ_time']));
+    } else {
+        $publ_date = '';
+        $publ_date_h = 0;
+        $publ_date_m = 0;
+    }
+
+    if (!empty($row['exp_time'])) {
+        $exp_date = date('d/m/Y', $row['exp_time']);
+        $exp_date_h = date('G', $row['exp_time']);
+        $exp_date_m = intval(date('i', $row['exp_time']));
+    } else {
+        $exp_date = '';
+        $exp_date_h = 23;
+        $exp_date_m = 59;
+    }
 
     $assign_user = '';
     if (!empty($row['clid']) and $row['clid'] != $admin_info['userid']) {
@@ -242,7 +290,9 @@ $contents['plan'] = array(
     $lang_module['in_plan'],
     'pid',
     $plans,
-    $pid
+    $pid,
+    $require_image,
+    $plans_exp
 );
 $contents['assign_user'] = $assign_user;
 
@@ -292,13 +342,15 @@ $contents['publ_date'] = array(
     $lang_module['publ_date'],
     'publ_date',
     $publ_date,
-    10
+    $publ_date_h,
+    $publ_date_m
 );
 $contents['exp_date'] = array(
     $lang_module['exp_date'],
     'exp_date',
     $exp_date,
-    10
+    $exp_date_h,
+    $exp_date_m
 );
 
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));

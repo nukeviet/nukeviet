@@ -1,3 +1,7 @@
+.w70 {
+    width: 70px;
+}
+
 .grouppost-area {
     max-height: 200px;
     overflow: auto;
@@ -5,6 +9,10 @@
 
 .display-inline-block {
     display: inline-block;
+}
+
+.help-block-bottom {
+    margin-bottom: 0!important;
 }
 
 .margin-top {
@@ -27,6 +35,11 @@
     margin-left: 10px;
     margin-top: 7px;
     display: inline-block;
+}
+
+#exp_date_manual,
+#exp_date_auto {
+    display: none;
 }
 
 /* Auto complete */
