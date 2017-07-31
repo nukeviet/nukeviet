@@ -30,6 +30,7 @@ if (! empty($row)) {
     $sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id;
     $db->query($sql);
 
+    $nv_Cache->delMod($module_name);
     nv_CreateXML_bannerPlan();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_banner', 'bannerid ' . $id, $admin_info['userid']);

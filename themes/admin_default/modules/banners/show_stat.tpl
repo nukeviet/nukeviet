@@ -9,7 +9,7 @@
 		<thead>
 			<tr>
 				<th colspan="2">{CONTENTS.0}</th>
-				<th>{CONTENTS.1}</th>
+				<th class="text-right">{CONTENTS.1}</th>
 			</tr>
 		</thead>
 		<tbody>
