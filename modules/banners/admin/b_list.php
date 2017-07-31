@@ -58,7 +58,7 @@ $aray_act = array(
 
 if ($pid > 0 and isset($plans[$pid])) {
     $contents['thead'][1] = $lang_module['click_url'];
-    if ($plans_form[$pid] == 'sequential') {
+    if ($plans_form[$pid] == 'sequential' and $act == 1) {
         array_unshift($contents['thead'], $lang_module['weight']);
         define('NV_BANNER_WEIGHT', true);
     }
@@ -123,7 +123,7 @@ foreach ($rows as $row) {
     $weight_banner = '';
     if (defined('NV_BANNER_WEIGHT')) {
         $weight_banner = '';
-        $weight_banner .= "<select id=\"id_weight_" . $row['id'] . "\" onchange=\"nv_chang_weight_banners('banners_list',0,'" . $pid . "',0,'" . $row['id'] . "');\">\n";
+        $weight_banner .= "<select id=\"id_weight_" . $row['id'] . "\" onchange=\"nv_chang_weight_banners('banners_list_act', 0,'" . $pid . "', 1,'" . $row['id'] . "');\">\n";
 
         for ($i = 1; $i <= $num; ++$i) {
             $weight_banner .= "<option value=\"" . $i . "\"" . ($i == $row['weight'] ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";

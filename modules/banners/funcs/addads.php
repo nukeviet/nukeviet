@@ -90,11 +90,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $endtime = $begintime + $global_array_uplans[$array['blockid']]['exp_time'];
         }
 
+        $weight = $db->query('SELECT MAX(weight) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $array['blockid'])->fetchColumn();
+        $weight++;
+
         $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
             title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
             :title, " . $array['blockid'] . ", " . $user_info['userid'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '',
-            :url, " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
+            :url, " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, " . $weight . "
         )";
 
         $data_insert = array();
