@@ -8,29 +8,29 @@
  * @Createdate 3/12/2010 12:34
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_module['banners_list'];
 
-$sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC";
+$sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC";
 $result = $db->query($sql);
 
 $plans = array();
 while ($row = $result->fetch()) {
-    $plans[$row['id']] = $row['title'] . " (" . (! empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
+    $plans[$row['id']] = $row['title'] . " (" . (!empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
 }
 
 $contents = array();
 
-$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE ";
-if (in_array($nv_Request->get_int('act', 'get'), array( 2, 3, 4 ))) {
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE ";
+if (in_array($nv_Request->get_int('act', 'get', 1), array(0, 2, 3, 4))) {
     $sql .= "act=" . $nv_Request->get_int('act', 'get');
     $contents['caption'] = $lang_module['banners_list' . $nv_Request->get_int('act', 'get')];
 } else {
-    $sql .= "act=0 or act=1";
-    $contents['caption'] = $lang_module['banners_list0'];
+    $sql .= "act=1";
+    $contents['caption'] = $lang_module['banners_list1'];
 }
 
 if ($nv_Request->get_bool('clid', 'get') and isset($clients[$nv_Request->get_int('clid', 'get')])) {
@@ -45,7 +45,15 @@ $sql .= " ORDER BY id DESC";
 
 $result = $db->query($sql);
 
-$contents['thead'] = array( $lang_module['title'], $lang_module['in_plan'], $lang_module['of_user'], $lang_module['publ_date'], $lang_module['exp_date'], $lang_module['is_act'], $lang_global['actions'] );
+$contents['thead'] = array(
+    $lang_module['title'],
+    $lang_module['in_plan'],
+    $lang_module['of_user'],
+    $lang_module['publ_date'],
+    $lang_module['exp_date'],
+    $lang_module['is_act'],
+    $lang_global['actions']
+);
 $contents['view'] = $lang_global['detail'];
 $contents['edit'] = $lang_global['edit'];
 $contents['del'] = $lang_global['delete'];
@@ -54,16 +62,20 @@ $contents['rows'] = array();
 $array_userids = $array_users = array();
 
 while ($row = $result->fetch()) {
-	if($row['exp_time'] != 0 and $row['exp_time'] <= NV_CURRENTTIME){
-		$db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=0 WHERE id=' . $row['id']);
-		$row['act'] = 0;
-	}
+    if ($row['exp_time'] != 0 and $row['exp_time'] <= NV_CURRENTTIME) {
+        $db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=0 WHERE id=' . $row['id']);
+        $row['act'] = 0;
+    }
     $contents['rows'][$row['id']]['title'] = $row['title'];
-    $contents['rows'][$row['id']]['pid'] = array( NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']] );
+    $contents['rows'][$row['id']]['pid'] = array(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']]);
     $contents['rows'][$row['id']]['clid'] = $row['clid'];
     $contents['rows'][$row['id']]['publ_date'] = date("d/m/Y", $row['publ_time']);
-    $contents['rows'][$row['id']]['exp_date'] = ! empty($row['exp_time']) ? date("d/m/Y", $row['exp_time']) : $lang_module['unlimited'];
-    $contents['rows'][$row['id']]['act'] = array( 'act_' . $row['id'], $row['act'], "nv_b_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');" );
+    $contents['rows'][$row['id']]['exp_date'] = !empty($row['exp_time']) ? date("d/m/Y", $row['exp_time']) : $lang_module['unlimited'];
+    $contents['rows'][$row['id']]['act'] = array(
+        'act_' . $row['id'],
+        $row['act'],
+        "nv_b_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');"
+    );
     $contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_banner&amp;id=" . $row['id'];
     $contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $row['id'];
     $contents['rows'][$row['id']]['del'] = "nv_b_del(" . $row['id'] . ");";

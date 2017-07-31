@@ -147,7 +147,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
         }
 
-        $act = (empty($exptime) or $exptime > NV_CURRENTTIME) ? 1 : 2;
+        $act = (empty($exptime) or $exptime > NV_CURRENTTIME) ? ($publtime > NV_CURRENTTIME ? 0 : 1) : 2;
 
         $_weight = 0;
         if ($plans_form[$pid] == 'sequential') {

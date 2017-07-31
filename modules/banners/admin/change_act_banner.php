@@ -22,9 +22,15 @@ if (empty($id)) {
     nv_htmlOutput('NO|act_' . $id);
 }
 
-$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id . ' AND act IN (0,1,3,4)';
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id . ' AND act IN (0,1,2,3,4)';
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
+    nv_htmlOutput('NO|act_' . $id);
+}
+
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $row['pid'];
+$plan = $db->query($sql)->fetch();
+if (empty($plan)) {
     nv_htmlOutput('NO|act_' . $id);
 }
 
@@ -36,13 +42,27 @@ if ($act == 0) {
     $act = 1;
 } elseif ($act == 1) {
     $act = 3;
-} elseif ($act == 3) {
+} elseif ($act == 3 or $act == 2) {
     $act = 1;
 } elseif ($act == 4) {
     $act = 1;
     if ($exp_time > 0) {
         $exp_time = NV_CURRENTTIME + ($exp_time - $publ_time);
         $publ_time = NV_CURRENTTIME;
+    }
+}
+
+// Xác định lại thời gian đăng quảng cáo khi kích hoạt lại
+if ($act == 1) {
+    // Nếu hẹn giờ đăng thì cho đăng, Nếu đã bị hết hạn thì đăng lại
+    if ($publ_time > NV_CURRENTTIME or ($exp_time > 0 and $exp_time <= NV_CURRENTTIME)) {
+        if ($exp_time > 0) {
+            $exp_time = NV_CURRENTTIME + ($exp_time - $publ_time);
+        }
+        $publ_time = NV_CURRENTTIME;
+    }
+    if ($exp_time > 0 and $exp_time < $publ_time) {
+        $exp_time = $publ_time;
     }
 }
 

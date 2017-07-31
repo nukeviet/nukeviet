@@ -49,6 +49,7 @@ $contents['rows'] = array();
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ';
 $where = array();
 $aray_act = array(
+    0,
     1,
     2,
     3,
@@ -115,8 +116,8 @@ $array_userids = $array_users = array();
 
 foreach ($rows as $row) {
     if($row['exp_time'] != 0 and $row['exp_time'] <= NV_CURRENTTIME){
-        $db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=0 WHERE id=' . $row['id']);
-        $row['act'] = 0;
+        $db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=2 WHERE id=' . $row['id']);
+        $row['act'] = 2;
     }
 
     $weight_banner = '';

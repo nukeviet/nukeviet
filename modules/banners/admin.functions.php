@@ -85,7 +85,7 @@ function nv_CreateXML_bannerPlan()
         $plan['form'] = $row['form'];
         $plan['width'] = $row['width'];
         $plan['height'] = $row['height'];
-        $query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = ' . $id . ' AND (exp_time > ' . NV_CURRENTTIME . ' OR exp_time = 0) AND act = 1';
+        $query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = ' . $id . ' AND (exp_time > ' . NV_CURRENTTIME . ' OR exp_time = 0) AND (act = 1 OR act = 0)';
         if ($row['form'] == 'sequential') {
             $query2 .= ' ORDER BY weight ASC';
         }
