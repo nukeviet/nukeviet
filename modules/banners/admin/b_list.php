@@ -175,5 +175,5 @@ if (!empty($array_userids)) {
 }
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_b_list_theme($contents, $array_users);
+echo $rows ? nv_b_list_theme($contents, $array_users) : '';
 include NV_ROOTDIR . '/includes/footer.php';
