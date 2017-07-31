@@ -45,6 +45,7 @@ if ($nv_Request->isset_request('notification_get', 'get')) {
             'timestamp' => $last_time
         );
     }
+
     nv_jsonOutput($return);
 }
 

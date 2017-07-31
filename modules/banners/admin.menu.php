@@ -12,8 +12,6 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['client_list'] = $lang_module['client_list'];
-$submenu['add_client'] = $lang_module['add_client'];
 $submenu['plans_list'] = $lang_module['plans_list'];
 $submenu['add_plan'] = $lang_module['add_plan'];
 $submenu['banners_list'] = $lang_module['banners_list'];

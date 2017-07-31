@@ -8,13 +8,13 @@
  * @Createdate 3/13/2010 0:3
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-$sql = 'SELECT title FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . $id;
+$sql = 'SELECT title FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
@@ -24,8 +24,22 @@ if (empty($row)) {
 $page_title = $lang_module['info_plan'];
 
 $contents = array();
-$contents['containerid'] = array( 'plan_info', 'banners_list' );
-$contents['aj'] = array( "nv_plan_info(" . $id . ", 'plan_info');", "nv_show_banners_list('banners_list', 0, " . $id . ", 0);" );
+$contents['containerid'] = array(
+    'plan_info',
+    'banners_list_act',
+    'banners_list_queue',
+    'banners_list_timeract',
+    'banners_list_exp',
+    'banners_list_deact'
+);
+$contents['aj'] = array(
+    "nv_plan_info(" . $id . ", 'plan_info');",
+    "nv_show_banners_list('banners_list_act', 0, " . $id . ", 1);",
+    "nv_show_banners_list('banners_list_queue', 0, " . $id . ", 4);",
+    "nv_show_banners_list('banners_list_timeract', 0, " . $id . ", 0);",
+    "nv_show_banners_list('banners_list_exp', 0, " . $id . ", 2);",
+    "nv_show_banners_list('banners_list_deact', 0, " . $id . ", 3);"
+);
 
 $contents = nv_info_plan_theme($contents);
 $set_active_op = 'plans_list';
