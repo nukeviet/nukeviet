@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -26,7 +26,7 @@ if ($sys_info['ini_set_support']) {
             trigger_error('Server does not support Redis Session handler!', 256);
         }
     }
-    
+
     if (! isset($_SESSION)) {
         //ini_set( 'session.save_handler', 'files' );
         ini_set('session.use_trans_sid', 0);
@@ -84,6 +84,16 @@ if (! (extension_loaded('gd'))) {
 //Neu he thong khong ho tro session se bao loi
 if (! extension_loaded('session')) {
     trigger_error('Session object not supported', 256);
+}
+
+//Neu he thong khong ho tro json se bao loi
+if (! extension_loaded('json')) {
+    trigger_error('Json object not supported', 256);
+}
+
+//Neu he thong khong ho tro xml se bao loi
+if (! extension_loaded('xml')) {
+    trigger_error('Xml library not supported', 256);
 }
 
 //Neu he thong khong ho tro mcrypt library se bao loi

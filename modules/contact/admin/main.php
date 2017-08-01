@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -18,7 +18,7 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
     $sends = $nv_Request->get_array('sends', 'post', array());
     if (empty($sends)) {
-        die(json_encode(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] )));
+        nv_jsonOutput(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ));
     }
 
     foreach ($sends as $id) {
@@ -27,7 +27,7 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 
     $sends = implode(',', $sends);
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
-    die(json_encode(array( 'status' => 'ok', 'mess' => '' )));
+    nv_jsonOutput(array( 'status' => 'ok', 'mess' => '' ));
 }
 
 $page_title = $module_info['site_title'];

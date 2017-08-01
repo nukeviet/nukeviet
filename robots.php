@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 4/12/2010, 17:25
@@ -87,5 +87,8 @@ header('Content-Type: text/plain; charset=utf-8');
 header('Cache-Control: public; max-age=' . $maxAge);
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $createTime) . ' GMT');
 header('expires: ' . gmdate('D, d M Y H:i:s', $expTme) . ' GMT');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-Content-Type-Options: nosniff');
+header('X-XSS-Protection: 1; mode=block');
 
 print_r($contents);

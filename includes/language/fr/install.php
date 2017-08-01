@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
  * @Language Français
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -60,6 +60,7 @@ $lang_module['xml_support'] = 'PHP supporte XML';
 $lang_module['openssl_support'] = 'PHP entraide le bibliothèque chiffé openssl';
 $lang_module['session_support'] = 'PHP supporte session';
 $lang_module['fileuploads_support'] = 'PHP supporte le transfert des fichiers';
+$lang_module['json_support'] = 'PHP supporte JSON';
 $lang_module['dir_noexit'] = 'Inexistant';
 $lang_module['dir_not_writable'] = 'inmodifiable';
 $lang_module['dir_not_writable_ip_files'] = 'Impossible d\'enregistrer les fichiers dans la répertoire %1$s';

@@ -57,14 +57,14 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" class="form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
                 </div>
             </div>
             
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" class="form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.passwordsincorrect}">
+                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.passwordsincorrect}">
                 </div>
             </div>
         </div>

@@ -1,8 +1,25 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.1.03 (not yet released)
-- Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard 
+NUKEVIET 4.2.00 (Beta) - not yet released
+- Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard
+- CKEditor 4.7.1
+- Update Error Document
+- Fix error when turn off rewrite
+- Module news: Fix undefined index external_link. Fix weight topics. Fix rssdata
+- Module users: Config show, hide, required for system fields. Add config age limit. Add config require 2 step for group users
+- Module banner: change link click
+- Add notification when installing the beta versions
+- Fix error logs
+- Save update/upgrade logs to db
+- Add feature: Turn on / turn off sitemap for module
+- Fix class Blocker
+- Fix class Optimizer
+- Fix check IP when using proxy
+- Add "link rel=preload as=script" for all js files
+- Update Header file for js|css|xml|ttf
+- Theme: fix config blocks_func
+- Add function nv_htmlOutput
 
 NUKEVIET 4.1.02 Final Releases Apr 23, 2017
 - Jquery 3.2.1
@@ -74,7 +91,7 @@ NUKEVIET 4.0.29 Final Releases May 19, 2016
 - PHPMailer v6.0
 - Endroid/qrcode v1.6.5
 - CKEditor v4.5.9
-- Config allow theme type 
+- Config allow theme type
 - Update theme default
 - Update theme admin default
 - Update Memcache class
@@ -83,9 +100,9 @@ NUKEVIET 4.0.29 Final Releases May 19, 2016
 - Module upload: fix download image
 - Fix update, upgrade system and extentions
 - Fix check update, auto update
-- Module users: 
-	Add feature for group's leader (creat user, delete user, accept user, delete user, change password), 
-	Update theme redirect login, 
+- Module users:
+	Add feature for group's leader (creat user, delete user, accept user, delete user, change password),
+	Update theme redirect login,
 	Update facebook login
 	Change rule for view list users
 	Remove Admin Relogin
@@ -101,7 +118,7 @@ NUKEVIET 4.0.28
 - Module Seotools: Remove site Diagnostic
 - Module Users: Allow virtual, fix user custom fields, fix block login, fix users login, fix search user waiting
 - Module Upload: Fix error on quickly refresh dir, fix error on refresh large dir
-- Module News: Fix check image exists, fix change alias op content, fix function and cat, add block by category 
+- Module News: Fix check image exists, fix change alias op content, fix function and cat, add block by category
 - Module Contact: Delete link in contact mail containing admin path
 - Update theme mobile_nukeviet
 - Fix comment on mobile theme
@@ -116,18 +133,18 @@ NUKEVIET 4.0.28
 
 NUKEVIET 4.0.27
 - update class Punycode
-- update class phpmailer 
+- update class phpmailer
 - Module Users: add Group new users
-- Module users: add function groups manage for leader 
+- Module users: add function groups manage for leader
 - Theme mobile: file layout not exit
 - nv_info_die function: send http status code
-- Module authors: remove module siteinfo in grant system 
+- Module authors: remove module siteinfo in grant system
 - Module news: update block newscenter, fix edit content
 - update sample data
 - Fix module Extensions
 - Module page: add image position config, add og:image
 - Update ckeditor 4.5.7, fix when editor maximize
-- Blocks: fix variables $blockID 
+- Blocks: fix variables $blockID
 - Database: fix setting backup database
 
 NUKEVIET 4.0.26
@@ -139,15 +156,15 @@ NUKEVIET 4.0.26
 
 NUKEVIET 4.0.25
 - Update Data demo
-- Update jQuery v2.2.0 
+- Update jQuery v2.2.0
 - Update jQuery Validation Plugin - v1.14.0
 - Optimizer class XTemplate for NukeViet
 - Update utf8 lookup: fix check email
 - Block: drag and drop blocks
-- Fix setup module 
+- Fix setup module
 - Update code getCountry
-- news: fix article url when change alias 
-- Fix utf8mb4 for vertrigo v2.38  
+- news: fix article url when change alias
+- Fix utf8mb4 for vertrigo v2.38
 
 NUKEVIET 4.0.24 (Open beta 10)
 - Add Composer, Move class to vendor dir
@@ -181,14 +198,14 @@ NUKEVIET 4.0.23 (Open beta 9)
 - Update module Contact
 - Update module Users.
 - Change Admin-toolbar
-- Update variables for javascript: 
+- Update variables for javascript:
 	 nv_siteroot -> nv_base_siteurl
 	 nv_sitelang -> nv_lang_data
 - Update Language Français, thank Nguyễn Phú Thành.
 - Update CKEditor 4.5.3
 - Class resquest: Fix block tag
-- Update notification	
-- Class image:  support image bmp 
+- Update notification
+- Class image:  support image bmp
 - Module siteinfo: fix check chmod dir
 - Seotools: Sorts siteDiagnostic
 - Fix error "ASSETS_DIR"
@@ -355,7 +372,7 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commi
 	+ Add the features report the status of articles not published and only be viewed by admin outside (To avoid link of those article send by admin are unavailable with others).
 
 	+ Add the feature show illustrate image of categorise.
-	+ Allows linebreak in short introduction 
+	+ Allows linebreak in short introduction
 	+ Add default configuration show illustrate image in detail page.
 
 	+ Additional show tooltip in list articles, blocks.

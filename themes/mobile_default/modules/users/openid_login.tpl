@@ -35,7 +35,7 @@
 							<em class="fa fa-key fa-lg fa-fix">
 							</em>
 						</span>
-						<input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100"/>
+						<input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100"/>
 					</div>
 				</div>
 				<!-- BEGIN: captcha -->

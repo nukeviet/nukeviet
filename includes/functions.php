@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 23:48
@@ -1093,6 +1093,13 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                     break;
                 default:
                     $mail->SMTPSecure = '';
+                    $mail->SMTPOptions = array(
+                        'ssl' => array(
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true
+                        )
+                    );
             }
 
             if (filter_var($global_config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
@@ -1136,7 +1143,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $message = $optimizer->process(false);
         $message = nv_unhtmlspecialchars($message);
 
-        $mail->FromName = $global_config['site_name'];
+        $mail->FromName = nv_unhtmlspecialchars($global_config['site_name']);
 
         if (is_array($from)) {
             $mail->addReplyTo($from[1], $from[0]);
