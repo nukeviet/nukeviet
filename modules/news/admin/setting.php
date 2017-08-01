@@ -265,7 +265,7 @@ $xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? "images" : NV_UPLOADS_DI
 
 if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
     $groups_list = nv_groups_list();
-    unset($groups_list[6]);
+    unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[6]);
 
     $savepost = $nv_Request->get_int('savepost', 'post', 0);
     if (!empty($savepost)) {
