@@ -37,11 +37,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
     $array['url'] = $nv_Request->get_title('url', 'post', '', 0);
 
+    if ($global_config['captcha_type'] == 2) {
+        $array['captcha'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $array['captcha'] = $nv_Request->get_title('captcha', 'post', '');
+    }
+
     if ($array['url'] == 'http://') {
         $array['url'] = '';
     }
 
-    if (empty($array['title'])) {
+    if (!nv_capcha_txt($array['captcha'])) {
+        $error[] = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+    } elseif (empty($array['title'])) {
         $error[] = $lang_module['title_empty'];
     } elseif (empty($array['blockid'])) {
         $error[] = $lang_module['plan_not_selected'];
@@ -134,6 +142,21 @@ foreach ($global_array_uplans as $row) {
 }
 
 $xtpl->assign('DATA', $array);
+
+if ($global_config['captcha_type'] == 2) {
+    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+    $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+    $xtpl->parse('main.recaptcha');
+} else {
+    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+    $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+    $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+    $xtpl->parse('main.captcha');
+}
 
 $xtpl->parse('main');
 $contents .= $xtpl->text('main');

@@ -47,6 +47,30 @@
 				<input class="url form-control" type="text" name="url" id="url" value="{DATA.url}"/>
 			</div>
 		</div>
+        <!-- BEGIN: captcha -->
+    	<div class="form-group">
+    		<label class="col-sm-6 control-label">{N_CAPTCHA} <span class="text-danger"> (*)</span>:</label>
+    		<div class="col-sm-18">
+    			<input type="text" maxlength="6" value="" id="fcode_iavim" name="captcha" class="form-control pull-left margin-right" style="width: 150px;" />
+                <img height="32" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{N_CAPTCHA}" class="captchaImg" />
+                <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
+    		</div>
+    	</div>
+        <!-- END: captcha -->
+        <!-- BEGIN: recaptcha -->
+        <div class="form-group">
+            <label class="col-sm-6 control-label">{N_CAPTCHA} <span class="text-danger"> (*)</span>:</label>
+            <div class="col-sm-18">
+                <div id="{RECAPTCHA_ELEMENT}"></div>
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent())
+                })
+                </script>
+            </div>
+        </div>
+        <!-- END: recaptcha -->
 		<div class="form-group">
 			<div class="col-sm-offset-6 col-sm-18">
 				<input type="submit" name="confirm" value="{LANG.addads_confirm}" class="btn btn-primary"/>
@@ -55,7 +79,7 @@
 	</form>
 	<script type="text/javascript">
 	$(document).ready(function() {
-		//$('#frm').validate();
+		$('#frm').validate();
 	});
 	</script>
 </div>
