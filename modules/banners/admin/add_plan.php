@@ -17,7 +17,7 @@ $forms = preg_replace('/^form\_([a-zA-Z0-9\_\-]+)\.php$/', '\\1', $forms);
 
 $error = '';
 $groups_list = nv_groups_list();
-unset($groups_list[5], $groups_list[6]);
+unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[5], $groups_list[6]);
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $blang = strip_tags($nv_Request->get_string('blang', 'post', ''));
