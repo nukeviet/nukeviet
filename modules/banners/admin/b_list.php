@@ -58,7 +58,7 @@ $aray_act = array(
 
 if ($pid > 0 and isset($plans[$pid])) {
     $contents['thead'][1] = $lang_module['click_url'];
-    if ($plans_form[$pid] == 'sequential' and $act == 1) {
+    if ($plans_form[$pid] == 'sequential' and in_array($act, array(0, 1, 3))) {
         array_unshift($contents['thead'], $lang_module['weight']);
         define('NV_BANNER_WEIGHT', true);
     }
@@ -90,7 +90,7 @@ if (defined('NV_BANNER_WEIGHT')) {
     $new_weight = $nv_Request->get_int('weight', 'get', 0);
 
     if ($id > 0 and $new_weight > 0) {
-        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id!=' . $id . ' AND pid=' . $pid . ' ORDER BY weight ASC';
+        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id!=' . $id . ' AND pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC';
         $result = $db->query($query_weight);
 
         $weight = 0;
@@ -111,8 +111,11 @@ if (defined('NV_BANNER_WEIGHT')) {
 }
 
 $rows = $db->query($sql)->fetchAll();
-$num = sizeof($rows);
 $array_userids = $array_users = array();
+
+if (defined('NV_BANNER_WEIGHT')) {
+    $num = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
+}
 
 foreach ($rows as $row) {
     if($row['exp_time'] != 0 and $row['exp_time'] <= NV_CURRENTTIME){
@@ -123,7 +126,7 @@ foreach ($rows as $row) {
     $weight_banner = '';
     if (defined('NV_BANNER_WEIGHT')) {
         $weight_banner = '';
-        $weight_banner .= "<select id=\"id_weight_" . $row['id'] . "\" onchange=\"nv_chang_weight_banners('banners_list_act', 0,'" . $pid . "', 1,'" . $row['id'] . "');\">\n";
+        $weight_banner .= "<select id=\"id_weight_" . $row['id'] . "\" onchange=\"nv_chang_weight_banners('" . $pid . "','" . $row['id'] . "');\">\n";
 
         for ($i = 1; $i <= $num; ++$i) {
             $weight_banner .= "<option value=\"" . $i . "\"" . ($i == $row['weight'] ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";

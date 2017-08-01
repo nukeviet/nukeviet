@@ -150,8 +150,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $act = (empty($exptime) or $exptime > NV_CURRENTTIME) ? ($publtime > NV_CURRENTTIME ? 0 : 1) : 2;
 
         $_weight = 0;
-        if ($plans_form[$pid] == 'sequential') {
-            $_weight = $db->query('SELECT MAX(weight) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid)->fetchColumn();
+        if ($plans_form[$pid] == 'sequential' and $act != 2) {
+            $_weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
             $_weight = intval($_weight) + 1;
         }
         if (!is_uploaded_file($_FILES['banner']['tmp_name'])) {

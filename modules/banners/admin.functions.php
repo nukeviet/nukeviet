@@ -128,7 +128,7 @@ function nv_fix_banner_weight($pid)
     global $db;
     list($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . intval($pid))->fetch(3);
     if ($pid > 0 and $form == 'sequential') {
-        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' ORDER BY weight ASC, id DESC';
+        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC, id DESC';
         $result = $db->query($query_weight);
         $weight = 0;
         while ($row = $result->fetch()) {
@@ -136,6 +136,9 @@ function nv_fix_banner_weight($pid)
             $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
             $db->query($sql);
         }
+        // Các banner hết hạn và banner chờ duyệt có weight = 0
+        $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE act IN(2,4) AND pid=' . $pid;
+        $db->query($sql);
     } elseif ($pid > 0 and $form == 'random') {
         $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE pid=' . $pid;
         $db->query($sql);

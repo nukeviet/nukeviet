@@ -66,7 +66,15 @@ if ($act == 1) {
     }
 }
 
-$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=' . $act . ', publ_time=' . $publ_time . ', exp_time=' . $exp_time . ' WHERE id=' . $id;
+// Xác định lại weight của banner khi duyệt, đăng lại banner hết hạn
+if ($row['act'] == 2 or $row['act'] == 4) {
+    $weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $row['pid'] . ' AND act IN(0,1,3)')->fetchColumn();
+    $weight++;
+} else {
+    $weight = $row['weight'];
+}
+
+$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=' . $act . ', publ_time=' . $publ_time . ', exp_time=' . $exp_time . ', weight=' . $weight . ' WHERE id=' . $id;
 $return = ($db->exec($sql)) ? 'OK' : 'NO';
 
 $nv_Cache->delMod($module_name);
