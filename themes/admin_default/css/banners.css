@@ -37,11 +37,6 @@
     display: inline-block;
 }
 
-#exp_date_manual,
-#exp_date_auto {
-    display: none;
-}
-
 /* Auto complete */
 .autosearchpersion {
     position: relative;
