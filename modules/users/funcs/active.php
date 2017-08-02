@@ -64,7 +64,7 @@ if ($checknum == $row['checknum']) {
                 active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
             VALUES (
                 :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
-                '', '', 0, :regdate, :question, :answer,
+                :gender, '', :birthday, :regdate, :question, :answer,
                 '', 0, 1, :in_groups,
                 1, '', 0, '', '', '', " . $global_config['idsite'] . "
             )";
@@ -77,6 +77,8 @@ if ($checknum == $row['checknum']) {
         $data_insert['email'] = $row['email'];
         $data_insert['first_name'] = $row['first_name'];
         $data_insert['last_name'] = $row['last_name'];
+        $data_insert['gender'] = $row['gender'];
+        $data_insert['birthday'] = $row['birthday'];
         $data_insert['regdate'] = $row['regdate'];
         $data_insert['question'] = $row['question'];
         $data_insert['answer'] = $row['answer'];
