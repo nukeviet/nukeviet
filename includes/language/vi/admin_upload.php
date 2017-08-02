@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -53,6 +53,7 @@ $lang_module['deletefolder'] = 'Xóa Thư mục';
 $lang_module['createfolder'] = 'Tạo Thư mục';
 $lang_module['recreatethumb'] = 'Tạo lại ảnh thumb';
 $lang_module['recreatethumb_note'] = 'Chú ý: Chức năng này sẽ Xóa tất cả thumb thuộc thư mục, cả thư mục con và tạo lại ảnh thumb theo cấu hình mới. Quá trình này có thể kéo dài rất lâu, bạn không được đóng trình duyệt';
+$lang_module['recreatethumb_result'] = 'Đã tạo lại ảnh thumb cho';
 $lang_module['rename_newname'] = 'Tên mới';
 $lang_module['rename_noname'] = 'Bạn chưa đặt tên mới cho file';
 $lang_module['rename_error_folder'] = 'Lỗi: Hệ thống không đổi tên được thư mục';

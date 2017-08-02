@@ -141,6 +141,7 @@ function set_reg_attribs($attribs)
             $upload = new NukeViet\Files\Upload(array(
                 'images'
             ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $upload->setLanguage($lang_global);
 
             $upload_info = $upload->save_urlfile($attribs['picture_url'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
 

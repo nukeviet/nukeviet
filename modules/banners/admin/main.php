@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -18,21 +18,32 @@ $contents = array();
 $contents['containerid'] = array();
 $contents['aj'] = array();
 
-$new = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=4")->fetchColumn();
+// Chờ duyệt
+$new = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=4")->fetchColumn();
 
 if ($new > 0) {
     $contents['containerid'][] = 'new_list';
     $contents['aj'][] = "nv_show_banners_list('new_list', 0, 0, 4);";
 }
 
-$deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=3")->fetchColumn();
+// Chờ hoạt động
+$deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=0")->fetchColumn();
+
+if ($deact > 0) {
+    $contents['containerid'][] = 'unpub_list';
+    $contents['aj'][] = "nv_show_banners_list('unpub_list', 0, 0, 0);";
+}
+
+// Đình chỉ hoạt động
+$deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=3")->fetchColumn();
 
 if ($deact > 0) {
     $contents['containerid'][] = 'deact_list';
     $contents['aj'][] = "nv_show_banners_list('deact_list', 0, 0, 3);";
 }
 
-$exp = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=2")->fetchColumn();
+// Hết hạn
+$exp = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=2")->fetchColumn();
 
 if ($exp > 0) {
     $contents['containerid'][] = 'exp_list';

@@ -141,10 +141,10 @@ function tipShow(a, b, callback) {
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
                     var btn = false, pnum = 0, btnselector = '';
-                    
+
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-                    
+
                     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
                         ele = nv_recaptcha_elements[i];
                         if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
@@ -191,10 +191,10 @@ function ftipShow(a, b, callback) {
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
                     var btn = false, pnum = 0, btnselector = '';
-                    
+
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-                    
+
                     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
                         ele = nv_recaptcha_elements[i];
                         if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
@@ -316,10 +316,10 @@ function modalShow(a, b, callback) {
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
                     var btn = false, pnum = 0, btnselector = '';
-                    
+
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-                    
+
                     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
                         ele = nv_recaptcha_elements[i];
                         if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
@@ -617,12 +617,14 @@ $(function() {
         locationReplace($(this).data("location"))
     });
     //Add preload: link rel="prefetch", link rel="prerender"
+    /*
     $(document).bind("mousemove", function(e) {
     	if (!e.target.href || e.target.href.indexOf(location.host) == -1 || e.target.hintAdded) return;
         add_hint("prefetch", e.target.href);
     	add_hint("prerender", e.target.href);
     	e.target.hintAdded = true
     });
+    */
 });
 // Fix bootstrap multiple modal
 $(document).on({
