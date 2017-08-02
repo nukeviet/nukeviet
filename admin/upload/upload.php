@@ -42,7 +42,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
     }
 
     $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-    $upload ->setLanguage($lang_upload);
+    $upload ->setLanguage($lang_global);
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
         $upload_info = $upload->save_file($_FILES['upload'], NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize']);
