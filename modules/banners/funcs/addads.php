@@ -63,6 +63,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $error[] = $lang_module['file_upload_empty'];
     } elseif (!empty($global_array_uplans[$array['blockid']]['require_image'])) {
         $upload = new NukeViet\Files\Upload(explode(',', $global_array_uplans[$array['blockid']]['uploadtype']), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $upload->setLanguage($lang_upload);
         $upload_info = $upload->save_file($_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
 
         if (is_file($_FILES['image']['tmp_name'])) {
