@@ -18,6 +18,8 @@ $array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:co
 $array_url_instruction['supporter'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#hiển_thị_danh_sach_cac_nhan_vien_hỗ_trợ';
 $array_url_instruction['department'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#quản_ly_cac_bộ_phận';
 $array_url_instruction['send'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#gửi_phản_hồi';
+$array_url_instruction['supporter-content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#them_nhan_vien_hỗ_trợ';
+
 /**
  * nv_getAllowed()
  *
