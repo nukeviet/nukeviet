@@ -8,13 +8,15 @@
  * @Createdate 12/28/2009 20:8
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
+
+$nv_resquest_serverext_key = array('php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support');
 
 if ($sys_info['ini_set_support']) {
     ini_set('session.use_trans_sid', 0);
@@ -43,7 +45,9 @@ if ($sys_info['ini_set_support']) {
 }
 
 $sys_info['php_required'] = '5.5.0';
-$sys_info['opendir_support'] = (function_exists('opendir') and ! in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['php_version'] = PHP_VERSION;
+$sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required']) < 0) ? 0 : 1;
+$sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['gd_support'] = (extension_loaded('gd')) ? 1 : 0;
 $sys_info['xml_support'] = (extension_loaded('xml')) ? 1 : 0;
 $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;
@@ -52,11 +56,11 @@ $sys_info['session_support'] = (extension_loaded('session')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
 $sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
 $sys_info['json_support'] = (extension_loaded('json')) ? 1 : 0;
-$sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and ! in_array('curl_init', $sys_info['disable_functions'])) ? 1 : 0;
-$sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and !in_array('curl_init', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
 
-$sys_info['os'] = strtoupper((function_exists('php_uname') and ! in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
-$sys_info['ftp_support'] = (function_exists('ftp_connect') and ! in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and ! in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and ! in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and ! in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and ! in_array('ftp_nlist', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['os'] = strtoupper((function_exists('php_uname') and !in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
+$sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['openssl_support'] = (function_exists('openssl_encrypt')) ? 1 : 0;
 
 //Xac dinh tien ich mo rong lam viec voi string
