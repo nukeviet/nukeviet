@@ -774,6 +774,20 @@ function nv_main_theme($contents)
     return $xtpl->text('main');
 }
 
+/**
+ * nv_clean60_bannerlink()
+ *
+ * @param mixed $string
+ * @param integer $num
+ * @return
+ */
+function nv_clean60_bannerlink($string, $num = 60)
+{
+    $org_len = nv_strlen($string);
+    $new_string = nv_clean60($string, $num);
+    return preg_replace('/\.\.\.\.\.\.$/', '...', ($new_string . ($org_len > nv_strlen($new_string) ? '...' : '')));
+}
+
 // Tìm kiếm thành viên AJAX
 if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
