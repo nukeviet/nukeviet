@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_SYSTEM') and ! defined('NV_ADMIN') and ! defined('NV_WYSIWYG')) {
+if (!defined('NV_SYSTEM') and !defined('NV_ADMIN') and !defined('NV_WYSIWYG')) {
     Header('Location: index.php');
     exit();
 }
@@ -32,7 +32,7 @@ if (extension_loaded('suhosin')) {
     $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
 }
 
-$sys_info['ini_set_support'] = (function_exists('ini_set') and ! in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
+$sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
 
 //Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
