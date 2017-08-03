@@ -262,6 +262,7 @@ $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $mod
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_group_newusers', '0', " . NV_CURRENTTIME . ")";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_user_logs', '1', " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('min_old_user', '16', " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('register_active_time', '86400', " . NV_CURRENTTIME . ")";
 
