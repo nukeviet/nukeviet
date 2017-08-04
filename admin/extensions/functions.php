@@ -14,6 +14,9 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 
 define('NV_IS_FILE_EXTENSIONS', true);
 
+//Document
+$array_url_instruction['manage'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:manage';
+
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
