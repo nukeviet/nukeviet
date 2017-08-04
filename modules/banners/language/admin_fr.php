@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -22,7 +22,7 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['uploadtype'] = 'Types de fichiers autorisés';
 $lang_module['is_act'] = 'Activer';
 $lang_module['require_image'] = 'Bannière genre';
-$lang_module['require_image0'] = 'lien';
+$lang_module['require_image0'] = 'Textlink';
 $lang_module['require_image1'] = 'Image/Flash';
 $lang_module['act0'] = 'En suspens';
 $lang_module['act1'] = 'Actif';
@@ -31,7 +31,7 @@ $lang_module['act3'] = 'Suspendu';
 $lang_module['act4'] = 'En attente d\'acceptation';
 $lang_module['change_act'] = 'Suspendre/Activer';
 $lang_module['add_banner'] = 'Ajouter une publicité';
-$lang_module['add_banner_client'] = 'Ajouter des annonces à des clients &ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['add_banner_client'] = 'Ajouter des annonces aux clients et &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Blocks publicitaires';
 $lang_module['plans_list2'] = 'Liste des Blocks publicitaires';
 $lang_module['in_plan'] = 'Dans le bloque';
@@ -129,6 +129,6 @@ $lang_module['plan_exp_time_custom'] = 'Entrer manuellement';
 $lang_module['plan_exp_time_d'] = '%s jour';
 $lang_module['plan_exp_time_w'] = '%s semaine';
 $lang_module['plan_exp_time_m'] = '%s mois (%s jour)';
-$lang_module['plan_exp_time_y'] = '%s Année (%s jour)';
+$lang_module['plan_exp_time_y'] = '%s année (%s jour)';
 $lang_module['exp_date_nochoose'] = 'Les annonces seront diffusées toujours, sinon sélectionnez la date ici';
 $lang_module['publ_time_info'] = 'Les systèmes automatiques prennent le temps commence le moment plus de publicité sinon sélectionner des dates ici';
