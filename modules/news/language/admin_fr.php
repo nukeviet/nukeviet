@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -47,8 +47,6 @@ $lang_module['status_7'] = 'En cours d\'examiner d\'article';
 $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
-$lang_module['status_12'] = 'Sauvegarder l\'article, passer à la rédacteur';
-$lang_module['status_13'] = 'Sauvegarder l\'article, passer à la rédacteur en chef';
 $lang_module['errorsave'] = 'Erreur: il est impossible de mettre à jour, vérifiez si le titre ou l\'alias a été utilisé';
 $lang_module['errorexists'] = 'Erreur: le titre ou le lien statique est dupliqué, entrez une valeur différente';
 $lang_module['saveok'] = 'Mise à jour réussie';
@@ -67,6 +65,11 @@ $lang_module['newday'] = 'Icone des nouvelles (par jour)';
 $lang_module['hitstotal'] = 'Nombre de regard';
 $lang_module['checkall'] = 'Sélectionner tout';
 $lang_module['uncheckall'] = 'Désélectionner tout';
+$lang_module['cat_instant_view'] = 'Voir URL du flux RSS article instantanée';
+$lang_module['cat_instant_viewsimple'] = 'Voir URL de flux RSS';
+$lang_module['cat_instant_title'] = 'Les flux RSS, URL instantanée';
+$lang_module['show_hide_pass'] = 'Afficher / Masquer le mot de passe';
+$lang_module['gen_rand_pass'] = 'Généré au hasard';
 $lang_module['description'] = 'Description';
 $lang_module['viewdescription'] = 'Faire apparaître le contenu en détail en regardant l\'article';
 $lang_module['viewdescription_0'] = 'Cacher';
@@ -119,6 +122,19 @@ $lang_module['setting_elas_index'] = 'Base de données stockées dans le serveur
 $lang_module['error_elas_host_connect'] = 'Impossible de se connecter au serveur ElasticSearch!';
 $lang_module['use_setup_elasticseach'] = 'Les instructions d\'installation ElasticSearch';
 $lang_module['use_dev_elasticseach'] = 'Guide ElasticSearch intégré dans NukeViet';
+$lang_module['setting_insart_caption'] = 'Configurer l\'article instantanée';
+$lang_module['setting_active_instant_articles'] = 'Activer l\'article instantanée';
+$lang_module['setting_instant_articles_template'] = 'L\'article de l\'échantillon est utilisé par défaut si chaque article ne précise pas une forme particulière';
+$lang_module['setting_instant_articles_httpauth'] = 'Activer l\'authentification HTTP pour les flux RSS';
+$lang_module['setting_instant_articles_username'] = 'Authentification de compte';
+$lang_module['setting_instant_articles_password'] = 'L\'authentification par mot de passe';
+$lang_module['setting_instant_articles_livetime'] = '(Minutes) pour recréer RSS';
+$lang_module['setting_instant_articles_livetime1'] = 'Entrez 0 pour créer un nouveau flux, même lorsque les requêtes dans l\'alimentation. RSS crée automatiquement la requête droit de fournir si le cache (cache) supprimé sans moules d\'attente terme';
+$lang_module['setting_instant_articles_gettime'] = 'Limitée dans le temps (minutes) obtenir de nouveaux articles publiés et des articles mis à jour à partir du moment de la création il y a RSS';
+$lang_module['setting_instant_articles_gettime1'] = 'Remarque: requête Facebook pour alimenter de nombreuses heures, mais pour vous assurer que les nouvelles mises à jour de poste ou le créateur peut afficher requête standard de délai d\'attente de Facebook devrait sélectionner des valeurs de 60 minutes ou plus vers le haut. A noter également, si vous choisissez cette valeur est inférieure au temps de recréer RSS des articles ne peuvent pas être affichés';
+$lang_module['setting_instant_articles_defaulturl'] = 'URL du flux RSS pour déclarer si vous utilisez l\'article instantanée';
+$lang_module['setting_instant_articles_defaulturl1'] = 'Remarque: Cette URL est une URL contenant tout l\'article du module. Pour obtenir l\'URL du flux pour chaque catégorie, après activation en utilisant l\'instant de l\'article caractéristique terminée, vous devez entrer dans la catégorie de gestion, cliquez sur le bouton affichant l\'URL du flux RSS, l\'article immédiatement dans chaque catégorie respective.';
+$lang_module['setting_instant_articles_auto'] = 'Article par défaut est un article publié immédiatement si cette fonction activée';
 $lang_module['viewcat_page'] = 'Méthode d\'affichage';
 $lang_module['viewcat_page_new'] = 'liste, nouveau en haut';
 $lang_module['viewcat_page_old'] = 'liste, ancien en haut';
@@ -183,6 +199,7 @@ $lang_module['content_admin'] = 'Créateur';
 $lang_module['content_author'] = 'Auteur';
 $lang_module['content_sourceid'] = 'Source';
 $lang_module['content_copyright'] = 'Garder le droit d\'auteur';
+$lang_module['content_external_link'] = 'Lien open source (si disponible)';
 $lang_module['content_saveok'] = 'Enregistrement de données avec succès';
 $lang_module['content_main'] = 'Retour à la gestion';
 $lang_module['content_back'] = 'Retour à l\'administration';
@@ -194,6 +211,11 @@ $lang_module['content_tags_empty'] = 'Note:L\'article n\'a aucun mot clé';
 $lang_module['content_tags_empty_auto'] = 'Système va créer les mots clés au moment où vous sauvegardez cet article, vous pouvez éteindre le fonctionnement de créer les mots clés dans le rubrique Gestion des modules';
 $lang_module['content_advfeature'] = 'Options avancées';
 $lang_module['content_description'] = 'Description du site';
+$lang_module['content_insart'] = 'instant article';
+$lang_module['content_instant_active'] = 'Cet article est instantanée';
+$lang_module['content_instant_template'] = 'échantillon';
+$lang_module['content_instant_templatenote'] = 'Blank-à-dire à l\'aide de modèles par défaut';
+$lang_module['content_instant_creatauto'] = 'Créer automatiquement l\'article instantané de l\'article souvent';
 $lang_module['showtooltip'] = 'Afficher tooltips';
 $lang_module['showtooltip_position'] = 'Position de l\'affichage';
 $lang_module['showtooltip_position_top'] = 'Au dessus';
@@ -298,37 +320,16 @@ $lang_module['notification_post_queue'] = 'Modéré <strong>%s</strong> par <str
 $lang_module['ad_block_show'] = 'Affichage du sous-bloc';
 $lang_module['ad_block_top'] = 'Catégories du parti blocs';
 $lang_module['ad_block_bot'] = 'Catégories de blocs ci-dessous';
-$lang_module['content_external_link'] = 'Lien open source (si disponible)';
-$lang_module['cat_instant_view'] = 'Voir URL du flux RSS article instantanée';
-$lang_module['cat_instant_viewsimple'] = 'Voir URL de flux RSS';
-$lang_module['cat_instant_title'] = 'Les flux RSS, URL instantanée';
-$lang_module['show_hide_pass'] = 'Afficher / Masquer le mot de passe';
-$lang_module['gen_rand_pass'] = 'Généré au hasard';
-$lang_module['setting_insart_caption'] = 'Configurer l\'article instantanée';
-$lang_module['setting_active_instant_articles'] = 'Activer l\'article instantanée';
-$lang_module['setting_instant_articles_template'] = 'L\'article de l\'échantillon est utilisé par défaut si chaque article ne précise pas une forme particulière';
-$lang_module['setting_instant_articles_httpauth'] = 'Activer l\'authentification HTTP pour les flux RSS';
-$lang_module['setting_instant_articles_username'] = 'Authentification de compte';
-$lang_module['setting_instant_articles_password'] = 'L\'authentification par mot de passe';
-$lang_module['setting_instant_articles_livetime'] = '(Minutes) pour recréer RSS';
-$lang_module['setting_instant_articles_livetime1'] = 'Entrez 0 pour créer un nouveau flux, même lorsque les requêtes dans l\'alimentation. RSS crée automatiquement la requête droit de fournir si le cache (cache) supprimé sans moules d\'attente terme';
-$lang_module['setting_instant_articles_gettime'] = 'Limitée dans le temps (minutes) obtenir de nouveaux articles publiés et des articles mis à jour à partir du moment de la création il y a RSS';
-$lang_module['setting_instant_articles_gettime1'] = 'Remarque: requête Facebook pour alimenter de nombreuses heures, mais pour vous assurer que les nouvelles mises à jour de poste ou le créateur peut afficher requête standard de délai d\'attente de Facebook devrait sélectionner des valeurs de 60 minutes ou plus vers le haut. A noter également, si vous choisissez cette valeur est inférieure au temps de recréer RSS des articles ne peuvent pas être affichés';
-$lang_module['setting_instant_articles_defaulturl'] = 'URL du flux RSS pour déclarer si vous utilisez l\'article instantanée';
-$lang_module['setting_instant_articles_defaulturl1'] = 'Remarque: Cette URL est une URL contenant tout l\'article du module. Pour obtenir l\'URL du flux pour chaque catégorie, après activation en utilisant l\'instant de l\'article caractéristique terminée, vous devez entrer dans la catégorie de gestion, cliquez sur le bouton affichant l\'URL du flux RSS, l\'article immédiatement dans chaque catégorie respective.';
-$lang_module['setting_instant_articles_auto'] = 'Article par défaut est un article publié immédiatement si cette fonction activée';
-$lang_module['content_insart'] = 'instant article';
-$lang_module['content_instant_active'] = 'Cet article est instantanée';
-$lang_module['content_instant_template'] = 'échantillon';
-$lang_module['content_instant_templatenote'] = 'Blank-à-dire à l\'aide de modèles par défaut';
-$lang_module['content_instant_creatauto'] = 'Créer automatiquement l\'article instantané de l\'article souvent';
 $lang_module['fbinsartmgs_100'] = 'Erreur: Les articles avec les balises HTML: <strong />%s  ne sont pas pris en charge par les postes immédiatement. Pour sélectionner cet article comme article s\'il vous plaît les enlever immédiatement, remplacé par le support de carte ou cocher la case convertit automatiquement des articles dans l\'article habituellement instantané. Remarque: lors de la conversion du système laissera automatiquement le composant ne prend pas en charge ou les remplacer par d\'autres ingrédients appropriés';
 $lang_module['fbinsartmgs_101'] = 'Erreur: L\'sans contenu';
 $lang_module['fbinsartmgs_102'] = 'Erreur: Votre article a des attributs pour les balises. Pour sélectionner cet article comme l\'article les retirer immédiatement de la carte ou cocher la case convertit automatiquement des articles dans l\'article habituellement instantané. Remarque: lors de la conversion du système laissera automatiquement le composant ne prend pas en charge ou les remplacer par d\'autres ingrédients appropriés';
-
 $lang_module['dulicate_edit'] = 'L\'article <b>%s </b> est édité par le compte <b>%s </b> à %s. Vous ne pouvez pas modifier cette publication jusqu\'à ce qu\'elle soit terminée.';
 $lang_module['dulicate_edit_admin'] = 'L\'article <b>%s</b> est édité par le compte <b>%s</b> à %s. Voulez-vous <b> Prendre en charge l\'éditeur de la publication </b>?';
 $lang_module['dulicate_takeover'] = 'Prendre en charge l\'éditeur de la publication';
-$lang_module['setting_copy_news'] = 'Nouvelles de copie';
 $lang_module['dulicate_edit_takeover'] = 'Vous avez été pris en charge par ce compte %s à %s. Vos modifications ne peuvent pas être sauvegardées dans le système, copiez-les à nouveau pour éviter de perdre vos modifications.';
+$lang_module['setting_copy_news'] = 'Nouvelles de copie';
 $lang_module['title_copy_news'] = 'Copier l\'article';
+$lang_module['status_12'] = 'Sauvegarder l\'article, passer à la rédacteur';
+$lang_module['status_13'] = 'Sauvegarder l\'article, passer à la rédacteur en chef';
+$lang_module['error_edit'] = 'Les messages sont des modérateurs modérés. Vous ne pouvez pas éditer ensuite.';
+$lang_module['not_edit_by_admin'] = 'Vous avez été détourné pour éditer cette publication. Vos modifications ne peuvent pas être sauvegardées dans le système, copiez-les à nouveau pour éviter de perdre vos modifications.';

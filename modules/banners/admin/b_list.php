@@ -140,7 +140,7 @@ foreach ($rows as $row) {
     if ($pid > 0) {
         $contents['rows'][$row['id']]['pid'] = array(
             $row['click_url'],
-            $row['click_url']
+            nv_clean60_bannerlink($row['click_url'], 50)
         );
     } else {
         $contents['rows'][$row['id']]['pid'] = array(

@@ -14,4 +14,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 
 define('NV_IS_RSS_ADMIN', true);
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:feeds';
+
 $allow_func = array( 'main' );

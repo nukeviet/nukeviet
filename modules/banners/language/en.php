@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -58,3 +58,9 @@ $lang_module['stats_views_country'] = 'Country';
 $lang_module['stats_views_month'] = 'Month';
 $lang_module['stats_views_select'] = 'Please select';
 $lang_module['stats_views_ads'] = 'Advertise';
+$lang_module['plan_wrong_selected'] = 'This plan doesn\'t exists';
+$lang_module['login_to_check'] = 'Please login to check advertising permissions. Click here to login';
+$lang_module['no_permission'] = 'You do not have permission to post ads. Please contact the site administrator for permission to advertise';
+$lang_module['plan_allowed'] = 'Posting rights';
+$lang_module['plan_allowed_yes'] = 'Yes';
+$lang_module['plan_allowed_no'] = 'No';
