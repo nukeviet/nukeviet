@@ -30,3 +30,10 @@ if (defined('NV_IS_GODADMIN')) {
 }
 
 define('NV_IS_FILE_WEBTOOLS', true);
+
+//Document
+$array_url_instruction['clearsystem'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:webtools';
+$array_url_instruction['statistics'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:webtools#cấu_hinh_thống_ke';
+$array_url_instruction['checkupdate'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:webtools#kiểm_tra_phien_bản';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:webtools';
+
