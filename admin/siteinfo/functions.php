@@ -22,6 +22,9 @@ $menu_top = array(
     'custom_title' => $lang_global['mod_siteinfo']
 );
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin';
+
 define('NV_IS_FILE_SITEINFO', true);
 
 /**

@@ -33,12 +33,22 @@ $allow_func = array(
     'del_banner'
 );
 define('NV_IS_FILE_ADMIN', true);
+
 $targets = array(
     '_blank' => $lang_module['target_blank'],
     '_top' => $lang_module['target_top'],
     '_self' => $lang_module['target_self'],
     '_parent' => $lang_module['target_parent']
 );
+
+// Document
+$array_url_instruction['banners_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#quảng_cao';
+$array_url_instruction['plans_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
+$array_url_instruction['add_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
+$array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_khối_quảng_cao';
+$array_url_instruction['add_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
+$array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_quảng_cao';
+
 $array_uploadtype = array('images', 'flash');
 $array_exp_time = array(
     array(0, $lang_module['plan_exp_time_nolimit']),

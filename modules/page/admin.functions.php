@@ -16,6 +16,11 @@ $allow_func = array( 'main', 'content', 'alias', 'change_status', 'change_weight
 
 define('NV_IS_FILE_ADMIN', true);
 
+// Document
+$array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:about#them_bai_mới';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:about#cấu_hinh';
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:about';
+
 // Get Config Module
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $list = $nv_Cache->db($sql, '', $module_name);

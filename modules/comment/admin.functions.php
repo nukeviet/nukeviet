@@ -36,3 +36,8 @@ while ($row = $result->fetch()) {
 }
 
 define('NV_IS_FILE_ADMIN', true);
+
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:comment';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:comment#config';
+$array_url_instruction['edit'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:comment#edit';
