@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -53,6 +53,7 @@ $lang_module['deletefolder'] = 'Delete Folder';
 $lang_module['createfolder'] = 'Create Folder';
 $lang_module['recreatethumb'] = 'Recreate thumb images';
 $lang_module['recreatethumb_note'] = 'Note: This function will erase all the thumbs under the folder, both sub-folders and recreate the thumb image according to the new configuration. This process can take a long time, you can not close the browser';
+$lang_module['recreatethumb_result'] = 'Recreated thumb images for';
 $lang_module['rename_newname'] = 'New name:';
 $lang_module['rename_noname'] = 'You not enter a new file name';
 $lang_module['rename_error_folder'] = 'Error: System can not rename folder';
