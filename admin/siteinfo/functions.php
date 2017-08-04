@@ -23,7 +23,13 @@ $menu_top = array(
 );
 
 //Document
-$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin';
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo';
+$array_url_instruction['system_info'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo#cấu_hinh_site';
+$array_url_instruction['php_info_configuration'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo#cấu_hinh_php';
+$array_url_instruction['php_info_modules'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo#tiện_ich_mở_rộng';
+$array_url_instruction['php_info_environment'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo#cac_biến_moi_truờng';
+$array_url_instruction['php_info_variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo#cac_biến_tiền_dịnh';
+$array_url_instruction['logs'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo#nhật_ky_hệ_thống';
 
 define('NV_IS_FILE_SITEINFO', true);
 
