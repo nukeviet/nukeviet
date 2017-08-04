@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
+$lang_translator['author'] = 'VINADES.,JSC ';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -22,12 +22,16 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['uploadtype'] = 'Upload file type allowed';
 $lang_module['is_act'] = 'Active';
 $lang_module['require_image'] = 'Banner type';
+$lang_module['require_image0'] = 'Liên kết';
+$lang_module['require_image1'] = 'Images/Flash';
 $lang_module['act0'] = 'Wait for active';
 $lang_module['act1'] = 'Active';
 $lang_module['act2'] = 'Expire';
 $lang_module['act3'] = 'Suspend';
+$lang_module['act4'] = 'Waiting for acceptance';
 $lang_module['change_act'] = 'Suspend/Active';
 $lang_module['add_banner'] = 'Add advertising';
+$lang_module['add_banner_client'] = 'Add ads to customers &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Block advertising';
 $lang_module['plans_list2'] = 'List Block Advertising';
 $lang_module['in_plan'] = 'Block';
@@ -114,3 +118,17 @@ $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
 $lang_module['bannerhtml'] = 'Advertising content';
 $lang_module['assign_to_user'] = 'Assign to a user';
+$lang_module['assign_to_user_tip'] = 'Enter username or full name to search then select from the drop down list. To find the correct username, enter = in front. If left blank, the system will be automatically assigned to the admin';
+$lang_module['assign_to_user_err'] = 'Error: Member %s does not exist';
+$lang_module['of_user'] = 'The poster';
+$lang_module['plan_uploadgroup'] = 'Group members are posted outside the site';
+$lang_module['plan_exp_time'] = 'The time each ad is displayed';
+$lang_module['plan_exp_time_note'] = 'Note: The time limit of ads in the block applies to members posting ads or when administrators add ads without choosing the end time. Administrators can freely choose the end time of each ad without being bound by this value.';
+$lang_module['plan_exp_time_nolimit'] = 'Unlimited';
+$lang_module['plan_exp_time_custom'] = 'Self-import';
+$lang_module['plan_exp_time_d'] = '%s day';
+$lang_module['plan_exp_time_w'] = '%s week';
+$lang_module['plan_exp_time_m'] = '%s month (%s day)';
+$lang_module['plan_exp_time_y'] = '%s year (%s day)';
+$lang_module['exp_date_nochoose'] = 'Ads will always show if the date is not here';
+$lang_module['publ_time_info'] = 'The self-time system starts at the time of adding the ad if no date is selected here';

@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
-if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -48,6 +48,7 @@ $lang_module['addads_block_lang_ru'] = 'Russe';
 $lang_module['addads_block_lang_zz'] = 'Autre langue';
 $lang_module['title_empty'] = 'Erreur: manque de titre';
 $lang_module['plan_not_selected'] = 'Veuillez sélectionner le block pour cette publicité';
+$lang_module['plan_wrong_selected'] = 'Bloquer les annonces que vous n\'existe pas';
 $lang_module['click_url_invalid'] = 'Lien invalide';
 $lang_module['file_upload_empty'] = 'Erreur: manque d\'image';
 $lang_module['upload_blocked'] = 'Le transfert de fichier flash est interdit par le système, donc vous ne pouvez pas ajouter les publicités. Vérifiez la configuration du site ou l\'autorisation des fichiers transférés.';
@@ -58,3 +59,8 @@ $lang_module['stats_views_country'] = 'Pays';
 $lang_module['stats_views_month'] = 'Mois';
 $lang_module['stats_views_select'] = 'Sélectionnez';
 $lang_module['stats_views_ads'] = 'Publicité';
+$lang_module['login_to_check'] = 'S\'il vous plaît connecter aux utilisateurs de vérifier les droits à publier l\'annonce. Cliquez ici pour vous identifier';
+$lang_module['no_permission'] = 'Vous ne pouvez pas faire de la publicité. S\'il vous plaît contacter l\'administrateur du site à accorder ad';
+$lang_module['plan_allowed'] = 'Droit de signer';
+$lang_module['plan_allowed_yes'] = 'Oui';
+$lang_module['plan_allowed_no'] = 'Non';
