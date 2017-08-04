@@ -115,9 +115,6 @@
                             </div>
                             <span class="help-block help-block-bottom">{LANG.exp_date_nochoose}</span>
                         </div>
-                        <div class="clearfix" id="exp_date_auto">
-                            <p class="text-info">{LANG.exp_date_auto}</p>
-                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -160,13 +157,6 @@ function chancePlan() {
         document.getElementById("require_image").innerHTML = "&lowast;";
     } else {
         document.getElementById("require_image").innerHTML = "&nbsp;";
-    }
-    if (plsel.data('exp')) {
-        $('#exp_date_manual').hide();
-        $('#exp_date_auto').show();
-    } else {
-        $('#exp_date_manual').show();
-        $('#exp_date_auto').hide();
     }
 }
 </script>

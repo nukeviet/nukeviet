@@ -17,3 +17,7 @@ $submenu['content'] = $lang_module['voting_add'];
 $allow_func = array( 'main', 'content', 'del' );
 
 define('NV_IS_FILE_ADMIN', true);
+
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:voting';
+$array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:voting#them_tham_do';

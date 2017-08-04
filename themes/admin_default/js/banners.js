@@ -182,24 +182,18 @@ function nv_show_banners_list(containerid, clid, pid, act) {
     return false;
 }
 
-function nv_chang_weight_banners(containerid, clid, pid, act, id) {
-
-    var request_query = nv_fc_variable + '=b_list';
+function nv_chang_weight_banners(pid, id) {
     var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
     var weight = $("#id_weight_" + id).val();
 
-    if (clid != 0) {
-        request_query += '&clid=' + clid;
-    } else {
-        if (pid != 0)
-            request_query += '&pid=' + pid;
-    }
-
-    request_query += '&act=' + act;
+    var request_query = nv_fc_variable + '=b_list';
+    request_query += '&pid=' + pid
     request_query += '&id=' + id;
     request_query += '&weight=' + weight;
 
-    $('#' + containerid).load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
+    $('#banners_list_act').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=1&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
+    $('#banners_list_timeract').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=0&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
+    $('#banners_list_deact').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=3&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
     return false;
 }
 

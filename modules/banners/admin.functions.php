@@ -33,22 +33,42 @@ $allow_func = array(
     'del_banner'
 );
 define('NV_IS_FILE_ADMIN', true);
+
 $targets = array(
     '_blank' => $lang_module['target_blank'],
     '_top' => $lang_module['target_top'],
     '_self' => $lang_module['target_self'],
     '_parent' => $lang_module['target_parent']
 );
+
+// Document
+$array_url_instruction['banners_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#quảng_cao';
+$array_url_instruction['plans_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
+$array_url_instruction['add_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
+$array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_khối_quảng_cao';
+$array_url_instruction['add_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
+$array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_quảng_cao';
+
 $array_uploadtype = array('images', 'flash');
 $array_exp_time = array(
-    0 => array(0, $lang_module['plan_exp_time_nolimit']),
-    1 => array(86400, $lang_module['plan_exp_time_1d']),
-    2 => array(604800, $lang_module['plan_exp_time_1w']),
-    3 => array(1209600, $lang_module['plan_exp_time_2w']),
-    4 => array(2592000, $lang_module['plan_exp_time_1m']),
-    5 => array(15552000, $lang_module['plan_exp_time_6m']),
-    6 => array(31536000, $lang_module['plan_exp_time_1y']),
-    7 => array(-1, $lang_module['plan_exp_time_custom']),
+    array(0, $lang_module['plan_exp_time_nolimit']),
+    array(86400, sprintf($lang_module['plan_exp_time_d'], 1)),
+    array(604800, sprintf($lang_module['plan_exp_time_w'], 1)),
+    array(1209600, sprintf($lang_module['plan_exp_time_w'], 2)),
+    array(1814400, sprintf($lang_module['plan_exp_time_w'], 3)),
+    array(2592000, sprintf($lang_module['plan_exp_time_m'], 1, 30)),
+    array(5184000, sprintf($lang_module['plan_exp_time_m'], 2, 60)),
+    array(7776000, sprintf($lang_module['plan_exp_time_m'], 3, 90)),
+    array(10368000, sprintf($lang_module['plan_exp_time_m'], 4, 120)),
+    array(12960000, sprintf($lang_module['plan_exp_time_m'], 5, 150)),
+    array(15552000, sprintf($lang_module['plan_exp_time_m'], 6, 180)),
+    array(18144000, sprintf($lang_module['plan_exp_time_m'], 7, 210)),
+    array(20736000, sprintf($lang_module['plan_exp_time_m'], 8, 240)),
+    array(23328000, sprintf($lang_module['plan_exp_time_m'], 9, 270)),
+    array(25920000, sprintf($lang_module['plan_exp_time_m'], 10, 300)),
+    array(28512000, sprintf($lang_module['plan_exp_time_m'], 11, 330)),
+    array(31536000, sprintf($lang_module['plan_exp_time_y'], 1, 365)),
+    array(-1, $lang_module['plan_exp_time_custom'])
 );
 
 /**
@@ -128,7 +148,7 @@ function nv_fix_banner_weight($pid)
     global $db;
     list($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . intval($pid))->fetch(3);
     if ($pid > 0 and $form == 'sequential') {
-        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' ORDER BY weight ASC, id DESC';
+        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC, id DESC';
         $result = $db->query($query_weight);
         $weight = 0;
         while ($row = $result->fetch()) {
@@ -136,6 +156,9 @@ function nv_fix_banner_weight($pid)
             $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
             $db->query($sql);
         }
+        // Các banner hết hạn và banner chờ duyệt có weight = 0
+        $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE act IN(2,4) AND pid=' . $pid;
+        $db->query($sql);
     } elseif ($pid > 0 and $form == 'random') {
         $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE pid=' . $pid;
         $db->query($sql);
@@ -759,6 +782,20 @@ function nv_main_theme($contents)
     }
     $xtpl->parse('main');
     return $xtpl->text('main');
+}
+
+/**
+ * nv_clean60_bannerlink()
+ *
+ * @param mixed $string
+ * @param integer $num
+ * @return
+ */
+function nv_clean60_bannerlink($string, $num = 60)
+{
+    $org_len = nv_strlen($string);
+    $new_string = nv_clean60($string, $num);
+    return preg_replace('/\.\.\.\.\.\.$/', '...', ($new_string . ($org_len > nv_strlen($new_string) ? '...' : '')));
 }
 
 // Tìm kiếm thành viên AJAX

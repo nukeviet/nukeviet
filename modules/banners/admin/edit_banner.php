@@ -124,6 +124,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     } else {
         if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
             $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $upload->setLanguage($lang_global);
             $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
             @unlink($_FILES['banner']['tmp_name']);
 
@@ -146,6 +147,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         if ($file_ext == 'swf') {
             if (isset($_FILES['imageforswf']) and is_uploaded_file($_FILES['imageforswf']['tmp_name'])) {
                 $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                $upload->setLanguage($lang_global);
                 $upload_info = $upload->save_file($_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
                 @unlink($_FILES['imageforswf']['tmp_name']);
 
@@ -176,20 +178,20 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $publtime = $publtime = $row['add_time'];
             }
 
-            if (!empty($plans_exp[$pid])) {
-                $exptime = $publtime + $plans_exp[$pid];
+            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
+                $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
+                if ($exptime <= $publtime) {
+                    $exptime = $publtime;
+                }
             } else {
-                if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
-                    $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
-                    if ($exptime <= $publtime) {
-                        $exptime = $publtime;
-                    }
+                if (!empty($plans_exp[$pid])) {
+                    $exptime = $publtime + $plans_exp[$pid];
                 } else {
                     $exptime = 0;
                 }
-                if ($exptime != 0 and $exptime <= $publtime) {
-                    $exptime = $publtime;
-                }
+            }
+            if ($exptime != 0 and $exptime <= $publtime) {
+                $exptime = $publtime;
             }
 
             $act = $row['act'];

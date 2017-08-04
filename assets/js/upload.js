@@ -1,6 +1,6 @@
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 27/01/2011, 9:36
@@ -634,8 +634,8 @@ function createfolder() {
 // Tạo lại ảnh Thumb
 function recreatethumb() {
     $("div#recreatethumb").dialog("open")
-	$("#recreatethumb_ok").show();
-	$("#recreatethumb_loading").html(LANG.recreatethumb_note);
+    $("#recreatethumb_ok").show();
+    $("#recreatethumb_loading").html(LANG.recreatethumb_note);
 }
 
 // Xoa thu muc
@@ -1200,50 +1200,72 @@ $("div#createfolder").dialog({
 
 var timer_recreatethumb = 0;
 function nv_recreatethumb_loop(a, idf) {
-	clearTimeout(timer_recreatethumb);
-	$.ajax({
-		type : "POST",
-		url : nv_module_url + "recreatethumb&random=" + nv_randomNum(10),
-		data : "path=" + a + "&idf=" + idf,
-		success : function(d) {
-			var e = d.split("_");
-			if (e[0] == "ERROR") {
-				alert(e[1])
-			} else if (e[0] == "OK") {
-				timer_recreatethumb = setTimeout(function() {
-					$("#recreatethumb_loading").html(nv_loading_data + "<h3 class=\"text-center\">"+LANG.recreatethumb+": " + e[1] + " / " + e[2]+" file.</h3>");
-					nv_recreatethumb_loop(a, e[1]);
-				}, 1000);
-			} else if (e[0] == "COMPLETE") {
-				$("div#recreatethumb").dialog("close");
-			}
-		}
-	});
+    clearTimeout(timer_recreatethumb);
+    $.ajax({
+        type : "POST",
+        url : nv_module_url + "recreatethumb&random=" + nv_randomNum(10),
+        data : "path=" + a + "&idf=" + idf,
+        success : function(d) {
+            var e = d.split("_");
+            if (e[0] == "ERROR") {
+                alert(e[1])
+            } else if (e[0] == "OK") {
+                timer_recreatethumb = setTimeout(function() {
+                    var loadarea = $("#recreatethumb_loading");
+                    var per = (parseInt(e[1]) / parseInt(e[2])) * 100;
+                    if (!$('.progress', loadarea).length) {
+                        var html = '';
+                        html += '<br /><div class="progress">';
+                        html += '<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>';
+                        html += '</div>';
+                        html += '<h3 class="text-center">' + LANG.recreatethumb + ': <strong><span class="mcur">' + e[1] + '</span> / ' + e[2] + '</strong> file.</h3>';
+                        loadarea.html(html);
+                    }
+                    $('.progress-bar', loadarea).css({width: per + '%'});
+                    $('.mcur', loadarea).html(e[1]);
+                    nv_recreatethumb_loop(a, e[1]);
+                }, 1000);
+            } else if (e[0] == "COMPLETE") {
+                $("#recreatethumb_loading").html("<div class=\"alert alert-success\">" + LANG.recreatethumb_result + " <strong>" + e[1] + "</strong> file.</div>");
+                setTimeout(function() {
+                    $("div#recreatethumb").dialog("close");
+                }, 3000);
+            }
+        }
+    });
 }
 
 $("div#recreatethumb").dialog({
-	autoOpen : false,
-	width : 500,
-	height : 250,
-	modal : true,
-	position : {
-		my : "center",
-		at : "center",
-		of : window
-	},
-	buttons : [ {
-		text : "OK",
-		id : "recreatethumb_ok",
-		click : function() {
-			$("#recreatethumb_ok").hide();
-			$("#recreatethumb_loading").html(nv_loading_data);
-			var b = $("span[name=current]").attr("title");
-			timer_recreatethumb = setTimeout(function() {
-				nv_recreatethumb_loop(b, -1);
-			}, 500);
-		}
-
-	} ]
+    autoOpen : false,
+    width: 500,
+    height: 270,
+    modal: true,
+    position: {
+        my: "center",
+        at: "center",
+        of: window
+    },
+    buttons: [{
+        text: "OK",
+        id: "recreatethumb_ok",
+        click: function() {
+            $("#recreatethumb_ok").parent().parent().hide();
+            $("#recreatethumb_loading").html(nv_loading_data);
+            var b = $("span[name=current]").attr("title");
+            timer_recreatethumb = setTimeout(function() {
+                nv_recreatethumb_loop(b, -1);
+            }, 500);
+        }
+    }],
+    close: function() {
+        if (timer_recreatethumb) {
+            clearTimeout(timer_recreatethumb);
+        }
+        if ($("#recreatethumb_ok").length) {
+            $("#recreatethumb_ok").parent().parent().show();
+        }
+        $("#recreatethumb_loading").html('');
+    }
 });
 
 $("input[name=newWidth], input[name=newHeight]").keyup(function() {
@@ -1803,7 +1825,7 @@ var NVUPLOAD = {
                         }
 
                         NVUPLOAD.updateList();
-                        
+
                         // Xác định resize ảnh (bug plupload 2.3.1)
                         if (nv_resize != false) {
                             var lastKey = NVUPLOAD.uploader.files.length - 1;
@@ -1812,16 +1834,16 @@ var NVUPLOAD = {
                                 file.clientResize = false;
                                 var img = new moxie.image.Image();
                                 try {
-                                	img.onload = function() {
-                                		if (this.width > nv_resize.width || this.height > nv_resize.height) {
+                                    img.onload = function() {
+                                        if (this.width > nv_resize.width || this.height > nv_resize.height) {
                                             file.clientResize = true;
-                                		}
+                                        }
                                         if (k == lastKey) {
                                             setTimeout(function() {
                                                 $('#upload-start').prop('disabled', false).html(LANG.upload_file);
                                             }, 1500);
                                         }
-                                	};
+                                    };
                                     img.onerror = function() {
                                         if (k == lastKey) {
                                             setTimeout(function() {
@@ -1829,7 +1851,7 @@ var NVUPLOAD = {
                                             }, 1500);
                                         }
                                     }
-                                	img.load(file.getSource());
+                                    img.load(file.getSource());
                                 } catch(ex) {
                                     // Nothing
                                 }
@@ -2167,7 +2189,7 @@ var NVUPLOAD = {
         } else {
             // Nothing to do
         }
-        
+
         var actionHTML = '<i class="' + actionClass + '"></i>';
         if ($('#' + file.id + ' .file-action').html() != actionHTML) {
             $('#' + file.id + ' .file-action').html(actionHTML);
@@ -2280,7 +2302,7 @@ var NVCMENU = {
             createfolder()
         },
         recreatethumb: function() {
-        	recreatethumb()
+            recreatethumb()
         },
         deletefolder: function() {
             deletefolder()
