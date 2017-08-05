@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 24/1/2011, 1:33
@@ -125,7 +125,6 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                         $config_logo['x'] = $file_size[0] - $w - 5; // Horizontal: Right
                         $config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
 
-
                         // Logo vertical
                         if (preg_match("/^top/", $global_config['upload_logo_pos'])) {
                             $config_logo['y'] = 5;
@@ -223,5 +222,4 @@ if (empty($error)) {
         echo 'ERROR_' . $error;
     }
 }
-
 exit();

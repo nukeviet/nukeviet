@@ -8,7 +8,7 @@
  * @Createdate 05/07/2010 09:47
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -21,8 +21,15 @@ $module_version = array(
     'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
     'version' => '4.2.01', // Phien ban cua modle
     'date' => 'Sat, 5 Aug 2017 13:00:00 GMT', // Ngay phat hanh phien ban
-    'author' => 'VINADES (contact@vinades.vn)', // Tac gia
+    'author' => 'VINADES <contact@vinades.vn>', // Tac gia
     'note' => '', // Ghi chu
-    'uploads_dir' => array( $module_upload, $module_upload . '/source', $module_upload . '/temp_pic', $module_upload . '/topics' ),
-    'files_dir' => array( $module_upload . '/topics' )
+    'uploads_dir' => array(
+        $module_upload,
+        $module_upload . '/source',
+        $module_upload . '/temp_pic',
+        $module_upload . '/topics'
+    ),
+    'files_dir' => array(
+        $module_upload . '/topics'
+    )
 );
