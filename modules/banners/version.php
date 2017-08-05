@@ -19,7 +19,9 @@ $module_version = array(
     'virtual' => 0,
     'version' => '4.2.01',
     'date' => 'Sat, 5 Aug 2017 13:00:00 GMT',
-    'author' => 'VINADES (contact@vinades.vn)',
+    'author' => 'VINADES <contact@vinades.vn>',
     'note' => '',
-    'uploads_dir' => array($module_upload)
+    'uploads_dir' => array(
+        $module_upload
+    )
 );
