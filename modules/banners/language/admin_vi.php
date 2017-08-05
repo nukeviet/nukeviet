@@ -1,57 +1,35 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
+
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
-$lang_module['add_client'] = 'Thêm khách hàng';
-$lang_module['edit_client'] = 'Sửa thông tin khách hàng';
-$lang_module['full_name_empty'] = 'Tên khách hàng chưa được khai báo';
-$lang_module['website_incorrect'] = 'Website không đúng';
-$lang_module['yim_incorrect'] = 'YIM không đúng';
-$lang_module['add_client_info'] = 'Để thêm khách hàng mới, bạn cần điền đầy đủ vào các ô trống dưới đây';
-$lang_module['edit_client_info'] = 'Những ô có đánh dấu hoa thị bắt buộc phải khai báo';
-$lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
-$lang_module['show_password'] = 'Hiển thị mật khẩu';
-$lang_module['login'] = 'Tài khoản';
-$lang_module['full_name'] = 'Họ và Tên';
-$lang_module['email'] = 'Email';
-$lang_module['website'] = 'Website';
-$lang_module['location'] = 'Địa chỉ';
-$lang_module['yim'] = 'YIM';
-$lang_module['phone'] = 'Điện thoại';
-$lang_module['fax'] = 'Fax';
-$lang_module['mobile'] = 'Mobile';
+
 $lang_module['uploadtype'] = 'Kiểu file được upload';
-$lang_module['add_client_submit'] = 'Tạo mới';
-$lang_module['edit_client_submit'] = 'Thực hiện';
-$lang_module['login_is_already_in_use'] = 'Tài khoản &ldquo;<strong>%s</strong>&rdquo; đã được sử dụng';
-$lang_module['email_is_already_in_use'] = 'Email &ldquo;<strong>%s</strong>&rdquo; đã được sử dụng';
-$lang_module['client_list'] = 'Khách hàng';
-$lang_module['client_list2'] = 'Danh sách Khách hàng';
-$lang_module['reg_time'] = 'Ngày đăng ký';
 $lang_module['is_act'] = 'Hiệu lực';
-$lang_module['require_image'] = 'Yêu cầu hình ảnh';
-$lang_module['act0'] = 'Đang đợi chấp nhận';
+$lang_module['require_image'] = 'Loại quảng cáo';
+$lang_module['require_image0'] = 'Textlink';
+$lang_module['require_image1'] = 'Hình ảnh/Flash';
+$lang_module['act0'] = 'Đang hẹn giờ hoạt động';
 $lang_module['act1'] = 'Đang hoạt động';
 $lang_module['act2'] = 'Đã hết hạn';
 $lang_module['act3'] = 'Đang bị đình chỉ hoạt động';
+$lang_module['act4'] = 'Đang đợi chấp nhận';
 $lang_module['change_act'] = 'Đình chỉ/Kích hoạt';
-$lang_module['info_client_title'] = 'Thông tin khách hàng';
-$lang_module['info_client_caption'] = 'Thông tin cá nhân của khách hàng &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['banners_client_caption'] = 'Danh sách quảng cáo của khách hàng &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['banners_client_empty'] = 'Hiện chưa có quảng cáo nào của khách hàng &ldquo;<strong>%s</strong>&rdquo; được ghi nhận';
 $lang_module['add_banner'] = 'Thêm quảng cáo';
 $lang_module['add_banner_client'] = 'Thêm quảng cáo cho khách hàng &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Khối quảng cáo';
@@ -78,24 +56,23 @@ $lang_module['click_url_invalid'] = 'URL khi click vào quảng cáo sai';
 $lang_module['file_upload_empty'] = 'Hình quảng cáo chưa được xác định';
 $lang_module['upload_blocked'] = 'Việc tải lên các file hình ảnh và flash đã bị cấm bởi hệ thống, vì vậy bạn không thể thêm quảng cáo. Hãy kiểm tra lại cấu hình của site hoặc việc cấp phép các kiểu file được tải lên trong tài khoản quản trị của bạn';
 $lang_module['add_banner_info'] = 'Để thêm quảng cáo mới, bạn cần khai báo đầy đủ vào các ô trống dưới đây';
-$lang_module['of_client'] = 'Khách hàng';
 $lang_module['upload'] = 'File hình quảng cáo (%s)';
 $lang_module['re_upload'] = 'Thay hình quảng cáo mới (%s)';
 $lang_module['imageforswf'] = 'Hình quảng cáo nếu trình duyệt là mobile';
 $lang_module['file_alt'] = 'Chú thích cho hình';
-$lang_module['click_url'] = 'URL khi click vào hình';
+$lang_module['click_url'] = 'URL khi click vào quảng cáo';
 $lang_module['add_date'] = 'Khởi tạo';
 $lang_module['publ_date'] = 'Bắt đầu';
 $lang_module['exp_date'] = 'Kết thúc';
 $lang_module['edit_banner'] = 'Sửa quảng cáo';
 $lang_module['edit_banner_info'] = 'Những ô có đánh dấu hoa thị bắt buộc phải khai báo';
 $lang_module['file_name'] = 'Hình quảng cáo';
-$lang_module['banners_list0'] = 'Danh sách các quảng cáo';
+$lang_module['banners_list0'] = 'Danh sách các quảng cáo đang hẹn giờ hoạt động';
 $lang_module['banners_list1'] = 'Danh sách các quảng cáo đang hoạt động';
 $lang_module['banners_list2'] = 'Danh sách các quảng cáo đã hết hạn';
 $lang_module['banners_list3'] = 'Danh sách các quảng cáo đang bị đình chỉ hoạt động';
-$lang_module['banners_list4'] = 'Danh sách các quảng cáo đang đợi kích hoạt';
-$lang_module['banners_list_cl'] = 'của khách hàng &ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['banners_list4'] = 'Danh sách các quảng cáo đang đợi duyệt';
+$lang_module['banners_list_cl'] = 'của thành viên &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['banners_list_pl'] = 'thuộc khối &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['unlimited'] = 'Không hạn chế';
 $lang_module['info_banner_title'] = 'Thông tin quảng cáo';
@@ -134,9 +111,24 @@ $lang_module['file_del_confirm'] = 'Bạn có muốn xóa?';
 $lang_module['delfile_success'] = 'Đã xóa xong';
 $lang_module['delfile_error'] = 'Xóa lỗi';
 $lang_module['weight'] = 'vị trí';
-$lang_module['target'] = 'Đích đếm';
+$lang_module['target'] = 'Đích đến';
 $lang_module['target_blank'] = 'Cửa sổ mới (_blank)';
 $lang_module['target_top'] = 'Cửa sổ trên cùng (_top)';
 $lang_module['target_self'] = 'Tại trang (_self)';
 $lang_module['target_parent'] = 'Cửa sổ cha (_parent)';
 $lang_module['bannerhtml'] = 'Nội dung quảng cáo';
+$lang_module['assign_to_user'] = 'Gán cho thành viên';
+$lang_module['assign_to_user_tip'] = 'Nhập tên đăng nhập hoặc họ tên để tìm kiếm sau đó chọn từ danh sách đổ xuống. Để tìm chính xác bằng tên đăng nhập hãy nhập = ở trước. Nếu để trống, hệ thống sẽ tự động gán cho quản trị đang thao tác';
+$lang_module['assign_to_user_err'] = 'Lỗi: Thành viên %s không tồn tại';
+$lang_module['of_user'] = 'Người đăng';
+$lang_module['plan_uploadgroup'] = 'Nhóm thành viên được đăng quảng cáo ngoài site';
+$lang_module['plan_exp_time'] = 'Thời gian mỗi quảng cáo được hiển thị';
+$lang_module['plan_exp_time_note'] = 'Chú ý: Thời gian giới hạn quảng cáo trong khối áp dụng cho thành viên đăng quảng cáo hoặc khi quản trị thêm quảng cáo mà không chọn thời gian kết thúc. Quản trị có thể tự do chọn thời gian kết thúc của mỗi quảng cáo mà không bị ràng buộc bởi giá trị này.';
+$lang_module['plan_exp_time_nolimit'] = 'Không giới hạn';
+$lang_module['plan_exp_time_custom'] = 'Tự nhập';
+$lang_module['plan_exp_time_d'] = '%s ngày';
+$lang_module['plan_exp_time_w'] = '%s tuần';
+$lang_module['plan_exp_time_m'] = '%s tháng (%s ngày)';
+$lang_module['plan_exp_time_y'] = '%s năm (%s ngày)';
+$lang_module['exp_date_nochoose'] = 'Quảng cáo sẽ luôn hiển thị nếu không chọn ngày ở đây';
+$lang_module['publ_time_info'] = 'Hệ thống tự lấy thời gian bắt đầu ngay lúc thêm quảng cáo nếu không chọn ngày ở đây';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 3:21
@@ -12,9 +12,9 @@ namespace NukeViet\Cache;
 
 /**
  * Files
- * 
+ *
  * @package NukeViet Cache
- * @author VINADES.,JSC (contact@vinades.vn)
+ * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2016 VINADES.,JSC. All rights reserved
  * @version 4.0
  * @access public
@@ -33,12 +33,12 @@ class Files
     private $_FunCompress = '';
 
     private $_FunUnCompress = '';
-    
+
     private $_Current_Time = 0;
 
     /**
      * Files::__construct()
-     * 
+     *
      * @param mixed $CacheDir
      * @param mixed $Lang
      * @param mixed $Cache_Prefix
@@ -58,7 +58,7 @@ class Files
             $this->_FunCompress = 'gzdeflate';
             $this->_FunUnCompress = 'gzinflate';
         }
-        
+
         if (defined('NV_CURRENTTIME')) {
             $this->_Current_Time = NV_CURRENTTIME;
         } else {
@@ -139,16 +139,16 @@ class Files
      */
     public function getItem($module_name, $filename, $ttl = 0)
     {
-        if (!preg_match('/([a-z0-9\_]+)\.cache/', $filename)) {
+        if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
             return false;
         }
-        
+
         $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
 
         if (!is_file($fullname)) {
             return false;
         }
-        
+
         if ($ttl > 0 and ($this->_Current_Time - filemtime($fullname)) > $ttl) {
             return false;
         }
@@ -173,7 +173,7 @@ class Files
     public function setItem($module_name, $filename, $content, $ttl = 0)
     {
         // Note: $ttl not use in Files cache
-        if (!preg_match('/([a-z0-9\_]+)\.cache/', $filename)) {
+        if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
             return false;
         }
 

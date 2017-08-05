@@ -8,18 +8,20 @@
  * @Createdate 05/10/2010 14:29
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 $module_version = array(
     'name' => 'Banners',
-    'modfuncs' => 'main, clientinfo, addads, stats',
+    'modfuncs' => 'main, addads, stats',
     'is_sysmod' => 1,
     'virtual' => 0,
-    'version' => '4.2.00',
-    'date' => 'Sat, 22 Jul 2017 16:00:00 GMT',
-    'author' => 'VINADES (contact@vinades.vn)',
+    'version' => '4.2.01',
+    'date' => 'Sat, 5 Aug 2017 13:00:00 GMT',
+    'author' => 'VINADES <contact@vinades.vn>',
     'note' => '',
-    'uploads_dir' => array( $module_upload )
+    'uploads_dir' => array(
+        $module_upload
+    )
 );

@@ -14,7 +14,8 @@ body{
  -----------------------------------------------------------------------------*/
 #logo{
 	text-align:center;
-	margin-bottom:10px;
+    display: table;
+    margin: 0px auto 10px;
 }
 
 /* Content

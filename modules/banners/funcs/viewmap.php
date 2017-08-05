@@ -2,23 +2,21 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 21:7
  */
 
-if (! defined('NV_IS_MOD_BANNERS')) {
+if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
-
-global $global_config, $module_name, $module_info, $lang_module, $banner_client_info;
 
 if (defined('NV_IS_BANNER_CLIENT')) {
     $type = $nv_Request->get_title('type', 'post,get', 'country', 1);
     $month = $nv_Request->get_int('month', 'post,get');
     $ads = $nv_Request->get_int('ads', 'post,get');
-    $year = ( int )date('Y');
+    $year = (int)date('Y');
     $month_array = array(
         '1' => 31,
         '3' => 31,
@@ -54,9 +52,9 @@ if (defined('NV_IS_BANNER_CLIENT')) {
 
     $process = $data = array();
 
-    $geturl = new NukeViet\Client\UrlGetContents();
+    $geturl = new NukeViet\Client\UrlGetContents($global_config);
 
-    $result = $db->query("SELECT a." . $onetype . " FROM " . NV_BANNERS_GLOBALTABLE. "_click a INNER JOIN " . NV_BANNERS_GLOBALTABLE. "_rows b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY click_time ASC");
+    $result = $db->query("SELECT a." . $onetype . " FROM " . NV_BANNERS_GLOBALTABLE . "_click a INNER JOIN " . NV_BANNERS_GLOBALTABLE . "_rows b ON a.bid=b.id WHERE b.clid= " . $user_info['userid'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY click_time ASC");
     while ($row = $result->fetch()) {
         if ($type == 'date') {
             $row[$onetype] = date('d/m', $row[$onetype]);
@@ -65,6 +63,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
     }
     if (sizeof($data) > 0) {
         $statics = array_count_values($data);
+        $total = array_sum($statics);
 
         foreach ($statics as $country => $quantity) {
             if ($type == 'date') {
@@ -94,9 +93,9 @@ if (defined('NV_IS_BANNER_CLIENT')) {
 
         header("Content-type: image/png");
         imagepng($my_img);
-        imagecolordeallocate($line_color);
-        imagecolordeallocate($text_color);
-        imagecolordeallocate($background);
+        imagecolordeallocate($my_img, $line_colour);
+        imagecolordeallocate($my_img, $text_colour);
+        imagecolordeallocate($my_img, $background);
         imagedestroy($my_img);
     }
 }

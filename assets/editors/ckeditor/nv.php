@@ -31,6 +31,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
     }
     $return .= "<script type=\"text/javascript\">
 			CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',";
+    $return .= "contentsCss: '" . NV_BASE_SITEURL . NV_EDITORSDIR . "/ckeditor/nv.css?t=" . $global_config['timestamp'] . "',";
 
     if (defined('NV_IS_ADMIN')) {
         if (empty($path) and empty($currentpath)) {

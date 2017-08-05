@@ -24,6 +24,8 @@ $forms = nv_scandir(NV_ROOTDIR . '/modules/' . $module_name . '/forms', '/^form\
 $forms = preg_replace('/^form\_([a-zA-Z0-9\_\-]+)\.php$/', '\\1', $forms);
 
 $error = '';
+$groups_list = nv_groups_list();
+unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[5], $groups_list[6]);
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $blang = strip_tags($nv_Request->get_string('blang', 'post', ''));
@@ -43,6 +45,25 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $width = $nv_Request->get_int('width', 'post', 0);
     $height = $nv_Request->get_int('height', 'post', 0);
 
+    $uploadtype = $nv_Request->get_typed_array('uploadtype', 'post', 'title', array());
+    $uploadtype = implode(',', $uploadtype);
+
+    $uploadgroup = $nv_Request->get_array('uploadgroup', 'post', array());
+    $uploadgroup = !empty($uploadgroup) ? implode(',', nv_groups_post(array_intersect($uploadgroup, array_keys($groups_list)))) : '';
+
+    $exp_time = $nv_Request->get_int('exp_time', 'post', 0);
+    $exp_time_custom = $nv_Request->get_float('exp_time_custom', 'post', 0);
+    if ($exp_time_custom < 0) {
+        $exp_time_custom = 0;
+    }
+    $exp_time_value = $exp_time;
+    if ($exp_time < 0) {
+        $exp_time = -1;
+        $exp_time_value = $exp_time_custom * 86400;
+    } else {
+        $exp_time_custom = 0;
+    }
+
     if (empty($title)) {
         $error = $lang_module['title_empty'];
     } elseif ($width < 50 or $height < 50) {
@@ -54,12 +75,18 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         list($blang_old, $form_old) = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval($id))->fetch(3);
 
-        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ' WHERE id=' . $id);
+        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET
+            blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ',
+            uploadtype=:uploadtype, uploadgroup=:uploadgroup, exp_time=:exp_time
+        WHERE id=' . $id);
         $stmt->bindParam(':blang', $blang, PDO::PARAM_STR);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':form', $form, PDO::PARAM_STR);
 		$stmt->bindParam(':require_image', $require_image, PDO::PARAM_STR);
+		$stmt->bindParam(':uploadtype', $uploadtype, PDO::PARAM_STR);
+		$stmt->bindParam(':uploadgroup', $uploadgroup, PDO::PARAM_STR);
+		$stmt->bindParam(':exp_time', $exp_time_value, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($form_old != $form or $blang_old != $blang) {
@@ -68,6 +95,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_plan', 'planid ' . $id, $admin_info['userid']);
         nv_CreateXML_bannerPlan();
+        $nv_Cache->delMod($module_name);
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id);
     }
 } else {
@@ -78,6 +106,23 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 	$require_image = $row['require_image'];
     $width = $row['width'];
     $height = $row['height'];
+    $exp_time = $row['exp_time'];
+    $exp_time_custom = 0;
+    $uploadgroup = $row['uploadgroup'];
+    $uploadtype = $row['uploadtype'];
+    if (!empty($row['exp_time'])) {
+        $is_custom_exptime = true;
+        foreach ($array_exp_time as $expt) {
+            if ($expt[0] == $row['exp_time']) {
+                $is_custom_exptime = false;
+                break;
+            }
+        }
+        if ($is_custom_exptime) {
+            $exp_time_custom = round($row['exp_time'] / 86400, 2);
+            $exp_time = -1;
+        }
+    }
 }
 
 if (! empty($description)) {
@@ -104,20 +149,24 @@ $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['edit_plan'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id;
-$contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
-$contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
-$contents['form'] = array( $lang_module['form'], 'form', $forms, $form, $require_image );
+$contents['title'] = array($lang_module['title'], 'title', $title, 255);
+$contents['blang'] = array($lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang);
+$contents['form'] = array($lang_module['form'], 'form', $forms, $form, $require_image);
 $contents['size'] = $lang_module['size'];
-$contents['require_image'] = $lang_module['require_image'];
-$contents['width'] = array( $lang_module['width'], 'width', $width, 4 );
-$contents['height'] = array( $lang_module['height'], 'height', $height, 4 );
-$contents['description'] = array( $lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false );
+$contents['require_image'] = $require_image;
+$contents['width'] = array($lang_module['width'], 'width', $width, 4);
+$contents['height'] = array($lang_module['height'], 'height', $height, 4);
+$contents['description'] = array($lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false);
+$contents['exp_time'] = $exp_time;
+$contents['exp_time_custom'] = $exp_time_custom ? $exp_time_custom : '';
+$contents['uploadgroup'] = $uploadgroup;
+$contents['uploadtype'] = $uploadtype;
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$contents = call_user_func('nv_edit_plan_theme', $contents);
+$contents = call_user_func('nv_edit_plan_theme', $contents, $array_uploadtype, $groups_list);
 
 $page_title = $lang_module['edit_plan'];
 

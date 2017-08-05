@@ -8,7 +8,7 @@
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -18,8 +18,8 @@ $module_version = array(
     'submenu' => 'main,setup,confirm',
     'is_sysmod' => 1,
     'virtual' => 0,
-    'version' => '4.2.00',
-    'date' => 'Sat, 22 Jul 2017 16:00:00 GMT',
-    'author' => 'VINADES (contact@vinades.vn)',
+    'version' => '4.2.01',
+    'date' => 'Sat, 5 Aug 2017 13:00:00 GMT',
+    'author' => 'VINADES <contact@vinades.vn>',
     'note' => 'Two-Step Verification'
 );

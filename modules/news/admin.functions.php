@@ -51,6 +51,17 @@ $array_allowed_comm = array(
 define('NV_IS_FILE_ADMIN', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news';
+$array_url_instruction['cat'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#quản_ly_chuyen_mục';
+$array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#them_bai_viet';
+$array_url_instruction['tags'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#quản_ly_tags';
+$array_url_instruction['groups'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#cac_nhom_tin';
+$array_url_instruction['topics'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#theo_dong_sự_kiện';
+$array_url_instruction['sources'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#nguồn_tin';
+$array_url_instruction['admins'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#phan_quyền_quản_ly';
+$array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#cấu_hinh_module';
+
 global $global_array_cat;
 $global_array_cat = array();
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
