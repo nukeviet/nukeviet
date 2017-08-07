@@ -563,16 +563,28 @@ function nv_listmail_notify()
 
     $array_mail = array();
     if (!empty($pro_config['groups_notify'])) {
-    	if($pro_config['groups_notify'] == 3) {
-    		$lis_adminid = $db->query('SELECT admins FROM '. $db_config['prefix'] . '_'. $global_config['site_lang'] . '_modules WHERE module_data= ' .$db->quote($module_data))->fetchColumn();
-    		$result = $db->query('SELECT email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $lis_adminid .')');
+    	$arr_groups_notify = explode(',',$pro_config['groups_notify']);
+    	if(in_array(3, $arr_groups_notify)) {
+    		$lis_adminid = $db->query('SELECT admins FROM '. $db_config['prefix'] .'_'.$global_config['site_lang'].'_modules WHERE module_data= '.$db->quote($module_data))->fetchColumn();
+    		if(!empty($lis_adminid)) {
+    			$result = $db->query('SELECT email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $lis_adminid .')');
+    			while (list($email) = $result->fetch(3)) {
+    				$array_mail[] = $email;
+    			}
+    		}
+    		if(sizeof($arr_groups_notify) > 1) {
+    			$result = $db->query('SELECT email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN ( ' . $pro_config['groups_notify'] . ' ) and group_id != 3 )');
+    			while (list($email) = $result->fetch(3)) {
+    				$array_mail[] = $email;
+    			}
+    		}
     	}
     	else {
     		$result = $db->query('SELECT email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN ( ' . $pro_config['groups_notify'] . ' ) )');
+    		while (list($email) = $result->fetch(3)) {
+    			$array_mail[] = $email;
+    		}
     	}
-        while (list ($email) = $result->fetch(3)) {
-            $array_mail[] = $email;
-        }
     }
     $array_mail = array_unique($array_mail);
 
