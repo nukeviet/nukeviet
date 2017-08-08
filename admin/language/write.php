@@ -82,12 +82,12 @@ function nv_admin_write_lang($dirlang, $idfile)
             $content_lang .= "*/\n";
 
             if ($admin_file) {
-                $content_lang .= "\nif (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {";
+                $content_lang .= "\nif (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {";
             } else {
-                $content_lang .= "\nif (! defined('NV_MAINFILE')) {";
+                $content_lang .= "\nif (!defined('NV_MAINFILE')) {";
             }
 
-            $content_lang .= "\n    die( 'Stop!!!' );\n}\n\n";
+            $content_lang .= "\n    die('Stop!!!');\n}\n\n";
 
             $array_translator['info'] = (isset($array_translator['info'])) ? $array_translator['info'] : "";
 

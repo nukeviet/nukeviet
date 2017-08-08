@@ -9,11 +9,11 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -48,7 +48,6 @@ $lang_module['addads_block_lang_ru'] = 'Russian';
 $lang_module['addads_block_lang_zz'] = 'Other';
 $lang_module['title_empty'] = 'Empty title';
 $lang_module['plan_not_selected'] = 'You must select plan';
-$lang_module['plan_wrong_selected'] = 'The block for the ad you selected does not exist';
 $lang_module['click_url_invalid'] = 'Invalid URL';
 $lang_module['file_upload_empty'] = 'Empty image';
 $lang_module['upload_blocked'] = 'Upload image and flash fail for this plan. Please contact the site administrator.';
@@ -59,8 +58,9 @@ $lang_module['stats_views_country'] = 'Country';
 $lang_module['stats_views_month'] = 'Month';
 $lang_module['stats_views_select'] = 'Please select';
 $lang_module['stats_views_ads'] = 'Advertise';
-$lang_module['login_to_check'] = 'Please log in to check advertising permissions. Click here to sign in';
+$lang_module['plan_wrong_selected'] = 'This plan doesn\'t exists';
+$lang_module['login_to_check'] = 'Please login to check advertising permissions. Click here to login';
 $lang_module['no_permission'] = 'You do not have permission to post ads. Please contact the site administrator for permission to advertise';
-$lang_module['plan_allowed'] = 'Allowed';
+$lang_module['plan_allowed'] = 'Posting rights';
 $lang_module['plan_allowed_yes'] = 'Yes';
 $lang_module['plan_allowed_no'] = 'No';

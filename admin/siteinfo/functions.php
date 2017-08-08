@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 5:50
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -45,7 +45,7 @@ function nv_siteinfo_getlang()
     $result = $nv_Cache->db($sql, 'lang', 'siteinfo');
     $array_lang = array();
 
-    if (! empty($result)) {
+    if (!empty($result)) {
         foreach ($result as $row) {
             $array_lang[] = $row['lang'];
         }
@@ -66,9 +66,12 @@ function nv_siteinfo_getuser()
     $result = $nv_Cache->db($sql, 'userid', 'siteinfo');
     $array_user = array();
 
-    if (! empty($result)) {
+    if (!empty($result)) {
         foreach ($result as $row) {
-            $array_user[] = array( 'userid' => $row['userid'], 'username' => $row['username'] );
+            $array_user[] = array(
+                'userid' => $row['userid'],
+                'username' => $row['username']
+            );
         }
     }
 
@@ -87,7 +90,7 @@ function nv_siteinfo_getmodules()
     $result = $nv_Cache->db($sql, 'module_name', 'siteinfo');
     $array_modules = array();
 
-    if (! empty($result)) {
+    if (!empty($result)) {
         foreach ($result as $row) {
             $array_modules[] = $row['module_name'];
         }
@@ -110,11 +113,11 @@ function nv_get_lang_module($mod)
 
     if (isset($site_mods[$mod])) {
         if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php' ;
+            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php';
         } elseif (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php')) {
-            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php' ;
+            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php';
         } elseif (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php')) {
-            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php' ;
+            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php';
         }
     }
     return $lang_module;

@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -62,5 +62,5 @@ $lang_module['stats_views_ads'] = 'Publicité';
 $lang_module['login_to_check'] = 'S\'il vous plaît connecter aux utilisateurs de vérifier les droits à publier l\'annonce. Cliquez ici pour vous identifier';
 $lang_module['no_permission'] = 'Vous ne pouvez pas faire de la publicité. S\'il vous plaît contacter l\'administrateur du site à accorder ad';
 $lang_module['plan_allowed'] = 'Droit de signer';
-$lang_module['plan_allowed_yes'] = 'Oui';
-$lang_module['plan_allowed_no'] = 'Non';
+$lang_module['plan_allowed_yes'] = 'Avoir';
+$lang_module['plan_allowed_no'] = 'Pas';

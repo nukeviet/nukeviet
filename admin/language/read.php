@@ -63,13 +63,13 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         list ($idfile, $langtype) = $sth->fetch(3);
 
         if (empty($idfile)) {
-            $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
+            $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_module';
 
             $lang_translator_save = array();
-            $lang_translator_save['author'] = isset($lang_translator['author']) ? strip_tags($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
-            $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? strip_tags($lang_translator['createdate']) : date('d/m/Y, H:i');
-            $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? strip_tags($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
-            $lang_translator_save['info'] = isset($lang_translator['info']) ? strip_tags($lang_translator['info']) : '';
+            $lang_translator_save['author'] = isset($lang_translator['author']) ? trim($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
+            $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? trim($lang_translator['createdate']) : date('d/m/Y, H:i');
+            $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? trim($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
+            $lang_translator_save['info'] = isset($lang_translator['info']) ? trim($lang_translator['info']) : '';
             $lang_translator_save['langtype'] = $langtype;
 
             $data = array();
@@ -84,12 +84,12 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         } else {
             $lang_translator_save = array();
 
-            $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
+            $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_module';
 
-            $lang_translator_save['author'] = isset($lang_translator['author']) ? strip_tags($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
-            $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? strip_tags($lang_translator['createdate']) : date('d/m/Y, H:i');
-            $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? strip_tags($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
-            $lang_translator_save['info'] = isset($lang_translator['info']) ? strip_tags($lang_translator['info']) : '';
+            $lang_translator_save['author'] = isset($lang_translator['author']) ? trim($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
+            $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? trim($lang_translator['createdate']) : date('d/m/Y, H:i');
+            $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? trim($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
+            $lang_translator_save['info'] = isset($lang_translator['info']) ? trim($lang_translator['info']) : '';
             $lang_translator_save['langtype'] = $langtype;
 
             $author = serialize($lang_translator_save);

@@ -8,7 +8,7 @@
  * @Createdate 05/07/2010 09:47
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -20,8 +20,8 @@ $module_version = array(
     'layoutdefault' => 'body:main,allreferers,allcountries,allbrowsers,allos,allbots',
     'is_sysmod' => 0,
     'virtual' => 2,
-    'version' => '4.2.00',
-    'date' => 'Sat, 22 Jul 2017 16:00:00 GMT',
-    'author' => 'VINADES (contact@vinades.vn)',
+    'version' => '4.2.01',
+    'date' => 'Sat, 5 Aug 2017 13:00:00 GMT',
+    'author' => 'VINADES <contact@vinades.vn>',
     'note' => ''
 );
