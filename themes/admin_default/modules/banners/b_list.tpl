@@ -8,7 +8,7 @@
 		<colgroup>
 			<col span="5">
 			<col class="w100">
-			<col class="w200">
+			<col class="w150">
 		</colgroup>
 		<thead>
 			<tr>
@@ -23,20 +23,18 @@
 				<!-- BEGIN: nv_banner_weight -->
 				<td>{ROW.weight}</td>
 				<!-- END: nv_banner_weight -->
-				<td>{ROW.title}</td>
+				<td><a href="{ROW.view}">{ROW.title}</a></td>
 				<td><a href="{ROW.pid.0}">{ROW.pid.1}</a></td>
-				<!-- BEGIN: t1 -->
-				<td><a href="{ROW.clid.0}">{ROW.clid.1}</a></td>
-				<!-- END: t1 -->
-				<!-- BEGIN: t2 -->
-				<td>&nbsp;</td>
-				<!-- END: t2 -->
+				<td>
+                    <!-- BEGIN: user -->
+                    <a href="{USER.link}">{USER.username}</a>
+                    <!-- END: user -->
+                </td>
 				<td>{ROW.publ_date}</td>
 				<td>{ROW.exp_date}</td>
 				<td class="text-center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
 				<td>
-					<em class="fa fa-search fa-lg">&nbsp;</em> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp;
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="{ROW.delfile}" id="delete_banners">{CONTENTS.del}</a>
 				</td>
 			</tr>

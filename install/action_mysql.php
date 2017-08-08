@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/28/2009 20:8
@@ -175,41 +175,19 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 	KEY click_os_key (click_os_key)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
-	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-	login varchar(60) NOT NULL,
-	pass varchar(200) NOT NULL,
-	reg_time int(11) unsigned NOT NULL DEFAULT '0',
-	full_name varchar(250) NOT NULL,
-	email varchar(100) NOT NULL,
-	website varchar(255) NOT NULL,
-	location varchar(255) NOT NULL,
-	yim varchar(100) NOT NULL,
-	phone varchar(100) NOT NULL,
-	fax varchar(100) NOT NULL,
-	mobile varchar(100) NOT NULL,
-	act tinyint(1) unsigned NOT NULL DEFAULT '0',
-	check_num varchar(40) NOT NULL,
-	last_login int(11) unsigned NOT NULL DEFAULT '0',
-	last_ip varchar(15) NOT NULL,
-	last_agent varchar(255) NOT NULL,
-	uploadtype varchar(255) NOT NULL,
-	PRIMARY KEY (id),
-	UNIQUE KEY login (login),
-	UNIQUE KEY email (email),
-	KEY full_name (full_name)
-) ENGINE=MyISAM";
-
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
 	title varchar(250) NOT NULL,
-	description text,    
+	description text,
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',
 	height smallint(4) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL DEFAULT '0',
 	require_image tinyint(1) unsigned NOT NULL DEFAULT '1',
+	uploadtype varchar(255) NOT NULL DEFAULT '',
+	uploadgroup varchar(255) NOT NULL DEFAULT '',
+	exp_time int(11) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (id),
 	KEY title (title)
 ) ENGINE=MyISAM";

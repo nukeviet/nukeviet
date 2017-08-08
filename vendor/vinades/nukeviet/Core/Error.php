@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 4/10/2010 19:43
@@ -113,6 +113,8 @@ class Error
         $this->month = date('m-Y', NV_CURRENTTIME);
 
         $ip = $this->get_Env('REMOTE_ADDR');
+        $this->ip = $ip;
+
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
         } else {
@@ -126,11 +128,10 @@ class Error
             }
             $ip2long = base_convert($r_ip, 2, 10);
         }
-
-        if ($ip2long === -1 and $ip2long === false) {
+        if ($ip2long === -1 or $ip2long === false) {
             exit(Error::INCORRECT_IP);
         }
-        $this->ip = $ip;
+
         $request = $this->get_request();
         if (!empty($request)) {
             $this->request = substr($request, 500);
@@ -354,6 +355,13 @@ class Error
         for ($i = 0; $i < $strlen; ++$i) {
             $strEncodedEmail .= "&#" . ord(substr($this->error_send_mail, $i)) . ";";
         }
+
+        header('Content-Type: text/html; charset=utf-8');
+        if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
+            Header('X-Frame-Options: SAMEORIGIN');
+        }
+        header('X-Content-Type-Options: nosniff');
+        header('X-XSS-Protection: 1; mode=block');
 
         $_info = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
         $_info .= "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";

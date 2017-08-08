@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @Language English
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -47,6 +47,8 @@ $lang_module['status_7'] = 'Checking for Approve';
 $lang_module['status_8'] = 'Send Publish';
 $lang_module['status_9'] = 'Reject Publish';
 $lang_module['status_10'] = 'Checking for Publish';
+$lang_module['status_12'] = 'Save articles, send admin';
+$lang_module['status_13'] = 'Save articles, send super admin';
 $lang_module['errorsave'] = 'Error: Update content fail, please check your article alias';
 $lang_module['errorexists'] = 'Error: The title or static link is duplicated, enter a different value';
 $lang_module['saveok'] = 'Update succesfully';

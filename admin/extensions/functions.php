@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 5:50
@@ -13,6 +13,9 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 }
 
 define('NV_IS_FILE_EXTENSIONS', true);
+
+//Document
+$array_url_instruction['manage'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:manage';
 
 $menu_top = array(
     'title' => $module_name,
