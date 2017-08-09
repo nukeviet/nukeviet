@@ -20,6 +20,12 @@ $menu_top = array(
 
 define('NV_IS_FILE_MODULES', true);
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:modules';
+$array_url_instruction['setup'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:setup';
+$array_url_instruction['vmodule'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:vmodule';
+$array_url_instruction['edit'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:edit';
+
 /**
  * nv_parse_vers()
  *

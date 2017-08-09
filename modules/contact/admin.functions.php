@@ -14,6 +14,13 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 
 //Tài liệu hướng dẫn
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact';
+$array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#nội_dung_thong_bao_tren_trang_lien_hệ';
+$array_url_instruction['supporter'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#hiển_thị_danh_sach_cac_nhan_vien_hỗ_trợ';
+$array_url_instruction['department'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#quản_ly_cac_bộ_phận';
+$array_url_instruction['send'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#gửi_phản_hồi';
+$array_url_instruction['supporter-content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#them_nhan_vien_hỗ_trợ';
+$array_url_instruction['row'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#them_bộ_phận';
+
 /**
  * nv_getAllowed()
  *

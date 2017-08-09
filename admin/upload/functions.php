@@ -20,6 +20,12 @@ $menu_top = array(
 
 define('NV_IS_FILE_ADMIN', true);
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload';
+$array_url_instruction['thumbconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:thumbconfig';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:config';
+$array_url_instruction['uploadconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:uploadconfig';
+
 $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo', 'cropimg', 'rotateimg', 'download' );
 
 if (defined('NV_IS_SPADMIN')) {

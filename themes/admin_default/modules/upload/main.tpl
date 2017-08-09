@@ -304,6 +304,7 @@ LANG.upload_delfile = "{LANG.upload_delfile}";
 LANG.createfolder = "{LANG.createfolder}";
 LANG.recreatethumb = "{LANG.recreatethumb}";
 LANG.recreatethumb_note = "{LANG.recreatethumb_note}";
+LANG.recreatethumb_result = "{LANG.recreatethumb_result}";
 LANG.renamefolder = "{LANG.renamefolder}";
 LANG.deletefolder = "{LANG.deletefolder}";
 LANG.delete_folder = "{LANG.delete_folder}";

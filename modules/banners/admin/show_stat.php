@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/18/2010 14:37
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ if ($client_info['is_myreferer'] != 1) {
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
@@ -51,23 +51,23 @@ $day_max = ($data_month == $current_month) ? $current_day : date('t', $time);
 $day_min = ($current_month == $publ_month and $current_year == $publ_year) ? $publ_day : 1;
 $maxday = mktime(24, 60, 60, $data_month, $day_max, $current_year);
 $minday = mktime(0, 0, 0, $data_month, $day_min, $current_year);
-$sum = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday)->fetchColumn();
+$sum = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday)->fetchColumn();
 
 $cts = array();
 
-$ext = in_array($nv_Request->get_string('ext', 'get', 'no'), array( 'country', 'browse', 'os' )) ? $nv_Request->get_string('ext', 'get') : 'day';
+$ext = in_array($nv_Request->get_string('ext', 'get', 'no'), array('country', 'browse', 'os')) ? $nv_Request->get_string('ext', 'get') : 'day';
 
 if ($ext == 'country') {
-    $sql = 'SELECT click_country FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
+    $sql = 'SELECT click_country FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
     $result = $db->query($sql);
     $unknown = 0;
 
-    if (! empty($result)) {
+    if (!empty($result)) {
         $result = $db->query($sql);
         $bd = array();
-        if (! empty($result)) {
+        if (!empty($result)) {
             while ($row = $result->fetch()) {
-                if (! isset($bd[$row['click_country']])) {
+                if (!isset($bd[$row['click_country']])) {
                     $bd[$row['click_country']] = 0;
                 }
                 $bd[$row['click_country']] = $bd[$row['click_country']] + 1;
@@ -85,7 +85,7 @@ if ($ext == 'country') {
             }
         }
 
-        if (! empty($unknown)) {
+        if (!empty($unknown)) {
             $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
             $cts[$key][0] = $lang_module['unknown'];
             $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
@@ -94,13 +94,13 @@ if ($ext == 'country') {
     }
     $caption = sprintf($lang_module['info_stat_bycountry_caption'], nv_monthname($data_month), $current_year);
 } elseif ($ext == 'browse') {
-    $sql = 'SELECT click_browse_name FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
+    $sql = 'SELECT click_browse_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
 
     $result = $db->query($sql);
     $bd = array();
-    if (! empty($result)) {
+    if (!empty($result)) {
         while ($row = $result->fetch()) {
-            if (! isset($bd[$row['click_browse_name']])) {
+            if (!isset($bd[$row['click_browse_name']])) {
                 $bd[$row['click_browse_name']] = 0;
             }
             $bd[$row['click_browse_name']] = $bd[$row['click_browse_name']] + 1;
@@ -117,7 +117,7 @@ if ($ext == 'country') {
             $unknown += $click_count;
         }
     }
-    if (! empty($unknown)) {
+    if (!empty($unknown)) {
         $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
         $cts[$key][0] = $lang_module['unknown'];
         $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
@@ -126,13 +126,13 @@ if ($ext == 'country') {
 
     $caption = sprintf($lang_module['info_stat_bybrowse_caption'], nv_monthname($data_month), $current_year);
 } elseif ($ext == 'os') {
-    $sql = 'SELECT click_os_name FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_os_name DESC';
+    $sql = 'SELECT click_os_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_os_name DESC';
     $result = $db->query($sql);
     $bd = array();
 
-    if (! empty($result)) {
+    if (!empty($result)) {
         while ($row = $result->fetch()) {
-            if (! isset($bd[$row['click_os_name']])) {
+            if (!isset($bd[$row['click_os_name']])) {
                 $bd[$row['click_os_name']] = 0;
             }
             $bd[$row['click_os_name']] = $bd[$row['click_os_name']] + 1;
@@ -158,11 +158,11 @@ if ($ext == 'country') {
         }
     }
 
-    if (! empty($robots)) {
+    if (!empty($robots)) {
         $cts = array_merge($cts, $robots);
     }
 
-    if (! empty($unknown)) {
+    if (!empty($unknown)) {
         $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
         $cts[$key][0] = $lang_module['unknown'];
         $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
@@ -171,13 +171,13 @@ if ($ext == 'country') {
 
     $caption = sprintf($lang_module['info_stat_byos_caption'], nv_monthname($data_month), $current_year);
 } else {
-    $sql = 'SELECT click_time FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_time DESC';
+    $sql = 'SELECT click_time FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_time DESC';
     $result = $db->query($sql);
     $bd = array();
 
-    if (! empty($result)) {
+    if (!empty($result)) {
         while ($row = $result->fetch()) {
-            if (! isset($bd[date('d', $row['click_time'])])) {
+            if (!isset($bd[date('d', $row['click_time'])])) {
                 $bd[date('d', $row['click_time'])] = 0;
             }
             $bd[date('d', $row['click_time'])] = $bd[date('d', $row['click_time'])] + 1;
@@ -195,7 +195,7 @@ if ($ext == 'country') {
     $caption = sprintf($lang_module['info_stat_byday_caption'], nv_monthname($data_month), $current_year);
 }
 
-$contents = nv_show_stat_theme(array( $caption, $sum, $cts ));
+$contents = nv_show_stat_theme(array($caption, $sum, $cts));
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
