@@ -113,6 +113,8 @@ class Error
         $this->month = date('m-Y', NV_CURRENTTIME);
 
         $ip = $this->get_Env('REMOTE_ADDR');
+        $this->ip = $ip;
+
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
         } else {
@@ -126,11 +128,10 @@ class Error
             }
             $ip2long = base_convert($r_ip, 2, 10);
         }
-
-        if ($ip2long === -1 and $ip2long === false) {
+        if ($ip2long === -1 or $ip2long === false) {
             exit(Error::INCORRECT_IP);
         }
-        $this->ip = $ip;
+
         $request = $this->get_request();
         if (!empty($request)) {
             $this->request = substr($request, 500);

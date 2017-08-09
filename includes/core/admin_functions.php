@@ -220,6 +220,16 @@ function nv_save_file_config_global()
         }
     }
 
+    // Các ngôn ngữ data đã thiết lập
+    $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1 ORDER BY weight ASC';
+    $result = $db->query($sql);
+
+    $c_config_value = array();
+    while ($row = $result->fetch()) {
+        $c_config_value[] = $row['lang'];
+    }
+    $content_config .= "\$global_config['setup_langs']=array('" . implode("','", $c_config_value) . "');\n";
+
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
         $allowed_html_tags = "'" . implode("','", array_map('trim', explode(',', $allowed_html_tags))) . "'";

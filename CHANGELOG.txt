@@ -1,7 +1,17 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.2.00 (Beta) - not yet released
+NUKEVIET 4.2.01
+- Module banners: Change upload dir, editor dir; move clients to users, banner plans: add config for group users, upload types, expiration date
+- Cache for load config theme
+- Check system support json, xml during operation
+- Fix lang for class Upload
+- Fix style of blockquote in ckeditor for Vietnamese
+- Module upload: Fix recreatthumb
+- Module users: Fix bug save registration information when validating by email
+- Add link to document page in admin
+
+NUKEVIET 4.2.00 (Beta)
 - Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard
 - CKEditor 4.7.1
 - Update Error Document

@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
+$lang_translator['author'] = '<contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -114,3 +114,21 @@ $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
 $lang_module['bannerhtml'] = 'Advertising content';
 $lang_module['assign_to_user'] = 'Assign to a user';
+$lang_module['require_image0'] = 'Textlink';
+$lang_module['require_image1'] = 'Image/Flash';
+$lang_module['act4'] = 'Queue';
+$lang_module['add_banner_client'] = 'Add banner for user &ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['assign_to_user_tip'] = 'Enter username or full name to search then select from the drop down list. To find the correct username, enter = in front. If left blank, the system will be automatically assigned to the admin';
+$lang_module['assign_to_user_err'] = 'Error: User %s doesn\'t exists';
+$lang_module['of_user'] = 'Poster';
+$lang_module['plan_uploadgroup'] = 'Group members are posted in site';
+$lang_module['plan_exp_time'] = 'The time each banner is displayed';
+$lang_module['plan_exp_time_note'] = 'Note: The time limit of ads in the plan applies to members posting ads or when administrators add ads without choosing the end time. Administrators can freely choose the end time of each ad without being bound by this value.';
+$lang_module['plan_exp_time_nolimit'] = 'No limit';
+$lang_module['plan_exp_time_custom'] = 'Custom value';
+$lang_module['plan_exp_time_d'] = '%s day(s)';
+$lang_module['plan_exp_time_w'] = '%s week(s)';
+$lang_module['plan_exp_time_m'] = '%s month(s) (%s day(s))';
+$lang_module['plan_exp_time_y'] = '%s year(s) (%s day(s))';
+$lang_module['exp_date_nochoose'] = 'Ads will always show if the date is not here';
+$lang_module['publ_time_info'] = 'The self-time system starts at the time of adding the ad if no date is selected here';

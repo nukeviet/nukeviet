@@ -8,7 +8,7 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -18,9 +18,9 @@ $module_version = array(
     'submenu' => '',
     'is_sysmod' => 0,
     'virtual' => 0,
-    'version' => '4.2.00',
-    'date' => 'Sat, 22 Jul 2017 16:00:00 GMT',
-    'author' => 'VINADES (contact@vinades.vn)',
+    'version' => '4.2.01',
+    'date' => 'Sat, 5 Aug 2017 13:00:00 GMT',
+    'author' => 'VINADES <contact@vinades.vn>',
     'uploads_dir' => array(),
     'note' => ''
 );

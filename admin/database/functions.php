@@ -34,6 +34,11 @@ unset($page_title, $select_options);
 
 define('NV_IS_FILE_DATABASE', true);
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database';
+$array_url_instruction['file'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database:file';
+$array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database:setting';
+
 function nv_show_tables()
 {
     global $db, $db_config, $lang_module, $module_name;
