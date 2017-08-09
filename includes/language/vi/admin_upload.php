@@ -153,6 +153,7 @@ $lang_module['thumb_type_1'] = 'resize ảnh theo chiều rộng';
 $lang_module['thumb_type_2'] = 'resize ảnh theo chiều cao';
 $lang_module['thumb_type_3'] = 'resize ảnh theo hai chiều';
 $lang_module['thumb_type_4'] = 'resize và crop ảnh theo kích thước';
+$lang_module['thumb_type_5'] = 'resize và crop top ảnh theo kích thước';
 $lang_module['thumb_quality'] = 'Chất lượng hình ảnh resize';
 $lang_module['thumb_dir'] = 'Thư mục';
 $lang_module['thumb_dir_default'] = 'Cấu hình mặc định';

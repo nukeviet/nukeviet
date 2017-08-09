@@ -607,6 +607,63 @@ class Image
      * @param mixed $newheight
      * @return
      */
+    public function cropFromTop($newwidth, $newheight)
+    {
+    	if (empty($this->error)) {
+    		if ($this->is_destroy) {
+    			$this->get_createImage();
+    		}
+
+    		$newwidth = intval($newwidth);
+    		$newheight = intval($newheight);
+    		if ($newwidth <= 0 or $newwidth >= $this->create_Image_info['width']) {
+    			$newwidth = $this->create_Image_info['width'];
+    		}
+    		if ($newheight <= 0 or $newheight >= $this->create_Image_info['height']) {
+    			$newheight = $this->create_Image_info['height'];
+    		}
+
+    		if ($newwidth < $this->create_Image_info['width'] or $newheight < $this->create_Image_info['height']) {
+    			$leftX = 0;
+    			$leftY = 0;
+    			$workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
+    			if ($workingImage != false) {
+    				$this->is_createWorkingImage = true;
+    				$this->set_memory_limit();
+
+    				$transparent_index = imagecolortransparent($this->createImage);
+    				if ($transparent_index >= 0) {
+    					$t_c = imagecolorsforindex($this->createImage, $transparent_index);
+    					$transparent_index = imagecolorallocate($workingImage, $t_c['red'], $t_c['green'], $t_c['blue']);
+    					if (false !== $transparent_index and imagefill($workingImage, 0, 0, $transparent_index)) {
+    						imagecolortransparent($workingImage, $transparent_index);
+    					}
+    				}
+
+    				if ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+    					if (imagealphablending($workingImage, false)) {
+    						$transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
+    						if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
+    							imagesavealpha($workingImage, true);
+    						}
+    					}
+    				}
+
+    				if (ImageCopyResampled($workingImage, $this->createImage, 0, 0, $leftX, $leftY, $newwidth, $newheight, $newwidth, $newheight)) {
+    					$this->createImage = $workingImage;
+    					$this->create_Image_info['width'] = $newwidth;
+    					$this->create_Image_info['height'] = $newheight;
+    				}
+    			}
+    		}
+    	}
+    }
+    /**
+     *
+     * @param mixed $newwidth
+     * @param mixed $newheight
+     * @return
+     */
     public function cropFromCenter($newwidth, $newheight)
     {
         if (empty($this->error)) {
