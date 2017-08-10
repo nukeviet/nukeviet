@@ -37,7 +37,8 @@ if (defined('NV_IS_SPADMIN')) {
         'reply',
         'del',
         'view',
-        'send'
+        'send',
+        'forward'
     );
 }
 
