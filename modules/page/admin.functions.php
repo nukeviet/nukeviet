@@ -19,8 +19,7 @@ $allow_func = array(
     'change_status',
     'change_weight',
     'del',
-    'view',
-    'config'
+    'view'
 );
 
 define('NV_IS_FILE_ADMIN', true);
