@@ -25,6 +25,10 @@ $allow_func = array(
 
 define('NV_IS_FILE_ADMIN', true);
 
+if (defined('NV_IS_SPADMIN')) {
+	$allow_func[] = 'config';
+}
+
 // Document
 $array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:about#them_bai_mới';
 $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:about#cấu_hinh';
