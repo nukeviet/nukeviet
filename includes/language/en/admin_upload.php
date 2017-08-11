@@ -150,6 +150,7 @@ $lang_module['thumb_type_1'] = 'resize according width';
 $lang_module['thumb_type_2'] = 'resize according height';
 $lang_module['thumb_type_3'] = 'resize according two dimensions';
 $lang_module['thumb_type_4'] = 'resize and crop image according size';
+$lang_module['thumb_type_5'] = 'Resize and crop top photos by size';
 $lang_module['thumb_quality'] = 'Resize image quality';
 $lang_module['thumb_dir'] = 'Folder';
 $lang_module['thumb_dir_default'] = 'Default configuration';
