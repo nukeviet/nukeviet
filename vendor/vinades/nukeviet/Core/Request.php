@@ -379,7 +379,7 @@ class Request
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
 
-        session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0, 1);
+        session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 1, 1);
 
         session_name($this->cookie_prefix . '_sess');
         session_start();
