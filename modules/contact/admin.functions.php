@@ -8,8 +8,38 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
+}
+
+if (defined('NV_IS_SPADMIN')) {
+    $allow_func = array(
+        'main',
+        'reply',
+        'send',
+        'del',
+        'department',
+        'row',
+        'del_department',
+        'content',
+        'view',
+        'change_status',
+        'change_weight',
+        'alias',
+        'change_default',
+        'supporter',
+        'supporter-content',
+        'forward'
+    );
+} else {
+    $allow_func = array(
+        'main',
+        'reply',
+        'del',
+        'view',
+        'send',
+        'forward'
+    );
 }
 
 //Tài liệu hướng dẫn
@@ -38,7 +68,7 @@ function nv_getAllowed()
 
     if (defined('NV_IS_SPADMIN')) {
         $contact_allowed['view'][0] = $lang_module['is_default'];
-        $contact_allowed['reply'][0] =$lang_module['is_default'];
+        $contact_allowed['reply'][0] = $lang_module['is_default'];
         $contact_allowed['obt'][0] = $lang_module['is_default'];
     }
 
@@ -60,13 +90,13 @@ function nv_getAllowed()
                 $admins2 = array_map('intval', explode('/', $a));
 
                 if ($admins2[0] == $admin_info['admin_id']) {
-                    if ($admins2[1] == 1 and ! isset($contact_allowed['view'][$id])) {
+                    if ($admins2[1] == 1 and !isset($contact_allowed['view'][$id])) {
                         $contact_allowed['view'][$id] = $row['full_name'];
                     }
-                    if ($admins2[2] == 1 and ! isset($contact_allowed['reply'][$id])) {
+                    if ($admins2[2] == 1 and !isset($contact_allowed['reply'][$id])) {
                         $contact_allowed['reply'][$id] = $row['full_name'];
                     }
-                    if ($admins2[3] == 1 and ! isset($contact_allowed['obt'][$id])) {
+                    if ($admins2[3] == 1 and !isset($contact_allowed['obt'][$id])) {
                         $contact_allowed['obt'][$id] = $row['full_name'];
                     }
                 }
