@@ -28,7 +28,7 @@ $editor = false;
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 
-$server_name = (isset($_SERVER['HTTP_HOST']) and ! empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+$server_name = trim((isset($_SERVER['HTTP_HOST']) and ! empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
 $server_name = preg_replace('/^[a-z]+\:\/\//i', '', $server_name);
 $server_name = preg_replace('/(\:[0-9]+)$/', '', $server_name);
 $server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($_SERVER['HTTPS'] == 'on') ? 's' : '');
