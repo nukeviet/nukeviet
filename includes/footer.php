@@ -55,7 +55,7 @@ if ($_SERVER['HTTPS'] != 'on') {
 
 foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
-    if (! isset($sys_info['server_headers'][$_key]) or strcasecmp($html_headers[$key], $sys_info['server_headers'][$_key]) != 0) {
+    if (! isset($sys_info['server_headers'][$_key])) {
         if (! is_array($value)) {
             $value = array($value);
         }
