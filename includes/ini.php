@@ -139,9 +139,11 @@ if ($iniSaveTime + 86400 < $ctime) {
     stream_context_set_default(array('http' => array('method' => "GET", 'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n")));
     $server_headers = get_headers(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
     unset($server_headers[0], $server_headers['Date'], $server_headers['Expires'], $server_headers['Last-Modified'], $server_headers['Connection'], $server_headers['Set-Cookie'], $server_headers['X-Page-Speed']);
-    $sys_info['server_headers'] = array_map('strtolower', $server_headers);
+    $sys_info['server_headers'] = array();
     $_temp = array();
-    foreach ($sys_info['server_headers'] as $k => $v) {
+    foreach ($server_headers as $k => $v) {
+        $k = strtolower($k);
+        $sys_info['server_headers'][$k] = $v;
         $_temp[] = "'" . $k . "'=>'" . $v . "'";
     }
     $_temp = implode(",", $_temp);
