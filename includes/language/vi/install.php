@@ -26,6 +26,7 @@ $lang_module['check_server'] = 'Kiểm tra máy chủ';
 $lang_module['check_chmod'] = 'Kiểm tra việc CHMOD';
 $lang_module['config_database'] = 'Cấu hình cơ sở dữ liệu';
 $lang_module['website_info'] = 'Thông tin website';
+$lang_module['sample_data'] = 'Dữ liệu mẫu';
 $lang_module['done'] = 'Kết thúc';
 $lang_module['select_lang_des'] = 'Hãy lựa chọn ngôn ngữ mà bạn dự định sử dụng trong site';
 $lang_module['choose_lang'] = 'Lựa chọn ngôn ngữ';

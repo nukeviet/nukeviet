@@ -38,12 +38,14 @@ if (is_file(NV_ROOTDIR . '/' . $file_config_temp)) {
     require_once NV_ROOTDIR . '/' . $file_config_temp;
 }
 
+$array_samples_data = nv_scandir(NV_ROOTDIR . '/install/samples', '/^data\_([a-z0-9]+)\.php$/');
+
 $contents = '';
 $step = $nv_Request->get_int('step', 'post,get', 1);
 
 $maxstep = $nv_Request->get_int('maxstep', 'session', 1);
 
-if ($step <= 0 or $step > 7) {
+if ($step <= 0 or $step > 8) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
 }
 
@@ -52,7 +54,7 @@ if ($step > $maxstep and $step > 2) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 }
 
-if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 7) {
+if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 8) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php');
 }
 if (empty($sys_info['supports_rewrite'])) {
@@ -695,8 +697,7 @@ if ($step == 1) {
             $db = $db_slave = new NukeViet\Core\Database($db_config);
             if (empty($db->connect)) {
                 $error = 'Sorry! Could not connect to data server';
-            }
-            else {
+            } else {
                 $check_login = nv_check_valid_login($array_data['nv_login'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
                 $check_pass = nv_check_valid_pass($array_data['nv_password'], $global_config['nv_upassmax'], $global_config['nv_upassmin']);
                 $check_email = nv_check_valid_email($array_data['nv_email']);
@@ -808,7 +809,8 @@ if ($step == 1) {
                         if (empty($rewrite[0])) {
                             $error .= sprintf($lang_module['file_not_writable'], $rewrite[1]);
                         } elseif (nv_save_file_config_global()) {
-                            ++ $step;
+                            // Nếu không có dữ liệu mẫu chuyển sang bước 8
+                            $step += (empty($array_samples_data) ? 2 : 1);
                             $nv_Request->set_Session('maxstep', $step);
 
                             nv_save_file_config();
@@ -927,6 +929,17 @@ if ($step == 1) {
     $lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
     $contents = nv_step_6($array_data, $nextstep);
 } elseif ($step == 7) {
+    // Nếu không có dữ liệu mẫu chuyển sang bước tiếp theo
+    if (empty($array_samples_data)) {
+        $step++;
+        $nv_Request->set_Session('maxstep', $step);
+        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+    }
+    $title = $lang_module['sample_data'];
+    $array_data = array();
+    $nextstep = 0;
+    $contents = nv_step_7($array_data, $nextstep);
+} elseif ($step == 8) {
     $finish = 0;
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME)) {
@@ -974,7 +987,7 @@ if ($step == 1) {
     }
 
     $title = $lang_module['done'];
-    $contents = nv_step_7($finish);
+    $contents = nv_step_8($finish);
 }
 
 echo nv_site_theme($step, $title, $contents);
