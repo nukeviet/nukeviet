@@ -283,6 +283,14 @@ div.step_content_title {
 	padding: 2px 5px
 }
 
+.checkbox {
+    vertical-align: middle;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    top: -1px;
+}
+
 .select {
 	padding: 1px
 }
