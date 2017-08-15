@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                 $store_table_name = preg_replace('/^' . nv_preg_quote($db_config['prefix']) . '\_/', '" . $db_config[\'prefix\'] . "_', $table['name']);
                 $content = '';
 
-                // Xóa bảng tạo lại nếu như bảng này không DROP
+                // Xóa bảng tạo lại
                 if (!in_array($table['name'], $array_ignore_drop)) {
                     $content = $db->query('SHOW CREATE TABLE ' . $table['name'])->fetchColumn(1);
                     $content = preg_replace('/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content);
@@ -174,22 +174,37 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                         $row['link'] = preg_replace('/^(' . nv_preg_quote(NV_BASE_SITEURL) . ')([a-zA-Z0-9\-]+)/', '{{NV_BASE_SITEURL}}\\2', $row['link']);
                                     }
                                 }
-                            } elseif (preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_menu\_rows$/', $table['name'])) {
-                                // Chỉnh lại các đường dẫn trong block config
-                                // Viết sau
-                            }
-                            if (isset($row['bodyhtml'])) {
-                                $row['bodyhtml'] = strtr($row['bodyhtml'], array(
-                                    "\r\n" => '',
-                                    "\r" => '',
-                                    "\n" => ''
-                                ));
-                            } elseif (isset($row['bodytext'])) {
-                                $row['bodytext'] = strtr($row['bodytext'], array(
-                                    "\r\n" => ' ',
-                                    "\r" => ' ',
-                                    "\n" => ' '
-                                ));
+                            } elseif (preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_blocks\_groups$/', $table['name'])) {
+                                // Các đường dẫn trong này không chỉnh được
+                            } else {
+                                // Chỉnh lại đường dẫn các module
+                                $array_mods_news = $array_mods_page = array();
+                                foreach ($site_mods as $mod) {
+                                    if ($mod['module_file'] == 'news') {
+                                        $array_mods_news[] = nv_preg_quote($mod['module_data']);
+                                    } elseif ($mod['module_file'] == 'page') {
+                                        $array_mods_page[] = nv_preg_quote($mod['module_data']);
+                                    }
+                                }
+                                if (!empty($array_mods_news) and preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_(' . implode('|', $array_mods_news) . ')\_detail$/', $table['name'])) {
+                                    if (isset($row['bodyhtml'])) {
+                                        $row['bodyhtml'] = strtr($row['bodyhtml'], array(
+                                            "\r\n" => '',
+                                            "\r" => '',
+                                            "\n" => ''
+                                        ));
+                                        $row['bodyhtml'] = preg_replace('/(href|src)[\s]*\=[\s]*("|\')(' . nv_preg_quote(NV_BASE_SITEURL) . ')([a-zA-Z0-9\-]+)/i', '\\1=\\2{{NV_BASE_SITEURL}}\\4', $row['bodyhtml']);
+                                    }
+                                } elseif (!empty($array_mods_page) and preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_(' . implode('|', $array_mods_page) . ')$/', $table['name'])) {
+                                    if (isset($row['bodytext'])) {
+                                        $row['bodytext'] = strtr($row['bodytext'], array(
+                                            "\r\n" => ' ',
+                                            "\r" => ' ',
+                                            "\n" => ' '
+                                        ));
+                                        $row['bodytext'] = preg_replace('/(href|src)[\s]*\=[\s]*("|\')(' . nv_preg_quote(NV_BASE_SITEURL) . ')([a-zA-Z0-9\-]+)/i', '\\1=\\2{{NV_BASE_SITEURL}}\\4', $row['bodytext']);
+                                    }
+                                }
                             }
                             $row2 = array();
                             foreach ($columns as $key => $kt) {

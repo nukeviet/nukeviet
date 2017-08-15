@@ -329,6 +329,7 @@ function nv_step_6($array_data, $nextstep)
  */
 function nv_step_7($array_data, $nextstep)
 {
+    // Chú ý không xóa global $db_config vì bên dưới có dùng khi require
     global $lang_module, $step, $array_samples_data, $db_config;
 
     $xtpl = new XTemplate('step7.tpl', NV_ROOTDIR . '/install/tpl');
