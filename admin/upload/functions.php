@@ -235,7 +235,7 @@ function nv_get_viewImage($fileName, $refresh = 0)
             }
         }
         $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-        if ($thumb_config['thumb_type'] == 4) {
+        if ($thumb_config['thumb_type'] == 4 || $thumb_config['thumb_type'] == 5) {
             $thumb_width = $thumb_config['thumb_width'];
             $thumb_height = $thumb_config['thumb_height'];
             $maxwh = max($thumb_width, $thumb_height);
@@ -247,10 +247,14 @@ function nv_get_viewImage($fileName, $refresh = 0)
                 $thumb_config['thumb_height'] = 0;
             }
         }
+
         if ($image->fileinfo['width'] > $thumb_config['thumb_width'] or $image->fileinfo['height'] > $thumb_config['thumb_height']) {
             $image->resizeXY($thumb_config['thumb_width'], $thumb_config['thumb_height']);
             if ($thumb_config['thumb_type'] == 4) {
                 $image->cropFromCenter($thumb_width, $thumb_height);
+            }
+            else if($thumb_config['thumb_type'] == 5) {
+            	$image->cropFromTop($thumb_width, $thumb_height);
             }
             $image->save(NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality']);
             $create_Image_info = $image->create_Image_info;

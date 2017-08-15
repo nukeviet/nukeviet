@@ -150,6 +150,7 @@ $lang_module['thumb_type_1'] = 'Re-dimensionner selon la larguer';
 $lang_module['thumb_type_2'] = 'Re-dimensionner selon la hauteur';
 $lang_module['thumb_type_3'] = 'Re-dimensionner selon deux directions';
 $lang_module['thumb_type_4'] = 'Re-dimensionner et couper l\'image selon les dimensions';
+$lang_module['thumb_type_5'] = 'Redimensionner et recadrer l\'image en taille supérieure';
 $lang_module['thumb_quality'] = 'Qualité de l\'image re-dimensionnée';
 $lang_module['thumb_dir'] = 'Dossier';
 $lang_module['thumb_dir_default'] = 'Configuration par défaut';
