@@ -8,35 +8,36 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_IS_MOD_PAGE')) {
+if (!defined('NV_IS_MOD_PAGE')) {
     die('Stop!!!');
 }
 
-$contents = '';
-if ($id) {
+if ($page_config['viewtype'] == 2) {
+    $contents = '';
+} elseif ($id) {
     // Xem theo bài viết
     $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url) . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
     if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
     } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-        if (! empty($array_op) and $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+        if (!empty($array_op) and $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
             nv_redirect_location($base_url_rewrite);
         }
         $canonicalUrl = $base_url_rewrite;
     }
 
-    if (! empty($rowdetail['image']) and ! nv_is_url($rowdetail['image'])) {
+    if (!empty($rowdetail['image']) and !nv_is_url($rowdetail['image'])) {
         $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
         $rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
         $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];
-		$meta_property['og:image'] = NV_MY_DOMAIN . $rowdetail['image'];
+        $meta_property['og:image'] = NV_MY_DOMAIN . $rowdetail['image'];
     }
     $rowdetail['add_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['add_time']);
     $rowdetail['edit_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['edit_time']);
 
     $module_info['layout_funcs'][$op_file] = !empty($rowdetail['layout_func']) ? $rowdetail['layout_func'] : $module_info['layout_funcs'][$op_file];
 
-    if (! empty($rowdetail['keywords'])) {
+    if (!empty($rowdetail['keywords'])) {
         $key_words = $rowdetail['keywords'];
     } else {
         $key_words = nv_get_keywords($rowdetail['bodytext']);
@@ -59,7 +60,12 @@ if ($id) {
 
     $related_articles = intval($page_config['related_articles']);
     if ($related_articles) {
-        $db_slave->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $module_data)->where('status=1 AND id !=' . $id)->order('weight ASC')->limit($related_articles);
+        $db_slave->sqlreset()
+            ->select('*')
+            ->from(NV_PREFIXLANG . '_' . $module_data)
+            ->where('status=1 AND id !=' . $id)
+            ->order('weight ASC')
+            ->limit($related_articles);
         $result = $db_slave->query($db_slave->sql());
         while ($_other = $result->fetch()) {
             $_other['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $_other['alias'] . $global_config['rewrite_exturl'];
@@ -69,10 +75,10 @@ if ($id) {
 
     // comment
     if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
-        define('NV_COMM_ID', $id);//ID bài viết
+        define('NV_COMM_ID', $id); //ID bài viết
         define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']);
         //check allow comemnt
-        $allowed = $module_config[$module_name]['allowed_comm'];//tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
+        $allowed = $module_config[$module_name]['allowed_comm']; //tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
         if ($allowed == '-1') {
             $allowed = $rowdetail['activecomm'];
         }
@@ -84,12 +90,12 @@ if ($id) {
     } else {
         $content_comment = '';
     }
-	$time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
-     if (empty($time_set)) {
-                $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
-                $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
-                $db->query($query);
-	 }
+    $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
+    if (empty($time_set)) {
+        $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
+        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
+        $db->query($query);
+    }
     $contents = nv_page_main($rowdetail, $other_links, $content_comment);
 } else {
     // Xem theo danh sách
@@ -99,10 +105,17 @@ if ($id) {
     $per_page = $page_config['per_page'];
 
     $array_data = array();
-    $db_slave->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_' . $module_data)->where('status=1');
-    $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
+    $db_slave->sqlreset()
+        ->select('COUNT(*)')
+        ->from(NV_PREFIXLANG . '_' . $module_data)
+        ->where('status=1');
+    $num_items = $db_slave->query($db_slave->sql())
+        ->fetchColumn();
 
-    $db_slave->select('*')->order('weight')->limit($per_page)->offset(($page - 1) * $per_page);
+    $db_slave->select('*')
+        ->order('weight')
+        ->limit($per_page)
+        ->offset(($page - 1) * $per_page);
 
     $result = $db_slave->query($db_slave->sql());
     while ($row = $result->fetch()) {
