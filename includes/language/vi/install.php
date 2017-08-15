@@ -270,3 +270,10 @@ $lang_module['thanks_list_member_all'] = 'Danh sách thành viên:';
 $lang_module['thanks_list_member_other_version'] = 'Danh sách các thành viên đã đóng góp theo từng phiên bản';
 $lang_module['thanks_other_version'] = 'Phiên bản';
 $lang_module['is_unofficial_mode'] = 'Chú ý: Đây là phiên bản dùng để phát triển và thử nghiệm, bạn không nên sử dụng để làm website chính thức';
+
+$lang_module['spdata_name'] = 'Tên gói dữ liệu';
+$lang_module['spdata_compatible'] = 'Gói dữ liệu mẫu này tương thích';
+$lang_module['spdata_incompatible'] = 'Gói dữ liệu mẫu này được xây dựng ở thư mục %s, việc cài đặt site ở thư mục %s sẽ khiến một số link không chính xác';
+$lang_module['spdata_root'] = 'gốc';
+$lang_module['spdata_note'] = 'Nhấp nút <strong>Cài đặt</strong> để cài gói dữ liệu mẫu tương ứng. Bạn cũng có thể bỏ qua các gói dữ liệu mẫu bằng cách nhấp nút <strong>Bước kế tiếp</strong>';
+$lang_module['spdata_choose'] = 'Cài đặt';

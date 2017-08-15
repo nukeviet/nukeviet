@@ -775,7 +775,7 @@ if ($step == 1) {
                                 $db->query("UPDATE " . $db_config['prefix'] . "_authors_module SET checksum = '" . $checksum . "' WHERE mid = " . $row['mid']);
                             }
 
-                            if (! (nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_function_exists('mime_content_type') or (substr($sys_info['os'], 0, 3) != 'WIN' and (nv_function_exists('system') or nv_function_exists('exec'))))) {
+                            if (!(nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_function_exists('mime_content_type') or (substr($sys_info['os'], 0, 3) != 'WIN' and (nv_function_exists('system') or nv_function_exists('exec'))))) {
                                 $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mild' WHERE lang='sys' AND module = 'global' AND config_name = 'upload_checking_mode'");
                             }
                             if (empty($array_data['lang_multi'])) {
@@ -814,8 +814,6 @@ if ($step == 1) {
                             $nv_Request->set_Session('maxstep', $step);
 
                             nv_save_file_config();
-
-                            @rename(NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME);
 
                             if (is_writable(NV_ROOTDIR . '/robots.txt')) {
                                 $contents = file_get_contents(NV_ROOTDIR . '/robots.txt');
@@ -929,18 +927,75 @@ if ($step == 1) {
     $lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
     $contents = nv_step_6($array_data, $nextstep);
 } elseif ($step == 7) {
+    $maxstep = 8;
+    $nv_Request->set_Session('maxstep', $maxstep);
+
     // Nếu không có dữ liệu mẫu chuyển sang bước tiếp theo
     if (empty($array_samples_data)) {
-        $step++;
-        $nv_Request->set_Session('maxstep', $step);
-        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
     }
+
+    if ($nv_Request->isset_request('package', 'get')) {
+        $package = $nv_Request->get_title('package', 'get', '');
+        if (!in_array('data_' . $package . '.php', $array_samples_data)) {
+            nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+        }
+        require NV_ROOTDIR . '/install/samples/data_' . $package . '.php';
+        $db = $db_slave = new NukeViet\Core\Database($db_config);
+        if (empty($db->connect)) {
+            die('Sorry! Could not connect to data server');
+        }
+        foreach ($sql_create_table as $sql) {
+            try {
+                $db->query($sql);
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+
+        define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
+
+        try {
+            nv_save_file_config_global();
+            $array_config_rewrite = array(
+                'rewrite_enable' => $global_config['rewrite_enable'],
+                'rewrite_optional' => $global_config['rewrite_optional'],
+                'rewrite_endurl' => $global_config['rewrite_endurl'],
+                'rewrite_exturl' => $global_config['rewrite_exturl'],
+                'rewrite_op_mod' => $global_config['rewrite_op_mod'],
+                'ssl_https' => 0
+            );
+            $sql = "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global' AND config_name IN('" . implode("', '", array_keys($array_config_rewrite)) . "')";
+            $result = $db->query($sql);
+            while ($row = $result->fetch()) {
+                $array_config_rewrite[$row['config_name']] = $row['config_value'];
+            }
+            nv_rewrite_change($array_config_rewrite);
+        } catch (PDOException $e) {
+            echo'<pre>';
+            print_r($e);
+            echo'</pre>';
+            die();
+        }
+
+        $nv_Cache->delAll();
+        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
+    }
+
     $title = $lang_module['sample_data'];
     $array_data = array();
-    $nextstep = 0;
+    $nextstep = 1;
     $contents = nv_step_7($array_data, $nextstep);
 } elseif ($step == 8) {
     $finish = 0;
+
+    if (file_exists(NV_ROOTDIR . '/' . $file_config_temp)) {
+        @rename(NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME);
+        //Resets the contents of the opcode cache
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+    }
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME)) {
         $ftp_check_login = 0;
@@ -1015,9 +1070,8 @@ function nv_save_file_config()
         $content = '';
         $content .= "<?php\n\n";
         $content .= NV_FILEHEAD . "\n\n";
-        $content .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
-        $content .= "{\n";
-        $content .= "\tdie( 'Stop!!!' );\n";
+        $content .= "if (!defined('NV_MAINFILE')) {\n";
+        $content .= "    die('Stop!!!');\n";
         $content .= "}\n\n";
         $content .= "\$db_config['dbhost'] = '" . $db_config['dbhost'] . "';\n";
         $content .= "\$db_config['dbport'] = '" . $db_config['dbport'] . "';\n";

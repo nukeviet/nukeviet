@@ -70,7 +70,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
     $xtpl->assign('LANGNAMESL', $langname);
 
     foreach ($languageslist as $languageslist_i) {
-        if (! empty($languageslist_i) and (NV_LANG_DATA != $languageslist_i)) {
+        if (!empty($languageslist_i) and (NV_LANG_DATA != $languageslist_i)) {
             $xtpl->assign('LANGTYPE', $languageslist_i);
             $langname = $language_array[$languageslist_i]['name'];
             $xtpl->assign('LANGNAME', $langname);
@@ -329,7 +329,7 @@ function nv_step_6($array_data, $nextstep)
  */
 function nv_step_7($array_data, $nextstep)
 {
-    global $lang_module, $step;
+    global $lang_module, $step, $array_samples_data, $db_config;
 
     $xtpl = new XTemplate('step7.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
@@ -337,8 +337,27 @@ function nv_step_7($array_data, $nextstep)
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('DATA', $array_data);
-    $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-    $xtpl->assign('CHECK_LANG_MULTI', ($array_data['lang_multi']) ? ' checked="checked"' : '');
+
+    foreach ($array_samples_data as $data) {
+        require NV_ROOTDIR . '/install/samples/' . $data;
+        unset($sql_create_table);
+        $data = substr(substr($data, 0, -4), 5);
+        $row = array(
+            'url' => $sample_base_siteurl,
+            'compatible' => $sample_base_siteurl == NV_BASE_SITEURL ? true : false,
+            'title' => $data,
+            'link' => NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=' . $step . '&amp;package=' . $data . '&amp;s=' . NV_CHECK_SESSION
+        );
+        $xtpl->assign('ROW', $row);
+
+        if ($row['compatible']) {
+            $xtpl->assign('MESSAGE', $lang_module['spdata_compatible']);
+        } else {
+            $xtpl->assign('MESSAGE', sprintf($lang_module['spdata_incompatible'], ($row['url'] == '/' ? $lang_module['spdata_root'] : trim($row['url'], '/')), (NV_BASE_SITEURL == '/' ? $lang_module['spdata_root'] : trim(NV_BASE_SITEURL, '/'))));
+        }
+
+        $xtpl->parse('step.loop');
+    }
 
     if (!empty($array_data['error'])) {
         $xtpl->parse('step.errordata');
