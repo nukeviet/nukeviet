@@ -230,7 +230,7 @@ class Request
         if (! empty($doc_root)) {
             $doc_root = preg_replace('/[\/]+$/', '', $doc_root);
         }
-        
+
         if (defined('NV_BASE_SITEURL')) {
             $base_siteurl = preg_replace('/[\/]+$/', '', NV_BASE_SITEURL);
         } else {
@@ -251,7 +251,7 @@ class Request
                 $base_siteurl = preg_replace('#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl);
             } elseif (defined('NV_IS_UPDATE')) {
                 // Update se bao gom ca admin nen update phai dat truoc
-    
+
                 $base_siteurl = preg_replace('#/install(.*)$#', '', $base_siteurl);
             } elseif (defined('NV_ADMIN')) {
                 $base_siteurl = preg_replace('#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl);
@@ -259,7 +259,7 @@ class Request
                 $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
             }
         }
-        
+
         if (NV_ROOTDIR !== $doc_root . $base_siteurl) {
             $doc_root = NV_ROOTDIR;
             $count = substr_count($base_siteurl, '/');
@@ -293,7 +293,7 @@ class Request
         } else {
             $this->server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
         }
-        
+
         if (defined('NV_MY_DOMAIN')) {
             $this->my_current_domain = NV_MY_DOMAIN;
         } else {
@@ -401,7 +401,7 @@ class Request
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
 
-        session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 1, 1);
+        session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0, 1);
 
         session_name($this->cookie_prefix . '_sess');
         session_start();
