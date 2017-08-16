@@ -9,6 +9,10 @@
  * @Createdate 31/05/2010, 00:36
  */
 
+if (isset($_GET['response_headers_detect'])) {
+    exit(0);
+}
+
 define('NV_SYSTEM', true);
 
 // Xac dinh thu muc goc cua site
