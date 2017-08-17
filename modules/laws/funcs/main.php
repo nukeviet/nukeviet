@@ -30,13 +30,8 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 }
 
 if (empty($contents)) {
-    if (in_array($nv_laws_setting['typeview'], array(
-        0,
-        1,
-        3,
-        4
-    ))) // Hien thi danh sach van ban
-{
+    if ($nv_laws_setting['typeview'] != 2) {
+        // Hien thi danh sach van ban
         $order = ($nv_laws_setting['typeview'] == 1 or $nv_laws_setting['typeview'] == 4) ? "ASC" : "DESC";
         $order_param = ($nv_laws_setting['typeview'] == 0 or $nv_laws_setting['typeview'] == 1) ? "publtime" : "addtime";
         
@@ -83,8 +78,8 @@ if (empty($contents)) {
             $array_data[] = $row;
         }
         $contents = nv_theme_laws_main($array_data, $generate_page);
-    } elseif ($nv_laws_setting['typeview'] == 2) // Hien thi theo phan muc
-{
+    } else {
+        // Hien thi theo phan muc
         if (!empty($nv_laws_listsubject)) {
             foreach ($nv_laws_listsubject as $subjectid => $subject) {
                 $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $subjectid . ' ORDER BY addtime DESC LIMIT ' . $subject['numlink']);

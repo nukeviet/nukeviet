@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
@@ -13,7 +13,6 @@ if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
-//
 $per_page = $nv_laws_setting['numsub'];
 
 $array_search = array();
@@ -149,8 +148,11 @@ $all_page = $db->query($db->sql())
 
 $array_data = array();
 
+$_order = ($nv_laws_setting['typeview'] == 1 or $nv_laws_setting['typeview'] == 4) ? 'ASC' : 'DESC';
+$_order_param = ($nv_laws_setting['typeview'] == 0 or $nv_laws_setting['typeview'] == 1) ? 'publtime' : 'addtime';
+
 $db->select('*')
-    ->order('addtime ' . ($nv_laws_setting['typeview'] ? "ASC" : "DESC"))
+    ->order($_order_param . ' ' . $_order)
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
 
@@ -166,7 +168,7 @@ while ($row = $result->fetch()) {
     $row['areatitle'] = !empty($row['areatitle']) ? implode(', ', $row['areatitle']) : '';
     $row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
     $row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
-    $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
+    $row['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $row['alias'];
     $row['stt'] = $number++;
     
     $array_data[] = $row;
