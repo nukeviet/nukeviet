@@ -13,9 +13,9 @@ if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
 $id = isset($array_op[1]) ? intval($array_op[1]) : 0;
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_signer WHERE id=' . $id;
-$result = $db->query( $sql );
+$result = $db->query($sql);
 $signer = $result->fetch();
-if( empty( $signer ) ){
+if (empty($signer)) {
     Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     exit();
 }

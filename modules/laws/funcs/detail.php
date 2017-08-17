@@ -8,8 +8,7 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
 
 $lawalias = $alias = isset($array_op[1]) ? $array_op[1] : '';
 
@@ -31,7 +30,7 @@ if (($row = $result->fetch()) === false) {
 
 $row['aid'] = array();
 $result = $db->query('SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id']);
-while (list($area_id) = $result->fetch(3)) {
+while (list ($area_id) = $result->fetch(3)) {
     $row['aid'][] = $area_id;
 }
 
@@ -41,19 +40,19 @@ if (!nv_user_in_groups($row['groups_view'])) {
 
 if ($nv_Request->isset_request('download', 'get')) {
     $fileid = $nv_Request->get_int('id', 'get', 0);
-
+    
     $row['files'] = explode(',', $row['files']);
-
+    
     if (!isset($row['files'][$fileid])) {
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
         exit();
     }
-
+    
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
         exit();
     }
-
+    
     // Update download
     $lawsdownloaded = $nv_Request->get_string('lawsdownloaded', 'session', '');
     $lawsdownloaded = !empty($lawsdownloaded) ? unserialize($lawsdownloaded) : array();
@@ -64,7 +63,7 @@ if ($nv_Request->isset_request('download', 'get')) {
         $lawsdownloaded = serialize($lawsdownloaded);
         $nv_Request->set_Session('lawsdownloaded', $lawsdownloaded);
     }
-
+    
     $file_info = pathinfo(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid]);
     $download = new NukeViet\Files\Download(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true);
     $download->download_file();
@@ -73,13 +72,13 @@ if ($nv_Request->isset_request('download', 'get')) {
 
 if ($nv_Request->isset_request('pdf', 'get')) {
     $fileid = $nv_Request->get_int('id', 'get', 0);
-
+    
     $row['files'] = explode(',', $row['files']);
-
+    
     if (!isset($row['files'][$fileid])) {
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
-
+    
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
@@ -98,7 +97,7 @@ if (!empty($row['replacement'])) {
     $sql = 'SELECT title, alias, code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id IN(' . $row['replacement'] . ')';
     $result = $db->query($sql);
     $row['replacement'] = array();
-    while (list($_title, $_alias, $_code) = $result->fetch(3)) {
+    while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
         $row['replacement'][] = array(
             'title' => $_title,
             'code' => $_code,
@@ -111,7 +110,7 @@ if (!empty($row['replacement'])) {
 $row['unreplacement'] = array();
 $sql = 'SELECT b.title, b.alias, b.code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_set_replace AS a INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_row AS b ON a.oid=b.id WHERE a.nid=' . $row['id'];
 $result = $db->query($sql);
-while (list($_title, $_alias, $_code) = $result->fetch(3)) {
+while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
     $row['unreplacement'][] = array(
         'title' => $_title,
         'code' => $_code,
@@ -124,7 +123,7 @@ if (!empty($row['relatement'])) {
     $sql = 'SELECT title, alias, code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id IN(' . $row['relatement'] . ')';
     $result = $db->query($sql);
     $row['relatement'] = array();
-    while (list($_title, $_alias, $_code) = $result->fetch(3)) {
+    while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
         $row['relatement'][] = array(
             'title' => $_title,
             'code' => $_code,
@@ -137,7 +136,7 @@ if (!empty($row['relatement'])) {
 if (!empty($row['sgid'])) {
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_signer WHERE id = ' . $row['sgid'];
     $result = $db->query($sql);
-    list($row['signer']) = $result->fetch(3);
+    list ($row['signer']) = $result->fetch(3);
     $row['signer_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=signer/' . $row['sgid'] . '/' . change_alias($row['signer']);
 }
 
@@ -146,7 +145,7 @@ if (!empty($row['files'])) {
     $row['files'] = explode(',', $row['files']);
     $files = $row['files'];
     $row['files'] = array();
-
+    
     foreach ($files as $id => $file) {
         $file_title = basename($file);
         $row['files'][] = array(
@@ -186,7 +185,7 @@ if ($nv_laws_setting['detail_other']) {
             $other_cat[$data['id']] = $data;
         }
     }
-
+    
     if (in_array('area', $nv_laws_setting['detail_other'])) {
         $_row_aid = implode(',', $row['aid']);
         $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_row_area t2 ON t1.id=t2.row_id WHERE t2.area_id IN (' . $_row_aid . ') AND t1.id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks']);
@@ -195,7 +194,7 @@ if ($nv_laws_setting['detail_other']) {
             $other_area[$data['id']] = $data;
         }
     }
-
+    
     if (in_array('subject', $nv_laws_setting['detail_other'])) {
         $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $row['sid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks']);
         while ($data = $result->fetch()) {
@@ -203,7 +202,7 @@ if ($nv_laws_setting['detail_other']) {
             $other_subject[$data['id']] = $data;
         }
     }
-
+    
     if (in_array('singer', $nv_laws_setting['detail_other'])) {
         $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sgid=' . $row['sgid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks']);
         while ($data = $result->fetch()) {

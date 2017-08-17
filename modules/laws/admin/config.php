@@ -8,8 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $page_title = $lang_module['config'];
 
@@ -29,16 +28,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['detail_show_link_subject'] = $nv_Request->get_int('detail_show_link_subject', 'post', 0);
     $array_config['detail_show_link_signer'] = $nv_Request->get_int('detail_show_link_signer', 'post', 0);
     $array_config['detail_pdf_quick_view'] = $nv_Request->get_int('detail_pdf_quick_view', 'post', 0);
-
+    
     $sth = $db->prepare("UPDATE " . NV_PREFIXLANG . '_' . $module_data . "_config SET config_value = :config_value WHERE config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
-
+    
     $nv_Cache->delMod($module_name);
-
+    
     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
     die();
 }
@@ -58,7 +57,7 @@ $array_config['detail_pdf_quick_view'] = 0;
 
 $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 $result = $db->query($sql);
-while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
+while (list ($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
 
@@ -102,8 +101,8 @@ foreach ($array_other as $key => $value) {
     $xtpl->assign('OTHER', array(
         'key' => $key,
         'value' => $value,
-        'checked' => $ck)
-    );
+        'checked' => $ck
+    ));
     $xtpl->parse('main.detail_other');
 }
 

@@ -8,10 +8,10 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!nv_function_exists('nv_law_block_newg')) {
+
     /**
      * nv_block_config_new_laws()
      * 
@@ -61,7 +61,7 @@ if (!nv_function_exists('nv_law_block_newg')) {
         $ck = $data_block['duplicated'] ? 'checked="checked"' : '';
         $html .= '<td><input type="checkbox" name="config_duplicated" value="1" ' . $ck . ' /></td>';
         $html .= '</tr>';
-
+        
         $html .= '<tr>';
         $html .= '<td>' . $lang_block['order'] . '</td>';
         $html .= '<td><select name="config_order" class="form-control">';
@@ -111,35 +111,35 @@ if (!nv_function_exists('nv_law_block_newg')) {
     function nv_law_block_newg($block_config)
     {
         global $module_info, $lang_module, $global_config, $site_mods, $db, $my_head, $module_name, $nv_laws_listcat, $nv_Cache;
-
+        
         $module = $block_config['module'];
         $data = $site_mods[$module]['module_data'];
         $modfile = $site_mods[$module]['module_file'];
-
+        
         $numrow = (isset($block_config['numrow'])) ? $block_config['numrow'] : 10;
         $title_length = (isset($block_config['title_length'])) ? $block_config['title_length'] : 0;
         $show_code = (isset($block_config['show_code'])) ? $block_config['show_code'] : 1;
-
+        
         $order = ($block_config['order'] == 2 or $block_config['order'] == 4) ? "ASC" : "DESC";
         $order_param = ($block_config['order'] == 1 or $block_config['order'] == 2) ? "publtime" : "addtime";
-
+        
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $data . '_row WHERE status=1 ORDER BY ' . $order_param . ' ' . $order . ' LIMIT 0,' . $numrow;
         $result = $db->query($sql);
         $numrow = $result->rowCount();
-
+        
         if (!empty($numrow)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $modfile . '/block_new_law.tpl')) {
                 $block_theme = $global_config['module_theme'];
             } else {
                 $block_theme = 'default';
             }
-
+            
             if ($module_name != $module) {
                 $sql = "SELECT id, parentid, alias, title, introduction, keywords, newday FROM " . NV_PREFIXLANG . "_" . $data . "_cat ORDER BY parentid,weight ASC";
                 $nv_laws_listcat = $nv_Cache->db($sql, 'id', $module);
-
+                
                 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/css/laws.css\" />";
-
+                
                 $temp_lang_module = $lang_module;
                 $lang_module = array();
                 include NV_ROOTDIR . '/modules/' . $site_mods[$module]['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php';
@@ -148,38 +148,38 @@ if (!nv_function_exists('nv_law_block_newg')) {
             } else {
                 $lang_block_module = $lang_module;
             }
-
+            
             $xtpl = new XTemplate('block_new_law.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $modfile);
             $xtpl->assign('LANG', $lang_block_module);
             $xtpl->assign('TEMPLATE', $block_theme);
-
+            
             while ($row = $result->fetch()) {
                 $newday = $row['publtime'] + (86400 * $nv_laws_listcat[$row['cid']]['newday']);
-
+                
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module]['alias']['detail'] . '/' . $row['alias'];
                 $row['link'] = $link;
-
+                
                 if ($title_length > 0) {
                     $row['stitle'] = nv_clean60($row['title'], $title_length);
                 } else {
                     $row['stitle'] = $row['title'];
                 }
-
+                
                 $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-
+                
                 $xtpl->assign('ROW', $row);
-
+                
                 if ($show_code) {
                     $xtpl->parse('main.loop.code');
                 }
-
+                
                 if ($newday >= NV_CURRENTTIME) {
                     $xtpl->parse('main.loop.newday');
                 }
-
+                
                 $xtpl->parse('main.loop');
             }
-
+            
             if ($block_config['direction'] != 'none') {
                 $block_config['pauseOnHover'] = $block_config['pauseOnHover'] ? 'true' : 'false';
                 $block_config['duplicated'] = $block_config['duplicated'] ? 'true' : 'false';
@@ -187,7 +187,7 @@ if (!nv_function_exists('nv_law_block_newg')) {
                 $xtpl->parse('main.marquee_data');
                 $xtpl->parse('main.marquee_js');
             }
-
+            
             $xtpl->parse('main');
             return $xtpl->text('main');
         }
