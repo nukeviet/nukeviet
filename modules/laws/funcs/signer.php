@@ -12,7 +12,10 @@ if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
 
 $id = isset($array_op[1]) ? intval($array_op[1]) : 0;
 
-if (empty($id)) {
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_signer WHERE id=' . $id;
+$result = $db->query( $sql );
+$signer = $result->fetch();
+if( empty( $signer ) ){
     Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     exit();
 }
@@ -27,8 +30,7 @@ $base_url_rewrite = nv_url_rewrite($base_url, true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    //chuyen huong neu doi alias
-    header('HTTP/1.1 301 Moved Permanently');
+    http_response_code(301);
     Header('Location: ' . $base_url_rewrite);
     die();
 } else {
