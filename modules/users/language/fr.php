@@ -135,7 +135,7 @@ $lang_module['pass_new'] = 'Nouveau mot de passe';
 $lang_module['pass_new_re'] = 'Confirmer le nouveau mot de passe';
 $lang_module['change_pass_ok'] = 'Le mot de passe a été changé avec succès';
 $lang_module['lostpass_email_subject'] = 'Guide de rechercher le mot de passe du site %s';
-$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />Email: %5$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
+$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you will need to enter the verification code below in the corresponding box at the password change area.<br /><br />Verification code: <strong>%3$s</strong><br /><br />This code is only used once and before the deadline of %4$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
 $lang_module['lostpass_content_mess'] = 'Nous vous envoyons dans votre e-mail %1$s les informations,<br /><br /> vous suivez le guide pour activer votre compte. Si vous ne trouvez pas le mail dans votre boite à lettre, veuillez vérifier le dossier Spam';
 $lang_module['lostpass_active_error'] = 'Code de certifier n\'est pas bon';
 $lang_module['lostpass_newpass_mess'] = 'Saisir votre mot de passe dans cette case';
