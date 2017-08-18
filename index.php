@@ -84,9 +84,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     if (isset($site_mods[$module_name])) {
         // SSL
         if ($global_config['ssl_https'] === 3 and !empty($global_config['ssl_https_modules']) and in_array($module_name, $global_config['ssl_https_modules']) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-            exit(0);
+            nv_redirect_location("https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
         }
 
         // Global variable for module

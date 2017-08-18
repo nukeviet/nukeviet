@@ -593,3 +593,12 @@ $(document).ready(function(){
         $($(this).data('target')).val(nv_randomPassword(10));
     });
 });
+
+function nv_sort_content(id, w) {
+    $("#order_articles").dialog("open");
+    $("#order_articles_title").text($("#id_" + id).attr("title"));
+    $("#order_articles_id").val(id, w);
+    $("#order_articles_number").val(w);
+    $("#order_articles_new").val(w);
+    return false;
+}
