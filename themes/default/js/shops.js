@@ -1,9 +1,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * @Createdate 04/18/2017 09:47
  */
 
 function sendrating(id, point, newscheckss)
@@ -394,7 +394,7 @@ function fix_image_content(){
 	}
 }
 
-$(window).load(function(){
+$(window).on('load', function(){
 	fix_image_content();
 });
 

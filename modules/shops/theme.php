@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 04 May 2014 12:41:32 GMT
+ * @Createdate 04/18/2017 09:47
  */
 
 if (!defined('NV_IS_MOD_SHOPS')) {
@@ -1203,14 +1203,13 @@ function viewcat_page_list($data_content, $compare_id, $pages, $sort = 0, $viewt
             if (defined('NV_IS_MODADMIN')) {
                 $xtpl->assign('ADMINLINK', nv_link_edit_page($data_row['id']) . '&nbsp;-&nbsp;' . nv_link_delete_page($data_row['id']));
                 $xtpl->parse('main.row.adminlink');
-            } else {
-                if ($pro_config['show_compare'] == 1) {
-                    if (!empty($compare_id)) {
-                        $ch = (in_array($data_row['id'], $compare_id)) ? ' checked="checked"' : '';
-                        $xtpl->assign('ch', $ch);
-                    }
-                    $xtpl->parse('main.row.compare');
+            }
+            if ($pro_config['show_compare'] == 1) {
+                if (!empty($compare_id)) {
+                    $ch = (in_array($data_row['id'], $compare_id)) ? ' checked="checked"' : '';
+                    $xtpl->assign('ch', $ch);
                 }
+                $xtpl->parse('main.row.compare');
             }
 
             if ($data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice']) {
@@ -1666,6 +1665,8 @@ function cart_product($data_content, $coupons_code, $order_info, $array_error_nu
             $xtpl->assign('pro_num', $data_row['num']);
             $xtpl->assign('link_remove', $data_row['link_remove']);
             $xtpl->assign('product_unit', $data_row['product_unit']);
+			$xtpl->assign( 'list_group', $data_row['group'] );
+			$xtpl->assign( 'list_group_id', str_replace(',', '_', $data_row['group']) );
 
             // Tinh diem tich luy
             if ($pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and ($global_array_shops_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_shops_cat[$data_row['listcatid']]['cat_number_product'])) {

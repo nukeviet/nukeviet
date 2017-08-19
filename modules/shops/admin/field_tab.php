@@ -3,10 +3,11 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Fri, 29 May 2015 09:00:55 GMT
+ * @Createdate 04/18/2017 09:47
  */
+ 
 if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }

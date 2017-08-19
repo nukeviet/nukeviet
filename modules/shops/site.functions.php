@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 04 May 2014 12:41:32 GMT
+ * @Createdate 04/18/2017 09:47
  */
 
 if (!defined('NV_MAINFILE')) {
@@ -326,7 +326,7 @@ function nv_shipping_price($weight, $weight_unit, $location_id, $shops_id, $carr
         foreach ($array_weight_config as $weight_config) {
             foreach ($weight_config as $config) {
                 $config['weight'] = nv_weight_conversion($config['weight'], $config['weight_unit'], $weight_unit);
-                if ($weight < $config['weight']) {
+                if ($weight <= $config['weight']) {
                     $price = nv_currency_conversion($config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit']);
                     break;
                 } else {

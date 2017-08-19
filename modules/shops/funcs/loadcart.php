@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * @Createdate 04/18/2017 09:47
  */
 
 if (! defined('NV_IS_MOD_SHOPS')) {
@@ -45,6 +45,8 @@ if ($coupons_load) {
 
 if (! empty($_SESSION[$module_data . '_cart'])) {
     foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
+    	$array=explode('_', $pro_id);
+		$pro_id	=$array[0];
         $price = nv_get_price($pro_id, $pro_config['money_unit'], $info['num']);
         // Ap dung giam gia cho tung san pham dac biet
         if (!empty($counpons['product'])) {
