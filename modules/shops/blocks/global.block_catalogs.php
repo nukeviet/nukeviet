@@ -67,8 +67,8 @@ if (! function_exists('nv_pro_catalogs')) {
         $array_cat_shops = array();
 
         $block_tpl_name = "block.catalogsv.tpl";
-        if (file_exists(NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $mod_file . "/" . $block_tpl_name)) {
-            $block_theme = $global_config['site_theme'];
+        if (file_exists(NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $mod_file . "/" . $block_tpl_name)) {
+            $block_theme = $global_config['module_theme'];
         } else {
             $block_theme = "default";
         }

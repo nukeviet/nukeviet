@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
- 
+
 if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -108,8 +108,8 @@ if (! nv_function_exists('nv_relates_product')) {
         $mod_data = $site_mods[$module]['module_data'];
         $mod_file = $site_mods[$module]['module_file'];
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $mod_file . '/block.others_product.tpl')) {
-            $block_theme = $global_config['site_theme'];
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block.others_product.tpl')) {
+            $block_theme = $global_config['module_theme'];
         } else {
             $block_theme = 'default';
         }
@@ -215,7 +215,7 @@ if (! nv_function_exists('nv_relates_product')) {
             } else {
                 // no image
 
-                $src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
+                $src_img = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/shops/no-image.jpg';
             }
 
             $xtpl->assign('id', $row['id']);
