@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -18,8 +18,8 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
 
 $iniSaveTime = 0;
 $ctime = time();
-$ini_default_list = ini_get_all(null, false);
-$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini. ' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', $server_name) . '.php';
+$ini_list = ini_get_all(null, false);
+$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', $server_name) . '.php';
 @include_once $config_ini_file;
 if ($iniSaveTime + 86400 < $ctime) {
     $content_config = "<?php" . "\n\n";
@@ -28,17 +28,17 @@ if ($iniSaveTime + 86400 < $ctime) {
 
     //disable_classes
     $sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
-    $content_config .= "\$sys_info['disable_classes']=array(" . ((! empty($sys_info['disable_classes'])) ? "'" . implode("','", $sys_info['disable_classes']) . "'" : "") . ");\n";
+    $content_config .= "\$sys_info['disable_classes']=array(" . ((!empty($sys_info['disable_classes'])) ? "'" . implode("','", $sys_info['disable_classes']) . "'" : "") . ");\n";
 
     //disable_functions
     $sys_info['disable_functions'] = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
     if (extension_loaded('suhosin')) {
         $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
     }
-    $content_config .= "\$sys_info['disable_functions']=array(" . ((! empty($sys_info['disable_functions'])) ? "'" . implode("','", $sys_info['disable_functions']) . "'" : "") . ");\n";
+    $content_config .= "\$sys_info['disable_functions']=array(" . ((!empty($sys_info['disable_functions'])) ? "'" . implode("','", $sys_info['disable_functions']) . "'" : "") . ");\n";
 
     //ini_set_support
-    $sys_info['ini_set_support'] = (function_exists('ini_set') and ! in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
+    $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
     $content_config .= "\$sys_info['ini_set_support']= " . ($sys_info['ini_set_support'] ? "true" : "false") . ";\n";
 
     //Kiem tra ho tro rewrite
@@ -59,7 +59,7 @@ if ($iniSaveTime + 86400 < $ctime) {
     } elseif (strpos($iis_info[0], 'nginx') !== false) {
         $sys_info['supports_rewrite'] = 'nginx';
     }
-    $content_config .= "\$sys_info['supports_rewrite']= " . (! empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : "false") . ";\n";
+    $content_config .= "\$sys_info['supports_rewrite']= " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : "false") . ";\n";
 
     //zlib_support
     $sys_info['zlib_support'] = (extension_loaded('zlib')) ? true : false;
@@ -74,11 +74,11 @@ if ($iniSaveTime + 86400 < $ctime) {
     $content_config .= "\$sys_info['iconv_support']= " . ($sys_info['iconv_support'] ? "true" : "false") . ";\n";
 
     //allowed_set_time_limit
-    $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? true : false;
+    $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'])) ? true : false;
     $content_config .= "\$sys_info['allowed_set_time_limit']= " . ($sys_info['allowed_set_time_limit'] ? "true" : "false") . ";\n";
 
     //os
-    $sys_info['os'] = strtoupper((function_exists('php_uname') and ! in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
+    $sys_info['os'] = strtoupper((function_exists('php_uname') and !in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
     $content_config .= "\$sys_info['os']= '" . $sys_info['os'] . "';\n";
 
     //fileuploads_support
@@ -86,11 +86,11 @@ if ($iniSaveTime + 86400 < $ctime) {
     $content_config .= "\$sys_info['fileuploads_support']= " . ($sys_info['fileuploads_support'] ? "true" : "false") . ";\n";
 
     //curl_support
-    $sys_info['curl_support'] = (extension_loaded('curl') and (empty($sys_info['disable_functions']) or (! empty($sys_info['disable_functions']) and ! preg_grep('/^curl\_/', $sys_info['disable_functions'])))) ? true : false;
+    $sys_info['curl_support'] = (extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions'])))) ? true : false;
     $content_config .= "\$sys_info['curl_support']= " . ($sys_info['curl_support'] ? "true" : "false") . ";\n";
 
     //ftp_support
-    $sys_info['ftp_support'] = (function_exists('ftp_connect') and ! in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and ! in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and ! in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and ! in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and ! in_array('ftp_nlist', $sys_info['disable_functions'])) ? true : false;
+    $sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'])) ? true : false;
     $content_config .= "\$sys_info['ftp_support']= " . ($sys_info['ftp_support'] ? "true" : "false") . ";\n";
 
     //Xac dinh tien ich mo rong lam viec voi string
@@ -112,22 +112,22 @@ if ($iniSaveTime + 86400 < $ctime) {
 
     //php_compress_methods
     $sys_info['php_compress_methods'] = array();
-    if (function_exists('brotli_compress') and ! in_array('brotli_compress', $sys_info['disable_functions'])) {
+    if (function_exists('brotli_compress') and !in_array('brotli_compress', $sys_info['disable_functions'])) {
         $sys_info['php_compress_methods']['br'] = 'brotli_compress';
     }
-    if (function_exists('gzdeflate') and ! in_array('gzdeflate', $sys_info['disable_functions'])) {
+    if (function_exists('gzdeflate') and !in_array('gzdeflate', $sys_info['disable_functions'])) {
         $sys_info['php_compress_methods']['deflate'] = 'gzdeflate';
     }
-    if (function_exists('gzencode') and ! in_array('gzencode', $sys_info['disable_functions'])) {
+    if (function_exists('gzencode') and !in_array('gzencode', $sys_info['disable_functions'])) {
         $sys_info['php_compress_methods']['gzip'] = 'gzencode';
         $sys_info['php_compress_methods']['x-gzip'] = 'gzencode';
     }
-    if (function_exists('gzcompress') and ! in_array('gzcompress', $sys_info['disable_functions'])) {
+    if (function_exists('gzcompress') and !in_array('gzcompress', $sys_info['disable_functions'])) {
         $sys_info['php_compress_methods']['compress'] = 'gzcompress';
         $sys_info['php_compress_methods']['x-compress'] = 'gzcompress';
     }
     $_compress_method = '';
-    if (! empty($sys_info['php_compress_methods'])) {
+    if (!empty($sys_info['php_compress_methods'])) {
         $_compress_method = array();
         foreach ($sys_info['php_compress_methods'] as $k => $f) {
             $_compress_method[] = "'" . $k . "' => '" . $f . "'";
@@ -137,7 +137,12 @@ if ($iniSaveTime + 86400 < $ctime) {
     $content_config .= "\$sys_info['php_compress_methods'] = array(" . $_compress_method . ");\n";
 
     //server_headers
-    stream_context_set_default(array('http' => array('method' => "GET", 'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n")));
+    stream_context_set_default(array(
+        'http' => array(
+            'method' => "GET",
+            'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
+        )
+    ));
     $server_headers = get_headers(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
     unset($server_headers[0], $server_headers['Date'], $server_headers['Expires'], $server_headers['Last-Modified'], $server_headers['Connection'], $server_headers['Set-Cookie'], $server_headers['X-Page-Speed']);
     $sys_info['server_headers'] = array();
@@ -151,7 +156,7 @@ if ($iniSaveTime + 86400 < $ctime) {
     $content_config .= "\$sys_info['server_headers'] = array(" . $_temp . ");\n";
 
     if ($sys_info['ini_set_support']) {
-        if (strcasecmp($global_config['session_handler'], $ini_default_list['session.save_handler']) != 0) {
+        if (strcasecmp($global_config['session_handler'], $ini_list['session.save_handler']) != 0) {
             if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache']) and defined('NV_MEMCACHED_HOST') and defined('NV_MEMCACHED_PORT') and NV_MEMCACHED_HOST != '' and NV_MEMCACHED_PORT != '') {
                 if (ini_set('session.save_handler', 'memcached') !== false) {
                     if (ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT) === false) {
@@ -167,7 +172,7 @@ if ($iniSaveTime + 86400 < $ctime) {
             }
         }
 
-        if (! isset($_SESSION)) {
+        if (!isset($_SESSION)) {
             if (strcasecmp(ini_get('session.save_handler'), 'memcached') == 0) {
                 ini_set('memcached.sess_prefix', "nv");
                 ini_set('memcached.sess_locking', '1');
@@ -192,7 +197,7 @@ if ($iniSaveTime + 86400 < $ctime) {
         ini_set('user_agent', 'NV4');
         ini_set('default_charset', strtoupper($global_config['site_charset']));
 
-        if ((int)ini_get('memory_limit') < 64) {
+        if ((int) ini_get('memory_limit') < 64) {
             ini_set('memory_limit', '64M');
         }
 
@@ -201,20 +206,7 @@ if ($iniSaveTime + 86400 < $ctime) {
     }
 
     $content_config .= "\n";
-
-    $ini_list = ini_get_all(null, false);
-
-    $diff = array_diff_assoc($ini_list, $ini_default_list);
-    if (! empty($diff)) {
-        foreach ($diff as $key => $value) {
-            $content_config .= "ini_set('" . $key . "', '" . $value . "');\n";
-        }
-        $content_config .= "\n";
-    }
-
-    $content_config .= "\$ini_list = ini_get_all(null, false);\n";
-    $content_config .= "\n";
-    $content_config .= "\$iniSaveTime = " . $ctime . ";\n";
+    $content_config .= "\$iniSaveTime = " . $ctime . ";";
     @file_put_contents($config_ini_file, $content_config, LOCK_EX);
 }
 
@@ -224,35 +216,31 @@ if (version_compare(PHP_VERSION, '5.5.0') < 0) {
 }
 
 //Neu he thong khong ho tro opendir se bao loi
-if (! (function_exists('opendir') and ! in_array('opendir', $sys_info['disable_functions']))) {
+if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions']))) {
     die('Opendir function is not supported');
 }
 
 //Neu he thong khong ho tro GD se bao loi
-if (! (extension_loaded('gd'))) {
+if (!(extension_loaded('gd'))) {
     die('GD not installed');
 }
 
-//Neu he thong khong ho tro session se bao loi
-if (! extension_loaded('session')) {
-    die('Session object not supported');
-}
-
 //Neu he thong khong ho tro json se bao loi
-if (! extension_loaded('json')) {
+if (!extension_loaded('json')) {
     die('Json object not supported');
 }
 
 //Neu he thong khong ho tro xml se bao loi
-if (! extension_loaded('xml')) {
+if (!extension_loaded('xml')) {
     die('Xml library not supported');
 }
 
 //Neu he thong khong ho tro mcrypt library se bao loi
-if (! function_exists('openssl_encrypt')) {
+if (!function_exists('openssl_encrypt')) {
     die('Openssl library not available');
 }
 
-if (empty($ini_list['session.save_handler']) or empty($ini_list['session.save_path'])) {
+//Neu he thong khong ho tro session se bao loi
+if (!extension_loaded('session') or empty($ini_list['session.save_handler']) or ($ini_list['session.save_handler'] != 'files' and empty($ini_list['session.save_path']))) {
     die('Session object not supported');
 }
