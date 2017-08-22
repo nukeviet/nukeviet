@@ -5,6 +5,7 @@
 /assets/css/*.opt.css
 /config.php
 /data/cache/*
+/data/config/config_ini.*.php
 /data/config/diagnostic-*.xml
 /data/logs/data_logs/
 /data/logs/dump_backup/
