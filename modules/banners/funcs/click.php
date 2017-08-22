@@ -37,8 +37,7 @@ if ($id > 0 and $nv_Request->get_string('s', 'get', 0) == md5($id . NV_CHECK_SES
 
 include NV_ROOTDIR . '/includes/header.php';
 
-header('Status: 301 Moved Permanently', false, 301);
-
+http_response_code(301);
 echo '<script type="text/javascript">';
 echo '		window.location.href="' . $links . '";';
 echo '</script>';

@@ -16,6 +16,7 @@ $array_ignore_save = array(
     NV_AUTHORS_GLOBALTABLE,
     NV_AUTHORS_GLOBALTABLE . '_config',
     NV_AUTHORS_GLOBALTABLE . '_module',
+    $db_config['prefix'] . '_banners_click',
     $db_config['prefix'] . '_cookies',
     $db_config['prefix'] . '_counter',
     $db_config['prefix'] . '_logs',
@@ -143,7 +144,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                     $content = preg_replace('/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content);
                     $content = preg_replace('/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content);
                     $content = '$sql_create_table[] = "' . str_replace('"', '\"', $content) . "\";\n";
-                    $content = "\$sql_create_table[] = \"DROP TABLE IF EXISTS `" . $store_table_name . "`\";\n" . $content;
+                    $content = "\n\$sql_create_table[] = \"DROP TABLE IF EXISTS `" . $store_table_name . "`\";\n" . $content;
                     $content = str_replace('`' . $table['name'] . '`', '`' . $store_table_name . '`', $content);
                 }
 

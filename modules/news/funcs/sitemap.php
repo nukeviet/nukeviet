@@ -8,7 +8,7 @@
  * @Createdate 4/12/2010, 1:27
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -23,13 +23,13 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
         ->select('id, catid, publtime, alias')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
         ->where('status=1')
-        ->order('publtime DESC')
+        ->order($order_articles_by . ' DESC')
         ->limit(1000);
     $result = $db_slave->query($db_slave->sql());
 
     $url = array();
 
-    while (list($id, $catid_i, $publtime, $alias) = $result->fetch(3)) {
+    while (list ($id, $catid_i, $publtime, $alias) = $result->fetch(3)) {
         $catalias = $global_array_cat[$catid_i]['alias'];
         $url[] = array(
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],

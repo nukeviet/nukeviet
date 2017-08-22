@@ -30,14 +30,66 @@ if ($per_page_old != $per_page) {
 $q = $nv_Request->get_title('q', 'get', '');
 $q = str_replace('+', ' ', $q);
 $qhtml = nv_htmlspecialchars($q);
-$ordername = $nv_Request->get_string('ordername', 'get', 'publtime');
+
+$order_articles = 0;
+if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and empty($q) and $sstatus == -1) {
+    $order_articles = 1;
+
+    $_weight_new = $nv_Request->get_int('order_articles_new', 'post', 0);
+    $_id = $nv_Request->get_int('order_articles_id', 'post', 0);
+    if ($_id > 0 and $_weight_new > 0) {
+        $sql = 'SELECT weight, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id;
+        $_row1 = $db->query($sql)->fetch();
+        if (!empty($_row1)) {
+            $_weight1 = min($_weight_new, $_row1['weight']);
+            $_weight2 = max($_weight_new, $_row1['weight']);
+            if ($_weight_new > $_row1['weight']) {
+                // Kiểm tra không cho set weight lơn hơn maxweight
+                $maxweight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
+                if ($_weight_new > $maxweight) {
+                    $_weight_new = $maxweight;
+                }
+            }
+
+            $sql = 'SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE weight BETWEEN ' . $_weight1 . '  AND ' . $_weight2 . ' AND id!=' . $_id . ' ORDER BY weight ASC, publtime ASC';
+            $result = $db->query($sql);
+            $weight = $_weight1;
+            while ($_row2 = $result->fetch()) {
+                if ($weight == $_weight_new) {
+                    ++$weight;
+                }
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                $_array_catid = explode(',', $_row2['listcatid']);
+                foreach ($_array_catid as $_catid) {
+                    try {
+                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                    } catch (PDOException $e) {}
+                }
+                ++$weight;
+            }
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $_weight_new . ' WHERE id=' . $_id);
+            $_array_catid = explode(',', $_row1['listcatid']);
+            foreach ($_array_catid as $_catid) {
+                try {
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $_weight_new . ' WHERE id=' . $_id);
+                } catch (PDOException $e) {}
+            }
+        }
+    }
+}
+
+$ordername = ($module_config[$module_name]['order_articles'] == 1) ? 'weight' : 'publtime';
+$ordername = $nv_Request->get_string('ordername', 'get', $ordername);
+
 $order = $nv_Request->get_string('order', 'get') == 'asc' ? 'asc' : 'desc';
+
 $val_cat_content = array();
 $val_cat_content[] = array(
     'value' => 0,
     'selected' => ($catid == 0) ? ' selected="selected"' : '',
     'title' => $lang_module['search_cat_all']
 );
+
 $array_cat_view = array();
 $check_declined = false;
 foreach ($global_array_cat as $catid_i => $array_value) {
@@ -61,7 +113,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
             $check_cat = true;
         }
     }
-    
+
     if ($check_cat) {
         $xtitle_i = '';
         if ($lev_i > 0) {
@@ -168,7 +220,7 @@ $checkss = $nv_Request->get_string('checkss', 'get', '');
 if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESSION) {
     // Ket noi den csdl elastic
     $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
-    
+
     $search_elastic = array();
     // Tim kiem theo bodytext,author,title
     $key_elastic_search = nv_EncString($db_slave->dblikeescape($q));
@@ -182,7 +234,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                     ]
                 ]
             ];
-            
+
         } elseif ($stype == 'author') {
             $search_elastic = [
                 'should' => [
@@ -191,7 +243,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                     ]
                 ]
             ];
-            
+
         } elseif ($stype == 'title') {
             $search_elastic = [
                 'should' => [
@@ -219,10 +271,10 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
     } elseif ($stype == 'admin_id') {
         //tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
         $db->sqlreset()
-        ->select('userid')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
-        
+            ->select('userid')
+            ->from(NV_USERS_GLOBALTABLE)
+            ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
+
         $sth = $db->prepare($db->sql());
         $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
         $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
@@ -269,10 +321,10 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
         ];
         //tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
         $db->sqlreset()
-        ->select('userid')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
-        
+            ->select('userid')
+            ->from(NV_USERS_GLOBALTABLE)
+            ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
+
         $sth = $db->prepare($db->sql());
         $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
         $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
@@ -288,12 +340,12 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             ];
         }
         $result = count($match);
-        
+
         if ($result > 0) {
             $search_elastic_user['filter']['or'] = $match;
             $search_elastic = array_merge($search_elastic, $search_elastic_user);
         }
-        
+
     }
     if ($catid != 0) {
         $search_elastic_catid = [
@@ -308,9 +360,9 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
         } else {
             $search_elastic = $search_elastic_catid;
         }
-        
+
     }
-    
+
     if ($sstatus != -1) {
         $search_elastic_status = [
             'filter' => [
@@ -325,14 +377,14 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             $search_elastic = $search_elastic_status;
         }
     }
-    
+
     $array_query_elastic = array();
     $array_query_elastic['query']['bool'] = $search_elastic;
     $array_query_elastic['size'] = $per_page;
     $array_query_elastic['from'] = ($page - 1) * $per_page;
-    
+
     $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
-    
+
     //so dong du lieu lay dc,c?n s?a $num_items=s? dong d? li?u
     $num_checkss = md5($num_items . NV_CHECK_SESSION);
     if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
@@ -348,7 +400,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
         $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
     }
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
-    
+
     //hien thi du lieu
     $data = $array_ids = $array_userid = array();
     foreach ($response['hits']['hits'] as $key => $value) {
@@ -372,15 +424,15 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
         if ($catid > 0) {
             $catid_i = $catid;
         }
-        
+
         $check_permission_edit = $check_permission_delete = false;
-        
+
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission_edit = $check_permission_delete = true;
         } else {
             $array_temp = explode(',', $listcatid);
             $check_edit = $check_del = 0;
-            
+
             foreach ($array_temp as $catid_i) {
                 if (isset($array_cat_admin[$admin_id][$catid_i])) {
                     if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
@@ -404,7 +456,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                             ++$check_edit;
                             $_permission_action['waiting'] = true;
                         }
-                        
+
                         if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
                             ++$check_del;
                         } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
@@ -414,16 +466,16 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                     }
                 }
             }
-            
+
             if ($check_edit == sizeof($array_temp)) {
                 $check_permission_edit = true;
             }
-            
+
             if ($check_del == sizeof($array_temp)) {
                 $check_permission_delete = true;
             }
         }
-        
+
         $admin_funcs = array();
         if ($check_permission_edit) {
             $admin_funcs[] = nv_link_edit_page($id);
@@ -446,7 +498,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             'numtags' => 0,
             'feature' => implode(' ', $admin_funcs)
         );
-        
+
         $array_ids[] = $id;
         $array_userid[] = $_userid;
     }
@@ -489,7 +541,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             $from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
         }
     }
-    
+
     if (!defined('NV_IS_ADMIN_MODULE')) {
         $from_catid = array();
         foreach ($array_cat_view as $catid_i) {
@@ -513,12 +565,12 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
         'description' => '',
         'keywords' => ''
     );
-    
+
     $db_slave->sqlreset()
-    ->select('COUNT(*)')
-    ->from($from)
-    ->where($where);
-    
+        ->select('COUNT(*)')
+        ->from($from)
+        ->where($where);
+
     $_sql = $db_slave->sql();
     $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
     if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
@@ -533,30 +585,29 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
         $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
     }
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
-    
-    $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id')
-    ->order('r.' . $ordername . ' ' . $order)
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
+
+    $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status, r.weight, r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id')
+        ->order('r.' . $ordername . ' ' . $order)
+        ->limit($per_page)
+        ->offset(($page - 1) * $per_page);
     $result = $db_slave->query($db_slave->sql());
-    
+
     $data = $array_ids = $array_userid = array();
-    while (list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid) = $result->fetch(3)) {
+    while (list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $publtime, $exptime, $hitstotal, $hitscm, $_userid) = $result->fetch(3)) {
         $publtime = nv_date('H:i d/m/y', $publtime);
-        $title = nv_clean60($title);
-        
+
         if ($catid > 0) {
             $catid_i = $catid;
         }
-        
+
         $check_permission_edit = $check_permission_delete = false;
-        
+
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission_edit = $check_permission_delete = true;
         } else {
             $array_temp = explode(',', $listcatid);
             $check_edit = $check_del = 0;
-            
+
             foreach ($array_temp as $catid_i) {
                 if (isset($array_cat_admin[$admin_id][$catid_i])) {
                     if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
@@ -582,7 +633,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                             ++$check_edit;
                             $_permission_action['waiting'] = true;
                         }
-                        
+
                         if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
                             ++$check_del;
                         } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
@@ -592,16 +643,16 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                     }
                 }
             }
-            
+
             if ($check_edit == sizeof($array_temp)) {
                 $check_permission_edit = true;
             }
-            
+
             if ($check_del == sizeof($array_temp)) {
                 $check_permission_delete = true;
             }
         }
-        
+
         $admin_funcs = array();
         if ($check_permission_edit) {
             $admin_funcs[] = nv_link_edit_page($id);
@@ -610,13 +661,15 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             $admin_funcs[] = nv_link_delete_page($id);
             $_permission_action['delete'] = true;
         }
-        
+
         $data[$id] = array(
             'id' => $id,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
             'title' => $title,
+            'title_clean' => nv_clean60($title),
             'publtime' => $publtime,
             'status_id' => $status,
+            'weight' => $weight,
             'status' => $lang_module['status_' . $status],
             'class' => $array_status_class[$status],
             'userid' => $_userid,
@@ -625,7 +678,7 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             'numtags' => 0,
             'feature' => implode(' ', $admin_funcs)
         );
-        
+
         $array_ids[] = $id;
         $array_userid[] = $_userid;
     }
@@ -665,10 +718,10 @@ $ord_sql = ' r.' . $ordername . ' ' . $order;
 // Lay so tags
 if (!empty($array_ids)) {
     $db_slave->sqlreset()
-    ->select('COUNT(*) AS numtags, id')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags_id')
-    ->where('id IN( ' . implode(',', $array_ids) . ' )')
-    ->group('id');
+        ->select('COUNT(*) AS numtags, id')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_tags_id')
+        ->where('id IN( ' . implode(',', $array_ids) . ' )')
+        ->group('id');
     $result = $db_slave->query($db_slave->sql());
     while (list ($numtags, $id) = $result->fetch(3)) {
         $data[$id]['numtags'] = $numtags;
@@ -678,9 +731,9 @@ if (!empty($array_ids)) {
 if (!empty($array_userid)) {
     $array_userid = array_unique($array_userid);
     $db_slave->sqlreset()
-    ->select('userid, username')
-    ->from(NV_USERS_GLOBALTABLE)
-    ->where('userid IN( ' . implode(',', $array_userid) . ' )');
+        ->select('userid, username')
+        ->from(NV_USERS_GLOBALTABLE)
+        ->where('userid IN( ' . implode(',', $array_userid) . ' )');
     $array_userid = array();
     $result = $db_slave->query($db_slave->sql());
     while (list ($_userid, $_username) = $result->fetch(3)) {
@@ -706,6 +759,8 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('Q', $qhtml);
+
+$xtpl->assign('CATID', $catid);
 $xtpl->assign('base_url_id', $base_url_id);
 $xtpl->assign('base_url_name', $base_url_name);
 $xtpl->assign('base_url_publtime', $base_url_publtime);
@@ -738,31 +793,36 @@ foreach ($data as $row) {
     $is_excdata = 0;
     if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status_id'] == 1) {
         $count = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db_slave->quote($module_name))
-        ->fetchColumn();
+            ->fetchColumn();
         if ($count == 0) {
             $is_excdata = 1;
             $row['url_send'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=excdata&amp;' . NV_OP_VARIABLE . '=send&amp;module=' . $module_name . '&amp;id=' . $row['id'];
         }
     }
-    
+
     if ($row['status_id'] == 4 and empty($row['title'])) {
         $row['title'] = $lang_module['no_name'];
     }
     $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']] : '';
     $xtpl->assign('ROW', $row);
-    
+
     if ($is_excdata) {
         $xtpl->parse('main.loop.excdata');
     }
-    if($module_config[$module_name]['copy_news'] == 1) {
+    if ($module_config[$module_name]['copy_news'] == 1) {
         $url_copy = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;copy=1&amp;id=' . $row['id'];
         $xtpl->assign('URL_COPY', $url_copy);
         $xtpl->parse('main.loop.copy_news');
     }
-    
+
     if ($row['status_id'] == 4) {
         $xtpl->parse('main.loop.text');
     }
+
+    if ($order_articles) {
+        $xtpl->parse('main.loop.sort');
+    }
+
     $xtpl->parse('main.loop');
 }
 

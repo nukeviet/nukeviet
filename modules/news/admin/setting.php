@@ -49,6 +49,7 @@ if (!empty($savesetting)) {
     $array_config['auto_tags'] = $nv_Request->get_int('auto_tags', 'post', 0);
     $array_config['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
 	$array_config['copy_news'] = $nv_Request->get_int('copy_news', 'post', 0);
+	$array_config['order_articles'] = $nv_Request->get_int('order_articles', 'post', 0);
 
     $array_config['elas_use'] = $nv_Request->get_int('elas_use', 'post', 0);
     $array_config['elas_host'] = $nv_Request->get_title('elas_host', 'post', '');
@@ -218,6 +219,15 @@ foreach ($array_structure_image as $type => $dir) {
         'selected' => $type == $structure_image_upload ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.structure_upload');
+}
+
+for ($i = 0; $i < 2; $i++) {
+    $xtpl->assign('ORDER_ARTICLES', array(
+        'key' => $i,
+        'title' => $lang_module['order_articles_' . $i],
+        'selected' => $i == $module_config[$module_name]['order_articles'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.order_articles');
 }
 
 // Cau hinh hien thi nguon tin
