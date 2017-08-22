@@ -12,6 +12,8 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+$order_articles = $module_config[$module_name]['order_articles'];
+$order_articles_by = ($order_articles) ? 'weight' : 'publtime';
 $timecheckstatus = $module_config[$module_name]['timecheckstatus'];
 if ($timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME) {
     nv_set_status_module();
@@ -25,19 +27,13 @@ if ($timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME) {
 function nv_set_status_module()
 {
     global $nv_Cache, $db, $module_name, $module_data, $global_config;
-    
+
     $check_run_cronjobs = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/cronjobs_' . md5($module_data . 'nv_set_status_module' . $global_config['sitekey']) . '.txt';
     $p = NV_CURRENTTIME - 300;
     if (file_exists($check_run_cronjobs) and @filemtime($check_run_cronjobs) > $p) {
         return;
     }
     file_put_contents($check_run_cronjobs, '');
-    
-    //status_0 = "Cho duyet";
-    //status_1 = "Xuat ban";
-    //status_2 = "Hen gio dang";
-    //status_3= "Het han";
-    
 
     // Dang cai bai cho kich hoat theo thoi gian
     $query = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC');
@@ -51,34 +47,37 @@ function nv_set_status_module()
         }
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=1 WHERE id=' . $id);
     }
-    
+
     // Ngung hieu luc cac bai da het han
-    $query = $db->query('SELECT id, listcatid, archive FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY exptime ASC');
-    while (list ($id, $listcatid, $archive) = $query->fetch(3)) {
+    $weight_min = 0;
+    $query = $db->query('SELECT id, listcatid, archive, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY weight DESC, exptime ASC');
+    while (list ($id, $listcatid, $archive, $weight) = $query->fetch(3)) {
         if (intval($archive) == 0) {
             nv_del_content_module($id);
+            $weight_min = $weight;
         } else {
             nv_archive_content_module($id, $listcatid);
         }
     }
-    
+
     // Tim kiem thoi gian chay lan ke tiep
     $time_publtime = $db->query('SELECT min(publtime) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime > ' . NV_CURRENTTIME)->fetchColumn();
     $time_exptime = $db->query('SELECT min(exptime) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > ' . NV_CURRENTTIME)->fetchColumn();
-    
+
     $timecheckstatus = min($time_publtime, $time_exptime);
     if (!$timecheckstatus) {
         $timecheckstatus = max($time_publtime, $time_exptime);
     }
-    
+
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'timecheckstatus'");
     $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
     $sth->bindValue(':config_value', intval($timecheckstatus), PDO::PARAM_STR);
     $sth->execute();
-    
+
+    nv_fix_weight_content($weight_min);
     $nv_Cache->delMod('settings');
     $nv_Cache->delMod($module_name);
-    
+
     unlink($check_run_cronjobs);
     clearstatcache();
 }
@@ -107,31 +106,31 @@ function nv_del_content_module($id)
                 }
             }
         }
-        
+
         $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
         if (!$db->exec($_sql)) {
             ++$number_no_del;
         }
-        
+
         $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $id;
         if (!$db->exec($_sql)) {
             ++$number_no_del;
         }
-        
+
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id = ' . $id);
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id);
-        
+
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')');
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id);
-        
+
         nv_delete_notification(NV_LANG_DATA, $module_name, 'post_queue', $id);
-        
+
         /*conenct to elasticsearch*/
         if ($module_config[$module_name]['elas_use'] == 1) {
             $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
             $nukeVietElasticSearh->delete_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $id);
         }
-        
+
         if ($number_no_del == 0) {
             $content_del = 'OK_' . $id . '_' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
         } else {
@@ -139,6 +138,33 @@ function nv_del_content_module($id)
         }
     }
     return $content_del;
+}
+
+/**
+ * nv_fix_weight_content()
+ *
+ * @param mixed $weight_min
+ * @return
+ */
+function nv_fix_weight_content($weight_min)
+{
+    global $db, $module_data;
+    if ($weight_min > 0) {
+        $weight_min = $weight_min - 1;
+        $sql = 'SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE weight >= ' . $weight_min . ' ORDER BY weight ASC, publtime ASC';
+        $result = $db->query($sql);
+        $weight = $weight_min;
+        while ($_row2 = $result->fetch()) {
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+            $_array_catid = explode(',', $_row2['listcatid']);
+            foreach ($_array_catid as $_catid) {
+                try {
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                } catch (PDOException $e) {}
+            }
+            ++$weight;
+        }
+    }
 }
 
 /**
@@ -210,16 +236,16 @@ function nv_get_firstimage($contents)
  */
 function nv_check_block_topcat_news($catid)
 {
-    
+
     global $global_config, $module_info, $module_name;
-    
+
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
     } else {
         $ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
     }
     $contents = file_get_contents($ini_file);
-    
+
     $find1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
     $find2 = "/<tag>\[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "\]<\/tag>/";
     if (preg_match($find1, $contents) and preg_match($find2, $contents)) {
@@ -237,16 +263,16 @@ function nv_check_block_topcat_news($catid)
  */
 function nv_check_block_block_botcat_news($catid)
 {
-    
+
     global $global_config, $module_info, $module_name;
-    
+
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
     } else {
         $ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
     }
     $contents = file_get_contents($ini_file);
-    
+
     $find1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
     $find2 = "/<tag>\[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "\]<\/tag>/";
     if (preg_match($find1, $contents) and preg_match($find2, $contents)) {
@@ -264,16 +290,16 @@ function nv_check_block_block_botcat_news($catid)
  */
 function nv_add_block_topcat_news($catid)
 {
-    
-    global $global_config, $module_info, $module_name;
-    
+
+    global $global_config, $module_info, $module_name, $nv_Cache;
+
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
     } else {
         $ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
     }
     $contents = file_get_contents($ini_file);
-    
+
     if (!nv_check_block_topcat_news($catid) and !empty($contents)) {
         $find = "/<positions>/";
         $pos = "
@@ -286,12 +312,12 @@ function nv_add_block_topcat_news($catid)
         $contents = preg_replace($find, $_replace, $contents);
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
         $contents = preg_replace("/\\t\\t\\n/", "", $contents);
-        
+
         $doc = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput = true;
         $doc->loadXML($contents);
         $contents = $doc->saveXML();
-        
+
         $fname = $ini_file;
         $fhandle = fopen($fname, "w");
         $fwrite = fwrite($fhandle, $contents);
@@ -299,6 +325,7 @@ function nv_add_block_topcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
+            $nv_Cache->delMod('themes');
             return true;
         }
     }
@@ -312,16 +339,16 @@ function nv_add_block_topcat_news($catid)
  */
 function nv_add_block_botcat_news($catid)
 {
-    
-    global $global_config, $module_info, $module_name;
-    
+
+    global $global_config, $module_info, $module_name, $nv_Cache, $nv_Cache;
+
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
     } else {
         $ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
     }
     $contents = file_get_contents($ini_file);
-    
+
     if (!nv_check_block_block_botcat_news($catid) and !empty($contents)) {
         $find = "/<positions>/";
         $pos = "
@@ -334,12 +361,12 @@ function nv_add_block_botcat_news($catid)
         $contents = preg_replace($find, $_replace, $contents);
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
         $contents = preg_replace("/\\t\\t\\n/", "", $contents);
-        
+
         $doc = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput = true;
         $doc->loadXML($contents);
         $contents = $doc->saveXML();
-        
+
         $fname = $ini_file;
         $fhandle = fopen($fname, "w");
         $fwrite = fwrite($fhandle, $contents);
@@ -347,6 +374,7 @@ function nv_add_block_botcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
+            $nv_Cache->delMod('themes');
             return true;
         }
     }
@@ -360,21 +388,21 @@ function nv_add_block_botcat_news($catid)
  */
 function nv_remove_block_topcat_news($catid)
 {
-    
-    global $global_config, $module_info, $module_name;
-    
+
+    global $global_config, $module_info, $module_name, $nv_Cache;
+
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
     } else {
         $ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
     }
     $contents = file_get_contents($ini_file);
-    
+
     if (nv_check_block_topcat_news($catid)) {
-        
+
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
         $contents = preg_replace("/\\t\\t\\n/", "", $contents);
-        
+
         $doc = new DOMDocument('1.0');
         $doc->formatOutput = true;
         $doc->loadXML($contents);
@@ -391,6 +419,7 @@ function nv_remove_block_topcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
+            $nv_Cache->delMod('themes');
             return true;
         }
     }
@@ -404,21 +433,21 @@ function nv_remove_block_topcat_news($catid)
  */
 function nv_remove_block_botcat_news($catid)
 {
-    
-    global $global_config, $module_info, $module_name;
-    
+
+    global $global_config, $module_info, $module_name, $nv_Cache;
+
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
     } else {
         $ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
     }
     $contents = file_get_contents($ini_file);
-    
+
     if (nv_check_block_block_botcat_news($catid)) {
-        
+
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
         $contents = preg_replace("/\\t\\t\\n/", "", $contents);
-        
+
         $doc = new DOMDocument('1.0');
         $doc->formatOutput = true;
         $doc->loadXML($contents);
@@ -435,6 +464,7 @@ function nv_remove_block_botcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
+            $nv_Cache->delMod('themes');
             return true;
         }
     }

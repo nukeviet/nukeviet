@@ -36,10 +36,10 @@ $per_page = 50;
 $sql = 'SELECT count(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid;
 $num_items = $db_slave->query($sql)->fetchColumn();
 
-$sql = 'SELECT id, catid, alias, title, publtime, status, hitstotal, hitscm FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid . ' ORDER BY publtime DESC LIMIT ' . $per_page . ' OFFSET ' . (($page - 1) * $per_page);
+$sql = 'SELECT id, catid, alias, title, publtime, status, hitstotal, hitscm FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid . ' ORDER BY ' . $order_articles_by . ' DESC LIMIT ' . $per_page . ' OFFSET ' . (($page - 1) * $per_page);
 $result = $db_slave->query($sql);
 
-$generate_page = nv_generate_page(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op.'&amp;topicid='.$topicid, $num_items, $per_page, $page);
+$generate_page = nv_generate_page(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;topicid=' . $topicid, $num_items, $per_page, $page);
 
 $xtpl = new XTemplate('topicsnews.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);

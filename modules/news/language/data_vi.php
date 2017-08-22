@@ -947,9 +947,11 @@ while (list ($catid_i) = $result->fetch(3)) {
     $db->exec('CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid_i . ' LIKE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows');
 }
 
-$result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows ORDER BY id ASC');
-
+$weight = 0;
+$result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows ORDER BY publtime ASC, id ASC');
 while (list ($id, $listcatid) = $result->fetch(3)) {
+    ++$weight;
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $id);
     $arr_catid = explode(',', $listcatid);
     foreach ($arr_catid as $catid) {
         $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows WHERE id=' . $id);
