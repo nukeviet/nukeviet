@@ -155,6 +155,13 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config .= "\$sys_info['server_headers'] = array(" . $_temp . ");\n";
 
     if ($sys_info['ini_set_support']) {
+        ini_set('display_startup_errors', 0);
+        ini_set('track_errors', 1);
+
+        ini_set('log_errors', 0);
+        ini_set('display_errors', 0);
+        ini_set('display_errors', 0);
+
         if (strcasecmp($global_config['session_handler'], $ini_list['session.save_handler']) != 0) {
             if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache']) and defined('NV_MEMCACHED_HOST') and defined('NV_MEMCACHED_PORT') and NV_MEMCACHED_HOST != '' and NV_MEMCACHED_PORT != '') {
                 if (ini_set('session.save_handler', 'memcached') !== false) {
