@@ -49,7 +49,7 @@ if (! empty($headers)) {
     $html_headers += $headers;
 }
 
-if ($_SERVER['HTTPS'] != 'on') {
+if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
     unset($html_headers['Strict-Transport-Security']);
 }
 

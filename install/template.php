@@ -338,18 +338,19 @@ function nv_step_7($array_data, $nextstep)
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('DATA', $array_data);
+    $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 
-    foreach ($array_samples_data as $data) {
+    foreach ($array_samples_data as $key => $data) {
         require NV_ROOTDIR . '/install/samples/' . $data;
         unset($sql_create_table);
         $data = substr(substr($data, 0, -4), 5);
         $row = array(
             'url' => $sample_base_siteurl,
             'compatible' => $sample_base_siteurl == NV_BASE_SITEURL ? true : false,
-            'title' => $data,
-            'link' => NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=' . $step . '&amp;package=' . $data . '&amp;s=' . NV_CHECK_SESSION
+            'title' => $data
         );
         $xtpl->assign('ROW', $row);
+        $xtpl->assign('ROWKEY', $key);
 
         if ($row['compatible']) {
             $xtpl->assign('MESSAGE', $lang_module['spdata_compatible']);
