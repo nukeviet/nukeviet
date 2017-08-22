@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
@@ -56,8 +56,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         $type = $lang_module['signer'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=signer&add";
     } else {
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&add");
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&add");
     }
     
     $xtpl->assign('TYPE', $type);
@@ -76,8 +75,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $result = $db->query($sql);
             $num = $result->rowCount();
             if ($num != 1) {
-                Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
             }
             $row = $result->fetch();
             
@@ -340,7 +338,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
             
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         }
         
         if (defined('NV_EDITOR')) {
@@ -490,9 +488,9 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_subject SET numcount=(SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $data['sid'] . ') WHERE id=' . $data['sid']);
             
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         }
-        die('NO');
+        nv_htmlOutput('NO');
     }
     
     if ($nv_Request->isset_request('changestatus', 'post')) {
@@ -513,7 +511,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         
         $nv_Cache->delMod($module_name);
         
-        die('OK');
+        nv_htmlOutput('OK');
     }
     
     if ($nv_Request->isset_request('list', 'get')) {

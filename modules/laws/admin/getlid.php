@@ -2,7 +2,7 @@
 
 /**
  * @Project WEBNHANH
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
  * @Createdate 26/5/2011, 23:28
  */

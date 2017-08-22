@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 18/2/2011, 5:29
@@ -15,7 +15,7 @@ $page_title = $lang_module['subject'];
 if ($nv_Request->isset_request('get_alias_title', 'post')) {
     $alias = $nv_Request->get_title('get_alias_title', 'post', '');
     $alias = change_alias($alias);
-    die($alias);
+    nv_htmlOutput($alias);
 }
 
 $contents = "";
@@ -23,8 +23,7 @@ $sList = nv_sList();
 $scount = count($sList);
 
 if (empty($sList) and !$nv_Request->isset_request('add', 'get')) {
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject&add");
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject&add");
 }
 
 if ($nv_Request->isset_request('cWeight, id', 'post')) {
@@ -47,7 +46,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
     $db->query($query);
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['logChangesWeight'], "Id: " . $id, $admin_info['userid']);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 if ($nv_Request->isset_request('del', 'post')) {
@@ -63,7 +62,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     fix_subjectWeight();
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['logDelSubject'], "Id: " . $id, $admin_info['userid']);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 $xtpl = new XTemplate($op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
@@ -77,8 +76,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     if ($nv_Request->isset_request('edit', 'get')) {
         $post['id'] = $nv_Request->get_int('id', 'get');
         if (empty($post['id']) or !isset($sList[$post['id']])) {
-            Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject");
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject");
         }
         
         $xtpl->assign('PTITLE', $lang_module['editSubject']);
@@ -144,7 +142,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         
         $nv_Cache->delMod($module_name);
         nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, "Id: " . $post['id'], $admin_info['userid']);
-        die('OK');
+        nv_htmlOutput('OK');
     }
     
     if ($nv_Request->isset_request('edit', 'get')) {
