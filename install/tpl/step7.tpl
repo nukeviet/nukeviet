@@ -1,23 +1,31 @@
 <!-- BEGIN: step -->
 <blockquote>{LANG.spdata_note}</blockquote>
-<table cellspacing="0" summary="{LANG.website_info}">
-    <tr>
-        <th scope="col" class="nobg" style="width: 200px;">&nbsp;</th>
-        <th scope="col">{LANG.spdata_name}</th>
-        <th scope="col">{LANG.note}</th>
-    </tr>
-    <!-- BEGIN: loop -->
-    <tr>
-        <th scope="row" class="spec">
-            <a href="{ROW.link}" class="button fr">{LANG.spdata_choose}</a>
-        </th>
-        <td>
-            <strong>{ROW.title}</strong>
-        </td>
-        <td>{MESSAGE}</td>
-    </tr>
-    <!-- END: loop -->
-</table>
+<form method="post" action="{ACTIONFORM}">
+    <table cellspacing="0" summary="{LANG.website_info}">
+        <tr>
+            <th scope="col" class="nobg" style="width: 200px;">&nbsp;</th>
+            <th scope="col">{LANG.spdata_name}</th>
+            <th scope="col">{LANG.note}</th>
+        </tr>
+        <!-- BEGIN: loop -->
+        <tr>
+            <th scope="row" class="spec center">
+                <input type="radio" name="package" id="package{ROWKEY}" value="{ROW.title}"/>
+            </th>
+            <td>
+                <strong><label for="package{ROWKEY}">{ROW.title}</label></strong>
+            </td>
+            <td>{MESSAGE}</td>
+        </tr>
+        <!-- END: loop -->
+        <tr>
+            <th class="spec center">
+                <input type="submit" name="submit" class="button" value="{LANG.spdata_choose}"/>
+            </th>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+</form>
 <ul class="control_t fr">
     <!-- BEGIN: nextstep -->
     <li>

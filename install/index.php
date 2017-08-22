@@ -931,16 +931,15 @@ if ($step == 1) {
     $lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
     $contents = nv_step_6($array_data, $nextstep);
 } elseif ($step == 7) {
-    $maxstep = 8;
-    $nv_Request->set_Session('maxstep', $maxstep);
-
     // Nếu không có dữ liệu mẫu chuyển sang bước tiếp theo
     if (empty($array_samples_data)) {
+        $maxstep = 8;
+        $nv_Request->set_Session('maxstep', $maxstep);
         nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
     }
 
-    if ($nv_Request->isset_request('package', 'get')) {
-        $package = $nv_Request->get_title('package', 'get', '');
+    if ($nv_Request->isset_request('submit', 'post')) {
+        $package = $nv_Request->get_title('package', 'post', '');
         if (!in_array('data_' . $package . '.php', $array_samples_data)) {
             nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
         }
@@ -983,12 +982,14 @@ if ($step == 1) {
         }
 
         $nv_Cache->delAll();
+        $maxstep = 8;
+        $nv_Request->set_Session('maxstep', $maxstep);
         nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
     }
 
     $title = $lang_module['sample_data'];
     $array_data = array();
-    $nextstep = 1;
+    $nextstep = 0;
     $contents = nv_step_7($array_data, $nextstep);
 } elseif ($step == 8) {
     $finish = 0;

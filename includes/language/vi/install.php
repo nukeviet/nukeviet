@@ -275,5 +275,5 @@ $lang_module['spdata_name'] = 'Tên gói dữ liệu';
 $lang_module['spdata_compatible'] = 'Gói dữ liệu mẫu này tương thích';
 $lang_module['spdata_incompatible'] = 'Gói dữ liệu mẫu này được xây dựng ở thư mục %s, việc cài đặt site ở thư mục %s sẽ khiến một số link không chính xác';
 $lang_module['spdata_root'] = 'gốc';
-$lang_module['spdata_note'] = 'Nhấp nút <strong>Cài đặt</strong> để cài gói dữ liệu mẫu tương ứng. Bạn cũng có thể bỏ qua các gói dữ liệu mẫu bằng cách nhấp nút <strong>Bước kế tiếp</strong>';
+$lang_module['spdata_note'] = 'Chọn gói dữ liệu mẫu bằng cách nhấp vào ô tương ứng bên phải sau đó nhấp nút <strong>Cài đặt</strong>';
 $lang_module['spdata_choose'] = 'Cài đặt';
