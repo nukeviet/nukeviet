@@ -19,6 +19,7 @@ define('NV_MAINFILE', true);
 
 // Thoi gian bat dau phien lam viec
 define('NV_START_TIME', microtime(true));
+define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = array();
@@ -109,7 +110,6 @@ $client_info['ip'] = NV_CLIENT_IP;
 
 // Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
-define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
