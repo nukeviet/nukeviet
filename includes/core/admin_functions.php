@@ -340,8 +340,10 @@ function nv_version_compare($version1, $version2)
 function nv_check_rewrite_file()
 {
     global $sys_info;
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    if ($sys_info['supports_rewrite'] == 'nginx') {
+        return true;
+    }
+    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
@@ -350,8 +352,7 @@ function nv_check_rewrite_file()
 
         return (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess));
     }
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
@@ -376,7 +377,10 @@ function nv_rewrite_change($array_config_global)
     $rewrite_rule = $filename = '';
     $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . '|' . nv_preg_quote($array_config_global['rewrite_exturl']);
 
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    if ($sys_info['supports_rewrite'] == 'nginx') {
+        return array(true, true);
+    }
+    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         $filename = NV_ROOTDIR . '/web.config';
         $rulename = 0;
         $rewrite_rule .= "\n";
