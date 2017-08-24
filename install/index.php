@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:42
@@ -24,6 +24,10 @@ foreach ($dirs as $file) {
     }
 }
 
+if (!in_array(NV_LANG_DATA, $languageslist)) {
+    nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . $languageslist[0] . '&step=1');
+}
+
 require_once NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
 require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php';
 require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php';
@@ -38,12 +42,14 @@ if (is_file(NV_ROOTDIR . '/' . $file_config_temp)) {
     require_once NV_ROOTDIR . '/' . $file_config_temp;
 }
 
+$array_samples_data = nv_scandir(NV_ROOTDIR . '/install/samples', '/^data\_([a-z0-9]+)\.php$/');
+
 $contents = '';
 $step = $nv_Request->get_int('step', 'post,get', 1);
 
 $maxstep = $nv_Request->get_int('maxstep', 'session', 1);
 
-if ($step <= 0 or $step > 7) {
+if ($step <= 0 or $step > 8) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
 }
 
@@ -52,7 +58,7 @@ if ($step > $maxstep and $step > 2) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 }
 
-if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 7) {
+if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 8) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php');
 }
 if (empty($sys_info['supports_rewrite'])) {
@@ -275,10 +281,9 @@ if ($step == 1) {
     }
 
     $array_resquest['php_required'] = $sys_info['php_required'];
-    $array_resquest['php_version'] = PHP_VERSION;
-    $sys_info['php_support'] = (version_compare(PHP_VERSION, $sys_info['php_required']) < 0) ? 0 : 1;
-    $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support' );
-    foreach ($array_resquest_key as $key) {
+    $array_resquest['php_version'] = $sys_info['php_version'];
+
+    foreach ($nv_resquest_serverext_key as $key) {
         $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
         $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
 
@@ -696,8 +701,7 @@ if ($step == 1) {
             $db = $db_slave = new NukeViet\Core\Database($db_config);
             if (empty($db->connect)) {
                 $error = 'Sorry! Could not connect to data server';
-            }
-            else {
+            } else {
                 $check_login = nv_check_valid_login($array_data['nv_login'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
                 $check_pass = nv_check_valid_pass($array_data['nv_password'], $global_config['nv_upassmax'], $global_config['nv_upassmin']);
                 $check_email = nv_check_valid_email($array_data['nv_email']);
@@ -763,7 +767,7 @@ if ($step == 1) {
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_port', " . $db->quote($global_config['ftp_port']) . ")");
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_name', " . $db->quote($global_config['ftp_user_name']) . ")");
 
-                            $ftp_user_pass = nv_base64_encode($crypt->aes_encrypt($global_config['ftp_user_pass']));
+                            $ftp_user_pass = $crypt->encrypt($global_config['ftp_user_pass']);
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_pass', " . $db->quote($ftp_user_pass) . ")");
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_path', " . $db->quote($global_config['ftp_path']) . ")");
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_check_login', " . $db->quote($global_config['ftp_check_login']) . ")");
@@ -775,7 +779,7 @@ if ($step == 1) {
                                 $db->query("UPDATE " . $db_config['prefix'] . "_authors_module SET checksum = '" . $checksum . "' WHERE mid = " . $row['mid']);
                             }
 
-                            if (! (nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_function_exists('mime_content_type') or (substr($sys_info['os'], 0, 3) != 'WIN' and (nv_function_exists('system') or nv_function_exists('exec'))))) {
+                            if (!(nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_function_exists('mime_content_type') or (substr($sys_info['os'], 0, 3) != 'WIN' and (nv_function_exists('system') or nv_function_exists('exec'))))) {
                                 $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mild' WHERE lang='sys' AND module = 'global' AND config_name = 'upload_checking_mode'");
                             }
                             if (empty($array_data['lang_multi'])) {
@@ -809,12 +813,11 @@ if ($step == 1) {
                         if (empty($rewrite[0])) {
                             $error .= sprintf($lang_module['file_not_writable'], $rewrite[1]);
                         } elseif (nv_save_file_config_global()) {
-                            ++ $step;
+                            // Nếu không có dữ liệu mẫu chuyển sang bước 8
+                            $step += (empty($array_samples_data) ? 2 : 1);
                             $nv_Request->set_Session('maxstep', $step);
 
                             nv_save_file_config();
-
-                            @rename(NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME);
 
                             if (is_writable(NV_ROOTDIR . '/robots.txt')) {
                                 $contents = file_get_contents(NV_ROOTDIR . '/robots.txt');
@@ -928,7 +931,76 @@ if ($step == 1) {
     $lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
     $contents = nv_step_6($array_data, $nextstep);
 } elseif ($step == 7) {
+    // Nếu không có dữ liệu mẫu chuyển sang bước tiếp theo
+    if (empty($array_samples_data)) {
+        $maxstep = 8;
+        $nv_Request->set_Session('maxstep', $maxstep);
+        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
+    }
+
+    if ($nv_Request->isset_request('submit', 'post')) {
+        $package = $nv_Request->get_title('package', 'post', '');
+        if (!in_array('data_' . $package . '.php', $array_samples_data)) {
+            nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+        }
+        require NV_ROOTDIR . '/install/samples/data_' . $package . '.php';
+        $db = $db_slave = new NukeViet\Core\Database($db_config);
+        if (empty($db->connect)) {
+            die('Sorry! Could not connect to data server');
+        }
+        foreach ($sql_create_table as $sql) {
+            try {
+                $db->query($sql);
+            } catch (PDOException $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+
+        define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
+
+        try {
+            nv_save_file_config_global();
+            $array_config_rewrite = array(
+                'rewrite_enable' => $global_config['rewrite_enable'],
+                'rewrite_optional' => $global_config['rewrite_optional'],
+                'rewrite_endurl' => $global_config['rewrite_endurl'],
+                'rewrite_exturl' => $global_config['rewrite_exturl'],
+                'rewrite_op_mod' => $global_config['rewrite_op_mod'],
+                'ssl_https' => 0
+            );
+            $sql = "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global' AND config_name IN('" . implode("', '", array_keys($array_config_rewrite)) . "')";
+            $result = $db->query($sql);
+            while ($row = $result->fetch()) {
+                $array_config_rewrite[$row['config_name']] = $row['config_value'];
+            }
+            nv_rewrite_change($array_config_rewrite);
+        } catch (PDOException $e) {
+            echo'<pre>';
+            print_r($e);
+            echo'</pre>';
+            die();
+        }
+
+        $nv_Cache->delAll();
+        $maxstep = 8;
+        $nv_Request->set_Session('maxstep', $maxstep);
+        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
+    }
+
+    $title = $lang_module['sample_data'];
+    $array_data = array();
+    $nextstep = 0;
+    $contents = nv_step_7($array_data, $nextstep);
+} elseif ($step == 8) {
     $finish = 0;
+
+    if (file_exists(NV_ROOTDIR . '/' . $file_config_temp)) {
+        @rename(NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME);
+        //Resets the contents of the opcode cache
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+    }
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME)) {
         $ftp_check_login = 0;
@@ -975,7 +1047,7 @@ if ($step == 1) {
     }
 
     $title = $lang_module['done'];
-    $contents = nv_step_7($finish);
+    $contents = nv_step_8($finish);
 }
 
 echo nv_site_theme($step, $title, $contents);
@@ -1003,9 +1075,8 @@ function nv_save_file_config()
         $content = '';
         $content .= "<?php\n\n";
         $content .= NV_FILEHEAD . "\n\n";
-        $content .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
-        $content .= "{\n";
-        $content .= "\tdie( 'Stop!!!' );\n";
+        $content .= "if (!defined('NV_MAINFILE')) {\n";
+        $content .= "    die('Stop!!!');\n";
         $content .= "}\n\n";
         $content .= "\$db_config['dbhost'] = '" . $db_config['dbhost'] . "';\n";
         $content .= "\$db_config['dbport'] = '" . $db_config['dbport'] . "';\n";

@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
-if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -135,7 +135,7 @@ $lang_module['pass_new'] = 'New password';
 $lang_module['pass_new_re'] = 'Repeat password';
 $lang_module['change_pass_ok'] = 'Password changed';
 $lang_module['lostpass_email_subject'] = 'Guide password recovery in website %s';
-$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
+$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you will need to enter the verification code below in the corresponding box at the password change area.<br /><br />Verification code: <strong>%3$s</strong><br /><br />This code is only used once and before the deadline of %4$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
 $lang_module['lostpass_content_mess'] = 'An email is sent to %1$s, <br /><br /> please follow istruction to activate';
 $lang_module['lostpass_active_error'] = 'The Verification code does not match!';
 $lang_module['lostpass_newpass_mess'] = 'Let declare a new password in this box';
@@ -354,4 +354,5 @@ $lang_module['2step_require_directgo'] = 'Click here if the system did not redir
 $lang_module['2step_error_opt_backup'] = 'Please enter confirmation code from the Google Authenticator app or redundant code saved';
 $lang_module['2step_status'] = 'Two-step authentication';
 $lang_module['2step_link'] = 'Settings';
-$lang_module['old_min_user_error'] ='Your age is under% s so it is not old enough to register';
+$lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
+$lang_module['lostpass_sendmail_error'] = 'Currently the system can not send email so you can temporarily not get your password, please contact the site administrator for assistance. Honestly apologize for this inconvenience!';

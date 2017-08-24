@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10-5-2010 0:14
@@ -314,7 +314,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             ->fetchColumn();
 
         $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
-            ->order('tb1.publtime DESC')
+            ->order('tb1.' . $order_articles_by . ' DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 

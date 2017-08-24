@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
@@ -25,7 +25,6 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
         } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
             //chuyen huong neu doi alias
-            header('HTTP/1.1 301 Moved Permanently');
             nv_redirect_location($base_url_rewrite);
         } else {
             $canonicalUrl = $base_url_rewrite;

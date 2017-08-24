@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -30,6 +30,7 @@ if (! empty($row)) {
     $sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id;
     $db->query($sql);
 
+    $nv_Cache->delMod($module_name);
     nv_CreateXML_bannerPlan();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_banner', 'bannerid ' . $id, $admin_info['userid']);

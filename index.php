@@ -2,12 +2,16 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC.
  * All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+
+if (isset($_GET['response_headers_detect'])) {
+    exit(0);
+}
 
 define('NV_SYSTEM', true);
 
@@ -80,9 +84,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     if (isset($site_mods[$module_name])) {
         // SSL
         if ($global_config['ssl_https'] === 3 and !empty($global_config['ssl_https_modules']) and in_array($module_name, $global_config['ssl_https_modules']) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-            exit(0);
+            nv_redirect_location("https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
         }
 
         // Global variable for module
@@ -218,9 +220,17 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
 
             // Doc file cau hinh giao dien
-            $themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini'));
-            if (isset($themeConfig['positions']['position']['name'])) {
-                $themeConfig['positions']['position'] = array($themeConfig['positions']['position']);
+            $cache_file = NV_LANG_DATA . '_' . $global_config['module_theme'] . '_config_' . NV_CACHE_PREFIX . '.cache';
+            if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
+                $themeConfig = unserialize($cache);
+            } else {
+                $themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini'));
+                if (isset($themeConfig['positions']['position']['name'])) {
+                    $themeConfig['positions']['position'] = array(
+                        $themeConfig['positions']['position']
+                    );
+                }
+                $nv_Cache->setItem('themes', $cache_file, serialize($themeConfig));
             }
             require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme.php';
 

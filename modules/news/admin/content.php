@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -47,7 +47,7 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
             $return = 'ERROR_' . sprintf($lang_module['dulicate_edit_takeover'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
         }
     }
-    die($return);
+    nv_htmlOutput($return);
 }
 
 if (defined('NV_EDITOR')) {
@@ -202,7 +202,9 @@ if ($rowcontent['id'] > 0) {
                     } else {
                         if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
                             ++$check_edit;
-                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status = 2)) {
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 and $status == 5) {
+                            ++$check_edit;
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status == 8 or $status == 2)) {
                             ++$check_edit;
                         } elseif (($status == 0 or $status == 4 or $status == 5) and $rowcontent['admin_id'] == $admin_id) {
                             ++$check_edit;
@@ -308,11 +310,13 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     if ($nv_Request->isset_request('status1', 'post') || $copy) {
         $rowcontent['status'] = 1;
         //Dang tin
-    } elseif ($nv_Request->isset_request('status0', 'post')) {
-        $rowcontent['status'] = 0;
+    } elseif ($nv_Request->isset_request('status8', 'post')) {
+        $rowcontent['status'] = 8;
     } elseif ($nv_Request->isset_request('status4', 'post')) {
-        $rowcontent['status'] = 4;
+        $rowcontent['status'] = ($rowcontent['id'] > 0) ? $rowcontent['status']: 4;
         //Luu tam
+    } elseif ($nv_Request->isset_request('status5', 'post')) {
+        $rowcontent['status'] = 5;  // Chuyển duyệt bài
     } else {
         $rowcontent['status'] = 6;
         //Gui, cho bien tap
@@ -581,8 +585,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
             }
+
+            $_weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
+            $_weight = intval($_weight) + 1;
+
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
-                catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext,
+                catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext,
                 homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template,
                 instant_creatauto
             ) VALUES (
@@ -595,6 +603,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  ' . intval($rowcontent['addtime']) . ',
                  ' . intval($rowcontent['edittime']) . ',
                  ' . intval($rowcontent['status']) . ',
+                 ' . $_weight . ',
                  ' . intval($rowcontent['publtime']) . ',
                  ' . intval($rowcontent['exptime']) . ',
                  ' . intval($rowcontent['archive']) . ',
@@ -996,7 +1005,6 @@ if (empty($array_cat_check_content)) {
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    die();
 }
 $contents = '';
 
@@ -1006,7 +1014,6 @@ $lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_m
 $rowcontent['style_content_bodytext_required'] = $rowcontent['external_link'] ? 'hidden' : '';
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('rowcontent', $rowcontent);
 $xtpl->assign('ISCOPY', $copy);
@@ -1015,6 +1022,12 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
+
+if ($rowcontent['id'] > 0) {
+    $op = '';
+    $lang_module['save_temp'] = $lang_module['save'];
+}
+$xtpl->assign('LANG', $lang_module);
 
 $xtpl->assign('module_name', $module_name);
 
@@ -1174,9 +1187,6 @@ if (!empty($error)) {
 }
 
 $status_save = true;
-if ($rowcontent['id'] > 0) {
-    $op = '';
-}
 
 //Gioi hoan quyen
 if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
@@ -1187,11 +1197,14 @@ if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
         // neu co quyen dang bai
         $xtpl->parse('main.status_1');
     }
-    if (!empty($array_censor_content)) {
+    if (!empty($array_censor_content) and $rowcontent['status'] != 8) {
         // neu co quyen duyet bai thi
-        $xtpl->parse('main.status_0');
+        $xtpl->parse('main.status_8');
     }
-    $xtpl->parse('main.status_6');
+
+    if($rowcontent['status'] != 5){
+        $xtpl->parse('main.status_5');
+    }
 }
 
 if (empty($rowcontent['alias'])) {

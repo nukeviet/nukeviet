@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -19,45 +19,19 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits r
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['add_client'] = 'Ajouter un client';
-$lang_module['edit_client'] = 'Modifier les coordonnées du client';
-$lang_module['full_name_empty'] = 'Le nom du client n\'a pas été déclaré';
-$lang_module['website_incorrect'] = 'Site web incorrect';
-$lang_module['yim_incorrect'] = 'Mauvais YIM';
-$lang_module['add_client_info'] = 'Remplissez tous les champs ci-dessous pour créer un nouveau compte de client';
-$lang_module['edit_client_info'] = 'Les champs avec * sont obligatoirement déclarés';
-$lang_module['random_password'] = 'Créer le mot de passe aléatoirement';
-$lang_module['show_password'] = 'Afficher le mot de passe';
-$lang_module['login'] = 'Identifiant';
-$lang_module['full_name'] = 'Nom complet';
-$lang_module['email'] = 'E-mail';
-$lang_module['website'] = 'Site web';
-$lang_module['location'] = 'Adresse';
-$lang_module['yim'] = 'YIM';
-$lang_module['phone'] = 'Téléphone';
-$lang_module['fax'] = 'Fax';
-$lang_module['mobile'] = 'Portable';
 $lang_module['uploadtype'] = 'Types de fichiers autorisés';
-$lang_module['add_client_submit'] = 'Sauver';
-$lang_module['edit_client_submit'] = 'Soumettre';
-$lang_module['login_is_already_in_use'] = 'Le Compte &ldquo;<strong>%s</strong>&rdquo; a été utilisé';
-$lang_module['email_is_already_in_use'] = 'L\'E-mail &ldquo;<strong>%s</strong>&rdquo; a été utilisé';
-$lang_module['client_list'] = 'Clients';
-$lang_module['client_list2'] = 'Liste des clients';
-$lang_module['reg_time'] = 'Date d\'inscription';
 $lang_module['is_act'] = 'Activer';
-$lang_module['require_image'] = 'Besoin d\'image';
+$lang_module['require_image'] = 'Bannière genre';
+$lang_module['require_image0'] = 'Textlink';
+$lang_module['require_image1'] = 'Image/Flash';
 $lang_module['act0'] = 'En suspens';
 $lang_module['act1'] = 'Actif';
 $lang_module['act2'] = 'Expiré';
 $lang_module['act3'] = 'Suspendu';
+$lang_module['act4'] = 'En attente d\'acceptation';
 $lang_module['change_act'] = 'Suspendre/Activer';
-$lang_module['info_client_title'] = 'Coordonnées du client';
-$lang_module['info_client_caption'] = 'Coordonnées privées du client &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['banners_client_caption'] = 'Liste des publicités du client &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['banners_client_empty'] = 'Aucune publicité du client &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['add_banner'] = 'Ajouter une publicité';
-$lang_module['add_banner_client'] = 'Ajouter une publicité pour le client &ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['add_banner_client'] = 'Ajouter des annonces aux clients et &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Blocks publicitaires';
 $lang_module['plans_list2'] = 'Liste des Blocks publicitaires';
 $lang_module['in_plan'] = 'Dans le bloque';
@@ -82,7 +56,6 @@ $lang_module['click_url_invalid'] = 'Lien incorrect';
 $lang_module['file_upload_empty'] = 'Manque de bannière';
 $lang_module['upload_blocked'] = 'Vous ne pouvez pas ajouter les banières par ce que le transfert d\'image et de flash est interdit par le système. Merci de vérifier les configurations du serveur ou de l\'administration du site';
 $lang_module['add_banner_info'] = 'Pour ajouter une publicité, remplissez les infos aux champs ci-dessous';
-$lang_module['of_client'] = 'Client';
 $lang_module['upload'] = 'Fichier image (%s)';
 $lang_module['re_upload'] = 'Changer la bannière (%s)';
 $lang_module['imageforswf'] = 'L\'image de publicitaire si le navigateur est un mobile';
@@ -99,7 +72,7 @@ $lang_module['banners_list1'] = 'Liste des publicités actives';
 $lang_module['banners_list2'] = 'Liste des publicités expirées';
 $lang_module['banners_list3'] = 'Liste des publicités suspens';
 $lang_module['banners_list4'] = 'Liste des publicités en attente';
-$lang_module['banners_list_cl'] = 'du client &ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['banners_list_cl'] = 'du utilisateur &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['banners_list_pl'] = 'de block &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['unlimited'] = 'Illimité';
 $lang_module['info_banner_title'] = 'Titre de publicité';
@@ -144,3 +117,18 @@ $lang_module['target_top'] = 'Fenêtre le plus haut';
 $lang_module['target_self'] = 'A la page';
 $lang_module['target_parent'] = 'Fenêtre père';
 $lang_module['bannerhtml'] = 'Contenu de l\'annonce';
+$lang_module['assign_to_user'] = 'Affecter à un membre';
+$lang_module['assign_to_user_tip'] = 'Entrez votre nom d\'utilisateur ou le nom complet de recherche, puis sélectionnez dans la liste déroulante. Pour trouver exactement le type de nom d\'utilisateur = devant. Si laissé vide, le système attribue automatiquement les administrateurs manipulaient';
+$lang_module['assign_to_user_err'] = 'Erreur: Membres %s n\'existe pas';
+$lang_module['of_user'] = 'Affiche';
+$lang_module['plan_uploadgroup'] = 'Les membres de l\'équipe sont annoncés à l\'extérieur du site';
+$lang_module['plan_exp_time'] = 'Le temps chaque annonce est affichée';
+$lang_module['plan_exp_time_note'] = 'Note: La publicité limite de temps dans le bloc appliqué à l\'adhésion ou la publicité lors de l\'administration d\'annonces supplémentaires sans sélectionner l\'heure de fin. Les administrateurs peuvent choisir librement l\'heure de fin de chaque annonce qui est pas lié par cette valeur.';
+$lang_module['plan_exp_time_nolimit'] = 'Sans borne';
+$lang_module['plan_exp_time_custom'] = 'Entrer manuellement';
+$lang_module['plan_exp_time_d'] = '%s jour';
+$lang_module['plan_exp_time_w'] = '%s semaine';
+$lang_module['plan_exp_time_m'] = '%s mois (%s jour)';
+$lang_module['plan_exp_time_y'] = '%s année (%s jour)';
+$lang_module['exp_date_nochoose'] = 'Les annonces seront diffusées toujours, sinon sélectionnez la date ici';
+$lang_module['publ_time_info'] = 'Les systèmes automatiques prennent le temps commence le moment plus de publicité sinon sélectionner des dates ici';

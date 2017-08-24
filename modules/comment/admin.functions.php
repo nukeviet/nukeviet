@@ -2,17 +2,23 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
-$allow_func = array( 'main', 'edit', 'active', 'del', 'change_active' );
+$allow_func = array(
+    'main',
+    'edit',
+    'active',
+    'del',
+    'change_active'
+);
 if (defined('NV_IS_SPADMIN')) {
     $submenu['config'] = $lang_module['config'];
     $allow_func[] = 'config';
@@ -36,3 +42,8 @@ while ($row = $result->fetch()) {
 }
 
 define('NV_IS_FILE_ADMIN', true);
+
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:comment';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:comment#config';
+$array_url_instruction['edit'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:comment#edit';

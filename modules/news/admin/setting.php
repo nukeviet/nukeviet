@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -49,6 +49,7 @@ if (!empty($savesetting)) {
     $array_config['auto_tags'] = $nv_Request->get_int('auto_tags', 'post', 0);
     $array_config['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
 	$array_config['copy_news'] = $nv_Request->get_int('copy_news', 'post', 0);
+	$array_config['order_articles'] = $nv_Request->get_int('order_articles', 'post', 0);
 
     $array_config['elas_use'] = $nv_Request->get_int('elas_use', 'post', 0);
     $array_config['elas_host'] = $nv_Request->get_title('elas_host', 'post', '');
@@ -220,6 +221,15 @@ foreach ($array_structure_image as $type => $dir) {
     $xtpl->parse('main.structure_upload');
 }
 
+for ($i = 0; $i < 2; $i++) {
+    $xtpl->assign('ORDER_ARTICLES', array(
+        'key' => $i,
+        'title' => $lang_module['order_articles_' . $i],
+        'selected' => $i == $module_config[$module_name]['order_articles'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.order_articles');
+}
+
 // Cau hinh hien thi nguon tin
 $array_config_source = array(
     0 => $lang_module['config_source_title'],
@@ -265,7 +275,7 @@ $xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? "images" : NV_UPLOADS_DI
 
 if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
     $groups_list = nv_groups_list();
-    unset($groups_list[6]);
+    unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[6]);
 
     $savepost = $nv_Request->get_int('savepost', 'post', 0);
     if (!empty($savepost)) {

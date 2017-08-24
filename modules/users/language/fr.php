@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
-if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -21,6 +21,8 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['notallowuserlogin'] = 'Désolé, cette fonction est désactivée  pour ce moment';
 $lang_module['register'] = 'Créer un compte';
+$lang_module['userlogout'] = 'Compte de membre sortie';
+$lang_module['userloginviaopt'] = 'Connectez-vous au port';
 $lang_module['login_title'] = 'Si vous avez un compte';
 $lang_module['lostpass_title'] = 'Si vous oubliez le mot de passe';
 $lang_module['memberlist'] = 'Liste des utilisateurs';
@@ -77,6 +79,7 @@ $lang_module['avatar_news_copy_error'] = 'Ne peux pas sauvegarder l\'image de pr
 $lang_module['birthday'] = 'Date de naissance';
 $lang_module['showmail'] = 'Afficher l’émail';
 $lang_module['login'] = 'Se connecter';
+$lang_module['login_with'] = 'Connectez-vous avec';
 $lang_module['login_submit'] = 'Soumettre';
 $lang_module['user_info'] = 'Infos de \'utilisateur';
 $lang_module['regdate'] = 'Date d\'inscription';
@@ -132,7 +135,7 @@ $lang_module['pass_new'] = 'Nouveau mot de passe';
 $lang_module['pass_new_re'] = 'Confirmer le nouveau mot de passe';
 $lang_module['change_pass_ok'] = 'Le mot de passe a été changé avec succès';
 $lang_module['lostpass_email_subject'] = 'Guide de rechercher le mot de passe du site %s';
-$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />Email: %5$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
+$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you will need to enter the verification code below in the corresponding box at the password change area.<br /><br />Verification code: <strong>%3$s</strong><br /><br />This code is only used once and before the deadline of %4$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
 $lang_module['lostpass_content_mess'] = 'Nous vous envoyons dans votre e-mail %1$s les informations,<br /><br /> vous suivez le guide pour activer votre compte. Si vous ne trouvez pas le mail dans votre boite à lettre, veuillez vérifier le dossier Spam';
 $lang_module['lostpass_active_error'] = 'Code de certifier n\'est pas bon';
 $lang_module['lostpass_newpass_mess'] = 'Saisir votre mot de passe dans cette case';
@@ -351,6 +354,5 @@ $lang_module['2step_require_directgo'] = 'Cliquez ici si pas système d\'auto-na
 $lang_module['2step_error_opt_backup'] = 'S\'il vous plaît entrez le code de confirmation de l\'application Google Authenticator ou code redondant sauvé';
 $lang_module['2step_status'] = 'L\'authentification à deux étapes';
 $lang_module['2step_link'] = 'Réglage';
-$lang_module['userlogout'] = 'Compte de membre sortie';
-$lang_module['userloginviaopt'] = 'Connectez-vous au port';
-$lang_module['old_min_user_error'] ='Votre âge% s, l\'enregistrement des mineurs';
+$lang_module['old_min_user_error'] = 'Votre âge% s, l\'enregistrement des mineurs';
+$lang_module['lostpass_sendmail_error'] = 'Les systèmes actuels ne peuvent pas envoyer des courriels afin que vous ne pouvez pas récupérer un mot de passe temporaire, s\'il vous plaît contacter l\'administrateur du site d\'assistance. Nos sincères excuses pour la gêne occasionnée!';

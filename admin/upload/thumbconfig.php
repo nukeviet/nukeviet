@@ -56,22 +56,22 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     if (! defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
-    
+
     $thumb_dir = $nv_Request->get_int('did', 'post', 0);
     $thumb_type = $nv_Request->get_int('t', 'post', 0);
     $thumb_width = $nv_Request->get_int('w', 'post', 0);
     $thumb_height = $nv_Request->get_int('h', 'post', 0);
     $thumb_quality = $nv_Request->get_int('q', 'post', 0);
-    
+
     if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
         nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($lang_module['prViewExampleError1'], $lang_module['prViewExampleError'])));
     }
-    
+
     $return = array('status' => 'error');
-    
-    // T?m ra cái ?nh demo
+
+    // T?m ra cï¿½i ?nh demo
     $image_demo = array();
-    
+
     if ($thumb_dir) {
         $select_dir = array_intersect($array_dirname, array($thumb_dir));
         $select_dir = key($select_dir);
@@ -85,15 +85,15 @@ if ($nv_Request->isset_request('getexample', 'post')) {
             }
         }
     }
-    
+
     if (empty($image_demo)) {
         $image_demo = $db->query('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file tb1, ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 WHERE tb1.did=tb2.did AND tb1.type=\'image\' ORDER BY RAND() LIMIT 1')->fetch();
     }
-    
+
     if (empty($image_demo)) {
         nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($lang_module['file_no_exists'], $lang_module['prViewExampleError2'])));
     }
-    
+
     $image_demo['sizes'] = explode('|', $image_demo['sizes']);
     $result = array();
     $result['status'] = 'success';
@@ -103,7 +103,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     $result['thumbsrc'] = NV_BASE_SITEURL . $image_demo['dirname'] . '/' . $image_demo['title'];
     $result['thumbwidth'] = $image_demo['sizes'][0];
     $result['thumbheight'] = $image_demo['sizes'][1];
-    
+
     $file_tmp_name = 'thumbdemo_' . NV_CACHE_PREFIX . '.' . $image_demo['ext'];
     $file_tmp = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_tmp_name;
     if (file_exists($file_tmp)) {
@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
             $result['thumbheight'] = $image->create_Image_info['height'];
         }
     }
-    
+
     nv_jsonOutput($result);
 }
 
@@ -163,7 +163,7 @@ while ($data = $result->fetch()) {
         $forid = 0;
     }
     if ($data['thumb_type']) {
-        for ($id = $forid; $id < 5; $id++) {
+        for ($id = $forid; $id < 6; $id++) {
             $type = array(
                 'id' => $id,
                 'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',

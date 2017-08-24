@@ -58,6 +58,7 @@ $lang_module['config'] = 'Configuration';
 $lang_module['config_view_type'] = 'Solution d\'affichage de l\'article';
 $lang_module['config_view_type_0'] = 'Un article principal';
 $lang_module['config_view_type_1'] = 'Liste des articles';
+$lang_module['config_view_type_2'] = 'Cacher';
 $lang_module['config_view_type_page'] = 'Nombre d\'articles affiché dans une page';
 $lang_module['config_view_related_articles'] = 'Nombre d\'articles concernés';
 $lang_module['config_facebookapi'] = 'Facebook App ID';

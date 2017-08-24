@@ -153,6 +153,16 @@
 					<th>{LANG.setting_copy_news}</th>
 					<td><input type="checkbox" value="1" name="copy_news"{COPY_NEWS}/></td>
 				</tr>
+                <tr>
+                    <th>{LANG.order_articles}</th>
+                    <td>
+                    <select class="form-control" name="order_articles" id="order_articles">
+                        <!-- BEGIN: order_articles -->
+                        <option value="{ORDER_ARTICLES.key}" {ORDER_ARTICLES.selected}>{ORDER_ARTICLES.title}</option>
+                        <!-- END: order_articles -->
+                    </select></td>
+                </tr>
+               
 			</tbody>
 		</table>
 	</div>

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 4/12/2010, 17:25
@@ -43,7 +43,7 @@ $hash = $createTime . '-' . md5($host);
 header('Etag: "' . $hash . '"');
 
 if (isset($_SERVER['HTTP_IF_NONE_MATCH']) and stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == '"' . $hash . '"') {
-    header('HTTP/1.1 304 Not Modified');
+    http_response_code(304);
     header('Content-Length: 0');
     exit();
 }

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10/03/2010 10:51
@@ -23,9 +23,12 @@ if (empty($userid) or empty($checknum)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$del = NV_CURRENTTIME - 86400;
-$sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE regdate < ' . $del;
-$db->query($sql);
+$register_active_time = isset($global_users_config[register_active_time]) ? $global_users_config[register_active_time] : 86400;
+if ($register_active_time > 0) {
+    $del = NV_CURRENTTIME - $register_active_time;
+    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE regdate < ' . $del;
+    $db->query($sql);
+}
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
@@ -61,7 +64,7 @@ if ($checknum == $row['checknum']) {
                 active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
             VALUES (
                 :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
-                '', '', 0, :regdate, :question, :answer,
+                :gender, '', :birthday, :regdate, :question, :answer,
                 '', 0, 1, :in_groups,
                 1, '', 0, '', '', '', " . $global_config['idsite'] . "
             )";
@@ -74,6 +77,8 @@ if ($checknum == $row['checknum']) {
         $data_insert['email'] = $row['email'];
         $data_insert['first_name'] = $row['first_name'];
         $data_insert['last_name'] = $row['last_name'];
+        $data_insert['gender'] = $row['gender'];
+        $data_insert['birthday'] = $row['birthday'];
         $data_insert['regdate'] = $row['regdate'];
         $data_insert['question'] = $row['question'];
         $data_insert['answer'] = $row['answer'];
@@ -86,6 +91,7 @@ if ($checknum == $row['checknum']) {
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
+                if ($row_f['system'] == 1) continue;
                 $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
             }
 

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
@@ -311,7 +311,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         last_name=" . $db->quote($_user['last_name']) . ",
         gender=" . $db->quote($_user['gender']) . ",
         photo=" . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ",
-        birthday=" . $_user['birthday'] . ",
+        birthday=" . intval($_user['birthday']) . ",
         sig=" . $db->quote($_user['sig']) . ",
         question=" . $db->quote($_user['question']) . ",
         answer=" . $db->quote($_user['answer']) . ",
@@ -319,7 +319,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         in_groups='" . implode(',', $in_groups) . "'
     WHERE userid=" . $userid);
 
-    if (!empty($array_field_config)) {
+    if (!empty($query_field)) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
     }
 
@@ -432,7 +432,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $row['required'] = ($row['required']) ? 'required' : '';
 
         $xtpl->assign('FIELD', $row);
-        
+
         // Các trường hệ thống xuất độc lập
         if (!empty($row['system'])) {
             if ($row['field'] == 'birthday') {

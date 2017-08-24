@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10/03/2010 10:51
@@ -262,7 +262,9 @@ $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $mod
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_group_newusers', '0', " . NV_CURRENTTIME . ")";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_user_logs', '1', " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('min_old_user', '16', " . NV_CURRENTTIME . ")";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('register_active_time', '86400', " . NV_CURRENTTIME . ")";
 
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('first_name', 1, 'textbox', '', '', 'none', '', '', 0, 100, 1, 1, 1, 1, 'input', '', '', 1)";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, system) VALUES ('last_name', 2, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', '', '', 1)";
@@ -321,7 +323,7 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
     $lang_module_save = $lang_module;
     $lang_module = array();
     $lang_translator = array();
-    
+
     if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
         include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
     } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
@@ -329,7 +331,7 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
     } else {
         include NV_ROOTDIR . '/modules/' . $module_file . '/language/vi.php';
     }
-    
+
     // Build lại lang bảng field
     try {
         $sql = "SELECT fid, field, language, system FROM " . $db_config['prefix'] . "_" . $module_data . "_field";
@@ -357,6 +359,6 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['birthday'], 1 => '')))) . " WHERE field='birthday'";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['sig'], 1 => '')))) . " WHERE field='sig'";
     }
-    
+
     $lang_module = $lang_module_save;
 }

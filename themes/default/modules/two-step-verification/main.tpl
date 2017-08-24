@@ -4,13 +4,13 @@
     <div class="list-group">
         <div class="list-group-item">
             <p>
-                {LANG.status_2step}: 
+                {LANG.status_2step}:
                 <!-- BEGIN: on --><strong class="text-success">{LANG.active_2step}</strong><!-- END: on -->
                 <!-- BEGIN: off --><strong class="text-danger">{LANG.deactive_2step}</strong><!-- END: off -->
             </p>
             <!-- BEGIN: turnoff -->
             <div class="clearfix">
-                <a href="{LINK_TURNOFF}" class="btn btn-danger">{LANG.turnoff2step}</a>
+                <input class="btn btn-danger" type="button" value="{LANG.turnoff2step}" data-toggle="turnoff2step" data-tokend="{NV_CHECK_SESSION}"/>
             </div>
             <!-- END: turnoff -->
             <!-- BEGIN: turnon -->
@@ -23,9 +23,16 @@
         <div class="list-group-item">
             <p>{NUM_CODE}: <strong><a href="#modal-backupcode" data-toggle="viewcode">{LANG.backupcode_2step_view}</a></strong></p>
             <div class="clearfix">
-                <a href="{LINK_CREATCODE}" class="btn btn-info">{LANG.creat_other_code}</a>
+                <input class="btn btn-info" type="button" value="{LANG.creat_other_code}" data-toggle="changecode2step" data-tokend="{NV_CHECK_SESSION}"/>
             </div>
         </div>
+        <!-- BEGIN: autoshowcode -->
+        <script type="text/javascript">
+        $(function() {
+            $('[data-toggle="viewcode"]').click();
+        });
+        </script>
+        <!-- END: autoshowcode -->
         <!-- END: backupcode -->
     </div>
 </div>

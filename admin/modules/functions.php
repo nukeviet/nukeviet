@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 5:53
@@ -19,6 +19,12 @@ $menu_top = array(
 );
 
 define('NV_IS_FILE_MODULES', true);
+
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:modules';
+$array_url_instruction['setup'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:setup';
+$array_url_instruction['vmodule'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:vmodule';
+$array_url_instruction['edit'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:edit';
 
 /**
  * nv_parse_vers()

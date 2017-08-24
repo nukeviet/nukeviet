@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:19
@@ -37,8 +37,7 @@ if ($id > 0 and $nv_Request->get_string('s', 'get', 0) == md5($id . NV_CHECK_SES
 
 include NV_ROOTDIR . '/includes/header.php';
 
-header('Status: 301 Moved Permanently', false, 301);
-
+http_response_code(301);
 echo '<script type="text/javascript">';
 echo '		window.location.href="' . $links . '";';
 echo '</script>';
