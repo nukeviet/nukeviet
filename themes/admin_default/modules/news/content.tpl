@@ -146,6 +146,19 @@
 								</div>
 							</div>
 						</li>
+						<li>
+							<p class="message_head">
+								<cite>{LANG.pick_layout}</cite>
+							</p>
+							<div class="message_body">
+							<select name="layout_func" class="form-control">
+								<option value="">{LANG.default_layout}</option>
+								<!-- BEGIN: layout_func -->
+								<option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+								<!-- END: layout_func -->
+							</select>
+							</div>
+						</li>
 					</ul>
 				</div>
 				<div class="col-sm-12 col-md-24">

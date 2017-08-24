@@ -325,9 +325,9 @@ function nv_add_block_topcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
-            $nv_Cache->delMod('themes');
             return true;
         }
+		$nv_Cache->delMod($module_name);
     }
 }
 
@@ -340,7 +340,7 @@ function nv_add_block_topcat_news($catid)
 function nv_add_block_botcat_news($catid)
 {
 
-    global $global_config, $module_info, $module_name, $nv_Cache, $nv_Cache;
+    global $global_config, $module_info, $module_name, $nv_Cache;
 
     if (!empty($module_info['theme'])) {
         $ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
@@ -374,9 +374,9 @@ function nv_add_block_botcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
-            $nv_Cache->delMod('themes');
             return true;
         }
+		$nv_Cache->delMod($module_name);
     }
 }
 
@@ -419,9 +419,9 @@ function nv_remove_block_topcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
-            $nv_Cache->delMod('themes');
             return true;
         }
+		$nv_Cache->delMod($module_name);
     }
 }
 
@@ -464,8 +464,8 @@ function nv_remove_block_botcat_news($catid)
             return false;
         } else {
             fclose($fhandle);
-            $nv_Cache->delMod('themes');
             return true;
         }
+		$nv_Cache->delMod($module_name);
     }
 }

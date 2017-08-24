@@ -336,3 +336,6 @@ $lang_module['dulicate_edit_takeover'] = 'You have been take over by this accoun
 
 $lang_module['setting_copy_news'] = 'Allowed to copy the article';
 $lang_module['title_copy_news'] = 'Copy the article';
+
+$lang_module['pick_layout'] = 'Choose layout';
+$lang_module['default_layout'] = 'Default';

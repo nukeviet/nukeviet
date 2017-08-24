@@ -73,6 +73,10 @@ $array_structure_image['username_Y_m_d'] = $module_upload . '/' . $username_alia
 $structure_upload = isset($module_config[$module_name]['structure_upload']) ? $module_config[$module_name]['structure_upload'] : 'Ym';
 $currentpath = isset($array_structure_image[$structure_upload]) ? $array_structure_image[$structure_upload] : '';
 
+// Lua chon Layout
+$selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
+$layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
+
 if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
     $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $currentpath;
 } else {
@@ -166,6 +170,7 @@ $rowcontent = array(
     'hitscm' => 0,
     'total_rating' => 0,
     'click_rating' => 0,
+	'layout_func' => '',
     'keywords' => '',
     'keywords_old' => '',
     'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
@@ -409,6 +414,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     if (!array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
         $rowcontent['imgposition'] = 1;
     }
+	// Lua chon Layout
+	$rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
+	
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
     $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
@@ -624,7 +632,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  ' . intval($rowcontent['instant_active']) . ',
                  :instant_template,
                  ' . intval($rowcontent['instant_creatauto']) . '
-            )';
+				 :layout_func)';
 
             $data_insert = array();
             $data_insert['listcatid'] = $rowcontent['listcatid'];
@@ -637,6 +645,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
             $data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
             $data_insert['instant_template'] = $rowcontent['instant_template'];
+			$data_insert['layout_func'] = $rowcontent['layout_func'];
 
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
@@ -721,6 +730,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 instant_active=' . intval($rowcontent['instant_active']) . ',
                 instant_template=:instant_template,
                 instant_creatauto=' . intval($rowcontent['instant_creatauto']) . ',
+				layout_func=:layout_func,
                 edittime=' . NV_CURRENTTIME . '
             WHERE id =' . $rowcontent['id']);
 
@@ -734,6 +744,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $sth->bindParam(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR);
             $sth->bindParam(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
             $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
+			$sth->bindParam( ':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR );
 
             if ($sth->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
@@ -1116,6 +1127,17 @@ foreach ($groups_list as $_group_id => $_title) {
 if ($module_config[$module_name]['allowed_comm'] != '-1') {
     $xtpl->parse('main.content_note_comm');
 }
+
+// Lua chon Layout
+foreach ($layout_array as $value) {
+    $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
+    $xtpl->assign('LAYOUT_FUNC', array(
+        'key' => $value,
+        'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.layout_func');
+}
+
 
 // source
 $select = '';

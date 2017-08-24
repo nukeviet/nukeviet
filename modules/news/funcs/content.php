@@ -147,6 +147,10 @@ $contentid = $nv_Request->get_int('contentid', 'get,post', 0);
 $fcheckss = $nv_Request->get_title('checkss', 'get,post', '');
 $checkss = md5($contentid . NV_CHECK_SESSION);
 
+// Lua chon Layout
+$selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
+$layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
+
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     if ($contentid > 0) {
         $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid . ' and admin_id= ' . $user_info['userid'])->fetch();
@@ -223,6 +227,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         'hitscm' => 0,
         'total_rating' => 0,
         'click_rating' => 0,
+		'layout_func' => '',
         'keywords' => ''
     );
 
@@ -272,6 +277,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '', 1);
         $rowcontent['imgposition'] = $nv_Request->get_int('imgposition', 'post', 0);
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
+		
+		$rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
 
         // Xu ly anh minh hoa
         $rowcontent['homeimgthumb'] = 0;
@@ -339,7 +346,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $_weight = intval($_weight) + 1;
 
                 $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
+						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, layout_func) VALUES
 						 (" . intval($rowcontent['catid']) . ",
 						 " . $db->quote($rowcontent['listcatid']) . ",
 						 " . intval($rowcontent['topicid']) . ",
@@ -366,7 +373,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 						 " . intval($rowcontent['hitstotal']) . ",
 						 " . intval($rowcontent['hitscm']) . ",
 						 " . intval($rowcontent['total_rating']) . ",
-						 " . intval($rowcontent['click_rating']) . ")";
+						 " . intval($rowcontent['click_rating']) . ",
+						 " . $db->quote($rowcontent['layout_func']) . ")";
 
                 $rowcontent['id'] = $db->insert_id($_sql, 'id');
                 if ($rowcontent['id'] > 0) {
@@ -424,6 +432,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 						 inhome=" . intval($rowcontent['inhome']) . ",
 						 allowed_comm=" . intval($rowcontent['allowed_comm']) . ",
 						 allowed_rating=" . intval($rowcontent['allowed_rating']) . ",
+						 layout_func=" . $db->quote($rowcontent['layout_func']) . ",
 						 external_link=" . intval($rowcontent['external_link']) . ",
 						 edittime=" . NV_CURRENTTIME . "
 						WHERE id =" . $rowcontent['id'];
@@ -554,6 +563,16 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->assign('CHECKSS', $checkss);
         $xtpl->parse('main.captcha');
     }
+	
+	// Lua chon Layout
+	foreach ($layout_array as $value) {
+		$value = preg_replace($global_config['check_op_layout'], '\\1', $value);
+		$xtpl->assign('LAYOUT_FUNC', array(
+			'key' => $value,
+			'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
+		));
+		$xtpl->parse('main.layout_func');
+	}
 
     $xtpl->assign('CONTENT_URL', $base_url . '&contentid=' . $rowcontent['id'] . '&checkss=' . $checkss);
     $array_catid_in_row = explode(',', $rowcontent['listcatid']);

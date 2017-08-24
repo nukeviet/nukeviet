@@ -52,6 +52,18 @@
 	</div>
 
 	<div class="form-group">
+		<label class="col-sm-4 control-label">{LANG.pick_layout}</label>
+		<div class="col-sm-20">
+			<select name="layout_func" class="form-control">
+				<option value="">{LANG.default_layout}</option>
+				<!-- BEGIN: layout_func -->
+				<option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+				<!-- END: layout_func -->
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.content_homeimg}</label>
 		<div class="col-sm-20">
 			<input class="form-control" name="homeimgfile" id="homeimg" value="{DATA.homeimgfile}" type="text" />

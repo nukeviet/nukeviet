@@ -356,3 +356,6 @@ $lang_module['order_articles_0'] = 'Sắp xếp theo thời gian đăng';
 $lang_module['order_articles_1'] = 'Sắp xếp tùy biến, đánh số tăng dần';
 $lang_module['order_articles_number'] = 'STT sắp xếp hiện tại';
 $lang_module['order_articles_new'] = 'STT sắp xếp mới';
+
+$lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
+$lang_module['default_layout'] = 'Mặc định';
