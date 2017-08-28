@@ -350,3 +350,9 @@ $lang_module['dulicate_edit_takeover'] = 'Bạn đã bị chiếm quyền chi
 
 $lang_module['setting_copy_news'] = 'Cho phép copy bài viết';
 $lang_module['title_copy_news'] = 'Sao chép bài viết';
+
+$lang_module['order_articles'] = 'Sắp xếp bài viết';
+$lang_module['order_articles_0'] = 'Sắp xếp theo thời gian đăng';
+$lang_module['order_articles_1'] = 'Sắp xếp tùy biến, đánh số tăng dần';
+$lang_module['order_articles_number'] = 'STT sắp xếp hiện tại';
+$lang_module['order_articles_new'] = 'STT sắp xếp mới';

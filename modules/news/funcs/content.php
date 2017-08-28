@@ -21,7 +21,7 @@ if (defined('NV_EDITOR')) {
 
     /**
      * nv_aleditor()
-     * 
+     *
      * @param mixed $textareaname
      * @param string $width
      * @param string $height
@@ -158,6 +158,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
         if ($nv_Request->get_int('delcontent', 'get') and (empty($rowcontent_old['status']) or $array_post_user['delcontent'])) {
             nv_del_content_module($contentid);
+            nv_fix_weight_content($rowcontent_old['weight']);
 
             $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['del_content'], $contentid . ' | ' . $client_info['ip'] . $user_content, 0);
@@ -334,8 +335,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 }
             }
             if ($rowcontent['id'] == 0) {
+                $_weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
+                $_weight = intval($_weight) + 1;
+
                 $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
+						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
 						 (" . intval($rowcontent['catid']) . ",
 						 " . $db->quote($rowcontent['listcatid']) . ",
 						 " . intval($rowcontent['topicid']) . ",
@@ -345,6 +349,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 						 " . intval($rowcontent['addtime']) . ",
 						 " . intval($rowcontent['edittime']) . ",
 						 " . intval($rowcontent['status']) . ",
+						 " . $_weight . ",
 						 " . intval($rowcontent['publtime']) . ",
 						 " . intval($rowcontent['exptime']) . ",
 						 " . intval($rowcontent['archive']) . ",

@@ -17,6 +17,7 @@ define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,ab
 function nv_copy_structure_table($table_des, $table_src)
 {
     global $db;
+    $db->exec('DROP TABLE IF EXISTS ' . $table_des);
     return $db->exec('CREATE TABLE ' . $table_des . ' LIKE ' . $table_src);
 }
 

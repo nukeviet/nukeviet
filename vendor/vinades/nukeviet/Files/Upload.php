@@ -140,12 +140,7 @@ class Upload
         }
 
         if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions)) {
-            ini_set('allow_url_fopen', 1);
             ini_set('default_socket_timeout', 120);
-            $memoryLimitMB = (integer) ini_get('memory_limit');
-            if ($memoryLimitMB < 64) {
-                ini_set('memory_limit', '64M');
-            }
             ini_set('user_agent', $this->user_agent);
         }
     }

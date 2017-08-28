@@ -178,7 +178,6 @@ class Optimizer
         }
 
         $head = "";
-        $this->_content = preg_replace('/>[\r\n\t ]+</', '><', $this->_content);
 
         if (! empty($meta)) {
             $head .= implode($this->eol, $meta) . $this->eol;
