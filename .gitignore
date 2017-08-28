@@ -35,7 +35,10 @@
 !/themes/admin_default/images/videoclips/*
 !/themes/admin_default/modules/videoclips
 !/themes/admin_default/modules/videoclips/*
+!/themes/default/css/fonts/
+!/themes/default/css/flexslider.css
 !/themes/default/css/videoclips.css
+!/themes/default/js/jquery.flexslider.js
 !/themes/default/js/videoclips*.js
 !/themes/default/images/videoclips
 !/themes/default/images/videoclips/*
