@@ -303,11 +303,11 @@ function nv_add_block_topcat_news($catid)
     if (!nv_check_block_topcat_news($catid) and !empty($contents)) {
         $find = "/<positions>/";
         $pos = "
-		<position>
-			<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "</name>
-			<tag>[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "]</tag>
-		</position>
-			";
+        <position>
+            <name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "</name>
+            <tag>[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "]</tag>
+        </position>
+            ";
         $_replace = "<positions>" . $pos;
         $contents = preg_replace($find, $_replace, $contents);
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
@@ -352,11 +352,11 @@ function nv_add_block_botcat_news($catid)
     if (!nv_check_block_block_botcat_news($catid) and !empty($contents)) {
         $find = "/<positions>/";
         $pos = "
-		<position>
-			<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "</name>
-			<tag>[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "]</tag>
-		</position>
-			";
+        <position>
+            <name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "</name>
+            <tag>[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "]</tag>
+        </position>
+            ";
         $_replace = "<positions>" . $pos;
         $contents = preg_replace($find, $_replace, $contents);
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
@@ -376,7 +376,7 @@ function nv_add_block_botcat_news($catid)
             fclose($fhandle);
             return true;
         }
-		$nv_Cache->delMod($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 
@@ -421,7 +421,7 @@ function nv_remove_block_topcat_news($catid)
             fclose($fhandle);
             return true;
         }
-		$nv_Cache->delMod($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 
@@ -466,6 +466,6 @@ function nv_remove_block_botcat_news($catid)
             fclose($fhandle);
             return true;
         }
-		$nv_Cache->delMod($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }

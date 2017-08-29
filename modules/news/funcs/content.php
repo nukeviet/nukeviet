@@ -272,7 +272,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         
         // Xu ly Alias
         $rowcontent['alias'] = strtolower(change_alias($rowcontent['title']));
-        if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0){
+        if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ) {
             $alias = $nv_Request->get_title('alias', 'post', '');
             $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
         }
@@ -573,12 +573,12 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     }
     
     // Xu ly alias
-    if( $module_config[$module_name]['frontend_edit_alias'] == 1 AND $rowcontent['id'] == 0 ){
+    if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ){
         $xtpl->parse('main.alias');
     }
 
     // Lua chon Layout
-    if( $module_config[$module_name]['frontend_edit_layout'] == 1){
+    if ( $module_config[$module_name]['frontend_edit_layout'] == 1){
         foreach ($layout_array as $value) {
             $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
             $xtpl->assign('LAYOUT_FUNC', array(
