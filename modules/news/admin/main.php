@@ -74,6 +74,7 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $_weight_new . ' WHERE id=' . $_id);
                 } catch (PDOException $e) {}
             }
+            $nv_Cache->delMod($module_name);
         }
     }
 }
