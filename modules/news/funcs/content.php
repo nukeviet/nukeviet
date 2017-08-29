@@ -578,7 +578,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     }
 
     // Lua chon Layout
-    if ( $module_config[$module_name]['frontend_edit_layout'] == 1){
+    if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ){
         foreach ($layout_array as $value) {
             $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
             $xtpl->assign('LAYOUT_FUNC', array(
