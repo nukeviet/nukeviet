@@ -170,7 +170,7 @@ $rowcontent = array(
     'hitscm' => 0,
     'total_rating' => 0,
     'click_rating' => 0,
-	'layout_func' => '',
+    'layout_func' => '',
     'keywords' => '',
     'keywords_old' => '',
     'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
@@ -414,9 +414,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     if (!array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
         $rowcontent['imgposition'] = 1;
     }
-	// Lua chon Layout
-	$rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
-	
+    // Lua chon Layout
+    $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
+    
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
     $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
@@ -922,14 +922,14 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     // Lưu thông tin người đang sửa
     $_query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp
-		WHERE id =' . $rowcontent['id']);
+        WHERE id =' . $rowcontent['id']);
     if ($row_tmp = $_query->fetch()) {
         if ($row_tmp['admin_id'] == $admin_info['admin_id']) {
             // Cập nhật thời gian sửa cuối
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' WHERE id=' . $rowcontent['id']);
         } elseif ($row_tmp['time_late'] < NV_CURRENTTIME - 300) {
             //Cho phép sửa nếu người đang sửa 5 phút không thao tác đến
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '	WHERE id=' . $rowcontent['id']);
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '  WHERE id=' . $rowcontent['id']);
         } else {
             // Thông báo không có quyền sửa.
             $_username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $row_tmp['admin_id'])->fetchColumn();
@@ -937,7 +937,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($admin_info['level'] < $_authors_lev) {
                 $takeover = md5($rowcontent['id'] . '_takeover_' . NV_CHECK_SESSION);
                 if ($takeover == $nv_Request->get_title('takeover', 'get', '')) {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '	WHERE id=' . $rowcontent['id']);
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '  WHERE id=' . $rowcontent['id']);
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 }
                 $contents = sprintf($lang_module['dulicate_edit_admin'], $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
@@ -952,7 +952,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         }
     } else {
         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (id, admin_id, time_edit, time_late, ip)
-			VALUES (' . $rowcontent['id'] . ',' . $admin_info['admin_id'] . ',' . NV_CURRENTTIME . ',' . NV_CURRENTTIME . ',' . $db->quote($admin_info['last_ip']) . ')');
+            VALUES (' . $rowcontent['id'] . ',' . $admin_info['admin_id'] . ',' . NV_CURRENTTIME . ',' . NV_CURRENTTIME . ',' . $db->quote($admin_info['last_ip']) . ')');
     }
 }
 

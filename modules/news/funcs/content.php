@@ -272,7 +272,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         
         // Xu ly Alias
         $rowcontent['alias'] = strtolower(change_alias($rowcontent['title']));
-        if( $module_config[$module_name]['frontend_edit_alias'] == 1 AND $rowcontent['id'] == 0){
+        if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0){
             $alias = $nv_Request->get_title('alias', 'post', '');
             $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
         }
@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
         
         // Lua chon Layout
-        if( $module_config[$module_name]['frontend_edit_layout'] == 1){
+        if ( $module_config[$module_name]['frontend_edit_layout'] == 1){
             $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
         }
         // Xu ly anh minh hoa

@@ -327,7 +327,7 @@ function nv_add_block_topcat_news($catid)
             fclose($fhandle);
             return true;
         }
-		$nv_Cache->delMod($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 
