@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
         
         // Lua chon Layout
-        if ( $module_config[$module_name]['frontend_edit_layout'] == 1){
+        if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ){
             $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
         }
         // Xu ly anh minh hoa

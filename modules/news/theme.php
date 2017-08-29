@@ -701,7 +701,7 @@ function viewcat_two_column($array_content, $array_catpage)
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $admin_info, $client_info, $op_file;
+    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $client_info, $op_file;
     
     // Xu ly Layout tuy chinh
     $module_info['layout_funcs'][$op_file] = !empty($news_contents['layout_func']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
