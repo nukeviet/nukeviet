@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
         
         // Lua chon Layout
-        if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ){
+        if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ) {
             $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
         }
         // Xu ly anh minh hoa
@@ -573,12 +573,12 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     }
     
     // Xu ly alias
-    if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ){
+    if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ) {
         $xtpl->parse('main.alias');
     }
 
     // Lua chon Layout
-    if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ){
+    if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ) {
         foreach ($layout_array as $value) {
             $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
             $xtpl->assign('LAYOUT_FUNC', array(
