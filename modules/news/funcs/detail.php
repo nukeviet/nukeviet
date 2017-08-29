@@ -31,7 +31,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         }
         $canonicalUrl = str_replace('&', '&amp;', $canonicalUrl);
 
-        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, sourcetext, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
 

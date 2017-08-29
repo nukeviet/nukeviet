@@ -359,3 +359,7 @@ $lang_module['order_articles_new'] = 'STT sắp xếp mới';
 
 $lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
 $lang_module['default_layout'] = 'Mặc định';
+
+$lang_module['setting_frontend_post'] = 'Cấu hình khu vực đăng bài ở trang người dùng';
+$lang_module['frontend_edit_alias'] = 'Cho phép tuỳ chỉnh liên kết tĩnh khi đăng bài mới';
+$lang_module['frontend_edit_layout'] = 'Cho phép tuỳ chỉnh bố cục';

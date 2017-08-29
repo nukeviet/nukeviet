@@ -64,7 +64,7 @@ if (!empty($savesetting)) {
     $array_config['instant_articles_livetime'] = $nv_Request->get_int('instant_articles_livetime', 'post', 0);
     $array_config['instant_articles_gettime'] = $nv_Request->get_int('instant_articles_gettime', 'post', 0);
     $array_config['instant_articles_auto'] = $nv_Request->get_int('instant_articles_auto', 'post', 0);
-
+    
     if (!empty($array_config['instant_articles_httpauth']) and (empty($array_config['instant_articles_username']) or empty($array_config['instant_articles_password']))) {
         $array_config['instant_articles_httpauth'] = 0;
     }
@@ -188,6 +188,9 @@ $xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_a
 $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant_articles_httpauth'] ? ' checked="checked"' : '');
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 
+$xtpl->assign('FRONTEND_EDIT_ALIAS', $module_config[$module_name]['frontend_edit_alias'] ? ' checked="checked"' : '');
+$xtpl->assign('FRONTEND_EDIT_LAYOUT', $module_config[$module_name]['frontend_edit_layout'] ? ' checked="checked"' : '');
+
 if (!empty($module_config[$module_name]['instant_articles_password'])) {
     $xtpl->assign('INSTANT_ARTICLES_PASSWORD', $crypt->decrypt($module_config[$module_name]['instant_articles_password']));
 } else {
@@ -285,6 +288,18 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
         $array_postcontent = $nv_Request->get_typed_array('array_postcontent', 'post', 'int', array());
         $array_editcontent = $nv_Request->get_typed_array('array_editcontent', 'post', 'int', array());
         $array_delcontent = $nv_Request->get_typed_array('array_delcontent', 'post', 'int', array());
+        
+
+        $array_config['frontend_edit_alias'] = $nv_Request->get_int('frontend_edit_alias', 'post', 0);
+        $array_config['frontend_edit_layout'] = $nv_Request->get_int('frontend_edit_layout', 'post', 0);
+        
+        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+        foreach ($array_config as $config_name => $config_value) {
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
 
         foreach ($array_group_id as $group_id) {
             if (isset($groups_list[$group_id])) {
@@ -344,7 +359,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
 
         $xtpl->parse('main.admin_config_post.loop');
     }
-
+    
     $xtpl->parse('main.admin_config_post');
 }
 
