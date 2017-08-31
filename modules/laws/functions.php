@@ -167,7 +167,7 @@ if ($op == "main") {
                 );
                 $parentid = $c['parentid'];
             }
-            sort($array_mod_title, SORT_NUMERIC);
+            krsort($array_mod_title, SORT_NUMERIC);
         }
     }
 }
