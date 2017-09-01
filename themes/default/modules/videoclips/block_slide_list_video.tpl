@@ -66,11 +66,10 @@
 		<!-- END: loop -->
 	</ul>
 </div>
-<div class="custom-navigation col-md-24">
-   <a href="#" class="flex-next">Sau <i class="fa fa-angle-right fa-lg"></i></a>
-  <div class="custom-controls-container"></div>
-  <a href="#" class="flex-prev"><i class="fa fa-angle-left fa-lg"></i> Trước</a>
-</div>
+
+<ul class="flex-direction-nav">
+<li class="flex-nav-prev"><a href="#" class="flex-next">Sau <i class="fa fa-angle-right fa-lg"></i></a></li>
+<li class="flex-nav-next"><a href="#" class="flex-prev"><i class="fa fa-angle-left fa-lg"></i> Trước</a></li></ul>
 <script defer src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.flexslider.js"></script>
 <script type="text/javascript">
 	$(window).on('load', function() {
