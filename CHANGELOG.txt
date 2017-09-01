@@ -1,6 +1,13 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.2.02
+- Add feature: Export and install sample data.
+- News: Added sorting feature.
+- Upload: Resize and crop top photos by size
+- Page: add no-dipsplay view type 
+- Fix some other bugs
+
 NUKEVIET 4.2.01
 - Module banners: Change upload dir, editor dir; move clients to users, banner plans: add config for group users, upload types, expiration date
 - Cache for load config theme

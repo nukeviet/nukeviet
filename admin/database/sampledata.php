@@ -21,7 +21,8 @@ $array_ignore_save = array(
     $db_config['prefix'] . '_counter',
     $db_config['prefix'] . '_logs',
     $db_config['prefix'] . '_sessions',
-    $db_config['prefix'] . '_sessions'
+    $db_config['prefix'] . '_upload_dir',
+    $db_config['prefix'] . '_upload_file'
 );
 $array_ignore_drop = array(
     NV_USERS_GLOBALTABLE

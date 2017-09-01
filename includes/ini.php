@@ -17,11 +17,10 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
 }
 
 $iniSaveTime = 0;
-$ctime = time();
 $ini_list = ini_get_all(null, false);
 $config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', $server_name) . '.php';
 @include_once $config_ini_file;
-if ($iniSaveTime + 86400 < $ctime) {
+if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config = "<?php" . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
@@ -156,6 +155,13 @@ if ($iniSaveTime + 86400 < $ctime) {
     $content_config .= "\$sys_info['server_headers'] = array(" . $_temp . ");\n";
 
     if ($sys_info['ini_set_support']) {
+        ini_set('display_startup_errors', 0);
+        ini_set('track_errors', 1);
+
+        ini_set('log_errors', 0);
+        ini_set('display_errors', 0);
+        ini_set('display_errors', 0);
+
         if (strcasecmp($global_config['session_handler'], $ini_list['session.save_handler']) != 0) {
             if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache']) and defined('NV_MEMCACHED_HOST') and defined('NV_MEMCACHED_PORT') and NV_MEMCACHED_HOST != '' and NV_MEMCACHED_PORT != '') {
                 if (ini_set('session.save_handler', 'memcached') !== false) {
@@ -205,42 +211,52 @@ if ($iniSaveTime + 86400 < $ctime) {
         ini_set('auto_detect_line_endings', 0);
     }
 
+    //Neu he thong khong ho tro php se bao loi
+    if (version_compare(PHP_VERSION, '5.5.0') < 0) {
+        die('You are running an unsupported PHP version. Please upgrade to PHP 5.5 or higher before trying to install Nukeviet Portal');
+    }
+
+    //Neu he thong khong ho tro opendir se bao loi
+    if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions']))) {
+        die('Opendir function is not supported');
+    }
+
+    //Neu he thong khong ho tro GD se bao loi
+    if (!(extension_loaded('gd'))) {
+        die('GD not installed');
+    }
+
+    //Neu he thong khong ho tro json se bao loi
+    if (!extension_loaded('json')) {
+        die('Json object not supported');
+    }
+
+    //Neu he thong khong ho tro xml se bao loi
+    if (!extension_loaded('xml')) {
+        die('Xml library not supported');
+    }
+
+    //Neu he thong khong ho tro mcrypt library se bao loi
+    if (!function_exists('openssl_encrypt')) {
+        die('Openssl library not available');
+    }
+
+    //Neu he thong khong ho tro session se bao loi
+    if (!extension_loaded('session') or empty($ini_list['session.save_handler']) or ($ini_list['session.save_handler'] != 'files' and empty($ini_list['session.save_path']))) {
+        die('Session object not supported');
+    }
+
+    $ini_list_new = ini_get_all(null, false);
+
+    $diff = array_diff_assoc($ini_list_new, $ini_list);
+    if (!empty($diff)) {
+        $content_config .= "\n";
+        foreach ($diff as $key => $value) {
+            $content_config .= "ini_set('" . $key . "', '" . $value . "');\n";
+        }
+    }
+
     $content_config .= "\n";
-    $content_config .= "\$iniSaveTime = " . $ctime . ";";
+    $content_config .= "\$iniSaveTime = " . NV_CURRENTTIME . ";";
     @file_put_contents($config_ini_file, $content_config, LOCK_EX);
-}
-
-//Neu he thong khong ho tro php se bao loi
-if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-    die('You are running an unsupported PHP version. Please upgrade to PHP 5.5 or higher before trying to install Nukeviet Portal');
-}
-
-//Neu he thong khong ho tro opendir se bao loi
-if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions']))) {
-    die('Opendir function is not supported');
-}
-
-//Neu he thong khong ho tro GD se bao loi
-if (!(extension_loaded('gd'))) {
-    die('GD not installed');
-}
-
-//Neu he thong khong ho tro json se bao loi
-if (!extension_loaded('json')) {
-    die('Json object not supported');
-}
-
-//Neu he thong khong ho tro xml se bao loi
-if (!extension_loaded('xml')) {
-    die('Xml library not supported');
-}
-
-//Neu he thong khong ho tro mcrypt library se bao loi
-if (!function_exists('openssl_encrypt')) {
-    die('Openssl library not available');
-}
-
-//Neu he thong khong ho tro session se bao loi
-if (!extension_loaded('session') or empty($ini_list['session.save_handler']) or ($ini_list['session.save_handler'] != 'files' and empty($ini_list['session.save_path']))) {
-    die('Session object not supported');
 }
