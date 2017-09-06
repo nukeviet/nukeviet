@@ -63,30 +63,30 @@
         height: auto;
         padding-bottom: 0;
     }
-    
+
     .upload-wrap{
         height: auto;
     }
-    
+
     .imgfolder{
         height: auto;
         max-height: 300px;
     }
-    
+
     .filebrowse{
         height: auto;
     }
-    
+
     .footer{
         position: inherit;
         height: auto;
         border-top: 1px #dadada solid;
     }
-    
+
     .footer .form-control{
         margin-bottom: 10px;
     }
-    
+
     .footer .refresh, .footer .search{
         text-align: center;
     }
@@ -127,6 +127,16 @@
 
 #imgpreview .file-detail{
     font-size: 11px;
+}
+
+#fileView.zoomin img {
+    cursor: zoom-in;
+}
+
+#fileInfoLink label {
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 600;
 }
 
 /* Creat image */
@@ -210,7 +220,7 @@
 /* Remote upload */
 #uploadremote{
     padding: 10px;
-    display: none;    
+    display: none;
 }
 
 /* Local upload */
@@ -322,7 +332,7 @@ img.watermark:hover {
 .imgIcon{
     width: 100px;
     height: 86px;
-    display: table-cell; 
+    display: table-cell;
     vertical-align: middle;
 }
 
@@ -356,7 +366,7 @@ img.previewimg {
 .view-detail .imgcontent{
     background: #fff;
     border: 0;
-    border-bottom: 1px #EAEAEA solid;    
+    border-bottom: 1px #EAEAEA solid;
     color: #666;
     cursor: pointer;
     float: none;
@@ -381,7 +391,7 @@ img.previewimg {
 .view-detail .imgIcon{
     width: 40px;
     height: 30px;
-    display: inherit; 
+    display: inherit;
     vertical-align: middle;
     float: left;
 }
@@ -424,7 +434,7 @@ img.previewimg {
 /* Crop image */
 #cropimage{
     padding: 10px;
-    display: none;    
+    display: none;
 }
 
 #cropimage .crop-content{
@@ -445,7 +455,7 @@ img.previewimg {
 /* Add logo */
 #addlogo{
     padding: 10px;
-    display: none;    
+    display: none;
 }
 
 #addlogo .addlogo-content{
