@@ -317,7 +317,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0;
     width: 100%;
     height: calc(100vh - 224px);
-    min-height: 450px!important;
+    min-height: 450px;
 }
 
 #contentmod p.note_cat{
