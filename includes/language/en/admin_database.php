@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -78,3 +78,19 @@ $lang_module['file_nb'] = 'No.';
 $lang_module['file_name'] = 'File name';
 $lang_module['file_time'] = 'Time';
 $lang_module['file_size'] = 'Size';
+$lang_module['sampledata'] = 'Export sample data';
+$lang_module['sampledata_note'] = 'This is a way to export the entire database of the current website to a template file for the purpose of packaging the entire website. When installed new, the system will restore the old packaging data instead of installing the sample data in the installer. Please complete the required items below then click the make button to begin the process';
+$lang_module['sampledata_creat'] = 'Create a new sample data packet';
+$lang_module['sampledata_list'] = 'List of generated template packets';
+$lang_module['sampledata_empty'] = 'No sample data package yet';
+$lang_module['sampledata_start'] = 'Start creating';
+$lang_module['sampledata_dat_init'] = 'The process begins to run, please do not turn off the browser until the completion message or error message. The system is checking information';
+$lang_module['sampledata_name'] = 'Sample package name';
+$lang_module['sampledata_name_rule'] = 'Only enter characters from a-z and 0-9';
+$lang_module['sampledata_error_sys'] = 'Server error, please reload the page and try again';
+$lang_module['sampledata_error_name'] = 'Please enter a sample package name';
+$lang_module['sampledata_error_namerule'] = 'Please enter only characters from a-z and 0-9';
+$lang_module['sampledata_error_exists'] = 'This sample data package already exists, by clicking the <strong /> Start creating  button again, the system will overwrite the existing template data package. If you do not want to overwrite, enter a different name.';
+$lang_module['sampledata_error_writetmp'] = 'Error: The system failed to write data, give write permission to the% s directory and then execute again';
+$lang_module['sampledata_success_1'] = 'Data export successful! The system has written data to the file. Now you can clean the system to delete the extra files, then delete the config file and encapsulate the code to share.';
+$lang_module['sampledata_success_2'] = 'Data export was successful but the system failed to write to the file. You can download a manual <a href="%s"> <strong /> here ! </a> package';
