@@ -8,7 +8,7 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -30,17 +30,23 @@ function nv_menu_blocks($block_config)
 
     foreach ($list as $row) {
         if (nv_user_in_groups($row['groups_view'])) {
-            switch ($row['target']) {
-                case 1:
-                    $row['target'] = '';
-                    break;
-                case 3:
-                    $row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
-                    break;
-                default:
-                    $row['target'] = ' onclick="this.target=\'_blank\'"';
+            if ($row['link'] != '' and $row['link'] != '#') {
+                $row['link'] = nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true);
+                switch ($row['target']) {
+                    case 1:
+                        $row['target'] = '';
+                        break;
+                    case 3:
+                        $row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+                        break;
+                    default:
+                        $row['target'] = ' onclick="this.target=\'_blank\'"';
+                }
+            } else {
+                $row['target'] = '';
             }
-            if (! empty($row['icon']) and file_exists(NV_UPLOADS_REAL_DIR . '/menu/' . $row['icon'])) {
+
+            if (!empty($row['icon']) and file_exists(NV_UPLOADS_REAL_DIR . '/menu/' . $row['icon'])) {
                 $row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
             } else {
                 $row['icon'] = '';
@@ -53,7 +59,7 @@ function nv_menu_blocks($block_config)
                 'title_trim' => nv_clean60($row['title'], $block_config['title_length']),
                 'target' => $row['target'],
                 'note' => empty($row['note']) ? $row['title'] : $row['note'],
-                'link' => nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true),
+                'link' => $row['link'],
                 'icon' => $row['icon'],
                 'html_class' => $row['css'],
                 'current' => nv_menu_check_current($row['link'], $row['active_type'])
@@ -79,7 +85,7 @@ function nv_menu_blocks($block_config)
     if (!empty($list_cats)) {
         foreach ($list_cats as $cat) {
             if (empty($cat['parentid'])) {
-                if (! empty($cat['subcats'])) {
+                if (!empty($cat['subcats'])) {
                     $submenu_active = array();
                     $html_content = nv_smenu_blocks($block_config['block_name'], $list_cats, $cat['subcats'], $submenu_active, $block_theme);
                     $xtpl->assign('HTML_CONTENT', $html_content);
@@ -87,14 +93,14 @@ function nv_menu_blocks($block_config)
                         $xtpl->parse('main.loopcat1.cat2');
                         $xtpl->parse('main.loopcat1.expand');
                     }
-                    if (! empty($submenu_active)) {
+                    if (!empty($submenu_active)) {
                         $cat['current'] = true;
                     }
                 }
                 $cat['class'] = nv_menu_blocks_active($cat);
 
                 $xtpl->assign('CAT1', $cat);
-                if (! empty($cat['icon'])) {
+                if (!empty($cat['icon'])) {
                     $xtpl->parse('main.loopcat1.icon');
                 }
                 $xtpl->parse('main.loopcat1');
@@ -117,7 +123,7 @@ function nv_menu_blocks($block_config)
  */
 function nv_menu_blocks_active($cat)
 {
-    if ($cat['current'] === true and ! $cat['html_class']) {
+    if ($cat['current'] === true and !$cat['html_class']) {
         $class = ' class="current"';
     } elseif ($cat['current'] === false and $cat['html_class']) {
         $class = ' class="' . $cat['html_class'] . '"';
@@ -141,8 +147,6 @@ function nv_menu_blocks_active($cat)
 function nv_menu_check_current($url, $type = 0)
 {
     global $home, $client_info, $global_config;
-
-    $url = nv_unhtmlspecialchars($url);
 
     if ($client_info['selfurl'] == $url) {
         return true;
@@ -201,10 +205,10 @@ function nv_smenu_blocks($style, $list_cats, $list_sub, &$submenu_active, $block
                 }
 
                 $xtpl->assign('MENUTREE', $list_cats[$catid]);
-                if (! empty($list_cats[$catid]['icon'])) {
+                if (!empty($list_cats[$catid]['icon'])) {
                     $xtpl->parse('tree.icon');
                 }
-                if (! empty($list_cats[$catid]['subcats'])) {
+                if (!empty($list_cats[$catid]['subcats'])) {
                     $tree = nv_smenu_blocks($style, $list_cats, $list_cats[$catid]['subcats'], $submenu_active, $block_theme);
 
                     $xtpl->assign('TREE_CONTENT', $tree);

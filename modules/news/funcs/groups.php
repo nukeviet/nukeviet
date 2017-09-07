@@ -87,7 +87,7 @@ if (isset($array_op[1])) {
         $item_array_other = array();
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal')
+                ->select('t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal, t1.external_link')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
                 ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')
                 ->where('t2.bid= ' . $bid . ' AND t2.weight > ' . $end_weight)

@@ -11,7 +11,10 @@
 if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
-if (!in_array($op, array('viewcat', 'detail'))) {
+if (!in_array($op, array(
+    'viewcat',
+    'detail'
+))) {
     define('NV_IS_MOD_NEWS', true);
 }
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
@@ -38,7 +41,10 @@ if (!empty($list)) {
 
 //Xac dinh RSS
 if ($module_info['rss']) {
-    $rss[] = array('title' => $module_info['custom_title'], 'src' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss']);
+    $rss[] = array(
+        'title' => $module_info['custom_title'],
+        'src' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss']
+    );
 }
 
 foreach ($global_array_cat as $catid_i => $array_cat_i) {
@@ -73,7 +79,10 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
 
     //Xac dinh RSS
     if ($catid_i and $module_info['rss']) {
-        $rss[] = array('title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'], 'src' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_cat_i['alias']);
+        $rss[] = array(
+            'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'],
+            'src' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_cat_i['alias']
+        );
     }
 }
 unset($result, $catid_i, $parentid_i, $title_i, $alias_i);
@@ -83,6 +92,7 @@ $module_info['submenu'] = 0;
 $page = 1;
 $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];
+
 $count_op = sizeof($array_op);
 if (!empty($array_op) and $op == 'main') {
     $op = 'main';
@@ -111,9 +121,7 @@ if (!empty($array_op) and $op == 'main') {
                 $_row = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id)->fetch();
                 if (!empty($_row) and isset($global_array_cat[$_row['catid']])) {
                     $url_Permanently = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$_row['catid']]['alias'] . '/' . $_row['alias'] . '-' . $_row['id'] . $global_config['rewrite_exturl'], true);
-                    header("HTTP/1.1 301 Moved Permanently");
-                    header('Location:' . $url_Permanently);
-                    exit();
+                    nv_redirect_location($url_Permanently);
                 }
             }
         }

@@ -128,7 +128,10 @@ $lang_module['logopostopright'] = 'Phía trên, bên phải';
 $lang_module['logopostopleft'] = 'Phía trên, bên trái';
 $lang_module['logopostopcenter'] = 'Phía trên, ở giữa';
 $lang_module['fileimage'] = 'ảnh';
+$lang_module['filerelativepath'] = 'Đường dẫn tương đối';
+$lang_module['fileabsolutepath'] = 'Đường dẫn tuyệt đối';
 $lang_module['altimage'] = 'Chú thích cho hình';
+$lang_module['filepathcopied'] = 'Đường dẫn đã được sao chép';
 
 $lang_module['uploadconfig'] = 'Cấu hình upload';
 $lang_module['uploadconfig_ban_ext'] = 'Phần mở rộng bị cấm';

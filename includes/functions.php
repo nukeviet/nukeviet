@@ -1916,11 +1916,13 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
  * nv_redirect_location()
  *
  * @param string $url
+ * @param interger $error_code
  * @return void
  *
  */
-function nv_redirect_location($url)
+function nv_redirect_location($url, $error_code = 301)
 {
+    http_response_code($error_code);
     Header('Location: ' . nv_url_rewrite($url, true));
     exit(0);
 }

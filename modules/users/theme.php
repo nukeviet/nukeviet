@@ -77,6 +77,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
             if (!empty($row['system'])) {
                 if ($row['field'] == 'birthday') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                    $datepicker = true;
                 } elseif ($row['field'] == 'sig') {
                     $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
                 }
