@@ -60,9 +60,8 @@ $xtpl->assign( 'CONFIGMODULE', $configMods );
 
 $sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip ORDER BY addtime DESC LIMIT 100";
 $result = $db->query( $sql );
-while ( $row = $result->fetch() )
-{
-	$row['select'] = $configMods['idhomeclips'] ? " selected=\"selected\"" : "";
+while ( $row = $result->fetch() ) {
+    $row['select']= ( $row['id'] == $configMods['idhomeclips'] ) ? ' selected="selected"' : '';
 	$xtpl->assign( 'VHOME', $row );
 	$xtpl->parse( 'main.idhomeclips' );
 }
