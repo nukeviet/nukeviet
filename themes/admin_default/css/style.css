@@ -308,6 +308,16 @@ h1, h2, h3, h4, h5, h6 {
 	padding: 15px;
 	margin-bottom: 50px;
 	position: relative;
+    min-height: calc(100vh - 189px);
+}
+
+#contentmod #uploadframe {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: calc(100vh - 224px);
+    min-height: 450px;
 }
 
 #contentmod p.note_cat{
@@ -632,7 +642,7 @@ input[type=checkbox]:disabled, input[type=radio]:disabled, input[type=checkbox]:
 	opacity: 0.7;
 }
 
-input[type=checkbox]:checked:before, 
+input[type=checkbox]:checked:before,
 input[type=checkbox].checkdefault:before,
 input[type=radio]:checked:before {
 	float: left;
@@ -862,7 +872,7 @@ label {
 }
 }
 
-#notification_waiting, 
+#notification_waiting,
 #notification_more {
     position: absolute;
     left: 0;

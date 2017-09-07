@@ -70,6 +70,7 @@ $lang_module['in_group_default'] = 'Là nhóm mặc định';
 $lang_module['is_official'] = 'Là thành viên chính thức';
 $lang_module['is_official_note'] = 'Nếu không chọn, tài khoản này sẽ được đưa vào nhóm thành viên mới đăng ký';
 $lang_module['set_official_note'] = 'Cho làm thành viên chính thức';
+$lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 tài khoản để thực hiện';
 
 $lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['addquestion'] = 'Thêm câu hỏi bảo mật';
@@ -98,7 +99,7 @@ $lang_module['deny_email'] = 'Các từ cấm sử dụng trong email tài kho�
 $lang_module['deny_name'] = 'Các từ cấm sử dụng trong tài khoản';
 $lang_module['password_simple'] = 'Các từ cấm sử dụng các mật khẩu đơn giản';
 $lang_module['memberlist_active'] = 'Hoạt động';
-$lang_module['memberlist_unactive'] = 'Hoạt động';
+$lang_module['memberlist_unactive'] = 'Dừng hoạt động';
 $lang_module['memberlist_error_method'] = 'Hãy chọn phương thức để tìm kiếm !';
 $lang_module['memberlist_error_value'] = 'Giá trị tìm kiếm không được để trống và không quá 64 kí tự !';
 $lang_module['memberlist_nousers'] = 'Không tìm thấy tài khoản nào phù hợp !';
