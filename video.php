@@ -40,14 +40,15 @@ try {
              - playerSkin: giao diện
              - playerMaxWidth: chiều rộng của video
              */
-            if ( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $mod. ".php" ) ) {
-                require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $mod. ".php" );
+            $configMods['idhomeclips'] = 0;
+            if (file_exists(NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $mod . ".php")) {
+                require (NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $mod . ".php");
             }
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'otherClipsNum', '" . $configMods['otherClipsNum'] . "')");
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerAutostart', '" . $configMods['playerAutostart'] . "')");
-            $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerSkin', '" . $configMods['playerSkin']. "')");
+            $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerSkin', '" . $configMods['playerSkin'] . "')");
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerMaxWidth', '" . $configMods['playerMaxWidth'] . "')");
-            $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET `config_value` = '" . $configMods['idhomeclips'] . "' WHERE " . NV_CONFIG_GLOBALTABLE . " .`lang` = '" . $lang . "' AND " . NV_CONFIG_GLOBALTABLE . " .`module` = '" . $mod . "' AND " . NV_CONFIG_GLOBALTABLE . " .`config_name` = 'idhomeclips'");
+            $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET `config_value` = '" . $configMods['idhomeclips'] . "' WHERE `lang` = '" . $lang . "' AND  `module` = '" . $mod . "' AND `config_name` = 'idhomeclips'");
 
             /*
              * Xóa file thừa sinh ra do cấu hình vào file
