@@ -67,7 +67,4 @@
 	    <input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" style="width: 100px;"/>
 	</div>
 </form>
-<script type="text/javascript">
-//$("#modConf").submit(function(){var a="submit=1&idhomeclips="+intval($("#idhomeclips").val())+"&playerMaxWidth="+intval($("#playerMaxWidth").val())+"&commNum="+$("#commNum").val()+"&otherClipsNum="+$("#otherClipsNum").val()+"&playerAutostart="+(1==$("#playerAutostart:checked").length?1:0)+"&playerSkin="+$("#playerSkin").val();return $.ajax({type:"POST",url:window.location.href,data:a,success:function(){return alert("{LANG.successfullySaved}"),!1}}),!1});
-</script>
 <!-- END: main -->
