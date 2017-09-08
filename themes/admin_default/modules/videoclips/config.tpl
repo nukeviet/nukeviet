@@ -34,7 +34,7 @@
 		                <strong>{LANG.playerAutostart}</strong>
 		            </td>
 		            <td>
-		                <input type="checkbox" value="1" name="playerAutostart" id="playerAutostart"{CONFIGMODULE.playerAutostart} />
+		                <input type="checkbox" value="1" name="playerAutostart" id="playerAutostart" {CONFIGMODULE.playerAutostart_checked} />
 		            </td>
 		        </tr>
 		         <!-- BEGIN: hidden -->
@@ -68,6 +68,6 @@
 	</div>
 </form>
 <script type="text/javascript">
-$("#modConf").submit(function(){var a="submit=1&idhomeclips="+intval($("#idhomeclips").val())+"&playerMaxWidth="+intval($("#playerMaxWidth").val())+"&commNum="+$("#commNum").val()+"&otherClipsNum="+$("#otherClipsNum").val()+"&playerAutostart="+(1==$("#playerAutostart:checked").length?1:0)+"&playerSkin="+$("#playerSkin").val();return $.ajax({type:"POST",url:window.location.href,data:a,success:function(){return alert("{LANG.successfullySaved}"),!1}}),!1});
+//$("#modConf").submit(function(){var a="submit=1&idhomeclips="+intval($("#idhomeclips").val())+"&playerMaxWidth="+intval($("#playerMaxWidth").val())+"&commNum="+$("#commNum").val()+"&otherClipsNum="+$("#otherClipsNum").val()+"&playerAutostart="+(1==$("#playerAutostart:checked").length?1:0)+"&playerSkin="+$("#playerSkin").val();return $.ajax({type:"POST",url:window.location.href,data:a,success:function(){return alert("{LANG.successfullySaved}"),!1}}),!1});
 </script>
 <!-- END: main -->
