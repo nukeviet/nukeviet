@@ -25,33 +25,24 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	if ( ! in_array( $array_config['playerSkin'] . ".zip", $skins ) ) $array_config['playerSkin'] = "";
 	if ( $array_config['playerMaxWidth'] < 50 or $array_config['playerMaxWidth'] > 1000 ) $array_config['playerMaxWidth'] = 640;
 
-	$content_config = "<?php\n\n";
-	$content_config .= NV_FILEHEAD . "\n\n";
-	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
-	$content_config .= "\$configMods['otherClipsNum'] = " . $array_config['otherClipsNum'] . ";\n";
-	$content_config .= "\$configMods['playerAutostart'] = " . $array_config['playerAutostart'] . ";\n";
-	$content_config .= "\$configMods['playerSkin'] = \"" . nv_htmlspecialchars( $array_config['playerSkin'] ) . "\";\n";
-	$content_config .= "\$configMods['playerMaxWidth'] = " . $array_config['playerMaxWidth'] . ";\n";
-	$content_config .= "\$configMods['idhomeclips'] = " . $array_config['idhomeclips'] . ";\n";
-	$content_config .= "\n";
-	$content_config .= "?>";
 
-	file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $module_data . ".php", $content_config, LOCK_EX );
-	die( 'OK' );
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+    foreach ($array_config as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
+    $nv_Cache->delMod('settings');
+    $nv_Cache->delMod($module_name);
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+
 }
 
 $configMods = array();
-$configMods['otherClipsNum'] = 16; //So video-clip hien thi tren trang chu hoac trang The loai
-$configMods['playerAutostart'] = 0; //Co tu dong phat video hay khong
-$configMods['playerSkin'] = ""; //Skin cua player
-$configMods['playerMaxWidth'] = 640; //Chieu rong toi da cua player
-$configMods['idhomeclips'] = 0;
-if ( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $module_data . ".php" ) )
-{
-	require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_module-" . $module_data . ".php" );
-}
-
-$configMods['playerAutostart'] = $configMods['playerAutostart'] ? " checked=\"checked\"" : "";
+$configMods = $module_config[$module_name];
+$configMods['playerAutostart_checked'] = ( $configMods['playerAutostart'] == 1 ) ? ' checked="checked"' : '';
 
 $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
