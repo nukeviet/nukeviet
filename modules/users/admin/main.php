@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright(C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -73,9 +73,9 @@ $ordertype = $nv_Request->get_string('sorttype', 'get', 'DESC');
 if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
-$method = (! empty($method) and isset($methods[$method])) ? $method : '';
+$method = (!empty($method) and isset($methods[$method])) ? $method : '';
 
-if (! empty($methodvalue)) {
+if (!empty($methodvalue)) {
     if (empty($method)) {
         $array_like = array();
         foreach ($methods as $method_i) {
@@ -98,7 +98,7 @@ $db->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_MOD_TABLE);
 
-if (! empty($_arr_where)) {
+if (!empty($_arr_where)) {
     $db->where(implode(' AND ', $_arr_where));
 }
 
@@ -107,7 +107,7 @@ $num_items = $db->query($db->sql())->fetchColumn();
 $db->select('*')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
-if (! empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders)) {
     $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
@@ -123,7 +123,7 @@ $is_setactive = (in_array('setactive', $allow_func)) ? true : false;
 
 while ($row = $result2->fetch()) {
     $row['in_groups'] = explode(',', $row['in_groups']);
-    
+
     $users_list[$row['userid']] = array(
         'userid' =>  $row['userid'],
         'username' =>  $row['username'],
@@ -146,7 +146,7 @@ while ($row = $result2->fetch()) {
     $admin_in[] = $row['userid'];
 }
 
-if (! empty($admin_in)) {
+if (!empty($admin_in)) {
     $admin_in = implode(',', $admin_in);
     $sql = 'SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id IN (' . $admin_in . ')';
     $query = $db->query($sql);
@@ -167,13 +167,13 @@ if (! empty($admin_in)) {
         if ($users_list[$row['admin_id']]['is_edit']) {
             if (defined('NV_IS_GODADMIN')) {
                 $users_list[$row['admin_id']]['is_edit'] = true;
-            } elseif (defined('NV_IS_SPADMIN') and ! ($row['lev'] == 1 or $row['lev'] == 2)) {
+            } elseif (defined('NV_IS_SPADMIN') and !($row['lev'] == 1 or $row['lev'] == 2)) {
                 $users_list[$row['admin_id']]['is_edit'] = true;
             } else {
                 $users_list[$row['admin_id']]['is_edit'] = false;
             }
         }
-        if (! $users_list[$row['admin_id']]['is_edit']) {
+        if (!$users_list[$row['admin_id']]['is_edit']) {
             $users_list[$row['admin_id']]['disabled'] = ' disabled="disabled"';
         }
     }
@@ -243,16 +243,18 @@ foreach ($head_tds as $head_td) {
 }
 
 $view_user_allowed = nv_user_in_groups($global_config['whoviewuser']);
+$has_choose = false;
+
 foreach ($users_list as $u) {
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
-    
+
     if ($u['is_admin']) {
         $xtpl->parse('main.xusers.is_admin');
     }
 
-    if (! defined('NV_IS_USER_FORUM')) {
+    if (!defined('NV_IS_USER_FORUM')) {
         if ($view_user_allowed) {
             $xtpl->parse('main.xusers.view');
         } else {
@@ -270,18 +272,44 @@ foreach ($users_list as $u) {
         if ($u['is_newuser'] and in_array('setofficial', $allow_func)) {
             $xtpl->parse('main.xusers.set_official');
         }
+        if ($is_setactive and $u['is_delete']) {
+            $has_choose = true;
+            $xtpl->parse('main.xusers.choose');
+        }
     }
 
     $xtpl->parse('main.xusers');
 }
 
-if (! empty($generate_page)) {
+$has_footer = false;
+$array_action = array(
+    'del' => $lang_module['delete'],
+    'active' => $lang_module['memberlist_active'],
+    'unactive' => $lang_module['memberlist_unactive']
+);
+if ($has_choose) {
+    $has_footer = true;
+    foreach ($array_action as $action_key => $action_lang) {
+        $xtpl->assign('ACTION_KEY', $action_key);
+        $xtpl->assign('ACTION_LANG', $action_lang);
+        $xtpl->parse('main.footer.action.loop');
+    }
+    $xtpl->parse('main.footer.action');
+}
+
+if (!empty($generate_page)) {
     $xtpl->assign('GENERATE_PAGE', $generate_page);
-    $xtpl->parse('main.generate_page');
+    $xtpl->parse('main.footer.generate_page');
+    $has_footer = true;
 }
 
 if (in_array('export', $allow_func)) {
-    $xtpl->parse('main.exportfile');
+    $has_footer = true;
+    $xtpl->parse('main.footer.exportfile');
+}
+
+if ($has_footer) {
+    $xtpl->parse('main.footer');
 }
 
 $xtpl->parse('main');
