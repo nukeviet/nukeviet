@@ -37,7 +37,7 @@
         }, 500);
     });
     </script>
-    <!-- END: video_flash -->    
+    <!-- END: video_flash -->
     <!-- BEGIN: video_youtube -->
     <script type="text/javascript">
     $(function() {
@@ -45,7 +45,7 @@
         640 < a && (a = 640);
         b = a;
         a = Math.ceil(45 * a / 80) + 4;
-        $("div.detailContent").append('<iframe class="detailContent clearfix" allowfullscreen="" frameborder="0" style="height: ' + a + 'px;width:' + b + 'px" src="//www.youtube.com/embed/{CODE}?rel=0&amp;controls=1{autoplay}"></iframe>');
+        $("div.detailContent").append('<div class="videoplayer"><div class="clearfix" style="height: ' + a + 'px;width:' + b + 'px;margin:0 auto;"><iframe class="detailContent clearfix" allowfullscreen="" frameborder="0" style="height: ' + a + 'px;width:' + b + 'px" src="//www.youtube.com/embed/{CODE}?rel=0&amp;controls=1{autoplay}"></iframe></div></div>');
     });
     </script>
     <!-- END: video_youtube -->
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="socialicon pull-left">
             <div id="fb-root"></div>
             <script>(function(d, s, id) {
@@ -107,7 +107,7 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
               })();
             </script>
-            
+
             <a href="//twitter.com/share" class="twitter-share-button">Tweet</a>
             <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
         </div>
@@ -166,7 +166,7 @@
                         }).hide("slow")
                     }, 3E3)
                 }
-            });            
+            });
 
             return !1
         });
