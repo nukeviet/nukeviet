@@ -258,7 +258,8 @@ if ($post_order == 1) {
                 $order_id = $order_info['order_id'];
                 $order_code2 = $order_info['order_code'];
                 foreach ($order_info['order_product'] as $pro_id => $info) {
-                    $listid_old[] = $pro_id;
+                	$array=explode('_', $pro_id);
+                	$listid_old[]=$array[0];
                     $listnum_old[] = $info['num'];
                 }
 
