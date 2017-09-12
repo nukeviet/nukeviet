@@ -14,7 +14,8 @@
 			<input type="text" class="form-control" name="title" id="idtitle" value="{DATA.title}" />
 		</div>
 	</div>
-
+    
+    <!-- BEGIN: alias -->
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.alias}</label>
 		<div class="col-sm-20">
@@ -22,6 +23,7 @@
 			<em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" onclick="get_alias('{OP}');" alt="Click">&nbsp;</em>
 		</div>
 	</div>
+    <!-- END: alias -->
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.content_cat} <span class="txtrequired">(*)</span></label>
@@ -50,7 +52,21 @@
 			</select>
 		</div>
 	</div>
-
+    
+    <!-- BEGIN: layout_func -->
+	<div class="form-group">
+		<label class="col-sm-4 control-label">{LANG.pick_layout}</label>
+		<div class="col-sm-20">
+			<select name="layout_func" class="form-control">
+				<option value="">{LANG.default_layout}</option>
+				<!-- BEGIN: loop -->
+				<option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+				<!-- END: loop -->
+			</select>
+		</div>
+	</div>
+    <!-- END: layout_func -->
+    
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.content_homeimg}</label>
 		<div class="col-sm-20">
@@ -64,18 +80,7 @@
 			<input maxlength="255" value="{DATA.homeimgalt}" name="homeimgalt" type="text" class="form-control" />
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label class="col-sm-4 control-label">{LANG.imgposition}</label>
-		<div class="col-sm-20">
-			<select name="imgposition" class="form-control">
-				<!-- BEGIN: imgposition -->
-				<option value="{DATAIMGOP.value}"{DATAIMGOP.selected}>{DATAIMGOP.title}</option>
-				<!-- END: imgposition -->
-			</select>
-		</div>
-	</div>
-
+    
 	<div class="form-group">
 		<label>{LANG.content_hometext}</label>
 		<textarea class="form-control" rows="6" cols="60" name="hometext"> {DATA.hometext}</textarea>
@@ -97,13 +102,6 @@
 		<label class="col-sm-4 control-label">{LANG.search_author}</label>
 		<div class="col-sm-20">
 			<input maxlength="255" value="{DATA.author}" name="author" type="text" class="form-control" />
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-sm-4 control-label">{LANG.content_keywords}</label>
-		<div class="col-sm-20">
-			<input maxlength="255" value="{DATA.keywords}" name="keywords" type="text" class="form-control" />
 		</div>
 	</div>
 
