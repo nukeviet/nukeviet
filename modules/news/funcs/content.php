@@ -34,8 +34,8 @@ if (defined('NV_EDITOR')) {
         global $module_data;
         $return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
         $return .= "<script type=\"text/javascript\">
-		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (! empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
-		</script>";
+        CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (! empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
+        </script>";
         return $return;
     }
 }
@@ -147,6 +147,10 @@ $contentid = $nv_Request->get_int('contentid', 'get,post', 0);
 $fcheckss = $nv_Request->get_title('checkss', 'get,post', '');
 $checkss = md5($contentid . NV_CHECK_SESSION);
 
+// Lua chon Layout
+$selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
+$layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
+
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     if ($contentid > 0) {
         $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid . ' and admin_id= ' . $user_info['userid'])->fetch();
@@ -210,6 +214,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         'homeimgalt' => '',
         'homeimgthumb' => 0,
         'imgposition' => 1,
+        'titlesite' => '',
+        'description' => '',
         'bodyhtml' => '',
         'copyright' => 0,
         'inhome' => 1,
@@ -223,7 +229,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         'hitscm' => 0,
         'total_rating' => 0,
         'click_rating' => 0,
-        'keywords' => ''
+        'layout_func' => ''
     );
 
     $array_catid_module = array();
@@ -263,8 +269,13 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['author'] = $nv_Request->get_title('author', 'post', '', 1);
 
         $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
-        $alias = $nv_Request->get_title('alias', 'post', '');
-        $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
+        
+        // Xu ly Alias
+        $rowcontent['alias'] = strtolower(change_alias($rowcontent['title']));
+        if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ) {
+            $alias = $nv_Request->get_title('alias', 'post', '');
+            $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
+        }
 
         $rowcontent['hometext'] = $nv_Request->get_title('hometext', 'post', '');
 
@@ -272,7 +283,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '', 1);
         $rowcontent['imgposition'] = $nv_Request->get_int('imgposition', 'post', 0);
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
-
+        
+        // Lua chon Layout
+        if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ) {
+            $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
+        }
         // Xu ly anh minh hoa
         $rowcontent['homeimgthumb'] = 0;
         if (! nv_is_url($rowcontent['homeimgfile']) and nv_is_file($rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload)) {
@@ -298,8 +313,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
         $bodyhtml = $nv_Request->get_string('bodyhtml', 'post', '');
         $rowcontent['bodyhtml'] = defined('NV_EDITOR') ? nv_nl2br($bodyhtml, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($bodyhtml)), '<br />');
-
-        $rowcontent['keywords'] = $nv_Request->get_title('keywords', 'post', '', 1);
 
         if (empty($rowcontent['title'])) {
             $error = $lang_module['error_title'];
@@ -339,34 +352,34 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $_weight = intval($_weight) + 1;
 
                 $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
-						 (" . intval($rowcontent['catid']) . ",
-						 " . $db->quote($rowcontent['listcatid']) . ",
-						 " . intval($rowcontent['topicid']) . ",
-						 " . intval($rowcontent['admin_id']) . ",
-						 " . $db->quote($rowcontent['author']) . ",
-						 " . intval($rowcontent['sourceid']) . ",
-						 " . intval($rowcontent['addtime']) . ",
-						 " . intval($rowcontent['edittime']) . ",
-						 " . intval($rowcontent['status']) . ",
-						 " . $_weight . ",
-						 " . intval($rowcontent['publtime']) . ",
-						 " . intval($rowcontent['exptime']) . ",
-						 " . intval($rowcontent['archive']) . ",
-						 " . $db->quote($rowcontent['title']) . ",
-						 " . $db->quote($rowcontent['alias']) . ",
-						 " . $db->quote($rowcontent['hometext']) . ",
-						 " . $db->quote($rowcontent['homeimgfile']) . ",
-						 " . $db->quote($rowcontent['homeimgalt']) . ",
-						 " . intval($rowcontent['homeimgthumb']) . ",
-						 " . intval($rowcontent['inhome']) . ",
-						 " . intval($rowcontent['allowed_comm']) . ",
-						 " . intval($rowcontent['allowed_rating']) . ",
-						 " . intval($rowcontent['external_link']) . ",
-						 " . intval($rowcontent['hitstotal']) . ",
-						 " . intval($rowcontent['hitscm']) . ",
-						 " . intval($rowcontent['total_rating']) . ",
-						 " . intval($rowcontent['click_rating']) . ")";
+                        (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
+                         (" . intval($rowcontent['catid']) . ",
+                         " . $db->quote($rowcontent['listcatid']) . ",
+                         " . intval($rowcontent['topicid']) . ",
+                         " . intval($rowcontent['admin_id']) . ",
+                         " . $db->quote($rowcontent['author']) . ",
+                         " . intval($rowcontent['sourceid']) . ",
+                         " . intval($rowcontent['addtime']) . ",
+                         " . intval($rowcontent['edittime']) . ",
+                         " . intval($rowcontent['status']) . ",
+                         " . $_weight . ",
+                         " . intval($rowcontent['publtime']) . ",
+                         " . intval($rowcontent['exptime']) . ",
+                         " . intval($rowcontent['archive']) . ",
+                         " . $db->quote($rowcontent['title']) . ",
+                         " . $db->quote($rowcontent['alias']) . ",
+                         " . $db->quote($rowcontent['hometext']) . ",
+                         " . $db->quote($rowcontent['homeimgfile']) . ",
+                         " . $db->quote($rowcontent['homeimgalt']) . ",
+                         " . intval($rowcontent['homeimgthumb']) . ",
+                         " . intval($rowcontent['inhome']) . ",
+                         " . intval($rowcontent['allowed_comm']) . ",
+                         " . intval($rowcontent['allowed_rating']) . ",
+                         " . intval($rowcontent['external_link']) . ",
+                         " . intval($rowcontent['hitstotal']) . ",
+                         " . intval($rowcontent['hitscm']) . ",
+                         " . intval($rowcontent['total_rating']) . ",
+                         " . intval($rowcontent['click_rating']) . ")";
 
                 $rowcontent['id'] = $db->insert_id($_sql, 'id');
                 if ($rowcontent['id'] > 0) {
@@ -374,16 +387,19 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id']);
                     }
 
-                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_detail (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
-							" . $rowcontent['id'] . ",
-							" . $db->quote($rowcontent['bodyhtml']) . ",
-							" . $db->quote($rowcontent['sourcetext']) . ",
-							" . intval($rowcontent['imgposition']) . ",
-			 				" . intval($rowcontent['copyright']) . ",
-			 				" . intval($rowcontent['allowed_send']) . ",
-			 				" . intval($rowcontent['allowed_print']) . ",
-			 				" . intval($rowcontent['allowed_save']) . ", 0
-						)");
+                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
+                            " . $rowcontent['id'] . ",
+                            " . $db->quote($rowcontent['titlesite']) . ",
+                            " . $db->quote($rowcontent['description']) . ",
+                            " . $db->quote($rowcontent['bodyhtml']) . ",
+                            " . $db->quote($rowcontent['sourcetext']) . ",
+                            " . intval($rowcontent['imgposition']) . ",
+                            " . $db->quote($rowcontent['layout_func']) . ",
+                            " . intval($rowcontent['copyright']) . ",
+                            " . intval($rowcontent['allowed_send']) . ",
+                            " . intval($rowcontent['allowed_print']) . ",
+                            " . intval($rowcontent['allowed_save']) . ", 0
+                        )");
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
@@ -406,27 +422,27 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 }
 
                 $_sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
-						 catid=" . intval($rowcontent['catid']) . ",
-						 listcatid=" . $db->quote($rowcontent['listcatid']) . ",
-						 topicid=" . intval($rowcontent['topicid']) . ",
-						 author=" . $db->quote($rowcontent['author']) . ",
-						 sourceid=" . intval($rowcontent['sourceid']) . ",
-						 status=" . intval($rowcontent['status']) . ",
-						 publtime=" . intval($rowcontent['publtime']) . ",
-						 exptime=" . intval($rowcontent['exptime']) . ",
-						 archive=" . intval($rowcontent['archive']) . ",
-						 title=" . $db->quote($rowcontent['title']) . ",
-						 alias=" . $db->quote($rowcontent['alias']) . ",
-						 hometext=" . $db->quote($rowcontent['hometext']) . ",
-						 homeimgfile=" . $db->quote($rowcontent['homeimgfile']) . ",
-						 homeimgalt=" . $db->quote($rowcontent['homeimgalt']) . ",
-						 homeimgthumb=" . intval($rowcontent['homeimgthumb']) . ",
-						 inhome=" . intval($rowcontent['inhome']) . ",
-						 allowed_comm=" . intval($rowcontent['allowed_comm']) . ",
-						 allowed_rating=" . intval($rowcontent['allowed_rating']) . ",
-						 external_link=" . intval($rowcontent['external_link']) . ",
-						 edittime=" . NV_CURRENTTIME . "
-						WHERE id =" . $rowcontent['id'];
+                         catid=" . intval($rowcontent['catid']) . ",
+                         listcatid=" . $db->quote($rowcontent['listcatid']) . ",
+                         topicid=" . intval($rowcontent['topicid']) . ",
+                         author=" . $db->quote($rowcontent['author']) . ",
+                         sourceid=" . intval($rowcontent['sourceid']) . ",
+                         status=" . intval($rowcontent['status']) . ",
+                         publtime=" . intval($rowcontent['publtime']) . ",
+                         exptime=" . intval($rowcontent['exptime']) . ",
+                         archive=" . intval($rowcontent['archive']) . ",
+                         title=" . $db->quote($rowcontent['title']) . ",
+                         alias=" . $db->quote($rowcontent['alias']) . ",
+                         hometext=" . $db->quote($rowcontent['hometext']) . ",
+                         homeimgfile=" . $db->quote($rowcontent['homeimgfile']) . ",
+                         homeimgalt=" . $db->quote($rowcontent['homeimgalt']) . ",
+                         homeimgthumb=" . intval($rowcontent['homeimgthumb']) . ",
+                         inhome=" . intval($rowcontent['inhome']) . ",
+                         allowed_comm=" . intval($rowcontent['allowed_comm']) . ",
+                         allowed_rating=" . intval($rowcontent['allowed_rating']) . ",
+                         external_link=" . intval($rowcontent['external_link']) . ",
+                         edittime=" . NV_CURRENTTIME . "
+                        WHERE id =" . $rowcontent['id'];
 
                 if ($db->exec($_sql)) {
                     $array_cat_old = explode(',', $rowcontent_old['listcatid']);
@@ -442,14 +458,15 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                     }
 
                     $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_detail SET
-							bodyhtml=" . $db->quote($rowcontent['bodyhtml']) . ",
-							imgposition=" . intval($rowcontent['imgposition']) . ",
-							 sourcetext=" . $db->quote($rowcontent['sourcetext']) . ",
-							 copyright=" . intval($rowcontent['copyright']) . ",
-							 allowed_send=" . intval($rowcontent['allowed_send']) . ",
-							 allowed_print=" . intval($rowcontent['allowed_print']) . ",
-							 allowed_save=" . intval($rowcontent['allowed_save']) . "
-							WHERE id =" . $rowcontent['id']);
+                            bodyhtml=" . $db->quote($rowcontent['bodyhtml']) . ",
+                            imgposition=" . intval($rowcontent['imgposition']) . ",
+                            layout_func=" . $db->quote($rowcontent['layout_func']) . ",
+                            sourcetext=" . $db->quote($rowcontent['sourcetext']) . ",
+                            copyright=" . intval($rowcontent['copyright']) . ",
+                            allowed_send=" . intval($rowcontent['allowed_send']) . ",
+                            allowed_print=" . intval($rowcontent['allowed_print']) . ",
+                            allowed_save=" . intval($rowcontent['allowed_save']) . "
+                            WHERE id =" . $rowcontent['id']);
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
@@ -524,7 +541,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if (! empty($error)) {
         $my_head .= "<script type=\"text/javascript\">\n";
-        $my_head .= "	alert('" . $error . "')\n";
+        $my_head .= "   alert('" . $error . "')\n";
         $my_head .= "</script>\n";
     }
 
@@ -553,6 +570,24 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('CHECKSS', $checkss);
         $xtpl->parse('main.captcha');
+    }
+    
+    // Xu ly alias
+    if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ) {
+        $xtpl->parse('main.alias');
+    }
+
+    // Lua chon Layout
+    if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ) {
+        foreach ($layout_array as $value) {
+            $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
+            $xtpl->assign('LAYOUT_FUNC', array(
+                'key' => $value,
+                'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
+            ));
+            $xtpl->parse('main.layout_func.loop');
+        }
+        $xtpl->parse('main.layout_func');
     }
 
     $xtpl->assign('CONTENT_URL', $base_url . '&contentid=' . $rowcontent['id'] . '&checkss=' . $checkss);
@@ -609,8 +644,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     if (empty($rowcontent['alias'])) {
         $contents .= "<script type=\"text/javascript\">\n";
         $contents .= '$("#idtitle").change(function () {
- 		get_alias("' . $module_info['alias']['content'] . '");
-		});';
+        get_alias("' . $module_info['alias']['content'] . '");
+        });';
         $contents .= "</script>\n";
     }
 } elseif (defined('NV_IS_USER')) {

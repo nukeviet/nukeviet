@@ -526,10 +526,10 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                 $arr_from[] = "(r." . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
             }
             $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
-    			OR r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
-    			OR c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'
-    			OR u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
-    			OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
+                OR r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
+                OR c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'
+                OR u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
+                OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         }
         if ($sstatus != -1) {
             if ($where == '') {
