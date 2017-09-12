@@ -444,8 +444,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_orders_shipping (
-  id tinyint(11) unsigned NOT NULL AUTO_INCREMENT,
-  order_id tinyint(11) unsigned NOT NULL,
+  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  order_id int(11) unsigned NOT NULL,
   ship_name varchar(250) NOT NULL,
   ship_phone varchar(25) NOT NULL,
   ship_location_id mediumint(8) unsigned NOT NULL,
