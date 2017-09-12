@@ -91,6 +91,7 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 	if( $_SESSION[$module_data . '_order_info']['checked'] )
 	{
 		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_info['order_id'] );
+
 		while( $row = $result->fetch( ) )
 		{
 			$array_group = array( );
@@ -101,7 +102,7 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 				$array_group[] = $group_id;
 			}
 			$array_group = !empty( $array_group ) ? implode( ',', $array_group ) : '';
-			$order_old[$row['proid']] = array(
+			$order_old[$row['proid'].'_'.$array_group] = array(
 				'num' => $row['num'],
 				'num_old' => $row['num'],
 				'order' => 1,
@@ -159,15 +160,14 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) == 1 )
 $data_content = array( );
 $array_error_product_number = array( );
 
-//print_r($_SESSION[$module_data . '_cart']);die('pass');
+
 if( !empty( $_SESSION[$module_data . '_cart'] ) )
 {
 	$arrayid = array( );
-
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $pro_info )
 	{
 		$array = explode( '_', $pro_id );
-		if( $array[1] == '' )
+		if( $array[1] == '')
 		{
 			$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 WHERE t1.product_unit = t2.id AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
 
