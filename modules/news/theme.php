@@ -423,33 +423,33 @@ function viewsubcat_main($viewcat, $array_cat)
             $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
             $catid = intval($array_row_i['catid']);
-			$array_row_i['ad_block_cat'] = isset($array_row_i['ad_block_cat']) ? explode(',', $array_row_i['ad_block_cat']) : array();
+            $array_row_i['ad_block_cat'] = isset($array_row_i['ad_block_cat']) ? explode(',', $array_row_i['ad_block_cat']) : array();
 
-			$_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_row_i['catid'] . ']';
-			if( in_array( '1', $array_row_i['ad_block_cat']) ){
-				if( !nv_check_block_topcat_news( $array_row_i['catid'] ) ){
-					nv_add_block_topcat_news( $array_row_i['catid'] );
-				}
-				$xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_id );
-				$xtpl->parse( 'main.listcat.block_topcat' );
-			}else{
-				if( nv_check_block_topcat_news( $array_row_i['catid'] ) ){
-					nv_remove_block_topcat_news( $array_row_i['catid'] );
-				}
-			}
+            $_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_row_i['catid'] . ']';
+            if( in_array( '1', $array_row_i['ad_block_cat']) ){
+                if( !nv_check_block_topcat_news( $array_row_i['catid'] ) ){
+                    nv_add_block_topcat_news( $array_row_i['catid'] );
+                }
+                $xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_id );
+                $xtpl->parse( 'main.listcat.block_topcat' );
+            }else{
+                if( nv_check_block_topcat_news( $array_row_i['catid'] ) ){
+                    nv_remove_block_topcat_news( $array_row_i['catid'] );
+                }
+            }
 
-			$_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_row_i['catid'] . ']';
-			if( in_array( '2', $array_row_i['ad_block_cat']) ){
-				if( !nv_check_block_block_botcat_news( $array_row_i['catid'] )){
-					nv_add_block_botcat_news( $array_row_i['catid'] );
-				}
-				$xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_id );
-				$xtpl->parse( 'main.listcat.block_bottomcat' );
-			}else{
-				if( nv_check_block_block_botcat_news( $array_row_i['catid'] ) ){
-					nv_remove_block_botcat_news( $array_row_i['catid'] );
-				}
-			}
+            $_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_row_i['catid'] . ']';
+            if( in_array( '2', $array_row_i['ad_block_cat']) ){
+                if( !nv_check_block_block_botcat_news( $array_row_i['catid'] )){
+                    nv_add_block_botcat_news( $array_row_i['catid'] );
+                }
+                $xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_id );
+                $xtpl->parse( 'main.listcat.block_bottomcat' );
+            }else{
+                if( nv_check_block_block_botcat_news( $array_row_i['catid'] ) ){
+                    nv_remove_block_botcat_news( $array_row_i['catid'] );
+                }
+            }
 
             if ($array_row_i['subcatid'] != '') {
                 $_arr_subcat = explode(',', $array_row_i['subcatid']);
@@ -701,7 +701,7 @@ function viewcat_two_column($array_content, $array_catpage)
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $admin_info, $client_info;
+    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $client_info;
 
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
