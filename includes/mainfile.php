@@ -175,7 +175,7 @@ $domains = explode(',', $global_config['my_domains']);
 if (!in_array(NV_SERVER_NAME, $domains)) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
     $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-    nv_info_die($global_config['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {

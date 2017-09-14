@@ -9,8 +9,8 @@
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
@@ -70,6 +70,7 @@ $lang_module['in_group_default'] = 'Group default';
 $lang_module['is_official'] = 'Is an official member';
 $lang_module['is_official_note'] = 'If not selected, this account will be included in the group of new member registration';
 $lang_module['set_official_note'] = 'To make an official member';
+$lang_module['msgnocheck'] = 'You need to select at least 1 account to perform';
 $lang_module['question'] = 'Secret question';
 $lang_module['addquestion'] = 'Add secret question';
 $lang_module['savequestion'] = 'Save secret question';
@@ -134,9 +135,17 @@ $lang_module['delconfirm_ok'] = 'Ok!';
 $lang_module['delconfirm_email_title'] = 'Email notification to delete account';
 $lang_module['delconfirm_email_content'] = 'Hi %1$s,<br />We are so sorry to delete your account at website %2$s.';
 $lang_module['adduser_email'] = 'Send notification email:';
+$lang_module['adduser_email1'] = 'Send email notification';
+$lang_module['adduser_email1_note'] = 'If selected, after creating a successful account the member who created the account will receive an email notification that the account has been created, including login details and password.';
+$lang_module['adduser_email1_note1'] = 'If selected, after successfully updating the account members will receive an email notification of account changes, including login information and password (if the password is replaced).';
 $lang_module['adduser_email_yes'] = 'Yes';
 $lang_module['adduser_register'] = 'Your account was created';
+$lang_module['adduser_register1'] = 'Your account has been updated';
 $lang_module['adduser_register_info'] = 'Hi %1$s,<br />Your account at website %2$s activated. Your login information:<br />URL: <a href="%3$s">%3$s</a><br />Account: %4$s<br />Password: %5$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
+$lang_module['adduser_register_info1'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been created. Here are the logins: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s<br /> < Password: %5$s<br /><br />We recommend that you change your password before using your account. <br /> <br /> This is an automated message sent to Your email box from %2$s. website. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
+$lang_module['adduser_register_info2'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been updated. Here are the new login information: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s';
+$lang_module['adduser_register_info3'] = '<br /> Password: %1$s';
+$lang_module['adduser_register_info4'] = '<br /> <br /> This is an automated message sent to your email from %1$s. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
 $lang_module['openid_servers'] = 'Oauth accepted list';
 $lang_module['openid_processing'] = 'The default processing mode after Oauth login';
 $lang_module['openid_processing_0'] = 'Users can choose the mode of processing';
@@ -421,14 +430,6 @@ $lang_module['group_description_empty'] = 'Take a brief description of the group
 $lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
 $lang_module['active_group_newusers'] = 'Enable new member';
 $lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';
-$lang_module['adduser_email1'] = 'Send email notification';
-$lang_module['adduser_email1_note'] = 'If selected, after creating a successful account the member who created the account will receive an email notification that the account has been created, including login details and password.';
-$lang_module['adduser_email1_note1'] = 'If selected, after successfully updating the account members will receive an email notification of account changes, including login information and password (if the password is replaced).';
-$lang_module['adduser_register1'] = 'Your account has been updated';
-$lang_module['adduser_register_info1'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been created. Here are the logins: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s<br /> < Password: %5$s<br /><br />We recommend that you change your password before using your account. <br /> <br /> This is an automated message sent to Your email box from %2$s. website. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
-$lang_module['adduser_register_info2'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been updated. Here are the new login information: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s';
-$lang_module['adduser_register_info3'] = '<br /> Password: %1$s';
-$lang_module['adduser_register_info4'] = '<br /> <br /> This is an automated message sent to your email from %1$s. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
 $lang_module['active_user_logs'] = 'Log the log, log out of the member';
 $lang_module['user_openid_mamager'] = 'Manage OpenID & Oauth';
 $lang_module['user_2step_mamager'] = 'Manage two-step authentication';

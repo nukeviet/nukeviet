@@ -1,5 +1,5 @@
 <!-- BEGIN: uploadPage -->
-<iframe src="{IFRAME_SRC}" style="border: 0;width: 100%;height:400px"></iframe>
+<iframe src="{IFRAME_SRC}" id="uploadframe"></iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
@@ -14,6 +14,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jQueryRotate.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/plupload-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
 
 <div class="content">
     <div class="row upload-wrap">
@@ -120,7 +121,6 @@
     </div>
 </div>
 
-
 <div id="recreatethumb" class="upload-hide" title="{LANG.recreatethumb}">
     <div class="form-horizontal" role="form">
         <div class="form-group" id="recreatethumb_loading">
@@ -135,7 +135,23 @@
     <div id="fileInfoAlt" class="dynamic file-title"></div>
     <div id="fileView" class="dynamic file-content"></div>
     <div id="fileInfoName" class="dynamic file-title"></div>
-    <div id="fileInfoDetail" class="dynamic file-detail"></div>
+    <div id="fileInfoDetail" class="dynamic file-detail m-bottom"></div>
+    <div class="clearfix" id="fileInfoLink">
+        <label for="FileRelativePath" class="text-left display-block">{LANG.filerelativepath}:</label>
+        <div class="input-group input-group-sm m-bottom">
+            <input type="text" class="form-control" id="FileRelativePath"/>
+            <span class="input-group-btn">
+                <button class="btn btn-default" data-clipboard-target="#FileRelativePath" id="FileRelativePathBtn" data-title="{LANG.filepathcopied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="0"><i class="fa fa-copy"></i></button>
+            </span>
+        </div>
+        <label for="FileAbsolutePath" class="text-left">{LANG.fileabsolutepath}:</label>
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="FileAbsolutePath"/>
+            <span class="input-group-btn">
+                <button class="btn btn-default" data-clipboard-target="#FileAbsolutePath" id="FileAbsolutePathBtn" data-title="{LANG.filepathcopied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="0"><i class="fa fa-copy"></i></button>
+            </span>
+        </div>
+    </div>
 </div>
 
 <div id="imgcreate" title="{LANG.upload_createimage}">
@@ -344,6 +360,7 @@ LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
 LANG.altimage = "{LANG.altimage}";
 LANG.upload_alt_note = "{LANG.upload_alt_note}";
 
+var nv_my_domain = '{NV_MY_DOMAIN}';
 var nv_max_size_bytes = '{NV_MAX_SIZE_BYTES}';
 var nv_max_width = '{NV_MAX_WIDTH}';
 var nv_max_height = '{NV_MAX_HEIGHT}';

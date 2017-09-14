@@ -51,11 +51,11 @@ function nv_create_submenu()
  */
 function nv_blocks_content($sitecontent)
 {
-    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $client_info, $themeConfig;
+    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $client_info, $theme_config_positions;
 
     $_posAllowed = array();
 
-    foreach ($themeConfig['positions']['position'] as $_pos) {
+    foreach ($theme_config_positions as $_pos) {
         $_pos = trim(( string )$_pos['tag']);
         unset($matches);
         if (preg_match('/^\[([^\]]+)\]$/is', $_pos, $matches)) {

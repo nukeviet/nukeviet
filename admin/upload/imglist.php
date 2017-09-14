@@ -20,7 +20,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
     if ($refresh) {
         if ($sys_info['allowed_set_time_limit']) {
             set_time_limit(0);
-        }        
+        }
         nv_filesListRefresh($path);
     }
 
@@ -116,17 +116,17 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             $file['data'] .= '|' . $file['ext'] . '|' . $file['type'] . '|' . nv_convertfromBytes($file['filesize']) . '|' . $file['userid'] . '|' . nv_date('l, d F Y, H:i:s P', $file['mtime']) . '|';
             $file['data'] .= (empty($q)) ? '' : $file['dirname'];
             $file['data'] .= '|' . $file['mtime'];
-            
+
             $file['is_img'] = $file['type'] == 'image' ? 'true' : 'false';
             $file['sel'] = in_array($file['title'], $selectfile) ? ' imgsel' : '';
             $file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
-            
+
             $file['nameLong'] = substr($file['title'], 0, 0 - strlen($file['ext']) - 1);
             if (strlen($file['nameLong']) >= 30) {
                 $file['nameLong'] = substr($file['nameLong'], 0, 28) . '..';
             }
             $file['nameLong'] = $file['nameLong'] . '.' . $file['ext'];
-            
+
             $xtpl->assign('IMG', $file);
             $xtpl->parse('main.loopimg');
         }
