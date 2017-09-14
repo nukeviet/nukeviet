@@ -277,7 +277,12 @@ function user_login($is_ajax = false)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
+    if (in_array($global_config['gfx_chk'], array(
+        2,
+        4,
+        5,
+        7
+    ))) {
         if ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->parse('main.recaptcha.default');
@@ -325,6 +330,10 @@ function user_login($is_ajax = false)
 
     if (defined('NV_OPENID_ALLOWED')) {
         $assigns = array();
+        $icons = array(
+            'google' => 'google-plus',
+            'facebook' => 'facebook'
+        );
         foreach ($global_config['openid_servers'] as $server) {
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             if (!empty($nv_redirect)) {
@@ -332,8 +341,7 @@ function user_login($is_ajax = false)
             }
             $assigns['server'] = $server;
             $assigns['title'] = ucfirst($server);
-            $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
-            $assigns['img_width'] = $assigns['img_height'] = 24;
+            $assigns['icon'] = $icons[$server];
 
             $xtpl->assign('OPENID', $assigns);
             $xtpl->parse('main.openid.server');
@@ -603,7 +611,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     }
 
     // Thông tin cơ bản
-    $array_basic_key = array('first_name', 'last_name', 'gender', 'birthday', 'sig');
+    $array_basic_key = array(
+        'first_name',
+        'last_name',
+        'gender',
+        'birthday',
+        'sig'
+    );
     foreach ($array_basic_key as $key) {
         $row = $array_field_config[$key];
         $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : '';
@@ -745,13 +759,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             if (empty($row['system'])) {
                 $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
                 $row['required'] = ($row['required']) ? 'required' : '';
-    
+
                 $xtpl->assign('FIELD', $row);
-    
+
                 if ($row['required']) {
                     $xtpl->parse('main.tab_edit_others.loop.required');
                 }
-    
+
                 if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
                     $xtpl->parse('main.tab_edit_others.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
@@ -799,7 +813,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                 } elseif ($row['field_type'] == 'checkbox') {
                     $number = 0;
                     $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
-    
+
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', array(
                             'id' => $row['fid'] . '_' . $number++,
@@ -812,7 +826,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     $xtpl->parse('main.tab_edit_others.loop.checkbox');
                 } elseif ($row['field_type'] == 'multiselect') {
                     $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
-    
+
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', array(
                             'key' => $key,
@@ -843,7 +857,10 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->parse('main.question_empty_pass');
         }
 
-        $array_question_key = array('question', 'answer');
+        $array_question_key = array(
+            'question',
+            'answer'
+        );
         foreach ($array_question_key as $key) {
             $row = $array_field_config[$key];
             $show_key = 'show_' . $row['field'];

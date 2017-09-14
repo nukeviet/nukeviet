@@ -13,6 +13,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_login')) {
+
     /**
      * nv_block_config_login()
      *
@@ -28,7 +29,7 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '	<td>' . $lang_block['display_mode'] . '</td>';
         $html .= '	<td><select class="w300 form-control" name="config_display_mode">';
 
-        for ($i = 0; $i <= 1; $i ++) {
+        for ($i = 0; $i <= 1; $i++) {
             $html .= '	<option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
         }
 
@@ -38,7 +39,7 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '	<td>' . $lang_block['popup_register'] . '</td>';
         $html .= '	<td><select class="w300 form-control" name="config_popup_register">';
 
-        for ($i = 0; $i <= 1; $i ++) {
+        for ($i = 0; $i <= 1; $i++) {
             $html .= '	<option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
         }
 
@@ -73,9 +74,11 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
+        global $client_info, $global_config, $module_name, $module_file, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head;
 
         $content = '';
+        $module = $block_config['module'];
+        $mod_file = $site_mods[$module]['module_file'];
 
         if ($global_config['allowuserlogin']) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/users/block.login.tpl')) {
@@ -88,10 +91,13 @@ if (!nv_function_exists('nv_block_login')) {
 
             $xtpl = new XTemplate('block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 
-            if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php')) {
-                include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
-            } else {
-                include NV_ROOTDIR . '/modules/users/language/vi.php';
+            if ($mod_file != $module_file) {
+                if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php')) {
+                    include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+                } else {
+                    include NV_ROOTDIR . '/modules/users/language/vi.php';
+                }
+                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/users.css' . '">';
             }
 
             $xtpl->assign('LANG', $lang_module);
@@ -143,7 +149,6 @@ if (!nv_function_exists('nv_block_login')) {
                     $xtpl->parse('signed.admintoolbar');
                 }
 
-
                 $xtpl->parse('signed');
                 $content = $xtpl->text('signed');
             } else {
@@ -172,7 +177,12 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('USERNAME_RULE', $username_rule);
                 $xtpl->assign('PASSWORD_RULE', $password_rule);
 
-                if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
+                if (in_array($global_config['gfx_chk'], array(
+                    2,
+                    4,
+                    5,
+                    7
+                ))) {
                     if ($global_config['captcha_type'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->parse('main.' . $display_layout . '.recaptcha.compact');
@@ -183,7 +193,12 @@ if (!nv_function_exists('nv_block_login')) {
                     }
                 }
 
-                if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) {
+                if (in_array($global_config['gfx_chk'], array(
+                    3,
+                    4,
+                    6,
+                    7
+                ))) {
                     if ($global_config['captcha_type'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
@@ -194,12 +209,16 @@ if (!nv_function_exists('nv_block_login')) {
                 }
 
                 if (defined('NV_OPENID_ALLOWED')) {
+                    $icons = array(
+                        'google' => 'google-plus',
+                        'facebook' => 'facebook'
+                    );
                     foreach ($global_config['openid_servers'] as $server) {
                         $assigns = array();
                         $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
-                        $assigns['title'] = $lang_global['openid_login'] . ' ' . ucfirst($server);
-                        $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/' . $server . '.png';
-                        $assigns['img_width'] = $assigns['img_height'] = 24;
+                        $assigns['title'] = ucfirst($server);
+                        $assigns['server'] = $server;
+                        $assigns['icon'] = $icons[$server];
 
                         $xtpl->assign('OPENID', $assigns);
                         $xtpl->parse('main.' . $display_layout . '.openid.server');
@@ -211,13 +230,16 @@ if (!nv_function_exists('nv_block_login')) {
                     if (empty($block_config['popup_register'])) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
-                    	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
+                        $_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
 
                         $data_questions = array();
                         $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
                         $result = $db->query($sql);
                         while ($row = $result->fetch()) {
-                            $data_questions[$row['qid']] = array('qid' => $row['qid'], 'title' => $row['title']);
+                            $data_questions[$row['qid']] = array(
+                                'qid' => $row['qid'],
+                                'title' => $row['title']
+                            );
                         }
 
                         foreach ($data_questions as $array_question_i) {
@@ -239,7 +261,7 @@ if (!nv_function_exists('nv_block_login')) {
                                 $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
                                 $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
                                 $result = $db->query($query);
-                                while (list($key, $val) = $result->fetch(3)) {
+                                while (list ($key, $val) = $result->fetch(3)) {
                                     $row_field['field_choices'][$key] = $val;
                                 }
                             }
@@ -303,7 +325,8 @@ if (!nv_function_exists('nv_block_login')) {
                                             $xtpl->assign('FIELD_CHOICES', array(
                                                 'key' => $key,
                                                 'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                                                'value' => $value));
+                                                'value' => $value
+                                            ));
                                             $xtpl->parse('main.allowuserreg.field.loop.select.loop');
                                         }
                                         $xtpl->parse('main.allowuserreg.field.loop.select');
@@ -314,7 +337,8 @@ if (!nv_function_exists('nv_block_login')) {
                                                 'id' => $row['fid'] . '_' . $number++,
                                                 'key' => $key,
                                                 'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                                                'value' => $value));
+                                                'value' => $value
+                                            ));
                                             $xtpl->parse('main.allowuserreg.field.loop.radio.loop');
                                         }
                                         $xtpl->parse('main.allowuserreg.field.loop.radio');
@@ -326,7 +350,8 @@ if (!nv_function_exists('nv_block_login')) {
                                                 'id' => $row['fid'] . '_' . $number++,
                                                 'key' => $key,
                                                 'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
-                                                'value' => $value));
+                                                'value' => $value
+                                            ));
                                             $xtpl->parse('main.allowuserreg.field.loop.checkbox.loop');
                                         }
                                         $xtpl->parse('main.allowuserreg.field.loop.checkbox');
@@ -336,7 +361,8 @@ if (!nv_function_exists('nv_block_login')) {
                                             $xtpl->assign('FIELD_CHOICES', array(
                                                 'key' => $key,
                                                 'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
-                                                'value' => $value));
+                                                'value' => $value
+                                            ));
                                             $xtpl->parse('main.allowuserreg.field.loop.multiselect.loop');
                                         }
                                         $xtpl->parse('main.allowuserreg.field.loop.multiselect');
