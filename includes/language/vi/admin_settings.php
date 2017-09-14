@@ -232,6 +232,7 @@ $lang_module['plugin_area'] = 'Khu vực';
 $lang_module['plugin_area_1'] = 'Trước khi kết nối CSDL';
 $lang_module['plugin_area_2'] = 'Trước khi gọi các module';
 $lang_module['plugin_area_3'] = 'Trước khi website gửi nội dung tới trình duyệt';
+$lang_module['plugin_area_4'] = 'Sau khi gọi các module';
 $lang_module['plugin_number'] = 'Số thứ tự';
 $lang_module['plugin_func'] = 'Chức năng';
 $lang_module['plugin_add'] = 'Thêm plugin';
