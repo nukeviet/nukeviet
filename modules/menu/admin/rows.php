@@ -440,7 +440,7 @@ $array_mod_title[] = array(
     'title' => $lang_module['menu_manager'],
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
 );
-sort($array_mod_title, SORT_NUMERIC);
+krsort($array_mod_title, SORT_NUMERIC);
 
 // Active last item
 $s = sizeof($array_mod_title) - 1;

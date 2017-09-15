@@ -142,30 +142,8 @@ class Error
             $this->useragent = substr($useragent, 0, 500);
         }
 
-        $this->nv_set_ini();
-
         set_error_handler(array(&$this, 'error_handler'));
         register_shutdown_function(array(&$this, 'shutdown'));
-    }
-
-    /**
-     * Error::nv_set_ini()
-     *
-     * @return
-     */
-    public function nv_set_ini()
-    {
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
-        if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-        }
-        if ((function_exists('ini_set') and !in_array('ini_set', $disable_functions))) {
-            ini_set('display_startup_errors', 0);
-            ini_set('track_errors', 1);
-
-            ini_set('log_errors', 0);
-            ini_set('display_errors', 0);
-        }
     }
 
     /**

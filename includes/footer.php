@@ -13,7 +13,7 @@ if ((! defined('NV_SYSTEM') and ! defined('NV_ADMIN')) or ! defined('NV_MAINFILE
 }
 
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
-global $db, $nv_Request, $nv_plugin_area;
+global $db, $nv_Request, $nv_plugin_area, $headers;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -32,35 +32,43 @@ if (isset($nv_plugin_area[3])) {
     }
 }
 
-$db = null;
-unset($lang_global, $global_config, $client_info);
+$html_headers = $global_config['others_headers'];
+$html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
+$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+$html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
+$html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
+$html_headers['Expires'] = '-1'; // Proxies.
+if (preg_match('/(Googlebot)/i', NV_USER_AGENT)) {
+    $html_headers['X-Robots-Tag'] = 'index,archive,follow,noodp';
+}
+if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
+    $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
+}
 
-//Nen trang
-if (defined('NV_IS_GZIP')) {
-    $http_accept_encoding = $nv_Request->get_string('HTTP_ACCEPT_ENCODING', 'server', '');
+if (! empty($headers)) {
+    $html_headers += $headers;
+}
 
-    if (! empty($http_accept_encoding)) {
-        $compress_list = array();
-        $compress_list['deflate'] = 'gzdeflate';
-        $compress_list['gzip'] = 'gzencode';
-        $compress_list['x-gzip'] = 'gzencode';
-        $compress_list['compress'] = 'gzcompress';
-        $compress_list['x-compress'] = 'gzcompress';
+if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
+    unset($html_headers['Strict-Transport-Security']);
+}
 
-        $http_accept_encoding = explode(',', str_replace(' ', '', $http_accept_encoding));
+foreach ($html_headers as $key => $value) {
+    $_key = strtolower($key);
+    if (! isset($sys_info['server_headers'][$_key])) {
+        if (! is_array($value)) {
+            $value = array($value);
+        }
 
-        foreach ($http_accept_encoding as $enc) {
-            if (! empty($enc) and isset($compress_list[$enc])) {
-                if (nv_function_exists($compress_list[$enc])) {
-                    $contents = call_user_func($compress_list[$enc], $contents, ZLIB_OUTPUT_COMPRESSION_LEVEL);
-                    @Header('Content-Encoding: ' . $enc);
-                    @Header('Vary: Accept-Encoding');
-                    break;
-                }
-            }
+        foreach ($value as $val) {
+            $replace = ($key != 'link') ? true : false;
+            Header($key . ': ' . $val, $replace);
         }
     }
 }
+
+$db = null;
+unset($lang_global, $global_config, $client_info);
 
 echo $contents;
 exit(0);

@@ -430,8 +430,7 @@ class Download
         header('Last-Modified: ' . date('D, d M Y H:i:s \G\M\T', $this->properties['mtime']));
 
         if ($data_section and $this->properties['resume']) {
-            header('HTTP/1.1 206 Partial Content');
-            header('Status: 206 Partial Content');
+            http_response_code(206);
             header('Accept-Ranges: bytes');
             header('Content-Range: bytes ' . $seek_start . '-' . $seek_end . '/' . $this->properties['size']);
             header('Content-Length: ' . ($seek_end - $seek_start + 1));

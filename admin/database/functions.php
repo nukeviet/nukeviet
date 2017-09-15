@@ -29,6 +29,7 @@ $allow_func = array(
 );
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'setting';
+    $allow_func[] = 'sampledata';
 }
 unset($page_title, $select_options);
 
@@ -38,7 +39,13 @@ define('NV_IS_FILE_DATABASE', true);
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database';
 $array_url_instruction['file'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database:file';
 $array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database:setting';
+$array_url_instruction['sampledata'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:database:sampledata';
 
+/**
+ * nv_show_tables()
+ *
+ * @return void
+ */
 function nv_show_tables()
 {
     global $db, $db_config, $lang_module, $module_name;
@@ -134,6 +141,13 @@ function nv_show_tables()
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+/**
+ * nv_highlight_string()
+ *
+ * @param mixed $tab
+ * @param string $type
+ * @return
+ */
 function nv_highlight_string($tab, $type = 'sql')
 {
     global $db;
@@ -150,6 +164,11 @@ function nv_highlight_string($tab, $type = 'sql')
     }
 }
 
+/**
+ * nv_show_tab()
+ *
+ * @return void
+ */
 function nv_show_tab()
 {
     global $db, $db_config, $module_name, $page_title, $lang_module, $nv_Request;
@@ -264,6 +283,12 @@ function nv_show_tab()
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+/**
+ * main_theme()
+ *
+ * @param mixed $contents
+ * @return
+ */
 function main_theme($contents)
 {
     global $global_config, $module_file;
@@ -283,6 +308,12 @@ function main_theme($contents)
     return $xtpl->text('main');
 }
 
+/**
+ * nv_show_tables_theme()
+ *
+ * @param mixed $contents
+ * @return
+ */
 function nv_show_tables_theme($contents)
 {
     global $global_config, $module_file;
@@ -344,6 +375,12 @@ function nv_show_tables_theme($contents)
     return $xtpl->text('main');
 }
 
+/**
+ * nv_show_tab_theme()
+ *
+ * @param mixed $contents
+ * @return
+ */
 function nv_show_tab_theme($contents)
 {
     global $global_config, $module_file;

@@ -55,11 +55,32 @@ if ($theme_type != $global_config['current_theme_type']) {
 unset($theme_type);
 
 // Doc file cau hinh giao dien
-$themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini'));
-if (isset($themeConfig['positions']['position']['name'])) {
-    $themeConfig['positions']['position'] = array(
-        $themeConfig['positions']['position']
-    );
+$cache_file = NV_LANG_DATA . '_' . $site_theme . '_configposition_' . NV_CACHE_PREFIX . '.cache';
+if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
+    $theme_config_positions = unserialize($cache);
+} else {
+    $_themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini'));
+    if (isset($_themeConfig['positions']['position']['name'])) {
+        $theme_config_positions = array(
+            $_themeConfig['positions']['position']
+        );
+    } elseif (isset($_themeConfig['positions']['position'])) {
+        $theme_config_positions = $_themeConfig['positions']['position'];
+    } else {
+        $theme_config_positions = array();
+        $_ini_file = file_get_contents(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini');
+        if (preg_match_all('/<position>[\t\n\s]+<name>(.*?)<\/name>[\t\n\s]+<tag>(\[[a-zA-Z0-9_]+\])<\/tag>[\t\n\s]+<\/position>/s', $_ini_file, $_m)) {
+            foreach ($_m[1] as $_key => $value) {
+                $theme_config_positions[] = array(
+                    'name' => $value,
+                    'tag' => $_m[2][$_key]
+                );
+            }
+        }
+    }
+    if (!empty($theme_config_positions)) {
+        $nv_Cache->setItem('themes', $cache_file, serialize($theme_config_positions));
+    }
 }
 require NV_ROOTDIR . '/themes/' . $site_theme . '/theme.php';
 

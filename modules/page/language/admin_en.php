@@ -62,6 +62,7 @@ $lang_module['config'] = 'Config';
 $lang_module['config_view_type'] = 'Display articles type';
 $lang_module['config_view_type_0'] = 'Main article';
 $lang_module['config_view_type_1'] = 'List article';
+$lang_module['config_view_type_2'] = 'No display';
 $lang_module['config_view_type_page'] = 'Number of posts displayed on a page';
 $lang_module['config_view_related_articles'] = 'Number of posts related articles';
 $lang_module['config_facebookapi'] = 'Facebook App ID';

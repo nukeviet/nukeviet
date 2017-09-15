@@ -110,6 +110,7 @@ function nv_dump_save($params)
             if ($item['engine'] != 'MyISAM') {
                 $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
             }
+            $tables[$a] = array();
             $tables[$a]['name'] = $item['name'];
             $tables[$a]['size'] = intval($item['data_length']) + intval($item['index_length']);
             $tables[$a]['limit'] = 1 + round(1048576 / ($item['avg_row_length'] + 1));
@@ -255,7 +256,7 @@ function nv_dump_restore($file)
             $st = preg_replace("/^\xEF\xBB\xBF/", "", $st);
         }
 
-        if (empty($st) or preg_match('/^(#|--)/', $st)) {
+        if (empty($st) or preg_match('/^(#|--|\/\*\!)/', $st)) {
             continue;
         } else {
             $query_len += strlen($st);

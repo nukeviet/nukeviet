@@ -14,5 +14,6 @@ if (! defined('NV_ADMIN')) {
 
 $submenu['file'] = $lang_module['file_backup'];
 if (defined('NV_IS_GODADMIN')) {
+    $submenu['sampledata'] = $lang_module['sampledata'];
     $submenu['setting'] = $lang_global['mod_settings'];
 }

@@ -263,15 +263,17 @@ function download() {
 function preview() {
     $("div.dynamic").text("");
     $("input.dynamic").val("");
+    $("div#fileView").removeClass("zoomin");
 
     var selFile = $("input[name=selFile]").val();
     var html = LANG.upload_size + ": ";
 
-    var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+    var img = $("img[title='" + selFile + "']");
+    var selFileData = img.attr("name").split("|");
     fullPath = (selFileData[7] == "") ? $("span#foldervalue").attr("title") : selFileData[7];
 
     if (selFileData[3] == "image" || selFileData[2] == "swf") {
-        var size = calSize(selFileData[0], selFileData[1], 360, 230);
+        var size = calSize(selFileData[0], selFileData[1], 188, 120);
         html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
         selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
             src: nv_base_siteurl + fullPath + "/" + selFile,
@@ -280,6 +282,14 @@ function preview() {
         }, {
             version: 8
         });
+        if (selFileData[3] == "image") {
+            $("div#fileView").addClass("zoomin");
+            $("div#fileView img").click(function() {
+                $("#sitemodal").find(".modal-title").html(selFile);
+                $("#sitemodal").find(".modal-body").html('<div class="text-center"><img class="img-responsive" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" /></div>');
+                $("#sitemodal").modal();
+            });
+        }
     } else {
         html += selFileData[4] + "<br />";
         $("div#fileView").html($("div[title='" + selFile + "'] div").html());
@@ -290,6 +300,8 @@ function preview() {
     $("#fileInfoAlt").html($("img[title='" + selFile + "']").attr("alt"));
     $("#fileInfoDetail").html(html);
     $("#fileInfoName").html(selFile);
+    $("#FileRelativePath").val(nv_base_siteurl + fullPath + "/" + selFile);
+    $("#FileAbsolutePath").val(nv_my_domain + nv_base_siteurl + fullPath + "/" + selFile);
 
     $("div#imgpreview").dialog({
         autoOpen: false,
@@ -299,10 +311,35 @@ function preview() {
             my: "center",
             at: "center",
             of: window
+        },
+        open: function() {
+            $("#FileRelativePath").blur();
+            $("#FileRelativePath").focus(function() {
+                $(this).select();
+            });
+            $("#FileAbsolutePath").focus(function() {
+                $(this).select();
+            });
+            $("#FileRelativePathBtn").mouseout(function() {
+                $(this).tooltip('destroy');
+            });
+            $("#FileAbsolutePathBtn").mouseout(function() {
+                $(this).tooltip('destroy');
+            });
+            var clipboard1 = new Clipboard('#FileRelativePathBtn');
+            var clipboard2 = new Clipboard('#FileAbsolutePathBtn');
+            clipboard1.on('success', function(e) {
+                $(e.trigger).tooltip('show');
+            });
+            clipboard2.on('success', function(e) {
+                $(e.trigger).tooltip('show');
+            });
+        },
+        close: function() {
+            $('#FileRelativePathBtn').tooltip('destroy');
+            $('#FileAbsolutePathBtn').tooltip('destroy');
         }
-    }).dialog("open").dblclick(function() {
-        $("div#imgpreview").dialog("close");
-    });
+    }).dialog("open");
 }
 
 // Tao anh moi (Menu cong cu anh)

@@ -55,7 +55,7 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
         $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
-            ->order('publtime DESC')
+        ->order($order_articles_by.' DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
@@ -93,7 +93,7 @@ if (! empty($page_title) and $page_title == strip_punctuation($page_title)) {
                 ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
                 ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') and publtime < ' . $end_publtime)
-                ->order('publtime DESC')
+                ->order($order_articles_by.' DESC')
                 ->limit($st_links);
             $result = $db_slave->query($db_slave->sql());
             while ($item = $result->fetch()) {

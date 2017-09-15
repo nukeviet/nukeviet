@@ -17,9 +17,7 @@ require NV_ROOTDIR . '/includes/mainfile.php';
 
 // SSL
 if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-    header("HTTP/1.1 301 Moved Permanently");
-    header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-    exit(0);
+    nv_redirect_location("https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
 }
 
 // Admin dang nhap

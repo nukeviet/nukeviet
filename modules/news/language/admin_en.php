@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -47,8 +47,6 @@ $lang_module['status_7'] = 'Checking for Approve';
 $lang_module['status_8'] = 'Send Publish';
 $lang_module['status_9'] = 'Reject Publish';
 $lang_module['status_10'] = 'Checking for Publish';
-$lang_module['status_12'] = 'Save articles, send admin';
-$lang_module['status_13'] = 'Save articles, send super admin';
 $lang_module['errorsave'] = 'Error: Update content fail, please check your article alias';
 $lang_module['errorexists'] = 'Error: The title or static link is duplicated, enter a different value';
 $lang_module['saveok'] = 'Update succesfully';
@@ -67,6 +65,11 @@ $lang_module['newday'] = 'Show new icon (day)';
 $lang_module['hitstotal'] = 'Number view';
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';
+$lang_module['cat_instant_view'] = 'See the RSS feed URL for instant messages';
+$lang_module['cat_instant_viewsimple'] = 'View the RSS URL';
+$lang_module['cat_instant_title'] = 'RSS feed URL instantaneously';
+$lang_module['show_hide_pass'] = 'Show / Hide passwords';
+$lang_module['gen_rand_pass'] = 'Randomly generated';
 $lang_module['description'] = 'Description';
 $lang_module['viewdescription'] = 'Show describes when view topic';
 $lang_module['viewdescription_0'] = 'No display';
@@ -119,6 +122,19 @@ $lang_module['setting_elas_index'] = 'Database name Elasticsearch';
 $lang_module['error_elas_host_connect'] = 'Unable to connect to the server Elasticsearch!';
 $lang_module['use_setup_elasticseach'] = 'Installation instructions Elasticsearch';
 $lang_module['use_dev_elasticseach'] = 'Programming Guide Elasticsearch on NukeViet';
+$lang_module['setting_insart_caption'] = 'Configure instant messages';
+$lang_module['setting_active_instant_articles'] = 'Enable instant messaging functionality';
+$lang_module['setting_instant_articles_template'] = 'Post templates are used by default if each post does not specify a template';
+$lang_module['setting_instant_articles_httpauth'] = 'Enable HTTP authentication for RSS feeds';
+$lang_module['setting_instant_articles_username'] = 'Account authentication';
+$lang_module['setting_instant_articles_password'] = 'Authentication password';
+$lang_module['setting_instant_articles_livetime'] = 'Time (minutes) recreate RSS';
+$lang_module['setting_instant_articles_livetime1'] = 'Enter 0 to create new RSS feeds when queries to the feed. RSS will also automatically recreate the query immediately to the cache if the cache is deleted without waiting.';
+$lang_module['setting_instant_articles_gettime'] = 'Limit the time (minutes) to retrieve new posts and new posts from the time of RSS creation before';
+$lang_module['setting_instant_articles_gettime1'] = 'Note: Facebook queries into the power for many hours at a time, however, to make sure that new or updated articles can be displayed between query timeouts from facebook, select this value from 60 minutes or less. on. Also note, if this value is less than the re-generation time RSS some posts may not be displayed';
+$lang_module['setting_instant_articles_defaulturl'] = 'RSS feed URL to declare if using instant messaging feature';
+$lang_module['setting_instant_articles_defaulturl1'] = 'Note: This URL is the URL that contains the entire article of the module. To get the URL of the feed for each forum, after activating the instant messaging feature, you need to move to the administration section, click the button that displays the URL of the instant message RSS feed. At each respective category.';
+$lang_module['setting_instant_articles_auto'] = 'The default message is posted as an instant message if this function is activated';
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
 $lang_module['viewcat_page_old'] = 'Old categories, Up';
@@ -183,6 +199,7 @@ $lang_module['content_admin'] = 'Creator';
 $lang_module['content_author'] = 'Author';
 $lang_module['content_sourceid'] = 'Source';
 $lang_module['content_copyright'] = 'Copyright';
+$lang_module['content_external_link'] = 'Use external link';
 $lang_module['content_saveok'] = 'Successfully recorded data';
 $lang_module['content_main'] = 'Back to management';
 $lang_module['content_back'] = 'Back to edit page';
@@ -194,6 +211,11 @@ $lang_module['content_tags_empty'] = 'Note: article do not have keywords';
 $lang_module['content_tags_empty_auto'] = 'The system will automatically generate keywords stored at this article, you can disable auto-generated keywords in the management module';
 $lang_module['content_advfeature'] = 'Advance setting';
 $lang_module['content_description'] = 'Site description';
+$lang_module['content_insart'] = 'Instant article';
+$lang_module['content_instant_active'] = 'This is an instant message';
+$lang_module['content_instant_template'] = 'Template';
+$lang_module['content_instant_templatenote'] = 'Leave blank ie use the default template';
+$lang_module['content_instant_creatauto'] = 'Automatically generate instant messages from regular posts';
 $lang_module['showtooltip'] = 'Display tooltip';
 $lang_module['showtooltip_position'] = 'Tooltip postition';
 $lang_module['showtooltip_position_top'] = 'Top';
@@ -298,41 +320,25 @@ $lang_module['notification_post_queue'] = 'Approve post <strong>%s</strong> by <
 $lang_module['ad_block_show'] = 'Displaying the sub block';
 $lang_module['ad_block_top'] = 'Block top category';
 $lang_module['ad_block_bot'] = 'Block bottom category';
-$lang_module['content_external_link'] = 'Use external link';
-$lang_module['cat_instant_view'] = 'See the RSS feed URL for instant messages';
-$lang_module['cat_instant_viewsimple'] = 'View the RSS URL';
-$lang_module['cat_instant_title'] = 'RSS feed URL instantaneously';
-$lang_module['show_hide_pass'] = 'Show / Hide passwords';
-$lang_module['gen_rand_pass'] = 'Randomly generated';
-$lang_module['setting_insart_caption'] = 'Configure instant messages';
-$lang_module['setting_active_instant_articles'] = 'Enable instant messaging functionality';
-$lang_module['setting_instant_articles_template'] = 'Post templates are used by default if each post does not specify a template';
-$lang_module['setting_instant_articles_httpauth'] = 'Enable HTTP authentication for RSS feeds';
-$lang_module['setting_instant_articles_username'] = 'Account authentication';
-$lang_module['setting_instant_articles_password'] = 'Authentication password';
-$lang_module['setting_instant_articles_livetime'] = 'Time (minutes) recreate RSS';
-$lang_module['setting_instant_articles_livetime1'] = 'Enter 0 to create new RSS feeds when queries to the feed. RSS will also automatically recreate the query immediately to the cache if the cache is deleted without waiting.';
-$lang_module['setting_instant_articles_gettime'] = 'Limit the time (minutes) to retrieve new posts and new posts from the time of RSS creation before';
-$lang_module['setting_instant_articles_gettime1'] = 'Note: Facebook queries into the power for many hours at a time, however, to make sure that new or updated articles can be displayed between query timeouts from facebook, select this value from 60 minutes or less. on. Also note, if this value is less than the re-generation time RSS some posts may not be displayed';
-$lang_module['setting_instant_articles_defaulturl'] = 'RSS feed URL to declare if using instant messaging feature';
-$lang_module['setting_instant_articles_defaulturl1'] = 'Note: This URL is the URL that contains the entire article of the module. To get the URL of the feed for each forum, after activating the instant messaging feature, you need to move to the administration section, click the button that displays the URL of the instant message RSS feed. At each respective category.';
-$lang_module['setting_instant_articles_auto'] = 'The default message is posted as an instant message if this function is activated';
-$lang_module['content_insart'] = 'Instant article';
-$lang_module['content_instant_active'] = 'This is an instant message';
-$lang_module['content_instant_template'] = 'Template';
-$lang_module['content_instant_templatenote'] = 'Leave blank ie use the default template';
-$lang_module['content_instant_creatauto'] = 'Automatically generate instant messages from regular posts';
 $lang_module['fbinsartmgs_100'] = 'Error: The article has HTML tags: <strong />% s  not supported by instant message. To select this article as an instant article, remove them, replace them with supported tags, or check the box to automatically convert your posts into instant posts. Note: at system conversion will automatically remove components that do not support or replace them with other appropriate components.';
 $lang_module['fbinsartmgs_101'] = 'Error: The article has no content';
 $lang_module['fbinsartmgs_102'] = 'Error: Your article has attributes for tags. To select this article as an instant article, remove them from the tab or tick the box to automatically convert your posts into instant posts. Note: at system conversion will automatically remove components that do not support or replace them with other appropriate components.';
-$lang_module['error_edit'] = 'Posts are moderated moderators. You can not edit next.';
-$lang_module['dulicate_edit'] = 'Posts are moderated moderators. Do you want to take over this administration?';
-$lang_module['not_edit_by_admin'] = 'You have been hijacked to edit this post. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
-
 $lang_module['dulicate_edit'] = 'The article <b>%s </b> is being edited by the account <b>%s</b> at %s. You may not edit this post until it is complete.';
 $lang_module['dulicate_edit_admin'] = 'The article <b>%s </b> is being edited by the account <b>%s</b> at %s. Do you want to <b>Take over the editor of the post</b>?';
 $lang_module['dulicate_takeover'] = 'Take over the editor of the post';
 $lang_module['dulicate_edit_takeover'] = 'You have been take over by this account %s at %s. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
-
 $lang_module['setting_copy_news'] = 'Allowed to copy the article';
 $lang_module['title_copy_news'] = 'Copy the article';
+
+$lang_module['order_articles'] = 'Sort articles';
+$lang_module['order_articles_0'] = 'Sort by post time';
+$lang_module['order_articles_1'] = 'Custom sort, incremental numbering';
+$lang_module['order_articles_number'] = 'No current arrangements';
+$lang_module['order_articles_new'] = 'No new arrangements';
+$lang_module['status_12'] = 'Save articles, send admin';
+$lang_module['status_13'] = 'Save articles, send super admin';
+$lang_module['error_edit'] = 'Posts are moderated moderators. You can not edit next.';
+$lang_module['not_edit_by_admin'] = 'You have been hijacked to edit this post. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
+
+$lang_module['pick_layout'] = 'Choose layout';
+$lang_module['default_layout'] = 'Default';
