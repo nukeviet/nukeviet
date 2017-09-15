@@ -1,25 +1,25 @@
 <!-- BEGIN: main -->
 <div id="users">
-    <form class="form-inline" action="{FORM_ACTION}" method="post">
+    <form action="{FORM_ACTION}" method="post">
     	<div class="table-responsive">
 	        <table class="table table-striped table-bordered table-hover">
 	            <tbody>
 	                <tr>
-	                    <td style="width:200px">{LANG.config_nummain}</td>
+	                    <td class="w350">{LANG.config_nummain}</td>
 	                    <td>
-							<input class="form-control" type="text" style="width:350px" name="nummain" value="{DATA.nummain}"/>
+							<input class="form-control w200 pull-left" type="text" name="nummain" value="{DATA.nummain}"/>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>{LANG.config_numsub}</td>
 	                    <td>
-							<input class="form-control" type="text" style="width:350px" name="numsub" value="{DATA.numsub}"/>
+							<input class="form-control w200 pull-left" type="text" name="numsub" value="{DATA.numsub}"/>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>{LANG.config_typeview}</td>
 	                    <td>
-	                        <select class="form-control" name="typeview">
+	                        <select class="form-control w250 pull-left" name="typeview">
 	                            <!-- BEGIN: typeview -->
 	                            <option value="{typeview.id}"{typeview.selected}> {typeview.title}</option>
 	                            <!-- END: typeview -->
@@ -43,7 +43,28 @@
 	                <tr>
 	                    <td>{LANG.config_detail_other_numlinks}</td>
 	                    <td>
-							<input class="form-control" type="text" name="other_numlinks" value="{DATA.other_numlinks}"/>
+							<input class="form-control w200 pull-left" type="text" name="other_numlinks" value="{DATA.other_numlinks}"/>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>{LANG.config_detail_hide_empty_field}</td>
+	                    <td>
+							<input type="checkbox" name="detail_hide_empty_field" value="1"{DATA.detail_hide_empty_field}/>
+	                    </td>
+	                </tr>
+                    <tr>
+                        <td>{LANG.config_show_link_detailpage}</td>
+                        <td>
+                            <div><label><input type="checkbox" name="detail_show_link_cat" value="1"{DATA.detail_show_link_cat}/>&nbsp;{LANG.config_show_link_detailpage1}</label></div>
+                            <div><label><input type="checkbox" name="detail_show_link_area" value="1"{DATA.detail_show_link_area}/>&nbsp;{LANG.config_show_link_detailpage2}</label></div>
+                            <div><label><input type="checkbox" name="detail_show_link_subject" value="1"{DATA.detail_show_link_subject}/>&nbsp;{LANG.config_show_link_detailpage3}</label></div>
+                            <div><label><input type="checkbox" name="detail_show_link_signer" value="1"{DATA.detail_show_link_signer}/>&nbsp;{LANG.config_show_link_detailpage4}</label></div>
+                        </td>
+                    </tr>
+	                <tr>
+	                    <td>{LANG.config_detail_pdf_quick_view}</td>
+	                    <td>
+							<input type="checkbox" name="detail_pdf_quick_view" value="1"{DATA.detail_pdf_quick_view}/>
 	                    </td>
 	                </tr>
 	            </tbody>

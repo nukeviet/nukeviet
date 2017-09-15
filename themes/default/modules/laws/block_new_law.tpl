@@ -10,7 +10,7 @@
 		</h3>
 		<p class="law-title">{ROW.title}</p>
 		<!-- BEGIN: code -->
-		<em class="text-muted law-view">Lượt xem:{ROW.view_hits} | {LANG.download_hits}:{ROW.download_hits}</em>
+		<em class="text-muted law-view">{LANG.view_hits}: {ROW.view_hits} | {LANG.download_hits}:{ROW.download_hits}</em>
 		<!-- END: code -->
 	</div>
 	<!-- END: loop -->

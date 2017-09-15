@@ -1,30 +1,117 @@
 ﻿/**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
  
-.myh3{background:url('../images/arrows/arrow3_red.gif') no-repeat left center;margin:10px 0;font:800 13px Tahoma,Arial,Verdana,sans-serif;text-indent:14px}
-.myh3 a{color:#333}
-.red{color:red}
-.bold{font-weight: bold;color:red}
-#ablist{margin:5px;padding:10px;background:#F2F2F2;}
-#pageContent{margin-top: 10px;}
-#pageContent .result{margin:10px 0;font:800 13px Tahoma,Arial,Verdana,sans-serif;color:red}
-#pageContent dl {padding: 4px;background: #FFF;}
-#pageContent input[type="text"].txt {width: 280px;}
-#pageContent textarea.txt {width: 400px;height:100px}
-#pageContent label {font:400 12px/20px Tahoma,Arial,Verdana,sans-serif;}
-#pageContent dd {width:150px;}
-#pageContent dd,#pageContent dt {float: left;}
-#pageContent .row{font:normal 13px/17px Arial;padding:3px;}
-.groupcss0{display: none}
-.groupcss1{display: block}
-.center{text-align:center}
-.fixwidthinput{width:98%}
+.myh3 {
+    background: url('../images/arrows/arrow3_red.gif') no-repeat left center;
+    margin: 10px 0;
+    font: 800 13px Tahoma, Arial, Verdana, sans-serif;
+    text-indent: 14px
+}
+
+.myh3 a {
+    color: #333
+}
+
+.red {
+    color: red
+}
+
+.bold {
+    font-weight: bold;
+    color: red
+}
+
+#ablist {
+    margin: 5px;
+    padding: 10px;
+    background: #F2F2F2;
+}
+
+#pageContent {
+    margin-top: 10px;
+}
+
+#pageContent .result {
+    margin: 10px 0;
+    font: 800 13px Tahoma, Arial, Verdana, sans-serif;
+    color: red
+}
+
+#pageContent dl {
+    padding: 4px;
+    background: #FFF;
+}
+
+#pageContent input[type="text"].txt {
+    width: 280px;
+}
+
+#pageContent textarea.txt {
+    width: 400px;
+    height: 100px
+}
+
+#pageContent label {
+    font: 400 12px/20px Tahoma, Arial, Verdana, sans-serif;
+}
+
+#pageContent dd {
+    width: 150px;
+}
+
+#pageContent dd, #pageContent dt {
+    float: left;
+}
+
+#pageContent .row {
+    font: normal 13px/17px Arial;
+    padding: 3px;
+}
+
+.groupcss0 {
+    display: none
+}
+
+.groupcss1 {
+    display: block
+}
+
+.center {
+    text-align: center
+}
+
+.fixwidthinput {
+    width: 98%
+}
 /* Order */
-.orderasc {height: 16px;padding-left: 16px;background-repeat: no-repeat;background-position: left center;background-image: url('../images/arrows/tall-up-arrow.gif');}
-.orderdesc {height: 16px;padding-left: 16px;background-repeat: no-repeat;background-position: left center;background-image: url('../images/arrows/tall-down-arrow.gif');}
-.orderno {height: 16px;padding-left: 16px;	background-repeat: no-repeat;background-position: left center;background-image: url('../images/collapse-all.gif');}
-.pointer {cursor: pointer;}
+.orderasc {
+    height: 16px;
+    padding-left: 16px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url('../images/arrows/tall-up-arrow.gif');
+}
+
+.orderdesc {
+    height: 16px;
+    padding-left: 16px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url('../images/arrows/tall-down-arrow.gif');
+}
+
+.orderno {
+    height: 16px;
+    padding-left: 16px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url('../images/collapse-all.gif');
+}
+
+.pointer {
+    cursor: pointer;
+}

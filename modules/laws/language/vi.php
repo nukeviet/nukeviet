@@ -2,15 +2,15 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['author'] = "VINADES.,JSC <contact@vinades.vn>";
 $lang_translator['createdate'] = "27/07/2011, 14:55";
 $lang_translator['copyright'] = "@Copyright (C) 2011 VINADES.,JSC. All rights reserved";
 $lang_translator['info'] = "";
@@ -72,6 +72,7 @@ $lang_module['s_noresult'] = "Không có kết quả nào phù hợp với yêu 
 $lang_module['s_result_num'] = "%d văn bản";
 
 $lang_module['download'] = "Tải tập tin";
+$lang_module['quick_view_pdf'] = "Xem trước tập tin PDF";
 $lang_module['other_cat'] = "Các văn bản cùng thể loại";
 $lang_module['other_area'] = "Các văn bản cùng lĩnh vực";
 $lang_module['other_subject'] = "Các văn bản cùng cơ quan ban hành";

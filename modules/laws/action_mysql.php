@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 $sql_drop_module = array();
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_area";
@@ -129,5 +129,11 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('typeview', '0'),
 ('down_in_home', '1'),
 ('detail_other', 'a:1:{i:0;s:3:\"cat\";}'),
+('detail_hide_empty_field', '1'),
+('detail_show_link_cat', '1'),
+('detail_show_link_area', '1'),
+('detail_show_link_subject', '1'),
+('detail_show_link_signer', '1'),
+('detail_pdf_quick_view', '1'),
 ('other_numlinks', '5')
 ";
