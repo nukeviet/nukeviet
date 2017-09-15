@@ -98,4 +98,5 @@ $lang_module['error_required_departmentid'] = 'Erreur: vous devez saisir des don
 $lang_module['error_required_full_name'] = 'Erreur: vous devez saisir des données pour Nom complet';
 $lang_module['error_required_phone'] = 'Erreur: vous devez saisir les données pour téléphone';
 $lang_module['forwarded'] = 'Transmis';
+$lang_module['forward'] = 'Transmis à l\'adresse: %s';
 $lang_module['error_mail_empty'] = 'Erreur: E-mail vide';

@@ -98,4 +98,5 @@ $lang_module['error_required_departmentid'] = 'Error: Departmentid field is requ
 $lang_module['error_required_full_name'] = 'Error: Full name field is required';
 $lang_module['error_required_phone'] = 'Error: Phone field is required';
 $lang_module['forwarded'] = 'Forwarded';
+$lang_module['forward'] = 'Forward to: %s';
 $lang_module['error_mail_empty'] = 'Error: Empty email';
