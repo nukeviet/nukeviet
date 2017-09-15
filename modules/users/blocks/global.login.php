@@ -97,6 +97,7 @@ if (!nv_function_exists('nv_block_login')) {
             $xtpl->assign('LANG', $lang_module);
             $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('BLOCKID', $blockID);
+            $xtpl->assign('BLOCK_THEME', $block_theme);
 
             if (defined('NV_IS_USER')) {
                 if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
