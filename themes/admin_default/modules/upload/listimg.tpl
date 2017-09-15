@@ -2,7 +2,7 @@
 <!-- BEGIN: loopimg -->
 <div class="imgcontent{IMG.sel}" title="{IMG.title}" data-img="{IMG.is_img}">
     <div class="imgIcon">
-        <img class="previewimg" alt="{IMG.alt}" title="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
+        <img class="previewimg" alt="{IMG.alt}" title="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}"/>
     </div>
     <div class="imgInfo">
         <span class="nameSort">{IMG.name}</span>

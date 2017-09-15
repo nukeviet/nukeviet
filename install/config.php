@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die();
 }
 
@@ -34,8 +34,8 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['unofficial_mode'] = 1; // Cảnh báo bản thử nghiệm
-$global_config['version'] = '4.2.00'; // NukeViet 4.2 Beta
+$global_config['unofficial_mode'] = 0; // Cảnh báo bản thử nghiệm
+$global_config['version'] = '4.2.02'; // NukeViet 4.2.02
 $global_config['site_email'] = '';
 $global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;

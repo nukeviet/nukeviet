@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 29, 2010, 02:24:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 29, 2010, 02:24:00 AM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -26,6 +26,7 @@ $lang_module['check_server'] = 'Check server';
 $lang_module['check_chmod'] = 'Check CHMOD';
 $lang_module['config_database'] = 'Database configuration';
 $lang_module['website_info'] = 'Website info';
+$lang_module['sample_data'] = 'Sample data';
 $lang_module['done'] = 'Done';
 $lang_module['select_lang_des'] = 'Please select the language to use on this site';
 $lang_module['choose_lang'] = 'Please choose language!';
@@ -121,7 +122,7 @@ $lang_module['success'] = 'Setup successful!';
 $lang_module['congratulations'] = 'Congratulation! Nukeviet installation is successful. Please Login to administration to configure your site.';
 $lang_module['notesupport'] = 'All technical support, please contact <a href="http://nukeviet.vn" target="_blank"><strong>forum Nukeviet.VN</strong></a>.';
 $lang_module['noteuploads'] = '<strong>Note:</strong> Please <strong>CHMOD uploads and it\'s sub folders</strong> in webroot by 777 to enable files can be upload to host.';
-$lang_module['thanks'] = 'Thanks!';
+$lang_module['thanks'] = 'Thanks Member';
 $lang_module['gohome'] = 'Go to home page';
 $lang_module['goadmin'] = 'Go to admin page';
 $lang_module['finish'] = 'Finish';
@@ -168,6 +169,8 @@ $lang_module['update_version_current_name'] = 'Version';
 $lang_module['update_ability'] = 'The ability to upgrade';
 $lang_module['update_ability_0'] = 'You can\'t upgrade due to incompatible versions';
 $lang_module['update_ability_1'] = 'Upgradeable';
+$lang_module['update_ability_2'] = 'Can not upgrade because server does not support new version';
+$lang_module['update_ability_3'] = 'Can upgrade because current version is not supported and server does not support the new version';
 $lang_module['update_cannot_start'] = 'You can not upgrade because update packages do not support the version you are using';
 $lang_module['update_info_start'] = 'The test procedure and test updated package compatible version is complete, you can make updates to the new version';
 $lang_module['update_or'] = 'or';
@@ -260,10 +263,14 @@ $lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind databas
 $lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';
 $lang_module['update_error_check_version_sys'] = 'Error: Unable to check the version of the system';
 $lang_module['update_error_check_version_ext'] = 'Error: Unable to check the version of the extension';
-
-$lang_module['thanks'] = 'Thanks Member';
 $lang_module['thanks_text'] = 'NuKeViets management would like to send our sincere thanks to our fellow members as well as for their contribution to the development of NuKeViet so far, hope you continue to promote and always support As well as continue building hands NuKeViets growing.';
 $lang_module['thanks_list_member_all'] = 'Members list:';
 $lang_module['thanks_list_member_other_version'] = 'The list of members contributed by each version';
 $lang_module['thanks_other_version'] = 'Version';
 $lang_module['is_unofficial_mode'] = 'Note: This version is for development and testing, you should not use to be the official website';
+$lang_module['spdata_name'] = 'Package name';
+$lang_module['spdata_compatible'] = 'This sample data package is compatible';
+$lang_module['spdata_incompatible'] = 'This sample package is built into the% s directory, installing the site in the% s directory will result in some inaccuracies.';
+$lang_module['spdata_root'] = 'Root';
+$lang_module['spdata_note'] = 'Select the sample data plan by clicking on the corresponding cell and then clicking the <strong /> Settings  button';
+$lang_module['spdata_choose'] = 'Settings';

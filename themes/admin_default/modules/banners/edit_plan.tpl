@@ -82,6 +82,7 @@
                         <div class="clearfix" id="plan_exp_time_custom"{DISPLAY_CUSTOM_EXPTIME}>
                             <input type="text" name="exp_time_custom" class="form-control margin-top w300 pull-left" value="{CONTENTS.exp_time_custom}"/> <span class="display-inline-block margin-top-lg margin-left">({GLANG.day})</span>
                         </div>
+                        <span class="help-block help-block-bottom">{LANG.plan_exp_time_note}</span>
                     </td>
                 </tr>
                 <tr>

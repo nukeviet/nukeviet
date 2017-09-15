@@ -102,56 +102,6 @@ function nv_save_file_config_global()
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
 
-    //disable_classes
-    $sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
-    if (!empty($sys_info['disable_classes'])) {
-        $disable_classes = "'" . implode("','", $sys_info['disable_classes']) . "'";
-    } else {
-        $disable_classes = '';
-    }
-    $content_config .= "\$sys_info['disable_classes']=array(" . $disable_classes . ");\n";
-
-    //disable_functions
-    $sys_info['disable_functions'] = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
-
-    if (extension_loaded('suhosin')) {
-        $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-    }
-    if (!empty($sys_info['disable_functions'])) {
-        $disable_functions = "'" . implode("','", $sys_info['disable_functions']) . "'";
-    } else {
-        $disable_functions = '';
-    }
-    $content_config .= "\$sys_info['disable_functions']=array(" . $disable_functions . ");\n";
-
-    //ini_set_support
-    $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
-    $ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
-    $content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
-    //Kiem tra ho tro rewrite
-	$iis_info = explode( '/', $_SERVER['SERVER_SOFTWARE']);
-    if (function_exists('apache_get_modules')) {
-        $apache_modules = apache_get_modules();
-        if (in_array('mod_rewrite', $apache_modules)) {
-            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-        } else {
-            $sys_info['supports_rewrite'] = false;
-        }
-    } elseif (strpos($iis_info[0], 'Microsoft-IIS') !== false AND $iis_info[1] >= 7) {
-        if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
-            $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
-        } else {
-            $sys_info['supports_rewrite'] = false;
-        }
-    }
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis' or $sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-        $content_config .= "\$sys_info['supports_rewrite']='" . $sys_info['supports_rewrite'] . "';\n";
-    } else {
-        $content_config .= "\$sys_info['supports_rewrite']=false;\n";
-    }
-    $content_config .= "\n";
-
     $config_variable = array();
     $allowed_html_tags = '';
     $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
@@ -219,6 +169,16 @@ function nv_save_file_config_global()
             }
         }
     }
+
+    // Các ngôn ngữ data đã thiết lập
+    $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1 ORDER BY weight ASC';
+    $result = $db->query($sql);
+
+    $c_config_value = array();
+    while ($row = $result->fetch()) {
+        $c_config_value[] = $row['lang'];
+    }
+    $content_config .= "\$global_config['setup_langs']=array('" . implode("','", $c_config_value) . "');\n";
 
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
@@ -380,8 +340,10 @@ function nv_version_compare($version1, $version2)
 function nv_check_rewrite_file()
 {
     global $sys_info;
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    if ($sys_info['supports_rewrite'] == 'nginx') {
+        return true;
+    }
+    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
@@ -390,8 +352,7 @@ function nv_check_rewrite_file()
 
         return (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess));
     }
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
@@ -416,7 +377,10 @@ function nv_rewrite_change($array_config_global)
     $rewrite_rule = $filename = '';
     $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . '|' . nv_preg_quote($array_config_global['rewrite_exturl']);
 
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    if ($sys_info['supports_rewrite'] == 'nginx') {
+        return array(true, true);
+    }
+    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         $filename = NV_ROOTDIR . '/web.config';
         $rulename = 0;
         $rewrite_rule .= "\n";

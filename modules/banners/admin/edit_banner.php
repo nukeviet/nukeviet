@@ -178,20 +178,20 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $publtime = $publtime = $row['add_time'];
             }
 
-            if (!empty($plans_exp[$pid])) {
-                $exptime = $publtime + $plans_exp[$pid];
+            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
+                $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
+                if ($exptime <= $publtime) {
+                    $exptime = $publtime;
+                }
             } else {
-                if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
-                    $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
-                    if ($exptime <= $publtime) {
-                        $exptime = $publtime;
-                    }
+                if (!empty($plans_exp[$pid])) {
+                    $exptime = $publtime + $plans_exp[$pid];
                 } else {
                     $exptime = 0;
                 }
-                if ($exptime != 0 and $exptime <= $publtime) {
-                    $exptime = $publtime;
-                }
+            }
+            if ($exptime != 0 and $exptime <= $publtime) {
+                $exptime = $publtime;
             }
 
             $act = $row['act'];

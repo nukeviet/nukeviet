@@ -1,7 +1,7 @@
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1 - 31 - 2010 5 : 12
  */
@@ -426,11 +426,11 @@ function control_theme_groups() {
     var ingroup = $('[name="group[]"]:checked').length,
         gdefault = $('[name="group_default"]:checked').val(),
         groups = []
-    
+
     $('[name="group[]"]').each(function(){
         if ($(this).is(':checked') && ingroup > 1) {
             $('.group_default', $(this).parent().parent()).show()
-            
+
             if (typeof gdefault == 'undefined') {
                 gdefault = $(this).val()
                 $('[name="group_default"]', $(this).parent().parent()).prop('checked', true)
@@ -442,7 +442,7 @@ function control_theme_groups() {
             groups.push($(this).val())
         }
     })
-    
+
     if (typeof gdefault != 'undefined' && $.inArray(gdefault, groups) == -1 && ingroup > 1) {
         $('[name="group_default"]').prop('checked', false)
         $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
@@ -475,7 +475,65 @@ function nv_del_oauthone(opid, userid) {
     return false;
 }
 
-$(document).ready(function(){
+function nv_main_action(btn) {
+    var fa = $('#users [name="idcheck[]"]');
+    var setactive = 0;
+    var listid = '';
+    if (fa.length) {
+        fa.each(function() {
+            if ($(this).is(':checked')) {
+                listid = listid + $(this).val() + ',';
+            }
+        });
+    }
+
+    if (listid != '') {
+        var action = $('#mainuseropt').val();
+        if (action == 'del') {
+            if (confirm(nv_is_del_confirm[0])) {
+                $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid, function(res) {
+                    if (res == 'OK') {
+                        window.location.href = window.location.href;
+                    } else {
+                        var r_split = res.split("_");
+                        if (r_split[0] == 'ERROR') {
+                            alert(r_split[1]);
+                        } else {
+                            alert(nv_is_del_confirm[2]);
+                        }
+                        btn.prop('disabled', false);
+                    }
+
+                });
+            } else {
+                btn.prop('disabled', false);
+            }
+        } else {
+            if (action == 'active') {
+                setactive = 1;
+            }
+            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + listid + '&setactive=' + setactive, function(res) {
+                if (res != 'OK') {
+                    alert(nv_is_change_act_confirm[2]);
+                    btn.prop('disabled', false);
+                } else {
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+    } else {
+        alert(btn.data('msgnocheck'));
+        btn.prop('disabled', false);
+    }
+}
+
+$(document).ready(function() {
+    // List user main
+    $('#mainusersaction').click(function() {
+        $(this).prop('disabled', true);
+        nv_main_action($(this));
+    });
+
     // Edit user
     $("#btn_upload").click(function() {
         nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
@@ -528,7 +586,7 @@ $(document).ready(function(){
             }
         });
     }
-    
+
     $('[name="group[]"]').change(function(){
         control_theme_groups()
     })
@@ -642,7 +700,7 @@ $(document).ready(function(){
     $("select[name=choicetypes]").change(function() {
         nv_users_check_choicetypes(this);
     });
-    
+
     // Group
      $("[name='browse-image']").click(function(e) {
         e.preventDefault()

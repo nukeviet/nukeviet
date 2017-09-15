@@ -113,6 +113,8 @@ class Error
         $this->month = date('m-Y', NV_CURRENTTIME);
 
         $ip = $this->get_Env('REMOTE_ADDR');
+        $this->ip = $ip;
+
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
         } else {
@@ -126,11 +128,10 @@ class Error
             }
             $ip2long = base_convert($r_ip, 2, 10);
         }
-
-        if ($ip2long === -1 and $ip2long === false) {
+        if ($ip2long === -1 or $ip2long === false) {
             exit(Error::INCORRECT_IP);
         }
-        $this->ip = $ip;
+
         $request = $this->get_request();
         if (!empty($request)) {
             $this->request = substr($request, 500);
@@ -141,30 +142,8 @@ class Error
             $this->useragent = substr($useragent, 0, 500);
         }
 
-        $this->nv_set_ini();
-
         set_error_handler(array(&$this, 'error_handler'));
         register_shutdown_function(array(&$this, 'shutdown'));
-    }
-
-    /**
-     * Error::nv_set_ini()
-     *
-     * @return
-     */
-    public function nv_set_ini()
-    {
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
-        if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-        }
-        if ((function_exists('ini_set') and !in_array('ini_set', $disable_functions))) {
-            ini_set('display_startup_errors', 0);
-            ini_set('track_errors', 1);
-
-            ini_set('log_errors', 0);
-            ini_set('display_errors', 0);
-        }
     }
 
     /**

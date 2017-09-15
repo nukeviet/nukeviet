@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -53,6 +53,7 @@ $lang_module['deletefolder'] = 'Delete Folder';
 $lang_module['createfolder'] = 'Create Folder';
 $lang_module['recreatethumb'] = 'Recreate thumb images';
 $lang_module['recreatethumb_note'] = 'Note: This function will erase all the thumbs under the folder, both sub-folders and recreate the thumb image according to the new configuration. This process can take a long time, you can not close the browser';
+$lang_module['recreatethumb_result'] = 'Recreated thumb images for';
 $lang_module['rename_newname'] = 'New name:';
 $lang_module['rename_noname'] = 'You not enter a new file name';
 $lang_module['rename_error_folder'] = 'Error: System can not rename folder';
@@ -126,7 +127,10 @@ $lang_module['logopostopright'] = 'Top, right';
 $lang_module['logopostopleft'] = 'Top, left';
 $lang_module['logopostopcenter'] = 'Top, Center';
 $lang_module['fileimage'] = 'image';
+$lang_module['filerelativepath'] = 'Relative path';
+$lang_module['fileabsolutepath'] = 'Absolute path';
 $lang_module['altimage'] = 'Note for image';
+$lang_module['filepathcopied'] = 'The path has been copied';
 $lang_module['uploadconfig'] = 'Upload Configuration';
 $lang_module['uploadconfig_ban_ext'] = 'Forbidden Extensions';
 $lang_module['uploadconfig_ban_mime'] = 'Forbidden Mimes';
@@ -149,6 +153,7 @@ $lang_module['thumb_type_1'] = 'resize according width';
 $lang_module['thumb_type_2'] = 'resize according height';
 $lang_module['thumb_type_3'] = 'resize according two dimensions';
 $lang_module['thumb_type_4'] = 'resize and crop image according size';
+$lang_module['thumb_type_5'] = 'Resize and crop top photos by size';
 $lang_module['thumb_quality'] = 'Resize image quality';
 $lang_module['thumb_dir'] = 'Folder';
 $lang_module['thumb_dir_default'] = 'Default configuration';

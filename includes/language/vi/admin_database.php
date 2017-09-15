@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -78,3 +78,19 @@ $lang_module['file_nb'] = 'STT';
 $lang_module['file_name'] = 'Tên file';
 $lang_module['file_time'] = 'Thời gian backup';
 $lang_module['file_size'] = 'Dung lượng';
+$lang_module['sampledata'] = 'Xuất dữ liệu mẫu';
+$lang_module['sampledata_note'] = 'Đây là cách xuất toàn bộ CSDL của website hiện tại ra file mẫu nhằm mục đích đóng gói chia sẻ toàn bộ website. Khi cài đặt mới hệ thống sẽ phục hồi lại dữ liệu cũ được đóng gói thay vì cài đặt dữ liệu mẫu ở bộ cài. Hãy hoàn thành các mục yêu cầu bên dưới sau đó nhấp nút thực hiện để bắt đầu quá trình';
+$lang_module['sampledata_creat'] = 'Tạo mới gói dữ liệu mẫu';
+$lang_module['sampledata_list'] = 'Danh sách các gói dữ liệu mẫu đã tạo';
+$lang_module['sampledata_empty'] = 'Chưa có gói dữ liệu mẫu nào';
+$lang_module['sampledata_start'] = 'Bắt đầu tạo';
+$lang_module['sampledata_dat_init'] = 'Tiến trình bắt đầu chạy, vui lòng không tắt trình duyệt cho đến khi có thông báo hoàn thành hoặc thông báo lỗi. Hệ thống đang kiểm tra thông tin';
+$lang_module['sampledata_name'] = 'Tên gói dữ liệu mẫu';
+$lang_module['sampledata_name_rule'] = 'Chỉ nhập các ký tự từ a-z và 0-9';
+$lang_module['sampledata_error_sys'] = 'Lỗi máy chủ, vui lòng tải lại trang và thực hiện lại';
+$lang_module['sampledata_error_name'] = 'Vui lòng nhập tên gói dữ liệu mẫu';
+$lang_module['sampledata_error_namerule'] = 'Vui lòng chỉ nhập các ký tự từ a-z và 0-9';
+$lang_module['sampledata_error_exists'] = 'Gói dữ liệu mẫu này đã tồn tại, bằng cách nhấp vào nút <strong>Bắt đầu tạo</strong> lần nữa hệ thống sẽ ghi đè gói dữ liệu mẫu đã có. Nếu không muốn ghi đè, bạn hãy nhập tên khác';
+$lang_module['sampledata_error_writetmp'] = 'Lỗi: Hệ thống không ghi được dữ liệu, hãy cấp quyền ghi cho thư mục %s sau đó thực hiện lại';
+$lang_module['sampledata_success_1'] = 'Xuất dữ liệu thành công! Hệ thống đã ghi dữ liệu ra file. Bây giờ bạn có thể dọn dẹp hệ thống để xóa các file thừa sau đó xóa file config và đóng gói bộ code để chia sẻ.';
+$lang_module['sampledata_success_2'] = 'Xuất dữ liệu thành công tuy nhiên hệ thống không ghi được ra file. Bạn có thể tải gói dữ liệu thủ công <a href="%s"><strong>tại đây</strong>!</a>';

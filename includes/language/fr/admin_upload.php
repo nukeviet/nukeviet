@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 29, 2010, 05:00:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 29, 2010, 05:00:00 PM
+*/
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -53,6 +53,7 @@ $lang_module['deletefolder'] = 'Supprimer le répertoire';
 $lang_module['createfolder'] = 'Créer  un répertoire';
 $lang_module['recreatethumb'] = 'Régénérer pouce image';
 $lang_module['recreatethumb_note'] = 'Remarque: Cette fonction efface tous les pouces sous le dossier, les deux sous-dossiers et recréer l\'image du pouce en fonction de la nouvelle configuration. Ce processus peut prendre beaucoup de temps, vous ne pouvez pas fermer le navigateur';
+$lang_module['recreatethumb_result'] = 'A créé l\'image pour le pouce';
 $lang_module['rename_newname'] = 'Nouveau nom';
 $lang_module['rename_noname'] = 'Vous n\'avez pas encore nommé le fichier';
 $lang_module['rename_error_folder'] = 'Erreur: Le système ne peut pas changer le nom du dossier';
@@ -149,6 +150,7 @@ $lang_module['thumb_type_1'] = 'Re-dimensionner selon la larguer';
 $lang_module['thumb_type_2'] = 'Re-dimensionner selon la hauteur';
 $lang_module['thumb_type_3'] = 'Re-dimensionner selon deux directions';
 $lang_module['thumb_type_4'] = 'Re-dimensionner et couper l\'image selon les dimensions';
+$lang_module['thumb_type_5'] = 'Redimensionner et recadrer l\'image en taille supérieure';
 $lang_module['thumb_quality'] = 'Qualité de l\'image re-dimensionnée';
 $lang_module['thumb_dir'] = 'Dossier';
 $lang_module['thumb_dir_default'] = 'Configuration par défaut';

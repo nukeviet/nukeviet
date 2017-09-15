@@ -152,3 +152,6 @@ $lang_module['status_7'] = 'Đang duyệt bài';
 $lang_module['status_8'] = 'Chuyển đăng bài';
 $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
+
+$lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
+$lang_module['default_layout'] = 'Mặc định';

@@ -42,7 +42,6 @@ $base_siteurl_quote = nv_preg_quote($base_siteurl);
 $request_uri = preg_replace('/(' . $base_siteurl_quote . ')index\.php\//', '\\1', urldecode($_SERVER['REQUEST_URI']));
 $request_uri = parse_url($request_uri);
 if (!isset($request_uri['path'])) {
-    header('HTTP/1.1 301 Moved Permanently');
     nv_redirect_location($base_siteurl);
 }
 $request_uri_query = isset($request_uri['query']) ? $request_uri['query'] : '';
@@ -79,7 +78,6 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
         }
     }
 } elseif (preg_match('/<(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t(.*)>/i', urldecode($request_uri . $request_uri_query))) {
-    header('HTTP/1.1 301 Moved Permanently');
     nv_redirect_location($base_siteurl);
 } elseif (isset($_GET[NV_OP_VARIABLE])) {
     // Có query op=
@@ -106,7 +104,6 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
     } elseif (isset($_GET[NV_NAME_VARIABLE])) {
         if (strpos($_GET[NV_NAME_VARIABLE], '/') !== false) {
             if (isset($_GET[NV_OP_VARIABLE])) {
-                header('HTTP/1.1 301 Moved Permanently');
                 nv_redirect_location($base_siteurl);
             }
             $name_variable = explode('/', $_GET[NV_NAME_VARIABLE]);

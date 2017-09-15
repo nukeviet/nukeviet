@@ -8,12 +8,49 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
+}
+
+if (defined('NV_IS_SPADMIN')) {
+    $allow_func = array(
+        'main',
+        'reply',
+        'send',
+        'del',
+        'department',
+        'row',
+        'del_department',
+        'content',
+        'view',
+        'change_status',
+        'change_weight',
+        'alias',
+        'change_default',
+        'supporter',
+        'supporter-content',
+        'forward'
+    );
+} else {
+    $allow_func = array(
+        'main',
+        'reply',
+        'del',
+        'view',
+        'send',
+        'forward'
+    );
 }
 
 //Tài liệu hướng dẫn
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact';
+$array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#nội_dung_thong_bao_tren_trang_lien_hệ';
+$array_url_instruction['supporter'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#hiển_thị_danh_sach_cac_nhan_vien_hỗ_trợ';
+$array_url_instruction['department'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#quản_ly_cac_bộ_phận';
+$array_url_instruction['send'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#gửi_phản_hồi';
+$array_url_instruction['supporter-content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#them_nhan_vien_hỗ_trợ';
+$array_url_instruction['row'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#them_bộ_phận';
+
 /**
  * nv_getAllowed()
  *
@@ -31,7 +68,7 @@ function nv_getAllowed()
 
     if (defined('NV_IS_SPADMIN')) {
         $contact_allowed['view'][0] = $lang_module['is_default'];
-        $contact_allowed['reply'][0] =$lang_module['is_default'];
+        $contact_allowed['reply'][0] = $lang_module['is_default'];
         $contact_allowed['obt'][0] = $lang_module['is_default'];
     }
 
@@ -53,13 +90,13 @@ function nv_getAllowed()
                 $admins2 = array_map('intval', explode('/', $a));
 
                 if ($admins2[0] == $admin_info['admin_id']) {
-                    if ($admins2[1] == 1 and ! isset($contact_allowed['view'][$id])) {
+                    if ($admins2[1] == 1 and !isset($contact_allowed['view'][$id])) {
                         $contact_allowed['view'][$id] = $row['full_name'];
                     }
-                    if ($admins2[2] == 1 and ! isset($contact_allowed['reply'][$id])) {
+                    if ($admins2[2] == 1 and !isset($contact_allowed['reply'][$id])) {
                         $contact_allowed['reply'][$id] = $row['full_name'];
                     }
-                    if ($admins2[3] == 1 and ! isset($contact_allowed['obt'][$id])) {
+                    if ($admins2[3] == 1 and !isset($contact_allowed['obt'][$id])) {
                         $contact_allowed['obt'][$id] = $row['full_name'];
                     }
                 }

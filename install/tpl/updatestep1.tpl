@@ -9,7 +9,7 @@
 </div>
 <!-- END: notexistmod -->
 <!-- BEGIN: infoupdate -->
-<table id="checkchmod" cellspacing="0" summary="summary" style="width: 100%;">
+<table cellspacing="0" summary="summary" style="width: 100%;">
     <tr>
         <th scope="col" abbr="{LANG.update_info_backage}" class="nobg" style="width:380px">{LANG.update_info_backage}</th>
         <th scope="col">{LANG.update_value}</th>
@@ -39,7 +39,21 @@
         <td><span class="highlight_green">{UPDATE_AUTO_TYPE}</span></td>
     </tr>
 </table>
-<table id="checkchmod" cellspacing="0" summary="summary" style="width: 100%;">
+<!-- BEGIN: sysnotsupport -->
+<table cellspacing="0" summary="summary" style="width: 100%;">
+    <tr>
+        <th scope="col" abbr="{LANG.check_server}" class="nobg" style="width:380px">{LANG.check_server}</th>
+        <th scope="col">{LANG.update_file_info}</th>
+    </tr>
+    <!-- BEGIN: loop -->
+    <tr>
+        <th scope="col" class="spec text_normal">{EXTINFO.0}</th>
+        <td><span class="highlight_red">{EXTINFO.1}</span></td>
+    </tr>
+    <!-- END: loop -->
+</table>
+<!-- END: sysnotsupport -->
+<table cellspacing="0" summary="summary" style="width: 100%;">
     <tr>
         <th scope="col" abbr="{LANG.update_version_current}" class="nobg" style="width:380px">{LANG.update_version_current}</th>
         <th scope="col">{LANG.update_value}</th>
@@ -50,7 +64,7 @@
     </tr>
     <tr>
         <th scope="col" class="specalt text_normal">{LANG.update_ability}</th>
-        <td><span class="highlight_green">{DATA.ability}</span></td>
+        <td><span class="{DATA.ability_class}">{DATA.ability}</span></td>
     </tr>
 </table>
 <!-- BEGIN: canupdate -->
@@ -65,7 +79,7 @@
 <!-- END: canupdate -->
 <!-- BEGIN: cannotupdate -->
 <div class="infoerror" id="infodetectedupg">
-    {LANG.update_cannot_start}.<br />
+    {DATA.ability}.<br />
     <strong><a class="delete_update_backage" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
     <script type="text/javascript">
     ud_url_return = '{URL_RETURN}';
