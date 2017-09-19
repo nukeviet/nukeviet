@@ -284,11 +284,6 @@ $(document).ready(function() {
 					<th>{LANG.group_delcontent}</th>
 				</tr>
 			</thead>
-			<tfoot>
-				<tr>
-					<td style="text-align: center;" colspan="5"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savepost" /></td>
-				</tr>
-			</tfoot>
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
@@ -302,6 +297,27 @@ $(document).ready(function() {
 			</tbody>
 		</table>
 	</div>
+	<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_frontend_post}</caption>
+			<tbody>
+                <tr>
+					<th class="w400">{LANG.frontend_edit_alias}</th>
+					<td><input type="checkbox" name="frontend_edit_alias" value="1"{FRONTEND_EDIT_ALIAS}/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.frontend_edit_layout}</th>
+					<td><input type="checkbox" name="frontend_edit_layout" value="1"{FRONTEND_EDIT_LAYOUT}/></td>
+				</tr>
+            </tbody>
+			<tfoot>
+				<tr>
+					<td style="text-align: center;" colspan="5"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savepost" /></td>
+                </tr>
+			</tfoot>
+        </table>
+   </div>
 </form>
 <!-- END: admin_config_post -->
+
 <!-- END: main -->

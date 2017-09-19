@@ -329,6 +329,7 @@ $lang_module['dulicate_takeover'] = 'Take over the editor of the post';
 $lang_module['dulicate_edit_takeover'] = 'You have been take over by this account %s at %s. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
 $lang_module['setting_copy_news'] = 'Allowed to copy the article';
 $lang_module['title_copy_news'] = 'Copy the article';
+
 $lang_module['order_articles'] = 'Sort articles';
 $lang_module['order_articles_0'] = 'Sort by post time';
 $lang_module['order_articles_1'] = 'Custom sort, incremental numbering';
@@ -338,3 +339,6 @@ $lang_module['status_12'] = 'Save articles, send admin';
 $lang_module['status_13'] = 'Save articles, send super admin';
 $lang_module['error_edit'] = 'Posts are moderated moderators. You can not edit next.';
 $lang_module['not_edit_by_admin'] = 'You have been hijacked to edit this post. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
+
+$lang_module['pick_layout'] = 'Choose layout';
+$lang_module['default_layout'] = 'Default';

@@ -23,14 +23,8 @@
 						<td><strong>{LANG.alias}: </strong></td>
 						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="250"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
 					</tr>
-				</tbody>
-			</table>
-			<table class="table table-striped table-bordered table-hover">
-				<tbody>
 					<tr>
-						<td class="top"><strong>{LANG.content_topic}</strong></td>
-					</tr>
-					<tr>
+                        <td><strong>{LANG.content_topic}: </strong></td>
 						<td>
 						<select class="form-control w300" name="topicid" id="topicid">
 							<!-- BEGIN: rowstopic -->
@@ -38,12 +32,6 @@
 							<!-- END: rowstopic -->
 						</select><input class="form-control w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
 					</tr>
-				</tbody>
-			</table>
-			<table class="table table-striped table-bordered table-hover">
-				<col class="w200" />
-				<col />
-				<tbody>
 					<tr>
 						<td><strong>{LANG.content_homeimg}</strong></td>
 						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input id="select-img-post" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
@@ -61,31 +49,25 @@
 							<!-- END: looppos -->
 						</select></td>
 					</tr>
-				</tbody>
-			</table>
-			<table class="table table-striped table-bordered table-hover">
-				<tbody>
 					<tr>
-						<td><strong>{LANG.content_hometext}</strong><i>{LANG.content_notehome}.</i></td>
+						<td colspan="2"><strong>{LANG.content_hometext}</strong><i>{LANG.content_notehome}.</i> <br> {edit_hometext} </td>
 					</tr>
 					<tr>
-						<td> {edit_hometext} </td>
-					</tr>
-					<tr>
-						<td><strong>{LANG.content_bodytext}</strong><sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup><i>{LANG.content_bodytext_note}</i></td>
-					</tr>
-					<tr>
-						<td>
+						<td colspan="2"><strong>{LANG.content_bodytext}</strong><sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup><i>{LANG.content_bodytext_note}</i>
+                        <br>
 						<div style="padding:2px; background:#CCCCCC; margin:0; display:block; position:relative">
 							{edit_bodytext}
-						</div></td>
+						</div>
+                        </td>
 					</tr>
 					<tr>
-						<td><strong>{LANG.content_sourceid}</strong></td>
+						<td><strong>{LANG.content_sourceid}</strong>:</td>
+                        <td><input class="form-control" type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width:100%" /></td>
 					</tr>
-					<tr>
-						<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width:100%"/></td>
-					</tr>
+                    <tr>
+                        <td>{LANG.content_external_link}:</td>
+                        <td><input type="checkbox" value="1" name="external_link" {external_link_checked}/></td>
+                    </tr>
 				</tbody>
 			</table>
 		</div>
@@ -196,9 +178,6 @@
 									<input type="checkbox" value="1" name="copyright" {checkcop}/>
 									<label> {LANG.content_copyright} </label>
 								</div>
-								<div style="margin-bottom: 2px;">
-									<label><input type="checkbox" value="1" name="external_link" {external_link_checked}/>{LANG.content_external_link} </label>
-								</div>
 							</div>
 						</li>
 						<li>
@@ -254,6 +233,20 @@
 				</div>
 				<div class="col-sm-24 col-md-6">
 					<ul style="padding-left:4px; margin:0">
+                          <li>
+                            <p class="message_head">
+                                <cite>{LANG.pick_layout}</cite>
+                            </p>
+                            <div class="message_body">
+                            <select name="layout_func" class="form-control">
+                                <option value="">{LANG.default_layout}</option>
+                                <!-- BEGIN: layout_func -->
+                                <option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+                                <!-- END: layout_func -->
+                            </select>
+                            </div>
+                        </li>
+                    
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
@@ -340,7 +333,7 @@
 </form>
 <div id="message"></div>
 <script type="text/javascript">
-		//<![CDATA[
+//<![CDATA[
 	var LANG = [];
 	var CFG = [];
 	CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
@@ -350,10 +343,11 @@
 	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
 	<!-- BEGIN: getalias -->
 	$("#idtitle").change(function() {
-	get_alias();
+		get_alias();
 	});
 	<!-- END: getalias -->
-	//]]></script>
+//]]>
+</script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>

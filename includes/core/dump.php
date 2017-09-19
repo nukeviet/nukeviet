@@ -256,7 +256,7 @@ function nv_dump_restore($file)
             $st = preg_replace("/^\xEF\xBB\xBF/", "", $st);
         }
 
-        if (empty($st) or preg_match('/^(#|--)/', $st)) {
+        if (empty($st) or preg_match('/^(#|--|\/\*\!)/', $st)) {
             continue;
         } else {
             $query_len += strlen($st);

@@ -103,7 +103,7 @@ class Files
             }
 
             while (($modname = readdir($dh)) !== false) {
-                if (preg_match('/^([a-z0-9\_]+)$/', $modname)) {
+                if (preg_match('/^([a-z0-9\_\-]+)$/', $modname)) {
                     $this->_Delete($modname, $pattern);
                 }
             }

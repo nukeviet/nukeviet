@@ -41,7 +41,7 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config .= "\$sys_info['ini_set_support']= " . ($sys_info['ini_set_support'] ? "true" : "false") . ";\n";
 
     //Kiem tra ho tro rewrite
-    $iis_info = explode('/', $_SERVER['SERVER_SOFTWARE']);
+    $_server_software = explode('/', $_SERVER['SERVER_SOFTWARE']);
     if (function_exists('apache_get_modules')) {
         $apache_modules = apache_get_modules();
         if (in_array('mod_rewrite', $apache_modules)) {
@@ -49,14 +49,21 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
         } else {
             $sys_info['supports_rewrite'] = false;
         }
-    } elseif (strpos($iis_info[0], 'Microsoft-IIS') !== false and $iis_info[1] >= 7) {
+    } elseif (strpos($_server_software[0], 'Microsoft-IIS') !== false and $_server_software[1] >= 7) {
         if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
         } else {
             $sys_info['supports_rewrite'] = false;
         }
-    } elseif (strpos($iis_info[0], 'nginx') !== false) {
+    } elseif (strpos($_server_software[0], 'nginx') !== false) {
         $sys_info['supports_rewrite'] = 'nginx';
+    } else {
+        $_check_rewrite = file_get_contents(NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
+        if ($_check_rewrite == 'mod_rewrite works') {
+            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+        } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
+            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+        }
     }
     $content_config .= "\$sys_info['supports_rewrite']= " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : "false") . ";\n";
 
