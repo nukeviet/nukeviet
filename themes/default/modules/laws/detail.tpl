@@ -16,6 +16,18 @@
                 <td>{DATA.publtime}</td>
             </tr>
             <!-- END: publtime -->
+            <!-- BEGIN: start_comm_time -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.start_comm_time_title}</td>
+                <td>{DATA.start_comm_time}</td>
+            </tr>
+            <!-- END: start_comm_time -->
+             <!-- BEGIN: end_comm_time -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.end_comm_time_title}</td>
+                <td>{DATA.end_comm_time}</td>
+            </tr>
+            <!-- END: end_comm_time -->
             <!-- BEGIN: startvalid -->
             <tr class="hoatim">
                 <td class="text-right">{LANG.startvalid}</td>
@@ -134,6 +146,14 @@
 <p class="text-center m-bottom">{LANG.info_download_no}</p>
 <!-- END: nodownload -->
 
+<!-- BEGIN: comment -->
+<div class="news_column panel panel-default">
+	<div class="panel-body">
+	{CONTENT_COMMENT}
+    </div>
+</div>
+<!-- END: comment -->
+
 <!-- BEGIN: other_cat -->
 <h3 class="subtitle">{LANG.other_cat} <a href="{DATA.cat_url}" title="{DATA.cat}">"{DATA.cat}"</a></h3>
 {OTHER_CAT}
@@ -153,5 +173,7 @@
 <h3 class="subtitle">{LANG.other_signer} <a href="{DATA.signer_url}" title="{DATA.signer}">"{DATA.signer}"</a></h3>
 {OTHER_SIGNER}
 <!-- END: other_signer -->
+
+
 
 <!-- END: main -->
