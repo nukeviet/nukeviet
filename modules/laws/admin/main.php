@@ -207,6 +207,8 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                         if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $_file)) {
                             $post['files'][] = $_file;
                         }
+                    }elseif(preg_match("/^http*/",$_file)){
+                    	$post['files'][] = $_file;
                     }
                 }
             }
@@ -472,7 +474,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                 if (!empty($_file)) {
                     $xtpl->assign('FILEUPL', array(
                         'id' => $_id,
-                        'value' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $_file
+                        'value' => (!preg_match("/^http*/", $_file)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $_file : $_file
                     ));
                     $xtpl->parse('add.files');
                 }

@@ -85,3 +85,4 @@ $lang_module['start_comm_time'] = "Từ %s";
 $lang_module['end_comm_time'] = "Đến %s";
 $lang_module['uncomm_time'] = "Hết hạn góp ý";
 $lang_module['comm_time'] = "Gửi góp ý";
+$lang_module['click_to_download'] = "Nhấn vào link để tải file";

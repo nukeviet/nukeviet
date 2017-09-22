@@ -72,3 +72,4 @@ $lang_module['s_signer_all'] = '-- All --';
 $lang_module['s_result'] = 'Search result';
 $lang_module['s_noresult'] = 'There are no results that match your requirements';
 $lang_module['s_result_num'] = '%d laws';
+$lang_module['click_to_download'] = "Click here to download";

@@ -78,7 +78,7 @@ if (empty($contents)) {
                         $row['files'][] = array(
                             "title" => $file_title,
                             "titledown" => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
-                            "url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
+                            "url" => (!preg_match("/^http*/", $file)) ? NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'] . "&amp;download=1&amp;id=" . $id : $file
                         );
                     }
                 }
