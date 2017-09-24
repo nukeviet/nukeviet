@@ -22,3 +22,4 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['add_time'] = 'Date de création';
 $lang_module['edit_time'] = 'Dernière édition';
 $lang_module['not_found'] = 'Désolé!!! L\'article que vous recherchez n\'existe pas';
+$lang_module['warning'] = 'Cet article se trouve dans le statut <strong>Stopped working</strong>, qui ne peut être vu que par l\'administrateur';
