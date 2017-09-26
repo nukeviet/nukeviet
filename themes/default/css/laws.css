@@ -398,3 +398,12 @@ a#btn-search {
 .laws-download-file .list-group-item .badge a {
     color: #fff;
 }
+
+#advance .form-inline label{
+    width:100%;
+}
+
+#advance .form-inline .form-control{
+    width: auto !important;
+    margin-right: 2px;
+}
