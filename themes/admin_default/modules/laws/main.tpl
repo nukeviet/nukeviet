@@ -17,8 +17,14 @@
             <tr>
                 <th>{LANG.title}</th>
                 <th>{LANG.code}</th>
+                <!-- BEGIN: view_time_title -->
                 <th>{LANG.publtime}</th>
                 <th>{LANG.exptime}</th>
+                <!-- END: view_time_title -->
+                <!-- BEGIN: view_comm_time_title -->
+                <th>{LANG.start_comm_time}</th>
+                <th>{LANG.end_comm_time}</th>
+                <!-- END: view_comm_time_title -->
                 <th class="text-center">{LANG.status}</th>
                 <th class="text-center">{LANG.feature}</th>
             </tr>
@@ -28,14 +34,26 @@
             <tr>
                 <td><a href="{DATA.url_view}" target="_blank" title="{DATA.title}">{DATA.title}</a></td>
                 <td><strong>{DATA.code}</strong></td>
+                <!-- BEGIN: view_time -->
                 <td>{DATA.publtime}</td>
                 <td>{DATA.exptime}</td>
+                <!-- END: view_time -->
+                <!-- BEGIN: view_comm_time -->
+                <td>{DATA.start_comm_time}</td>
+                <td>{DATA.end_comm_time}</td>
+                <!-- END: view_comm_time -->
                 <td class="text-center">
                 <select class="form-control" id="status_{DATA.id}" name="status[]" onchange="nv_change_status({DATA.id});">
                     <option value="0">{LANG.status0}</option>
                     <option value="1"{DATA.selected}>{LANG.status1}</option>
                 </select></td>
-                <td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a></td>
+                <td class="text-center">
+                	<em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a>
+                	- <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a>
+                	<!-- BEGIN: view_comm -->
+                	- <em class="fa fa-eye fa-lg">&nbsp;</em><a href="{DATA.url_view_comm}">{LANG.view_comm}</a>
+                	<!-- END: view_comm -->
+                </td>
             </tr>
             <!-- END: loop -->
         </tbody>
@@ -177,6 +195,21 @@
                                     <!-- END: files -->
                                 </div></td>
                             </tr>
+                            <!-- BEGIN: comment -->
+                            <tr class="form-inline">
+                                <td> {LANG.start_comm_time} </td>
+                                <td><label>
+                                    <input class="form-control" name="start_comm_time" id="start_comm_time" value="{DATA.start_comm_time}" style="width: 110px;" maxlength="10" type="text" />
+                                    &nbsp;({LANG.prm})</label></td>
+                            </tr>
+                            <tr class="form-inline">
+                                <td> {LANG.end_comm_time} </td>
+                                <td><label>
+                                    <input class="form-control" name="end_comm_time" id="end_comm_time" value="{DATA.end_comm_time}" style="width: 110px;" maxlength="10" type="text" />
+                                    &nbsp;({LANG.prm})</label></td>
+                            </tr>
+                            <!-- END: comment-->
+                            <!-- BEGIN: normal_laws -->
                             <tr class="form-inline">
                                 <td> {LANG.publtime}  <span class="red">*</span></td>
                                 <td><label>
@@ -213,6 +246,7 @@
                                     });
                                 </script></td>
                             </tr>
+                            <!-- END: normal_laws -->
                             <tr>
                                 <td> {LANG.replacement} ({LANG.ID}) </td>
                                 <td>
@@ -328,7 +362,7 @@
 </div>
 <script type="text/javascript">
     //<![CDATA[
-    $("#publtime,#startvalid").datepicker({
+    $("#publtime,#startvalid,#end_comm_time,#start_comm_time").datepicker({
         showOn : "both",
         yearRange: "2000:2025",
         dateFormat : "dd.mm.yy",

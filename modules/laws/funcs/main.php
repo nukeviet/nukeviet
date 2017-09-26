@@ -34,15 +34,15 @@ if (empty($contents)) {
         // Hien thi danh sach van ban
         $order = ($nv_laws_setting['typeview'] == 1 or $nv_laws_setting['typeview'] == 4) ? "ASC" : "DESC";
         $order_param = ($nv_laws_setting['typeview'] == 0 or $nv_laws_setting['typeview'] == 1) ? "publtime" : "addtime";
-        
+
         $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY " . $order_param . " " . $order . " LIMIT " . $per_page . " OFFSET " . ($page - 1) * $per_page;
-        
+
         $result = $db->query($sql);
         $query = $db->query("SELECT FOUND_ROWS()");
         $all_page = $query->fetchColumn();
-        
+
         $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
-        
+
         $array_data = array();
         $stt = nv_get_start_id($page, $per_page);
         while ($row = $result->fetch()) {
@@ -55,26 +55,35 @@ if (empty($contents)) {
             $row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
             $row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
             $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
+            $row['comm_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
+			if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
+	        	$row['send_comm_title'] = $lang_module['uncomm_time'];
+	        }else{
+	        	$row['send_comm_title'] = $lang_module['comm_time'];
+	        }
+			$row['start_comm_time'] = ($row['start_comm_time']>0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
+            $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
+            $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
             $row['stt'] = $stt++;
-            
+
             if ($nv_laws_setting['down_in_home']) {
                 // File download
                 if (!empty($row['files'])) {
                     $row['files'] = explode(",", $row['files']);
                     $files = $row['files'];
                     $row['files'] = array();
-                    
+
                     foreach ($files as $id => $file) {
                         $file_title = basename($file);
                         $row['files'][] = array(
                             "title" => $file_title,
                             "titledown" => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
-                            "url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
+                            "url" => (!preg_match("/^http*/", $file)) ? NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'] . "&amp;download=1&amp;id=" . $id : $file
                         );
                     }
                 }
             }
-            
+
             $array_data[] = $row;
         }
         $contents = nv_theme_laws_main($array_data, $generate_page);
@@ -85,13 +94,23 @@ if (empty($contents)) {
                 $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $subjectid . ' ORDER BY addtime DESC LIMIT ' . $subject['numlink']);
                 while ($row = $result->fetch()) {
                     $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
+                    $row['comm_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
+					if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
+			        	$row['send_comm_title'] = $lang_module['uncomm_time'];
+			        }else{
+			        	$row['send_comm_title'] = $lang_module['comm_time'];
+			        }
+					$row['start_comm_time'] = ($row['start_comm_time']>0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
+		            $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
+		            $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
+
                     if ($nv_laws_setting['down_in_home']) {
                         // File download
                         if (!empty($row['files'])) {
                             $row['files'] = explode(",", $row['files']);
                             $files = $row['files'];
                             $row['files'] = array();
-                            
+
                             foreach ($files as $id => $file) {
                                 $file_title = basename($file);
                                 $row['files'][] = array(
@@ -108,7 +127,7 @@ if (empty($contents)) {
         }
         $contents = nv_theme_laws_maincat('subject', $nv_laws_listsubject);
     }
-    
+
     if (!defined('NV_IS_MODADMIN') and $contents != '' and $cache_file != '') {
         $nv_Cache->setItem($module_name, $cache_file, $contents);
     }

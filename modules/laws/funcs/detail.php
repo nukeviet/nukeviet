@@ -37,17 +37,17 @@ if (!nv_user_in_groups($row['groups_view'])) {
 
 if ($nv_Request->isset_request('download', 'get')) {
     $fileid = $nv_Request->get_int('id', 'get', 0);
-    
+
     $row['files'] = explode(',', $row['files']);
-    
+
     if (!isset($row['files'][$fileid])) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
     }
-    
+
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
     }
-    
+
     // Update download
     $lawsdownloaded = $nv_Request->get_string('lawsdownloaded', 'session', '');
     $lawsdownloaded = !empty($lawsdownloaded) ? unserialize($lawsdownloaded) : array();
@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('download', 'get')) {
         $lawsdownloaded = serialize($lawsdownloaded);
         $nv_Request->set_Session('lawsdownloaded', $lawsdownloaded);
     }
-    
+
     $file_info = pathinfo(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid]);
     $download = new NukeViet\Files\Download(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true);
     $download->download_file();
@@ -67,17 +67,17 @@ if ($nv_Request->isset_request('download', 'get')) {
 
 if ($nv_Request->isset_request('pdf', 'get')) {
     $fileid = $nv_Request->get_int('id', 'get', 0);
-    
+
     $row['files'] = explode(',', $row['files']);
-    
+
     if (!isset($row['files'][$fileid])) {
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
-    
+
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
-    
+
     $file_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&download=1&id=' . $fileid;
     $contents = nv_theme_viewpdf($file_url);
     nv_htmlOutput($contents);
@@ -140,15 +140,15 @@ if (!empty($row['files'])) {
     $row['files'] = explode(',', $row['files']);
     $files = $row['files'];
     $row['files'] = array();
-    
+
     foreach ($files as $id => $file) {
-        $file_title = basename($file);
+        $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $lang_module['click_to_download'];
         $row['files'][] = array(
             'title' => $file_title,
             'key' => md5($id . $file_title),
             'ext' => nv_getextension($file_title),
             'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
-            'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id,
+            'url' => (!preg_match("/^http*/", $file)) ? NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id : $file,
             'urlpdf' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;pdf=1&amp;id=' . $id
         );
     }
@@ -180,7 +180,7 @@ if ($nv_laws_setting['detail_other']) {
             $other_cat[$data['id']] = $data;
         }
     }
-    
+
     if (in_array('area', $nv_laws_setting['detail_other'])) {
         $_row_aid = implode(',', $row['aid']);
         $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_row_area t2 ON t1.id=t2.row_id WHERE t2.area_id IN (' . $_row_aid . ') AND t1.id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks']);
@@ -189,7 +189,7 @@ if ($nv_laws_setting['detail_other']) {
             $other_area[$data['id']] = $data;
         }
     }
-    
+
     if (in_array('subject', $nv_laws_setting['detail_other'])) {
         $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $row['sid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks']);
         while ($data = $result->fetch()) {
@@ -197,7 +197,7 @@ if ($nv_laws_setting['detail_other']) {
             $other_subject[$data['id']] = $data;
         }
     }
-    
+
     if (in_array('singer', $nv_laws_setting['detail_other'])) {
         $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sgid=' . $row['sgid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks']);
         while ($data = $result->fetch()) {
@@ -207,7 +207,31 @@ if ($nv_laws_setting['detail_other']) {
     }
 }
 
-$contents = nv_theme_laws_detail($row, $other_cat, $other_area, $other_subject, $other_signer);
+// comment
+    if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
+        define('NV_COMM_ID', $row['id']);//ID bài viết hoặc
+        define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']);//để đáp ứng comment ở bất cứ đâu không cứ là bài viết
+        //check allow comemnt
+        if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
+        	$allowed = 1;//Nếu không trong thời gian góp ý thì chỉ quản trị tối cao có thể comment
+        }else{
+        	//Nếu văn bản trong thời gian lấy ý kiến thì lấy cấu hình comm theo module
+        	$allowed = $module_config[$module_name]['allowed_comm'];//tùy vào module để lấy cấu hình.
+	        if ($allowed == '-1') {
+	            $allowed = 6;//Nếu cấu hình giá trị là tùy vào bài viết thì để mặc định là tất cả mọi người được comment
+	        }
+        }
+
+        require_once NV_ROOTDIR . '/modules/comment/comment.php';
+        $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
+        $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
+
+        $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
+    } else {
+        $content_comment = '';
+    }
+//print_r(NV_COMM_ID);die('ok');
+$contents = nv_theme_laws_detail($row, $other_cat, $other_area, $other_subject, $other_signer, $content_comment);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

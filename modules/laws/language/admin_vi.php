@@ -172,3 +172,7 @@ $lang_module['msg2'] = 'truớc';
 $lang_module['msg3'] = 'Nhấn vào đây';
 $lang_module['msg4'] = 'để chuyển đến trang thêm ';
 $lang_module['msg5'] = 'Hệ thống sẽ tự chuyển trang sau 5 giây.';
+$lang_module['activecomm'] = 'Cho phép lấy ý kiến góp ý';
+$lang_module['start_comm_time'] = 'Ngày bắt đầu lấy ý kiến';
+$lang_module['end_comm_time'] = 'Ngày kết thúc lấy ý kiến';
+$lang_module['view_comm'] = 'Xem góp ý';

@@ -67,6 +67,12 @@
 							<input type="checkbox" name="detail_pdf_quick_view" value="1"{DATA.detail_pdf_quick_view}/>
 	                    </td>
 	                </tr>
+	                <tr>
+	                    <td>{LANG.activecomm}</td>
+	                    <td>
+							<input type="checkbox" name="activecomm" value="1"{DATA.activecomm}/>
+	                    </td>
+	                </tr>
 	            </tbody>
 	        </table>
 	    </div>
