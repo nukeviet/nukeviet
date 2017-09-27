@@ -87,3 +87,4 @@ $lang_module['alias'] = 'Alias';
 $lang_module['commnum'] = 'Number of comments per page';
 $lang_module['cbroken'] = 'Bad Content';
 $lang_module['error8'] = 'Error! Please report content in the textarea';
+$lang_module['per_title'] = 'The number of title characters is cut off';

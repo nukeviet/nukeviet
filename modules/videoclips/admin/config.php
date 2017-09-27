@@ -22,6 +22,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['playerSkin'] = $nv_Request->get_title( 'playerSkin', 'post', '', 1 );
 	$array_config['playerMaxWidth'] = $nv_Request->get_int( 'playerMaxWidth', 'post', 0 );
 	$array_config['idhomeclips'] = $nv_Request->get_int( 'idhomeclips', 'post', 0 );
+	$array_config['clean_title_video'] = $nv_Request->get_int( 'clean_title_video', 'post', 0 );
 	if ( ! in_array( $array_config['playerSkin'] . ".zip", $skins ) ) $array_config['playerSkin'] = "";
 	if ( $array_config['playerMaxWidth'] < 50 or $array_config['playerMaxWidth'] > 1000 ) $array_config['playerMaxWidth'] = 640;
 
@@ -70,6 +71,17 @@ foreach ( $skins as $skin )
 	$sel = $skin == $configMods['playerSkin'] ? " selected=\"selected\"" : "";
 	$xtpl->assign( 'SKIN', array( 'value' => $skin, 'select' => $sel ) );
 	$xtpl->parse( 'main.playerSkin' );
+}
+
+// gioi han so luong cat tieu de
+for ($i = 5; $i <= 100; ++$i) {
+
+    $xtpl->assign('PER_TITLE', array(
+        'key' => $i,
+        'title' => $i,
+        'selected' => $i == $configMods['clean_title_video'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.per_title');
 }
 
 $xtpl->parse( 'main' );

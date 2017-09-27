@@ -84,3 +84,4 @@ $lang_module['error6'] = 'Lỗi! Hình minh họa chưa được xác định';
 $lang_module['error7'] = 'Lỗi! Vui lòng điền nội dung vào ô Mô tả ngắn gọn';
 
 $lang_module['alias'] = 'Liên kết tĩnh';
+$lang_module['per_title'] = 'Số lượng ký tự tiêu đề bị cắt';

@@ -58,18 +58,19 @@ $base_url = array();
 $base_url['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $topic['alias'];
 $base_url['amp'] = "/page-";
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_clip` a, 
-    `" . NV_PREFIXLANG . "_" . $module_data . "_hit` b 
-    WHERE a.tid=" . $db->quote($topic['id']) . " 
-    AND a.id=b.cid 
-    AND a.status=1 
-    ORDER BY a.id DESC 
+$sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_clip` a,
+    `" . NV_PREFIXLANG . "_" . $module_data . "_hit` b
+    WHERE a.tid=" . $db->quote($topic['id']) . "
+    AND a.id=b.cid
+    AND a.status=1
+    ORDER BY a.id DESC
     LIMIT " . $pgnum . "," . $configMods['otherClipsNum'];
 
 $xtpl = new XTemplate("topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULECONFIG', $configMods);
+$xtpl->assign('TEMPLATE', $module_info['template']);
 
 if (!empty($_otherTopic['main']) or !empty($_otherTopic['sub'])) {
     if (!empty($_otherTopic['main'])) {
@@ -91,7 +92,7 @@ if (!empty($_otherTopic['main']) or !empty($_otherTopic['sub'])) {
         }
         $xtpl->parse('main.topicList.topicListMain');
     }
-    
+
     if (!empty($_otherTopic['sub'])) {
         foreach ($_otherTopic['sub'] as $_ottp) {
             $href = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $_ottp['alias'];
@@ -110,7 +111,7 @@ if (!empty($_otherTopic['main']) or !empty($_otherTopic['sub'])) {
         }
         $xtpl->parse('main.topicList.topicListSub');
     }
-    
+
     $xtpl->parse('main.topicList');
 }
 
@@ -128,7 +129,7 @@ if ($all_page) {
             $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
         }
         $row['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'];
-        $row['sortTitle'] = nv_clean60($row['title'], 20);
+        $row['sortTitle'] = nv_clean60($row['title'], $module_config[$module_name]['clean_title_video']);
         $xtpl->assign('OTHERCLIPSCONTENT', $row);
         if ($i == 4) {
             $i = 0;
@@ -137,13 +138,13 @@ if ($all_page) {
         $xtpl->parse('main.otherClips.otherClipsContent');
         ++$i;
     }
-    
+
     $generate_page = nv_generate_page($base_url, $all_page, $configMods['otherClipsNum'], $pgnum);
     if (!empty($generate_page)) {
         $xtpl->assign('NV_GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.otherClips.nv_generate_page');
     }
-    
+
     $xtpl->parse('main.otherClips');
 }
 
