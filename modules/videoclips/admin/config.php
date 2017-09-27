@@ -74,7 +74,7 @@ foreach ( $skins as $skin )
 }
 
 // gioi han so luong cat tieu de
-for ($i = 5; $i <= 100; ++$i) {
+for ($i = 20; $i <= 150; ++$i) {
 
     $xtpl->assign('PER_TITLE', array(
         'key' => $i,
