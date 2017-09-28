@@ -22,3 +22,4 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['add_time'] = 'Addition time';
 $lang_module['edit_time'] = 'Last addition';
 $lang_module['not_found'] = 'Sorry! Does not exist categories';
+$lang_module['warning'] = 'This post <strong>is</strong> disabled by admin <strong>, only admin can see it';

@@ -25,21 +25,21 @@ if (!nv_function_exists('nv_block_login')) {
     {
         $html = '';
         $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['display_mode'] . '</td>';
-        $html .= '	<td><select class="w300 form-control" name="config_display_mode">';
+        $html .= '  <td>' . $lang_block['display_mode'] . '</td>';
+        $html .= '  <td><select class="w300 form-control" name="config_display_mode">';
 
         for ($i = 0; $i <= 1; $i ++) {
-            $html .= '	<option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
+            $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
         }
 
         $html .= '  </select></td>';
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['popup_register'] . '</td>';
-        $html .= '	<td><select class="w300 form-control" name="config_popup_register">';
+        $html .= '  <td>' . $lang_block['popup_register'] . '</td>';
+        $html .= '  <td><select class="w300 form-control" name="config_popup_register">';
 
         for ($i = 0; $i <= 1; $i ++) {
-            $html .= '	<option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
+            $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
         }
 
         $html .= '  </select></td>';
@@ -230,7 +230,7 @@ if (!nv_function_exists('nv_block_login')) {
                     if (empty($block_config['popup_register'])) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
-                    	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
+                        $_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
 
                         $data_questions = array();
                         $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";

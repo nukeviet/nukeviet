@@ -108,3 +108,81 @@
     width:100%
 }
 }
+
+.openid-google {
+    color: #ffffff !important;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.openid-google:focus {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #761c19;
+}
+
+.openid-google:hover {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.openid-google:active {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.openid-google:active:hover, .openid-google:active:focus {
+    color: #ffffff;
+    background-color: #ac2925;
+    border-color: #761c19;
+}
+
+.openid-google:active {
+    background-image: none;
+}
+
+.openid-google.disabled:hover, .openid-google[disabled]:hover, fieldset[disabled] .openid-google:hover, .openid-google.disabled:focus, .openid-google[disabled]:focus, fieldset[disabled] .openid-google:focus {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.openid-facebook {
+    color: #ffffff !important;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+
+.openid-facebook:focus {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #193c5a;
+}
+
+.openid-facebook:hover {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+
+.openid-facebook:active {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+
+.openid-facebook:active:hover, .openid-facebook:active:focus {
+    color: #ffffff;
+    background-color: #285e8e;
+    border-color: #193c5a;
+}
+
+.openid-facebook:active {
+    background-image: none;
+}
+
+.openid-facebook.disabled:hover, .openid-facebook[disabled]:hover, .openid-facebook.disabled:focus, .openid-facebook[disabled]:focus, fieldset[disabled] .openid-facebook:focus {
+    background-color: #428bca;
+    border-color: #357ebd;
+}
