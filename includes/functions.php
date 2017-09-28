@@ -1413,7 +1413,7 @@ function nv_check_domain($domain)
 {
     if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
         return $domain;
-    } else {
+    } elseif (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
             $domain_ascii = idn_to_ascii($domain);
         } else {
