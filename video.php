@@ -48,6 +48,7 @@ try {
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerAutostart', '" . $configMods['playerAutostart'] . "')");
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerSkin', '" . $configMods['playerSkin'] . "')");
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'playerMaxWidth', '" . $configMods['playerMaxWidth'] . "')");
+            $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $mod . "', 'clean_title_video', '" . 10 . "')");
             $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET `config_value` = '" . $configMods['idhomeclips'] . "' WHERE `lang` = '" . $lang . "' AND  `module` = '" . $mod . "' AND `config_name` = 'idhomeclips'");
 
             /*

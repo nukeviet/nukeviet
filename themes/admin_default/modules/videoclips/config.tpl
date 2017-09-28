@@ -37,6 +37,16 @@
 		                <input type="checkbox" value="1" name="playerAutostart" id="playerAutostart" {CONFIGMODULE.playerAutostart_checked} />
 		            </td>
 		        </tr>
+                
+                <tr>
+                    <th>{LANG.per_title}</th>
+                    <td>
+                    <select class="form-control w100" name="clean_title_video">
+                        <!-- BEGIN: per_title -->
+                        <option value="{PER_TITLE.key}"{PER_TITLE.selected}>{PER_TITLE.title}</option>
+                        <!-- END: per_title -->
+                    </select></td>
+                </tr>
 		         <!-- BEGIN: hidden -->
 		        <tr>
 		            <td>

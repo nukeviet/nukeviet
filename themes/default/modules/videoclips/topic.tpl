@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.matchHeight-min.js"></script>
 <!-- BEGIN: topicList -->
 <div class="otherTopic marginbottom15 clearfix">
     <div class="otherTopicCont">
@@ -53,5 +54,7 @@
 <!-- END: nv_generate_page -->
 </div>
 <!-- END: otherClips -->
-
+<script type="text/javascript">
+$('.otherClips .otherClipsContent .ctn1 .ctn2').matchHeight({ property: 'min-height' });
+</script>
 <!-- END: main -->

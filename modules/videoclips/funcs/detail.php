@@ -45,7 +45,7 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
     require_once NV_ROOTDIR . '/modules/comment/comment.php';
     $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
     $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
-    
+
     //get url comment
     $url_info = parse_url($client_info['selfurl']);
     $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
@@ -165,7 +165,7 @@ if ($all_page) {
             $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
         }
         $row['href'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'], 1);
-        $row['sortTitle'] = nv_clean60($row['title'], 20);
+        $row['sortTitle'] = nv_clean60($row['title'], $module_config[$module_name]['clean_title_video']);
         $xtpl->assign('OTHERCLIPSCONTENT', $row);
         if ($i == 4) {
             $i = 0;
@@ -174,7 +174,7 @@ if ($all_page) {
         $xtpl->parse('main.otherClips.otherClipsContent');
         ++$i;
     }
-    
+
     $xtpl->parse('main.otherClips');
 }
 

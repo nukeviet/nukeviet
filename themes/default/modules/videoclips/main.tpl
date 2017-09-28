@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.matchHeight-min.js"></script>
 <!-- BEGIN: video_flash -->
 <div class="message" id="mesHide"></div>
 <div class="detailContent clearfix">
@@ -70,4 +70,7 @@
 <!-- END: nv_generate_page -->
 </div>
 <!-- END: otherClips -->
+<script type="text/javascript">
+$('.otherClips .otherClipsContent .ctn1 .ctn2').matchHeight({ property: 'min-height' });
+</script>
 <!-- END: main -->

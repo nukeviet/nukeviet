@@ -37,6 +37,7 @@ $xtpl = new XTemplate("main.tpl", NV_ROOTDIR . "/themes/" . $module_info['templa
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULECONFIG', $configMods);
+$xtpl->assign('TEMPLATE', $module_info['template']);
 
 if (isset($configMods['idhomeclips']) and $configMods['idhomeclips'] > 0) {
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_clip a, ' . NV_PREFIXLANG . '_' . $module_data . '_hit b WHERE id=' . intval($configMods['idhomeclips']) . ' AND a.status=1 AND a.id=b.cid LIMIT 1';
@@ -46,7 +47,7 @@ if (isset($configMods['idhomeclips']) and $configMods['idhomeclips'] > 0) {
         $clip['filepath'] = urlencode(!empty($clip['internalpath']) ? NV_BASE_SITEURL . $clip['internalpath'] : $clip['externalpath']);
         $clip['url'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $clip['alias'], 1);
         $clip['editUrl'] = nv_url_rewrite(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&op=main&edit&id=" . $clip['id'] . "&redirect=1", 1);
-        
+
         // kiểm tra có phải youtube
         if (preg_match("/(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/watch\?v\=([^\&]+)$/isU", $clip['externalpath'], $m)) {
             $xtpl->assign('CODE', $m[4]);
@@ -56,9 +57,9 @@ if (isset($configMods['idhomeclips']) and $configMods['idhomeclips'] > 0) {
         } else {
             $xtpl->assign('DETAILCONTENT', $clip);
             $xtpl->parse('main.video_flash');
-            
+
             $contents = "<div id=\"videoDetail\">" . $contents . "</div>\n";
-            
+
             $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/jquery.autoresize.js\"></script>\n";
             $my_head .= "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js\"></script>\n";
             $my_head .= '<script type="text/javascript">
@@ -75,11 +76,11 @@ $base_url = array();
 $base_url['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $base_url['amp'] = '/page-';
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_clip` a, 
-    `" . NV_PREFIXLANG . "_" . $module_data . "_hit` b 
-    WHERE a.id=b.cid 
-    AND a.status=1 
-    ORDER BY a.id DESC 
+$sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $module_data . "_clip` a,
+    `" . NV_PREFIXLANG . "_" . $module_data . "_hit` b
+    WHERE a.id=b.cid
+    AND a.status=1
+    ORDER BY a.id DESC
     LIMIT " . $pgnum . "," . $configMods['otherClipsNum'];
 
 if (!empty($_otherTopic['main'])) {
@@ -116,7 +117,7 @@ if ($all_page) {
             $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
         }
         $row['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'];
-        $row['sortTitle'] = nv_clean60($row['title'], 20);
+        $row['sortTitle'] = nv_clean60($row['title'], $module_config[$module_name]['clean_title_video']);
         $xtpl->assign('OTHERCLIPSCONTENT', $row);
         if ($i == 4) {
             $i = 0;
@@ -125,13 +126,13 @@ if ($all_page) {
         $xtpl->parse('main.otherClips.otherClipsContent');
         ++$i;
     }
-    
+
     $generate_page = nv_generate_page($base_url, $all_page, $configMods['otherClipsNum'], $pgnum);
     if (!empty($generate_page)) {
         $xtpl->assign('NV_GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.otherClips.nv_generate_page');
     }
-    
+
     $xtpl->parse('main.otherClips');
 }
 
