@@ -35,14 +35,14 @@ $forward_to = $nv_Request->get_string('email', 'post,get');
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
-    
+
     if ($forward_to == '') {
         $error = $lang_module['error_mail_empty'];
     } elseif (strip_tags($mess_content) == '') {
         $error = $lang_module['no_content_send_title'];
     } else {
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
-        
+
         $_arr_mail = explode(',', $forward_to);
         foreach ($_arr_mail as $_email) {
             $_email = nv_unhtmlspecialchars($_email);
@@ -50,16 +50,17 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $mail->addAddress($_email);
             }
         }
-        
+
         $mail->Content($mess_content);
         $mail->Subject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
-            $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
+            $content = sprintf($lang_module['forward'], $forward_to)  . '</br>' . $mess_content;
+            $sth->bindParam(':reply_content', $content, PDO::PARAM_STR, strlen($content));
             $sth->execute();
-            
+
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_reply=2 WHERE id=' . $id);
-            
+
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id);
         } else {
             $error = $lang_global['error_sendmail_admin'];
@@ -73,7 +74,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
-    
+
     require_once NV_ROOTDIR . '/modules/contact/sign.php';
     $mess_content .= $sign_content;
 }

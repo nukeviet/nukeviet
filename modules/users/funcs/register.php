@@ -219,7 +219,6 @@ while ($row_field = $result_field->fetch()) {
         $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
         $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
         $result = $db->query($query);
-        $weight = 0;
         while (list($key, $val) = $result->fetch(3)) {
             $row_field['field_choices'][$key] = $val;
         }

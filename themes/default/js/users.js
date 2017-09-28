@@ -69,7 +69,7 @@ function datepickerShow(a) {
             showOn: "focus",
             yearRange: "-90:+0"
         });
-        $(a).css("z-index", "1000").datepicker('show');
+        $(a).css("z-index", "9998").datepicker('show');
     }
 }
 
@@ -211,8 +211,8 @@ function login_validForm(a) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
             if (d.status == "error") {
-                $("input,button", a).not("[type=submit]").prop("disabled", !1), 
-                $(".tooltip-current", a).removeClass("tooltip-current"), 
+                $("input,button", a).not("[type=submit]").prop("disabled", !1),
+                $(".tooltip-current", a).removeClass("tooltip-current"),
                 "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
                     $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                     validErrorShow(this)
@@ -223,7 +223,7 @@ function login_validForm(a) {
                     }
                 }, 1E3)
             } else if (d.status == "ok") {
-                $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), 
+                $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
                 $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
                     if( "undefined" != typeof d.redirect && "" != d.redirect){
                          window.location.href = d.redirect;
@@ -508,7 +508,7 @@ UAV.common = {
                     $('#' + UAV.config.imageType).html(file.type);
                     $('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
                     $('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
-                    
+
                     UAV.data.cropperApi = $('#' + UAV.config.target).cropper({
                         viewMode: 3,
                         dragMode: 'crop',
