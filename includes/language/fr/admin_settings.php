@@ -223,6 +223,7 @@ $lang_module['plugin_area'] = 'Aréa';
 $lang_module['plugin_area_1'] = 'Avant la connexion CSDL';
 $lang_module['plugin_area_2'] = 'Avant l\'appel des modules';
 $lang_module['plugin_area_3'] = 'Avant l\'envoie des données du site au navigateur';
+$lang_module['plugin_area_4'] = 'Après l\'appel des modules';
 $lang_module['plugin_number'] = 'Numero';
 $lang_module['plugin_func'] = 'Fonctionnement';
 $lang_module['plugin_add'] = 'Ajouter plugin';

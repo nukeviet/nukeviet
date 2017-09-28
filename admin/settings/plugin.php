@@ -8,7 +8,7 @@
  * @Createdate 28/10/2012, 14:51
  */
 
-if (! defined('NV_IS_FILE_SETTINGS')) {
+if (!defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
@@ -29,7 +29,7 @@ if ($nv_Request->isset_request('plugin_file', 'post')) {
             if (empty($count)) {
                 nv_deletefile(NV_ROOTDIR . '/includes/plugin/' . $plugin_file);
             }
-        } elseif (! empty($plugin_area)) {
+        } elseif (!empty($plugin_area)) {
             $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $plugin_area;
             $weight = $db->query($_sql)->fetchColumn();
             $weight = intval($weight) + 1;
@@ -54,10 +54,10 @@ if ($nv_Request->isset_request('dpid', 'get')) {
     $checkss = $nv_Request->get_title('checkss', 'get');
     if ($dpid > 0 and $checkss == md5($dpid . '-' . NV_CHECK_SESSION)) {
         $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $dpid)->fetch();
-        if (! empty($row) and $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid)) {
+        if (!empty($row) and $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid)) {
             $weight = intval($row['weight']);
             $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND weight > ' . $weight . ' ORDER BY weight ASC');
-            while (list($pid) = $_query->fetch(3)) {
+            while (list ($pid) = $_query->fetch(3)) {
                 $db->query('UPDATE ' . $db_config['prefix'] . '_plugin SET weight = ' . $weight++ . ' WHERE pid=' . $pid);
             }
 
@@ -68,12 +68,12 @@ if ($nv_Request->isset_request('dpid', 'get')) {
 } elseif ($nv_Request->isset_request('pid', 'get') and $nv_Request->isset_request('weight', 'get')) {
     $pid = $nv_Request->get_int('pid', 'get');
     $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $pid)->fetch();
-    if (! empty($row)) {
+    if (!empty($row)) {
         $new = $nv_Request->get_int('weight', 'get');
 
         $weight = 0;
         $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND pid != ' . $pid . ' ORDER BY weight ASC');
-        while (list($pid_i) = $_query->fetch(3)) {
+        while (list ($pid_i) = $_query->fetch(3)) {
             ++$weight;
             if ($weight == $new) {
                 ++$weight;
@@ -123,7 +123,7 @@ foreach ($nv_plugin_area as $area => $nv_plugin_area_i) {
 }
 
 foreach ($plugin_all as $_file) {
-    if (! in_array($_file, $nv_plugin_array)) {
+    if (!in_array($_file, $nv_plugin_array)) {
         $plugin_new[] = $_file;
     }
 }
@@ -133,14 +133,22 @@ if ($errormess != '') {
     $xtpl->parse('main.error');
 }
 
-if (! empty($plugin_new)) {
+if (!empty($plugin_new)) {
     foreach ($plugin_new as $_file) {
         $xtpl->assign('PLUGIN_FILE', $_file);
         $xtpl->parse('main.add.file');
     }
-    for ($i = 1; $i < 4; $i++) {
-        $xtpl->assign('AREA_VALUE', $i);
-        $xtpl->assign('AREA_TEXT', $lang_module['plugin_area_' . $i]);
+
+    $array_plugin_position = array(
+        1 => $lang_module['plugin_area_1'],
+        2 => $lang_module['plugin_area_2'],
+        4 => $lang_module['plugin_area_4'],
+        3 => $lang_module['plugin_area_3']
+    );
+
+    foreach ($array_plugin_position as $index => $value) {
+        $xtpl->assign('AREA_VALUE', $index);
+        $xtpl->assign('AREA_TEXT', $value);
         $xtpl->parse('main.add.area');
     }
     $xtpl->parse('main.add');
