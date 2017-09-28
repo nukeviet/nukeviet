@@ -276,6 +276,7 @@ function user_login($is_ajax = false)
     $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('TEMPLATE', $module_info['template']);
 
     if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
         if ($global_config['captcha_type'] == 2) {
@@ -745,13 +746,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             if (empty($row['system'])) {
                 $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
                 $row['required'] = ($row['required']) ? 'required' : '';
-    
+
                 $xtpl->assign('FIELD', $row);
-    
+
                 if ($row['required']) {
                     $xtpl->parse('main.tab_edit_others.loop.required');
                 }
-    
+
                 if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
                     $xtpl->parse('main.tab_edit_others.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
@@ -799,7 +800,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                 } elseif ($row['field_type'] == 'checkbox') {
                     $number = 0;
                     $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
-    
+
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', array(
                             'id' => $row['fid'] . '_' . $number++,
@@ -812,7 +813,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     $xtpl->parse('main.tab_edit_others.loop.checkbox');
                 } elseif ($row['field_type'] == 'multiselect') {
                     $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
-    
+
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', array(
                             'key' => $key,
