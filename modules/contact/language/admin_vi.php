@@ -99,5 +99,6 @@ $lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh s�
 $lang_module['error_required_departmentid'] = 'Lỗi: bạn cần nhập dữ liệu cho Departmentid';
 $lang_module['error_required_full_name'] = 'Lỗi: bạn cần nhập dữ liệu cho Full name';
 $lang_module['error_required_phone'] = 'Lỗi: bạn cần nhập dữ liệu cho Phone';
+$lang_module['forward'] = 'Chuyển tiếp tới: %s';
 $lang_module['forwarded'] = 'Thư đã chuyển tiếp';
 $lang_module['error_mail_empty'] = 'Lỗi: Bạn chưa nhập email';

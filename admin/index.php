@@ -40,6 +40,10 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
 
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
+try {
+
+
+
 $admin_mods = array();
 $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC');
 while ($row = $result->fetch()) {
@@ -188,3 +192,13 @@ if (preg_match($global_config['check_module'], $module_name)) {
 }
 
 nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+
+} catch (PDOException $e) {
+    if(NV_CLIENT_IP=='123.25.21.13')
+    {
+        echo '<pre>';
+        print_r($e);
+        echo '</pre>';
+        die();
+    }
+}

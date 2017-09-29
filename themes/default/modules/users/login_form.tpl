@@ -90,8 +90,10 @@
        	<hr />
        	<div class="text-center">
       		<!-- BEGIN: server -->
-      		<a title="{LANG.login_with} {OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
-      		<!-- END: server -->
+            <div class="btn-group m-bottom">
+                <button class="btn openid-{OPENID.server} disabled"><i class="fa fa-{OPENID.icon}" style="width: 15px">&nbsp;</i></button> <a class="btn openid-{OPENID.server}" href="{OPENID.href}" onclick="return openID_load(this);" style="width: 175px">{LANG.login_with} {OPENID.title}</a>
+            </div>
+            <!-- END: server -->
        	</div>
        	<!-- END: openid -->
     </div>

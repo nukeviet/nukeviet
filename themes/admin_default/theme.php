@@ -97,7 +97,7 @@ function nv_get_submenu_mod($module_name)
  */
 function nv_admin_theme($contents, $head_site = 1)
 {
-    global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op, $client_info;
+    global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op, $client_info, $nv_plugin_area;
 
     $dir_template = '';
 
@@ -126,6 +126,13 @@ function nv_admin_theme($contents, $head_site = 1)
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
     if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+    }
+
+    if (isset($nv_plugin_area[4])) {
+        // Kết nối với các plugin sau khi xây dựng nội dung module
+        foreach ($nv_plugin_area[4] as $_fplugin) {
+            include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+        }
     }
 
     $xtpl = new XTemplate($file_name_tpl, $dir_template);

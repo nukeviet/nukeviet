@@ -223,6 +223,7 @@ $lang_module['plugin_area'] = 'Area';
 $lang_module['plugin_area_1'] = 'Before the database connection';
 $lang_module['plugin_area_2'] = 'Before run the module';
 $lang_module['plugin_area_3'] = 'Website content before sending to the browser';
+$lang_module['plugin_area_4'] = 'After run the module';
 $lang_module['plugin_number'] = 'Order Number';
 $lang_module['plugin_func'] = 'Aunction';
 $lang_module['plugin_add'] = 'Add a plugin';
