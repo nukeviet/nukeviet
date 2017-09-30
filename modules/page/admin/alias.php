@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -16,6 +16,7 @@ $title = $nv_Request->get_title('title', 'post', '');
 $id = $nv_Request->get_int('id', 'post', 0);
 
 $alias = change_alias($title);
+$alias = $page_config['alias_lower'] ? strtolower($alias) : $alias;
 
 $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id !=' . $id . ' AND alias = :alias');
 $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
