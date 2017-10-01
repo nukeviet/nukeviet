@@ -18,7 +18,7 @@
 				<tr>
 					<td><strong>{LANG.closed_site}</strong></td>
 					<td>
-					<select name="closed_site" class="form-control w200">
+					<select name="closed_site" class="form-control w300">
 						<!-- BEGIN: closed_site_mode -->
 						<option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
 						<!-- END: closed_site_mode -->
@@ -35,7 +35,7 @@
 				<tr>
 					<td><strong>{LANG.themeadmin}</strong></td>
 					<td>
-					<select name="admin_theme" class="form-control w200" >
+					<select name="admin_theme" class="form-control w300" >
 						<!-- BEGIN: admin_theme -->
 						<option value="{THEME_NAME}"{THEME_SELECTED}>{THEME_NAME}</option>
 						<!-- END: admin_theme -->
@@ -49,26 +49,17 @@
 					<td><strong>{LANG.time_pattern}</strong></td>
 					<td><input type="text" name="time_pattern" value="{DATA.time_pattern}" class="w150 form-control"/></td>
 				</tr>
-				<!-- BEGIN: system -->
-				<tr>
-					<td><strong>{LANG.ssl_https}</strong></td>
-					<td>
-						<div class="row">
-							<div class="col-xs-8">
-								<select id="ssl_https" name="ssl_https" class="form-control" data-val="{DATA.ssl_https}">
-									<!-- BEGIN: ssl_https -->
-									<option value="{SSL_HTTPS.key}"{SSL_HTTPS.selected}>{SSL_HTTPS.title}</option>
-									<!-- END: ssl_https -->
-								</select>
-							</div>
-							<div class="col-xs-16">
-								<div class="row<!-- BEGIN: ssl_https_modules_hide --> hidden<!-- END: ssl_https_modules_hide -->" id="ssl_https_modules">
-									<a href="{LINK_SSL_MODULES}" target="_blank">{LANG.note_ssl_modules}</a>
-								</div>
-							</div>
-						</div>
-					</td>
-				</tr>
+                <tr>
+                    <td><strong>{LANG.ssl_https}</strong></td>
+                    <td>
+                        <select id="ssl_https" name="ssl_https" class="form-control w300" data-val="{DATA.ssl_https}">
+                            <!-- BEGIN: ssl_https -->
+                            <option value="{SSL_HTTPS.key}"{SSL_HTTPS.selected}>{SSL_HTTPS.title}</option>
+                            <!-- END: ssl_https -->
+                        </select>
+                    </td>
+                </tr>
+                <!-- BEGIN: system -->
 				<tr>
 					<td><strong>{LANG.lang_multi}</strong></td>
 					<td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} data-toggle="controlrw"/></td>
@@ -77,7 +68,7 @@
 				<tr>
 					<td><strong>{LANG.site_lang}</strong></td>
 					<td>
-					<select name="site_lang" class="form-control w200">
+					<select name="site_lang" class="form-control w300">
 						<!-- BEGIN: site_lang_option -->
 						<option value="{LANGOP}" {SELECTED}>{LANGVALUE} </option>
 						<!-- END: site_lang_option -->
@@ -101,7 +92,7 @@
 				<tr id="tr_rewrite_op_mod"{SHOW_REWRITE_OP_MOD}>
 					<td><strong>{LANG.rewrite_op_mod}</strong></td>
 					<td>
-					<select name="rewrite_op_mod" class="form-control w200">
+					<select name="rewrite_op_mod" class="form-control w300">
 						<option value="">&nbsp;</option>
 						<!-- BEGIN: rewrite_op_mod -->
 						<option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
@@ -111,7 +102,7 @@
 				<tr>
 					<td><strong>{LANG.site_timezone}</strong></td>
 					<td>
-					<select name="site_timezone" id="site_timezone" class="form-control w200">
+					<select name="site_timezone" id="site_timezone" class="form-control w300">
 						<option value="">{LANG.timezoneAuto}</option>
 						<!-- BEGIN: opsite_timezone -->
 						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
