@@ -8,7 +8,7 @@
  * @Createdate 3/25/2010 18:6
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
@@ -39,7 +39,7 @@ if ($global_config['allowuserlogin']) {
     $xtpl->assign('BLOCK_THEME', $block_theme);
 
     if (defined('NV_IS_USER')) {
-        if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and ! empty($user_info['photo'])) {
+        if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
             $avata = NV_BASE_SITEURL . $user_info['photo'];
         } else {
             $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
@@ -77,7 +77,7 @@ if ($global_config['allowuserlogin']) {
             if (defined('NV_IS_SPADMIN')) {
                 $xtpl->parse('signed.admintoolbar.is_spadadmin');
             }
-            if (defined('NV_IS_MODADMIN') and ! empty($module_info['admin_file'])) {
+            if (defined('NV_IS_MODADMIN') and !empty($module_info['admin_file'])) {
                 $xtpl->parse('signed.admintoolbar.is_modadmin');
             }
             $xtpl->parse('signed.admintoolbar');
@@ -109,7 +109,12 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('USERNAME_RULE', $username_rule);
         $xtpl->assign('PASSWORD_RULE', $password_rule);
 
-        if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
+        if (in_array($global_config['gfx_chk'], array(
+            2,
+            4,
+            5,
+            7
+        ))) {
             if ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->parse('main.recaptcha.default');
@@ -119,7 +124,12 @@ if ($global_config['allowuserlogin']) {
             }
         }
 
-        if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7 ))) {
+        if (in_array($global_config['gfx_chk'], array(
+            3,
+            4,
+            6,
+            7
+        ))) {
             if ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
@@ -130,12 +140,16 @@ if ($global_config['allowuserlogin']) {
         }
 
         if (defined('NV_OPENID_ALLOWED')) {
+            $icons = array(
+                'google' => 'google-plus',
+                'facebook' => 'facebook'
+            );
             foreach ($global_config['openid_servers'] as $server) {
                 $assigns = array();
                 $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
-                $assigns['title'] = $lang_global['openid_login'] . " " . ucfirst($server);
-                $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/' . $server . '.png';
-                $assigns['img_width'] = $assigns['img_height'] = 24;
+                $assigns['title'] = ucfirst($server);
+                $assigns['server'] = $server;
+                $assigns['icon'] = $icons[$server];
 
                 $xtpl->assign('OPENID', $assigns);
                 $xtpl->parse('main.openid.server');
@@ -168,7 +182,10 @@ if ($global_config['allowuserlogin']) {
             $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
             $result = $db->query($sql);
             while ($row = $result->fetch()) {
-                $data_questions[$row['qid']] = array( 'qid' => $row['qid'], 'title' => $row['title'] );
+                $data_questions[$row['qid']] = array(
+                    'qid' => $row['qid'],
+                    'title' => $row['title']
+                );
             }
 
             foreach ($data_questions as $array_question_i) {
@@ -188,7 +205,7 @@ if ($global_config['allowuserlogin']) {
                     $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
                     $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
                     $result = $db->query($query);
-                    while (list($key, $val) = $result->fetch(3)) {
+                    while (list ($key, $val) = $result->fetch(3)) {
                         $row_field['field_choices'][$key] = $val;
                     }
                 }
