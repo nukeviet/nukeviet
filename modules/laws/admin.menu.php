@@ -10,10 +10,14 @@
 
 if (!defined('NV_ADMIN')) die('Stop!!!');
 
-$submenu['main'] = $lang_module['main'];
+global $module_config;
+
 $submenu['signer'] = $lang_module['signer'];
 $submenu['scontent'] = $lang_module['scontent_add'];
 $submenu['area'] = $lang_module['area'];
 $submenu['cat'] = $lang_module['cat'];
 $submenu['subject'] = $lang_module['subject'];
+if($module_config[$module_name]['activecomm']){
+	$submenu['examine'] = $lang_module['examine'];
+}
 $submenu['config'] = $lang_module['config'];

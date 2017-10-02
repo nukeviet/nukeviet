@@ -30,6 +30,8 @@ $lang_module['day'] = "Ngày";
 
 $lang_module['hl0'] = "Còn hiệu lực";
 $lang_module['hl1'] = "Hết hiệu lực";
+$lang_module['e0'] = "Chưa thông qua";
+$lang_module['e1'] = "Đã thông qua";
 
 $lang_module['add_laws'] = "Thêm văn bản";
 $lang_module['logChangeWeight'] = "Thay đổi thứ tự thể loại";
@@ -176,3 +178,12 @@ $lang_module['activecomm'] = 'Cho phép lấy ý kiến góp ý';
 $lang_module['start_comm_time'] = 'Ngày bắt đầu lấy ý kiến';
 $lang_module['end_comm_time'] = 'Ngày kết thúc lấy ý kiến';
 $lang_module['view_comm'] = 'Xem góp ý';
+$lang_module['examine'] = 'Ủy ban thẩm tra';
+$lang_module['addExamine'] = 'Thêm Ủy ban thẩm tra';
+$lang_module['errorExamineNotExists'] = 'Lỗi! Ủy ban thẩm tra không tồn tại.';
+$lang_module['errorExamineYesRow'] = "Lỗi! có các Văn bản thuộc Ủy ban thẩm tra này. Hãy xóa chúng trước đã.";
+$lang_module['editExamine'] = 'Sửa Ủy ban thẩm tra';
+$lang_module['logDelExamine'] = "Xóa Ủy ban thẩm tra";
+$lang_module['ExamineSel'] = "Chọn Ủy ban thẩm tra";
+$lang_module['erroNotSelectExamine'] = 'Lỗi! Bạn chưa chọn Ủy ban thẩm tra';
+$lang_module['approval'] = "Trang thái";
