@@ -35,21 +35,42 @@
 		</script>
 		<!-- END: comment_result -->
 
-		<form method="post" role="form" onsubmit="return false;">
-			<input type="hidden" id="commentpid" value="0"/>
+		<form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}" data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"<!-- BEGIN: enctype --> enctype="multipart/form-data"<!-- END: enctype -->>
+			<input type="hidden" name="module" value="{MODULE_COMM}"/>
+			<input type="hidden" name="area" value="{AREA_COMM}"/>
+			<input type="hidden" name="id" value="{ID_COMM}"/>
+			<input type="hidden" id="commentpid" name="pid" value="0"/>
+			<input type="hidden" name="allowed" value="{ALLOWED_COMM}"/>
+			<input type="hidden" name="checkss" value="{CHECKSS_COMM}"/>
 			<div class="form-group clearfix">
 				<div class="row">
 					<div class="col-xs-12">
-						<input id="commentname" type="text" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
+						<input id="commentname" type="text" name="name" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
 					</div>
 					<div class="col-xs-12">
-						<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
+						<input id="commentemail_iavim" type="text" name="email" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
 					</div>
 				</div>
 			</div>
-			<div class="form-group clearfix">				
-				<textarea class="form-control" style="width: 100%" name="commentcontent" id="commentcontent" cols="20" rows="5"></textarea>			
+			<div class="form-group clearfix">
+				<textarea class="form-control" style="width: 100%" name="content" id="commentcontent" cols="20" rows="5"></textarea>
+				<!-- BEGIN: editor -->
+                <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/ckeditor.js?t={TIMESTAMP}"></script>
+                <script type="text/javascript">
+                nv_commment_buildeditor();
+                </script>
+                <!-- END: editor -->
 			</div>
+            <!-- BEGIN: attach -->
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-12 col-sm-8 col-md-6 control-label">{LANG.attach}</label>
+                    <div class="col-xs-12 col-sm-16 col-md-18">
+                        <input type="file" name="fileattach"/>
+                    </div>
+                </div>
+            </div>
+            <!-- END: attach -->
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
 				<div class="row">
@@ -59,7 +80,7 @@
 						&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
 					</div>
 					<div class="col-xs-12">
-						<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>
+						<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}" name="code"/>
 					</div>
 				</div>
 			</div>
@@ -77,9 +98,10 @@
             <!-- END: recaptcha -->
 			<div class="form-group text-center">
 				<input id="reset-cm" type="button" value="{GLANG.reset}" class="btn btn-default" />
-				<input id="buttoncontent" type="button" value="{LANG.comment_submit}" onclick="sendcommment(this, '{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" class="btn btn-primary" />
 			</div>
 		</form>
+        <iframe class="hidden" id="submitcommentarea" name="submitcommentarea"></iframe>
 		<script type="text/javascript">
 		$("#reset-cm").click(function() {
 			$("#commentcontent,#commentseccode_iavim").val("");

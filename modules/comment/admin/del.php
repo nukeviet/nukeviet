@@ -24,6 +24,14 @@ if (! empty($listcid)) {
     $array_row_id = $db->query($sql)->fetchAll();
     // Het Xac dinh ID cac bai viet
 
+    // Xóa đính kèm
+    $list_comments = $db->query('SELECT attach FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ')')->fetchAll();
+    foreach ($list_comments as $comment) {
+        if (!empty($comment['attach'])) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $comment['attach']);
+        }
+    }
+
     if (defined('NV_IS_SPADMIN')) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ')');
     } elseif (! empty($site_mod_comm)) {
