@@ -399,6 +399,15 @@ a#btn-search {
     color: #fff;
 }
 
+#advance .form-inline label{
+    width:100%;
+}
+
+#advance .form-inline .form-control{
+    width: auto !important;
+    margin-right: 2px;
+}
+
 .comm_time{
 	width: 100%;
 }
