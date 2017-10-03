@@ -63,7 +63,9 @@ $lang_module['config_view_type_page'] = 'Nombre d\'articles affiché dans une pa
 $lang_module['config_view_related_articles'] = 'Nombre d\'articles concernés';
 $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = '(Sous formet 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xRegarder en détail</a>)';
+$lang_module['config_alias_lower'] = 'Alias chaîne inférieure automatique';
 $lang_module['config_save'] = 'Sauvegarder la configuration';
+
 $lang_module['add_time'] = 'Date affichée';
 $lang_module['edit_time'] = 'dernière mise à jour';
 $lang_module['group_post'] = 'Articles de rubrique';

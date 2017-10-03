@@ -52,6 +52,10 @@
 						<td>{LANG.setting_copy_page}</td>
 						<td><input type="checkbox" value="1" name="copy_page"{COPY_PAGE}/></td>
 					</tr>
+					<tr>
+						<td>{LANG.config_alias_lower}</td>
+						<td><input type="checkbox" value="1" name="alias_lower"{ALIAS_LOWER}/></td>
+					</tr>
 
 				</tbody>
 			</table>

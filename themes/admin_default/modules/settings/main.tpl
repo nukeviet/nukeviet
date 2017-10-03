@@ -97,21 +97,6 @@
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
 			</tr>
             <!-- END: mobile_theme -->
-			<tr<!-- BEGIN: ssl_https_modules_hide --> class="hidden"<!-- END: ssl_https_modules_hide -->>
-				<td><strong>{LANG.ssl_https_module}</strong></td>
-				<td>
-					<div class="row">
-						<!-- BEGIN: ssl_https_modules -->
-						<div class="col-xs-6">
-							<label>
-								<input type="checkbox" value="{MOD_TITLE}" name="ssl_https_modules[]"{MOD_CHECKED}> {MOD_TITLE}
-							</label>
-						</div>
-						<!-- END: ssl_https_modules -->
-					</div>
-					<input type="hidden" name="show_ssl_modules" value="{SHOW_SSL_MODULES}">
-				</td>
-			</tr>
 			<tr>
 				<th>{LANG.disable_content}</th>
 				<td> {DISABLE_SITE_CONTENT} </td>
