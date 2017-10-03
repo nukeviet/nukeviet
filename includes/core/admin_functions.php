@@ -444,11 +444,6 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteEngine On\n";
         $rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
 
-        if ($array_config_global['ssl_https'] == 1) {
-            $rewrite_rule .= "RewriteCond %{SERVER_PORT} !^443$\n";
-            $rewrite_rule .= "RewriteRule (.*)  https://%{SERVER_NAME}%{REQUEST_URI} [L,R]\n";
-        }
-
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]\n";
         $rewrite_rule .= "RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
