@@ -90,3 +90,6 @@ $lang_module['captcha_2'] = 'If not the manager comment';
 $lang_module['captcha_3'] = 'Display at all';
 $lang_module['siteinfo_queue_comments'] = 'Total commments need approval';
 $lang_module['notification_comment_queue'] = 'Comment moderation posts by %s<br /><em>%s</em>';
+$lang_module['allowattachcomm'] = 'Allow Attach';
+$lang_module['alloweditorcomm'] = 'Allow editor';
+$lang_module['attach'] = 'File attach';

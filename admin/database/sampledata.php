@@ -142,6 +142,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                 // Xóa bảng tạo lại
                 if (!in_array($table['name'], $array_ignore_drop)) {
                     $content = $db->query('SHOW CREATE TABLE ' . $table['name'])->fetchColumn(1);
+                    $content = preg_replace('/[\s]+COLLATE[\s]+([a-zA-Z0-9\_]+)/i', '', $content);
                     $content = preg_replace('/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content);
                     $content = preg_replace('/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content);
                     $content = '$sql_create_table[] = "' . str_replace('"', '\"', $content) . "\";\n";

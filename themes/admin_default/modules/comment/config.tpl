@@ -133,6 +133,14 @@
                         <span class="help-block m-bottom-none">{LANG.timeoutcomm_note}</span>
                     </td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.allowattachcomm}</strong></td>
+                    <td><input type="checkbox" value="1" name="allowattachcomm"{ALLOWATTACHCOMM}/></td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.alloweditorcomm}</strong></td>
+                    <td><input type="checkbox" value="1" name="alloweditorcomm"{ALLOWEDITORCOMM}/></td>
+                </tr>
 			</tbody>
 		</table>
 	</div>

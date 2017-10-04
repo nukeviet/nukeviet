@@ -18,23 +18,47 @@ $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $
 $row = $db->query($sql)->fetch();
 
 if (empty($row) or ! isset($site_mod_comm[$row['module']])) {
-    header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+}
+
+$dir = date('Y_m');
+if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
+    $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
+    if ($mk[0] > 0) {
+        try {
+            $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $dir . "', 0)");
+        } catch (PDOException $e) {
+            trigger_error($e->getMessage());
+        }
+    }
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $delete = $nv_Request->get_int('delete', 'post', 0);
     if ($delete) {
+        if (!empty($row['attach'])) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['attach']);
+        }
         $count = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid);
     } else {
-        $content = $nv_Request->get_textarea('content', '', NV_ALLOWED_HTML_TAGS, 1);
+        $content = nv_editor_nl2br($nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS));
         $active = $nv_Request->get_int('active', 'post', 0);
         $active = ($active == 1) ? 1 : 0;
+        $attach = $nv_Request->get_string('attach', 'post', '', true);
+        if (!empty($attach)) {
+            $attach = substr($attach, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
+        }
 
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET content= :content, status=' . $active . ' WHERE cid=' . $cid);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET content= :content, attach=:attach, status=' . $active . ' WHERE cid=' . $cid);
         $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+        $stmt->bindParam(':attach', $attach, PDO::PARAM_STR);
         $stmt->execute();
         $count = $stmt->rowCount();
+
+        // Xóa file đính kèm cũ
+        if ($attach != $row['attach'] and !empty($row['attach'])) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['attach']);
+        }
     }
 
     if ($count) {
@@ -54,8 +78,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 nv_status_notification(NV_LANG_DATA, $module_name, 'comment_queue', $cid);
 
-$row['content'] = nv_htmlspecialchars(nv_br2nl($row['content']));
+if (defined('NV_EDITOR'))
+    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+
+$row['content'] = nv_htmlspecialchars(nv_editor_br2nl($row['content']));
+
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $row['content'] = nv_aleditor('content', '100%', '250px', $row['content']);
+} else {
+    $row['content'] = '<textarea style="width:100%;height:250px" name="content">' . $row['content'] . '</textarea>';
+}
+
 $row['status'] = ($row['status']) ? 'checked="checked"' : '';
+
+if (!empty($row['attach'])) {
+    $row['attach'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['attach'];
+}
 
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -67,6 +105,8 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('CID', $cid);
 $xtpl->assign('ROW', $row);
+$xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload);
+$xtpl->assign('CURRENT_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
