@@ -22,6 +22,7 @@
 	</div>
 
     <div id="advance" <!-- BEGIN: is_advance -->style="display: none"<!-- END: is_advance --> >
+    	<!-- BEGIN: pubtime -->
     	<div class="form-group form-inline">
     		<label class="control-label">{LANG.s_pubtime}</label>
     		<input class="form-control" id="ls_from" style="width: 90%" type="text" name="sfrom" value="{FROM}" readonly="readonly"/>
@@ -31,7 +32,7 @@
     		<label class="control-label">{LANG.to}</label>
     		<input class="form-control" id="ls_to" style="width: 90%" type="text" name="sto" value="{TO}" readonly="readonly"/>
     	</div>
-
+		<!-- END: pubtime -->
     	<div class="form-group">
     		<label class="control-label">{LANG.area}</label>
     		<select class="form-control" id="ls_area" name="area">
@@ -50,6 +51,19 @@
     		</select>
     	</div>
 
+    	<!-- BEGIN: approval -->
+		<div class="form-group">
+    		<label class="col-sm-6 control-label">{LANG.approval}</label>
+    		<div class="col-sm-18">
+    			<select class="form-control" name="approval">
+    				<!-- BEGIN: loop -->
+    				<option value="{APP.key}"{APP.selected}>{APP.title}</option>
+    				<!-- END: loop -->
+    			</select>
+    		</div>
+    	</div>
+		<!-- END: approval -->
+		<!-- BEGIN: exptime -->
     	<div class="form-group">
     		<label class="control-label">{LANG.s_status}</label>
     		<select class="form-control" id="ls_status" name="status">
@@ -58,7 +72,7 @@
     			<!-- END: status -->
     		</select>
     	</div>
-
+		<!-- END: exptime -->
     	<div class="form-group">
     		<label class="control-label">{LANG.s_signer}</label>
     		<select class="form-control" id="ls_signer" name="signer">
@@ -76,6 +90,20 @@
     			<!-- END: subject -->
     		</select>
     	</div>
+
+    	<!-- BEGIN: examine -->
+    	<div class="form-group">
+    		<label class="col-sm-6 control-label">{LANG.examine}</label>
+    		<div class="col-sm-18">
+    			<select class="form-control" name="examine">
+    				<option value="0">--{LANG.examine}--</option>
+    				<!-- BEGIN: loop -->
+    				<option value="{EXAMINE.key}"{EXAMINE.selected}>{EXAMINE.title}</option>
+    				<!-- END: loop -->
+    			</select>
+    		</div>
+    	</div>
+	<!-- END: examine -->
 	</div>
 
 	<div class="form-group text-center">

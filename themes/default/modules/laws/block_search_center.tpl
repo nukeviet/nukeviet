@@ -21,6 +21,7 @@
 	</div>
 
     <div id="advance" <!-- BEGIN: is_advance -->style="display: none"<!-- END: is_advance --> >
+    	<!-- BEGIN: pubtime -->
     	<div class="form-group">
     		<label class="col-sm-6 control-label">{LANG.s_pubtime}</label>
     		<div class="col-sm-18 form-inline">
@@ -29,7 +30,7 @@
     			<input class="form-control" id="ls_to" style="width:110px" type="text" name="sto" value="{TO}" readonly="readonly"/>
     		</div>
     	</div>
-
+		<!-- END: pubtime -->
     	<div class="form-group">
     		<label class="col-sm-6 control-label">{LANG.area}</label>
     		<div class="col-sm-18">
@@ -51,7 +52,19 @@
     			</select>
     		</div>
     	</div>
-
+		<!-- BEGIN: approval -->
+		<div class="form-group">
+    		<label class="col-sm-6 control-label">{LANG.approval}</label>
+    		<div class="col-sm-18">
+    			<select class="form-control" name="approval">
+    				<!-- BEGIN: loop -->
+    				<option value="{APP.key}"{APP.selected}>{APP.title}</option>
+    				<!-- END: loop -->
+    			</select>
+    		</div>
+    	</div>
+		<!-- END: approval -->
+		<!-- BEGIN: exptime -->
     	<div class="form-group">
     		<label class="col-sm-6 control-label">{LANG.s_status}</label>
     		<div class="col-sm-18">
@@ -62,7 +75,7 @@
     			</select>
     		</div>
     	</div>
-
+		<!-- END: exptime -->
     	<div class="form-group">
     		<label class="col-sm-6 control-label">{LANG.s_signer}</label>
     		<div class="col-sm-18">
@@ -84,8 +97,19 @@
     			</select>
     		</div>
     	</div>
-    </div>
-
+    	<!-- BEGIN: examine -->
+    	<div class="form-group">
+    		<label class="col-sm-6 control-label">{LANG.examine}</label>
+    		<div class="col-sm-18">
+    			<select class="form-control" name="examine">
+    				<option value="0">--{LANG.examine}--</option>
+    				<!-- BEGIN: loop -->
+    				<option value="{EXAMINE.key}"{EXAMINE.selected}>{EXAMINE.title}</option>
+    				<!-- END: loop -->
+    			</select>
+    		</div>
+    	</div>
+	<!-- END: examine -->
 	<div class="form-group">
 		<label class="col-sm-6 control-label">&nbsp;</label>
 		<div class="col-sm-18">

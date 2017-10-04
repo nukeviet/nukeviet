@@ -102,6 +102,17 @@
                 <!-- END: slist -->
             </select>
         </div>
+        <!-- BEGIN: elist_loop -->
+        <div class="form-group">
+            <label class="sr-only">{LANG.ExamineSel}</label>
+            <select class="form-control select2" name="eid">
+                <option value="">---{LANG.ExamineSel}---</option>
+                <!-- BEGIN: elist -->
+                <option value="{ELIST.id}">{ELIST.title}</option>
+                <!-- END: elist -->
+            </select>
+        </div>
+        <!-- END: elist_loop -->
         <div class="form-group">
             <label class="sr-only">{LANG.signer}</label>
             <select class="form-control select2" name="sgid">
@@ -137,13 +148,14 @@
         var cid = $('select[name="cid"]').val();
         var aid = $('select[name="aid"]').val();
         var sid = $('select[name="sid"]').val();
+        var eid = $('select[name="eid"]').val();
         var sgid = $('select[name="sgid"]').val();
 
-        if (keywords == '' && cid == '' && aid == '' && sid == '' && sgid == '') {
+        if (keywords == '' && cid == '' && aid == '' && sid == '' && eid == '' && sgid == '') {
             alert('{LANG.search_error}');
         } else {
             $('#lawlist').html('<div style="text-align: center"><em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}</div>');
-            $('#lawlist').load('{BASE_LOAD}&keywords=' + encodeURIComponent(keywords) + '&cat=' + cid + '&aid=' + aid + '&sid=' + sid + '&sgid=' + sgid);
+            $('#lawlist').load('{BASE_LOAD}&keywords=' + encodeURIComponent(keywords) + '&cat=' + cid + '&aid=' + aid + '&sid=' + sid + '&eid=' + eid + '&sgid=' + sgid);
         }
     }
 
@@ -207,6 +219,15 @@
                                 <td><label>
                                     <input class="form-control" name="end_comm_time" id="end_comm_time" value="{DATA.end_comm_time}" style="width: 110px;" maxlength="10" type="text" />
                                     &nbsp;({LANG.prm})</label></td>
+                            </tr>
+                            <tr>
+                                <td> {LANG.approval} </td>
+                                <td>
+                                <select class="form-control" name="approval" style="width: 200px">
+                                    <option value="0"{DATA.e0}>{LANG.e0}</option>
+                                    <option value="1"{DATA.e1}>{LANG.e1}</option>
+                                </select>
+                                </td>
                             </tr>
                             <!-- END: comment-->
                             <!-- BEGIN: normal_laws -->
@@ -318,6 +339,19 @@
                                 <!-- END: subopt -->
                             </select></td>
                         </tr>
+                        <!-- BEGIN: loop -->
+                        <tr>
+                            <td>{LANG.ExamineSel} <span class="red">*</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <select class="form-control select2" title="{LANG.ExamineSel}" name="eid">
+                                <!-- BEGIN: exbopt -->
+                                <option value="{EXBOPT.id}"{EXBOPT.selected}>{EXBOPT.title}</option>
+                                <!-- END: exbopt -->
+                            </select></td>
+                        </tr>
+                         <!-- END: loop -->
                         <tr>
                             <td>{LANG.signer} <span class="red">*</span></td>
                         </tr>

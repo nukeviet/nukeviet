@@ -57,12 +57,28 @@ if (empty($contents)) {
             $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
             $row['comm_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
 			if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
-	        	$row['send_comm_title'] = $lang_module['uncomm_time'];
+	        	$row['allow_comm'] = 0;
 	        }else{
-	        	$row['send_comm_title'] = $lang_module['comm_time'];
+	        	$row['allow_comm'] = 1;
 	        }
+			//Đếm số comment
+			if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
+		        $area = $module_info['funcs']['detail']['func_id'];
+		        $_where = 'a.module=' .$db_slave->quote($module_name);
+			    if ($area) {
+			        $_where .= ' AND a.area= ' . $area;
+			    }
+			    $_where .= ' AND a.id= ' . $row['id'] . ' AND a.status=1 AND a.pid=0';
+
+			    $db_slave->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_comment a')->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')->where($_where);
+
+			    $num_comm = $db_slave->query($db_slave->sql())->fetchColumn();
+		    } else {
+		        $num_comm = '';
+		    }
 			$row['start_comm_time'] = ($row['start_comm_time']>0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
             $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
+            $row['number_comm'] = sprintf($lang_module['number_comm'],$num_comm);
             $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
             $row['stt'] = $stt++;
 
@@ -96,14 +112,29 @@ if (empty($contents)) {
                     $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
                     $row['comm_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
 					if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
-			        	$row['send_comm_title'] = $lang_module['uncomm_time'];
+			        	$row['allow_comm'] = 0;
 			        }else{
-			        	$row['send_comm_title'] = $lang_module['comm_time'];
+			        	$row['allow_comm'] = 1;
 			        }
+					//Đếm số comment
+					if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
+				        $area = $module_info['funcs']['detail']['func_id'];//print_r($area);die('ok');
+				        $_where = 'a.module=' .$db_slave->quote($module_name);
+					    if ($area) {
+					        $_where .= ' AND a.area= ' . $area;
+					    }
+					    $_where .= ' AND a.id= ' . $row['id'] . ' AND a.status=1 AND a.pid=0';
+
+					    $db_slave->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_comment a')->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')->where($_where);
+
+					    $num_comm = $db_slave->query($db_slave->sql())->fetchColumn();
+				    } else {
+				        $num_comm = '';
+				    }
 					$row['start_comm_time'] = ($row['start_comm_time']>0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
 		            $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
 		            $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
-
+					$row['number_comm'] = sprintf($lang_module['number_comm'],$num_comm);
                     if ($nv_laws_setting['down_in_home']) {
                         // File download
                         if (!empty($row['files'])) {

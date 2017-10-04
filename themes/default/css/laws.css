@@ -16,7 +16,7 @@
 }
 
 .ddsmoothmenu-v {
-    
+
 }
 
 .ddsmoothmenu-v ul {
@@ -97,7 +97,7 @@
 }
 
 .lawitem tbody {
-    
+
 }
 
 .lawitem tbody.bg {
@@ -406,4 +406,30 @@ a#btn-search {
 #advance .form-inline .form-control{
     width: auto !important;
     margin-right: 2px;
+}
+
+.comm_time{
+	width: 100%;
+}
+.start_comm{
+	display: inline-block;
+	float: left;
+	color: #f7a41e;
+}
+.end_comm{
+	display: inline-block;
+	float: right;
+	color: #f7a41e;
+}
+.send_comm{
+	width: 100%;
+	height: 25px;
+	background: url(../images/laws/comment.png) no-repeat center;
+	background-size: 25px 25px;
+}
+.comm_close{
+	width: 100%;
+	height: 25px;
+	background: url(../images/laws/comment_close.png) no-repeat center;
+	background-size: 20px 20px;
 }

@@ -17,7 +17,9 @@ $groups_list = nv_groups_list();
 $catList = nv_catList();
 $aList = nv_aList();
 $sList = nv_sList();
+$eList = nv_eList();
 $scount = count($sList);
+$ecount = count($eList);
 $sgList = nv_sgList();
 $scount = count($sgList);
 
@@ -49,6 +51,9 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
     } elseif (empty($sList)) {
         $type = $lang_module['subject'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject&add";
+    }elseif (empty($eList) && $module_cofig[$module_name]['activecomm']==1) {
+        $type = $lang_module['examine'];
+        $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=examine&add";
     } elseif (empty($sgList)) {
         $type = $lang_module['signer'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=signer&add";
@@ -108,6 +113,11 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $post['sid'] = $nv_Request->get_int('sid', 'post', 0);
             if (!isset($sList[$post['sid']])) {
                 die($lang_module['erroNotSelectSubject']);
+            }
+
+			$post['eid'] = $nv_Request->get_int('eid', 'post', 0);
+            if (!isset($eList[$post['eid']]) && $module_config[$module_name]['activecomm']==1) {
+                die($lang_module['erroNotSelectExamine']);
             }
 
             $post['sgid'] = $nv_Request->get_title('sgid', 'post', '');
@@ -232,7 +242,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                 $post['exptime'] = 0;
             }
 
-			//Nếu là module lấy ý kiến thì lấy thời gian bắt đầu-kết thúc lấy ý kiến
+			//Nếu là module lấy ý kiến thì lấy thời gian bắt đầu-kết thúc lấy ý kiến, trang thái thông qua của văn bản
 			$post['start_comm_time'] = nv_substr($nv_Request->get_title('start_comm_time', 'post', '', 1), 0, 10);
             unset($m);
             if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['start_comm_time'], $m)) {
@@ -248,6 +258,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             } else {
                 $post['end_comm_time'] = 0;
             }
+			$post['approval'] = $nv_Request->get_int('approval', 'post', 0);
 
             $post['startvalid'] = nv_substr($nv_Request->get_title('startvalid', 'post', '', 1), 0, 10);
             unset($m);
@@ -266,7 +277,9 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 	                code=" . $db->quote($post['code']) . ",
 	                cid=" . $post['cid'] . ",
 	                sid=" . $post['sid'] . ",
+	                eid=" . $post['eid'] . ",
 	                sgid=" . $post['sgid'] . ",
+	                approval=" . $post['approval'] . ",
 	                note=" . $db->quote($post['note']) . ",
 	                introtext=" . $db->quote($post['introtext']) . ",
 	                bodytext=" . $db->quote($post['bodytext']) . ",
@@ -310,6 +323,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 	                " . $db->quote($post['code']) . ",
 	                " . $post['cid'] . ",
 	                " . $post['sid'] . ",
+	                " . $post['eid'] . ",
 	                " . $post['sgid'] . ",
 	                " . $db->quote($post['note']) . ",
 	                " . $db->quote($post['introtext']) . ",
@@ -318,6 +332,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 	                " . $db->quote($post['groups_view']) . ",
 	                " . $db->quote($post['groups_download']) . ",
 	                " . $db->quote($post['files']) . ",
+	                " . $post['approval'] . ",
 	                1, " . NV_CURRENTTIME . ", 0,
 	                " . $post['publtime'] . ",
 	                " . $post['start_comm_time'] . ",
@@ -374,6 +389,8 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 
             $post['select0'] = ($post['exptime'] == 0 or $post['exptime'] > NV_CURRENTTIME) ? " selected=\"selected\"" : "";
             $post['select1'] = ($post['exptime'] != 0 and $post['exptime'] <= NV_CURRENTTIME) ? " selected=\"selected\"" : "";
+			$post['e0'] = ($post['approval'] == 0 ) ? " selected=\"selected\"" : "";
+            $post['e1'] = ($post['approval'] == 1 ) ? " selected=\"selected\"" : "";
             $post['display'] = ($post['exptime'] == 0 or $post['exptime'] > NV_CURRENTTIME) ? "none" : "block";
 
             $post['groups_view'] = !empty($post['groups_view']) ? explode(",", $post['groups_view']) : array();
@@ -392,7 +409,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $post['groups_view'] = $post['groups_download'] = array(
                 6
             );
-            $post['cid'] = $post['sid'] = $post['sgid'] = $post['who_view'] = $post['who_download'] = 0;
+            $post['cid'] = $post['sid'] = $post['sgid'] = $post['eid'] = $post['who_view'] = $post['who_download'] = 0;
 
             $post['groupcss'] = $post['groupcss2'] = "groupcss0";
             $post['files'] = '';
@@ -427,6 +444,15 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $xtpl->assign('SUBOPT', $_s);
             $xtpl->parse('add.subopt');
         }
+
+		if($module_config[$module_name]['activecomm']){
+			foreach ($eList as $_s) {
+	            $_s['selected'] = $_s['id'] == $post['eid'] ? " selected=\"selected\"" : "";
+	            $xtpl->assign('EXBOPT', $_s);
+	            $xtpl->parse('add.loop.exbopt');
+	        }
+			$xtpl->parse('add.loop');
+		}
 
         foreach ($sgList as $_sg) {
             $_sg['selected'] = $_sg['id'] == $post['sgid'] ? " selected=\"selected\"" : "";
@@ -556,6 +582,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $cid = $nv_Request->get_int('cat', 'get', 0);
             $aid = $nv_Request->get_int('aid', 'get', 0);
             $sid = $nv_Request->get_int('sid', 'get', 0);
+            $eid = $nv_Request->get_int('eid', 'get', 0);
             $sgid = $nv_Request->get_int('sgid', 'get', 0);
 
             if (!empty($keywords)) {
@@ -579,6 +606,11 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             if (!empty($sid) and isset($sList[$sid])) {
                 $where[] = "t1.sid=" . $sid;
                 $base_url .= "&sid=" . $sid;
+            }
+
+			if (!empty($eid) and isset($eList[$eid]) && $module_config[$module_name]['activecomm']==1) {
+                $where[] = "t1.eid=" . $eid;
+                $base_url .= "&eid=" . $eid;
             }
 
             if (!empty($sgid) and isset($sgList[$sgid])) {
@@ -660,6 +692,14 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         $xtpl->assign('SLIST', $_sList);
         $xtpl->parse('main.slist');
     }
+
+	if($module_config[$module_name]['activecomm']){
+		foreach ($eList as $_eList) {
+	        $xtpl->assign('ELIST', $_eList);
+	        $xtpl->parse('main.elist_loop.elist');
+	    }
+		$xtpl->parse('main.elist_loop');
+	}
 
     foreach ($sgList as $_sgList) {
         $xtpl->assign('SGLIST', $_sgList);

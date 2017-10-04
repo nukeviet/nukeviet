@@ -45,7 +45,12 @@ function nv_theme_laws_main($array_data, $generate_page)
         }
 		if($module_config[$module_name]['activecomm']){
 			$xtpl->parse('main.loop.comm');
-			$xtpl->parse('main.loop.send_comm');
+			if($row['allow_comm']){
+				$xtpl->parse('main.loop.send_comm');
+			}else{
+				$xtpl->parse('main.loop.comm_close');
+			}
+
 		}else{
 			$xtpl->parse('main.loop.publtime');
 		}
@@ -53,7 +58,6 @@ function nv_theme_laws_main($array_data, $generate_page)
     }
 
 	if($module_config[$module_name]['activecomm']){
-			$xtpl->parse('main.comm_title');
 			$xtpl->parse('main.send_comm_title');
 	}else{
 		$xtpl->parse('main.publtime_title');
@@ -106,7 +110,12 @@ function nv_theme_laws_maincat($mod, $array_data)
                 }
 				if($module_config[$module_name]['activecomm']){
 					$xtpl->parse('main.loop.row.comm');
-					$xtpl->parse('main.loop.row.send_comm');
+					if($rows['allow_comm']){
+						$xtpl->parse('main.loop.row.send_comm');
+					}else{
+						$xtpl->parse('main.loop.row.comm_close');
+					}
+
 				}else{
 					$xtpl->parse('main.loop.row.publtime');
 				}
@@ -127,7 +136,6 @@ function nv_theme_laws_maincat($mod, $array_data)
     }
 
 	if($module_config[$module_name]['activecomm']){
-			$xtpl->parse('main.comm_title');
 			$xtpl->parse('main.send_comm_title');
 	}else{
 		$xtpl->parse('main.publtime_title');
@@ -163,7 +171,7 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
     $array_data['exptime'] = $array_data['exptime'] ? nv_date('d/m/Y', $array_data['exptime']) : '';
 	$array_data['start_comm_time'] = $array_data['start_comm_time'] ? nv_date('d/m/Y', $array_data['start_comm_time']) : $lang_module['unlimit'];
 	$array_data['end_comm_time'] = $array_data['end_comm_time'] ? nv_date('d/m/Y', $array_data['end_comm_time']) : $lang_module['unlimit'];
-
+	$array_data['approval'] = $array_data['approval'] == 1 ? $lang_module['e1'] : $lang_module['e0'];
     if (isset($nv_laws_listcat[$array_data['cid']])) {
         $array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
         $array_data['cat_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $nv_laws_listcat[$array_data['cid']]['alias'];
@@ -206,12 +214,19 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
 	if($module_config[$module_name]['activecomm']){
 		$xtpl->parse('main.field.start_comm_time');
 		$xtpl->parse('main.field.end_comm_time');
+		$xtpl->parse('main.field.approval');
 	}
 
     if ((empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['publtime'])) && $module_config[$module_name]['activecomm']==0) {
         $filled_field++;
         $xtpl->parse('main.field.publtime');
     }
+
+	if ((empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['examine'])) && $module_config[$module_name]['activecomm']==1) {
+        $filled_field++;
+        $xtpl->parse('main.field.examine');
+    }
+
     if (empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['startvalid'])) {
         $filled_field++;
         $xtpl->parse('main.field.startvalid');
@@ -548,7 +563,7 @@ function nv_theme_laws_signer($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_list_other($array_data)
 {
-    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting, $module_config, $site_mods;
 
     $xtpl = new XTemplate('list_other.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -557,11 +572,23 @@ function nv_theme_laws_list_other($array_data)
     foreach ($array_data as $row) {
         $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
         $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
+		$row['start_comm_time'] = ($row['start_comm_time']>0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
+        $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
+        $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
         $xtpl->assign('ROW', $row);
+		if(isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])){
+		$xtpl->parse('main.loop.comm_time');
+	}else{
+		$xtpl->parse('main.loop.publtime');
+	}
         $xtpl->parse('main.loop');
         $i++;
     }
-
+	if(isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])){
+		$xtpl->parse('main.comm_time');
+	}else{
+		$xtpl->parse('main.publtime_title');
+	}
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

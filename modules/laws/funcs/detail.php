@@ -135,6 +135,13 @@ if (!empty($row['sgid'])) {
     $row['signer_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=signer/' . $row['sgid'] . '/' . change_alias($row['signer']);
 }
 
+// Uy ban tham tra
+if (!empty($row['eid'])) {
+    $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_examine WHERE id = ' . $row['eid'];
+    $result = $db->query($sql);
+    list ($row['examine']) = $result->fetch(3);
+}
+
 // File download
 if (!empty($row['files'])) {
     $row['files'] = explode(',', $row['files']);
@@ -230,7 +237,7 @@ if ($nv_laws_setting['detail_other']) {
     } else {
         $content_comment = '';
     }
-//print_r(NV_COMM_ID);die('ok');
+//print_r($row);die('ok');
 $contents = nv_theme_laws_detail($row, $other_cat, $other_area, $other_subject, $other_signer, $content_comment);
 
 include NV_ROOTDIR . '/includes/header.php';

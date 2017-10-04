@@ -22,12 +22,18 @@
                 <td>{DATA.start_comm_time}</td>
             </tr>
             <!-- END: start_comm_time -->
-             <!-- BEGIN: end_comm_time -->
+            <!-- BEGIN: end_comm_time -->
             <tr class="hoatim">
                 <td class="text-right">{LANG.end_comm_time_title}</td>
                 <td>{DATA.end_comm_time}</td>
             </tr>
             <!-- END: end_comm_time -->
+             <!-- BEGIN: approval -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.approval}</td>
+                <td>{DATA.approval}</td>
+            </tr>
+            <!-- END: approval -->
             <!-- BEGIN: startvalid -->
             <tr class="hoatim">
                 <td class="text-right">{LANG.startvalid}</td>
@@ -65,6 +71,14 @@
                 </td>
             </tr>
             <!-- END: subject -->
+            <!-- BEGIN: examine -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.examine}</td>
+                <td>
+                    {DATA.examine}
+                </td>
+            </tr>
+            <!-- END: examine -->
             <!-- BEGIN: signer -->
             <tr class="hoatim">
                 <td class="text-right">{LANG.signer}</td>

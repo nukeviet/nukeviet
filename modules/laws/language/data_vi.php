@@ -37,3 +37,9 @@ $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_d
 	(2, 'So-GD-DT', 'Sở GD&amp;ĐT', '', '', 0, 5, 1412265295, 2),
 	(3, 'Phong-GD-DT', 'Phòng GD', '', '', 0, 5, 1412265295, 3),
 	(4, 'Khac', 'Khác', '', '', 0, 5, 1412265295, 4)");
+
+$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_examine VALUES
+	(1, 'Ủy ban Pháp luật', 1),
+	(2, 'Ủy ban Đối ngoại', 2),
+	(3, 'Ủy ban Kinh tế', 3),
+	(4, 'Ủy ban Tư pháp', 4)");
