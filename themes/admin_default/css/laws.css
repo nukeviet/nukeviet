@@ -4,7 +4,7 @@
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
- 
+
 .myh3 {
     background: url('../images/arrows/arrow3_red.gif') no-repeat left center;
     margin: 10px 0;
@@ -114,4 +114,8 @@
 
 .pointer {
     cursor: pointer;
+}
+
+.form-inline .form-group{
+	margin-top: 5px;
 }

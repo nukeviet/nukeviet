@@ -19,6 +19,7 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_set_replace";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_examine";
 
 $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_area(
@@ -74,6 +75,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   code varchar(50) NOT NULL,
   cid smallint(4) unsigned NOT NULL DEFAULT '0',
   sid smallint(4) unsigned NOT NULL DEFAULT '0',
+  eid smallint(4) unsigned NOT NULL DEFAULT '0',
   sgid smallint(4) unsigned NOT NULL DEFAULT '0',
   note text NOT NULL,
   introtext text NOT NULL,
@@ -83,6 +85,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   groups_download varchar(255) NOT NULL,
   files mediumtext NOT NULL,
   status tinyint(1) NOT NULL,
+  approval tinyint(1) NOT NULL,
   addtime int(11) NOT NULL,
   edittime int(11) NOT NULL,
   publtime int(11) NOT NULL DEFAULT '0',
@@ -124,6 +127,13 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   config_value varchar(255) NOT NULL,
   UNIQUE KEY config_name (config_name)
 )ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_examine(
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(250) NOT NULL,
+  weight smallint(4) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('nummain', '50'),

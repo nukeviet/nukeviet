@@ -15,6 +15,7 @@ $allow_func = array(
     'area',
     'cat',
     'subject',
+    'examine',
     'getlid',
     'signer',
     'scontent',
@@ -166,6 +167,24 @@ function nv_sList()
     return $list;
 }
 
+function nv_eList()
+{
+    global $db, $module_data;
+
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_examine ORDER BY weight ASC";
+    $result = $db->query($sql);
+    $list = array();
+    while ($row = $result->fetch()) {
+        $list[$row['id']] = array( //
+            'id' => (int) $row['id'], //
+            'title' => $row['title'], //
+            'weight' => (int) $row['weight'] //
+        );
+    }
+
+    return $list;
+}
+
 function nv_sgList()
 {
     global $db, $module_data;
@@ -195,6 +214,20 @@ function fix_subjectWeight()
     while ($row = $result->fetch()) {
         $weight++;
         $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET weight=" . $weight . " WHERE id=" . $row['id'];
+        $db->query($query);
+    }
+}
+
+function fix_examineWeight()
+{
+    global $db, $module_data;
+
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_examine ORDER BY weight ASC";
+    $result = $db->query($sql);
+    $weight = 0;
+    while ($row = $result->fetch()) {
+        $weight++;
+        $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_examine SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query($query);
     }
 }

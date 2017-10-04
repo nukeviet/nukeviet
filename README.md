@@ -16,5 +16,16 @@ INSERT INTO `laws_my`.`nv4_config` (`lang`, `module`, `config_name`, `config_val
 ('vi', 'laws', 'perpagecomm', '5'),
 ('vi', 'laws', 'timeoutcomm', '360');
 
+CREATE TABLE IF NOT EXISTS `nv4_vi_laws_examine` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `weight` smallint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `nv4_vi_laws_examine`
+ ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `nv4_vi_laws_row` ADD `start_comm_time` INT(11) NULL AFTER `publtime`;
 ALTER TABLE `nv4_vi_laws_row` ADD `end_comm_time` INT(11) NULL AFTER `start_comm_time`;
+ALTER TABLE `nv4_vi_laws_row` ADD `eid` INT(11) NULL DEFAULT '0' AFTER `sid`;
+ALTER TABLE `nv4_vi_laws_row` ADD `approval` TINYINT(1) NOT NULL DEFAULT '0' AFTER `status`;//trạng thái đã thông qua/chưa thông qua

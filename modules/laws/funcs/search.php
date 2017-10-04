@@ -36,6 +36,10 @@ $sstatus = $nv_Request->get_int('status', 'get', 0);
 $array_search['sstatus'] = $sstatus;
 $is_advance = $nv_Request->get_int('is_advance', 'get', 0);
 $array_search['is_advance'] = $is_advance;
+$approval = $nv_Request->get_int('approval', 'get', 0);
+$array_search['approval'] = $area;
+$examine = $nv_Request->get_int('examine', 'get', 0);
+$array_search['examine'] = $examine;
 
 unset($m);
 if (preg_match("/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $sfrom, $m)) {
@@ -54,18 +58,18 @@ if (preg_match("/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $sto, $m)) {
 $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&q=' . htmlspecialchars(nv_unhtmlspecialchars($key));
 $where = '';
 $search = false;
-if (!empty($key) or !empty($area) or !empty($cat) or !empty($subject) or !empty($sstatus) or !empty($ssigner) or !empty($sfrom1) or !empty($sto1)) {
+if (!empty($key) or !empty($area) or !empty($cat) or !empty($subject) or !empty($sstatus) or !empty($ssigner) or !empty($sfrom1) or !empty($sto1) or !empty($approval) or !empty($examine)) {
     $search = true;
-    
+
     if (!empty($key)) {
         $dbkey = $db->dblikeescape($key);
         $keyhtml = nv_htmlspecialchars($key);
         $where .= " AND ( title LIKE '%" . $keyhtml . "%' OR introtext LIKE '%" . $keyhtml . "%' OR code LIKE '%" . $keyhtml . "%' OR bodytext LIKE '%" . $dbkey . "%' )";
     }
-    
+
     if (!empty($area)) {
         $base_url_rewrite .= "&area=" . $area;
-        
+
         $tmp = $nv_laws_listarea[$area];
         $in = "";
         if (empty($tmp['subcats'])) {
@@ -75,13 +79,13 @@ if (!empty($key) or !empty($area) or !empty($cat) or !empty($subject) or !empty(
             $in[] = $area;
             $in = " AND t2.area_id IN(" . implode(",", $in) . ")";
         }
-        
+
         $where .= $in;
     }
-    
+
     if (!empty($cat)) {
         $base_url_rewrite .= "&cat=" . $cat;
-        
+
         $tmp = $nv_laws_listcat[$cat];
         $in = "";
         if (empty($tmp['subcats'])) {
@@ -91,25 +95,35 @@ if (!empty($key) or !empty($area) or !empty($cat) or !empty($subject) or !empty(
             $in[] = $cat;
             $in = " AND cid IN(" . implode(",", $in) . ")";
         }
-        
+
         $where .= $in;
     }
-    
+
     if (!empty($subject)) {
         $where .= " AND sid=" . $subject;
         $base_url_rewrite .= "&subject=" . $subject;
     }
-    
+
+	if ($approval != 2 && $module_config[$module_name]['activecomm']==1) {
+        $where .= " AND approval=" . $approval;
+        $base_url_rewrite .= "&approval=" . $approval;
+    }
+
+	if (!empty($examine) && $module_config[$module_name]['activecomm']==1) {
+        $where .= " AND eid=" . $examine;
+        $base_url_rewrite .= "&examine=" . $examine;
+    }
+
     if (!empty($sfrom1)) {
         $where .= " AND publtime>=" . $sfrom1;
         $base_url_rewrite .= "&sfrom=" . $sfrom;
     }
-    
+
     if (!empty($sto1)) {
         $where .= " AND publtime<=" . $sto1;
         $base_url_rewrite .= "&sto=" . $sto;
     }
-    
+
     if (!empty($sstatus)) {
         if ($sstatus == 1) {
             $where .= " AND ( exptime=0 OR exptime>=" . NV_CURRENTTIME . ")";
@@ -119,7 +133,7 @@ if (!empty($key) or !empty($area) or !empty($cat) or !empty($subject) or !empty(
             $base_url_rewrite .= "&status=" . $sstatus;
         }
     }
-    
+
     if ($is_advance) {
         $base_url_rewrite .= "&is_advance=" . $is_advance;
     }
@@ -170,7 +184,7 @@ while ($row = $result->fetch()) {
     $row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
     $row['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $row['alias'];
     $row['stt'] = $number++;
-    
+
     $array_data[] = $row;
 }
 
