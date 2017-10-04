@@ -58,7 +58,6 @@ $lang_module['titlesite'] = 'Modification Le titre du site';
 $lang_module['error_name'] = 'Erreur: Manque de titre';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Nombre de sous-catégories';
-$lang_module['inhome'] = 'Afficher à l\'Accueil';
 $lang_module['numlinks'] = 'Nombre de liens';
 $lang_module['numcomments'] = 'Nombre de commentaire';
 $lang_module['newday'] = 'Icone des nouvelles (par jour)';

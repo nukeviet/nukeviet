@@ -32,7 +32,7 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
     nv_jsonOutput($array_data);
 }
 
-//kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa
+// Kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa
 if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('check_edit', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $return = 'OK_';
@@ -131,6 +131,8 @@ $array_imgposition = array(
     1 => $lang_module['imgposition_1'],
     2 => $lang_module['imgposition_2']
 );
+$total_news_current = nv_get_mod_countrows();
+$is_submit_form = false;
 
 $rowcontent = array(
     'id' => '',
@@ -186,6 +188,7 @@ $groups_list = nv_groups_list();
 $array_keywords_old = array();
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 
+// ID của bài viết cần sửa hoặc cần copy
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 $copy = $nv_Request->get_int('copy', 'get,post',0);
 
@@ -193,7 +196,16 @@ if ($rowcontent['id'] > 0) {
     $check_permission = false;
     $rowcontent = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
     if (!empty($rowcontent['id'])) {
-        $rowcontent['mode'] = 'edit';
+        $rowcontent['old_status'] = $rowcontent['status'];
+        // Nếu bài viết đang bị đình chỉ thì trả lại trang thái ban đầu để thao tác, trước khi lưu vào CSDL sẽ căn cứ vào chuyên mục có bị khóa hay không mà build lại trạng thái
+        if ($rowcontent['status'] > $global_code_defined['row_locked_status']) {
+            $rowcontent['status'] -= ($global_code_defined['row_locked_status'] + 1);
+        }
+        if (!$copy) {
+            $rowcontent['mode'] = 'edit';
+        } else {
+            $rowcontent['mode'] = 'add';
+        }
         $arr_catid = explode(',', $rowcontent['listcatid']);
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission = true;
@@ -221,6 +233,7 @@ if ($rowcontent['id'] > 0) {
                 $check_permission = true;
             }
         }
+        $rowcontent['old_listcatid'] = $arr_catid;
     }
 
     if (!$check_permission) {
@@ -261,70 +274,82 @@ if ($rowcontent['id'] > 0) {
     }
 }
 
+// Xác định các chuyên mục được quyền đăng bài, xuất bản bài viết, sửa bài, kiểm duyệt bài, các chuyên mục hiện đang bị khóa
 $array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = array();
+$array_cat_locked = array();
 foreach ($global_array_cat as $catid_i => $array_value) {
-    $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = false;
-    if (defined('NV_IS_ADMIN_MODULE')) {
-        $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = true;
-    } elseif (isset($array_cat_admin[$admin_id][$catid_i])) {
-        if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
+    if (!in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
+        $array_cat_locked[] = $catid_i;
+    }
+    /**
+     * Đăng bài thì kiểm tra chuyên mục không bị đình chỉ
+     * Sửa bài thì kiểm tra thêm cả chuyên mục bị đình chỉ và bài viết đang sửa thuộc chuyên mục đó
+     */
+    if (in_array($array_value['status'], $global_code_defined['cat_visible_status']) or ($rowcontent['id'] > 0 and in_array($catid_i, $rowcontent['old_listcatid']))) {
+        $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = false;
+        if (defined('NV_IS_ADMIN_MODULE')) {
             $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = true;
-        } else {
-            if ($array_cat_admin[$admin_id][$catid_i]['add_content'] == 1) {
-                $check_add_content = true;
-            }
+        } elseif (isset($array_cat_admin[$admin_id][$catid_i])) {
+            if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
+                $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = true;
+            } else {
+                if ($array_cat_admin[$admin_id][$catid_i]['add_content'] == 1) {
+                    $check_add_content = true;
+                }
 
-            if ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1) {
-                $check_pub_content = true;
-            }
+                if ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1) {
+                    $check_pub_content = true;
+                }
 
-            if ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1) {
-                $check_censor_content = true;
-            }
+                if ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1) {
+                    $check_censor_content = true;
+                }
 
-            if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
-                $check_edit_content = true;
+                if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
+                    $check_edit_content = true;
+                }
             }
         }
-    }
-    if ($check_add_content) {
-        $array_cat_add_content[] = $catid_i;
-    }
 
-    if ($check_pub_content) {
-        $array_cat_pub_content[] = $catid_i;
-    }
-    if ($check_censor_content) {
-        //Nguoi kiem duyet
-
-        $array_censor_content[] = $catid_i;
-    }
-
-    if ($check_edit_content) {
-        $array_cat_edit_content[] = $catid_i;
+        if ($check_add_content) {
+            $array_cat_add_content[] = $catid_i;
+        }
+        if ($check_pub_content) {
+            $array_cat_pub_content[] = $catid_i;
+        }
+        if ($check_censor_content) {
+            $array_censor_content[] = $catid_i;
+        }
+        if ($check_edit_content) {
+            $array_cat_edit_content[] = $catid_i;
+        }
     }
 }
 
 if ($nv_Request->get_int('save', 'post') == 1) {
+    $is_submit_form = true;
     $rowcontent['referer'] = $nv_Request->get_string('referer', 'get,post');
     $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
     $rowcontent['listcatid'] = implode(',', $catids);
     $rowcontent['catid'] = $nv_Request->get_int('catid', 'post', 0);
 
     $id_block_content_post = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', array()));
-    if ($nv_Request->isset_request('status1', 'post') || $copy) {
+
+    if ($nv_Request->isset_request('status1', 'post') or $copy) {
+        // Xuất bản
         $rowcontent['status'] = 1;
-        //Dang tin
     } elseif ($nv_Request->isset_request('status8', 'post')) {
+        // Chuyển đăng bài
         $rowcontent['status'] = 8;
     } elseif ($nv_Request->isset_request('status4', 'post')) {
-        $rowcontent['status'] = ($rowcontent['id'] > 0) ? $rowcontent['status']: 4;
-        //Luu tam
+        // Luu tam
+        $rowcontent['status'] = ($rowcontent['id'] > 0) ? $rowcontent['status'] : 4;
     } elseif ($nv_Request->isset_request('status5', 'post')) {
-        $rowcontent['status'] = 5;  // Chuyển duyệt bài
+        // Chuyển duyệt bài
+        $rowcontent['status'] = 5;
     } else {
+        // Gui, cho bien tap
         $rowcontent['status'] = 6;
-        //Gui, cho bien tap
     }
 
     $message_error_show = $lang_module['permissions_pub_error'];
@@ -343,6 +368,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         if (!in_array($catid_i, $array_cat_check_content)) {
             $error[] = sprintf($message_error_show, $global_array_cat[$catid_i]['title']);
         }
+    }
+    if (!empty($catids)) {
+        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
     }
 
     $rowcontent['topicid'] = $nv_Request->get_int('topicid', 'post', 0);
@@ -416,7 +444,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
     // Lua chon Layout
     $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
-    
+
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
     $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
@@ -506,9 +534,6 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
 
     if (empty($error)) {
-        if (!empty($catids)) {
-            $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
-        }
         if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
             $weightopic = intval($weightopic) + 1;
@@ -586,12 +611,18 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $rowcontent['homeimgfile'] = '';
         }
 
-        if ($rowcontent['id'] == 0 || $copy) {
+        // Xử lý lưu vào CSDL khi đăng mới hoặc sao chép
+        if ($rowcontent['id'] == 0 or $copy) {
             if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
                 $rowcontent['publtime'] = NV_CURRENTTIME;
             }
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
+            }
+
+            // Nếu bài viết trong chuyên mục bị khóa thì xây dựng lại status
+            if (array_intersect($catids, $array_cat_locked) != array() and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
+                $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
             }
 
             $_weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
@@ -697,9 +728,13 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             }
         } else {
             $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
+            if ($rowcontent_old['status'] > $global_code_defined['row_locked_status']) {
+                $rowcontent_old['status'] -= ($global_code_defined['row_locked_status'] + 1);
+            }
             if ($rowcontent_old['status'] == 1) {
                 $rowcontent['status'] = 1;
             }
+
             if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
                 $rowcontent['publtime'] = $rowcontent_old['addtime'];
             }
@@ -707,6 +742,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
             }
+
+            // Nếu bài viết trong chuyên mục bị khóa thì xây dựng lại status
+            if (array_intersect($catids, $array_cat_locked) != array() and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
+                $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
+            }
+
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
                 catid=' . intval($rowcontent['catid']) . ',
                 listcatid=:listcatid,
@@ -831,7 +872,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 nv_news_fix_block($bid_i, false);
             }
 
-            if ($rowcontent['keywords'] != $rowcontent['keywords_old'] || $copy) {
+            if ($rowcontent['keywords'] != $rowcontent['keywords_old'] or $copy) {
                 $keywords = explode(',', $rowcontent['keywords']);
                 $keywords = array_map('strip_punctuation', $keywords);
                 $keywords = array_map('trim', $keywords);
@@ -1049,14 +1090,20 @@ foreach ($global_array_cat as $catid_i => $array_value) {
         $array_cat = GetCatidInParent($catid_i);
         $check_show = array_intersect($array_cat, $array_cat_check_content);
     }
-    if (!empty($check_show)) {
+    /**
+     * Thêm bài viết không hiển thị chuyên mục bị đình chỉ hoạt động
+     * Sửa bài viết hiển thị chuyên mục bị đình chỉ hoạt động với:
+     * - Bài viết đang thuộc chuyên mục thì enable
+     * - Bài viết chưa nằm trong chuyên mục thì disable
+     */
+    if (!empty($check_show) and ($rowcontent['id'] > 0 or in_array($array_value['status'], $global_code_defined['cat_visible_status']))) {
         $space = intval($array_value['lev']) * 30;
         $catiddisplay = (sizeof($array_catid_in_row) > 1 and (in_array($catid_i, $array_catid_in_row))) ? '' : ' display: none;';
         $temp = array(
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
-            'disabled' => (!in_array($catid_i, $array_cat_check_content)) ? ' disabled="disabled"' : '',
+            'disabled' => (!in_array($catid_i, $array_cat_check_content) or (!in_array($array_value['status'], $global_code_defined['cat_visible_status']) and !in_array($catid_i, $array_catid_in_row))) ? ' disabled="disabled"' : '',
             'checked' => (in_array($catid_i, $array_catid_in_row)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '',
             'catiddisplay' => $catiddisplay
@@ -1208,9 +1255,15 @@ if (!empty($error)) {
     $xtpl->parse('main.error');
 }
 
+// Thông báo vượt quá hệ thống lớn
+if (!$is_submit_form and $total_news_current == NV_MIN_MEDIUM_SYSTEM_ROWS and $rowcontent['mode'] == 'add') {
+    $xtpl->assign('LARGE_SYS_MESSAGE', sprintf($lang_module['large_sys_message'], number_format($total_news_current, 0, ',', '.')));
+    $xtpl->parse('main.large_sys_note');
+}
+
 $status_save = true;
 
-//Gioi hoan quyen
+// Gioi han quyen
 if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
     $xtpl->parse('main.status_save');
 } else {

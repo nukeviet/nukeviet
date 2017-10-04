@@ -13,7 +13,9 @@ if ((! defined('NV_SYSTEM') and ! defined('NV_ADMIN')) or ! defined('NV_MAINFILE
 }
 
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
-global $db, $nv_Request, $nv_plugin_area, $headers;
+
+// Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
+global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global;
 
 $contents = ob_get_contents();
 ob_end_clean();

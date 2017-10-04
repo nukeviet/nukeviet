@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: large_sys_note -->
+<div class="alert alert-info">{LARGE_SYS_MESSAGE}</div>
+<!-- END: large_sys_note -->
 <!-- BEGIN: error -->
 <div class="alert alert-danger">
 	{error}
@@ -246,7 +249,7 @@
                             </select>
                             </div>
                         </li>
-                    
+
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>

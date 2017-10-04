@@ -100,7 +100,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
                     $sub_nav_item = array();
 
                     if ($modvalues['module_file'] == 'news' or $modvalues['module_file'] == 'weblinks') {
-                        $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat')->where('parentid=0 AND inhome=1')->order('weight ASC')->limit(10);
+                        $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat')->where('parentid=0 AND ' . ($modvalues['module_file'] == 'news' ? 'status=1' : 'inhome=1'))->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
                             $sub_nav_item[] = array(
