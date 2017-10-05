@@ -19,9 +19,6 @@ $module_version = array(
     'version' => '4.2.01',
     'date' => 'Fri, June 16, 2017 3:55:20 AM',
     'author' => 'VINADES (contact@vinades.vn)',
-    'uploads_dir' => array(
-        $module_name
-    ),
     'note' => 'Module playback of video-clips',
     'uploads_dir' => array(
         $module_upload,
