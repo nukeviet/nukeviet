@@ -12,7 +12,6 @@
             <col width="125" />
             <col />
             <!-- END: publtime_col -->
-            <col width="100"/>
             <!-- BEGIN: down_in_home_col --><col width="130" /><!-- END: down_in_home_col -->
         </colgroup>
         <thead>
