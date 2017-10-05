@@ -7,14 +7,20 @@
  */
 
 function nv_chang_cat(catid, mod) {
-	var nv_timer = nv_settimeout_disable('id_' + mod + '_' + catid, 5000);
-	var new_vid = $('#id_' + mod + '_' + catid).val();
+    var obj = $('#id_' + mod + '_' + catid);
+	var new_vid = obj.val();
+	if (mod == 'status' && new_vid == 0 && !confirm(obj.data('cmess'))) {
+	   obj.find('option').prop('selected', false);
+	   obj.find('option[value="' + obj.data('val') + '"]').prop('selected', true);
+	   return 0;
+	}
+    obj.prop('disabled', true);
 	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
 		var r_split = res.split('_');
 		if (r_split[0] != 'OK') {
 			alert(nv_is_change_act_confirm[2]);
 		}
-		clearTimeout(nv_timer);
+		obj.prop('disabled', false);
 		var parentid = parseInt(r_split[1]);
 		nv_show_list_cat(parentid);
 		return;
@@ -573,7 +579,7 @@ $(document).ready(function(){
         e.preventDefault();
         modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
     });
-    
+
     // Setting Instant Articles
     $(document).delegate('[data-toggle="selectall"]', 'focus', function() {
         $(this).select();

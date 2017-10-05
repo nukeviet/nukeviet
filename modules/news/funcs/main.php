@@ -118,7 +118,7 @@ if (empty($contents)) {
             ->order($order_articles_by . ' DESC');
 
         foreach ($global_array_cat as $_catid => $array_cat_i) {
-            if ($array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1) {
+            if ($array_cat_i['parentid'] == 0 and $array_cat_i['status'] == 1) {
                 $array_cat[$key] = $array_cat_i;
                 $featured = 0;
                 if ($array_cat_i['featured'] != 0) {
@@ -191,7 +191,7 @@ if (empty($contents)) {
             ->where('status= 1 AND inhome=1')
             ->order($order_articles_by . ' DESC');
         foreach ($global_array_cat as $_catid => $array_cat_i) {
-            if ($array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1) {
+            if ($array_cat_i['parentid'] == 0 and $array_cat_i['status'] == 1) {
                 $array_catpage[$key] = $array_cat_i;
                 $featured = 0;
                 if ($array_cat_i['featured'] != 0) {

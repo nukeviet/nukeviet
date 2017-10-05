@@ -12,6 +12,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
+/**
+ * Khi di chuyển bài viết sẽ làm mất hoàn toàn các chuyên mục cũ dó đó nếu bài viết
+ * đang bị đình chỉ thì chúng sẽ được trả lại trạng thái trước đó.
+ */
+
 $page_title = $lang_module['move'];
 
 $id_array = array();
@@ -20,21 +25,36 @@ $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', arr
 $catid = $nv_Request->get_int('catid', 'get,post', 0);
 
 if ($nv_Request->isset_request('idcheck', 'post')) {
+    // Kiểm tra ID các chuyên mục phải hợp lệ
+    $array_catid_allowed = array();
+    foreach ($global_array_cat as $catid_i => $array_value) {
+        if (in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
+            $array_catid_allowed[$catid_i] = $catid_i;
+        }
+    }
+    $catids = array_intersect($catids, $array_catid_allowed);
     $id_array = array_unique($nv_Request->get_typed_array('idcheck', 'post', 'int', array()));
+
     if (!empty($id_array) and !empty($catids)) {
         $listcatid = implode(',', $catids);
-        if (empty($catid)) {
+        if (empty($catid) or !in_array($catid, $catids)) {
             $catid = $catids[0];
         }
 
-        $result = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
-        while (list($id, $listcatid_old) = $result->fetch(3)) {
+        $result = $db->query('SELECT id, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
+        while (list($id, $listcatid_old, $status) = $result->fetch(3)) {
+            // Xóa hết các chuyên mục cũ đi
             $array_catid_old = explode(',', $listcatid_old);
             foreach ($array_catid_old as $catid_i) {
                 $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id);
             }
 
-            $db->exec('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid=' . $catid . ', listcatid=' . $db->quote($listcatid) . ' WHERE id=' . $id);
+            // Nếu bài viết hiện tại đang bị khóa bởi chuyên mục thì sau khi di chuyển qua chuyên mục khác nó sẽ trở lại trạng thái ban đầu
+            $sql_status = '';
+            if ($status > $global_code_defined['row_locked_status']) {
+                $sql_status = ', status=' . ($status - ($global_code_defined['row_locked_status'] + 1));
+            }
+            $db->exec('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid=' . $catid . ', listcatid=' . $db->quote($listcatid) . $sql_status . ' WHERE id=' . $id);
 
             foreach ($catids as $catid_i) {
                 try {
@@ -78,18 +98,20 @@ while (list($id, $title) = $result->fetch(3)) {
 }
 
 foreach ($global_array_cat as $catid_i => $array_value) {
-    $space = intval($array_value['lev']) * 30;
-    $catiddisplay = (sizeof($catids) > 1 and (in_array($catid_i, $catids))) ? '' : ' display: none;';
-    $temp = array(
-        'catid' => $catid_i,
-        'space' => $space,
-        'title' => $array_value['title'],
-        'checked' => (in_array($catid_i, $catids)) ? ' checked="checked"' : '',
-        'catidchecked' => ($catid_i == $catid) ? ' checked="checked"' : '',
-        'catiddisplay' => $catiddisplay
-    );
-    $xtpl->assign('CATS', $temp);
-    $xtpl->parse('main.catid');
+    if (in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
+        $space = intval($array_value['lev']) * 30;
+        $catiddisplay = (sizeof($catids) > 1 and (in_array($catid_i, $catids))) ? '' : ' display: none;';
+        $temp = array(
+            'catid' => $catid_i,
+            'space' => $space,
+            'title' => $array_value['title'],
+            'checked' => (in_array($catid_i, $catids)) ? ' checked="checked"' : '',
+            'catidchecked' => ($catid_i == $catid) ? ' checked="checked"' : '',
+            'catiddisplay' => $catiddisplay
+        );
+        $xtpl->assign('CATS', $temp);
+        $xtpl->parse('main.catid');
+    }
 }
 
 $xtpl->parse('main');

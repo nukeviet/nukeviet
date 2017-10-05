@@ -13,25 +13,31 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_news_cat')) {
-
     function nv_block_config_news_cat($module, $data_block, $lang_block)
     {
         global $nv_Cache, $site_mods;
 
         $html = '<tr>';
         $html .= '<td>' . $lang_block['catid'] . '</td>';
+
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
+        if (!is_array($data_block['catid'])) {
+            $data_block['catid'] = array($data_block['catid']);
+        }
+
         $html .= '<td>';
         foreach ($list as $l) {
-            $xtitle_i = '';
+            if ($l['status'] == 1 or $l['status'] == 2) {
+                $xtitle_i = '';
 
-            if ($l['lev'] > 0) {
-                for ($i = 1; $i <= $l['lev']; ++$i) {
-                    $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                if ($l['lev'] > 0) {
+                    for ($i = 1; $i <= $l['lev']; ++$i) {
+                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    }
                 }
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_catid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['catid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
-            $html .= $xtitle_i . '<label><input type="checkbox" name="config_catid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['catid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
         }
         $html .= '</td>';
         $html .= '</tr>';
@@ -167,7 +173,7 @@ if (defined('NV_SYSTEM')) {
             unset($module_array_cat[0]);
         } else {
             $module_array_cat = array();
-            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
+            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
             if (!empty($list)) {
                 foreach ($list as $l) {

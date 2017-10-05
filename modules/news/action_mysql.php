@@ -61,7 +61,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	  viewcat varchar(50) NOT NULL DEFAULT 'viewcat_page_new',
 	  numsubcat smallint(5) NOT NULL DEFAULT '0',
 	  subcatid varchar(255) DEFAULT '',
-	  inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
 	  numlinks tinyint(2) unsigned NOT NULL DEFAULT '3',
 	  newday tinyint(2) unsigned NOT NULL DEFAULT '2',
 	  featured int(11) NOT NULL DEFAULT '0',
@@ -71,9 +70,11 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	  add_time int(11) unsigned NOT NULL DEFAULT '0',
 	  edit_time int(11) unsigned NOT NULL DEFAULT '0',
 	  groups_view varchar(255) DEFAULT '',
+      status smallint(4) NOT NULL DEFAULT '1',
 	  PRIMARY KEY (catid),
 	  UNIQUE KEY alias (alias),
-	  KEY parentid (parentid)
+	  KEY parentid (parentid),
+	  KEY status (status)
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources (
