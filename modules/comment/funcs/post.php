@@ -37,7 +37,11 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                 $content = $nv_Request->get_title('content', 'post', '', 1);
                 $content = nv_nl2br($content);
             }
-            $code = $nv_Request->get_title('code', 'post', '');
+            if ($global_config['captcha_type'] == 2) {
+                $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+            } else {
+                $code = $nv_Request->get_title('code', 'post', '');
+            }
             $status = $module_config[$module]['auto_postcomm'];
 
             $timeout = $nv_Request->get_int($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, 'cookie', 0);
