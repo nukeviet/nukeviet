@@ -47,6 +47,7 @@ $lang_module['status_7'] = 'Checking for Approve';
 $lang_module['status_8'] = 'Send Publish';
 $lang_module['status_9'] = 'Reject Publish';
 $lang_module['status_10'] = 'Checking for Publish';
+$lang_module['status_lockbycat'] = 'Locked by category';
 $lang_module['errorsave'] = 'Error: Update content fail, please check your article alias';
 $lang_module['errorexists'] = 'Error: The title or static link is duplicated, enter a different value';
 $lang_module['saveok'] = 'Update succesfully';
