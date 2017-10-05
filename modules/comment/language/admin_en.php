@@ -93,3 +93,6 @@ $lang_module['notification_comment_queue'] = 'Comment moderation posts by %s<br 
 $lang_module['allowattachcomm'] = 'Allow Attach';
 $lang_module['alloweditorcomm'] = 'Allow editor';
 $lang_module['attach'] = 'File attach';
+$lang_module['attach_download'] = 'Download attach';
+$lang_module['attach_choose'] = 'Choose';
+$lang_module['attach_view'] = 'Download';

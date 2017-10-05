@@ -168,7 +168,7 @@ $num_items = $sth->fetchColumn();
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-$db->select('cid, module, area, id, content, userid, post_name, post_email, status')->order('cid DESC')->limit($per_page)->offset(($page - 1) * $per_page);
+$db->select('cid, module, area, id, content, attach, userid, post_name, post_email, status')->order('cid DESC')->limit($per_page)->offset(($page - 1) * $per_page);
 $sql = $db->sql();
 $sth = $db->prepare($sql);
 if (strpos($sql, ':content')) {
@@ -182,7 +182,7 @@ if (strpos($sql, ':post_email')) {
 }
 $sth->execute();
 $array = array();
-while (list($cid, $module, $area, $id, $content, $userid, $post_name, $email, $status) = $sth->fetch(3)) {
+while (list($cid, $module, $area, $id, $content, $attach, $userid, $post_name, $email, $status) = $sth->fetch(3)) {
     if ($userid > 0) {
         $email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
     }
@@ -200,7 +200,13 @@ while (list($cid, $module, $area, $id, $content, $userid, $post_name, $email, $s
         'linkedit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;cid=' . $cid,
         'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid
     );
+
     $xtpl->assign('ROW', $row);
+
+    if (!empty($attach)) {
+        $xtpl->assign('ATTACH_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadfile=' . urlencode(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $attach));
+        $xtpl->parse('main.loop.attach');
+    }
     $xtpl->parse('main.loop');
 }
 
