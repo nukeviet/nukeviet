@@ -24,12 +24,12 @@ $module_version = array(
     ),
     'note' => 'Module playback of video-clips',
     'uploads_dir' => array(
-        $module_name,
-        $module_name . '/icons',
-        $module_name . '/images',
-        $module_name . '/video'
+        $module_upload,
+        $module_upload . '/icons',
+        $module_upload . '/images',
+        $module_upload . '/video'
     ),
     'files_dir' => array(
-        $module_name
+        $module_upload
     )
 );
