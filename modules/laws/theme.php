@@ -58,8 +58,10 @@ function nv_theme_laws_main($array_data, $generate_page)
     }
 
 	if($module_config[$module_name]['activecomm']){
-			$xtpl->parse('main.send_comm_title');
+		$xtpl->parse('main.send_comm_col');
+		$xtpl->parse('main.send_comm_title');
 	}else{
+		$xtpl->parse('main.publtime_col');
 		$xtpl->parse('main.publtime_title');
 	}
 
