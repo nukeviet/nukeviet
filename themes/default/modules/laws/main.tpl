@@ -4,9 +4,14 @@
         <colgroup>
             <col width="50" />
             <col width="100" />
+            <!-- BEGIN: send_comm_col -->
             <col />
             <col width="125" />
-            <col width="100"/>
+            <!-- END: send_comm_col -->
+            <!-- BEGIN: publtime_col -->
+            <col width="125" />
+            <col />
+            <!-- END: publtime_col -->
             <!-- BEGIN: down_in_home_col --><col width="130" /><!-- END: down_in_home_col -->
         </colgroup>
         <thead>
