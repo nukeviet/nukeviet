@@ -26,7 +26,7 @@ $parentid = 0;
 $alias_cat_url = isset($array_op[0]) ? $array_op[0] : '';
 $array_mod_title = array();
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
 $list = $nv_Cache->db($sql, 'catid', $module_name);
 if (!empty($list)) {
     foreach ($list as $l) {
