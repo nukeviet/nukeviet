@@ -816,7 +816,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
  */
 function nv_get_mod_countrows()
 {
-    global $db, $module_data, $nv_Cache, $module_name;
+    global $module_data, $nv_Cache, $module_name;
     $sql = 'SELECT COUNT(*) totalnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows';
     $list = $nv_Cache->db($sql, '', $module_name);
     return $list[0]['totalnews'];
