@@ -159,7 +159,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 $nv_Request->set_Cookie('sortcomm', $sortcomm, NV_LIVE_COOKIE_TIME);
             }
             $is_delete = false;
-            if (defined('NV_IS_ADMIN')) {
+            if (defined('NV_IS_SPADMIN')) {
                 $is_delete = true;
             } elseif (defined('NV_IS_ADMIN')) {
                 $adminscomm = explode(',', $module_config[$module]['adminscomm']);
