@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_news_block_newscenter')) {
-
     function nv_block_config_news_newscenter($module, $data_block, $lang_block)
     {
         global $nv_Cache, $site_mods;
@@ -69,14 +68,16 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $html .= '<td>';
         $html .= '<div style="height: 160px; overflow: auto">';
         foreach ($list as $l) {
-            $xtitle_i = '';
-            if ($l['lev'] > 0) {
-                for ($i = 1; $i <= $l['lev']; ++$i) {
-                    $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            if ($l['status'] == 1 or $l['status'] == 2) {
+                $xtitle_i = '';
+                if ($l['lev'] > 0) {
+                    for ($i = 1; $i <= $l['lev']; ++$i) {
+                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    }
                 }
+                $data_block['nocatid'] = !empty($data_block['nocatid']) ? $data_block['nocatid'] : array();
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
-            $data_block['nocatid'] = !empty($data_block['nocatid']) ? $data_block['nocatid'] : array();
-            $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
         }
         $html .= '</div>';
         $html .= '</td>';

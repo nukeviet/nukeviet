@@ -55,14 +55,16 @@ if (!nv_function_exists('nv_news_block_tophits')) {
             $data_block['nocatid'] = explode(',', $data_block['nocatid']);
         }
         foreach ($list as $l) {
-            $xtitle_i = '';
+            if ($l['status'] == 1 or $l['status'] == 2) {
+                $xtitle_i = '';
 
-            if ($l['lev'] > 0) {
-                for ($i = 1; $i <= $l['lev']; ++$i) {
-                    $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                if ($l['lev'] > 0) {
+                    for ($i = 1; $i <= $l['lev']; ++$i) {
+                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    }
                 }
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
-            $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
         }
         $html .= '</div>';
         $html .= '</td>';

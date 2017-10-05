@@ -20,7 +20,7 @@ if ($NV_IS_ADMIN_FULL_MODULE) {
     define('NV_IS_ADMIN_FULL_MODULE', true);
 }
 
-define('NV_MIN_MEDIUM_SYSTEM_ROWS', 14);
+define('NV_MIN_MEDIUM_SYSTEM_ROWS', 100000);
 
 $array_viewcat_full = array(
     'viewcat_page_new' => $lang_module['viewcat_page_new'],
@@ -48,12 +48,6 @@ $array_allowed_comm = array(
     $lang_global['no'],
     $lang_global['level6'],
     $lang_global['level4']
-);
-
-$global_code_defined = array(
-    'cat_visible_status' => array(1, 2),
-    'cat_locked_status' => 10,
-    'row_locked_status' => 20
 );
 
 define('NV_IS_FILE_ADMIN', true);
