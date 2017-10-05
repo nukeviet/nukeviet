@@ -20,7 +20,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
     while (list($id, $listcatid, $publtime, $exptime, $status) = $result->fetch(3)) {
-        if (($exptime == 0 or $exptime > NV_CURRENTTIME) and $status !=4) {
+        if (($exptime == 0 or $exptime > NV_CURRENTTIME) and $status != 4 and $status <= $global_code_defined['row_locked_status']) {
             $arr_catid = explode(',', $listcatid);
 
             $check_permission = false;

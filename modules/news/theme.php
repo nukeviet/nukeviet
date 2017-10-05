@@ -455,7 +455,7 @@ function viewsubcat_main($viewcat, $array_cat)
                 $_arr_subcat = explode(',', $array_row_i['subcatid']);
                 $limit = 0;
                 foreach ($_arr_subcat as $catid_i) {
-                    if ($global_array_cat[$catid_i]['inhome'] == 1) {
+                    if ($global_array_cat[$catid_i]['status'] == 1) {
                         $xtpl->assign('SUBCAT', $global_array_cat[$catid_i]);
                         $xtpl->parse('main.listcat.subcatloop');
                         $limit++;

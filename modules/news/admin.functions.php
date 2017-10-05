@@ -20,6 +20,8 @@ if ($NV_IS_ADMIN_FULL_MODULE) {
     define('NV_IS_ADMIN_FULL_MODULE', true);
 }
 
+define('NV_MIN_MEDIUM_SYSTEM_ROWS', 100000);
+
 $array_viewcat_full = array(
     'viewcat_page_new' => $lang_module['viewcat_page_new'],
     'viewcat_page_old' => $lang_module['viewcat_page_old'],
@@ -212,7 +214,7 @@ function nv_news_fix_block($bid, $repairtable = true)
  */
 function nv_show_cat_list($parentid = 0)
 {
-    global $db, $lang_module, $lang_global, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file, $module_config;
+    global $db, $lang_module, $lang_global, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file, $module_config, $global_code_defined;
 
     $xtpl = new XTemplate('cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -250,17 +252,19 @@ function nv_show_cat_list($parentid = 0)
         $xtpl->parse('main.cat_title');
     }
 
-    $sql = 'SELECT catid, parentid, title, alias, weight, viewcat, numsubcat, inhome, numlinks, newday FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
+    $sql = 'SELECT catid, parentid, title, alias, weight, viewcat, numsubcat, numlinks, newday, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
     $rowall = $db->query($sql)->fetchAll(3);
     $num = sizeof($rowall);
     $a = 1;
-    $array_inhome = array(
-        $lang_global['no'],
-        $lang_global['yes']
+    $array_status = array(
+        $lang_module['cat_status_0'],
+        $lang_module['cat_status_1'],
+        $lang_module['cat_status_2']
     );
+    $is_large_system = (nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS);
 
     foreach ($rowall as $row) {
-        list($catid, $parentid, $title, $alias, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday) = $row;
+        list($catid, $parentid, $title, $alias, $weight, $viewcat, $numsubcat, $numlinks, $newday, $status) = $row;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_show = 1;
         } else {
@@ -318,8 +322,8 @@ function nv_show_cat_list($parentid = 0)
             }
 
             if ($func_cat_disabled) {
-                $xtpl->assign('INHOME', $array_inhome[$inhome]);
-                $xtpl->parse('main.data.loop.disabled_inhome');
+                $xtpl->assign('STATUS', $status > $global_code_defined['cat_locked_status'] ? $lang_module['cat_locked_byparent'] : $array_status[$status]);
+                $xtpl->parse('main.data.loop.disabled_status');
 
                 $xtpl->assign('VIEWCAT', $array_viewcat[$viewcat]);
                 $xtpl->parse('main.data.loop.disabled_viewcat');
@@ -330,15 +334,26 @@ function nv_show_cat_list($parentid = 0)
                 $xtpl->assign('NEWDAY', $newday);
                 $xtpl->parse('main.data.loop.title_newday');
             } else {
-                foreach ($array_inhome as $key => $val) {
-                    $xtpl->assign('INHOME', array(
-                        'key' => $key,
-                        'title' => $val,
-                        'selected' => $key == $inhome ? ' selected="selected"' : ''
-                    ));
-                    $xtpl->parse('main.data.loop.inhome.loop');
+                if ($status > $global_code_defined['cat_locked_status']) {
+                    $xtpl->assign('STATUS', $lang_module['cat_locked_byparent']);
+                    $xtpl->parse('main.data.loop.disabled_status');
+                } elseif ($is_large_system and $status == 0) {
+                    $xtpl->assign('STATUS', $array_status[$status]);
+                    $xtpl->parse('main.data.loop.disabled_status');
+                } else {
+                    $xtpl->assign('STATUS_VAL', $status);
+                    foreach ($array_status as $key => $val) {
+                        if (!$is_large_system or $key != 0) {
+                            $xtpl->assign('STATUS', array(
+                                'key' => $key,
+                                'title' => $val,
+                                'selected' => $key == $status ? ' selected="selected"' : ''
+                            ));
+                            $xtpl->parse('main.data.loop.status.loop');
+                        }
+                    }
+                    $xtpl->parse('main.data.loop.status');
                 }
-                $xtpl->parse('main.data.loop.inhome');
 
                 foreach ($array_viewcat as $key => $val) {
                     $xtpl->assign('VIEWCAT', array(
@@ -792,4 +807,17 @@ function get_mod_alias($title, $mod = '', $id = 0)
     }
 
     return $alias;
+}
+
+/**
+ * nv_get_mod_countrows()
+ *
+ * @return
+ */
+function nv_get_mod_countrows()
+{
+    global $module_data, $nv_Cache, $module_name;
+    $sql = 'SELECT COUNT(*) totalnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows';
+    $list = $nv_Cache->db($sql, '', $module_name);
+    return $list[0]['totalnews'];
 }

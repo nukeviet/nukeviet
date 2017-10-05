@@ -25,15 +25,17 @@ if (!nv_function_exists('nv_news_category')) {
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
         foreach ($list as $l) {
-            $xtitle_i = '';
+            if ($l['status'] == 1 or $l['status'] == 2) {
+                $xtitle_i = '';
 
-            if ($l['lev'] > 0) {
-                for ($i = 1; $i <= $l['lev']; ++$i) {
-                    $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                if ($l['lev'] > 0) {
+                    for ($i = 1; $i <= $l['lev']; ++$i) {
+                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    }
                 }
+                $html_input .= '<input type="hidden" id="config_catid_' . $l['catid'] . '" value="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . '" />';
+                $html .= '<option value="' . $l['catid'] . '" ' . (($data_block['catid'] == $l['catid']) ? ' selected="selected"' : '') . '>' . $xtitle_i . $l['title'] . '</option>';
             }
-            $html_input .= '<input type="hidden" id="config_catid_' . $l['catid'] . '" value="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . '" />';
-            $html .= '<option value="' . $l['catid'] . '" ' . (($data_block['catid'] == $l['catid']) ? ' selected="selected"' : '') . '>' . $xtitle_i . $l['title'] . '</option>';
         }
         $html .= '</select>';
         $html .= $html_input;
@@ -61,9 +63,9 @@ if (!nv_function_exists('nv_news_category')) {
     function nv_block_config_news_category_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array( );
-        $return['error'] = array( );
-        $return['config'] = array( );
+        $return = array();
+        $return['error'] = array();
+        $return['config'] = array();
         $return['config']['catid'] = $nv_Request->get_int('config_catid', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 0);
         return $return;
@@ -87,7 +89,7 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
             foreach ($module_array_cat as $cat) {
-                if ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid'])) {
+                if (in_array($cat['status'], array(1, 2)) and ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid']))) {
                     $cat['title0'] = nv_clean60($cat['title'], $title_length);
 
                     $xtpl->assign('CAT', $cat);
@@ -142,11 +144,10 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = $global_array_cat;
             unset($module_array_cat[0]);
         } else {
-            $module_array_cat = array( );
-            $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat ORDER BY sort ASC";
+            $module_array_cat = array();
+            $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat ORDER BY sort ASC";
             $list = $nv_Cache->db($sql, 'catid', $module);
-            if(!empty($list))
-            {
+            if (!empty($list)) {
                 foreach ($list as $l) {
                     $module_array_cat[$l['catid']] = $l;
                     $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];

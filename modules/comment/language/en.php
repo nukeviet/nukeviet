@@ -43,3 +43,5 @@ $lang_module['like'] = 'Like';
 $lang_module['dislike'] = 'Dislike';
 $lang_module['delete'] = 'Delete';
 $lang_module['like_unsuccess'] = 'You have already rated this comment earlier';
+$lang_module['attach'] = 'File attach';
+$lang_module['attachdownload'] = 'Download attach';

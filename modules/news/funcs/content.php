@@ -8,13 +8,13 @@
  * @Createdate 12-11-2010 20:40
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
-} elseif (! nv_function_exists('nv_aleditor') and file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor.js')) {
+} elseif (!nv_function_exists('nv_aleditor') and file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor.js')) {
     define('NV_EDITOR', true);
     define('NV_IS_CKEDITOR', true);
     $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
@@ -34,7 +34,7 @@ if (defined('NV_EDITOR')) {
         global $module_data;
         $return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
         $return .= "<script type=\"text/javascript\">
-        CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (! empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
+        CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
         </script>";
         return $return;
     }
@@ -52,8 +52,7 @@ while (list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $
         'addcontent' => $addcontent,
         'postcontent' => $postcontent,
         'editcontent' => $editcontent,
-        'delcontent' => $delcontent
-    );
+        'delcontent' => $delcontent);
 }
 
 $array_post_user = array(
@@ -101,14 +100,14 @@ if (defined('NV_IS_USER') and isset($array_post_config[4])) {
     }
 }
 
+// check user post content
 if ($array_post_user['postcontent']) {
     $array_post_user['addcontent'] = 1;
 }
-// check user post content
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
-if (! $array_post_user['addcontent']) {
+if (!$array_post_user['addcontent']) {
     if (defined('NV_IS_USER')) {
         $array_temp['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
     } else {
@@ -118,7 +117,7 @@ if (! $array_post_user['addcontent']) {
     $array_temp['content'] = $lang_module['error_addcontent'];
     $template = $module_info['template'];
 
-    if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
+    if (!file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
         $template = 'default';
     }
 
@@ -153,7 +152,7 @@ $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', 
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     if ($contentid > 0) {
-        $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid . ' and admin_id= ' . $user_info['userid'])->fetch();
+        $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $contentid . ' AND admin_id= ' . $user_info['userid'] . ' AND status<=' . $global_code_defined['row_locked_status'])->fetch();
         $contentid = (isset($rowcontent_old['id'])) ? intval($rowcontent_old['id']) : 0;
 
         if (empty($contentid)) {
@@ -172,7 +171,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             }
 
             nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        } elseif (! (empty($rowcontent_old['status']) or $array_post_user['editcontent'])) {
+        } elseif (!(empty($rowcontent_old['status']) or $array_post_user['editcontent'])) {
             nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         }
 
@@ -233,7 +232,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     );
 
     $array_catid_module = array();
-    $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
+    $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
     $result_cat = $db->query($sql);
 
     while (list($catid_i, $title_i, $lev_i) = $result_cat->fetch(3)) {
@@ -269,10 +268,10 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['author'] = $nv_Request->get_title('author', 'post', '', 1);
 
         $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
-        
+
         // Xu ly Alias
         $rowcontent['alias'] = strtolower(change_alias($rowcontent['title']));
-        if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ) {
+        if ($module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0) {
             $alias = $nv_Request->get_title('alias', 'post', '');
             $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
         }
@@ -283,14 +282,14 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '', 1);
         $rowcontent['imgposition'] = $nv_Request->get_int('imgposition', 'post', 0);
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
-        
+
         // Lua chon Layout
-        if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ) {
+        if ($module_config[$module_name]['frontend_edit_layout'] == 1) {
             $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
         }
         // Xu ly anh minh hoa
         $rowcontent['homeimgthumb'] = 0;
-        if (! nv_is_url($rowcontent['homeimgfile']) and nv_is_file($rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload)) {
+        if (!nv_is_url($rowcontent['homeimgfile']) and nv_is_file($rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload)) {
             $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
             $rowcontent['homeimgfile'] = substr($rowcontent['homeimgfile'], $lu);
             if (is_file(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
@@ -304,10 +303,10 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $rowcontent['homeimgfile'] = '';
         }
 
-        if (! array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
+        if (!array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
             $rowcontent['imgposition'] = 1;
         }
-        if (! array_key_exists($rowcontent['topicid'], $array_topic_module)) {
+        if (!array_key_exists($rowcontent['topicid'], $array_topic_module)) {
             $rowcontent['topicid'] = 0;
         }
 
@@ -320,7 +319,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $error = $lang_module['error_cat'];
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
-        } elseif (! nv_capcha_txt($fcode)) {
+        } elseif (!nv_capcha_txt($fcode)) {
             $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
@@ -332,7 +331,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             }
             $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;
-            if (! empty($rowcontent['sourcetext'])) {
+            if (!empty($rowcontent['sourcetext'])) {
                 $url_info = @parse_url($rowcontent['sourcetext']);
 
                 if (isset($url_info['scheme']) and isset($url_info['host'])) {
@@ -405,10 +404,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                     // Them vao thong bao
                     if (empty($rowcontent['status'])) {
-                        $content = array(
-                            'title' => $rowcontent['title'],
-                            'hometext' => $rowcontent['hometext']
-                        );
+                        $content = array('title' => $rowcontent['title'], 'hometext' => $rowcontent['hometext']);
                         nv_insert_notification($module_name, 'post_queue', $content, $rowcontent['id']);
                     }
 
@@ -500,7 +496,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                 $template = $module_info['template'];
 
-                if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
+                if (!file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
                     $template = 'default';
                 }
 
@@ -528,7 +524,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         unset($body_contents);
     }
 
-    if (! empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
+    if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
         $rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
     }
 
@@ -539,7 +535,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $htmlbodyhtml .= "<textarea class=\"textareaform\" name=\"bodyhtml\" id=\"bodyhtml\" cols=\"60\" rows=\"15\">" . $rowcontent['bodyhtml'] . "</textarea>";
     }
 
-    if (! empty($error)) {
+    if (!empty($error)) {
         $my_head .= "<script type=\"text/javascript\">\n";
         $my_head .= "   alert('" . $error . "')\n";
         $my_head .= "</script>\n";
@@ -547,7 +543,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $template = $module_info['template'];
 
-    if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
+    if (!file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
         $template = 'default';
     }
 
@@ -571,20 +567,17 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->assign('CHECKSS', $checkss);
         $xtpl->parse('main.captcha');
     }
-    
+
     // Xu ly alias
-    if ( $module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0 ) {
+    if ($module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0) {
         $xtpl->parse('main.alias');
     }
 
     // Lua chon Layout
-    if ( $module_config[$module_name]['frontend_edit_layout'] == 1 ) {
+    if ($module_config[$module_name]['frontend_edit_layout'] == 1) {
         foreach ($layout_array as $value) {
             $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-            $xtpl->assign('LAYOUT_FUNC', array(
-                'key' => $value,
-                'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
-            ));
+            $xtpl->assign('LAYOUT_FUNC', array('key' => $value, 'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''));
             $xtpl->parse('main.layout_func.loop');
         }
         $xtpl->parse('main.layout_func');
@@ -630,7 +623,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->parse('main.imgposition');
     }
 
-    if (! ($rowcontent['status'] and $rowcontent['id'])) {
+    if (!($rowcontent['status'] and $rowcontent['id'])) {
         $xtpl->parse('main.save_temp');
     }
 
@@ -659,17 +652,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $array_catpage = array();
 
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-        ->where('admin_id= ' . $user_info['userid']);
+    $db->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('admin_id= ' . $user_info['userid'] . ' AND status<=' . $global_code_defined['row_locked_status']);
 
     $num_items = $db->query($db->sql())->fetchColumn();
     if ($num_items) {
-        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
-            ->order('id DESC')
-            ->limit($per_page)
-            ->offset(($page - 1) * $per_page);
+        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')->order('id DESC')->limit($per_page)->offset(($page - 1) * $per_page);
 
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
@@ -715,14 +702,14 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['delete'] . "</a>";
             }
 
-            if (! empty($array_link_content)) {
+            if (!empty($array_link_content)) {
                 $xtpl->assign('ADMINLINK', implode('&nbsp;-&nbsp;', $array_link_content));
                 $xtpl->parse('main.viewcatloop.news.adminlink');
             }
 
             if ($array_row_i['imghome'] != '') {
                 $xtpl->assign('HOMEIMG1', $array_row_i['imghome']);
-                $xtpl->assign('HOMEIMGALT1', ! empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
+                $xtpl->assign('HOMEIMGALT1', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
                 $xtpl->parse('main.viewcatloop.news.image');
             }
 
@@ -733,7 +720,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.generate_page');
         }
