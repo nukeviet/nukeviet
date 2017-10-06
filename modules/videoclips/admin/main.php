@@ -12,19 +12,27 @@ if (!defined('NV_IS_FILE_ADMIN'))
     die('Stop!!!');
 
 if ($nv_Request->isset_request('get_alias_title', 'post')) {
-    $alias = $nv_Request->get_title('get_alias_title', 'post', '');
-    $alias = change_alias($alias);
-
+    $title = $nv_Request->get_title('get_alias_title', 'post', '');
+    $alias = change_alias($title);
+    $alias = strtolower($alias);
     $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_clip where alias = :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        $weight = $db->query('SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_clip')->fetchColumn();
-        $weight = intval($weight) + 1;
-        $alias = $alias . '-' . $weight;
+        $id = $nv_Request->get_int('id', 'post', 0);
+        if ($id > 0) {
+            $main_alias = $db->query('SELECT alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_clip WHERE id=' . $id)->fetchColumn();
+            $alias = $main_alias . '-' . $alias;
+        } else {
+            $weight = $db->query('SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_clip')->fetchColumn();
+            $weight = intval($weight) + 1;
+            $alias = $alias . '-' . $weight;
+        }
     }
 
-    die($alias);
+    include NV_ROOTDIR . '/includes/header.php';
+    echo $alias;
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 $topicList = nv_listTopics(0);
@@ -84,7 +92,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     if ($nv_Request->isset_request('submit', 'post')) {
         $post['tid'] = $nv_Request->get_int('tid', 'post', 0);
         $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
-        $post['alias'] = $nv_Request->get_title('alias', 'post', '', 1);
+        $post['alias'] = $nv_Request->get_title('alias', 'post', '');
         $post['alias'] = (empty($post['alias'])) ? change_alias($post['title']) : change_alias($post['alias']);
         $post['hometext'] = $nv_Request->get_title('hometext', 'post', '', 1);
         $post['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);

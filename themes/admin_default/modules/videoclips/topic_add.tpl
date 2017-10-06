@@ -4,20 +4,21 @@
 <!-- END: error -->
 
 <form class="form-inline" action="{FORM_ACTION}" method="post">
+    <input type="hidden" name="id" value="{DATA.id}" />
     <table class="table table-striped table-bordered table-hover">
         <tbody>
             <tr>
                 <td>
-                    {LANG.topic_name}
+                    {LANG.topic_name} <span class="red">(*)</span>
                 </td>
                 <td>
                     <input class="form-control" value="{DATA.title}" name="title" id="title" style="width:300px" maxlength="100" />
                 </td>
             </tr>
             <tr>
-				<td> {LANG.alias}</td>
+				<td> {LANG.alias} <span class="red">(*)</span></td>
 				<td>
-				<input class="form-control" title="{LANG.alias}" type="text" name="alias" value="{DATA.alias}" style="width:300px" maxlength="255" id="id_alias" disabled="disabled"/>
+				<input class="form-control" type="text" name="alias" value="{DATA.alias}" title="{LANG.alias}" style="width:300px" maxlength="255" id="id_alias" required="required" oninvalid="setCustomValidity(nv_required)" oninput="setCustomValidity('')"/>
 				&nbsp;<i class="fa fa-refresh fa-lg icon-pointer" onclick="nv_get_alias('id_alias');">&nbsp;</i>
 				</td>
 			</tr>
@@ -89,14 +90,25 @@ function nv_get_alias(id) {
 	}
 	return false;
 }
+function nv_get_alias(id) {
+    var title = strip_tags($("[name='title']").val());
+    if (title != '') {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topic&nocache=' + new Date().getTime(), 'get_alias_title=' + encodeURIComponent(title), function(res) {
+            $("#"+id).val(strip_tags(res));
+        });
+    }
+    return false;
+}
 //]]>
 </script>
 
 <!-- BEGIN: auto_get_alias -->
 <script type="text/javascript">
-	$("[name='title']").change(function() {
-		nv_get_alias('id_alias');
-	}); 
+//<![CDATA[
+    $("[name='title']").change(function() {
+        nv_get_alias('id_alias');
+    });
+//]]>
 </script>
 <!-- END: auto_get_alias -->
 <!-- END: main -->
