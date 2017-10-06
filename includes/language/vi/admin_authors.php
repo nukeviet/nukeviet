@@ -154,3 +154,4 @@ $lang_module['users'] = 'Tài khoản';
 $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';
 $lang_module['custom_title'] = 'Tiêu đề';
+$lang_module['main_module'] = 'Module trang chính';
