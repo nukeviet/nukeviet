@@ -49,6 +49,7 @@ $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
 $xtpl->assign( 'CONFIGMODULE', $configMods );
+$xtpl->assign( 'CLEAN_TITLE_VIDEO', $configMods['clean_title_video']);
 
 $sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip ORDER BY addtime DESC LIMIT 100";
 $result = $db->query( $sql );
@@ -71,17 +72,6 @@ foreach ( $skins as $skin )
 	$sel = $skin == $configMods['playerSkin'] ? " selected=\"selected\"" : "";
 	$xtpl->assign( 'SKIN', array( 'value' => $skin, 'select' => $sel ) );
 	$xtpl->parse( 'main.playerSkin' );
-}
-
-// gioi han so luong cat tieu de
-for ($i = 20; $i <= 150; ++$i) {
-
-    $xtpl->assign('PER_TITLE', array(
-        'key' => $i,
-        'title' => $i,
-        'selected' => $i == $configMods['clean_title_video'] ? ' selected="selected"' : ''
-    ));
-    $xtpl->parse('main.per_title');
 }
 
 $xtpl->parse( 'main' );

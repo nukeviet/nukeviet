@@ -41,11 +41,7 @@
                 <tr>
                     <th>{LANG.per_title}</th>
                     <td>
-                    <select class="form-control w100" name="clean_title_video">
-                        <!-- BEGIN: per_title -->
-                        <option value="{PER_TITLE.key}"{PER_TITLE.selected}>{PER_TITLE.title}</option>
-                        <!-- END: per_title -->
-                    </select></td>
+                    <input type="text" value="{CLEAN_TITLE_VIDEO}" name="clean_title_video" class="form-control w100" />
                 </tr>
 		         <!-- BEGIN: hidden -->
 		        <tr>
