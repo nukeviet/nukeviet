@@ -8,8 +8,13 @@
 
 function nv_commment_feedback(cid, post_name) {
     $("#commentpid").val(cid);
-    $("#commentcontent").focus();
-    $("#commentcontent").val("@" + post_name + " ");
+    var data = $('#formcomment form').data();
+    if (data.editor) {
+        CKEDITOR.instances['commentcontent'].insertText("@" + post_name + " ");
+    } else {
+        $("#commentcontent").focus();
+        $("#commentcontent").val("@" + post_name + " ");
+    }
 }
 
 function nv_commment_like(cid, checkss, like) {
