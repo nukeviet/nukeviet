@@ -17,7 +17,8 @@ $smtp_encrypted_array = array();
 $smtp_encrypted_array[0] = 'None';
 $smtp_encrypted_array[1] = 'SSL';
 $smtp_encrypted_array[2] = 'TLS';
-
+$smtp_encrypted_array[3] = '1';
+$smtp_encrypted_array[4] = '1';
 $array_config = array();
 $errormess = '';
 $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', $global_config['mailer_mode'], 1), 0, 255);
@@ -31,7 +32,8 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
 } else {
     $array_config['smtp_ssl'] = intval($global_config['smtp_ssl']);
 }
-
+$array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', 0);
+$array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', 0);
 if ($nv_Request->isset_request('mailer_mode', 'post')) {
     $smtp_password = $array_config['smtp_password'];
     $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
@@ -66,6 +68,7 @@ $array_config['mailer_mode_phpmail'] = ($array_config['mailer_mode'] == '') ? ' 
 $array_config['mailer_mode_smtpt_show'] = ($array_config['mailer_mode'] == 'smtp') ? '' : ' style="display: none" ';
 
 $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -73,17 +76,31 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+
 foreach ($smtp_encrypted_array as $id => $value) {
     $encrypted = array(
         'id' => $id,
         'value' => $value,
-        'sl' => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : ''
+        'sl' => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : '',
+    	'verify_peer_ssl' => ($global_config['verify_peer_ssl'] == $value) ? ' selected="selected"' : '',
+    	'verify_peer_name_ssl' => ($global_config['verify_peer_name_ssl'] == $value) ? ' selected="selected"' : '',
     );
 
     $xtpl->assign('EMCRYPTED', $encrypted);
     $xtpl->parse('smtp.encrypted_connection');
 }
-
+if($global_config['verify_peer_ssl'] == 1) {
+	$xtpl->assign('PEER_SSL_YES', 'checked="checked"');
+}
+else {
+	$xtpl->assign('PEER_SSL_NO', 'checked="checked"');
+}
+if($global_config['verify_peer_name_ssl'] == 1) {
+	$xtpl->assign('PEER_NAME_SSL_YES', 'checked="checked"');
+}
+else {
+	$xtpl->assign('PEER_NAME_SSL_NO', 'checked="checked"');
+}
 if ($errormess != '') {
     $xtpl->assign('ERROR', $errormess);
     $xtpl->parse('smtp.error');
