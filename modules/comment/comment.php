@@ -162,6 +162,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             if (defined('NV_IS_SPADMIN')) {
                 $is_delete = true;
             } elseif (defined('NV_IS_ADMIN')) {
+                global $admin_info;
                 $adminscomm = explode(',', $module_config[$module]['adminscomm']);
                 if (in_array($admin_info['admin_id'], $adminscomm)) {
                     $is_delete = true;
