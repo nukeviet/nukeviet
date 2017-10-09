@@ -68,6 +68,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config_site['googleMapsAPI'] = '';
     }
 
+    $array_config_site['ssl_https'] = $nv_Request->get_int('ssl_https', 'post');
+    if ($array_config_site['ssl_https'] < 0 or $array_config_site['ssl_https'] > 2) {
+        $array_config_site['ssl_https'] = 0;
+    }
+
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -102,12 +107,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
         $array_config_global['my_domains'] = array_unique($array_config_global['my_domains']);
         $array_config_global['my_domains'] = implode(',', $array_config_global['my_domains']);
-
-        $array_config_global['ssl_https'] = $nv_Request->get_int('ssl_https', 'post');
-
-        if ($array_config_global['ssl_https'] < 0 or $array_config_global['ssl_https'] > 3) {
-            $array_config_global['ssl_https'] = 0;
-        }
 
         $array_config_global['gzip_method'] = $nv_Request->get_int('gzip_method', 'post');
         $array_config_global['lang_multi'] = $nv_Request->get_int('lang_multi', 'post');
@@ -178,7 +177,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
             'rewrite_endurl' => $global_config['rewrite_endurl'],
             'rewrite_exturl' => $global_config['rewrite_exturl'],
             'rewrite_op_mod' => $array_config_global['rewrite_op_mod'],
-            'ssl_https' => $array_config_global['ssl_https']
         );
         $rewrite = nv_rewrite_change($array_config_rewrite);
         if (empty($rewrite[0])) {
@@ -202,6 +200,17 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+
+for ($i = 0; $i <= 2; $i ++) {
+    $ssl_https = array(
+        'key' => $i,
+        'title' => $lang_module['ssl_https_' . $i],
+        'selected' => $i == $global_config['ssl_https'] ? ' selected="selected"' : ''
+    );
+
+    $xtpl->assign('SSL_HTTPS', $ssl_https);
+    $xtpl->parse('main.ssl_https');
+}
 
 if (defined('NV_IS_GODADMIN')) {
     $result = $db->query("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
@@ -256,22 +265,6 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->assign('TIMEZONELANGVALUE', $site_timezone_i);
         $xtpl->parse('main.system.opsite_timezone');
     }
-
-    for ($i = 0; $i <= 3; $i ++) {
-        $ssl_https = array(
-            'key' => $i,
-            'title' => $lang_module['ssl_https_' . $i],
-            'selected' => $i == $array_config_global['ssl_https'] ? ' selected="selected"' : ''
-        );
-
-        $xtpl->assign('SSL_HTTPS', $ssl_https);
-        $xtpl->parse('main.system.ssl_https');
-    }
-
-    if (intval($array_config_global['ssl_https']) !== 3) {
-        $xtpl->parse('main.system.ssl_https_modules_hide');
-    }
-    $xtpl->assign('LINK_SSL_MODULES', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&show_ssl_modules=1');
 
     $xtpl->parse('main.system');
 }

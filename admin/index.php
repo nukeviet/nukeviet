@@ -15,11 +15,6 @@ define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
-// SSL
-if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-    nv_redirect_location("https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-}
-
 // Admin dang nhap
 if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
     require NV_ROOTDIR . '/includes/core/admin_access.php';

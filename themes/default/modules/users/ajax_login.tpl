@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}themes/default/css/users.css" rel="stylesheet" />
-<script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/users.css" rel="stylesheet" />
+<script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/users.js"></script>
 <div class="centered">
 <div class="login-box">
     <div class="page panel panel-default box-shadow bg-lavender" style="margin-bottom:0">

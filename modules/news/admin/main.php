@@ -203,7 +203,7 @@ if (defined('NV_IS_ADMIN_MODULE')) {
 if (!in_array($stype, array_keys($array_search))) {
     $stype = '-';
 }
-if ($sstatus < 0 or $sstatus > 10) {
+if ($sstatus < 0 or ($sstatus > 10 and $sstatus != ($global_code_defined['row_locked_status'] + 1))) {
     $sstatus = -1;
 }
 if (!in_array($ordername, array_keys($array_in_ordername))) {
@@ -365,13 +365,25 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
     }
 
     if ($sstatus != -1) {
-        $search_elastic_status = [
-            'filter' => [
-                'match' => [
-                    'status' => $sstatus
+        if ($sstatus > $global_code_defined['row_locked_status']) {
+            $search_elastic_status = [
+                'filter' => [
+                    'range' => [
+                        'status' => [
+                            'gt' => $global_code_defined['row_locked_status']
+                        ]
+                    ]
                 ]
-            ]
-        ];
+            ];
+        } else {
+            $search_elastic_status = [
+                'filter' => [
+                    'match' => [
+                        'status' => $sstatus
+                    ]
+                ]
+            ];
+        }
         if (!empty($q)) {
             $search_elastic = array_merge($search_elastic, $search_elastic_status);
         } else {
@@ -491,8 +503,8 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             'title' => $title,
             'publtime' => $publtime,
             'status_id' => $status,
-            'status' => $lang_module['status_' . $status],
-            'class' => $array_status_class[$status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
+            'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
             'hitscm' => number_format($hitscm, 0, ',', '.'),
@@ -532,10 +544,15 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
                 OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         }
         if ($sstatus != -1) {
-            if ($where == '') {
-                $where = ' r.status = ' . $sstatus;
+            if ($sstatus > $global_code_defined['row_locked_status']) {
+                $where_status = 'r.status > ' . $global_code_defined['row_locked_status'];
             } else {
-                $where .= ' AND r.status = ' . $sstatus;
+                $where_status = 'r.status = ' . $sstatus;
+            }
+            if ($where == '') {
+                $where = ' ' . $where_status;
+            } else {
+                $where .= ' AND ' . $where_status;
             }
         }
         if (strpos($where, 'u.username')) {
@@ -671,8 +688,8 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             'publtime' => $publtime,
             'status_id' => $status,
             'weight' => $weight,
-            'status' => $lang_module['status_' . $status],
-            'class' => $array_status_class[$status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
+            'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
             'hitscm' => number_format($hitscm, 0, ',', '.'),
@@ -693,6 +710,13 @@ for ($i = 0; $i <= 10; $i++) {
         'selected' => $sl
     );
 }
+$fixedkey = $global_code_defined['row_locked_status'] + 1;
+$sl = ($fixedkey == $sstatus) ? ' selected="selected"' : '';
+$search_status[] = array(
+    'key' => $fixedkey,
+    'value' => $lang_module['status_lockbycat'],
+    'selected' => $sl
+);
 
 $i = 5;
 $search_per_page = array();

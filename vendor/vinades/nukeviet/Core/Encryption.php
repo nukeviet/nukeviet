@@ -110,7 +110,7 @@ class Encryption
         } else {
             $validate_hash = $this->hash($password);
         }
-        
+
         if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
             return hash_equals($hash, $validate_hash);
         }
@@ -118,59 +118,6 @@ class Encryption
             return true;
         }
         return false;
-    }
-
-    /**
-     * Encryption::aes_encrypt()
-     *
-     * @param mixed $val
-     * @param mixed $ky
-     * @return
-     */
-    public function aes_encrypt($val, $ky = '')
-    {
-        if (empty($ky)) {
-            $ky = $this->_key;
-        }
-        $key = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
-        for ($a = 0; $a < strlen($ky); $a++) {
-            $key[$a % 16] = chr(ord($key[$a % 16]) ^ ord($ky[$a]));
-        }
-        $mode = MCRYPT_MODE_ECB;
-        $enc = MCRYPT_RIJNDAEL_128;
-        $val = str_pad($val, (16 * (floor(strlen($val) / 16) + (strlen($val) % 16 == 0 ? 2 : 1))), chr(16 - (strlen($val) % 16)));
-        return mcrypt_encrypt($enc, $key, $val, $mode, mcrypt_create_iv(mcrypt_get_iv_size($enc, $mode), MCRYPT_DEV_URANDOM));
-    }
-
-    /**
-     * Encryption::aes_decrypt()
-     *
-     * @param mixed $val
-     * @param mixed $ky
-     * @return
-     */
-    public function aes_decrypt($val, $ky = '')
-    {
-        if (empty($ky)) {
-            $ky = $this->_key;
-        }
-        $key = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
-        for ($a = 0; $a < strlen($ky); $a++) {
-            $key[$a % 16] = chr(ord($key[$a % 16]) ^ ord($ky[$a]));
-        }
-        $mode = MCRYPT_MODE_ECB;
-        $enc = MCRYPT_RIJNDAEL_128;
-        $dec = mcrypt_decrypt($enc, $key, $val, $mode, @mcrypt_create_iv(@mcrypt_get_iv_size($enc, $mode), MCRYPT_DEV_URANDOM));
-
-        $slast = ord(substr($dec, -1));
-        $slastc = chr($slast);
-        $pcheck = substr($dec, -$slast);
-        $dec_len = strlen($dec);
-        if ($dec_len) {
-            return rtrim($dec, ((ord(substr($dec, $dec_len - 1, 1)) >= 0 and ord(substr($dec, $dec_len - 1, 1)) <= 16) ? chr(ord(substr($dec, $dec_len - 1, 1))) : null));
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -183,7 +130,7 @@ class Encryption
     public function encrypt($data, $iv = '')
     {
         $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
-        
+
         $data = openssl_encrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
         return strtr($data, '+/=', '-_,');
     }
@@ -198,8 +145,8 @@ class Encryption
     public function decrypt($data, $iv = '')
     {
         $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
-        
+
         $data = strtr($data, '-_,', '+/=');
         return openssl_decrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
-    }    
+    }
 }
