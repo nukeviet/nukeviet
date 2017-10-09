@@ -172,7 +172,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
 
             $alias = change_alias($post['title']);
-            $post['code'] = $nv_Request->get_title('code', 'post', '', 1);
+            $post['code'] = nv_substr($nv_Request->get_title('code', 'post', '', 1), 0, 50);
             $post['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
             $test_content = strip_tags($post['bodytext']);
             $test_content = trim($test_content);
