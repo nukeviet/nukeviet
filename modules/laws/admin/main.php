@@ -51,7 +51,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
     } elseif (empty($sList)) {
         $type = $lang_module['subject'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject&add";
-    }elseif (empty($eList) && $module_cofig[$module_name]['activecomm']==1) {
+    } elseif (empty($eList) and $module_config[$module_name]['activecomm'] == 1) {
         $type = $lang_module['examine'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=examine&add";
     } elseif (empty($sgList)) {
