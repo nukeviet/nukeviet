@@ -120,19 +120,6 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                 die($lang_module['erroNotSelectExamine']);
             }
 
-            $post['sgid'] = $nv_Request->get_title('sgid', 'post', '');
-            if (!is_numeric($post['sgid']) and !empty($post['sgid'])) {
-                $result = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE title=" . $db->quote($post['title']) . " AND offices='' AND positions=''");
-                if ($result->rowCount() == 0) {
-                    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_signer(title, addtime) VALUES(' . $db->quote($post['sgid']) . ', ' . NV_CURRENTTIME . ')';
-                    $post['sgid'] = $db->insert_id($sql);
-                } else {
-                    $post['sgid'] = $result->fetchColumn();
-                }
-            } else {
-                $post['sgid'] = intval($post['sgid']);
-            }
-
             $post['introtext'] = $nv_Request->get_title('introtext', 'post', '', 1);
             $post['introtext'] = nv_nl2br($post['introtext'], "<br />");
             if (empty($post['introtext'])) {
@@ -266,6 +253,19 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                 $post['startvalid'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
             } else {
                 $post['startvalid'] = 0;
+            }
+
+			$post['sgid'] = $nv_Request->get_title('sgid', 'post', '');
+            if (!is_numeric($post['sgid']) and !empty($post['sgid'])) {
+                $result = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE title=" . $db->quote($post['title']) . " AND offices='' AND positions=''");
+                if ($result->rowCount() == 0) {
+                    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_signer(title, addtime) VALUES(' . $db->quote($post['sgid']) . ', ' . NV_CURRENTTIME . ')';
+                    $post['sgid'] = $db->insert_id($sql);
+                } else {
+                    $post['sgid'] = $result->fetchColumn();
+                }
+            } else {
+                $post['sgid'] = intval($post['sgid']);
             }
 
             if (isset($post['id'])) {
