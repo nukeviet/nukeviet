@@ -48,7 +48,7 @@ class Sendmail extends PHPMailer
             $this->SMTPOptions = array(
             		'ssl' => array(
             				'verify_peer' => ($config['verify_peer_ssl'] == 1) ? true : false,
-            				'verify_peer_name' => $verify_peer_name_ssl = ($config['verify_peer_name_ssl'] == 1) ? true : false,
+            				'verify_peer_name' => ($config['verify_peer_name_ssl'] == 1) ? true : false,
             				'allow_self_signed' => true
             		)
             );
