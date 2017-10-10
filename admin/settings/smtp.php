@@ -17,8 +17,7 @@ $smtp_encrypted_array = array();
 $smtp_encrypted_array[0] = 'None';
 $smtp_encrypted_array[1] = 'SSL';
 $smtp_encrypted_array[2] = 'TLS';
-$smtp_encrypted_array[3] = '1';
-$smtp_encrypted_array[4] = '1';
+
 $array_config = array();
 $errormess = '';
 $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', $global_config['mailer_mode'], 1), 0, 255);
@@ -82,8 +81,6 @@ foreach ($smtp_encrypted_array as $id => $value) {
         'id' => $id,
         'value' => $value,
         'sl' => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : '',
-    	'verify_peer_ssl' => ($global_config['verify_peer_ssl'] == $value) ? ' selected="selected"' : '',
-    	'verify_peer_name_ssl' => ($global_config['verify_peer_name_ssl'] == $value) ? ' selected="selected"' : '',
     );
 
     $xtpl->assign('EMCRYPTED', $encrypted);

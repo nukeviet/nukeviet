@@ -1082,8 +1082,6 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             $mail->Host = $global_config['smtp_host'];
             $mail->Username = $global_config['smtp_username'];
             $mail->Password = $global_config['smtp_password'];
-            $verify_peer = ($global_config['verify_peer_ssl'] == 1) ? true : false;
-            $verify_peer_name_ssl = ($global_config['verify_peer_name_ssl'] == 1) ? true : false;
 
             $SMTPSecure = intval($global_config['smtp_ssl']);
             switch ($SMTPSecure) {
@@ -1098,8 +1096,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
             $mail->SMTPOptions = array(
             		'ssl' => array(
-            				'verify_peer' => $verify_peer,
-            				'verify_peer_name' => $verify_peer_name_ssl,
+            				'verify_peer' => ($global_config['verify_peer_ssl'] == 1) ? true : false,
+            				'verify_peer_name' => ($global_config['verify_peer_name_ssl'] == 1) ? true : false,
             				'allow_self_signed' => true
             		)
             );
