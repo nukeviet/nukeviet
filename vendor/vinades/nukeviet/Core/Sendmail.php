@@ -44,14 +44,14 @@ class Sendmail extends PHPMailer
                     break;
                 default:
                     $this->SMTPSecure = '';
-                    $this->SMTPOptions = array(
-                        'ssl' => array(
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                            'allow_self_signed' => true
-                        )
-                    );
             }
+            $this->SMTPOptions = array(
+            		'ssl' => array(
+            				'verify_peer' => ($config['verify_peer_ssl'] == 1) ? true : false,
+            				'verify_peer_name' => ($config['verify_peer_name_ssl'] == 1) ? true : false,
+            				'allow_self_signed' => true
+            		)
+            );
         } elseif ($mailer_mode == 'sendmail') {
             $this->IsSendmail();
         } else {
