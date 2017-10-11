@@ -134,6 +134,7 @@
 <p class="m-bottom">{DATA.bodytext}</p>
 <!-- END: bodytext -->
 
+<div id="comment"></div>
 <!-- BEGIN: files -->
 <h3 class="lawh3"><em class="fa fa-download">&nbsp;</em>{LANG.files}</h3>
 <div class="list-group laws-download-file">

@@ -56,12 +56,12 @@
 				<!-- END: down_in_home -->
 				<!-- BEGIN: send_comm -->
                 	<td>
-            			<a href="{ROW.url}" title="{ROW.send_comm_title}"><div class="send_comm"></div></a>
+            			<a href="{ROW.url}#comment" title="{ROW.send_comm_title}"><div class="send_comm"></div></a>
                 	</td>
                 <!-- END: send_comm -->
                 <!-- BEGIN: comm_close -->
                 	<td>
-            			<a href="{ROW.url}" title="{ROW.send_comm_title}"><div class="comm_close"></div></a>
+            			<a href="{ROW.url}#comment" title="{ROW.send_comm_title}"><div class="comm_close"></div></a>
                 	</td>
                 <!-- END: comm_close -->
 			</tr>
