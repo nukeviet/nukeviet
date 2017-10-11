@@ -99,15 +99,15 @@ $plugin_new = array();
 $plugin_all = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);
 
 $nv_plugin_array = array();
-$nv_plugin_area = array();
+$_nv_plugin_area = array();
 $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
 $_query = $db->query($_sql);
 while ($row = $_query->fetch()) {
-    $nv_plugin_area[$row['plugin_area']][] = $row;
+    $_nv_plugin_area[$row['plugin_area']][] = $row;
     $nv_plugin_array[] = $row['plugin_file'];
 }
 
-foreach ($nv_plugin_area as $area => $nv_plugin_area_i) {
+foreach ($_nv_plugin_area as $area => $nv_plugin_area_i) {
     $_sizeof = sizeof($nv_plugin_area_i);
     foreach ($nv_plugin_area_i as $row) {
         $row['plugin_area'] = ($row['weight'] == 1) ? $lang_module['plugin_area_' . $row['plugin_area']] : '';
