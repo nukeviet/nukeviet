@@ -131,7 +131,7 @@ function nv_admin_theme($contents, $head_site = 1)
     if (isset($nv_plugin_area[4])) {
         // Kết nối với các plugin sau khi xây dựng nội dung module
         foreach ($nv_plugin_area[4] as $_fplugin) {
-            include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+            include NV_ROOTDIR . '/includes/plugin/' . $_fplugin['plugin_file'];
         }
     }
 
