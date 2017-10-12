@@ -1513,7 +1513,6 @@ $('[name="uploadremoteFileOK"]').click(function() {
             url: nv_module_url + "upload&random=" + nv_randomNum(10),
             data: "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt,
             success: function(k) {
-                $("input[name=currentFileUrl]").val(check);
                 $('[name="uploadremoteFileOK"]').removeAttr('disabled');
 
                 var l = k.split("_");
@@ -1521,6 +1520,7 @@ $('[name="uploadremoteFileOK"]').click(function() {
                     $("div#errorInfo").html(l[1]).dialog("open");
                     $('#upload-remote-info').html('');
                 } else {
+                    $("input[name=currentFileUrl]").val(check);
                     $("input[name=selFile]").val(k);
                     $('#upload-remote-info').html('<em class="fa fa-2x fa-check text-success"></em>');
                     LFILE.reload(folderPath, k);
