@@ -81,9 +81,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $upload_chunk_size = $nv_Request->get_float('upload_chunk_size', 'post', 0);
     $upload_chunk_size_text = $nv_Request->get_title('upload_chunk_size_text', 'post', '');
-    if ($upload_chunk_size_text == 'GB') {
-        $pow = 3;
-    } elseif ($upload_chunk_size_text == 'MB') {
+    if ($upload_chunk_size_text == 'MB') {
         $pow = 2;
     } elseif ($upload_chunk_size_text == 'KB') {
         $pow = 1;
@@ -209,10 +207,7 @@ $xtpl->assign('UPLOAD_CHECKING_NOTE', !$strong ? $lang_module['upload_checking_n
 
 $upload_chunk_size = '';
 $upload_chunk_size_text = '';
-if ($global_config['upload_chunk_size'] > 1073741823) {
-    $upload_chunk_size = round($global_config['upload_chunk_size'] / 1073741824, 2, PHP_ROUND_HALF_DOWN);
-    $upload_chunk_size_text = 'GB';
-} elseif ($global_config['upload_chunk_size'] > 1048575) {
+if ($global_config['upload_chunk_size'] > 1048575) {
     $upload_chunk_size = round($global_config['upload_chunk_size'] / 1048576, 2, PHP_ROUND_HALF_DOWN);
     $upload_chunk_size_text = 'MB';
 } elseif ($global_config['upload_chunk_size'] > 1023) {
@@ -223,7 +218,7 @@ if ($global_config['upload_chunk_size'] > 1073741823) {
 }
 
 $xtpl->assign('UPLOAD_CHUNK_SIZE', $upload_chunk_size);
-$array_chunk_size = array('B', 'KB', 'MB', 'GB');
+$array_chunk_size = array('KB', 'MB');
 foreach ($array_chunk_size as $chunk_size) {
     $chunk_size_lev = array(
         'key' => $chunk_size,
