@@ -1846,10 +1846,10 @@ var NVUPLOAD = {
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
                 multipart: true,
-        		filters : {
-        			max_file_size : nv_max_size_bytes,
-        			mime_types: []
-        		},
+                filters : {
+               	    max_file_size : nv_max_size_bytes,
+                    mime_types: []
+                },
                 chunk_size: nv_chunk_size,
                 init: {
                     // Event on init uploader
