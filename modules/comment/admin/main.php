@@ -132,23 +132,24 @@ if ($sstatus == 0 or $sstatus == 1) {
 }
 if (!empty($from['q'])) {
     $array_like = array();
-    if ($stype == '' or $stype == 'content') {
-        $array_like[] = 'content LIKE :content';
-    }
-
-    if ($stype == '' or $stype == 'post_name') {
-        $array_like[] = 'post_name LIKE :post_name';
-    }
-
-    if ($stype == '' or $stype == 'post_email') {
-        $array_like[] = 'post_email LIKE :post_email';
-    }
-
-    if ($stype == 'content_id' and preg_match('/^[0-9]$/', $from['q'])) {
-        $array_like = array();
+    if ($stype == 'content_id' and preg_match('/^([0-9]+)$/', $from['q'])) {
         $array_like[] = 'id =' . intval($from['q']);
+    } else {
+        if ($stype == '' or $stype == 'content') {
+            $array_like[] = 'content LIKE :content';
+        }
+
+        if ($stype == '' or $stype == 'post_name') {
+            $array_like[] = 'post_name LIKE :post_name';
+        }
+
+        if ($stype == '' or $stype == 'post_email') {
+            $array_like[] = 'post_email LIKE :post_email';
+        }
     }
-    $array_where[] = '( ' . implode(' OR ', $array_like) . ' )';
+    if (!empty($array_like)) {
+        $array_where[] = '( ' . implode(' OR ', $array_like) . ' )';
+    }
     $base_url .= '&amp;q=' . urlencode($from['q']);
 }
 if ($stype != '') {
