@@ -1650,8 +1650,8 @@ class Upload
         if ($iswin and $this->cl_exists("COM")) {
             try {
                 $fsobj = new COM('Scripting.FileSystemObject');
-                $f = $fsobj->GetFile(realpath($file));
-                $size = $f->Size;
+                $filecal = $fsobj->GetFile(realpath($file));
+                $size = $filecal->Size;
             } catch (Exception $e) {
                 $size = null;
             }
