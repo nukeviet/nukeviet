@@ -7,16 +7,17 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 $ini = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
 
 $myini = array(
-    'types' => array( '' ),
-    'exts' => array( '' ),
-    'mimes' => array( '' )
+    'types' => array(''),
+    'exts' => array(''),
+    'mimes' => array('')
 );
 
 foreach ($ini as $type => $extmime) {
@@ -28,8 +29,8 @@ foreach ($ini as $type => $extmime) {
         $myini['mimes'] = array_merge($myini['mimes'], $m);
     } else {
         foreach ($m as $m2) {
-            if (! is_array($m2)) {
-                $m2 = array( $m2 );
+            if (!is_array($m2)) {
+                $m2 = array($m2);
             }
             $myini['mimes'] = array_merge($myini['mimes'], $m2);
         }
@@ -76,7 +77,23 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $nv_max_size = $nv_Request->get_float('nv_max_size', 'post', $global_config['nv_max_size']);
     $nv_max_size = min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')), $nv_max_size);
-    $nv_auto_resize = ( int )$nv_Request->get_bool('nv_auto_resize', 'post', 0);
+    $nv_auto_resize = (int)$nv_Request->get_bool('nv_auto_resize', 'post', 0);
+
+    $upload_chunk_size = $nv_Request->get_float('upload_chunk_size', 'post', 0);
+    $upload_chunk_size_text = $nv_Request->get_title('upload_chunk_size_text', 'post', '');
+    if ($upload_chunk_size_text == 'GB') {
+        $pow = 3;
+    } elseif ($upload_chunk_size_text == 'MB') {
+        $pow = 2;
+    } elseif ($upload_chunk_size_text == 'KB') {
+        $pow = 1;
+    } else {
+        $pow = 0;
+    }
+    $upload_chunk_size = round($upload_chunk_size * pow(1024, $pow));
+    if ($upload_chunk_size > $nv_max_size or $upload_chunk_size < 0) {
+        $upload_chunk_size = 0;
+    }
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     $sth->bindValue(':config_name', 'file_allowed_ext', PDO::PARAM_STR);
@@ -103,9 +120,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->bindValue(':config_value', $upload_checking_mode, PDO::PARAM_STR);
     $sth->execute();
 
+    $sth->bindValue(':config_name', 'upload_chunk_size', PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $upload_chunk_size, PDO::PARAM_STR);
+    $sth->execute();
+
     $array_config_define = array();
-    $array_config_define['upload_alt_require'] = ( int ) $nv_Request->get_bool('upload_alt_require', 'post', 0);
-    $array_config_define['upload_auto_alt'] = ( int ) $nv_Request->get_bool('upload_auto_alt', 'post', 0);
+    $array_config_define['upload_alt_require'] = (int)$nv_Request->get_bool('upload_alt_require', 'post', 0);
+    $array_config_define['upload_auto_alt'] = (int)$nv_Request->get_bool('upload_auto_alt', 'post', 0);
 
     $sth->bindValue(':config_name', 'upload_alt_require', PDO::PARAM_STR);
     $sth->bindValue(':config_value', $array_config_define['upload_alt_require'], PDO::PARAM_STR);
@@ -184,7 +205,34 @@ if (nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_fu
     $strong = true;
 }
 
-$xtpl->assign('UPLOAD_CHECKING_NOTE', ! $strong ? $lang_module['upload_checking_note'] : '');
+$xtpl->assign('UPLOAD_CHECKING_NOTE', !$strong ? $lang_module['upload_checking_note'] : '');
+
+$upload_chunk_size = '';
+$upload_chunk_size_text = '';
+if ($global_config['upload_chunk_size'] > 1073741823) {
+    $upload_chunk_size = round($global_config['upload_chunk_size'] / 1073741824, 2, PHP_ROUND_HALF_DOWN);
+    $upload_chunk_size_text = 'GB';
+} elseif ($global_config['upload_chunk_size'] > 1048575) {
+    $upload_chunk_size = round($global_config['upload_chunk_size'] / 1048576, 2, PHP_ROUND_HALF_DOWN);
+    $upload_chunk_size_text = 'MB';
+} elseif ($global_config['upload_chunk_size'] > 1023) {
+    $upload_chunk_size = round($global_config['upload_chunk_size'] / 1024, 2, PHP_ROUND_HALF_DOWN);
+    $upload_chunk_size_text = 'KB';
+} elseif ($global_config['upload_chunk_size'] > 0) {
+    $upload_chunk_size = $global_config['upload_chunk_size'];
+}
+
+$xtpl->assign('UPLOAD_CHUNK_SIZE', $upload_chunk_size);
+$array_chunk_size = array('B', 'KB', 'MB', 'GB');
+foreach ($array_chunk_size as $chunk_size) {
+    $chunk_size_lev = array(
+        'key' => $chunk_size,
+        'title' => $chunk_size,
+        'selected' => $chunk_size == $upload_chunk_size_text ? ' selected="selected"' : ''
+    );
+    $xtpl->assign('CHUNK_SIZE_LEV', $chunk_size_lev);
+    $xtpl->parse('main.chunk_size_lev');
+}
 
 foreach ($myini['types'] as $key => $name) {
     $xtpl->assign('TYPES', array(

@@ -366,6 +366,7 @@ var nv_max_width = '{NV_MAX_WIDTH}';
 var nv_max_height = '{NV_MAX_HEIGHT}';
 var nv_min_width = '{NV_MIN_WIDTH}';
 var nv_min_height = '{NV_MIN_HEIGHT}';
+var nv_chunk_size = '{NV_CHUNK_SIZE}';
 var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=";
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
