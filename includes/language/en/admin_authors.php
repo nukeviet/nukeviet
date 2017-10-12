@@ -151,3 +151,4 @@ $lang_module['users'] = 'Users';
 $lang_module['number'] = 'No.';
 $lang_module['module'] = 'Module name';
 $lang_module['custom_title'] = 'Title';
+$lang_module['main_module'] = 'Main module';

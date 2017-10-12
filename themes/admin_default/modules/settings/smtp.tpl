@@ -35,6 +35,19 @@
 							<!-- END: encrypted_connection -->
 						</select></td>
 					</tr>
+                    <tr>
+                        <td>{LANG.verify_peer_ssl}</td>
+                        <td>
+                        <label style="margin-right: 10px"><input type="radio" name="verify_peer_ssl" value="1" {PEER_SSL_YES}> {LANG.verify_peer_ssl_yes}</label>
+                        <label style="margin-right: 10px"><input type="radio" name="verify_peer_ssl" value="0" {PEER_SSL_NO}> {LANG.verify_peer_ssl_no}</label>
+                    </tr>
+                      <tr>
+                        <td>{LANG.verify_peer_name_ssl}</td>
+                        <td>
+                        <label style="margin-right: 10px"><input type="radio" name="verify_peer_name_ssl" value="1" {PEER_NAME_SSL_YES}> {LANG.verify_peer_ssl_yes}</label>
+                        <label style="margin-right: 10px"><input type="radio" name="verify_peer_name_ssl" value="0" {PEER_NAME_SSL_NO}> {LANG.verify_peer_ssl_no}</label>
+                       </td>
+                    </tr>
 				</tbody>
 			</table>
 		</div>

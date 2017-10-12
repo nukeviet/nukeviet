@@ -86,6 +86,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $lev = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_int('lev', 'post', 0) : $row['lev'];
     $modules = (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_array('modules', 'post', array()) : $old_modules;
     $position = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) ? $nv_Request->get_title('position', 'post') : $row['position'];
+    $main_module = $nv_Request->get_title('main_module', 'post', 'siteinfo');
 
     if ($lev == 2) {
         $modules = array();
@@ -138,10 +139,11 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
         $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position WHERE admin_id=' . $admin_id);
+        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module WHERE admin_id=' . $admin_id);
         $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
         $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
         $sth->bindParam(':position', $position, PDO::PARAM_STR);
+        $sth->bindParam(':main_module', $main_module, PDO::PARAM_STR);
         $sth->execute();
 
         if ($lev != $row['lev']) {
@@ -342,6 +344,35 @@ if (defined('NV_IS_SPADMIN')) {
     );
 }
 
+$array_module = array();
+if ($admin_id != $admin_info['userid']) {
+    $admin_mods = array();
+    $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
+    while ($_row = $result->fetch()) {
+        $_row['custom_title'] = isset($lang_global[$_row['lang_key']]) ? $lang_global[$_row['lang_key']] : $_row['module'];
+        $admin_mods[$_row['module']] = $_row;
+    }
+}
+
+foreach ($admin_mods as $mod) {
+    $array_module[$mod['module']] = array(
+        'module' => $mod['module'],
+        'title' => $mod['custom_title']
+    );
+}
+
+foreach ($site_mods as $index => $value) {
+    if ($value['admin_file']) {
+        if ($row['lev'] == 3 && !in_array($index, $old_modules)) {
+            continue;
+        }
+        $array_module[$index] = array(
+            'module' => $index,
+            'title' => $value['custom_title']
+        );
+    }
+}
+
 // Parse content
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors');
 $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
@@ -415,6 +446,12 @@ if (isset($contents['position'])) {
     $xtpl->assign('POSITION1', $contents['position'][1]);
     $xtpl->assign('POSITION2', $contents['position'][2]);
     $xtpl->parse('edit.position');
+}
+
+foreach ($array_module as $module) {
+    $module['selected'] = $row['main_module'] == $module['module'] ? 'selected="selected"' : '';
+    $xtpl->assign('MODULE', $module);
+    $xtpl->parse('edit.module');
 }
 
 $xtpl->parse('edit');
