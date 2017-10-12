@@ -41,6 +41,16 @@ $array_method_update = array(
                 'lang' => 'sys',
                 'module' => 'global',
                 'config_name' => 'lang_multi'
+            ),
+            2 => array(
+                'lang' => 'sys',
+                'module' => 'global',
+                'config_name' => 'cookie_prefix'
+            ),
+            3 => array(
+                'lang' => 'sys',
+                'module' => 'global',
+                'config_name' => 'session_prefix'
             )
         )
     )
@@ -245,17 +255,14 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                     }
                                 }
                                 if (empty($setting['ignore']) or !$is_ignore) {
-                                    $sql_where =  array();
-                                    $sql_set =  array();
-
-                                    foreach ($setting['key'] as $v) {
-                                        $sql_where[] = $v . "='" . addslashes($row[$v]) . "'";
+                                    // Các bảng chực hiện thực hiện REPLACE
+                                    $row2 = array();
+                                    foreach ($columns as $key => $kt) {
+                                        $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
                                     }
-                                    foreach ($setting['value'] as $v) {
-                                        $sql_set[] = $v . "='" . addslashes($row[$v]) . "'";
-                                    }
-
-                                    $content .= '$sql_create_table[] = "UPDATE `' . $store_table_name . '` SET ' . implode(', ', $sql_set) . ' WHERE ' . implode(' AND ', $sql_where) . ";\";\n";
+                                    $row2 = implode(', ', $row2);
+                                    $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
+                                    $content .= '$sql_create_table[] = "REPLACE INTO `' . $store_table_name . '` (`' . implode('`, `', array_keys($columns)) . '`) VALUES (' . $row2 . ")\";\n";
                                 }
                             } else {
                                 // Các bảng chực hiện thực hiện Insert
@@ -265,7 +272,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 }
                                 $row2 = implode(', ', $row2);
                                 $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
-                                $content .= '$sql_create_table[] = "INSERT INTO `' . $store_table_name . '` (`' . implode('`, `', array_keys($columns)) . '`) VALUES (' . $row2 . ");\";\n";
+                                $content .= '$sql_create_table[] = "INSERT INTO `' . $store_table_name . '` (`' . implode('`, `', array_keys($columns)) . '`) VALUES (' . $row2 . ")\";\n";
                             }
 
                             ++$a;
