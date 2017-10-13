@@ -111,7 +111,7 @@
 			<tr>
 				<td> {LANG.alias} <span style="color:red"> * </span></td>
 				<td>
-				<input class="form-control" title="{LANG.alias}" type="text" name="alias" value="{POST.alias}" style="width:400px" maxlength="250" id="id_alias" disabled="disabled"/>
+				<input class="form-control" title="{LANG.alias}" type="text" name="alias" value="{POST.alias}" style="width:400px" maxlength="250" id="id_alias" required="required" oninvalid="setCustomValidity(nv_required)" oninput="setCustomValidity('')"/>
 				&nbsp;<i class="fa fa-refresh fa-lg icon-pointer" onclick="nv_get_alias('id_alias');">&nbsp;</i>
 				</td>
 			</tr>
