@@ -54,8 +54,8 @@
     	</div>
 		<!-- BEGIN: approval -->
 		<div class="form-group">
-    		<label class="col-sm-6 control-label">{LANG.approval}</label>
-    		<div class="col-sm-18">
+    		<label class="control-label">{LANG.approval}</label>
+    		<div>
     			<select class="form-control" name="approval">
     				<!-- BEGIN: loop -->
     				<option value="{APP.key}"{APP.selected}>{APP.title}</option>
@@ -66,7 +66,7 @@
 		<!-- END: approval -->
 		<!-- BEGIN: exptime -->
     	<div class="form-group">
-    		<label class="col-sm-6 control-label">{LANG.s_status}</label>
+    		<label class="control-label">{LANG.s_status}</label>
     		<div class="col-sm-18">
     			<select class="form-control" id="ls_status" name="status">
     				<!-- BEGIN: status -->
@@ -77,8 +77,8 @@
     	</div>
 		<!-- END: exptime -->
     	<div class="form-group">
-    		<label class="col-sm-6 control-label">{LANG.s_signer}</label>
-    		<div class="col-sm-18">
+    		<label class="control-label">{LANG.s_signer}</label>
+    		<div>
     			<select class="form-control" id="ls_signer" name="signer">
     				<!-- BEGIN: signer -->
     				<option value="{KEY}"{SELECTED}>{TITLE}</option>
