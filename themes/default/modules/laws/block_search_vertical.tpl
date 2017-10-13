@@ -53,8 +53,8 @@
 
     	<!-- BEGIN: approval -->
 		<div class="form-group">
-    		<label class="col-sm-6 control-label">{LANG.approval}</label>
-    		<div class="col-sm-18">
+    		<label class="control-label">{LANG.approval}</label>
+    		<div class="">
     			<select class="form-control" name="approval">
     				<!-- BEGIN: loop -->
     				<option value="{APP.key}"{APP.selected}>{APP.title}</option>
@@ -93,8 +93,8 @@
 
     	<!-- BEGIN: examine -->
     	<div class="form-group">
-    		<label class="col-sm-6 control-label">{LANG.examine}</label>
-    		<div class="col-sm-18">
+    		<label class="control-label">{LANG.examine}</label>
+    		<div>
     			<select class="form-control" name="examine">
     				<option value="0">--{LANG.examine}--</option>
     				<!-- BEGIN: loop -->
