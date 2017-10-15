@@ -17,13 +17,24 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 $newfilename = change_alias($nv_Request->get_title('newfilename', 'post', ''));
 $responseType = $nv_Request->get_title('responseType', 'get', '');
 
+$chunk_upload = array();
+$chunk_upload['name'] = $nv_Request->get_title('name', 'post', '');
+$chunk_upload['chunk'] = $nv_Request->get_int('chunk', 'post', 0);
+$chunk_upload['chunks'] = $nv_Request->get_int('chunks', 'post', 0);
+$chunk_upload['tmpdir'] = NV_ROOTDIR . '/' . NV_TEMP_DIR;
+$chunk_upload['chunk_prefix'] = NV_TEMPNAM_PREFIX . 'chunk' . md5($global_config['sitekey'] . NV_CLIENT_IP) . '_';
+
 $error = '';
+$upload_info = array();
+
 if (!isset($check_allow_upload_dir['upload_file'])) {
     $error = $lang_module['notlevel'];
 } elseif (!isset($_FILES, $_FILES['upload'], $_FILES['upload']['tmp_name']) and !$nv_Request->isset_request('fileurl', 'post')) {
     $error = $lang_module['uploadError1'];
 } elseif (!isset($_FILES) and !nv_is_url($nv_Request->get_string('fileurl', 'post,get'))) {
     $error = $lang_module['uploadError2'];
+} elseif (isset($_FILES['upload']) and $global_config['upload_chunk_size'] > 0 and (empty($chunk_upload['name']) or empty($_FILES['upload']['name']) or ($chunk_upload['name'] != $_FILES['upload']['name'] and $_FILES['upload']['name'] != 'blob') or $chunk_upload['chunks'] < 1 or $chunk_upload['chunk'] >= $chunk_upload['chunks'])) {
+    $error = $lang_module['uploadError3'];
 } else {
     $type = $nv_Request->get_string('type', 'post,get');
 
@@ -45,6 +56,10 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
     $upload->setLanguage($lang_global);
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
+        // Upload Chunk (nhiều phần)
+        if ($global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 1) {
+            $upload->setChunkOption($chunk_upload);
+        }
         $upload_info = $upload->save_file($_FILES['upload'], NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize']);
     } else {
         $urlfile = rawurldecode(trim($nv_Request->get_string('fileurl', 'post')));
@@ -53,7 +68,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 
     if (!empty($upload_info['error'])) {
         $error = $upload_info['error'];
-    } elseif (preg_match('#image\/[x\-]*([a-z]+)#', $upload_info['mime'])) {
+    } elseif ($upload_info['complete'] and preg_match('#image\/[x\-]*([a-z]+)#', $upload_info['mime'])) {
         if (isset($array_thumb_config[$path])) {
             $thumb_config = $array_thumb_config[$path];
         } else {
@@ -170,7 +185,23 @@ if (!preg_match("/^([a-zA-Z0-9\-\_]+)$/", $editor)) {
     $editor = '';
 }
 
-if (empty($error)) {
+if (!empty($error)) {
+    // Lỗi upload
+    if ($responseType == 'json') {
+        $array_data = array();
+        $array_data['uploaded'] = 0;
+        $array_data['error'] = array(
+            'message' => $error
+        );
+
+        nv_jsonOutput($array_data);
+    } elseif ($editor == 'ckeditor') {
+        echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $error . "');</script>";
+    } else {
+        echo 'ERROR_' . $error;
+    }
+} elseif (!empty($upload_info['complete'])) {
+    // Upload hoàn thành
     if (isset($array_dirname[$path])) {
         $did = $array_dirname[$path];
         $info = nv_getFileInfo($path, $upload_info['basename']);
@@ -208,18 +239,5 @@ if (empty($error)) {
         echo $upload_info['basename'];
     }
 } else {
-    if ($responseType == 'json') {
-        $array_data = array();
-        $array_data['uploaded'] = 0;
-        $array_data['error'] = array(
-            'message' => $error
-        );
-
-        nv_jsonOutput($array_data);
-    } elseif ($editor == 'ckeditor') {
-        echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $error . "');</script>";
-    } else {
-        echo 'ERROR_' . $error;
-    }
+    // Upload chunk hoàn thành
 }
-exit();
