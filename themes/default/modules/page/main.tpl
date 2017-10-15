@@ -6,7 +6,7 @@
 
 <div class="page panel panel-default">
     <div class="panel-body">
-        <h3 class="title margin-bottom-lg">{CONTENT.title}</h3>
+        <h1 class="title margin-bottom-lg">{CONTENT.title}</h1>
     	<!-- BEGIN: socialbutton -->
     	<div class="well well-sm">
     		<ul class="nv-social-share">
@@ -66,7 +66,7 @@
     <div class="panel-body">
         <ul class="nv-list-item">
     		<!-- BEGIN: loop -->
-    		<li><em class="fa fa-angle-double-right">&nbsp;</em><a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a></li>
+    		<li><em class="fa fa-angle-double-right">&nbsp;</em><h3><a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a></h3></li>
     		<!-- END: loop -->
 	   </ul>
     </div>
