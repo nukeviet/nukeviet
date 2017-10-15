@@ -25,7 +25,35 @@ $array_ignore_save = array(
     $db_config['prefix'] . '_upload_file'
 );
 $array_ignore_drop = array(
+    $db_config['prefix'] . '_config',
     NV_USERS_GLOBALTABLE
+);
+$array_method_update = array(
+    $db_config['prefix'] . '_config' => array(
+        'key' => array('lang', 'module', 'config_name'),
+        'value' => array('config_value'),
+        'ignore' => array(
+            0 => array(
+                'module' => 'global',
+                'config_name' => 'site_name'
+            ),
+            1 => array(
+                'lang' => 'sys',
+                'module' => 'global',
+                'config_name' => 'lang_multi'
+            ),
+            2 => array(
+                'lang' => 'sys',
+                'module' => 'global',
+                'config_name' => 'cookie_prefix'
+            ),
+            3 => array(
+                'lang' => 'sys',
+                'module' => 'global',
+                'config_name' => 'session_prefix'
+            )
+        )
+    )
 );
 
 $file_data_tmp = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_samplewrite_' . NV_CHECK_SESSION;
@@ -209,13 +237,43 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                     }
                                 }
                             }
-                            $row2 = array();
-                            foreach ($columns as $key => $kt) {
-                                $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
+
+                            if (isset($array_method_update[$table['name']])) {
+                                // Các bảng thực hiện Update
+                                $setting = $array_method_update[$table['name']];
+                                $is_ignore = false;
+                                foreach ($setting['ignore'] as $ignore_row) {
+                                    $check_ignore = 0;
+                                    foreach ($ignore_row as $k => $v) {
+                                        if ($row[$k] == $v) {
+                                            $check_ignore++;
+                                        }
+                                    }
+                                    if ($check_ignore >= sizeof($ignore_row)) {
+                                        $is_ignore = true;
+                                        break;
+                                    }
+                                }
+                                if (empty($setting['ignore']) or !$is_ignore) {
+                                    // Các bảng chực hiện thực hiện REPLACE
+                                    $row2 = array();
+                                    foreach ($columns as $key => $kt) {
+                                        $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
+                                    }
+                                    $row2 = implode(', ', $row2);
+                                    $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
+                                    $content .= '$sql_create_table[] = "REPLACE INTO `' . $store_table_name . '` (`' . implode('`, `', array_keys($columns)) . '`) VALUES (' . $row2 . ")\";\n";
+                                }
+                            } else {
+                                // Các bảng chực hiện thực hiện Insert
+                                $row2 = array();
+                                foreach ($columns as $key => $kt) {
+                                    $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
+                                }
+                                $row2 = implode(', ', $row2);
+                                $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
+                                $content .= '$sql_create_table[] = "INSERT INTO `' . $store_table_name . '` (`' . implode('`, `', array_keys($columns)) . '`) VALUES (' . $row2 . ")\";\n";
                             }
-                            $row2 = implode(', ', $row2);
-                            $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
-                            $content .= '$sql_create_table[] = "INSERT INTO `' . $store_table_name . '` (`' . implode('`, `', array_keys($columns)) . '`) VALUES (' . $row2 . ");\";\n";
 
                             ++$a;
                             if ($a >= $table['numrow']) {
