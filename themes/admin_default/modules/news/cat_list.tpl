@@ -1,8 +1,9 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: cat_title -->
-<div style="background:#eee;padding:10px">
-    {CAT_TITLE}
-</div>
+<ol class="breadcrumb breadcrumb-catnav">
+    <!-- BEGIN: loop --><li><a href="{CAT.link}">{CAT.title}</a></li><!-- END: loop -->
+    <!-- BEGIN: active --><li class="active">{CAT.title}</li><!-- END: active -->
+</ol>
 <!-- END: cat_title -->
 <!-- BEGIN: data -->
 <div class="table-responsive">
@@ -24,11 +25,7 @@
                 <td class="text-center">
                     <!-- BEGIN: stt -->{STT}<!-- END: stt -->
                     <!-- BEGIN: weight -->
-                    <select class="form-control" id="id_weight_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','weight');">
-                        <!-- BEGIN: loop -->
-                        <option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
-                        <!-- END: loop -->
-                    </select>
+                    <button id="cat_weight_{ROW.catid}" data-toggle="changecat" data-mod="weight" data-min="1" data-num="{MAX_WEIGHT}" data-catid="{ROW.catid}" data-current="{STT}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{STT}</span></button>
                     <!-- END: weight -->
                 </td>
                 <td>
@@ -43,11 +40,7 @@
                     {NUMLINKS}
                     <!-- END: title_numlinks -->
                     <!-- BEGIN: numlinks -->
-                    <select class="form-control" id="id_numlinks_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','numlinks');">
-                        <!-- BEGIN: loop -->
-                        <option value="{NUMLINKS.key}"{NUMLINKS.selected}>{NUMLINKS.title}</option>
-                        <!-- END: loop -->
-                    </select>
+                    <button id="cat_numlinks_{ROW.catid}" data-toggle="changecat" data-mod="numlinks" data-min="0" data-num="{MAX_NUMLINKS}" data-catid="{ROW.catid}" data-current="{NUMLINKS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{NUMLINKS}</span></button>
                     <!-- END: numlinks -->
                 </td>
                 <td class="text-center">
@@ -55,11 +48,7 @@
                     {NEWDAY}
                     <!-- END: title_newday -->
                     <!-- BEGIN: newday -->
-                    <select class="form-control" id="id_newday_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','newday');">
-                        <!-- BEGIN: loop -->
-                        <option value="{NEWDAY.key}"{NEWDAY.selected}>{NEWDAY.title}</option>
-                        <!-- END: loop -->
-                    </select>
+                    <button id="cat_newday_{ROW.catid}" data-toggle="changecat" data-mod="newday" data-min="0" data-num="{MAX_NEWDAY}" data-catid="{ROW.catid}" data-current="{NEWDAY}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{NEWDAY}</span></button>
                     <!-- END: newday -->
                 </td>
                 <td class="text-left">
@@ -67,11 +56,7 @@
                     {VIEWCAT}
                     <!-- END: disabled_viewcat -->
                     <!-- BEGIN: viewcat -->
-                    <select class="form-control" id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
-                        <!-- BEGIN: loop -->
-                        <option value="{VIEWCAT.key}"{VIEWCAT.selected}>{VIEWCAT.title}</option>
-                        <!-- END: loop -->
-                    </select>
+                    <button id="cat_viewcat_{ROW.catid}" data-toggle="changecat" data-mod="viewcat" data-catid="{ROW.catid}" data-current="{VIEWCAT_VAL}" data-mode="{VIEWCAT_MODE}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{VIEWCAT}</span></button>
                     <!-- END: viewcat -->
                 </td>
                 <td class="text-center">
@@ -79,11 +64,7 @@
                     {STATUS}
                     <!-- END: disabled_status -->
                     <!-- BEGIN: status -->
-                    <select class="form-control" id="id_status_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','status');" data-val="{STATUS_VAL}" data-cmess="{LANG.cat_status_0_confirm}">
-                        <!-- BEGIN: loop -->
-                        <option value="{STATUS.key}"{STATUS.selected}>{STATUS.title}</option>
-                        <!-- END: loop -->
-                    </select>
+                    <button id="cat_status_{ROW.catid}" data-toggle="changecat" data-mod="status" data-catid="{ROW.catid}" data-current="{STATUS_VAL}" data-cmess="{LANG.cat_status_0_confirm}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{STATUS}</span></button>
                     <!-- END: status -->
                 </td>
                 <td class="text-center">{ROW.adminfuncs}</td>
@@ -92,5 +73,14 @@
         </tbody>
     </table>
 </div>
+<ul id="cat_list_full" class="hidden">
+    <!-- BEGIN: viewcat_full --><li><a href="#" data-value="{K}">{V}</a></li><!-- END: viewcat_full -->
+</ul>
+<ul id="cat_list_nosub" class="hidden">
+    <!-- BEGIN: viewcat_nosub --><li><a href="#" data-value="{K}">{V}</a></li><!-- END: viewcat_nosub -->
+</ul>
+<ul id="cat_list_status" class="hidden">
+    <!-- BEGIN: status --><li><a href="#" data-value="{K}">{V}</a></li><!-- END: status -->
+</ul>
 <!-- END: data -->
 <!-- END: main -->
