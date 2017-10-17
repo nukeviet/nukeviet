@@ -89,6 +89,7 @@ $lang_module['edit_block_cat'] = 'Edit block groups';
 $lang_module['link'] = 'Website\'s link';
 $lang_module['cat_sub'] = 'Categories';
 $lang_module['cat_sub_sl'] = 'Main categories';
+$lang_module['cat_parent'] = 'Main categories';
 $lang_module['note_cat_title'] = 'Empty cat';
 $lang_module['note_cat_content'] = 'You need a category before create new post. System redirecting <strong>Cat manage</strong> a moments...';
 $lang_module['topic_sl'] = 'Select topics';

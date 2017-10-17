@@ -96,6 +96,7 @@ $lang_module['edit_block_cat'] = 'Sửa nhóm tin';
 $lang_module['link'] = 'Website nguồn tin';
 $lang_module['cat_sub'] = 'Thuộc chuyên mục';
 $lang_module['cat_sub_sl'] = 'Là chuyên mục chính';
+$lang_module['cat_parent'] = 'Chuyên mục chính';
 $lang_module['note_cat_title'] = 'Chưa có chuyên mục';
 $lang_module['note_cat_content'] = 'Bạn cần chuyên mục trước khi thêm bài viết mới. Hệ thống sẽ chuyển bạn đến trang <strong>Quản lý chuyên mục</strong> trong giây lát!';
 $lang_module['topic_sl'] = 'Chọn nhóm tin liên quan hoặc tự điền';
