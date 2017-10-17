@@ -42,7 +42,7 @@ while ($row = $result->fetch()) {
     $admin_mods[$row['module']] = $row;
 }
 
-$main_module = $db->query('SELECT main_module FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_info['userid'])->fetchColumn();
+$main_module = $db->query('SELECT main_module FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_info['userid'])->fetchColumn();
 
 $module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $main_module));
 if (preg_match($global_config['check_module'], $module_name)) {
