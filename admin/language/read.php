@@ -140,7 +140,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         $sth_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ', update_' . $dirlang . ') VALUES (:idfile, :lang_key, :lang_value, ' . NV_CURRENTTIME . ')');
         $sth_ud = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $dirlang . ' = :lang_value, update_' . $dirlang . ' = ' . NV_CURRENTTIME . ' WHERE idfile = :idfile AND lang_key = :lang_key');
 
-        while (list ($lang_key, $lang_value) = each($temp_lang)) {
+        foreach ($temp_lang as $lang_key => $lang_value) {
             $check_type_update = false;
             $lang_key = trim($lang_key);
             $lang_value = nv_nl2br($lang_value);

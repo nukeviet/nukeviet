@@ -1118,7 +1118,7 @@ $checkcop = ($rowcontent['copyright']) ? ' checked="checked"' : '';
 $xtpl->assign('checkcop', $checkcop);
 
 // topic
-while (list($topicid_i, $title_i) = each($array_topic_module)) {
+foreach ($array_topic_module as $topicid_i => $title_i) {
     $sl = ($topicid_i == $rowcontent['topicid']) ? ' selected="selected"' : '';
     $xtpl->assign('topicid', $topicid_i);
     $xtpl->assign('topic_title', $title_i);
@@ -1127,7 +1127,7 @@ while (list($topicid_i, $title_i) = each($array_topic_module)) {
 }
 
 // position images
-while (list($id_imgposition, $title_imgposition) = each($array_imgposition)) {
+foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $rowcontent['imgposition']) ? ' selected="selected"' : '';
     $xtpl->assign('id_imgposition', $id_imgposition);
     $xtpl->assign('title_imgposition', $title_imgposition);
@@ -1188,7 +1188,7 @@ foreach ($layout_array as $value) {
 
 // source
 $select = '';
-while (list($sourceid_i, $source_title_i) = each($array_source_module)) {
+foreach ($array_source_module as $sourceid_i => $source_title_i) {
     $source_sl = ($sourceid_i == $rowcontent['sourceid']) ? ' selected="selected"' : '';
     $select .= "<option value=\"" . $sourceid_i . "\" " . $source_sl . ">" . $source_title_i . "</option>\n";
 }
