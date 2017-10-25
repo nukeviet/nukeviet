@@ -255,3 +255,49 @@ select, input {
 		padding: 6px 0px;
 	}
 }
+.breadcrumb-catnav {
+    font-size: 13px;
+    line-height: 1.2em;
+    background-color: #f5f5f5;
+    padding: 8px 15px;
+    display: block;
+    border: 1px solid #e1e1e8;
+    border-radius: 0;
+}
+.btn-cattool {
+    text-align: left;
+    padding-right: 20px!important;
+}
+.btn-cattool .caret {
+    float: right;
+    margin-top: 7px;
+    margin-right: -14px;
+}
+.dropdown-cattool-ctn {
+    margin: 0 -14px;
+    overflow: auto;
+    max-height: 250px;
+}
+.dropdown-cattool {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.dropdown-cattool > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    text-align: left;
+    min-width: 100px;
+}
+.dropdown-cattool > li > a:hover,
+.dropdown-cattool > li > a.active {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+

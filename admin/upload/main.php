@@ -56,6 +56,7 @@ if ($popup) {
     $xtpl->assign('AREA', $area);
     $xtpl->assign('ALT', $alt);
     $xtpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
+    $xtpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
 
     $sfile = ($type == 'file') ? ' selected="selected"' : '';
     $simage = ($type == 'image') ? ' selected="selected"' : '';

@@ -154,7 +154,6 @@ $(document).ready(function(){
 		});
 	});
 	
-	// 
 	$('#ssl_https').change(function(){
 		var val = $(this).data('val');
 		var mode = $(this).val();
@@ -162,12 +161,6 @@ $(document).ready(function(){
 		if( mode != 0 && val == 0 && ! confirm(LANG.note_ssl) ){
 			$(this).val('0');
 			return;
-		}
-		
-		if( mode == '3' ){
-			$('#ssl_https_modules').removeClass('hidden');
-		}else{
-			$('#ssl_https_modules').addClass('hidden');
 		}
 	});
 });

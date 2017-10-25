@@ -74,5 +74,5 @@
     </div>
 </div>
 <!-- END FORFOOTER -->
-<script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
+<script src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/users.js"></script>
 <!-- END: signed -->

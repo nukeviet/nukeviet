@@ -32,6 +32,8 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     $array_config['captcha'] = $nv_Request->get_int('captcha', 'post', 0);
     $array_config['perpagecomm'] = $nv_Request->get_int('perpagecomm', 'post', 0);
     $array_config['timeoutcomm'] = $nv_Request->get_int('timeoutcomm', 'post', 0);
+    $array_config['allowattachcomm'] = ($nv_Request->get_int('allowattachcomm', 'post', 0) == 1 ? 1 : 0);
+    $array_config['alloweditorcomm'] = ($nv_Request->get_int('alloweditorcomm', 'post', 0) == 1 ? 1 : 0);
 
     if ($array_config['perpagecomm'] < 1 or $array_config['perpagecomm'] > 1000) {
         $array_config['perpagecomm'] = 5;
@@ -88,6 +90,8 @@ if (!empty($mod_name)) {
     $xtpl->assign('DATA', $module_config[$mod_name]);
     $xtpl->assign('ACTIVECOMM', $module_config[$mod_name]['activecomm'] ? ' checked="checked"' : '');
     $xtpl->assign('EMAILCOMM', $module_config[$mod_name]['emailcomm'] ? ' checked="checked"' : '');
+    $xtpl->assign('ALLOWATTACHCOMM', empty($module_config[$mod_name]['allowattachcomm']) ? '' : ' checked="checked"');
+    $xtpl->assign('ALLOWEDITORCOMM', empty($module_config[$mod_name]['alloweditorcomm']) ? '' : ' checked="checked"');
 
     $admins_mod_name = explode(',', $site_mod_comm[$mod_name]['admins']);
     $admins_module_name = explode(',', $site_mods[$module_name]['admins']);

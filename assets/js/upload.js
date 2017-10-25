@@ -1513,7 +1513,6 @@ $('[name="uploadremoteFileOK"]').click(function() {
             url: nv_module_url + "upload&random=" + nv_randomNum(10),
             data: "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt,
             success: function(k) {
-                $("input[name=currentFileUrl]").val(check);
                 $('[name="uploadremoteFileOK"]').removeAttr('disabled');
 
                 var l = k.split("_");
@@ -1521,6 +1520,7 @@ $('[name="uploadremoteFileOK"]').click(function() {
                     $("div#errorInfo").html(l[1]).dialog("open");
                     $('#upload-remote-info').html('');
                 } else {
+                    $("input[name=currentFileUrl]").val(check);
                     $("input[name=selFile]").val(k);
                     $('#upload-remote-info').html('<em class="fa fa-2x fa-check text-success"></em>');
                     LFILE.reload(folderPath, k);
@@ -1841,12 +1841,16 @@ var NVUPLOAD = {
                 runtimes: 'html5,flash,silverlight,html4',
                 browse_button: 'upload-local',
                 url: nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
-                max_file_size: nv_max_size_bytes,
                 flash_swf_url: nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
                 silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
                 multipart: true,
+                filters : {
+               	    max_file_size : nv_max_size_bytes,
+                    mime_types: []
+                },
+                chunk_size: nv_chunk_size,
                 init: {
                     // Event on init uploader
                     PostInit: function() {
@@ -1945,12 +1949,14 @@ var NVUPLOAD = {
                                 $('#upload-start, #upload-cancel, #upload-button-area .browse-button').hide();
 
                                 // Add some button
-                                $('#upload-button-area .buttons').append(
-                                    '<input id="upload-stop" type="button" class="btn btn-primary" value="' + LANG.upload_stop + '"/> ' +
-                                    '<input style="display:none" id="upload-continue" type="button" class="btn btn-primary" value="' + LANG.upload_continue + '"/>' +
-                                    '<div class="total-info pull-right"></div>'
-                                );
+                                if (parseFloat(nv_chunk_size) <= 0) {
+                                    $('#upload-button-area .buttons').append(
+                                        '<input id="upload-stop" type="button" class="btn btn-primary" value="' + LANG.upload_stop + '"/> ' +
+                                        '<input style="display:none" id="upload-continue" type="button" class="btn btn-primary" value="' + LANG.upload_continue + '"/>'
+                                    );
+                                }
 
+                                $('#upload-button-area .buttons').append('<div class="total-info pull-right"></div>');
                                 $('#upload-button-area .total-info').html(
                                     plupload.sprintf(LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize(NVUPLOAD.uploader.total.bytesPerSec))
                                 );
@@ -2037,6 +2043,17 @@ var NVUPLOAD = {
                             } else {
                                 NVUPLOAD.uploader.settings.resize = {};
                             }
+                        }
+                    },
+
+                    // Upload xong một BLOB
+                    ChunkUploaded: function(up, file, res) {
+                        /**
+                         * Hiện tại Plupload không có chức năng dừng upload chunk và chuyển sang file khác
+                         * Do đó tạm thời khi lỗi một BLOG phải chờ upload xong cả file để kiểm tra lỗi
+                         */
+                        if (res.response != null && res.response != '') {
+                            //NVUPLOAD.handleStatus(file, res.response);
                         }
                     }
                 }

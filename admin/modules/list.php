@@ -107,8 +107,9 @@ if ($is_delCache) {
     $nv_Cache->delMod('modules');
 }
 
-$contents['caption'] = array( $lang_module['caption_actmod'], $lang_module['caption_deactmod'], $lang_module['caption_badmod'], $lang_module['caption_newmod'] );
-$contents['thead'] = array( $lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_global['activate'], $lang_global['actions'] );
+$contents = array();
+$contents['caption'] = array($lang_module['caption_actmod'], $lang_module['caption_deactmod'], $lang_module['caption_badmod'], $lang_module['caption_newmod']);
+$contents['thead'] = array($lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_global['activate'], $lang_global['actions']);
 
 $contents = list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weight_list);
 

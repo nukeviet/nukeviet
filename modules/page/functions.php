@@ -45,7 +45,7 @@ if ($page_config['viewtype'] != 2) {
             $id = $rowdetail['id'];
         }
     } elseif (!empty($alias)) {
-        $sth = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND alias=:alias');
+        $sth = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=:alias');
         $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
         $sth->execute();
         $rowdetail = $sth->fetch();

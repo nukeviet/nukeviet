@@ -217,11 +217,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $id = $db->insert_id($_sql, 'id', $data_insert);
             }
         }
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid']);
-        nv_CreateXML_bannerPlan();
-        $nv_Cache->delMod($module_name);
-        $op2 = ($file_ext == 'swf') ? 'edit_banner' : 'info_banner';
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op2 . '&id=' . $id);
+
+        if (empty($error)) {
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid']);
+            nv_CreateXML_bannerPlan();
+            $nv_Cache->delMod($module_name);
+            $op2 = ($file_ext == 'swf') ? 'edit_banner' : 'info_banner';
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op2 . '&id=' . $id);
+        }
     }
 } else {
     $pid = 0;

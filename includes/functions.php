@@ -1093,14 +1093,14 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                     break;
                 default:
                     $mail->SMTPSecure = '';
-                    $mail->SMTPOptions = array(
-                        'ssl' => array(
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                            'allow_self_signed' => true
-                        )
-                    );
             }
+            $mail->SMTPOptions = array(
+            		'ssl' => array(
+            				'verify_peer' => ($global_config['verify_peer_ssl'] == 1) ? true : false,
+            				'verify_peer_name' => ($global_config['verify_peer_name_ssl'] == 1) ? true : false,
+            				'allow_self_signed' => true
+            		)
+            );
 
             if (filter_var($global_config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
                 $mail->From = $global_config['smtp_username'];
@@ -1413,7 +1413,7 @@ function nv_check_domain($domain)
 {
     if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
         return $domain;
-    } else {
+    } elseif (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
             $domain_ascii = idn_to_ascii($domain);
         } else {

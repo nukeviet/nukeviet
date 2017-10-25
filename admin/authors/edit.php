@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 21:17
  */
 
-if (! defined('NV_IS_FILE_AUTHORS')) {
+if (!defined('NV_IS_FILE_AUTHORS')) {
     die('Stop!!!');
 }
 
@@ -22,7 +22,7 @@ if (empty($row)) {
 }
 
 $allowed = false;
-if (defined('NV_IS_GODADMIN')) {
+if (defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) {
     $allowed = true;
 } elseif (defined('NV_IS_SPADMIN')) {
     if ($row['admin_id'] == $admin_info['admin_id']) {
@@ -44,8 +44,8 @@ $old_modules = array();
 if ($row['lev'] == 3) {
     $array_keys = array_keys($site_mods);
     foreach ($array_keys as $mod) {
-        if (! empty($mod)) {
-            if (! empty($site_mods[$mod]['admins'])) {
+        if (!empty($mod)) {
+            if (!empty($site_mods[$mod]['admins'])) {
                 if (in_array($admin_id, explode(',', $site_mods[$mod]['admins']))) {
                     $old_modules[] = $mod;
                 }
@@ -61,8 +61,8 @@ if (empty($row['files_level'])) {
     $old_allow_files_type = array();
     $old_allow_modify_files = $old_allow_create_subdirectories = $old_allow_modify_subdirectories = 0;
 } else {
-    list($old_allow_files_type, $old_allow_modify_files, $old_allow_create_subdirectories, $old_allow_modify_subdirectories) = explode('|', $row['files_level']);
-    $old_allow_files_type = ! empty($old_allow_files_type) ? explode(',', $old_allow_files_type) : array();
+    list ($old_allow_files_type, $old_allow_modify_files, $old_allow_create_subdirectories, $old_allow_modify_subdirectories) = explode('|', $row['files_level']);
+    $old_allow_files_type = !empty($old_allow_files_type) ? explode(',', $old_allow_files_type) : array();
 }
 
 $error = '';
@@ -83,15 +83,16 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $allow_modify_subdirectories = $old_allow_modify_subdirectories;
     }
 
-    $lev = (defined('NV_IS_GODADMIN') and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_int('lev', 'post', 0) : $row['lev'];
+    $lev = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_int('lev', 'post', 0) : $row['lev'];
     $modules = (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_array('modules', 'post', array()) : $old_modules;
-    $position = (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) ? $nv_Request->get_title('position', 'post') : $row['position'];
+    $position = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) ? $nv_Request->get_title('position', 'post') : $row['position'];
+    $main_module = $nv_Request->get_title('main_module', 'post', 'siteinfo');
 
     if ($lev == 2) {
         $modules = array();
     }
 
-    if (! empty($modules)) {
+    if (!empty($modules)) {
         $modules = array_intersect(array_keys($site_mods), $modules);
     }
 
@@ -101,12 +102,12 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $add_modules = array_diff($modules, $old_modules);
         $del_modules = array_diff($old_modules, $modules);
 
-        if (! empty($add_modules)) {
+        if (!empty($add_modules)) {
             foreach ($add_modules as $mod) {
-                $admins = (! empty($site_mods[$mod]['admins'])) ? explode(',', $site_mods[$mod]['admins']) : array();
+                $admins = (!empty($site_mods[$mod]['admins'])) ? explode(',', $site_mods[$mod]['admins']) : array();
                 array_push($admins, $admin_id);
                 $admins = array_map('intval', $admins);
-                $admins = (! empty($admins)) ? implode(',', $admins) : '';
+                $admins = (!empty($admins)) ? implode(',', $admins) : '';
 
                 $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
                 $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
@@ -114,12 +115,15 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                 $sth->execute();
             }
         }
-        if (! empty($del_modules)) {
+        if (!empty($del_modules)) {
             foreach ($del_modules as $mod) {
-                $admins = (! empty($site_mods[$mod]['admins'])) ? explode(',', $site_mods[$mod]['admins']) : array();
-                $admins = array_diff($admins, array( $admin_id, 0 ));
+                $admins = (!empty($site_mods[$mod]['admins'])) ? explode(',', $site_mods[$mod]['admins']) : array();
+                $admins = array_diff($admins, array(
+                    $admin_id,
+                    0
+                ));
                 $admins = array_map('intval', $admins);
-                $admins = (! empty($admins)) ? implode(',', $admins) : '';
+                $admins = (!empty($admins)) ? implode(',', $admins) : '';
 
                 $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
                 $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
@@ -128,17 +132,18 @@ if ($nv_Request->get_int('save', 'post', 0)) {
             }
         }
 
-        if (! empty($add_modules) or ! empty($del_modules)) {
+        if (!empty($add_modules) or !empty($del_modules)) {
             $nv_Cache->delMod('modules');
         }
 
         $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
-        $files_level = (! empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
+        $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position WHERE admin_id=' . $admin_id);
+        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module WHERE admin_id=' . $admin_id);
         $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
         $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
         $sth->bindParam(':position', $position, PDO::PARAM_STR);
+        $sth->bindParam(':main_module', $main_module, PDO::PARAM_STR);
         $sth->execute();
 
         if ($lev != $row['lev']) {
@@ -151,61 +156,101 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $result['login'] = $row_user['username'];
         $result['change'] = array();
         if ($editor != $row['editor']) {
-            $result['change']['editor'] = array( $lang_module['editor'], (! empty($row['editor']) ? $row['editor'] : $lang_module['not_use']), (! empty($editor) ? $editor : $lang_module['not_use']) );
+            $result['change']['editor'] = array(
+                $lang_module['editor'],
+                (!empty($row['editor']) ? $row['editor'] : $lang_module['not_use']),
+                (!empty($editor) ? $editor : $lang_module['not_use'])
+            );
         }
         if ($allow_files_type != $old_allow_files_type) {
-            $result['change']['allow_files_type'] = array( $lang_module['allow_files_type'], (! empty($old_allow_files_type) ? implode(', ', $old_allow_files_type) : $lang_global['no']), (! empty($allow_files_type) ? implode(', ', $allow_files_type) : $lang_global['no']) );
+            $result['change']['allow_files_type'] = array(
+                $lang_module['allow_files_type'],
+                (!empty($old_allow_files_type) ? implode(', ', $old_allow_files_type) : $lang_global['no']),
+                (!empty($allow_files_type) ? implode(', ', $allow_files_type) : $lang_global['no'])
+            );
         }
         if ($allow_modify_files != $old_allow_modify_files) {
-            $result['change']['allow_modify_files'] = array( $lang_module['allow_modify_files'], (! empty($old_allow_modify_files) ? $lang_global['yes'] : $lang_global['no']), (! empty($allow_modify_files) ? $lang_global['yes'] : $lang_global['no']) );
+            $result['change']['allow_modify_files'] = array(
+                $lang_module['allow_modify_files'],
+                (!empty($old_allow_modify_files) ? $lang_global['yes'] : $lang_global['no']),
+                (!empty($allow_modify_files) ? $lang_global['yes'] : $lang_global['no'])
+            );
         }
         if ($allow_create_subdirectories != $old_allow_create_subdirectories) {
-            $result['change']['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], (! empty($old_allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no']), (! empty($allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no']) );
+            $result['change']['allow_create_subdirectories'] = array(
+                $lang_module['allow_create_subdirectories'],
+                (!empty($old_allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no']),
+                (!empty($allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no'])
+            );
         }
         if ($allow_modify_subdirectories != $old_allow_modify_subdirectories) {
-            $result['change']['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], (! empty($old_allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no']), (! empty($allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no']) );
+            $result['change']['allow_modify_subdirectories'] = array(
+                $lang_module['allow_modify_subdirectories'],
+                (!empty($old_allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no']),
+                (!empty($allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no'])
+            );
         }
         if ($lev == 2 and $lev != $row['lev']) {
-            $result['change']['lev'] = array( $lang_module['lev'], $lang_global['level' . $row['lev']], $lang_global['level' . $lev] );
+            $result['change']['lev'] = array(
+                $lang_module['lev'],
+                $lang_global['level' . $row['lev']],
+                $lang_global['level' . $lev]
+            );
         } elseif ($lev == 3 and $lev != $row['lev']) {
-            $result['change']['lev'] = array( $lang_module['lev'], $lang_global['level' . $row['lev']], $lang_global['level' . $lev] );
+            $result['change']['lev'] = array(
+                $lang_module['lev'],
+                $lang_global['level' . $row['lev']],
+                $lang_global['level' . $lev]
+            );
             $old = array();
-            if (! empty($old_modules)) {
+            if (!empty($old_modules)) {
                 foreach ($old_modules as $m) {
                     $old[] = $site_mods[$m]['custom_title'];
                 }
             }
-            $old = (! empty($old)) ? implode(', ', $old) : '';
+            $old = (!empty($old)) ? implode(', ', $old) : '';
             $new = array();
-            if (! empty($modules)) {
+            if (!empty($modules)) {
                 foreach ($modules as $m) {
                     $new[] = $site_mods[$m]['custom_title'];
                 }
             }
-            $new = (! empty($new)) ? implode(', ', $new) : '';
+            $new = (!empty($new)) ? implode(', ', $new) : '';
 
-            $result['change']['modules'] = array( $lang_module['nv_admin_modules'], $old, $new );
+            $result['change']['modules'] = array(
+                $lang_module['nv_admin_modules'],
+                $old,
+                $new
+            );
         } elseif ($lev == 3 and $lev == $row['lev']) {
-            if (! empty($add_modules) or ! empty($del_modules)) {
+            if (!empty($add_modules) or !empty($del_modules)) {
                 $old = array();
-                if (! empty($old_modules)) {
+                if (!empty($old_modules)) {
                     foreach ($old_modules as $m) {
                         $old[] = $site_mods[$m]['custom_title'];
                     }
                 }
-                $old = (! empty($old)) ? implode(', ', $old) : '';
+                $old = (!empty($old)) ? implode(', ', $old) : '';
                 $new = array();
-                if (! empty($modules)) {
+                if (!empty($modules)) {
                     foreach ($modules as $m) {
                         $new[] = $site_mods[$m]['custom_title'];
                     }
                 }
-                $new = (! empty($new)) ? implode(', ', $new) : '';
-                $result['change']['modules'] = array( $lang_module['nv_admin_modules'], $old, $new );
+                $new = (!empty($new)) ? implode(', ', $new) : '';
+                $result['change']['modules'] = array(
+                    $lang_module['nv_admin_modules'],
+                    $old,
+                    $new
+                );
             }
         }
         if ($position != $row['position']) {
-            $result['change']['position'] = array( $lang_module['position'], $row['position'], $position );
+            $result['change']['position'] = array(
+                $lang_module['position'],
+                $row['position'],
+                $position
+            );
         }
 
         if (empty($result['change'])) {
@@ -228,8 +273,8 @@ if ($nv_Request->get_int('save', 'post', 0)) {
 $page_title = $lang_module['nv_admin_edit'];
 
 $contents = array();
-$contents['info'] = (! empty($error)) ? $error : sprintf($lang_module['nv_admin_edit_info'], $row_user['username']);
-$contents['is_error'] = (! empty($error)) ? 1 : 0;
+$contents['info'] = (!empty($error)) ? $error : sprintf($lang_module['nv_admin_edit_info'], $row_user['username']);
+$contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $admin_id;
 if (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
     $mods = array();
@@ -239,19 +284,27 @@ if (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
         $mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
     }
 
-    $contents['lev'] = array( $lang_module['lev'], $lang_module['if_level3_selected'], $mods );
+    $contents['lev'] = array(
+        $lang_module['lev'],
+        $lang_module['if_level3_selected'],
+        $mods
+    );
 
-    if (defined('NV_IS_GODADMIN')) {
+    if (defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) {
         array_push($contents['lev'], $lev, $lang_global['level2'], $lang_global['level3']);
     }
 }
-if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) {
-    $contents['position'] = array( $lang_module['position'], $position, $lang_module['position_info'] );
+if ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) {
+    $contents['position'] = array(
+        $lang_module['position'],
+        $position,
+        $lang_module['position_info']
+    );
 }
 
 $editors = array();
 $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_]+$/');
-if (! empty($dirs)) {
+if (!empty($dirs)) {
     foreach ($dirs as $dir) {
         if (file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $dir . '/nv.php')) {
             $editors[] = $dir;
@@ -259,18 +312,65 @@ if (! empty($dirs)) {
     }
 }
 
-if (! empty($editors)) {
-    $contents['editor'] = array( $lang_module['editor'], $editors, $editor, $lang_module['not_use'] );
+if (!empty($editors)) {
+    $contents['editor'] = array(
+        $lang_module['editor'],
+        $editors,
+        $editor,
+        $lang_module['not_use']
+    );
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    if (! empty($global_config['file_allowed_ext'])) {
-        $contents['allow_files_type'] = array( $lang_module['allow_files_type'], $global_config['file_allowed_ext'], $allow_files_type );
+    if (!empty($global_config['file_allowed_ext'])) {
+        $contents['allow_files_type'] = array(
+            $lang_module['allow_files_type'],
+            $global_config['file_allowed_ext'],
+            $allow_files_type
+        );
     }
 
-    $contents['allow_modify_files'] = array( $lang_module['allow_modify_files'], $allow_modify_files );
-    $contents['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], $allow_create_subdirectories );
-    $contents['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], $allow_modify_subdirectories );
+    $contents['allow_modify_files'] = array(
+        $lang_module['allow_modify_files'],
+        $allow_modify_files
+    );
+    $contents['allow_create_subdirectories'] = array(
+        $lang_module['allow_create_subdirectories'],
+        $allow_create_subdirectories
+    );
+    $contents['allow_modify_subdirectories'] = array(
+        $lang_module['allow_modify_subdirectories'],
+        $allow_modify_subdirectories
+    );
+}
+
+$array_module = array();
+if ($admin_id != $admin_info['userid']) {
+    $admin_mods = array();
+    $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
+    while ($_row = $result->fetch()) {
+        $_row['custom_title'] = isset($lang_global[$_row['lang_key']]) ? $lang_global[$_row['lang_key']] : $_row['module'];
+        $admin_mods[$_row['module']] = $_row;
+    }
+}
+
+foreach ($admin_mods as $mod) {
+    $array_module[$mod['module']] = array(
+        'module' => $mod['module'],
+        'title' => $mod['custom_title']
+    );
+}
+
+foreach ($site_mods as $index => $value) {
+    if ($value['admin_file']) {
+        if ($row['lev'] == 3 && !in_array($index, $old_modules)) {
+            continue;
+        }
+        $array_module[$index] = array(
+            'module' => $index,
+            'title' => $value['custom_title']
+        );
+    }
 }
 
 // Parse content
@@ -334,7 +434,7 @@ if (isset($contents['lev'])) {
     }
     foreach ($contents['lev'][2] as $mod => $value) {
         $xtpl->assign('VALUE', $mod);
-        $xtpl->assign('CHECKED', ! empty($value['checked']) ? 'checked="checked"' : '');
+        $xtpl->assign('CHECKED', !empty($value['checked']) ? 'checked="checked"' : '');
         $xtpl->assign('CUSTOM_TITLE', $value['custom_title']);
         $xtpl->parse('edit.lev.loop');
     }
@@ -346,6 +446,12 @@ if (isset($contents['position'])) {
     $xtpl->assign('POSITION1', $contents['position'][1]);
     $xtpl->assign('POSITION2', $contents['position'][2]);
     $xtpl->parse('edit.position');
+}
+
+foreach ($array_module as $module) {
+    $module['selected'] = $row['main_module'] == $module['module'] ? 'selected="selected"' : '';
+    $xtpl->assign('MODULE', $module);
+    $xtpl->parse('edit.module');
 }
 
 $xtpl->parse('edit');

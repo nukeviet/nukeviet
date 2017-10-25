@@ -48,6 +48,20 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.upload_chunk}</strong></td>
+                    <td>
+                        <div class="clearfix">
+                            <input type="text" name="upload_chunk_size" value="{UPLOAD_CHUNK_SIZE}" class="form-control pull-left w100"/>
+                            <select class="form-control pull-left m-left w100" name="upload_chunk_size_text">
+                                <!-- BEGIN: chunk_size_lev -->
+                                <option value="{CHUNK_SIZE_LEV.key}"{CHUNK_SIZE_LEV.selected}>{CHUNK_SIZE_LEV.title}</option>
+                                <!-- END: chunk_size_lev -->
+                            </select>
+                        </div>
+                        <span class="help-block m-bottom-none">{LANG.upload_chunk_help}</span>
+                    </td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.uploadconfig_types}</strong></td>
                     <td>
                     <!-- BEGIN: types -->

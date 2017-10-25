@@ -15,13 +15,8 @@ define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
-// SSL
-if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-    nv_redirect_location("https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-}
-
 // Admin dang nhap
-if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
+if (!defined('NV_IS_ADMIN') or !isset($admin_info) or empty($admin_info)) {
     require NV_ROOTDIR . '/includes/core/admin_access.php';
     require NV_ROOTDIR . '/includes/core/admin_login.php';
     exit(0);
@@ -47,7 +42,9 @@ while ($row = $result->fetch()) {
     $admin_mods[$row['module']] = $row;
 }
 
-$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', 'siteinfo'));
+$main_module = $db->query('SELECT main_module FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_info['userid'])->fetchColumn();
+
+$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $main_module));
 if (preg_match($global_config['check_module'], $module_name)) {
     $include_functions = $include_file = $include_menu = $lang_file = $mod_theme_file = '';
     $module_data = $module_file = $module_name;
@@ -56,7 +53,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
     if (empty($op) or $op == 'functions') {
         $op = 'main';
-    } elseif (! preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
+    } elseif (!preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -69,7 +66,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
         }
     }
     $menu_top = array();
-    if (isset($admin_mods['database']) and ! (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0))) {
+    if (isset($admin_mods['database']) and !(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0))) {
         unset($admin_mods['database']);
     }
 
@@ -163,7 +160,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
         if (in_array($op, $allow_func)) {
             $admin_menu_mods = array();
-            if (! empty($menu_top) and ! empty($submenu)) {
+            if (!empty($menu_top) and !empty($submenu)) {
                 $admin_menu_mods[$module_name] = $menu_top['custom_title'];
             } elseif (isset($site_mods[$module_name])) {
                 $admin_menu_mods[$module_name] = $site_mods[$module_name]['admin_title'];

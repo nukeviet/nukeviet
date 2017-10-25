@@ -23,6 +23,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  id mediumint(8) unsigned NOT NULL DEFAULT '0',
  pid mediumint(8) unsigned NOT NULL DEFAULT '0',
  content text NOT NULL,
+ attach varchar(255) NOT NULL DEFAULT '',
  post_time int(11) unsigned NOT NULL DEFAULT '0',
  userid mediumint(8) unsigned NOT NULL DEFAULT '0',
  post_name varchar(100) NOT NULL,

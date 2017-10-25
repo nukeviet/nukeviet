@@ -957,6 +957,7 @@ if ($step == 1) {
         }
 
         define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
+        $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . $db->quote(NV_SERVER_NAME) . " WHERE lang = 'sys' AND module = 'global' AND config_name = 'my_domains'");
 
         try {
             nv_save_file_config_global();
