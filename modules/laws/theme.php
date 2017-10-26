@@ -605,7 +605,7 @@ function nv_theme_laws_list_other($array_data)
         $xtpl->parse('main.loop');
         $i++;
     }
-	if(isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])){
+	if(isset($site_mods['comment']) && $module_config[$module_name]['activecomm']==1){
 		$xtpl->parse('main.comm_time');
 	}else{
 		$xtpl->parse('main.publtime_title');
