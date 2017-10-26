@@ -252,7 +252,7 @@
                                 </select>
                                 <div id="exptimearea" style="display:{DATA.display}">
                                     <input class="form-control" name="exptime" id="exptime" value="{DATA.exptime}" style="width: 110px;" maxlength="10" type="text" />
-                                    <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exptime', 'dd.mm.yyyy', true);" alt="" height="17" /> ({LANG.prm})
+                                    ({LANG.prm})
                                 </div>
                                 <script type="text/javascript">
                                     $(document).ready(function() {
@@ -396,7 +396,7 @@
 </div>
 <script type="text/javascript">
     //<![CDATA[
-    $("#publtime,#startvalid,#end_comm_time,#start_comm_time").datepicker({
+    $("#publtime,#startvalid,#end_comm_time,#start_comm_time,#exptime").datepicker({
         showOn : "both",
         yearRange: "2000:2025",
         dateFormat : "dd.mm.yy",
