@@ -25,6 +25,9 @@ if (($row = $result->fetch()) === false) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
+$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main&amp;edit=1&amp;id=" . $row['id'];
+$row['delete_link'] = 'nv_delete_law(' . $row['id'] . ', \'' . md5($row['id'] . session_id()) . '\')';
+
 $row['aid'] = array();
 $result = $db->query('SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id']);
 while (list ($area_id) = $result->fetch(3)) {

@@ -13,6 +13,7 @@
             <col />
             <!-- END: publtime_col -->
             <!-- BEGIN: down_in_home_col --><col width="130" /><!-- END: down_in_home_col -->
+            <!-- BEGIN: admin_link_col --><col width="80" /><!-- END: admin_link_col -->
         </colgroup>
         <thead>
             <tr>
@@ -28,6 +29,7 @@
                 <!-- BEGIN: send_comm_title -->
                 <th>{LANG.comm_time}</th>
                 <!-- END: send_comm_title -->
+                <!-- BEGIN: admin_link_title --><th></th><!-- END: admin_link_title -->
             </tr>
         </thead>
         <tbody>
@@ -69,6 +71,12 @@
             			<a href="{ROW.url}#comment" title="{ROW.send_comm_title}"><div class="comm_close"></div></a>
                 	</td>
                 <!-- END: comm_close -->
+                <!-- BEGIN: admin_link -->
+                <td>
+                	<a class="btn btn-primary btn-xs btn_edit margin-bottom" href="{ROW.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
+					<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{ROW.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
+                </td>
+                <!-- END: admin_link -->
             </tr>
             <!-- END: loop -->
         </tbody>
