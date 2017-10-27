@@ -43,6 +43,9 @@ function nv_theme_laws_main($array_data, $generate_page)
             }
             $xtpl->parse('main.loop.down_in_home');
         }
+		if (defined('NV_IS_MODADMIN')) {
+			$xtpl->parse('main.loop.admin_link');
+		}
 		if($module_config[$module_name]['activecomm']){
 			$xtpl->parse('main.loop.comm');
 			if($row['allow_comm']){
@@ -69,7 +72,10 @@ function nv_theme_laws_main($array_data, $generate_page)
         $xtpl->parse('main.down_in_home');
         $xtpl->parse('main.down_in_home_col');
     }
-
+	if (defined('NV_IS_MODADMIN')) {
+		$xtpl->parse('main.admin_link_col');
+		$xtpl->parse('main.admin_link_title');
+	}
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -110,6 +116,10 @@ function nv_theme_laws_maincat($mod, $array_data)
                     }
                     $xtpl->parse('main.loop.row.down_in_home');
                 }
+
+				if (defined('NV_IS_MODADMIN')) {
+					$xtpl->parse('main.loop.row.admin_link');
+				}
 				if($module_config[$module_name]['activecomm']){
 					$xtpl->parse('main.loop.row.comm');
 					if($rows['allow_comm']){
@@ -146,6 +156,10 @@ function nv_theme_laws_maincat($mod, $array_data)
     if ($nv_laws_setting['down_in_home']) {
         $xtpl->parse('main.down_in_home');
     }
+	if (defined('NV_IS_MODADMIN')) {
+		$xtpl->parse('main.admin_link_col');
+		$xtpl->parse('main.admin_link_title');
+	}
 
     $xtpl->parse('main');
     return $xtpl->text('main');
@@ -314,6 +328,11 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
     } else {
         $xtpl->parse('main.nodownload');
     }
+
+	if (defined('NV_IS_MODADMIN')) {
+		$xtpl->parse('main.admin_link');
+		$xtpl->parse('main.admin_link_title');
+	}
 
     if (!empty($other_cat)) {
         $xtpl->assign('OTHER_CAT', nv_theme_laws_list_other($other_cat));
@@ -586,7 +605,7 @@ function nv_theme_laws_list_other($array_data)
         $xtpl->parse('main.loop');
         $i++;
     }
-	if(isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])){
+	if(isset($site_mods['comment']) && $module_config[$module_name]['activecomm']==1){
 		$xtpl->parse('main.comm_time');
 	}else{
 		$xtpl->parse('main.publtime_title');

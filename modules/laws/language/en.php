@@ -73,3 +73,5 @@ $lang_module['s_result'] = 'Search result';
 $lang_module['s_noresult'] = 'There are no results that match your requirements';
 $lang_module['s_result_num'] = '%d laws';
 $lang_module['click_to_download'] = "Click here to download";
+$lang_module['edit'] = "Edit";
+$lang_module['delete'] = "Delete";

@@ -91,3 +91,6 @@ $lang_module['e0'] = "Chưa thông qua";
 $lang_module['e1'] = "Đã thông qua";
 $lang_module['approval'] = "Trạng thái";
 $lang_module['examine'] = "Ủy ban thẩm tra";
+$lang_module['edit'] = "Sửa";
+$lang_module['delete'] = "Xóa";
+$lang_module['addtime'] = "Thời gian đăng";

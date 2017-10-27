@@ -81,6 +81,8 @@ if (empty($contents)) {
             $row['number_comm'] = sprintf($lang_module['number_comm'],$num_comm);
             $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
             $row['stt'] = $stt++;
+			$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main&amp;edit=1&amp;id=" . $row['id'];
+			$row['delete_link'] = 'nv_delete_law(' . $row['id'] . ', \'' . md5($row['id'] . session_id()) . '\')';
 
             if ($nv_laws_setting['down_in_home']) {
                 // File download
@@ -135,7 +137,9 @@ if (empty($contents)) {
 		            $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
 		            $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
 					$row['number_comm'] = sprintf($lang_module['number_comm'],$num_comm);
-                    if ($nv_laws_setting['down_in_home']) {
+					$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main&amp;edit=1&amp;id=" . $row['id'];
+					$row['delete_link'] = 'nv_delete_law(' . $row['id'] . ', \'' . md5($row['id'] . session_id()) . '\')';
+					if ($nv_laws_setting['down_in_home']) {
                         // File download
                         if (!empty($row['files'])) {
                             $row['files'] = explode(",", $row['files']);
@@ -162,6 +166,32 @@ if (empty($contents)) {
     if (!defined('NV_IS_MODADMIN') and $contents != '' and $cache_file != '') {
         $nv_Cache->setItem($module_name, $cache_file, $contents);
     }
+}
+
+if ($nv_Request->isset_request('id', 'get, post') and $nv_Request->isset_request('checkss', 'get, post')) {
+    $contents = 'NO_' . $id;
+
+    $id = $nv_Request->get_int('id', 'get, post', 0);
+    $checkss = $nv_Request->get_string('checkss', 'get, post', '');
+    if ($id > 0 and md5($id . session_id()) == $checkss) {
+    	$data = $db->query('SELECT sid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id=' . $id)->fetch();
+        if(!empty($data)){
+	        $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id = " . $id;
+	            $db->query($query);
+
+	            $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE oid = " . $id;
+	            $db->query($query);
+
+	            // Cap nhat lai so luong van ban o chu de
+	            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_subject SET numcount=(SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $data['sid'] . ') WHERE id=' . $data['sid']);
+
+
+	        $nv_Cache->delMod($module_name);
+	        $contents = 'OK_' . $id;
+		}
+    }
+
+    die($contents);
 }
 
 include NV_ROOTDIR . '/includes/header.php';
