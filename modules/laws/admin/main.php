@@ -270,7 +270,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             if (!is_numeric($post['sgid']) and !empty($post['sgid'])) {
                 $result = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE title=" . $db->quote($post['title']) . " AND offices='' AND positions=''");
                 if ($result->rowCount() == 0) {
-                    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_signer(title, addtime) VALUES(' . $db->quote($post['sgid']) . ', ' . NV_CURRENTTIME . ')';
+                    $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_signer (title, offices, positions, addtime) VALUES (" . $db->quote($post['sgid']) . ", '', '', " . NV_CURRENTTIME . ")";
                     $post['sgid'] = $db->insert_id($sql);
                 } else {
                     $post['sgid'] = $result->fetchColumn();
