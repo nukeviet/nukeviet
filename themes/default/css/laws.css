@@ -1,5 +1,5 @@
 ﻿/**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.0
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
@@ -7,20 +7,24 @@
 
 /* block menu */
 #smoothmenu2 {
-	z-index: 1000
+    z-index: 1000
 }
-#smoothmenu2 ul li a{
+
+#smoothmenu2 ul li a {
     padding: 5px;
-    margin:0px 10px;
+    margin: 0px 10px;
 }
+
 .ddsmoothmenu-v {
 
 }
+
 .ddsmoothmenu-v ul {
-	list-style-type: none;
-	padding: 0px;
-	margin: 0px;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
 }
+
 .ddsmoothmenu-v ul li {
     position: relative;
 }
@@ -30,7 +34,7 @@
     color: #000000;
     padding: 5px;
     white-space: nowrap;
-	border-bottom:1px dashed #f5f5f5;
+    border-bottom: 1px dashed #f5f5f5;
 }
 
 .ddsmoothmenu-v ul li img {
@@ -39,7 +43,7 @@
 }
 
 .ddsmoothmenu-v ul li a:link, .ddsmoothmenu-v ul li a:visited, .ddsmoothmenu-v ul li a:active {
-    color:#000000;
+    color: #000000;
     background: #fff;
 }
 
@@ -58,266 +62,319 @@
     top: 0;
     font-weight: normal;
     visibility: hidden;
-	width:200px;
-	border:1px solid #D8D8D8;
+    width: 200px;
+    border: 1px solid #D8D8D8;
 }
 
 * html .ddsmoothmenu-v ul li {
     float: left;
     height: 1%;
 }
+
 * html .ddsmoothmenu-v ul li a {
     height: 1%;
 }
 
 /* TABLE LAWS */
-.lawitem{background-color:#f2f2f2;width:100%; margin:0}
-.lawitem td{ border:1px #fff solid}
-.lawitem a{ color:#3333FF}
-.lawitem thead{ background-color:#e5e5e5;font-weight:bold;border-bottom:2px #FFFFFF solid}
-.lawitem tbody{}
-.lawitem tbody.bg{ background-color:#FBFBFB;background-image:none}
-
-h3.pagetitle{
-	line-height: 30px;
-	padding: 0px;
-	margin: 8px 0px 8px 0px;
+.lawitem {
+    background-color: #f2f2f2;
+    width: 100%;
+    margin: 0
 }
 
-.generate_page{ text-align:center;font-weight:bold}
+.lawitem td {
+    border: 1px #fff solid
+}
+
+.lawitem a {
+    color: #3333FF
+}
+
+.lawitem thead {
+    background-color: #e5e5e5;
+    font-weight: bold;
+    border-bottom: 2px #FFFFFF solid
+}
+
+.lawitem tbody {
+
+}
+
+.lawitem tbody.bg {
+    background-color: #FBFBFB;
+    background-image: none
+}
+
+h3.pagetitle {
+    line-height: 30px;
+    padding: 0px;
+    margin: 8px 0px 8px 0px;
+}
+
+.generate_page {
+    text-align: center;
+    font-weight: bold
+}
 
 /* Style button */
 .style-button {
-	padding: 0px 10px 0px 0px;
-	height: 25px;
-	cursor: pointer;
-	display: inline-block;
-	background-image: url('../images/laws/button.png');
-	background-position: right top;
-	background-repeat: no-repeat;
+    padding: 0px 10px 0px 0px;
+    height: 25px;
+    cursor: pointer;
+    display: inline-block;
+    background-image: url('../images/laws/button.png');
+    background-position: right top;
+    background-repeat: no-repeat;
 }
+
 .style-button:hover {
-	background-image: url('../images/laws/button.png');
-	background-repeat: no-repeat;
-	background-position: right bottom;
+    background-image: url('../images/laws/button.png');
+    background-repeat: no-repeat;
+    background-position: right bottom;
 }
+
 .style-button:hover span, .style-button:hover a {
-	background-repeat: no-repeat !important;
-	background-position: left bottom;
-	background-image: url('../images/laws/button.png');
+    background-repeat: no-repeat !important;
+    background-position: left bottom;
+    background-image: url('../images/laws/button.png');
 }
+
 .style-button span, .style-button a {
-	background-position: left top;
-	line-height: 25px;
-	padding-left: 10px;
-	display: inline-block;
-	background-repeat: no-repeat;
-	background-image: url('../images/laws/button.png');
-	font-weight: bold;
-	color: #FFFFFF;
+    background-position: left top;
+    line-height: 25px;
+    padding-left: 10px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-image: url('../images/laws/button.png');
+    font-weight: bold;
+    color: #FFFFFF;
 }
 
 /* big icon */
 .big-icon {
-	height: 32px;
-	padding: 0;
-	background-color: transparent;
-	background-repeat: no-repeat;
-	display: inline-block;
-	width: 32px;
-	margin-right: 4px;
+    height: 32px;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 32px;
+    margin-right: 4px;
 }
+
 .bcourse {
-	background-image: url('../images/laws/big-icon-pack.png');
+    background-image: url('../images/laws/big-icon-pack.png');
 }
+
 .bdetail {
-	background-position: -32px 0px;
-	background-image: url('../images/laws/big-icon-pack.png');
+    background-position: -32px 0px;
+    background-image: url('../images/laws/big-icon-pack.png');
 }
+
 .bteacher {
-	background-position: -64px 0px;
-	background-image: url('../images/laws/big-icon-pack.png');
+    background-position: -64px 0px;
+    background-image: url('../images/laws/big-icon-pack.png');
 }
+
 .bcat {
-	background-position: -96px 0px;
-	background-image: url('../images/laws/big-icon-pack.png');
+    background-position: -96px 0px;
+    background-image: url('../images/laws/big-icon-pack.png');
 }
 
 /* small icon */
 .small-icon {
-	height: 16px;
-	padding: 0;
-	background-color: transparent;
-	background-repeat: no-repeat;
-	display: inline-block;
-	width: 16px;
-	margin-right: 4px;
+    height: 16px;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 16px;
+    margin-right: 4px;
 }
+
 .sreg {
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .steacher {
-	background-position: -16px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -16px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .ssumary {
-	background-position: -32px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -32px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .sdetail {
-	background-position: -48px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -48px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .snumc {
-	background-position: -64px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -64px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .scv {
-	background-position: -80px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -80px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .slession {
-	background-position: -96px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -96px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .svideo {
-	background-position: -112px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -112px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .sdata {
-	background-position: -128px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -128px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
+
 .sfloder {
-	background-position: -144px;
-	background-image: url('../images/laws/small-icon-pack.png');
+    background-position: -144px;
+    background-image: url('../images/laws/small-icon-pack.png');
 }
 
 /* ul list */
 ul.list-item, ul.list-releted-item, ul.list-none {
-	padding: 0px;
-	margin: 0px;
-	list-style-type: none;
-	list-style-image: none;
+    padding: 0px;
+    margin: 0px;
+    list-style-type: none;
+    list-style-image: none;
 }
-ul.list-item li{
-	background-repeat: no-repeat;
-	background-position: left 6px;
-	background-image: url('../images/laws/ul-bull.png');
-	padding-left: 10px;
-	line-height: 1.5em;
+
+ul.list-item li {
+    background-repeat: no-repeat;
+    background-position: left 6px;
+    background-image: url('../images/laws/ul-bull.png');
+    padding-left: 10px;
+    line-height: 1.5em;
 }
 
 ul.list-releted-item li {
-	background-repeat: no-repeat;
-	background-position: left center;
-	background-image: url('../images/laws/ul-bull.png');
-	padding-left: 10px;
-	line-height: 1.5em;
-}
-ul.list-none li {
-	line-height: 1.6em;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url('../images/laws/ul-bull.png');
+    padding-left: 10px;
+    line-height: 1.5em;
 }
 
-.center{
-	text-align:center
+ul.list-none li {
+    line-height: 1.6em;
 }
-.infoerror{
-	color:#FF0000;
+
+.center {
+    text-align: center
+}
+
+.infoerror {
+    color: #FF0000;
 }
 
 /* BLOCK TOP AREA CENTER */
-div.blocktop10area{
-	padding: 5px;
-	margin: 0px 0px 10px 0px;
-	border: 1px solid #C0C0C0;
+div.blocktop10area {
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+    border: 1px solid #C0C0C0;
 }
-div.blocktop10area ul{
-	list-style-type: none;
-	padding: 0px;
-	margin: 5px 0px 5px 0px;
+
+div.blocktop10area ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 5px 0px;
 }
-div.blocktop10area ul li{
-	font-weight: bold;
-	line-height: 22px;
-	float: left;
-	width: 48%;
+
+div.blocktop10area ul li {
+    font-weight: bold;
+    line-height: 22px;
+    float: left;
+    width: 48%;
 }
 
 /* BLOCK SEARCH */
-.formsearch{
-	padding: 5px 5px 0px 5px;
-	margin: 5px 0px 0px 0px;
-}
-table.inner-search,table.inner-search td,table.inner-search tr,table.inner-search tbody{
-	border-style: none;
-	border-width: 0px;
-}
-table.inner-search input[type=text],table.inner-search input[type=submit],table.inner-search input[type=button]{
-	border: 1px solid #CCCCCC;
-}
-table.inner-search input[type=submit],table.inner-search input[type=button]{
-	background-color: #FFFFFF;
-	cursor: pointer;
+.formsearch {
+    padding: 5px 5px 0px 5px;
+    margin: 5px 0px 0px 0px;
 }
 
+table.inner-search, table.inner-search td, table.inner-search tr, table.inner-search tbody {
+    border-style: none;
+    border-width: 0px;
+}
+
+table.inner-search input[type=text], table.inner-search input[type=submit], table.inner-search input[type=button] {
+    border: 1px solid #CCCCCC;
+}
+
+table.inner-search input[type=submit], table.inner-search input[type=button] {
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
 
 /* BLOCK TOP LAW */
-.block-law{
-	padding:0px 10px;
+.block-law {
+    padding: 0px 10px;
 }
-.block-law ul{
-	padding: 0px;
-	margin: 0px;
-	list-style-type: none;
+
+.block-law ul {
+    padding: 0px;
+    margin: 0px;
+    list-style-type: none;
 }
-.block-law ul li{
-	padding: 5px 0px 5px 0px;
-	margin: 0px;
-	border-bottom-style: dashed;
-	border-bottom-width: 1px;
-	border-bottom-color: #CCCCCC;
+
+.block-law ul li {
+    padding: 5px 0px 5px 0px;
+    margin: 0px;
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+    border-bottom-color: #CCCCCC;
 }
-.block-law ul li span.small{
-	list-style-type: none;
-	font-size: 11px;
-	color: #666666;
+
+.block-law ul li span.small {
+    list-style-type: none;
+    font-size: 11px;
+    color: #666666;
 }
 
 /* DETAIL */
-h3.lawh3{
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-bottom-color: #CCCCCC;
-	font-size: 20px;
-	line-height: 25px;
-	padding-bottom: 10px;
-	margin-bottom: 5px;
-	padding-top: 10px;
-	margin-top: 0px;
-    color:#02659d;
+h3.lawh3 {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #CCCCCC;
+    font-size: 20px;
+    line-height: 25px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    padding-top: 10px;
+    margin-top: 0px;
+    color: #02659d;
 }
 
-h3.subtitle{
-	font-size: 20px;
-	line-height: 25px;
-	margin-bottom: 5px;
-	padding-top: 10px;
-	margin-top: 0px;
-    color:#02659d;
+h3.subtitle {
+    font-size: 20px;
+    line-height: 25px;
+    margin-bottom: 5px;
+    padding-top: 10px;
+    margin-top: 0px;
+    color: #02659d;
 }
 
-a#btn-search{
-	display: block;
-	font-size: 12px;
-	margin-top: 7px;
+a#btn-search {
+    display: block;
+    font-size: 12px;
+    margin-top: 7px;
 }
 
 .laws-download-file {
     margin-top: -6px;
 }
 
-.laws-download-file .list-group-item:first-child{
+.laws-download-file .list-group-item:first-child {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
@@ -340,4 +397,38 @@ a#btn-search{
 
 .laws-download-file .list-group-item .badge a {
     color: #fff;
+}
+
+#advance .form-inline label{
+    width:100%;
+}
+
+#advance .form-inline .form-control{
+    margin-right: 2px;
+}
+
+.comm_time{
+	width: 100%;
+}
+.start_comm{
+	display: inline-block;
+	float: left;
+	color: #f7a41e;
+}
+.end_comm{
+	display: inline-block;
+	float: right;
+	color: #f7a41e;
+}
+.send_comm{
+	width: 100%;
+	height: 25px;
+	background: url(../images/laws/comment.png) no-repeat center;
+	background-size: 25px 25px;
+}
+.comm_close{
+	width: 100%;
+	height: 25px;
+	background: url(../images/laws/comment_close.png) no-repeat center;
+	background-size: 20px 20px;
 }

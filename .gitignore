@@ -43,3 +43,4 @@
 /vendor/
 /.gitattributes
 /composer.json
+/error.php

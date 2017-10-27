@@ -16,6 +16,24 @@
                 <td>{DATA.publtime}</td>
             </tr>
             <!-- END: publtime -->
+            <!-- BEGIN: start_comm_time -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.start_comm_time_title}</td>
+                <td>{DATA.start_comm_time}</td>
+            </tr>
+            <!-- END: start_comm_time -->
+            <!-- BEGIN: end_comm_time -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.end_comm_time_title}</td>
+                <td>{DATA.end_comm_time}</td>
+            </tr>
+            <!-- END: end_comm_time -->
+             <!-- BEGIN: approval -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.approval}</td>
+                <td>{DATA.approval}</td>
+            </tr>
+            <!-- END: approval -->
             <!-- BEGIN: startvalid -->
             <tr class="hoatim">
                 <td class="text-right">{LANG.startvalid}</td>
@@ -53,6 +71,14 @@
                 </td>
             </tr>
             <!-- END: subject -->
+            <!-- BEGIN: examine -->
+            <tr class="hoatim">
+                <td class="text-right">{LANG.examine}</td>
+                <td>
+                    {DATA.examine}
+                </td>
+            </tr>
+            <!-- END: examine -->
             <!-- BEGIN: signer -->
             <tr class="hoatim">
                 <td class="text-right">{LANG.signer}</td>
@@ -108,6 +134,7 @@
 <p class="m-bottom">{DATA.bodytext}</p>
 <!-- END: bodytext -->
 
+<div id="comment"></div>
 <!-- BEGIN: files -->
 <h3 class="lawh3"><em class="fa fa-download">&nbsp;</em>{LANG.files}</h3>
 <div class="list-group laws-download-file">
@@ -134,6 +161,21 @@
 <p class="text-center m-bottom">{LANG.info_download_no}</p>
 <!-- END: nodownload -->
 
+<!-- BEGIN: admin_link -->
+<div class="text-right list-group clearfix">
+	<a class="btn btn-primary btn-xs btn_edit" href="{DATA.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
+	<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{DATA.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
+</div>
+<!-- END: admin_link -->
+
+<!-- BEGIN: comment -->
+<div class="news_column panel panel-default">
+	<div class="panel-body">
+	{CONTENT_COMMENT}
+    </div>
+</div>
+<!-- END: comment -->
+
 <!-- BEGIN: other_cat -->
 <h3 class="subtitle">{LANG.other_cat} <a href="{DATA.cat_url}" title="{DATA.cat}">"{DATA.cat}"</a></h3>
 {OTHER_CAT}
@@ -153,5 +195,7 @@
 <h3 class="subtitle">{LANG.other_signer} <a href="{DATA.signer_url}" title="{DATA.signer}">"{DATA.signer}"</a></h3>
 {OTHER_SIGNER}
 <!-- END: other_signer -->
+
+
 
 <!-- END: main -->

@@ -2,19 +2,19 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES., JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!nv_function_exists('nv_law_block_newg')) {
+
     /**
      * nv_block_config_new_laws()
-     * 
+     *
      * @param mixed $module
      * @param mixed $data_block
      * @param mixed $lang_block
@@ -80,7 +80,7 @@ if (!nv_function_exists('nv_law_block_newg')) {
 
     /**
      * nv_block_config_new_laws_submit()
-     * 
+     *
      * @param mixed $module
      * @param mixed $lang_block
      * @return
@@ -104,7 +104,7 @@ if (!nv_function_exists('nv_law_block_newg')) {
 
     /**
      * nv_law_block_newg()
-     * 
+     *
      * @param mixed $block_config
      * @return
      */
@@ -166,6 +166,7 @@ if (!nv_function_exists('nv_law_block_newg')) {
                 }
 
                 $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
+				$row['addtime'] = nv_date('d/m/Y', $row['addtime']);
 
                 $xtpl->assign('ROW', $row);
 

@@ -2,25 +2,24 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
 
 /**
  * nv_theme_laws_main()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $generate_page
  * @return
  */
 function nv_theme_laws_main($array_data, $generate_page)
 {
-    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $module_config, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -44,28 +43,53 @@ function nv_theme_laws_main($array_data, $generate_page)
             }
             $xtpl->parse('main.loop.down_in_home');
         }
+		if (defined('NV_IS_MODADMIN')) {
+			$xtpl->parse('main.loop.admin_link');
+		}
+		if($module_config[$module_name]['activecomm']){
+			$xtpl->parse('main.loop.comm');
+			if($row['allow_comm']){
+				$xtpl->parse('main.loop.send_comm');
+			}else{
+				$xtpl->parse('main.loop.comm_close');
+			}
+
+		}else{
+			$xtpl->parse('main.loop.publtime');
+		}
         $xtpl->parse('main.loop');
     }
+
+	if($module_config[$module_name]['activecomm']){
+		$xtpl->parse('main.send_comm_col');
+		$xtpl->parse('main.send_comm_title');
+	}else{
+		$xtpl->parse('main.publtime_col');
+		$xtpl->parse('main.publtime_title');
+	}
 
     if ($nv_laws_setting['down_in_home']) {
         $xtpl->parse('main.down_in_home');
         $xtpl->parse('main.down_in_home_col');
     }
-
+	if (defined('NV_IS_MODADMIN')) {
+		$xtpl->parse('main.admin_link_col');
+		$xtpl->parse('main.admin_link_title');
+	}
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_laws_maincat()
- * 
+ *
  * @param mixed $mod
  * @param mixed $array_data
  * @return
  */
 function nv_theme_laws_maincat($mod, $array_data)
 {
-    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $module_config, $lang_module, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate('main_' . $mod . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -93,18 +117,49 @@ function nv_theme_laws_maincat($mod, $array_data)
                     $xtpl->parse('main.loop.row.down_in_home');
                 }
 
+				if (defined('NV_IS_MODADMIN')) {
+					$xtpl->parse('main.loop.row.admin_link');
+				}
+				if($module_config[$module_name]['activecomm']){
+					$xtpl->parse('main.loop.row.comm');
+					if($rows['allow_comm']){
+						$xtpl->parse('main.loop.row.send_comm');
+					}else{
+						$xtpl->parse('main.loop.row.comm_close');
+					}
+
+				}else{
+					$xtpl->parse('main.loop.row.publtime');
+				}
+
                 $xtpl->parse('main.loop.row');
             }
         }
+
         if ($nv_laws_setting['down_in_home']) {
+        	$colspan = 4;
+			if($module_config[$module_name]['activecomm']){
+				$colspan = 5;
+			}
+			$xtpl->assign('COL', $colspan);
             $xtpl->parse('main.loop.down_in_home');
         }
         $xtpl->parse('main.loop');
     }
 
+	if($module_config[$module_name]['activecomm']){
+			$xtpl->parse('main.send_comm_title');
+	}else{
+		$xtpl->parse('main.publtime_title');
+	}
+
     if ($nv_laws_setting['down_in_home']) {
         $xtpl->parse('main.down_in_home');
     }
+	if (defined('NV_IS_MODADMIN')) {
+		$xtpl->parse('main.admin_link_col');
+		$xtpl->parse('main.admin_link_title');
+	}
 
     $xtpl->parse('main');
     return $xtpl->text('main');
@@ -112,7 +167,7 @@ function nv_theme_laws_maincat($mod, $array_data)
 
 /**
  * nv_theme_laws_detail()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $other_cat
  * @param mixed $other_area
@@ -120,9 +175,9 @@ function nv_theme_laws_maincat($mod, $array_data)
  * @param mixed $other_signer
  * @return
  */
-function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = array(), $other_subject = array(), $other_signer = array())
+function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = array(), $other_subject = array(), $other_signer = array(), $content_comment)
 {
-    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info, $nv_laws_setting;
+    global $global_config, $module_name, $module_config, $lang_module, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info, $nv_laws_setting;
 
     $xtpl = new XTemplate($module_info['funcs'][$op]['func_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -130,7 +185,9 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
     $array_data['publtime'] = $array_data['publtime'] ? nv_date('d/m/Y', $array_data['publtime']) : '';
     $array_data['startvalid'] = $array_data['startvalid'] ? nv_date('d/m/Y', $array_data['startvalid']) : '';
     $array_data['exptime'] = $array_data['exptime'] ? nv_date('d/m/Y', $array_data['exptime']) : '';
-
+	$array_data['start_comm_time'] = $array_data['start_comm_time'] ? nv_date('d/m/Y', $array_data['start_comm_time']) : $lang_module['unlimit'];
+	$array_data['end_comm_time'] = $array_data['end_comm_time'] ? nv_date('d/m/Y', $array_data['end_comm_time']) : $lang_module['unlimit'];
+	$array_data['approval'] = $array_data['approval'] == 1 ? $lang_module['e1'] : $lang_module['e0'];
     if (isset($nv_laws_listcat[$array_data['cid']])) {
         $array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
         $array_data['cat_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $nv_laws_listcat[$array_data['cid']]['alias'];
@@ -151,7 +208,7 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
 
     // Ẩn giá trị trống
     $filled_field = 0;
-    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['cat'])) {
+    if (empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['cat'])) {
         $filled_field++;
         if (!empty($nv_laws_setting['detail_show_link_cat'])) {
             $xtpl->parse('main.field.cat.link');
@@ -160,7 +217,7 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
         }
         $xtpl->parse('main.field.cat');
     }
-    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['subject'])) {
+    if (empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['subject'])) {
         $filled_field++;
         if (!empty($nv_laws_setting['detail_show_link_subject'])) {
             $xtpl->parse('main.field.subject.link');
@@ -169,19 +226,32 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
         }
         $xtpl->parse('main.field.subject');
     }
-    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['publtime'])) {
+
+	if($module_config[$module_name]['activecomm']){
+		$xtpl->parse('main.field.start_comm_time');
+		$xtpl->parse('main.field.end_comm_time');
+		$xtpl->parse('main.field.approval');
+	}
+
+    if ((empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['publtime'])) && $module_config[$module_name]['activecomm']==0) {
         $filled_field++;
         $xtpl->parse('main.field.publtime');
     }
-    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['startvalid'])) {
+
+	if ((empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['examine'])) && $module_config[$module_name]['activecomm']==1) {
+        $filled_field++;
+        $xtpl->parse('main.field.examine');
+    }
+
+    if (empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['startvalid'])) {
         $filled_field++;
         $xtpl->parse('main.field.startvalid');
     }
-    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['exptime'])) {
+    if (empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['exptime'])) {
         $filled_field++;
         $xtpl->parse('main.field.exptime');
     }
-    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['signer'])) {
+    if (empty($nv_laws_setting['detail_hide_empty_field']) or !empty($array_data['signer'])) {
         $filled_field++;
         if (!empty($nv_laws_setting['detail_show_link_signer'])) {
             $xtpl->parse('main.field.signer.link');
@@ -196,7 +266,7 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
             $area['title'] = $nv_laws_listarea[$aid]['title'];
             $area['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=area/' . $nv_laws_listarea[$aid]['alias'];
             $xtpl->assign('AREA', $area);
-            
+
             if (!empty($nv_laws_setting['detail_show_link_area'])) {
                 $xtpl->parse('main.field.area_link');
             } else {
@@ -245,12 +315,12 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
         if (!empty($array_data['files'])) {
             foreach ($array_data['files'] as $file) {
                 $xtpl->assign('FILE', $file);
-                
+
                 if ($file['ext'] == 'pdf' and !empty($nv_laws_setting['detail_pdf_quick_view'])) {
                     $xtpl->parse('main.files.loop.show_quick_view');
                     $xtpl->parse('main.files.loop.content_quick_view');
                 }
-                
+
                 $xtpl->parse('main.files.loop');
             }
             $xtpl->parse('main.files');
@@ -258,6 +328,11 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
     } else {
         $xtpl->parse('main.nodownload');
     }
+
+	if (defined('NV_IS_MODADMIN')) {
+		$xtpl->parse('main.admin_link');
+		$xtpl->parse('main.admin_link_title');
+	}
 
     if (!empty($other_cat)) {
         $xtpl->assign('OTHER_CAT', nv_theme_laws_list_other($other_cat));
@@ -279,13 +354,18 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
         $xtpl->parse('main.other_signer');
     }
 
+	if (! empty($content_comment)) {
+        $xtpl->assign('CONTENT_COMMENT', $content_comment);
+        $xtpl->parse('main.comment');
+    }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_laws_search()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $generate_page
  * @param mixed $all_page
@@ -321,7 +401,7 @@ function nv_theme_laws_search($array_data, $generate_page, $all_page)
 
 /**
  * nv_theme_laws_area()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $generate_page
  * @param mixed $cat
@@ -369,7 +449,7 @@ function nv_theme_laws_area($array_data, $generate_page, $cat)
 
 /**
  * nv_theme_laws_cat()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $generate_page
  * @param mixed $cat
@@ -400,7 +480,7 @@ function nv_theme_laws_cat($array_data, $generate_page, $cat)
 
 /**
  * nv_theme_laws_subject()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $generate_page
  * @param mixed $cat
@@ -449,7 +529,7 @@ function nv_theme_laws_subject($array_data, $generate_page, $cat)
 
 /**
  * nv_theme_laws_signer()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $generate_page
  * @param mixed $cat
@@ -498,13 +578,13 @@ function nv_theme_laws_signer($array_data, $generate_page, $cat)
 
 /**
  * nv_theme_laws_list_other()
- * 
+ *
  * @param mixed $array_data
  * @return
  */
 function nv_theme_laws_list_other($array_data)
 {
-    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting, $module_config, $site_mods;
 
     $xtpl = new XTemplate('list_other.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -513,19 +593,30 @@ function nv_theme_laws_list_other($array_data)
     foreach ($array_data as $row) {
         $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
         $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
+		$row['start_comm_time'] = ($row['start_comm_time']>0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
+        $row['end_comm_time'] = ($row['end_comm_time']>0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
+        $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
         $xtpl->assign('ROW', $row);
+		if(isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])){
+		$xtpl->parse('main.loop.comm_time');
+	}else{
+		$xtpl->parse('main.loop.publtime');
+	}
         $xtpl->parse('main.loop');
         $i++;
     }
-
+	if(isset($site_mods['comment']) && $module_config[$module_name]['activecomm']==1){
+		$xtpl->parse('main.comm_time');
+	}else{
+		$xtpl->parse('main.publtime_title');
+	}
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
-
 /**
  * nv_theme_viewpdf()
- * 
+ *
  * @param mixed $file_url
  * @return
  */

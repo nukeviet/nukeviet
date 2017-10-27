@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $page_title = $lang_module['config'];
 
 $array_config = array();
+$array_config_comm = $module_config[$module_name];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['nummain'] = $nv_Request->get_int('nummain', 'post', 0);
@@ -29,6 +29,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['detail_show_link_subject'] = $nv_Request->get_int('detail_show_link_subject', 'post', 0);
     $array_config['detail_show_link_signer'] = $nv_Request->get_int('detail_show_link_signer', 'post', 0);
     $array_config['detail_pdf_quick_view'] = $nv_Request->get_int('detail_pdf_quick_view', 'post', 0);
+	$array_config_comm['activecomm'] = $nv_Request->get_int('activecomm', 'post', 0);
 
     $sth = $db->prepare("UPDATE " . NV_PREFIXLANG . '_' . $module_data . "_config SET config_value = :config_value WHERE config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
@@ -36,11 +37,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
+	$nv_Cache->delMod($module_name);
+	//Lưu cấu hình cho phép lấy ý kiến góp ý tại bảng nv4_config
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+    foreach ($array_config_comm as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
 
-    $nv_Cache->delMod($module_name);
+    $nv_Cache->delMod('settings');
 
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
 }
 
 $array_config['nummain'] = 50;
@@ -56,12 +65,13 @@ $array_config['detail_show_link_subject'] = 1;
 $array_config['detail_show_link_signer'] = 1;
 $array_config['detail_pdf_quick_view'] = 0;
 
+
 $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 $result = $db->query($sql);
-while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
+while (list ($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
-
+$array_config['activecomm'] = $module_config[$module_name]['activecomm'];
 $typeview = array();
 for ($i = 0; $i <= 4; $i++) {
     $typeview[] = array(
@@ -78,6 +88,7 @@ $array_config['detail_show_link_area'] = $array_config['detail_show_link_area'] 
 $array_config['detail_show_link_subject'] = $array_config['detail_show_link_subject'] ? 'checked="checked"' : '';
 $array_config['detail_show_link_signer'] = $array_config['detail_show_link_signer'] ? 'checked="checked"' : '';
 $array_config['detail_pdf_quick_view'] = $array_config['detail_pdf_quick_view'] ? 'checked="checked"' : '';
+$array_config['activecomm'] = $array_config['activecomm'] ? 'checked="checked"' : '';
 
 $xtpl = new XTemplate("config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op);
@@ -102,8 +113,8 @@ foreach ($array_other as $key => $value) {
     $xtpl->assign('OTHER', array(
         'key' => $key,
         'value' => $value,
-        'checked' => $ck)
-    );
+        'checked' => $ck
+    ));
     $xtpl->parse('main.detail_other');
 }
 

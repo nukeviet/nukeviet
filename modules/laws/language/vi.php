@@ -2,15 +2,15 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['author'] = "VINADES.,JSC <contact@vinades.vn>";
 $lang_translator['createdate'] = "27/07/2011, 14:55";
 $lang_translator['copyright'] = "@Copyright (C) 2011 VINADES.,JSC. All rights reserved";
 $lang_translator['info'] = "";
@@ -77,3 +77,20 @@ $lang_module['other_cat'] = "Các văn bản cùng thể loại";
 $lang_module['other_area'] = "Các văn bản cùng lĩnh vực";
 $lang_module['other_subject'] = "Các văn bản cùng cơ quan ban hành";
 $lang_module['other_signer'] = "Các văn bản cùng người ký";
+$lang_module['comm_time_title'] = "Thời hạn nhận góp ý";
+$lang_module['start_comm_time_title'] = "Bắt đầu lấy ý kiến";
+$lang_module['end_comm_time_title'] = "Kết thúc lấy ý kiến";
+$lang_module['unlimit'] = "Không giới hạn";
+$lang_module['start_comm_time'] = "Từ %s";
+$lang_module['end_comm_time'] = "Đến %s";
+$lang_module['uncomm_time'] = "Hết hạn";
+$lang_module['comm_time'] = "Gửi góp ý";
+$lang_module['number_comm'] = "%d góp ý";
+$lang_module['click_to_download'] = "Nhấn vào link để tải file";
+$lang_module['e0'] = "Chưa thông qua";
+$lang_module['e1'] = "Đã thông qua";
+$lang_module['approval'] = "Trạng thái";
+$lang_module['examine'] = "Ủy ban thẩm tra";
+$lang_module['edit'] = "Sửa";
+$lang_module['delete'] = "Xóa";
+$lang_module['addtime'] = "Thời gian đăng";

@@ -2,15 +2,15 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
-$lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
+$lang_translator['author'] = "VINADES.,JSC <contact@vinades.vn>";
 $lang_translator['createdate'] = "27/07/2011, 14:55";
 $lang_translator['copyright'] = "@Copyright (C) 2011 VINADES.,JSC. All rights reserved";
 $lang_translator['info'] = "";
@@ -30,6 +30,8 @@ $lang_module['day'] = "Ngày";
 
 $lang_module['hl0'] = "Còn hiệu lực";
 $lang_module['hl1'] = "Hết hiệu lực";
+$lang_module['e0'] = "Chưa thông qua";
+$lang_module['e1'] = "Đã thông qua";
 
 $lang_module['add_laws'] = "Thêm văn bản";
 $lang_module['logChangeWeight'] = "Thay đổi thứ tự thể loại";
@@ -172,3 +174,18 @@ $lang_module['msg2'] = 'truớc';
 $lang_module['msg3'] = 'Nhấn vào đây';
 $lang_module['msg4'] = 'để chuyển đến trang thêm ';
 $lang_module['msg5'] = 'Hệ thống sẽ tự chuyển trang sau 5 giây.';
+$lang_module['activecomm'] = 'Cho phép lấy ý kiến góp ý';
+$lang_module['start_comm_time'] = 'Ngày bắt đầu lấy ý kiến';
+$lang_module['end_comm_time'] = 'Ngày kết thúc lấy ý kiến';
+$lang_module['view_comm'] = 'Xem góp ý';
+$lang_module['examine'] = 'Ủy ban thẩm tra';
+$lang_module['addExamine'] = 'Thêm Ủy ban thẩm tra';
+$lang_module['errorExamineNotExists'] = 'Lỗi! Ủy ban thẩm tra không tồn tại.';
+$lang_module['errorExamineYesRow'] = "Lỗi! có các Văn bản thuộc Ủy ban thẩm tra này. Hãy xóa chúng trước đã.";
+$lang_module['editExamine'] = 'Sửa Ủy ban thẩm tra';
+$lang_module['logDelExamine'] = "Xóa Ủy ban thẩm tra";
+$lang_module['ExamineSel'] = "Chọn Ủy ban thẩm tra";
+$lang_module['erroNotSelectExamine'] = 'Lỗi! Bạn chưa chọn Ủy ban thẩm tra.';
+$lang_module['approval'] = "Trang thái";
+$lang_module['erroStartvalid'] = 'Lỗi! Ngày bắt đầu hiệu lực không thể trước ngày ban hành.';
+$lang_module['erroExptime'] = 'Lỗi! Ngày hết hiệu lực phải sau ngày ban hành và ngày bắt đầu hiệu lực.';

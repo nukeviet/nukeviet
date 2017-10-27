@@ -2,36 +2,35 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS'))
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
 
 $lawalias = $alias = isset($array_op[1]) ? $array_op[1] : '';
 
 if (!preg_match('/^([a-z0-9\-\_\.]+)$/i', $alias)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE alias=' . $db->quote($alias) . ' AND status=1';
 if (($result = $db->query($sql)) === false) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 if (($row = $result->fetch()) === false) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
+
+$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main&amp;edit=1&amp;id=" . $row['id'];
+$row['delete_link'] = 'nv_delete_law(' . $row['id'] . ', \'' . md5($row['id'] . session_id()) . '\')';
 
 $row['aid'] = array();
 $result = $db->query('SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id']);
-while (list($area_id) = $result->fetch(3)) {
+while (list ($area_id) = $result->fetch(3)) {
     $row['aid'][] = $area_id;
 }
 
@@ -45,13 +44,11 @@ if ($nv_Request->isset_request('download', 'get')) {
     $row['files'] = explode(',', $row['files']);
 
     if (!isset($row['files'][$fileid])) {
-        Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
     }
 
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
-        Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
     }
 
     // Update download
@@ -83,10 +80,10 @@ if ($nv_Request->isset_request('pdf', 'get')) {
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
-    
+
     $file_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&download=1&id=' . $fileid;
     $contents = nv_theme_viewpdf($file_url);
-    die($contents);
+    nv_htmlOutput($contents);
 }
 
 $page_title = $row['title'];
@@ -98,7 +95,7 @@ if (!empty($row['replacement'])) {
     $sql = 'SELECT title, alias, code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id IN(' . $row['replacement'] . ')';
     $result = $db->query($sql);
     $row['replacement'] = array();
-    while (list($_title, $_alias, $_code) = $result->fetch(3)) {
+    while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
         $row['replacement'][] = array(
             'title' => $_title,
             'code' => $_code,
@@ -111,7 +108,7 @@ if (!empty($row['replacement'])) {
 $row['unreplacement'] = array();
 $sql = 'SELECT b.title, b.alias, b.code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_set_replace AS a INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_row AS b ON a.oid=b.id WHERE a.nid=' . $row['id'];
 $result = $db->query($sql);
-while (list($_title, $_alias, $_code) = $result->fetch(3)) {
+while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
     $row['unreplacement'][] = array(
         'title' => $_title,
         'code' => $_code,
@@ -124,7 +121,7 @@ if (!empty($row['relatement'])) {
     $sql = 'SELECT title, alias, code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id IN(' . $row['relatement'] . ')';
     $result = $db->query($sql);
     $row['relatement'] = array();
-    while (list($_title, $_alias, $_code) = $result->fetch(3)) {
+    while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
         $row['relatement'][] = array(
             'title' => $_title,
             'code' => $_code,
@@ -137,8 +134,15 @@ if (!empty($row['relatement'])) {
 if (!empty($row['sgid'])) {
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_signer WHERE id = ' . $row['sgid'];
     $result = $db->query($sql);
-    list($row['signer']) = $result->fetch(3);
+    list ($row['signer']) = $result->fetch(3);
     $row['signer_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=signer/' . $row['sgid'] . '/' . change_alias($row['signer']);
+}
+
+// Uy ban tham tra
+if (!empty($row['eid'])) {
+    $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_examine WHERE id = ' . $row['eid'];
+    $result = $db->query($sql);
+    list ($row['examine']) = $result->fetch(3);
 }
 
 // File download
@@ -148,13 +152,13 @@ if (!empty($row['files'])) {
     $row['files'] = array();
 
     foreach ($files as $id => $file) {
-        $file_title = basename($file);
+        $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $lang_module['click_to_download'];
         $row['files'][] = array(
             'title' => $file_title,
             'key' => md5($id . $file_title),
             'ext' => nv_getextension($file_title),
             'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
-            'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id,
+            'url' => (!preg_match("/^http*/", $file)) ? NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id : $file,
             'urlpdf' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;pdf=1&amp;id=' . $id
         );
     }
@@ -213,7 +217,31 @@ if ($nv_laws_setting['detail_other']) {
     }
 }
 
-$contents = nv_theme_laws_detail($row, $other_cat, $other_area, $other_subject, $other_signer);
+// comment
+    if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
+        define('NV_COMM_ID', $row['id']);//ID bài viết hoặc
+        define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']);//để đáp ứng comment ở bất cứ đâu không cứ là bài viết
+        //check allow comemnt
+        if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
+        	$allowed = 1;//Nếu không trong thời gian góp ý thì chỉ quản trị tối cao có thể comment
+        }else{
+        	//Nếu văn bản trong thời gian lấy ý kiến thì lấy cấu hình comm theo module
+        	$allowed = $module_config[$module_name]['allowed_comm'];//tùy vào module để lấy cấu hình.
+	        if ($allowed == '-1') {
+	            $allowed = 6;//Nếu cấu hình giá trị là tùy vào bài viết thì để mặc định là tất cả mọi người được comment
+	        }
+        }
+
+        require_once NV_ROOTDIR . '/modules/comment/comment.php';
+        $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
+        $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
+
+        $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
+    } else {
+        $content_comment = '';
+    }
+//print_r($row);die('ok');
+$contents = nv_theme_laws_detail($row, $other_cat, $other_area, $other_subject, $other_signer, $content_comment);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
