@@ -189,3 +189,4 @@ $lang_module['erroNotSelectExamine'] = 'Lỗi! Bạn chưa chọn Ủy ban thẩ
 $lang_module['approval'] = "Trang thái";
 $lang_module['erroStartvalid'] = 'Lỗi! Ngày bắt đầu hiệu lực không thể trước ngày ban hành.';
 $lang_module['erroExptime'] = 'Lỗi! Ngày hết hiệu lực phải sau ngày ban hành và ngày bắt đầu hiệu lực.';
+$lang_module['admin_add'] = "Người đăng";

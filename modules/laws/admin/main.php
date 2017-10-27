@@ -587,7 +587,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 
     if ($nv_Request->isset_request('list', 'get')) {
         $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&list";
-        $join = "";
+        $join = 'INNER JOIN ' . NV_USERS_GLOBALTABLE . ' u1 ON t1.admin_add=u1.userid';
         $where = array();
         if ($nv_Request->isset_request('cat', 'get')) {
             $keywords = $nv_Request->get_title('keywords', 'get', '');
@@ -638,10 +638,11 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         $per_page = 30;
 
         if ($all_page) {
-            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "") . " ORDER BY t1.addtime DESC LIMIT " . (($page - 1) * $per_page) . "," . $per_page;
+            $sql = "SELECT t1.*, u1.username FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "") . " ORDER BY t1.addtime DESC LIMIT " . (($page - 1) * $per_page) . "," . $per_page;
             $result = $db->query($sql);
             $a = 0;
             while ($row = $result->fetch()) {
+            	$row['admin_add'] = $row['username'];
                 $row['publtime'] = date("d-m-Y", $row['publtime']);
                 $row['exptime'] = $row['exptime'] ? date("d-m-Y", $row['exptime']) : "N/A";
 				$row['start_comm_time'] = $row['start_comm_time'] ? date("d/m/Y", $row['start_comm_time']) : "";
