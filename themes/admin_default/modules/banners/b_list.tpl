@@ -35,7 +35,7 @@
 				<td class="text-center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
 				<td>
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp;
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="{ROW.delfile}" id="delete_banners">{CONTENTS.del}</a>
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" id="delete_banners" onclick="nv_delete_banner();">{CONTENTS.del}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->
@@ -43,24 +43,25 @@
 	</table>
 </div>
 <script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$('a[id=delete_banners]').click(function(event) {
-			event.preventDefault();
-			if (confirm('{LANG.file_del_confirm}')) {
-				var href = $(this).attr('href') + "&nocache=" + new Date().getTime();
-				$.ajax({
-					type : 'POST',
-					url : href,
-					data : '',
-					success : function(data) {
-						alert(data);
-						window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banners_list';
-					}
-				});
+function nv_delete_banner() {
+	var r = confirm('{LANG.file_del_confirm}');
+	if (r == true) {
+		var href = '{ROW.delfile}' + "&nocache=" + new Date().getTime();
+		$.ajax({
+			type : 'POST',
+			url : href,
+			data : '',
+			success : function(data) {						
+				alert(data);
+				location.reload();
+				//window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banners_list';
 			}
 		});
-	});
-	//]]>
+	}	
+	else {
+		return false;
+	}
+	return;
+}
 </script>
 <!-- END: main -->
