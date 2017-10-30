@@ -12,7 +12,14 @@ if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 
 if (!nv_function_exists('nv4_block_slide_list_video')) {
-
+    /**
+     * nv_block_config_slide_list_video()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_slide_list_video($module, $data_block, $lang_block)
     {
         global $site_mods;
@@ -26,6 +33,13 @@ if (!nv_function_exists('nv4_block_slide_list_video')) {
         return $html;
     }
 
+    /**
+     * nv_block_config_slide_list_video_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_slide_list_video_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -36,6 +50,12 @@ if (!nv_function_exists('nv4_block_slide_list_video')) {
         return $return;
     }
 
+    /**
+     * nv4_block_slide_list_video()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv4_block_slide_list_video($block_config)
     {
         global $global_config, $db, $site_mods, $module_name, $module_info, $module_file;

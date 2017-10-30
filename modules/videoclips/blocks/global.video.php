@@ -12,15 +12,22 @@ if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 
 if (!nv_function_exists('nv_block_video')) {
-
+    /**
+     * nv_block_config_video()
+     *
+     * @param mixed $mod_name
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_video($mod_name, $data_block, $lang_block)
     {
         global $db, $site_mods;
 
         $html = '';
         $html .= '<tr>';
-        $html .= '	<td>Topic Video</td>';
-        $html .= '	<td><select name="config_idtopic" class="form-control w250"><option value="0">---------------</option>';
+        $html .= '	<td>' . $lang_block['topicvideo'] . '</td>';
+        $html .= '	<td><select name="config_idtopic" class="form-control w250"><option value="0">' . $lang_block['topicvideo_all'] . '</option>';
 
         $db->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $site_mods[$mod_name]['module_data'] . '_topic')->where('status= 1')->order('weight ASC');
         $result = $db->query($db->sql());
@@ -32,21 +39,32 @@ if (!nv_function_exists('nv_block_video')) {
 
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= '	<td>Number Video</td>';
+        $html .= '	<td>' . $lang_block['numvideo'] . '</td>';
         $html .= '	<td><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></td>';
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= '	<td>Other Video</td>';
+        $html .= '	<td>' . $lang_block['numothervideo'] . '</td>';
         $html .= '	<td><input type="text" name="config_other" class="form-control w100" size="5" value="' . $data_block['other'] . '"/></td>';
         $html .= '</tr>';
         $html .= '<tr>';
-        $html .= '	<td>Length Title Video</td>';
+        $html .= '	<td>' . $lang_block['titlelength'] . '</td>';
         $html .= '	<td><input type="text" name="config_length" class="form-control w100" size="5" value="' . $data_block['length'] . '"/></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+        $html .= '	<td>' . $lang_block['showhometext'] . '</td>';
+        $html .= '	<td><input type="checkbox" name="config_showhometext" value="1"' . (empty($data_block['showhometext']) ? '' : ' checked="checked"') . '/></td>';
         $html .= '</tr>';
 
         return $html;
     }
 
+    /**
+     * nv_block_config_video_submit()
+     *
+     * @param mixed $mod_name
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_video_submit($mod_name, $lang_block)
     {
         global $nv_Request;
@@ -57,9 +75,16 @@ if (!nv_function_exists('nv_block_video')) {
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['other'] = $nv_Request->get_int('config_other', 'post', 0);
         $return['config']['length'] = $nv_Request->get_int('config_length', 'post', 0);
+        $return['config']['showhometext'] = $nv_Request->get_int('config_showhometext', 'post', 0);
         return $return;
     }
 
+    /**
+     * nv_block_video()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_block_video($block_config)
     {
         global $module_array_cat, $module_info, $db, $module_config, $global_config, $site_mods, $module_name, $module_file;
@@ -114,16 +139,18 @@ if (!nv_function_exists('nv_block_video')) {
                 if (preg_match("/^(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/watch\?v\=([^\&]+)\&?(.*?)$/is", $row['externalpath'], $m)) {
                     $xtpl->assign('CODE', $m[4]);
                     $xtpl->parse('main.youtube');
-                } else
-                    if (preg_match("/(http(s)?\:)?\/\/youtu?\.be[^\/]?\/([^\&]+)$/isU", $row['externalpath'], $m)) {
-                        $xtpl->assign('CODE', $m[3]);
-                        $xtpl->parse('main.youtube');
-                    } else {
-                        $row['filepath'] = !empty($row['internalpath']) ? NV_BASE_SITEURL . $row['internalpath'] : $row['externalpath'];
-                        $xtpl->assign('DETAILCONTENT', $row);
-                        $xtpl->parse('main.player');
-                    }
+                } elseif (preg_match("/(http(s)?\:)?\/\/youtu?\.be[^\/]?\/([^\&]+)$/isU", $row['externalpath'], $m)) {
+                    $xtpl->assign('CODE', $m[3]);
+                    $xtpl->parse('main.youtube');
+                } else {
+                    $row['filepath'] = !empty($row['internalpath']) ? NV_BASE_SITEURL . $row['internalpath'] : $row['externalpath'];
+                    $xtpl->assign('DETAILCONTENT', $row);
+                    $xtpl->parse('main.player');
+                }
             } else {
+                if (!empty($block_config['showhometext'])) {
+                    $xtpl->parse('main.other.showhometext');
+                }
                 $xtpl->parse('main.other');
             }
             ++$i;
@@ -131,7 +158,6 @@ if (!nv_function_exists('nv_block_video')) {
         $xtpl->parse('main');
         return $xtpl->text('main');
     }
-
 }
 
 if (defined('NV_SYSTEM')) {

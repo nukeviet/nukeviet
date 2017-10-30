@@ -71,6 +71,7 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULECONFIG', $configMods);
 $xtpl->assign('TEMPLATE', $module_info['template']);
+$xtpl->assign('MODULE_THEME', $module_info['module_theme']);
 
 if (!empty($_otherTopic['main']) or !empty($_otherTopic['sub'])) {
     if (!empty($_otherTopic['main'])) {

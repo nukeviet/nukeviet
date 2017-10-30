@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/jquery.matchHeight-min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_THEME}_jquery.matchHeight-min.js"></script>
 <!-- BEGIN: topicList -->
 <div class="otherTopic marginbottom15 clearfix">
     <div class="otherTopicCont">

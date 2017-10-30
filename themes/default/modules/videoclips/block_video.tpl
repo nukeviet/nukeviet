@@ -60,7 +60,7 @@
 	<li class="video-other clearfix">
 		<a title="{DATA.title}" href="{DATA.link}"> <img class=" pull-left" alt="{DATA.title}" src="{DATA.img}" /></a>
 		<a class="show" title="{DATA.title}" href="{DATA.link}"> {DATA.titlevideo} </a>
-		<span class=""> {DATA.hometext60} </span>
+		<!-- BEGIN: showhometext --><span class=""> {DATA.hometext60} </span><!-- END: showhometext -->
 	</li>
 	<!-- END: other -->
 </ul>
