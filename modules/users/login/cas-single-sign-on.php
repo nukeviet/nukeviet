@@ -12,15 +12,17 @@ if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
+$_cas_config = unserialize($global_config['config_sso']);
+
 // Enable debugging
 phpCAS::setDebug();
 
 // Initialize phpCAS
-phpCAS::client($global_config['config_sso']['cas_version'], $global_config['config_sso']['cas_hostname'], $global_config['config_sso']['cas_port'], $global_config['config_sso']['cas_baseuri']);
+phpCAS::client($_cas_config['cas_version'], $_cas_config['cas_hostname'], $_cas_config['cas_port'], $_cas_config['cas_baseuri']);
 
 // For production use set the CA certificate that is the issuer of the cert
 // on the CAS server and uncomment the line below
-// phpCAS::setCasServerCACert($global_config['config_sso']['cas_certificate_path']);
+// phpCAS::setCasServerCACert($_cas_config['cas_certificate_path']);
 
 // For quick testing you can disable SSL validation of the CAS server.
 // THIS SETTING IS NOT RECOMMENDED FOR PRODUCTION.
@@ -30,7 +32,7 @@ phpCAS::setNoCasServerValidation();
 // set the language to french
 //phpCAS::setLang(PHPCAS_LANG_FRENCH);
 
-phpCAS::handleLogoutRequests(false);// https://wiki.jasig.org/display/casum/single+sign+out#SingleSignOut-Howitworks
+phpCAS::handleLogoutRequests(false); // https://wiki.jasig.org/display/casum/single+sign+out#SingleSignOut-Howitworks
 
 // force CAS authentication
 phpCAS::forceAuthentication();
@@ -42,18 +44,18 @@ if (defined('CAS_LOGOUT_URL_REDIRECT')) {
 $username = phpCAS::getUser();
 if (!empty($username)) {
     if (nv_function_exists('ldap_connect')) {
-        $ldapconn = ldap_connect($global_config['config_sso']['ldap_host_url']);
-        ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, $global_config['config_sso']['ldap_version']);
+        $ldapconn = ldap_connect($_cas_config['ldap_host_url']);
+        ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, $_cas_config['ldap_version']);
         ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
-        if (!empty($global_config['config_sso']['ldap_bind_dn']) and !empty($global_config['config_sso']['ldap_bind_pw'])) {
-            $ldapbind = ldap_bind($ldapconn, $global_config['config_sso']['ldap_bind_dn'], $global_config['config_sso']['ldap_bind_pw']);
+        if (!empty($_cas_config['ldap_bind_dn']) and !empty($_cas_config['ldap_bind_pw'])) {
+            $ldapbind = ldap_bind($ldapconn, $_cas_config['ldap_bind_dn'], $_cas_config['ldap_bind_pw']);
         } else {
             $ldapbind = ldap_bind($ldapconn);
         }
         if ($ldapbind) {
             // verify binding
 
-            $result = ldap_search($ldapconn, $global_config['config_sso']['user_contexts'], '(uid=' . $username . ')');
+            $result = ldap_search($ldapconn, $_cas_config['user_contexts'], '(uid=' . $username . ')');
             $data = ldap_get_entries($ldapconn, $result);
 
             $attribs = array(
@@ -64,7 +66,7 @@ if (!empty($username)) {
                 'current_mode' => 4
             );
 
-            foreach ($global_config['config_sso']['config_field'] as $key => $ckey) {
+            foreach ($_cas_config['config_field'] as $key => $ckey) {
                 if (!empty($ckey) and isset($data[0][$ckey])) {
                     $attribs[$key] = $data[0][$ckey][0];
                 }
@@ -91,7 +93,9 @@ if (!empty($username)) {
         ldap_close($ldapconn);
     }
 } else {
-    $attribs = array( 'result' => 'notlogin' );
+    $attribs = array(
+        'result' => 'notlogin'
+    );
 }
 
 $nv_Request->set_Session('openid_attribs', serialize($attribs));
