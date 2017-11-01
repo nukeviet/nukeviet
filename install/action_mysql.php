@@ -8,7 +8,7 @@
  * @Createdate 12/28/2009 20:8
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -25,6 +25,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
 	lev tinyint(1) unsigned NOT NULL DEFAULT '0',
 	files_level varchar(255) DEFAULT '',
 	position varchar(255) NOT NULL,
+    main_module varchar(50) NOT NULL DEFAULT 'siteinfo',
 	addtime int(11) NOT NULL DEFAULT '0',
 	edittime int(11) NOT NULL DEFAULT '0',
 	is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -144,7 +145,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
 	KEY id (id),
 	KEY type (type)
 ) ENGINE=MyISAM";
-
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
 	idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

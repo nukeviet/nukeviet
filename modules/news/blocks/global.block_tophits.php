@@ -55,14 +55,16 @@ if (!nv_function_exists('nv_news_block_tophits')) {
             $data_block['nocatid'] = explode(',', $data_block['nocatid']);
         }
         foreach ($list as $l) {
-            $xtitle_i = '';
+            if ($l['status'] == 1 or $l['status'] == 2) {
+                $xtitle_i = '';
 
-            if ($l['lev'] > 0) {
-                for ($i = 1; $i <= $l['lev']; ++$i) {
-                    $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                if ($l['lev'] > 0) {
+                    for ($i = 1; $i <= $l['lev']; ++$i) {
+                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    }
                 }
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
-            $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
         }
         $html .= '</div>';
         $html .= '</td>';
@@ -190,7 +192,7 @@ if (defined('NV_SYSTEM')) {
             unset($module_array_cat[0]);
         } else {
             $module_array_cat = array();
-            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
+            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
             if(!empty($list))
             {

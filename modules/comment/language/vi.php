@@ -44,3 +44,5 @@ $lang_module['like'] = 'Thích';
 $lang_module['dislike'] = 'Không thích';
 $lang_module['delete'] = 'Xóa';
 $lang_module['like_unsuccess'] = 'Bạn đã đánh giá bình luận này trước đó';
+$lang_module['attach'] = 'Đính kèm file';
+$lang_module['attachdownload'] = 'Tải đính kèm';

@@ -44,6 +44,7 @@ class Error
     private $errfile = false;
     private $errline = false;
     private $ip = false;
+    private $server_name = false;
     private $useragent = false;
     private $request = false;
     private $day;
@@ -367,7 +368,7 @@ class Error
      */
     private function _log()
     {
-        $content = '[' . $this->error_date . ']';
+        $content = '[' . $this->error_date . '] [' . $this->get_server_name() . ']';
         if (!empty($this->ip)) {
             $content .= ' [' . $this->ip . ']';
         }
@@ -566,5 +567,22 @@ class Error
                 $this->_display();
             }
         }
+    }
+
+    /**
+     * Error::get_server_name()
+     *
+     * @return void
+     */
+    private function get_server_name()
+    {
+        if ($this->server_name != false) {
+            return $this->server_name;
+        }
+        $server_name = trim((isset($_SERVER['HTTP_HOST']) and !empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
+        $server_name = preg_replace('/^[a-z]+\:\/\//i', '', $server_name);
+        $server_name = preg_replace('/(\:[0-9]+)$/', '', $server_name);
+        $this->server_name = $server_name;
+        return $server_name;
     }
 }

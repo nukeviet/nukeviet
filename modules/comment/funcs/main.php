@@ -23,7 +23,7 @@ if (! empty($module) and isset($module_config[$module]['activecomm'])) {
     $page = $nv_Request->get_int('page', 'get', 1);
     $status_comment = $nv_Request->get_title('status_comment', 'post,get', '');
     require_once NV_ROOTDIR . '/modules/comment/comment.php';
-    $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment);
+    $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
     include NV_ROOTDIR . '/includes/header.php';
     echo $content_comment;
     include NV_ROOTDIR . '/includes/footer.php';

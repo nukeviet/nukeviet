@@ -10,7 +10,9 @@
 
 namespace NukeViet\Files;
 
+use COM;
 use finfo;
+use Exception;
 
 if (!defined('NV_MIME_INI_FILE')) {
     define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
@@ -18,7 +20,6 @@ if (!defined('NV_MIME_INI_FILE')) {
 
 class Upload
 {
-
     private $config = array(
         'allowed_files' => array(),
         'upload_checking_mode' => 'strong',
@@ -27,7 +28,6 @@ class Upload
         'maxheight' => 0,
         'magic_path' => ''
     );
-
     private $lang = array(
         'error_uploadNameEmpty' => 'Upload failed: UserFile Name is empty',
         'error_uploadSizeEmpty' => 'Upload failed: UserFile Size is empty',
@@ -53,26 +53,24 @@ class Upload
     );
 
     private $file_extension = '';
-
     private $urlfile_extension = '';
-
     private $file_mime = '';
-
+    private $file_size = 0;
     private $urlfile_mime = '';
-
     private $temp_file = '';
-
     private $url_info = array();
-
     private $is_img = false;
-
     private $img_info = array();
-
     private $disable_functions = array();
-
     private $disable_classes = array();
-
     private $user_agent;
+
+    private $chunk_filename = '';
+    private $chunk_current = 0;
+    private $chunk_total = 0;
+    private $chunk_tmpdir = '';
+    private $chunk_prefix = '';
+    private $chunk_resource = null;
 
     /**
      * upload::__construct()
@@ -86,7 +84,7 @@ class Upload
      * @param string $magic_path
      * @return
      */
-    public function __construct($allowed_filetypes = array( 'any' ), $forbid_extensions = array( 'php' ), $forbid_mimes = array(), $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
+    public function __construct($allowed_filetypes = array('any'), $forbid_extensions = array('php'), $forbid_mimes = array(), $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
     {
         if (!is_array($allowed_filetypes)) {
             $allowed_filetypes = array(
@@ -113,7 +111,7 @@ class Upload
         $this->config['maxsize'] = floatval($maxsize);
         $this->config['maxwidth'] = intval($maxwidth);
         $this->config['maxheight'] = intval($maxheight);
-        $this->config['upload_checking_mode'] = UPLOAD_CHECKING_MODE;
+        $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
         $this->config['magic_path'] = $magic_path;
 
         $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split('/[\s,]+/', ini_get('disable_functions'))) : array();
@@ -260,73 +258,74 @@ class Upload
      */
     private function get_ini($allowed_filetypes, $forbid_extensions, $forbid_mimes)
     {
-        $all_ini = array();
+        $ini = $all_ini = array();
 
-        $data = file(NV_MIME_INI_FILE);
-        $section = '';
-        foreach ($data as $line) {
-            $line = trim($line);
-            if (empty($line) or preg_match('/^;/', $line)) {
-                continue;
+        if (file_exists(NV_MIME_INI_FILE)) {
+            $data = file(NV_MIME_INI_FILE);
+            $section = '';
+            foreach ($data as $line) {
+                $line = trim($line);
+                if (empty($line) or preg_match('/^;/', $line)) {
+                    continue;
+                }
+
+                if (preg_match('/^\[(.*?)\]$/', $line, $match)) {
+                    $section = $match[1];
+                    continue;
+                }
+
+                if (!strpos($line, '=')) {
+                    continue;
+                }
+
+                list ($key, $value) = explode('=', $line);
+                $key = trim($key);
+                $value = trim($value);
+                $value = str_replace(array(
+                    '"',
+                    "'"
+                ), array(
+                    '',
+                    ''
+                ), $value);
+
+                if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
+                    $all_ini[$section][$match[1]][] = $value;
+                } else {
+                    $all_ini[$section][$key][] = $value;
+                }
             }
 
-            if (preg_match('/^\[(.*?)\]$/', $line, $match)) {
-                $section = $match[1];
-                continue;
+            foreach ($all_ini as $section => $line) {
+                if ($allowed_filetypes == array(
+                    'any'
+                ) or in_array($section, $allowed_filetypes)) {
+                    $ini = array_merge($ini, $line);
+                }
             }
 
-            if (!strpos($line, '=')) {
-                continue;
+            if (!empty($forbid_extensions)) {
+                foreach ($forbid_extensions as $extension) {
+                    unset($ini[$extension]);
+                }
             }
 
-            list ($key, $value) = explode('=', $line);
-            $key = trim($key);
-            $value = trim($value);
-            $value = str_replace(array(
-                '"',
-                "'"
-            ), array(
-                '',
-                ''
-            ), $value);
-
-            if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
-                $all_ini[$section][$match[1]][] = $value;
-            } else {
-                $all_ini[$section][$key][] = $value;
-            }
-        }
-
-        $ini = array();
-        foreach ($all_ini as $section => $line) {
-            if ($allowed_filetypes == array(
-                'any'
-            ) or in_array($section, $allowed_filetypes)) {
-                $ini = array_merge($ini, $line);
-            }
-        }
-
-        if (!empty($forbid_extensions)) {
-            foreach ($forbid_extensions as $extension) {
-                unset($ini[$extension]);
-            }
-        }
-
-        if (!empty($forbid_mimes)) {
-            $new_ini = array();
-            foreach ($ini as $key => $i) {
-                $new = array();
-                $new[$key] = array();
-                foreach ($i as $i2) {
-                    if (!in_array($i2, $forbid_mimes)) {
-                        $new[$key][] = $i2;
+            if (!empty($forbid_mimes)) {
+                $new_ini = array();
+                foreach ($ini as $key => $i) {
+                    $new = array();
+                    $new[$key] = array();
+                    foreach ($i as $i2) {
+                        if (!in_array($i2, $forbid_mimes)) {
+                            $new[$key][] = $i2;
+                        }
+                    }
+                    if (!empty($new[$key])) {
+                        $new_ini = array_merge($new_ini, $new);
                     }
                 }
-                if (!empty($new[$key])) {
-                    $new_ini = array_merge($new_ini, $new);
-                }
+                $ini = $new_ini;
             }
-            $ini = $new_ini;
         }
 
         return $ini;
@@ -680,9 +679,10 @@ class Upload
     }
 
     /**
-     * upload::check_tmpfile()
+     * Upload::check_tmpfile()
      *
      * @param mixed $userfile
+     * @param mixed $no_check_size
      * @return
      */
     private function check_tmpfile($userfile, $no_check_size)
@@ -690,7 +690,6 @@ class Upload
         if (empty($userfile)) {
             return $this->lang['error_upload_no_file'];
         }
-
         if (!isset($userfile['name']) or empty($userfile['name'])) {
             return $this->lang['error_uploadNameEmpty'];
         }
@@ -737,11 +736,77 @@ class Upload
 
         $this->file_extension = $extension;
         $this->file_mime = $this->get_mime_type($userfile);
+        $this->file_size = $userfile['size'];
+
+        /**
+         * Chú ý:
+         * - Nếu upload chunk sau khi hoàn thành tất cả các chunk cần kiểm tra lại mime của file trước khi rename, move, copy file qua đích đến
+         * - Khi upload chunk sẽ chỉ kiểm tra BLOB đầu tiên mang thông tin của file đó
+         */
+        if (empty($this->file_mime) and ($this->chunk_total <= 1 or $this->chunk_current <= 0)) {
+            return $this->lang['error_upload_mime_not_recognize'];
+        }
+
+        /**
+         * Nếu upload nhiều phần không kiểm tra dung lượng BLOB hoặc tất cả các BLOB
+         * Nguyên nhân tổng số BLOB cộng lại có thể lớn hơn dung lượng cho phép
+         * tuy nhiên BLOB cuối cùng lại có thể có dung lượng rất nhỏ và chưa vượt mức cho phép
+         * Sau khi upload tất cả BLOB lên sẽ check sau, tuy nhiên tốt nhất là nên sử dụng các công cụ
+         * để kiểm tra trực tiếp từ trình duyệt.
+         */
+        if (!empty($this->config['maxsize']) and $this->file_size > $this->config['maxsize'] and $this->chunk_total <= 1) {
+            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
+                return sprintf($this->lang['error_upload_max_user_size'], nv_convertfromBytes($this->config['maxsize']));
+            }
+        }
+
+        if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) or preg_match('#application\/[x\-]*(shockwave\-flash)#', $this->file_mime)) {
+            $this->is_img = true;
+            if (empty($this->img_info)) {
+                $this->img_info = @getimagesize($userfile['tmp_name']);
+            }
+
+            if (empty($this->img_info) or !isset($this->img_info[0]) or empty($this->img_info[0]) or !isset($this->img_info[1]) or empty($this->img_info[1])) {
+                return $this->lnag['error_upload_not_image'];
+            }
+
+            if (!$this->verify_image($userfile['tmp_name'])) {
+                return $this->lang['error_upload_image_failed'];
+            }
+
+            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
+                if (!empty($this->config['maxwidth']) and $this->img_info[0] > $this->config['maxwidth']) {
+                    return sprintf($this->lang['error_upload_image_width'], $this->config['maxwidth']);
+                }
+
+                if (!empty($this->config['maxheight']) and $this->img_info[1] > $this->config['maxheight']) {
+                    return sprintf($this->lang['error_upload_image_height'], $this->config['maxheight']);
+                }
+            }
+        }
+
+        return '';
+    }
+
+    private function check_chunktmp($file_tmp, $no_check_size)
+    {
+        if (!file_exists($file_tmp)) {
+            return $this->lang['error_upload_cant_write'];
+        }
+
+        $userfile = array();
+        $userfile['tmp_name'] = $file_tmp;
+        $userfile['type'] = 'type';
+
+        $this->file_mime = $this->get_mime_type($userfile);
+
         if (empty($this->file_mime)) {
             return $this->lang['error_upload_mime_not_recognize'];
         }
 
-        if (!empty($this->config['maxsize']) and $userfile['size'] > $this->config['maxsize']) {
+        $this->file_size = $this->filesize($userfile['tmp_name']);
+
+        if (!empty($this->config['maxsize']) and $this->file_size > $this->config['maxsize']) {
             if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
                 return sprintf($this->lang['error_upload_max_user_size'], nv_convertfromBytes($this->config['maxsize']));
             }
@@ -823,19 +888,26 @@ class Upload
     }
 
     /**
-     * upload::save_file()
+     * Upload::save_file()
      *
      * @param mixed $userfile
      * @param mixed $savepath
      * @param bool $replace_if_exists
+     * @param bool $no_check_size
      * @return
      */
     public function save_file($userfile, $savepath, $replace_if_exists = true, $no_check_size = false)
     {
+        $this->headersNoCache();
         $this->file_extension = '';
         $this->file_mime = '';
+        $this->file_size = 0;
         $this->is_img = false;
         $this->img_info = array();
+
+        if ($this->chunk_total > 1) {
+            $userfile['name'] = $this->chunk_filename;
+        }
 
         $return = array();
         $return['error'] = $this->check_tmpfile($userfile, $no_check_size);
@@ -847,6 +919,13 @@ class Upload
         $return['error'] = $this->check_save_path($savepath);
         if (!empty($return['error'])) {
             return $return;
+        }
+
+        if ($this->chunk_total > 1) {
+            $return['error'] = $this->check_save_path($this->chunk_tmpdir);
+            if (!empty($return['error'])) {
+                return $return;
+            }
         }
 
         unset($f);
@@ -867,30 +946,95 @@ class Upload
             $filename = $filename2;
         }
 
-        if (!@copy($userfile['tmp_name'], $savepath . $filename)) {
-            @move_uploaded_file($userfile['tmp_name'], $savepath . $filename);
+        if ($this->chunk_total > 1) {
+            $chunkComplete = false;
+            if (!preg_match('/\/$/', $this->chunk_tmpdir)) {
+                $this->chunk_tmpdir = $this->chunk_tmpdir . '/';
+            }
+
+            $file_tmp = $this->chunk_tmpdir . $this->chunk_prefix . md5($userfile['name'] . $this->chunk_total);
+
+            if ($this->chunk_current == 0 and file_exists($file_tmp)) {
+                @unlink($file_tmp);
+            }
+
+            try {
+                $this->lockChunkFile($file_tmp);
+                if (!$out = @fopen($file_tmp, 'ab')) {
+                    throw new Exception($this->lang['error_upload_cant_write']);
+                }
+                if (!$in = @fopen($userfile['tmp_name'], "rb")) {
+                    throw new Exception($this->lang['error_upload_no_file']);
+                }
+
+                while ($buff = fread($in, 4096)) {
+                    fwrite($out, $buff);
+                }
+
+                @fclose($in);
+                fflush($out);
+                @fclose($out);
+
+                if ($this->chunk_total <= ($this->chunk_current + 1)) {
+                    $error = $this->check_chunktmp($file_tmp, $no_check_size);
+                    if ($error != '') {
+                        throw new Exception($error);
+                    }
+
+                    $chunkComplete = true;
+
+                    if (!@rename($file_tmp, $savepath . $filename)) {
+                        @copy($file_tmp, $savepath . $filename);
+                    }
+
+                    if (!file_exists($savepath . $filename)) {
+                        throw new Exception($this->lang['error_upload_cant_write']);
+                    }
+
+                    if (file_exists($file_tmp)) {
+                        @unlink($file_tmp);
+                    }
+                }
+
+                $this->unlockChunkFile($file_tmp);
+            } catch (Exception $e) {
+                $this->unlockChunkFile($file_tmp);
+                @unlink($file_tmp);
+                $return['error'] = $e->getMessage();
+                return $return;
+            }
+        } else {
+            $chunkComplete = true;
+            if (!@copy($userfile['tmp_name'], $savepath . $filename)) {
+                @move_uploaded_file($userfile['tmp_name'], $savepath . $filename);
+            }
+
+            if (!file_exists($savepath . $filename)) {
+                $return['error'] = $this->lang['error_upload_cant_write'];
+                return $return;
+            }
         }
 
-        if (!file_exists($savepath . $filename)) {
-            $return['error'] = $this->lang['error_upload_cant_write'];
-            return $return;
+        $return['complete'] = $chunkComplete;
+
+        if ($chunkComplete) {
+            if (substr(PHP_OS, 0, 3) != 'WIN') {
+                $oldumask = umask(0);
+                chmod($savepath . $filename, 0777);
+                umask($oldumask);
+            }
+
+            $return['name'] = $savepath . $filename;
+            $return['basename'] = $filename;
+            $return['ext'] = $this->file_extension;
+            $return['mime'] = $this->file_mime;
+            $return['size'] = $this->file_size;
+            $return['is_img'] = $this->is_img;
+            if ($this->is_img) {
+                $return['img_info'] = $this->img_info;
+            }
         }
 
-        if (substr(PHP_OS, 0, 3) != 'WIN') {
-            $oldumask = umask(0);
-            chmod($savepath . $filename, 0777);
-            umask($oldumask);
-        }
-
-        $return['name'] = $savepath . $filename;
-        $return['basename'] = $filename;
-        $return['ext'] = $this->file_extension;
-        $return['mime'] = $this->file_mime;
-        $return['size'] = $userfile['size'];
-        $return['is_img'] = $this->is_img;
-        if ($this->is_img) {
-            $return['img_info'] = $this->img_info;
-        }
         return $return;
     }
 
@@ -1253,6 +1397,7 @@ class Upload
      */
     public function save_urlfile($urlfile, $savepath, $replace_if_exists = true, $no_check_size = false)
     {
+        $this->headersNoCache();
         $this->file_extension = '';
         $this->file_mime = '';
         $this->urlfile_mime = '';
@@ -1300,7 +1445,7 @@ class Upload
             );
         }
 
-        $this->temp_file = str_replace("\\", "/", tempnam(NV_TEMP_REAL_DIR, NV_TEMPNAM_PREFIX));
+        $this->temp_file = str_replace("\\", "/", tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX));
 
         $result = false;
         foreach ($allow_methods as $method) {
@@ -1319,7 +1464,7 @@ class Upload
             return $return;
         }
 
-        $return['size'] = filesize($this->temp_file);
+        $return['size'] = $this->filesize($this->temp_file);
 
         $this->file_extension = $this->urlfile_extension;
         $this->file_mime = $this->get_mime_type(array(
@@ -1419,6 +1564,7 @@ class Upload
             umask($oldumask);
         }
 
+        $return['complete'] = true;
         $return['name'] = $savepath . $filename;
         $return['basename'] = $filename;
         $return['ext'] = $this->file_extension;
@@ -1428,5 +1574,119 @@ class Upload
             $return['img_info'] = $this->img_info;
         }
         return $return;
+    }
+
+    /**
+     * Upload::headersNoCache()
+     *
+     * @return void
+     */
+    private function headersNoCache()
+    {
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+    }
+
+    /**
+     * Upload::setChunkOption()
+     *
+     * @param mixed $chunk_upload
+     * @return
+     */
+    public function setChunkOption($chunk_upload)
+    {
+        if (is_array($chunk_upload)) {
+            if (!empty($chunk_upload['name'])) {
+                $this->chunk_filename = $chunk_upload['name'];
+            }
+            if (isset($chunk_upload['chunk'])) {
+                $this->chunk_current = $chunk_upload['chunk'];
+            }
+            if (!empty($chunk_upload['chunks'])) {
+                $this->chunk_total = $chunk_upload['chunks'];
+            }
+            if (!empty($chunk_upload['tmpdir'])) {
+                $this->chunk_tmpdir = $chunk_upload['tmpdir'];
+            }
+            if (!empty($chunk_upload['chunk_prefix'])) {
+                $this->chunk_prefix = $chunk_upload['chunk_prefix'];
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * PHPs filesize() fails to measure files larger than 2gb
+     * @see http://stackoverflow.com/a/5502328/189673
+     *
+     * @param string $file Path to the file to measure
+     * @return int
+     */
+    protected function filesize($file)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
+        static $iswin;
+        if (!isset($iswin)) {
+            $iswin = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN');
+        }
+        static $exec_works;
+        if (!isset($exec_works)) {
+            $exec_works = ($this->func_exists('exec') and !ini_get('safe_mode') and @exec('echo EXEC') == 'EXEC');
+        }
+        // Try a shell command
+        if ($exec_works) {
+            $cmd = ($iswin) ? "for %F in (\"$file\") do @echo %~zF" : "stat -c%s \"$file\"";
+            @exec($cmd, $output);
+            if (is_array($output) and is_numeric($size = trim(implode("\n", $output)))) {
+                return $size;
+            }
+        }
+        // Try the Windows COM interface
+        if ($iswin and $this->cl_exists("COM")) {
+            try {
+                $fsobj = new COM('Scripting.FileSystemObject');
+                $filecal = $fsobj->GetFile(realpath($file));
+                $size = $filecal->Size;
+            } catch (Exception $e) {
+                $size = null;
+            }
+            if (ctype_digit($size)) {
+                return $size;
+            }
+        }
+        // If everything else fails
+        return @filesize($file);
+    }
+
+    /**
+     * Upload::lockChunkFile()
+     *
+     * @param mixed $file
+     * @return void
+     */
+    private function lockChunkFile($file)
+    {
+        if (is_resource($this->chunk_resource)) {
+            fclose($this->chunk_resource);
+        }
+        $this->chunk_resource = fopen($file . '.lock', 'w');
+        flock($this->chunk_resource, LOCK_EX);
+    }
+
+    /**
+     * Upload::unlockChunkFile()
+     *
+     * @param mixed $file
+     * @return void
+     */
+    private function unlockChunkFile($file)
+    {
+        fclose($this->chunk_resource);
+        @unlink($file . '.lock');
     }
 }

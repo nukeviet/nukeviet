@@ -8,7 +8,7 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 

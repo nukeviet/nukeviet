@@ -134,8 +134,8 @@ if (!empty($savecat)) {
         $viewcat = 'viewcat_page_new';
         $subcatid = '';
 
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, featured, ad_block_cat, keywords, admins, add_time, edit_time, groups_view) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :featured, :ad_block_cat, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
+        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, featured, ad_block_cat, keywords, admins, add_time, edit_time, groups_view, status) VALUES
+			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '3', '2', :featured, :ad_block_cat, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, 1)";
 
         $data_insert = array();
         $data_insert['parentid'] = $parentid;
@@ -256,7 +256,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
 
 if (!empty($array_cat_list)) {
     $cat_listsub = array();
-    while (list ($catid_i, $title_i) = each($array_cat_list)) {
+    foreach ($array_cat_list as $catid_i => $title_i) {
         if (!in_array($catid_i, $array_in_cat)) {
             $cat_listsub[] = array(
                 'value' => $catid_i,

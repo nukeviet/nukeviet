@@ -147,10 +147,7 @@ function nv_save_file_config_global()
     $config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
-        if ($c_config_name == 'config_sso') {
-            $config_sso = empty($c_config_value) ? '' : nv_var_export(unserialize($c_config_value));
-            $content_config .= "\$global_config['" . $c_config_name . "']=" . $config_sso . ";\n";
-        } elseif (in_array($c_config_name, $config_name_array)) {
+        if (in_array($c_config_name, $config_name_array)) {
             if (!empty($c_config_value)) {
                 $c_config_value = "'" . implode("','", array_map('trim', explode(',', $c_config_value))) . "'";
             } else {
@@ -443,11 +440,6 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "<IfModule mod_rewrite.c>\n";
         $rewrite_rule .= "RewriteEngine On\n";
         $rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
-
-        if ($array_config_global['ssl_https'] == 1) {
-            $rewrite_rule .= "RewriteCond %{SERVER_PORT} !^443$\n";
-            $rewrite_rule .= "RewriteRule (.*)  https://%{SERVER_NAME}%{REQUEST_URI} [L,R]\n";
-        }
 
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]\n";
         $rewrite_rule .= "RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]\n";

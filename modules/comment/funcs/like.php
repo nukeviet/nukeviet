@@ -20,10 +20,10 @@ $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 
 if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
-    if ($nv_Request->isset_request($module_name . '_like_' . $cid, 'cookie')) {
+    if ($nv_Request->isset_request($module_data . '_like_' . $cid, 'cookie')) {
         $contents = 'ERR_' . $lang_module['like_unsuccess'];
     } else {
-        $nv_Request->set_Cookie($module_name . '_like_' . $cid, 1, 86400);
+        $nv_Request->set_Cookie($module_data . '_like_' . $cid, 1, 86400);
 
         $_sql = 'SELECT cid, likes, dislikes FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
         $row = $db->query($_sql)->fetch();

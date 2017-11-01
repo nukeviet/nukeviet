@@ -112,6 +112,8 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
             $_GET[NV_OP_VARIABLE] = implode('/', $name_variable);
             unset($name_variable);
         }
+    } elseif (strpos(ltrim($request_uri, '/'), '/') !== false) {
+        nv_redirect_location($base_siteurl);
     }
 }
 

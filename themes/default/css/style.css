@@ -1145,6 +1145,11 @@ a.btn {
 
 #menusite .dropdown-submenu {
     position:relative;
+    display: none;
+}
+
+#menusite .open .dropdown-submenu {
+    display: block;
 }
 
 #menusite .dropdown-submenu li a {
