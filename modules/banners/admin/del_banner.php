@@ -29,7 +29,7 @@ if (! empty($row)) {
 
     $sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id;
     $db->query($sql);
-
+    nv_fix_banner_weight($row['pid']);
     $nv_Cache->delMod($module_name);
     nv_CreateXML_bannerPlan();
 
