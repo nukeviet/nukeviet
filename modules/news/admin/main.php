@@ -851,7 +851,7 @@ foreach ($data as $row) {
     $xtpl->parse('main.loop');
 }
 
-while (list ($action_i, $title_i) = each($array_list_action)) {
+foreach ($array_list_action as $action_i => $title_i) {
     if (defined('NV_IS_ADMIN_MODULE') or isset($_permission_action[$action_i])) {
         $action_assign = array(
             'value' => $action_i,

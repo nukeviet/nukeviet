@@ -256,7 +256,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
 
 if (!empty($array_cat_list)) {
     $cat_listsub = array();
-    while (list ($catid_i, $title_i) = each($array_cat_list)) {
+    foreach ($array_cat_list as $catid_i => $title_i) {
         if (!in_array($catid_i, $array_in_cat)) {
             $cat_listsub[] = array(
                 'value' => $catid_i,

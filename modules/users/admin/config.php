@@ -312,6 +312,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     }
 
     $nv_files = @scandir(NV_ROOTDIR);
+    $i = 0;
     foreach ($nv_files as $value) {
         if (!in_array($value, $ignorefolders) and is_dir(NV_ROOTDIR . '/' . $value)) {
             if (is_dir(NV_ROOTDIR . '/' . $value . '/nukeviet')) {
@@ -321,9 +322,13 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                     'value' => $value
                 );
                 $xtpl->assign('DIR_FORUM', $array);
-                $xtpl->parse('main.dir_forum');
+                $xtpl->parse('main.dir_forum.loop');
+                ++$i;
             }
         }
+    }
+    if ($i) {
+        $xtpl->parse('main.dir_forum');
     }
 
     foreach ($array_name_show as $id => $titleregister) {
@@ -366,7 +371,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $checked = (!empty($servers) and in_array($m[2], $servers)) ? ' checked="checked"' : '';
             $disabled = '';
 
-            if ($server == 'cas-single-sign-on.php' and !isset($global_config['config_sso']['cas_hostname'])) {
+            if ($server == 'cas-single-sign-on.php' and !isset($global_config['config_sso'])) {
                 $disabled = ' disabled="disabled" ';
             } elseif ($server == 'oauth-facebook.php' and (empty($global_config['facebook_client_id']) or empty($global_config['facebook_client_secret']))) {
                 $disabled = ' disabled="disabled" ';
