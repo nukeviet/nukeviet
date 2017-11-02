@@ -1460,11 +1460,11 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
         return false;
     }
 
-    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
+    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
         return false;
     }
 
