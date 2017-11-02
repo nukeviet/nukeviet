@@ -128,7 +128,7 @@ if (!nv_function_exists('nv_block_video')) {
                 $imageinfo = nv_ImageInfo(NV_ROOTDIR . '/' . $row['img'], 120, true, NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name);
                 $row['img'] = $imageinfo['src'];
             } else {
-                $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $mod_file . "/video.png";
+                $row['img'] = NV_BASE_SITEURL . "themes/" . $mod_template . "/images/" . $mod_file . "/video.png";
             }
             $row['hometext60'] = nv_clean60($row['hometext'], 60);
 
