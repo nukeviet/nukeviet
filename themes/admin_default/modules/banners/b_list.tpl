@@ -41,20 +41,17 @@
 			<!-- END: loop -->
 		</tbody>
 	</table>
-</div>n
+</div>
 <script type="text/javascript">
 function nv_delete_banner(url) {
-	var r = confirm('{LANG.file_del_confirm}');
-	if (r == true) {
-		var href = url + "&nocache=" + new Date().getTime();
+	if (confirm('{LANG.file_del_confirm}')) {
 		$.ajax({
 			type : 'POST',
-			url : href,
+			url : url + '&nocache='' + new Date().getTime(),
 			data : '',
 			success : function(data) {						
 				alert(data);
 				location.reload();
-				//window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banners_list';
 			}
 		});
 	}	
