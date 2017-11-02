@@ -51,7 +51,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
     } elseif (empty($sList)) {
         $type = $lang_module['subject'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=subject&add";
-    }elseif (empty($eList) && $module_cofig[$module_name]['activecomm']==1) {
+    } elseif (empty($eList) and $module_config[$module_name]['activecomm'] == 1) {
         $type = $lang_module['examine'];
         $href = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=examine&add";
     } elseif (empty($sgList)) {
@@ -172,7 +172,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
 
             $alias = change_alias($post['title']);
-            $post['code'] = $nv_Request->get_title('code', 'post', '', 1);
+            $post['code'] = nv_substr($nv_Request->get_title('code', 'post', '', 1), 0, 50);
             $post['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
             $test_content = strip_tags($post['bodytext']);
             $test_content = trim($test_content);
@@ -210,8 +210,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                 }
             }
             $post['files'] = !empty($post['files']) ? implode(",", $post['files']) : "";
-            $post['publtime'] = nv_substr($nv_Request->get_title('publtime', 'post', '', 1), 0, 10);
-            unset($m);
+            $post['publtime'] = $nv_Request->get_title('publtime', 'post', '');
             if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['publtime'], $m)) {
                 $post['publtime'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
             } else {
@@ -221,8 +220,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
                 die($lang_module['erroNotSelectPubtime']);
             }
 
-            $post['exptime'] = nv_substr($nv_Request->get_title('exptime', 'post', '', 1), 0, 10);
-            unset($m);
+            $post['exptime'] = $nv_Request->get_title('exptime', 'post', '');
             if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['exptime'], $m)) {
                 $post['exptime'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
             } else {
@@ -230,16 +228,14 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
 
 			//Nếu là module lấy ý kiến thì lấy thời gian bắt đầu-kết thúc lấy ý kiến, trang thái thông qua của văn bản
-			$post['start_comm_time'] = nv_substr($nv_Request->get_title('start_comm_time', 'post', '', 1), 0, 10);
-            unset($m);
+			$post['start_comm_time'] = $nv_Request->get_title('start_comm_time', 'post', '');
             if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['start_comm_time'], $m)) {
                 $post['start_comm_time'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
             } else {
                 $post['start_comm_time'] = 0;
             }
 
-			$post['end_comm_time'] = nv_substr($nv_Request->get_title('end_comm_time', 'post', '', 1), 0, 10);
-            unset($m);
+			$post['end_comm_time'] = $nv_Request->get_title('end_comm_time', 'post', '');
             if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['end_comm_time'], $m)) {
                 $post['end_comm_time'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
             } else {
@@ -247,8 +243,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
 			$post['approval'] = $nv_Request->get_int('approval', 'post', 0);
 
-            $post['startvalid'] = nv_substr($nv_Request->get_title('startvalid', 'post', '', 1), 0, 10);
-            unset($m);
+            $post['startvalid'] = $nv_Request->get_title('startvalid', 'post', '');
             if (preg_match("/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['startvalid'], $m)) {
                 $post['startvalid'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
             } else {
@@ -270,7 +265,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             if (!is_numeric($post['sgid']) and !empty($post['sgid'])) {
                 $result = $db->query("SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE title=" . $db->quote($post['title']) . " AND offices='' AND positions=''");
                 if ($result->rowCount() == 0) {
-                    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_signer(title, addtime) VALUES(' . $db->quote($post['sgid']) . ', ' . NV_CURRENTTIME . ')';
+                    $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_signer (title, offices, positions, addtime) VALUES (" . $db->quote($post['sgid']) . ", '', '', " . NV_CURRENTTIME . ")";
                     $post['sgid'] = $db->insert_id($sql);
                 } else {
                     $post['sgid'] = $result->fetchColumn();
@@ -325,7 +320,9 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['editRow'], "Id: " . $post['id'], $admin_info['userid']);
             } else {
-                $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row VALUES
+                $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row
+                    (id, replacement, relatement, title, alias, code, cid, sid, eid, sgid, note, introtext, bodytext, keywords, groups_view, groups_download, files, status, approval, addtime, edittime, publtime, start_comm_time, end_comm_time, startvalid, exptime, view_hits, download_hits, admin_add, admin_edit)
+                VALUES
 	                (NULL,
 	                " . $db->quote($post['replacement']) . ",
 	                " . $db->quote($post['relatement']) . ",
