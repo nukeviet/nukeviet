@@ -332,3 +332,5 @@ $lang_module['status_12'] = 'Sauvegarder l\'article, passer à la rédacteur';
 $lang_module['status_13'] = 'Sauvegarder l\'article, passer à la rédacteur en chef';
 $lang_module['error_edit'] = 'Les messages sont des modérateurs modérés. Vous ne pouvez pas éditer ensuite.';
 $lang_module['not_edit_by_admin'] = 'Vous avez été détourné pour éditer cette publication. Vos modifications ne peuvent pas être sauvegardées dans le système, copiez-les à nouveau pour éviter de perdre vos modifications.';
+$lang['fileattach'] = 'Attaché';
+$lang_module['add'] = 'Ajouter';

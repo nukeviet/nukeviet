@@ -152,6 +152,7 @@ $rowcontent = array(
     'alias' => '',
     'hometext' => '',
     'sourcetext' => '',
+    'files' => array(),
     'homeimgfile' => '',
     'homeimgalt' => '',
     'homeimgthumb' => '',
@@ -244,6 +245,7 @@ if ($rowcontent['id'] > 0) {
     $rowcontent['topictext'] = '';
 
     $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+    $body_contents['files'] = !empty($body_contents['files']) ? explode(",", $body_contents['files']) : array();
     $rowcontent = array_merge($rowcontent, $body_contents);
     unset($body_contents);
 
@@ -410,6 +412,25 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $rowcontent['archive'] = ($rowcontent['exptime'] > NV_CURRENTTIME) ? 1 : 2;
     }
     $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
+	//Xử lý file đính kèm
+	$rowcontent['files'] = array();
+    $fileupload = $nv_Request->get_array('files', 'post');
+    if (!empty($fileupload)) {
+        $fileupload = array_map("trim", $fileupload);
+        $fileupload = array_unique($fileupload);
+        foreach ($fileupload as $_file) {
+            if (preg_match("/^" . str_replace("/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR) . "\//", $_file)) {
+                $_file = substr($_file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
+
+                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $_file)) {
+                    $rowcontent['files'][] = $_file;
+                }
+            }elseif(preg_match("/^http*/",$_file)){
+            	$rowcontent['files'][] = $_file;
+            }
+        }
+    }
+    $rowcontent['files'] = !empty($rowcontent['files']) ? implode(",", $rowcontent['files']) : "";
 
     // Xử lý liên kết tĩnh
     $alias = $nv_Request->get_title('alias', 'post', '');
@@ -694,6 +715,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     :description,
                     :bodyhtml,
                     :sourcetext,
+                    :files,
                     ' . $rowcontent['imgposition'] . ',
                     :layout_func,
                     ' . $rowcontent['copyright'] . ',
@@ -702,6 +724,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     ' . $rowcontent['allowed_save'] . ',
                     ' . $rowcontent['gid'] . '
                 )');
+				$stmt->bindParam(':titlesite', $rowcontent['files'], PDO::PARAM_STR);
                 $stmt->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
                 $stmt->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
                 $stmt->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
@@ -801,6 +824,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     description=:description,
                     bodyhtml=:bodyhtml,
                     sourcetext=:sourcetext,
+                    files=:files,
                     imgposition=' . intval($rowcontent['imgposition']) . ',
                     layout_func=:layout_func,
                     copyright=' . intval($rowcontent['copyright']) . ',
@@ -810,7 +834,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     gid=' . intval($rowcontent['gid']) . '
                 WHERE id =' . $rowcontent['id']);
 
-                $sth->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
+                $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
+				$sth->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
                 $sth->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR, strlen($rowcontent['layout_func']));
                 $sth->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $sth->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
@@ -1120,6 +1145,30 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     }
 }
 
+$xtpl->assign('UPLOADS_DIR_USER', $uploads_dir_user);
+$xtpl->assign('UPLOAD_CURRENT', $currentpath);
+$xtpl->assign('NUMFILE', count($rowcontent['files']));
+
+// Attach files
+if (!empty($rowcontent['files'])) {
+    $rowcontent['files'] = array_filter($rowcontent['files']);
+    foreach ($rowcontent['files'] as $_id => $_file) {
+        if (!empty($_file)) {
+            $xtpl->assign('FILEUPL', array(
+                'id' => $_id,
+                'value' => (!preg_match("/^http*/", $_file)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $_file : $_file
+            ));
+            $xtpl->parse('main.files');
+        }
+    }
+} else {
+    $xtpl->assign('FILEUPL', array(
+        'id' => 0,
+        'value' => ''
+    ));
+    $xtpl->parse('main.files');
+}
+
 // Copyright
 $checkcop = ($rowcontent['copyright']) ? ' checked="checked"' : '';
 $xtpl->assign('checkcop', $checkcop);
@@ -1292,8 +1341,6 @@ if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
 if (empty($rowcontent['alias'])) {
     $xtpl->parse('main.getalias');
 }
-$xtpl->assign('UPLOADS_DIR_USER', $uploads_dir_user);
-$xtpl->assign('UPLOAD_CURRENT', $currentpath);
 
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_googleplus ORDER BY weight ASC';
 $_array = $db->query($sql)->fetchAll();

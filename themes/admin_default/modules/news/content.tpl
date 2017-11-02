@@ -44,6 +44,19 @@
 						<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:100%" /></td>
 					</tr>
 					<tr>
+                        <td style="vertical-align:top"> {LANG.fileattach} <strong>[<a onclick="nv_add_files('{NV_BASE_ADMINURL}','{UPLOAD_CURRENT}','{GLANG.delete}','Browse server');" href="javascript:void(0);" title="{LANG.add}">{LANG.add}]</a></strong></td>
+                        <td>
+                        <div id="filearea">
+                            <!-- BEGIN: files -->
+                            <div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
+                                <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px" />
+                                <input onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOAD_CURRENT}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" type="button" value="Browse server" class="selectfile btn btn-primary" />
+                                <input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
+                            </div>
+                            <!-- END: files -->
+                        </div></td>
+                    </tr>
+					<tr>
 						<td>{LANG.imgposition}</td>
 						<td>
 						<select class="form-control" name="imgposition">
@@ -336,6 +349,7 @@
 </form>
 <div id="message"></div>
 <script type="text/javascript">
+	var nv_num_files = '{NUMFILE}';
 //<![CDATA[
 	var LANG = [];
 	var CFG = [];
