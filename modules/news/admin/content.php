@@ -619,6 +619,13 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
             }
+			//Reset lượt xem, lượt tải, số comment, số vote, điểm vote về 0
+			if ($copy) {
+                $rowcontent['hitstotal'] = 0;
+				$rowcontent['hitscm'] = 0;
+				$rowcontent['total_rating'] = 0;
+				$rowcontent['click_rating'] = 0;
+            }
 
             // Nếu bài viết trong chuyên mục bị khóa thì xây dựng lại status
             if (array_intersect($catids, $array_cat_locked) != array() and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
