@@ -507,7 +507,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $error[] = $lang_module['error_title'];
         } elseif (empty($rowcontent['listcatid'])) {
             $error[] = $lang_module['error_cat'];
-        } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
+        } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml']) and !preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/isU", $rowcontent['bodyhtml'])) {
             $error[] = $lang_module['error_bodytext'];
         }
     }
