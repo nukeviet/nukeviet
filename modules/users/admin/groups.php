@@ -80,7 +80,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
 // Thay doi tinh trang hien thi cua nhom
 if ($nv_Request->isset_request('act', 'post')) {
     $group_id = $nv_Request->get_int('act', 'post');
-    if (! isset($groupsList[$group_id]) or ! defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
+    if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
         die('ERROR|' . $groupsList[$group_id]['act']);
     }
 
@@ -97,7 +97,7 @@ if ($nv_Request->isset_request('act', 'post')) {
 if ($nv_Request->isset_request('del', 'post')) {
     $group_id = $nv_Request->get_int('del', 'post', 0);
 
-    if (! isset($groupsList[$group_id]) or ! defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
+    if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
         die($lang_module['error_group_not_found']);
     }
 
@@ -117,22 +117,15 @@ if ($nv_Request->isset_request('del', 'post')) {
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = ' . $group_id);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $group_id);
 
-    /**
-     * Cho nay can xu ly nhom mac dinh cua thanh vien khi xoa nhom
-     */
+    // Cập nhật lại thứ tự
+    $sql = 'SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE idsite=' . $global_config['idsite'] . ' ORDER BY weight ASC';
+    $result = $db->query($sql);
 
-    unset($groupsList[$group_id]);
-    --$groupcount;
-    $idList = array_keys($groupsList);
-
-    $query = array();
-    for ($i = 0, $weight = 1; $i < $groupcount; ++$i, ++$weight) {
-        $query[] = 'WHEN group_id = ' . $idList[$i] . ' THEN ' . $weight;
-    }
-
-    if (! empty($query)) {
-        $query = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight = CASE ' . implode(' ', $query) . ' END';
-        $db->query($query);
+    $weight = 0;
+    while ($row = $result->fetch()) {
+        ++$weight;
+        $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $weight . ' WHERE group_id=' . $row['group_id'];
+        $db->query($sql);
     }
 
     $nv_Cache->delMod($module_name);
