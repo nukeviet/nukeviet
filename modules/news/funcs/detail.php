@@ -150,8 +150,10 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 			            'key' => md5($id . $file_title),
 			            'ext' => nv_getextension($file_title),
 			            'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
+			            'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
 			            'url' => (!preg_match("/^http*/", $file)) ?  $base_url_rewrite . '?download=1&amp;id=' . $id : $file,
-			            'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $id
+			            'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $id,
+			            'urldoc' => (preg_match("/^http*/", $file)) ? $file : 'https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file
 			        );
 			    }
 			}
