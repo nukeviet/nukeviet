@@ -46,9 +46,9 @@
             </figure>
             <!-- END: empty -->
 			<!-- END: imgthumb -->
-			 
+
 			 <div class="hometext m-bottom">{DETAIL.hometext}</div>
-			
+
     		<!-- BEGIN: imgfull -->
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
@@ -60,6 +60,26 @@
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
 			{DETAIL.bodyhtml}
 		</div>
+		<!-- BEGIN: files -->
+		<h3 class="newh3"><em class="fa fa-download">&nbsp;</em>{LANG.files}</h3>
+		<div class="list-group news-download-file">
+		    <!-- BEGIN: loop -->
+		    <div class="list-group-item">
+		        <!-- BEGIN: show_quick_view --><span class="badge"><a role="button" data-toggle="collapse" href="#pdf{FILE.key}" aria-expanded="false" aria-controls="pdf{FILE.key}"><i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i></a></span><!-- END: show_quick_view -->
+		        <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
+		        <!-- BEGIN: content_quick_view -->
+		        <div class="clearfix"></div>
+		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
+		            <div style="height:10px"></div>
+		            <div class="well">
+		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+		            </div>
+		        </div>
+		        <!-- END: content_quick_view -->
+		    </div>
+		    <!-- END: loop -->
+		</div>
+		<!-- END: files -->
 		<!-- BEGIN: author -->
         <div class="margin-bottom-lg">
     		<!-- BEGIN: name -->
