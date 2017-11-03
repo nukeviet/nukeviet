@@ -836,7 +836,7 @@ if ($nv_Request->isset_request('list', 'get')) {
     $contents = $xtpl->text('list');
 
     include NV_ROOTDIR . '/includes/header.php';
-    echo $contents;
+    echo ($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
