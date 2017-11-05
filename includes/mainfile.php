@@ -362,6 +362,14 @@ if (defined('NV_ADMIN')) {
     }
 }
 
+//China Censorship
+if($client_info['country'] == 'CN') {
+    define("CHINA_CENSORSHIP", true);
+    if($global_config['captcha_type'] == 2) {
+        $global_config['captcha_type'] = 0;
+    }
+}
+
 // Cronjobs execute
 if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
     require NV_ROOTDIR . '/includes/core/cronjobs.php';
