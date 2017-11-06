@@ -149,7 +149,7 @@ var htmlload = '<div class="text-center"><img src="{NV_BASE_SITEURL}{NV_ASSETS_D
                     <dl class="dl-horizontal">
                         <dt>
                             <div class="ellipsis text-left">
-                                <input {M_CHECKED} type="checkbox" value="{M_TITLE}" class="checkmodule"/> {M_CUSTOM_TITLE}
+                                <label><input {M_CHECKED} type="checkbox" value="{M_TITLE}" class="checkmodule"/> <strong>{M_CUSTOM_TITLE}</strong></label>
                             </div>
                         </dt>
                         <dd>
