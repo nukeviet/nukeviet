@@ -153,4 +153,8 @@ $lang_module['status_10'] = 'Checking for Publish';
 $lang_module['insrss_not_auth'] = 'The firewall has blocked access to this area';
 
 $lang_module['pick_layout'] = 'Choose layout';
+$lang_module['click_to_download'] = 'Click to download';
 $lang_module['default_layout'] = 'Default';
+$lang_module['download'] = 'File';
+$lang_module['quick_view_pdf'] = 'Preview';
+$lang_module['files'] = 'Attach files';

@@ -371,3 +371,5 @@ $lang_module['setting_frontend_post'] = 'Cấu hình khu vực đăng bài ở t
 $lang_module['frontend_edit_alias'] = 'Cho phép tuỳ chỉnh liên kết tĩnh khi đăng bài mới';
 $lang_module['frontend_edit_layout'] = 'Cho phép tuỳ chỉnh bố cục';
 $lang_module['large_sys_message'] = 'Chú ý: Hiện đang có <strong>%s</strong> bài viết trên website, sau khi đăng thêm bài viết, hệ thống này sẽ trở thành một hệ thống lớn. Để đảm bảo an toàn cho máy chủ, một số tính năng như đình chỉ, kích hoạt lại chuyên mục sẽ bị khóa. Trước khi đăng bài viết, bạn hãy kiểm tra các chuyên mục có khóa không nếu có hãy kích hoạt lại hoặc xóa đi các bài viết trong đó';
+$lang_module['fileattach'] = 'File đính kèm';
+$lang_module['add'] = 'Thêm';

@@ -151,3 +151,7 @@ $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
 $lang_module['insrss_not_auth'] = 'Pare-feu a bloqué l\'accès à cette zone';
+$lang_module['click_to_download'] = 'Cliquez pour télécharger';
+$lang_module['files'] = 'Joindre des fichiers';
+$lang_module['quick_view_pdf'] = 'Aperçu';
+$lang_module['download'] = 'Fichier';

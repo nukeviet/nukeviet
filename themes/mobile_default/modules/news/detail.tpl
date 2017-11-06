@@ -51,6 +51,36 @@
 		<div class="bodytext">
 			{DETAIL.bodyhtml}
 		</div>
+		<!-- BEGIN: files -->
+		<h3 class="newh3"><em class="fa fa-download">&nbsp;</em>{LANG.files}</h3>
+		<div class="list-group news-download-file">
+		    <!-- BEGIN: loop -->
+		    <div class="list-group-item">
+		        <!-- BEGIN: show_quick_viewpdf --><span class="badge"><a role="button" data-toggle="collapse" href="#pdf{FILE.key}" aria-expanded="false" aria-controls="pdf{FILE.key}"><i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i></a></span><!-- END: show_quick_viewpdf -->
+		        <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
+		        <!-- BEGIN: content_quick_viewpdf -->
+		        <div class="clearfix"></div>
+		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
+		            <div style="height:10px"></div>
+		            <div class="well">
+		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+		            </div>
+		        </div>
+		        <!-- END: content_quick_viewpdf -->
+		        <!-- BEGIN: content_quick_viewdoc -->
+		        <div class="clearfix"></div>
+		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urldoc}" data-toggle="collapsepdf">
+		            <div style="height:10px"></div>
+		            <div class="well">
+		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+		            </div>
+		        </div>
+		        <!-- END: content_quick_viewdoc -->
+		        <!-- BEGIN: show_quick_viewimg --><span class="badge"><a href="javascript:void(0)" data-src="{FILE.src}" id="open_modal_image" data-width="100%"><i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i></a></span><!-- END: show_quick_viewimg -->
+		    </div>
+		    <!-- END: loop -->
+		</div>
+		<!-- END: files -->
 		<!-- BEGIN: author -->
 		<!-- BEGIN: name -->
 		<p class="text-right">
