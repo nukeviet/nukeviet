@@ -771,18 +771,18 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         $xtpl->parse('main.post_name');
     }
 
-	if (!empty($news_contents['files'])) {
+    if (!empty($news_contents['files'])) {
         foreach ($news_contents['files'] as $file) {
             $xtpl->assign('FILE', $file);
 
             if ($file['ext'] == 'pdf') {
                 $xtpl->parse('main.files.loop.show_quick_viewpdf');
                 $xtpl->parse('main.files.loop.content_quick_viewpdf');
-            }elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
-            	$xtpl->parse('main.files.loop.show_quick_viewimg');
-            }else{
-            	$xtpl->parse('main.files.loop.show_quick_viewpdf');
-				$xtpl->parse('main.files.loop.content_quick_viewdoc');
+            } elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
+                $xtpl->parse('main.files.loop.show_quick_viewimg');
+            } else {
+                $xtpl->parse('main.files.loop.show_quick_viewpdf');
+                $xtpl->parse('main.files.loop.content_quick_viewdoc');
             }
             $xtpl->parse('main.files.loop');
         }
