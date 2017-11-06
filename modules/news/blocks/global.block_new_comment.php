@@ -13,20 +13,35 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_comment_new')) {
+    /**
+     * nv_block_comment_new()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_comment_new($module, $data_block, $lang_block)
     {
-        $html = '<tr>';
-        $html .= '	<td>' . $lang_block['titlelength'] . '</td>';
-        $html .= '	<td><input type="text" name="config_titlelength" class="form-control w200" size="5" value="' . $data_block['titlelength'] . '"/><span class="help-block">' . $lang_block['titlenote'] . '</span></td>';
-        $html .= '</tr>';
+        $html = '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['titlelength'] . ':</label>';
+        $html .= '	<div class="col-sm-5"><input type="text" name="config_titlelength" class="form-control" value="' . $data_block['titlelength'] . '"/><span class="help-block panel-block-content-last">' . $lang_block['titlenote'] . '</span></div>';
+        $html .= '</div>';
 
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '	<td><input type="text" name="config_numrow" class="form-control w200" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_comment_new_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_comment_new_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -38,6 +53,12 @@ if (!nv_function_exists('nv_comment_new')) {
         return $return;
     }
 
+    /**
+     * nv_comment_new()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_comment_new($block_config)
     {
         global $db, $site_mods, $db_slave, $module_info, $global_config;

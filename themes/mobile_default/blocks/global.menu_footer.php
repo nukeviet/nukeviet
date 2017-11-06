@@ -25,6 +25,10 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
     {
         global $site_mods;
 
+        if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
+            $data_block['module_in_menu'] = array();
+        }
+
         $html = '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $lang_block['module_in_menu'] . ':</label>';
         $html .= '<div class="col-sm-18">';
