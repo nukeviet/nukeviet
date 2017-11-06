@@ -22,34 +22,33 @@ if (! nv_function_exists('nv_company_info')) {
             include NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php';
         }
 
-        $html = '<tr>';
-        $html .= '<td>' . $lang_global['company_name'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_name" value="' . $data_block['company_name'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_sortname'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_sortname" value="' . $data_block['company_sortname'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_regcode'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_regcode" value="' . $data_block['company_regcode'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_regplace'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_regplace" value="' . $data_block['company_regplace'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_licensenumber'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_licensenumber" value="' . $data_block['company_licensenumber'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_responsibility'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_responsibility" value="' . $data_block['company_responsibility'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_address'] . '</td>';
-        $html .= '<td>';
+        $html = '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_name'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_name" value="' . $data_block['company_name'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_sortname'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_sortname" value="' . $data_block['company_sortname'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_regcode'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_regcode" value="' . $data_block['company_regcode'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_regplace'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_regplace" value="' . $data_block['company_regplace'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_licensenumber'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_licensenumber" value="' . $data_block['company_licensenumber'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_responsibility'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_responsibility" value="' . $data_block['company_responsibility'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_address'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-xs-16">';
         $html .= '<input type="text" class="form-control" name="config_company_address" id="config_company_address" value="' . $data_block['company_address'] . '">';
@@ -62,7 +61,7 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '</div>';
         $html .= '<div id="config_company_maparea">';
-        $html .= '<div id="config_company_mapcanvas" style="margin-top:10px;" class="form-group"></div>';
+        $html .= '<div id="config_company_mapcanvas" style="margin:10px 0;"></div>';
         $html .= '<div class="row form-group">';
         $html .= '<div class="col-xs-6">';
         $html .= '<div class="input-group">
@@ -101,30 +100,30 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '</td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_phone'] . '</td>';
-        $html .= '<td>
-					<div class="form-group"><input type="text" class="form-control" name="config_company_phone" value="' . $data_block['company_phone'] . '"></div>
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_phone'] . ':</label>';
+        $html .= '<div class="col-sm-18">
+					<input type="text" class="form-control margin-bottom" name="config_company_phone" value="' . $data_block['company_phone'] . '">
 					<button class="btn btn-default btn-xs" onclick="modalShow(\'' . $lang_global['phone_note_title'] . '\',\'' . $lang_global['phone_note_content'] . '\');return!1;">' . $lang_global['phone_note_title'] . '</button>
-				  </td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_fax'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_fax" value="' . $data_block['company_fax'] . '"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_email'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $lang_global['multi_note'] . '</span></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_global['company_website'] . '</td>';
-        $html .= '<td><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $lang_global['multi_note'] . '</span></td>';
-        $html .= '</tr>';
+				  </div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_fax'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_fax" value="' . $data_block['company_fax'] . '"></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_email'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_website'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
+        $html .= '</div>';
         $html .= '<tr class="hide">';
-        $html .= '<td colspan="2"><script type="text/javascript">$.getScript("' . NV_BASE_SITEURL . 'themes/' . $selectthemes . '/js/block.global.company_info.js");</script></td>';
-        $html .= '</tr>';
+        $html .= '<div class="col-sm-18" colspan="2"><script type="text/javascript">$.getScript("' . NV_BASE_SITEURL . 'themes/' . $selectthemes . '/js/block.global.company_info.js");</script></div>';
+        $html .= '</div>';
 
         return $html;
     }
@@ -175,7 +174,7 @@ if (! nv_function_exists('nv_company_info')) {
         }
 
         $block_config['company_mapapikey'] = $global_config['googleMapsAPI'];
-        
+
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);

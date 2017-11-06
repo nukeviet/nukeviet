@@ -1,3 +1,7 @@
+.margin-bottom {
+    margin-bottom: 10px;
+}
+
 .exp_time {
 	line-height: 20px
 }
@@ -159,6 +163,10 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 }
 
 .funclist .dl-horizontal {
+    margin-bottom: 0;
+}
+
+#block_config > .form-group:last-child {
     margin-bottom: 0;
 }
 
