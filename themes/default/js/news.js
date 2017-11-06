@@ -5,6 +5,13 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1 - 31 - 2010 5 : 12
  */
+$(function() {
+    $('[data-toggle="collapsepdf"]').each(function() {
+        $('#' + $(this).attr('id')).on('shown.bs.collapse', function() {
+            $(this).find('iframe').attr('src', $(this).data('src'));
+        });
+    });
+});
 
 function sendrating(id, point, newscheckss) {
     if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
@@ -69,7 +76,7 @@ function fix_news_image(){
                 w = $(this).data('width');
                 h = $(this).data('height');
             }
-            
+
             if( w > newsW ){
                 $(this).prop('width', newsW);
                 $(this).prop('height', h * newsW / w);

@@ -57,7 +57,7 @@
             {CONTENT}
         </div>
         <!-- END: basic_infomation -->
-        
+
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
                 <colgroup>
@@ -88,14 +88,14 @@
                     <tr>
                         <td>{LANG.two_step_verification_require_admin}:</td>
                         <td class="form-inline">
-                            <input type="checkbox" name="require_2step_admin" value="1"{DATA.require_2step_admin}<!-- BEGIN: 2step_admin_default --> class="checkdefault"<!-- END: 2step_admin_default -->/> 
+                            <input type="checkbox" name="require_2step_admin" value="1"{DATA.require_2step_admin}<!-- BEGIN: 2step_admin_default --> class="checkdefault"<!-- END: 2step_admin_default -->/>
                             <!-- BEGIN: 2step_admin_default_active --><span>{LANG.two_step_verification_require_admindefault}</span><!-- END: 2step_admin_default_active -->
                         </td>
                     </tr>
                     <tr>
                         <td>{LANG.two_step_verification_require_site}:</td>
                         <td class="form-inline">
-                            <input type="checkbox" name="require_2step_site" value="1"{DATA.require_2step_site}<!-- BEGIN: 2step_site_default --> class="checkdefault"<!-- END: 2step_site_default -->/> 
+                            <input type="checkbox" name="require_2step_site" value="1"{DATA.require_2step_site}<!-- BEGIN: 2step_site_default --> class="checkdefault"<!-- END: 2step_site_default -->/>
                             <!-- BEGIN: 2step_site_default_active --><span>{LANG.two_step_verification_require_sitedefault}</span><!-- END: 2step_site_default_active -->
                         </td>
                     </tr>
@@ -129,7 +129,7 @@
             </tbody>
         </table>
         <!-- END: config -->
-        
+
         <input type="hidden" name="save" value="1" />
         <p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
     </form>
@@ -194,32 +194,36 @@
             <tr class="text-center">
                 <th> {LANG.weight} </th>
                 <th> {LANG.title} </th>
-                <th> {LANG.add_time} </th>
-                <th> {LANG.exp_time} </th>
-                <th> {LANG.users} </th>
-                <th> {GLANG.active} </th>
-                <th> {GLANG.actions} </th>
+                <th class="text-center"> {LANG.add_time} </th>
+                <th class="text-center"> {LANG.exp_time} </th>
+                <th class="text-center"> {LANG.users} </th>
+                <th class="text-center"> {GLANG.active} </th>
+                <th class="text-center"> {GLANG.actions} </th>
             </tr>
         </thead>
         <tbody>
             <!-- BEGIN: loop -->
             <tr class="text-center">
                 <td>
-                <select name="w_{GROUP_ID}" class="form-control newWeight">
-                    <!-- BEGIN: option -->
-                    <option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
-                    <!-- END: option -->
-                </select></td>
+                    <!-- BEGIN: weight -->
+                    <select name="w_{GROUP_ID}" class="form-control newWeight">
+                        <!-- BEGIN: loop -->
+                        <option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
+                        <!-- END: loop -->
+                    </select>
+                    <!-- END: weight -->
+                    <!-- BEGIN: weight_text -->{WEIGHT_TEXT}<!-- END: weight_text -->
+                </td>
                 <td class="text-left"><a title="{LANG.users}" href="{LOOP.link_userlist}">{LOOP.title}</a></td>
                 <td>{LOOP.add_time}</td>
                 <td>{LOOP.exp_time}</td>
                 <td>{LOOP.number}</td>
                 <td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
                 <td>
-                <!-- BEGIN: action -->
-                <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
-                <!-- BEGIN: delete --><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a><!-- END: delete -->
-                <!-- END: action -->
+                    <!-- BEGIN: action -->
+                    <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}" class="btn btn-default btn-xs"><i class="fa fa-edit fa-fw"></i>{GLANG.edit}</a>
+                    <!-- BEGIN: delete --><a class="del btn btn-danger btn-xs" href="{GROUP_ID}"><i class="fa fa-trash-o fa-fw"></i>{GLANG.delete}</a><!-- END: delete -->
+                    <!-- END: action -->
                 </td>
             </tr>
             <!-- END: loop -->
@@ -228,50 +232,50 @@
 </div>
 <!-- BEGIN: action_js -->
 <script type="text/javascript">
-    //<![CDATA[
-    $("a.del").click(function() {
-        confirm("{LANG.delConfirm} ?") && $.ajax({
-            type : "POST",
-            url : "{MODULE_URL}={OP}",
-            data : "del=" + $(this).attr("href"),
-            success : function(a) {
-                a == "OK" ? window.location.href = window.location.href : alert(a)
-            }
-        });
-        return false
+//<![CDATA[
+$("a.del").click(function() {
+    confirm("{LANG.delConfirm} ?") && $.ajax({
+        type : "POST",
+        url : "{MODULE_URL}={OP}",
+        data : "del=" + $(this).attr("href"),
+        success : function(a) {
+            a == "OK" ? window.location.href = window.location.href : alert(a)
+        }
     });
-    $("select.newWeight").change(function() {
-        var a = $(this).attr("name").split("_"), b = $(this).val(), c = this, a = a[1];
-        $("#pageContent input, #pageContent select").attr("disabled", "disabled");
-        $.ajax({
-            type : "POST",
-            url : "{MODULE_URL}={OP}",
-            data : "cWeight=" + b + "&id=" + a,
-            success : function(a) {
-                a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10)) : alert("{LANG.errorChangeWeight}");
-                $("#pageContent input, #pageContent select").removeAttr("disabled")
-            }
-        });
-        return false
+    return false
+});
+$("select.newWeight").change(function() {
+    var a = $(this).attr("name").split("_"), b = $(this).val(), c = this, a = a[1];
+    $("#pageContent input, #pageContent select").attr("disabled", "disabled");
+    $.ajax({
+        type : "POST",
+        url : "{MODULE_URL}={OP}",
+        data : "cWeight=" + b + "&id=" + a,
+        success : function(a) {
+            a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10)) : alert("{LANG.errorChangeWeight}");
+            $("#pageContent input, #pageContent select").removeAttr("disabled")
+        }
     });
+    return false
+});
 
-    $("input.act").change(function() {
-        var a = $(this).attr("name").split("_"), a = a[1], b = this;
-        $("#pageContent input, #pageContent select").attr("disabled", "disabled");
-        $.ajax({
-            type : "POST",
-            url : "{MODULE_URL}={OP}",
-            data : "act=" + a + "&rand=" + nv_randomPassword(10),
-            success : function(a) {
-                a = a.split("|");
-                $("#pageContent input, #pageContent select").removeAttr("disabled");
-                a[0] == "ERROR" && (a[1] == "1" ? $(b).prop("checked", true) : $(b).prop("checked", false));
+$("input.act").change(function() {
+    var a = $(this).attr("name").split("_"), a = a[1], b = this;
+    $("#pageContent input, #pageContent select").attr("disabled", "disabled");
+    $.ajax({
+        type : "POST",
+        url : "{MODULE_URL}={OP}",
+        data : "act=" + a + "&rand=" + nv_randomPassword(10),
+        success : function(a) {
+            a = a.split("|");
+            $("#pageContent input, #pageContent select").removeAttr("disabled");
+            a[0] == "ERROR" && (a[1] == "1" ? $(b).prop("checked", true) : $(b).prop("checked", false));
 
-            }
-        });
-        return !1;
+        }
     });
-    //]]>
+    return !1;
+});
+//]]>
 </script>
 <!-- END: action_js -->
 <!-- END: list -->

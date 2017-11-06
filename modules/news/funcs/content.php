@@ -47,12 +47,13 @@ $key_words = $module_info['keywords'];
 $array_post_config = array();
 $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post';
 $result = $db->query($sql);
-while (list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
+while (list ($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
     $array_post_config[$group_id] = array(
         'addcontent' => $addcontent,
         'postcontent' => $postcontent,
         'editcontent' => $editcontent,
-        'delcontent' => $delcontent);
+        'delcontent' => $delcontent
+    );
 }
 
 $array_post_user = array(
@@ -235,7 +236,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
     $result_cat = $db->query($sql);
 
-    while (list($catid_i, $title_i, $lev_i) = $result_cat->fetch(3)) {
+    while (list ($catid_i, $title_i, $lev_i) = $result_cat->fetch(3)) {
         $array_catid_module[] = array(
             'catid' => $catid_i,
             'title' => $title_i,
@@ -248,7 +249,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $array_topic_module = array();
     $array_topic_module[0] = $lang_module['topic_sl'];
 
-    while (list($topicid_i, $title_i) = $result->fetch(3)) {
+    while (list ($topicid_i, $title_i) = $result->fetch(3)) {
         $array_topic_module[$topicid_i] = $title_i;
     }
 
@@ -336,7 +337,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                 if (isset($url_info['scheme']) and isset($url_info['host'])) {
                     $sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
-                    $rowcontent['sourceid'] = $db->query('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link=' . $db->quote($sourceid_link))->fetchColumn();
+                    $rowcontent['sourceid'] = $db->query('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link=' . $db->quote($sourceid_link))
+                        ->fetchColumn();
 
                     if (empty($rowcontent['sourceid'])) {
                         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
@@ -404,7 +406,10 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                     // Them vao thong bao
                     if (empty($rowcontent['status'])) {
-                        $content = array('title' => $rowcontent['title'], 'hometext' => $rowcontent['hometext']);
+                        $content = array(
+                            'title' => $rowcontent['title'],
+                            'hometext' => $rowcontent['hometext']
+                        );
                         nv_insert_notification($module_name, 'post_queue', $content, $rowcontent['id']);
                     }
 
@@ -577,7 +582,10 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     if ($module_config[$module_name]['frontend_edit_layout'] == 1) {
         foreach ($layout_array as $value) {
             $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-            $xtpl->assign('LAYOUT_FUNC', array('key' => $value, 'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''));
+            $xtpl->assign('LAYOUT_FUNC', array(
+                'key' => $value,
+                'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
+            ));
             $xtpl->parse('main.layout_func.loop');
         }
         $xtpl->parse('main.layout_func');
@@ -604,7 +612,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->parse('main.catid');
     }
 
-    while (list($topicid_i, $title_i) = each($array_topic_module)) {
+    foreach ($array_topic_module as $topicid_i => $title_i) {
         $array_temp = array();
         $array_temp['value'] = $topicid_i;
         $array_temp['title'] = $title_i;
@@ -613,7 +621,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->parse('main.topic');
     }
 
-    while (list($id_imgposition, $title_imgposition) = each($array_imgposition)) {
+    foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
         $array_temp = array();
         $array_temp['value'] = $id_imgposition;
         $array_temp['title'] = $title_imgposition;
@@ -652,11 +660,18 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $array_catpage = array();
 
-    $db->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('admin_id= ' . $user_info['userid'] . ' AND status<=' . $global_code_defined['row_locked_status']);
+    $db->sqlreset()
+        ->select('COUNT(*)')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
+        ->where('admin_id= ' . $user_info['userid'] . ' AND status<=' . $global_code_defined['row_locked_status']);
 
-    $num_items = $db->query($db->sql())->fetchColumn();
+    $num_items = $db->query($db->sql())
+        ->fetchColumn();
     if ($num_items) {
-        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')->order('id DESC')->limit($per_page)->offset(($page - 1) * $per_page);
+        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+            ->order('id DESC')
+            ->limit($per_page)
+            ->offset(($page - 1) * $per_page);
 
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
@@ -727,7 +742,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
         $xtpl->parse('main');
         $contents .= $xtpl->text('main');
-
 
         if ($page > 1) {
             $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;

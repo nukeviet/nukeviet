@@ -16,51 +16,61 @@ $page_title = $lang_global['mod_groups'];
 $contents = '';
 
 // Lay danh sach nhom
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = ' . $global_config['idsite'] . ' or (idsite=0 AND group_id>3 AND siteus=1) ORDER BY idsite, weight ASC';
 $result = $db->query($sql);
 $groupsList = array();
 $groupcount = 0;
 $weight_siteus = 0;
+$checkEmptyGroup = 0; // Sử dụng cái này để tính cả những nhóm "SHARE"
 while ($row = $result->fetch()) {
     if ($row['idsite'] == $global_config['idsite']) {
         ++$groupcount;
+        ++$checkEmptyGroup;
     } else {
         $row['weight'] = ++$weight_siteus;
         $row['title'] = '<strong>' . $row['title'] . '</strong>';
+        if ($row['group_id'] > 9) {
+            ++$checkEmptyGroup;
+        }
     }
     $groupsList[$row['group_id']] = $row;
 }
 
 // Neu khong co nhom => chuyen den trang tao nhom
-if (! $groupcount and ! $nv_Request->isset_request('add', 'get')) {
+if (!$checkEmptyGroup and ! $nv_Request->isset_request('add', 'get')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add');
 }
 
-// Thay doi thu tu nhom
+// Thay đổi thứ tự nhóm
 if ($nv_Request->isset_request('cWeight, id', 'post')) {
     $group_id = $nv_Request->get_int('id', 'post');
     $cWeight = $nv_Request->get_int('cWeight', 'post');
-    if (! isset($groupsList[$group_id]) or ! defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
+    if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $groupsList[$group_id]['idsite'] != $global_config['idsite'] or ($global_config['idsite'] > 0 and $group_id < 10)) {
         die('ERROR');
     }
 
-    $cWeight = min($cWeight, $groupcount);
+    $cWeight = min($cWeight, sizeof($groupsList));
+    if ($global_config['idsite'] > 0) {
+        $cWeight = $cWeight - $weight_siteus;
+    }
+    if ($cWeight < 1) {
+        $cWeight = 1;
+    }
 
-    $query = array();
-    $query[] = 'WHEN group_id = ' . $group_id . ' THEN ' . $cWeight;
-    unset($groupsList[$group_id]);
-    --$groupcount;
-    $idList = array_keys($groupsList);
+    $sql = 'SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE group_id!=' . $group_id . ' AND idsite=' . $global_config['idsite'] . ' ORDER BY weight ASC';
+    $result = $db->query($sql);
 
-    for ($i = 0, $weight = 1; $i < $groupcount; ++$i, ++$weight) {
+    $weight = 0;
+    while ($row = $result->fetch()) {
+        ++$weight;
         if ($weight == $cWeight) {
             ++$weight;
         }
-        $query[] = 'WHEN group_id = ' . $idList[$i] . ' THEN ' . $weight;
+        $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $weight . ' WHERE group_id=' . $row['group_id'];
+        $db->query($sql);
     }
-
-    $query = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight = CASE ' . implode(' ', $query) . ' END';
-    $db->query($query);
+    $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $cWeight . ' WHERE group_id=' . $group_id;
+    $db->query($sql);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['changeGroupWeight'], 'group_id: ' . $group_id, $admin_info['userid']);
@@ -70,7 +80,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
 // Thay doi tinh trang hien thi cua nhom
 if ($nv_Request->isset_request('act', 'post')) {
     $group_id = $nv_Request->get_int('act', 'post');
-    if (! isset($groupsList[$group_id]) or ! defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
+    if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
         die('ERROR|' . $groupsList[$group_id]['act']);
     }
 
@@ -87,7 +97,7 @@ if ($nv_Request->isset_request('act', 'post')) {
 if ($nv_Request->isset_request('del', 'post')) {
     $group_id = $nv_Request->get_int('del', 'post', 0);
 
-    if (! isset($groupsList[$group_id]) or ! defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
+    if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
         die($lang_module['error_group_not_found']);
     }
 
@@ -107,22 +117,15 @@ if ($nv_Request->isset_request('del', 'post')) {
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = ' . $group_id);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $group_id);
 
-    /**
-     * Cho nay can xu ly nhom mac dinh cua thanh vien khi xoa nhom
-     */
+    // Cập nhật lại thứ tự
+    $sql = 'SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE idsite=' . $global_config['idsite'] . ' ORDER BY weight ASC';
+    $result = $db->query($sql);
 
-    unset($groupsList[$group_id]);
-    --$groupcount;
-    $idList = array_keys($groupsList);
-
-    $query = array();
-    for ($i = 0, $weight = 1; $i < $groupcount; ++$i, ++$weight) {
-        $query[] = 'WHEN group_id = ' . $idList[$i] . ' THEN ' . $weight;
-    }
-
-    if (! empty($query)) {
-        $query = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight = CASE ' . implode(' ', $query) . ' END';
-        $db->query($query);
+    $weight = 0;
+    while ($row = $result->fetch()) {
+        ++$weight;
+        $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $weight . ' WHERE group_id=' . $row['group_id'];
+        $db->query($sql);
     }
 
     $nv_Cache->delMod($module_name);
@@ -590,7 +593,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $weight = intval($weight) + 1;
 
                     $_sql = "INSERT INTO " . NV_MOD_TABLE . "_groups (
-                        title, email, description, content, group_type, group_color, group_avatar, require_2step_admin, require_2step_site, is_default, add_time, exp_time, weight, act, 
+                        title, email, description, content, group_type, group_color, group_avatar, require_2step_admin, require_2step_site, is_default, add_time, exp_time, weight, act,
                         idsite, numbers, siteus, config
                     ) VALUES (
                         :title, :email, :description, :content, " . $post['group_type'] . ", :group_color,
@@ -769,12 +772,12 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    die();
 }
 
 // Danh sach nhom (AJAX)
 if ($nv_Request->isset_request('list', 'get')) {
     $weight_op = 1;
+    $allGroupCount = sizeof($groupsList);
     foreach ($groupsList as $group_id => $values) {
         $xtpl->assign('GROUP_ID', $group_id);
         if ($group_id < 4 or $group_id > 9) {
@@ -797,13 +800,14 @@ if ($nv_Request->isset_request('list', 'get')) {
         );
 
         if (defined('NV_IS_SPADMIN') and $values['idsite'] == $global_config['idsite']) {
-            $_bg = (empty($global_config['idsite'])) ? $weight_op : 1;
+            $_bg = empty($global_config['idsite']) ? 1 : $weight_op;
 
-            for ($i = $_bg; $i <= $groupcount; $i++) {
-                $opt = array( 'value' => $i, 'selected' => $i == $values['weight'] ? ' selected="selected"' : '' );
+            for ($i = $_bg; $i <= $allGroupCount; $i++) {
+                $opt = array('value' => $i, 'selected' => $i == ($_bg + $values['weight'] - 1) ? ' selected="selected"' : '');
                 $xtpl->assign('NEWWEIGHT', $opt);
-                $xtpl->parse('list.loop.option');
+                $xtpl->parse('list.loop.weight.loop');
             }
+            $xtpl->parse('list.loop.weight');
 
             if ($group_id > 9) {
                 $xtpl->parse('list.loop.action.delete');
@@ -812,9 +816,8 @@ if ($nv_Request->isset_request('list', 'get')) {
             $xtpl->parse('list.loop.action');
         } else {
             ++$weight_op;
-            $opt = array( 'value' => $values['weight'], 'selected' => ' selected="selected"' );
-            $xtpl->assign('NEWWEIGHT', $opt);
-            $xtpl->parse('list.loop.option');
+            $xtpl->assign('WEIGHT_TEXT', $values['weight']);
+            $xtpl->parse('list.loop.weight_text');
 
             $loop['act'] .= ' disabled="disabled"';
             if ($group_id < 9) {
@@ -830,8 +833,11 @@ if ($nv_Request->isset_request('list', 'get')) {
     }
 
     $xtpl->parse('list');
-    $xtpl->out('list');
-    exit();
+    $contents = $xtpl->text('list');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo ($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 if (defined('NV_IS_SPADMIN')) {

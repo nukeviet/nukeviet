@@ -154,4 +154,8 @@ $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
 
 $lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
+$lang_module['click_to_download'] = 'Nhấn vào để tải file.';
+$lang_module['files'] = 'File đính kèm';
 $lang_module['default_layout'] = 'Mặc định';
+$lang_module['download'] = 'Tập tin';
+$lang_module['quick_view_pdf'] = 'Xem trước';

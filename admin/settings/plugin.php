@@ -15,10 +15,9 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 $errormess = $lang_module['plugin_info'];
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
 
+$plugin_file = $nv_Request->get_title('plugin_file', 'post,get');
 if ($nv_Request->isset_request('plugin_file', 'post')) {
     $config_plugin = array();
-    $plugin_file = $nv_Request->get_title('plugin_file', 'post');
-
     if (preg_match($pattern_plugin, $plugin_file) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
         $plugin_area = $nv_Request->get_int('plugin_area', 'post');
         if ($nv_Request->isset_request('delete', 'post')) {
@@ -99,15 +98,15 @@ $plugin_new = array();
 $plugin_all = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);
 
 $nv_plugin_array = array();
-$nv_plugin_area = array();
+$_nv_plugin_area = array();
 $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
 $_query = $db->query($_sql);
 while ($row = $_query->fetch()) {
-    $nv_plugin_area[$row['plugin_area']][] = $row;
+    $_nv_plugin_area[$row['plugin_area']][] = $row;
     $nv_plugin_array[] = $row['plugin_file'];
 }
 
-foreach ($nv_plugin_area as $area => $nv_plugin_area_i) {
+foreach ($_nv_plugin_area as $area => $nv_plugin_area_i) {
     $_sizeof = sizeof($nv_plugin_area_i);
     foreach ($nv_plugin_area_i as $row) {
         $row['plugin_area'] = ($row['weight'] == 1) ? $lang_module['plugin_area_' . $row['plugin_area']] : '';
@@ -136,20 +135,26 @@ if ($errormess != '') {
 if (!empty($plugin_new)) {
     foreach ($plugin_new as $_file) {
         $xtpl->assign('PLUGIN_FILE', $_file);
+        $xtpl->assign('PLUGIN_SELECTED', $_file == $plugin_file ? 'selected="selected"' : '');
         $xtpl->parse('main.add.file');
     }
 
-    $array_plugin_position = array(
-        1 => $lang_module['plugin_area_1'],
-        2 => $lang_module['plugin_area_2'],
-        4 => $lang_module['plugin_area_4'],
-        3 => $lang_module['plugin_area_3']
-    );
-
-    foreach ($array_plugin_position as $index => $value) {
-        $xtpl->assign('AREA_VALUE', $index);
-        $xtpl->assign('AREA_TEXT', $value);
-        $xtpl->parse('main.add.area');
+    $array_plugin_position = array();
+    if (preg_match($pattern_plugin, $plugin_file, $_m) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
+        if (file_exists(NV_ROOTDIR . '/includes/plugin/' . $_m[1] . '.ini')) {
+            if ($xml = @simplexml_load_file(NV_ROOTDIR . '/includes/plugin/' . $_m[1] . '.ini')) {
+                $position = $xml->xpath('positions');
+                $positions = $position[0]->position;
+                for ($j = 0, $count = sizeof($positions); $j < $count; ++$j) {
+                    $_index = $positions[$j]->id;
+                    if ($_index >= 1 and $_index <= 4) {
+                        $xtpl->assign('AREA_VALUE', $_index);
+                        $xtpl->assign('AREA_TEXT', $lang_module['plugin_area_' . $_index]);
+                        $xtpl->parse('main.add.area');
+                    }
+                }
+            }
+        }
     }
     $xtpl->parse('main.add');
 }

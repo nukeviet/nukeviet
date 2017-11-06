@@ -46,9 +46,9 @@
             </figure>
             <!-- END: empty -->
 			<!-- END: imgthumb -->
-			 
+
 			 <div class="hometext m-bottom">{DETAIL.hometext}</div>
-			
+
     		<!-- BEGIN: imgfull -->
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
@@ -60,6 +60,36 @@
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
 			{DETAIL.bodyhtml}
 		</div>
+		<!-- BEGIN: files -->
+		<h3 class="newh3"><em class="fa fa-download">&nbsp;</em>{LANG.files}</h3>
+		<div class="list-group news-download-file">
+		    <!-- BEGIN: loop -->
+		    <div class="list-group-item">
+		        <!-- BEGIN: show_quick_viewpdf --><span class="badge"><a role="button" data-toggle="collapse" href="#pdf{FILE.key}" aria-expanded="false" aria-controls="pdf{FILE.key}"><i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i></a></span><!-- END: show_quick_viewpdf -->
+		        <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
+		        <!-- BEGIN: content_quick_viewpdf -->
+		        <div class="clearfix"></div>
+		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
+		            <div style="height:10px"></div>
+		            <div class="well">
+		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+		            </div>
+		        </div>
+		        <!-- END: content_quick_viewpdf -->
+		        <!-- BEGIN: content_quick_viewdoc -->
+		        <div class="clearfix"></div>
+		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urldoc}" data-toggle="collapsepdf">
+		            <div style="height:10px"></div>
+		            <div class="well">
+		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+		            </div>
+		        </div>
+		        <!-- END: content_quick_viewdoc -->
+		        <!-- BEGIN: show_quick_viewimg --><span class="badge"><a href="javascript:void(0)" data-src="{FILE.src}" id="open_modal_image" data-width="575"><i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i></a></span><!-- END: show_quick_viewimg -->
+		    </div>
+		    <!-- END: loop -->
+		</div>
+		<!-- END: files -->
 		<!-- BEGIN: author -->
         <div class="margin-bottom-lg">
     		<!-- BEGIN: name -->
@@ -116,6 +146,11 @@
             </div>
         </form>
 <script>
+$("#open_modal_image").on("click", function() {
+    $('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
+    $('#imagemodal .modal-body').html('<img src="' + $(this).data('src') + '" />');
+    $('#imagemodal').modal('show');
+});
 $(function() {
     var sr = 0;
     $(".hover-star").rating({
@@ -226,6 +261,22 @@ $(function() {
     </div>
 </div>
 <!-- END: others -->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">{LANG.file_name}</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->

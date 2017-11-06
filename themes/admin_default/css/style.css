@@ -103,6 +103,10 @@ a.link:hover {
 	margin-bottom: 10px;
 }
 
+.m-left {
+	margin-left: 10px;
+}
+
 .m-bottom-none {
 	margin-bottom: 0;
 }

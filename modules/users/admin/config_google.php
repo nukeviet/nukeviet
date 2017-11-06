@@ -13,10 +13,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
-    $array_config['oauth_client_id'] = ( string )$nv_Request->get_title('oauth_client_id', 'post', '');
+    $array_config['oauth_client_id'] = (string) $nv_Request->get_title('oauth_client_id', 'post', '');
     $array_config['oauth_client_secret'] = $nv_Request->get_title('oauth_client_secret', 'post', '');
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
 
     $sth->bindValue(':config_name', 'google_client_id', PDO::PARAM_STR);
     $sth->bindParam(':config_value', $array_config['oauth_client_id'], PDO::PARAM_STR);
@@ -27,7 +27,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['config'], $page_title, $admin_info['userid']);
-    nv_save_file_config_global();
+    $nv_Cache->delAll();
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass());
 } else {
     $array_config['oauth_client_id'] = $global_config['google_client_id'];
