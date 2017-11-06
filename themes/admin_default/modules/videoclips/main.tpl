@@ -116,7 +116,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td> {LANG.topic_parent} </td>
+				<td> {LANG.topic_parent}<span style="color:red"> * </span> </td>
 				<td>
 				<select class="form-control" name="tid">
 					<!-- BEGIN: option3 -->
