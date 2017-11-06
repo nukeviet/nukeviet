@@ -349,3 +349,5 @@ $lang_module['cat_status_2'] = 'Active, not displayed on the homepage';
 $lang_module['cat_status_0_confirm'] = 'Note: Deactive this category will stop all active posts in the category and its subcategories. Are you sure?';
 $lang_module['large_sys_message'] = 'Note: There are currently <strong>%s</strong> posts on the site, after posting more posts, this system will become a big system. To ensure server security, some features such as suspend, re-enable categories will be locked. Before posting, please check if the categories are deactive, if so please reactivate or delete the posts in it.';
 $lang_module['cat_locked_byparent'] = 'Locked by parent category';
+$lang_module['fileattach'] = 'Attach files';
+$lang_module['add'] = 'Add';
