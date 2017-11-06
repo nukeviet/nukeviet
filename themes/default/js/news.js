@@ -5,11 +5,16 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1 - 31 - 2010 5 : 12
  */
+
 $(function() {
     $('[data-toggle="collapsepdf"]').each(function() {
         $('#' + $(this).attr('id')).on('shown.bs.collapse', function() {
             $(this).find('iframe').attr('src', $(this).data('src'));
         });
+    });
+    $('[data-toggle="newsattachimage"]').click(function(e) {
+        e.preventDefault();
+        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width:auto;"/></div>');
     });
 });
 
