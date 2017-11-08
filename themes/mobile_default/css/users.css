@@ -50,3 +50,163 @@
 .users-menu > li > a{
     padding: 8px 10px !important;
 }
+
+
+.openid-btns {
+    border-top: 1px #fff solid;
+    padding-top: 15px;
+}
+
+.openid-btns .btn-group {
+    display: flex;
+    width: 100%;
+}
+
+.openid-btns .btn-group button.btn {
+    width: 40px;
+    text-align: center;
+}
+
+.openid-btns .btn-group a.btn {
+    flex-grow: 1;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.openid-google {
+    color: #ffffff !important;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.openid-google:focus {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #761c19;
+}
+
+.openid-google:hover {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.openid-google:active {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.openid-google:active:hover,
+.openid-google:active:focus {
+    color: #ffffff;
+    background-color: #ac2925;
+    border-color: #761c19;
+}
+
+.openid-google:active {
+    background-image: none;
+}
+
+.openid-google.disabled:hover,
+.openid-google[disabled]:hover,
+fieldset[disabled] .openid-google:hover,
+.openid-google.disabled:focus,
+.openid-google[disabled]:focus,
+fieldset[disabled] .openid-google:focus {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    cursor: inherit;
+}
+
+.openid-facebook {
+    color: #ffffff !important;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+
+.openid-facebook:focus {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #193c5a;
+}
+
+.openid-facebook:hover {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+
+.openid-facebook:active {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+
+.openid-facebook:active:hover,
+.openid-facebook:active:focus {
+    color: #ffffff;
+    background-color: #285e8e;
+    border-color: #193c5a;
+}
+
+.openid-facebook:active {
+    background-image: none;
+}
+
+.openid-facebook.disabled:hover,
+.openid-facebook[disabled]:hover,
+.openid-facebook.disabled:focus,
+.openid-facebook[disabled]:focus,
+fieldset[disabled] .openid-facebook:focus {
+    background-color: #428bca;
+    border-color: #357ebd;
+    cursor: inherit;
+}
+
+.openid-single-sign-on {
+    color: #ffffff !important;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.openid-single-sign-on:focus {
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #255625;
+}
+
+.openid-single-sign-on:hover {
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.openid-single-sign-on:active {
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.openid-single-sign-on:active:hover,
+.openid-single-sign-on:active:focus {
+    color: #ffffff;
+    background-color: #398439;
+    border-color: #255625;
+}
+
+.openid-single-sign-on:active {
+    background-image: none;
+}
+
+.openid-single-sign-on.disabled:hover,
+.openid-single-sign-on[disabled]:hover,
+.openid-single-sign-on.disabled:focus,
+.openid-single-sign-on[disabled]:focus,
+fieldset[disabled] .openid-single-sign-on:focus {
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    cursor: inherit;
+}

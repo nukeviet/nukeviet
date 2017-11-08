@@ -1325,11 +1325,11 @@ a.btn {
 }
 
 #tip a {
-    color:#333 !important;
+    color:#333;
 }
 
 #tip .socialList a {
-    color:#fff !important;
+    color:#fff;
 }
 
 /* Blocks social-icons,contactDefault and personalArea */

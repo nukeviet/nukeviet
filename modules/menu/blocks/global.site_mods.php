@@ -8,43 +8,58 @@
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_menu_site_mods')) {
+if (!nv_function_exists('nv_menu_site_mods')) {
+    /**
+     * nv_menu_site_mods_config()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_menu_site_mods_config($module, $data_block, $lang_block)
     {
         global $site_mods;
 
-        $html = '<tr>';
-        $html .= '	<td>&nbsp;</td>';
-        $html .= '	<td>' . $lang_block['menu_note_auto'] . '</td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>';
+        $html = '<div class="form-group">';
+        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $lang_block['menu_note_auto'] . '</div></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">';
         $html .= $lang_block['title_length'];
-        $html .= '</td>';
-        $html .= '<td>';
-        $html .= "<input type=\"text\" class=\"form-control w100\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
-        $html .= '</td>';
-        $html .= '</tr>';
-        $html .= '<tr><td>' . $lang_block['module_display'] . '</td><td>';
+        $html .= ':</label>';
+        $html .= '<div class="col-sm-9">';
+        $html .= "<input type=\"text\" class=\"form-control\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['module_display'] . ':</label><div class="col-sm-18">';
 
-        $array_no_show = array(
-            'comment',
-            'menu'
-        );
+        if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
+            $data_block['module_in_menu'] = array();
+        }
+
+        $array_no_show = array('comment', 'menu');
         foreach ($site_mods as $modname => $modvalues) {
-            if (! in_array($modname, $array_no_show)) {
+            if (!in_array($modname, $array_no_show)) {
                 $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';
-                $html .= '<div style="float: left" class="w150"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div>';
+                $html .= '<div class="w150 pull-left"><div class="ellipsis"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div></div>';
             }
         }
-        $html .= '</td></tr>';
+        $html .= '</div></div>';
         return $html;
     }
 
+    /**
+     * nv_menu_site_mods_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_menu_site_mods_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -81,7 +96,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
         $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 
         foreach ($site_mods as $modname => $modvalues) {
-            if (in_array($modname, $block_config['module_in_menu']) and ! empty($modvalues['funcs'])) {
+            if (in_array($modname, $block_config['module_in_menu']) and !empty($modvalues['funcs'])) {
                 $array_menu = array(
                     'title' => $modvalues['custom_title'],
                     'title_trim' => nv_clean60($modvalues['custom_title'], $block_config['title_length']),
@@ -96,7 +111,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
                 }
 
                 // Get submenu
-                if (! empty($modvalues['funcs'])) {
+                if (!empty($modvalues['funcs'])) {
                     $sub_nav_item = array();
 
                     if ($modvalues['module_file'] == 'news' or $modvalues['module_file'] == 'weblinks') {
@@ -161,7 +176,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
                     }
 
                     // Prase sub menu
-                    if (! empty($sub_nav_item)) {
+                    if (!empty($sub_nav_item)) {
                         $array_menu['current'][] = 'dropdown';
 
                         $submenu = nv_menu_site_mods_submenu($sub_nav_item, $block_theme);
@@ -182,7 +197,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
         $xtpl->assign('THEME_DIGCLOCK_TEXT', nv_date('H:i T l, d/m/Y', NV_CURRENTTIME));
 
         // Active home menu
-        if (! empty($home)) {
+        if (!empty($home)) {
             $xtpl->parse('main.home_active');
         }
 
@@ -190,6 +205,13 @@ if (! nv_function_exists('nv_menu_site_mods')) {
         return $xtpl->text('main');
     }
 
+    /**
+     * nv_menu_site_mods_submenu()
+     *
+     * @param mixed $sub_nav_item
+     * @param mixed $block_theme
+     * @return
+     */
     function nv_menu_site_mods_submenu($sub_nav_item, $block_theme)
     {
         $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');

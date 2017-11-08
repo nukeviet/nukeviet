@@ -7,14 +7,14 @@
                 <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
             </div>
         </div>
-        
+
         <div class="form-group loginstep1">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
                 <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
             </div>
         </div>
-        
+
         <div class="form-group loginstep2 hidden">
             <label class="margin-bottom">{GLANG.2teplogin_totppin_label}</label>
             <div class="input-group margin-bottom">
@@ -25,7 +25,7 @@
                 <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
-        
+
         <div class="form-group loginstep3 hidden">
             <label class="margin-bottom">{GLANG.2teplogin_code_label}</label>
             <div class="input-group margin-bottom">
@@ -36,7 +36,7 @@
                 <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
-        
+
         <!-- BEGIN: captcha -->
         <div class="form-group loginCaptcha">
             <div class="middle text-center clearfix">
@@ -44,7 +44,7 @@
             </div>
         </div>
         <!-- END: captcha -->
-        
+
         <!-- BEGIN: recaptcha -->
         <div class="form-group loginCaptcha">
             <div class="middle text-center clearfix">
@@ -62,22 +62,22 @@
             </div>
         </div>
         <!-- END: recaptcha -->
-        
+
         <div class="text-center margin-bottom-lg">
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{NV_REDIRECT}" type="hidden" /><!-- END: redirect -->
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
        	</div>
-        
+
         <!-- BEGIN: allowuserreg2_form -->
         <div class="form-group">
             <div class="text-right clearfix">
-                <a href="#" onclick="modalShowByObj('#guestReg_{BLOCKID}')">{GLANG.register}</a>
+                <a href="#" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">{GLANG.register}</a>
             </div>
         </div>
         <!-- END: allowuserreg2_form -->
-        
+
         <!-- BEGIN: allowuserreg_linkform -->
         <div class="form-group">
             <div class="text-right clearfix">
@@ -87,11 +87,13 @@
         <!-- END: allowuserreg_linkform -->
 
         <!-- BEGIN: openid -->
-       	<hr />
-       	<div class="text-center">
+       	<div class="text-center openid-btns">
       		<!-- BEGIN: server -->
-      		<a title="{OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
-      		<!-- END: server -->
+            <div class="btn-group m-bottom btn-group-justified">
+                <button class="btn openid-{OPENID.server} disabled" type="button" tabindex="-1"><i class="fa fa-fw fa-{OPENID.icon}"></i></button>
+                <a class="btn openid-{OPENID.server}" href="{OPENID.href}" onclick="return openID_load(this);">{LANG.login_with} {OPENID.title}</a>
+            </div>
+            <!-- END: server -->
        	</div>
        	<!-- END: openid -->
     </div>

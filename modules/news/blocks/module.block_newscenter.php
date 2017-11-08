@@ -13,59 +13,102 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_news_block_newscenter')) {
+    /**
+     * nv_block_config_news_newscenter()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_newscenter($module, $data_block, $lang_block)
     {
         global $nv_Cache, $site_mods;
 
-        $html = '<tr>';
-        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '	<td><input type="text" name="config_numrow" class="form-control w100 pull-left" size="5" value="' . $data_block['numrow'] . '"/>';
-        $html .= '	<span class="text-middle pull-left">&nbsp; ' . $lang_block['width'] . '&nbsp; </span>';
-        $html .= '	<input type="width" name="config_width" class="form-control w100 pull-left" value="' . $data_block['width'] . '"/>';
-        $html .= '	<span class="text-middle pull-left">&nbsp; ' . $lang_block['height'] . '&nbsp; </span>';
-        $html .= '	<input type="height" name="config_height" class="form-control w100 pull-left" value="' . $data_block['height'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
-
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['length_title'] . '</td>';
-        $html .= '	<td>';
-        $html .= '	<input type="text" class="form-control w100 pull-left" name="config_length_title" size="5" value="' . $data_block['length_title'] . '"/>';
-        $html .= '	<span class="text-middle pull-left">&nbsp;' . $lang_block['length_hometext'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_length_hometext" size="5" value="' . $data_block['length_hometext'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
-
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['length_othertitle'] . '</td>';
-        $html .= '	<td>';
-        $html .= '	<input type="text" class="form-control w100" name="config_length_othertitle" size="5" value="' . $data_block['length_othertitle'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
-
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
-        $html .= '<td>';
-        $html .= '<div class="text-middle pull-left" ><input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></div>';
         $tooltip_position = array(
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
             'left' => $lang_block['tooltip_position_left'],
             'right' => $lang_block['tooltip_position_right']
         );
-        $html .= '<span class="text-middle pull-left">' . $lang_block['tooltip_position'] . '&nbsp;</span><select name="config_tooltip_position" class="form-control w100 pull-left">';
+
+        $html = '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	  <div class="col-sm-18"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['width'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
+        $html .= '      <input type="width" name="config_width" class="form-control" value="' . $data_block['width'] . '"/>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['height'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
+        $html .= '    <input type="height" name="config_height" class="form-control" value="' . $data_block['height'] . '"/>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['length_title'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
+        $html .= '    <input type="text" class="form-control" name="config_length_title" value="' . $data_block['length_title'] . '"/>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['length_hometext'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
+        $html .= '	  <input type="text" class="form-control" name="config_length_hometext" value="' . $data_block['length_hometext'] . '"/>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['length_othertitle'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
+        $html .= '	  <input type="text" class="form-control" name="config_length_othertitle" value="' . $data_block['length_othertitle'] . '"/>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-sm-4">';
+        $html .= '<div class="checkbox"><label><input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></label>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group margin-bottom-sm">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<select name="config_tooltip_position" class="form-control">';
+
         foreach ($tooltip_position as $key => $value) {
             $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
         }
-        $html .= '</select>';
-        $html .= '	<span class="text-middle pull-left">&nbsp;' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
 
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['nocatid'] . '</td>';
+        $html .= '</select>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['nocatid'] . ':</label>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
-        $html .= '<td>';
+        $html .= '<div class="col-sm-18">';
         $html .= '<div style="height: 160px; overflow: auto">';
         foreach ($list as $l) {
             if ($l['status'] == 1 or $l['status'] == 2) {
@@ -80,11 +123,18 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
             }
         }
         $html .= '</div>';
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= '</div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_news_newscenter_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_newscenter_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -104,6 +154,12 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         return $return;
     }
 
+    /**
+     * nv_news_block_newscenter()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_news_block_newscenter($block_config)
     {
         global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
