@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 10:30:00 AM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -32,6 +32,7 @@ $lang_module['caption_badmod'] = 'Liste des modules inactifs par erreurs';
 $lang_module['caption_newmod'] = 'Liste des modules pas encore installés';
 $lang_module['module_name'] = 'Module';
 $lang_module['custom_title'] = 'Titre';
+$lang_module['site_title'] = 'Valeur pour le titre du site';
 $lang_module['admin_title'] = 'Titre de la section d\'administration';
 $lang_module['weight'] = 'Ordre';
 $lang_module['in_menu'] = 'Menu en haut';
@@ -55,6 +56,7 @@ $lang_module['funcs_layout'] = 'Layout utilisé';
 $lang_module['funcs_in_submenu'] = 'Menu';
 $lang_module['funcs_subweight'] = 'Ordre';
 $lang_module['activate_rss'] = 'Activer la fonction RSS';
+$lang_module['activate_sitemap'] = 'activer plan du site';
 $lang_module['module_sys'] = 'Les Modules du système';
 $lang_module['vmodule'] = 'Modules virtuels';
 $lang_module['vmodule_add'] = 'Ajout de mod. virtuel';
@@ -64,8 +66,10 @@ $lang_module['vmodule_note'] = 'Description';
 $lang_module['vmodule_select'] = 'Choisir un module';
 $lang_module['vmodule_blockquote'] = 'Note: Nom du nouveau module se combine de lettres latines, chiffres et/ou tiret.';
 $lang_module['vmodule_exit'] = 'Erreur: Module que vous voulez installer existe déjà dans le système';
+$lang_module['vmodule_maxlength'] = 'Un maximum de 50 caractères';
 $lang_module['back'] = 'Revenir';
 $lang_module['change_func_name'] = 'Renommer la fonction "%s" du module "%s"';
+$lang_module['change_func_sitetitle'] = 'Changer de site titre funtion module "% s" "% s"';
 $lang_module['change_fun_alias'] = 'Renommer l\'alias "%s" du module "%s"';
 $lang_module['description'] = 'Description';
 $lang_module['reinstall_module'] = 'Ré-installer le module';
@@ -79,7 +83,3 @@ $lang_module['reinstall_note4'] = 'Ce modèle de données n\'est pas compatible 
 $lang_module['setup_option'] = 'Choisir une solution';
 $lang_module['setup_option_0'] = 'Ne configurer que le module';
 $lang_module['setup_option_1'] = 'Configurer le module et installer le modèle de données';
-$lang_module['vmodule_maxlength'] = 'Un maximum de 50 caractères';
-$lang_module['site_title'] = 'Valeur pour le titre du site';
-$lang_module['change_func_sitetitle'] = 'Changer de site titre funtion module "% s" "% s"';
-$lang_module['activate_sitemap'] = 'activer plan du site';

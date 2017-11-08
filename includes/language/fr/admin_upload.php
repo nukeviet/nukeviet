@@ -9,8 +9,8 @@
 * @Createdate Jun 29, 2010, 05:00:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -81,6 +81,7 @@ $lang_module['author0'] = 'de tout';
 $lang_module['author1'] = 'moi';
 $lang_module['uploadError1'] = 'Merci de sélectionner le fichier dans votre ordinateur ou donner le lien';
 $lang_module['uploadError2'] = 'Erreur: lien invalide';
+$lang_module['uploadError3'] = 'Erreur: nombre de téléchargements non standard';
 $lang_module['pubdate'] = 'Mis à jour';
 $lang_module['newSize'] = 'Créer une image';
 $lang_module['prView'] = 'Voir';
@@ -127,7 +128,10 @@ $lang_module['logopostopright'] = 'Ci-dessus, à droite';
 $lang_module['logopostopleft'] = 'Au-dessus, à gauche';
 $lang_module['logopostopcenter'] = 'Ci-dessus, au milieu';
 $lang_module['fileimage'] = 'Image';
+$lang_module['filerelativepath'] = 'Chemin relatif';
+$lang_module['fileabsolutepath'] = 'Chemin absolu';
 $lang_module['altimage'] = 'Note de l\'image';
+$lang_module['filepathcopied'] = 'Le chemin a été copié';
 $lang_module['uploadconfig'] = 'Configuration du Transfert';
 $lang_module['uploadconfig_ban_ext'] = 'Extensioins interdites';
 $lang_module['uploadconfig_ban_mime'] = 'Types de Mime interdits';
@@ -180,3 +184,5 @@ $lang_module['upload_auto_alt'] = 'Déterminer la description de l\'image automa
 $lang_module['upload_alt_note'] = 'Veuillez saisir des commentaires pour le fichier avant';
 $lang_module['upload_view_thumbnail'] = 'Passer à l\'affichage de la grille';
 $lang_module['upload_view_detail'] = 'Passer à un affichage de la liste';
+$lang_module['upload_chunk'] = 'Vérifier le téléchargement';
+$lang_module['upload_chunk_help'] = 'Cette fonction prend en charge le fractionnement du fichier de téléchargement en plusieurs petits paquets, la prise en charge pour télécharger de gros fichiers sur le serveur. Si vous n\'avez pas l\'intention d\'autoriser le téléchargement de fichiers volumineux, laissez ce champ vide';

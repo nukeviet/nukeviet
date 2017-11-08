@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -139,6 +139,7 @@ $lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to 
 $lang_module['lostpass_content_mess'] = 'Nous vous envoyons dans votre e-mail %1$s les informations,<br /><br /> vous suivez le guide pour activer votre compte. Si vous ne trouvez pas le mail dans votre boite à lettre, veuillez vérifier le dossier Spam';
 $lang_module['lostpass_active_error'] = 'Code de certifier n\'est pas bon';
 $lang_module['lostpass_newpass_mess'] = 'Saisir votre mot de passe dans cette case';
+$lang_module['lostpass_sendmail_error'] = 'Les systèmes actuels ne peuvent pas envoyer des courriels afin que vous ne pouvez pas récupérer un mot de passe temporaire, s\'il vous plaît contacter l\'administrateur du site d\'assistance. Nos sincères excuses pour la gêne occasionnée!';
 $lang_module['logout_title'] = 'Déconnexion';
 $lang_module['edit_info_title'] = 'Éditer';
 $lang_module['img_size_title'] = 'Votre avatar';
@@ -230,6 +231,7 @@ $lang_module['field_min_max_error'] = '%1$s  doit être saisir de %2$s à %3$s c
 $lang_module['field_match_type_required'] = '%s doit être rempli';
 $lang_module['errorMessage'] = 'Message du système';
 $lang_module['login_info'] = 'Remplissez les champs ci-dessous';
+$lang_module['old_min_user_error'] = 'Votre âge% s, l\'enregistrement des mineurs';
 $lang_module['edit_basic'] = 'Standard';
 $lang_module['edit_others'] = 'Autre';
 $lang_module['edit_avatar'] = 'Image de profile';
@@ -354,5 +356,3 @@ $lang_module['2step_require_directgo'] = 'Cliquez ici si pas système d\'auto-na
 $lang_module['2step_error_opt_backup'] = 'S\'il vous plaît entrez le code de confirmation de l\'application Google Authenticator ou code redondant sauvé';
 $lang_module['2step_status'] = 'L\'authentification à deux étapes';
 $lang_module['2step_link'] = 'Réglage';
-$lang_module['old_min_user_error'] = 'Votre âge% s, l\'enregistrement des mineurs';
-$lang_module['lostpass_sendmail_error'] = 'Les systèmes actuels ne peuvent pas envoyer des courriels afin que vous ne pouvez pas récupérer un mot de passe temporaire, s\'il vous plaît contacter l\'administrateur du site d\'assistance. Nos sincères excuses pour la gêne occasionnée!';
