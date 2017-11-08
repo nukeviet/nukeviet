@@ -210,6 +210,7 @@ if (!nv_function_exists('nv_block_login')) {
 
                 if (defined('NV_OPENID_ALLOWED')) {
                     $icons = array(
+                        'single-sign-on' => 'lock',
                         'google' => 'google-plus',
                         'facebook' => 'facebook'
                     );
