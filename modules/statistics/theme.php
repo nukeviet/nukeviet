@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
+if (!defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
@@ -28,7 +28,7 @@ function nv_theme_statistics_referer($cts, $total)
         $xtpl->assign('CTS', $cts);
 
         foreach ($cts['rows'] as $m) {
-            if (! empty($m['count'])) {
+            if (!empty($m['count'])) {
                 $xtpl->assign('M', number_format($m['count']));
                 $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
                 $xtpl->assign('HEIGHT', ceil(($m['count'] / $cts['max']) * 200));
@@ -68,7 +68,7 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
     $xtpl = new XTemplate('allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
-        if (! empty($host_list)) {
+        if (!empty($host_list)) {
             $xtpl->assign('CTS', $cts);
 
             $a = 0;
@@ -93,7 +93,7 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
                 $xtpl->parse('main.loop');
             }
 
-            if (! empty($cts['generate_page'])) {
+            if (!empty($cts['generate_page'])) {
                 $xtpl->parse('main.gp');
             }
         }
@@ -115,7 +115,7 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
     $xtpl = new XTemplate('allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
-        if (! empty($bot_list)) {
+        if (!empty($bot_list)) {
             $xtpl->assign('CTS', $cts);
 
             $a = 0;
@@ -140,7 +140,7 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
                 $xtpl->parse('main.loop');
             }
 
-            if (! empty($cts['generate_page'])) {
+            if (!empty($cts['generate_page'])) {
                 $xtpl->parse('main.gp');
             }
         }
@@ -162,7 +162,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
     $xtpl = new XTemplate('allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
-        if (! empty($os_list)) {
+        if (!empty($os_list)) {
             $xtpl->assign('CTS', $cts);
 
             $a = 0;
@@ -189,7 +189,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
                 $xtpl->parse('main.loop');
             }
 
-            if (! empty($cts['generate_page'])) {
+            if (!empty($cts['generate_page'])) {
                 $xtpl->parse('main.gp');
             }
         }
@@ -211,7 +211,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
     $xtpl = new XTemplate('allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
-        if (! empty($browsers_list)) {
+        if (!empty($browsers_list)) {
             $xtpl->assign('CTS', $cts);
 
             $a = 0;
@@ -239,7 +239,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
                 $xtpl->parse('main.loop');
             }
 
-            if (! empty($cts['generate_page'])) {
+            if (!empty($cts['generate_page'])) {
                 $xtpl->parse('main.gp');
             }
         }
@@ -261,7 +261,7 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
     $xtpl = new XTemplate('allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     if ($num_items) {
-        if (! empty($countries_list)) {
+        if (!empty($countries_list)) {
             $xtpl->assign('CTS', $cts);
 
             $a = 0;
@@ -289,7 +289,7 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
                 $xtpl->parse('main.loop');
             }
 
-            if (! empty($cts['generate_page'])) {
+            if (!empty($cts['generate_page'])) {
                 $xtpl->parse('main.gp');
             }
         }
@@ -309,167 +309,71 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     global $module_info, $lang_module, $lang_global;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
 
-    $xtpl->assign('CTS', $ctsy);
-
-    foreach ($ctsy['rows'] as $key => $m) {
-        if (! empty($m)) {
-            $xtpl->assign('M', number_format($m));
-            $proc = ceil(($m / $ctsy['max']) * 100);
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
-            $xtpl->assign('HEIGHT', $proc * 2);
-
-            $xtpl->parse('main.year.loop.img');
-        }
-
-        $xtpl->parse('main.year.loop');
-    }
-
-    foreach ($ctsy['rows'] as $key => $m) {
-        $xtpl->assign('KEY', $key);
-
-        if ($key == $ctsy['current_year']) {
-            $xtpl->parse('main.year.loop_1.yc');
-        } else {
-            $xtpl->parse('main.year.loop_1.yc_o');
-        }
-
-        $xtpl->parse('main.year.loop_1');
-    }
-
-    $xtpl->parse('main.year');
-
-    //Thong ke theo thang
-    $xtpl->assign('CTS', $ctsm);
-
-    foreach ($ctsm['rows'] as $m) {
-        if (! empty($m['count'])) {
-            $proc = ceil(($m['count'] / $ctsm['max']) * 100);
-            $m['count'] = number_format($m['count']);
-            $xtpl->assign('M', $m);
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
-            $xtpl->assign('HEIGHT', $proc * 2);
-
-            $xtpl->parse('main.month.loop.img');
-        }
-
-        $xtpl->parse('main.month.loop');
-    }
-
-    foreach ($ctsm['rows'] as $key => $m) {
-        $xtpl->assign('KEY', $key);
-        $xtpl->assign('M', $m);
-
-        if ($key == $ctsm['current_month']) {
-            $xtpl->parse('main.month.loop_1.mc');
-        } else {
-            $xtpl->parse('main.month.loop_1.mc_o');
-        }
-
-        $xtpl->parse('main.month.loop_1');
-    }
-
-    $xtpl->parse('main.month');
-    //Thong ke theo thang
-
-    //thong ke theo ngay trong thang
-    $xtpl->assign('CTS', $ctsdm);
-
-    foreach ($ctsdm['rows'] as $key => $m) {
-        $xtpl->assign('M', number_format($m));
-
-        if (! empty($m)) {
-            $proc = ceil(($m / $ctsdm['max']) * 100);
-
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
-            $xtpl->assign('HEIGHT', $proc * 2);
-
-            $xtpl->parse('main.day_m.loop.img');
-        }
-
-        $xtpl->parse('main.day_m.loop');
-    }
-
-    foreach ($ctsdm['rows'] as $key => $m) {
-        $xtpl->assign('KEY', $key);
-
-        if ($key == $ctsdm['current_day']) {
-            $xtpl->parse('main.day_m.loop_1.dc');
-        } else {
-            $xtpl->parse('main.day_m.loop_1.dc_o');
-        }
-
-        $xtpl->parse('main.day_m.loop_1');
-    }
-    $xtpl->parse('main.day_m');
-    //thong ke theo ngay trong thang
-
-    //Thong ke theo ngay cua tuan
-    $xtpl->assign('CTS', $ctsdw);
-
-    foreach ($ctsdw['rows'] as $key => $m) {
-        if (! empty($m['count'])) {
-            $proc = ceil(($m['count'] / $ctsdw['max']) * 100);
-
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
-            $xtpl->assign('HEIGHT', $proc * 2);
-            $m['count'] = number_format($m['count']);
-            $xtpl->assign('M', $m);
-            $xtpl->parse('main.day_k.loop.img');
-        }
-
-        $xtpl->parse('main.day_k.loop');
-    }
-
-    foreach ($ctsdw['rows'] as $key => $m) {
-        $xtpl->assign('KEY', $key);
-        $xtpl->assign('M', $m);
-
-        if ($key == $ctsdw['current_dayofweek']) {
-            $xtpl->parse('main.day_k.loop_1.dc');
-        } else {
-            $xtpl->parse('main.day_k.loop_1.dc_o');
-        }
-
-        $xtpl->parse('main.day_k.loop_1');
-    }
-    $xtpl->parse('main.day_k');
-    //Thong ke theo ngay cua tuan
-
-    //Thong ke theo gio trong ngay
+    // Thống kê theo giờ trong ngày
     $xtpl->assign('CTS', $ctsh);
-
-    if (! empty($ctsh['rows'])) {
-        foreach ($ctsh['rows'] as $key => $m) {
-            if (! empty($m)) {
-                $xtpl->assign('M', number_format($m));
-
-                $proc = ceil(($m / $ctsh['max']) * 100);
-
-                $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
-                $xtpl->assign('HEIGHT', $proc * 2);
-
-                $xtpl->parse('main.hour.loop.img');
-            }
-
-            $xtpl->parse('main.hour.loop');
-        }
-
-        foreach ($ctsh['rows'] as $key => $m) {
-            $xtpl->assign('KEY', $key);
-
-            if ($key == $ctsh['current_hour']) {
-                $xtpl->parse('main.hour.loop_1.h');
-            } else {
-                $xtpl->parse('main.hour.loop_1.h_o');
-            }
-
-            $xtpl->parse('main.hour.loop_1');
-        }
-    }
+    $xtpl->assign('DATA_LABEL', '"' . implode('", "', array_keys($ctsh['rows'])) . '"');
+    $xtpl->assign('DATA_VALUE', implode(', ', $ctsh['rows']));
 
     $xtpl->parse('main.hour');
-    //Thong ke theo gio trong ngay
+
+    // Thống kê theo ngày trong tuần
+    $xtpl->assign('CTS', $ctsdw);
+
+    $data_label = array();
+    $data_value = array();
+    $data_bgcolor = array(
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+    );
+
+    foreach ($ctsdw['rows'] as $key => $m) {
+        $data_label[] = $m['fullname'];
+        $data_value[] = $m['count'];
+    }
+
+    $xtpl->assign('DATA_LABEL', '"' . implode('", "', $data_label) . '"');
+    $xtpl->assign('DATA_BGCOLOR', '"' . implode('", "', $data_bgcolor) . '"');
+    $xtpl->assign('DATA_VALUE', implode(', ', $data_value));
+
+    $xtpl->parse('main.day_k');
+
+    // Thống kê ngày của tháng
+    $xtpl->assign('CTS', $ctsdm);
+    $xtpl->assign('DATA_LABEL', '"' . implode('", "', array_keys($ctsdm['rows'])) . '"');
+    $xtpl->assign('DATA_VALUE', implode(', ', $ctsdm['rows']));
+
+    $xtpl->parse('main.day_m');
+
+    // Thống kê tháng của năm
+    $xtpl->assign('CTS', $ctsm);
+
+    $data_label = array();
+    $data_value = array();
+
+    foreach ($ctsm['rows'] as $key => $m) {
+        $data_label[] = $m['fullname'];
+        $data_value[] = $m['count'];
+    }
+
+    $xtpl->assign('DATA_LABEL', '"' . implode('", "', $data_label) . '"');
+    $xtpl->assign('DATA_VALUE', implode(', ', $data_value));
+
+    $xtpl->parse('main.month');
+
+    // Thống kê theo năm
+    $xtpl->assign('CTS', $ctsy);
+    $xtpl->assign('DATA_LABEL', '"' . implode('", "', array_keys($ctsy['rows'])) . '"');
+    $xtpl->assign('DATA_VALUE', implode(', ', $ctsy['rows']));
+
+    $xtpl->parse('main.year');
 
     //Thong ke theo quoc gia
     $xtpl->assign('CTS', $ctsc);
