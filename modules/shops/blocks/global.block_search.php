@@ -8,11 +8,11 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! function_exists('nv_search_product')) {
+if (!function_exists('nv_search_product')) {
 
     /**
      * nv_search_product()
@@ -42,12 +42,12 @@ if (! function_exists('nv_search_product')) {
             $cataid = $catid;
         }
         if ($price1_temp == '') {
-            $price1 = - 1;
+            $price1 = -1;
         } else {
             $price1 = floatval($price1_temp);
         }
         if ($price2_temp == '') {
-            $price2 = - 1;
+            $price2 = -1;
         } else {
             $price2 = floatval($price2_temp);
         }
@@ -74,7 +74,7 @@ if (! function_exists('nv_search_product')) {
             $xtitle_i = '';
             if ($row['lev'] > 0) {
                 $xtitle_i .= '&nbsp;&nbsp;&nbsp;';
-                for ($i = 1; $i <= $row['lev']; $i ++) {
+                for ($i = 1; $i <= $row['lev']; $i++) {
                     $xtitle_i .= '&nbsp;&nbsp;&nbsp;';
                 }
                 $xtitle_i .= '&nbsp;';
@@ -95,10 +95,10 @@ if (! function_exists('nv_search_product')) {
             $xtpl->parse('main.typemoney');
         }
 
-        if ($price1 == - 1) {
+        if ($price1 == -1) {
             $price1 = '';
         }
-        if ($price2 == - 1) {
+        if ($price2 == -1) {
             $price2 = '';
         }
 
