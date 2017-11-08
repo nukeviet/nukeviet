@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 03:22:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -75,13 +75,11 @@ $lang_module['cat_status_1'] = 'Hoạt động, hiển thị trên trang chủ';
 $lang_module['cat_status_2'] = 'Hoạt động, không hiển thị trên trang chủ';
 $lang_module['cat_status_0_confirm'] = 'Chú ý: Đình chỉ hoạt động chuyên mục này sẽ đình chỉ hoạt động cả các bài viết thuộc trong chuyên mục và chuyên mục con của nó. Bạn có chắc chắn thực hiện không?';
 $lang_module['cat_locked_byparent'] = 'Khóa bởi chuyên mục cha';
-
 $lang_module['description'] = 'Miêu tả';
 $lang_module['viewdescription'] = 'Hiển thị nội dung chi tiết khi xem chủ đề';
 $lang_module['viewdescription_0'] = 'Không hiển thị ';
 $lang_module['viewdescription_1'] = 'Hiển thị tại trang số 1 của chủ đề';
 $lang_module['viewdescription_2'] = 'Hiển thị ở tất cả các trang của chủ đề';
-
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['content_list'] = 'Danh sách bài viết';
 $lang_module['content_add'] = 'Thêm bài viết';
@@ -108,7 +106,6 @@ $lang_module['delcat_msg_cat_permissions'] = 'Bạn không có quyền thực hi
 $lang_module['delcatandrows'] = 'Xóa Chuyên mục và các bài viết';
 $lang_module['delcat_msg_rows_noselect'] = 'Bạn cần chọn Chuyên mục để di chuyển bài viết tới';
 $lang_module['deltopic_msg_rows'] = 'nhóm tin liên quan có %s bài viết, bạn có chắc chắn xóa, khi đó nhóm tin liên quan sẽ bị xóa khỏi các bài viết.';
-
 $lang_module['setting'] = 'Cấu hình module';
 $lang_module['setting_indexfile'] = 'Phương án thể hiện trang chủ';
 $lang_module['setting_homesite'] = 'Kích thước của hình tại trang chủ';
@@ -144,7 +141,6 @@ $lang_module['setting_instant_articles_gettime1'] = 'Chú ý: Facebook truy vấ
 $lang_module['setting_instant_articles_defaulturl'] = 'URL nguồn cấp RSS để khai báo nếu sử dụng tính năng bài viết tức thời';
 $lang_module['setting_instant_articles_defaulturl1'] = 'Chú ý: URL này là URL chứa toàn bộ bài viết của module. Để lấy URL của nguồn cấp cho từng chuyên mục, sau khi kích hoạt sử dụng tính năng bài viết tức thời xong, bạn cần di chuyển vào phần quản lý chuyên mục, nhấp chọn nút hiển thị URL của nguồn cấp RSS bài viết tức thời tại mỗi chuyên mục tương ứng.';
 $lang_module['setting_instant_articles_auto'] = 'Mặc định bài viết được đăng là bài viết tức thời nếu chức năng này kích hoạt';
-
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';
 $lang_module['viewcat_page_old'] = 'danh sách, cũ lên trên';
@@ -158,7 +154,6 @@ $lang_module['viewcat_grid_new'] = 'theo lưới, mới lên trên';
 $lang_module['viewcat_grid_old'] = 'theo lưới, cũ lên trên';
 $lang_module['viewcat_none'] = 'không hiển thị';
 $lang_module['viewcat_detail'] = 'Các nhóm được xem chi tiết bài viết';
-
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_type'] = 'Tìm kiếm theo';
 $lang_module['search_status'] = 'Trạng thái';
@@ -177,7 +172,6 @@ $lang_module['error_title'] = 'Lỗi: Bài viết chưa có tiêu đề';
 $lang_module['error_bodytext'] = 'Lỗi: Bài viết chưa có nội dung';
 $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chuyên mục';
 $lang_module['sources_sl'] = 'Hãy chọn hoặc tự điền';
-
 $lang_module['content_cat'] = 'Chuyên mục của bài viết';
 $lang_module['content_block'] = 'Bài viết thuộc các nhóm tin';
 $lang_module['content_topic'] = 'Thuộc dòng sự kiện';
@@ -229,7 +223,6 @@ $lang_module['content_instant_template'] = 'Mẫu';
 $lang_module['content_instant_templatenote'] = 'Để trống tức là sử dụng mẫu mặc định';
 $lang_module['content_instant_creatauto'] = 'Tự động tạo bài viết tức thời từ bài viết thường';
 $lang_module['content_locked_bycat'] = 'Khóa bởi chuyên mục';
-
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
 $lang_module['showtooltip_position_top'] = 'Trên';
@@ -264,7 +257,6 @@ $lang_module['topic_nonews'] = 'Hiện tại không có bài viết nào thuộc
 $lang_module['addtotopics'] = 'Thêm vào Theo dòng sự kiện';
 $lang_module['topic_update_success'] = 'Cập nhật thành công!';
 $lang_module['topic_num_news'] = ' bài viết';
-
 $lang_module['siteinfo_publtime'] = 'Tổng số bài viết hiệu lực';
 $lang_module['siteinfo_users_send'] = 'Số bài viết thành viên gửi tới';
 $lang_module['siteinfo_pending'] = 'Số bài viết chờ đăng';
@@ -273,13 +265,11 @@ $lang_module['siteinfo_exptime'] = 'Số bài viết sắp hết hạn';
 $lang_module['siteinfo_comment'] = 'Tổng số bình luận được đăng';
 $lang_module['siteinfo_comment_pending'] = 'Số bình luận chờ duyệt';
 $lang_module['siteinfo_tags_incomplete'] = 'Số tags chưa có mô tả';
-
 $lang_module['group_content'] = 'Cấu hình đăng bài viết tại trang người dùng';
 $lang_module['group_addcontent'] = 'Được đăng bài viết';
 $lang_module['group_postcontent'] = 'Đăng bài viết không cần kiểm duyệt';
 $lang_module['group_editcontent'] = 'Được sửa bài viết đã đăng';
 $lang_module['group_delcontent'] = 'Được xóa bài viết đã đăng';
-
 $lang_module['admin'] = 'Phân quyền quản lý';
 $lang_module['admin_permissions'] = 'Quyền hạn';
 $lang_module['admin_edit'] = 'Sửa quyền hạn';
@@ -299,7 +289,6 @@ $lang_module['admin_last_name'] = 'Họ';
 $lang_module['admin_email'] = 'Email';
 $lang_module['firstname_lastname'] = 'Tên và Họ';
 $lang_module['lastname_firstname'] = 'Họ và Tên';
-
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';
 $lang_module['permissions_add_content'] = 'Tạo bài viết';
 $lang_module['permissions_pub_content'] = 'Đăng bài viết';
@@ -309,16 +298,13 @@ $lang_module['permissions_del_content'] = 'Xóa bài viêt';
 $lang_module['permissions_pub_error'] = 'Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1$s';
 $lang_module['permissions_sendspadmin_error'] = 'Lỗi: Bạn không được phép chuyển bài viết cho tổng biên tập tại Chuyên mục: %1$s';
 $lang_module['permissions_pub_show_error'] = 'Lỗi: Bạn không được cho hiển thị bài viết tại Chuyên mục: %1$s';
-
 $lang_module['error_no_del_content_id'] = 'Lỗi: Hệ thống không xóa được các bài viết có id:';
 $lang_module['structure_image_upload'] = 'Ảnh upload của module được lưu trữ mặc định theo cấu trúc thư mục';
-
 $lang_module['config_source'] = 'Cấu hình hiển thị nguồn bài viết tại chi tiết tin';
 $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
 $lang_module['config_source_link_nofollow'] = 'Hiển thị link của nguồn tin (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
-
 $lang_module['tags'] = 'Quản lý Tags';
 $lang_module['add_tags'] = 'Thêm Tags';
 $lang_module['edit_tags'] = 'Sửa Tags';
@@ -326,50 +312,44 @@ $lang_module['tags_alias'] = 'Lọc bỏ dấu tiếng việt, các ký tự kh�
 $lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
 $lang_module['tags_all_link'] = 'Chế độ xem các tags chưa có mô tả đang được kích hoạt, nhấp vào đây để xem tất cả các tags';
 $lang_module['tags_no_description'] = 'Chưa có mô tả';
-
 $lang_module['googleplus'] = 'Xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo quyền tác giả của module';
 $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
-
 $lang_module['alias_empty_notice'] = 'Liên kết tĩnh còn trống, hệ thống sẽ tự động tạo liên kết tĩnh phù hợp';
 $lang_module['functional'] = 'Chức năng';
 $lang_module['featured'] = 'Tin nổi bật';
 $lang_module['addtocat'] = 'Thêm bài viết nổi bật vào chuyên mục';
 $lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
 $lang_module['not_featured'] = 'Không có bài viết nào';
-
 $lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s</strong> gửi bởi <strong>%s</strong><br /><em>%s</em>';
-
 $lang_module['ad_block_show'] = 'Hiển thị các block phụ';
 $lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
 $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
-
 $lang_module['fbinsartmgs_100'] = 'Lỗi: Bài viết có các thẻ HTML: <strong>%s</strong> không được hỗ trở bởi bài viết tức thời. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng, thay thế bằng các thẻ được hỗ trợ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
 $lang_module['fbinsartmgs_101'] = 'Lỗi: Bài viết không có nội dung';
 $lang_module['fbinsartmgs_102'] = 'Lỗi: Bài viết của bạn có các thuộc tính cho các thẻ. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng khỏi thẻ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
-
 $lang_module['dulicate_edit'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn không được sửa bài viết này đến khi người đó sửa xong.';
 $lang_module['dulicate_edit_admin'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn có muốn <b>chiếm quyền sửa bài viết</b> này không ?';
 $lang_module['dulicate_takeover'] = 'Chiếm quyền sửa bài viết';
 $lang_module['dulicate_edit_takeover'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này bởi  tài khoản %s lúc %s. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';
-
 $lang_module['setting_copy_news'] = 'Cho phép copy bài viết';
 $lang_module['title_copy_news'] = 'Sao chép bài viết';
-
 $lang_module['order_articles'] = 'Sắp xếp bài viết';
 $lang_module['order_articles_0'] = 'Sắp xếp theo thời gian đăng';
 $lang_module['order_articles_1'] = 'Sắp xếp tùy biến, đánh số tăng dần';
 $lang_module['order_articles_number'] = 'STT sắp xếp hiện tại';
 $lang_module['order_articles_new'] = 'STT sắp xếp mới';
-
 $lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
 $lang_module['default_layout'] = 'Mặc định';
-
 $lang_module['setting_frontend_post'] = 'Cấu hình khu vực đăng bài ở trang người dùng';
 $lang_module['frontend_edit_alias'] = 'Cho phép tuỳ chỉnh liên kết tĩnh khi đăng bài mới';
 $lang_module['frontend_edit_layout'] = 'Cho phép tuỳ chỉnh bố cục';
 $lang_module['large_sys_message'] = 'Chú ý: Hiện đang có <strong>%s</strong> bài viết trên website, sau khi đăng thêm bài viết, hệ thống này sẽ trở thành một hệ thống lớn. Để đảm bảo an toàn cho máy chủ, một số tính năng như đình chỉ, kích hoạt lại chuyên mục sẽ bị khóa. Trước khi đăng bài viết, bạn hãy kiểm tra các chuyên mục có khóa không nếu có hãy kích hoạt lại hoặc xóa đi các bài viết trong đó';
 $lang_module['fileattach'] = 'File đính kèm';
 $lang_module['add'] = 'Thêm';
+$lang_module['status_12'] = 'Lưu bài viết, gửi quản trị';
+$lang_module['status_13'] = 'Lưu bài viết, gửi quản trị tối cao';
+$lang_module['error_edit'] = 'Bài đăng là người kiểm duyệt được kiểm duyệt. Bạn không thể tiếp tục chỉnh sửa.';
+$lang_module['not_edit_by_admin'] = 'Bạn đã bị tấn công để chỉnh sửa bài đăng này. Không thể lưu thay đổi của bạn vào hệ thống, hãy sao chép lại để tránh bị mất các thay đổi của bạn.';

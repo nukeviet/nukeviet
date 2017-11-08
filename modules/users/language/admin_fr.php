@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -70,6 +70,7 @@ $lang_module['in_group_default'] = 'Le groupe est par défaut';
 $lang_module['is_official'] = 'En tant que membre officiel';
 $lang_module['is_official_note'] = 'Si non sélectionné, ce compte sera inclus dans le groupe de la nouvelle immatriculation de membre';
 $lang_module['set_official_note'] = 'Pour un membre officiel';
+$lang_module['msgnocheck'] = 'Vous devez sélectionner au moins 1 compte pour effectuer';
 $lang_module['question'] = 'Question secrète';
 $lang_module['addquestion'] = 'Ajouter une question secrète';
 $lang_module['savequestion'] = 'Modifier la question de sécurité';
@@ -134,9 +135,17 @@ $lang_module['delconfirm_ok'] = 'Confirmer!';
 $lang_module['delconfirm_email_title'] = 'Notification de suppression du compte';
 $lang_module['delconfirm_email_content'] = 'Bonjour %1$s,<br /><br />Nous sommes désolé de vous informer la suppression de votre compte sur le site %2$s.';
 $lang_module['adduser_email'] = 'Envoyer la notification:';
+$lang_module['adduser_email1'] = 'Les notifications par courriel';
+$lang_module['adduser_email1_note'] = 'Si elle est sélectionnée, après avoir créé le compte créé avec succès un compte de membres recevront un compte de messagerie de notification a été créée, les informations, y compris connexion et mot de passe';
+$lang_module['adduser_email1_note1'] = 'Si elle est sélectionnée, après les membres de compte mise à jour réussie recevront notification par courrier électronique au sujet du changement d\'informations de compte, y compris le nom d\'utilisateur et mot de passe (si les mots de passe sont modifiés)';
 $lang_module['adduser_email_yes'] = 'Oui';
 $lang_module['adduser_register'] = 'Votre compte a été créé';
+$lang_module['adduser_register1'] = 'Votre compte a été mis à jour';
 $lang_module['adduser_register_info'] = 'Bonjour %1$s,<br /><br /> Votre compte sur le site Web %2$s est activé. Les informations de connexion est au dessous: :<br /><br />URL: <a href="%3$s">%3$s</a><br />Nom de compte: %4$s<br /><br />Cela est un message automatique qui était envoyé à votre boîte mail à partir du site %2$s. Si vous ne comprenez pas le contenu de ce mail, vous pouvez simplement le supprimer .<br /><br />Administration du site';
+$lang_module['adduser_register_info1'] = 'Bonjour %1$s,<br /><br /> Votre compte sur le site %2$s a été créé. Voici vos informations de connexion: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Nom: %4$s<br /> mot de passe: %5$s<br /><br /> Nous de vous recommandons de changer votre mot de passe avant d\'utiliser le compte <br /><br /> Ceci est un message automatique envoyé. votre boîte de réception e-mail à partir du site web %2$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br /><br /> site d\'administration';
+$lang_module['adduser_register_info2'] = 'Bonjour %1$s,<br /><br /> Votre compte sur le site %2$s a été mis à jour. Voici les nouvelles informations de connexion: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Nom: %4$s';
+$lang_module['adduser_register_info3'] = '<br /> Mot de passe: %1$s';
+$lang_module['adduser_register_info4'] = '<br /> <br /> Ceci est un message automatique envoyé à votre boîte de réception e-mail à partir du site %1$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br /> <br /> site d\'administration';
 $lang_module['openid_servers'] = 'Les fournisseur d\'Oauth est accepté';
 $lang_module['openid_processing'] = 'Le mode est par défaut de traiter après la connexion au OauthID';
 $lang_module['openid_processing_0'] = 'Option de choisir la méthode de traiter';
@@ -421,14 +430,6 @@ $lang_module['group_description_empty'] = 'Prenez une brève description du grou
 $lang_module['auto_login_after_reg'] = 'Se connecter automatiquement après une inscription réussie';
 $lang_module['active_group_newusers'] = 'Activer membre d\'authentification';
 $lang_module['active_group_newusers_note'] = 'Si cette fonction est activée, le nouvel enregistrement de membre sera automatiquement classé comme "activé" jusqu\'à ce qu\'il ait été retiré du chef d\'équipe, au cours de laquelle les nouveaux membres sont considérés comme des «membres officiels "';
-$lang_module['adduser_email1'] = 'Les notifications par courriel';
-$lang_module['adduser_email1_note'] = 'Si elle est sélectionnée, après avoir créé le compte créé avec succès un compte de membres recevront un compte de messagerie de notification a été créée, les informations, y compris connexion et mot de passe';
-$lang_module['adduser_email1_note1'] = 'Si elle est sélectionnée, après les membres de compte mise à jour réussie recevront notification par courrier électronique au sujet du changement d\'informations de compte, y compris le nom d\'utilisateur et mot de passe (si les mots de passe sont modifiés)';
-$lang_module['adduser_register1'] = 'Votre compte a été mis à jour';
-$lang_module['adduser_register_info1'] = 'Bonjour %1$s,<br /><br /> Votre compte sur le site %2$s a été créé. Voici vos informations de connexion: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Nom: %4$s<br /> mot de passe: %5$s<br /><br /> Nous de vous recommandons de changer votre mot de passe avant d\'utiliser le compte <br /><br /> Ceci est un message automatique envoyé. votre boîte de réception e-mail à partir du site web %2$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br /><br /> site d\'administration';
-$lang_module['adduser_register_info2'] = 'Bonjour %1$s,<br /><br /> Votre compte sur le site %2$s a été mis à jour. Voici les nouvelles informations de connexion: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Nom: %4$s';
-$lang_module['adduser_register_info3'] = '<br /> Mot de passe: %1$s';
-$lang_module['adduser_register_info4'] = '<br /> <br /> Ceci est un message automatique envoyé à votre boîte de réception e-mail à partir du site %1$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br /> <br /> site d\'administration';
 $lang_module['active_user_logs'] = 'Connexion Enregistrement, déconnexion des membres';
 $lang_module['user_openid_mamager'] = 'Gérer et OAuth OpenID';
 $lang_module['user_2step_mamager'] = 'Gérer l\'authentification en deux étapes';
