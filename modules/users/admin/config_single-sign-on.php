@@ -45,16 +45,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $_cas_config['config_field_lock'] = $nv_Request->get_array('config_field_lock', 'post', '');
 
     $config_sso = serialize($_cas_config);
-    if (isset($global_config['config_sso'])) {
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
-    } else {
-        $sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', :config_name, :config_value)");
-        die('đeay');
+
+    try {
+        if (isset($global_config['config_sso'])) {
+            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+        } else {
+            $sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', :config_name, :config_value)");
+        }
+
+        $sth->bindValue(':config_name', 'config_sso', PDO::PARAM_STR);
+        $sth->bindParam(':config_value', $config_sso, PDO::PARAM_STR);
+        $sth->execute();
+    } catch (PDOException $e) {
+        trigger_error($e->getMessage());
     }
 
-    $sth->bindValue(':config_name', 'config_sso', PDO::PARAM_STR);
-    $sth->bindParam(':config_value', $config_sso, PDO::PARAM_STR);
-    $sth->execute();
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['config'], $page_title, $admin_info['userid']);
     $nv_Cache->delAll();
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass());
