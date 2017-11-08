@@ -24,11 +24,11 @@ if (! function_exists('nv_filter_product')) {
     function nv_block_config_filter_product($module, $data_block, $lang_block)
     {
         $html = '';
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['group_price'] . "</td>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['group_price'] . "</label>";
         $ck = $data_block['display_group_price'] ? 'checked="checked"' : '';
-        $html .= "	<td><input type=\"checkbox\" name=\"config_group_price\" value=\"1\" " . $ck . " /></td>";
-        $html .= "</tr>";
+        $html .= "	<div class=\"col-sm-18\"><input type=\"checkbox\" class=\"form-control\" name=\"config_group_price\" value=\"1\" " . $ck . " /></div>";
+        $html .= "</div>";
 
         return $html;
     }

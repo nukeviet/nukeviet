@@ -26,14 +26,14 @@ if (! function_exists('nv_filter_product_cat')) {
         global $nv_Cache, $db_config, $site_mods;
 
         $html = '';
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['content'] . "</td>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['content'] . "</label>";
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$module]['module_data'] . '_group WHERE parentid = 0 ORDER BY weight';
         $list = $nv_Cache->db($sql, '', $module);
 
         $array_style = array( 'checkbox' => 'Checkbox', 'label' => 'Label', 'image' => 'Image'  );
 
-        $html .= "	<td><div class=\"row\">";
+        $html .= "	<div class=\"col-sm-18\"><div class=\"row\">";
         foreach ($list as $l) {
             $html .= "<div class=\"col-sm-6\">";
             $html .= $l[NV_LANG_DATA . '_title'];
@@ -47,8 +47,8 @@ if (! function_exists('nv_filter_product_cat')) {
 
             $html .= "</div>";
         }
-        $html .= "   </div></td>";
-        $html .= "</tr>";
+        $html .= "   </div></div>";
+        $html .= "</div>";
 
         return $html;
     }

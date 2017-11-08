@@ -25,8 +25,8 @@ if (! nv_function_exists('nv_global_product_center')) {
     {
         global $nv_Cache, $db_config, $site_mods;
 
-        $html = "<tr>";
-        $html .= "	<td>" . $lang_block['blockid'] . "</td>";
+        $html = "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['blockid'] . "</label>";
         $html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
 
         $sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
@@ -37,23 +37,23 @@ if (! nv_function_exists('nv_global_product_center')) {
             $html .= "<option value=\"" . $l['bid'] . "\" " . $sel . ">" . $l[NV_LANG_DATA . '_title'] . "</option>\n";
         }
 
-        $html .= "	</select></td>\n";
+        $html .= "	</select></div>\n";
         $html .= '<script type="text/javascript">';
         $html .= '	$("select[name=config_blockid]").change(function() {';
         $html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
         $html .= '	});';
         $html .= '</script>';
-        $html .= "</tr>";
+        $html .= "</div>";
 
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['numget'] . "</td>";
-        $html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numget\" size=\"5\" value=\"" . $data_block['numget'] . "\"/></td>";
-        $html .= "</tr>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['numget'] . "</label>";
+        $html .= "	<div class=\"col-sm-18\"><input class=\"form-control w100\" type=\"text\" name=\"config_numget\" size=\"5\" value=\"" . $data_block['numget'] . "\"/></div>";
+        $html .= "</div>";
 
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['numrow'] . "</td>";
-        $html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
-        $html .= "</tr>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['numrow'] . "</label>";
+        $html .= "	<div class=\"col-sm-18\"><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></div>";
+        $html .= "</div>";
 
         return $html;
     }
