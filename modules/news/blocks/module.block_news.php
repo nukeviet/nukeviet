@@ -13,34 +13,67 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_news_block_news')) {
-
+    /**
+     * nv_block_config_news()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news($module, $data_block, $lang_block)
     {
-        $html = '<tr>';
-        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '	<td><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
-        $html .= '<td>';
-        $html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /><br /><br />';
         $tooltip_position = array(
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
             'left' => $lang_block['tooltip_position_left'],
             'right' => $lang_block['tooltip_position_right']
         );
-        $html .= '<span class="text-middle pull-left">' . $lang_block['tooltip_position'] . '&nbsp;</span><select name="config_tooltip_position" class="form-control w100 pull-left">';
+
+        $html = '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<div class="col-sm-18"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-sm-4">';
+        $html .= '<div class="checkbox"><label><input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></label>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group margin-bottom-sm">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<select name="config_tooltip_position" class="form-control">';
+
         foreach ($tooltip_position as $key => $value) {
             $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
         }
+
         $html .= '</select>';
-        $html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_news_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -54,6 +87,13 @@ if (!nv_function_exists('nv_news_block_news')) {
         return $return;
     }
 
+    /**
+     * nv_news_block_news()
+     *
+     * @param mixed $block_config
+     * @param mixed $mod_data
+     * @return
+     */
     function nv_news_block_news($block_config, $mod_data)
     {
         global $nv_Cache, $module_array_cat, $module_info, $db_slave, $module_config, $global_config, $site_mods;

@@ -332,6 +332,7 @@ function user_login($is_ajax = false)
     if (defined('NV_OPENID_ALLOWED')) {
         $assigns = array();
         $icons = array(
+            'single-sign-on' => 'lock',
             'google' => 'google-plus',
             'facebook' => 'facebook'
         );
