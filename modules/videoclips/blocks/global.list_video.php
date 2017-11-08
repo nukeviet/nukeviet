@@ -19,10 +19,10 @@ if (!nv_function_exists('nv4_block_list_video')) {
 
         $html_input = '';
         $html = '';
-        $html = '<tr>';
-        $html .= '<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '<td><input type="text" class="form-control w200" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
+        $html = '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['numrow'] . '</label>';
+        $html .= '<div class="col-sm-8"><input type="text" class="form-control w200" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
         return $html;
     }
 
