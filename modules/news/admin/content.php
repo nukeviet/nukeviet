@@ -729,7 +729,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     ' . $rowcontent['allowed_save'] . ',
                     ' . $rowcontent['gid'] . '
                 )');
-                $stmt->bindParam(':titlesite', $rowcontent['files'], PDO::PARAM_STR);
+                $stmt->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $stmt->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
                 $stmt->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
                 $stmt->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
