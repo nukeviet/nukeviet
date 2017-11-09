@@ -1,3 +1,7 @@
+.margin-bottom {
+    margin-bottom: 10px;
+}
+
 .exp_time {
 	line-height: 20px
 }
@@ -44,16 +48,6 @@
 	background-color: #f9f9f9
 }
 
-.list-funcs {
-	max-height: 330px;
-	width: 100%;
-	overflow: auto
-}
-
-.list-funcs td:hover {
-	background-color: #f4f4f4 !important
-}
-
 .tab_container label{
     text-align: right;
     display: inline-block;
@@ -96,7 +90,7 @@ ul.tabs li a {
 }
 ul.tabs li a:hover {
     background: #ccc;
-}   
+}
 html ul.tabs li.active, html ul.tabs li.active a:hover  {
     background: #fff;
     border-bottom: 1px solid #fff;
@@ -105,7 +99,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
     border: 1px solid #999;
     border-top: none;
     clear: both;
-    float: left; 
+    float: left;
     width: 100%;
     background: #fff;
     -moz-border-radius-bottomright: 5px;
@@ -127,5 +121,63 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 .tab_content .note {
 	font-style: italic;
 	display: block;
-	margin-bottom: 10px	
+	margin-bottom: 10px
+}
+
+.margin-top-lg {
+    margin-top: 15px;
+}
+
+.block-content-wrap {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.panel-block-content {
+    margin-bottom: 5px;
+}
+
+.panel-block-content-last {
+    margin-bottom: 0;
+}
+
+.checkbox > div {
+    margin-bottom: 3px;
+}
+
+.checkbox > div:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox > div > label [type="checkbox"] {
+    margin-top: 0;
+}
+
+.radio > label [type="radio"] {
+    margin-top: 0;
+}
+
+.list-group-users {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.funclist .dl-horizontal {
+    margin-bottom: 0;
+}
+
+#block_config > .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+.margin-bottom-sm {
+    margin-bottom: 15px;
+}
 }

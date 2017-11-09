@@ -9,8 +9,8 @@
 * @Createdate Jun 30, 2010, 03:30:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -26,6 +26,7 @@ $lang_module['check_server'] = 'Vérification du système';
 $lang_module['check_chmod'] = 'Vérification les permissions (CHMOD)';
 $lang_module['config_database'] = 'Configuration de base de données';
 $lang_module['website_info'] = 'Information du site';
+$lang_module['sample_data'] = 'Exemple de données';
 $lang_module['done'] = 'Terminer';
 $lang_module['select_lang_des'] = 'Veuillez sélectionner la langue utilisée sur votre site';
 $lang_module['choose_lang'] = 'Sélectionnez la langue';
@@ -267,3 +268,9 @@ $lang_module['thanks_list_member_all'] = 'Liste des membres:';
 $lang_module['thanks_list_member_other_version'] = 'La liste des membres Contribution de chaque version';
 $lang_module['thanks_other_version'] = 'Version';
 $lang_module['is_unofficial_mode'] = 'Note: Cette version est utilisée pour le développement et les tests, vous ne devriez pas être utilisé pour rendre le site officiel';
+$lang_module['spdata_name'] = 'Nom du package';
+$lang_module['spdata_compatible'] = 'Cet exemple de package de données est compatible';
+$lang_module['spdata_incompatible'] = 'Cet exemple de package est intégré au répertoire% s, l\'installation du site dans le répertoire% s entraînera des imprécisions.';
+$lang_module['spdata_root'] = 'Original';
+$lang_module['spdata_note'] = 'Sélectionnez l\'exemple de package en cliquant sur la cellule correspondante, puis en cliquant sur le bouton <strong /> Paramètres';
+$lang_module['spdata_choose'] = 'Installation';

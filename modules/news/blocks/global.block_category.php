@@ -13,14 +13,22 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_news_category')) {
+    /**
+     * nv_block_config_news_category()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_category($module, $data_block, $lang_block)
     {
         global $nv_Cache, $site_mods;
 
         $html_input = '';
-        $html = '<tr>';
-        $html .= '<td>' . $lang_block['catid'] . '</td>';
-        $html .= '<td><select name="config_catid" class="form-control w200">';
+        $html = '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['catid'] . ':</label>';
+        $html .= '<div class="col-sm-9"><select name="config_catid" class="form-control">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
@@ -41,25 +49,32 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= $html_input;
         $html .= '<script type="text/javascript">';
         $html .= '	$("select[name=config_catid]").change(function() {';
-        $html .= '		$("input[name=title]").val($("select[name=config_catid] option:selected").text());';
+        $html .= '		$("input[name=title]").val(trim($("select[name=config_catid] option:selected").text()));';
         $html .= '		$("input[name=link]").val($("#config_catid_" + $("select[name=config_catid]").val()).val());';
         $html .= '	});';
         $html .= '</script>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['title_length'] . '</td>';
-        $html .= '<td>';
-        $html .= "<select name=\"config_title_length\" class=\"form-control w200\">\n";
+        $html .= '</div></div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<div class="col-sm-9">';
+        $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
         $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
         }
         $html .= "</select>\n";
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= '</div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_news_category_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_category_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -71,6 +86,12 @@ if (!nv_function_exists('nv_news_category')) {
         return $return;
     }
 
+    /**
+     * nv_news_category()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_news_category($block_config)
     {
         global $module_array_cat, $lang_module, $global_config;
@@ -108,6 +129,14 @@ if (!nv_function_exists('nv_news_category')) {
         }
     }
 
+    /**
+     * nv_news_sub_category()
+     *
+     * @param mixed $list_sub
+     * @param mixed $title_length
+     * @param mixed $block_theme
+     * @return
+     */
     function nv_news_sub_category($list_sub, $title_length, $block_theme)
     {
         global $module_array_cat;

@@ -6,26 +6,16 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-function nv_chang_cat(catid, mod) {
-    var obj = $('#id_' + mod + '_' + catid);
-	var new_vid = obj.val();
-	if (mod == 'status' && new_vid == 0 && !confirm(obj.data('cmess'))) {
-	   obj.find('option').prop('selected', false);
-	   obj.find('option[value="' + obj.data('val') + '"]').prop('selected', true);
-	   return 0;
-	}
-    obj.prop('disabled', true);
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
-		var r_split = res.split('_');
-		if (r_split[0] != 'OK') {
-			alert(nv_is_change_act_confirm[2]);
-		}
-		obj.prop('disabled', false);
-		var parentid = parseInt(r_split[1]);
-		nv_show_list_cat(parentid);
-		return;
-	});
-	return;
+function nv_add_files(nv_admin_baseurl, nv_files_dir, nv_lang_delete, nv_lang_select) {
+    nv_num_files++;
+    $('#filearea').append('<div id="fileitem_' + nv_num_files + '" style="margin-bottom: 5px">' + '<input class="form-control pull-left w400" style="margin: 4px 4px 0 0;" type="text" name="files[]" id="fileupload_' + nv_num_files + '" value="" />' + '<input onclick="nv_open_browse( \'' + nv_admin_baseurl + 'index.php?' + nv_name_variable + '=upload&popup=1&area=fileupload_' + nv_num_files + '&path=' + nv_files_dir + '&type=file\', \'NVImg\', \'850\', \'500\', \'resizable=no,scrollbars=no,toolbar=no,location=no,status=no\' );return false;" type="button" value="' + nv_lang_select + '" class="selectfile btn btn-primary" style="margin-right: 3px" />' + '<input onclick="nv_delete_datacontent(\'fileitem_' + nv_num_files + '\');return false;" type="button" value="' + nv_lang_delete + '" class="selectfile btn btn-danger" />' + '</div>');
+
+    return false;
+}
+
+function nv_delete_datacontent(content) {
+    $('#' + content).remove();
+    return false;
 }
 
 function nv_show_list_cat(parentid) {
@@ -579,6 +569,71 @@ $(document).ready(function(){
         e.preventDefault();
         modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
     });
+    var popOverALl = new Array();
+    // Thay đổi thứ tự số chuyên mục: Thứ tự, số liên kết, ngày mới
+    $(document).delegate('[data-toggle="changecat"]', 'click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        popOverALl.push(this);
+        if (!$(this).data('havepop')) {
+            $(this).data('havepop', true);
+            $(this).popover({
+                container: "body",
+                html: true,
+                placement: "bottom",
+                content: getPopoverContent(this),
+                trigger: "manual"
+            });
+            $(this).popover('show');
+            $(this).on('shown.bs.popover', function() {
+                var $this = $(this);
+                var ctn = $('#' + $this.attr('aria-describedby'));
+                var wrapArea = ctn.find('.dropdown-cattool-ctn');
+                var wrapContent = ctn.find('.dropdown-cattool');
+                wrapContent.find('[data-value="' + $this.data('current') + '"]').addClass('active');
+                if (wrapArea.height() < wrapContent.height()) {
+                    var item = wrapContent.find('li:first');
+                    var scrollTop = ($this.data('current') - $this.data('min')) * item.height();
+                    wrapArea.scrollTop(scrollTop);
+                }
+            });
+        }
+    });
+    $(document).delegate('.dropdown-cattool a', 'click', function(e) {
+        e.preventDefault();
+        destroyAllPop();
+        var $this = $(this);
+        var ctn = $this.parent().parent();
+        var btn = $('#cat_' + ctn.data('mod') + '_' + ctn.data('catid'));
+    	if (ctn.data('mod') == 'status' && $this.data('value') == 0 && !confirm(btn.data('cmess'))) {
+    	   return 0;
+    	}
+        btn.find('span.text').html('<i class="fa fa-spinner fa-spin fa-fw"></i>' + $this.html());
+        btn.prop('disabled', true);
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(), 'catid=' + ctn.data('catid') + '&mod=' + ctn.data('mod') + '&new_vid=' + $this.data('value'), function(res) {
+    		var r_split = res.split('_');
+    		if (r_split[0] != 'OK') {
+    			alert(nv_is_change_act_confirm[2]);
+    		}
+    		var parentid = parseInt(r_split[1]);
+    		nv_show_list_cat(parentid);
+    		return;
+    	});
+    });
+    // Các thao tác với popover
+    $(document).delegate('div.popover', 'click', function(e) {
+        e.stopPropagation();
+    });
+    $(window).on('click', function() {
+        destroyAllPop();
+    });
+    function destroyAllPop() {
+        $.each(popOverALl, function(k, v) {
+            $(v).popover('destroy');
+            $(v).data('havepop', false);
+        });
+        popOverALl = new Array();
+    }
 
     // Setting Instant Articles
     $(document).delegate('[data-toggle="selectall"]', 'focus', function() {
@@ -607,4 +662,32 @@ function nv_sort_content(id, w) {
     $("#order_articles_number").val(w);
     $("#order_articles_new").val(w);
     return false;
+}
+
+function getPopoverContent(e) {
+    var tmpcat;
+    if ($(e).data('mod') == "status") {
+        tmpcat = $("#cat_list_status");
+    } else if ($(e).data('mod') == 'viewcat') {
+        if ($(e).data('mode') == 'full') {
+            tmpcat = $("#cat_list_full");
+        } else {
+            tmpcat = $("#cat_list_nosub");
+        }
+    } else {
+        var keyID = "#tmpcat_" + $(e).data('mod');
+        tmpcat = $(keyID);
+        if (tmpcat.length && tmpcat.data('num') != $(e).data('num')) {
+            tmpcat.remove();
+            tmpcat = $(keyID);
+        }
+        if (!tmpcat.length) {
+            $('body').append('<ul id="tmpcat_' + $(e).data('mod') + '" class="hidden" data-num="' + $(e).data('num') + '"></ul>');
+            tmpcat = $(keyID);
+            for (i = $(e).data('min'); i <= $(e).data('num'); i++) {
+                tmpcat.append('<li><a href="#" data-value="' + i + '">' + i + '</a></li>');
+            }
+        }
+    }
+    return '<div class="dropdown-cattool-ctn"><ul class="dropdown-cattool" data-mod="' + $(e).data('mod') + '" data-catid="' + $(e).data('catid') + '">' + tmpcat.html() + '</ul></div>';
 }

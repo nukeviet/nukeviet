@@ -141,6 +141,7 @@ if ($global_config['allowuserlogin']) {
 
         if (defined('NV_OPENID_ALLOWED')) {
             $icons = array(
+                'single-sign-on' => 'lock',
                 'google' => 'google-plus',
                 'facebook' => 'facebook'
             );

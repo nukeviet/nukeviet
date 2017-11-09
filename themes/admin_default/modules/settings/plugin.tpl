@@ -33,7 +33,7 @@
 					<select name="plugin_file" class="form-control w200">
 						<option value=""> -- </option>
 						<!-- BEGIN: file -->
-						<option value="{PLUGIN_FILE}">{PLUGIN_FILE} </option>
+						<option value="{PLUGIN_FILE}" {PLUGIN_SELECTED}>{PLUGIN_FILE} </option>
 						<!-- END: file -->
 					</select> &nbsp;
 					<select name="plugin_area" class="form-control w200">
@@ -48,4 +48,9 @@
 		</table>
 	</div>
 </form>
+<script type="text/javascript">
+    $("select[name=plugin_file]").change(function() {
+        window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&plugin_file=' + $(this).val();
+    });
+</script>    
 <!-- END: main -->

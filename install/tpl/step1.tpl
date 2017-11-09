@@ -66,6 +66,7 @@
 			<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a>, 
 			<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen</a>, 
 			<a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>, 
+            <a target="_blank" href="https://github.com/tdfoss">tdfoss</a>,
 			<a target="_blank" href="https://github.com/thehung">thehung</a>, 
 			dinhpc86 at gmail.com, 
 			<a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a>, 
@@ -95,8 +96,20 @@
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                
+                <h5>{LANG.thanks_other_version} 4.3</h5>
+                    VINADES.,JSC (132 commits), 
+                    <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (17 commits)</a>,
+                    <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet (11 commits)</a>,
+                    <a target="_blank" href="https://github.com/tdfoss">tdfoss (9 commits)</a>,
+                    <a target="_blank" href="https://github.com/vuthao">vuthao (8 commits)</a>,
+                    <a target="_blank" href="https://github.com/mynukeviet">mynukeviet (4 commits)</a>,
+                    <a target="_blank" href="https://github.com/thehung">thehung (3 commits)</a>,
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,
+                    <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp (1 commits)</a>
+                    <br><br>
                 <h5>{LANG.thanks_other_version} 4.2</h5>
-                    VINADES.,JSC (238 commits)</a>,             
+                    VINADES.,JSC (238 commits),             
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (64 commits)</a>,
                     <a target="_blank" href="https://github.com/vuthao">vuthao (31 commits)</a>,
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (7 commits)</a>,
@@ -105,7 +118,7 @@
                     <a target="_blank" href="https://github.com/thehung">thehung (1 commits)</a>
                  <br><br>
 				<h5>{LANG.thanks_other_version} 4.1</h5>
-					VINADES.,JSC (197 commits)</a>, 
+					VINADES.,JSC (197 commits), 
 					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (131 commits)</a>, 
 					<a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet (19 commits)</a>, 
 					<a target="_blank" href="https://github.com/vuthao">vuthao (17 commits)</a>, 
@@ -122,7 +135,7 @@
 				 <br><br>
 
 				<h5>{LANG.thanks_other_version} 4.0</h5>
-					VINADES.,JSC (713 commits)</a>, 
+					VINADES.,JSC (713 commits) 
 					<a target="_blank" href="https://github.com/vuthao">vuthao (1360 commits)</a>, 
 					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (547 commits)</a>, 
 					<a target="_blank" href="https://github.com/mynukeviet">mynukeviet (219 commits)</a>, 
@@ -141,14 +154,14 @@
 					<a target="_blank" href="https://github.com/webvang">webvang (1 commits)</a>
 				 <br><br>
 				<h5>{LANG.thanks_other_version} 3.4</h5>
-					VINADES.,JSC (74 commits)</a>, 
+					VINADES.,JSC (74 commits), 
 					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (245 commits)</a>, 
 					<a target="_blank" href="https://github.com/vuthao">vuthao (60 commits)</a>, 
 					<a target="_blank" href="https://github.com/thehung">thehung (23 commits)</a>, 
 					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (5 commits)</a>
 				 <br><br>
 				<h5>{LANG.thanks_other_version} 3.3</h5>
-					VINADES.,JSC (29 commits)</a>, 
+					VINADES.,JSC (29 commits), 
 					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (24 commits)</a>, 
 					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (20 commits)</a>, 
 					<a target="_blank" href="https://github.com/thehung">thehung (5 commits)</a>

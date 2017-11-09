@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -37,6 +37,7 @@ $lang_module['disable_content'] = 'Notification de fermeture du site';
 $lang_module['submit'] = 'Enregistrer cette configuration';
 $lang_module['err_writable'] = 'Erreur: impossible d\'entregister le fichier: %s merci de vérifier les permissions (chmod) de ce fichier.';
 $lang_module['err_supports_rewrite'] = 'Erreur: le serveur ne supporte pas le module rewrite';
+$lang_module['err_save_sysconfig'] = 'Les modifications ont été enregistrées, mais le système est pas configuré pour enregistrer le fichier. Écrivons les autorisations pour le fichier% s puis refaisons';
 $lang_module['security'] = 'Configuration de la sécurité';
 $lang_module['is_flood_blocker'] = 'Active la capacité contre flood';
 $lang_module['max_requests_60'] = 'Le nombre de requests maximum pendant 1 minutes';
@@ -244,8 +245,7 @@ $lang_module['two_step_verification0'] = 'Ne demandez pas';
 $lang_module['two_step_verification1'] = 'Admin Area';
 $lang_module['two_step_verification2'] = 'Espace extérieur du site';
 $lang_module['two_step_verification3'] = 'Toutes les zones';
+$lang_module['two_step_verification_note'] = 'Remarque: Cette configuration applique à l\'ensemble du compte du groupe, le cas échéant être configuré individuellement pour chaque groupe de choisir cette valeur est <strong />%s puis modifiez le <a href="%" /> puis sélectionnez l\'authentification obligatoire en deux étapes du groupe de la zone activée à volonté';
 $lang_module['site_phone'] = 'Nom du fichier Téléphone';
 $lang_module['googleMapsAPI'] = 'Google Maps API key';
 $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guides obtiennent clé API</a>';
-$lang_module['err_save_sysconfig'] = 'Les modifications ont été enregistrées, mais le système est pas configuré pour enregistrer le fichier. Écrivons les autorisations pour le fichier% s puis refaisons';
-$lang_module['two_step_verification_note'] = 'Remarque: Cette configuration applique à l\'ensemble du compte du groupe, le cas échéant être configuré individuellement pour chaque groupe de choisir cette valeur est <strong />%s puis modifiez le <a href="%" /> puis sélectionnez l\'authentification obligatoire en deux étapes du groupe de la zone activée à volonté';

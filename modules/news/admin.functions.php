@@ -242,13 +242,30 @@ function nv_show_cat_list($parentid = 0)
     if ($parentid > 0) {
         $parentid_i = $parentid;
         $array_cat_title = array();
+        $stt = 0;
         while ($parentid_i > 0) {
-            $array_cat_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $parentid_i . "\"><strong>" . $global_array_cat[$parentid_i]['title'] . "</strong></a>";
+            $array_cat_title[] = array(
+                'active' => ($stt++ == 0) ? true : false,
+                'link' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $parentid_i,
+                'title' => $global_array_cat[$parentid_i]['title']
+            );
             $parentid_i = $global_array_cat[$parentid_i]['parentid'];
         }
-        sort($array_cat_title, SORT_NUMERIC);
+        $array_cat_title[] = array(
+            'active' => false,
+            'link' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat",
+            'title' => $lang_module['cat_parent']
+        );
+        krsort($array_cat_title, SORT_NUMERIC);
 
-        $xtpl->assign('CAT_TITLE', implode(' &raquo; ', $array_cat_title));
+        foreach ($array_cat_title as $cat) {
+            $xtpl->assign('CAT', $cat);
+            if ($cat['active']) {
+                $xtpl->parse('main.cat_title.active');
+            } else {
+                $xtpl->parse('main.cat_title.loop');
+            }
+        }
         $xtpl->parse('main.cat_title');
     }
 
@@ -262,6 +279,10 @@ function nv_show_cat_list($parentid = 0)
         $lang_module['cat_status_2']
     );
     $is_large_system = (nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS);
+
+    $xtpl->assign('MAX_WEIGHT', $num);
+    $xtpl->assign('MAX_NUMLINKS', 20);
+    $xtpl->assign('MAX_NEWDAY', 10);
 
     foreach ($rowall as $row) {
         list($catid, $parentid, $title, $alias, $weight, $viewcat, $numsubcat, $numlinks, $newday, $status) = $row;
@@ -306,32 +327,25 @@ function nv_show_cat_list($parentid = 0)
                 'adminfuncs' => implode(' ', $admin_funcs)
             ));
 
+            $xtpl->assign('STT', $a);
+            $xtpl->assign('STATUS', $status > $global_code_defined['cat_locked_status'] ? $lang_module['cat_locked_byparent'] : $array_status[$status]);
+            $xtpl->assign('STATUS_VAL', $status);
+            $xtpl->assign('VIEWCAT', $array_viewcat[$viewcat]);
+            $xtpl->assign('VIEWCAT_VAL', $viewcat);
+            $xtpl->assign('VIEWCAT_MODE', $numsubcat > 0 ? 'full' : 'nosub');
+            $xtpl->assign('NUMLINKS', $numlinks);
+            $xtpl->assign('NEWDAY', $newday);
+
             if ($weight_disabled) {
-                $xtpl->assign('STT', $a);
                 $xtpl->parse('main.data.loop.stt');
             } else {
-                for ($i = 1; $i <= $num; ++$i) {
-                    $xtpl->assign('WEIGHT', array(
-                        'key' => $i,
-                        'title' => $i,
-                        'selected' => $i == $weight ? ' selected="selected"' : ''
-                    ));
-                    $xtpl->parse('main.data.loop.weight.loop');
-                }
                 $xtpl->parse('main.data.loop.weight');
             }
 
             if ($func_cat_disabled) {
-                $xtpl->assign('STATUS', $status > $global_code_defined['cat_locked_status'] ? $lang_module['cat_locked_byparent'] : $array_status[$status]);
                 $xtpl->parse('main.data.loop.disabled_status');
-
-                $xtpl->assign('VIEWCAT', $array_viewcat[$viewcat]);
                 $xtpl->parse('main.data.loop.disabled_viewcat');
-
-                $xtpl->assign('NUMLINKS', $numlinks);
                 $xtpl->parse('main.data.loop.title_numlinks');
-
-                $xtpl->assign('NEWDAY', $newday);
                 $xtpl->parse('main.data.loop.title_newday');
             } else {
                 if ($status > $global_code_defined['cat_locked_status']) {
@@ -341,48 +355,11 @@ function nv_show_cat_list($parentid = 0)
                     $xtpl->assign('STATUS', $array_status[$status]);
                     $xtpl->parse('main.data.loop.disabled_status');
                 } else {
-                    $xtpl->assign('STATUS_VAL', $status);
-                    foreach ($array_status as $key => $val) {
-                        if (!$is_large_system or $key != 0) {
-                            $xtpl->assign('STATUS', array(
-                                'key' => $key,
-                                'title' => $val,
-                                'selected' => $key == $status ? ' selected="selected"' : ''
-                            ));
-                            $xtpl->parse('main.data.loop.status.loop');
-                        }
-                    }
                     $xtpl->parse('main.data.loop.status');
                 }
 
-                foreach ($array_viewcat as $key => $val) {
-                    $xtpl->assign('VIEWCAT', array(
-                        'key' => $key,
-                        'title' => $val,
-                        'selected' => $key == $viewcat ? ' selected="selected"' : ''
-                    ));
-                    $xtpl->parse('main.data.loop.viewcat.loop');
-                }
                 $xtpl->parse('main.data.loop.viewcat');
-
-                for ($i = 0; $i <= 20; ++$i) {
-                    $xtpl->assign('NUMLINKS', array(
-                        'key' => $i,
-                        'title' => $i,
-                        'selected' => $i == $numlinks ? ' selected="selected"' : ''
-                    ));
-                    $xtpl->parse('main.data.loop.numlinks.loop');
-                }
                 $xtpl->parse('main.data.loop.numlinks');
-
-                for ($i = 0; $i <= 10; ++$i) {
-                    $xtpl->assign('NEWDAY', array(
-                        'key' => $i,
-                        'title' => $i,
-                        'selected' => $i == $newday ? ' selected="selected"' : ''
-                    ));
-                    $xtpl->parse('main.data.loop.newday.loop');
-                }
                 $xtpl->parse('main.data.loop.newday');
             }
 
@@ -397,6 +374,23 @@ function nv_show_cat_list($parentid = 0)
     }
 
     if ($num > 0) {
+        foreach ($array_viewcat_full as $k => $v) {
+            $xtpl->assign('K', $k);
+            $xtpl->assign('V', $v);
+            $xtpl->parse('main.data.viewcat_full');
+        }
+        foreach ($array_viewcat_nosub as $k => $v) {
+            $xtpl->assign('K', $k);
+            $xtpl->assign('V', $v);
+            $xtpl->parse('main.data.viewcat_nosub');
+        }
+        foreach ($array_status as $key => $val) {
+            if (!$is_large_system or $key != 0) {
+                $xtpl->assign('K', $key);
+                $xtpl->assign('V', $val);
+                $xtpl->parse('main.data.status');
+            }
+        }
         $xtpl->parse('main.data');
     }
 

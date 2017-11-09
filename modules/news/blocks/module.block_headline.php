@@ -8,29 +8,68 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_headline')) {
+if (!nv_function_exists('nv_block_headline')) {
+    /**
+     * nv_block_config_news_headline()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_headline($module, $data_block, $lang_block)
     {
-        $html = '<tr>';
-        $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
-        $html .= '<td>';
-        $html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /><br /><br />';
-        $tooltip_position = array( 'top' => $lang_block['tooltip_position_top'], 'bottom' => $lang_block['tooltip_position_bottom'], 'left' => $lang_block['tooltip_position_left'], 'right' => $lang_block['tooltip_position_right'] );
-        $html .= '<span class="text-middle pull-left">' . $lang_block['tooltip_position'] . '&nbsp;</span><select name="config_tooltip_position" class="form-control w100 pull-left">';
+        $tooltip_position = array(
+            'top' => $lang_block['tooltip_position_top'],
+            'bottom' => $lang_block['tooltip_position_bottom'],
+            'left' => $lang_block['tooltip_position_left'],
+            'right' => $lang_block['tooltip_position_right']
+        );
+
+        $html = '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-sm-4">';
+        $html .= '<div class="checkbox"><label><input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></label>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group margin-bottom-sm">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<select name="config_tooltip_position" class="form-control">';
+
         foreach ($tooltip_position as $key => $value) {
             $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
         }
+
         $html .= '</select>';
-        $html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_news_headline_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_headline_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -43,6 +82,12 @@ if (! nv_function_exists('nv_block_headline')) {
         return $return;
     }
 
+    /**
+     * nv_block_headline()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_block_headline($block_config)
     {
         global $nv_Cache, $module_name, $module_data, $db_slave, $my_head, $module_info, $module_upload, $global_array_cat, $global_config;
@@ -55,11 +100,7 @@ if (! nv_function_exists('nv_block_headline')) {
             $array_bid_content = unserialize($cache);
         } else {
             $id = 0;
-            $db_slave->sqlreset()
-                ->select('bid, title, numbers')
-                ->from(NV_PREFIXLANG . '_' . $module_data . '_block_cat')
-                ->order('weight ASC')
-                ->limit(2);
+            $db_slave->sqlreset()->select('bid, title, numbers')->from(NV_PREFIXLANG . '_' . $module_data . '_block_cat')->order('weight ASC')->limit(2);
             $result = $db_slave->query($db_slave->sql());
 
             while (list($bid, $titlebid, $numberbid) = $result->fetch(3)) {
@@ -73,13 +114,7 @@ if (! nv_function_exists('nv_block_headline')) {
             }
 
             foreach ($array_bid_content as $i => $array_bid) {
-                $db_slave->sqlreset()
-                    ->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt, t1.hometext, t1.external_link')
-                    ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
-                    ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')
-                    ->where('t1.status= 1 AND t2.bid=' . $array_bid['bid'])
-                    ->order('t2.weight ASC')
-                    ->limit($array_bid['number']);
+                $db_slave->sqlreset()->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt, t1.hometext, t1.external_link')->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')->where('t1.status= 1 AND t2.bid=' . $array_bid['bid'])->order('t2.weight ASC')->limit($array_bid['number']);
 
                 $result = $db_slave->query($db_slave->sql());
                 $array_content = array();
@@ -107,7 +142,7 @@ if (! nv_function_exists('nv_block_headline')) {
         $xtpl->assign('TEMPLATE', $module_info['template']);
 
         $images = array();
-        if (! empty($array_bid_content[1]['content'])) {
+        if (!empty($array_bid_content[1]['content'])) {
             $hot_news = $array_bid_content[1]['content'];
             $a = 0;
             foreach ($hot_news as $hot_news_i) {
@@ -116,14 +151,14 @@ if (! nv_function_exists('nv_block_headline')) {
                     $hot_news_i['target_blank'] = 'target="_blank"';
                 }
 
-                if (! empty($hot_news_i['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'])) {
+                if (!empty($hot_news_i['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'])) {
                     $images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'];
                 } elseif (nv_is_url($hot_news_i['homeimgfile'])) {
                     $images_url = $hot_news_i['homeimgfile'];
                 }
 
-                if (! empty($images_url)) {
-                    $hot_news_i['image_alt'] = ! empty($hot_news_i['homeimgalt']) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
+                if (!empty($images_url)) {
+                    $hot_news_i['image_alt'] = !empty($hot_news_i['homeimgalt']) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
                     $hot_news_i['imgID'] = $a;
                     $images[] = $images_url;
                     $xtpl->assign('HOTSNEWS', $hot_news_i);
@@ -139,9 +174,9 @@ if (! nv_function_exists('nv_block_headline')) {
             $xtpl->parse('main.loop_tabs_title');
 
             $content_bid = $array_bid['content'];
-            if (! empty($content_bid)) {
+            if (!empty($content_bid)) {
                 foreach ($content_bid as $lastest) {
-                    if (! empty($lastest['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $lastest['homeimgfile'])) {
+                    if (!empty($lastest['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $lastest['homeimgfile'])) {
                         $lastest['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $lastest['homeimgfile'];
                     } elseif (nv_is_url($lastest['homeimgfile'])) {
                         $lastest['homeimgfile'] = $lastest['homeimgfile'];
@@ -149,7 +184,7 @@ if (! nv_function_exists('nv_block_headline')) {
                         $lastest['homeimgfile'] = '';
                     }
 
-                    if (! $block_config['showtooltip']) {
+                    if (!$block_config['showtooltip']) {
                         $xtpl->assign('TITLE', 'title="' . $lastest['title'] . '"');
                     }
 
@@ -174,7 +209,7 @@ if (! nv_function_exists('nv_block_headline')) {
             $xtpl->parse('main.tooltip');
         }
 
-        if (empty($my_head) or ! preg_match("/jquery\.imgpreload\.min\.js[^>]+>/", $my_head)) {
+        if (empty($my_head) or !preg_match("/jquery\.imgpreload\.min\.js[^>]+>/", $my_head)) {
             $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
         }
 

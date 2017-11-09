@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -138,6 +138,7 @@ $lang_module['errorsave'] = 'Erreurs: Impossible d\'ajouter, vérifiez si le tit
 $lang_module['update_content'] = 'Éditer l\'article';
 $lang_module['del_content'] = 'Supprimer l\'article';
 $lang_module['no_public'] = 'Note: Cet article n\'est pas encore publié, seulement les gens qui ont le droit peuvent le regarder';
+$lang_module['insrss_not_auth'] = 'Pare-feu a bloqué l\'accès à cette zone';
 $lang_module['status_alert'] = 'Article est en état:  %1$s';
 $lang_module['status_0'] = 'Désactiver';
 $lang_module['status_1'] = 'Publié';
@@ -150,4 +151,9 @@ $lang_module['status_7'] = 'En cours d\'examiner';
 $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
-$lang_module['insrss_not_auth'] = 'Pare-feu a bloqué l\'accès à cette zone';
+$lang_module['pick_layout'] = 'Choisissez une mise en page pour l\'article';
+$lang_module['click_to_download'] = 'Cliquez pour télécharger';
+$lang_module['files'] = 'Joindre des fichiers';
+$lang_module['default_layout'] = 'Par défaut';
+$lang_module['download'] = 'Fichier';
+$lang_module['quick_view_pdf'] = 'Aperçu';
