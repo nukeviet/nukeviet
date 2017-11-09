@@ -9,8 +9,8 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -47,6 +47,7 @@ $lang_module['status_7'] = 'En cours d\'examiner d\'article';
 $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
+$lang_module['status_lockbycat'] = 'Verrouillé par catégories';
 $lang_module['errorsave'] = 'Erreur: il est impossible de mettre à jour, vérifiez si le titre ou l\'alias a été utilisé';
 $lang_module['errorexists'] = 'Erreur: le titre ou le lien statique est dupliqué, entrez une valeur différente';
 $lang_module['saveok'] = 'Mise à jour réussie';
@@ -69,6 +70,11 @@ $lang_module['cat_instant_viewsimple'] = 'Voir URL de flux RSS';
 $lang_module['cat_instant_title'] = 'Les flux RSS, URL instantanée';
 $lang_module['show_hide_pass'] = 'Afficher / Masquer le mot de passe';
 $lang_module['gen_rand_pass'] = 'Généré au hasard';
+$lang_module['cat_status_0'] = 'Suspension active';
+$lang_module['cat_status_1'] = 'Actif, affiché sur la page d\'accueil';
+$lang_module['cat_status_2'] = 'Actif, non visible sur la page d\'accueil';
+$lang_module['cat_status_0_confirm'] = 'Remarque: La suspension de ce forum arrêtera tous les messages actifs dans le forum et ses sous-catégories. Êtes-vous sûr de ne pas?';
+$lang_module['cat_locked_byparent'] = 'Lock par la catégorie père';
 $lang_module['description'] = 'Description';
 $lang_module['viewdescription'] = 'Faire apparaître le contenu en détail en regardant l\'article';
 $lang_module['viewdescription_0'] = 'Cacher';
@@ -88,6 +94,7 @@ $lang_module['edit_block_cat'] = 'Éditer le groupe de blocks';
 $lang_module['link'] = 'Lien de la source';
 $lang_module['cat_sub'] = 'Catégorie';
 $lang_module['cat_sub_sl'] = 'Catégorie principale';
+$lang_module['cat_parent'] = 'Catégorie principale';
 $lang_module['note_cat_title'] = 'Sans catégorie';
 $lang_module['note_cat_content'] = 'Vous avez besoin de la catégorie avant d\'ajouter de nouveaux messages. Le système vous passer à la <strong>Gérer les catégories</strong> dans le moment!';
 $lang_module['topic_sl'] = 'Sélectionnez ou tapez le sujet';
@@ -215,6 +222,7 @@ $lang_module['content_instant_active'] = 'Cet article est instantanée';
 $lang_module['content_instant_template'] = 'échantillon';
 $lang_module['content_instant_templatenote'] = 'Blank-à-dire à l\'aide de modèles par défaut';
 $lang_module['content_instant_creatauto'] = 'Créer automatiquement l\'article instantané de l\'article souvent';
+$lang_module['content_locked_bycat'] = 'Verrouiller par catégories';
 $lang_module['showtooltip'] = 'Afficher tooltips';
 $lang_module['showtooltip_position'] = 'Position de l\'affichage';
 $lang_module['showtooltip_position_top'] = 'Au dessus';
@@ -328,6 +336,19 @@ $lang_module['dulicate_takeover'] = 'Prendre en charge l\'éditeur de la publica
 $lang_module['dulicate_edit_takeover'] = 'Vous avez été pris en charge par ce compte %s à %s. Vos modifications ne peuvent pas être sauvegardées dans le système, copiez-les à nouveau pour éviter de perdre vos modifications.';
 $lang_module['setting_copy_news'] = 'Nouvelles de copie';
 $lang_module['title_copy_news'] = 'Copier l\'article';
+$lang_module['order_articles'] = 'Trier les articles';
+$lang_module['order_articles_0'] = 'Trier par heure de publication';
+$lang_module['order_articles_1'] = 'Personnaliser, incrémenter la numérotation';
+$lang_module['order_articles_number'] = 'Non arrangements actuels';
+$lang_module['order_articles_new'] = 'Non arrangements actuels';
+$lang_module['pick_layout'] = 'Choisissez une mise en page pour l\'article';
+$lang_module['default_layout'] = 'Par défaut';
+$lang_module['setting_frontend_post'] = 'Configurer la zone de publication sur la page de l\'utilisateur';
+$lang_module['frontend_edit_alias'] = 'Autoriser la liaison statique personnalisée lors de la publication de nouveaux';
+$lang_module['frontend_edit_layout'] = 'Vous permet de personnaliser la mise en page';
+$lang_module['large_sys_message'] = 'Note: Il y a actuellement des messages <strong />% s  sur le site, après avoir posté plus de messages, ce système deviendra un grand système. Pour assurer la sécurité du serveur, certaines fonctionnalités telles que la suspension, la réactivation des catégories seront verrouillées. Avant de poster, veuillez vérifier les catégories du forum si vous devez réactiver ou supprimer les messages qu\'il contient.';
+$lang_module['fileattach'] = 'Pièces jointes';
+$lang_module['add'] = 'Ajouter';
 $lang_module['status_12'] = 'Sauvegarder l\'article, passer à la rédacteur';
 $lang_module['status_13'] = 'Sauvegarder l\'article, passer à la rédacteur en chef';
 $lang_module['error_edit'] = 'Les messages sont des modérateurs modérés. Vous ne pouvez pas éditer ensuite.';

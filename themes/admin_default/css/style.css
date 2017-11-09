@@ -965,8 +965,7 @@ button.close {
 }
 
 .select2-container--default .select2-selection--single,
-.select2-container--bootstrap .select2-selection--single
-{
+.select2-container--bootstrap .select2-selection--single {
 	height: 32px !important;
     padding-top: 2px;
 }
@@ -975,4 +974,9 @@ input[type=text].required, input[type=password].required, input[type=email].requ
     background-image: url(../images/icons/required.png);
     background-position: right center;
     background-repeat: no-repeat;
+}
+
+div.checkbox [type="checkbox"],
+div.radio [type="radio"] {
+    margin-top: 0;
 }

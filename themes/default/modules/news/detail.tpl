@@ -46,9 +46,9 @@
             </figure>
             <!-- END: empty -->
 			<!-- END: imgthumb -->
-			 
+
 			 <div class="hometext m-bottom">{DETAIL.hometext}</div>
-			
+
     		<!-- BEGIN: imgfull -->
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
@@ -60,6 +60,50 @@
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
 			{DETAIL.bodyhtml}
 		</div>
+		<!-- BEGIN: files -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-download fa-fw"></i><strong>{LANG.files}</strong>
+            </div>
+    		<div class="list-group news-download-file">
+    		    <!-- BEGIN: loop -->
+    		    <div class="list-group-item">
+    		        <!-- BEGIN: show_quick_viewpdf -->
+                    <span class="badge">
+                        <a role="button" data-toggle="collapse" href="#pdf{FILE.key}" aria-expanded="false" aria-controls="pdf{FILE.key}">
+                            <i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i>
+                        </a>
+                    </span>
+                    <!-- END: show_quick_viewpdf -->
+    		        <!-- BEGIN: show_quick_viewimg -->
+                    <span class="badge">
+                        <a href="javascript:void(0)" data-src="{FILE.src}" data-toggle="newsattachimage">
+                            <i class="fa fa-file-image-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i>
+                        </a>
+                    </span>
+                    <!-- END: show_quick_viewimg -->
+    		        <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
+    		        <!-- BEGIN: content_quick_viewpdf -->
+    		        <div class="clearfix"></div>
+    		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
+    		            <div class="well margin-top">
+    		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+    		            </div>
+    		        </div>
+    		        <!-- END: content_quick_viewpdf -->
+    		        <!-- BEGIN: content_quick_viewdoc -->
+    		        <div class="clearfix"></div>
+    		        <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urldoc}" data-toggle="collapsepdf">
+    		            <div class="well margin-top">
+    		                <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+    		            </div>
+    		        </div>
+    		        <!-- END: content_quick_viewdoc -->
+    		    </div>
+    		    <!-- END: loop -->
+    		</div>
+        </div>
+		<!-- END: files -->
 		<!-- BEGIN: author -->
         <div class="margin-bottom-lg">
     		<!-- BEGIN: name -->
@@ -115,29 +159,29 @@
                 </div>
             </div>
         </form>
-<script>
-$(function() {
-    var sr = 0;
-    $(".hover-star").rating({
-    	focus: function(b, c) {
-    		var a = $("#hover-test");
-    		2 != sr && (a[0].data = a[0].data || a.html(), a.html(c.title || "value: " + b), sr = 1)
-    	},
-    	blur: function(b, c) {
-    		var a = $("#hover-test");
-    		2 != sr && ($("#hover-test").html(a[0].data || ""), sr = 1)
-    	},
-    	callback: function(b, c) {
-    		1 == sr && (sr = 2, $(".hover-star").rating("disable"), sendrating("{NEWSID}", b, "{NEWSCHECKSS}"))
-    	}
-    });
-    $(".hover-star").rating("select", "{NUMBERRATING}");
-    <!-- BEGIN: disablerating -->
-    $(".hover-star").rating('disable');
-    sr = 2;
-    <!-- END: disablerating -->
-})
-</script>
+        <script type="text/javascript">
+        $(function() {
+            var sr = 0;
+            $(".hover-star").rating({
+            	focus: function(b, c) {
+            		var a = $("#hover-test");
+            		2 != sr && (a[0].data = a[0].data || a.html(), a.html(c.title || "value: " + b), sr = 1)
+            	},
+            	blur: function(b, c) {
+            		var a = $("#hover-test");
+            		2 != sr && ($("#hover-test").html(a[0].data || ""), sr = 1)
+            	},
+            	callback: function(b, c) {
+            		1 == sr && (sr = 2, $(".hover-star").rating("disable"), sendrating("{NEWSID}", b, "{NEWSCHECKSS}"))
+            	}
+            });
+            $(".hover-star").rating("select", "{NUMBERRATING}");
+            <!-- BEGIN: disablerating -->
+            $(".hover-star").rating('disable');
+            sr = 2;
+            <!-- END: disablerating -->
+        })
+        </script>
     </div>
 </div>
 <!-- END: allowed_rating -->
@@ -226,6 +270,7 @@ $(function() {
     </div>
 </div>
 <!-- END: others -->
+
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->

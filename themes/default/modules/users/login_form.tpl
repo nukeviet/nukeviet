@@ -87,11 +87,11 @@
         <!-- END: allowuserreg_linkform -->
 
         <!-- BEGIN: openid -->
-       	<hr />
-       	<div class="text-center">
+       	<div class="text-center openid-btns">
       		<!-- BEGIN: server -->
-            <div class="btn-group m-bottom">
-                <button class="btn openid-{OPENID.server} disabled"><i class="fa fa-{OPENID.icon}" style="width: 15px">&nbsp;</i></button> <a class="btn openid-{OPENID.server}" href="{OPENID.href}" onclick="return openID_load(this);" style="width: 175px">{LANG.login_with} {OPENID.title}</a>
+            <div class="btn-group m-bottom btn-group-justified">
+                <button class="btn openid-{OPENID.server} disabled" type="button" tabindex="-1"><i class="fa fa-fw fa-{OPENID.icon}"></i></button>
+                <a class="btn openid-{OPENID.server}" href="{OPENID.href}" onclick="return openID_load(this);">{LANG.login_with} {OPENID.title}</a>
             </div>
             <!-- END: server -->
        	</div>

@@ -88,6 +88,7 @@ $sth->execute(array( 'main', 'main', 'main', 'comment', 1, 0, 1, ''));
 $sth->execute(array( 'post', 'post', 'post', 'comment', 1, 0, 2, ''));
 $sth->execute(array( 'like', 'like', 'Like', 'comment', 1, 0, 3, ''));
 $sth->execute(array( 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, ''));
+$sth->execute(array( 'down', 'down', 'Down', 'comment', 1, 0, 5, ''));
 //Page
 $sth->execute(array( 'main', 'main', 'Main', 'page', 1, 0, 1, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, ''));

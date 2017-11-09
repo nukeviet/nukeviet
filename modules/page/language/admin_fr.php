@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 31, 2015, 09:30:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 31, 2015, 09:30:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -23,6 +23,8 @@ $lang_module['list'] = 'Liste des articles';
 $lang_module['add'] = 'Ajouter un article';
 $lang_module['send'] = 'Publiez';
 $lang_module['title'] = 'Titre de l\'article';
+$lang_module['add_time'] = 'Date affichée';
+$lang_module['edit_time'] = 'dernière mise à jour';
 $lang_module['order'] = 'Numero';
 $lang_module['status'] = 'Etat';
 $lang_module['active'] = 'Active';
@@ -49,6 +51,8 @@ $lang_module['imgposition'] = 'Lieu de Création';
 $lang_module['imgposition_0'] = 'Non illustré';
 $lang_module['imgposition_1'] = 'Afficher la description à gauche';
 $lang_module['imgposition_2'] = 'Montrer comme décrit';
+$lang_module['group_post'] = 'Articles de rubrique';
+$lang_module['hot_post'] = 'Sélection';
 $lang_module['layout_func'] = 'Utilisation des layouts';
 $lang_module['layout_default'] = 'Par défaut';
 $lang_module['googleplus'] = 'Certificat de Google+';
@@ -65,11 +69,5 @@ $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = '(Sous formet 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xRegarder en détail</a>)';
 $lang_module['config_alias_lower'] = 'Alias chaîne inférieure automatique';
 $lang_module['config_save'] = 'Sauvegarder la configuration';
-
-$lang_module['add_time'] = 'Date affichée';
-$lang_module['edit_time'] = 'dernière mise à jour';
-$lang_module['group_post'] = 'Articles de rubrique';
-$lang_module['hot_post'] = 'Sélection';
-
-$lang_module['setting_copy_page']= 'Page de copie';
-$lang_module['title_copy_page']= 'Copier l\'article';
+$lang_module['setting_copy_page'] = 'Page de copie';
+$lang_module['title_copy_page'] = 'Copier l\'article';

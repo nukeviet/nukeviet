@@ -181,6 +181,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
      description text NOT NULL,
 	 bodyhtml longtext NOT NULL,
 	 sourcetext varchar(255) default '',
+	 files TEXT NULL,
 	 imgposition tinyint(1) NOT NULL default '1',
 	 layout_func varchar(100) DEFAULT '',
 	 copyright tinyint(1) NOT NULL default '0',

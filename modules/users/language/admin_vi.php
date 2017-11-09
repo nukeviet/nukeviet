@@ -79,7 +79,7 @@ $lang_module['deletequestion'] = 'Xóa câu hỏi bảo mật';
 $lang_module['errornotitle'] = 'Lỗi bạn chưa nhập câu hỏi bảo mật';
 
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề có thể bị trùng';
-$lang_module['weight'] = 'vị trí';
+$lang_module['weight'] = 'Vị trí';
 $lang_module['save'] = 'Lưu';
 $lang_module['siteterms'] = 'Quy định đăng ký';
 $lang_module['error_content'] = 'Bạn cần nhập nội quy site';

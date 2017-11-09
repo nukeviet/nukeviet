@@ -26,17 +26,17 @@ if (!nv_function_exists('nv_block_voting_select')) {
         global $nv_Cache, $site_mods;
 
         $html = '';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['vid'] . '</td>';
-        $html .= '<td><select name="vid" class="w300 form-control">';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['vid'] . ':</label>';
+        $html .= '<div class="col-sm-9"><select name="vid" class="form-control">';
         $sql = 'SELECT vid, question,acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', $module);
         foreach ($list as $l) {
             $sel = ($data_block['vid'] == $l['vid']) ? ' selected' : '';
             $html .= "<option value=\"" . $l['vid'] . "\" " . $sel . ">" . $l['question'] . "</option>";
         }
-        $html .= '</select></td>';
-        $html .= '</tr>';
+        $html .= '</select></div>';
+        $html .= '</div>';
         return $html;
     }
 
