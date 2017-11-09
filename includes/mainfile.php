@@ -363,7 +363,7 @@ if (defined('NV_ADMIN')) {
 }
 
 //China Censorship
-if($client_info['country'] == 'CN') {
+if ($client_info['country'] == 'CN') {
     define("CHINA_CENSORSHIP", true);
     if($global_config['captcha_type'] == 2) {
         $global_config['captcha_type'] = 0;
