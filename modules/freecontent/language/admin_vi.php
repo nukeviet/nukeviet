@@ -55,7 +55,6 @@ $lang_module['content_target_self'] = '_self';
 $lang_module['content_target_parent'] = '_parent';
 $lang_module['content_target_top'] = '_top';
 $lang_module['content_title_error'] = 'Tên nội dung không được để trống';
-$lang_module['content_link_error'] = 'Có vẻ đây không phải là một liên kết hợp lệ';
 $lang_module['content_total_rows'] = 'Tổng số';
 $lang_module['content_delete'] = 'Xóa nội dung';
 $lang_module['content_delete_confirm'] = 'Dữ liệu đã xóa không thể khôi phục, bạn có muốn xóa không?';
