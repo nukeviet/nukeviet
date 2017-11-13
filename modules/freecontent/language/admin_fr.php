@@ -52,7 +52,6 @@ $lang_module['content_target_self'] = '_self';
 $lang_module['content_target_parent'] = '_parent';
 $lang_module['content_target_top'] = '_haut';
 $lang_module['content_title_error'] = 'Le nom de contenu ne peut pas être blanc';
-$lang_module['content_link_error'] = 'Semble que ce n\'est pas un bon lien';
 $lang_module['content_total_rows'] = 'Totale';
 $lang_module['content_delete'] = 'Supprimer le contenu';
 $lang_module['content_delete_confirm'] = 'Les données supprimées ne peut pas être reconstruites après, voulez-vous les supprimer?';
