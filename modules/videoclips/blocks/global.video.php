@@ -26,8 +26,8 @@ if (!nv_function_exists('nv_block_video')) {
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['topicvideo'] . '</label>';
-        $html .= '	<div class="col-sm-18"><select name="config_idtopic" class="form-control w250"><option value="0">' . $lang_block['topicvideo_all'] . '</option>';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['topicvideo'] . ':</label>';
+        $html .= '	<div class="col-sm-18"><select name="config_idtopic" class="form-control"><option value="0">' . $lang_block['topicvideo_all'] . '</option>';
 
         $db->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $site_mods[$mod_name]['module_data'] . '_topic')->where('status= 1')->order('weight ASC');
         $result = $db->query($db->sql());
@@ -39,20 +39,20 @@ if (!nv_function_exists('nv_block_video')) {
 
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numvideo'] . '</label>';
-        $html .= '	<div class="col-sm-8"><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numvideo'] . ':</label>';
+        $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numothervideo'] . '</label>';
-        $html .= '	<div class="col-sm-8"><input type="text" name="config_other" class="form-control w100" size="5" value="' . $data_block['other'] . '"/></div>';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numothervideo'] . ':</label>';
+        $html .= '	<div class="col-sm-5"><input type="text" name="config_other" class="form-control" value="' . $data_block['other'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['titlelength'] . '</label>';
-        $html .= '	<td><input type="text" name="config_length" class="form-control w100" size="5" value="' . $data_block['length'] . '"/></td>';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['titlelength'] . ':</label>';
+        $html .= '	<div class="col-sm-5"><input type="text" name="config_length" class="form-control" value="' . $data_block['length'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['showhometext'] . '</label>';
-        $html .= '	<div class="col-sm-18"><input type="checkbox" name="config_showhometext" value="1"' . (empty($data_block['showhometext']) ? '' : ' checked="checked"') . '/></div>';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['showhometext'] . ':</label>';
+        $html .= '	<div class="col-sm-18"><div class="checkbox"><label><input type="checkbox" name="config_showhometext" value="1"' . (empty($data_block['showhometext']) ? '' : ' checked="checked"') . '/></label></div></div>';
         $html .= '</div>';
 
         return $html;
