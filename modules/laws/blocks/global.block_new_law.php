@@ -11,7 +11,6 @@
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!nv_function_exists('nv_law_block_newg')) {
-
     /**
      * nv_block_config_new_laws()
      *
@@ -24,20 +23,20 @@ if (!nv_function_exists('nv_law_block_newg')) {
     {
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['numrow'] . '</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control w200" name="config_numrow" value="' . $data_block['numrow'] . '" /></div>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_numrow" value="' . $data_block['numrow'] . '" /></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . '</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control w200" name="config_title_length" value="' . $data_block['title_length'] . '" /><span class="help-block">' . $lang_block['title_note'] . '</span></div>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '" /><span class="help-block">' . $lang_block['title_note'] . '</span></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['show_code'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['show_code'] . ':</label>';
         $ck = $data_block['show_code'] ? 'checked="checked"' : '';
         $html .= '<div class="col-sm-18"><input type="checkbox" name="config_show_code" value="1" ' . $ck . ' /></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['direction'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['direction'] . ':</label>';
         $html .= '<div class="col-sm-18"><select name="config_direction" class="form-control">';
         $sl = $data_block['direction'] == 'none' ? 'selected="selected"' : '';
         $html .= '<option value="none" ' . $sl . ' >' . $lang_block['direction_none'] . '</option>';
@@ -48,22 +47,22 @@ if (!nv_function_exists('nv_law_block_newg')) {
         $html .= '</select></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['duration'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['duration'] . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_duration" value="' . $data_block['duration'] . '" /></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['pauseOnHover'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['pauseOnHover'] . ':</label>';
         $ck = $data_block['pauseOnHover'] ? 'checked="checked"' : '';
         $html .= '<div class="col-sm-18"><input type="checkbox" name="config_pauseOnHover" value="1" ' . $ck . ' /></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['duplicated'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['duplicated'] . ':</label>';
         $ck = $data_block['duplicated'] ? 'checked="checked"' : '';
         $html .= '<div class="col-sm-18"><input type="checkbox" name="config_duplicated" value="1" ' . $ck . ' /></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['order'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['order'] . ':</label>';
         $html .= '<div class="col-sm-18"><select name="config_order" class="form-control">';
         $sel = $data_block['order'] == '1' ? 'selected="selected"' : '';
         $html .= '<option value="1" ' . $sel . ' >' . $lang_block['order_pub_new'] . '</option>';

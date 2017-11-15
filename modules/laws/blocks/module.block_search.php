@@ -11,7 +11,6 @@
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!function_exists('nv_law_block_search')) {
-
     /**
      * nv_block_config_laws_search()
      *
@@ -24,9 +23,9 @@ if (!function_exists('nv_law_block_search')) {
     {
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['style'] . '</label>';
-        $html .= ' <div class="col-sm-18">';
-        $html .= "<select name=\"config_style\" class=\"form-control w200\">\n";
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['style'] . ':</label>';
+        $html .= ' <div class="col-sm-9">';
+        $html .= "<select name=\"config_style\" class=\"form-control\">\n";
         $sel = $data_block['style'] == 'center' ? 'selected="selected"' : '';
         $html .= '<option value="center" ' . $sel . '>Center</option>';
         $sel = $data_block['style'] == 'vertical' ? 'selected="selected"' : '';
@@ -35,7 +34,7 @@ if (!function_exists('nv_law_block_search')) {
         $html .= '</div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['search_advance'] . '</label>';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['search_advance'] . ':</label>';
         $html .= '<div class="col-sm-18">';
         $ck = (isset($data_block['search_advance']) and $data_block['search_advance']) ? 'checked="checked"' : '';
         $html .= " <label><input type=\"checkbox\" name=\"config_search_advance\" value=\"1\" " . $ck . ">" . $lang_block['search_advance_note'] . "</label>\n";

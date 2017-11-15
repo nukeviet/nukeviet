@@ -11,14 +11,21 @@
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!function_exists('nv_laws_block_subject')) {
-
+    /**
+     * nv_block_config_laws_subject()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_subject($module, $data_block, $lang_block)
     {
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . '</label>';
-        $html .= '<div class="col-sm-18">';
-        $html .= "<select name=\"config_title_length\" class=\"form-control w200\">\n";
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<div class="col-sm-9">';
+        $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
         $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
@@ -30,6 +37,13 @@ if (!function_exists('nv_laws_block_subject')) {
         return $html;
     }
 
+    /**
+     * nv_block_config_laws_subject_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_subject_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -40,6 +54,12 @@ if (!function_exists('nv_laws_block_subject')) {
         return $return;
     }
 
+    /**
+     * nv_laws_block_subject()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_laws_block_subject($block_config)
     {
         global $db, $lang_module, $module_info, $site_mods, $global_config, $nv_laws_listsubject, $module_name, $nv_Cache;

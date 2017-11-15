@@ -11,14 +11,21 @@
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!function_exists('nv_laws_block_cat')) {
-
+    /**
+     * nv_block_config_laws_cat()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_cat($module, $data_block, $lang_block)
     {
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . '</label>';
-        $html .= '<div class="col-sm-18">';
-        $html .= "<select name=\"config_title_length\" class=\"form-control w200\">\n";
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<div class="col-sm-9">';
+        $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
         $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
@@ -30,6 +37,13 @@ if (!function_exists('nv_laws_block_cat')) {
         return $html;
     }
 
+    /**
+     * nv_block_config_laws_cat_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_cat_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -40,6 +54,12 @@ if (!function_exists('nv_laws_block_cat')) {
         return $return;
     }
 
+    /**
+     * nv_laws_block_cat()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_laws_block_cat($block_config)
     {
         global $lang_module, $module_info, $global_config, $site_mods, $nv_laws_listcat, $module_name;
@@ -77,6 +97,13 @@ if (!function_exists('nv_laws_block_cat')) {
         return $xtpl->text('main');
     }
 
+    /**
+     * nv_content_subcat()
+     *
+     * @param mixed $list_sub
+     * @param mixed $title_length
+     * @return
+     */
     function nv_content_subcat($list_sub, $title_length)
     {
         global $nv_laws_listcat, $module_name;
