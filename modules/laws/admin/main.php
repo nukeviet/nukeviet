@@ -116,10 +116,6 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
 
 			$post['eid'] = $nv_Request->get_int('eid', 'post', 0);
-            if (!isset($eList[$post['eid']]) && $module_config[$module_name]['activecomm']==1) {
-                die($lang_module['erroNotSelectExamine']);
-            }
-
             $post['introtext'] = $nv_Request->get_title('introtext', 'post', '', 1);
             $post['introtext'] = nv_nl2br($post['introtext'], "<br />");
             if (empty($post['introtext'])) {

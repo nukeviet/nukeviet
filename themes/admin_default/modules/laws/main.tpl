@@ -344,7 +344,7 @@
                         </tr>
                         <!-- BEGIN: loop -->
                         <tr>
-                            <td>{LANG.ExamineSel} <span class="red">*</span></td>
+                            <td>{LANG.ExamineSel}</td>
                         </tr>
                         <tr>
                             <td>
