@@ -52,7 +52,6 @@ $lang_module['content_target_self'] = '_self';
 $lang_module['content_target_parent'] = '_parent';
 $lang_module['content_target_top'] = '_top';
 $lang_module['content_title_error'] = 'Name of the content can not be empty';
-$lang_module['content_link_error'] = 'It appears this is not a valid link';
 $lang_module['content_total_rows'] = 'Total';
 $lang_module['content_delete'] = 'Content delete';
 $lang_module['content_delete_confirm'] = 'Deleted data unrecoverable, you may want to delete?';
