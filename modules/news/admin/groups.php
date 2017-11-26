@@ -76,7 +76,6 @@ if (! empty($savecat)) {
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':image', $image, PDO::PARAM_STR);
         $stmt->bindParam(':keywords', $keywords, PDO::PARAM_STR);
-        $stmt->execute();
         if ($stmt->execute()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
