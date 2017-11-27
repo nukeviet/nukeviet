@@ -110,8 +110,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer(
   id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   title varchar(255) NOT NULL,
-  offices varchar(255) NOT NULL,
-  positions varchar(255) NOT NULL,
+  offices varchar(255) NOT NULL DEFAULT '',
+  positions varchar(255) NOT NULL DEFAULT '',
   addtime int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";

@@ -11,7 +11,8 @@
         <colgroup>
             <col />
             <col class="w100" />
-            <col span="4" class="w150" />
+            <col span="5" class="w150" />
+
         </colgroup>
         <thead>
             <tr>
@@ -25,6 +26,7 @@
                 <th>{LANG.start_comm_time}</th>
                 <th>{LANG.end_comm_time}</th>
                 <!-- END: view_comm_time_title -->
+                <th class="text-center">{LANG.admin_add}</th>
                 <th class="text-center">{LANG.status}</th>
                 <th class="text-center">{LANG.feature}</th>
             </tr>
@@ -42,6 +44,7 @@
                 <td>{DATA.start_comm_time}</td>
                 <td>{DATA.end_comm_time}</td>
                 <!-- END: view_comm_time -->
+                <td>{DATA.admin_add}</td>
                 <td class="text-center">
                 <select class="form-control" id="status_{DATA.id}" name="status[]" onchange="nv_change_status({DATA.id});">
                     <option value="0">{LANG.status0}</option>
@@ -341,7 +344,7 @@
                         </tr>
                         <!-- BEGIN: loop -->
                         <tr>
-                            <td>{LANG.ExamineSel} <span class="red">*</span></td>
+                            <td>{LANG.ExamineSel}</td>
                         </tr>
                         <tr>
                             <td>

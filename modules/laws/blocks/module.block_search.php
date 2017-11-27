@@ -11,7 +11,6 @@
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!function_exists('nv_law_block_search')) {
-
     /**
      * nv_block_config_laws_search()
      *
@@ -23,24 +22,24 @@ if (!function_exists('nv_law_block_search')) {
     function nv_block_config_laws_search($module, $data_block, $lang_block)
     {
         $html = '';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['style'] . '</td>';
-        $html .= '<td>';
-        $html .= "<select name=\"config_style\" class=\"form-control w200\">\n";
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['style'] . ':</label>';
+        $html .= ' <div class="col-sm-9">';
+        $html .= "<select name=\"config_style\" class=\"form-control\">\n";
         $sel = $data_block['style'] == 'center' ? 'selected="selected"' : '';
         $html .= '<option value="center" ' . $sel . '>Center</option>';
         $sel = $data_block['style'] == 'vertical' ? 'selected="selected"' : '';
         $html .= '<option value="vertical" ' . $sel . '>Vertical</option>';
         $html .= "</select>\n";
-        $html .= '</td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['search_advance'] . '</td>';
-        $html .= '<td>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['search_advance'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
         $ck = (isset($data_block['search_advance']) and $data_block['search_advance']) ? 'checked="checked"' : '';
-        $html .= "<label><input type=\"checkbox\" name=\"config_search_advance\" value=\"1\" " . $ck . ">" . $lang_block['search_advance_note'] . "</label>\n";
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= " <label><input type=\"checkbox\" name=\"config_search_advance\" value=\"1\" " . $ck . ">" . $lang_block['search_advance_note'] . "</label>\n";
+        $html .= '</div>';
+        $html .= '</div>';
 
         return $html;
     }

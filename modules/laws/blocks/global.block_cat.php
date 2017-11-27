@@ -11,25 +11,39 @@
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!function_exists('nv_laws_block_cat')) {
-
+    /**
+     * nv_block_config_laws_cat()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_cat($module, $data_block, $lang_block)
     {
         $html = '';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['title_length'] . '</td>';
-        $html .= '<td>';
-        $html .= "<select name=\"config_title_length\" class=\"form-control w200\">\n";
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<div class="col-sm-9">';
+        $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
         $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
         }
         $html .= "</select>\n";
-        $html .= '</td>';
-        $html .= '</tr>';
-        
+        $html .= '</div>';
+        $html .= '</div>';
+
         return $html;
     }
 
+    /**
+     * nv_block_config_laws_cat_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_cat_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -40,24 +54,30 @@ if (!function_exists('nv_laws_block_cat')) {
         return $return;
     }
 
+    /**
+     * nv_laws_block_cat()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_laws_block_cat($block_config)
     {
         global $lang_module, $module_info, $global_config, $site_mods, $nv_laws_listcat, $module_name;
-        
+
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
         $mod_file = $site_mods[$module]['module_file'];
-        
+
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block_cat.tpl')) {
             $block_theme = $global_config['module_theme'];
         } else {
             $block_theme = 'default';
         }
-        
+
         $xtpl = new XTemplate("block_cat.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file);
-        
+
         $html = "";
-        
+
         $i = 1;
         foreach ($nv_laws_listcat as $cat) {
             if ($cat['id'] == 0) continue;
@@ -67,7 +87,7 @@ if (!function_exists('nv_laws_block_cat')) {
                 $html .= "<em class=\"fa fa-comment-o fa-lg\">&nbsp;</em><a title=\"" . $cat['title'] . "\" href=\"" . $link . "\">" . nv_clean60($cat['title'], $block_config['title_length']) . "</a>\n";
                 if (!empty($cat['subcats'])) $html .= nv_content_subcat($cat['subcats'], $block_config['title_length']);
                 $html .= "</li>";
-                
+
                 if ($i >= 10) break;
                 $i++;
             }
@@ -77,10 +97,17 @@ if (!function_exists('nv_laws_block_cat')) {
         return $xtpl->text('main');
     }
 
+    /**
+     * nv_content_subcat()
+     *
+     * @param mixed $list_sub
+     * @param mixed $title_length
+     * @return
+     */
     function nv_content_subcat($list_sub, $title_length)
     {
         global $nv_laws_listcat, $module_name;
-        
+
         if (empty($list_sub))
             return "";
         else {
@@ -101,7 +128,7 @@ if (!function_exists('nv_laws_block_cat')) {
 if (defined('NV_SYSTEM')) {
     global $site_mods, $module_name, $nv_laws_listcat, $module_array_cat, $nv_Cache;
     $module = $block_config['module'];
-    
+
     if (isset($site_mods[$module])) {
         if ($module != $module_name) {
             $module_array_cat = array();

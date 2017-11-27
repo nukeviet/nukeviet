@@ -17,8 +17,8 @@ $module_version = array(
     'change_alias' => 'detail',
     'is_sysmod' => 0,
     'virtual' => 1,
-    'version' => '4.2.01',
-    'date' => 'Tue, 22 Aug 2017 12:32:21 GMT',
+    'version' => '4.3.00',
+    'date' => 'Wes, 15 Nov 2017 04:03:12 GMT',
     'author' => 'VINADES <contact@vinades.vn>',
     'uploads_dir' => array(
         $module_upload

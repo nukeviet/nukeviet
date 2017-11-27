@@ -8,7 +8,8 @@
  * @Createdate Thu, 03 Jul 2014 04:35:32 GMT
  */
 
-if (!defined('NV_ADMIN')) die('Stop!!!');
+if (!defined('NV_ADMIN'))
+    die('Stop!!!');
 
 global $module_config;
 
@@ -17,7 +18,7 @@ $submenu['scontent'] = $lang_module['scontent_add'];
 $submenu['area'] = $lang_module['area'];
 $submenu['cat'] = $lang_module['cat'];
 $submenu['subject'] = $lang_module['subject'];
-if($module_config[$module_name]['activecomm']){
-	$submenu['examine'] = $lang_module['examine'];
+if ($module_config[$module_name]['activecomm']) {
+    $submenu['examine'] = $lang_module['examine'];
 }
 $submenu['config'] = $lang_module['config'];
