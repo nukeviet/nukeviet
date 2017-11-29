@@ -131,3 +131,5 @@ $lang_module['type_view_1'] = 'Oldest on top';
 $lang_module['wait'] = 'Please wait....';
 $lang_module['search_error'] = 'Choose at least one search terms';
 $lang_module['admin_add'] = "Admin add";
+
+$lang_module['admins'] = 'Decentralization of management';

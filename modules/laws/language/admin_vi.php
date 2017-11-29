@@ -189,3 +189,32 @@ $lang_module['approval'] = "Trang thái";
 $lang_module['erroStartvalid'] = 'Lỗi! Ngày bắt đầu hiệu lực không thể trước ngày ban hành.';
 $lang_module['erroExptime'] = 'Lỗi! Ngày hết hiệu lực phải sau ngày ban hành và ngày bắt đầu hiệu lực.';
 $lang_module['admin_add'] = "Người đăng";
+
+$lang_module['admins'] = 'Phân quyền quản lý';
+$lang_module['admin_cat_for_user'] = 'Quyền hạn của bạn tại các chuyên mục';
+$lang_module['admin_no_user_title'] = 'Chưa có người quản lý module';
+$lang_module['admin_no_user_content'] = 'Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.';
+
+$lang_module['content_cat'] = 'Chuyên mục của văn bản';
+$lang_module['permissions_admin'] = 'Quản lý Chuyên mục';
+$lang_module['permissions_add_content'] = 'Tạo bài viết';
+$lang_module['permissions_edit_content'] = 'Sửa bài viết';
+$lang_module['permissions_del_content'] = 'Xóa bài viêt';
+$lang_module['permissions_pub_error'] = 'Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1$s';
+$lang_module['permissions_sendspadmin_error'] = 'Lỗi: Bạn không được phép chuyển bài viết cho tổng biên tập tại Chuyên mục: %1$s';
+$lang_module['permissions_pub_show_error'] = 'Lỗi: Bạn không được cho hiển thị bài viết tại Chuyên mục: %1$s';
+$lang_module['admin_cat'] = 'Quản lý Chuyên mục';
+$lang_module['admin_module'] = 'Quản lý module';
+$lang_module['admin_full_module'] = 'Toàn quyền module';
+$lang_module['admin_userid'] = 'userid';
+$lang_module['admin_username'] = 'Tài khoản';
+$lang_module['admin_full_name'] = 'Họ tên';
+$lang_module['admin_first_name'] = 'Tên';
+$lang_module['admin_last_name'] = 'Họ';
+$lang_module['admin_email'] = 'Email';
+$lang_module['lastname_firstname'] = 'Họ và Tên';
+$lang_module['admin_permissions'] = 'Quyền hạn';
+$lang_module['admin_edit'] = 'Sửa quyền hạn';
+$lang_module['admin_edit_user'] = 'Sửa quyền hạn thành viên';
+
+$lang_module['admin_add'] = "Người đăng";

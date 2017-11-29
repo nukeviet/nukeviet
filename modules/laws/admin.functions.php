@@ -13,18 +13,32 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $allow_func = array(
     'main',
     'area',
-    'cat',
     'subject',
     'examine',
     'getlid',
-    'signer',
     'scontent',
-    'config',
     'change_cat',
     'view'
 );
+if ($NV_IS_ADMIN_MODULE) {
+    $allow_func[] = 'signer';
+    $allow_func[] = 'scontent';
+    $allow_func[] = 'area';
+    $allow_func[] = 'cat';
+    $allow_func[] = 'subject';
+}
 
+if ($NV_IS_ADMIN_FULL_MODULE) {
+    $allow_func[] = 'admins';
+    $allow_func[] = 'config';
+}
 define('NV_IS_FILE_ADMIN', true);
+if ($NV_IS_ADMIN_FULL_MODULE) {
+    define('NV_IS_ADMIN_FULL_MODULE', true);
+}
+if ($NV_IS_ADMIN_MODULE) {
+    define('NV_IS_ADMIN_MODULE', true);
+}
 
 function nv_setCats($list2, $id, $list, $num = 0)
 {
