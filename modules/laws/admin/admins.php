@@ -17,13 +17,13 @@ if (!function_exists('nv_array_subject_admin')) {
     function nv_array_subject_admin()
     {
         global $db, $module_data;
-        $array_cat_admin = array();
+        $array_subject_admin = array();
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins ORDER BY userid ASC';
         $result = $db->query($sql);
         while ($row = $result->fetch()) {
-            $array_cat_admin[$row['userid']][$row['subjectid']] = $row;
+            $array_subject_admin[$row['userid']][$row['subjectid']] = $row;
         }
-        return $array_cat_admin;
+        return $array_subject_admin;
     }
 }
 
@@ -104,7 +104,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
             $sql = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_subject ORDER BY weight ASC';
             $result_cat = $db->query($sql);
             while ($row = $result_cat->fetch()) {
-                $admin_i = (in_array(in_array($row['id'], $array_admin))) ? 1 : 0;
+                $admin_i = (in_array($row['id'], $array_admin)) ? 1 : 0;
                 if ($admin_i) {
                     $add_content_i = $edit_content_i = $del_content_i = 1;
                     $array_admin[] = $row['id'];
@@ -236,7 +236,6 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
                     $xtpl->assign('CONTENT', $u);
                     $xtpl->parse('main.edit.catid');
                 }
-
                 $xtpl->assign('CAPTION_EDIT', $lang_module['admin_edit_user'] . ': ' . $users_list[$userid]['username']);
                 $xtpl->parse('main.edit');
             }

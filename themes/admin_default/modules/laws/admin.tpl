@@ -55,10 +55,10 @@
                         <tbody>
                             <tr>
                                 <td>{CONTENT.title}</td>
-                                <td class="text-center"><input type="checkbox" name="add_content[]" value="{CONTENT.catid}"{CONTENT.checked_add_content}></td>
-                                <td class="text-center"><input type="checkbox" name="edit_content[]" value="{CONTENT.catid}"{CONTENT.checked_edit_content}></td>
-                                <td class="text-center"><input type="checkbox" name="del_content[]" value="{CONTENT.catid}"{CONTENT.checked_del_content}></td>
-                                <td class="text-center"><input type="checkbox" name="admin_content[]" value="{CONTENT.catid}"{CONTENT.checked_admin}></td>
+                                <td class="text-center"><input type="checkbox" name="add_content[]" value="{CONTENT.subjectid}"{CONTENT.checked_add_content}></td>
+                                <td class="text-center"><input type="checkbox" name="edit_content[]" value="{CONTENT.subjectid}"{CONTENT.checked_edit_content}></td>
+                                <td class="text-center"><input type="checkbox" name="del_content[]" value="{CONTENT.subjectid}"{CONTENT.checked_del_content}></td>
+                                <td class="text-center"><input type="checkbox" name="admin_content[]" value="{CONTENT.subjectid}"{CONTENT.checked_admin}></td>
                             </tr>
                         </tbody>
                         <!-- END: catid -->
@@ -75,9 +75,13 @@
 </form>
 <script type="text/javascript">
     $(document).ready(function() {
+        var tp = $('input[name=admin_module]:checked').val();
+        if (tp == 0) {
+            $("#id_admin_module").show();
+        } else {
+            $("#id_admin_module").hide();
+        }
         $("#check_add_content").one("dblclick", check_add_first);
-        $("#check_app_content").one("dblclick", check_app_first);
-        $("#check_pub_content").one("dblclick", check_pub_first);
         $("#check_edit_content").one("dblclick", check_edit_first);
         $("#check_del_content").one("dblclick", check_del_first);
         $("#check_admin_content").one("dblclick", check_admin_first);

@@ -163,19 +163,21 @@ function fix_aWeight($parentid)
 
 function nv_sList()
 {
-    global $db, $module_data;
+    global $db, $module_data, $array_subject_admin, $admin_id;
 
     $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
     $result = $db->query($sql);
     $list = array();
     while ($row = $result->fetch()) {
-        $list[$row['id']] = array( //
-            'id' => (int) $row['id'], //
-            'title' => $row['title'], //
-            'alias' => $row['alias'], //
-            'numlink' => $row['numlink'], //
-            'weight' => (int) $row['weight'] //
-        );
+        if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['id']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1 || $array_subject_admin[$admin_id][$row['id']]['edit_content'] == 1) {
+            $list[$row['id']] = array(
+                'id' => (int) $row['id'],
+                'title' => $row['title'],
+                'alias' => $row['alias'],
+                'numlink' => $row['numlink'],
+                'weight' => (int) $row['weight']
+            );
+        }
     }
 
     return $list;

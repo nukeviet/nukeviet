@@ -11,19 +11,24 @@
 if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $page_title = $lang_module['main'];
-
+try {
 $contents = "";
 $groups_list = nv_groups_list();
 $catList = nv_catList();
 $aList = nv_aList();
 $sList = nv_sList();
+$_arr_subject = array();
+foreach ($sList as $s_i => $array_value) {
+    $_arr_subject[$array_value['id']] = $array_value['id'];
+}
+$subject_str = implode(',', $_arr_subject);
 $eList = nv_eList();
 $scount = count($sList);
 $ecount = count($eList);
 $sgList = nv_sgList();
 $scount = count($sgList);
 
-$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row";
+$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE sid IN (" . $subject_str . ")";
 $result = $db->query($sql);
 $all_page = $result->fetch();
 $all_page = $all_page['ccount'];
@@ -624,14 +629,14 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             }
         }
 
-        $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "");
+        $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "") . " AND sid IN (" . $subject_str . ")";
         $all_page = $db->query($sql)->fetchColumn();
 
         $page = $nv_Request->get_int('page', 'get', 1);
         $per_page = 30;
 
         if ($all_page) {
-            $sql = "SELECT t1.*, u1.username FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "") . " ORDER BY t1.addtime DESC LIMIT " . (($page - 1) * $per_page) . "," . $per_page;
+            $sql = "SELECT t1.*, u1.username FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "") . " AND sid IN (" . $subject_str . ") ORDER BY t1.addtime DESC LIMIT " . (($page - 1) * $per_page) . "," . $per_page;
             $result = $db->query($sql);
             $a = 0;
             while ($row = $result->fetch()) {
@@ -658,6 +663,12 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 					 $xtpl->parse('list.loop.view_comm');
 				}else{
 					$xtpl->parse('list.loop.view_time');
+				}
+				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['cid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['cid']]['edit_content'] == 1) {
+				    $xtpl->parse('list.loop.view_edit');
+				}
+				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['cid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['cid']]['del_content'] == 1) {
+				    $xtpl->parse('list.loop.view_delete');
 				}
                 $xtpl->parse('list.loop');
                 $a++;
@@ -722,3 +733,6 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
+} catch (Exception $e) {
+    print_r($e->getMessage());
+}
