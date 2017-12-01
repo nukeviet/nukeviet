@@ -664,10 +664,10 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 				}else{
 					$xtpl->parse('list.loop.view_time');
 				}
-				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['cid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['cid']]['edit_content'] == 1) {
+				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['sid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['edit_content'] == 1) {
 				    $xtpl->parse('list.loop.view_edit');
 				}
-				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['cid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['cid']]['del_content'] == 1) {
+				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['sid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['del_content'] == 1) {
 				    $xtpl->parse('list.loop.view_delete');
 				}
                 $xtpl->parse('list.loop');
