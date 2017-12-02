@@ -21,6 +21,7 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_examine";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins";
 
 $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_area(
@@ -134,6 +135,16 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   title varchar(250) NOT NULL,
   weight smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins(
+  userid mediumint(8) UNSIGNED NOT NULL DEFAULT '0',
+  subjectid smallint(4) NOT NULL DEFAULT '0',
+  admin tinyint(4) NOT NULL DEFAULT '0',
+  add_content tinyint(4) NOT NULL DEFAULT '0',
+  edit_content tinyint(4) NOT NULL DEFAULT '0',
+  del_content tinyint(4) NOT NULL DEFAULT '0',
+  UNIQUE KEY userid (userid,subjectid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES

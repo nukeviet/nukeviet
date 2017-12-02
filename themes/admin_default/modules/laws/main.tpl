@@ -51,8 +51,7 @@
                     <option value="1"{DATA.selected}>{LANG.status1}</option>
                 </select></td>
                 <td class="text-center">
-                	<em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a>
-                	- <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a>
+                	<!-- BEGIN: view_edit --> <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a> <!-- END: view_edit --> <!-- BEGIN: view_delete --> <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a> <!-- END: view_delete --> 
                 	<!-- BEGIN: view_comm -->
                 	- <em class="fa fa-eye fa-lg">&nbsp;</em><a href="{DATA.url_view_comm}">{LANG.view_comm}</a>
                 	<!-- END: view_comm -->
