@@ -119,3 +119,11 @@
 .form-inline .form-group{
 	margin-top: 5px;
 }
+
+#id_admin_module > tr > td {
+    padding: 0;
+}
+
+#id_admin_module > tr > td table {
+    margin: 0;
+}

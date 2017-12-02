@@ -11,7 +11,7 @@
 if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $page_title = $lang_module['main'];
-try {
+
 $contents = "";
 $groups_list = nv_groups_list();
 $catList = nv_catList();
@@ -733,6 +733,3 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
-} catch (Exception $e) {
-    print_r($e->getMessage());
-}
