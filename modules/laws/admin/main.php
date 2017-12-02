@@ -88,7 +88,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         if ($nv_Request->isset_request('edit, id', 'get')) {
             $post['id'] = $nv_Request->get_int('id', 'get', 0);
 
-            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $post['id'];
+            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $post['id'] . " AND sid IN(" . $subject_str . ")";
             $result = $db->query($sql);
             $num = $result->rowCount();
             if ($num != 1) {
