@@ -169,7 +169,7 @@ function nv_sList()
     $result = $db->query($sql);
     $list = array();
     while ($row = $result->fetch()) {
-        if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['id']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1 || $array_subject_admin[$admin_id][$row['id']]['edit_content'] == 1) {
+        if (defined('NV_IS_ADMIN_MODULE') or $array_subject_admin[$admin_id][$row['id']]['admin'] == 1 or $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1 or $array_subject_admin[$admin_id][$row['id']]['edit_content'] == 1) {
             $list[$row['id']] = array(
                 'id' => (int) $row['id'],
                 'title' => $row['title'],

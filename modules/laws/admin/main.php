@@ -16,7 +16,14 @@ $contents = "";
 $groups_list = nv_groups_list();
 $catList = nv_catList();
 $aList = nv_aList();
+
 $sList = nv_sList();
+if (empty($sList)) {
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme('');
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
 $_arr_subject = array();
 foreach ($sList as $s_i => $array_value) {
     $_arr_subject[$array_value['id']] = $array_value['id'];
