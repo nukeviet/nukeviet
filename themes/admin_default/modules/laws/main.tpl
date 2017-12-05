@@ -28,7 +28,7 @@
                 <!-- END: view_comm_time_title -->
                 <th class="text-center">{LANG.admin_add}</th>
                 <th class="text-center">{LANG.status}</th>
-                <th class="text-center">{LANG.feature}</th>
+               <!-- BEGIN: view_tlfeature --> <th class="text-center">{LANG.feature}</th><!-- END: view_tlfeature -->
             </tr>
         </thead>
         <tbody>
@@ -46,16 +46,18 @@
                 <!-- END: view_comm_time -->
                 <td>{DATA.admin_add}</td>
                 <td class="text-center">
-                <select class="form-control" id="status_{DATA.id}" name="status[]" onchange="nv_change_status({DATA.id});">
+                <select class="form-control" id="status_{DATA.id}" name="status[]" onchange="nv_change_status({DATA.id});" <!-- BEGIN: view_suspended -->disabled<!-- END: view_suspended -->>
                     <option value="0">{LANG.status0}</option>
                     <option value="1"{DATA.selected}>{LANG.status1}</option>
                 </select></td>
+                <!-- BEGIN: view_feature -->
                 <td class="text-center">
                 	<!-- BEGIN: view_edit --> <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a> <!-- END: view_edit --> <!-- BEGIN: view_delete --> <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a> <!-- END: view_delete --> 
                 	<!-- BEGIN: view_comm -->
                 	- <em class="fa fa-eye fa-lg">&nbsp;</em><a href="{DATA.url_view_comm}">{LANG.view_comm}</a>
                 	<!-- END: view_comm -->
                 </td>
+                <!-- END: view_feature -->
             </tr>
             <!-- END: loop -->
         </tbody>
@@ -129,11 +131,11 @@
         </div>
     </form>
 </div>
-
+<!-- BEGIN: view_add -->
 <div style="text-align: left; margin-bottom:10px;">
     <input name="submit" onclick="window.location='{ADD_LINK}';" type="button" value="{LANG.add_laws}" class="btn btn-primary" />
 </div>
-
+ <!-- END: view_add -->
 <div id="lawlist">
     <div style="text-align: center"><em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}</div>
 </div>

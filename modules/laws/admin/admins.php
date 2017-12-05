@@ -1,5 +1,7 @@
 <?php
 
+use OAuth\Common\Exception\Exception;
+
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
@@ -8,37 +10,18 @@
  * @Createdate 27-11-2010 14:43
  */
 
-if (!defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_ADMIN_FULL_MODULE')) {
     die('Stop!!!');
 }
-try {
-if (!function_exists('nv_array_subject_admin')) {
-
-    function nv_array_subject_admin()
-    {
-        global $db, $module_data;
-        $array_subject_admin = array();
-        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins ORDER BY userid ASC';
-        $result = $db->query($sql);
-        while ($row = $result->fetch()) {
-            $array_subject_admin[$row['userid']][$row['subjectid']] = $row;
-        }
-        return $array_subject_admin;
-    }
-}
-
-$is_refresh = false;
-$array_cat_admin = nv_array_subject_admin();
 
 $module_admin = explode(',', $module_info['admins']);
 // Xoa cac dieu hanh vien khong co quyen tai module
-foreach ($array_cat_admin as $userid_i => $value) {
+foreach ($array_subject_admin as $userid_i => $value) {
     if (!in_array($userid_i, $module_admin)) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid_i);
         $is_refresh = true;
     }
 }
-
 // Het Xoa cac dieu hanh vien khong co quyen tai module
 
 if (empty($module_info['admins'])) {
@@ -46,23 +29,6 @@ if (empty($module_info['admins'])) {
     $contents = nv_theme_alert($lang_module['admin_no_user_title'], $lang_module['admin_no_user_content']);
 }
 
-foreach ($module_admin as $userid_i) {
-    $userid_i = intval($userid_i);
-    if ($userid_i > 0 and !isset($array_cat_admin[$userid_i])) {
-        // Them nguoi dieu hanh chung, voi quyen han Quan ly module
-        $sql = 'SELECT userid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid=' . $userid_i . ' AND subjectid=0';
-        $numrows = $db->query($sql)->fetchColumn();
-        if ($numrows == 0) {
-            $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, subjectid, admin, add_content, edit_content, del_content) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1')");
-            $is_refresh = true;
-        }
-    }
-}
-if ($is_refresh) {
-    $array_cat_admin = nv_array_subject_admin();
-}
-
-if (defined('NV_IS_ADMIN_FULL_MODULE')) {
     $orders = array(
         'userid',
         'username',
@@ -85,49 +51,57 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         $lang_module['admin_module'],
         $lang_module['admin_full_module']
     );
-
+    $error = '';
     if ($nv_Request->isset_request('submit', 'post') and $userid > 0) {
-        $admin_module = $nv_Request->get_int('admin_module', 'post', 0);
-        if ($admin_module == 1 or $admin_module == 2) {
-            if (!defined('NV_IS_SPADMIN')) {
-                $admin_module = 1;
-            }
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid);
-            $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, subjectid, admin, add_content, edit_content, del_content) VALUES ('" . $userid . "', '0', '" . $admin_module . "', '1', '1', '1')");
-        } else {
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid);
-            $array_admin = $nv_Request->get_typed_array('admin_content', 'post', 'int', array());
-            $array_add_content = $nv_Request->get_typed_array('add_content', 'post', 'int', array());
-            $array_edit_content = $nv_Request->get_typed_array('edit_content', 'post', 'int', array());
-            $array_del_content = $nv_Request->get_typed_array('del_content', 'post', 'int', array());
-
-            $sql = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_subject ORDER BY weight ASC';
-            $result_cat = $db->query($sql);
-            while ($row = $result_cat->fetch()) {
-                $admin_i = (in_array($row['id'], $array_admin)) ? 1 : 0;
-                if ($admin_i) {
-                    $add_content_i = $edit_content_i = $del_content_i = 1;
-                    $array_admin[] = $row['id'];
-                } else {
-                    $add_content_i = (in_array($row['id'], $array_add_content)) ? 1 : 0;
-                    $edit_content_i = (in_array($row['id'], $array_edit_content)) ? 1 : 0;
-                    $del_content_i = (in_array($row['id'], $array_del_content)) ? 1 : 0;
-
-                    if (!empty($add_content_i)) {
-                        $array_add_content[] = $row['id'];
-                    }
-                    if (!empty($edit_content_i)) {
-                        $array_edit_content[] = $row['id'];
-                    }
-                    if (!empty($del_content_i)) {
-                        $array_del_content[] = $row['id'];
-                    }
+        try {
+            $admin_module = $nv_Request->get_int('admin_module', 'post', 0);
+            if ($admin_module == 1 or $admin_module == 2) {
+                if (!defined('NV_IS_SPADMIN')) {
+                    $admin_module = 1;
                 }
-                $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, subjectid, admin, add_content,edit_content, del_content) VALUES ('" . $userid . "', '" . $row['id'] . "', '" . $admin_i . "', '" . $add_content_i . "', '" . $edit_content_i . "', '" . $del_content_i . "')");
+                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid);
+                $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, subjectid, admin, add_content, edit_content, del_content) VALUES ('" . $userid . "', '0', '" . $admin_module . "', '1', '1', '1')");
+            } else {
+                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid);
+                $array_admin = $nv_Request->get_typed_array('admin_content', 'post', 'int', array());
+                $array_add_content = $nv_Request->get_typed_array('add_content', 'post', 'int', array());
+                $array_edit_content = $nv_Request->get_typed_array('edit_content', 'post', 'int', array());
+                $array_del_content = $nv_Request->get_typed_array('del_content', 'post', 'int', array());
+
+                $sql = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_subject ORDER BY weight ASC';
+                $result_cat = $db->query($sql);
+                while ($row = $result_cat->fetch()) {
+                    $admin_i = (in_array($row['id'], $array_admin)) ? 1 : 0;
+                    if ($admin_i) {
+                        $add_content_i = $edit_content_i = $del_content_i = 1;
+                        $array_admin[] = $row['id'];
+                    } else {
+                        $add_content_i = (in_array($row['id'], $array_add_content)) ? 1 : 0;
+                        $edit_content_i = (in_array($row['id'], $array_edit_content)) ? 1 : 0;
+                        $del_content_i = (in_array($row['id'], $array_del_content)) ? 1 : 0;
+
+                        if (!empty($add_content_i)) {
+                            $array_add_content[] = $row['id'];
+                        }
+                        if (!empty($edit_content_i)) {
+                            $array_edit_content[] = $row['id'];
+                        }
+                        if (!empty($del_content_i)) {
+                            $array_del_content[] = $row['id'];
+                        }
+                    }
+                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, subjectid, admin, add_content,edit_content, del_content) VALUES ('" . $userid . "', '" . $row['id'] . "', '" . $admin_i . "', '" . $add_content_i . "', '" . $edit_content_i . "', '" . $del_content_i . "')");
+                }
             }
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
-        $base_url = str_replace('&amp;', '&', $base_url) . '&userid=' . $userid;
-        nv_redirect_location($base_url);
+
+        if (empty($error)) {
+            $base_url = str_replace('&amp;', '&', $base_url) . '&userid=' . $userid;
+            nv_redirect_location($base_url);
+        }
+
     }
     $users_list = array();
     if (!empty($module_info['admins'])) {
@@ -140,7 +114,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         $result = $db->query($sql);
         while ($row = $result->fetch()) {
             $userid_i = (int) $row['userid'];
-            $admin_module = (isset($array_cat_admin[$userid_i][0])) ? intval($array_cat_admin[$userid_i][0]['admin']) : 0;
+            $admin_module = (isset($array_subject_admin[$userid_i][0])) ? intval($array_subject_admin[$userid_i][0]['admin']) : 0;
             $admin_module_cat = $array_permissions_mod[$admin_module];
             $is_edit = true;
             if ($admin_module == 2 and !defined('NV_IS_SPADMIN')) {
@@ -186,6 +160,11 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
             $xtpl->parse('main.head_td');
         }
 
+        if (!empty($error)) {
+            $xtpl->assign('ERROR', $error);
+            $xtpl->parse('main.error');
+        }
+
         foreach ($users_list as $u) {
             $xtpl->assign('CONTENT_TD', $u);
             if ($u['is_edit']) {
@@ -196,7 +175,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         }
 
         if ($userid > 0 and $userid != $admin_id) {
-            $admin_module = (isset($array_cat_admin[$userid][0])) ? intval($array_cat_admin[$userid][0]['admin']) : 0;
+            $admin_module = (isset($array_subject_admin[$userid][0])) ? intval($array_subject_admin[$userid][0]['admin']) : 0;
             $is_edit = true;
             if ($admin_module == 2 and !defined('NV_IS_SPADMIN')) {
                 $is_edit = false;
@@ -229,10 +208,10 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
                     $u = array();
                     $u['subjectid'] = $row['id'];
                     $u['title'] = $row['title'];
-                    $u['checked_admin'] = (isset($array_cat_admin[$userid][$row['id']]) and $array_cat_admin[$userid][$row['id']]['admin'] == 1) ? ' checked="checked"' : '';
-                    $u['checked_add_content'] = (isset($array_cat_admin[$userid][$row['id']]) and $array_cat_admin[$userid][$row['id']]['add_content'] == 1) ? ' checked="checked"' : '';
-                    $u['checked_edit_content'] = (isset($array_cat_admin[$userid][$row['id']]) and $array_cat_admin[$userid][$row['id']]['edit_content'] == 1) ? ' checked="checked"' : '';
-                    $u['checked_del_content'] = (isset($array_cat_admin[$userid][$row['id']]) and $array_cat_admin[$userid][$row['id']]['del_content'] == 1) ? ' checked="checked"' : '';
+                    $u['checked_admin'] = (isset($array_subject_admin[$userid][$row['id']]) and $array_subject_admin[$userid][$row['id']]['admin'] == 1) ? ' checked="checked"' : '';
+                    $u['checked_add_content'] = (isset($array_subject_admin[$userid][$row['id']]) and $array_subject_admin[$userid][$row['id']]['add_content'] == 1) ? ' checked="checked"' : '';
+                    $u['checked_edit_content'] = (isset($array_subject_admin[$userid][$row['id']]) and $array_subject_admin[$userid][$row['id']]['edit_content'] == 1) ? ' checked="checked"' : '';
+                    $u['checked_del_content'] = (isset($array_subject_admin[$userid][$row['id']]) and $array_subject_admin[$userid][$row['id']]['del_content'] == 1) ? ' checked="checked"' : '';
                     $xtpl->assign('CONTENT', $u);
                     $xtpl->parse('main.edit.catid');
                 }
@@ -243,53 +222,9 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
     }
-} elseif (defined('NV_IS_ADMIN_MODULE')) {
-    $contents = '<br /><br /><br /><center><b>' . $lang_module['admin_module_for_user'] . '</b></center><br /><br /><br />';
-} else {
-    $sql = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_subject ORDER BY weight ASC';
-
-    if ($db->query($sql)->fetchColumn() == 0) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
-    }
-    $xtpl = new XTemplate('admin.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('CAPTION_EDIT', $lang_module['admin_cat_for_user']);
-
-    $result_cat = $db->query($sql);
-    while ($row = $result_cat->fetch()) {
-        if (isset($array_cat_admin[$admin_id][$row['id']])) {
-            $u = array();
-            $check_show = false;
-            if ($array_cat_admin[$admin_id][$row['id']]['admin'] == 1) {
-                $check_show = true;
-            } else {
-                if ($array_cat_admin[$admin_id][$row['id']]['add_content'] == 1) {
-                    $check_show = true;
-                } elseif ($array_cat_admin[$admin_id][$row['id']]['edit_content'] == 1) {
-                    $check_show = true;
-                }
-            }
-            if ($check_show) {
-                $u['subjectid'] = $row['id'];
-                $u['title'] = $xtitle_i . $row['title'];
-                $u['checked_admin'] = (isset($array_cat_admin[$admin_id][$row['id']]) and $array_cat_admin[$admin_id][$row['id']]['admin'] == 1) ? 'X' : '';
-                $u['checked_add_content'] = (isset($array_cat_admin[$admin_id][$row['id']]) and $array_cat_admin[$admin_id][$row['id']]['add_content'] == 1) ? 'X' : '';
-                $u['checked_edit_content'] = (isset($array_cat_admin[$admin_id][$row['id']]) and $array_cat_admin[$admin_id][$row['id']]['edit_content'] == 1) ? 'X' : '';
-                $u['checked_del_content'] = (isset($array_cat_admin[$admin_id][$row['id']]) and $array_cat_admin[$admin_id][$row['id']]['del_content'] == 1) ? 'X' : '';
-                $xtpl->assign('CONTENT', $u);
-                $xtpl->parse('view_user.catid');
-            }
-        }
-    }
-
-    $xtpl->parse('view_user');
-    $contents = $xtpl->text('view_user');
-}
 
 $page_title = $lang_module['admins'];
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
-} catch (Exception $e) {
-    print_r($e->getMessage());
-}

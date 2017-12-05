@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{ERROR}</div>
+<!-- END: error -->
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr class="header">
@@ -97,28 +100,3 @@
 </script>
 <!-- END: edit -->
 <!-- END: main -->
-<!-- BEGIN: view_user -->
-<table class="table table-striped table-bordered table-hover">
-    <caption>{CAPTION_EDIT}</caption>
-    <thead>
-        <tr class="header" class="text-center">
-            <td>{LANG.content_subject}</td>
-            <td>{LANG.permissions_add_content}</td>
-            <td>{LANG.permissions_edit_content}</td>
-            <td>{LANG.permissions_del_content}</td>
-            <td>{LANG.permissions_admin}</td>
-        </tr>
-    </thead>
-    <!-- BEGIN: catid -->
-    <tbody>
-        <tr>
-            <td>{CONTENT.title}</td>
-            <td class="text-center">{CONTENT.checked_add_content}</td>
-            <td class="text-center">{CONTENT.checked_edit_content}</td>
-            <td class="text-center">{CONTENT.checked_del_content}</td>
-            <td class="text-center">{CONTENT.checked_admin}</td>
-        </tr>
-    </tbody>
-    <!-- END: catid -->
-</table>
-<!-- END: view_user -->

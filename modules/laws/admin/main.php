@@ -40,6 +40,10 @@ $result = $db->query($sql);
 $all_page = $result->fetch();
 $all_page = $all_page['ccount'];
 
+$sql_sub = "SELECT subjectid FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE userid=" . $admin_id ." AND add_content = 1";
+$result = $db->query($sql_sub);
+$num_sub = $result->rowCount();
+
 $xtpl = new XTemplate($op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -84,6 +88,10 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
     $contents .= '<meta http-equiv="refresh" content="5;url=' . $href . '">';
 } else {
     if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit, id', 'get')) {
+
+        if ($num_sub <=0 && !defined('NV_IS_ADMIN_MODULE') && $nv_Request->isset_request('add', 'get')) {
+            nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
+        }
         $row = array();
         if ($nv_Request->isset_request('edit, id', 'get')) {
             $post['id'] = $nv_Request->get_int('id', 'get', 0);
@@ -91,10 +99,10 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $post['id'] . " AND sid IN(" . $subject_str . ")";
             $result = $db->query($sql);
             $num = $result->rowCount();
-            if ($num != 1) {
+            $row = $result->fetch();
+            if ($num != 1 || (!defined('NV_IS_ADMIN_MODULE') and $array_subject_admin[$admin_id][$row['sid']]['admin'] != 1 and $array_subject_admin[$admin_id][$row['sid']]['edit_content'] != 1)) {
                 nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
             }
-            $row = $result->fetch();
 
             $post['area_id'] = array();
             $result = $db->query('SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id']);
@@ -457,6 +465,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         }
 
         foreach ($sList as $_s) {
+            if($_s['add'] != 1 and $nv_Request->isset_request('add', 'get')) continue;
             $_s['selected'] = $_s['id'] == $post['sid'] ? " selected=\"selected\"" : "";
             $xtpl->assign('SUBOPT', $_s);
             $xtpl->parse('add.subopt');
@@ -552,7 +561,14 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
     if ($nv_Request->isset_request('del', 'post')) {
         $id = $nv_Request->get_int('id', 'post', 0);
 
+        $sql = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $id;
+        $result = $db->query($sql);
+        $num = $result->rowCount();
+        $row = $result->fetch();
+
         $data = $db->query('SELECT sid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id=' . $id)->fetch();
+        if (!$num  || (!defined('NV_IS_ADMIN_MODULE') and $array_cat_admin[$admin_id][$row['cid']]['admin'] != 1 and $array_cat_admin[$admin_id][$row['cid']]['del_content'] != 1)) nv_htmlOutput('NO');
+        $status = $row['status'];
         if (!empty($data)) {
             $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id = " . $id;
             $db->query($query);
@@ -575,8 +591,8 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         $sql = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $id;
         $result = $db->query($sql);
         $num = $result->rowCount();
-        if (!$num) die("ERROR");
         $row = $result->fetch();
+        if (!$num  || (!defined('NV_IS_ADMIN_MODULE') and $array_cat_admin[$admin_id][$row['cid']]['admin'] != 1 and $array_cat_admin[$admin_id][$row['cid']]['del_content'] != 1)) die("ERROR");
         $status = $row['status'];
         if ($status != 1)
             $status = 1;
@@ -646,6 +662,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $sql = "SELECT t1.*, u1.username FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . ($where ? " WHERE " . implode(" AND ", $where) : "") . " AND sid IN (" . $subject_str . ") ORDER BY t1.addtime DESC LIMIT " . (($page - 1) * $per_page) . "," . $per_page;
             $result = $db->query($sql);
             $a = 0;
+            $check = 0;
             while ($row = $result->fetch()) {
             	$row['admin_add'] = $row['username'];
                 $row['publtime'] = date("d-m-Y", $row['publtime']);
@@ -672,12 +689,22 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 					$xtpl->parse('list.loop.view_time');
 				}
 				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['sid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['edit_content'] == 1) {
-				    $xtpl->parse('list.loop.view_edit');
+				    $xtpl->parse('list.loop.view_feature.view_edit');
 				}
 				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['sid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['del_content'] == 1) {
-				    $xtpl->parse('list.loop.view_delete');
+				    $xtpl->parse('list.loop.view_feature.view_delete');
+				}
+
+				if(!defined('NV_IS_ADMIN_MODULE') && $array_subject_admin[$admin_id][$row['sid']]['admin'] != 1 && $array_subject_admin[$admin_id][$row['sid']]['del_content'] != 1) {
+				    $xtpl->parse('list.loop.view_suspended');
+				}
+				if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['sid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['del_content'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['edit_content'] == 1) {
+				    $xtpl->parse('list.loop.view_feature');
 				}
                 $xtpl->parse('list.loop');
+                if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['sid']]['admin'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['del_content'] == 1 || $array_subject_admin[$admin_id][$row['sid']]['edit_content'] == 1) {
+                    $check = 1;
+                }
                 $a++;
             }
 			if($module_config[$module_name]['activecomm']){
@@ -685,10 +712,12 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 			}else{
 				$xtpl->parse('list.view_time_title');
 			}
-
             $generate_page = nv_generate_page($base_url, $all_page, $per_page, $page, true, true, "nv_load_laws", "data");
 
             $xtpl->assign('NV_GENERATE_PAGE', $generate_page);
+            if($check) {
+                $xtpl->parse('list.view_tlfeature');
+            }
             $xtpl->parse('list');
             $xtpl->out('list');
         }
@@ -732,6 +761,10 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 
     $xtpl->assign('BASE_LOAD', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&list");
     $xtpl->assign('ADD_LINK', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&add");
+
+    if($num_sub > 0 || defined('NV_IS_ADMIN_MODULE')) {
+        $xtpl->parse('main.view_add');
+    }
 
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
