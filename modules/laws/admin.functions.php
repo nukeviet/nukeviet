@@ -26,18 +26,22 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'area';
     $allow_func[] = 'cat';
     $allow_func[] = 'subject';
+    define('NV_IS_ADMIN_MODULE', true);
 }
 
 if ($NV_IS_ADMIN_FULL_MODULE) {
     $allow_func[] = 'admins';
     $allow_func[] = 'config';
-}
-define('NV_IS_FILE_ADMIN', true);
-if ($NV_IS_ADMIN_FULL_MODULE) {
+
     define('NV_IS_ADMIN_FULL_MODULE', true);
 }
+define('NV_IS_FILE_ADMIN', true);
+
+// xóa hai cái này đi
+if ($NV_IS_ADMIN_FULL_MODULE) { // lệnh này y chang thì em bê lên
+
+}
 if ($NV_IS_ADMIN_MODULE) {
-    define('NV_IS_ADMIN_MODULE', true);
 }
 
 function nv_setCats($list2, $id, $list, $num = 0)
@@ -168,13 +172,19 @@ function nv_sList()
     $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
     $result = $db->query($sql);
     $list = array();
+    $add = 0;
     while ($row = $result->fetch()) {
         if (defined('NV_IS_ADMIN_MODULE') or $array_subject_admin[$admin_id][$row['id']]['admin'] == 1 or $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1 or $array_subject_admin[$admin_id][$row['id']]['edit_content'] == 1) {
+            if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1) {
+                $add = 1;
+            } else
+                $add = 0;
             $list[$row['id']] = array(
                 'id' => (int) $row['id'],
                 'title' => $row['title'],
                 'alias' => $row['alias'],
                 'numlink' => $row['numlink'],
+                'add' => $add,
                 'weight' => (int) $row['weight']
             );
         }
