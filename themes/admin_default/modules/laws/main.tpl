@@ -1,10 +1,12 @@
 <!-- BEGIN: msg -->
 <div class="alert alert-info text-center">
-    <p><strong>{LANG.msg1} {TYPE} {LANG.msg2}. <a href="{HREF}">{LANG.msg3}</a> {LANG.msg4}</strong></p>
-	{LANG.msg5}
+    <p>
+        <strong>{LANG.msg1} {TYPE} {LANG.msg2}. <a href="{HREF}">{LANG.msg3}</a> {LANG.msg4}
+        </strong>
+    </p>
+    {LANG.msg5}
 </div>
 <!-- END: msg -->
-
 <!-- BEGIN: list -->
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover">
@@ -12,7 +14,6 @@
             <col />
             <col class="w100" />
             <col span="5" class="w150" />
-
         </colgroup>
         <thead>
             <tr>
@@ -28,7 +29,9 @@
                 <!-- END: view_comm_time_title -->
                 <th class="text-center">{LANG.admin_add}</th>
                 <th class="text-center">{LANG.status}</th>
-               <!-- BEGIN: view_tlfeature --> <th class="text-center">{LANG.feature}</th><!-- END: view_tlfeature -->
+                <!-- BEGIN: view_tlfeature -->
+                <th class="text-center">{LANG.feature}</th>
+                <!-- END: view_tlfeature -->
             </tr>
         </thead>
         <tbody>
@@ -45,17 +48,15 @@
                 <td>{DATA.end_comm_time}</td>
                 <!-- END: view_comm_time -->
                 <td>{DATA.admin_add}</td>
-                <td class="text-center">
-                <select class="form-control" id="status_{DATA.id}" name="status[]" onchange="nv_change_status({DATA.id});" <!-- BEGIN: view_suspended -->disabled<!-- END: view_suspended -->>
-                    <option value="0">{LANG.status0}</option>
-                    <option value="1"{DATA.selected}>{LANG.status1}</option>
+                <td class="text-center"><select class="form-control" id="status_{DATA.id}" name="status[]" onchange="nv_change_status({DATA.id});"
+                        <!-- BEGIN: view_suspended -->disabled
+                        <!-- END: view_suspended -->>
+                        <option value="0">{LANG.status0}</option>
+                        <option value="1"{DATA.selected}>{LANG.status1}</option>
                 </select></td>
                 <!-- BEGIN: view_feature -->
                 <td class="text-center">
-                	<!-- BEGIN: view_edit --> <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a> <!-- END: view_edit --> <!-- BEGIN: view_delete --> <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a> <!-- END: view_delete --> 
-                	<!-- BEGIN: view_comm -->
-                	- <em class="fa fa-eye fa-lg">&nbsp;</em><a href="{DATA.url_view_comm}">{LANG.view_comm}</a>
-                	<!-- END: view_comm -->
+                    <!-- BEGIN: view_edit --> <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{DATA.url_edit}">{GLANG.edit}</a> <!-- END: view_edit --> <!-- BEGIN: view_delete --> <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_law({DATA.id});">{GLANG.delete}</a> <!-- END: view_delete --> <!-- BEGIN: view_comm --> - <em class="fa fa-eye fa-lg">&nbsp;</em><a href="{DATA.url_view_comm}">{LANG.view_comm}</a> <!-- END: view_comm -->
                 </td>
                 <!-- END: view_feature -->
             </tr>
@@ -63,25 +64,19 @@
         </tbody>
     </table>
 </div>
-<div class="text-center">
-    {NV_GENERATE_PAGE}
-</div>
+<div class="text-center">{NV_GENERATE_PAGE}</div>
 <!-- END: list -->
-
 <!-- BEGIN: main -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_DATA}.js"></script>
-
 <div class="well">
     <form class="form-inline">
         <div class="form-group">
-            <label class="sr-only">{LANG.keywords}</label>
-            <input type="text" name="keywords" class="form-control" placeholder="{LANG.keywords}" />
+            <label class="sr-only">{LANG.keywords}</label> <input type="text" name="keywords" class="form-control" placeholder="{LANG.keywords}" />
         </div>
         <div class="form-group">
-            <label class="sr-only">{LANG.catParent}</label>
-            <select class="form-control select2" name="cid">
+            <label class="sr-only">{LANG.catParent}</label> <select class="form-control select2" name="cid">
                 <option value="">---{LANG.catParent}---</option>
                 <!-- BEGIN: catParent -->
                 <option value="{CATOPT.id}">{CATOPT.name}</option>
@@ -89,8 +84,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label class="sr-only">{LANG.areaSel}</label>
-            <select class="form-control select2" name="aid">
+            <label class="sr-only">{LANG.areaSel}</label> <select class="form-control select2" name="aid">
                 <option value="">---{LANG.areaSel}---</option>
                 <!-- BEGIN: alist -->
                 <option value="{ALIST.id}">{ALIST.name}</option>
@@ -98,8 +92,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label class="sr-only">{LANG.subjectSel}</label>
-            <select class="form-control select2" name="sid">
+            <label class="sr-only">{LANG.subjectSel}</label> <select class="form-control select2" name="sid">
                 <option value="">---{LANG.subjectSel}---</option>
                 <!-- BEGIN: slist -->
                 <option value="{SLIST.id}">{SLIST.title}</option>
@@ -108,8 +101,7 @@
         </div>
         <!-- BEGIN: elist_loop -->
         <div class="form-group">
-            <label class="sr-only">{LANG.ExamineSel}</label>
-            <select class="form-control select2" name="eid">
+            <label class="sr-only">{LANG.ExamineSel}</label> <select class="form-control select2" name="eid">
                 <option value="">---{LANG.ExamineSel}---</option>
                 <!-- BEGIN: elist -->
                 <option value="{ELIST.id}">{ELIST.title}</option>
@@ -118,8 +110,7 @@
         </div>
         <!-- END: elist_loop -->
         <div class="form-group">
-            <label class="sr-only">{LANG.signer}</label>
-            <select class="form-control select2" name="sgid">
+            <label class="sr-only">{LANG.signer}</label> <select class="form-control select2" name="sgid">
                 <option value="">---{LANG.signer}---</option>
                 <!-- BEGIN: sglist -->
                 <option value="{SGLIST.id}">{SGLIST.title}</option>
@@ -132,14 +123,15 @@
     </form>
 </div>
 <!-- BEGIN: view_add -->
-<div style="text-align: left; margin-bottom:10px;">
+<div style="text-align: left; margin-bottom: 10px;">
     <input name="submit" onclick="window.location='{ADD_LINK}';" type="button" value="{LANG.add_laws}" class="btn btn-primary" />
 </div>
- <!-- END: view_add -->
+<!-- END: view_add -->
 <div id="lawlist">
-    <div style="text-align: center"><em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}</div>
+    <div style="text-align: center">
+        <em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}
+    </div>
 </div>
-
 <script type="text/javascript">
     $('.select2').select2();
 
@@ -168,7 +160,6 @@
     });
 </script>
 <!-- END: main -->
-
 <!-- BEGIN: add -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
@@ -183,82 +174,67 @@
             <div class="col-sm-24 col-md-18">
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover">
-                        <col style="width:200px" />
+                        <col style="width: 200px" />
                         <tbody>
                             <tr>
                                 <td>{LANG.title} <span class="red">*</span></td>
-                                <td>
-                                <input title="{LANG.title}" class="form-control" style="width: 400px" type="text" name="title" value="{DATA.title}" maxlength="255" />
-                                </td>
+                                <td><input title="{LANG.title}" class="form-control" style="width: 400px" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
                             </tr>
                             <tr>
                                 <td>{LANG.code} <span class="red">*</span></td>
-                                <td>
-                                <input title="{LANG.code}" class="form-control" style="width: 400px" type="text" name="code" value="{DATA.code}" maxlength="255" />
-                                </td>
+                                <td><input title="{LANG.code}" class="form-control" style="width: 400px" type="text" name="code" value="{DATA.code}" maxlength="255" /></td>
                             </tr>
-
                             <tr>
-                                <td style="vertical-align:top"> {LANG.fileupload} <strong>[<a onclick="nv_add_files('{NV_BASE_ADMINURL}','{UPLOADS_DIR_USER}','{GLANG.delete}','Browse server');" href="javascript:void(0);" title="{LANG.add}">{LANG.add}]</a></strong></td>
+                                <td style="vertical-align: top">{LANG.fileupload} <strong>[<a onclick="nv_add_files('{NV_BASE_ADMINURL}','{UPLOADS_DIR_USER}','{GLANG.delete}','Browse server');" href="javascript:void(0);" title="{LANG.add}">{LANG.add}]</a></strong></td>
                                 <td>
-                                <div id="filearea">
-                                    <!-- BEGIN: files -->
-                                    <div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
-                                        <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px" />
-                                        <input onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOADS_DIR_USER}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" type="button" value="Browse server" class="selectfile btn btn-primary" />
-                                        <input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
+                                    <div id="filearea">
+                                        <!-- BEGIN: files -->
+                                        <div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
+                                            <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px" /> <input onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOADS_DIR_USER}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" type="button" value="Browse server" class="selectfile btn btn-primary" /> <input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
+                                        </div>
+                                        <!-- END: files -->
                                     </div>
-                                    <!-- END: files -->
-                                </div></td>
+                                </td>
                             </tr>
                             <!-- BEGIN: comment -->
                             <tr class="form-inline">
-                                <td> {LANG.start_comm_time} </td>
-                                <td><label>
-                                    <input class="form-control" name="start_comm_time" id="start_comm_time" value="{DATA.start_comm_time}" style="width: 110px;" maxlength="10" type="text" />
-                                    &nbsp;({LANG.prm})</label></td>
+                                <td>{LANG.start_comm_time}</td>
+                                <td><label> <input class="form-control" name="start_comm_time" id="start_comm_time" value="{DATA.start_comm_time}" style="width: 110px;" maxlength="10" type="text" /> &nbsp;({LANG.prm})
+                                </label></td>
                             </tr>
                             <tr class="form-inline">
-                                <td> {LANG.end_comm_time} </td>
-                                <td><label>
-                                    <input class="form-control" name="end_comm_time" id="end_comm_time" value="{DATA.end_comm_time}" style="width: 110px;" maxlength="10" type="text" />
-                                    &nbsp;({LANG.prm})</label></td>
+                                <td>{LANG.end_comm_time}</td>
+                                <td><label> <input class="form-control" name="end_comm_time" id="end_comm_time" value="{DATA.end_comm_time}" style="width: 110px;" maxlength="10" type="text" /> &nbsp;({LANG.prm})
+                                </label></td>
                             </tr>
                             <tr>
-                                <td> {LANG.approval} </td>
-                                <td>
-                                <select class="form-control" name="approval" style="width: 200px">
-                                    <option value="0"{DATA.e0}>{LANG.e0}</option>
-                                    <option value="1"{DATA.e1}>{LANG.e1}</option>
-                                </select>
-                                </td>
+                                <td>{LANG.approval}</td>
+                                <td><select class="form-control" name="approval" style="width: 200px">
+                                        <option value="0"{DATA.e0}>{LANG.e0}</option>
+                                        <option value="1"{DATA.e1}>{LANG.e1}</option>
+                                </select></td>
                             </tr>
                             <!-- END: comment-->
                             <!-- BEGIN: normal_laws -->
                             <tr class="form-inline">
-                                <td> {LANG.publtime}  <span class="red">*</span></td>
-                                <td><label>
-                                    <input class="form-control" name="publtime" id="publtime" value="{DATA.publtime}" style="width: 110px;" maxlength="10" type="text" />
-                                    &nbsp;({LANG.prm})</label></td>
+                                <td>{LANG.publtime} <span class="red">*</span></td>
+                                <td><label> <input class="form-control" name="publtime" id="publtime" value="{DATA.publtime}" style="width: 110px;" maxlength="10" type="text" /> &nbsp;({LANG.prm})
+                                </label></td>
                             </tr>
                             <tr class="form-inline">
-                                <td> {LANG.startvalid}</td>
-                                <td><label>
-                                    <input class="form-control" name="startvalid" id="startvalid" value="{DATA.startvalid}" style="width: 110px;" maxlength="10" type="text" />
-                                    &nbsp;({LANG.prm})</label></td>
+                                <td>{LANG.startvalid}</td>
+                                <td><label> <input class="form-control" name="startvalid" id="startvalid" value="{DATA.startvalid}" style="width: 110px;" maxlength="10" type="text" /> &nbsp;({LANG.prm})
+                                </label></td>
                             </tr>
                             <tr>
-                                <td> {LANG.exptime} </td>
-                                <td>
-                                <select class="form-control" id="chooseexptime" name="chooseexptime" style="width: 200px">
-                                    <option value="0"{DATA.select0}>{LANG.hl0}</option>
-                                    <option value="1"{DATA.select1}>{LANG.hl1}</option>
+                                <td>{LANG.exptime}</td>
+                                <td><select class="form-control" id="chooseexptime" name="chooseexptime" style="width: 200px">
+                                        <option value="0"{DATA.select0}>{LANG.hl0}</option>
+                                        <option value="1"{DATA.select1}>{LANG.hl1}</option>
                                 </select>
-                                <div id="exptimearea" style="display:{DATA.display}">
-                                    <input class="form-control" name="exptime" id="exptime" value="{DATA.exptime}" style="width: 110px;" maxlength="10" type="text" />
-                                    ({LANG.prm})
-                                </div>
-                                <script type="text/javascript">
+                                    <div id="exptimearea" style="display: {DATA.display">
+                                        <input class="form-control" name="exptime" id="exptime" value="{DATA.exptime}" style="width: 110px;" maxlength="10" type="text" /> ({LANG.prm})
+                                    </div> <script type="text/javascript">
                                     $(document).ready(function() {
                                         $('#chooseexptime').change(function() {
                                             if ($(this).val() == 0) {
@@ -273,25 +249,20 @@
                             </tr>
                             <!-- END: normal_laws -->
                             <tr>
-                                <td> {LANG.replacement} ({LANG.ID}) </td>
-                                <td>
-                                <input class="form-control" title="{LANG.replacement}" type="text" name="replacement" id="replacement" style="width: 200px;" maxlength="255" value="{DATA.replacement}" />
-                                </td>
+                                <td>{LANG.replacement} ({LANG.ID})</td>
+                                <td><input class="form-control" title="{LANG.replacement}" type="text" name="replacement" id="replacement" style="width: 200px;" maxlength="255" value="{DATA.replacement}" /></td>
                             </tr>
                             <tr>
-                                <td> {LANG.relatement} ({LANG.ID}) </td>
-                                <td>
-                                <input class="form-control" title="{LANG.relatement}" type="text" name="relatement" id="relatement" style="width: 200px;" maxlength="255" value="{DATA.relatement}" />
-                                </td>
+                                <td>{LANG.relatement} ({LANG.ID})</td>
+                                <td><input class="form-control" title="{LANG.relatement}" type="text" name="relatement" id="relatement" style="width: 200px;" maxlength="255" value="{DATA.relatement}" /></td>
                             </tr>
                             <tr>
                                 <td>{LANG.keywords}</td>
-                                <td><label>
-                                    <input title="{LANG.keywords}" class="form-control" style="width: 400px" type="text" name="keywords" value="{DATA.keywords}" maxlength="255" />
-                                    ({LANG.keywordsNote})</label></td>
+                                <td><label> <input title="{LANG.keywords}" class="form-control" style="width: 400px" type="text" name="keywords" value="{DATA.keywords}" maxlength="255" /> ({LANG.keywordsNote})
+                                </label></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align:top">{LANG.note}</td>
+                                <td style="vertical-align: top">{LANG.note}</td>
                                 <td><textarea class="form-control" name="note" id="note">{DATA.note}</textarea></td>
                             </tr>
                             <tr>
@@ -312,13 +283,11 @@
                             <td>{LANG.catSel} <span class="red">*</span></td>
                         </tr>
                         <tr>
-                            <td>
-                            <select class="form-control select2" title="{LANG.catSel}" name="cid" id="cid">
-                                <!-- BEGIN: catopt -->
-                                <option value="{CATOPT.id}"{CATOPT.selected}>{CATOPT.name}</option>
-                                <!-- END: catopt -->
-                            </select>
-                            </td>
+                            <td><select class="form-control select2" title="{LANG.catSel}" name="cid" id="cid">
+                                    <!-- BEGIN: catopt -->
+                                    <option value="{CATOPT.id}"{CATOPT.selected}>{CATOPT.name}</option>
+                                    <!-- END: catopt -->
+                            </select></td>
                         </tr>
                         <tr>
                             <td>{LANG.areaSel} <span class="red">*</span></td>
@@ -336,11 +305,10 @@
                             <td>{LANG.subjectSel} <span class="red">*</span></td>
                         </tr>
                         <tr>
-                            <td>
-                            <select class="form-control select2" title="{LANG.subjectSel}" name="sid">
-                                <!-- BEGIN: subopt -->
-                                <option value="{SUBOPT.id}"{SUBOPT.selected}>{SUBOPT.title}</option>
-                                <!-- END: subopt -->
+                            <td><select class="form-control select2" title="{LANG.subjectSel}" name="sid">
+                                    <!-- BEGIN: subopt -->
+                                    <option value="{SUBOPT.id}"{SUBOPT.selected}>{SUBOPT.title}</option>
+                                    <!-- END: subopt -->
                             </select></td>
                         </tr>
                         <!-- BEGIN: loop -->
@@ -348,54 +316,54 @@
                             <td>{LANG.ExamineSel}</td>
                         </tr>
                         <tr>
-                            <td>
-                            <select class="form-control select2" title="{LANG.ExamineSel}" name="eid">
-                                <!-- BEGIN: exbopt -->
-                                <option value="{EXBOPT.id}"{EXBOPT.selected}>{EXBOPT.title}</option>
-                                <!-- END: exbopt -->
+                            <td><select class="form-control select2" title="{LANG.ExamineSel}" name="eid">
+                                    <!-- BEGIN: exbopt -->
+                                    <option value="{EXBOPT.id}"{EXBOPT.selected}>{EXBOPT.title}</option>
+                                    <!-- END: exbopt -->
                             </select></td>
                         </tr>
-                         <!-- END: loop -->
+                        <!-- END: loop -->
                         <tr>
                             <td>{LANG.signer} <span class="red">*</span></td>
                         </tr>
                         <tr>
-                            <td>
-                            <select class="form-control" title="{LANG.signer}" name="sgid" id="signer">
-                                <!-- BEGIN: singers -->
-                                <option value="{SINGER.id}"{SINGER.selected}>{SINGER.title}</option>
-                                <!-- END: singers -->
+                            <td><select class="form-control" title="{LANG.signer}" name="sgid" id="signer">
+                                    <!-- BEGIN: singers -->
+                                    <option value="{SINGER.id}"{SINGER.selected}>{SINGER.title}</option>
+                                    <!-- END: singers -->
                             </select></td>
                         </tr>
                         <tr>
                             <td>{LANG.who_view}</td>
                         </tr>
                         <tr>
-                            <td><!-- BEGIN: group_view -->
-                            <div class="row">
-                                <label>
-                                    <input name="groups_view[]" type="checkbox" value="{GROUPS_VIEWS.id}" {GROUPS_VIEWS.checked} />
-                                    {GROUPS_VIEWS.title}</label>
-                            </div><!-- END: group_view --></td>
+                            <td>
+                                <!-- BEGIN: group_view -->
+                                <div class="row">
+                                    <label> <input name="groups_view[]" type="checkbox" value="{GROUPS_VIEWS.id}" {GROUPS_VIEWS.checked} /> {GROUPS_VIEWS.title}
+                                    </label>
+                                </div>
+                                <!-- END: group_view -->
+                            </td>
                         </tr>
                         <tr>
                             <td>{LANG.who_download}</td>
                         </tr>
                         <tr>
-                            <td><!-- BEGIN: groups_download -->
-                            <div class="row">
-                                <label>
-                                    <input name="groups_download[]" type="checkbox" value="{GROUPS_DOWNLOAD.id}" {GROUPS_DOWNLOAD.checked} />
-                                    {GROUPS_DOWNLOAD.title}</label>
-                            </div><!-- END: groups_download --></td>
+                            <td>
+                                <!-- BEGIN: groups_download -->
+                                <div class="row">
+                                    <label> <input name="groups_download[]" type="checkbox" value="{GROUPS_DOWNLOAD.id}" {GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}
+                                    </label>
+                                </div>
+                                <!-- END: groups_download -->
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <input type="hidden" name="save" value="1" />
-        <input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" />
+        <input type="hidden" name="save" value="1" /> <input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" />
     </form>
 </div>
 <script type="text/javascript">

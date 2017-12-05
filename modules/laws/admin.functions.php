@@ -42,7 +42,6 @@ if ($NV_IS_ADMIN_FULL_MODULE) { // lệnh này y chang thì em bê lên
 
 }
 if ($NV_IS_ADMIN_MODULE) {
-
 }
 
 function nv_setCats($list2, $id, $list, $num = 0)
@@ -176,10 +175,9 @@ function nv_sList()
     $add = 0;
     while ($row = $result->fetch()) {
         if (defined('NV_IS_ADMIN_MODULE') or $array_subject_admin[$admin_id][$row['id']]['admin'] == 1 or $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1 or $array_subject_admin[$admin_id][$row['id']]['edit_content'] == 1) {
-            if(defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1) {
+            if (defined('NV_IS_ADMIN_MODULE') || $array_subject_admin[$admin_id][$row['id']]['add_content'] == 1) {
                 $add = 1;
-            }
-            else
+            } else
                 $add = 0;
             $list[$row['id']] = array(
                 'id' => (int) $row['id'],
