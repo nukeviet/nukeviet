@@ -11,12 +11,19 @@
 if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 $page_title = $lang_module['main'];
-try {
+
 $contents = "";
 $groups_list = nv_groups_list();
 $catList = nv_catList();
 $aList = nv_aList();
+
 $sList = nv_sList();
+if (empty($sList)) {
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme('');
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
 $_arr_subject = array();
 foreach ($sList as $s_i => $array_value) {
     $_arr_subject[$array_value['id']] = $array_value['id'];
@@ -81,7 +88,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         if ($nv_Request->isset_request('edit, id', 'get')) {
             $post['id'] = $nv_Request->get_int('id', 'get', 0);
 
-            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $post['id'];
+            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $post['id'] . " AND sid IN(" . $subject_str . ")";
             $result = $db->query($sql);
             $num = $result->rowCount();
             if ($num != 1) {
@@ -733,6 +740,3 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
-} catch (Exception $e) {
-    print_r($e->getMessage());
-}

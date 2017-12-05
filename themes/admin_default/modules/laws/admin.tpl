@@ -38,13 +38,13 @@
                 <!-- BEGIN: admin_module --> <input name="admin_module" value="{ADMIN_MODULE.value}" type="radio"{ADMIN_MODULE.checked}> {ADMIN_MODULE.text} <!-- END: admin_module -->
             </td>
         </tr>
-        <tbody style="" id="id_admin_module">
+        <tbody id="id_admin_module">
             <tr>
                 <td colspan="2">
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th class="text-center">{LANG.content_cat}</th>
+                                <th class="text-center">{LANG.content_subject}</th>
                                 <th class="text-center" id="check_add_content">{LANG.permissions_add_content}</th>
                                 <th class="text-center" id="check_edit_content">{LANG.permissions_edit_content}</th>
                                 <th class="text-center" id="check_del_content">{LANG.permissions_del_content}</th>
@@ -68,7 +68,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2" class="text-center"><input type="submit" value="{LANG.save}" name="submit"></td>
+                <td colspan="2" class="text-center"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit"></td>
             </tr>
         </tfoot>
     </table>
@@ -102,7 +102,7 @@
     <caption>{CAPTION_EDIT}</caption>
     <thead>
         <tr class="header" class="text-center">
-            <td>{LANG.content_cat}</td>
+            <td>{LANG.content_subject}</td>
             <td>{LANG.permissions_add_content}</td>
             <td>{LANG.permissions_edit_content}</td>
             <td>{LANG.permissions_del_content}</td>
