@@ -27,9 +27,9 @@
                 <th class="text-center">{LANG.files}</th>
                 <!-- END: down_in_home -->
                 <!-- BEGIN: send_comm_title -->
-                <th>{LANG.comm_time}</th>
+                <th class="text-center">{LANG.comm_time}</th>
                 <!-- END: send_comm_title -->
-                <!-- BEGIN: admin_link_title --><th></th><!-- END: admin_link_title -->
+                <!-- BEGIN: admin_link_title --><<th class="text-center">{LANG.edit}></th><!-- END: admin_link_title -->
             </tr>
         </thead>
         <tbody>
