@@ -32,7 +32,7 @@
 									<input class="form-control" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255" />
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">
-											<i class="fa fa-refresh fa-lg" onclick="get_alias('content', {rowcontent.id});">&nbsp;</i>
+											<i class="fa fa-refresh fa-lg" onclick="get_alias('content', {ALIAS});">&nbsp;</i>
 										</button>
 									</span>
 								</div>
@@ -555,7 +555,7 @@
 <!-- BEGIN:getalias -->
 <script type="text/javascript">
 	$("#idtitle").change(function() {
-		get_alias('content', {rowcontent.id});
+		get_alias('content', {ALIAS});
 	});
 </script>
 <!-- END:getalias -->
