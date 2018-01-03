@@ -216,8 +216,13 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
 
     $alias = nv_substr($nv_Request->get_title('alias', 'post', '', 1), 0, 255);
-    $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
-
+    if($is_copy && $alias == ''){
+        $rowcontent['alias'] = change_alias($rowcontent['title']);
+        $nb = $db->query('SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows')->fetchColumn();
+        $rowcontent['alias'] .= '-' . (intval($nb) + 1);
+    }else {
+        $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
+    }
     if (!empty($rowcontent['alias'])) {
         $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id !=' . $rowcontent['id'] . ' AND '  . NV_LANG_DATA . '_alias = :alias');
         $stmt->bindParam(':alias', $rowcontent['alias'], PDO::PARAM_STR);
@@ -722,12 +727,15 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             }
 
             // Update tags list
-            if ($rowcontent['keywords'] != $rowcontent['keywords_old']) {
+            if ($rowcontent['keywords'] != $rowcontent['keywords_old'] || ($is_copy == 1 && $rowcontent['keywords'] !='')) {
                 $keywords = explode(',', $rowcontent['keywords']);
                 $keywords = array_map('strip_punctuation', $keywords);
                 $keywords = array_map('trim', $keywords);
                 $keywords = array_diff($keywords, array( '' ));
                 $keywords = array_unique($keywords);
+                if($is_copy){
+                    $array_keywords_old = array();
+                }
 
                 foreach ($keywords as $keyword) {
                     if (!in_array($keyword, $array_keywords_old)) {
@@ -866,6 +874,12 @@ if ($pro_config['download_active']) {
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
+if($is_copy){
+    $get_alias_id = 0;
+}else {
+    $get_alias_id = $rowcontent['id'];
+}
+$xtpl->assign('ALIAS', $get_alias_id);
 $xtpl->assign('rowcontent', $rowcontent);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
