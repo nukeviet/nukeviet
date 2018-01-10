@@ -522,7 +522,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                         $rowcontent_coppy[$flang . '_' . $fname]= change_alias($rowcontent_coppy[$flang . '_title']);
                         $rowcontent_coppy[$flang . '_' . $fname].= '-' . (intval($nb) + 1);
                     }
-                    $data_insert[$flang . '_' . $fname] = ($flang == NV_PREFIXLANG) ? $rowcontent[$fname] : $rowcontent_coppy[$flang . '_' . $fname];
+                    $data_insert[$flang . '_' . $fname] = ($flang == NV_LANG_DATA) ? $rowcontent[$fname] : $rowcontent_coppy[$flang . '_' . $fname];
                 }else {
                     $data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
                 }
