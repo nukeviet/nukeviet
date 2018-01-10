@@ -216,9 +216,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
 
     $alias = nv_substr($nv_Request->get_title('alias', 'post', '', 1), 0, 255);
+    $nb = $db->query('SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows')->fetchColumn();
+
     if($is_copy && $alias == ''){
         $rowcontent['alias'] = change_alias($rowcontent['title']);
-        $nb = $db->query('SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows')->fetchColumn();
         $rowcontent['alias'] .= '-' . (intval($nb) + 1);
     }else {
         $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
@@ -516,7 +517,15 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
             foreach ($field_lang as $field_lang_i) {
                 list($flang, $fname) = $field_lang_i;
-                $data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
+                if($is_copy){
+                    if($fname == 'alias') {
+                        $rowcontent_coppy[$flang . '_' . $fname]= change_alias($rowcontent_coppy[$flang . '_title']);
+                        $rowcontent_coppy[$flang . '_' . $fname].= '-' . (intval($nb) + 1);
+                    }
+                    $data_insert[$flang . '_' . $fname] = ($flang == NV_PREFIXLANG) ? $rowcontent[$fname] : $rowcontent_coppy[$flang . '_' . $fname];
+                }else {
+                    $data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
+                }
             }
 
             unset($sth);
