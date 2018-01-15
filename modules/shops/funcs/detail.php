@@ -7,8 +7,8 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
- 
-if (! defined('NV_IS_MOD_SHOPS')) {
+
+if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
@@ -24,11 +24,11 @@ if ($nv_Request->isset_request('check_quantity', 'post')) {
         $sum = 0;
         $count = 0;
         $listgroupid = GetGroupID($id_pro, 1);
-        if (! empty($listgroupid) and ! empty($global_array_group)) {
+        if (!empty($listgroupid) and !empty($global_array_group)) {
             foreach ($listgroupid as $gid => $subid) {
                 $parent_info = $global_array_group[$gid];
                 if ($parent_info['in_order']) {
-                    $count ++;
+                    $count++;
                 }
             }
         }
@@ -91,14 +91,14 @@ if ($global_array_shops_cat[$data_content['listcatid']]['form'] != '') {
             }
         }
         
-        if (! empty($listfield)) {
+        if (!empty($listfield)) {
             $result = $db->query('SELECT t1.field_value, t2.field FROM ' . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . ' t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_field t2 WHERE t1.field_id=t2.fid AND t1.rows_id=' . $id);
             $data_content['template'] = $global_array_shops_cat[$data_content['listcatid']]['form'];
             while ($row = $result->fetch()) {
                 $data_content['array_custom'][$row['field']] = $row['field_value'];
             }
             
-            if (! empty($array_tmp)) {
+            if (!empty($array_tmp)) {
                 foreach ($array_tmp as $f_key => $field) {
                     foreach ($field as $key_lang => $lang_data) {
                         if ($key_lang == NV_LANG_DATA) {
@@ -112,8 +112,8 @@ if ($global_array_shops_cat[$data_content['listcatid']]['form'] != '') {
     }
 }
 
-$page_title = ! empty($data_content[NV_LANG_DATA . '_tag_title']) ? $data_content[NV_LANG_DATA . '_tag_title'] : $data_content[NV_LANG_DATA . '_title'];
-$description = ! empty($data_content[NV_LANG_DATA . '_tag_description']) ? $data_content[NV_LANG_DATA . '_tag_description'] : $data_content[NV_LANG_DATA . '_hometext'];
+$page_title = !empty($data_content[NV_LANG_DATA . '_tag_title']) ? $data_content[NV_LANG_DATA . '_tag_title'] : $data_content[NV_LANG_DATA . '_title'];
+$description = !empty($data_content[NV_LANG_DATA . '_tag_description']) ? $data_content[NV_LANG_DATA . '_tag_description'] : $data_content[NV_LANG_DATA . '_hometext'];
 
 if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $popup = $nv_Request->get_int('popup', 'post,get', 0);
@@ -128,7 +128,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $catid = $data_content['listcatid'];
     $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . $global_config['rewrite_exturl'], true);
     
-    if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and ! $popup) {
+    if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and !$popup) {
         Header('Location: ' . $base_url_rewrite);
         die();
     }
@@ -143,12 +143,12 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $data_content['tabs'] = $nv_Cache->db($sql, 'id', $module_name);
     
     $data_content['files'] = array();
-    if (! empty($data_content['tabs'])) {
+    if (!empty($data_content['tabs'])) {
         // Download tai lieu san pham
         if ($pro_config['download_active']) {
             $result = $db->query('SELECT id, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description, path, filesize, extension, download_groups FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE id IN (SELECT id_files FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_rows=' . $data_content['id'] . ')');
             while ($row = $result->fetch()) {
-                $row['filesize'] = ! empty($row['filesize']) ? nv_convertfromBytes($row['filesize']) : $lang_module['download_file_unknown'];
+                $row['filesize'] = !empty($row['filesize']) ? nv_convertfromBytes($row['filesize']) : $lang_module['download_file_unknown'];
                 $data_content['files'][] = $row;
             }
         }
@@ -171,31 +171,28 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $homeimgfile = $data_content['homeimgfile'];
     if ($data_content['homeimgthumb'] == 1) {
         // image thumb
-        
         $data_content['homeimgthumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
         $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
     } elseif ($data_content['homeimgthumb'] == 2) {
         // image file
-        
         $data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
     } elseif ($data_content['homeimgthumb'] == 3) {
         // image url
-        
         $data_content['homeimgthumb'] = $data_content['homeimgfile'] = $homeimgfile;
     } else {
         // no image
-        
         $data_content['homeimgthumb'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
     }
     
     // Tu khoa
     $array_keyword = array();
+    $key_words = array();
     $_query = $db->query('SELECT a1.keyword keyword, a2.alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id']);
     while ($row = $_query->fetch()) {
         $array_keyword[] = $row;
         $key_words[] = $row['keyword'];
     }
-    $key_words = ! empty($key_words) ? implode(',', $key_words) : '';
+    $key_words = !empty($key_words) ? implode(',', $key_words) : '';
     
     // metatag image facebook
     $meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgfile'];
@@ -213,19 +210,15 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $price_config, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
             // image thumb
-            
             $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 2) {
             // image file
-            
             $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 3) {
             // image url
-            
             $thumb = $homeimgfile;
         } else {
             // no image
-            
             $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
         }
         
@@ -255,7 +248,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     }
     
     $array_other_view = array();
-    if (! empty($_SESSION[$module_data . '_proview'])) {
+    if (!empty($_SESSION[$module_data . '_proview'])) {
         $arrid = array();
         foreach ($_SESSION[$module_data . '_proview'] as $id_i => $data_i) {
             if ($id_i != $id) {
@@ -263,7 +256,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
             }
         }
         $arrtempid = implode(',', $arrid);
-        if (! empty($arrtempid)) {
+        if (!empty($arrtempid)) {
             // Fetch Limit
             $db->sqlreset()
                 ->select('id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
@@ -275,19 +268,15 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
             while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
                 if ($homeimgthumb == 1) {
                     // image thumb
-                    
                     $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
                 } elseif ($homeimgthumb == 2) {
                     // image file
-                    
                     $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
                 } elseif ($homeimgthumb == 3) {
                     // image url
-                    
                     $thumb = $homeimgfile;
                 } else {
                     // no image
-                    
                     $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
                 }
                 
@@ -323,7 +312,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
         define('NV_COMM_ID', $data_content['id']); // ID bài viết hoặc
         define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']); // để đáp ứng comment ở bất cứ đâu không cứ là bài viết
-                                                                       // check allow comemnt
+        // check allow comemnt
         $allowed = $module_config[$module_name]['allowed_comm']; // tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
         if ($allowed == '-1') {
             $allowed = $data_content['allowed_comm'];
