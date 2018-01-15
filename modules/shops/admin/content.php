@@ -522,7 +522,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                         $rowcontent_coppy[$flang . '_' . $fname]= change_alias($rowcontent_coppy[$flang . '_title']);
                         $rowcontent_coppy[$flang . '_' . $fname].= '-' . (intval($nb) + 1);
                     }
-                    $data_insert[$flang . '_' . $fname] = ($flang == NV_LANG_DATA) ? $rowcontent[$fname] : $rowcontent_coppy[$flang . '_' . $fname];
+                    $data_insert[$flang . '_' . $fname] = ($flang == NV_LANG_DATA || $fname == 'title') ? $rowcontent[$fname] : $rowcontent_coppy[$flang . '_' . $fname];
                 }else {
                     $data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
                 }
@@ -534,13 +534,37 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent['id'] > 0) {
                 // Them du lieu tuy bien
                 if ($global_array_shops_cat[$rowcontent['listcatid']]['form'] != '') {
-                    foreach ($array_custom as $field_id => $value) {
-                        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
+                    if ($global_config['lang_multi']) {
+                        foreach ($global_config['allow_sitelangs'] as $lang_i) {
+                            foreach ($array_custom as $field_id => $value) {
+                                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . $lang_i . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
 
-                        $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
-                        $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
-                        $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
-                        $sth->execute();
+                                if(NV_LANG_DATA != $lang_i && $is_copy == 1){
+                                    $value_coppy = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . $lang_i . ' where rows_id=' . $rowcontent['id_coppy'] . ' AND field_id=' . $field_id)->fetch();
+                                    if(!empty($value_coppy)){
+                                        $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
+                                        $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
+                                        $sth->bindParam(':field_value', $value_coppy['field_value'], PDO::PARAM_STR, strlen($value_coppy['field_value']));
+                                        $sth->execute();
+                                    }
+                                }else {
+                                    $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
+                                    $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
+                                    $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
+                                    $sth->execute();
+                                }
+
+                            }
+                        }
+                    }else {
+                        foreach ($array_custom as $field_id => $value) {
+                            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
+
+                            $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
+                            $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
+                            $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
+                            $sth->execute();
+                        }
                     }
                 }
 
