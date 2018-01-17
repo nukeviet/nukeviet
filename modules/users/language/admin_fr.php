@@ -459,3 +459,4 @@ $lang_module['two_step_verification_require_admin'] = 'Obligatoire zone d\'admin
 $lang_module['two_step_verification_require_site'] = 'Obligatoire site en dehors d\'authentification en deux étapes';
 $lang_module['two_step_verification_require_admindefault'] = 'Les paramètres de sécurité sont invités à tourner dans le domaine de la gestion, mais pas ici encore la gouvernance pour activer la nouvelle connexion d\'authentification en deux étapes';
 $lang_module['two_step_verification_require_sitedefault'] = 'Les paramètres de sécurité sont nécessaires pour permettre un site externe, mais n\'a pas ici encore membres pour activer la nouvelle connexion d\'authentification en deux étapes';
+$lang_module['notification_new_acount'] = 'Le compte %d en attente d\'actif';
