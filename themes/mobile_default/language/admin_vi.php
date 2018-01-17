@@ -54,4 +54,4 @@ $lang_module['module_in_menu'] = 'Các module hiển thị tại menu';
 
 $lang_module['save'] = 'Lưu cấu hình';
 $lang_module['exp'] = 'Ví dụ';
-$lang_module['gfont_note'] = 'Chọn font tại: https://www.google.com/fonts';
+$lang_module['gfont_note'] = 'Chọn font tại: <a href="https://www.google.com/fonts" target="_blank" rel="nofollow">https://www.google.com/fonts</a>';
