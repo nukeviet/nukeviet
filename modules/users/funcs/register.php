@@ -379,6 +379,7 @@ if ($checkss == $array_register['checkss']) {
                 }
             } else {
                 $info = $lang_module['account_register_to_admin'];
+                nv_insert_notification($module_name, 'contact_new', array('title' => $array_register['username']), $userid, 0, 0, 1);
             }
 
             $nv_redirect = '';
