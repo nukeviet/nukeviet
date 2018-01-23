@@ -280,7 +280,8 @@ if ($step == 1) {
         }
     }
 
-    $array_resquest['php_required'] = $sys_info['php_required'];
+    $array_resquest['php_required_min'] = preg_replace('/\.([0-9]+)$/', '', $sys_info['php_required_min']);
+    $array_resquest['php_allowed_max'] = preg_replace('/\.([0-9]+)$/', '', $sys_info['php_allowed_max']);
     $array_resquest['php_version'] = $sys_info['php_version'];
 
     foreach ($nv_resquest_serverext_key as $key) {
