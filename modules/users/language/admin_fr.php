@@ -426,7 +426,6 @@ $lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['safe_active_info'] = 'Votre compte est en mode sans échec donc tous les fonctionnements de modification des infos du compte sont bloqués';
 $lang_module['safe_deactivate'] = 'Désactiver le mode sans échec';
 $lang_module['group_description'] = 'Description';
-$lang_module['group_description_empty'] = 'Prenez une brève description du groupe';
 $lang_module['auto_login_after_reg'] = 'Se connecter automatiquement après une inscription réussie';
 $lang_module['active_group_newusers'] = 'Activer membre d\'authentification';
 $lang_module['active_group_newusers_note'] = 'Si cette fonction est activée, le nouvel enregistrement de membre sera automatiquement classé comme "activé" jusqu\'à ce qu\'il ait été retiré du chef d\'équipe, au cours de laquelle les nouveaux membres sont considérés comme des «membres officiels "';
