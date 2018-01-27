@@ -1,13 +1,12 @@
 .sliderwrapper {
-	height: 200px;
-	width: 320px;
+	height: 190px;
 	overflow: hidden;
+    position: relative;
 }
 
 .sliderwrapper .contentdiv {
 	height: 190px;
 	left: 0;
-	padding: 5px;
 	position: absolute;
 	top: 0;
 	visibility: hidden;
@@ -22,49 +21,51 @@
 }
 
 .sliderwrapper .contentdiv h3 {
-	background: url(../images/transparent.png) repeat-x;
-	bottom: 4px;
-	left: 8px;
+	bottom: 0;
+	left: 0;
 	font-size: 14px;
 	line-height: 20px;
-	padding: 5px 3px 4px 3px;
 	position: absolute;
-	width: 96%
+	width: 100%;
 }
 
 .sliderwrapper .contentdiv h3 a {
-	color: #fff
+	background: url(../images/transparent.png) repeat-x;
+	color: #fff;
+	padding: 5px 3px 4px 3px;
+    display: block;
+    margin: 0 3px 5px 3px;
 }
 
 .sliderwrapper .contentdiv h3 a:hover {
 	color: #911E03
 }
 
-.pagination {
+.slider-pagination {
 	background: #fff;
 	padding: 2px 0;
 	text-align: center;
 	width: 100%
 }
 
-.pagination a {
+.slider-pagination a {
 	color: #999;
 	font-size: 11px;
 	font-weight: normal;
 	padding: 0 5px
 }
 
-.pagination a:hover, .pagination a.selected {
+.slider-pagination a:hover, .slider-pagination a.selected {
 	background-color: #ccc;
 	color: #333
 }
 
-.pagination a.prev {
+.slider-pagination a.prev {
 	background: url(../images/prev.png) no-repeat 4px 4px;
 	width: 6px
 }
 
-.pagination a.next {
+.slider-pagination a.next {
 	background: url(../images/next.png) no-repeat 4px 4px;
 	width: 6px
 }
