@@ -16,64 +16,64 @@
 }
 
 #topnews .ui-tabs .ui-tabs-nav {
-	margin: 0;
-	width: 100%
+    margin: 0;
+    width: 100%
 }
 
 #topnews .ui-tabs .ui-tabs-nav li {
-	border: 0;
-	display: inline;
-	height: 23px;
-	padding: 0;
-	position: relative;
-	white-space: nowrap;
+    border: 0;
+    display: inline;
+    height: 23px;
+    padding: 0;
+    position: relative;
+    white-space: nowrap;
     background-color: transparent;
 }
 
 #topnews .ui-tabs .ui-tabs-nav li a {
-	color: #333;
-	float: left;
-	font-weight: normal;
-	padding: 0 4px;
+    color: #333;
+    float: left;
+    font-weight: normal;
+    padding: 0 4px;
     outline: 0;
     line-height: 18px;
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active {
-	margin-bottom: 0
+    margin-bottom: 0
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
-	background: url(../images/tabs_arrow_down.jpg) no-repeat bottom center;
-	color: #fff;
-	display: block;
-	float: left;
-	height: 23px
+    background: url(../images/tabs_arrow_down.jpg) no-repeat bottom center;
+    color: #fff;
+    display: block;
+    float: left;
+    height: 23px
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a span {
-	background: #fff url(../images/tabs_l.png) no-repeat top left;
-	float: left;
-	height: 18px;
-	padding: 0 0 0 4px
+    background: #fff url(../images/tabs_l.png) no-repeat top left;
+    float: left;
+    height: 18px;
+    padding: 0 0 0 4px
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a span span {
-	background: url(../images/tabs_r.png) no-repeat top right;
-	padding: 0 4px 0 0
+    background: url(../images/tabs_r.png) no-repeat top right;
+    padding: 0 4px 0 0
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a {
-	cursor: text
+    cursor: text
 }
 
 #topnews .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
-	cursor: pointer
+    cursor: pointer
 }
 
 #topnews .ui-tabs .ui-tabs-panel {
-	border-width: 0;
-	display: block;
+    border-width: 0;
+    display: block;
     padding: 5px 5px 5px 0;
 }
 
@@ -82,5 +82,5 @@
 }
 
 #topnews .ui-tabs .ui-tabs-hide {
-	display: none !important
+    display: none !important
 }
