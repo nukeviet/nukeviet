@@ -320,7 +320,7 @@ if ($step == 1) {
     $db_config['dbhost'] = $nv_Request->get_string('dbhost', 'post', $db_config['dbhost']);
     $db_config['dbname'] = $nv_Request->get_string('dbname', 'post', $db_config['dbname']);
     $db_config['dbuname'] = $nv_Request->get_string('dbuname', 'post', $db_config['dbuname']);
-    $db_config['dbpass'] = $nv_Request->get_string('dbpass', 'post', $db_config['dbpass']);
+    $db_config['dbpass'] = trim($_POST['dbpass']);
     $db_config['prefix'] = $nv_Request->get_string('prefix', 'post', $db_config['prefix']);
     $db_config['dbport'] = $nv_Request->get_string('dbport', 'post', $db_config['dbport']);
     $db_config['db_detete'] = $nv_Request->get_int('db_detete', 'post', $db_config['dbdetete']);
@@ -668,6 +668,7 @@ if ($step == 1) {
     }
 
     $title = $lang_module['config_database'];
+    $db_config['dbpass'] = nv_htmlspecialchars($db_config['dbpass']);
     $contents = nv_step_5($db_config, $nextstep);
 } elseif ($step == 6) {
     $nextstep = 0;
@@ -1085,7 +1086,7 @@ function nv_save_file_config()
         $content .= "\$db_config['dbname'] = '" . $db_config['dbname'] . "';\n";
         $content .= "\$db_config['dbsystem'] = '" . $db_config['dbsystem'] . "';\n";
         $content .= "\$db_config['dbuname'] = '" . $db_config['dbuname'] . "';\n";
-        $content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
+        $content .= "\$db_config['dbpass'] = '" . str_replace("'", "\'", $db_config['dbpass']) . "';\n";
         $content .= "\$db_config['dbtype'] = '" . $db_config['dbtype'] . "';\n";
         $content .= "\$db_config['collation'] = '" . $db_config['collation'] . "';\n";
         $content .= "\$db_config['charset'] = '" . $db_config['charset'] . "';\n";
