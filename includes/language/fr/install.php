@@ -53,6 +53,7 @@ $lang_module['recommnet'] = 'Recommandé';
 $lang_module['request_more'] = 'Exigences supplementaires';
 $lang_module['turnoff'] = 'Inactif recommandé';
 $lang_module['turnon'] = 'Actif recommandé';
+$lang_module['and'] = 'et';
 $lang_module['is_support'] = 'Support recommandé';
 $lang_module['supports_rewrite'] = 'Support de rewrite';
 $lang_module['opendir_support'] = 'PHP supporte opendir';

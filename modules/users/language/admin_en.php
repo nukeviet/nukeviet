@@ -426,7 +426,6 @@ $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['safe_active_info'] = 'Your account is in safe mode,  all the features to edit your account information is protected.';
 $lang_module['safe_deactivate'] = 'Safe mode turn off';
 $lang_module['group_description'] = 'Description';
-$lang_module['group_description_empty'] = 'Take a brief description of the group.';
 $lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
 $lang_module['active_group_newusers'] = 'Enable new member';
 $lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';

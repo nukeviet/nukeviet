@@ -350,20 +350,24 @@
 </form>
 <div id="message"></div>
 <script type="text/javascript">
-	var nv_num_files = '{NUMFILE}';
 //<![CDATA[
-	var LANG = [];
-	var CFG = [];
-	CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
-	CFG.upload_current = "{UPLOAD_CURRENT}";
-	LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
-	LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
-	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-	<!-- BEGIN: getalias -->
-	$("#idtitle").change(function() {
-		get_alias();
-	});
-	<!-- END: getalias -->
+var nv_num_files = '{NUMFILE}';
+var LANG = [];
+var CFG = [];
+CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
+CFG.upload_current = "{UPLOAD_CURRENT}";
+CFG.id = {rowcontent.id};
+LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
+LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
+var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+<!-- BEGIN: getalias -->
+$("#idtitle").change(function() {
+	get_alias();
+});
+<!-- END: getalias -->
+<!-- BEGIN: holdon_edit -->
+CFG.is_edit_news = true;
+<!-- END: holdon_edit -->
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
@@ -373,3 +377,12 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
 <!-- END:main -->
+
+<!-- BEGIN: editing -->
+<div class="text-center">
+    <h2>{MESSAGE}</h2>
+    <!-- BEGIN: takeover -->
+    <a href="{TAKEOVER_LINK}" class="btn btn-danger">{LANG.dulicate_takeover}</a>
+    <!-- END: takeover -->
+</div>
+<!-- END: editing -->
