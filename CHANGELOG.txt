@@ -1,6 +1,26 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.01
+
+- Module banner: Fix delete banner.
+- Module freecontent: Free field link
+- Module users: Fix edit group, add notification when new account wating for active, group description is not required
+- Fix PDF.js
+- Fix check theme mobile
+- Update theme configuration
+- Extensions: Fix auto invalid theme version
+- Change the extension package upload error message
+- Fixed menu changes when editing admin
+- Fix function nv_user_groups
+- Fix qrcodeLoad theme mobile_default
+- Limited PHP version to install
+- Theme config: Update google fonts
+- Fix bug HTTP class: access to a source that has a redirect
+- Update theme block headline
+- PHPMailer v6.0.3
+- Jquery v3.3.1
+
 NUKEVIET 4.3.00
 
 - Module Upload: Add file path copy function, config chunk upload
