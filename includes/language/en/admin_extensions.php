@@ -135,6 +135,7 @@ $lang_module['autoinstall_uploaded_filelist'] = 'List of file';
 $lang_module['autoinstall_uploaded_num_exists'] = 'The number of duplicate files';
 $lang_module['autoinstall_uploaded_num_invalid'] = 'The number does not match the file structure';
 $lang_module['autoinstall_error_uploadfile'] = 'Error: Can not upload files to the system. Please check back or chmod tmp directory';
+$lang_module['autoinstall_error_uploadfile1'] = 'Error: Unable to upload file to system. Please check that the file size exceeds %s';
 $lang_module['autoinstall_error_downloaded'] = 'Error: Could not find file upload';
 $lang_module['autoinstall_error_createfile'] = 'Error: Unable to save file buffer list. Please check back or chmod tmp directory';
 $lang_module['autoinstall_error_invalidfile'] = 'Error: Invalid File zip';

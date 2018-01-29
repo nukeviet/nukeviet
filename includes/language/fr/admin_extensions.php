@@ -135,6 +135,7 @@ $lang_module['autoinstall_uploaded_filelist'] = 'Liste de fichier';
 $lang_module['autoinstall_uploaded_num_exists'] = 'Nombre de fichiers doublés';
 $lang_module['autoinstall_uploaded_num_invalid'] = 'Nombre de fichiers avec structure incompatible';
 $lang_module['autoinstall_error_uploadfile'] = 'Erreur: ne pas pouvoir mettre en ligne les fichier au système. Verifiez-les ou chmod le dossier tmp';
+$lang_module['autoinstall_error_uploadfile1'] = 'Erreur: Impossible de télécharger le fichier sur le système. Veuillez vérifier que la taille du fichier dépasse %s';
 $lang_module['autoinstall_error_downloaded'] = 'Erreur: Ne trouve pas le fichier mis en ligne';
 $lang_module['autoinstall_error_createfile'] = 'Erreur: N\'arrive pas à sauvegarder le nombre de fichier. Verifier-les ou chmod le dossier tmp';
 $lang_module['autoinstall_error_invalidfile'] = 'Erreur: Fichier .zip est incompatible';
