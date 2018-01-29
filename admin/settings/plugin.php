@@ -153,6 +153,12 @@ if (!empty($plugin_new)) {
                         $xtpl->parse('main.add.area');
                     }
                 }
+                $info = $xml->xpath('info');
+                if (!empty($info[0]->description)) {
+                    $xtpl->assign('NAME', $info[0]->name);
+                    $xtpl->assign('DESCRIPTION', $info[0]->description);
+                    $xtpl->parse('main.add.info');
+                }
             }
         }
     }
