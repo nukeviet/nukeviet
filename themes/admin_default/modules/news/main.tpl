@@ -78,7 +78,7 @@
                     <th>{LANG.status}</th>
                     <th class="text-center"><a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a></th>
                     <th class="text-center"><a href="{base_url_hitscm}"><em title="{LANG.numcomments}" class="fa fa-comment-o">&nbsp;</em></a></th>
-                    <th class="text-center"><em title="{LANG.keywords}" class="fa fa-tags">&nbsp;</em></th>
+                    <th class="text-center"><em title="{LANG.numtags}" class="fa fa-tags">&nbsp;</em></th>
                     <th>&nbsp;</th>
                 </tr>
             </thead>
