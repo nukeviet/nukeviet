@@ -195,20 +195,16 @@ if (!empty($savecat)) {
                     $sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval($data['catid']);
                     $db->query($sql);
                     nv_fix_cat_order();
-                }
-
-                //cập nhật nhóm khi chuyển cat con thành cat cha
-                if ($data['parentid'] == 0) {
-                    $result_group = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['parentid_old']);
-                    while ($row_group = $result_group->fetch()) {
-                        $count_group = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = '. $data['catid'].' AND groupid ='.$row_group['groupid'])->fetchcolumn() ;
-                        if($count_group<1) {
+                    //cập nhật nhóm khi chuyển cat con thành cat cha
+                    if ($data['parentid'] == 0) {
+                        $result_group = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['parentid_old']);
+                        while ($row_group = $result_group->fetch()) {
                             $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $row_group['groupid'] . ',' . $data['catid'] . ')');
                         }
                     }
-                }
-                else {
-                    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $data['catid']);
+                    else {
+                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $data['catid']);
+                    }
                 }
 
                 // cập nhật các form dữ liệu tùy biến cho các subcat
