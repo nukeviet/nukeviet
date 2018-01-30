@@ -26,23 +26,27 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     $include_lang = '';
     $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
-    if ($module == 'global' and preg_match('/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/', $admin_file, $m)) {
-        $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $admin_file;
-        $admin_file = 'block.global.' . $m[1];
-    } elseif (preg_match('/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/', $admin_file, $m)) {
+    if (preg_match('/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/', $admin_file, $m)) {
+        // Block các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file;
         $admin_file = 'block.' . $m[1] . '.' . $m[2];
     } elseif ($module == 'global' and $admin_file == 1) {
+        // Global trong quản trị
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
     } elseif ($module == 'global' and $admin_file == 0) {
+        // Global ngoài site
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
     } elseif ($module == 'install' and $admin_file == 0) {
+        // Lang cài đặt ngoài site
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
     } elseif (in_array($module, $modules_exit) and $admin_file == 1) {
+        // Lang quản trị của các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php';
     } elseif (in_array($module, $modules_exit) and $admin_file == 0) {
+        // Lang ngoài site các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
     } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php')) {
+        // Lang các module trong quản trị
         $admin_file = 1;
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
     }
@@ -186,37 +190,47 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
     $array_filename = array();
 
     nv_admin_add_field_lang($dirlang);
+    // Đọc ngôn ngữ global ngoài site
     nv_admin_read_lang($dirlang, 'global', 0);
+    // Đọc ngôn ngữ cài đặt ngoài site
     nv_admin_read_lang($dirlang, 'install', 0);
 
     $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
+
+    // Đọc ngôn ngữ global admin
     nv_admin_read_lang($dirlang, 'global', 1);
 
     $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
     $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
 
     foreach ($dirs as $module) {
+        // Đọc ngôn ngữ các module trong quản trị
         nv_admin_read_lang($dirlang, $module, 1);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
     }
 
-    $dirs = nv_scandir(NV_ROOTDIR . '/includes/language/' . $dirlang, '/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/');
-    foreach ($dirs as $file_i) {
-        nv_admin_read_lang($dirlang, 'global', $file_i);
-    }
-
     $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
     foreach ($dirs as $module) {
+        // Đọc ngôn ngữ ngoài site các module
         nv_admin_read_lang($dirlang, $module, 0);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
 
+        // Đọc ngôn ngữ admin các module
         nv_admin_read_lang($dirlang, $module, 1);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
 
         $blocks = nv_scandir(NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/');
         foreach ($blocks as $file_i) {
+            // Đọc ngôn ngữ các block của module tương ứng
             nv_admin_read_lang($dirlang, $module, $file_i);
         }
+    }
+
+    $dirs1 = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme']);
+    $dirs2 = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_mobile']);
+    $dirs = array_unique(array_merge_recursive($dirs1, $dirs2));
+    foreach ($dirs as $theme) {
+        //
     }
 
     $nv_Request->set_Cookie('dirlang', $dirlang, NV_LIVE_COOKIE_TIME);
