@@ -90,6 +90,7 @@ $lang_module['search_modul_title'] = 'Tin tức';
 $lang_module['type_title'] = 'Lựa chọn kiểu tìm kiếm';
 $lang_module['finter_title'] = 'Thời gian';
 $lang_module['source_title'] = 'Nguồn tin';
+$lang_module['tags'] = 'Tags';
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['no_permission'] = 'Bạn không được phép xem bài viết';
 $lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
