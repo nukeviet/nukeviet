@@ -320,7 +320,7 @@ if ($step == 1) {
     $db_config['dbhost'] = $nv_Request->get_string('dbhost', 'post', $db_config['dbhost']);
     $db_config['dbname'] = $nv_Request->get_string('dbname', 'post', $db_config['dbname']);
     $db_config['dbuname'] = $nv_Request->get_string('dbuname', 'post', $db_config['dbuname']);
-    $db_config['dbpass'] = trim($_POST['dbpass']);
+    $db_config['dbpass'] = isset($_POST['dbpass']) ? trim($_POST['dbpass']) : '';
     $db_config['prefix'] = $nv_Request->get_string('prefix', 'post', $db_config['prefix']);
     $db_config['dbport'] = $nv_Request->get_string('dbport', 'post', $db_config['dbport']);
     $db_config['db_detete'] = $nv_Request->get_int('db_detete', 'post', $db_config['dbdetete']);
