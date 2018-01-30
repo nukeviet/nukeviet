@@ -182,8 +182,9 @@ $rowcontent = array(
     'total_rating' => 0,
     'click_rating' => 0,
     'layout_func' => '',
+    'tags' => '',
+    'tags_old' => '',
     'keywords' => '',
-    'keywords_old' => '',
     'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
     'instant_template' => '',
     'instant_creatauto' => 0,
@@ -194,7 +195,7 @@ $rowcontent['topictext'] = '';
 $page_title = $lang_module['content_add'];
 $error = array();
 $groups_list = nv_groups_list();
-$array_keywords_old = array();
+$array_tags_old = array();
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 
 // ID của bài viết cần sửa hoặc cần copy
@@ -264,10 +265,10 @@ if ($rowcontent['id'] > 0) {
     // Lấy các tag của bài viết
     $_query = $db->query('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY keyword ASC');
     while ($row = $_query->fetch()) {
-        $array_keywords_old[$row['tid']] = $row['keyword'];
+        $array_tags_old[$row['tid']] = $row['keyword'];
     }
-    $rowcontent['keywords'] = implode(', ', $array_keywords_old);
-    $rowcontent['keywords_old'] = $rowcontent['keywords'];
+    $rowcontent['tags'] = implode(', ', $array_tags_old);
+    $rowcontent['tags_old'] = $rowcontent['tags'];
 
     // Các nhóm tin của bài viết
     $id_block_content = array();
@@ -561,7 +562,6 @@ if ($is_submit_form) {
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
     $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
-
     $rowcontent['copyright'] = (int) $nv_Request->get_bool('copyright', 'post');
     $rowcontent['inhome'] = (int) $nv_Request->get_bool('inhome', 'post');
 
@@ -581,38 +581,40 @@ if ($is_submit_form) {
 
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords']);
+    $rowcontent['tags'] = $nv_Request->get_array('tags', 'post', '');
+    $rowcontent['tags'] = implode(', ', $rowcontent['tags']);
 
-    // Tu dong xac dinh keywords
-    if ($rowcontent['keywords'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
-        $keywords = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
-        $keywords = nv_get_keywords($keywords, 100);
-        $keywords = explode(',', $keywords);
+    // Tu dong xac dinh tags
+    if ($rowcontent['tags'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
+        $tags = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
+        $tags = nv_get_keywords($tags, 100);
+        $tags = explode(',', $tags);
 
         // Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
-        $keywords_return = array();
-        foreach ($keywords as $keyword_i) {
+        $tags_return = array();
+        foreach ($tags as $tag_i) {
             $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where keyword = :keyword');
-            $sth->bindParam(':keyword', $keyword_i, PDO::PARAM_STR);
+            $sth->bindParam(':keyword', $tag_i, PDO::PARAM_STR);
             $sth->execute();
             if ($sth->fetchColumn()) {
-                $keywords_return[] = $keyword_i;
-                if (sizeof($keywords_return) > 20) {
+                $tags_return[] = $tag_i;
+                if (sizeof($tags_return) > 20) {
                     break;
                 }
             }
         }
 
-        if (sizeof($keywords_return) < 20) {
-            foreach ($keywords as $keyword_i) {
-                if (!in_array($keyword_i, $keywords_return)) {
-                    $keywords_return[] = $keyword_i;
-                    if (sizeof($keywords_return) > 20) {
+        if (sizeof($tags_return) < 20) {
+            foreach ($tags as $tag_i) {
+                if (!in_array($tag_i, $tags_return)) {
+                    $tags_return[] = $tag_i;
+                    if (sizeof($tags_return) > 20) {
                         break;
                     }
                 }
             }
         }
-        $rowcontent['keywords'] = implode(',', $keywords_return);
+        $rowcontent['tags'] = implode(',', $tags_return);
     }
 
     if ($rowcontent['status'] != 4) {
@@ -801,11 +803,12 @@ if ($is_submit_form) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
                 $ct_query = array();
 
-                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail VALUES (
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, keywords, sourcetext, files, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
                     :description,
                     :bodyhtml,
+                    :keywords,
                     :sourcetext,
                     :files,
                     ' . $rowcontent['imgposition'] . ',
@@ -821,6 +824,7 @@ if ($is_submit_form) {
                 $stmt->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
                 $stmt->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $stmt->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
+                $stmt->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
                 $ct_query[] = (int) $stmt->execute();
 
@@ -915,6 +919,7 @@ if ($is_submit_form) {
                     titlesite=:titlesite,
                     description=:description,
                     bodyhtml=:bodyhtml,
+                    keywords=:keywords,
                     sourcetext=:sourcetext,
                     files=:files,
                     imgposition=' . intval($rowcontent['imgposition']) . ',
@@ -931,6 +936,7 @@ if ($is_submit_form) {
                 $sth->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR, strlen($rowcontent['layout_func']));
                 $sth->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $sth->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
+                $sth->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $sth->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
 
                 $ct_query[] = (int) $sth->execute();
@@ -996,43 +1002,43 @@ if ($is_submit_form) {
                 nv_news_fix_block($bid_i, false);
             }
 
-            if ($rowcontent['keywords'] != $rowcontent['keywords_old'] or $copy) {
-                $keywords = explode(',', $rowcontent['keywords']);
-                $keywords = array_map('strip_punctuation', $keywords);
-                $keywords = array_map('trim', $keywords);
-                $keywords = array_diff($keywords, array(
+            if ($rowcontent['tags'] != $rowcontent['tags_old'] or $copy) {
+                $tags = explode(',', $rowcontent['tags']);
+                $tags = array_map('strip_punctuation', $tags);
+                $tags = array_map('trim', $tags);
+                $tags = array_diff($tags, array(
                     ''
                 ));
-                $keywords = array_unique($keywords);
-                foreach ($keywords as $keyword) {
-                    $keyword = str_replace('&', ' ', $keyword);
-                    if (!in_array($keyword, $array_keywords_old)) {
-                        $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($keyword) : str_replace(' ', '-', $keyword);
+                $tags = array_unique($tags);
+                foreach ($tags as $_tag) {
+                    $_tag = str_replace('&', ' ', $_tag);
+                    if (!in_array($_tag, $array_tags_old)) {
+                        $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($_tag) : str_replace(' ', '-', $_tag);
                         $alias_i = nv_strtolower($alias_i);
                         $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                         $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
-                        $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+                        $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                         $sth->execute();
 
-                        list ($tid, $alias, $keywords_i) = $sth->fetch(3);
+                        list ($tid, $alias, $tag_i) = $sth->fetch(3);
                         if (empty($tid)) {
                             $array_insert = array();
                             $array_insert['alias'] = $alias_i;
-                            $array_insert['keyword'] = $keyword;
+                            $array_insert['keyword'] = $_tag;
 
                             $tid = $db->insert_id("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert);
                         } else {
                             if ($alias != $alias_i) {
-                                if (!empty($keywords_i)) {
-                                    $keyword_arr = explode(',', $keywords_i);
-                                    $keyword_arr[] = $keyword;
-                                    $keywords_i2 = implode(',', array_unique($keyword_arr));
+                                if (!empty($tag_i)) {
+                                    $tag_arr = explode(',', $tag_i);
+                                    $tag_arr[] = $_tag;
+                                    $tag_i2 = implode(',', array_unique($tag_arr));
                                 } else {
-                                    $keywords_i2 = $keyword;
+                                    $tag_i2 = $_tag;
                                 }
-                                if ($keywords_i != $keywords_i2) {
+                                if ($tag_i != $tag_i2) {
                                     $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET keywords= :keywords WHERE tid =' . $tid);
-                                    $sth->bindParam(':keywords', $keywords_i2, PDO::PARAM_STR);
+                                    $sth->bindParam(':keywords', $tag_i2, PDO::PARAM_STR);
                                     $sth->execute();
                                 }
                             }
@@ -1042,19 +1048,19 @@ if ($is_submit_form) {
                         // insert keyword for table _tags_id
                         try {
                             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . intval($tid) . ', :keyword)');
-                            $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+                            $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();
                         } catch (PDOException $e) {
                             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval($tid));
-                            $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+                            $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();
                         }
-                        unset($array_keywords_old[$tid]);
+                        unset($array_tags_old[$tid]);
                     }
                 }
 
-                foreach ($array_keywords_old as $tid => $keyword) {
-                    if (!in_array($keyword, $keywords)) {
+                foreach ($array_tags_old as $tid => $_tag_i) {
+                    if (!in_array($_tag_i, $tags)) {
                         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid);
                         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid);
                     }
@@ -1338,11 +1344,20 @@ if (sizeof($array_block_cat_module)) {
     }
     $xtpl->parse('main.block_cat');
 }
+
 if (!empty($rowcontent['keywords'])) {
-    $keywords_array = explode(',', $rowcontent['keywords']);
-    foreach ($keywords_array as $keywords) {
-        $xtpl->assign('KEYWORDS', $keywords);
+    $_array = explode(',', $rowcontent['keywords']);
+    foreach ($_array as $_v) {
+        $xtpl->assign('KEYWORDS', $_v);
         $xtpl->parse('main.keywords');
+    }
+}
+
+if (!empty($rowcontent['tags'])) {
+    $_array = explode(',', $rowcontent['tags']);
+    foreach ($_array as $_v) {
+        $xtpl->assign('TAGS', $_v);
+        $xtpl->parse('main.tags');
     }
 }
 $archive_checked = ($rowcontent['archive']) ? ' checked="checked"' : '';

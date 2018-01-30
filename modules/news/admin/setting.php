@@ -48,6 +48,7 @@ if (!empty($savesetting)) {
     $array_config['tags_alias'] = $nv_Request->get_int('tags_alias', 'post', 0);
     $array_config['auto_tags'] = $nv_Request->get_int('auto_tags', 'post', 0);
     $array_config['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
+    $array_config['keywords_tag'] = $nv_Request->get_int('keywords_tag', 'post', 0);
     $array_config['copy_news'] = $nv_Request->get_int('copy_news', 'post', 0);
     $array_config['order_articles'] = $nv_Request->get_int('order_articles', 'post', 0);
 
@@ -180,6 +181,7 @@ $xtpl->assign('TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' check
 $xtpl->assign('ALIAS_LOWER', $module_config[$module_name]['alias_lower'] ? ' checked="checked"' : '');
 $xtpl->assign('AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '');
+$xtpl->assign('KEYWORDS_TAG', $module_config[$module_name]['keywords_tag'] ? ' checked="checked"' : '');
 $xtpl->assign('COPY_NEWS', $module_config[$module_name]['copy_news'] ? ' checked="checked"' : '');
 $xtpl->assign('ELAS_USE', $module_config[$module_name]['elas_use'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOW_NO_IMAGE', (!empty($module_config[$module_name]['show_no_image'])) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '');

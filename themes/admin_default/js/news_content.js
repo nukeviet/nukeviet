@@ -133,7 +133,8 @@ $(document).ready(function() {
             });
         }
     });
-
+    
+    // Keywords autocomplete
     $("#keywords-search").bind("keydown", function(event) {
         if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
             event.preventDefault();
@@ -200,6 +201,76 @@ $(document).ready(function() {
         }
         return false;
     });
+    // Keywords autocomplete end    
+
+    // Tags autocomplete
+    $("#tags-search").bind("keydown", function(event) {
+        if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
+            event.preventDefault();
+        }
+
+        if(event.keyCode==13){
+            var tags_add= $("#tags-search").val();
+            tags_add = trim( tags_add );
+            if( tags_add != '' ){
+                nv_add_element( 'tags', tags_add, tags_add );
+                $(this).val('');
+            }
+            return false;
+        }
+
+    }).autocomplete({
+        source : function(request, response) {
+            $.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
+                term : extractLast(request.term)
+            }, response);
+        },
+        search : function() {
+            // custom minLength
+            var term = extractLast(this.value);
+            if (term.length < 2) {
+                return false;
+            }
+        },
+        focus : function() {
+          //no action
+        },
+        select : function(event, ui) {
+            // add placeholder to get the comma-and-space at the end
+            if(event.keyCode!=13){
+                nv_add_element( 'tags', ui.item.value, ui.item.value );
+                $(this).val('');
+               }
+            return false;
+        }
+    });
+
+    $("#tags-search").blur(function() {
+        // add placeholder to get the comma-and-space at the end
+        var tags_add= $("#tags-search").val();
+        tags_add = trim( tags_add );
+        if( tags_add != '' ){
+            nv_add_element( 'tags', tags_add, tags_add );
+            $(this).val('');
+        }
+        return false;
+    });
+    $("#tags-search").bind("keyup", function(event) {
+        var tags_add= $("#tags-search").val();
+        if(tags_add.search(',') > 0 )
+        {
+            tags_add = tags_add.split(",");
+            for (i = 0; i < tags_add.length; i++) {
+                var str_keyword = trim( tags_add[i] );
+                if( str_keyword != '' ){
+                    nv_add_element( 'tags', str_keyword, str_keyword );
+                }
+            }
+            $(this).val('');
+        }
+        return false;
+    });
+    // Tags autocomplete end
 
     // hide message_body after the first one
     $(".message_list .message_body:gt(1)").hide();
