@@ -216,8 +216,14 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
 
     $alias = nv_substr($nv_Request->get_title('alias', 'post', '', 1), 0, 255);
-    $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
+    $nb = $db->query('SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows')->fetchColumn();
 
+    if($is_copy && $alias == ''){
+        $rowcontent['alias'] = change_alias($rowcontent['title']);
+        $rowcontent['alias'] .= '-' . (intval($nb) + 1);
+    }else {
+        $rowcontent['alias'] = ($alias == '') ? change_alias($rowcontent['title']) : change_alias($alias);
+    }
     if (!empty($rowcontent['alias'])) {
         $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id !=' . $rowcontent['id'] . ' AND '  . NV_LANG_DATA . '_alias = :alias');
         $stmt->bindParam(':alias', $rowcontent['alias'], PDO::PARAM_STR);
@@ -511,7 +517,15 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
             foreach ($field_lang as $field_lang_i) {
                 list($flang, $fname) = $field_lang_i;
-                $data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
+                if($is_copy){
+                    if($fname == 'alias') {
+                        $rowcontent_coppy[$flang . '_' . $fname]= change_alias($rowcontent_coppy[$flang . '_title']);
+                        $rowcontent_coppy[$flang . '_' . $fname].= '-' . (intval($nb) + 1);
+                    }
+                    $data_insert[$flang . '_' . $fname] = ($flang == NV_LANG_DATA || $fname == 'title') ? $rowcontent[$fname] : $rowcontent_coppy[$flang . '_' . $fname];
+                }else {
+                    $data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
+                }
             }
 
             unset($sth);
@@ -520,13 +534,37 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent['id'] > 0) {
                 // Them du lieu tuy bien
                 if ($global_array_shops_cat[$rowcontent['listcatid']]['form'] != '') {
-                    foreach ($array_custom as $field_id => $value) {
-                        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
+                    if ($global_config['lang_multi']) {
+                        foreach ($global_config['allow_sitelangs'] as $lang_i) {
+                            foreach ($array_custom as $field_id => $value) {
+                                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . $lang_i . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
 
-                        $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
-                        $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
-                        $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
-                        $sth->execute();
+                                if(NV_LANG_DATA != $lang_i && $is_copy == 1){
+                                    $value_coppy = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . $lang_i . ' where rows_id=' . $rowcontent['id_coppy'] . ' AND field_id=' . $field_id)->fetch();
+                                    if(!empty($value_coppy)){
+                                        $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
+                                        $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
+                                        $sth->bindParam(':field_value', $value_coppy['field_value'], PDO::PARAM_STR, strlen($value_coppy['field_value']));
+                                        $sth->execute();
+                                    }
+                                }else {
+                                    $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
+                                    $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
+                                    $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
+                                    $sth->execute();
+                                }
+
+                            }
+                        }
+                    }else {
+                        foreach ($array_custom as $field_id => $value) {
+                            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
+
+                            $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
+                            $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
+                            $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
+                            $sth->execute();
+                        }
                     }
                 }
 
@@ -722,12 +760,15 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             }
 
             // Update tags list
-            if ($rowcontent['keywords'] != $rowcontent['keywords_old']) {
+            if ($rowcontent['keywords'] != $rowcontent['keywords_old'] || ($is_copy == 1 && $rowcontent['keywords'] !='')) {
                 $keywords = explode(',', $rowcontent['keywords']);
                 $keywords = array_map('strip_punctuation', $keywords);
                 $keywords = array_map('trim', $keywords);
                 $keywords = array_diff($keywords, array( '' ));
                 $keywords = array_unique($keywords);
+                if($is_copy){
+                    $array_keywords_old = array();
+                }
 
                 foreach ($keywords as $keyword) {
                     if (!in_array($keyword, $array_keywords_old)) {
@@ -866,6 +907,12 @@ if ($pro_config['download_active']) {
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
+if($is_copy){
+    $get_alias_id = 0;
+}else {
+    $get_alias_id = $rowcontent['id'];
+}
+$xtpl->assign('ALIAS', $get_alias_id);
 $xtpl->assign('rowcontent', $rowcontent);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

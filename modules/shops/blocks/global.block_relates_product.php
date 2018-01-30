@@ -8,11 +8,11 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_relates_product')) {
+if (!nv_function_exists('nv_relates_product')) {
 
     /**
      * nv_block_config_relates_blocks()
@@ -27,8 +27,8 @@ if (! nv_function_exists('nv_relates_product')) {
     {
         global $nv_Cache, $db_config, $site_mods;
 
-        $html = "<tr>";
-        $html .= "	<td>" . $lang_block['blockid'] . "</td>";
+        $html = "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['blockid'] . "</label>";
         $html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
         $sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
         $list = $nv_Cache->db($sql, 'catid', $module);
@@ -36,23 +36,23 @@ if (! nv_function_exists('nv_relates_product')) {
             $sel = ($data_block['blockid'] == $l['bid']) ? ' selected' : '';
             $html .= "<option value=\"" . $l['bid'] . "\" " . $sel . ">" . $l[NV_LANG_DATA . '_title'] . "</option>\n";
         }
-        $html .= "	</select></td>\n";
+        $html .= "	</select></div>\n";
         $html .= '<script type="text/javascript">';
         $html .= '	$("select[name=config_blockid]").change(function() {';
         $html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
         $html .= '	});';
         $html .= '</script>';
-        $html .= "</tr>";
+        $html .= "</div>";
 
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['numrow'] . "</td>";
-        $html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
-        $html .= "</tr>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['numrow'] . "</label>";
+        $html .= "	<div class=\"col-sm-18\"><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></div>";
+        $html .= "</div>";
 
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['cut_num'] . "</td>";
-        $html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
-        $html .= "</tr>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['cut_num'] . "</label>";
+        $html .= "	<div class=\"col-sm-18\"><input class=\"form-control w100\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></div>";
+        $html .= "</div>";
 
         return $html;
     }
@@ -77,7 +77,7 @@ if (! nv_function_exists('nv_relates_product')) {
         return $return;
     }
 
-    if (! nv_function_exists('nv_get_price_tmp')) {
+    if (!nv_function_exists('nv_get_price_tmp')) {
 
         function nv_get_price_tmp($module_name, $module_data, $module_file, $pro_id)
         {
@@ -187,12 +187,12 @@ if (! nv_function_exists('nv_relates_product')) {
         $xtpl->assign('WIDTH', $pro_config['homewidth']);
 
         $db->sqlreset()
-        ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.product_number')
-        ->from($db_config['prefix'] . '_' . $mod_data . '_rows t1')
-        ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id')
-        ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status =1')
-        ->order('t1.addtime DESC, t2.weight ASC')
-        ->limit($block_config['numrow']);
+            ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.product_number')
+            ->from($db_config['prefix'] . '_' . $mod_data . '_rows t1')
+            ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id')
+            ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status =1')
+            ->order('t1.addtime DESC, t2.weight ASC')
+            ->limit($block_config['numrow']);
 
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
@@ -252,7 +252,7 @@ if (! nv_function_exists('nv_relates_product')) {
 
             // San pham yeu thich
             if ($pro_config['active_wishlist']) {
-                if (! empty($array_wishlist_id)) {
+                if (!empty($array_wishlist_id)) {
                     if (in_array($row['id'], $array_wishlist_id)) {
                         $xtpl->parse('main.loop.wishlist.disabled');
                     }
@@ -261,7 +261,7 @@ if (! nv_function_exists('nv_relates_product')) {
             }
 
             $xtpl->parse('main.loop');
-            ++ $i;
+            ++$i;
         }
 
         $xtpl->parse('main');

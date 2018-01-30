@@ -8,11 +8,12 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! function_exists('nv_pro_catalogs')) {
+if (!function_exists('nv_pro_catalogs')) {
+
     /**
      * nv_block_config_product_catalogs_blocks()
      *
@@ -26,10 +27,10 @@ if (! function_exists('nv_pro_catalogs')) {
         global $db, $language_array, $db_config;
 
         $html = "";
-        $html .= "<tr>";
-        $html .= "	<td>" . $lang_block['cut_num'] . "</td>";
-        $html .= "	<td><input class=\"form-control w150\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
-        $html .= "</tr>";
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['cut_num'] . "</label>";
+        $html .= "	<div class=\"col-sm-18\"><input class=\"form-control w150\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></div>";
+        $html .= "</div>";
         return $html;
     }
 
@@ -111,7 +112,7 @@ if (! function_exists('nv_pro_catalogs')) {
                 if ($cat['inhome'] == '1') {
                     $html .= "<li>\n";
                     $html .= "<a title=\"" . $cat['title'] . "\" href=\"" . $cat['link'] . "\">" . nv_clean60($cat['title'], $cut_num) . "</a>\n";
-                    if (! empty($cat['subcatid'])) {
+                    if (!empty($cat['subcatid'])) {
                         $html .= "<span class=\"fa arrow expand\"></span>";
                         $html .= html_viewsub($cat['subcatid'], $block_config);
                     }
@@ -144,7 +145,7 @@ if (! function_exists('nv_pro_catalogs')) {
                 if ($array_cat_shops[$catid]['inhome'] == '1') {
                     $html .= "<li>\n";
                     $html .= "<a title=\"" . $array_cat_shops[$catid]['title'] . "\" href=\"" . $array_cat_shops[$catid]['link'] . "\">" . nv_clean60($array_cat_shops[$catid]['title'], $cut_num) . "</a>\n";
-                    if (! empty($array_cat_shops[$catid]['subcatid'])) {
+                    if (!empty($array_cat_shops[$catid]['subcatid'])) {
                         $html .= html_viewsub($array_cat_shops[$catid]['subcatid'], $block_config);
                     }
                     $html .= "</li>\n";
