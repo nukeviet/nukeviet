@@ -36,9 +36,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
     $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
-    $content_config .= "\$cache_other = '" . serialize($robots_other) . "';";
+    $content_config .= "\$cache_other = '" . serialize($robots_other) . "';\n";
 
     file_put_contents($cache_file, $content_config, LOCK_EX);
 
