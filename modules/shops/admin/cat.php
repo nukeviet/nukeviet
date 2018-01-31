@@ -188,6 +188,57 @@ if (!empty($savecat)) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid']);
 
                 if ($data['parentid'] != $data['parentid_old']) {
+                    //Khi loại sản phẩm đó đã có sản phẩm chọn thì mọi cấu hình của loại sản phẩm đó cần được giữ nguyên.
+                    $count_cat_items = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE listcatid =' . $data['catid'])->fetchcolumn();
+                    if ($count_cat_items > 0) {
+                        //cập nhật nhóm khi chuyển cat con thành cat cha hoặc từ con của cha này chuyển thành con của cha khác
+                        //Nếu hiện tại nó là cha thì copy chính nó, nếu là con thì copy thằng cha cũ
+                        $parentid = ($data['parentid_old'] != 0)? $data['parentid_old']: $data['catid'];
+                        //Kiểm tra nếu từ con sang cha thì cần insert cho chính nó, nếu từ cha thành con thì insertcho cha hiện tại
+                        $catid_insert = ($data['parentid_old'] != 0)? $data['catid']: $data['parentid'];
+                        if ($parentid != 0) {
+                            //Danh sách các nhóm được chọn cho sản phẩm của loại sản phẩm
+                            $result_group_items = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid =' . $parentid . ' AND groupid IN (SELECT parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group WHERE groupid IN (SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id IN(SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE listcatid =' . $data['catid'].'))) ');
+                            $arr_group_items = array();
+
+                            while ($row_group = $result_group_items->fetch()) {
+                                //$arr_group_items[] = $row_group['groupid'];
+                                $row_check = $db->query('SELECT is_require FROM nv4_shops_group where groupid = '. $row_group['groupid'])->fetch();
+
+                                if($row_check['is_require'] == 1) {
+                                    $error = 'Tồn tại thuộc tính của loại sản phẩm bắt buộc chọn khi nhập nên không thể thay đổi';
+                                    break;
+                                }
+                                $count_group = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $catid_insert . ' AND groupid =' . $row_group['groupid'])->fetchcolumn();
+                                if ($count_group < 1) {
+                                    $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $row_group['groupid'] . ',' . $catid_insert . ')');
+                                }
+                            }
+                            /*$result_group = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $parentid);
+
+                            while ($row_group = $result_group->fetch()) {
+
+                                //Kiểm tra group này đã có sản phẩm nào chọn chưa
+                                if (in_array($row_group['groupid'], $arr_group_items)) {
+                                    $count_group = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $catid_insert . ' AND groupid =' . $row_group['groupid'])->fetchcolumn();
+                                    if ($count_group < 1) {
+                                        $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $row_group['groupid'] . ',' . $catid_insert . ')');
+                                    }
+                                    else {
+                                        if($data['parentid_old'] == 0) {
+                                            $row_check = $db->query('SELECT is_require FROM nv4_shops_group where groupid = '. $row_group['groupid'])->fetch();
+                                        }
+                                        $error = '';
+                                        break;
+                                    }
+                                }
+                            }*/
+                            if($data['parentid_old'] == 0) {
+                                //Xóa các thông số hiện tại
+                                $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['catid']);
+                            }
+                        }
+                    }
                     $w = 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
                     $rw = $db->query($w);
                     $weight = $rw->fetchColumn();
@@ -195,16 +246,6 @@ if (!empty($savecat)) {
                     $sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval($data['catid']);
                     $db->query($sql);
                     nv_fix_cat_order();
-                    //cập nhật nhóm khi chuyển cat con thành cat cha
-                    if ($data['parentid'] == 0) {
-                        $result_group = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['parentid_old']);
-                        while ($row_group = $result_group->fetch()) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $row_group['groupid'] . ',' . $data['catid'] . ')');
-                        }
-                    }
-                    else {
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $data['catid']);
-                    }
                 }
 
                 // cập nhật các form dữ liệu tùy biến cho các subcat
@@ -215,8 +256,12 @@ if (!empty($savecat)) {
                 }
 
                 $nv_Cache->delMod($module_name);
+
+                if ($error == '') {
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
                 die();
+                }
+
             }
         } catch (PDOException $e) {
             $error = $lang_module['errorsave'];
@@ -307,7 +352,7 @@ $xtpl->assign('DATA', $data);
 $xtpl->assign('CAT_LIST', shops_show_cat_list($data['parentid']));
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;catid=' . $data['catid'] . '&amp;parentid=' . $data['parentid']);
-
+//print_R($error);die('dừng');
 if ($error != '') {
     $xtpl->assign('error', $error);
     $xtpl->parse('main.error');
