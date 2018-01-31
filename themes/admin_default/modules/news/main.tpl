@@ -85,11 +85,18 @@
             <tbody>
                 <!-- BEGIN: loop -->
                 <tr class="{ROW.class}">
-                    <td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
+                    <td class="text-center">
+                        <!-- BEGIN: checkrow -->
+                        <input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" />
+                        <!-- END: checkrow -->
+                    </td>
                     <td class="text-left">
                         <!-- BEGIN: sort -->
-                        <a href="javascript:void(0);" title="{LANG.order_articles_number}: {ROW.weight}" onclick="nv_sort_content({ROW.id}, {ROW.weight})"><i class="fa fa-sort fa-lg" aria-hidden="true"></i></a> &nbsp;
+                        <a href="javascript:void(0);" title="{LANG.order_articles_number}: {ROW.weight}" onclick="nv_sort_content({ROW.id}, {ROW.weight})"><i class="fa fa-fw fa-sort" aria-hidden="true"></i></a>
                         <!-- END: sort -->
+                        <!-- BEGIN: is_editing -->
+                        <i class="fa fa-fw fa-{LEV_EDITING} text-warning" data-toggle="tooltip" title="{USER_EDITING} {LANG.post_is_editing}."></i>
+                        <!-- END: is_editing -->
                         <!-- BEGIN: text -->
                         <strong><em>{LANG.status_4}</em></strong>:
                         <!-- END: text -->

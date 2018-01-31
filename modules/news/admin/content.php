@@ -365,7 +365,7 @@ if ($rowcontent['mode'] == 'edit') {
                 time_late=' . NV_CURRENTTIME . ',
                 ip=' . $db->quote($client_info['ip']) . '
             WHERE id=' . $rowcontent['id']);
-        } elseif ($row_tmp['time_late'] < (NV_CURRENTTIME - 180) or empty($_username)) {
+        } elseif ($row_tmp['time_late'] < (NV_CURRENTTIME - $global_code_defined['edit_timeout']) or empty($_username)) {
             /**
              * Cho phép sửa nếu:
              * - Người đang sửa 3 phút không thao tác đến
