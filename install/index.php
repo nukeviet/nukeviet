@@ -82,23 +82,32 @@ if ($step == 1) {
         $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
         $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 1));
 
-        if (! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass) {
+        if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
             die('ERROR|' . $lang_module['ftp_error_empty']);
         }
 
-        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array(
+            'timeout' => 10
+        ), $ftp_port);
 
-        if (! empty($ftp->error)) {
+        if (!empty($ftp->error)) {
             $ftp->close();
-            die('ERROR|' . ( string )$ftp->error);
+            die('ERROR|' . (string) $ftp->error);
         } else {
-            $list_valid = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
+            $list_valid = array(
+                NV_ASSETS_DIR,
+                'includes',
+                'index.php',
+                'modules',
+                'themes',
+                'vendor'
+            );
 
             $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
             if ($ftp_root === false) {
                 $ftp->close();
-                die('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : ( string )$ftp->error));
+                die('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error));
             }
 
             $ftp->close();
@@ -110,7 +119,23 @@ if ($step == 1) {
     }
 
     // Danh sach cac file can kiem tra quyen ghi
-    $array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_DATADIR );
+    $array_dir = array(
+        NV_LOGS_DIR,
+        NV_LOGS_DIR . '/data_logs',
+        NV_LOGS_DIR . '/dump_backup',
+        NV_LOGS_DIR . '/error_logs',
+        NV_LOGS_DIR . '/error_logs/errors256',
+        NV_LOGS_DIR . '/error_logs/old',
+        NV_LOGS_DIR . '/error_logs/tmp',
+        NV_LOGS_DIR . '/ip_logs',
+        NV_LOGS_DIR . '/ref_logs',
+        NV_LOGS_DIR . '/voting_logs',
+        NV_CACHEDIR,
+        NV_UPLOADS_DIR,
+        NV_TEMP_DIR,
+        NV_FILES_DIR,
+        NV_DATADIR
+    );
 
     // Them vao cac file trong thu muc data va file cau hinh tam
     $array_file_data = nv_scandir(NV_ROOTDIR . '/' . NV_DATADIR, '/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/');
@@ -120,14 +145,14 @@ if ($step == 1) {
     $array_dir[] = $file_config_temp;
 
     // Them vao file .htaccess va web.config
-    if (! empty($sys_info['supports_rewrite'])) {
+    if (!empty($sys_info['supports_rewrite'])) {
         if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-            if (! file_exists(NV_ROOTDIR . '/.htaccess')) {
+            if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
                 @file_put_contents(NV_ROOTDIR . '/.htaccess', file_get_contents(NV_ROOTDIR . '/install/default.htaccess.txt'));
             }
             $array_dir[] = '.htaccess';
         } else {
-            if (! file_exists(NV_ROOTDIR . '/web.config')) {
+            if (!file_exists(NV_ROOTDIR . '/web.config')) {
                 @file_put_contents(NV_ROOTDIR . '/web.config', file_get_contents(NV_ROOTDIR . '/install/default.web.config.txt'));
             }
             $array_dir[] = 'web.config';
@@ -154,17 +179,30 @@ if ($step == 1) {
     // CHMOD bang FTP
     $modftp = $nv_Request->get_int('modftp', 'post', 0);
     if ($modftp) {
-        if (! empty($global_config['ftp_server']) and ! empty($global_config['ftp_user_name']) and ! empty($global_config['ftp_user_pass'])) {
+        if (!empty($global_config['ftp_server']) and !empty($global_config['ftp_user_name']) and !empty($global_config['ftp_user_pass'])) {
             // Set up basic connection
             $conn_id = ftp_connect($global_config['ftp_server'], $global_config['ftp_port'], 10);
 
             // Login with username and password
             $login_result = ftp_login($conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass']);
-            if ((! $conn_id) or (! $login_result)) {
+            if ((!$conn_id) or (!$login_result)) {
                 $ftp_check_login = 3;
                 $array_ftp_data['error'] = $lang_module['ftp_error_account'];
             } elseif (ftp_chdir($conn_id, $global_config['ftp_path'])) {
-                $check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
+                $check_files = array(
+                    NV_CACHEDIR,
+                    NV_DATADIR,
+                    'images',
+                    'includes',
+                    'index.php',
+                    'robots.txt',
+                    'js',
+                    'language',
+                    NV_LOGS_DIR,
+                    'modules',
+                    'themes',
+                    NV_TEMP_DIR
+                );
 
                 $list_files = ftp_nlist($conn_id, '.');
 
@@ -199,18 +237,18 @@ if ($step == 1) {
     $array_dir_check = array();
     foreach ($array_dir as $dir) {
         if ($ftp_check_login == 1) {
-            if (! is_dir(NV_ROOTDIR . '/' . $dir) and $dir != $file_config_temp) {
+            if (!is_dir(NV_ROOTDIR . '/' . $dir) and $dir != $file_config_temp) {
                 ftp_mkdir($conn_id, $dir);
             }
 
-            if (! is_writable(NV_ROOTDIR . '/' . $dir)) {
+            if (!is_writable(NV_ROOTDIR . '/' . $dir)) {
                 if (substr($sys_info['os'], 0, 3) != 'WIN') {
                     ftp_chmod($conn_id, 0777, $dir);
                 }
             }
         }
 
-        if ($dir == $file_config_temp and ! file_exists(NV_ROOTDIR . '/' . $file_config_temp) and is_writable(NV_ROOTDIR . '/' . NV_TEMP_DIR)) {
+        if ($dir == $file_config_temp and !file_exists(NV_ROOTDIR . '/' . $file_config_temp) and is_writable(NV_ROOTDIR . '/' . NV_TEMP_DIR)) {
             file_put_contents(NV_ROOTDIR . '/' . $file_config_temp, '', LOCK_EX);
         }
 
@@ -234,7 +272,7 @@ if ($step == 1) {
         }
     }
 
-    if (! nv_save_file_config($db_config, $global_config) and $ftp_check_login == 1) {
+    if (!nv_save_file_config($db_config, $global_config) and $ftp_check_login == 1) {
         ftp_chmod($conn_id, 0777, $file_config_temp);
     }
 
@@ -288,7 +326,7 @@ if ($step == 1) {
         $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
         $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
 
-        if (! $sys_info[$key]) {
+        if (!$sys_info[$key]) {
             $nextstep = 0;
         }
     }
@@ -320,7 +358,7 @@ if ($step == 1) {
     $db_config['dbhost'] = $nv_Request->get_string('dbhost', 'post', $db_config['dbhost']);
     $db_config['dbname'] = $nv_Request->get_string('dbname', 'post', $db_config['dbname']);
     $db_config['dbuname'] = $nv_Request->get_string('dbuname', 'post', $db_config['dbuname']);
-    $db_config['dbpass'] = isset($_POST['dbpass']) ? trim($_POST['dbpass']) : '';
+    $db_config['dbpass'] = isset($_POST['dbpass']) ? trim($_POST['dbpass']) : $db_config['dbpass'];
     $db_config['prefix'] = $nv_Request->get_string('prefix', 'post', $db_config['prefix']);
     $db_config['dbport'] = $nv_Request->get_string('dbport', 'post', $db_config['dbport']);
     $db_config['db_detete'] = $nv_Request->get_int('db_detete', 'post', $db_config['dbdetete']);
@@ -345,7 +383,7 @@ if ($step == 1) {
             // Not check default dbtype
             $respon['status'] = 'success';
         } else {
-            if (! in_array($dbtype, $PDODrivers)) {
+            if (!in_array($dbtype, $PDODrivers)) {
                 $respon['message'] = $lang_module['dbcheck_error_driver'];
             } else {
                 $array_check_files = array(
@@ -383,10 +421,40 @@ if ($step == 1) {
         nv_jsonOutput($respon);
     }
 
-    if (in_array($db_config['dbtype'], $PDODrivers) and ! empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and ! empty($db_config['dbuname']) and ! empty($db_config['prefix'])) {
-        $db_config['dbuname'] = preg_replace(array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname']);
-        $db_config['dbname'] = preg_replace(array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbname']);
-        $db_config['prefix'] = preg_replace(array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower($db_config['prefix']));
+    if (in_array($db_config['dbtype'], $PDODrivers) and !empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and !empty($db_config['dbuname']) and !empty($db_config['prefix'])) {
+        $db_config['dbuname'] = preg_replace(array(
+            '/[^a-z0-9]/i',
+            '/[\_]+/',
+            '/^[\_]+/',
+            '/[\_]+$/'
+        ), array(
+            '_',
+            '_',
+            '',
+            ''
+        ), $db_config['dbuname']);
+        $db_config['dbname'] = preg_replace(array(
+            '/[^a-z0-9]/i',
+            '/[\_]+/',
+            '/^[\_]+/',
+            '/[\_]+$/'
+        ), array(
+            '_',
+            '_',
+            '',
+            ''
+        ), $db_config['dbname']);
+        $db_config['prefix'] = preg_replace(array(
+            '/[^a-z0-9]/',
+            '/[\_]+/',
+            '/^[\_]+/',
+            '/[\_]+$/'
+        ), array(
+            '_',
+            '_',
+            '',
+            ''
+        ), strtolower($db_config['prefix']));
 
         if (substr($sys_info['os'], 0, 3) == 'WIN' and $db_config['dbhost'] == 'localhost') {
             $db_config['dbhost'] = '127.0.0.1';
@@ -413,7 +481,7 @@ if ($step == 1) {
         } catch (PDOException $e) {
             $connect = 0;
         }
-        if (! $connect) {
+        if (!$connect) {
             $db_config['error'] = 'Could not connect to data server';
             if ($db_config['dbtype'] == 'mysql') {
                 $db_config['dbname'] = '';
@@ -465,8 +533,7 @@ if ($step == 1) {
 
         if ($connect) {
             // Kiểm tra lại kết nối MySQL nếu charset = utf8mb4
-            if ($db_config['charset'] == 'utf8mb4')
-            {
+            if ($db_config['charset'] == 'utf8mb4') {
                 $db = $db_slave = new NukeViet\Core\Database($db_config);
                 if (empty($db->connect)) {
                     $db_config['charset'] = 'utf8';
@@ -574,13 +641,13 @@ if ($step == 1) {
                     $lang_data = NV_LANG_DATA;
                     $lang = NV_LANG_DATA;
 
-                    if (! file_exists(NV_ROOTDIR . '/install/data_' . $lang_data . '.php')) {
+                    if (!file_exists(NV_ROOTDIR . '/install/data_' . $lang_data . '.php')) {
                         $filesavedata = 'en';
                     }
 
-                    $install_lang = array();//DO NOT DELETE THIS LINE
+                    $install_lang = array(); //DO NOT DELETE THIS LINE
                     $menu_rows_lev0 = array(); //DO NOT DELETE THIS LINE
-                    $menu_rows_lev1 = array();//DO NOT DELETE THIS LINE
+                    $menu_rows_lev1 = array(); //DO NOT DELETE THIS LINE
                     include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
                     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC';
@@ -657,7 +724,7 @@ if ($step == 1) {
                     }
 
                     if (empty($db_config['error'])) {
-                        ++ $step;
+                        ++$step;
                         $nv_Request->set_Session('maxstep', $step);
 
                         nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
@@ -672,7 +739,7 @@ if ($step == 1) {
     $contents = nv_step_5($db_config, $nextstep);
 } elseif ($step == 6) {
     $nextstep = 0;
-    $error  = '';
+    $error = '';
 
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
     $array_data['site_name'] = $nv_Request->get_title('site_name', 'post', $array_data['site_name'], 1);
@@ -710,13 +777,13 @@ if ($step == 1) {
 
                 if (empty($array_data['site_name'])) {
                     $error = $lang_module['err_sitename'];
-                } elseif (! empty($check_login)) {
+                } elseif (!empty($check_login)) {
                     $error = $check_login;
                 } elseif ("'" . $array_data['nv_login'] . "'" != $db->quote($array_data['nv_login'])) {
                     $error = sprintf($lang_module['account_deny_name'], '<strong>' . $array_data['nv_login'] . '</strong>');
-                } elseif (! empty($check_email)) {
+                } elseif (!empty($check_email)) {
                     $error = $check_email;
-                } elseif (! empty($check_pass)) {
+                } elseif (!empty($check_pass)) {
                     $error = $check_pass;
                 } elseif ($array_data['nv_password'] != $array_data['re_password']) {
                     $error = $lang_global['passwordsincorrect'];
@@ -865,7 +932,7 @@ if ($step == 1) {
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)");
 
                             $year = date('Y');
-                            for ($i=0; $i < 9; $i++) {
+                            for ($i = 0; $i < 9; $i++) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)");
                                 ++$year;
                             }
@@ -875,7 +942,7 @@ if ($step == 1) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)");
                             }
 
-                            for ($i=1; $i < 32; $i++) {
+                            for ($i = 1; $i < 32; $i++) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
                             }
 
@@ -884,16 +951,60 @@ if ($step == 1) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)");
                             }
 
-                            for ($i=0; $i < 24; $i++) {
+                            for ($i = 0; $i < 24; $i++) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
                             }
 
-                            $bots = array('googlebot', 'msnbot', 'bingbot', 'yahooslurp', 'w3cvalidator');
+                            $bots = array(
+                                'googlebot',
+                                'msnbot',
+                                'bingbot',
+                                'yahooslurp',
+                                'w3cvalidator'
+                            );
                             foreach ($bots as $_bot) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote($_bot) . ", 0, 0, 0)");
                             }
 
-                            $tmp_array = array('opera','operamini','webtv','explorer','edge','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','cococ','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+                            $tmp_array = array(
+                                'opera',
+                                'operamini',
+                                'webtv',
+                                'explorer',
+                                'edge',
+                                'pocket',
+                                'konqueror',
+                                'icab',
+                                'omniweb',
+                                'firebird',
+                                'firefox',
+                                'iceweasel',
+                                'shiretoko',
+                                'mozilla',
+                                'amaya',
+                                'lynx',
+                                'safari',
+                                'iphone',
+                                'ipod',
+                                'ipad',
+                                'chrome',
+                                'cococ',
+                                'android',
+                                'googlebot',
+                                'yahooslurp',
+                                'w3cvalidator',
+                                'blackberry',
+                                'icecat',
+                                'nokias60',
+                                'nokia',
+                                'msn',
+                                'msnbot',
+                                'bingbot',
+                                'netscape',
+                                'galeon',
+                                'netpositive',
+                                'phoenix'
+                            );
                             foreach ($tmp_array as $_browser) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote($_browser) . ", 0, 0, 0)");
                             }
@@ -902,7 +1013,35 @@ if ($step == 1) {
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)");
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)");
 
-                            $tmp_array = array('unknown', 'win', 'win10', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
+                            $tmp_array = array(
+                                'unknown',
+                                'win',
+                                'win10',
+                                'win8',
+                                'win7',
+                                'win2003',
+                                'winvista',
+                                'wince',
+                                'winxp',
+                                'win2000',
+                                'apple',
+                                'linux',
+                                'os2',
+                                'beos',
+                                'iphone',
+                                'ipod',
+                                'ipad',
+                                'blackberry',
+                                'nokia',
+                                'freebsd',
+                                'openbsd',
+                                'netbsd',
+                                'sunos',
+                                'opensolaris',
+                                'android',
+                                'irix',
+                                'palm'
+                            );
                             foreach ($tmp_array as $_os) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote($_os) . ", 0, 0, 0)");
                             }
@@ -923,9 +1062,9 @@ if ($step == 1) {
             }
         }
     } catch (PDOException $e) {
-        echo'<pre>';
+        echo '<pre>';
         print_r($e);
-        echo'</pre>';
+        echo '</pre>';
         die();
     }
     $array_data['error'] = $error;
@@ -978,9 +1117,9 @@ if ($step == 1) {
             }
             nv_rewrite_change($array_config_rewrite);
         } catch (PDOException $e) {
-            echo'<pre>';
+            echo '<pre>';
             print_r($e);
-            echo'</pre>';
+            echo '</pre>';
             die();
         }
 
@@ -999,6 +1138,34 @@ if ($step == 1) {
 
     if (file_exists(NV_ROOTDIR . '/' . $file_config_temp)) {
         @rename(NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME);
+
+        // Write file robots
+        if ($global_config['rewrite_enable']) {
+            $robots_data = array();
+            $robots_other = array();
+            $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
+            if (file_exists($cache_file)) {
+                include $cache_file;
+                $robots_data = unserialize($cache);
+            } else {
+                $robots_data['/' . NV_DATADIR . '/'] = 0;
+                $robots_data['/includes/'] = 0;
+                $robots_data['/install/'] = 0;
+                $robots_data['/modules/'] = 0;
+                $robots_data['/robots.php'] = 0;
+                $robots_data['/web.config'] = 0;
+            }
+            $robots_other[NV_BASE_SITEURL . 'users/'] = 0;
+            $robots_other[NV_BASE_SITEURL . 'statistics/'] = 0;
+
+            $content_config = "<?php\n\n";
+            $content_config .= NV_FILEHEAD . "\n\n";
+            $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
+            $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
+            $content_config .= "\$cache_other = '" . serialize($robots_other) . "';";
+            file_put_contents($cache_file, $content_config, LOCK_EX);
+        }
+
         //Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
@@ -1007,7 +1174,9 @@ if ($step == 1) {
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME)) {
         $ftp_check_login = 0;
-        $ftp_server_array = array( 'ftp_check_login' => 0 );
+        $ftp_server_array = array(
+            'ftp_check_login' => 0
+        );
 
         if ($nv_Request->isset_request('ftp_server_array', 'session')) {
             $ftp_server_array = $nv_Request->get_string('ftp_server_array', 'session');
@@ -1021,7 +1190,7 @@ if ($step == 1) {
             // Login with username and password
             $login_result = ftp_login($conn_id, $ftp_server_array['ftp_user_name'], $ftp_server_array['ftp_user_pass']);
 
-            if ((! $conn_id) or (! $login_result)) {
+            if ((!$conn_id) or (!$login_result)) {
                 $ftp_check_login = 3;
             } elseif (ftp_chdir($conn_id, $ftp_server_array['ftp_path'])) {
                 $ftp_check_login = 1;
@@ -1062,15 +1231,15 @@ function nv_save_file_config()
     if (is_writable(NV_ROOTDIR . '/' . $file_config_temp) or is_writable(NV_ROOTDIR . '/' . NV_TEMP_DIR)) {
         $global_config['cookie_prefix'] = (empty($global_config['cookie_prefix']) or $global_config['cookie_prefix'] == 'nv4') ? 'nv4c_' . nv_genpass(5) : $global_config['cookie_prefix'];
         $global_config['session_prefix'] = (empty($global_config['session_prefix']) or $global_config['session_prefix'] == 'nv4') ? 'nv4s_' . nv_genpass(6) : $global_config['session_prefix'];
-        $global_config['site_email'] = (! isset($global_config['site_email'])) ? '' : $global_config['site_email'];
+        $global_config['site_email'] = (!isset($global_config['site_email'])) ? '' : $global_config['site_email'];
 
-        $db_config['dbhost'] = (! isset($db_config['dbhost'])) ? 'localhost' : $db_config['dbhost'];
-        $db_config['dbport'] = (! isset($db_config['dbport'])) ? '' : $db_config['dbport'];
-        $db_config['dbname'] = (! isset($db_config['dbname'])) ? '' : $db_config['dbname'];
-        $db_config['dbuname'] = (! isset($db_config['dbuname'])) ? '' : $db_config['dbuname'];
+        $db_config['dbhost'] = (!isset($db_config['dbhost'])) ? 'localhost' : $db_config['dbhost'];
+        $db_config['dbport'] = (!isset($db_config['dbport'])) ? '' : $db_config['dbport'];
+        $db_config['dbname'] = (!isset($db_config['dbname'])) ? '' : $db_config['dbname'];
+        $db_config['dbuname'] = (!isset($db_config['dbuname'])) ? '' : $db_config['dbuname'];
         $db_config['dbsystem'] = (isset($db_config['dbsystem'])) ? $db_config['dbsystem'] : $db_config['dbuname'];
-        $db_config['dbpass'] = (! isset($db_config['dbpass'])) ? '' : $db_config['dbpass'];
-        $db_config['prefix'] = (! isset($db_config['prefix'])) ? 'nv4' : $db_config['prefix'];
+        $db_config['dbpass'] = (!isset($db_config['dbpass'])) ? '' : $db_config['dbpass'];
+        $db_config['prefix'] = (!isset($db_config['prefix'])) ? 'nv4' : $db_config['prefix'];
         $db_config['charset'] = strstr($db_config['collation'], '_', true);
 
         $persistent = ($db_config['persistent']) ? 'true' : 'false';
@@ -1106,12 +1275,12 @@ function nv_save_file_config()
             $content .= "\$global_config['cookie_prefix'] = '" . $global_config['cookie_prefix'] . "';\n";
             $content .= "\$global_config['session_prefix'] = '" . $global_config['session_prefix'] . "';\n";
 
-            $global_config['ftp_server'] = (! isset($global_config['ftp_server'])) ? 'localhost' : $global_config['ftp_server'];
-            $global_config['ftp_port'] = (! isset($global_config['ftp_port'])) ? 21 : $global_config['ftp_port'];
-            $global_config['ftp_user_name'] = (! isset($global_config['ftp_user_name'])) ? '' : $global_config['ftp_user_name'];
-            $global_config['ftp_user_pass'] = (! isset($global_config['ftp_user_pass'])) ? '' : $global_config['ftp_user_pass'];
-            $global_config['ftp_path'] = (! isset($global_config['ftp_path'])) ? '' : $global_config['ftp_path'];
-            $global_config['ftp_check_login'] = (! isset($global_config['ftp_check_login'])) ? 0 : $global_config['ftp_check_login'];
+            $global_config['ftp_server'] = (!isset($global_config['ftp_server'])) ? 'localhost' : $global_config['ftp_server'];
+            $global_config['ftp_port'] = (!isset($global_config['ftp_port'])) ? 21 : $global_config['ftp_port'];
+            $global_config['ftp_user_name'] = (!isset($global_config['ftp_user_name'])) ? '' : $global_config['ftp_user_name'];
+            $global_config['ftp_user_pass'] = (!isset($global_config['ftp_user_pass'])) ? '' : $global_config['ftp_user_pass'];
+            $global_config['ftp_path'] = (!isset($global_config['ftp_path'])) ? '' : $global_config['ftp_path'];
+            $global_config['ftp_check_login'] = (!isset($global_config['ftp_check_login'])) ? 0 : $global_config['ftp_check_login'];
 
             if ($global_config['ftp_check_login']) {
                 $ftp_server_array = array(

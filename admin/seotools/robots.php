@@ -8,7 +8,7 @@
  * @Createdate 5/12/2010, 1:34
  */
 
-if (! defined('NV_IS_FILE_SEOTOOLS')) {
+if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
@@ -29,7 +29,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $optionother = $nv_Request->get_array('optionother', 'post');
     $robots_other = array();
     foreach ($fileother as $key => $value) {
-        if (! empty($value)) {
+        if (!empty($value)) {
             $robots_other[$value] = intval($optionother[$key]);
         }
     }
@@ -64,7 +64,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $redirect = true;
         } else {
             $xtpl->assign('TITLE', $lang_module['robots_error_writable']);
-            $xtpl->assign('CONTENT', str_replace(array( "\n", "\t" ), array( '<br />', '&nbsp;&nbsp;&nbsp;&nbsp;' ), nv_htmlspecialchars($rbcontents)));
+            $xtpl->assign('CONTENT', str_replace(array(
+                "\n",
+                "\t"
+            ), array(
+                '<br />',
+                '&nbsp;&nbsp;&nbsp;&nbsp;'
+            ), nv_htmlspecialchars($rbcontents)));
             $xtpl->parse('main.nowrite');
         }
     }
@@ -76,6 +82,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 $robots_data = array();
 $robots_other = array();
+
 if (file_exists($cache_file)) {
     include $cache_file;
     $robots_data = unserialize($cache);
@@ -88,22 +95,34 @@ if (file_exists($cache_file)) {
     $robots_data['/robots.php'] = 0;
     $robots_data['/web.config'] = 0;
 }
-$robots_other[''] = 0;
 
+if ($global_config['rewrite_enable']) {
+    foreach ($site_mods as $key => $value) {
+        if ($value['module_file'] == 'users' or $value['module_file'] == 'statistics') {
+            $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $key, true);
+            if (!isset($robots_other[$_url])) {
+                $robots_other[$_url] = 0;
+            }
+        }
+    }
+}
 $files = scandir(NV_ROOTDIR, true);
 sort($files);
 $contents = array();
 $contents[] = 'User-agent: *';
 $number = 0;
 foreach ($files as $file) {
-    if (! preg_match('/^\.(.*)$/', $file)) {
+    if (!preg_match('/^\.(.*)$/', $file)) {
         if (is_dir(NV_ROOTDIR . '/' . $file)) {
             $file = '/' . $file . '/';
         } else {
             $file = '/' . $file;
         }
 
-        $data = array( 'number' => ++$number, 'filename' => $file );
+        $data = array(
+            'number' => ++$number,
+            'filename' => $file
+        );
 
         $type = isset($robots_data[$file]) ? $robots_data[$file] : 1;
 
@@ -123,7 +142,10 @@ foreach ($files as $file) {
     }
 }
 foreach ($robots_other as $file => $value) {
-    $data = array( 'number' => ++$number, 'filename' => $file );
+    $data = array(
+        'number' => ++$number,
+        'filename' => $file
+    );
     $xtpl->assign('DATA', $data);
 
     for ($i = 0; $i <= 2; $i++) {
