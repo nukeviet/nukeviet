@@ -37,7 +37,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
     $lang_translator_save['info'] = isset($lang_translator['info']) ? nv_htmlspecialchars(strip_tags($lang_translator['info'])) : '';
     $lang_translator_save['langtype'] = $langtype;
 
-    $author = var_export($lang_translator_save, true);
+    $author = serialize($lang_translator_save);
 
     $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= :idfile');
     $sth->bindParam(':idfile', $idfile, PDO::PARAM_INT);
