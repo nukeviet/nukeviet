@@ -84,7 +84,7 @@ while (list ($idfile, $module, $admin_file, $langtype, $author_lang) = $result->
 
     $xtpl->assign('ROW', array(
         'stt' => ++$a,
-        'module' => $module,
+        'module' => preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module),
         'langsitename' => $langsitename,
         'author' => nv_htmlspecialchars($array_translator['author']),
         'createdate' => $array_translator['createdate'],
