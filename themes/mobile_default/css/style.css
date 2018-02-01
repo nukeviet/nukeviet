@@ -893,7 +893,7 @@ header.header-up {
     background:#D8EAF8;
     border:1px solid #ADD3F0;
     padding:10px;
-    z-index:1000;
+    z-index:9998;
     display:none;
 }
 

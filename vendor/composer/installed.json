@@ -365,12 +365,12 @@
         "version_normalized": "1.9.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/endroid/QrCode.git",
+            "url": "https://github.com/endroid/qr-code.git",
             "reference": "ab09b42778ad67cfe850f9c23165f8d08b756680"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/endroid/QrCode/zipball/ab09b42778ad67cfe850f9c23165f8d08b756680",
+            "url": "https://api.github.com/repos/endroid/qr-code/zipball/ab09b42778ad67cfe850f9c23165f8d08b756680",
             "reference": "ab09b42778ad67cfe850f9c23165f8d08b756680",
             "shasum": ""
         },
@@ -419,7 +419,8 @@
             "qr",
             "qrcode",
             "symfony"
-        ]
+        ],
+        "abandoned": "endroid/qr-code"
     },
     {
         "name": "symfony/polyfill-mbstring",
@@ -887,21 +888,22 @@
     },
     {
         "name": "phpmailer/phpmailer",
-        "version": "v6.0.1",
-        "version_normalized": "6.0.1.0",
+        "version": "v6.0.3",
+        "version_normalized": "6.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "992392437c2e2784e0dc41446024fe411d293c96"
+            "reference": "44d49bab5ab1fef721d3ee07e75dc0865ddf4cc6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/992392437c2e2784e0dc41446024fe411d293c96",
-            "reference": "992392437c2e2784e0dc41446024fe411d293c96",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/44d49bab5ab1fef721d3ee07e75dc0865ddf4cc6",
+            "reference": "44d49bab5ab1fef721d3ee07e75dc0865ddf4cc6",
             "shasum": ""
         },
         "require": {
             "ext-ctype": "*",
+            "ext-filter": "*",
             "php": ">=5.5.0"
         },
         "require-dev": {
@@ -921,7 +923,7 @@
             "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
             "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
         },
-        "time": "2017-09-14 16:47:12",
+        "time": "2018-01-05 13:19:58",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
