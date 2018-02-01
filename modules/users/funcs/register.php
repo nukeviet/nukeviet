@@ -364,8 +364,7 @@ if ($checkss == $array_register['checkss']) {
             ));
         } else {
             if ($global_config['allowuserreg'] == 2) {
-
-                $register_active_time = isset($global_users_config[register_active_time]) ? $global_users_config[register_active_time] : 86400;
+                $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
                 $subject = $lang_module['account_active'];
