@@ -31,7 +31,7 @@ $lang_module['act3'] = 'Đang bị đình chỉ hoạt động';
 $lang_module['act4'] = 'Đang đợi chấp nhận';
 $lang_module['change_act'] = 'Đình chỉ/Kích hoạt';
 $lang_module['add_banner'] = 'Thêm quảng cáo';
-$lang_module['add_banner_client'] = 'Thêm quảng cáo cho khách hàng &ldquo;<strong>%s</strong>&rdquo;';
+
 $lang_module['plans_list'] = 'Khối quảng cáo';
 $lang_module['plans_list2'] = 'Danh sách các khối quảng cáo';
 $lang_module['in_plan'] = 'Thuộc Khối';
