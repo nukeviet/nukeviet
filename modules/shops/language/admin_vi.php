@@ -724,4 +724,4 @@ $lang_module['ad_block_show'] = 'Hiển thị các block phụ';
 $lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
 $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
 
-
+$lang_module['error_cat_update'] = 'Tồn tại thuộc tính <strong>%s</strong> của loại sản phẩm bắt buộc chọn khi nhập nên không thể thay đổi';
