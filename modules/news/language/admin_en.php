@@ -355,3 +355,4 @@ $lang_module['status_12'] = 'Save articles, send admin';
 $lang_module['status_13'] = 'Save articles, send super admin';
 $lang_module['error_edit'] = 'Posts are moderated moderators. You can not edit next.';
 $lang_module['not_edit_by_admin'] = 'You have been hijacked to edit this post. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
+$lang_module['post_is_editing'] = 'is editing this article';
