@@ -1023,3 +1023,21 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
     $xtpl->parse('results');
     return $xtpl->text('results');
 }
+
+/**
+ * nv_theme_viewpdf()
+ *
+ * @param mixed $file_url
+ * @return
+ */
+function nv_theme_viewpdf($file_url)
+{
+    global $lang_module, $lang_global;
+    $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_URL', $file_url);
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
