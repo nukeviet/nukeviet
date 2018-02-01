@@ -2739,6 +2739,10 @@ function nv_review_content($data_content)
     $xtpl = new XTemplate('review_content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('LINK_REVIEW', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=review&id=' . $data_content['id'] . '&1');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
 
     if (!empty($user_info)) {
         $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);

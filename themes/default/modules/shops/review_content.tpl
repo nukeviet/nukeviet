@@ -23,7 +23,7 @@
 					<div class="form-group">
 						<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 40%" placeholder="{LANG.rate_captcha}" />
 						<div class="pull-left" style="margin-top: 5px">
-							&nbsp;&nbsp;<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" class="captchaImg" />
+							&nbsp;&nbsp;<img src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{LANG.captcha}" class="captchaImg display-inline-block" />
 							&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#fcode_iavim');">&nbsp;</em>
 						</div>
 						<div class="clear"></div>
@@ -59,21 +59,36 @@
 		var sender = $(this).find('input[name="sender"]').val();
 		var comment = $(this).find('textarea[name="comment"]').val();
 		var fcode = $(this).find('input[name="fcode"]').val();
+		if(rating !=0) {
+		    if(sender == '') {
+			    $('input[name="sender"]').focus();
+			}
+			else if(fcode == '') {
+			    $('input[name="fcode"]').focus();
+			}
+		}		
+		
 		$.ajax({
 			type : "POST",
 			url : '{LINK_REVIEW}' + '&nocache=' + new Date().getTime(),
 			data : 'sender=' + sender + '&rating=' + rating + '&comment=' + comment + '&fcode=' + fcode,
 			success : function(data) {
-				var s = data.split('_');
+			
+			var s = data.split('_');
+				alert(s[1]);
 				if (s[0] == 'OK') {
 					$('#review_form input[name="sender"], #review_form input[name="fcode"], #review_form textarea').val('');
 					$('.rate-btn').removeClass('rate-btn-hover');
 					$("#rate_list").load('{LINK_REVIEW}&showdata=1');
+					window.location.href = 	$(location).attr('href')+'#detail';
 				}
-				alert(s[1]);
+				else {				    
+				    change_captcha();
+					$("[name=fcode]",a).val('');
+				}				
 			}
-		});
-		return false;
+		});		
+		return !1;
 	});
 </script>
 <!-- END: main -->
