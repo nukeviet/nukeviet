@@ -89,12 +89,12 @@ if ($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout) {
     $rating = $nv_Request->get_int('rating', 'get,post', 0);
     $comment = $nv_Request->get_textarea('comment', '');
     $fcode = $nv_Request->get_string('fcode', 'get,post', '');
-
+   
     if (empty($sender)) {
         $contents = "NO_" . $lang_module['rate_empty_sender'];
     } elseif (empty($rating)) {
         $contents = "NO_" . $lang_module['rate_empty_rating'];
-    } elseif ($pro_config['review_captcha'] and ! nv_capcha_txt($fcode)) {
+    } elseif ($pro_config['review_captcha'] and !nv_capcha_txt($fcode)) {
         $contents = "NO_" . $lang_module['rate_empty_captcha'];
     } else {
         $userid = !empty($user_info) ? $user_info['userid'] : 0;
