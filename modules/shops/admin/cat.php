@@ -179,22 +179,29 @@ if (!empty($savecat)) {
                     if ($parentid != 0) {
                         //Danh sách các nhóm được chọn cho sản phẩm của loại sản phẩm
                         $result_group_items = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid =' . $parentid . ' AND groupid IN (SELECT parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group WHERE groupid IN (SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id IN(SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE listcatid =' . $data['catid'] . '))) ');
-
+                        $_arr_group = array();
                         while ($row_group = $result_group_items->fetch()) {
-                            $row_check = $db->query('SELECT ' . NV_LANG_DATA . '_title, is_require FROM nv4_shops_group where groupid = ' . $row_group['groupid'])->fetch();
+                            $row_check = $db->query('SELECT ' . NV_LANG_DATA . '_title, is_require FROM ' . $db_config['prefix'] . '_' . $module_data . '_group where groupid = ' . $row_group['groupid'])->fetch();
                             if ($row_check['is_require'] == 1) {
                                 $error = sprintf($lang_module['error_cat_update'], $row_check[NV_LANG_DATA . '_title']);
                                 break;
                             }
-                            $count_group = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $catid_insert . ' AND groupid =' . $row_group['groupid'])->fetchcolumn();
-                            if ($count_group < 1) {
-                                $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $row_group['groupid'] . ',' . $catid_insert . ')');
+                            $_arr_group[] = $row_group['groupid'];
+
+                        }
+                        if ($error == '') {
+                            foreach ($_arr_group as $_group) {
+                                $count_group = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $catid_insert . ' AND groupid =' . $_group)->fetchcolumn();
+                                if ($count_group < 1) {
+                                    $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $_group . ',' . $catid_insert . ')');
+                                }
+                            }
+                            if ($data['parentid_old'] == 0) {
+                                //Xóa các thông số hiện tại
+                                $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['catid']);
                             }
                         }
-                        if ($data['parentid_old'] == 0 && $error == '') {
-                            //Xóa các thông số hiện tại
-                            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['catid']);
-                        }
+
                     }
                 }
             }
