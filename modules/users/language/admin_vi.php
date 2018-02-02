@@ -479,3 +479,4 @@ $lang_module['two_step_verification_require_admin'] = 'Bắt buộc xác thực 
 $lang_module['two_step_verification_require_site'] = 'Bắt buộc xác thực hai bước ngoài site';
 $lang_module['two_step_verification_require_admindefault'] = 'Thiết lập an ninh đang yêu cầu bật tại khu vực quản trị, dù không bật ở đây quản trị vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
 $lang_module['two_step_verification_require_sitedefault'] = 'Thiết lập an ninh đang yêu cầu bật ngoài site, dù không bật ở đây thành viên trong nhóm vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
+$lang_module['notification_new_acount'] = 'Tài khoản %s đang đợi kích hoạt';
