@@ -158,7 +158,7 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 
     $sql = 'SELECT catid, parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
-    $array_cat_order = array( );
+    $array_cat_order = array();
     while ($row = $result->fetch()) {
         $array_cat_order[] = $row['catid'];
     }
@@ -269,11 +269,11 @@ function shops_show_cat_list($parentid = 0)
 
     if ($parentid > 0) {
         $parentid_i = $parentid;
-        $array_cat_title = array( );
+        $array_cat_title = array();
         $a = 0;
 
         while ($parentid_i > 0) {
-            list($catid_i, $parentid_i, $title_i) = $db->query('SELECT catid, parentid, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid=' . intval($parentid_i))->fetch(3);
+            list ($catid_i, $parentid_i, $title_i) = $db->query('SELECT catid, parentid, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid=' . intval($parentid_i))->fetch(3);
 
             $array_cat_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid_i . "\"><strong>" . $title_i . "</strong></a>";
 
@@ -299,7 +299,7 @@ function shops_show_cat_list($parentid = 0)
             $lang_global['yes']
         );
 
-        while (list($catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday) = $result->fetch(3)) {
+        while (list ($catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday) = $result->fetch(3)) {
             $array_viewcat = ($numsubcat > 0) ? $array_viewcat_full : $array_viewcat_nosub;
             if (!array_key_exists($viewcat, $array_viewcat)) {
                 $viewcat = 'viewcat_page_list';
@@ -389,7 +389,7 @@ function nv_fix_group_order($parentid = 0, $sort = 0, $lev = 0)
 
     $sql = 'SELECT groupid, parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
-    $array_group_order = array( );
+    $array_group_order = array();
     while ($row = $result->fetch()) {
         $array_group_order[] = $row['groupid'];
     }
@@ -446,10 +446,10 @@ function shops_show_group_list($parentid = 0)
 
     if ($parentid > 0) {
         $parentid_i = $parentid;
-        $array_group_title = array( );
+        $array_group_title = array();
         $a = 0;
         while ($parentid_i > 0) {
-            list($groupid_i, $parentid_i, $title_i) = $db->query("SELECT groupid, parentid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . intval($parentid_i))->fetch(3);
+            list ($groupid_i, $parentid_i, $title_i) = $db->query("SELECT groupid, parentid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . intval($parentid_i))->fetch(3);
 
             $array_group_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid_i . "\"><strong>" . $title_i . "</strong></a>";
             ++$a;
@@ -462,7 +462,6 @@ function shops_show_group_list($parentid = 0)
         $xtpl->parse('main.catnav');
     }
 
-
     $sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_description, weight, viewgroup, numsubgroup, inhome, indetail, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
     $result = $db->query($sql);
     $num = $result->rowCount();
@@ -474,7 +473,7 @@ function shops_show_group_list($parentid = 0)
             $lang_global['yes']
         );
 
-        while (list($groupid, $parentid, $title, $description, $weight, $viewgroup, $numsubgroup, $inhome, $indetail, $in_order) = $result->fetch(3)) {
+        while (list ($groupid, $parentid, $title, $description, $weight, $viewgroup, $numsubgroup, $inhome, $indetail, $in_order) = $result->fetch(3)) {
             $array_viewgroup = $array_viewcat_nosub;
             if (!array_key_exists($viewgroup, $array_viewgroup)) {
                 $viewgroup = "viewcat_page_list";
@@ -568,11 +567,11 @@ function shops_show_location_list($parentid = 0, $page, $per_page, $base_url)
 
     if ($parentid > 0) {
         $parentid_i = $parentid;
-        $array_location_title = array( );
+        $array_location_title = array();
 
         $a = 0;
         while ($parentid_i > 0) {
-            list($id_i, $parentid_i, $title_i) = $db->query("SELECT id, parentid, title FROM " . $db_config['prefix'] . "_" . $module_data . "_location WHERE id=" . intval($parentid_i))->fetch(3);
+            list ($id_i, $parentid_i, $title_i) = $db->query("SELECT id, parentid, title FROM " . $db_config['prefix'] . "_" . $module_data . "_location WHERE id=" . intval($parentid_i))->fetch(3);
 
             $array_location_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=location&amp;parentid=" . $id_i . "\"><strong>" . $title_i . "</strong></a>";
             ++$a;
@@ -587,15 +586,22 @@ function shops_show_location_list($parentid = 0, $page, $per_page, $base_url)
     }
 
     // Fetch Limit
-    $db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_location')->where('parentid = ' . $parentid);
+    $db->sqlreset()
+        ->select('COUNT(*)')
+        ->from($db_config['prefix'] . '_' . $module_data . '_location')
+        ->where('parentid = ' . $parentid);
 
-    $all_page = $db->query($db->sql())->fetchColumn();
+    $all_page = $db->query($db->sql())
+        ->fetchColumn();
 
-    $db->select('id, parentid, title, weight, numsub')->order('weight ASC')->limit($per_page)->offset(($page - 1) * $per_page);
+    $db->select('id, parentid, title, weight, numsub')
+        ->order('weight ASC')
+        ->limit($per_page)
+        ->offset(($page - 1) * $per_page);
 
     $result = $db->query($db->sql());
     if ($result->rowCount()) {
-        while (list($id, $parentid, $title, $weight, $numsub) = $result->fetch(3)) {
+        while (list ($id, $parentid, $title, $weight, $numsub) = $result->fetch(3)) {
             $xtpl->assign('ROW', array(
                 "id" => $id,
                 "location_link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=location&amp;parentid=" . $id,
@@ -646,7 +652,7 @@ function nv_fix_location_order($parentid = 0, $sort = 0, $lev = 0)
 
     $sql = 'SELECT id, parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_location WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
-    $array_location_order = array( );
+    $array_location_order = array();
     while ($row = $result->fetch()) {
         $array_location_order[] = $row['id'];
     }
@@ -842,7 +848,7 @@ function nv_show_block_list($bid)
     $num = $result->rowCount();
     $a = 0;
 
-    while (list($id, $listcatid, $title, $alias, $weight) = $result->fetch(3)) {
+    while (list ($id, $listcatid, $title, $alias, $weight) = $result->fetch(3)) {
         $xtpl->assign('ROW', array(
             'id' => $id,
             'title' => $title,
@@ -1001,10 +1007,10 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
         require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
     }
 
-    $array_custom_lang = array( );
+    $array_custom_lang = array();
     $idtemplate = $db->query('SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace("/[\_]/", "-", $form) . '"')->fetchColumn();
     if ($idtemplate) {
-        $array_tmp = array( );
+        $array_tmp = array();
         $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field');
         while ($row = $result->fetch()) {
             $listtemplate = explode('|', $row['listtemplate']);
@@ -1028,7 +1034,7 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
                     $query = 'SELECT ' . $row['sql_choices'][2] . ', ' . $row['sql_choices'][3] . ' FROM ' . $row['sql_choices'][1];
                     $result_sql = $db->query($query);
                     $weight = 0;
-                    while (list($key, $val) = $result_sql->fetch(3)) {
+                    while (list ($key, $val) = $result_sql->fetch(3)) {
                         $row['field_choices'][$key] = $val;
                     }
                 }
@@ -1038,7 +1044,9 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
                 } elseif ($row['field_type'] == 'textarea') {
                     $array_custom[$row['field']] = nv_htmlspecialchars(nv_br2nl($array_custom[$row['field']]));
                 } elseif ($row['field_type'] == 'editor') {
-                    $array_custom[$row['field']] = htmlspecialchars(nv_editor_br2nl($array_custom[$row['field']]));
+                    $array_custom[$row['field']] = (empty($array_custom[$row['field']])) ? '' : htmlspecialchars(nv_editor_br2nl($array_custom[$row['field']]));
+                    $array_custom[$row['fid']] = !empty($array_custom[$row['fid']]) ? $array_custom[$row['fid']] : '';
+
                     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
                         $row['class'] = explode('@', $row['class']);
                         $edits = nv_aleditor('custom[' . $row['fid'] . ']', $row['class'][0], $row['class'][1], $array_custom[$row['fid']]);
@@ -1123,7 +1131,7 @@ function Insertabl_catfields($table, $array, $idshop)
 
     $result = $db->query("SHOW COLUMNS FROM " . $table);
 
-    $array_column = array( );
+    $array_column = array();
 
     while ($row = $result->fetch()) {
         $array_column[] = $row['field'];
@@ -1131,7 +1139,7 @@ function Insertabl_catfields($table, $array, $idshop)
     $sql_insert = '';
     array_shift($array_column);
     array_shift($array_column);
-    $array_new = array( );
+    $array_new = array();
 
     foreach ($array as $key => $array_a) {
         $array_new[$key] = $array_a;
@@ -1167,7 +1175,7 @@ function nv_create_form_file($array_template_id)
             }
         }
 
-        $array_field_js = array( );
+        $array_field_js = array();
         $content_2 = "<!-- BEGIN: main -->\n";
         $content_2 .= "\t<div class=\"panel panel-default\">\n\t\t<div class=\"panel-heading\">{LANG.tabs_content_customdata}</div>\n";
         $content_2 .= "\t\t<div class=\"panel-body\">\n";
@@ -1311,7 +1319,6 @@ function nv_create_form_file($array_template_id)
  * @param mixed $dataform
  * @return
  */
-
 
 function nv_get_data_type($dataform)
 {
