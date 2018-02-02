@@ -30,16 +30,6 @@
 	margin: 5px 0
 }
 
-.tab2 td {
-	border: 1px #dedede solid;
-	background-color: #f9fbfb;
-	padding: 5px
-}
-
-.tab2 td:hover {
-	background-color: #ecf3f5
-}
-
 .requie {
 	color: red
 }
@@ -207,4 +197,118 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 }
 div.colpick {
     z-index: 99999;
+}
+
+/* LIST THEME */
+.nv-themelist {
+    background-color: #f1f1f1;
+    border: #ddd 1px solid;
+}
+
+.nv-themelist.active {
+    background-color: #0074a2;
+}
+
+.nv-themelist:hover,
+.nv-themelist.active {
+    border-color: #0074a2;
+    box-shadow: 0 0 2px rgba(0,116,162,.8);
+}
+
+.nv-themelist .themelistthumb {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    transition: opacity .2s ease-in-out;
+    border-bottom: #ddd 1px solid;
+    background-color: #fff;
+}
+
+.nv-themelist .themelistthumb:after {
+    content: "";
+    display: block;
+    padding-top: 66.66666%;
+}
+
+.nv-themelist .themelistthumb img {
+    height: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transition: opacity .2s ease-in-out;
+}
+
+.nv-themelist:hover .themelistthumb img {
+    opacity: 0.4;
+}
+
+.nv-themelist .themelistthumb .actions {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding: 0 20px;
+    display: none;
+    transition: opacity .1s ease-in-out;
+}
+
+.nv-themelist:hover .themelistthumb .actions {
+    display: block;
+    transition: opacity .1s ease-in-out;
+}
+
+.nv-themelist .themelistthumb .actions .ctn .btn {
+    background: #23282d;
+    background: rgba(0,0,0,.7);
+    transition: opacity .1s ease-in-out;
+    margin-bottom: 10px;
+    color: #fff;
+    border-color: transparent;
+}
+
+.nv-themelist .themelistthumb .actions .ctn .btn:last-child {
+    margin-bottom: 0;
+}
+
+.nv-themelist h3 {
+    margin: 0;
+    font-weight: 500;
+    line-height: 30px;
+}
+
+.nv-themelist.active h3 {
+    color: #fff;
+}
+
+.nv-themelist .themedetail {
+    display: none;
+    transition: opacity .2s ease-in-out;
+}
+
+.nv-themelist:hover .themedetail {
+    display: block;
+    transition: opacity .2s ease-in-out;
+}
+
+/* THÔNG TIN CHI TIẾT GIAO DIỆN */
+.nv-theme-detail .dthumb {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.nv-theme-detail .dthumb img {
+    max-width: 100%;
+    height: auto;
+}
+
+.nv-theme-detail .tinfo {
+    text-align: justify;
+}
+
+.nv-theme-detail .tpos code {
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }

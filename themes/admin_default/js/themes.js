@@ -119,6 +119,11 @@ $(document).ready(function() {
             });
         }
     });
+    $('[data-toggle="viewthemedetail"]').click(function(e) {
+        e.preventDefault();
+        var target = $(this).data('target');
+        modalShow($(target).attr('title'), $(target).html());
+    });
 
     // Manager block
     $("a.block_content").click(function() {
