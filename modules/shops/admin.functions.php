@@ -181,8 +181,9 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 
     $numsubcat = $weight;
     if ($parentid > 0) {
+        $_view_cat_check = $db->query('SELECT viewcat FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid=' . $parentid)->fetch();
         $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs SET numsubcat=' . $numsubcat;
-        if ($numsubcat == 0) {
+        if ($numsubcat == 0 && $_view_cat_check['viewcat'] == 'view_home_cat') {
             $sql .= ", subcatid='', viewcat='viewcat_page_list'";
         } else {
             $sql .= ", subcatid='" . implode(",", $array_cat_order) . "'";
