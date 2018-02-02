@@ -13,15 +13,15 @@
                     <!-- BEGIN: actions -->
                     <div class="actions">
                         <div class="ctn">
-            				<!-- BEGIN: link_setting -->
-            				<a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-fw fa-sun-o"></i>{LANG.theme_created_setting}</a>
-            				<!-- END: link_setting -->
-            				<!-- BEGIN: link_active -->
-            				<a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-sun-o fa-fw"></i>{LANG.theme_created_activate}</a>
-            				<!-- END: link_active -->
-            				<!-- BEGIN: link_delete -->
-            				<a href="javascript:void(0);" class="btn btn-default btn-block delete ellipsis" title="{ROW.value}"><i class="fa fa-trash-o fa-fw"></i>{LANG.theme_delete}</a>
-            				<!-- END: link_delete -->
+                            <!-- BEGIN: link_setting -->
+                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-fw fa-sun-o"></i>{LANG.theme_created_setting}</a>
+                            <!-- END: link_setting -->
+                            <!-- BEGIN: link_active -->
+                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-sun-o fa-fw"></i>{LANG.theme_created_activate}</a>
+                            <!-- END: link_active -->
+                            <!-- BEGIN: link_delete -->
+                            <a href="javascript:void(0);" class="btn btn-default btn-block delete ellipsis" title="{ROW.value}"><i class="fa fa-trash-o fa-fw"></i>{LANG.theme_delete}</a>
+                            <!-- END: link_delete -->
                         </div>
                     </div>
                     <!-- END: actions -->
@@ -45,8 +45,8 @@
                     <h1>{ROW.name}</h1>
                     <p class="author">{LANG.theme_created_by}: <a href="{ROW.website}" title="{LANG.theme_created_website}" target="_blank"><strong>{ROW.author}</strong></a></p>
                     <p class="tinfo">{ROW.description}</p>
-        			<p class="tdir">{LANG.theme_created_folder} <code>/themes/{ROW.value}/</code></p>
-        			<p class="tpos">{LANG.theme_created_position} <code>{POSITION}</code></p>
+                    <p class="tdir">{LANG.theme_created_folder} <code>/themes/{ROW.value}/</code></p>
+                    <p class="tpos">{LANG.theme_created_position} <code>{POSITION}</code></p>
                 </div>
             </div>
         </div>
