@@ -8,11 +8,12 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! function_exists('nv_filter_product_cat')) {
+if (!function_exists('nv_filter_product_cat')) {
+
     /**
      * nv_block_config_filter_product_cat()
      *
@@ -31,7 +32,11 @@ if (! function_exists('nv_filter_product_cat')) {
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$module]['module_data'] . '_group WHERE parentid = 0 ORDER BY weight';
         $list = $nv_Cache->db($sql, '', $module);
 
-        $array_style = array( 'checkbox' => 'Checkbox', 'label' => 'Label', 'image' => 'Image'  );
+        $array_style = array(
+            'checkbox' => 'Checkbox',
+            'label' => 'Label',
+            'image' => 'Image'
+        );
 
         $html .= "	<div class=\"col-sm-18\"><div class=\"row\">";
         foreach ($list as $l) {
@@ -39,9 +44,13 @@ if (! function_exists('nv_filter_product_cat')) {
             $html .= $l[NV_LANG_DATA . '_title'];
             $html .= "</div>";
             $html .= "<div class=\"col-sm-18\">";
-
             foreach ($array_style as $key => $style) {
-                $ck = $data_block['group_style'][$l['groupid']] == $key ? 'checked="checked"' : '';
+                if($data_block['group_style'][$l['groupid']] != $key && $key == 'checkbox') {
+                    $ck = 'checked="checked"';
+                }
+                else {
+                    $ck = $data_block['group_style'][$l['groupid']] == $key ? 'checked="checked"' : '';
+                }
                 $html .= "<label><input type=\"radio\" name=\"config_group_style[" . $l['groupid'] . "]\" value=\"" . $key . "\" " . $ck . " />" . $style . "</label>&nbsp;&nbsp;&nbsp;";
             }
 
@@ -96,7 +105,7 @@ if (! function_exists('nv_filter_product_cat')) {
         $catid = GetParentCatFilter($catid);
         $result = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $site_mods[$module]['module_data'] . '_group_cateid WHERE cateid = ' . $catid);
         $i = 0;
-        while (list($groupid) = $result->fetch(3)) {
+        while (list ($groupid) = $result->fetch(3)) {
             $groupinfo = $global_array_group[$groupid];
 
             $groupinfo['key'] = str_replace('-', '_', $groupinfo['alias']);
@@ -104,9 +113,9 @@ if (! function_exists('nv_filter_product_cat')) {
             $xtpl->assign('MAIN_GROUP', $groupinfo);
 
             $subgroup = GetGroupidInParent($groupid, 0, 1);
-            if (! empty($subgroup)) {
+            if (!empty($subgroup)) {
                 foreach ($subgroup as $subgroup_id) {
-                    if (! empty($global_array_group[$subgroup_id]['image'])) {
+                    if (!empty($global_array_group[$subgroup_id]['image'])) {
                         $global_array_group[$subgroup_id]['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $global_array_group[$subgroup_id]['image'];
                     }
 
