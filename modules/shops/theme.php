@@ -230,9 +230,7 @@ function view_home_blockcat($data_content, $compare_id, $html_pages = '', $data_
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-
     $num_view = $pro_config['per_row'];
-
 
     $xtpl->assign('CSS_PRODUCT_CODE', !empty($pro_config['show_product_code']) ? ' show-product-code' : '');
 
@@ -370,8 +368,6 @@ function view_home_blockcat($data_content, $compare_id, $html_pages = '', $data_
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
-
-
 
 /**
  * view_home_cat()
@@ -1279,6 +1275,11 @@ function detail_product($data_content, $data_unit, $data_others, $array_other_vi
             $xtpl->assign('SRC_PRO_LAGE_INFO', nv_is_image(NV_ROOTDIR . $data_content['homeimgfile']));
         }
         $xtpl->assign('TITLE', $data_content[NV_LANG_DATA . '_title']);
+        if (!empty($data_content['product_weight'])) {
+            $xtpl->assign('PRODUCT_WEIGHT', $data_content['product_weight']);
+            $xtpl->assign('WEIGHT_UNIT', $data_content['weight_unit']);
+            $xtpl->parse('main.product_weight');
+        }
         $xtpl->assign('NUM_VIEW', $data_content['hitstotal']);
         $xtpl->assign('DATE_UP', $lang_module['detail_dateup'] . ' ' . nv_date('d-m-Y h:i:s A', $data_content['publtime']));
         $xtpl->assign('DETAIL', $data_content[NV_LANG_DATA . '_bodytext']);
@@ -1325,7 +1326,7 @@ function detail_product($data_content, $data_unit, $data_others, $array_other_vi
         if (!$popup) {
             // Hien thi tabs
             if (!empty($data_content['tabs'])) {
-                $i=0;
+                $i = 0;
                 foreach ($data_content['tabs'] as $tabs_id => $tabs_value) {
                     $tabs_content = '';
                     $tabs_key = $tabs_value['content'];
@@ -1337,7 +1338,7 @@ function detail_product($data_content, $data_unit, $data_others, $array_other_vi
                     } elseif ($tabs_key == 'content_download' and $pro_config['download_active'] == 1) {
                         // Download tài liệu
 
-                        $download_content = nv_download_content($data_content, $tabs_key.'-'.$tabs_id);
+                        $download_content = nv_download_content($data_content, $tabs_key . '-' . $tabs_id);
                         $tabs_content = !empty($download_content) ? $download_content : '';
                     } elseif ($tabs_key == 'content_otherimage') {
                         // Hình ảnh khác
@@ -1357,7 +1358,7 @@ function detail_product($data_content, $data_unit, $data_others, $array_other_vi
                         // Dữ liệu tùy biến
 
                         if (!empty($data_content['array_custom']) and !empty($data_content['array_custom_lang'])) {
-                            $tabs_content = nv_custom_tpl('tab-' . strtolower(change_alias($data_content['tabs'][$tabs_id][NV_LANG_DATA.'_title'])) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate);
+                            $tabs_content = nv_custom_tpl('tab-' . strtolower(change_alias($data_content['tabs'][$tabs_id][NV_LANG_DATA . '_title'])) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate);
                         }
                     }
 
@@ -1665,8 +1666,8 @@ function cart_product($data_content, $coupons_code, $order_info, $array_error_nu
             $xtpl->assign('pro_num', $data_row['num']);
             $xtpl->assign('link_remove', $data_row['link_remove']);
             $xtpl->assign('product_unit', $data_row['product_unit']);
-			$xtpl->assign( 'list_group', $data_row['group'] );
-			$xtpl->assign( 'list_group_id', str_replace(',', '_', $data_row['group']) );
+            $xtpl->assign('list_group', $data_row['group']);
+            $xtpl->assign('list_group_id', str_replace(',', '_', $data_row['group']));
 
             // Tinh diem tich luy
             if ($pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and ($global_array_shops_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_shops_cat[$data_row['listcatid']]['cat_number_product'])) {
@@ -1738,7 +1739,7 @@ function cart_product($data_content, $coupons_code, $order_info, $array_error_nu
     }
 
     $xtpl->assign('price_total', nv_number_format($price_total, nv_get_decimals($pro_config['money_unit'])));
-    $xtpl->assign('unit_config',$money_config[$pro_config['money_unit']]['symbol'] );
+    $xtpl->assign('unit_config', $money_config[$pro_config['money_unit']]['symbol']);
     $xtpl->assign('LINK_DEL_ALL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=remove');
     $xtpl->assign('LINK_CART', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart');
     $xtpl->assign('LINK_PRODUCTS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '');
@@ -2045,7 +2046,7 @@ function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro
     }
     $xtpl->assign('order_coupons', nv_number_format($data_content['coupons']['amount'], nv_get_decimals($pro_config['money_unit'])));
     $xtpl->assign('order_total', nv_number_format($data_content['order_total'], nv_get_decimals($pro_config['money_unit'])));
-    $xtpl->assign('unit',$money_config[$data_content['unit_total']]['symbol'] );
+    $xtpl->assign('unit', $money_config[$data_content['unit_total']]['symbol']);
     if (!empty($url_checkout)) {
         $xtpl->assign('note_pay', '');
         foreach ($url_checkout as $value) {
@@ -2796,7 +2797,7 @@ function nv_download_content($data_content)
         }
 
         if ($login > 0) {
-            $link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl'] . '#'.$linktab);
+            $link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl'] . '#' . $linktab);
             $xtpl->assign('DOWNLOAD_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module['download_login'] . '</a>');
             $xtpl->parse('main.form_login');
         }
