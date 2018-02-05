@@ -142,3 +142,8 @@ $lang_module['show_device_1'] = 'Tất cả';
 $lang_module['show_device_2'] = 'Hiển thị di động';
 $lang_module['show_device_3'] = 'Hiển thị máy tính bảng';
 $lang_module['show_device_4'] = 'Các thiết bị khác';
+
+$lang_module['preview_theme_on'] = 'Cho phép xem trước';
+$lang_module['preview_theme_off'] = 'Hủy xem trước';
+$lang_module['preview_theme_link'] = 'Liên kết xem trước giao diện';
+$lang_module['preview_theme_link_copied'] = 'Liên kết đã được sao chép vào bộ nhớ tạm';

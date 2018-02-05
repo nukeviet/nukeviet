@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
 <!-- BEGIN: error -->
 <div id="edit">&nbsp;</div>
 <div class="alert alert-danger"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></div>
@@ -39,6 +40,22 @@
             </div>
             <div id="theme-detail-{ROW.value}" class="hidden" title="{GLANG.detail}">
                 <div class="nv-theme-detail">
+                    <!-- BEGIN: preview -->
+                    <div class="form-group clearfix">
+                        <div class="pull-right">
+                            <a href="#" class="btn btn-primary" data-toggle="previewtheme" data-value="{ROW.value}"><i class="fa fa-fw fa-spinner fa-spin hidden"></i><span>{TEXT_PREVIEW}</span></a>
+                        </div>
+                        <label class="preview-label"{SHOW_PREVIEW2}>{LANG.preview_theme_link}:</label>
+                    </div>
+                    <div class="preview-link form-group{SHOW_PREVIEW1}">
+                        <div class="input-group">
+                            <input type="text" class="form-control selectedfocus" value="{LINK_PREVIEW}"/>
+                            <div class="input-group-btn">
+                                <a href="javascript:void(0);" class="btn btn-default preview-link-btn" data-clipboard-text="{LINK_PREVIEW}" data-title="{LANG.preview_theme_link_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="0"><i class="fa fa-copy"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: preview -->
                     <div class="dthumb">
                         <img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}"/>
                     </div>
