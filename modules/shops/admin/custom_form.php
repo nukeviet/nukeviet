@@ -25,7 +25,7 @@ if ($cid and ! empty($cat_form)) {
     if ($idtemplate) {
         $result = $db->query("SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . " WHERE rows_id=" . $id);
         while ($row = $result->fetch()) {
-            $custom[] = $row['field_id'];
+            $custom[$row['field_id']] = $row['field_value'];
         }
     }
 

@@ -7,18 +7,18 @@
 
 	<div class="form-group">
 		<label>{LANG.price1}</label>
-		<input id="price1" type="text" value="{value_price1}" name="price1" class="form-control input-sm">
+		<input id="price1" type="text" value="{value_price1}" name="price1" class="form-control input-sm" onkeyup="this.value=FormatNumber(this.value);">
 	</div>
 
 	<div class="form-group">
 		<label>{LANG.price2}</label>
-		<input id="price2" type="text" value="{price2}" name="price2" class="form-control input-sm">
+		<input id="price2" type="text" value="{price2}" name="price2" class="form-control input-sm" onkeyup="this.value=FormatNumber(this.value);">
 	</div>
 
 	<div class="form-group">
 		<label>{LANG.moneyunit}</label>
 		<select name="typemoney" id="typemoney" class="form-control input-sm">
-			<option value="0"></option>
+			<option value="0">{LANG.moneyunit}</option>
 			<!-- BEGIN: typemoney -->
 			<option {ROW.selected} value="{ROW.code}">{ROW.currency}</option>
 			<!-- END: typemoney -->
@@ -28,7 +28,7 @@
 	<div class="form-group">
 		<label>{LANG.catagories}</label>
 		<select name="cata" id="cata" class="form-control input-sm">
-			<option value="0"></option>
+			<option value="0">{LANG.allcatagories}</option>
 			<!-- BEGIN: loopcata -->
 			<option {ROW.selected} value="{ROW.catid}">{ROW.xtitle}</option>
 			<!-- END: loopcata -->

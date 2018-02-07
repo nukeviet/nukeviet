@@ -1404,3 +1404,7 @@ img.calendar {
 	border: none;
 	box-shadow: none
 }
+.tab-content ul {
+    list-style-type: disc !important;
+    padding-left: 20px !important;
+}

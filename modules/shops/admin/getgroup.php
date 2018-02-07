@@ -37,11 +37,18 @@ function getgroup_ckhtml($subgroupid_i, $array_groupid_in_row)
 }
 
 $cid = $nv_Request->get_int('cid', 'get', 0);
+$id = $nv_Request->get_int('id', 'get', 0);
 $inrow = $nv_Request->get_string('inrow', 'get', '');
 $array_groupid_in_row = array();
 if (!empty($inrow)) {
     $inrow = nv_base64_decode($inrow);
     $array_groupid_in_row = unserialize($inrow);
+}
+else if(!empty($id)) {
+    $_result = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = '.$id);
+    while($_row = $_result->fetch()) {
+        $array_groupid_in_row[]=$_row['group_id'];
+    }
 }
 $contents_temp_cate = '';
 
