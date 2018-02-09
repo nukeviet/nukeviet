@@ -58,11 +58,11 @@ if (empty($contents)) {
             $row['areatitle'] = !empty($row['areatitle']) ? implode(', ', $row['areatitle']) : '';
             $row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
             $row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
-            $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
-            $row['comm_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'];
-			if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
+            $row['url'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'], true);
+            $row['comm_url'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'], true);
+			if (($row['start_comm_time'] > 0 and $row['start_comm_time'] > NV_CURRENTTIME) or ($row['end_comm_time'] > 0 and $row['end_comm_time'] < NV_CURRENTTIME)) {
 	        	$row['allow_comm'] = 0;
-	        }else{
+	        } else {
 	        	$row['allow_comm'] = 1;
 	        }
 			//Đếm số comment
