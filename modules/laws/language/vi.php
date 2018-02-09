@@ -62,6 +62,7 @@ $lang_module['view_signer'] = "Văn bản theo người ký:";
 $lang_module['s_key'] = "Từ khóa";
 $lang_module['s_status'] = "Tình trạng";
 $lang_module['s_status_all'] = "-- Tất cả tình trạng --";
+$lang_module['s_app_status_all'] = "-- Tất cả trạng thái --";
 $lang_module['s_status_1'] = "Còn hiệu lực";
 $lang_module['s_status_2'] = "Hết hạn";
 $lang_module['s_signer'] = "Người ký";

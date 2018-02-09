@@ -64,6 +64,7 @@ $lang_module['view_signer'] = 'Writing under the sign:';
 $lang_module['s_key'] = 'Keywords';
 $lang_module['s_status'] = 'Status';
 $lang_module['s_status_all'] = 'All status';
+$lang_module['s_app_status_all'] = "-- All --";
 $lang_module['s_status_1'] = 'Enable';
 $lang_module['s_status_2'] = 'Unenable';
 $lang_module['s_signer'] = 'Signer';
