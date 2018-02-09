@@ -437,7 +437,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
             $post['cid'] = $post['sid'] = $post['sgid'] = $post['eid'] = $post['who_view'] = $post['who_download'] = 0;
 
             $post['groupcss'] = $post['groupcss2'] = "groupcss0";
-            $post['files'] = '';
+            $post['files'] = array();
 
             $post['select0'] = " selected=\"selected\"";
             $post['select1'] = "";
