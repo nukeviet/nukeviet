@@ -17,8 +17,15 @@ if (!preg_match("/^([a-z0-9\-\_\.]+)$/i", $alias)) {
 }
 
 $page = 1;
-if (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') {
-    $page = intval(substr($array_op[2], 5));
+if (isset($array_op[2])) {
+    if (preg_match('/^page\-([0-9]{1,10})$/', $array_op[2], $m)) {
+        $page = intval($m[1]);
+    } else {
+        nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
+    }
+}
+if (isset($array_op[3])) {
+    nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
 }
 
 $catid = 0;
@@ -59,29 +66,29 @@ if (empty($contents)) {
         $in[] = $catid;
         $in = " t2.area_id IN(" . implode(",", $in) . ")";
     }
-    
+
     $order = ($nv_laws_setting['typeview'] == 1) ? "ASC" : "DESC";
-    
+
     $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row_area t2 ON t1.id=t2.row_id WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ($page - 1) * $per_page;
     $result = $db->query($sql);
     $query = $db->query("SELECT FOUND_ROWS()");
     $all_page = $query->fetchColumn();
-    
+
     $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
-    
+
     $array_data = array();
     $stt = nv_get_start_id($page, $per_page);
     while ($row = $result->fetch()) {
         $row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
         $row['stt'] = $stt;
-        
+
         if ($nv_laws_setting['down_in_home']) {
             // File download
             if (!empty($row['files'])) {
                 $row['files'] = explode(",", $row['files']);
                 $files = $row['files'];
                 $row['files'] = array();
-                
+
                 foreach ($files as $id => $file) {
                     $file_title = basename($file);
                     $row['files'][] = array(
@@ -92,13 +99,13 @@ if (empty($contents)) {
                 }
             }
         }
-        
+
         $array_data[] = $row;
         $stt++;
     }
-    
+
     $contents = nv_theme_laws_area($array_data, $generate_page, $cat);
-    
+
     if (!defined('NV_IS_MODADMIN') and $contents != '' and $cache_file != '') {
         $nv_Cache->setItem($module_name, $cache_file, $contents);
     }

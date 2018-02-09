@@ -14,8 +14,12 @@ $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 $page = 1;
-if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
-    $page = intval(substr($array_op[0], 5));
+if (isset($array_op[0])) {
+    if (preg_match('/^page\-([0-9]{1,10})$/', $array_op[0], $m)) {
+        $page = intval($m[1]);
+    } else {
+        nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
+    }
 }
 
 $contents = $cache_file = '';
