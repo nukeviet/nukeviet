@@ -222,29 +222,29 @@ if ($nv_laws_setting['detail_other']) {
 }
 
 // comment
-    if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
-        define('NV_COMM_ID', $row['id']);//ID bài viết hoặc
-        define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']);//để đáp ứng comment ở bất cứ đâu không cứ là bài viết
-        //check allow comemnt
-        if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
-        	$allowed = 1;//Nếu không trong thời gian góp ý thì chỉ quản trị tối cao có thể comment
-        }else{
-        	//Nếu văn bản trong thời gian lấy ý kiến thì lấy cấu hình comm theo module
-        	$allowed = $module_config[$module_name]['allowed_comm'];//tùy vào module để lấy cấu hình.
-	        if ($allowed == '-1') {
-	            $allowed = 6;//Nếu cấu hình giá trị là tùy vào bài viết thì để mặc định là tất cả mọi người được comment
-	        }
+if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
+    define('NV_COMM_ID', $row['id']);//ID bài viết hoặc
+    define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']);//để đáp ứng comment ở bất cứ đâu không cứ là bài viết
+    //check allow comemnt
+    if(($row['start_comm_time']>0 && $row['start_comm_time']> NV_CURRENTTIME) || ($row['end_comm_time']>0 && $row['end_comm_time']< NV_CURRENTTIME)){
+    	$allowed = 1;//Nếu không trong thời gian góp ý thì chỉ quản trị tối cao có thể comment
+    }else{
+    	//Nếu văn bản trong thời gian lấy ý kiến thì lấy cấu hình comm theo module
+    	$allowed = $module_config[$module_name]['allowed_comm'];//tùy vào module để lấy cấu hình.
+        if ($allowed == '-1') {
+            $allowed = 6;//Nếu cấu hình giá trị là tùy vào bài viết thì để mặc định là tất cả mọi người được comment
         }
-
-        require_once NV_ROOTDIR . '/modules/comment/comment.php';
-        $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
-        $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
-
-        $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
-    } else {
-        $content_comment = '';
     }
-//print_r($row);die('ok');
+
+    require_once NV_ROOTDIR . '/modules/comment/comment.php';
+    $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
+    $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
+
+    $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
+} else {
+    $content_comment = '';
+}
+
 $contents = nv_theme_laws_detail($row, $other_cat, $other_area, $other_subject, $other_signer, $content_comment);
 
 include NV_ROOTDIR . '/includes/header.php';
