@@ -106,7 +106,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         $nv_Cache->delMod($module_name);
-        nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, "Id: " . $post['id'], $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, "Title: " . $post['title'], $admin_info['userid']);
         nv_htmlOutput('OK');
     }
 
