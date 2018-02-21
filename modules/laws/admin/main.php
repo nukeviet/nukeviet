@@ -608,7 +608,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
 
     if ($nv_Request->isset_request('list', 'get')) {
         $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&list";
-        $join = 'INNER JOIN ' . NV_USERS_GLOBALTABLE . ' u1 ON t1.admin_add=u1.userid';
+        $join = 'INNER JOIN ' . NV_USERS_GLOBALTABLE . ' u1 ON t1.admin_add=u1.userid ';
         $where = array();
         if ($nv_Request->isset_request('cat', 'get')) {
             $keywords = $nv_Request->get_title('keywords', 'get', '');
