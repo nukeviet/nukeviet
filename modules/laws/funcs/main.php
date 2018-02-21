@@ -14,12 +14,17 @@ $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 $page = 1;
+$issetPage = false;
 if (isset($array_op[0])) {
     if (preg_match('/^page\-([0-9]{1,10})$/', $array_op[0], $m)) {
         $page = intval($m[1]);
+        $issetPage = true;
     } else {
         nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
     }
+}
+if ($page < 1 or ($issetPage and $page < 2)) {
+    nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
 }
 
 $contents = $cache_file = '';
@@ -39,7 +44,7 @@ if (empty($contents)) {
         $order = ($nv_laws_setting['typeview'] == 1 or $nv_laws_setting['typeview'] == 4) ? "ASC" : "DESC";
         $order_param = ($nv_laws_setting['typeview'] == 0 or $nv_laws_setting['typeview'] == 1) ? "publtime" : "addtime";
 
-        $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY " . $order_param . " " . $order . " LIMIT " . $per_page . " OFFSET " . ($page - 1) * $per_page;
+        $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY " . $order_param . " " . $order . " LIMIT " . $per_page . " OFFSET " . (($page - 1) * $per_page);
 
         $result = $db->query($sql);
         $query = $db->query("SELECT FOUND_ROWS()");
@@ -107,6 +112,9 @@ if (empty($contents)) {
             }
 
             $array_data[] = $row;
+        }
+        if ($page > 1 and empty($array_data)) {
+            nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
         }
         $contents = nv_theme_laws_main($array_data, $generate_page);
     } else {
