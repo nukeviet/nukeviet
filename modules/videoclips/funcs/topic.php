@@ -41,17 +41,22 @@ foreach ($topicList as $__k => $__v) {
     }
 }
 
-$pgnum = 0;
+$pgnum = 1;
+$issetPgnum = false;
 if (isset($array_op[1])) {
     unset($matches);
     if (preg_match("/^page\-(\d+)$/i", $array_op[1], $matches)) {
         $pgnum = (int) $matches[1];
+        $issetPgnum = true;
     } else {
         $_tempUrl = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $topic['alias'];
         $_tempUrl = nv_url_rewrite($_tempUrl, 1);
         header('Location: ' . $_tempUrl, true, 301);
         exit();
     }
+}
+if (isset($array_op[2]) or $pgnum < 1 or ($pgnum < 2 and $issetPgnum)) {
+    nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
 }
 
 $base_url = array();
@@ -64,7 +69,7 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $m
     AND a.id=b.cid
     AND a.status=1
     ORDER BY a.id DESC
-    LIMIT " . $pgnum . "," . $configMods['otherClipsNum'];
+    LIMIT " . (($pgnum - 1) * $configMods['otherClipsNum']) . "," . $configMods['otherClipsNum'];
 
 $xtpl = new XTemplate("topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
 $xtpl->assign('LANG', $lang_module);
@@ -122,7 +127,9 @@ $all_page = $res->fetchColumn();
 $all_page = intval($all_page);
 if ($all_page) {
     $i = 1;
+    $numClips = 0;
     while ($row = $result->fetch()) {
+        $numClips++;
         if (!empty($row['img'])) {
             $imageinfo = nv_ImageInfo(NV_ROOTDIR . '/' . $row['img'], 120, true, NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name);
             $row['img'] = $imageinfo['src'];
@@ -138,6 +145,9 @@ if ($all_page) {
         }
         $xtpl->parse('main.otherClips.otherClipsContent');
         ++$i;
+    }
+    if ($pgnum > 1 and $numClips < 1) {
+        nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
     }
 
     $generate_page = nv_generate_page($base_url, $all_page, $configMods['otherClipsNum'], $pgnum);

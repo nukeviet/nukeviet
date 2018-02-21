@@ -19,17 +19,19 @@ if (!empty($topicList)) {
     }
 }
 
-$pgnum = 0;
+$pgnum = 1;
+$issetPgnum = false;
 if (isset($array_op[0]) and !empty($array_op[0])) {
     unset($matches);
-    if (preg_match("/^page\-(\d+)$/", $array_op[0], $matches))
+    if (preg_match("/^page\-(\d+)$/", $array_op[0], $matches)) {
         $pgnum = (int)$matches[1];
-    else {
-        $_tempUrl = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
-        $_tempUrl = nv_url_rewrite($_tempUrl, 1);
-        header('Location: ' . $_tempUrl, true, 301);
-        exit();
+        $issetPgnum = true;
+    } else {
+        nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
     }
+}
+if (isset($array_op[1]) or $pgnum < 1 or ($pgnum < 2 and $issetPgnum)) {
+    nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
 }
 
 $xtpl = new XTemplate("main.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
@@ -71,7 +73,7 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $m
     WHERE a.id=b.cid
     AND a.status=1
     ORDER BY a.id DESC
-    LIMIT " . $pgnum . "," . $configMods['otherClipsNum'];
+    LIMIT " . (($pgnum - 1) * $configMods['otherClipsNum']) . "," . $configMods['otherClipsNum'];
 
 if (!empty($_otherTopic['main'])) {
     $xtpl->assign('OTHETP', $lang_module['topic']);
@@ -98,7 +100,9 @@ $all_page = $res->fetchColumn();
 $all_page = intval($all_page);
 if ($all_page) {
     $i = 1;
+    $numClips = 0;
     while ($row = $result->fetch()) {
+        $numClips++;
         if (!empty($row['img'])) {
             $imageinfo = nv_ImageInfo(NV_ROOTDIR . '/' . $row['img'], 120, true, NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name);
             $row['img'] = $imageinfo['src'];
@@ -114,6 +118,9 @@ if ($all_page) {
         }
         $xtpl->parse('main.otherClips.otherClipsContent');
         ++$i;
+    }
+    if ($pgnum > 1 and $numClips < 1) {
+        nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
     }
 
     $generate_page = nv_generate_page($base_url, $all_page, $configMods['otherClipsNum'], $pgnum);
