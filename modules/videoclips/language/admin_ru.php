@@ -24,6 +24,9 @@ $lang_module['add'] = 'Добавить новый клип';
 $lang_module['topic'] = 'Категории';
 $lang_module['config'] = 'Настройки';
 $lang_module['save'] = 'Сохранить';
+$lang_module['viewhits'] = 'мнения';
+$lang_module['like'] = 'как';
+$lang_module['dislike'] = 'Не нравится';
 
 $lang_module['topic_management'] = 'Управление категориями';
 $lang_module['addtopic_titlebox'] = 'Добавить новую категорию';

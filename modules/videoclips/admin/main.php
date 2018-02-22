@@ -303,11 +303,11 @@ $where = "";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 $ptitle = $lang_module['main'];
 
-$_where = array();
+$_where = array('tb1.id=tb2.cid');
 $q = $nv_Request->get_title('q', 'get', '');
 
 if (!empty($q)) {
-    $_where[] = " title LIKE '%" . $q . "%' OR alias LIKE '%" . $q . "%' OR hometext LIKE '%" . $q . "%' OR keywords LIKE '%" . $q . "%' ";
+    $_where[] = " (tb1.title LIKE '%" . $q . "%' OR tb1.alias LIKE '%" . $q . "%' OR tb1.hometext LIKE '%" . $q . "%' OR tb1.keywords LIKE '%" . $q . "%') ";
     $base_url .= "q=" . $q;
 }
 
@@ -315,7 +315,7 @@ if ($nv_Request->isset_request('tid', 'get')) {
     $top = $nv_Request->get_int('tid', 'get', 0);
     if (isset($topicList[$top])) {
         if ($top != 0) {
-            $_where[] = " tid=" . $top;
+            $_where[] = " tb1.tid=" . $top;
         }
 
         $base_url .= "&tid=" . $top;
@@ -330,7 +330,8 @@ if (!empty($_where)) {
 $xtpl->assign('Q', $q);
 $xtpl->assign('PTITLE', $ptitle);
 
-$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip" . $where;
+$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip tb1,
+" . NV_PREFIXLANG . "_" . $module_data . "_hit tb2" . $where;
 $result = $db->query($sql);
 $all_page = $result->fetch();
 $all_page = $all_page['ccount'];
@@ -338,22 +339,23 @@ $all_page = $all_page['ccount'];
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 50;
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip" . $where . " ORDER BY addtime DESC LIMIT " . $per_page . " OFFSET " . (($page - 1) * $per_page);
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip tb1,
+" . NV_PREFIXLANG . "_" . $module_data . "_hit tb2
+" . $where . " ORDER BY tb1.addtime DESC LIMIT " . $per_page . " OFFSET " . (($page - 1) * $per_page);
 $result = $db->query($sql);
 
-$a = 0;
 while ($row = $result->fetch()) {
-    $xtpl->assign('CLASS', $a % 2 ? " class=\"second\"" : "");
-
     $row['adddate'] = date("d-m-Y H:i", $row['addtime']);
     $row['topicname'] = isset($topicList[$row['tid']]) ? $topicList[$row['tid']]['title'] : "";
     $row['icon'] = $row['status'] ? '<i class="fa fa-check-square-o" style="color: red; font-size: 16px"></i>' : '<i style="color: #333; font-size: 16px" class="fa fa-square-o"></i>';
     $row['status'] = $row['status'] ? $lang_module['tit1'] : $lang_module['tit0'];
     $row['alt'] = $row['status'] ? $lang_module['status1'] : $lang_module['status0'];
     $row['link_view'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=video-' . $row['alias'], true);
+    $row['view'] = number_format($row['view'], 0, ',', '.');
+    $row['liked'] = number_format($row['liked'], 0, ',', '.');
+    $row['unlike'] = number_format($row['unlike'], 0, ',', '.');
     $xtpl->assign('DATA', $row);
     $xtpl->parse('main.loop');
-    $a++;
 }
 
 $generate_page = nv_generate_page($base_url, $all_page, $per_page, $page);

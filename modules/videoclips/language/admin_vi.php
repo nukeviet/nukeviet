@@ -22,6 +22,9 @@ $lang_module['topic'] = 'Quản lý thể loại';
 $lang_module['config'] = 'Cấu hình';
 $lang_module['save'] = 'Lưu';
 $lang_module['search'] = 'Tìm kiếm';
+$lang_module['viewhits'] = 'Lượt xem';
+$lang_module['like'] = 'Thích';
+$lang_module['dislike'] = 'Không thích';
 
 $lang_module['topic_management'] = 'Quản lý thể loại';
 $lang_module['addtopic_titlebox'] = 'Thêm thể loại mới';
