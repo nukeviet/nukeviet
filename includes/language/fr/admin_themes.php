@@ -140,3 +140,8 @@ $lang_module['show_device_1'] = 'Tous';
 $lang_module['show_device_2'] = 'Afficher mobiles';
 $lang_module['show_device_3'] = 'Afficher sur tablette';
 $lang_module['show_device_4'] = 'Autres équipements';
+
+$lang_module['preview_theme_on'] = 'Autoriser l\'aperçu';
+$lang_module['preview_theme_off'] = 'Annuler l\'aperçu';
+$lang_module['preview_theme_link'] = 'Aperçu de l\'interface du lien';
+$lang_module['preview_theme_link_copied'] = 'Le lien a été copié dans le presse-papiers';
