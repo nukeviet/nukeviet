@@ -42,10 +42,6 @@ if (empty($contents)) {
 
     if ($viewcat == 'viewcat_none') {
         $contents = '';
-        if ($home == 1) {
-            $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-            $meta_property['og:url'] = $canonicalUrl;
-        }
     } elseif ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old') {
         $order_by = ($viewcat == 'viewcat_page_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
         $db_slave->sqlreset()

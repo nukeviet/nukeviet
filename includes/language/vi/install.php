@@ -53,6 +53,7 @@ $lang_module['recommnet'] = 'Khuyến cáo';
 $lang_module['request_more'] = 'Yêu cầu thêm (không bắt buộc)';
 $lang_module['turnoff'] = 'Nên tắt';
 $lang_module['turnon'] = 'Nên bật';
+$lang_module['and'] = 'và';
 $lang_module['is_support'] = 'Nên hỗ trợ';
 $lang_module['supports_rewrite'] = 'Hỗ trợ rewrite';
 $lang_module['opendir_support'] = 'PHP hỗ trợ opendir';

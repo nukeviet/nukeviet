@@ -88,16 +88,17 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
 	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	idfile mediumint(8) unsigned NOT NULL DEFAULT '0',
+    langtype varchar(50) NOT NULL DEFAULT 'lang_module',
 	lang_key varchar(50) NOT NULL,
 	PRIMARY KEY (id),
-	UNIQUE KEY filelang (idfile,lang_key)
+	UNIQUE KEY filelang (idfile,lang_key,langtype)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 	idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	module varchar(50) NOT NULL,
 	admin_file varchar(200) NOT NULL DEFAULT '0',
-	langtype varchar(50) NOT NULL,
+	langtype varchar(50) NOT NULL DEFAULT 'lang_module',
 	PRIMARY KEY (idfile),
 	UNIQUE KEY module (module,admin_file)
 ) ENGINE=MyISAM";

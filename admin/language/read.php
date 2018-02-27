@@ -26,23 +26,35 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     $include_lang = '';
     $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
-    if ($module == 'global' and preg_match('/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/', $admin_file, $m)) {
-        $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $admin_file;
-        $admin_file = 'block.global.' . $m[1];
+    if (preg_match('/^theme\_(.*?)$/', $module, $m)) {
+        if ($admin_file == 1) {
+            // Ngôn ngữ admin của giao diện
+            $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/admin_' . $dirlang . '.php';
+        } else {
+            // Ngôn ngữ ngoài site của giao diện
+            $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/' . $dirlang . '.php';
+        }
     } elseif (preg_match('/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/', $admin_file, $m)) {
+        // Block các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file;
         $admin_file = 'block.' . $m[1] . '.' . $m[2];
     } elseif ($module == 'global' and $admin_file == 1) {
+        // Global trong quản trị
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
     } elseif ($module == 'global' and $admin_file == 0) {
+        // Global ngoài site
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
     } elseif ($module == 'install' and $admin_file == 0) {
+        // Lang cài đặt ngoài site
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
     } elseif (in_array($module, $modules_exit) and $admin_file == 1) {
+        // Lang quản trị của các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php';
     } elseif (in_array($module, $modules_exit) and $admin_file == 0) {
+        // Lang ngoài site các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
     } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php')) {
+        // Lang các module trong quản trị
         $admin_file = 1;
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
     }
@@ -63,7 +75,8 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         list ($idfile, $langtype) = $sth->fetch(3);
 
         if (empty($idfile)) {
-            $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_module';
+            // Tạo file mới trong CSDL
+            $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_theme';
 
             $lang_translator_save = array();
             $lang_translator_save['author'] = isset($lang_translator['author']) ? trim($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
@@ -82,9 +95,10 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                 nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang), 404);
             }
         } else {
+            // Cập nhật lại tác giả cho các file đã có trong CSDL
             $lang_translator_save = array();
 
-            $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_module';
+            $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_theme';
 
             $lang_translator_save['author'] = isset($lang_translator['author']) ? trim($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
             $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? trim($lang_translator['createdate']) : date('d/m/Y, H:i');
@@ -102,19 +116,11 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             }
         }
 
-        $temp_lang = array();
-        switch ($langtype) {
-            case 'lang_global':
-                $temp_lang = $lang_global;
-                break;
-            case 'lang_module':
-                $temp_lang = $lang_module;
-                break;
-            case 'lang_block':
-                $temp_lang = $lang_block;
-                break;
-        }
-
+        $array_full_readlang = array(
+            'lang_global' => $lang_global,
+            'lang_module' => $lang_module,
+            'lang_block' => $lang_block
+        );
         $array_lang_key = array();
         $array_lang_value = array();
 
@@ -137,37 +143,48 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 
         $read_type = intval($global_config['read_type']);
 
-        $sth_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ', update_' . $dirlang . ') VALUES (:idfile, :lang_key, :lang_value, ' . NV_CURRENTTIME . ')');
-        $sth_ud = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $dirlang . ' = :lang_value, update_' . $dirlang . ' = ' . NV_CURRENTTIME . ' WHERE idfile = :idfile AND lang_key = :lang_key');
+        $sth_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (
+            idfile, langtype, lang_key, lang_' . $dirlang . ', update_' . $dirlang . '
+        ) VALUES (
+            :idfile, :langtype, :lang_key, :lang_value, ' . NV_CURRENTTIME . '
+        )');
+        $sth_ud = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET
+            lang_' . $dirlang . ' = :lang_value,
+            update_' . $dirlang . ' = ' . NV_CURRENTTIME . '
+        WHERE idfile = :idfile AND langtype=:langtype AND lang_key = :lang_key');
 
-        foreach ($temp_lang as $lang_key => $lang_value) {
-            $check_type_update = false;
-            $lang_key = trim($lang_key);
-            $lang_value = nv_nl2br($lang_value);
-            $lang_value = preg_replace("/<br\s*\/>/", '<br />', $lang_value);
-            $lang_value = preg_replace("/<\/\s*br\s*>/", '<br />', $lang_value);
+        foreach ($array_full_readlang as $langtype_row => $data_row) {
+            foreach ($data_row as $lang_key => $lang_value) {
+                $check_type_update = false;
+                $lang_key = trim($lang_key);
+                $lang_value = nv_nl2br($lang_value);
+                $lang_value = preg_replace("/<br\s*\/>/", '<br />', $lang_value);
+                $lang_value = preg_replace("/<\/\s*br\s*>/", '<br />', $lang_value);
 
-            if ($read_type == 0 or $read_type == 1) {
-                try {
-                    $sth_is->bindParam(':idfile', $idfile, PDO::PARAM_INT);
-                    $sth_is->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
-                    $sth_is->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
-                    $sth_is->execute();
-                    if ($read_type == 0 and !$sth_is->rowCount()) {
-                        $check_type_update = true;
-                    }
-                } catch (PDOException $e) {
-                    if ($read_type == 0) {
-                        $check_type_update = true;
+                if ($read_type == 0 or $read_type == 1) {
+                    try {
+                        $sth_is->bindParam(':idfile', $idfile, PDO::PARAM_INT);
+                        $sth_is->bindParam(':langtype', $langtype_row, PDO::PARAM_STR);
+                        $sth_is->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
+                        $sth_is->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
+                        $sth_is->execute();
+                        if ($read_type == 0 and !$sth_is->rowCount()) {
+                            $check_type_update = true;
+                        }
+                    } catch (PDOException $e) {
+                        if ($read_type == 0) {
+                            $check_type_update = true;
+                        }
                     }
                 }
-            }
 
-            if ($read_type == 2 or $check_type_update) {
-                $sth_ud->bindParam(':idfile', $idfile, PDO::PARAM_INT);
-                $sth_ud->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
-                $sth_ud->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
-                $sth_ud->execute();
+                if ($read_type == 2 or $check_type_update) {
+                    $sth_ud->bindParam(':idfile', $idfile, PDO::PARAM_INT);
+                    $sth_ud->bindParam(':langtype', $langtype_row, PDO::PARAM_STR);
+                    $sth_ud->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
+                    $sth_ud->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
+                    $sth_ud->execute();
+                }
             }
         }
 
@@ -186,37 +203,53 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
     $array_filename = array();
 
     nv_admin_add_field_lang($dirlang);
+    // Đọc ngôn ngữ global ngoài site
     nv_admin_read_lang($dirlang, 'global', 0);
+    // Đọc ngôn ngữ cài đặt ngoài site
     nv_admin_read_lang($dirlang, 'install', 0);
 
     $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
+
+    // Đọc ngôn ngữ global admin
     nv_admin_read_lang($dirlang, 'global', 1);
 
     $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
     $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
 
     foreach ($dirs as $module) {
+        // Đọc ngôn ngữ các module trong quản trị
         nv_admin_read_lang($dirlang, $module, 1);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
     }
 
-    $dirs = nv_scandir(NV_ROOTDIR . '/includes/language/' . $dirlang, '/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/');
-    foreach ($dirs as $file_i) {
-        nv_admin_read_lang($dirlang, 'global', $file_i);
-    }
-
     $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
     foreach ($dirs as $module) {
+        // Đọc ngôn ngữ ngoài site các module
         nv_admin_read_lang($dirlang, $module, 0);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
 
+        // Đọc ngôn ngữ admin các module
         nv_admin_read_lang($dirlang, $module, 1);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
 
         $blocks = nv_scandir(NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/');
         foreach ($blocks as $file_i) {
+            // Đọc ngôn ngữ các block của module tương ứng
             nv_admin_read_lang($dirlang, $module, $file_i);
         }
+    }
+
+    $dirs1 = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme']);
+    $dirs2 = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_mobile']);
+    $dirs = array_unique(array_merge_recursive($dirs1, $dirs2));
+    foreach ($dirs as $theme) {
+        // Đọc ngôn ngữ ngoài site các giao diện
+        nv_admin_read_lang($dirlang, 'theme_' . $theme, 0);
+        $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
+
+        // Đọc ngôn ngữ admin các giao diện
+        nv_admin_read_lang($dirlang, 'theme_' . $theme, 1);
+        $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
     }
 
     $nv_Request->set_Cookie('dirlang', $dirlang, NV_LIVE_COOKIE_TIME);
