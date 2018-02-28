@@ -10,10 +10,23 @@
 			</a>
 		</div>
 		<ul class="menu pull-right">
+            <!-- BEGIN: langinterface -->
+            <li title="{NV_LANGINTERFACE}">
+                <a href="javascript:void(0);" data-toggle="dropdown">
+                    <span class="screen-lg">Lang Interface: {NV_LANGINTERFACE_CURRENT} <em class="fa fa-caret-down">&nbsp;</em></span>
+                    <span class="screen-xs"><em class="fa fa-magic fa-2x fix logout">&nbsp;</em></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <!-- BEGIN: option -->
+                    <li{DISABLED}><a href="{LANGOP}">{LANGVALUE}</a></li>
+                    <!-- END: option -->
+                </ul>
+            </li>            
+            <!-- END: langinterface -->        
 			<!-- BEGIN: langdata -->
 			<li title="{NV_LANGDATA}">
 				<a href="javascript:void(0);" data-toggle="dropdown">
-					<span class="screen-lg">{NV_LANGDATA_CURRENT} <em class="fa fa-caret-down">&nbsp;</em></span>
+					<span class="screen-lg">Lang Data: {NV_LANGDATA_CURRENT} <em class="fa fa-caret-down">&nbsp;</em></span>
 					<span class="screen-xs"><em class="fa fa-magic fa-2x fix logout">&nbsp;</em></span>
 				</a>
 				<ul class="dropdown-menu" role="menu">
