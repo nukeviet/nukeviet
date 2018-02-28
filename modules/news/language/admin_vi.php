@@ -355,3 +355,4 @@ $lang_module['status_12'] = 'Lưu bài viết, gửi quản trị';
 $lang_module['status_13'] = 'Lưu bài viết, gửi quản trị tối cao';
 $lang_module['error_edit'] = 'Bài đăng là người kiểm duyệt được kiểm duyệt. Bạn không thể tiếp tục chỉnh sửa.';
 $lang_module['not_edit_by_admin'] = 'Bạn đã bị tấn công để chỉnh sửa bài đăng này. Không thể lưu thay đổi của bạn vào hệ thống, hãy sao chép lại để tránh bị mất các thay đổi của bạn.';
+$lang_module['post_is_editing'] = 'đang sửa bài viết này';
