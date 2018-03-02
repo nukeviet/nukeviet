@@ -663,3 +663,5 @@ $lang_module['introduce'] = 'Introduce';
 $lang_module['updateprice'] = 'Update prices by type';
 $lang_module['cateid'] = 'Product type';
 $lang_module['newprice'] = 'New Price';
+
+$lang_module['error_cat_update'] = 'The attribute <strong>%s</strong> of the product type is mandatory when entering, and can not be changed';

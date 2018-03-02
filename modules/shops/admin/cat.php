@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
- 
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -46,6 +46,7 @@ $data['group_price'] = $pro_config['group_price'];
 $data['viewdescriptionhtml'] = 0;
 $data['newday'] = 7;
 $data['typeprice'] = 1;
+$data['parent_title'] = '';
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
@@ -61,7 +62,7 @@ if (is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl
 
 if (!empty($savecat)) {
     $field_lang = nv_file_table($table_name);
-    
+
     $data['catid'] = $nv_Request->get_int('catid', 'post', 0);
     $data['typeprice'] = $nv_Request->get_int('typeprice', 'post', 2);
     $data['parentid_old'] = $nv_Request->get_int('parentid_old', 'post', 0);
@@ -78,21 +79,21 @@ if (!empty($savecat)) {
     $data['cat_allow_point'] = $nv_Request->get_int('cat_allow_point', 'post', 0);
     $data['cat_number_point'] = $nv_Request->get_int('cat_number_point', 'post', 0);
     $data['cat_number_product'] = $nv_Request->get_int('cat_number_product', 'post', 0);
-    
+
     $data['alias'] = ($data['alias'] == '') ? change_alias($data['title']) : change_alias($data['alias']);
-    
+
     // Cat mo ta cho chinh xac
     if (strlen($data['description']) > 255) {
         $data['description'] = nv_clean60($data['description'], 250);
     }
-    
+
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
     $data['groups_view'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-    
+
     if ($data['title'] == '') {
         $error = $lang_module['error_cat_name'];
     }
-    
+
     $image = $nv_Request->get_string('image', 'post', '');
     if (is_file(NV_DOCUMENT_ROOT . $image)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
@@ -100,24 +101,24 @@ if (!empty($savecat)) {
     } else {
         $data['image'] = '';
     }
-    
+
     $data['form'] = $nv_Request->get_title('cat_form', 'post', '');
     if (!in_array($data['form'], $cat_form_exit)) {
         $data['form'] = '';
     }
-    
+
     $data['group_price'] = $nv_Request->get_textarea('group_price', '', 'br');
-    
+
     $stmt = $db->prepare('SELECT count(*) FROM ' . $table_name . ' WHERE catid!=' . $data['catid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias');
     $stmt->bindParam(':alias', $data['alias'], PDO::PARAM_STR);
     $stmt->execute();
     $check_alias = $stmt->fetchColumn();
-    
+
     if ($check_alias and $data['parentid'] > 0) {
         $parentid_alias = $db->query('SELECT ' . NV_LANG_DATA . '_alias FROM ' . $table_name . ' WHERE catid=' . $data['parentid'])->fetchColumn();
         $data['alias'] = $parentid_alias . '-' . $data['alias'];
     }
-    
+
     if ($data['catid'] == 0 and $data['title'] != '' and $error == '') {
         $listfield = '';
         $listvalue = '';
@@ -130,7 +131,7 @@ if (!empty($savecat)) {
         $rw = $db->query($w);
         $weight = $rw->fetchColumn();
         $weight = intval($weight) + 1;
-        
+
         $sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
  			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :viewdescriptionhtml, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
         $data_insert = array();
@@ -152,7 +153,7 @@ if (!empty($savecat)) {
             list ($flang, $fname) = $field_lang_i;
             $data_insert[$flang . '_' . $fname] = $data[$fname];
         }
-        
+
         $newcatid = intval($db->insert_id($sql, 'catid', $data_insert));
         if ($newcatid > 0) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_catalog', 'id ' . $newcatid, $admin_info['userid']);
@@ -165,48 +166,91 @@ if (!empty($savecat)) {
         }
     } elseif ($data['catid'] > 0 and $data['title'] != '' and $error == '') {
         try {
-            $stmt = $db->prepare("UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_title_custom= :title_custom, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, " . NV_LANG_DATA . "_tag_description = :tag_description, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid']);
-            $stmt->bindParam(':parentid', $data['parentid'], PDO::PARAM_INT);
-            $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
-            $stmt->bindParam(':title_custom', $data['title_custom'], PDO::PARAM_STR);
-            $stmt->bindParam(':image', $data['image'], PDO::PARAM_STR);
-            $stmt->bindParam(':alias', $data['alias'], PDO::PARAM_STR);
-            $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
-            $stmt->bindParam(':descriptionhtml', $data['descriptionhtml'], PDO::PARAM_STR);
-            $stmt->bindParam(':keywords', $data['keywords'], PDO::PARAM_STR);
-            $stmt->bindParam(':tag_description', $data['tag_description'], PDO::PARAM_STR);
-            $stmt->bindParam(':typeprice', $data['typeprice'], PDO::PARAM_INT);
-            $stmt->bindParam(':form', $data['form'], PDO::PARAM_STR);
-            $stmt->bindParam(':group_price', $data['group_price'], PDO::PARAM_STR);
-            $stmt->bindParam(':viewdescriptionhtml', $data['viewdescriptionhtml'], PDO::PARAM_INT);
-            $stmt->bindParam(':groups_view', $data['groups_view'], PDO::PARAM_STR);
-            $stmt->bindParam(':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT);
-            $stmt->bindParam(':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT);
-            $stmt->bindParam(':cat_number_product', $data['cat_number_product'], PDO::PARAM_INT);
-            
-            if ($stmt->execute()) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid']);
-                
-                if ($data['parentid'] != $data['parentid_old']) {
-                    $w = 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
-                    $rw = $db->query($w);
-                    $weight = $rw->fetchColumn();
-                    $weight = intval($weight) + 1;
-                    $sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval($data['catid']);
-                    $db->query($sql);
-                    nv_fix_cat_order();
+
+            if ($data['parentid'] != $data['parentid_old']) {
+                //Khi loại sản phẩm đó đã có sản phẩm chọn thì mọi cấu hình của loại sản phẩm đó cần được giữ nguyên.
+                $count_cat_items = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE listcatid =' . $data['catid'])->fetchcolumn();
+                if ($count_cat_items > 0) {
+                    //cập nhật nhóm khi chuyển cat con thành cat cha hoặc từ con của cha này chuyển thành con của cha khác
+                    //Nếu hiện tại nó là cha thì copy chính nó, nếu là con thì copy thằng cha cũ
+                    $parentid = ($data['parentid_old'] != 0) ? $data['parentid_old'] : $data['catid'];
+                    //Kiểm tra nếu từ con sang cha thì cần insert cho chính nó, nếu từ cha thành con thì insertcho cha hiện tại
+                    $catid_insert = ($data['parentid_old'] != 0) ? $data['catid'] : $data['parentid'];
+                    if ($parentid != 0) {
+                        //Danh sách các nhóm được chọn cho sản phẩm của loại sản phẩm
+                        $result_group_items = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid =' . $parentid . ' AND groupid IN (SELECT parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group WHERE groupid IN (SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id IN(SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE listcatid =' . $data['catid'] . '))) ');
+                        $_arr_group = array();
+                        while ($row_group = $result_group_items->fetch()) {
+                            $row_check = $db->query('SELECT ' . NV_LANG_DATA . '_title, is_require FROM ' . $db_config['prefix'] . '_' . $module_data . '_group where groupid = ' . $row_group['groupid'])->fetch();
+                            if ($row_check['is_require'] == 1) {
+                                $error = sprintf($lang_module['error_cat_update'], $row_check[NV_LANG_DATA . '_title']);
+                                break;
+                            }
+                            $_arr_group[] = $row_group['groupid'];
+
+                        }
+                        if ($error == '') {
+                            foreach ($_arr_group as $_group) {
+                                $count_group = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $catid_insert . ' AND groupid =' . $_group)->fetchcolumn();
+                                if ($count_group < 1) {
+                                    $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid(groupid, cateid) VALUES (' . $_group . ',' . $catid_insert . ')');
+                                }
+                            }
+                            if ($data['parentid_old'] == 0) {
+                                //Xóa các thông số hiện tại
+                                $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid=' . $data['catid']);
+                            }
+                        }
+
+                    }
                 }
-                
-                // cập nhật các form dữ liệu tùy biến cho các subcat
-                $_sql = 'SELECT catid FROM ' . $table_name . ' WHERE parentid=' . intval($data['catid']);
-                $_query = $db->query($_sql);
-                while ($row_catid = $_query->fetch()) {
-                    $db->query('UPDATE ' . $table_name . ' SET form=' . $db->quote($data['form']) . ' WHERE catid=' . intval($row_catid['catid']));
+            }
+            if ($error == '') {
+                $stmt = $db->prepare("UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_title_custom= :title_custom, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, " . NV_LANG_DATA . "_tag_description = :tag_description, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid']);
+                $stmt->bindParam(':parentid', $data['parentid'], PDO::PARAM_INT);
+                $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
+                $stmt->bindParam(':title_custom', $data['title_custom'], PDO::PARAM_STR);
+                $stmt->bindParam(':image', $data['image'], PDO::PARAM_STR);
+                $stmt->bindParam(':alias', $data['alias'], PDO::PARAM_STR);
+                $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
+                $stmt->bindParam(':descriptionhtml', $data['descriptionhtml'], PDO::PARAM_STR);
+                $stmt->bindParam(':keywords', $data['keywords'], PDO::PARAM_STR);
+                $stmt->bindParam(':tag_description', $data['tag_description'], PDO::PARAM_STR);
+                $stmt->bindParam(':typeprice', $data['typeprice'], PDO::PARAM_INT);
+                $stmt->bindParam(':form', $data['form'], PDO::PARAM_STR);
+                $stmt->bindParam(':group_price', $data['group_price'], PDO::PARAM_STR);
+                $stmt->bindParam(':viewdescriptionhtml', $data['viewdescriptionhtml'], PDO::PARAM_INT);
+                $stmt->bindParam(':groups_view', $data['groups_view'], PDO::PARAM_STR);
+                $stmt->bindParam(':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT);
+                $stmt->bindParam(':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT);
+                $stmt->bindParam(':cat_number_product', $data['cat_number_product'], PDO::PARAM_INT);
+
+                if ($stmt->execute()) {
+                    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid']);
+
+                    if ($data['parentid'] != $data['parentid_old']) {
+                        $w = 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
+                        $rw = $db->query($w);
+                        $weight = $rw->fetchColumn();
+                        $weight = intval($weight) + 1;
+                        $sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval($data['catid']);
+                        $db->query($sql);
+                        nv_fix_cat_order();
+                    }
+
+                    // cập nhật các form dữ liệu tùy biến cho các subcat
+                    $_sql = 'SELECT catid FROM ' . $table_name . ' WHERE parentid=' . intval($data['catid']);
+                    $_query = $db->query($_sql);
+                    while ($row_catid = $_query->fetch()) {
+                        $db->query('UPDATE ' . $table_name . ' SET form=' . $db->quote($data['form']) . ' WHERE catid=' . intval($row_catid['catid']));
+                    }
+
+                    $nv_Cache->delMod($module_name);
+
+                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
+                    die();
                 }
-                
-                $nv_Cache->delMod($module_name);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
-                die();
+
             }
         } catch (PDOException $e) {
             $error = $lang_module['errorsave'];
@@ -214,7 +258,7 @@ if (!empty($savecat)) {
     }
 } else {
     $data['parentid'] = $nv_Request->get_int('parentid', 'get,post', 0);
-    
+
     $data['catid'] = $nv_Request->get_int('catid', 'get', 0);
     if ($data['catid'] > 0) {
         $data = $db->query('SELECT * FROM ' . $table_name . ' where catid=' . $data['catid'])->fetch();
@@ -294,13 +338,15 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('CAPTION', ($data['catid'] > 0) ? $lang_module['edit_cat'] : $lang_module['add_cat']);
 $xtpl->assign('DATA', $data);
-$xtpl->assign('CAT_LIST', shops_show_cat_list($data['parentid']));
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;catid=' . $data['catid'] . '&amp;parentid=' . $data['parentid']);
 
 if ($error != '') {
+    $xtpl->assign('CAT_LIST', shops_show_cat_list($data['parentid_old']));
     $xtpl->assign('error', $error);
     $xtpl->parse('main.error');
+} else {
+    $xtpl->assign('CAT_LIST', shops_show_cat_list($data['parentid']));
 }
 
 if (empty($data['alias'])) {

@@ -34,7 +34,7 @@
 				</div>
 				<div class="col-xs-24 col-sm-8">
 					<div class="form-group">
-						<label>{LANG.product_catalogs}</label>
+						<label>{LANG.moneyunit}</label>
 						<select name="typemoney" id="typemoney1" class="form-control">
 							<option value="0">{LANG.moneyunit}</option>
 							<!-- BEGIN: typemoney -->
