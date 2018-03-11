@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -220,6 +220,8 @@ $lang_module['order_shipping_name_err'] = '<em>Thiếu họ tên người nhận
 $lang_module['order_shipping_phone_err'] = '<em>Thiếu số điện thoại người nhận</em>';
 $lang_module['order_check_err'] = '<em>Bạn cần chọn mục xác nhận thông tin</em>';
 $lang_module['order_ok'] = 'Bạn đã gửi đơn hàng thành công chúng tôi sẽ sớm phản hồi cho bạn!';
+$lang_module['order_payment_go'] = 'Thanh toán đơn hàng này';
+$lang_module['order_payment_notsp'] = 'Xin lỗi, hệ thống tạm thời không hỗ trợ thanh toán trực tuyến đơn hàng này.';
 $lang_module['order_payment'] = 'Đã thanh toán';
 $lang_module['order_no_payment'] = 'Chưa thanh toán';
 $lang_module['order_payment_email'] = '<p>Cảm ơn bạn đã đặt hàng tại website {site_url}<br /> Dưới đây là thông tin đơn hàng của bạn.</p> <div class="block clearfix"> <table class="rows2" style="margin-bottom:2px;width:100%;border:1px solid rgb(245, 245, 245);padding:5px;"> <tbody> <tr> <td> <table> <tbody> <tr> <td width="130px">Họ tên khách hàng</td> <td>: <strong>{order_name}</strong></td> </tr> <tr> <td>Email</td> <td>: {order_email}</td> </tr> <tr> <td>Điện thoại</td> <td>: {order_phone}</td> </tr> <tr> <td valign="top">Địa chỉ</td> <td valign="top">: {order_address}</td> </tr> <tr> <td>Thời gian đặt hàng</td> <td>: {dateup} lúc {moment}</td> </tr> </tbody> </table> </td> <td align="center" valign="top" width="100px"> <div class="order_code">Mã đơn hàng<br /> <span class="text_date"><strong>{order_code}</strong></span></div> </td> </tr> </tbody> </table> <br /> {table_product} <p>Bạn có thể xem lại thông tin đơn hàng tại {review_url}</p> <p>Đây là email được gửi tự động từ website <span style="line-height: 20.7999992370605px;">{site_url}</span>, vui lòng không trả lời email này vì chúng tôi sẽ không nhận được email của bạn. Nếu không hiểu về nội dung email này hãy đơn giản xóa nó khỏi hòm thư của bạn.</p> </div>';
@@ -253,7 +255,9 @@ $lang_module['order_email_noreply'] = 'Đây là email được gửi tự độ
 $lang_module['order_email_thanks'] = 'Cảm ơn bạn đã đặt hàng tại website %s,<br />Dưới đây là thông tin đơn hàng của bạn.';
 $lang_module['order_email_thanks_to_admin'] = 'Cửa hàng nhận được đơn đặt hàng mới từ khách hàng <strong>%s</strong><br />Dưới đây là thông tin đơn hàng.';
 $lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! Chúng tôi sẽ gửi hàng cho bạn sớm nhất';
+$lang_module['payment_notcomplete'] = 'Bạn đã thanh toán đơn hàng này, tuy nhiên quá trình thanh toán chưa hoàn tất. Chúng tôi cần kiểm tra lại giao dịch, bạn sẽ sớm nhận được thông báo. Vui lòng xem chi tiết thông tin đơn hàng';
 $lang_module['payment_erorr'] = 'Quá trình thanh toán có lỗi do một lý do nào đó';
+$lang_module['payment_error_update'] = 'Hệ thống không cập nhật được trạng thái giao dịch, vui lòng liên hệ với quản trị site về sự cố này';
 $lang_module['cart_title'] = 'Giỏ hàng';
 $lang_module['cart_product_title'] = 'mặt hàng';
 $lang_module['cart_product_total'] = 'Tổng';
@@ -314,7 +318,7 @@ $lang_module['keywords'] = 'Từ khóa';
 $lang_module['search_reset'] = 'Xóa trắng';
 $lang_module['product_number_max'] = 'Sản phẩm: %1$s trong kho chỉ còn: %2$s';
 $lang_module['back_history'] = 'Quay lại trang lịch sử giao dịch';
-$lang_module['order_by_payment'] = 'Đơn hàng này bạn đang thực hiện quá trình thanh toán trên <a href="%1$s">%2$s</a>, Bạn cần thực hiện tiếp quá trình thanh toán này để hoàn tất đơn hàng.';
+$lang_module['order_by_payment'] = 'Đơn hàng này bạn đang thực hiện quá trình thanh toán, bạn cần thực hiện tiếp quá trình thanh toán này để hoàn tất đơn hàng.';
 $lang_module['update_order'] = 'Thông báo: Hệ thống đã cập nhật lại thông tin giao dịch các đơn hàng: %1$s';
 $lang_module['no_update_order'] = 'Thông báo: Hệ thống không tìm thấy các giao dịch nào mới';
 $lang_module['active_order_dis'] = 'Chức năng đặt hàng trực truyến đã bị tắt';

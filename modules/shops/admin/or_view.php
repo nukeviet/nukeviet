@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -234,24 +234,6 @@ $xtpl->assign('URL_ACTIVE_PAY', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIAB
 $xtpl->assign('URL_BACK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=or_view&order_id=' . $order_id);
 
 $array_data_payment = array();
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_payment ORDER BY weight ASC';
-$result = $db->query($sql);
-
-while ($row = $result->fetch()) {
-    $payment = $row['payment'];
-    $array_data_payment[$payment] = array(
-        'config' => array(),
-        'orders_id' => array(),
-        'data' => array()
-    );
-
-    $array_data_payment[$payment]['domain'] = $row['domain'];
-    $array_data_payment[$payment]['paymentname'] = $row['paymentname'];
-
-    if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/payment/' . $payment . '.config.ini')) {
-        $array_data_payment[$payment]['config'] = unserialize(nv_base64_decode($row['config']));
-    }
-}
 
 // Check lai cac don hang
 $checkpayment = $nv_Request->get_string('checkpayment', 'post,get', '');

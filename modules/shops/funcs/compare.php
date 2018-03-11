@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -26,7 +26,7 @@ if ($nv_Request->isset_request('compare', 'post')) {
         $array_id = serialize($array_id);
         $nv_Request->set_Session($module_data . '_compare_id', $array_id);
         $nv_Cache->delMod($module_name);
-        die('OK');
+        nv_htmlOutput('OK');
     } else {
         $array_id[$idss] = $idss;
         if (count($array_id) > 4) {
@@ -35,7 +35,7 @@ if ($nv_Request->isset_request('compare', 'post')) {
             $array_id = serialize($array_id);
             $nv_Request->set_Session($module_data . '_compare_id', $array_id);
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         }
     }
 }
@@ -67,14 +67,13 @@ if ($nv_Request->isset_request('compare_del', 'post') and $nv_Request->isset_req
         $nv_Request->set_Session($module_data . '_compare_id', $array_id);
     }
     $nv_Cache->delMod($module_name);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 $compare_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=compare';
 $compare_url_rewrite = nv_url_rewrite($compare_url_rewrite, true);
 if ($_SERVER['REQUEST_URI'] != $compare_url_rewrite) {
-    header('Location:' . $compare_url_rewrite);
-    die();
+    nv_redirect_location($compare_url_rewrite);
 }
 
 $array_id = $nv_Request->get_string($module_data . '_compare_id', 'session', '');
@@ -129,8 +128,7 @@ if (! empty($array_id)) {
         }
     }
 } else {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 $contents = compare($data_pro);

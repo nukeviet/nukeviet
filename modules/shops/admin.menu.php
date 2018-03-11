@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -70,9 +70,8 @@ if (defined('NV_IS_SPADMIN')) {
         $menu_setting['template'] = $lang_module['fields'];
     }
     $menu_setting['tabs'] = $lang_module['tabs'];
-    
+
     if ($shop_module_config['active_payment']) {
-        $menu_setting['payport'] = $lang_module['setup_payment'];
         $menu_setting['docpay'] = $lang_module['document_payment'];
     }
 }

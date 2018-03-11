@@ -2,7 +2,7 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
+* @Author VINADES.,JSC <contact@vinades.vn>
 * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -220,6 +220,9 @@ $lang_module['order_shipping_name_err'] = '<em>Missing names recipients</em>';
 $lang_module['order_shipping_phone_err'] = '<em>Missing recipient\'s phone number</em>';
 $lang_module['order_check_err'] = '<em>You need to confirm information</em>';
 $lang_module['order_ok'] = 'You order succesfully, we will reply you soonest!';
+$lang_module['order_payment_go'] = 'Payment orders';
+$lang_module['order_payment_notsp'] = 'Sorry, the billing system is temporarily unavailable for this order.';
+$lang_module['order_payment'] = 'Paid';
 $lang_module['order_payment'] = 'Paid';
 $lang_module['order_no_payment'] = 'Unpaid';
 $lang_module['order_payment_email'] = '<p>Thank you for ordering at the website {site_url}<br /> Here is your order information.</p>         Customer name : <strong>{order_name}</strong>   Email : {order_email}   Phone : {order_phone}   Address : {order_address}   Time orders : {dateup} at {moment}      Order code<br /> <span class="text_date"><strong>{order_code}</strong></span>     <br /> {table_product} <p>You can review the information orders at {review_url}</p> <p>This email is sent automatically from website <span style="line-height: 20.7999992370605px;">{site_url}</span>, Please do not reply to this email because we will not get your email. If you do not understand the contents of this email, please simply delete it from your inbox.</p>';
@@ -252,8 +255,10 @@ $lang_module['order_email_review_to_admin'] = '<a href="%s">View orders</a>';
 $lang_module['order_email_noreply'] = 'This email is automatically sent from the website <a href="%s">%s</a>, please do not reply this email because we will not receive your email. If you do not understand the contents of this email please simply delete it from your inbox.';
 $lang_module['order_email_thanks'] = 'Thank you for ordering on the website %s,<br />Here is your order information.';
 $lang_module['order_email_thanks_to_admin'] = 'Stores received new orders from customers <strong>%s</strong><br /> Here is information orders.';
+$lang_module['payment_notcomplete'] = 'You have paid this order, however the payment process has not been completed. We need to double check the transaction, you will soon receive a notification. Please see order details';
 $lang_module['payment_complete'] = 'You paid succesfully! We will send products to you soon';
 $lang_module['payment_erorr'] = 'Payment error by an unknow reason';
+$lang_module['payment_error_update'] = 'The system does not update the transaction status, please contact the site administrator for this problem';
 $lang_module['cart_title'] = 'Your cart';
 $lang_module['cart_product_title'] = 'products';
 $lang_module['cart_product_total'] = 'Total';
@@ -314,7 +319,7 @@ $lang_module['keywords'] = 'Keyword';
 $lang_module['search_reset'] = 'Clear';
 $lang_module['product_number_max'] = 'Product: %1$s left in stock: %2$s';
 $lang_module['back_history'] = 'Return to order historique';
-$lang_module['order_by_payment'] = 'You are processing the payment of this order on <a href="%1$s">%2$s</a>, You have to continue the payment to finish this order.';
+$lang_module['order_by_payment'] = 'You are processing the payment of this order, you have to continue the payment to finish this order.';
 $lang_module['update_order'] = 'Notification: The systeme updated information of orders: %1$s';
 $lang_module['no_update_order'] = 'Notification: The systeme can not find any new order';
 $lang_module['active_order_dis'] = 'On-line shopping function is disable';

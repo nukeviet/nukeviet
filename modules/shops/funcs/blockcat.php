@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -34,8 +34,7 @@ if (isset($array_op[1])) {
         $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
         
         if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-            Header('Location: ' . $base_url_rewrite);
-            die();
+            nv_redirect_location($base_url_rewrite);
         }
 
         $array_mod_title[] = array(

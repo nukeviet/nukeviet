@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -91,8 +91,7 @@ if ($catid > 0) {
 
                     nv_fix_cat_order();
                     $nv_Cache->delMod($module_name);
-                    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid);
-                    die();
+                    nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid);
                 } elseif (! empty($movecat) and $catidnews > 0 and $catidnews != $catid) {
                     // Di chuyen san pham sang chu de moi
 
@@ -107,8 +106,7 @@ if ($catid > 0) {
                         nv_fix_cat_order();
                         $nv_Cache->delMod($module_name);
 
-                        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid);
-                        die();
+                        nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid);
                     }
                 }
             } else {
@@ -133,6 +131,5 @@ if (defined('NV_IS_AJAX')) {
     echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat");
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat");
 }
