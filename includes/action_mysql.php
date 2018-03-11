@@ -185,6 +185,7 @@ function nv_create_table_sys($lang)
 	 	('" . $lang . "', 'global', 'site_keywords', ''),
 	 	('" . $lang . "', 'global', 'theme_type', 'r,d,m'),
 	 	('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
+	 	('" . $lang . "', 'global', 'preview_theme', ''),
 	 	('" . $lang . "', 'global', 'mobile_theme', 'mobile_default'),
 	 	('" . $lang . "', 'global', 'site_home_module', 'users'),
 	 	('" . $lang . "', 'global', 'switch_mobi_des', '1'),

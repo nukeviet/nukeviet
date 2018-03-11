@@ -187,15 +187,19 @@ function nv_admin_theme($contents, $head_site = 1)
         if (! empty($array_lang_admin)) {
             $xtpl->assign('NV_LANGDATA', $lang_global['langdata']);
             $xtpl->assign('NV_LANGDATA_CURRENT', $array_lang_admin[NV_LANG_DATA]);
-
+            $xtpl->assign('NV_LANGINTERFACE_CURRENT', $array_lang_admin[NV_LANG_INTERFACE]);
             foreach ($array_lang_admin as $lang_i => $lang_name) {
-                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "");
                 $xtpl->assign('LANGVALUE', $lang_name);
-                $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i);
+                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "");
+                $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . NV_LANG_INTERFACE . '&' . NV_LANG_VARIABLE . '=' . $lang_i);
                 $xtpl->parse('main.langdata.option');
-            }
 
+                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_INTERFACE) ? " class=\"disabled\"" : "");
+                $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i . '&' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+                $xtpl->parse('main.langinterface.option');
+            }
             $xtpl->parse('main.langdata');
+            $xtpl->parse('main.langinterface');
         }
 
         // Top_menu
