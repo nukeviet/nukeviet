@@ -454,7 +454,6 @@ $(document).ready(function() {
         var $this = $(this);
         var $icon = $this.find('.fa');
         if ($icon.hasClass('fa-spin')) {
-            console.log('busy');
             return false;
         }
         $icon.addClass('fa-spin');
@@ -462,7 +461,16 @@ $(document).ready(function() {
             nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=checkorder&nocache=' + new Date().getTime(),
             'id=' + $this.data('id') + '&checkss=' + $this.data('checksess'),
             function(res) {
-                window.location.href = window.location.href.replace(/#(.*)/, "");
+                if (res.status == 'CHANGED') {
+                    if (confirm(res.message)) {
+                        window.location.href = res.link;
+                    } else {
+                        window.location.href = window.location.href.replace(/#(.*)/, "");
+                    }
+                } else {
+                    alert(res.message);
+                    $icon.removeClass('fa-spin');
+                }
             }
         );
     });

@@ -162,8 +162,11 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
         }
     } elseif ($data['transaction_status'] == 1 and $data['transaction_id'] > 0) {
         if ($nv_Request->isset_request('cancel', 'get')) {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE transaction_id = ' . $data['transaction_id']);
-            $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET transaction_status=0, transaction_id = 0, transaction_count = 0 WHERE order_id=' . $order_id);
+            // Khi chọn hình thức thanh toán khác thì vẫn giữ lại giao dịch trước để kiểm tra, không xóa
+            //$db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE transaction_id = ' . $data['transaction_id']);
+
+            // Cập nhật lại đơn hàng là chưa thanh toán để chọn hình thức khác
+            $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET transaction_status=0, transaction_id = 0, transaction_count = transaction_count + 1 WHERE order_id=' . $order_id);
             nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss);
         }
 

@@ -2197,10 +2197,9 @@ function print_pay($data_content, $data_pro)
  * history_order()
  *
  * @param mixed $data_content
- * @param mixed $link_check_order
  * @return
  */
-function history_order($data_content, $link_check_order)
+function history_order($data_content)
 {
     global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config;
 
@@ -2248,7 +2247,6 @@ function history_order($data_content, $link_check_order)
             $history_payment = 'ERROR';
         }
 
-        $xtpl->assign('LINK_CHECK_ORDER', $link_check_order);
         $xtpl->assign('history_payment', $history_payment);
         $bg = ($i % 2 == 0) ? 'class="bg"' : '';
         $xtpl->assign('bg', $bg);

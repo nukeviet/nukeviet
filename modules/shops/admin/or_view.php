@@ -24,7 +24,7 @@ $result = $db->query('SELECT * FROM ' . $table_name . ' WHERE order_id=' . $orde
 $data_content = $result->fetch();
 
 if (empty($data_content)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order');
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order');
 }
 
 if ($save == 1 and intval($data_content['transaction_status']) == - 1) {
@@ -45,7 +45,7 @@ if ($save == 1 and intval($data_content['transaction_status']) == - 1) {
     }
 
     $nv_Cache->delMod($module_name);
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order');
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order');
 }
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
@@ -235,18 +235,65 @@ $xtpl->assign('URL_BACK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '
 
 $array_data_payment = array();
 
-// Check lai cac don hang
-$checkpayment = $nv_Request->get_string('checkpayment', 'post,get', '');
-if (! empty($checkpayment) and $checkpayment == md5($order_id . session_id() . $global_config['sitekey'])) {
-    $order_code = $data_content['order_code'];
-    require_once NV_ROOTDIR . '/modules/' . $module_file . '/payment/nganluong.class.php';
-    $payment_config = $array_data_payment['nganluong']['config'];
-    $nl = new NL_Checkout($payment_config['checkout_url'], $payment_config['merchant_site'], $payment_config['secure_pass']);
-    $transaction_i = $nl->checkOrder($payment_config['public_api_url'], $order_code, 0);
-    if ($transaction_i !== false) {
-        print_r($transaction_i);
-        die();
+// Cập nhật lại trạng thái đơn hàng từ wallet
+if ($nv_Request->isset_request('checkpayment', 'post')) {
+    $json = array(
+        'status' => 'NOCHANGE',
+        'message' => $lang_module['no_update_order']
+    );
+
+    $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE transaction_id=" . $data_content['transaction_id'];
+    $transaction_data = $db->query($sql)->fetch();
+    if (!empty($transaction_data) and isset($site_mods['wallet']) and file_exists(NV_ROOTDIR . '/modules/wallet/wallet.class.php')) {
+        require_once NV_ROOTDIR . '/modules/wallet/wallet.class.php';
+        $wallet = new nukeviet_wallet();
+
+        $data = array(
+            'modname' => $module_name, // Module thanh toán
+            'id' => $data_content['transaction_id'] // ID đơn hàng
+        );
+        $checkPayment = $wallet->checkInfoPayment($data);
+        if ($checkPayment['status'] == 'SUCCESS') {
+            // Chuẩn hóa status theo phong cách của shops
+            $nv_transaction_status = 1; // Đang thực hiện giao dịch
+            if ($checkPayment['data'][0] == 0) {
+                $nv_transaction_status = 1;
+            } elseif ($checkPayment['data'][0] == 1) {
+                $nv_transaction_status = 1;
+            } elseif ($checkPayment['data'][0] == 2) {
+                $nv_transaction_status = 2;
+            } elseif ($checkPayment['data'][0] == 3) {
+                $nv_transaction_status = 3;
+            } elseif ($checkPayment['data'][0] == 4) {
+                $nv_transaction_status = 4;
+            }
+
+            if ($nv_transaction_status != $transaction_data['transaction_status']) {
+                $json['status'] = 'CHANGED';
+                $json['message'] = $lang_module['update_order'];
+
+                // Cập nhật giao dịch
+                $check = $db->exec("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_transaction SET
+                    transaction_status=" . $nv_transaction_status . ",
+                    payment_time=" . $checkPayment['data'][1] . "
+                WHERE transaction_id=" . $data_content['transaction_id']);
+
+                // Cập nhật đơn hàng
+                $check = $db->exec("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET
+                    transaction_status=" . $nv_transaction_status . ",
+                    transaction_id=" . $data_content['transaction_id'] . "
+                WHERE order_id=" . $order_id);
+
+                if ($nv_transaction_status == 4) {
+                    // Cập nhật điểm tích lũy
+                    UpdatePoint($data_content);
+                }
+                $nv_Cache->delMod($module_name);
+            }
+        }
     }
+
+    nv_jsonOutput($json);
 }
 
 $a = 1;
@@ -298,8 +345,7 @@ if ($result->rowCount()) {
         $xtpl->parse('main.transaction.looptrans');
     }
 
-    if (! empty($array_payment)) {
-        $xtpl->assign('LINK_CHECK_PAYMENT', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&order_id=' . $order_id . '&checkpayment=' . md5($order_id . session_id() . $global_config['sitekey']));
+    if (! empty($array_payment) or 1) {
         $xtpl->parse('main.transaction.checkpayment');
     }
 

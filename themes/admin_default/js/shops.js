@@ -599,3 +599,27 @@ $.fn.clearForm = function() {
 			this.selectedIndex = 0;
 	});
 };
+
+$(document).ready(function() {
+    $('[data-toggle="checkorder"]').click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $icon = $this.find('i');
+        if ($icon.is(':visible')) {
+            return false;
+        }
+        $icon.removeClass('hidden');
+		$.post(
+            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=or_view&nocache=' + new Date().getTime(),
+            'order_id=' + $this.data('id') + '&checkpayment=1',
+            function(res) {
+                alert(res.message);
+                if (res.status == 'CHANGED') {
+                    window.location.href = window.location.href.replace(/#(.*)/, "");
+                } else {
+                    $icon.addClass('hidden');
+                }
+            }
+        );
+    });
+});

@@ -44,8 +44,7 @@ while (list($order_id, $order_code, $order_note, $user_id, $unit_total, $order_t
     );
 }
 
-$link_check_order = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=checkorder&checkss=" . md5($user_info["userid"] . $global_config['sitekey'] . session_id());
-$contents = call_user_func("history_order", $data_content, $link_check_order);
+$contents = call_user_func("history_order", $data_content);
 
 $page_title = $lang_module['history_title'];
 

@@ -113,7 +113,7 @@ while ($row = $query->fetch()) {
     $row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['user_id'];
     $row['order_time'] = nv_date("H:i d/m/y", $row['order_time']);
     $row['order_total'] = nv_number_format($price);
-	$row['unit_total']=$money_config[$pro_config['money_unit']]['symbol'];
+	$row['unit_total'] = $money_config[$pro_config['money_unit']]['symbol'];
 
     $xtpl->assign('DATA', $row);
 
