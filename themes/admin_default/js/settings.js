@@ -61,7 +61,7 @@ $(document).ready(function(){
 	});
 
 	// Security
-	if( $.fn.datepicker ){
+	if($.fn.datepicker) {
 		$(".datepicker, #start_date").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
@@ -72,24 +72,10 @@ $(document).ready(function(){
 			buttonImageOnly : true
 		});
 	}
-	$('.submit-security').click(function() {
-		var ip = $('input[name=ip]').val();
-		$('input[name=ip]').focus();
-		if (ip == '') {
-			alert(LANG.banip_error_ip);
-			return false;
-		}
-		var area = $('select[name=area]').val();
-		$('select[name=area]').focus();
-		if (area == '0') {
-			alert(LANG.banip_error_area);
-			return false;
-		}
-	});
 	$('a.deleteone-ip').click(function() {
 		if (confirm(LANG.banip_delete_confirm)) {
 			var url = $(this).attr('href');
-            var selectedtab = $('[name="selectedtab"]').val();
+            var selectedtab = $('[name="gselectedtab"]').val();
 			$.ajax({
 				type : 'POST',
 				url : url,

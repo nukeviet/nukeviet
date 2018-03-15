@@ -12,17 +12,17 @@
 <pre><code>{CODE}</code></pre>
 <!-- END: manual_save -->
 
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-    <div class="clearfix">
-        <ul class="nav nav-tabs setting-tabnav" role="tablist" id="settingTabs">
-            <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab">{LANG.security}</a></li>
-            <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab">{LANG.flood_blocker}</a></li>
-            <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
-            <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
-                <div class="setting-tabcontent clearfix">
+<div class="clearfix">
+    <ul class="nav nav-tabs setting-tabnav" role="tablist" id="settingTabs">
+        <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab">{LANG.security}</a></li>
+        <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab">{LANG.flood_blocker}</a></li>
+        <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
+        <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
                 	<div class="table-responsive">
                     	<table class="table table-striped table-bordered table-hover table-first">
                     		<colgroup>
@@ -62,11 +62,12 @@
                     			<tr>
                     				<td><strong>{LANG.proxy_blocker}</strong></td>
                     				<td>
-                    				<select name="proxy_blocker" class="form-control w200">
-                    					<!-- BEGIN: proxy_blocker -->
-                    					<option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE} </option>
-                    					<!-- END: proxy_blocker -->
-                    				</select></td>
+                        				<select name="proxy_blocker" class="form-control w200">
+                        					<!-- BEGIN: proxy_blocker -->
+                        					<option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE} </option>
+                        					<!-- END: proxy_blocker -->
+                        				</select>
+                                    </td>
                     			</tr>
                     			<tr>
                     				<td><strong>{LANG.str_referer_blocker}</strong></td>
@@ -92,10 +93,13 @@
                             </tfoot>
                     	</table>
                     </div>
-                </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
             </div>
-            <div role="tabpanel" class="tab-pane{TAB1_ACTIVE}" id="settingFlood">
-                <div class="setting-tabcontent clearfix">
+        </div>
+        <div role="tabpanel" class="tab-pane{TAB1_ACTIVE}" id="settingFlood">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
                 	<div class="table-responsive">
                     	<table class="table table-striped table-bordered table-hover table-first">
                     		<colgroup>
@@ -127,10 +131,94 @@
                             </tfoot>
                     	</table>
                     </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
+
+                <!-- BEGIN: noflips -->
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>{LANG.noflood_ip_list}</strong></div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>{LANG.banip_ip}</th>
+                                <th>{LANG.banip_mask}</th>
+                                <th>{LANG.banip_timeban}</th>
+                                <th>{LANG.banip_timeendban}</th>
+                                <th class="text-center">{LANG.banip_funcs}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- BEGIN: loop -->
+                            <tr>
+                                <td>{ROW.dbip}</td>
+                                <td>{ROW.dbmask}</td>
+                                <td>{ROW.dbbegintime}</td>
+                                <td>{ROW.dbendtime}</td>
+                                <td class="text-center">
+                                    <a class="edit btn btn-default btn-xs" title="{LANG.banip_edit}" href="{ROW.url_edit}"><em class="fa fa-edit fa-fw"></em>{LANG.banip_edit}</a>
+                                    <a class="deleteone-ip btn btn-danger btn-xs" title="{LANG.banip_delete}" href="{ROW.url_delete}"><em class="fa fa-trash-o fa-fw"></em>{LANG.banip_delete}</a>
+                                </td>
+                            </tr>
+                            <!-- END: loop -->
+                        </tbody>
+                    </table>
                 </div>
+                <!-- END: noflips -->
+
+                <form action="{FORM_ACTION}" method="post">
+                    <input type="hidden" name="flid" value="{FLDATA.flid}" />
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>{NOFLOODIP_TITLE}</strong></div>
+                        <table class="table table-striped table-bordered table-hover">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {LANG.banip_address} (<span style="color:red">*</span>)
+                                        <br/>(xxx.xxx.xxx.xxx)
+                                    </td>
+                                    <td><input class="w200 form-control" type="text" name="flip" value="{FLDATA.flip}" /></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_mask}</td>
+                                    <td>
+                                    <select name="flmask" class="form-control w200">
+                                        <option value="0">{MASK_TEXT_ARRAY.0}</option>
+                                        <option value="3"{FLDATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
+                                        <option value="2"{FLDATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
+                                        <option value="1"{FLDATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_begintime}</td>
+                                    <td><input type="text" name="flbegintime" class="w150 datepicker form-control pull-left" value="{FLDATA.begintime}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_endtime}</td>
+                                    <td><input type="text" name="flendtime" class="w150 datepicker form-control pull-left text" value="{FLDATA.endtime}" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="top">{LANG.banip_notice}</td>
+                                    <td><textarea cols="70" rows="5" class="form-control" name="flnotice" style="width:550px;height:100px">{FLDATA.notice}</textarea></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submitfloodip" class="btn btn-primary" /></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
             </div>
-            <div role="tabpanel" class="tab-pane{TAB2_ACTIVE}" id="settingCaptcha">
-                <div class="setting-tabcontent clearfix">
+        </div>
+        <div role="tabpanel" class="tab-pane{TAB2_ACTIVE}" id="settingCaptcha">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
                     <div class="table-responsive">
                 		<table class="table table-striped table-bordered table-hover table-first">
                 			<colgroup>
@@ -208,43 +296,46 @@
                             </tfoot>
                         </table>
                     </div>
-                </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
             </div>
-            <div role="tabpanel" class="tab-pane{TAB3_ACTIVE}" id="settingIp">
-                <div class="setting-tabcontenttop">
-                    <!-- BEGIN: listip -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><strong>{LANG.banip}</strong></div>
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>{LANG.banip_ip}</th>
-                                    <th>{LANG.banip_mask}</th>
-                                    <th>{LANG.banip_area}</th>
-                                    <th>{LANG.banip_timeban}</th>
-                                    <th>{LANG.banip_timeendban}</th>
-                                    <th class="text-center">{LANG.banip_funcs}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- BEGIN: loop -->
-                                <tr>
-                                    <td class="text-center">{ROW.dbip}</td>
-                                    <td class="text-center">{ROW.dbmask}</td>
-                                    <td class="text-center">{ROW.dbarea}</td>
-                                    <td class="text-center">{ROW.dbbegintime}</td>
-                                    <td class="text-center">{ROW.dbendtime}</td>
-                                    <td class="text-center">
-                                        <a class="edit btn btn-default btn-xs" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip"><em class="fa fa-edit fa-fw"></em>{LANG.banip_edit}</a>
-                                        <a class="deleteone-ip btn btn-danger btn-xs" title="{LANG.banip_delete}" href="{ROW.url_delete}"><em class="fa fa-trash-o fa-fw"></em>{LANG.banip_delete}</a>
-                                    </td>
-                                </tr>
-                                <!-- END: loop -->
-                            </tbody>
-                        </table>
-                    </div>
+        </div>
+        <div role="tabpanel" class="tab-pane{TAB3_ACTIVE}" id="settingIp">
+            <div class="setting-tabcontenttop">
+                <!-- BEGIN: listip -->
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>{LANG.banip}</strong></div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>{LANG.banip_ip}</th>
+                                <th>{LANG.banip_mask}</th>
+                                <th>{LANG.banip_area}</th>
+                                <th>{LANG.banip_timeban}</th>
+                                <th>{LANG.banip_timeendban}</th>
+                                <th class="text-center">{LANG.banip_funcs}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- BEGIN: loop -->
+                            <tr>
+                                <td>{ROW.dbip}</td>
+                                <td>{ROW.dbmask}</td>
+                                <td>{ROW.dbarea}</td>
+                                <td>{ROW.dbbegintime}</td>
+                                <td>{ROW.dbendtime}</td>
+                                <td class="text-center">
+                                    <a class="edit btn btn-default btn-xs" title="{LANG.banip_edit}" href="{ROW.url_edit}"><em class="fa fa-edit fa-fw"></em>{LANG.banip_edit}</a>
+                                    <a class="deleteone-ip btn btn-danger btn-xs" title="{LANG.banip_delete}" href="{ROW.url_delete}"><em class="fa fa-trash-o fa-fw"></em>{LANG.banip_delete}</a>
+                                </td>
+                            </tr>
+                            <!-- END: loop -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END: listip -->
 
-                    <!-- END: listip -->
+                <form action="{FORM_ACTION}" method="post">
                     <input type="hidden" name ="cid" value="{DATA.cid}" />
                     <div class="panel panel-default">
                         <div class="panel-heading"><strong>{BANIP_TITLE}</strong></div>
@@ -255,35 +346,38 @@
                             </colgroup>
                             <tfoot>
                                 <tr>
-                                    <td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary w100 submit-security" /></td>
+                                    <td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary w100"/></td>
                                 </tr>
                             </tfoot>
                             <tbody>
                                 <tr>
-                                    <td>{LANG.banip_address} (<span style="color:red">*</span>)
-                                    <br/>
-                                    (xxx.xxx.xxx.xxx)</td>
+                                    <td>
+                                        {LANG.banip_address} (<span style="color:red">*</span>)
+                                        <br/>(xxx.xxx.xxx.xxx)
+                                    </td>
                                     <td><input class="w200 form-control" type="text" name="ip" value="{DATA.ip}" /></td>
                                 </tr>
                                 <tr>
                                     <td>{LANG.banip_mask}</td>
                                     <td>
-                                    <select name="mask" class="form-control w200">
-                                        <option value="0">{MASK_TEXT_ARRAY.0}</option>
-                                        <option value="3"{DATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
-                                        <option value="2"{DATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
-                                        <option value="1"{DATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
-                                    </select></td>
+                                        <select name="mask" class="form-control w200">
+                                            <option value="0">{MASK_TEXT_ARRAY.0}</option>
+                                            <option value="3"{DATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
+                                            <option value="2"{DATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
+                                            <option value="1"{DATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>{LANG.banip_area}</td>
+                                    <td>{LANG.banip_area} (<span style="color:red">*</span>)</td>
                                     <td>
-                                    <select name="area" id="area" class="form-control w200">
-                                        <option value="0">{BANIP_AREA_ARRAY.0}</option>
-                                        <option value="1"{DATA.selected_area_1}>{BANIP_AREA_ARRAY.1}</option>
-                                        <option value="2"{DATA.selected_area_2}>{BANIP_AREA_ARRAY.2}</option>
-                                        <option value="3"{DATA.selected_area_3}>{BANIP_AREA_ARRAY.3}</option>
-                                    </select></td>
+                                        <select name="area" class="form-control w200">
+                                            <option value="0">{BANIP_AREA_ARRAY.0}</option>
+                                            <option value="1"{DATA.selected_area_1}>{BANIP_AREA_ARRAY.1}</option>
+                                            <option value="2"{DATA.selected_area_2}>{BANIP_AREA_ARRAY.2}</option>
+                                            <option value="3"{DATA.selected_area_3}>{BANIP_AREA_ARRAY.3}</option>
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>{LANG.banip_begintime}</td>
@@ -300,22 +394,22 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
             </div>
         </div>
     </div>
-    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
-</form>
+</div>
+<input type="hidden" name="gselectedtab" value="{SELECTEDTAB}"/>
 <script type="text/javascript">
 //<![CDATA[
 var LANG = [];
-LANG.banip_error_ip = '{LANG.banip_error_ip}';
-LANG.banip_error_area = '{LANG.banip_error_area}';
 LANG.banip_delete_confirm = '{LANG.banip_delete_confirm}';
 LANG.banip_del_success = '{LANG.banip_del_success}';
 $(document).ready(function() {
     $('#settingTabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         $('[name="selectedtab"]').val($(this).attr('aria-offsets'));
+        $('[name="gselectedtab"]').val($(this).attr('aria-offsets'));
     });
 });
 //]]>

@@ -263,3 +263,7 @@ $lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụ
 $lang_module['site_phone'] = 'Số điện thoại của site';
 $lang_module['googleMapsAPI'] = 'Google Maps API key';
 $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+$lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_list'] = 'Các IP bỏ qua kiểm tra flood';

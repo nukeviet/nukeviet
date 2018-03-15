@@ -208,28 +208,26 @@ $lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_veri
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
-
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('SELECTEDTAB', $selectedtab);
 for ($i = 0; $i <= 3; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
 }
 
+// Xử lý các IP bị cấm
 $error = array();
-$contents = '';
-
 $cid = $nv_Request->get_int('id', 'get');
 $del = $nv_Request->get_int('del', 'get');
 
 if (!empty($del) and !empty($cid)) {
-    $db->query('DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid);
-    nv_save_file_banip();
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=0 AND id=' . $cid);
+    nv_save_file_ips(0);
+    nv_htmlOutput('OK');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -262,7 +260,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     if (empty($error)) {
         if ($cid > 0) {
-            $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_banip
+            $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
 				SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
 				WHERE id=' . $cid);
             $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
@@ -270,9 +268,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
             $sth->execute();
         } else {
-            $result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_banip WHERE ip=' . $db->quote($ip));
+            $result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=0 AND ip=' . $db->quote($ip));
             if ($result) {
-                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
+                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES (0, :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
                 $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
                 $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
                 $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
@@ -280,7 +278,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         }
 
-        $save = nv_save_file_banip();
+        $save = nv_save_file_ips(0);
 
         if ($save !== true) {
             $xtpl->assign('MESSAGE', sprintf($lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR));
@@ -295,6 +293,104 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 } else {
     $id = $ip = $mask = $area = $begintime = $endtime = $notice = '';
+}
+
+// Xử lý các IP bỏ qua kiểm tra flood
+$error = array();
+$flid = $nv_Request->get_int('flid', 'get,post', 0);
+$fldel = $nv_Request->get_int('fldel', 'get,post', 0);
+$array_flip = array();
+
+if (!empty($fldel) and !empty($flid)) {
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=1 AND id=' . $flid);
+    nv_save_file_ips(1);
+    nv_htmlOutput('OK');
+}
+
+if ($nv_Request->isset_request('submitfloodip', 'post')) {
+    $array_flip['flip'] = $nv_Request->get_title('flip', 'post', '', 1);
+    $array_flip['flarea'] = 1;
+    $array_flip['flmask'] = $nv_Request->get_int('flmask', 'post', 0);
+
+    if (empty($array_flip['flip']) or !$ips->nv_validip($array_flip['flip'])) {
+        $error[] = $lang_module['banip_error_validip'];
+    }
+
+    if (empty($array_flip['flarea'])) {
+        $error[] = $lang_module['banip_error_area'];
+    }
+
+    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('flbegintime', 'post'), $m)) {
+        $array_flip['flbegintime'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+    } else {
+        $array_flip['flbegintime'] = NV_CURRENTTIME;
+    }
+
+    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('flendtime', 'post'), $m)) {
+        $array_flip['flendtime'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+    } else {
+        $array_flip['flendtime'] = 0;
+    }
+
+    $array_flip['flnotice'] = $nv_Request->get_title('flnotice', 'post', '', 1);
+
+    if (empty($error)) {
+        if ($flid > 0) {
+            $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
+                SET ip=:ip, mask=:mask, area=' . $array_flip['flarea'] . ', begintime=' . $array_flip['flbegintime'] . ', endtime=' . $array_flip['flendtime'] . ', notice=:notice
+            WHERE id=' . $flid);
+            $sth->bindParam(':ip', $array_flip['flip'], PDO::PARAM_STR);
+            $sth->bindParam(':mask', $array_flip['flmask'], PDO::PARAM_STR);
+            $sth->bindParam(':notice', $array_flip['flnotice'], PDO::PARAM_STR);
+            $sth->execute();
+        } else {
+            $result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=1 AND ip=' . $db->quote($array_flip['flip']));
+            if ($result) {
+                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (
+                    type, ip, mask, area, begintime, endtime, notice
+                ) VALUES (
+                    1, :ip, :mask, ' . $array_flip['flarea'] . ', ' . $array_flip['flbegintime'] . ', ' . $array_flip['flendtime'] . ', :notice
+                )');
+                $sth->bindParam(':ip', $array_flip['flip'], PDO::PARAM_STR);
+                $sth->bindParam(':mask', $array_flip['flmask'], PDO::PARAM_STR);
+                $sth->bindParam(':notice', $array_flip['flnotice'], PDO::PARAM_STR);
+                $sth->execute();
+            }
+        }
+
+        $save = nv_save_file_ips(1);
+
+        if ($save !== true) {
+            $xtpl->assign('MESSAGE', sprintf($lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR));
+            $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
+            $xtpl->parse('main.manual_save');
+        } else {
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+        }
+    } else {
+        $xtpl->assign('ERROR_SAVE', implode('<br/>', $error));
+        $xtpl->parse('main.error_save');
+    }
+} else {
+    if (!empty($flid)) {
+        $row = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $flid)->fetch();
+        if (empty($row)) {
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+        }
+        $array_flip['flip'] = $row['ip'];
+        $array_flip['flarea'] = $row['area'];
+        $array_flip['flmask'] = $row['mask'];
+        $array_flip['flbegintime'] = $row['begintime'];
+        $array_flip['flendtime'] = $row['endtime'];
+        $array_flip['flnotice'] = $row['notice'];
+    } else {
+        $array_flip['flip'] = '';
+        $array_flip['flarea'] = '';
+        $array_flip['flmask'] = '';
+        $array_flip['flbegintime'] = '';
+        $array_flip['flendtime'] = '';
+        $array_flip['flnotice'] = '';
+    }
 }
 
 if (!empty($errormess)) {
@@ -382,7 +478,11 @@ $banip_area_array[1] = $lang_module['banip_area_front'];
 $banip_area_array[2] = $lang_module['banip_area_admin'];
 $banip_area_array[3] = $lang_module['banip_area_both'];
 
-$sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_banip ORDER BY ip DESC';
+$xtpl->assign('MASK_TEXT_ARRAY', $mask_text_array);
+$xtpl->assign('BANIP_AREA_ARRAY', $banip_area_array);
+
+// Danh sách các IP cấm
+$sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=0 ORDER BY ip DESC';
 $result = $db->query($sql);
 $i = 0;
 while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
@@ -393,8 +493,8 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
         'dbarea' => $banip_area_array[$dbarea],
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
-        'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&amp;id=' . $dbid,
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&amp;del=1&amp;id=' . $dbid
+        'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;id=' . $dbid,
+        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;del=1&amp;id=' . $dbid
     ));
 
     $xtpl->parse('main.listip.loop');
@@ -404,14 +504,11 @@ if ($i) {
 }
 
 if (!empty($cid)) {
-    list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid)->fetch(3);
+    list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $cid)->fetch(3);
     $lang_module['banip_add'] = $lang_module['banip_edit'];
 }
 
-$xtpl->assign('MASK_TEXT_ARRAY', $mask_text_array);
-$xtpl->assign('BANIP_AREA_ARRAY', $banip_area_array);
 $xtpl->assign('BANIP_TITLE', ($cid) ? $lang_module['banip_title_edit'] : $lang_module['banip_title_add']);
-
 $xtpl->assign('DATA', array(
     'cid' => $cid,
     'ip' => $ip,
@@ -423,7 +520,44 @@ $xtpl->assign('DATA', array(
     'selected_area_3' => ($area == 3) ? ' selected="selected"' : '',
     'begintime' => !empty($begintime) ? date('d/m/Y', $begintime) : '',
     'endtime' => !empty($endtime) ? date('d/m/Y', $endtime) : '',
-    'endtime' => $notice
+    'notice' => $notice
+));
+
+// Danh sách các IP không bị kiểm tra Flood
+$sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=1 ORDER BY ip DESC';
+$result = $db->query($sql);
+$i = 0;
+while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+    ++$i;
+    $xtpl->assign('ROW', array(
+        'dbip' => $dbip,
+        'dbmask' => $mask_text_array[$dbmask],
+        'dbarea' => $banip_area_array[$dbarea],
+        'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
+        'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
+        'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;flid=' . $dbid,
+        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;fldel=1&amp;flid=' . $dbid
+    ));
+
+    $xtpl->parse('main.noflips.loop');
+}
+if ($i) {
+    $xtpl->parse('main.noflips');
+}
+
+$xtpl->assign('NOFLOODIP_TITLE', !empty($flcid) ? $lang_module['noflood_ip_edit'] : $lang_module['noflood_ip_add']);
+$xtpl->assign('FLDATA', array(
+    'flid' => $flid,
+    'flip' => $array_flip['flip'],
+    'selected3' => ($array_flip['flmask'] == 3) ? ' selected="selected"' : '',
+    'selected2' => ($array_flip['flmask'] == 2) ? ' selected="selected"' : '',
+    'selected1' => ($array_flip['flmask'] == 1) ? ' selected="selected"' : '',
+    'selected_area_1' => ($array_flip['flarea'] == 1) ? ' selected="selected"' : '',
+    'selected_area_2' => ($array_flip['flarea'] == 2) ? ' selected="selected"' : '',
+    'selected_area_3' => ($array_flip['flarea'] == 3) ? ' selected="selected"' : '',
+    'begintime' => !empty($array_flip['flbegintime']) ? date('d/m/Y', $array_flip['flbegintime']) : '',
+    'endtime' => !empty($array_flip['flendtime']) ? date('d/m/Y', $array_flip['flendtime']) : '',
+    'notice' => $array_flip['flnotice']
 ));
 
 for ($i = 0; $i <= 3; $i++) {
@@ -440,71 +574,6 @@ $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
 $page_title = $lang_module['security'];
-
-/**
- * nv_save_file_banip()
- *
- * @return
- */
-function nv_save_file_banip()
-{
-    global $db, $db_config;
-
-    $content_config_site = '';
-    $content_config_admin = '';
-
-    $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_banip');
-    while (list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
-        $dbendtime = intval($dbendtime);
-        $dbarea = intval($dbarea);
-
-        if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
-            switch ($dbmask) {
-                case 3:
-                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/';
-                    break;
-                case 2:
-                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}$/';
-                    break;
-                case 1:
-                    $ip_mask = '/\.[0-9]{1,3}$/';
-                    break;
-                default:
-                    $ip_mask = '//';
-            }
-
-            if ($dbarea == 1 or $dbarea == 3) {
-                $content_config_site .= "\$array_banip_site['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
-            }
-
-            if ($dbarea == 2 or $dbarea == 3) {
-                $content_config_admin .= "\$array_banip_admin['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
-            }
-        }
-    }
-
-    if (!$content_config_site and !$content_config_admin) {
-        nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php');
-        return true;
-    }
-
-    $content_config = "<?php\n\n";
-    $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
-    $content_config .= "\$array_banip_site = array();\n";
-    $content_config .= $content_config_site;
-    $content_config .= "\n";
-    $content_config .= "\$array_banip_admin = array();\n";
-    $content_config .= $content_config_admin;
-
-    $write = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php', $content_config, LOCK_EX);
-
-    if ($write === false) {
-        return $content_config;
-    }
-
-    return true;
-}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
