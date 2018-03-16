@@ -3,7 +3,7 @@
     <!-- BEGIN: loop -->
     <div class="col-sm-12 col-md-{NUM}">
         <div class="thumbnail">
-            <div style="height: {HEIGHT">
+            <div style="height: {HEIGHT}px">
                 <a href="{ROW.link_pro}" title="{ROW.title}"><img src="{ROW.homeimgthumb}" alt="{ROW.title}"
                 <!-- BEGIN: tooltip_js -->data-content='{ROW.hometext}' data-rel="tooltip" data-img="{ROW.homeimgthumb}"<!-- END: tooltip_js -->class="img-thumbnail" style="max-height:{HEIGHT}px;max-width:{WIDTH}px;"></a>
             </div>
