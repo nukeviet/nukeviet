@@ -55,7 +55,7 @@ if ($groupid > 0) {
         $viewgroup = $nv_Request->get_title('new_vid', 'post');
         $array_viewgroup = ($numsubgroup > 0) ? $array_viewcat_full : $array_viewcat_nosub;
         if (! array_key_exists($viewgroup, $array_viewgroup)) {
-            $viewgroup = 'viewcat_page_list';
+            $viewgroup = 'viewlist';
         }
         $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group SET viewgroup= :viewgroup WHERE groupid=' . $groupid);
         $stmt->bindParam(':viewgroup', $viewgroup, PDO::PARAM_STR);

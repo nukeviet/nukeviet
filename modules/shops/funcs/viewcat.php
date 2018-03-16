@@ -14,7 +14,7 @@ if (!defined('NV_IS_MOD_SHOPS')) {
 
 $ajax = $nv_Request->isset_request('ajax', 'get, post');
 $listgroupid = $nv_Request->get_string('listgroupid', 'get, post', '');
-$array_id_group = array( );
+$array_id_group = array();
 
 if ($ajax) {
     $page = $nv_Request->get_int('page', 'get, post', 1);
@@ -34,7 +34,7 @@ $compare_id = $nv_Request->get_string($module_data . '_compare_id', 'session', '
 $compare_id = unserialize($compare_id);
 
 unset($array_op[0]);
-$array_url_group = array( );
+$array_url_group = array();
 foreach ($array_op as $_inurl) {
     if (preg_match('/^page\-([0-9]+)$/', $_inurl, $m)) {
         $page = $m[1];
@@ -84,6 +84,7 @@ $nv_Request->get_string('viewtype', 'session', '');
 $viewtype = $nv_Request->get_string('viewtype', 'post', '');
 $viewtype_old = $nv_Request->get_string('viewtype', 'session', '');
 $viewtype = $nv_Request->get_string('viewtype', 'post', $viewtype_old);
+
 if (!empty($viewtype)) {
     $global_array_shops_cat[$catid]['viewcat'] = $viewtype;
 }
@@ -96,7 +97,7 @@ if (!defined('NV_IS_MODADMIN') and $page < 5 and !$ajax) {
 }
 
 if (empty($contents)) {
-    $data_content = array( );
+    $data_content = array();
 
     $count = 0;
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
@@ -124,9 +125,9 @@ if (empty($contents)) {
             if ($a > 0) {
                 $arr_sql = array();
                 for ($i = 0; $i < $a; $i++) {
-                    $arr_sql[]= ' pro_id IN (SELECT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id=' . $listid[$i] . ')';
+                    $arr_sql[] = ' pro_id IN (SELECT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id=' . $listid[$i] . ')';
                 }
-                $_sql .= ' ('. implode(' OR ', $arr_sql) . ')';
+                $_sql .= ' (' . implode(' OR ', $arr_sql) . ')';
             }
             if ($j < count($arr_id)) {
                 $_sql .= ' AND ';
@@ -140,30 +141,40 @@ if (empty($contents)) {
     }
 
     if ($global_array_shops_cat[$catid]['viewcat'] == 'view_home_cat' and $global_array_shops_cat[$catid]['numsubcat'] > 0) {
-        $data_content = array( );
+        $data_content = array();
         $array_subcatid = explode(',', $global_array_shops_cat[$catid]['subcatid']);
 
         foreach ($array_subcatid as $catid_i) {
             $array_info_i = $global_array_shops_cat[$catid_i];
 
-            $array_cat = array( );
+            $array_cat = array();
             $array_cat = GetCatidInParent($catid_i);
 
             // Fetch Limit
             if ($array_url_group or $ajax) {
-                $db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_rows t1')->where('t1.listcatid IN (' . implode(',', $array_cat) . ') AND t1.status=1' . $_sql);
+                $db->sqlreset()
+                    ->select('COUNT(*)')
+                    ->from($db_config['prefix'] . '_' . $module_data . '_rows t1')
+                    ->where('t1.listcatid IN (' . implode(',', $array_cat) . ') AND t1.status=1' . $_sql);
             } else {
-                $db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_rows t1')->where('t1.listcatid IN (' . implode(',', $array_cat) . ') AND t1.status =1');
+                $db->sqlreset()
+                    ->select('COUNT(*)')
+                    ->from($db_config['prefix'] . '_' . $module_data . '_rows t1')
+                    ->where('t1.listcatid IN (' . implode(',', $array_cat) . ') AND t1.status =1');
             }
 
-            $num_pro = $db->query($db->sql())->fetchColumn();
+            $num_pro = $db->query($db->sql())
+                ->fetchColumn();
 
-            $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice,t1.' . NV_LANG_DATA . '_gift_content, t1.gift_from, t1.gift_to, t2.newday')->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')->order($orderby)->limit($array_info_i['numlinks']);
+            $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice,t1.' . NV_LANG_DATA . '_gift_content, t1.gift_from, t1.gift_to, t2.newday')
+                ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')
+                ->order($orderby)
+                ->limit($array_info_i['numlinks']);
             $result = $db->query($db->sql());
 
-            $data_pro = array( );
+            $data_pro = array();
 
-            while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_from, $gift_to, $newday) = $result->fetch(3)) {
+            while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_from, $gift_to, $newday) = $result->fetch(3)) {
                 if ($homeimgthumb == 1) {
                     //image thumb
 
@@ -228,20 +239,31 @@ if (empty($contents)) {
         if ($global_array_shops_cat[$catid]['numsubcat'] == 0) {
             $where = ' t1.listcatid=' . $catid;
         } else {
-            $array_cat = array( );
+            $array_cat = array();
             $array_cat = GetCatidInParent($catid, true);
             $where = ' t1.listcatid IN (' . implode(',', $array_cat) . ')';
         }
 
         if ($array_url_group or !empty($array_id_group)) {
-            $db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_rows t1')->where($where . ' AND t1.status =1' . $_sql);
+            $db->sqlreset()
+                ->select('COUNT(*)')
+                ->from($db_config['prefix'] . '_' . $module_data . '_rows t1')
+                ->where($where . ' AND t1.status =1' . $_sql);
         } else {
-            $db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_rows t1')->where($where . ' AND t1.status =1');
+            $db->sqlreset()
+                ->select('COUNT(*)')
+                ->from($db_config['prefix'] . '_' . $module_data . '_rows t1')
+                ->where($where . ' AND t1.status =1');
         }
 
-        $num_items = $db->query($db->sql())->fetchColumn();
+        $num_items = $db->query($db->sql())
+            ->fetchColumn();
 
-        $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_gift_content, t1.gift_from, t1.gift_to, t2.newday, t2.image')->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')->order($orderby)->limit($per_page)->offset(($page - 1) * $per_page);
+        $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_gift_content, t1.gift_from, t1.gift_to, t2.newday, t2.image')
+            ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')
+            ->order($orderby)
+            ->limit($per_page)
+            ->offset(($page - 1) * $per_page);
         $result = $db->query($db->sql());
 
         $data_content = GetDataIn($result, $catid);
@@ -259,7 +281,8 @@ if (empty($contents)) {
             Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
             exit();
         }
-        $contents = call_user_func($global_array_shops_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts, $viewtype);
+
+        $contents = nv_template_viewcat($data_content, $compare_id, $pages, $sorts, $global_array_shops_cat[$catid]['viewcat']);
     }
 
     if (!defined('NV_IS_MODADMIN') and $contents != '' and $cache_file != '' and !$ajax) {
