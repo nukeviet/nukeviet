@@ -41,9 +41,11 @@ $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không h�
 $lang_module['err_save_sysconfig'] = 'Các thay đổi đã được lưu lại tuy nhiên hệ thống không ghi được cấu hình ra file. Hãy cấp quyền ghi cho file %s sau đó thực hiện lại';
 
 $lang_module['security'] = 'Thiết lập an ninh';
+$lang_module['flood_blocker'] = 'Chống flood';
 $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
 $lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
 $lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
+$lang_module['max_requests_error'] = 'Lỗi: Cần nhập số request lớn hơn 0';
 $lang_module['nv_anti_iframe'] = 'Chống IFRAME';
 $lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu agent không có';
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
@@ -261,3 +263,7 @@ $lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụ
 $lang_module['site_phone'] = 'Số điện thoại của site';
 $lang_module['googleMapsAPI'] = 'Google Maps API key';
 $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+$lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_list'] = 'Các IP bỏ qua kiểm tra flood';

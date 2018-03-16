@@ -819,3 +819,79 @@ function nv_http_get_lang($input)
 
     return 'Error' . ($input['code'] ? ': ' . $input['code'] . '.' : '.');
 }
+
+/**
+ * nv_save_file_ips()
+ *
+ * @param integer $type
+ * @return
+ */
+function nv_save_file_ips($type = 0)
+{
+    global $db, $db_config;
+
+    $content_config_site = '';
+    $content_config_admin = '';
+
+    if ($type == 0) {
+        $variable_name = 'banip';
+        $file_name = 'banip';
+    } elseif ($type == 1) {
+        $variable_name = 'except_flood';
+        $file_name = 'efloodip';
+    } else {
+        return true;
+    }
+
+    $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
+    while (list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+        $dbendtime = intval($dbendtime);
+        $dbarea = intval($dbarea);
+
+        if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
+            switch ($dbmask) {
+                case 3:
+                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/';
+                    break;
+                case 2:
+                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}$/';
+                    break;
+                case 1:
+                    $ip_mask = '/\.[0-9]{1,3}$/';
+                    break;
+                default:
+                    $ip_mask = '//';
+            }
+
+            if ($dbarea == 1 or $dbarea == 3) {
+                $content_config_site .= "\$array_" . $variable_name . "_site['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
+            }
+
+            if ($dbarea == 2 or $dbarea == 3) {
+                $content_config_admin .= "\$array_" . $variable_name . "_admin['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
+            }
+        }
+    }
+
+    if (!$content_config_site and !$content_config_admin) {
+        nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php');
+        return true;
+    }
+
+    $content_config = "<?php\n\n";
+    $content_config .= NV_FILEHEAD . "\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "\$array_" . $variable_name . "_site = array();\n";
+    $content_config .= $content_config_site;
+    $content_config .= "\n";
+    $content_config .= "\$array_" . $variable_name . "_admin = array();\n";
+    $content_config .= $content_config_admin;
+
+    $write = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php', $content_config, LOCK_EX);
+
+    if ($write === false) {
+        return $content_config;
+    }
+
+    return true;
+}
