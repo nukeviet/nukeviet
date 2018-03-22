@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/css/lightslider.min.css" rel="stylesheet" type="text/css">
 <div itemscope itemtype="http://schema.org/Product" style="display: none">
     <span itemprop="name">{TITLE}</span> <img itemprop="image" src="{SRC_PRO_FULL}" alt="{TITLE}" /> <span itemprop="description">{hometext}</span> <span itemprop="mpn">{PRODUCT_CODE}</span>
     <!-- BEGIN: allowed_rating_snippets -->
@@ -13,6 +14,15 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-24 col-sm-10 col-md-10 text-center">
+                    <!-- BEGIN: image -->
+                    <div class="image">
+                        <ul id="imageGallery" class="gallery">
+                            <!-- BEGIN: loop -->
+                            <li data-thumb="{IMAGE.thumb}" style="height: 200px" data-src="{IMAGE.file}"><img src="{IMAGE.file}" /></li>
+                            <!-- END: loop -->
+                        </ul>
+                    </div>
+                    <!-- END: image -->
                     <a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" class="img-thumbnail" id="imageproduct"></a> <br />
                     <!-- BEGIN: adminlink -->
                     <p class="tab-pane">{ADMINLINK}</p>
@@ -274,5 +284,24 @@
 		check_price( '{proid}', '{pro_unit}' );
 		<!-- END: check_price -->
 	}
+</script>
+<script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/js/lightslider.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#imageGallery').lightSlider({
+        gallery:true,
+        item:1,
+        loop:true,
+        thumbItem:5,
+        slideMargin:0,
+        enableDrag: false,
+        currentPagerPosition:'left',
+        onSliderLoad: function(el) {
+            el.lightGallery({
+                selector: '#imageGallery .lslide'
+            });
+        }   
+    });  
+  });
 </script>
 <!-- END: main -->

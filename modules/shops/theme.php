@@ -200,17 +200,14 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
         $xtpl->assign('proid', $data_content['id']);
         $xtpl->assign('CAT_TITLE', $global_array_shops_cat[$data_content['listcatid']]['title']);
         $xtpl->assign('SRC_PRO_FULL', $global_config['site_url'] . $data_content['homeimgthumb']);
-        $xtpl->assign('SRC_PRO', $data_content['homeimgthumb']);
-        $xtpl->assign('SRC_PRO_LAGE', $data_content['homeimgfile']);
-        if (!empty($data_content['homeimgfile']) and file_exists(NV_ROOTDIR . $data_content['homeimgfile'])) {
-            $xtpl->assign('SRC_PRO_LAGE_INFO', nv_is_image(NV_ROOTDIR . $data_content['homeimgfile']));
-        }
         $xtpl->assign('TITLE', $data_content[NV_LANG_DATA . '_title']);
+
         if (!empty($data_content['product_weight'])) {
             $xtpl->assign('PRODUCT_WEIGHT', $data_content['product_weight']);
             $xtpl->assign('WEIGHT_UNIT', $data_content['weight_unit']);
             $xtpl->parse('main.product_weight');
         }
+
         $xtpl->assign('NUM_VIEW', $data_content['hitstotal']);
         $xtpl->assign('DATE_UP', $lang_module['detail_dateup'] . ' ' . nv_date('d-m-Y h:i:s A', $data_content['publtime']));
         $xtpl->assign('DETAIL', $data_content[NV_LANG_DATA . '_bodytext']);
@@ -219,8 +216,15 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
         $xtpl->assign('PRICE', $price);
         $xtpl->assign('PRODUCT_CODE', $data_content['product_code']);
         $xtpl->assign('PRODUCT_NUMBER', $data_content['product_number']);
-
         $xtpl->assign('pro_unit', $data_unit['title']);
+
+        if (!empty($data_content['image'])) {
+            foreach ($data_content['image'] as $image) {
+                $xtpl->assign('IMAGE', $image);
+                $xtpl->parse('main.image.loop');
+            }
+            $xtpl->parse('main.image');
+        }
 
         if ($pro_config['active_gift'] and !empty($data_content[NV_LANG_DATA . '_gift_content']) and NV_CURRENTTIME >= $data_content['gift_from'] and NV_CURRENTTIME <= $data_content['gift_to']) {
             $xtpl->assign('gift_content', $data_content[NV_LANG_DATA . '_gift_content']);
@@ -264,30 +268,21 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
 
                     if ($tabs_key == 'content_detail') {
                         // Chi tiết sản phẩm
-
                         $tabs_content = $data_content[NV_LANG_DATA . '_bodytext'];
                     } elseif ($tabs_key == 'content_download' and $pro_config['download_active'] == 1) {
                         // Download tài liệu
-
                         $download_content = nv_download_content($data_content, $tabs_key . '-' . $tabs_id);
                         $tabs_content = !empty($download_content) ? $download_content : '';
-                    } elseif ($tabs_key == 'content_otherimage') {
-                        // Hình ảnh khác
-
-                        $tabs_content = nv_display_othersimage($data_content['otherimage']);
                     } elseif ($tabs_key == 'content_comments') {
                         // Bình luận
-
                         $tabs_content = $content_comment;
                     } elseif ($tabs_key == 'content_rate') {
                         // Đánh giá sản phẩm
-
                         if (!empty($data_content['allowed_rating']) and !empty($pro_config['review_active'])) {
                             $tabs_content = nv_review_content($data_content);
                         }
                     } elseif ($tabs_key == 'content_customdata') {
                         // Dữ liệu tùy biến
-
                         if (!empty($data_content['array_custom']) and !empty($data_content['array_custom_lang'])) {
                             $tabs_content = nv_custom_tpl('tab-' . strtolower(change_alias($data_content['tabs'][$tabs_id][NV_LANG_DATA . '_title'])) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate);
                         }
@@ -1595,37 +1590,6 @@ function nv_download_content($data_content)
         }
 
         $xtpl->parse('main.files_content');
-        $xtpl->parse('main');
-        return $xtpl->text('main');
-    }
-}
-
-/**
- * nv_display_othersimage
- *
- * @param mixed $otherimage
- * @return
- */
-function nv_display_othersimage($otherimage)
-{
-    global $module_info, $lang_module, $lang_global, $module_name, $module_data, $module_file, $module_upload, $pro_config, $op, $my_head;
-
-    $xtpl = new XTemplate('othersimg.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-
-    if (!empty($otherimage)) {
-        $otherimage = explode('|', $otherimage);
-        foreach ($otherimage as $otherimage_i) {
-            if (!empty($otherimage_i) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $otherimage_i)) {
-                $otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $otherimage_i;
-                $xtpl->assign('IMG_SRC_OTHER', $otherimage_i);
-                if (!empty($otherimage_i) and file_exists(NV_ROOTDIR . $otherimage_i)) {
-                    $xtpl->assign('IMG_SRC_OTHER_INFO', nv_is_image(NV_ROOTDIR . $otherimage_i));
-                }
-                $xtpl->parse('main.othersimg.loop');
-            }
-        }
-        $xtpl->parse('main.othersimg');
         $xtpl->parse('main');
         return $xtpl->text('main');
     }

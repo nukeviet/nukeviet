@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
@@ -60,7 +60,7 @@ if ($op == 'main') {
             $page = (int) $m[1];
         }
     } else {
-        if (sizeof($array_op) == 2 and preg_match('/^([a-z0-9\-]+)$/i', $array_op[1]) and ! preg_match('/^page\-([0-9]+)$/', $array_op[1], $m2)) {
+        if (sizeof($array_op) == 2 and preg_match('/^([a-z0-9\-]+)$/i', $array_op[1]) and !preg_match('/^page\-([0-9]+)$/', $array_op[1], $m2)) {
             $op = 'detail';
             $alias_url = $array_op[1];
         } else {
@@ -302,10 +302,10 @@ function GetDataInGroup($result, $groupid)
 function SetSessionProView($id, $title, $alias, $addtime, $link, $homeimgthumb)
 {
     global $module_data;
-    if (! isset($_SESSION[$module_data . '_proview'])) {
+    if (!isset($_SESSION[$module_data . '_proview'])) {
         $_SESSION[$module_data . '_proview'] = array();
     }
-    if (! isset($_SESSION[$module_data . '_proview'][$id])) {
+    if (!isset($_SESSION[$module_data . '_proview'][$id])) {
         $_SESSION[$module_data . '_proview'][$id] = array(
             'title' => $title,
             'alias' => $alias,
@@ -334,7 +334,7 @@ function nv_custom_tpl($name_file, $array_custom, $array_custom_lang, $idtemplat
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $row['tab'] = unserialize($row['tab']);
-        if (! empty($row['tab'])) {
+        if (!empty($row['tab'])) {
             foreach ($row['tab'] as $key => $value) {
                 if ($key == $idtemplate) {
                     $arr[$row['field']] = 1;
@@ -350,9 +350,9 @@ function nv_custom_tpl($name_file, $array_custom, $array_custom_lang, $idtemplat
     $count = 0;
 
     foreach ($array_custom as $key => $value) {
-        if (isset($arr[$key]) and ! empty($value)) {
+        if (isset($arr[$key]) and !empty($value)) {
             $xtpl->parse('main.' . $key);
-            $count ++;
+            $count++;
         }
     }
 

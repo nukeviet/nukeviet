@@ -1457,3 +1457,19 @@ a.btn-default {
 .viewtype span.active {
     color: #333
 }
+
+#imageGallery img{
+    height: 290px
+}
+
+.lSSlideOuter .lSPager.lSGallery img{
+    border: solid 1px #ddd
+}
+
+.lSSlideOuter .lSPager.lSGallery li.active{
+    border: solid 1px blue
+}
+
+.lSSlideWrapper{
+    margin-bottom: 15px
+}
