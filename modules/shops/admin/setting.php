@@ -7,8 +7,8 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
- 
-if (! defined('NV_IS_FILE_ADMIN')) {
+
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -20,7 +20,7 @@ $currencies_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/currencies.ini
 $data = $module_config[$module_name];
 
 $active_payment_old = 0;
-if (! empty($data)) {
+if (!empty($data)) {
     $temp = explode("x", $data['image_size']);
     $data['homewidth'] = $temp[0];
     $data['homeheight'] = $temp[1];
@@ -54,7 +54,8 @@ if ($savesetting == 1) {
     $data['post_auto_member'] = $nv_Request->get_string('post_auto_member', 'post', 0);
     $data['money_unit'] = $nv_Request->get_string('money_unit', 'post', "");
     $data['weight_unit'] = $nv_Request->get_string('weight_unit', 'post', "");
-    $data['home_view'] = $nv_Request->get_string('home_view', 'post', '');
+    $data['home_data'] = $nv_Request->get_title('home_data', 'post', 'all');
+    $data['home_view'] = $nv_Request->get_title('home_view', 'post', 'viewgrid');
     $data['format_order_id'] = $nv_Request->get_string('format_order_id', 'post', '');
     $data['format_code_id'] = $nv_Request->get_string('format_code_id', 'post', '');
     $data['facebookappid'] = $nv_Request->get_string('facebookappid', 'post', '');
@@ -68,7 +69,7 @@ if ($savesetting == 1) {
     $data['active_payment'] = $nv_Request->get_int('active_payment', 'post', 0);
     $data['active_showhomtext'] = $nv_Request->get_int('active_showhomtext', 'post', 0);
     $_groups_notify = $nv_Request->get_array('groups_notify', 'post', array());
-    $data['groups_notify'] = ! empty($_groups_notify) ? implode(',', array_intersect($_groups_notify, array_keys($groups_list))) : '';
+    $data['groups_notify'] = !empty($_groups_notify) ? implode(',', array_intersect($_groups_notify, array_keys($groups_list))) : '';
     $data['active_tooltip'] = $nv_Request->get_int('active_tooltip', 'post', 0);
     $data['show_product_code'] = $nv_Request->get_int('show_product_code', 'post', 0);
     $data['sortdefault'] = $nv_Request->get_int('sortdefault', 'post', 0);
@@ -83,14 +84,14 @@ if ($savesetting == 1) {
     $data['tags_alias'] = $nv_Request->get_int('tags_alias', 'post', 0);
     $data['auto_tags'] = $nv_Request->get_int('auto_tags', 'post', 0);
     $data['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
-    
+
     $data['point_active'] = $nv_Request->get_int('point_active', 'post', 0);
     $data['point_conversion'] = $nv_Request->get_string('point_conversion', 'post', 0);
     $data['point_conversion'] = floatval(preg_replace('/[^0-9\.]/', '', $data['point_conversion']));
     $data['money_to_point'] = $nv_Request->get_string('money_to_point', 'post', 0);
     $data['money_to_point'] = floatval(preg_replace('/[^0-9\.]/', '', $data['money_to_point']));
     $data['point_new_order'] = $nv_Request->get_string('point_new_order', 'post', 0);
-    
+
     $data['review_active'] = $nv_Request->get_int('review_active', 'post', 0);
     $data['review_check'] = $nv_Request->get_int('review_check', 'post', 0);
     $data['review_captcha'] = $nv_Request->get_int('review_captcha', 'post', 0);
@@ -98,8 +99,8 @@ if ($savesetting == 1) {
     $data['template_active'] = $nv_Request->get_int('template_active', 'post', 0);
     $data['download_active'] = $nv_Request->get_int('download_active', 'post', 0);
     $_dowload_groups = $nv_Request->get_array('download_groups', 'post', array());
-    $data['download_groups'] = ! empty($_dowload_groups) ? implode(',', nv_groups_post(array_intersect($_dowload_groups, array_keys($groups_list_default)))) : '';
-    
+    $data['download_groups'] = !empty($_dowload_groups) ? implode(',', nv_groups_post(array_intersect($_dowload_groups, array_keys($groups_list_default)))) : '';
+
     if ($error == '') {
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -108,16 +109,16 @@ if ($savesetting == 1) {
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
             $sth->execute();
         }
-        
+
         $mid = intval($currencies_array[$data['money_unit']]['numeric']);
-        
+
         $sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " SET exchange = '1' WHERE id = " . $mid;
         $db->query($sql);
-        
+
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['setting'], "Setting", $admin_info['userid']);
         $nv_Cache->delMod('settings');
         $nv_Cache->delMod($module_name);
-        
+
         Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . '=setting');
         die();
     }
@@ -129,7 +130,7 @@ if ($data['active_payment'] == '1') {
     $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
     $result = $db->query($sql);
     $num_items = $result->rowCount();
-    
+
     while ($row = $result->fetch()) {
         $array_setting_payment[$row['payment']] = $row;
     }
@@ -144,7 +145,7 @@ $xtpl->assign('DATA', $data);
 $xtpl->assign('MODULE_NAME', $module_name);
 
 // Số sản phẩm hiển thị trên một dòng
-for ($i = 1; $i <= 10; $i ++) {
+for ($i = 1; $i <= 10; $i++) {
     if (24 % $i == 0) {
         $xtpl->assign('PER_ROW', array(
             'value' => $i,
@@ -154,19 +155,32 @@ for ($i = 1; $i <= 10; $i ++) {
     }
 }
 
-$check_view = array(
-    'view_home_all' => '',
-    'view_home_cat' => '',
-    'view_home_group' => '',
-    'view_home_none' => ''
+$array_home_view = array(
+    'viewgrid' => $lang_module['viewcat_page_gird'],
+    'viewlist' => $lang_module['viewcat_page_list']
 );
-$check_view[$data['home_view']] = 'selected="selected"';
-
-foreach ($check_view as $type_view => $select) {
-    $xtpl->assign('type_view', $type_view);
-    $xtpl->assign('view_selected', $select);
-    $xtpl->assign('name_view', $lang_module[$type_view]);
+foreach ($array_home_view as $index => $value) {
+    $xtpl->assign('HOME_VIEW', array(
+        'index' => $index,
+        'value' => $value,
+        'selected' => $index == $data['home_view'] ? 'selected="selected"' : ''
+    ));
     $xtpl->parse('main.home_view_loop');
+}
+
+$array_home_data = array(
+    'all' => $lang_module['view_home_all'],
+    'cat' => $lang_module['view_home_cat'],
+    'group' => $lang_module['view_home_group'],
+    'none' => $lang_module['view_home_none']
+);
+foreach ($array_home_data as $index => $value) {
+    $xtpl->assign('HOME_DATA', array(
+        'index' => $index,
+        'value' => $value,
+        'selected' => $index == $data['home_data'] ? 'selected="selected"' : ''
+    ));
+    $xtpl->parse('main.home_data_loop');
 }
 
 $select = '';
@@ -214,7 +228,7 @@ $xtpl->assign('ck_active_tooltip', $check);
 $check = ($data['alias_lower'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_alias_lower', $check);
 
-$check = ! empty($data['show_product_code']) ? 'checked="checked"' : '';
+$check = !empty($data['show_product_code']) ? 'checked="checked"' : '';
 $xtpl->assign('ck_show_product_code', $check);
 
 $check = ($data['show_compare'] == '1') ? 'checked="checked"' : '';
@@ -297,33 +311,33 @@ foreach ($groups_list_default as $_group_id => $_title) {
     ));
     $xtpl->parse('main.download_groups');
 }
-if (! $data['download_active']) {
+if (!$data['download_active']) {
     $xtpl->parse('main.download_groups_none');
 }
 
 $xtpl->assign('per_page', $select);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('error', $error);
     $xtpl->parse('main.error');
 }
 
-if (! empty($array_setting_payment)) {
+if (!empty($array_setting_payment)) {
     $a = 0;
     $all_page = sizeof($array_setting_payment);
     $payment = $nv_Request->get_string('payment', 'get', 0);
-    
+
     foreach ($array_setting_payment as $value) {
-        $value['titleactive'] = (! empty($value['active'])) ? $lang_global['yes'] : $lang_global['no'];
+        $value['titleactive'] = (!empty($value['active'])) ? $lang_global['yes'] : $lang_global['no'];
         $value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
         $value['active'] = ($value['active'] == '1') ? 'checked="checked"' : '';
-        if (! empty($value['images_button']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $value['images_button'])) {
+        if (!empty($value['images_button']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $value['images_button'])) {
             $value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $value['images_button'];
         }
         $value['slect_weight'] = drawselect_number($value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);");
         $xtpl->assign('DATA_PM', $value);
         $xtpl->parse('main.payment.paymentloop');
-        ++ $a;
+        ++$a;
     }
     $xtpl->assign('url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
     $xtpl->assign('url_change', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=changepay");

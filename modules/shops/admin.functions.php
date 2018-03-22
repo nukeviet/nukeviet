@@ -92,12 +92,12 @@ if (defined('NV_IS_SPADMIN')) {
 
 $array_viewcat_full = array(
     'view_home_cat' => $lang_module['view_home_cat'],
-    'viewcat_page_list' => $lang_module['viewcat_page_list'],
-    'viewcat_page_gird' => $lang_module['viewcat_page_gird']
+    'viewlist' => $lang_module['viewcat_page_list'],
+    'viewgrid' => $lang_module['viewcat_page_gird']
 );
 $array_viewcat_nosub = array(
-    'viewcat_page_list' => $lang_module['viewcat_page_list'],
-    'viewcat_page_gird' => $lang_module['viewcat_page_gird']
+    'viewlist' => $lang_module['viewcat_page_list'],
+    'viewgrid' => $lang_module['viewcat_page_gird']
 );
 
 // Tài liệu hướng dẫn
@@ -184,7 +184,7 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
         $_view_cat_check = $db->query('SELECT viewcat FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid=' . $parentid)->fetch();
         $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs SET numsubcat=' . $numsubcat;
         if ($numsubcat == 0 && $_view_cat_check['viewcat'] == 'view_home_cat') {
-            $sql .= ", subcatid='', viewcat='viewcat_page_list'";
+            $sql .= ", subcatid='', viewcat='viewlist'";
         } else {
             $sql .= ", subcatid='" . implode(",", $array_cat_order) . "'";
         }
@@ -302,7 +302,7 @@ function shops_show_cat_list($parentid = 0)
         while (list ($catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday) = $result->fetch(3)) {
             $array_viewcat = ($numsubcat > 0) ? $array_viewcat_full : $array_viewcat_nosub;
             if (!array_key_exists($viewcat, $array_viewcat)) {
-                $viewcat = 'viewcat_page_list';
+                $viewcat = 'viewlist';
                 $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs SET viewcat= :viewcat WHERE catid=' . $catid);
                 $stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
                 $stmt->execute();

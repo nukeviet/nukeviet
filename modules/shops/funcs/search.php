@@ -76,7 +76,7 @@ if (strlen($key) >= NV_MIN_SEARCH_LENGTH) {
     } else {
         $orderby = 'product_price DESC, t1.id DESC';
     }
-    
+
     if ($catid != 0) {
         if ($global_array_shops_cat[$catid]['numsubcat'] == 0) {
             $where .= 'AND listcatid=' . $catid;

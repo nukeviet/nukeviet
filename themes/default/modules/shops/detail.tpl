@@ -1,16 +1,4 @@
 <!-- BEGIN: main -->
-<div id="fb-root"></div>
-<script type="text/javascript" data-show="after">
-	( function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id))
-				return;
-			js = d.createElement(s);
-			js.id = id;
-			js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
-</script>
 <div itemscope itemtype="http://schema.org/Product" style="display: none">
     <span itemprop="name">{TITLE}</span> <img itemprop="image" src="{SRC_PRO_FULL}" alt="{TITLE}" /> <span itemprop="description">{hometext}</span> <span itemprop="mpn">{PRODUCT_CODE}</span>
     <!-- BEGIN: allowed_rating_snippets -->
@@ -24,37 +12,24 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-24 col-sm-6 text-center">
-                    <a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail" id="imageproduct"></a> <br />
+                <div class="col-xs-24 col-sm-10 col-md-10 text-center">
+                    <a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" class="img-thumbnail" id="imageproduct"></a> <br />
                     <!-- BEGIN: adminlink -->
                     <p class="tab-pane">{ADMINLINK}</p>
                     <!-- END: adminlink -->
                     <!-- BEGIN: social_icon -->
-                    <hr />
-                    <ul style="padding: 0; margin-top: 5px;">
-                        <li class="pull-left">
-                            <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">&nbsp;</div>
-                        </li>
-                        <li class="pull-left">
-                            <div class="g-plusone" data-size="medium"></div>
-                        </li>
-                    </ul>
-                    <script type="text/javascript" data-show="after">
-						window.___gcfg = {
-							lang : nv_lang_data
-						};
-						(function() {
-							var po = document.createElement('script');
-							po.type = 'text/javascript';
-							po.async = true;
-							po.src = 'https://apis.google.com/js/plusone.js';
-							var s = document.getElementsByTagName('script')[0];
-							s.parentNode.insertBefore(po, s);
-						})();
-					</script>
+                    <div class="news_column panel panel-default">
+                        <div class="panel-body">
+                            <div class="socialicon">
+                                <div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
+                                <div class="g-plusone" data-size="medium"></div>
+                                <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
+                            </div>
+                        </div>
+                    </div>
                     <!-- END: social_icon -->
                 </div>
-                <div class="col-xs-24 col-sm-18">
+                <div class="col-xs-24 col-sm-14 col-md-14">
                     <ul class="product_info">
                         <li>
                             <h2>{TITLE}</h2>
@@ -181,10 +156,10 @@
                     </table>
                     <!-- END: typepeice -->
                     <!-- BEGIN: order -->
-                    <button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0); return false;">
+                    <button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, {POPUP}, 0); return !1;">
                         <em class="fa fa-shopping-cart fa-lg">&nbsp;</em> {LANG.add_cart}
                     </button>
-                    <button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1); return false;">
+                    <button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, {POPUP}, 1); return !1;">
                         <em class="fa fa-paper-plane-o fa-lg">&nbsp;</em> {LANG.buy_now}
                     </button>
                     <!-- END: order -->
@@ -254,7 +229,6 @@
         </div>
     </div>
 </div>
-<div class="msgshow" id="msgshow"></div>
 <!-- BEGIN: allowed_print_js -->
 <script type="text/javascript" data-show="after">
 	$(function() {
