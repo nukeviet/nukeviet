@@ -440,7 +440,7 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
     }
 
     if ($pro_config['active_price'] == '1') {
-        if ($data_content['showprice'] == '1') {
+        if ($data_content['showprice'] == '1' && !empty($data_content['product_price'])) {
             if ($data_content['discount_id'] and $price['discount_percent'] > 0) {
                 $xtpl->parse('main.price.discounts');
             } else {
