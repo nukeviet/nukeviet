@@ -1449,3 +1449,11 @@ a.btn-default {
 .viewlist input[type="checkbox"], .viewlist input[type="radio"] {
     margin: 0
 }
+
+.viewtype span {
+    color: #ddd
+}
+
+.viewtype span.active {
+    color: #333
+}

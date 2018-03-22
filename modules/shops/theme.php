@@ -1937,16 +1937,19 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
         }
 
         $array_viewtype = array(
-            'viewlist' => $lang_module['view_page_list'],
-            'viewgrid' => $lang_module['view_page_gird']
+            'viewgrid' => array(
+                'title' => $lang_module['view_page_gird'],
+                'icon' => 'th-large'
+            ),
+            'viewlist' => array(
+                'title' => $lang_module['view_page_list'],
+                'icon' => 'th-list'
+            )
         );
-        foreach ($array_viewtype as $k => $array_viewtype_i) {
-            $se = $k == $viewtype ? 'selected="selected"' : '';
-            $xtpl->assign('VIEWTYPE', array(
-                'key' => $k,
-                'value' => $array_viewtype_i,
-                'selected' => $se
-            ));
+        foreach ($array_viewtype as $index => $value) {
+            $value['active'] = $index == $viewtype ? 'active' : '';
+            $value['index'] = $index;
+            $xtpl->assign('VIEWTYPE', $value);
             $xtpl->parse('main.displays.viewtype');
         }
 
