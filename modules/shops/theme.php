@@ -1950,3 +1950,57 @@ function nv_template_wishlist($array_data, $pages, $viewtype = 'viewgrid')
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
+/**
+ * nv_template_tag()
+ *
+ * @param mixed $array_data
+ * @param mixed $pages
+ * @param mixed $viewtype
+ * @return
+ */
+function nv_template_tag($array_data, $pages = '', $sort = 0, $viewtype = 'viewgrid')
+{
+    global $module_info, $lang_module, $module_file, $op, $page_title, $pro_config, $array_displays;
+
+    $xtpl = new XTemplate('tag.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('TITLE', $page_title);
+
+    if (function_exists('nv_template_' . $viewtype)) {
+        $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $array_data, $pages));
+    }
+
+    if ($pro_config['show_displays'] == 1) {
+        foreach ($array_displays as $k => $array_displays_i) {
+            $se = '';
+            $xtpl->assign('value', $array_displays_i);
+            $xtpl->assign('key', $k);
+            $se = ($sort == $k) ? 'selected="selected"' : '';
+            $xtpl->assign('se', $se);
+            $xtpl->parse('main.displays.sorts');
+        }
+
+        $array_viewtype = array(
+            'viewgrid' => array(
+                'title' => $lang_module['view_page_gird'],
+                'icon' => 'th-large'
+            ),
+            'viewlist' => array(
+                'title' => $lang_module['view_page_list'],
+                'icon' => 'th-list'
+            )
+        );
+        foreach ($array_viewtype as $index => $value) {
+            $value['active'] = $index == $viewtype ? 'active' : '';
+            $value['index'] = $index;
+            $xtpl->assign('VIEWTYPE', $value);
+            $xtpl->parse('main.displays.viewtype');
+        }
+
+        $xtpl->parse('main.displays');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
