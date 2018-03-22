@@ -720,7 +720,8 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 // Default config
 $data = array();
 $data['image_size'] = '100x100';
-$data['home_view'] = 'view_home_all';
+$data['home_data'] = 'all'; // all, cat, group, none
+$data['home_view'] = 'viewgrid'; // viewgrid, viewlist
 $data['per_page'] = 20;
 $data['per_row'] = 3;
 $data['money_unit'] = 'VND';

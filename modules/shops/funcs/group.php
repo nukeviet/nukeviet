@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_MOD_SHOPS')) {
+if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
@@ -19,7 +19,7 @@ if (empty($groupid)) {
 
 $page_title = $lang_module['group_title'];
 if (preg_match('/^page\-([0-9]+)$/', (isset($array_op[2]) ? $array_op[2] : ''), $m)) {
-    $page = ( int )$m[1];
+    $page = (int) $m[1];
 }
 
 $page_title = $global_array_group[$groupid]['title'];
@@ -50,7 +50,7 @@ $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 $array_pro_id = array();
 $_sql = 'SELECT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id IN (' . implode(',', $chirld_groupid) . ')';
 $_query = $db->query($_sql);
-while (list($pro_id) = $_query->fetch(3)) {
+while (list ($pro_id) = $_query->fetch(3)) {
     $array_pro_id[] = $pro_id;
 }
 $array_pro_id = array_unique($array_pro_id);
@@ -62,7 +62,8 @@ $db->sqlreset()
     ->from($db_config['prefix'] . '_' . $module_data . '_rows')
     ->where('status=1 AND id IN ( ' . $array_pro_id . ' )');
 
-$num_items = $db->query($db->sql())->fetchColumn();
+$num_items = $db->query($db->sql())
+    ->fetchColumn();
 
 $db->select('id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgalt, homeimgfile, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
     ->order('id DESC')
@@ -86,7 +87,11 @@ if ($page > 1) {
     $description .= ' ' . $page;
 }
 
-$contents = call_user_func($global_array_group[$groupid]['viewgroup'], $data_content, $compare_id, $pages, $sorts, $viewtype);
+$contents = nv_template_viewcat($data_content, $compare_id, $pages, $sorts, $global_array_group[$groupid]['viewgroup']);
+
+$array_mod_title[] = array(
+    'title' => $page_title
+);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

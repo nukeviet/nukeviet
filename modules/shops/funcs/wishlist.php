@@ -8,13 +8,13 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_MOD_SHOPS')) {
+if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_module['wishlist_product'];
 
-if (! defined('NV_IS_USER')) {
+if (!defined('NV_IS_USER')) {
     $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
     Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($redirect));
     die();
@@ -26,7 +26,7 @@ if (empty($array_wishlist_id)) {
 }
 
 if (preg_match('/^page\-([0-9]+)$/', (isset($array_op[1]) ? $array_op[1] : ''), $m)) {
-    $page = ( int )$m[1];
+    $page = (int) $m[1];
 }
 
 $data_content = array();
@@ -36,9 +36,13 @@ $compare_id = $nv_Request->get_string($module_data . '_compare_id', 'session', '
 $compare_id = unserialize($compare_id);
 
 // Fetch Limit
-$db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_rows t1')->where('t1.inhome=1 AND t1.status =1 AND id IN (' . $array_wishlist_id . ')');
+$db->sqlreset()
+    ->select('COUNT(*)')
+    ->from($db_config['prefix'] . '_' . $module_data . '_rows t1')
+    ->where('t1.inhome=1 AND t1.status =1 AND id IN (' . $array_wishlist_id . ')');
 
-$num_items = $db->query($db->sql())->fetchColumn();
+$num_items = $db->query($db->sql())
+    ->fetchColumn();
 
 $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday')
     ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')
@@ -47,7 +51,7 @@ $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1
 
 $result = $db->query($db->sql());
 
-while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday) = $result->fetch(3)) {
+while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday) = $result->fetch(3)) {
     if ($homeimgthumb == 1) {
         //image thumb
 
@@ -95,7 +99,7 @@ if (empty($data_content) and $page > 1) {
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=wishlist';
 $html_pages = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
-$contents = call_user_func('wishlist', $data_content, $compare_id, $html_pages);
+$contents = nv_template_wishlist($data_content, $html_pages);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
