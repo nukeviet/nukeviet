@@ -13,17 +13,19 @@
     </div>
     <!-- BEGIN: displays -->
     <div class="form-group form-inline pull-right">
-        <label class="control-label">{LANG.displays_product}</label> <select name="sort" id="sort" class="form-control input-sm" onchange="nv_chang_price();">
-            <!-- BEGIN: sorts -->
-            <option value="{key}"{se}>{value}</option>
-            <!-- END: sorts -->
-        </select> <label class="control-label">{LANG.title_viewnum}</label> <select name="viewtype" id="viewtype" class="form-control input-sm" onchange="nv_chang_viewtype();">
-            <!-- BEGIN: viewtype -->
-            <option value="{VIEWTYPE.key}"{VIEWTYPE.selected}>{VIEWTYPE.value}</option>
-            <!-- END: viewtype -->
-        </select>
+        <label class="control-label"><select name="sort" id="sort" class="form-control input-sm" onchange="nv_chang_price();">
+                <!-- BEGIN: sorts -->
+                <option value="{key}"{se}>{value}</option>
+                <!-- END: sorts -->
+        </select>&nbsp;&nbsp;</label>
+        <!-- BEGIN: viewtype -->
+        <div class="viewtype">
+            <span class="pointer {VIEWTYPE.active}" onclick="nv_chang_viewtype('{VIEWTYPE.index}');" title="{VIEWTYPE.title}"><em class="fa fa-{VIEWTYPE.icon} fa-lg">&nbsp;</em></span>
+        </div>
+        <!-- END: viewtype -->
     </div>
+    <div class="clearfix"></div>
     <!-- END: displays -->
-    {CONTENT}
+    <div id="shops-content">{CONTENT}</div>
 </div>
 <!-- END: main -->

@@ -235,7 +235,6 @@ if (!empty($error)) {
 
 $array_select_content = array( );
 $array_select_content['content_detail'] = $lang_module['tabs_content_detail'];
-$array_select_content['content_otherimage'] = $lang_module['tabs_content_otherimage'];
 $array_select_content['content_download'] = $lang_module['tabs_content_download'];
 $array_select_content['content_comments'] = $lang_module['tabs_content_comments'];
 $array_select_content['content_rate'] = $lang_module['tabs_content_rate'];
