@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -130,8 +130,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . $global_config['rewrite_exturl'], true);
 
     if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and !$popup) {
-        Header('Location: ' . $base_url_rewrite);
-        die();
+        nv_redirect_location($base_url_rewrite);
     }
 
     // Lay don vi san pham

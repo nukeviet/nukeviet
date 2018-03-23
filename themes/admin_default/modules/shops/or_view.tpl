@@ -166,15 +166,15 @@
 			<td><a href="{DATA_TRANS.link_user}">{DATA_TRANS.payment}</a></td>
 			<td>{DATA_TRANS.payment_id}</td>
 			<td>{DATA_TRANS.transaction}</td>
-			<td align="right">{DATA_TRANS.payment_amount}</td>
-			<td align="right">{DATA_TRANS.transaction_time}</td>
+			<td class="text-right">{DATA_TRANS.payment_amount}</td>
+			<td class="text-right">{DATA_TRANS.transaction_time}</td>
 		</tr>
 		<!-- END: looptrans -->
 	</tbody>
 	<!-- BEGIN: checkpayment -->
 	<tfoot>
 		<tr>
-			<td colspan="8" align="right"><a href="{LINK_CHECK_PAYMENT}">{LANG.checkpayment}</a></td>
+			<td colspan="7" class="text-right"><a href="#" data-toggle="checkorder" data-id="{DATA.order_id}" class="btn btn-info"><i class="hidden fa fa-spin fa-spinner fa-fw"></i> {LANG.checkpayment}</a></td>
 		</tr>
 	</tfoot>
 	<!-- END: checkpayment -->

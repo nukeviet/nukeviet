@@ -2,7 +2,7 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
+* @Author VINADES.,JSC <contact@vinades.vn>
 * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -134,11 +134,7 @@ $lang_module['setting_facebookAppID'] = 'Facebook App ID';
 $lang_module['setting_facebookAppIDNote'] = '(There format 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
 $lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
 $lang_module['setting_socialbutton'] = 'Show tools Like facebook, G +, Twitter while watching posts';
-$lang_module['setup_payment'] = 'Integrate the on-line payment';
-$lang_module['setup_payment_guide'] = 'See the tutorial';
 $lang_module['setting_stt'] = 'Order';
-$lang_module['active_change_complete'] = 'Change succesfully';
-$lang_module['active_change_not_complete'] = 'Can not change';
 $lang_module['setting_error_connect'] = 'Unable to connect to Ngân Lượng';
 $lang_module['setting_title_email_send'] = 'Using module Shops - Nukeviet';
 $lang_module['setting_error_email_send'] = 'The system can not send e-mail ! Please turn on e-mail sending function';
@@ -317,14 +313,8 @@ $lang_module['money_add'] = 'Add currency';
 $lang_module['money_edit'] = 'Edit currency';
 $lang_module['money_compare'] = 'Compared to';
 $lang_module['checkpayment'] = 'Verify the transaction';
-$lang_module['paymentcaption'] = 'Integrated payment gates';
-$lang_module['paymentcaption_other'] = 'Other payment gates';
-$lang_module['payment_integrat'] = 'Integrate';
 $lang_module['payment'] = 'Payment gate';
-$lang_module['paymentname'] = 'Payment gate name';
 $lang_module['browse_image'] = 'Select image';
-$lang_module['images_button'] = 'Payment button at shopping cart';
-$lang_module['domain'] = 'Domain';
 $lang_module['active'] = 'Active';
 $lang_module['function'] = 'Function';
 $lang_module['payment_id'] = 'Transaction Reference';
@@ -332,7 +322,6 @@ $lang_module['user_payment'] = 'Paid by';
 $lang_module['transaction_time'] = 'Transaction time';
 $lang_module['payment_time'] = 'Record time';
 $lang_module['history_transaction'] = 'Order history';
-$lang_module['editpayment'] = 'Edit payment gate: %1$s';
 $lang_module['setting_intro_pay'] = 'On-line payment instructions';
 $lang_module['history_payment_wait'] = 'Waiting order approval';
 $lang_module['history_payment_no'] = 'Unpaid';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -527,6 +527,13 @@ function GetGroupID($pro_id, $group_by_parent = 0)
     return $data;
 }
 
+/**
+ * UpdatePoint()
+ *
+ * @param mixed $data_content
+ * @param bool $add
+ * @return void
+ */
 function UpdatePoint($data_content, $add = true)
 {
     global $db, $db_config, $module_data;
@@ -586,4 +593,18 @@ function nv_listmail_notify()
     $array_mail = array_unique($array_mail);
 
     return $array_mail;
+}
+
+/**
+ * isAllowedUpdateOrder()
+ *
+ * @param mixed $status
+ * @return
+ */
+function isAllowedUpdateOrder($status)
+{
+    if ($status > 0 and $status != 4) {
+        return true;
+    }
+    return false;
 }

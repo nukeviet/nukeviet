@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -19,7 +19,6 @@ if (defined('NV_EDITOR')) {
 $currencies_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/currencies.ini', true);
 $data = $module_config[$module_name];
 
-$active_payment_old = 0;
 if (!empty($data)) {
     $temp = explode("x", $data['image_size']);
     $data['homewidth'] = $temp[0];
@@ -119,20 +118,7 @@ if ($savesetting == 1) {
         $nv_Cache->delMod('settings');
         $nv_Cache->delMod($module_name);
 
-        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . '=setting');
-        die();
-    }
-}
-
-$array_setting_payment = array();
-
-if ($data['active_payment'] == '1') {
-    $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
-    $result = $db->query($sql);
-    $num_items = $result->rowCount();
-
-    while ($row = $result->fetch()) {
-        $array_setting_payment[$row['payment']] = $row;
+        nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . '=setting');
     }
 }
 
@@ -320,29 +306,6 @@ $xtpl->assign('per_page', $select);
 if (!empty($error)) {
     $xtpl->assign('error', $error);
     $xtpl->parse('main.error');
-}
-
-if (!empty($array_setting_payment)) {
-    $a = 0;
-    $all_page = sizeof($array_setting_payment);
-    $payment = $nv_Request->get_string('payment', 'get', 0);
-
-    foreach ($array_setting_payment as $value) {
-        $value['titleactive'] = (!empty($value['active'])) ? $lang_global['yes'] : $lang_global['no'];
-        $value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
-        $value['active'] = ($value['active'] == '1') ? 'checked="checked"' : '';
-        if (!empty($value['images_button']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $value['images_button'])) {
-            $value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $value['images_button'];
-        }
-        $value['slect_weight'] = drawselect_number($value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);");
-        $xtpl->assign('DATA_PM', $value);
-        $xtpl->parse('main.payment.paymentloop');
-        ++$a;
-    }
-    $xtpl->assign('url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
-    $xtpl->assign('url_change', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=changepay");
-    $xtpl->assign('url_active', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=actpay");
-    $xtpl->parse('main.payment');
 }
 
 $array_sortdefault = array(

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -26,8 +26,7 @@ if ($ajax) {
 }
 
 if (empty($catid)) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 $compare_id = $nv_Request->get_string($module_data . '_compare_id', 'session', '');
@@ -55,8 +54,7 @@ $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
 
 if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
     header('HTTP/1.1 301 Moved Permanently');
-    Header('Location: ' . $base_url_rewrite);
-    die();
+    nv_redirect_location($base_url_rewrite);
 }
 
 if (!empty($global_array_shops_cat[$catid]['title_custom'])) {
@@ -229,8 +227,7 @@ if (empty($contents)) {
         }
 
         if ($page > 1) {
-            Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-            exit();
+            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
         }
 
         $contents = call_user_func('view_home_cat', $data_content, $sorts);
@@ -278,8 +275,7 @@ if (empty($contents)) {
         }
 
         if (sizeof($data_content['data']) < 1 and $page > 1) {
-            Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-            exit();
+            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
         }
 
         $contents = nv_template_viewcat($data_content, $compare_id, $pages, $sorts, $global_array_shops_cat[$catid]['viewcat']);

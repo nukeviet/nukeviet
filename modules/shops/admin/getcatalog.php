@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -14,7 +14,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 
 $pid = $nv_Request->get_int('pid', 'get', 0);
 
-//print_r($global_array_group[$pid]);die('pass');
+//print_r($global_array_group[$pid]);nv_htmlOutput('pass');
 if ($pid >= 0) {
     $cateid = $nv_Request->get_string('cid', 'get', '');
     $cateid = nv_base64_decode($cateid);

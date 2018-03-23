@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -84,9 +84,6 @@ if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'template';
     $allow_func[] = 'detemplate';
     $allow_func[] = 'active_pay';
-    $allow_func[] = 'payport';
-    $allow_func[] = 'changepay';
-    $allow_func[] = 'actpay';
     $allow_func[] = 'docpay';
 }
 
@@ -128,7 +125,6 @@ $array_url_instruction['download'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:sh
 $array_url_instruction['group'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:group';
 $array_url_instruction['items'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:list';
 $array_url_instruction['money'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:money';
-$array_url_instruction['payport'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:payport';
 $array_url_instruction['point'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:point';
 $array_url_instruction['unit'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:unit';
 $array_url_instruction['review'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:review';

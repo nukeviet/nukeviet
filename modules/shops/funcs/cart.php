@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -59,20 +59,19 @@ if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
-	die( );
+	nv_htmlOutput( );
 }
 
 if( $nv_Request->isset_request( 'coupons_clear', 'post' ) )
 {
 	unset( $_SESSION[$module_data . '_coupons'] );
-	die( );
+	nv_htmlOutput( );
 }
 
 $base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart', true );
 if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 {
-	Header( 'Location: ' . $base_url_rewrite );
-	die( );
+	nv_redirect_location($base_url_rewrite );
 }
 
 // Sửa đơn hàng
@@ -84,8 +83,7 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 	if( $result->rowCount( ) == 0 )
 	{
 		unset( $_SESSION[$module_data . '_order_info'] );
-		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-		die( );
+		nv_redirect_location( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) ;
 	}
 
 	if( $_SESSION[$module_data . '_order_info']['checked'] )
@@ -259,15 +257,13 @@ if( !empty( $_SESSION[$module_data . '_cart'] ) )
 		}
 		if( empty( $array_error_product_number ) and $nv_Request->isset_request( 'cart_order', 'post' ) )
 		{
-			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order', true ) );
-			exit( );
+			nv_redirect_location( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order', true ) ;
 		}
 	}
 }
 else
 {
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	exit( );
+	nv_redirect_location( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) ;
 }
 
 $page_title = $lang_module['cart_title'];

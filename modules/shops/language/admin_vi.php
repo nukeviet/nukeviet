@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -142,11 +142,7 @@ $lang_module['setting_facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a h
 $lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
 $lang_module['setting_socialbutton'] = 'Hiển thị các công cụ Like facebook, G+, Twitter khi xem bài viết';
 $lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
-$lang_module['setup_payment'] = 'Tích hợp cổng thanh toán';
-$lang_module['setup_payment_guide'] = 'Xem hướng dẫn Tích hợp cổng thanh toán';
 $lang_module['setting_stt'] = 'STT';
-$lang_module['active_change_complete'] = 'Thay đổi thành công';
-$lang_module['active_change_not_complete'] = 'Thay đổi không thành công';
 $lang_module['setting_error_connect'] = 'Không kết nối được với ngân lượng';
 $lang_module['setting_title_email_send'] = 'sử dụng module shops nukeviet 3.0';
 $lang_module['setting_error_email_send'] = 'Hệ thống không gửi được email! Bạn hãy bật chức năng gửi email';
@@ -333,14 +329,10 @@ $lang_module['money_add'] = 'Thêm đơn vị tiền tệ';
 $lang_module['money_edit'] = 'Sửa đơn vị tiền tệ';
 $lang_module['money_compare'] = 'So với đồng';
 $lang_module['checkpayment'] = 'Kiểm tra lại giao dịch';
-$lang_module['paymentcaption'] = 'Các cổng thanh toán đã tích hợp';
-$lang_module['paymentcaption_other'] = 'Các cổng thanh toán khả dụng khác chưa tích hợp';
-$lang_module['payment_integrat'] = 'Tích hợp';
+$lang_module['update_order'] = 'Đơn hàng đã được cập nhật';
+$lang_module['no_update_order'] = 'Không có thay đổi mới';
 $lang_module['payment'] = 'Cổng thanh toán';
-$lang_module['paymentname'] = 'Tên cổng thanh toán';
 $lang_module['browse_image'] = 'Chọn hình ảnh';
-$lang_module['images_button'] = 'Ảnh nút thanh toán tại giỏ hàng';
-$lang_module['domain'] = 'Domain';
 $lang_module['active'] = 'Kích hoạt';
 $lang_module['function'] = 'Chức năng';
 $lang_module['payment_id'] = 'Mã giao dịch';
@@ -348,7 +340,6 @@ $lang_module['user_payment'] = 'Người thực hiện';
 $lang_module['transaction_time'] = 'Thời gian giao dịch';
 $lang_module['payment_time'] = 'Thời gian ghi nhận';
 $lang_module['history_transaction'] = 'Lịch sử giao dịch';
-$lang_module['editpayment'] = 'Sửa cổng thanh toán: %1$s';
 $lang_module['setting_intro_pay'] = 'Hướng dẫn thanh toán trực tuyến';
 $lang_module['history_payment_wait'] = 'Chờ duyệt đơn hàng';
 $lang_module['history_payment_no'] = 'Chưa thanh toán';

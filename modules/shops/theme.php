@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -22,7 +22,9 @@ if (!defined('NV_IS_MOD_SHOPS')) {
  */
 function redict_link($lang_view, $lang_back, $nv_redirect)
 {
-    $contents = "<div class=\"frame\">";
+    global $global_config;
+    $nv_redirect = nv_url_rewrite($nv_redirect, true);
+    $contents = "<div class=\"alert alert-info frame\">";
     $contents .= $lang_view . "<br /><br />\n";
     $contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
     $contents .= "<a href=\"" . $nv_redirect . "\">" . $lang_back . "</a>";
@@ -31,7 +33,6 @@ function redict_link($lang_view, $lang_back, $nv_redirect)
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit();
 }
 
 /**
@@ -867,11 +868,11 @@ function uers_order($data_content, $data_order, $total_coupons, $order_info, $er
  *
  * @param mixed $data_content
  * @param mixed $data_pro
- * @param mixed $url_checkout
+ * @param mixed $payment_supported
  * @param mixed $intro_pay
  * @return
  */
-function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro_pay, $point)
+function payment($data_content, $data_pro, $data_shipping, $payment_supported, $intro_pay, $point)
 {
     global $module_info, $lang_module, $module_data, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group, $client_info, $array_location, $array_shops;
 
@@ -973,22 +974,20 @@ function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro
     $xtpl->assign('order_coupons', nv_number_format($data_content['coupons']['amount'], nv_get_decimals($pro_config['money_unit'])));
     $xtpl->assign('order_total', nv_number_format($data_content['order_total'], nv_get_decimals($pro_config['money_unit'])));
     $xtpl->assign('unit', $money_config[$data_content['unit_total']]['symbol']);
-    if (!empty($url_checkout)) {
-        $xtpl->assign('note_pay', '');
-        foreach ($url_checkout as $value) {
-            $xtpl->assign('DATA_PAYMENT', $value);
-            $xtpl->parse('main.actpay.payment.paymentloop');
+
+    if ($data_content['transaction_status'] == 0 and $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0') {
+        if (!empty($payment_supported)) {
+            $xtpl->assign('PAYMENT_SUPPORTED', $payment_supported);
+            $xtpl->parse('main.actpay.payment_supported');
+        } else {
+            $xtpl->parse('main.actpay.payment_notsupported');
         }
 
         if ($pro_config['point_active']) {
-            $xtpl->parse('main.actpay.payment.payment_point1');
-            $xtpl->parse('main.actpay.payment.payment_point2');
+            $xtpl->parse('main.actpay.payment_point1');
+            $xtpl->parse('main.actpay.payment_point2');
         }
 
-        $xtpl->parse('main.actpay.payment');
-    }
-
-    if ($pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0') {
         $xtpl->parse('main.actpay');
     }
 
@@ -1124,10 +1123,9 @@ function print_pay($data_content, $data_pro)
  * history_order()
  *
  * @param mixed $data_content
- * @param mixed $link_check_order
  * @return
  */
-function history_order($data_content, $link_check_order)
+function history_order($data_content)
 {
     global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config;
 
@@ -1175,7 +1173,6 @@ function history_order($data_content, $link_check_order)
             $history_payment = 'ERROR';
         }
 
-        $xtpl->assign('LINK_CHECK_ORDER', $link_check_order);
         $xtpl->assign('history_payment', $history_payment);
         $bg = ($i % 2 == 0) ? 'class="bg"' : '';
         $xtpl->assign('bg', $bg);
@@ -1183,6 +1180,13 @@ function history_order($data_content, $link_check_order)
         if ($pro_config['active_price'] == '1') {
             $xtpl->parse('main.rows.price2');
         }
+
+        if (isAllowedUpdateOrder($data_row['transaction_status'])) {
+            $xtpl->assign('CHECK_ID', $data_row['order_id']);
+            $xtpl->assign('CHECK_SESS', $data_row['checkss']);
+            $xtpl->parse('main.rows.checkorder');
+        }
+
         $xtpl->parse('main.rows');
         ++$i;
     }
