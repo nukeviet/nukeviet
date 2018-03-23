@@ -308,36 +308,7 @@
         <input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting">
     </div>
 </form>
-<!-- BEGIN: payment -->
-<script type="text/javascript">
-    var url_back = '{url_back}';
-    var url_change_weight = '{url_change}';
-    var url_active = '{url_active}';
-</script>
-<table id="edit" class="table table-striped table-bordered table-hover">
-    <caption>{LANG.paymentcaption}</caption>
-    <thead>
-        <tr>
-            <td class="w100 text-center"><strong>{LANG.weight}</strong></td>
-            <td><strong>{LANG.paymentname}</strong></td>
-            <td><strong>{LANG.domain}</strong></td>
-            <td class="text-center"><strong>{LANG.active}</strong></td>
-            <td class="text-center"><strong>{LANG.function}</strong></td>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- BEGIN: paymentloop -->
-        <tr>
-            <td class="text-center">{DATA_PM.slect_weight}</td>
-            <td>{DATA_PM.paymentname}</td>
-            <td>{DATA_PM.domain}</td>
-            <td class="text-center"><input type="checkbox" name="{DATA_PM.payment}" id="{DATA_PM.payment}" {DATA_PM.active} onclick="ChangeActive(this,url_active)" /></td>
-            <td class="text-center"><span class="edit_icon"><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></span></td>
-        </tr>
-        <!-- END: paymentloop -->
-    </tbody>
-</table>
-<!-- END: payment -->
+
 <script type="text/javascript">
     $('#download_active').change(function() {
         $('#download_groups').toggle();

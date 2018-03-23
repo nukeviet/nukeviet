@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -90,5 +90,4 @@ if ($id > 0) {
     }
 }
 
-Header('Location: ' . $global_config['site_url']);
-exit();
+nv_redirect_location($global_config['site_url']);

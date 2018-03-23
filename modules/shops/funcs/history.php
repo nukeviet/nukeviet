@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -14,8 +14,8 @@ if (! defined('NV_IS_MOD_SHOPS')) {
 
 if (! defined('NV_IS_USER')) {
     $redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cart";
-    Header("Location: " . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_redirect_encrypt($redirect));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_redirect_encrypt($redirect));
+
 }
 
 $data_content = array();
@@ -28,6 +28,7 @@ $link_module = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG
 while (list($order_id, $order_code, $order_note, $user_id, $unit_total, $order_total, $order_time, $transaction_status, $transaction_id, $transaction_count) = $result->fetch(3)) {
     $checkss = md5($order_id . $global_config['sitekey'] . session_id());
     $data_content[] = array(
+        "checkss" => $checkss,
         "order_id" => $order_id,
         "order_code" => $order_code,
         "transaction_status" => $transaction_status,
@@ -43,8 +44,7 @@ while (list($order_id, $order_code, $order_note, $user_id, $unit_total, $order_t
     );
 }
 
-$link_check_order = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=checkorder&checkss=" . md5($user_info["userid"] . $global_config['sitekey'] . session_id());
-$contents = call_user_func("history_order", $data_content, $link_check_order);
+$contents = call_user_func("history_order", $data_content);
 
 $page_title = $lang_module['history_title'];
 

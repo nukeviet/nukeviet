@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -80,8 +80,7 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
             }
         }
         $nv_Cache->delMod($module_name);
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 }
 
@@ -141,8 +140,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $exc = $stmt->execute();
             if ($exc) {
                 $nv_Cache->delMod($module_name);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
@@ -151,8 +149,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 } elseif ($row['id'] > 0) {
     $row = $db->query('SELECT * FROM ' . $table_name . ' WHERE id=' . $row['id'])->fetch();
     if (empty($row)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
     $row['title'] = $row[NV_LANG_DATA . '_title'];
 } else {
@@ -235,7 +232,6 @@ if (!empty($error)) {
 
 $array_select_content = array( );
 $array_select_content['content_detail'] = $lang_module['tabs_content_detail'];
-$array_select_content['content_otherimage'] = $lang_module['tabs_content_otherimage'];
 $array_select_content['content_download'] = $lang_module['tabs_content_download'];
 $array_select_content['content_comments'] = $lang_module['tabs_content_comments'];
 $array_select_content['content_rate'] = $lang_module['tabs_content_rate'];

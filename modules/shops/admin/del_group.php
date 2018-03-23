@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -88,8 +88,7 @@ if ($groupid > 0) {
                     nv_fix_group_order();
                     $nv_Cache->delMod($module_name);
 
-                    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid);
-                    die();
+                    nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid);
                 } elseif (! empty($movegroup) and $groupidnews > 0 and $groupidnews != $groupid) {
                     $groupidnews = $db->query("SELECT groupid FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupidnews)->fetchColumn();
 
@@ -112,8 +111,7 @@ if ($groupid > 0) {
                         nv_fix_group_count($groupidnews);
                         $nv_Cache->delMod($module_name);
 
-                        Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid);
-                        die();
+                        nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid);
                     }
                 }
             } else {
@@ -143,6 +141,5 @@ if (defined('NV_IS_AJAX')) {
     echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group");
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group");
 }

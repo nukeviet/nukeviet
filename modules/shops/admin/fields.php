@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -13,8 +13,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 if (! defined('NV_IS_SPADMIN')) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 // Ket noi ngon ngu cua module users
@@ -30,8 +29,7 @@ $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template
 $_rows = $db->query($sql)->fetchAll();
 $num = sizeof($_rows);
 if ($num < 1) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=template');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=template');
 }
 
 $result = $db->query($sql);
@@ -72,7 +70,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     }
     $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
     $db->query($sql);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 // lay du lieu sql
@@ -382,8 +380,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $type_date = nv_get_data_type($dataform);
                     nv_create_form_file($templateids);
 
-                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-                    die();
+                    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
                 }
             }
         } elseif ($dataform['max_length'] <= 4294967296) {
@@ -411,8 +408,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 if ($save) {
                     nv_create_form_file($templateids);
                 }
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
             } catch (PDOException $e) {
                 die($e->getMessage());
             }
@@ -442,11 +438,11 @@ if ($nv_Request->isset_request('del', 'post')) {
 				$listtemplate
 			);
             nv_create_form_file($del_array);
-            die('OK');
+            nv_htmlOutput('OK');
         }
     }
 
-    die('NO');
+    nv_htmlOutput('NO');
 }
 
 $array_field_type = array(
@@ -659,8 +655,7 @@ if (empty($fid)) {
 } else {
     $f_count = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_field where fid = ' . $fid)->fetchColumn();
     if ($f_count < 1) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=fields');
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=fields');
     }
 
     $xtpl->assign('FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']]);

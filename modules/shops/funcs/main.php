@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -25,20 +25,6 @@ $compare_id = unserialize($compare_id);
 
 $contents = '';
 $cache_file = '';
-
-if ($nv_Request->isset_request('changesprice', 'post')) {
-    $sorts = $nv_Request->get_int('sort', 'post', 0);
-    $nv_Request->set_Session('sorts', $sorts, NV_LIVE_SESSION_TIME);
-    $nv_Cache->delMod($module_name);
-    die('OK');
-}
-
-if ($nv_Request->isset_request('changeviewtype', 'post')) {
-    $viewtype = $nv_Request->get_string('viewtype', 'post', '');
-    $nv_Request->set_Session('viewtype', $viewtype, NV_LIVE_SESSION_TIME);
-    $nv_Cache->delMod($module_name);
-    die('OK');
-}
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
@@ -119,8 +105,7 @@ if (empty($contents)) {
         }
 
         if (empty($data_content) and $page > 1) {
-            Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-            exit();
+            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
         }
 
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -203,8 +188,7 @@ if (empty($contents)) {
         }
 
         if ($page > 1) {
-            Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-            exit();
+            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
         }
     } elseif ($pro_config['home_data'] == 'group') {
         $num_links = $pro_config['per_row'] * 3;
@@ -293,8 +277,7 @@ if (empty($contents)) {
         }
 
         if ($page > 1) {
-            Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-            exit();
+            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
         }
     } else {
         include NV_ROOTDIR . '/includes/header.php';

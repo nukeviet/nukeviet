@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('del', 'post,get')) {
             }
         }
         $nv_Cache->delMod($module_name);
-        die('OK');
+        nv_htmlOutput('OK');
     } else {
         $id = $nv_Request->get_int('id', 'post,get', 0);
         if (empty($id)) {
@@ -34,10 +34,10 @@ if ($nv_Request->isset_request('del', 'post,get')) {
         $result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_review WHERE review_id=' . $id);
         if ($result) {
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         }
     }
-    die('NO');
+    nv_htmlOutput('NO');
 }
 
 if ($nv_Request->isset_request('change_status', 'get,post')) {
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('change_status', 'get,post')) {
         }
     }
     $nv_Cache->delMod($module_name);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 $per_page = 20;

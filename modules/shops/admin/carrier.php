@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -61,8 +61,7 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
                 $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_carrier SET weight=' . $weight . ' WHERE id=' . intval($id));
             }
         }
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 }
 
@@ -83,7 +82,7 @@ if ($nv_Request->isset_request('change_active', 'post')) {
 
     $nv_Cache->delMod($module_name);
 
-    die('OK_' . $pid);
+    nv_htmlOutput('OK_' . $pid);
 }
 
 $row = array();
@@ -121,8 +120,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $exc = $stmt->execute();
             if ($exc) {
                 $nv_Cache->delMod($module_name);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
@@ -131,8 +129,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 } elseif ($row['id'] > 0) {
     $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier WHERE id=' . $row['id'])->fetch();
     if (empty($row)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 } else {
     $row['id'] = 0;

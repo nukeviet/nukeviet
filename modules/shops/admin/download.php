@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('get_files', 'post,get')) {
             $option .= '<option value="' . $files['id'] . '">' . $files['title'] . '</option>';
         }
     }
-    die($option);
+    nv_htmlOutput($option);
 }
 
 if ($nv_Request->isset_request('del', 'post,get')) {
@@ -45,10 +45,10 @@ if ($nv_Request->isset_request('del', 'post,get')) {
         if ($result) {
             $result = $db->query('DELETE FROM ' . $table_name . '_rows WHERE id_files=' . $id);
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         }
     }
-    die('NO');
+    nv_htmlOutput('NO');
 }
 
 if ($nv_Request->isset_request('change_active', 'get,post')) {
@@ -66,7 +66,7 @@ if ($nv_Request->isset_request('change_active', 'get,post')) {
     $sql = 'UPDATE ' . $table_name . ' SET status=' . $new_status . ' WHERE id=' . $id;
     $db->query($sql);
     $nv_Cache->delMod($module_name);
-    die('OK');
+    nv_htmlOutput('OK');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -118,7 +118,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
         if ($stmt->execute()) {
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         } else {
             die('NO_' . $lang_module['errorsave']);
         }
@@ -143,7 +143,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $stmt->bindParam(':download_groups', $data['download_groups'], PDO::PARAM_STR);
         if ($stmt->execute()) {
             $nv_Cache->delMod($module_name);
-            die('OK');
+            nv_htmlOutput('OK');
         } else {
             die('NO_' . $lang_module['errorsave']);
         }

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -16,14 +16,12 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
 if (!$pro_config['point_active']) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 }
 
 if (!defined('NV_IS_USER')) {
     $redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=point';
-    Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($redirect));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($redirect));
 }
 
 $data_content = array();
@@ -73,7 +71,7 @@ if ($nv_Request->isset_request('paypoint', 'get')) {
                 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_point_history(userid, order_id, point, time) VALUES (" . $userid . ", " . $order_id . ", -" . $order_point . ", " . NV_CURRENTTIME . ")");
             }
             $nv_Cache->delMod($module_name);
-            die('OK_' . $lang_module['payment_complete']);
+            nv_htmlOutput('OK_' . $lang_module['payment_complete']);
         }
     }
 }

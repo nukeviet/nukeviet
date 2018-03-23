@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -13,8 +13,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 if (!$pro_config['active_warehouse']) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
 }
 
 $page_title = sprintf($lang_module['warehouse_day'], nv_date('d/m/Y', NV_CURRENTTIME));
@@ -24,8 +23,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     $array_warehouse = array( 'title' => $page_title, 'note' => '' );
     $listid = $nv_Request->get_string('listid', 'get', '');
     if (empty($listid)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
     } else {
         $listid = rtrim($listid, ',');
     }
@@ -90,8 +88,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
                 $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number + ' . $total_num . ' WHERE id=' . $pro_id);
             }
         }
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
     }
 
     // List pro_unit
@@ -239,8 +236,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
         }
     }
 } else {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
 }
 
 $xtpl->parse('main');

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -123,8 +123,7 @@ if (! empty($savegroup)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_group', 'id ' . $newgroupid, $admin_info['userid']);
             nv_fix_group_order();
             $nv_Cache->delMod($module_name);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
         } else {
             $error = $lang_module['errorsave'];
         }
@@ -167,8 +166,7 @@ if (! empty($savegroup)) {
 
                 $nv_Cache->delMod($module_name);
 
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
             }
         } catch (PDOException $e) {
             $error = $lang_module['errorsave'];

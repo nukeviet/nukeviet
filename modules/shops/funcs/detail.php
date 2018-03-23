@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -98,7 +98,6 @@ if ($global_array_shops_cat[$data_content['listcatid']]['form'] != '') {
                 $data_content['array_custom'][$row['field']] = $row['field_value'];
             }
 
-
             if (!empty($array_tmp)) {
                 foreach ($array_tmp as $f_key => $field) {
                     foreach ($field as $key_lang => $lang_data) {
@@ -115,6 +114,7 @@ if ($global_array_shops_cat[$data_content['listcatid']]['form'] != '') {
 
 $page_title = !empty($data_content[NV_LANG_DATA . '_tag_title']) ? $data_content[NV_LANG_DATA . '_tag_title'] : $data_content[NV_LANG_DATA . '_title'];
 $description = !empty($data_content[NV_LANG_DATA . '_tag_description']) ? $data_content[NV_LANG_DATA . '_tag_description'] : $data_content[NV_LANG_DATA . '_hometext'];
+$array_images = array();
 
 if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $popup = $nv_Request->get_int('popup', 'post,get', 0);
@@ -130,8 +130,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . $global_config['rewrite_exturl'], true);
 
     if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and !$popup) {
-        Header('Location: ' . $base_url_rewrite);
-        die();
+        nv_redirect_location($base_url_rewrite);
     }
 
     // Lay don vi san pham
@@ -184,6 +183,11 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
         // no image
         $data_content['homeimgthumb'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
     }
+
+    array_push($array_images, array(
+        'thumb' => $data_content['homeimgthumb'],
+        'file' => $data_content['homeimgfile']
+    ));
 
     // Tu khoa
     $array_keyword = array();
@@ -327,6 +331,31 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     } else {
         $content_comment = '';
     }
+
+    // hình ảnh sản phẩm
+    if (!empty($data_content['otherimage'])) {
+        $otherimage = explode('|', $data_content['otherimage']);
+        foreach ($otherimage as $image) {
+            $file = $thumb = '';
+            if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $image)) {
+                $thumb = NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_upload . '/' . $image;
+            }
+
+            if (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image)) {
+                $file = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
+            }
+
+            if (!empty($thumb) && !empty($file)) {
+                array_push($array_images, array(
+                    'thumb' => $thumb,
+                    'file' => $file
+                ));
+            }
+        }
+    }
+
+    $data_content['image'] = $array_images;
+    unset($array_images, $data_content['homeimgfile'], $data_content['otherimage']);
 
     $contents = nv_template_detail($data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $array_keyword);
 } else {

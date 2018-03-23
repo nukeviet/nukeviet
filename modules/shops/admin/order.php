@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
@@ -113,7 +113,7 @@ while ($row = $query->fetch()) {
     $row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['user_id'];
     $row['order_time'] = nv_date("H:i d/m/y", $row['order_time']);
     $row['order_total'] = nv_number_format($price);
-	$row['unit_total']=$money_config[$pro_config['money_unit']]['symbol'];
+	$row['unit_total'] = $money_config[$pro_config['money_unit']]['symbol'];
 
     $xtpl->assign('DATA', $row);
 
@@ -136,7 +136,6 @@ while ($row = $query->fetch()) {
     ++$count;
 }
 
-$xtpl->assign('URL_CHECK_PAYMENT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=checkpayment");
 $xtpl->assign('URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_del");
 $xtpl->assign('URL_DEL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
 $xtpl->assign('PAGES', nv_generate_page($base_url, $num_items, $per_page, $page));
