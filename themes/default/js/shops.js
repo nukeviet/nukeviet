@@ -35,7 +35,11 @@ function nv_del_content(id, checkss, base_adminurl) {
     return false;
 }
 
-// Nút thêm vào giỏ hàng
+/**
+ * Nút thêm vào giỏ hàng
+ * popup = 0 tức sản phẩm không phân theo nhóm
+ * popup = 1 tức sản phẩm phân theo nhóm, cần mở popup để chọn nhóm
+ */
 function cartorder(a_ob, popup, url) {
     var id = $(a_ob).attr("id");
     if (popup == '0') {

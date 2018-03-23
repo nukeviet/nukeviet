@@ -8,14 +8,14 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_MOD_SHOPS')) {
+if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 
-if (! isset($_SESSION[$module_data . '_cart'])) {
+if (!isset($_SESSION[$module_data . '_cart'])) {
     $_SESSION[$module_data . '_cart'] = array();
 }
 
@@ -25,7 +25,7 @@ $num = $nv_Request->get_int('num', 'post,get', 1);
 $ac = $nv_Request->get_string('ac', 'post,get', 0);
 $contents_msg = "";
 
-if (! is_numeric($num) || $num < 0) {
+if (!is_numeric($num) or $num < 0) {
     $contents_msg = 'ERR_' . $lang_module['cart_set_err'];
 } else {
     if ($ac == 0) {
@@ -37,8 +37,8 @@ if (! is_numeric($num) || $num < 0) {
                 $contents_msg = 'ERR_' . $lang_module['cart_set_err_num'];
             } else {
                 $update_cart = true;
-                if (! isset($_SESSION[$module_data . '_cart'][$id.'_'.$group])) {
-                    $_SESSION[$module_data . '_cart'][$id.'_'.$group] = array(
+                if (!isset($_SESSION[$module_data . '_cart'][$id . '_' . $group])) {
+                    $_SESSION[$module_data . '_cart'][$id . '_' . $group] = array(
                         'num' => $num,
                         'order' => 0,
                         'price' => $data_content['product_price'],
@@ -50,11 +50,11 @@ if (! is_numeric($num) || $num < 0) {
                         'weight_unit' => $data_content['weight_unit']
                     );
                 } else {
-                    if (($_SESSION[$module_data . '_cart'][$id.'_'.$group]['num'] + $num) > $data_content['product_number'] and empty($pro_config['active_order_number'])) {
+                    if (($_SESSION[$module_data . '_cart'][$id . '_' . $group]['num'] + $num) > $data_content['product_number'] and empty($pro_config['active_order_number'])) {
                         $contents_msg = 'ERR_' . $lang_module['cart_set_err_num'] . ': ' . $data_content['product_number'];
                         $update_cart = false;
                     } else {
-                        $_SESSION[$module_data . '_cart'][$id.'_'.$group]['num'] = $_SESSION[$module_data . '_cart'][$id.'_'.$group]['num'] + $num;
+                        $_SESSION[$module_data . '_cart'][$id . '_' . $group]['num'] = $_SESSION[$module_data . '_cart'][$id . '_' . $group]['num'] + $num;
                     }
                 }
                 if ($update_cart) {
@@ -72,8 +72,8 @@ if (! is_numeric($num) || $num < 0) {
             if ($num > $data_content['product_number'] and empty($pro_config['active_order_number'])) {
                 $contents_msg = 'ERR_' . $lang_module['cart_set_err_num'] . ': ' . $data_content['product_number'];
             } else {
-                if (isset($_SESSION[$module_data . '_cart'][$id.'_'.$group])) {
-                    $_SESSION[$module_data . '_cart'][$id.'_'.$group]['num'] = $num;
+                if (isset($_SESSION[$module_data . '_cart'][$id . '_' . $group])) {
+                    $_SESSION[$module_data . '_cart'][$id . '_' . $group]['num'] = $num;
                 }
                 $contents_msg = 'OK_' . $lang_module['cart_set_ok'] . $num;
             }
