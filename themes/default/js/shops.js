@@ -35,6 +35,7 @@ function nv_del_content(id, checkss, base_adminurl) {
     return false;
 }
 
+// Nút thêm vào giỏ hàng
 function cartorder(a_ob, popup, url) {
     var id = $(a_ob).attr("id");
     if (popup == '0') {
@@ -57,12 +58,20 @@ function cartorder(a_ob, popup, url) {
             }
         });
     } else {
-        $.post(url + '&popup=1', function(res) {
-            modalShow('', res);
+        $("#sitemodal").find(".modal-content").addClass('sh-popup-modal');
+        $("#sitemodal").find(".modal-title").html('');
+        $("#sitemodal").find(".modal-body").html('<iframe class="popup-product-detail" src="' + url + '&amp;popup=1"></iframe>');
+        $("#sitemodal").modal({
+            backdrop: "static"
+        });
+        $('#sitemodal').on('hidden.bs.modal', function() {
+            $("#sitemodal").find(".modal-content").removeClass('sh-popup-modal');
+            $('#sitemodal').unbind('hidden.bs.modal');
         });
     }
 }
 
+// Nút mua ngay
 function cartorder_detail(a_ob, popup, buy_now) {
     var num = $('#pnum').val();
     var id = $(a_ob).attr("data-id");
@@ -83,6 +92,7 @@ function cartorder_detail(a_ob, popup, buy_now) {
     if (label != '') {
         $('#group_error').css('display', 'block');
         $('#group_error').html(detail_error_group + ' <strong>' + label + '</strong>');
+        resize_popup();
         return false;
     }
 
@@ -320,7 +330,7 @@ function check_price(id_pro, pro_unit) {
             data.push(value);
         }
     });
-    
+
     if (data.length > 0) {
         $.ajax({
             method : "POST",
@@ -366,7 +376,6 @@ function fix_image_content() {
 }
 
 function FormatNumber(str) {
-    
     var strTemp = GetNumber(str);
     if (strTemp.length <= 3)
         return strTemp;
@@ -385,12 +394,12 @@ function FormatNumber(str) {
         var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."), strTemp.length);
         var tam = 0;
         for (var i = strphannguyen.length; i >= 0; i--) {
-            
+
             if (strResult.length > 0 && tam == 4) {
                 strResult = "," + strResult;
                 tam = 1;
             }
-            
+
             strResult = strphannguyen.substring(i, i + 1) + strResult;
             tam = tam + 1;
         }
@@ -430,6 +439,17 @@ function IsNumberInt(str) {
         }
     }
     return str;
+}
+
+function resize_popup() {
+    if ($('.prodetail-popup').length) {
+        var popheight = $('.prodetail-popup > .panel').height();
+        $('html,body').css({
+            overflow: 'hidden',
+            'background-color': 'transparent'
+        });
+        $('.popup-product-detail', window.parent.document).height(popheight);
+    }
 }
 
 $(window).on('load', function() {

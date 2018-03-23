@@ -353,6 +353,9 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
             if (!empty($data_content['homeimgfile'])) {
                 $xtpl->parse('main.imagemodal');
             }
+        } else {
+            $xtpl->parse('main.popup');
+            $xtpl->parse('main.popupid');
         }
 
         if (!empty($pro_config['show_product_code']) and !empty($data_content['product_code'])) {
