@@ -400,7 +400,7 @@ class NvUpdate
                     $langkey = str_replace('_', ' ', $key);
                 }
                 if ($key == 'php_support') {
-                    $langkey .= ' >= ' . $sys_info['php_required'];
+                    $langkey .= ' &gt;= ' . preg_replace('/\.([0-9]+)$/', '', $sys_info['php_required_min']) . ', &lt;= ' . preg_replace('/\.([0-9]+)$/', '', $sys_info['php_allowed_max']);
                 }
                 $result[$key] = array($langkey, $this->lang['not_compatible']);
             }

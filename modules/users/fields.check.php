@@ -208,10 +208,15 @@ foreach ($array_field_config as $row_f) {
     }
     
     if (empty($row_f['system'])) {
-        if (!empty($userid)) {
-            $query_field[] = $row_f['field'] . '=' . $db->quote($value);
+        if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
+            $value = floatval($value);
         } else {
-            $query_field[$row_f['field']] = $db->quote($value);
+            $value = $db->quote($value);
+        }
+        if (!empty($userid)) {
+            $query_field[] = $row_f['field'] . '=' . $value;
+        } else {
+            $query_field[$row_f['field']] = $value;
         }
     } elseif (defined('NV_ADMIN')) {
         $_user[$row_f['field']] = $value;

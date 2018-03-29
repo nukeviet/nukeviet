@@ -117,7 +117,7 @@
 			<div class="col-md-12">
 				<!-- BEGIN: keywords -->
 				<div class="keywords">
-					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
+					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.tags}: </strong>
 					<!-- BEGIN: loop -->
 					<a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}
 					<!-- END: loop -->

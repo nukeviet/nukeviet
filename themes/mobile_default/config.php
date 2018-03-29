@@ -8,12 +8,14 @@
  * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $config_theme = array();
 $propety = array();
+
+$selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $css = "";
@@ -189,6 +191,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $config_value = array_filter($config_theme);
     !empty($css) and $config_value['css_content'] = $css;
+
     $config_value = serialize($config_value);
 
     if (isset($module_config['themes'][$selectthemes])) {
@@ -201,24 +204,26 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR, strlen($config_value));
     $sth->execute();
 
-    if (defined('NV_CONFIG_DIR') and $global_config['idsite'] > 0) {
-        if (isset($global_config['sitetimestamp'])) {
-            $sitetimestamp = intval($global_config['sitetimestamp']) + 1;
-            $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $sitetimestamp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'sitetimestamp'");
-        } else {
+    if (isset($global_config['sitetimestamp'])) {
+        $sitetimestamp = intval($global_config['sitetimestamp']) + 1;
+        $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $sitetimestamp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'sitetimestamp'");
+    } else {
+        try {
             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'sitetimestamp', '1')");
+        } catch (PDOException $e) {
+            trigger_error($e->getMessage());
         }
     }
 
     $nv_Cache->delMod('settings');
 
-    if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $selectthemes . '.' . NV_LANG_DATA . '.' . $global_config['idsite'] . '.css')) {
-        nv_deletefile(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $selectthemes . '.' . NV_LANG_DATA . '.' . $global_config['idsite'] . '.css');
+    if (file_exists(NV_ROOTDIR . "/" . NV_ASSETS_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css")) {
+        nv_deletefile(NV_ROOTDIR . "/" . NV_ASSETS_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css");
     }
 
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectthemes=' . $selectthemes . '&rand=' . nv_genpass());
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectthemes=' . $selectthemes . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
 } else {
-    $default_config_theme = '';
+    $default_config_theme = "";
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config_default.php';
     if (isset($module_config['themes'][$selectthemes])) {
         $config_theme = unserialize($module_config['themes'][$selectthemes]);
@@ -240,6 +245,11 @@ $xtpl->assign('OP', $op);
 $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
 $xtpl->assign('SELECTTHEMES', $selectthemes);
 $xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload);
+$xtpl->assign('SELECTEDTAB', $selectedtab);
+
+for ($i = 0; $i <= 6; ++$i) {
+    $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
+}
 
 // List style border
 $boder_style = array(
@@ -252,23 +262,25 @@ $boder_style = array(
     'ridge' => 'Ridge',
     'inset' => 'Inset',
     'outset' => 'Outset',
-    'hidden' => 'Hidden' );
+    'hidden' => 'Hidden'
+);
 
 if (isset($module_config['themes'][$selectthemes])) {
     foreach ($boder_style as $key => $value) {
         $xtpl->assign('BLOCK_BORDER_STYLE', array(
             'key' => $key,
             'value' => $value,
-            'selected' => (isset($config_theme['block']['border_style']) and $config_theme['block']['border_style'] == $key) ? ' selected="selected"' : '' ));
+            'selected' => (isset($config_theme['block']['border_style']) and $config_theme['block']['border_style'] == $key) ? ' selected="selected"' : '')
+        );
         $xtpl->parse('main.block_border_style');
     }
 
-    $config_theme['body']['font_weight'] = ! empty($config_theme['body']['font_weight']) ? ' checked="checked"' : '';
-    $config_theme['body']['font_style'] = ! empty($config_theme['body']['font_style']) ? ' checked="checked"' : '';
-    $config_theme['a_link']['font_weight'] = ! empty($config_theme['a_link']['font_weight']) ? ' checked="checked"' : '';
-    $config_theme['a_link']['font_style'] = ! empty($config_theme['a_link']['font_style']) ? ' checked="checked"' : '';
-    $config_theme['a_link_hover']['font_weight'] = ! empty($config_theme['a_link_hover']['font_weight']) ? ' checked="checked"' : '';
-    $config_theme['a_link_hover']['font_style'] = ! empty($config_theme['a_link_hover']['font_style']) ? ' checked="checked"' : '';
+    $config_theme['body']['font_weight'] = !empty($config_theme['body']['font_weight']) ? ' checked="checked"' : '';
+    $config_theme['body']['font_style'] = !empty($config_theme['body']['font_style']) ? ' checked="checked"' : '';
+    $config_theme['a_link']['font_weight'] = !empty($config_theme['a_link']['font_weight']) ? ' checked="checked"' : '';
+    $config_theme['a_link']['font_style'] = !empty($config_theme['a_link']['font_style']) ? ' checked="checked"' : '';
+    $config_theme['a_link_hover']['font_weight'] = !empty($config_theme['a_link_hover']['font_weight']) ? ' checked="checked"' : '';
+    $config_theme['a_link_hover']['font_style'] = !empty($config_theme['a_link_hover']['font_style']) ? ' checked="checked"' : '';
 
     $xtpl->assign('CONFIG_THEME_BODY', $config_theme['body']);
     $xtpl->assign('CONFIG_THEME_A_LINK', $config_theme['a_link']);

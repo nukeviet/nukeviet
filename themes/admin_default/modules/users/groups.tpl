@@ -22,12 +22,20 @@
                         <td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
                     </tr>
                     <tr>
-                        <td>{LANG.group_description} <span style="color:red">*</span>:</td>
+                        <td>{LANG.group_description}:</td>
                         <td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="255" /></td>
                     </tr>
                     <tr>
                         <td>{LANG.exp_time}:</td>
-                        <td><input type="text" name="exp_time" class="form-control w150 datepicker pull-left" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
+                        <td>
+                            <div class="input-group w250 pull-left">
+                                <input type="text" name="exp_time" class="form-control" value="{DATA.exp_time}" maxlength="10" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" data-toggle="opendatepicker"><i class="fa fa-calendar"></i></button>
+                                </div>
+                            </div>
+                            <label class="control-label-inline">{LANG.emptyIsUnlimited}</label>
+                        </td>
                     </tr>
                     <tr>
                         <td>{LANG.group_type}:</td>
@@ -137,14 +145,15 @@
 <script type="text/javascript">
     //<![CDATA[
     $(document).ready(function() {
-        $(".datepicker").datepicker({
+        $('[name="exp_time"]').datepicker({
             showOn : "both",
             dateFormat : "dd/mm/yy",
             changeMonth : true,
             changeYear : true,
             showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true
+            buttonImage : null,
+            buttonImageOnly : true,
+            buttonText: null
         });
         $('[name="group_color"]').colpick({
             layout:'hex',

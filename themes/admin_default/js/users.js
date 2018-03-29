@@ -703,12 +703,17 @@ $(document).ready(function() {
 
     // Group
      $("[name='browse-image']").click(function(e) {
-        e.preventDefault()
+        e.preventDefault();
         var area = $(this).data('area'),
             path = $(this).data('path'),
             currentpath = $(this).data('currentpath'),
             type = "image"
 
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+    });
+    $('[data-toggle="opendatepicker"]').click(function(e) {
+        e.preventDefault();
+        var wrp = $(this).parent().parent();
+        wrp.find('[type="text"]').focus();
     });
 });

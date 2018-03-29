@@ -12,7 +12,7 @@ if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
-global $site_mods, $db_config, $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
+global $site_mods, $db_config, $client_info, $global_config, $module_file, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
 
 $content = '';
 
@@ -24,19 +24,42 @@ if ($global_config['allowuserlogin']) {
     } else {
         $block_theme = 'default';
     }
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/users.css')) {
+        $block_css = $global_config['module_theme'];
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/users.css')) {
+        $block_css = $global_config['site_theme'];
+    } else {
+        $block_css = '';
+    }
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/users.js')) {
+        $block_js = $global_config['module_theme'];
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/users.js')) {
+        $block_js = $global_config['site_theme'];
+    } else {
+        $block_js = 'default';
+    }
 
     $xtpl = new XTemplate('block.user_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 
-    if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php')) {
-        include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+    if ($site_mods[$block_config['module']]['module_file'] != $module_file) {
+        if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php')) {
+            include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
+        } else {
+            include NV_ROOTDIR . '/modules/users/language/vi.php';
+        }
+        if (!empty($block_css)) {
+            $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
+        }
     } else {
-        include NV_ROOTDIR . '/modules/users/language/vi.php';
+        global $lang_module;
     }
 
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('BLOCKID', $blockID);
     $xtpl->assign('BLOCK_THEME', $block_theme);
+    $xtpl->assign('BLOCK_CSS', $block_css);
+    $xtpl->assign('BLOCK_JS', $block_js);
 
     if (defined('NV_IS_USER')) {
         if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
