@@ -627,6 +627,13 @@ if ($is_submit_form) {
         }
     }
 
+    if(!empty($error)){
+        //Nếu có lỗi thì chuyển sang trạng thái đăng nháp, cho đến khi nào đủ thông tin mới cho xuất bản
+        $rowcontent['status'] = 4;
+        $error_data = $error;
+        $error = array();
+    }
+
     // Thao tác xử lý bài viết tức thời
     if (!empty($module_config[$module_name]['instant_articles_active'])) {
         $rowcontent['instant_active'] = (int) $nv_Request->get_bool('instant_active', 'post');
@@ -1066,22 +1073,29 @@ if ($is_submit_form) {
                     }
                 }
             }
-
-            if (isset($module_config['seotools']['prcservice']) and !empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
-                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
-            } else {
-
-                $referer = $crypt->decrypt($rowcontent['referer']);
-                if (!empty($referer)) {
-                    nv_redirect_location($referer);
+            if(!empty($error_data)){
+                $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'];
+                $msg1 = implode('<br />', $error_data);
+                $msg2 = $lang_module['content_back'];
+                redriect($msg1, $msg2, $url, $module_data . '_detail');
+            }else {
+                if (isset($module_config['seotools']['prcservice']) and !empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
+                    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 } else {
-                    $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-                    $msg1 = $lang_module['content_saveok'];
-                    $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
-                    redriect($msg1, $msg2, $url, $module_data . '_detail');
-                }
 
+                    $referer = $crypt->decrypt($rowcontent['referer']);
+                    if (!empty($referer)) {
+                        nv_redirect_location($referer);
+                    } else {
+                        $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+                        $msg1 = $lang_module['content_saveok'];
+                        $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
+                        redriect($msg1, $msg2, $url, $module_data . '_detail');
+                    }
+
+                }
             }
+
         }
     } else {
         $url = 'javascript: history.go(-1)';
