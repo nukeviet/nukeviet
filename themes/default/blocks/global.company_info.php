@@ -268,6 +268,7 @@ if (! nv_function_exists('nv_company_info')) {
             }
             $xtpl->parse('main.company_website');
         }
+        $xtpl->assign('SITE_LOGO', NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
         $xtpl->parse('main');
         return $xtpl->text('main');
     }

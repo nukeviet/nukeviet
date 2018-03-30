@@ -44,9 +44,10 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['php_required'] = '5.5.0';
+$sys_info['php_required_min'] = '5.6.0';
+$sys_info['php_allowed_max'] = '7.2.99';
 $sys_info['php_version'] = PHP_VERSION;
-$sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required']) < 0) ? 0 : 1;
+$sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required_min']) >= 0 and version_compare($sys_info['php_version'], $sys_info['php_allowed_max']) <= 0) ? 1 : 0;
 $sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['gd_support'] = (extension_loaded('gd')) ? 1 : 0;
 $sys_info['xml_support'] = (extension_loaded('xml')) ? 1 : 0;

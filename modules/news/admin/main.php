@@ -218,7 +218,7 @@ $where = '';
 $page = $nv_Request->get_int('page', 'get', 1);
 $checkss = $nv_Request->get_string('checkss', 'get', '');
 
-if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESSION) {
+if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SESSION) {
     // Ket noi den csdl elastic
     $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
 
@@ -491,10 +491,10 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
 
         $admin_funcs = array();
         if ($check_permission_edit) {
-            $admin_funcs[] = nv_link_edit_page($id);
+            $admin_funcs['edit'] = nv_link_edit_page($id);
         }
         if ($check_permission_delete) {
-            $admin_funcs[] = nv_link_delete_page($id);
+            $admin_funcs['delete'] = nv_link_delete_page($id);
             $_permission_action['delete'] = true;
         }
         $data[$id] = array(
@@ -509,11 +509,11 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
             'hitscm' => number_format($hitscm, 0, ',', '.'),
             'numtags' => 0,
-            'feature' => implode(' ', $admin_funcs)
+            'feature' => $admin_funcs
         );
 
-        $array_ids[] = $id;
-        $array_userid[] = $_userid;
+        $array_ids[$id] = $id;
+        $array_userid[$_userid] = $_userid;
     }
 } else {
     if ($checkss == NV_CHECK_SESSION) {
@@ -673,10 +673,10 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
 
         $admin_funcs = array();
         if ($check_permission_edit) {
-            $admin_funcs[] = nv_link_edit_page($id);
+            $admin_funcs['edit'] = nv_link_edit_page($id);
         }
         if ($check_permission_delete) {
-            $admin_funcs[] = nv_link_delete_page($id);
+            $admin_funcs['delete'] = nv_link_delete_page($id);
             $_permission_action['delete'] = true;
         }
 
@@ -694,11 +694,11 @@ if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESS
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
             'hitscm' => number_format($hitscm, 0, ',', '.'),
             'numtags' => 0,
-            'feature' => implode(' ', $admin_funcs)
+            'feature' => $admin_funcs
         );
 
-        $array_ids[] = $id;
-        $array_userid[] = $_userid;
+        $array_ids[$id] = $id;
+        $array_userid[$_userid] = $_userid;
     }
 }
 
@@ -740,8 +740,10 @@ foreach ($array_search as $key => $val) {
 $order2 = ($order == 'asc') ? 'desc' : 'asc';
 $ord_sql = ' r.' . $ordername . ' ' . $order;
 
-// Lay so tags
+$array_editdata = array();
+
 if (!empty($array_ids)) {
+    // Lấy số tags
     $db_slave->sqlreset()
         ->select('COUNT(*) AS numtags, id')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_tags_id')
@@ -751,19 +753,51 @@ if (!empty($array_ids)) {
     while (list ($numtags, $id) = $result->fetch(3)) {
         $data[$id]['numtags'] = $numtags;
     }
+
+    // Xác định người sửa bài viết
+    $db_slave->sqlreset()
+        ->select('*')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_tmp')
+        ->where('id IN( ' . implode(',', $array_ids) . ' )');
+    $result = $db_slave->query($db_slave->sql());
+    while ($_row = $result->fetch()) {
+        $array_editdata[$_row['id']] = $_row;
+        $array_userid[$_row['admin_id']] = $_row['admin_id'];
+    }
 }
 
 if (!empty($array_userid)) {
-    $array_userid = array_unique($array_userid);
     $db_slave->sqlreset()
-        ->select('userid, username')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where('userid IN( ' . implode(',', $array_userid) . ' )');
+        ->select('tb1.userid, tb1.username, tb2.lev admin_lev')
+        ->from(NV_USERS_GLOBALTABLE . ' tb1')
+        ->join('LEFT JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.userid=tb2.admin_id')
+        ->where('tb1.userid IN( ' . implode(',', $array_userid) . ' )');
     $array_userid = array();
     $result = $db_slave->query($db_slave->sql());
-    while (list ($_userid, $_username) = $result->fetch(3)) {
-        $array_userid[$_userid] = $_username;
+    while (list ($_userid, $_username, $admin_lev) = $result->fetch(3)) {
+        $array_userid[$_userid] = array(
+            'username' => $_username,
+            'admin_lev' => $admin_lev
+        );
     }
+}
+
+// Cập nhật lại trạng thái sửa bài nếu timeout hoặc không có người sửa bài
+$array_removeid = array();
+foreach ($array_editdata as $_id => $_row) {
+    if (!isset($array_userid[$_row['admin_id']]) or $_row['time_late'] < (NV_CURRENTTIME - $global_code_defined['edit_timeout'])) {
+        $array_removeid[$_id] = $_id;
+    }
+    if ($_row['admin_id'] == $admin_info['userid'] or !isset($array_userid[$_row['admin_id']]) or $array_userid[$_row['admin_id']]['admin_lev'] > $admin_info['level']) {
+        $array_editdata[$_id]['allowtakeover'] = true;
+    } else {
+        $array_editdata[$_id]['allowtakeover'] = false;
+    }
+}
+
+if (!empty($array_removeid)) {
+    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id IN(' . implode(',', $array_removeid) . ')');
+    nv_redirect_location($client_info['selfurl']);
 }
 
 $base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
@@ -816,6 +850,12 @@ foreach ($search_status as $status_view) {
 $url_copy = '';
 foreach ($data as $row) {
     $is_excdata = 0;
+    $is_editing_row = (isset($array_editdata[$row['id']]) and $array_editdata[$row['id']]['admin_id'] != $admin_info['userid']) ? true : false;
+    $is_locked_row = (isset($array_editdata[$row['id']]) and !$array_editdata[$row['id']]['allowtakeover']) ? true : false;
+    if ($is_locked_row) {
+        unset($row['feature']['edit'], $row['feature']['delete']);
+    }
+    $row['feature'] = implode(' ', $row['feature']);
     if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status_id'] == 1) {
         $count = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db_slave->quote($module_name))
             ->fetchColumn();
@@ -828,7 +868,7 @@ foreach ($data as $row) {
     if ($row['status_id'] == 4 and empty($row['title'])) {
         $row['title'] = $lang_module['no_name'];
     }
-    $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']] : '';
+    $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']]['username'] : '';
     $xtpl->assign('ROW', $row);
 
     if ($is_excdata) {
@@ -844,8 +884,17 @@ foreach ($data as $row) {
         $xtpl->parse('main.loop.text');
     }
 
-    if ($order_articles) {
+    if ($order_articles and !$is_locked_row) {
         $xtpl->parse('main.loop.sort');
+    }
+
+    if ($is_editing_row) {
+        $xtpl->assign('USER_EDITING', $array_userid[$array_editdata[$row['id']]['admin_id']]['username']);
+        $xtpl->assign('LEV_EDITING', $is_locked_row ? 'lock' : 'unlock-alt');
+        $xtpl->parse('main.loop.is_editing');
+    }
+    if (!$is_locked_row) {
+        $xtpl->parse('main.loop.checkrow');
     }
 
     $xtpl->parse('main.loop');

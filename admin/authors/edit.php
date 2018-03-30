@@ -346,15 +346,17 @@ if (defined('NV_IS_SPADMIN')) {
 
 $array_module = array();
 if ($admin_id != $admin_info['userid']) {
-    $admin_mods = array();
+    $edit_admin_mods = array();
     $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
     while ($_row = $result->fetch()) {
         $_row['custom_title'] = isset($lang_global[$_row['lang_key']]) ? $lang_global[$_row['lang_key']] : $_row['module'];
-        $admin_mods[$_row['module']] = $_row;
+        $edit_admin_mods[$_row['module']] = $_row;
     }
+} else {
+    $edit_admin_mods = $admin_mods;
 }
 
-foreach ($admin_mods as $mod) {
+foreach ($edit_admin_mods as $mod) {
     $array_module[$mod['module']] = array(
         'module' => $mod['module'],
         'title' => $mod['custom_title']

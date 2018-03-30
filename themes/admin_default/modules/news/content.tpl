@@ -123,22 +123,44 @@
 							</div>
 						</li>
 						<!-- END:block_cat -->
+                        <li>
+                            <p class="message_head">
+                                <cite>{LANG.content_keyword}:</cite>
+                            </p>
+                            <div class="message_body" style="overflow: auto">
+                                <div class="clearfix uiTokenizer uiInlineTokenizer">
+                                    <div id="keywords" class="tokenarea">
+                                        <!-- BEGIN: keywords -->
+                                        <span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();"> {KEYWORDS} <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+                                        <!-- END: keywords -->
+                                    </div>
+                                    <div class="uiTypeahead">
+                                        <div class="wrap">
+                                            <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+                                            <div class="innerWrap">
+                                                <input id="keywords-search" type="text" placeholder="{LANG.input_keyword}" class="form-control textInput" style="width: 100%;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>                        
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_tag}:</cite>
 							</p>
 							<div class="message_body" style="overflow: auto">
 								<div class="clearfix uiTokenizer uiInlineTokenizer">
-									<div id="keywords" class="tokenarea">
-										<!-- BEGIN: keywords -->
-										<span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();"> {KEYWORDS} <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
-										<!-- END: keywords -->
+									<div id="tags" class="tokenarea">
+										<!-- BEGIN: tags -->
+										<span class="uiToken removable" title="{TAGS}" ondblclick="$(this).remove();"> {TAGS} <input type="hidden" autocomplete="off" name="tags[]" value="{TAGS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+										<!-- END: tags -->
 									</div>
 									<div class="uiTypeahead">
 										<div class="wrap">
 											<input type="hidden" class="hiddenInput" autocomplete="off" value="" />
 											<div class="innerWrap">
-												<input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
+												<input id="tags-search" type="text" placeholder="{LANG.input_tag}" class="form-control textInput" style="width: 100%;" />
 											</div>
 										</div>
 									</div>
@@ -350,20 +372,24 @@
 </form>
 <div id="message"></div>
 <script type="text/javascript">
-	var nv_num_files = '{NUMFILE}';
 //<![CDATA[
-	var LANG = [];
-	var CFG = [];
-	CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
-	CFG.upload_current = "{UPLOAD_CURRENT}";
-	LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
-	LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
-	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-	<!-- BEGIN: getalias -->
-	$("#idtitle").change(function() {
-		get_alias();
-	});
-	<!-- END: getalias -->
+var nv_num_files = '{NUMFILE}';
+var LANG = [];
+var CFG = [];
+CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
+CFG.upload_current = "{UPLOAD_CURRENT}";
+CFG.id = {rowcontent.id};
+LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
+LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
+var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+<!-- BEGIN: getalias -->
+$("#idtitle").change(function() {
+	get_alias();
+});
+<!-- END: getalias -->
+<!-- BEGIN: holdon_edit -->
+CFG.is_edit_news = true;
+<!-- END: holdon_edit -->
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
@@ -373,3 +399,12 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
 <!-- END:main -->
+
+<!-- BEGIN: editing -->
+<div class="text-center">
+    <h2>{MESSAGE}</h2>
+    <!-- BEGIN: takeover -->
+    <a href="{TAKEOVER_LINK}" class="btn btn-danger">{LANG.dulicate_takeover}</a>
+    <!-- END: takeover -->
+</div>
+<!-- END: editing -->
