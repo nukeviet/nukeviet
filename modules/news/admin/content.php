@@ -617,14 +617,12 @@ if ($is_submit_form) {
         $rowcontent['tags'] = implode(',', $tags_return);
     }
 
-    if ($rowcontent['status'] != 4) {
-        if (empty($rowcontent['title'])) {
-            $error[] = $lang_module['error_title'];
-        } elseif (empty($rowcontent['listcatid'])) {
-            $error[] = $lang_module['error_cat'];
-        } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml']) and !preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/isU", $rowcontent['bodyhtml'])) {
-            $error[] = $lang_module['error_bodytext'];
-        }
+    if (empty($rowcontent['title'])) {
+        $error[] = $lang_module['error_title'];
+    } elseif (empty($rowcontent['listcatid'])) {
+        $error[] = $lang_module['error_cat'];
+    } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml']) and !preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/isU", $rowcontent['bodyhtml'])) {
+        $error[] = $lang_module['error_bodytext'];
     }
 
     if(!empty($error)){
@@ -866,6 +864,11 @@ if ($is_submit_form) {
             }
             if ($rowcontent_old['status'] == 1) {
                 $rowcontent['status'] = 1;
+            }
+
+            if(!empty($error_data)){
+                //Nếu khi sửa bài viết mà có lỗi nhập liệu lại chuyển về trạng thái đăng nháp
+                $rowcontent['status'] = 4;
             }
 
             if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
