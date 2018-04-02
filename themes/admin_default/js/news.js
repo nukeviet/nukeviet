@@ -691,3 +691,30 @@ function getPopoverContent(e) {
     }
     return '<div class="dropdown-cattool-ctn"><ul class="dropdown-cattool" data-mod="' + $(e).data('mod') + '" data-catid="' + $(e).data('catid') + '">' + tmpcat.html() + '</ul></div>';
 }
+
+
+function nv_validCheck(a) {	    
+    b = $(a).val();
+    if ("" == b) return 0;
+    return 1;
+}
+function nv_validReset(a)
+{
+    $(".has-error",a).removeClass("has-error");
+    $("[data-mess]",a).tooltip("destroy");
+    $(a)[0].reset();
+}
+
+function nv_validErrorShow(a) {
+    $(a).parent().parent().addClass("has-error");
+    $("[data-mess]",$(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
+    $(a).tooltip({
+        title: function() {
+            return $(a).attr("data-current-mess")
+        }
+    });
+    $(a).focus().tooltip("show")
+}
+function nv_validErrorHidden(a) {
+    $(a).parent().parent().removeClass("has-error")
+}
