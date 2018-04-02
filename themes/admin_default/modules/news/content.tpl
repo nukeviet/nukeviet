@@ -11,7 +11,7 @@
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
-<form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" onsubmit="return nv_validForm(this);">
+<form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" onsubmit="return nv_validForm(this, '{ERROR_BODYTEXT}','{ERROR_CAT}');">
 	<div class="row">    
         <div class="alert alert-danger" id="show_error" style="display: none">
             
@@ -23,7 +23,7 @@
 				<tbody>
 					<tr>
 						<td><strong>{LANG.name}</strong>: <sup class="required">(∗)</sup></td>
-						<td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control require" data-mess="{LANG.error_title}" style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+						<td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control require" data-mess="{LANG.error_title}" onkeypress="nv_validErrorHidden(this);" style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.alias}: </strong></td>
@@ -393,39 +393,6 @@ $("#idtitle").change(function() {
 <!-- BEGIN: holdon_edit -->
 CFG.is_edit_news = true;
 <!-- END: holdon_edit -->
-function nv_validForm(a) {	
-	$(".has-error", a).removeClass("has-error");	
-	var c = 0;
-	var x = $(a).find("[name='title']");
-	var y = $(a).find("[name='bodyhtml']");	
-	var value = CKEDITOR.instances['news_bodyhtml'].getData();
-	
-	if (!nv_validCheck(x)) {
-		return !1, $(".tooltip-current", a).removeClass("tooltip-current"), $(x).addClass("tooltip-current").attr("data-current-mess", $(x).attr("data-mess")), nv_validErrorShow(x), !1;
-	}else{
-		var value = CKEDITOR.instances['news_bodyhtml'].getData();
-		if(value == ""){
-			$(a).find("#show_error").css('display', 'block');
-			$("#show_error", a).html("{LANG.error_bodytext}");
-			$('html,body').animate({
-		        scrollTop: $("#show_error").offset().top},
-		        'slow');
-			return !1;
-		}else{
-			var z = $(a).find(".news_checkbox:checked").val();
-			if(typeof z== "undefined" || z <= 0){
-				$(a).find("#show_error").css('display', 'block');
-				$("#show_error", a).html("{LANG.error_cat}");	
-				$('html,body').animate({
-			        scrollTop: $("#show_error").offset().top},
-			        'slow');
-				return !1;
-			}		
-		}
-	}
-	return !0;
-};
-
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>

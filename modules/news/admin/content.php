@@ -1191,6 +1191,9 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
+$xtpl->assign('ERROR_BODYTEXT', str_replace('\'', '\\\'', $lang_module['error_bodytext']));
+$xtpl->assign('ERROR_CAT', str_replace('\'', '\\\'', $lang_module['error_cat']));
+
 if ($rowcontent['id'] > 0) {
     $op = '';
     $lang_module['save_temp'] = $lang_module['save'];
