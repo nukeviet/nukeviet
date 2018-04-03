@@ -355,3 +355,52 @@ $(document).ready(function() {
         }, 10000);
     }
 });
+function nv_validCheck(a) {	    
+    b = $(a).val();
+    if ("" == b) return 0;
+    return 1;
+}
+function nv_validErrorShow(a) {
+    $(a).parent().parent().addClass("has-error");
+    $("[data-mess]",$(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
+    $(a).tooltip({
+        title: function() {
+            return $(a).attr("data-current-mess")
+        }
+    });
+    $(a).focus().tooltip("show")
+}
+function nv_validErrorHidden(a) {
+    $(a).parent().parent().removeClass("has-error")
+}
+function nv_validForm(a, module_data, error_bodytext, error_cat) {	
+	$(".has-error", a).removeClass("has-error");	
+	var c = 0;
+	var x = $(a).find("[name='title']");
+	var y = $(a).find("[name='bodyhtml']");		
+	
+	if (!nv_validCheck(x)) {
+		return !1, $(".tooltip-current", a).removeClass("tooltip-current"), $(x).addClass("tooltip-current").attr("data-current-mess", $(x).attr("data-mess")), nv_validErrorShow(x), !1;
+	}else{
+		var value = CKEDITOR.instances[module_data + '_bodyhtml'].getData();
+		if(value == ""){
+			$(a).find("#show_error").css('display', 'block');
+			$("#show_error", a).html(error_bodytext);
+			$('html,body').animate({
+		        scrollTop: $("#show_error").offset().top},
+		        'slow');
+			return !1;
+		}else{
+			var z = $(a).find(".news_checkbox:checked").val();
+			if(typeof z== "undefined" || z <= 0){
+				$(a).find("#show_error").css('display', 'block');
+				$("#show_error", a).html(error_cat);	
+				$('html,body').animate({
+			        scrollTop: $("#show_error").offset().top},
+			        'slow');
+				return !1;
+			}		
+		}
+	}
+	return !0;
+};
