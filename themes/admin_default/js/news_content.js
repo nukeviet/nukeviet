@@ -373,17 +373,16 @@ function nv_validErrorShow(a) {
 function nv_validErrorHidden(a) {
     $(a).parent().parent().removeClass("has-error")
 }
-function nv_validForm(a, error_bodytext, error_cat) {	
+function nv_validForm(a, module_name, error_bodytext, error_cat) {	
 	$(".has-error", a).removeClass("has-error");	
 	var c = 0;
 	var x = $(a).find("[name='title']");
-	var y = $(a).find("[name='bodyhtml']");	
-	var value = CKEDITOR.instances['news_bodyhtml'].getData();
+	var y = $(a).find("[name='bodyhtml']");		
 	
 	if (!nv_validCheck(x)) {
 		return !1, $(".tooltip-current", a).removeClass("tooltip-current"), $(x).addClass("tooltip-current").attr("data-current-mess", $(x).attr("data-mess")), nv_validErrorShow(x), !1;
 	}else{
-		var value = CKEDITOR.instances['news_bodyhtml'].getData();
+		var value = CKEDITOR.instances[module_name + '_bodyhtml'].getData();
 		if(value == ""){
 			$(a).find("#show_error").css('display', 'block');
 			$("#show_error", a).html(error_bodytext);

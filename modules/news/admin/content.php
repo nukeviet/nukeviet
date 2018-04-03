@@ -1349,7 +1349,7 @@ if (!empty($module_config[$module_name]['htmlhometext']) and $has_editor) {
 if ($has_editor) {
     $edits = nv_aleditor('bodyhtml', '100%', '400px', $rowcontent['bodyhtml'], '', $uploads_dir_user, $currentpath);
 } else {
-    $edits = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"bodyhtml\" id=\"' . $module_data . 'bodyhtml\" rows=\"15\">" . $rowcontent['bodyhtml'] . "</textarea>";
+    $edits = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"bodyhtml\" id=\"' . $module_data . '_bodyhtml\" rows=\"15\">" . $rowcontent['bodyhtml'] . "</textarea>";
 }
 
 $shtm = '';
