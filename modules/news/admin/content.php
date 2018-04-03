@@ -1189,6 +1189,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
+$xtpl->assign('MODULE_DATA', $module_data);
 $xtpl->assign('OP', $op);
 
 $xtpl->assign('ERROR_BODYTEXT', str_replace('\'', '\\\'', $lang_module['error_bodytext']));
