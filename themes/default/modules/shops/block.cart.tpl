@@ -3,13 +3,13 @@
 	<!-- BEGIN: enable -->
 	<p>
 		<strong>{LANG.cart_title} :</strong>
-		<span>{num}</span>
+		<span>{NUM}</span>
 		{LANG.cart_product_title}
 	</p>
 	<!-- BEGIN: price -->
 	<p>
 		<strong>{LANG.cart_product_total} : </strong>
-		<span class="money">{total}</span> {money_unit}
+		<span class="money">{TOTAL}</span> {MONEY_UNIT}
 	</p>
 	<!-- END: price -->
 	<p class="clearfix">

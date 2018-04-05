@@ -2008,3 +2008,61 @@ function nv_template_tag($array_data, $pages = '', $sort = 0, $viewtype = 'viewg
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
+/**
+ * nv_template_loadcart()
+ *
+ * @param mixed $array_data
+ * @return
+ */
+function nv_template_loadcart($array_data, $array_products = array())
+{
+    global $lang_tmp, $module_name, $module_file, $pro_config, $module_info;
+
+    $xtpl = new XTemplate("block.cart.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
+    $xtpl->assign('LANG', $lang_tmp);
+    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('LINK_VIEW', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart");
+    $xtpl->assign('WISHLIST', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=wishlist");
+    $xtpl->assign('TOTAL', $array_data['total']);
+
+    if (!empty($array_products)) {
+        foreach ($array_products as $product) {
+            $product['price'] = nv_get_price($product['id'], $pro_config['money_unit']);
+            $xtpl->assign('PRODUCT', $product);
+            $xtpl->parse('main.product.loop');
+        }
+        $xtpl->parse('main.product');
+    }
+
+    if (defined('NV_IS_USER')) {
+        $xtpl->assign('LINK_HIS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=history");
+
+        if ($pro_config['active_wishlist']) {
+            $xtpl->assign('NUM_ID', $array_data['wishlist']);
+            $xtpl->parse('main.wishlist');
+        }
+
+        // Diem tich luy
+        if ($pro_config['point_active']) {
+            $xtpl->assign('POINT', $array_data['point']);
+            $xtpl->parse('main.point');
+        }
+    }
+
+    $xtpl->assign('MONEY_UNIT', $pro_config['money_unit']);
+    $xtpl->assign('NUM', $array_data['num']);
+
+    if ($pro_config['active_price'] == '1') {
+        $xtpl->parse('main.enable.price');
+    }
+
+    if ($pro_config['active_order'] == '1') {
+        $xtpl->parse('main.enable');
+    } else {
+        $xtpl->parse('main.disable');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}

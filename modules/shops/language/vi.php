@@ -358,6 +358,9 @@ $lang_module['view_page_list'] = 'Theo danh sách';
 $lang_module['view_page_gird'] = 'Theo dạng lưới';
 $lang_module['newday'] = "Mới";
 $lang_module['payport'] = "Cổng thanh toán";
+$lang_module['cart_empty_title'] = "Giỏ hàng không có sản phẩm";
+$lang_module['cart_empty_content'] = "Bạn chưa mua sản phẩm nào, bạn có thể tiếp tục mua hàng bằng cách click vào liên kết bên dưới";
+$lang_module['cart_continue'] = "Tiếp tục mua hàng";
 
 $lang_module['filter'] = "Lọc sản phẩm";
 $lang_module['filter_price_from'] = "Lớn hơn %s";
