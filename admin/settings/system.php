@@ -34,6 +34,8 @@ foreach ($global_config['allow_sitelangs'] as $lang_i) {
 $timezone_array = array_keys($nv_parse_ini_timezone);
 
 $errormess = '';
+$array_config_define = array();
+
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config_site = array();
 
@@ -169,6 +171,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $sth->execute();
         }
 
+        // Cấu hình ghi ra hằng
+        $array_config_define['nv_debug'] = (int)$nv_Request->get_bool('nv_debug', 'post');
+
+        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+        foreach ($array_config_define as $config_name => $config_value) {
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
+
         nv_save_file_config_global();
 
         $array_config_rewrite = array(
@@ -188,6 +200,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($errormess)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
+} else {
+    $array_config_define['nv_debug'] = NV_DEBUG;
 }
 
 $page_title = $lang_module['global_config'];
@@ -265,6 +279,9 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->assign('TIMEZONELANGVALUE', $site_timezone_i);
         $xtpl->parse('main.system.opsite_timezone');
     }
+
+    $array_config_define['nv_debug'] = empty($array_config_define['nv_debug']) ? '' : ' checked="checked"';
+    $xtpl->assign('CFG_DEFINE', $array_config_define);
 
     $xtpl->parse('main.system');
 }

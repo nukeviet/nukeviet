@@ -22,6 +22,9 @@ if (!defined('E_DEPRECATED')) {
 if (!defined('E_USER_DEPRECATED')) {
     define('E_USER_DEPRECATED', 16384); //khong sua
 }
+if (!defined('NV_DEBUG')) {
+    define('NV_DEBUG', 0);
+}
 
 class Error
 {
@@ -515,6 +518,11 @@ class Error
             if ($finded_track) {
                 $this->info_die();
             } else {
+                if (NV_DEBUG) {
+                    echo('Error on file ' . $this->errfile . ' line ' . $this->errline . ':<br /><pre><code>');
+                    echo($error['message']);
+                    die('</code></pre>');
+                }
                 die(chr(0));
             }
         }
@@ -551,8 +559,9 @@ class Error
     {
         $track_errors = $this->day . '_' . md5($this->errno . (string )$this->errfile . (string )$this->errline . $this->ip);
         $track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
+        $log_is_displayed = file_exists($track_errors);
 
-        if ($this->error_set_logs and !file_exists($track_errors)) {
+        if ($this->error_set_logs and !$log_is_displayed) {
             file_put_contents($track_errors, '', FILE_APPEND);
 
             if (!empty($this->log_errors_list) and isset($this->log_errors_list[$this->errno])) {
@@ -563,9 +572,9 @@ class Error
                 $this->_send();
             }
 
-            if (!empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
-                $this->_display();
-            }
+        }
+        if ((NV_DEBUG or (!$log_is_displayed and $this->error_set_logs)) and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
+            $this->_display();
         }
     }
 
