@@ -63,7 +63,7 @@ function timeoutsessrun() {
 			url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
 			data: "nv_ajax_login=1"
 		}).done(function(a) {
-			window.location.href = location.reload()
+			location.reload();
 		}));
 	}, 1E3)
 }
