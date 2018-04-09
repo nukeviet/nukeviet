@@ -112,6 +112,7 @@ $(document).ready(function() {
         }
     });
     
+    // ctrl + enter post comment    
     var data = $('#formcomment form').data();
     if (data.editor) {
         CKEDITOR.instances['commentcontent'].on('key', function(event) {
