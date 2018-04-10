@@ -517,12 +517,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 }
 
                 $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
-                if (empty($post['description'])) {
-                    die($lang_module['group_description_empty']);
-                }
-
                 $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
-
                 $post['exp_time'] = $nv_Request->get_title('exp_time', 'post', '');
 
                 if (preg_match('/^([\d]{1,2})\/([\d]{1,2})\/([\d]{4})$/', $post['exp_time'], $matches)) {

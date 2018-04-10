@@ -235,26 +235,26 @@ function nv_get_viewImage($fileName, $refresh = 0)
             }
         }
         $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-        if ($thumb_config['thumb_type'] == 4 || $thumb_config['thumb_type'] == 5) {
-            $thumb_width = $thumb_config['thumb_width'];
-            $thumb_height = $thumb_config['thumb_height'];
-            $maxwh = max($thumb_width, $thumb_height);
-            if ($image->fileinfo['width'] > $image->fileinfo['height']) {
-                $thumb_config['thumb_width'] = 0;
-                $thumb_config['thumb_height'] = $maxwh;
+        $resize_maxW = $thumb_config['thumb_width'];
+        $resize_maxH = $thumb_config['thumb_height'];
+        if ($thumb_config['thumb_type'] == 4 or $thumb_config['thumb_type'] == 5) {
+            if (($image->fileinfo['width'] / $image->fileinfo['height']) > ($thumb_config['thumb_width'] / $thumb_config['thumb_height'])) {
+                $resize_maxW = 0;
             } else {
-                $thumb_config['thumb_width'] = $maxwh;
-                $thumb_config['thumb_height'] = 0;
+                $resize_maxH = 0;
             }
         }
 
-        if ($image->fileinfo['width'] > $thumb_config['thumb_width'] or $image->fileinfo['height'] > $thumb_config['thumb_height']) {
-            $image->resizeXY($thumb_config['thumb_width'], $thumb_config['thumb_height']);
+        if ($image->fileinfo['width'] > $resize_maxW or $image->fileinfo['height'] > $resize_maxH) {
+            /**
+             * Resize và crop theo kích thước luôn có một trong hai giá trị width hoặc height = 0
+             * Có nghĩa luôn cho ra ảnh đúng cấu hình mặc cho ảnh gốc có nhỏ hơn ảnh thumb
+             */
+            $image->resizeXY($resize_maxW, $resize_maxH);
             if ($thumb_config['thumb_type'] == 4) {
-                $image->cropFromCenter($thumb_width, $thumb_height);
-            }
-            else if($thumb_config['thumb_type'] == 5) {
-            	$image->cropFromTop($thumb_width, $thumb_height);
+                $image->cropFromCenter($thumb_config['thumb_width'], $thumb_config['thumb_height']);
+            } elseif ($thumb_config['thumb_type'] == 5) {
+            	$image->cropFromTop($thumb_config['thumb_width'], $thumb_config['thumb_height']);
             }
             $image->save(NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality']);
             $create_Image_info = $image->create_Image_info;
@@ -268,6 +268,10 @@ function nv_get_viewImage($fileName, $refresh = 0)
                 );
             }
         } elseif (copy(NV_ROOTDIR . '/' . $fileName, NV_ROOTDIR . '/' . $viewDir . '/' . $m[3] . $m[4])) {
+            /**
+             * Đối với kiểu resize ảnh khác nếu ảnh gốc nhỏ hơn ảnh resize
+             * thì ảnh resize chính là ảnh gốc
+             */
             $return = array(
                 $viewDir . '/' . $m[3] . $m[4],
                 $image->fileinfo['width'],

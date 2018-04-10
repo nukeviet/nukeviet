@@ -36,12 +36,21 @@
 						<option value="{PLUGIN_FILE}" {PLUGIN_SELECTED}>{PLUGIN_FILE} </option>
 						<!-- END: file -->
 					</select> &nbsp;
-					<select name="plugin_area" class="form-control w200">
+                    <!-- BEGIN: info -->
+                    <br><br><div class="panel panel-info">
+                        <div class="panel-heading">{NAME}</div>
+                        <div class="panel-body">
+                            {DESCRIPTION}
+                        </div>
+                    </div>
+                    <!-- END: info -->                     
+					{LANG.plugin_area}: <select name="plugin_area" class="form-control w200">
 						<option value=""> -- </option>
 						<!-- BEGIN: area -->
 						<option value="{AREA_VALUE}">{AREA_TEXT} </option>
 						<!-- END: area -->
-					</select> &nbsp; <input class="btn btn-primary" type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/> &nbsp; <input class="btn btn-danger" type="submit" name="delete" onclick="return confirm(nv_is_del_confirm[0]);" value="{LANG.plugin_file_delete}" style="width: 150px;"/></td>
+					</select> &nbsp; 
+                    <input class="btn btn-primary" type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/> &nbsp; <input class="btn btn-danger" type="submit" name="delete" onclick="return confirm(nv_is_del_confirm[0]);" value="{LANG.plugin_file_delete}" style="width: 150px;"/></td>
 				</tr>
 				<!-- END: add -->
 			</tbody>

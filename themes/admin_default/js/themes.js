@@ -119,6 +119,68 @@ $(document).ready(function() {
             });
         }
     });
+    $('[data-toggle="viewthemedetail"]').click(function(e) {
+        e.preventDefault();
+        var target = $(this).data('target');
+        modalShow($(target).attr('title'), $(target).html(), function(e) {
+            var btn = $(e).find('.preview-link-btn');
+            if (btn.is(':visible')) {
+                var btnid = 'btnpreviewtheme-' + (new Date().getTime());
+                btn.attr('id', btnid);
+                var clipboard = new Clipboard('#' + btnid);
+                clipboard.on('success', function(e) {
+                    $(e.trigger).tooltip('show');
+                });
+            }
+            btn.mouseleave(function() {
+                $(this).tooltip('destroy');
+            });
+        });
+    });
+    $(document).delegate('.selectedfocus', 'focus', function(e) {
+        $(this).select();
+    });
+    $(document).delegate('[data-toggle="previewtheme"]', 'click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $ctn = $this.parent().parent().parent();
+        if ($this.find('i').is(':visible')) {
+            return false;
+        }
+        $this.find('i').removeClass('hidden');
+        $.ajax({
+            type: "POST",
+            url: MODULE_URL + "=main",
+            data: "togglepreviewtheme=1&theme=" + $this.data('value'),
+            dataType: 'JSON',
+            success: function(data) {
+                if (data.status == 'SUCCESS') {
+                    $this.find('span').html(data.spantext);
+                    if (data.mode == 'enable') {
+                        $('.preview-label', $ctn).show();
+                        $('.preview-link', $ctn).removeClass('hidden');
+                        $('.preview-link', $ctn).find('[type="text"]').val(data.link);
+                        var btn = $('.preview-link', $ctn).find('.btn');
+                        btn.attr('data-clipboard-text', data.link);
+                        var btnid = 'btnpreviewtheme-' + (new Date().getTime());
+                        btn.attr('id', btnid);
+                        var clipboard = new Clipboard('#' + btnid);
+                        clipboard.on('success', function(e) {
+                            $(e.trigger).tooltip('show');
+                        });
+                    } else {
+                        $('.preview-label', $ctn).hide();
+                        $('.preview-link', $ctn).addClass('hidden');
+                    }
+                }
+                $this.find('i').addClass('hidden');
+            }
+        });
+        $('#sitemodal').on('hidden.bs.modal', function (e) {
+            window.location.href = window.location.href.replace(/#(.*)/, "");
+        });
+
+    });
 
     // Manager block
     $("a.block_content").click(function() {

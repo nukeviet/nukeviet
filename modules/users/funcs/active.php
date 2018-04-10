@@ -23,7 +23,7 @@ if (empty($userid) or empty($checknum)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$register_active_time = isset($global_users_config[register_active_time]) ? $global_users_config[register_active_time] : 86400;
+$register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
 if ($register_active_time > 0) {
     $del = NV_CURRENTTIME - $register_active_time;
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE regdate < ' . $del;
@@ -92,7 +92,12 @@ if ($checknum == $row['checknum']) {
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
                 if ($row_f['system'] == 1) continue;
-                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
+                if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
+                    $default_value = floatval($row_f['default_value']);
+                } else {
+                    $default_value = $db->quote($row_f['default_value']);
+                }
+                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {

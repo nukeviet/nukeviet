@@ -169,7 +169,7 @@ function nv_site_theme($contents, $full = true)
 
             $html_links[] = array(
                 'rel' => 'StyleSheet',
-                'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css?t=' . $global_config['timestamp']
+                'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css'
             );
         }
 

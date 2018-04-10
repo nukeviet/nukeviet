@@ -1375,7 +1375,7 @@ a.btn {
     border-style: solid;
     border-color: #a6c8e6;
     padding:10px;
-    z-index:1000;
+    z-index:9998;
     display:none;
 }
 
