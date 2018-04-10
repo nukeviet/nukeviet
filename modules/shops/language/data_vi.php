@@ -206,6 +206,7 @@ if ($num_table == 1) {
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_group_items (pro_id, group_id) VALUES('11', '24');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_group_items (pro_id, group_id) VALUES('11', '35');");
 
+    // Các lần nhập kho
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse (wid, title, note, user_id, addtime) VALUES('1', 'Nhập kho ngày 23/05/2015', '', '1', '1432364016');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse (wid, title, note, user_id, addtime) VALUES('2', 'Nhập kho ngày 23/05/2015', '', '1', '1432365552');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse (wid, title, note, user_id, addtime) VALUES('3', 'Nhập kho ngày 23/05/2015', '', '1', '1432366753');");
@@ -218,6 +219,7 @@ if ($num_table == 1) {
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse (wid, title, note, user_id, addtime) VALUES('10', 'Nhập kho ngày 26/05/2015', '', '1', '1432608819');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse (wid, title, note, user_id, addtime) VALUES('11', 'Nhập kho ngày 26/05/2015', '', '1', '1432608835');");
 
+    // Chi tiết nhập kho
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('1', '1', '1', '20', '150000', 'VND');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('2', '2', '2', '50', '250000', 'VND');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('3', '3', '3', '15', '70000', 'VND');");
@@ -225,8 +227,18 @@ if ($num_table == 1) {
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('5', '5', '5', '30', '120000', 'VND');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('6', '6', '6', '15', '180000', 'VND');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('7', '7', '7', '50', '50000', 'VND');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('8', '8', '11', '20', '80', 'VND');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('9', '9', '10', '10', '180', 'VND');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('10', '10', '9', '10', '150', 'VND');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('8', '8', '11', '20', '80000', 'VND');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('9', '9', '10', '10', '90000', 'VND');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('10', '10', '9', '10', '95000', 'VND');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('11', '11', '8', '15', '50000', 'VND');");
+
+    // Chi tiết nhập kho theo loại sản phẩm
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs_group (id, logid, listgroup, quantity, price, money_unit) VALUES(8, 8, '7,24,35', 20, 80000, 'VND');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs_group (id, logid, listgroup, quantity, price, money_unit) VALUES(9, 9, '7,16,33,51', 10, 90000, 'VND');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs_group (id, logid, listgroup, quantity, price, money_unit) VALUES(10, 10, '7,24,35,53', 10, 95000, 'VND');");
+
+    // Sản phẩm theo từng loại
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_group_quantity (pro_id, listgroup, quantity) VALUES(11, '7,24,35', 20);");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_group_quantity (pro_id, listgroup, quantity) VALUES(10, '7,16,33,51', 10);");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_group_quantity (pro_id, listgroup, quantity) VALUES(9, '7,24,35,53', 10);");
 }
