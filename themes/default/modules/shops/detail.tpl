@@ -42,7 +42,7 @@
                 <div class="col-xs-24 col-sm-14 col-md-14">
                     <ul class="product_info">
                         <li>
-                            <h2>{TITLE}</h2>
+                            <h1>{TITLE}</h1>
                         </li>
                         <li class="text-muted">{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}</li>
                         <!-- BEGIN: product_code -->
