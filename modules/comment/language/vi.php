@@ -19,8 +19,8 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['comment'] = 'Ý kiến bạn đọc';
-$lang_module['comment_login'] = 'Bạn cần đăng nhập thành viên để có thể bình luận bài viết này';
-$lang_module['comment_register_groups'] = 'Bạn cần trở thành thành viên của nhóm <strong>%1$s</strong> để có thể bình luận bài viết này. Nhấn vào <a href="%2$s" title="Đăng ký nhóm">đây</a> để đăng ký làm thành viên nhóm!';
+$lang_module['comment_login'] = 'Bạn cần đăng nhập với tư cách là <strong>%s</strong> để có thể bình luận';
+$lang_module['comment_register_groups'] = 'Bạn cần trở thành thành viên của nhóm <strong>%1$s</strong> để có thể bình luận. Nhấn vào <a href="%2$s" title="Đăng ký nhóm">đây</a> để đăng ký làm thành viên nhóm!';
 $lang_module['comment_success'] = 'Bình luận thành công';
 $lang_module['comment_success_queue'] = 'Gửi thành công. Bình luận của bạn sẽ hiển thị sau khi được kiểm duyệt';
 $lang_module['comment_unsuccess'] = 'Lỗi trong quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ';
@@ -46,3 +46,4 @@ $lang_module['delete'] = 'Xóa';
 $lang_module['like_unsuccess'] = 'Bạn đã đánh giá bình luận này trước đó';
 $lang_module['attach'] = 'Đính kèm file';
 $lang_module['attachdownload'] = 'Tải đính kèm';
+$lang_module['user'] = 'Thành viên';
