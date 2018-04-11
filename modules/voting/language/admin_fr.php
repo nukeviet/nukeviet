@@ -57,3 +57,4 @@ $lang_module['voting_delete_unsuccess'] = 'Erreur dans le processus de supprimer
 $lang_module['warning'] = 'Remarque: Nombre d\'options doivent être moins ou égale au nombre de réponses données';
 $lang_module['voting_error_content'] = 'Remarques: vous devez saisir le contenu de sondage et les réponses';
 $lang_module['voting_active_captcha'] = 'Activation code de confirmation';
+$lang_module['voting_result'] = 'Résultats du vote';

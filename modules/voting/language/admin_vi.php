@@ -57,3 +57,4 @@ $lang_module['voting_delete_unsuccess'] = 'Có lỗi trong quá trình xóa dữ
 $lang_module['warning'] = 'Lưu ý: số cho phép chọn phải nhỏ hơn hoặc bằng số lựa chọn';
 $lang_module['voting_error_content'] = 'Lưu ý: bạn cần nhập Nội dung thăm dò và các câu trả lời';
 $lang_module['voting_active_captcha'] = 'Kích hoạt mã xác nhận';
+$lang_module['voting_result'] = 'Kết quả';
