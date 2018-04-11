@@ -322,7 +322,9 @@ if ($checkss == $array_register['checkss']) {
     }
 
     if (!defined('ACCESS_ADDUS') and ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info) VALUES (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
+            username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info
+        ) VALUES (
             :username,
             :md5username,
             :password,
@@ -389,27 +391,29 @@ if ($checkss == $array_register['checkss']) {
             ));
         }
     } else {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "
-        (group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig, regdate,
-        question, answer, passlostkey, view_mail, remember, in_groups,
-        active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-        " . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
-        :username,
-        :md5username,
-        :password,
-        :email,
-        :first_name,
-        :last_name,
-        :gender
-        , '',
-        :birthday,
-        :sig,
-         " . NV_CURRENTTIME . ",
-        :question,
-        :answer,
-        '', 0, 1,
-        '" . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . "',
-        1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+            group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig, regdate,
+            question, answer, passlostkey, view_mail, remember, in_groups,
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+        ) VALUES (
+            " . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
+            :username,
+            :md5username,
+            :password,
+            :email,
+            :first_name,
+            :last_name,
+            :gender
+            , '',
+            :birthday,
+            :sig,
+             " . NV_CURRENTTIME . ",
+            :question,
+            :answer,
+            '', 0, 1,
+            '" . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . "',
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ", -1
+        )";
 
         $data_insert = array();
         $data_insert['username'] = $array_register['username'];
@@ -455,6 +459,7 @@ if ($checkss == $array_register['checkss']) {
                 // Auto login
                 $array_user = array(
                     'userid' => $userid,
+                    'username' => $array_register['username'],
                     'last_agent' => '',
                     'last_ip' => '',
                     'last_login' => 0,

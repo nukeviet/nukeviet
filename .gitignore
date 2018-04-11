@@ -68,3 +68,4 @@ composer.lock
 !/data/cache/.htaccess
 !/data/cache/index.html
 !/data/tmp/index.html
+/data/config/efloodip.php

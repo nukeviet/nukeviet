@@ -125,6 +125,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     idsite int(11) NOT NULL DEFAULT '0',
     safemode tinyint(1) unsigned NOT NULL DEFAULT '0',
     safekey varchar(40) DEFAULT '',
+    email_verification_time INT(11) NOT NULL DEFAULT '-1' COMMENT '-3: Tài khoản sys, -2: Admin kích hoạt, -1 không cần kích hoạt, 0: Chưa xác minh, > 0 thời gian xác minh',
     PRIMARY KEY (userid),
     UNIQUE KEY username (username),
     UNIQUE KEY md5username (md5username),

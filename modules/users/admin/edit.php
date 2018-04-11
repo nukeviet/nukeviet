@@ -301,6 +301,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
 
+    if ($row['email'] != $_user['email']) {
+        $email_verification_time = 0;
+    } else {
+        $email_verification_time = $row['email_verification_time'];
+    }
+
     $db->query("UPDATE " . NV_MOD_TABLE . " SET
         group_id=" . $_user['in_groups_default'] . ",
         username=" . $db->quote($_user['username']) . ",
@@ -316,7 +322,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         question=" . $db->quote($_user['question']) . ",
         answer=" . $db->quote($_user['answer']) . ",
         view_mail=" . $_user['view_mail'] . ",
-        in_groups='" . implode(',', $in_groups) . "'
+        in_groups='" . implode(',', $in_groups) . "',
+        email_verification_time=" . $email_verification_time . "
     WHERE userid=" . $userid);
 
     if (!empty($query_field)) {
