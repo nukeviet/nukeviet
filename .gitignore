@@ -7,6 +7,8 @@
 /data/cache/*
 /data/config/config_ini.*.php
 /data/config/diagnostic-*.xml
+/data/config/efloodip.php
+/data/config/banip.php
 /data/logs/data_logs/
 /data/logs/dump_backup/
 /data/logs/error_logs/
@@ -68,4 +70,3 @@ composer.lock
 !/data/cache/.htaccess
 !/data/cache/index.html
 !/data/tmp/index.html
-/data/config/efloodip.php
