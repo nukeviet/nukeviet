@@ -391,7 +391,7 @@ var nv_auto_alt = {UPLOAD_AUTO_ALT};
 <script type="text/javascript">
 $(function(){
     $("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
-    $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
+    $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&imgfile={SELFILE}&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
 });
 </script>
 <!--  END: main  -->
