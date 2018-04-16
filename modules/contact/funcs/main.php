@@ -61,6 +61,10 @@ $fname = '';
 $femail = '';
 $fphone = '';
 $faddress = '';
+$sendcopy = true;
+if (!defined('NV_IS_MODADMIN') and empty($module_config[$module_name]['sendcopymode']) and (!defined('NV_IS_USER') or $user_info['email_verification_time'] == 0 or $user_info['email_verification_time'] == -1)) {
+    $sendcopy = false;
+}
 
 if (defined('NV_IS_USER')) {
     $fname = !empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
@@ -84,7 +88,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $array_content = array(
             'fname' => $fname,
             'femail' => $femail,
-            'fphone' => $fphone);
+            'fphone' => $fphone,
+            'sendcopy' => $sendcopy,
+            'bodytext' => ''
+        );
 
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -148,7 +155,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
     $faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
-    $fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
+    $fsendcopy = ((int)$nv_Request->get_bool('sendcopy', 'post') and $sendcopy);
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
@@ -253,8 +260,10 @@ if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
 $array_content = array(
     'fname' => $fname,
     'femail' => $femail,
-    'fphone' => $fphone);
-$array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? $module_config[$module_name]['bodytext'] : '';
+    'fphone' => $fphone,
+    'sendcopy' => $sendcopy,
+    'bodytext' => $module_config[$module_name]['bodytext']
+);
 
 $contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
 

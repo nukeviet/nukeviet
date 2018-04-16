@@ -84,9 +84,11 @@
     			<textarea cols="8" name="fcon" class="form-control required" maxlength="1000" placeholder="{LANG.content}" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_content}"></textarea>
             </div>
 		</div>
+        <!-- BEGIN: sendcopy -->
         <div class="form-group">
             <label><input type="checkbox" name="sendcopy" value="1" checked="checked" /><span>{LANG.sendcopy}</span></label>
         </div>
+        <!-- END: sendcopy -->
         <!-- BEGIN: captcha -->
 		<div class="form-group">
             <div class="middle text-right clearfix">
