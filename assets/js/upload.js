@@ -875,7 +875,7 @@ function addlogo() {
         $('#addlogoContent img.addlogo-image').cropper({
             viewMode: 3,
             dragMode: 'none',
-            aspectRatio: NaN,
+            aspectRatio: markW / markH,
             responsive: true,
             modal: true,
             guides: false,
@@ -889,7 +889,7 @@ function addlogo() {
             zoomOnTouch: false,
             zoomOnWheel: false,
             cropBoxMovable: true,
-            cropBoxResizable: false,
+            cropBoxResizable: true,
             minContainerWidth: 10,
             minContainerHeight: 10,
             crop: function(e) {

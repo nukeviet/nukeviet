@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
         regdate, question,
         answer, passlostkey, view_mail, remember, in_groups, active, checknum,
-        last_login, last_ip, last_agent, last_openid, idsite
+        last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
     ) VALUES (
         :group_id,
         :username,
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         " . $row['regdate'] . ",
         :question,
         :answer,
-        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
+        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", -2
     )";
 
     $data_insert = array();
@@ -89,12 +89,12 @@ if ($nv_Request->isset_request('act', 'get')) {
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
             if ($row_f['system'] == 1) continue;
-            $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $row_f['default_value'];
             if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                $query_field[$row_f['field']] = floatval($query_field[$row_f['field']]);
+                $default_value = floatval($row_f['default_value']);
             } else {
-                $query_field[$row_f['field']] = $db->quote($query_field[$row_f['field']]);
+                $default_value = $db->quote($row_f['default_value']);
             }
+            $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
         }
 
         if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {

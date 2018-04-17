@@ -477,7 +477,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
     		question, answer, passlostkey, view_mail, remember, in_groups,
-    		active, checknum, last_login, last_ip, last_agent, last_openid, idsite
+    		active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
         ) VALUES (
     		" . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
             :username,
@@ -489,7 +489,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     		:gender,
     		'', 0,
     		" . NV_CURRENTTIME . ",
-    		'', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . "
+    		'', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . ",
+            -1
 		)";
 
         $data_insert = array();
@@ -569,7 +570,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
         }
 
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info) VALUES (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
+            username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info
+        ) VALUES (
 			:username,
 			:md5username,
 			'',

@@ -48,7 +48,7 @@ if ($checknum == $row['checknum']) {
         $is_change_email = true;
 
         $userid_change_email = intval(substr($row['username'], 20));
-        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email= :email WHERE userid=' . $userid_change_email);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ' WHERE userid=' . $userid_change_email);
         $stmt->bindParam(':email', $row['email'], PDO::PARAM_STR);
         if ($stmt->execute()) {
             $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid= :userid');
@@ -58,16 +58,16 @@ if ($checknum == $row['checknum']) {
         }
     } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-                group_id, username, md5username, password, email, first_name, last_name,
-                gender, photo, birthday, regdate, question, answer,
-                passlostkey, view_mail, remember, in_groups,
-                active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-            VALUES (
-                :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
-                :gender, '', :birthday, :regdate, :question, :answer,
-                '', 0, 1, :in_groups,
-                1, '', 0, '', '', '', " . $global_config['idsite'] . "
-            )";
+            group_id, username, md5username, password, email, first_name, last_name,
+            gender, photo, birthday, regdate, question, answer,
+            passlostkey, view_mail, remember, in_groups,
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+        ) VALUES (
+            :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
+            :gender, '', :birthday, :regdate, :question, :answer,
+            '', 0, 1, :in_groups,
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ", " . NV_CURRENTTIME . "
+        )";
 
         $data_insert = array();
         $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
@@ -92,12 +92,12 @@ if ($checknum == $row['checknum']) {
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
                 if ($row_f['system'] == 1) continue;
-                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $row_f['default_value'];
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $query_field[$row_f['field']] = floatval($query_field[$row_f['field']]);
+                    $default_value = floatval($row_f['default_value']);
                 } else {
-                    $query_field[$row_f['field']] = $db->quote($query_field[$row_f['field']]);
+                    $default_value = $db->quote($row_f['default_value']);
                 }
+                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {

@@ -799,9 +799,15 @@ if ($step == 1) {
                     $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_users');
                     $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_authors');
 
-                    $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_users
-        				(userid, group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-        				VALUES(" . $userid . ", 1, :username, :md5username, :password, :email, :first_name, '', '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '1', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)");
+                    $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_users (
+                        userid, group_id, username, md5username, password, email, first_name, last_name, gender, photo,
+                        birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active,
+                        checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+                    ) VALUES (
+                        " . $userid . ", 1, :username, :md5username, :password, :email, :first_name, '', '', '', 0, '',
+                        " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '1', 1, '', " . NV_CURRENTTIME . ",
+                        '', '', '', 0, -3
+                    )");
                     $sth->bindParam(':username', $array_data['nv_login'], PDO::PARAM_STR);
                     $sth->bindValue(':md5username', nv_md5safe($array_data['nv_login']), PDO::PARAM_STR);
                     $sth->bindParam(':password', $password, PDO::PARAM_STR);

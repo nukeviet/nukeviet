@@ -49,6 +49,8 @@ $lang_module['max_requests_error'] = 'Lỗi: Cần nhập số request lớn hơ
 $lang_module['nv_anti_iframe'] = 'Chống IFRAME';
 $lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu agent không có';
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
+$lang_module['nv_debug'] = 'Chế độ nhà phát triển';
+$lang_module['nv_debug_help'] = 'Nếu bật tùy chọn này, hệ thống sẽ hiển thị các lỗi để giúp nhà phát triển dễ dàng kiểm tra trong quá trình lập trình. Nếu website đang hoạt động trên môi trường thật, bạn <strong>nên tắt</strong> tùy chọn này';
 
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';

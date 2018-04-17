@@ -171,6 +171,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $alert = sprintf($lang_module['status_alert'], $lang_module['status_' . $news_contents['status']]);
             $my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
             $news_contents['allowed_send'] = 0;
+            $module_config[$module_name]['socialbutton'] = 0;
         }
     }
 
