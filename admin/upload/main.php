@@ -17,7 +17,7 @@ $contents = '';
 
 $path = (defined('NV_IS_SPADMIN')) ? '' : NV_UPLOADS_DIR;
 $path = nv_check_path_upload($nv_Request->get_string('path', 'get', $path));
-$currentpath = $nv_Request->get_string('currentpath', 'get', $path);
+$currentpath = nv_check_path_upload($nv_Request->get_string('currentpath', 'get', $path));
 $type = $nv_Request->get_string('type', 'get');
 $popup = $nv_Request->get_int('popup', 'get', 0);
 $area = htmlspecialchars(trim($nv_Request->get_string('area', 'get')), ENT_QUOTES);
@@ -27,7 +27,7 @@ $currentfile = $nv_Request->get_string('currentfile', 'get', '');
 $selectfile = '';
 if (!empty($currentfile)) {
     $selectfile = nv_string_to_filename(pathinfo($currentfile, PATHINFO_BASENAME));
-    $currentfilepath = pathinfo($currentfile, PATHINFO_DIRNAME);
+    $currentfilepath = nv_check_path_upload(pathinfo($currentfile, PATHINFO_DIRNAME));
     if (!empty($currentfilepath) and !empty($selectfile)) {
         $currentpath = $currentfilepath;
     }
@@ -35,7 +35,6 @@ if (!empty($currentfile)) {
 if (empty($currentpath)) {
     $currentpath = NV_UPLOADS_DIR;
 }
-$currentpath = nv_check_path_upload($currentpath);
 
 if ($type != 'image' and $type != 'flash') {
     $type = 'file';
