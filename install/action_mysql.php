@@ -26,6 +26,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   files_level varchar(255) DEFAULT '',
   position varchar(255) NOT NULL,
   main_module varchar(50) NOT NULL DEFAULT 'siteinfo',
+  admin_theme varchar(100) NOT NULL DEFAULT '',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',

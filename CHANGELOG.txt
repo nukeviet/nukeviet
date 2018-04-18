@@ -1,6 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.02
+- Config theme for admin
+
 NUKEVIET 4.3.01
 
 - Fix install if db password has special character
