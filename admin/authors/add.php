@@ -33,6 +33,10 @@ if ($nv_Request->get_int('result', 'get', 0)) {
     exit();
 }
 
+$adminThemes = array( '' );
+$adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
+unset($adminThemes[0]);
+
 if ($nv_Request->get_int('save', 'post', 0)) {
     $userid = $nv_Request->get_title('userid', 'post', 0);
     $lev = $nv_Request->get_int('lev', 'post', 0);
@@ -43,6 +47,9 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $allow_modify_subdirectories = $nv_Request->get_int('allow_modify_subdirectories', 'post', 0);
     $modules = $nv_Request->get_array('modules', 'post', array());
     $position = $nv_Request->get_title('position', 'post', '', 1);
+
+    $admin_theme = $nv_Request->get_string('admin_theme', 'post');
+    $admin_theme =  (! empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
 
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
@@ -101,11 +108,12 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
     $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "
-		(admin_id, editor, lev, files_level, position, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
-		( " . $userid . ", :editor, " . $lev . ", :files_level, :position, 0,'', '', 0, '', ''	)");
+		(admin_id, editor, lev, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
+		( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
     $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
     $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
+    $sth->bindParam(':admin_theme', $admin_theme, PDO::PARAM_STR);
 
     if ($sth->execute()) {
         nv_groups_add_user($lev, $userid);
@@ -146,6 +154,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
 } else {
     $position = '';
+    $admin_theme =  '';
     $userid = $nv_Request->get_title('userid', 'get');
     $editor = 'ckeditor';
     $lev = 3;
@@ -238,6 +247,12 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
 $xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 $xtpl->assign('ACTION', $contents['action']);
+
+foreach ($adminThemes as $_admin_theme) {
+    $xtpl->assign('THEME_NAME', $_admin_theme);
+    $xtpl->assign('THEME_SELECTED', ($_admin_theme == $admin_theme ? ' selected="selected"' : ''));
+    $xtpl->parse('add.admin_theme');
+}
 
 if (isset($contents['editor'])) {
     $xtpl->assign('EDITOR0', $contents['editor'][0]);

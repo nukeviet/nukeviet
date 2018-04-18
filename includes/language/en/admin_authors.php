@@ -152,3 +152,5 @@ $lang_module['number'] = 'No.';
 $lang_module['module'] = 'Module name';
 $lang_module['custom_title'] = 'Title';
 $lang_module['main_module'] = 'Main module';
+$lang_module['themeadmin'] = 'Administration theme';
+$lang_module['theme_default'] = 'Default';

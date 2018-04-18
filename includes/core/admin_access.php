@@ -100,7 +100,7 @@ function nv_admin_checkdata($adm_session_value)
         return array();
     }
 
-    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.check_num check_num, a.last_agent current_agent,
+    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme, a.check_num check_num, a.last_agent current_agent,
 		a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
 		b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
 		b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
