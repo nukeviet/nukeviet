@@ -6,6 +6,9 @@
             <meta {$meta_tag.name}="{$meta_tag.value}" content="{$meta_tag.content}">
         {/foreach}
 		<link rel="shortcut icon" href="{$global_config.site_favicon}">
+        <link  rel="StyleSheet"  href="{$NV_BASE_SITEURL}assets/css/font-awesome.min.css" >
+        <link  rel="StyleSheet"  href="{$NV_BASE_SITEURL}themes/smarty3-bootstrap4/css/bootstrap.min.css" >
+        <link  rel="StyleSheet"  href="{$NV_BASE_SITEURL}themes/smarty3-bootstrap4/css/style.css" >
         
         {foreach $html_links as $html_link}
          <link {foreach $html_link as $key => $value} {$key}="{$value}" {/foreach}>
@@ -19,4 +22,4 @@
             {/if}        
         {/foreach}        
 	</head>
-	<body>
+    <body>
