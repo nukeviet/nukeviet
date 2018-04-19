@@ -157,7 +157,7 @@
         <div class="container container-full">
           <div class="ms-title">
             <a href="index.html">
-              <!-- <img src="/themes/smarty3-bootstrap4/assets/img/demo/logo-header.png" alt=""> -->
+              <!-- <img src="/uploads/demo/logo-header.png" alt=""> -->
               <span class="ms-logo animated zoomInDown animation-delay-5">M</span>
               <h1 class="animated fadeInRight animation-delay-6">Material
                 <span>Style</span>
@@ -206,7 +206,7 @@
         <div class="container container-full">
           <div class="navbar-header">
             <a class="navbar-brand" href="index.html">
-              <!-- <img src="/themes/smarty3-bootstrap4/assets/img/demo/logo-navbar.png" alt=""> -->
+              <!-- <img src="/uploads/demo/logo-navbar.png" alt=""> -->
               <span class="ms-logo ms-logo-sm">M</span>
               <span class="ms-title">Material
                 <strong>Style</strong>

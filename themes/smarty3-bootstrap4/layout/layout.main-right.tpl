@@ -30,7 +30,7 @@
               <div class="ms-hero-bg-royal ms-hero-img-coffee">
                 <h3 class="color-white index-1 text-center no-m pt-4">Victoria Smith</h3>
                 <div class="color-medium index-1 text-center np-m">@vic_smith</div>
-                <img src="/themes/smarty3-bootstrap4/assets/img/demo/avatar1.jpg" alt="..." class="img-avatar-circle"> </div>
+                <img src="/uploads/demo/avatar1.jpg" alt="..." class="img-avatar-circle"> </div>
               <div class="card-body pt-4 text-center">
                 <h3 class="color-primary">About me</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur alter adipisicing elit. Facilis, natuse inse voluptates officia repudiandae beatae magni es magnam autem molestias.</p>
@@ -81,7 +81,7 @@
                       <div class="media mb-2">
                         <div class="media-left media-middle">
                           <a href="#">
-                            <img class="d-flex mr-3 media-object media-object-circle" src="/themes/smarty3-bootstrap4/assets/img/demo/p75.jpg" alt="..."> </a>
+                            <img class="d-flex mr-3 media-object media-object-circle" src="/uploads/demo/p75.jpg" alt="..."> </a>
                         </div>
                         <div class="media-body">
                           <a href="javascript:void(0)" class="media-heading">Lorem ipsum dolor sit amet in consectetur adipisicing</a>
@@ -98,7 +98,7 @@
                       <div class="media mb-2">
                         <div class="media-left media-middle">
                           <a href="#">
-                            <img class="d-flex mr-3 media-object media-object-circle" src="/themes/smarty3-bootstrap4/assets/img/demo/p75.jpg" alt="..."> </a>
+                            <img class="d-flex mr-3 media-object media-object-circle" src="/uploads/demo/p75.jpg" alt="..."> </a>
                         </div>
                         <div class="media-body">
                           <a href="javascript:void(0)" class="media-heading">Nemo enim ipsam voluptatem quia voluptas sit aspernatur</a>
@@ -115,7 +115,7 @@
                       <div class="media">
                         <div class="media-left media-middle">
                           <a href="#">
-                            <img class="d-flex mr-3 media-object media-object-circle" src="/themes/smarty3-bootstrap4/assets/img/demo/p75.jpg" alt="..."> </a>
+                            <img class="d-flex mr-3 media-object media-object-circle" src="/uploads/demo/p75.jpg" alt="..."> </a>
                         </div>
                         <div class="media-body">
                           <a href="javascript:void(0)" class="media-heading">inventore veritatis et vitae quasi architecto beatae </a>

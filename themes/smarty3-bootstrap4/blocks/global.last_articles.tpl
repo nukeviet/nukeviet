@@ -3,7 +3,7 @@
     <div class="ms-footer-media">
         <div class="media">
             <div class="media-left media-middle">
-                <a href="javascript:void(0)"> <img class="media-object media-object-circle" src="/themes/smarty3-bootstrap4/assets/img/demo/p75.jpg" alt="...">
+                <a href="javascript:void(0)"> <img class="media-object media-object-circle" src="/uploads/demo/p75.jpg" alt="...">
                 </a>
             </div>
             <div class="media-body">
@@ -19,7 +19,7 @@
         </div>
         <div class="media">
             <div class="media-left media-middle">
-                <a href="javascript:void(0)"> <img class="media-object media-object-circle" src="/themes/smarty3-bootstrap4/assets/img/demo/p75.jpg" alt="...">
+                <a href="javascript:void(0)"> <img class="media-object media-object-circle" src="/uploads/demo/p75.jpg" alt="...">
                 </a>
             </div>
             <div class="media-body">
@@ -35,7 +35,7 @@
         </div>
         <div class="media">
             <div class="media-left media-middle">
-                <a href="javascript:void(0)"> <img class="media-object media-object-circle" src="/themes/smarty3-bootstrap4/assets/img/demo/p75.jpg" alt="...">
+                <a href="javascript:void(0)"> <img class="media-object media-object-circle" src="/uploads/demo/p75.jpg" alt="...">
                 </a>
             </div>
             <div class="media-body">
