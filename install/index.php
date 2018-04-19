@@ -1244,7 +1244,7 @@ if ($step == 1) {
             if (empty($db->connect)) {
                 die('Sorry! Could not connect to data server');
             }
-            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (
+            $sth = $db->prepare('INSERT IGNORE INTO ' . $db_config['prefix'] . '_ips (
                 type, ip, mask, area, begintime, endtime, notice
             ) VALUES (
                 1, :ip, 0, 1, ' . NV_CURRENTTIME . ', 0, \'\'
