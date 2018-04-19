@@ -6,13 +6,22 @@
             <meta {$meta_tag.name}="{$meta_tag.value}" content="{$meta_tag.content}">
         {/foreach}
 		<link rel="shortcut icon" href="{$global_config.site_favicon}">
-        <link  rel="StyleSheet"  href="{$NV_BASE_SITEURL}assets/css/font-awesome.min.css" >
-        <link  rel="StyleSheet"  href="{$NV_BASE_SITEURL}themes/smarty3-bootstrap4/css/bootstrap.min.css" >
-        <link  rel="StyleSheet"  href="{$NV_BASE_SITEURL}themes/smarty3-bootstrap4/css/style.css" >
+
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="/themes/smarty3-bootstrap4/assets/css/preload.min.css">
+        <link rel="stylesheet" href="/themes/smarty3-bootstrap4/assets/css/plugins.min.css">
+        <link rel="stylesheet" href="/themes/smarty3-bootstrap4/assets/css/style.light-blue-500.min.css">
         
         {foreach $html_links as $html_link}
          <link {foreach $html_link as $key => $value} {$key}="{$value}" {/foreach}>
         {/foreach}
+        
+        <!--[if lt IE 9]>
+            <script src="/themes/smarty3-bootstrap4/assets/js/html5shiv.min.js"></script>
+            <script src="/themes/smarty3-bootstrap4/assets/js/respond.min.js"></script>
+        <![endif]-->
+        
         
         {foreach $html_js as $js}
             {if $js.ext eq '1'}
@@ -20,6 +29,6 @@
             {else}
                 <script>{$js.content}</script>
             {/if}        
-        {/foreach}        
+        {/foreach}       
 	</head>
     <body>

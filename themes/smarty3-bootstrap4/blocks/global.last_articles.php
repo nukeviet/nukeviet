@@ -11,21 +11,21 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (!nv_function_exists('nv_block_list')) {
+if (!nv_function_exists('nv_block_last_articles')) {
 
     /**
-     * nv_block_list()
+     * nv_block_last_articles()
      *
      * @param mixed $block_config
      * @return
      */
-    function nv_block_list($block_config)
+    function nv_block_last_articles($block_config)
     {
         global $global_config, $lang_global;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.list.tpl')) {
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.last_articles.tpl')) {
             $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.list.tpl')) {
+        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.last_articles.tpl')) {
             $block_theme = $global_config['site_theme'];
         } else {
             $block_theme = 'default';
@@ -35,10 +35,10 @@ if (!nv_function_exists('nv_block_list')) {
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
 
-        return $tpl->fetch('global.list.tpl');
+        return $tpl->fetch('global.last_articles.tpl');
     }
 }
 
 if (defined('NV_SYSTEM')) {
-    $content = nv_block_list($block_config);
+    $content = nv_block_last_articles($block_config);
 }
