@@ -88,6 +88,7 @@ function nv_site_theme($contents, $full = true)
     $smarty->enableSecurity(); // enable default security
 
     $smarty->assign('LANG', $lang_global);
+    $smarty->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $smarty->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme']);
     $smarty->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['user_check_pass_time']) - 62) * 1000);
     $smarty->assign('MODULE_NAME', $module_name);
@@ -109,20 +110,6 @@ function nv_site_theme($contents, $full = true)
 
     //Links
     $html_links = array();
-    $html_links[] = array(
-        'rel' => 'StyleSheet',
-        'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/font-awesome.min.css'
-    );
-
-    $html_links[] = array(
-        'rel' => 'StyleSheet',
-        'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css'
-    );
-    $html_links[] = array(
-        'rel' => 'StyleSheet',
-        'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css'
-    );
-
     if (defined('NV_IS_ADMIN') and $full) {
         $html_links[] = array(
             'rel' => 'StyleSheet',
