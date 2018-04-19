@@ -132,3 +132,5 @@ $lang_module['plan_exp_time_m'] = '%s mois (%s jour)';
 $lang_module['plan_exp_time_y'] = '%s année (%s jour)';
 $lang_module['exp_date_nochoose'] = 'Les annonces seront diffusées toujours, sinon sélectionnez la date ici';
 $lang_module['publ_time_info'] = 'Les systèmes automatiques prennent le temps commence le moment plus de publicité sinon sélectionner des dates ici';
+$lang_module['enter_keyword'] = 'Entrez des mots clés';
+$lang_module['all_plan'] = 'Tous les plans';

@@ -17,13 +17,18 @@ $page_title = $lang_module['main_caption'];
 $contents = array();
 $contents['containerid'] = array();
 $contents['aj'] = array();
+$contents['keyword'] = $nv_Request->get_title('q', 'get', '');
+$contents['pid'] = $nv_Request->get_int('pid', 'get', 0);
+
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang ASC";
+$contents['plans'] = $db->query($sql)->fetchAll();
 
 // Chờ duyệt
 $new = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=4")->fetchColumn();
 
 if ($new > 0) {
     $contents['containerid'][] = 'new_list';
-    $contents['aj'][] = "nv_show_banners_list('new_list', 0, 0, 4);";
+    $contents['aj'][] = "nv_show_banners_list('new_list', 0, " . $contents['pid'] . ", 4, '" . $contents['keyword'] . "');";
 }
 
 // Chờ hoạt động
@@ -31,7 +36,7 @@ $deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WH
 
 if ($deact > 0) {
     $contents['containerid'][] = 'unpub_list';
-    $contents['aj'][] = "nv_show_banners_list('unpub_list', 0, 0, 0);";
+    $contents['aj'][] = "nv_show_banners_list('unpub_list', 0, " . $contents['pid'] . ", 0, '" . $contents['keyword'] . "');";
 }
 
 // Đình chỉ hoạt động
@@ -39,7 +44,7 @@ $deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WH
 
 if ($deact > 0) {
     $contents['containerid'][] = 'deact_list';
-    $contents['aj'][] = "nv_show_banners_list('deact_list', 0, 0, 3);";
+    $contents['aj'][] = "nv_show_banners_list('deact_list', 0, " . $contents['pid'] . ", 3, '" . $contents['keyword'] . "');";
 }
 
 // Hết hạn
@@ -47,7 +52,7 @@ $exp = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHER
 
 if ($exp > 0) {
     $contents['containerid'][] = 'exp_list';
-    $contents['aj'][] = "nv_show_banners_list('exp_list', 0, 0, 2);";
+    $contents['aj'][] = "nv_show_banners_list('exp_list', 0, " . $contents['pid'] . ", 2, '" . $contents['keyword'] . "');";
 }
 
 if (empty($contents['containerid']) or empty($contents['aj'])) {
