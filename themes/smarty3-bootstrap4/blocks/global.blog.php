@@ -31,12 +31,11 @@ if (!nv_function_exists('nv_block_blog')) {
             $block_theme = 'default';
         }
 
-        $smarty = new Smarty();
-        $smarty->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/template');
-        $smarty->enableSecurity();
-        $smarty->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
+        $tpl = new \NukeViet\Template\NvSmarty();
+        $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/template');
+        $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
 
-        return $smarty->fetch('blog.tpl');
+        return $tpl->fetch('blog.tpl');
     }
 }
 

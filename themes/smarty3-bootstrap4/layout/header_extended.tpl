@@ -21,4 +21,5 @@
             </nav>
         </div>
     </div>
+    [THEME_ERROR_INFO]
 </div>

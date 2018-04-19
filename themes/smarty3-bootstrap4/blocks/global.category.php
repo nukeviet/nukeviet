@@ -31,11 +31,10 @@ if (!nv_function_exists('nv_block_category')) {
             $block_theme = 'default';
         }
 
-        $smarty = new Smarty();
-        $smarty->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $smarty->enableSecurity();
+        $tpl = new \NukeViet\Template\NvSmarty();
+        $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
 
-        return $smarty->fetch('global.category.tpl');
+        return $tpl->fetch('global.category.tpl');
     }
 }
 

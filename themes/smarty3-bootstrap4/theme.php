@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+
 if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -77,24 +78,17 @@ function nv_site_theme($contents, $full = true)
         }
     }
 
-    $smarty = new Smarty();
-    //$smarty->debugging = true;
-    $smarty->caching = true;
-    $smarty->cache_lifetime = 6000;
-    //$smarty->setConfigDir('../smarty/configs/');
-    $smarty->setCacheDir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . themes);
-    //$smarty->setCompileDir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/templates_c');
-    $smarty->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
-    $smarty->enableSecurity(); // enable default security
+    $tpl = new \NukeViet\Template\NvSmarty();
+    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
 
-    $smarty->assign('LANG', $lang_global);
-    $smarty->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme']);
-    $smarty->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['user_check_pass_time']) - 62) * 1000);
-    $smarty->assign('MODULE_NAME', $module_name);
+    $tpl->assign('LANG', $lang_global);
+    $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme']);
+    $tpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['user_check_pass_time']) - 62) * 1000);
+    $tpl->assign('MODULE_NAME', $module_name);
 
     // System variables
-    $smarty->assign('theme_page_title', nv_html_page_title(false));
-    $smarty->assign('global_config', $global_config);
+    $tpl->assign('theme_page_title', nv_html_page_title(false));
+    $tpl->assign('global_config', $global_config);
 
     //Meta-tags
     $metatags = nv_html_meta_tags(false);
@@ -105,7 +99,7 @@ function nv_site_theme($contents, $full = true)
             'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no'
         );
     }
-    $smarty->assign('metatags', $metatags);
+    $tpl->assign('metatags', $metatags);
 
     //Links
     $html_links = array();
@@ -178,17 +172,17 @@ function nv_site_theme($contents, $full = true)
 
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
     }
-    $smarty->assign('html_links', $html_links);
+    $tpl->assign('html_links', $html_links);
 
     $html_js = nv_html_site_js(false);
     $html_js[] = array(
         'ext' => 1,
         'content' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/js/main.js'
     );
-    $smarty->assign('html_js', $html_js);
+    $tpl->assign('html_js', $html_js);
 
     if ($client_info['browser']['key'] == 'explorer' and $client_info['browser']['version'] < 9) {
-        $smarty->assign('chromeframe', 1);
+        $tpl->assign('chromeframe', 1);
     }
 
     // Header variables
@@ -203,8 +197,8 @@ function nv_site_theme($contents, $full = true)
         'width' => $size[0],
         'height' => $size[1]
     );
-    $smarty->assign('logo', $_logo);
-    $sitecontent = $smarty->fetch($layout_file);
+    $tpl->assign('logo', $_logo);
+    $sitecontent = $tpl->fetch($layout_file);
 
     // Module contents
     $sitecontent = str_replace('[MODULE_CONTENT]', $contents, $sitecontent);
