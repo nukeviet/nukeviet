@@ -13,12 +13,12 @@ if (! defined('NV_MAINFILE')) {
 }
 
 if (! nv_admin_checkip()) {
-    nv_info_die($global_config['site_description'], $lang_global['site_info'], sprintf($lang_global['admin_ipincorrect'], NV_CLIENT_IP) . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />');
+    nv_info_die($global_config['site_description'], $nv_Lang->get('site_info'), $nv_Lang->get('admin_ipincorrect', NV_CLIENT_IP) . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />');
 }
 
 if (! nv_admin_checkfirewall()) {
     // remove non US-ASCII to respect RFC2616
-    $server_message = preg_replace('/[^\x20-\x7e]/i', '', $lang_global['firewallsystem']);
+    $server_message = preg_replace('/[^\x20-\x7e]/i', '', $nv_Lang->get('firewallsystem'));
     if (empty($server_message)) {
         $server_message = 'Administrators Section';
     }
@@ -27,7 +27,7 @@ if (! nv_admin_checkfirewall()) {
     if (php_sapi_name() !== 'cgi-fcgi') {
         header('status: 401 Unauthorized');
     }
-    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />', 401);
+    nv_info_die($global_config['site_description'], $nv_Lang->get('site_info'), $nv_Lang->get('firewallincorrect') . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />', 401);
 }
 
 /**
@@ -107,13 +107,13 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
     }
 
     if (empty($nv_username)) {
-        $error = $lang_global['username_empty'];
+        $error = $nv_Lang->get('username_empty');
     } elseif ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
-        $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
+        $error = $nv_Lang->get('userlogin_blocked', $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
     } elseif (empty($nv_password)) {
-        $error = $lang_global['password_empty'];
+        $error = $nv_Lang->get('password_empty');
     } elseif ($captcha_require and ! nv_capcha_txt($nv_seccode)) {
-        $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+        $error = ($global_config['captcha_type'] == 2 ? $nv_Lang->get('securitycodeincorrect1') : $nv_Lang->get('securitycodeincorrect'));
     } else {
         if (defined('NV_IS_USER_FORUM')) {
             define('NV_IS_MOD_USER', true);
@@ -143,9 +143,9 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
         $error = '';
 
         if (empty($row) or !((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password']))) {
-            nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
+            nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $nv_Lang->get('loginsubmit') . ' ' . $nv_Lang->get('fail'), ' Client IP:' . NV_CLIENT_IP, 0);
             $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
-            $error = $lang_global['loginincorrect'];
+            $error = $nv_Lang->get('loginincorrect');
         } else {
             $row['admin_lev'] = intval($row['admin_lev']);
             $step2_isvalid = true;
@@ -169,7 +169,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             }
             if ($_2step_require) {
                 $url_setup2step = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification&amp;' . NV_OP_VARIABLE . '=setup&amp;nv_redirect=' . nv_redirect_encrypt(NV_BASE_ADMINURL);
-                $error = '<a href="' . $url_setup2step . '">' . $lang_global['2teplogin_require'] . '</a>';
+                $error = '<a href="' . $url_setup2step . '">' . $nv_Lang->get('2teplogin_require') . '</a>';
                 validUserLog($row);
                 $tokend_key = md5($row['username'] . '_' . NV_CURRENTTIME . '_users_confirm_pass_' . NV_CHECK_SESSION);
                 $tokend = md5('users_confirm_pass_' . NV_CHECK_SESSION);
@@ -183,7 +183,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
 
                 if (!empty($nv_totppin)) {
                     if (!$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
-                        $error = $lang_global['2teplogin_error_opt'];
+                        $error = $nv_Lang->get('2teplogin_error_opt');
                     } else {
                         $step2_isvalid = true;
                     }
@@ -196,7 +196,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                     $sth->execute();
 
                     if ($sth->rowCount() != 1) {
-                        $error = $lang_global['2teplogin_error_backup'];
+                        $error = $nv_Lang->get('2teplogin_error_backup');
                     } else {
                         $code = $sth->fetchColumn();
                         $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_backupcodes SET is_used=1, time_used=" . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
@@ -213,11 +213,11 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                     define('ADMIN_LOGIN_MODE', 3);
                 }
                 if (ADMIN_LOGIN_MODE == 2 and ! in_array($row['admin_lev'], array(1, 2))) {
-                    $error = $lang_global['admin_access_denied2'];
+                    $error = $nv_Lang->get('admin_access_denied2');
                 } elseif (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
-                    $error = $lang_global['admin_access_denied1'];
+                    $error = $nv_Lang->get('admin_access_denied1');
                 } else {
-                    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
+                    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $nv_Lang->get('loginsubmit'), ' Client IP:' . NV_CLIENT_IP, 0);
                     $admin_id = intval($row['admin_id']);
                     $checknum = md5(nv_genpass(10));
                     $array_admin = array(
@@ -259,7 +259,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                     }
 
                     $nv_Request->unset_request('admin_dismiss_captcha', 'session');
-                    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />");
+                    nv_info_die($global_config['site_description'], $nv_Lang->get('site_info'), $nv_Lang->get('admin_loginsuccessfully') . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />");
                     die();
                 }
             }
@@ -280,7 +280,7 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
     require_once NV_ROOTDIR . '/includes/language/en/admin_global.php';
 }
 
-$info = (! empty($error)) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['adminlogininfo'] . '</div>';
+$info = (! empty($error)) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $nv_Lang->get('adminlogininfo') . '</div>';
 $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
 
 $dir_template = '';
@@ -292,7 +292,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/syst
 }
 
 $xtpl = new XTemplate('login.tpl', $dir_template);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('CHARSET', $global_config['site_charset']);
 $xtpl->assign('SITE_NAME', $global_config['site_name']);
 $xtpl->assign('ADMIN_THEME', $global_config['admin_theme']);
@@ -306,11 +306,11 @@ $xtpl->assign('SITEURL', $global_config['site_url']);
 $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
 $xtpl->assign('NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS);
 
-$xtpl->assign('LOGIN_ERROR_SECURITY', addslashes(sprintf($lang_global['login_error_security'], NV_GFX_NUM)));
+$xtpl->assign('LOGIN_ERROR_SECURITY', addslashes($nv_Lang->get('login_error_security', NV_GFX_NUM)));
 
 $xtpl->assign('V_LOGIN', $nv_username);
 $xtpl->assign('V_PASSWORD', $nv_password);
-$xtpl->assign('LANGINTERFACE', $lang_global['langinterface']);
+$xtpl->assign('LANGINTERFACE', $nv_Lang->get('langinterface'));
 
 if ($login_step == 1) {
     $xtpl->assign('SHOW_STEP1', '');
@@ -352,19 +352,19 @@ if (isset($size[1])) {
     }
 }
 
-$xtpl->assign('LANGLOSTPASS', $lang_global['lostpass']);
+$xtpl->assign('LANGLOSTPASS', $nv_Lang->get('lostpass'));
 $xtpl->assign('LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass');
 
 if ($captcha_require) {
     if ($global_config['captcha_type'] == 2) {
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->get('securitycode1'));
         $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
         $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
         $xtpl->parse('main.recaptcha');
     } else {
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->get('captcharefresh'));
         $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->get('securitycode'));
         $xtpl->assign('GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
@@ -377,7 +377,7 @@ if ($global_config['lang_multi'] == 1) {
     foreach ($_language_array as $lang_i) {
         if (file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php') and file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php')) {
             $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i);
-            $xtpl->assign('LANGTITLE', $lang_global['langinterface']);
+            $xtpl->assign('LANGTITLE', $nv_Lang->get('langinterface'));
             $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : "");
             $xtpl->assign('LANGVALUE', $language_array[$lang_i]['name']);
             $xtpl->parse('main.lang_multi.option');

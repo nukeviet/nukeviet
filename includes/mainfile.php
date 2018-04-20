@@ -168,14 +168,16 @@ define('NV_USER_AGENT', $nv_Request->user_agent);
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
+$nv_Lang = new \NukeViet\Core\Language();
+$nv_Lang->loadGlobal();
+//$lang_global = \NukeViet\Core\Language::$lang_global; //;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 $domains = explode(',', $global_config['my_domains']);
 if (!in_array(NV_SERVER_NAME, $domains)) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
     $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
+    nv_info_die($nv_Lang->get('error_404_title'), $nv_Lang->get('error_404_title'), $nv_Lang->get('error_404_content'), 400, '', '', '', '');
 }
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
@@ -393,13 +395,13 @@ if (!defined('NV_IS_ADMIN')) {
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     // Dinh chi neu khong la admin toi cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {
-        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
+        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $nv_Lang->get('disable_site_content');
+        nv_info_die($global_config['site_description'], $nv_Lang->get('disable_site_title'), $disable_site_content, 200, '', '', '', '');
     }
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site'])) {
-        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
+        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $nv_Lang->get('disable_site_content');
+        nv_info_die($global_config['site_description'], $nv_Lang->get('disable_site_title'), $disable_site_content, 200, '', '', '', '');
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
         nv_redirect_location(NV_BASE_SITEURL);
     }
