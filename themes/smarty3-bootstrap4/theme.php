@@ -54,7 +54,7 @@ function nv_mailHTML($title, $content, $footer = '')
 function nv_site_theme($contents, $full = true)
 {
     global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $nv_plugin_area;
-
+    
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 

@@ -34,7 +34,20 @@ if (!nv_function_exists('nv_block_header')) {
         $tpl = new \NukeViet\Template\NvSmarty();
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
-
+        $site_description = $global_config['site_description'];
+        $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
+        $logo = preg_replace('/\.[a-z]+$/i', '.svg', $global_config['site_logo']);
+        if (!file_exists(NV_ROOTDIR . '/' . $logo)) {
+            $logo = $global_config['site_logo'];
+        }
+        $_logo = array(
+            'src' => NV_BASE_SITEURL . $logo,
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA,
+            'width' => $size[0],
+            'height' => $size[1]
+        );
+        $tpl->assign('des',$site_description);
+        $tpl->assign('logo', $_logo);
         return $tpl->fetch('global.header.tpl');
     }
 }

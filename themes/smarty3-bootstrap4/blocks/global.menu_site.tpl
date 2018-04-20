@@ -3,10 +3,11 @@
           <div class="navbar-header">
             <a class="navbar-brand" href="/material-style/index.html">
               <!-- <img src="/uploads/demo/logo-navbar.png" alt=""> -->
-              <span class="ms-logo ms-logo-sm">M</span>
-              <span class="ms-title">Material
-                <strong>Style</strong>
-              </span>
+             <!--  <span class="ms-logo ms-logo-sm">M</span>
+             <span class="ms-title">Material
+               <strong>Style</strong>
+             </span> -->
+             <img src="{$logo.src}" width= "{$logo.width}" height="{$logo.height}"alt="logo">
             </a>
           </div>
           <div class="collapse navbar-collapse" id="ms-navbar">

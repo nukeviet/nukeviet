@@ -153,7 +153,19 @@
         </div>
       </div>
       <!-- start header -->
-      [HEAD_RIGHT]
+<header class="ms-header ms-header-primary">
+  <!--ms-header-primary-->
+ 
+  <div class="container container-full ">
+          <div class="col-md-4">
+              [HEAD_RIGHT]
+            </div>
+            
+            <div class="col-md-8">
+              [RIGHT1]
+            </div>
+  </div>
+</header>
       <!-- end header -->
       <!-- start menu_site -->
       [MENU_SITE]
