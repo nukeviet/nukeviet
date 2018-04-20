@@ -350,7 +350,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             'verypoor' => $nv_Lang->getModule('star_verypoor'),
             'poor' => $nv_Lang->getModule('star_poor'),
             'ok' => $nv_Lang->getModule('star_ok'),
-            'good' => $lang_module['star_good}'],
+            'good' => $nv_Lang->getModule('star_good'),
             'verygood' => $nv_Lang->getModule('star_verygood')
         );
     }

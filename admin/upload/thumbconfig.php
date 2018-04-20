@@ -151,7 +151,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $thumb_type = array();
 $i = 0;
-$nv_Lang->getModule('thumb_type_0') = '';
+$nv_Lang->setModule('thumb_type_0', '');
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query($sql);

@@ -170,7 +170,6 @@ define('NV_USER_AGENT', $nv_Request->user_agent);
 require NV_ROOTDIR . '/includes/language.php';
 $nv_Lang = new \NukeViet\Core\Language();
 $nv_Lang->loadGlobal();
-//$lang_global = \NukeViet\Core\Language::$lang_global; //;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 $domains = explode(',', $global_config['my_domains']);

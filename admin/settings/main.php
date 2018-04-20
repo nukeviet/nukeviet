@@ -173,7 +173,7 @@ $value_setting = array(
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
-$nv_Lang->getModule('browse_image') = $nv_Lang->getGlobal('browse_image');
+$nv_Lang->setModule('browse_image', $nv_Lang->getGlobal('browse_image'));
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);

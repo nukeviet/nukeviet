@@ -24,10 +24,7 @@ if (!defined('NV_IS_ADMIN') or !isset($admin_info) or empty($admin_info)) {
 
 // Khong cho xac dinh tu do cac variables
 $array_url_instruction = $select_options = array();
-
 $nv_Lang->loadGlobal(true);
-//$lang_global = \NukeViet\Core\Language::$lang_global;//;;;;;;;;;;;;;;;;;;;;;;;
-
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
 $admin_mods = array();
@@ -75,7 +72,6 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
         //Ket noi ngon ngu cua module
         $nv_Lang->loadModule($module_file, true);
-        //$lang_module = \NukeViet\Core\Language::$lang_module; //;;;;;;;;;;;;;;;;;;;;;;;;;
     } elseif (isset($admin_mods[$module_name])) {
         $module_info = $admin_mods[$module_name];
         if (md5($module_info['module'] . '#' . $module_info['act_1'] . '#' . $module_info['act_2'] . '#' . $module_info['act_3'] . '#' . $global_config['sitekey'])) {
@@ -86,7 +82,6 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Ket noi voi file ngon ngu cua module
             $nv_Lang->loadModule($module_file, true, true);
-            //$lang_module = \NukeViet\Core\Language::$lang_module; //;;;;;;;;;;;;;;;;;;;;;;;;;
         }
     }
 

@@ -203,7 +203,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     $array_define_captcha['nv_gfx_height'] = NV_GFX_HEIGHT;
 }
 
-$nv_Lang->getModule('two_step_verification_note') = sprintf($nv_Lang->getModule('two_step_verification_note'), $nv_Lang->getModule('two_step_verification0'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
+$nv_Lang->setModule('two_step_verification_note', sprintf($nv_Lang->getModule('two_step_verification_note'), $nv_Lang->getModule('two_step_verification0'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups'));
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -505,7 +505,7 @@ if ($i) {
 
 if (!empty($cid)) {
     list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $cid)->fetch(3);
-    $nv_Lang->getModule('banip_add') = $nv_Lang->getModule('banip_edit');
+    $nv_Lang->setModule('banip_add', $nv_Lang->getModule('banip_edit'));
 }
 
 $xtpl->assign('BANIP_TITLE', ($cid) ? $nv_Lang->getModule('banip_title_edit') : $nv_Lang->getModule('banip_title_add'));

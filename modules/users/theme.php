@@ -42,8 +42,8 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
         $xtpl->parse('main.agreecheck');
     }
 
-    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($nv_Lang->getGlobal('username_rule_nolimit'), $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($nv_Lang->getGlobal('username_rule_limit'), $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
-    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($nv_Lang->getGlobal('password_rule_nolimit'), $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($nv_Lang->getGlobal('password_rule_limit'), $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($nv_Lang->getGlobal('username_rule_nolimit'), $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($nv_Lang->getGlobal('username_rule_limit'), $nv_Lang->getGlobal('unick_type_' . $global_config['nv_unick_type']), $global_config['nv_unickmin'], $global_config['nv_unickmax']);
+    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($nv_Lang->getGlobal('password_rule_nolimit'), $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($nv_Lang->getGlobal('password_rule_limit'), $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']), $global_config['nv_upassmin'], $global_config['nv_upassmax']);
 
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
@@ -729,8 +729,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $group_check_all_checked = 1;
         $count = 0;
         foreach ($groups as $group) {
-            $group['status'] = $lang_module['group_status_' . $group['status']];
-            $group['group_type'] = $lang_module['group_type_' . $group['group_type']];
+            $group['status'] = $nv_Lang->getModule('group_status_' . $group['status']);
+            $group['group_type'] = $nv_Lang->getModule('group_type_' . $group['group_type']);
             $xtpl->assign('GROUP_LIST', $group);
             if ($group['is_leader']) {
                 $xtpl->assign('URL_IS_LEADER', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group['group_id'], true));
@@ -979,10 +979,8 @@ function user_welcome()
 
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {
         $_user_info['current_mode'] = $nv_Lang->getModule('admin_login');
-    } elseif (isset($user_info['current_mode']) and isset($lang_module['mode_login_' . $user_info['current_mode']])) {
-        $_user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
-    } else {
-        $_user_info['current_mode'] = $nv_Lang->getModule('mode_login_1');
+    } elseif (isset($user_info['current_mode'])) {
+        $_user_info['current_mode'] = $nv_Lang->getModule('mode_login_' . $user_info['current_mode']) . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
     }
 
     $_user_info['change_name_info'] = sprintf($nv_Lang->getModule('change_name_info'), NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/username');
@@ -1069,7 +1067,7 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
 
     $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
-    $nv_Lang->getModule('openid_confirm_info') = sprintf($nv_Lang->getModule('openid_confirm_info'), $attribs['contact/email'], $user['username']);
+    $nv_Lang->setModule('openid_confirm_info', $nv_Lang->getModule('openid_confirm_info', $attribs['contact/email'], $user['username']));
 
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
@@ -1371,9 +1369,9 @@ function nv_avatar($array)
     }
     $xtpl->assign('NV_AVATAR_UPLOAD', $form_action);
 
-    $nv_Lang->getModule('avatar_bigfile') = sprintf($nv_Lang->getModule('avatar_bigfile'), nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    $nv_Lang->getModule('avatar_bigsize') = sprintf($nv_Lang->getModule('avatar_bigsize'), NV_MAX_WIDTH, NV_MAX_HEIGHT);
-    $nv_Lang->getModule('avatar_smallsize') = sprintf($nv_Lang->getModule('avatar_smallsize'), $global_config['avatar_width'], $global_config['avatar_height']);
+    $nv_Lang->setModule('avatar_bigfile', $nv_Lang->getModule('avatar_bigfile', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE)));
+    $nv_Lang->setModule('avatar_bigsize', $nv_Lang->getModule('avatar_bigsize', NV_MAX_WIDTH, NV_MAX_HEIGHT));
+    $nv_Lang->setModule('avatar_smallsize', $nv_Lang->getModule('avatar_smallsize', $global_config['avatar_width'], $global_config['avatar_height']));
 
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);

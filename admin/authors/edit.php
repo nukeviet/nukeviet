@@ -200,14 +200,14 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         if ($lev == 2 and $lev != $row['lev']) {
             $result['change']['lev'] = array(
                 $nv_Lang->getModule('lev'),
-                $lang_global['level' . $row['lev']],
-                $lang_global['level' . $lev]
+                $nv_Lang->getGlobal('level' . $row['lev']),
+                $nv_Lang->getGlobal('level' . $lev)
             );
         } elseif ($lev == 3 and $lev != $row['lev']) {
             $result['change']['lev'] = array(
                 $nv_Lang->getModule('lev'),
-                $lang_global['level' . $row['lev']],
-                $lang_global['level' . $lev]
+                $nv_Lang->getGlobal('level' . $row['lev']),
+                $nv_Lang->getGlobal('level' . $lev)
             );
             $old = array();
             if (!empty($old_modules)) {
@@ -357,7 +357,7 @@ if ($admin_id != $admin_info['userid']) {
     $edit_admin_mods = array();
     $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
     while ($_row = $result->fetch()) {
-        $_row['custom_title'] = isset($lang_global[$_row['lang_key']]) ? $lang_global[$_row['lang_key']] : $_row['module'];
+        $_row['custom_title'] = $nv_Lang->getGlobal($_row['lang_key']);
         $edit_admin_mods[$_row['module']] = $_row;
     }
 } else {

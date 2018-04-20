@@ -26,9 +26,36 @@ class Language
     private $defaultIsLoaded = false;
     private $isTmpLoaded = false;
 
+    const TYPE_LANG_ALL = 0;
+    const TYPE_LANG_GLOBAL = 1;
+    const TYPE_LANG_MODULE = 2;
+    const TYPE_LANG_BLOCK = 3;
+
+    /**
+     * Language::__construct()
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->lang = NV_LANG_INTERFACE;
+    }
+
+    /**
+     * Language::setLang()
+     *
+     * @param mixed $lang
+     * @return void
+     */
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+        self::$lang_block = array();
+        self::$lang_module = array();
+        self::$lang_global = array();
+        $this->tmplang_global = array();
+        $this->tmplang_module = array();
+        $this->tmplang_block = array();
     }
 
     /**
@@ -145,7 +172,15 @@ class Language
         unset($lang_translator, $lang_global, $lang_module, $lang_block);
     }
 
-    private function _get($funcArgs, $funcNum)
+    /**
+     * Language::_get()
+     *
+     * @param mixed $funcArgs
+     * @param mixed $funcNum
+     * @param mixed $type
+     * @return
+     */
+    private function _get($funcArgs, $funcNum, $type)
     {
         if ($funcNum < 1) {
             return '';
@@ -156,20 +191,20 @@ class Language
         $args = $funcArgs;
 
         $langvalue = '';
-        if (isset(self::$lang_global[$langkey])) {
-            $langvalue = self::$lang_global[$langkey];
-        } elseif (isset(self::$lang_module[$langkey])) {
-            $langvalue = self::$lang_module[$langkey];
-        } elseif (isset(self::$lang_block[$langkey])) {
-            $langvalue = self::$lang_block[$langkey];
-        } elseif ($this->isTmpLoaded) {
-            if (isset($this->tmplang_global[$langkey])) {
+        if ($this->isTmpLoaded) {
+            if (($type == self::TYPE_LANG_GLOBAL or $type == self::TYPE_LANG_ALL) and isset($this->tmplang_global[$langkey])) {
                 $langvalue = $this->tmplang_global[$langkey];
-            } elseif (isset($this->tmplang_module[$langkey])) {
+            } elseif (($type == self::TYPE_LANG_MODULE or $type == self::TYPE_LANG_ALL) and isset($this->tmplang_module[$langkey])) {
                 $langvalue = $this->tmplang_module[$langkey];
-            } elseif (isset($this->tmplang_block[$langkey])) {
+            } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset($this->tmplang_block[$langkey])) {
                 $langvalue = $this->tmplang_block[$langkey];
             }
+        } elseif (($type == self::TYPE_LANG_GLOBAL or $type == self::TYPE_LANG_ALL) and isset(self::$lang_global[$langkey])) {
+            $langvalue = self::$lang_global[$langkey];
+        } elseif (($type == self::TYPE_LANG_MODULE or $type == self::TYPE_LANG_ALL) and isset(self::$lang_module[$langkey])) {
+            $langvalue = self::$lang_module[$langkey];
+        } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset(self::$lang_block[$langkey])) {
+            $langvalue = self::$lang_block[$langkey];
         }
         if (empty($langvalue)) {
             return $langkey;
@@ -184,7 +219,7 @@ class Language
      */
     public function get()
     {
-        return $this->_get(func_get_args(), func_num_args());
+        return $this->_get(func_get_args(), func_num_args(), self::TYPE_LANG_ALL);
     }
 
     /**
@@ -194,7 +229,7 @@ class Language
      */
     public function getModule()
     {
-        return $this->_get(func_get_args(), func_num_args());
+        return $this->_get(func_get_args(), func_num_args(), self::TYPE_LANG_MODULE);
     }
 
     /**
@@ -204,7 +239,7 @@ class Language
      */
     public function getBlock()
     {
-        return $this->_get(func_get_args(), func_num_args());
+        return $this->_get(func_get_args(), func_num_args(), self::TYPE_LANG_BLOCK);
     }
 
     /**
@@ -214,6 +249,42 @@ class Language
      */
     public function getGlobal()
     {
-        return $this->_get(func_get_args(), func_num_args());
+        return $this->_get(func_get_args(), func_num_args(), self::TYPE_LANG_GLOBAL);
+    }
+
+    /**
+     * Language::setModule()
+     *
+     * @param mixed $langkey
+     * @param mixed $langvalue
+     * @return void
+     */
+    public function setModule($langkey, $langvalue)
+    {
+        self::$lang_module[$langkey] = $langvalue;
+    }
+
+    /**
+     * Language::setGlobal()
+     *
+     * @param mixed $langkey
+     * @param mixed $langvalue
+     * @return void
+     */
+    public function setGlobal($langkey, $langvalue)
+    {
+        self::$lang_global[$langkey] = $langvalue;
+    }
+
+    /**
+     * Language::setBlock()
+     *
+     * @param mixed $langkey
+     * @param mixed $langvalue
+     * @return void
+     */
+    public function setBlock($langkey, $langvalue)
+    {
+        self::$lang_block[$langkey] = $langvalue;
     }
 }

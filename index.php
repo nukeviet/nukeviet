@@ -159,7 +159,6 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Ket noi ngon ngu cua module
             $nv_Lang->loadModule($module_file);
-            $lang_module = \NukeViet\Core\Language::$lang_module; //;;;;;;;;;;;;;;;;;;;;;;;;;
 
             // Xem trước giao diện
             if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $nv_preview_theme . '/theme.php')) {
@@ -273,9 +272,6 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Ket noi ngon ngu theo theme
             $nv_Lang->loadTheme($global_config['module_theme']);
-            $lang_global = \NukeViet\Core\Language::$lang_global;//;;;;;;;;;;;;;;
-            $lang_module = \NukeViet\Core\Language::$lang_module;//;;;;;;;;;;;;;;
-            $lang_block = \NukeViet\Core\Language::$lang_block;//;;;;;;;;;;;;;;
 
             // Xac dinh template module
             $module_info['template'] = $global_config['module_theme'];

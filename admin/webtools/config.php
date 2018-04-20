@@ -31,7 +31,7 @@ if ($submit) {
 }
 
 $page_title = $nv_Lang->getModule('config');
-$nv_Lang->getModule('hour') = $nv_Lang->getGlobal('hour');
+$nv_Lang->setModule('hour', $nv_Lang->getGlobal('hour'));
 
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);

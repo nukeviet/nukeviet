@@ -16,7 +16,7 @@ define('NV_IS_MOD_USER', true);
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
 define('NV_2STEP_VERIFICATION_MODULE', 'two-step-verification');
 
-$nv_Lang->getModule('in_groups') = $nv_Lang->getGlobal('in_groups');
+$nv_Lang->setModule('in_groups', $nv_Lang->getGlobal('in_groups'));
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 /**

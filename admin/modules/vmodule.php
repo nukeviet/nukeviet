@@ -61,7 +61,7 @@ $page_title = $nv_Lang->getModule('vmodule_add');
 
 $xtpl = new XTemplate('vmodule.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 if ($error) {
-    $nv_Lang->getModule('vmodule_blockquote') = $nv_Lang->getModule('vmodule_exit');
+    $nv_Lang->setModule('vmodule_blockquote', $nv_Lang->getModule('vmodule_exit'));
     $xtpl->parse('main.error');
 }
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

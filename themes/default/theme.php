@@ -313,8 +313,8 @@ function nv_site_theme($contents, $full = true)
             $current_theme_type = (isset($global_config['current_theme_type']) and !empty($global_config['current_theme_type']) and in_array($global_config['current_theme_type'], array_keys($icons))) ? $global_config['current_theme_type'] : 'd';
             foreach ($array_theme_type as $theme_type) {
                 $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-                $xtpl->assign('STHEME_TITLE', $lang_global['theme_type_' . $theme_type]);
-                $xtpl->assign('STHEME_INFO', sprintf($nv_Lang->getGlobal('theme_type_chose'), $lang_global['theme_type_' . $theme_type]));
+                $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
+                $xtpl->assign('STHEME_INFO', sprintf($nv_Lang->getGlobal('theme_type_chose'), $nv_Lang->getGlobal('theme_type_' . $theme_type)));
                 $xtpl->assign('STHEME_ICON', $icons[$theme_type]);
 
                 if ($theme_type == $current_theme_type) {

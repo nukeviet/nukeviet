@@ -43,7 +43,7 @@ if ($type != 'image' and $type != 'flash') {
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 if ($popup) {
-    $nv_Lang->getModule('browse_file') = $nv_Lang->getGlobal('browse_file');
+    $nv_Lang->setModule('browse_file', $nv_Lang->getGlobal('browse_file'));
     $sys_max_size = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
 
     $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);

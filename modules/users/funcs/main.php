@@ -17,7 +17,7 @@ if (isset($array_op[0])) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
+$mod_title = $module_info['custom_title'];
 
 if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
     $contents = user_info_exit($nv_Lang->getModule('notallowuserlogin'));

@@ -220,8 +220,8 @@ function nv_site_theme($contents, $full = true)
         if ($global_config['switch_mobi_des']) {
             foreach ($global_config['array_theme_type'] as $theme_type) {
                 $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-                $xtpl->assign('STHEME_TITLE', $lang_global['theme_type_' . $theme_type]);
-                $xtpl->assign('STHEME_INFO', sprintf($nv_Lang->getGlobal('theme_type_chose'), $lang_global['theme_type_' . $theme_type]));
+                $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
+                $xtpl->assign('STHEME_INFO', sprintf($nv_Lang->getGlobal('theme_type_chose'), $nv_Lang->getGlobal('theme_type_' . $theme_type)));
 
                 if ($theme_type != $global_config['current_theme_type']) {
                     $xtpl->parse('main.theme_type.loop.other');
