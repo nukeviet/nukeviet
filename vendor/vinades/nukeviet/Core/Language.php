@@ -117,15 +117,8 @@ class Language
         unset($lang_translator, $lang_global, $lang_module, $lang_block);
     }
 
-    /**
-     * Language::get()
-     *
-     * @return
-     */
-    public function get()
+    private function _get($funcArgs, $funcNum)
     {
-        $funcArgs = func_get_args();
-        $funcNum = func_num_args();
         if ($funcNum < 1) {
             return '';
         }
@@ -146,5 +139,45 @@ class Language
             return $langkey;
         }
         return (empty($args) ? $langvalue : vsprintf($langvalue, $args));
+    }
+
+    /**
+     * Language::get()
+     *
+     * @return
+     */
+    public function get()
+    {
+        return $this->_get(func_get_args(), func_num_args());
+    }
+
+    /**
+     * Language::getModule()
+     *
+     * @return
+     */
+    public function getModule()
+    {
+        return $this->_get(func_get_args(), func_num_args());
+    }
+
+    /**
+     * Language::getBlock()
+     *
+     * @return
+     */
+    public function getBlock()
+    {
+        return $this->_get(func_get_args(), func_num_args());
+    }
+
+    /**
+     * Language::getGlobal()
+     *
+     * @return
+     */
+    public function getGlobal()
+    {
+        return $this->_get(func_get_args(), func_num_args());
     }
 }
