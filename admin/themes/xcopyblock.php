@@ -12,14 +12,14 @@ if (! defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['xcopyblock'];
+$page_title = $nv_Lang->getModule('xcopyblock');
 
 $selectthemes = $nv_Request->get_string('selectthemes', 'cookie', '');
 $op = $nv_Request->get_string(NV_OP_VARIABLE, 'get', '');
 
 $xtpl = new XTemplate('xcopyblock.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

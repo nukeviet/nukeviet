@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['edit_title'];
+$page_title = $nv_Lang->getModule('edit_title');
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
 
@@ -43,12 +43,12 @@ if (!$allow) {
 }
 
 // Thêm vào menutop
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $row['userid']] = $lang_module['user_2step_mamager'];
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $row['userid']] = $lang_module['user_openid_mamager'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $row['userid']] = $nv_Lang->getModule('user_2step_mamager');
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $row['userid']] = $nv_Lang->getModule('user_openid_mamager');
 
 if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     $xtpl = new XTemplate('user_safemode.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SAFEMODE_DEACT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow');
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -139,7 +139,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
-            'mess' => sprintf($lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>')
+            'mess' => sprintf($nv_Lang->getModule('account_deny_name'), '<strong>' . $_user['username'] . '</strong>')
         ));
     }
 
@@ -147,7 +147,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'username',
-            'mess' => $lang_module['edit_error_username_exist']
+            'mess' => $nv_Lang->getModule('edit_error_username_exist')
         ));
     }
 
@@ -163,7 +163,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ));
     }
 
@@ -171,7 +171,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ));
     }
 
@@ -179,7 +179,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ));
     }
 
@@ -195,7 +195,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'password2',
-            'mess' => $lang_module['edit_error_password']
+            'mess' => $nv_Lang->getModule('edit_error_password')
         ));
     }
 
@@ -243,7 +243,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'group_default',
-            'mess' => $lang_module['edit_error_group_default']
+            'mess' => $nv_Lang->getModule('edit_error_group_default')
         ));
     }
 
@@ -333,13 +333,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     // Gửi mail thông báo
     if (!empty($_user['adduser_email'])) {
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
-        $subject = $lang_module['adduser_register1'];
+        $subject = $nv_Lang->getModule('adduser_register1');
         $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-        $message = sprintf($lang_module['adduser_register_info2'], $full_name, $global_config['site_name'], $_url, $_user['username']);
+        $message = sprintf($nv_Lang->getModule('adduser_register_info2'), $full_name, $global_config['site_name'], $_url, $_user['username']);
         if (!empty($_user['password1'])) {
-            $message .= sprintf($lang_module['adduser_register_info3'], $_user['password1']);
+            $message .= sprintf($nv_Lang->getModule('adduser_register_info3'), $_user['password1']);
         }
-        $message .= sprintf($lang_module['adduser_register_info4'], $global_config['site_name']);
+        $message .= sprintf($nv_Lang->getModule('adduser_register_info4'), $global_config['site_name']);
         @nv_sendmail($global_config['site_email'], $_user['email'], $subject, $message);
     }
 
@@ -385,7 +385,7 @@ if (!empty($groups_list)) {
 }
 
 $xtpl = new XTemplate('user_edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $_user);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);

@@ -39,8 +39,8 @@ if (! empty($listcid)) {
         }
     }
 
-    $lang_enable = ($status == 1) ? $lang_module['enable'] : $lang_module['disable'];
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_active'] . ': ' . $lang_enable, 'listcid: ' . $listcid, $admin_info['userid']);
+    $lang_enable = ($status == 1) ? $nv_Lang->getModule('enable') : $nv_Lang->getModule('disable');
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_active') . ': ' . $lang_enable, 'listcid: ' . $listcid, $admin_info['userid']);
 
     // Xac dinh ID cac bai viet
     $sql = 'SELECT DISTINCT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid in (' . $listcid . ')';
@@ -55,7 +55,7 @@ if (! empty($listcid)) {
         }
     }
 
-    echo $lang_module['update_success'];
+    echo $nv_Lang->getModule('update_success');
 } else {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment');
 }

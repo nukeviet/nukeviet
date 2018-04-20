@@ -14,7 +14,7 @@ if (!defined('NV_MAINFILE')) {
 
 $allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
 
-$page_title = $lang_module['notification'];
+$page_title = $nv_Lang->getModule('notification');
 
 // Reset notification
 if ($nv_Request->isset_request('notification_reset', 'post')) {
@@ -91,7 +91,7 @@ while ($data = $result->fetch()) {
         // Hien thi thong bao tu cac module he thong
         if ($data['module'] == 'modules') {
             if ($data['type'] == 'auto_deactive_module') {
-                $data['title'] = sprintf($lang_module['notification_module_auto_deactive'], $data['content']['custom_title']);
+                $data['title'] = sprintf($nv_Lang->getModule('notification_module_auto_deactive'), $data['content']['custom_title']);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'];
             }
         }
@@ -99,7 +99,7 @@ while ($data = $result->fetch()) {
         if ($data['module'] == 'settings') {
             if ($data['type'] == 'auto_deactive_cronjobs') {
                 $cron_title = $db->query('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $data['content']['cron_id'])->fetchColumn();
-                $data['title'] = sprintf($lang_module['notification_cronjobs_auto_deactive'], $cron_title);
+                $data['title'] = sprintf($nv_Lang->getModule('notification_cronjobs_auto_deactive'), $cron_title);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=cronjobs';
             }
         }
@@ -112,7 +112,7 @@ while ($data = $result->fetch()) {
                 if ($user_info) {
                     $data['send_from'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
                 } else {
-                    $data['send_from'] = $lang_global['level5'];
+                    $data['send_from'] = $nv_Lang->getGlobal('level5');
                 }
 
                 if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
@@ -122,7 +122,7 @@ while ($data = $result->fetch()) {
                 }
             } else {
                 $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
-                $data['send_from'] = $lang_global['level5'];
+                $data['send_from'] = $nv_Lang->getGlobal('level5');
             }
 
             include NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php';
@@ -138,7 +138,7 @@ while ($data = $result->fetch()) {
 }
 
 $xtpl = new XTemplate('notification.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/siteinfo');
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 if (!empty($array_data)) {
     foreach ($array_data as $data) {
@@ -159,7 +159,7 @@ if (!empty($array_data)) {
         $contents = $xtpl->text('main');
     }
 } elseif ($is_ajax) {
-    $contents = $page == 1 ? $lang_module['notification_empty'] : '';
+    $contents = $page == 1 ? $nv_Lang->getModule('notification_empty') : '';
 } else {
     if ($page != 1) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);

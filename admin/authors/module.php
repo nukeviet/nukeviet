@@ -52,8 +52,8 @@ if (defined('NV_IS_AJAX')) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -91,7 +91,7 @@ $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
 if (! defined('NV_IS_AJAX')) {
-    $page_title = $lang_module['module_admin'];
+    $page_title = $nv_Lang->getModule('module_admin');
     $contents = nv_admin_theme($contents);
 }
 

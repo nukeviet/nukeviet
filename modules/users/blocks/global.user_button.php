@@ -12,7 +12,7 @@ if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
-global $site_mods, $db_config, $client_info, $global_config, $module_file, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
+global $site_mods, $db_config, $client_info, $global_config, $module_file, $module_name, $user_info, $my_head, $admin_info, $blockID, $nv_Lang;
 
 $content = '';
 
@@ -51,11 +51,11 @@ if ($global_config['allowuserlogin']) {
             $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
         }
     } else {
-        global $lang_module;
+        global $nv_Lang;
     }
 
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('BLOCKID', $blockID);
     $xtpl->assign('BLOCK_THEME', $block_theme);
     $xtpl->assign('BLOCK_CSS', $block_css);
@@ -77,7 +77,7 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('MODULENAME', $module_info['custom_title']);
         $xtpl->assign('AVATA', $avata);
         $xtpl->assign('USER', $user_info);
-        $xtpl->assign('WELCOME', defined('NV_IS_ADMIN') ? $lang_global['admin_account'] : $lang_global['your_account']);
+        $xtpl->assign('WELCOME', defined('NV_IS_ADMIN') ? $nv_Lang->getGlobal('admin_account') : $nv_Lang->getGlobal('your_account'));
         $xtpl->assign('LEVEL', defined('NV_IS_ADMIN') ? $admin_info['level'] : 'user');
         $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users');
         $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
@@ -89,7 +89,7 @@ if ($global_config['allowuserlogin']) {
 
         if (defined('NV_IS_ADMIN')) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
-            $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+            $lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
 
             $xtpl->assign('NV_ADMINDIR', NV_ADMINDIR);
             $xtpl->assign('URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block);
@@ -119,15 +119,15 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
+        $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
         $xtpl->assign('NV_HEADER', '');
         $xtpl->assign('NV_REDIRECT', '');
         $xtpl->assign('CHECKSS', NV_CHECK_SESSION);
 
-        $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
-        $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+        $username_rule = empty($global_config['nv_unick_type']) ? sprintf($nv_Lang->getGlobal('username_rule_nolimit'), $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($nv_Lang->getGlobal('username_rule_limit'), $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
+        $password_rule = empty($global_config['nv_upass_type']) ? sprintf($nv_Lang->getGlobal('password_rule_nolimit'), $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($nv_Lang->getGlobal('password_rule_limit'), $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
 
         $xtpl->assign('USERNAME_RULE', $username_rule);
         $xtpl->assign('PASSWORD_RULE', $password_rule);
@@ -155,7 +155,7 @@ if ($global_config['allowuserlogin']) {
         ))) {
             if ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
                 $xtpl->parse('main.allowuserreg.reg_recaptcha');
             } else {
                 $xtpl->parse('main.allowuserreg.reg_captcha');
@@ -185,17 +185,17 @@ if ($global_config['allowuserlogin']) {
             $global_array_genders = array(
                 'N' => array(
                     'key' => 'N',
-                    'title' => $lang_module['na'],
+                    'title' => $nv_Lang->getModule('na'),
                     'selected' => ''
                 ),
                 'M' => array(
                     'key' => 'M',
-                    'title' => $lang_module['male'],
+                    'title' => $nv_Lang->getModule('male'),
                     'selected' => ''
                 ),
                 'F' => array(
                     'key' => 'F',
-                    'title' => $lang_module['female'],
+                    'title' => $nv_Lang->getModule('female'),
                     'selected' => ''
                 )
             );

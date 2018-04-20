@@ -23,10 +23,10 @@ if ($id) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    $page_title = $lang_module['edit'];
+    $page_title = $nv_Lang->getModule('edit');
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 } else {
-    $page_title = $lang_module['add'];
+    $page_title = $nv_Lang->getModule('add');
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
@@ -62,9 +62,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     if (empty($row['title'])) {
-        $error = $lang_module['empty_title'];
+        $error = $nv_Lang->getModule('empty_title');
     } elseif (strip_tags($row['bodytext']) == '') {
-        $error = $lang_module['empty_bodytext'];
+        $error = $nv_Lang->getModule('empty_bodytext');
     } elseif (empty($row['layout_func']) or in_array('layout.' . $row['layout_func'] . '.tpl', $layout_array)) {
         $row['alias'] = empty($row['alias']) ? change_alias($row['title']) : change_alias($row['alias']);
 
@@ -136,10 +136,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $nv_Cache->delMod($module_name);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main');
             } else {
-                $error = $lang_module['errorsave'];
+                $error = $nv_Lang->getModule('errorsave');
             }
         } catch (PDOException $e) {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     }
 } elseif (empty($id)) {
@@ -170,12 +170,12 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
 }
-$lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
-$lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
+$nv_Lang->getGlobal('title_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 65);
+$nv_Lang->getGlobal('description_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 160);
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $action);
 $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('DATA', $row);
@@ -198,11 +198,11 @@ if (sizeof($_grows)) {
     $array_googleplus = array();
     $array_googleplus[] = array(
         'gid' => -1,
-        'title' => $lang_module['googleplus_1']
+        'title' => $nv_Lang->getModule('googleplus_1')
     );
     $array_googleplus[] = array(
         'gid' => 0,
-        'title' => $lang_module['googleplus_0']
+        'title' => $nv_Lang->getModule('googleplus_0')
     );
     foreach ($_grows as $grow) {
         $array_googleplus[] = $grow;
@@ -231,9 +231,9 @@ if (empty($row['alias'])) {
 
 // position images
 $array_imgposition = array(
-    0 => $lang_module['imgposition_0'],
-    1 => $lang_module['imgposition_1'],
-    2 => $lang_module['imgposition_2']
+    0 => $nv_Lang->getModule('imgposition_0'),
+    1 => $nv_Lang->getModule('imgposition_1'),
+    2 => $nv_Lang->getModule('imgposition_2')
 );
 foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';

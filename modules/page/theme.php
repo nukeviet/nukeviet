@@ -21,11 +21,11 @@ if (!defined('NV_IS_MOD_PAGE')) {
  */
 function nv_page_main($row, $ab_links, $content_comment)
 {
-    global $module_name, $lang_module, $lang_global, $module_info, $meta_property, $client_info, $page_config;
+    global $module_name, $module_info, $meta_property, $client_info, $page_config, $nv_Lang;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CONTENT', $row);
 
     if (!empty($row['description'])) {
@@ -98,12 +98,12 @@ function nv_page_main($row, $ab_links, $content_comment)
  */
 function nv_page_main_list($array_data, $generate_page)
 {
-    global $lang_global, $module_upload, $module_info, $module_name;
+    global $module_upload, $module_info, $module_name, $nv_Lang;
 
     $template = (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/main_list.tpl')) ? $module_info['template'] : 'default';
 
     $xtpl = new XTemplate('main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($array_data)) {
         foreach ($array_data as $row) {

@@ -21,7 +21,7 @@ if ($global_config['idsite']) {
 $metatags = array();
 $metatags['meta'] = array();
 $ignore = array( 'content-type', 'generator', 'description', 'keywords' );
-$vas = array( '{CONTENT-LANGUAGE} (' . $lang_global['Content_Language'] . ')', '{LANGUAGE} (' . $lang_global['LanguageName'] . ')', '{SITE_NAME} (' . $global_config['site_name'] . ')', '{SITE_EMAIL} (' . $global_config['site_email'] . ')' );
+$vas = array( '{CONTENT-LANGUAGE} (' . $nv_Lang->getGlobal('Content_Language') . ')', '{LANGUAGE} (' . $nv_Lang->getGlobal('LanguageName') . ')', '{SITE_NAME} (' . $global_config['site_name'] . ')', '{SITE_EMAIL} (' . $global_config['site_email'] . ')' );
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $metaGroupsName = $nv_Request->get_array('metaGroupsName', 'post');
@@ -73,13 +73,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-$page_title = $lang_module['metaTagsConfig'];
+$page_title = $nv_Lang->getModule('metaTagsConfig');
 
 $xtpl = new XTemplate('metatags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('NOTE', sprintf($lang_module['metaTagsNote'], implode(', ', $ignore)));
-$xtpl->assign('VARS', $lang_module['metaTagsVar'] . ': ' . implode(', ', $vas));
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('NOTE', sprintf($nv_Lang->getModule('metaTagsNote'), implode(', ', $ignore)));
+$xtpl->assign('VARS', $nv_Lang->getModule('metaTagsVar') . ': ' . implode(', ', $vas));
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);

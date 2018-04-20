@@ -42,7 +42,7 @@ foreach ($array_cat_admin as $userid_i => $value) {
 
 if (empty($module_info['admins'])) {
     // Thong bao khong co nguoi dieu hanh chung
-    $contents = nv_theme_alert($lang_module['admin_no_user_title'], $lang_module['admin_no_user_content']);
+    $contents = nv_theme_alert($nv_Lang->getModule('admin_no_user_title'), $nv_Lang->getModule('admin_no_user_content'));
 }
 
 foreach ($module_admin as $userid_i) {
@@ -79,9 +79,9 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
     $userid = $nv_Request->get_int('userid', 'get', 0);
 
     $array_permissions_mod = array(
-        $lang_module['admin_cat'],
-        $lang_module['admin_module'],
-        $lang_module['admin_full_module'] );
+        $nv_Lang->getModule('admin_cat'),
+        $nv_Lang->getModule('admin_module'),
+        $nv_Lang->getModule('admin_full_module') );
 
     if ($nv_Request->isset_request('submit', 'post') and $userid > 0) {
         $admin_module = $nv_Request->get_int('admin_module', 'post', 0);
@@ -175,13 +175,13 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
 
     if (! empty($users_list)) {
         $head_tds = array();
-        $head_tds['userid']['title'] = $lang_module['admin_userid'];
+        $head_tds['userid']['title'] = $nv_Lang->getModule('admin_userid');
         $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=userid&amp;sorttype=ASC';
-        $head_tds['username']['title'] = $lang_module['admin_username'];
+        $head_tds['username']['title'] = $nv_Lang->getModule('admin_username');
         $head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=username&amp;sorttype=ASC';
-        $head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
+        $head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname');
         $head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=full_name&amp;sorttype=ASC';
-        $head_tds['email']['title'] = $lang_module['admin_email'];
+        $head_tds['email']['title'] = $nv_Lang->getModule('admin_email');
         $head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=email&amp;sorttype=ASC';
 
         foreach ($orders as $order) {
@@ -195,7 +195,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         }
 
         $xtpl = new XTemplate('admin.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         foreach ($head_tds as $head_td) {
             $xtpl->assign('HEAD_TD', $head_td);
             $xtpl->parse('main.head_td');
@@ -260,7 +260,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
                     $xtpl->parse('main.edit.catid');
                 }
 
-                $xtpl->assign('CAPTION_EDIT', $lang_module['admin_edit_user'] . ': ' . $users_list[$userid]['username']);
+                $xtpl->assign('CAPTION_EDIT', $nv_Lang->getModule('admin_edit_user') . ': ' . $users_list[$userid]['username']);
                 $xtpl->parse('main.edit');
             }
         }
@@ -268,7 +268,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         $contents = $xtpl->text('main');
     }
 } elseif (defined('NV_IS_ADMIN_MODULE')) {
-    $contents = '<br /><br /><br /><center><b>' . $lang_module['admin_module_for_user'] . '</b></center><br /><br /><br />';
+    $contents = '<br /><br /><br /><center><b>' . $nv_Lang->getModule('admin_module_for_user') . '</b></center><br /><br /><br />';
 } else {
     $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 
@@ -276,8 +276,8 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
     }
     $xtpl = new XTemplate('admin.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('CAPTION_EDIT', $lang_module['admin_cat_for_user']);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('CAPTION_EDIT', $nv_Lang->getModule('admin_cat_for_user'));
 
     $result_cat = $db->query($sql);
     while ($row = $result_cat->fetch()) {
@@ -322,7 +322,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
     $contents = $xtpl->text('view_user');
 }
 
-$page_title = $lang_module['admin'];
+$page_title = $nv_Lang->getModule('admin');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

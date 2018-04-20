@@ -24,7 +24,7 @@ function nv_groups_list($mod_data = 'users')
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
         return unserialize($cache);
     } else {
-        global $db, $db_config, $global_config, $lang_global;
+        global $db, $db_config, $global_config, $nv_Lang;
 
         $groups = array();
         $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
@@ -236,7 +236,7 @@ function nv_save_file_config_global()
  */
 function nv_geVersion($updatetime = 3600)
 {
-    global $global_config, $lang_global;
+    global $global_config, $nv_Lang;
 
     $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml';
 
@@ -267,7 +267,7 @@ function nv_geVersion($updatetime = 3600)
         if (!empty(NukeViet\Http\Http::$error)) {
             $error = nv_http_get_lang(NukeViet\Http\Http::$error);
         } elseif (!isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
-            $error = $lang_global['error_valid_response'];
+            $error = $nv_Lang->getGlobal('error_valid_response');
         } elseif (!empty($array['error']['message'])) {
             $error = $array['error']['message'];
         }
@@ -653,7 +653,7 @@ function nv_rewrite_rule_iis7($rewrite_rule = '')
  */
 function nv_getExtVersion($updatetime = 3600)
 {
-    global $global_config, $lang_global, $db, $db_config;
+    global $global_config, $db, $db_config, $nv_Lang;
 
     $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/extensions.version.' . NV_LANG_INTERFACE . '.xml';
 
@@ -716,7 +716,7 @@ function nv_getExtVersion($updatetime = 3600)
             if (!empty(NukeViet\Http\Http::$error)) {
                 $error = nv_http_get_lang(NukeViet\Http\Http::$error);
             } elseif (!isset($apidata['error']) or !isset($apidata['data']) or !isset($apidata['pagination']) or !is_array($apidata['error']) or !is_array($apidata['data']) or !is_array($apidata['pagination']) or (!empty($apidata['error']) and (!isset($apidata['error']['level']) or empty($apidata['error']['message'])))) {
-                $error = $lang_global['error_valid_response'];
+                $error = $nv_Lang->getGlobal('error_valid_response');
             } elseif (!empty($apidata['error']['message'])) {
                 $error = $apidata['error']['message'];
             }
@@ -803,7 +803,7 @@ function nv_getExtVersion($updatetime = 3600)
  */
 function nv_http_get_lang($input)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     if (!isset($input['code']) or !isset($input['message'])) {
         return '';

@@ -191,7 +191,7 @@ function nv_convertfromBytes($size)
  */
 function nv_convertfromSec($sec = 0)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     $sec = intval($sec);
     $min = 60;
@@ -203,19 +203,19 @@ function nv_convertfromSec($sec = 0)
         return '';
     }
     if ($sec < $min) {
-        return plural($sec, $lang_global['plural_sec']);
+        return plural($sec, $nv_Lang->getGlobal('plural_sec'));
     }
     if ($sec < $hour) {
-        return trim(plural(floor($sec / $min), $lang_global['plural_min']) . (($sd = $sec % $min) ? ' ' . nv_convertfromSec($sd) : ''));
+        return trim(plural(floor($sec / $min), $nv_Lang->getGlobal('plural_min')) . (($sd = $sec % $min) ? ' ' . nv_convertfromSec($sd) : ''));
     }
     if ($sec < $day) {
-        return trim(plural(floor($sec / $hour), $lang_global['plural_hour']) . (($sd = $sec % $hour) ? ' ' . nv_convertfromSec($sd) : ''));
+        return trim(plural(floor($sec / $hour), $nv_Lang->getGlobal('plural_hour')) . (($sd = $sec % $hour) ? ' ' . nv_convertfromSec($sd) : ''));
     }
     if ($sec < $year) {
-        return trim(plural(floor($sec / $day), $lang_global['plural_day']) . (($sd = $sec % $day) ? ' ' . nv_convertfromSec($sd) : ''));
+        return trim(plural(floor($sec / $day), $nv_Lang->getGlobal('plural_day')) . (($sd = $sec % $day) ? ' ' . nv_convertfromSec($sd) : ''));
     }
 
-    return trim(plural(floor($sec / $year), $lang_global['plural_year']) . (($sd = $sec % $year) ? ' ' . nv_convertfromSec($sd) : ''));
+    return trim(plural(floor($sec / $year), $nv_Lang->getGlobal('plural_year')) . (($sd = $sec % $year) ? ' ' . nv_convertfromSec($sd) : ''));
 }
 
 /**
@@ -321,18 +321,18 @@ function nv_md5safe($username)
  */
 function nv_check_valid_login($login, $max, $min)
 {
-    global $lang_global, $global_config;
+    global $global_config, $nv_Lang;
 
     $login = trim(strip_tags($login));
 
     if (empty($login)) {
-        return $lang_global['username_empty'];
+        return $nv_Lang->getGlobal('username_empty');
     }
     if (isset($login{$max})) {
-        return sprintf($lang_global['usernamelong'], $max);
+        return sprintf($nv_Lang->getGlobal('usernamelong'), $max);
     }
     if (! isset($login{$min - 1})) {
-        return sprintf($lang_global['usernameadjective'], $min);
+        return sprintf($nv_Lang->getGlobal('usernameadjective'), $min);
     }
 
     $type = $global_config['nv_unick_type'];
@@ -369,18 +369,18 @@ function nv_check_valid_login($login, $max, $min)
  */
 function nv_check_valid_pass($pass, $max, $min)
 {
-    global $lang_global, $db_config, $db, $global_config;
+    global $db_config, $db, $global_config, $nv_Lang;
 
     $pass = trim(strip_tags($pass));
 
     if (empty($pass)) {
-        return $lang_global['password_empty'];
+        return $nv_Lang->getGlobal('password_empty');
     }
     if (isset($pass{$max})) {
-        return sprintf($lang_global['passwordlong'], $max);
+        return sprintf($nv_Lang->getGlobal('passwordlong'), $max);
     }
     if (! isset($pass{$min - 1})) {
-        return sprintf($lang_global['passwordadjective'], $min);
+        return sprintf($nv_Lang->getGlobal('passwordadjective'), $min);
     }
 
     $type = $global_config['nv_upass_type'];
@@ -405,7 +405,7 @@ function nv_check_valid_pass($pass, $max, $min)
     $password_simple = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'")->fetchColumn();
     $password_simple = explode('|', $password_simple);
     if (in_array($pass, $password_simple)) {
-        return $lang_global ['upass_type_simple'];
+        return $nv_Lang->getGlobal('upass_type_simple');
     }
     return '';
 }
@@ -418,24 +418,24 @@ function nv_check_valid_pass($pass, $max, $min)
  */
 function nv_check_valid_email($mail)
 {
-    global $lang_global, $global_config;
+    global $global_config, $nv_Lang;
 
     $mail = strip_tags(trim($mail));
 
     if (empty($mail)) {
-        return $lang_global['email_empty'];
+        return $nv_Lang->getGlobal('email_empty');
     }
 
     if (function_exists('filter_var') and filter_var($mail, FILTER_VALIDATE_EMAIL) === false) {
-        return $lang_global['email_incorrect'];
+        return $nv_Lang->getGlobal('email_incorrect');
     }
 
     if (! preg_match($global_config['check_email'], $mail)) {
-        return $lang_global['email_incorrect'];
+        return $nv_Lang->getGlobal('email_incorrect');
     }
 
     if (! preg_match('/\.([a-z0-9\-]+)$/', $mail)) {
-        return $lang_global['email_incorrect'];
+        return $nv_Lang->getGlobal('email_incorrect');
     }
 
     return '';
@@ -735,7 +735,7 @@ function nv_show_name_user($first_name, $last_name,  $user_name = '')
  */
 function nv_date($format, $time = 0)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     if (! $time) {
         $time = NV_CURRENTTIME;
@@ -745,44 +745,44 @@ function nv_date($format, $time = 0)
     $return = date($format, $time);
 
     $replaces = array(
-        '/\[Sun\](\W|$)/' => $lang_global['sun'] . "$1",
-        '/\[Mon\](\W|$)/' => $lang_global['mon'] . "$1",
-        '/\[Tue\](\W|$)/' => $lang_global['tue'] . "$1",
-        '/\[Wed\](\W|$)/' => $lang_global['wed'] . "$1",
-        '/\[Thu\](\W|$)/' => $lang_global['thu'] . "$1",
-        '/\[Fri\](\W|$)/' => $lang_global['fri'] . "$1",
-        '/\[Sat\](\W|$)/' => $lang_global['sat'] . "$1",
-        '/\[Jan\](\W|$)/' => $lang_global['jan'] . "$1",
-        '/\[Feb\](\W|$)/' => $lang_global['feb'] . "$1",
-        '/\[Mar\](\W|$)/' => $lang_global['mar'] . "$1",
-        '/\[Apr\](\W|$)/' => $lang_global['apr'] . "$1",
-        '/\[May\](\W|$)/' => $lang_global['may2'] . "$1",
-        '/\[Jun\](\W|$)/' => $lang_global['jun'] . "$1",
-        '/\[Jul\](\W|$)/' => $lang_global['jul'] . "$1",
-        '/\[Aug\](\W|$)/' => $lang_global['aug'] . "$1",
-        '/\[Sep\](\W|$)/' => $lang_global['sep'] . "$1",
-        '/\[Oct\](\W|$)/' => $lang_global['oct'] . "$1",
-        '/\[Nov\](\W|$)/' => $lang_global['nov'] . "$1",
-        '/\[Dec\](\W|$)/' => $lang_global['dec'] . "$1",
-        '/Sunday(\W|$)/' => $lang_global['sunday'] . "$1",
-        '/Monday(\W|$)/' => $lang_global['monday'] . "$1",
-        '/Tuesday(\W|$)/' => $lang_global['tuesday'] . "$1",
-        '/Wednesday(\W|$)/' => $lang_global['wednesday'] . "$1",
-        '/Thursday(\W|$)/' => $lang_global['thursday'] . "$1",
-        '/Friday(\W|$)/' => $lang_global['friday'] . "$1",
-        '/Saturday(\W|$)/' => $lang_global['saturday'] . "$1",
-        '/January(\W|$)/' => $lang_global['january'] . "$1",
-        '/February(\W|$)/' => $lang_global['february'] . "$1",
-        '/March(\W|$)/' => $lang_global['march'] . "$1",
-        '/April(\W|$)/' => $lang_global['april'] . "$1",
-        '/May(\W|$)/' => $lang_global['may'] . "$1",
-        '/June(\W|$)/' => $lang_global['june'] . "$1",
-        '/July(\W|$)/' => $lang_global['july'] . "$1",
-        '/August(\W|$)/' => $lang_global['august'] . "$1",
-        '/September(\W|$)/' => $lang_global['september'] . "$1",
-        '/October(\W|$)/' => $lang_global['october'] . "$1",
-        '/November(\W|$)/' => $lang_global['november'] . "$1",
-        '/December(\W|$)/' => $lang_global['december'] . "$1" );
+        '/\[Sun\](\W|$)/' => $nv_Lang->getGlobal('sun') . "$1",
+        '/\[Mon\](\W|$)/' => $nv_Lang->getGlobal('mon') . "$1",
+        '/\[Tue\](\W|$)/' => $nv_Lang->getGlobal('tue') . "$1",
+        '/\[Wed\](\W|$)/' => $nv_Lang->getGlobal('wed') . "$1",
+        '/\[Thu\](\W|$)/' => $nv_Lang->getGlobal('thu') . "$1",
+        '/\[Fri\](\W|$)/' => $nv_Lang->getGlobal('fri') . "$1",
+        '/\[Sat\](\W|$)/' => $nv_Lang->getGlobal('sat') . "$1",
+        '/\[Jan\](\W|$)/' => $nv_Lang->getGlobal('jan') . "$1",
+        '/\[Feb\](\W|$)/' => $nv_Lang->getGlobal('feb') . "$1",
+        '/\[Mar\](\W|$)/' => $nv_Lang->getGlobal('mar') . "$1",
+        '/\[Apr\](\W|$)/' => $nv_Lang->getGlobal('apr') . "$1",
+        '/\[May\](\W|$)/' => $nv_Lang->getGlobal('may2') . "$1",
+        '/\[Jun\](\W|$)/' => $nv_Lang->getGlobal('jun') . "$1",
+        '/\[Jul\](\W|$)/' => $nv_Lang->getGlobal('jul') . "$1",
+        '/\[Aug\](\W|$)/' => $nv_Lang->getGlobal('aug') . "$1",
+        '/\[Sep\](\W|$)/' => $nv_Lang->getGlobal('sep') . "$1",
+        '/\[Oct\](\W|$)/' => $nv_Lang->getGlobal('oct') . "$1",
+        '/\[Nov\](\W|$)/' => $nv_Lang->getGlobal('nov') . "$1",
+        '/\[Dec\](\W|$)/' => $nv_Lang->getGlobal('dec') . "$1",
+        '/Sunday(\W|$)/' => $nv_Lang->getGlobal('sunday') . "$1",
+        '/Monday(\W|$)/' => $nv_Lang->getGlobal('monday') . "$1",
+        '/Tuesday(\W|$)/' => $nv_Lang->getGlobal('tuesday') . "$1",
+        '/Wednesday(\W|$)/' => $nv_Lang->getGlobal('wednesday') . "$1",
+        '/Thursday(\W|$)/' => $nv_Lang->getGlobal('thursday') . "$1",
+        '/Friday(\W|$)/' => $nv_Lang->getGlobal('friday') . "$1",
+        '/Saturday(\W|$)/' => $nv_Lang->getGlobal('saturday') . "$1",
+        '/January(\W|$)/' => $nv_Lang->getGlobal('january') . "$1",
+        '/February(\W|$)/' => $nv_Lang->getGlobal('february') . "$1",
+        '/March(\W|$)/' => $nv_Lang->getGlobal('march') . "$1",
+        '/April(\W|$)/' => $nv_Lang->getGlobal('april') . "$1",
+        '/May(\W|$)/' => $nv_Lang->getGlobal('may') . "$1",
+        '/June(\W|$)/' => $nv_Lang->getGlobal('june') . "$1",
+        '/July(\W|$)/' => $nv_Lang->getGlobal('july') . "$1",
+        '/August(\W|$)/' => $nv_Lang->getGlobal('august') . "$1",
+        '/September(\W|$)/' => $nv_Lang->getGlobal('september') . "$1",
+        '/October(\W|$)/' => $nv_Lang->getGlobal('october') . "$1",
+        '/November(\W|$)/' => $nv_Lang->getGlobal('november') . "$1",
+        '/December(\W|$)/' => $nv_Lang->getGlobal('december') . "$1" );
 
     return preg_replace(array_keys($replaces), array_values($replaces), $return);
 }
@@ -795,10 +795,10 @@ function nv_date($format, $time = 0)
  */
 function nv_monthname($i)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     --$i;
-    $month_names = array( $lang_global['january'], $lang_global['february'], $lang_global['march'], $lang_global['april'], $lang_global['may'], $lang_global['june'], $lang_global['july'], $lang_global['august'], $lang_global['september'], $lang_global['october'], $lang_global['november'], $lang_global['december'] );
+    $month_names = array( $nv_Lang->getGlobal('january'), $nv_Lang->getGlobal('february'), $nv_Lang->getGlobal('march'), $nv_Lang->getGlobal('april'), $nv_Lang->getGlobal('may'), $nv_Lang->getGlobal('june'), $nv_Lang->getGlobal('july'), $nv_Lang->getGlobal('august'), $nv_Lang->getGlobal('september'), $nv_Lang->getGlobal('october'), $nv_Lang->getGlobal('november'), $nv_Lang->getGlobal('december') );
 
     return (isset($month_names[$i]) ? $month_names[$i] : '');
 }
@@ -1211,7 +1211,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  */
 function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page', $full_theme = true)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     // Round up total page
     $total_pages = ceil($num_items / $per_page);
@@ -1279,7 +1279,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         if ($on_page > 1) {
             $href = ($on_page > 2) ? $base_url . $amp . ($on_page - 1) : $base_url;
             $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
+            $page_string = "<li><a " . $href . " title=\"" . $nv_Lang->getGlobal('pageprev') . "\">&laquo;</a></li>" . $page_string;
         } else {
             $page_string = '<li class="disabled"><a href="#">&laquo;</a></li>' . $page_string;
         }
@@ -1287,7 +1287,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         if ($on_page < $total_pages) {
             $href = ($on_page) ? $base_url . $amp . ($on_page + 1) : $base_url;
             $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
+            $page_string .= '<li><a ' . $href . ' title="' . $nv_Lang->getGlobal('pagenext') . '">&raquo;</a></li>';
         } else {
             $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
         }
@@ -1313,7 +1313,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
  */
 function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $full_theme = true)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     $total_pages = ceil($num_items / $per_page);
 
@@ -1321,7 +1321,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         return '';
     }
 
-    $title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'];
+    $title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page');
     $page_string = ($on_page == 1) ? '<li class="active"><a href="#">1</a></li>' : '<li><a rel="prev" title="' . $title . ' 1" href="' . $base_url . '">1</a></li>';
 
     if ($total_pages > 7) {
@@ -1833,7 +1833,7 @@ function nv_site_mods()
  */
 function nv_insert_notification($module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1)
 {
-    global  $db, $global_config;
+    global $db, $global_config;
 
     /* $area
      * 0: Khu vuc ngoai site

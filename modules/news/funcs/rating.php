@@ -26,7 +26,7 @@ $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session'
 
 if ($id > 0 and in_array($point, $array_point) and $checkss == md5($id . NV_CHECK_SESSION)) {
     if (! empty($time_set)) {
-        die($lang_module['rating_error2'] . '|0|0');
+        die($nv_Lang->getModule('rating_error2') . '|0|0');
     }
 
     $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
@@ -40,9 +40,9 @@ if ($id > 0 and in_array($point, $array_point) and $checkss == md5($id . NV_CHEC
             $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET total_rating=total_rating+" . $point . ", click_rating=click_rating+1 WHERE id=" . $id;
             $db->query($query);
         }
-        $contents = sprintf($lang_module['stringrating'], $row['total_rating'] + $point, $row['click_rating'] + 1);
+        $contents = sprintf($nv_Lang->getModule('stringrating'), $row['total_rating'] + $point, $row['click_rating'] + 1);
         die($contents . '|' . round(($row['total_rating'] + $point) / ($row['click_rating'] + 1), 1) . '|' . ($row['click_rating'] + 1));
     }
 }
 
-die($lang_module['rating_error1'] . '|0|0');
+die($nv_Lang->getModule('rating_error1') . '|0|0');

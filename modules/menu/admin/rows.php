@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     $mod_file = $site_mods[$rows['module_name']]['module_file'];
 
     if (empty($rows)) {
-        die('NO_' . $lang_module['action_menu_reload_none_success']);
+        die('NO_' . $nv_Lang->getModule('action_menu_reload_none_success'));
     }
 
     // Xoa menu cu
@@ -73,7 +73,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
         menu_fix_order($mid, $id);
         $nv_Cache->delMod($module_name);
     }
-    die('OK_' . $lang_module['action_menu_reload_success']);
+    die('OK_' . $nv_Lang->getModule('action_menu_reload_success'));
 }
 
 // Default variable
@@ -118,7 +118,7 @@ $result = $db->query($sql);
 $arr_item[0] = array(
     'key' => 0,
     'parentid' => 0,
-    'title' => $lang_module['cat0'],
+    'title' => $nv_Lang->getModule('cat0'),
     'selected' => ($post['parentid'] == 0) ? ' selected="selected"' : ''
 );
 $array_all_item = array();
@@ -232,15 +232,15 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     $pa_old = $nv_Request->get_int('pa', 'post', 0);
 
     if (empty($post['title'])) {
-        $error = $lang_module['error_menu_name'];
+        $error = $nv_Lang->getModule('error_menu_name');
     } elseif (empty($post['link'])) {
-        $error = $lang_module['error_menu_link'];
+        $error = $nv_Lang->getModule('error_menu_link');
     } elseif ($post['id'] == 0) {
         $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title= :title AND parentid=' . $post['parentid'] . ' AND mid=' . $post['mid']);
         $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            $error = $lang_module['title_exit_cat'];
+            $error = $nv_Lang->getModule('title_exit_cat');
         } else {
             $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
             $weight = intval($weight) + 1;
@@ -289,7 +289,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
         $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            $error = $lang_module['title_exit_cat'];
+            $error = $nv_Lang->getModule('title_exit_cat');
         } else {
             $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
 				parentid=" . intval($post['parentid']) . ",
@@ -357,7 +357,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                 $nv_Cache->delMod($module_name);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
             } else {
-                $error = $lang_module['errorsave'];
+                $error = $nv_Lang->getModule('errorsave');
             }
         }
     }
@@ -437,7 +437,7 @@ $array_mod_title[] = array(
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid']
 );
 $array_mod_title[] = array(
-    'title' => $lang_module['menu_manager'],
+    'title' => $nv_Lang->getModule('menu_manager'),
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
 );
 krsort($array_mod_title, SORT_NUMERIC);
@@ -447,8 +447,8 @@ $s = sizeof($array_mod_title) - 1;
 $array_mod_title[$s]['active'] = true;
 
 $xtpl = new XTemplate('rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -604,12 +604,12 @@ for ($i = 0; $i <= 2; ++$i) {
     ));
     $xtpl->parse('main.active_type');
 }
-$xtpl->assign('FORM_CAPTION', ($post['id']) ? $lang_module['edit_menu'] : $lang_module['add_item']);
+$xtpl->assign('FORM_CAPTION', ($post['id']) ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_item'));
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['menu_manager'];
+$page_title = $nv_Lang->getModule('menu_manager');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

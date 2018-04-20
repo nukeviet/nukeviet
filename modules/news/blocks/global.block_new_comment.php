@@ -24,12 +24,12 @@ if (!nv_function_exists('nv_comment_new')) {
     function nv_block_comment_new($module, $data_block, $lang_block)
     {
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['titlelength'] . ':</label>';
-        $html .= '	<div class="col-sm-5"><input type="text" name="config_titlelength" class="form-control" value="' . $data_block['titlelength'] . '"/><span class="help-block panel-block-content-last">' . $lang_block['titlenote'] . '</span></div>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('titlelength') . ':</label>';
+        $html .= '	<div class="col-sm-5"><input type="text" name="config_titlelength" class="form-control" value="' . $data_block['titlelength'] . '"/><span class="help-block panel-block-content-last">' . $nv_Lang->getBlock('titlenote') . '</span></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('numrow') . ':</label>';
         $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
         return $html;

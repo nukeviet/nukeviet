@@ -99,7 +99,7 @@ if ($submit) {
     $array_config['disable_site_content'] = $nv_Request->get_editor('disable_site_content', '', NV_ALLOWED_HTML_TAGS);
 
     if (empty($array_config['disable_site_content'])) {
-        $array_config['disable_site_content'] = $lang_global['disable_site_content'];
+        $array_config['disable_site_content'] = $nv_Lang->getGlobal('disable_site_content');
     }
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
@@ -173,7 +173,7 @@ $value_setting = array(
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
-$lang_module['browse_image'] = $lang_global['browse_image'];
+$nv_Lang->getModule('browse_image') = $nv_Lang->getGlobal('browse_image');
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -181,7 +181,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('VALUE', $value_setting);
 
 foreach ($array_theme_type as $theme_type) {
@@ -242,7 +242,7 @@ if ($errormess != '') {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = sprintf($lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name']);
+$page_title = sprintf($nv_Lang->getModule('lang_site_config'), $language_array[NV_LANG_DATA]['name']);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

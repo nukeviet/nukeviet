@@ -32,11 +32,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 
     if (empty($cron_name)) {
-        $error = $lang_module['cron_name_empty'];
+        $error = $nv_Lang->getModule('cron_name_empty');
     } elseif (! empty($run_file) and ! nv_is_file(NV_BASE_SITEURL . 'includes/cronjobs/' . $run_file, 'includes/cronjobs')) {
-        $error = $lang_module['file_not_exist'];
+        $error = $nv_Lang->getModule('file_not_exist');
     } elseif (empty($run_func) or ! preg_match($global_config['check_cron'], $run_func)) {
-        $error = $lang_module['func_name_invalid'];
+        $error = $nv_Lang->getModule('func_name_invalid');
     } else {
         if (! empty($run_file) and preg_match('/^([a-zA-Z0-9\-\_\.]+)\.php$/', $run_file) and file_exists(NV_ROOTDIR . '/includes/cronjobs/' . $run_file)) {
             if (! defined('NV_IS_CRON')) {
@@ -46,7 +46,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         if (! nv_function_exists($run_func)) {
-            $error = $lang_module['func_name_not_exist'];
+            $error = $nv_Lang->getModule('func_name_not_exist');
         } else {
             if (! empty($params)) {
                 $params = explode(',', $params);
@@ -90,25 +90,25 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
 $contents = array();
 $contents['is_error'] = ! empty($error) ? 1 : 0;
-$contents['title'] = ! empty($error) ? $error : $lang_module['nv_admin_add_title'];
+$contents['title'] = ! empty($error) ? $error : $nv_Lang->getModule('nv_admin_add_title');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add';
-$contents['cron_name'] = array( $lang_module['cron_name'], $cron_name, 100 );
+$contents['cron_name'] = array( $nv_Lang->getModule('cron_name'), $cron_name, 100 );
 
 $filelist = nv_scandir(NV_ROOTDIR . '/includes/cronjobs', '/^([a-zA-Z0-9\_\.]+)\.php$/');
 
-$contents['run_file'] = array( $lang_module['run_file'], $lang_module['file_none'], $filelist, $run_file, $lang_module['run_file_info'] );
-$contents['run_func'] = array( $lang_module['run_func'], $run_func, 255, $lang_module['run_func_info'] );
-$contents['params'] = array( $lang_module['params'], $params, 255, $lang_module['params_info'] );
-$contents['start_time'] = array( $lang_module['start_time'], $lang_module['day'], date('d/m/Y', $start_time) );
-$contents['min'] = array( $lang_module['min'], $min );
-$contents['hour'] = array( $lang_module['hour'], $hour );
-$contents['interval'] = array( $lang_module['interval'], $interval, 11, $lang_module['min'], $lang_module['interval_info'] );
-$contents['del'] = array( $lang_module['is_del'], $del );
+$contents['run_file'] = array( $nv_Lang->getModule('run_file'), $nv_Lang->getModule('file_none'), $filelist, $run_file, $nv_Lang->getModule('run_file_info') );
+$contents['run_func'] = array( $nv_Lang->getModule('run_func'), $run_func, 255, $nv_Lang->getModule('run_func_info') );
+$contents['params'] = array( $nv_Lang->getModule('params'), $params, 255, $nv_Lang->getModule('params_info') );
+$contents['start_time'] = array( $nv_Lang->getModule('start_time'), $nv_Lang->getModule('day'), date('d/m/Y', $start_time) );
+$contents['min'] = array( $nv_Lang->getModule('min'), $min );
+$contents['hour'] = array( $nv_Lang->getModule('hour'), $hour );
+$contents['interval'] = array( $nv_Lang->getModule('interval'), $interval, 11, $nv_Lang->getModule('min'), $nv_Lang->getModule('interval_info') );
+$contents['del'] = array( $nv_Lang->getModule('is_del'), $del );
 
-$contents['submit'] = $lang_global['submit'];
+$contents['submit'] = $nv_Lang->getGlobal('submit');
 $contents = nv_admin_add_theme($contents);
 
-$page_title = $lang_global['mod_cronjobs'] . ' -> ' . $lang_module['nv_admin_add'];
+$page_title = $nv_Lang->getGlobal('mod_cronjobs') . ' -> ' . $nv_Lang->getModule('nv_admin_add');
 $set_active_op = 'cronjobs';
 
 include NV_ROOTDIR . '/includes/header.php';

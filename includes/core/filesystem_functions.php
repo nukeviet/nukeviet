@@ -367,10 +367,10 @@ function nv_pathinfo_filename($file)
  */
 function nv_mkdir($path, $dir_name)
 {
-    global $lang_global, $global_config, $sys_info;
+    global $global_config, $sys_info, $nv_Lang;
     $dir_name = nv_string_to_filename(trim(basename($dir_name)));
     if (! preg_match('/^[a-zA-Z0-9-_.]+$/', $dir_name)) {
-        return array( 0, sprintf($lang_global['error_create_directories_name_invalid'], $dir_name) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_create_directories_name_invalid'), $dir_name) );
     }
     $path = @realpath($path);
     if (! preg_match('/\/$/', $path)) {
@@ -378,11 +378,11 @@ function nv_mkdir($path, $dir_name)
     }
 
     if (file_exists($path . $dir_name)) {
-        return array( 2, sprintf($lang_global['error_create_directories_name_used'], $dir_name), $path . $dir_name );
+        return array( 2, sprintf($nv_Lang->getGlobal('error_create_directories_name_used'), $dir_name), $path . $dir_name );
     }
 
     if (! is_dir($path)) {
-        return array( 0, sprintf($lang_global['error_directory_does_not_exist'], $path) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_directory_does_not_exist'), $path) );
     }
 
     $ftp_check_login = 0;
@@ -418,7 +418,7 @@ function nv_mkdir($path, $dir_name)
             @chmod($path, 0777);
         }
         if (! is_writable($path)) {
-            return array( 0, sprintf($lang_global['error_directory_can_not_write'], $path) );
+            return array( 0, sprintf($nv_Lang->getGlobal('error_directory_can_not_write'), $path) );
         }
 
         $oldumask = umask(0);
@@ -426,12 +426,12 @@ function nv_mkdir($path, $dir_name)
         umask($oldumask);
     }
     if (! $res) {
-        return array( 0, sprintf($lang_global['error_create_directories_failed'], $dir_name) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_create_directories_failed'), $dir_name) );
     }
 
     file_put_contents($path . $dir_name . '/index.html', '');
 
-    return array( 1, sprintf($lang_global['directory_was_created'], $dir_name), $path . $dir_name );
+    return array( 1, sprintf($nv_Lang->getGlobal('directory_was_created'), $dir_name), $path . $dir_name );
 }
 
 /**
@@ -443,18 +443,18 @@ function nv_mkdir($path, $dir_name)
  */
 function nv_deletefile($file, $delsub = false)
 {
-    global $lang_global, $sys_info, $global_config;
+    global $sys_info, $global_config, $nv_Lang;
 
     // Kiem tra ten file
     $realpath = realpath($file);
     if (empty($realpath)) {
-        return array( 0, sprintf($lang_global['error_non_existent_file'], $file) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_non_existent_file'), $file) );
     }
     $realpath = str_replace('\\', '/', $realpath);
     $realpath = rtrim($realpath, '\\/');
     $preg_match = preg_match('/^(' . nv_preg_quote(NV_ROOTDIR) . ')(\/[\S]+)/', $realpath, $path);
     if (empty($preg_match)) {
-        return array( 0, sprintf($lang_global['error_delete_forbidden'], $file) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_delete_forbidden'), $file) );
     }
 
     $ftp_check_login = 0;
@@ -498,7 +498,7 @@ function nv_deletefile($file, $delsub = false)
         $files = scandir($realpath);
         $files2 = array_diff($files, array( '.', '..', '.htaccess', 'index.html' ));
         if (sizeof($files2) and ! $delsub) {
-            return array( 0, sprintf($lang_global['error_delete_subdirectories_not_empty'], $path[2]) );
+            return array( 0, sprintf($nv_Lang->getGlobal('error_delete_subdirectories_not_empty'), $path[2]) );
         } else {
             $files = array_diff($files, array( '.', '..' ));
             if (sizeof($files)) {
@@ -506,14 +506,14 @@ function nv_deletefile($file, $delsub = false)
                     $unlink = nv_deletefile($realpath . '/' . $f, true);
                     if (empty($unlink[0])) {
                         $filename = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $realpath . '/' . $f));
-                        return array( 0, sprintf($lang_global['error_delete_failed'], $filename) );
+                        return array( 0, sprintf($nv_Lang->getGlobal('error_delete_failed'), $filename) );
                     }
                 }
             }
             if (! @rmdir($realpath)) {
-                return array( 0, sprintf($lang_global['error_delete_subdirectories_failed'], $path[2]) );
+                return array( 0, sprintf($nv_Lang->getGlobal('error_delete_subdirectories_failed'), $path[2]) );
             } else {
-                return array( 1, sprintf($lang_global['directory_deleted'], $path[2]) );
+                return array( 1, sprintf($nv_Lang->getGlobal('directory_deleted'), $path[2]) );
             }
         }
     } else {
@@ -521,9 +521,9 @@ function nv_deletefile($file, $delsub = false)
     }
 
     if (file_exists($realpath)) {
-        return array( 0, sprintf($lang_global['error_delete_failed'], $filename) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_delete_failed'), $filename) );
     } else {
-        return array( 1, sprintf($lang_global['file_deleted'], $filename) );
+        return array( 1, sprintf($nv_Lang->getGlobal('file_deleted'), $filename) );
     }
 }
 
@@ -537,7 +537,7 @@ function nv_deletefile($file, $delsub = false)
  */
 function nv_ftp_del_dir($ftp, $dst_dir, $delsub)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     $dst_dir = preg_replace('/\\/\$/', '', $dst_dir);
     // Remove trailing slash
@@ -546,7 +546,7 @@ function nv_ftp_del_dir($ftp, $dst_dir, $delsub)
 
     // Bao loi thu muc khong rong
     if (! empty($ar_files) and ! $delsub) {
-        return sprintf($lang_global['error_delete_subdirectories_not_empty'], $dst_dir);
+        return sprintf($nv_Lang->getGlobal('error_delete_subdirectories_not_empty'), $dst_dir);
     }
 
     if (is_array($ar_files)) {
@@ -576,7 +576,7 @@ function nv_ftp_del_dir($ftp, $dst_dir, $delsub)
                 if ($ftp->unlink($dst_dir . '/' . $st_file) === false) {
                     // Khong the xoa duoc file
 
-                    return sprintf($lang_global['error_delete_failed'], $dst_dir . '/' . $st_file);
+                    return sprintf($nv_Lang->getGlobal('error_delete_failed'), $dst_dir . '/' . $st_file);
                 }
             }
         }
@@ -621,40 +621,40 @@ function nv_copyfile($file, $newfile)
  */
 function nv_renamefile($file, $newname)
 {
-    global $lang_global;
+    global $nv_Lang;
 
     $realpath = realpath($file);
     if (empty($realpath)) {
-        return array( 0, sprintf($lang_global['error_non_existent_file'], $file) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_non_existent_file'), $file) );
     }
     $realpath = str_replace('\\', '/', $realpath);
     $realpath = rtrim($realpath, '\\/');
     $preg_match = preg_match('/^(' . nv_preg_quote(NV_ROOTDIR) . ')(\/[\S]+)/', $realpath, $path);
     if (empty($preg_match)) {
-        return array( 0, sprintf($lang_global['error_rename_forbidden'], $file) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_rename_forbidden'), $file) );
     }
     $newname = basename(trim($newname));
     $pathinfo = pathinfo($realpath);
     if (file_exists($pathinfo['dirname'] . '/' . $newname)) {
-        return array( 0, sprintf($lang_global['error_rename_file_exists'], $newname) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_rename_file_exists'), $newname) );
     }
     if (is_dir($realpath) and ! preg_match('/^[a-zA-Z0-9-_]+$/', $newname)) {
-        return array( 0, sprintf($lang_global['error_rename_directories_invalid'], $newname) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_rename_directories_invalid'), $newname) );
     }
     if (! is_dir($realpath) and ! preg_match('/^[a-zA-Z0-9-_.]+$/', $newname)) {
-        return array( 0, sprintf($lang_global['error_rename_file_invalid'], $newname) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_rename_file_invalid'), $newname) );
     }
     if (! is_dir($realpath) and $pathinfo['extension'] != nv_getextension($newname)) {
-        return array( 0, sprintf($lang_global['error_rename_extension_changed'], $newname, $pathinfo['basename']) );
+        return array( 0, sprintf($nv_Lang->getGlobal('error_rename_extension_changed'), $newname, $pathinfo['basename']) );
     }
     if (! @rename($realpath, $pathinfo['dirname'] . '/' . $newname)) {
         if (! @nv_copyfile($realpath, $pathinfo['dirname'] . '/' . $newname)) {
-            return array( 0, sprintf($lang_global['error_rename_failed'], $pathinfo['basename'], $newname) );
+            return array( 0, sprintf($nv_Lang->getGlobal('error_rename_failed'), $pathinfo['basename'], $newname) );
         } else {
             @nv_deletefile($realpath);
         }
     }
-    return array( 1, sprintf($lang_global['file_has_been_renamed'], $pathinfo['basename'], $newname) );
+    return array( 1, sprintf($nv_Lang->getGlobal('file_has_been_renamed'), $pathinfo['basename'], $newname) );
 }
 
 /**

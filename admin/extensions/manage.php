@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['manage'];
+$page_title = $nv_Lang->getModule('manage');
 
 $theme_config = array(
     'sys_icon' => 'fa-cubes',
@@ -20,8 +20,8 @@ $theme_config = array(
 );
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('THEME_CONFIG', $theme_config);
 
 $request = array(
@@ -306,7 +306,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
         }
     }
 
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 }
 
 // Xoa ung dung
@@ -429,7 +429,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             }
 
             if (! empty($lang_module_array)) {
-                die('ERROR_' . printf($lang_module['delele_ext_theme_note_module'], implode('; ', $lang_module_array)));
+                die('ERROR_' . printf($nv_Lang->getModule('delele_ext_theme_note_module'), implode('; ', $lang_module_array)));
             } else {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid']);
                 nv_deletefile(NV_ROOTDIR . '/themes/' . $request['title'], true);
@@ -455,7 +455,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                     $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');
                     $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups');
                 } else {
-                    die('ERROR_' . $lang_module['delele_ext_unsuccess']);
+                    die('ERROR_' . $nv_Lang->getModule('delele_ext_unsuccess'));
                 }
             }
         }
@@ -506,14 +506,14 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
         $sth->bindValue(':title', $request['title']);
         $sth->execute();
 
-        die('OK_' . $lang_module['delele_ext_success']);
+        die('OK_' . $nv_Lang->getModule('delele_ext_success'));
     }
 
-    die("ERROR_" . $lang_module['delele_ext_unsuccess']);
+    die("ERROR_" . $nv_Lang->getModule('delele_ext_unsuccess'));
 }
 
 $array_extType = array( 'module', 'block', 'theme', 'cronjob', 'other', 'sys', 'admin' );
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype='] = $lang_module['manage'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype='] = $nv_Lang->getModule('manage');
 foreach ($array_extType as $_type) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype=' . $_type] = $lang_module['extType_' . $_type];
 }
@@ -626,7 +626,7 @@ while ($row = $result->fetch()) {
 
     $row['url_package'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('package_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
     $row['url_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('delete_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
-    $row['type'] = isset($lang_module['extType_' . $row['type']]) ? $lang_module['extType_' . $row['type']] : $lang_module['extType_other'];
+    $row['type'] = isset($lang_module['extType_' . $row['type']]) ? $lang_module['extType_' . $row['type']] : $nv_Lang->getModule('extType_other');
     $row['version'] = array_filter(explode(" ", $row['version']));
 
     if (sizeof($row['version']) == 2) {
@@ -642,7 +642,7 @@ while ($row = $result->fetch()) {
 if ($selecttype == '' or $selecttype == 'admin') {
     foreach ($array_module_admin as $row) {
         $array_parse[] = array(
-            'type' => $lang_module['extType_module'],
+            'type' => $nv_Lang->getModule('extType_module'),
             'basename' => $row,
             'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'],
@@ -670,7 +670,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
                 $author = ( string )$info[0]->author;
 
                 $array_parse[] = array(
-                    'type' => $lang_module['extType_theme'],
+                    'type' => $nv_Lang->getModule('extType_theme'),
                     'basename' => $_theme,
                     'author' => $author,
                     'version' => '',
@@ -698,7 +698,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
 
     foreach ($array_theme_admin as $row) {
         $array_parse[] = array(
-            'type' => $lang_module['extType_theme'],
+            'type' => $nv_Lang->getModule('extType_theme'),
             'basename' => $row,
             'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'],

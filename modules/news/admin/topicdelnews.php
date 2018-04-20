@@ -19,4 +19,4 @@ foreach ($arr_id as $id) {
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=0 WHERE id = ' . $id);
 }
 
-nv_htmlOutput($lang_module['topic_delete_success']);
+nv_htmlOutput($nv_Lang->getModule('topic_delete_success'));

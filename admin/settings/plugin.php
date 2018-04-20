@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
-$errormess = $lang_module['plugin_info'];
+$errormess = $nv_Lang->getModule('plugin_info');
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
 
 $plugin_file = $nv_Request->get_title('plugin_file', 'post,get');
@@ -87,7 +87,7 @@ if ($nv_Request->isset_request('dpid', 'get')) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -168,7 +168,7 @@ if (!empty($plugin_new)) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['plugin'];
+$page_title = $nv_Lang->getModule('plugin');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

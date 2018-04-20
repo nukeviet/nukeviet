@@ -150,7 +150,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-$page_title = $lang_module['uploadconfig'];
+$page_title = $nv_Lang->getModule('uploadconfig');
 
 $xtpl = new XTemplate('uploadconfig.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -158,7 +158,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
 $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
 
@@ -183,10 +183,10 @@ for ($index = 100; $index > 0; --$index) {
 }
 
 $_upload_checking_mode = array(
-    'strong' => $lang_module['strong_mode'],
-    'mild' => $lang_module['mild_mode'],
-    'lite' => $lang_module['lite_mode'],
-    'none' => $lang_module['none_mode']
+    'strong' => $nv_Lang->getModule('strong_mode'),
+    'mild' => $nv_Lang->getModule('mild_mode'),
+    'lite' => $nv_Lang->getModule('lite_mode'),
+    'none' => $nv_Lang->getModule('none_mode')
 );
 
 foreach ($_upload_checking_mode as $m => $n) {
@@ -203,7 +203,7 @@ if (nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_fu
     $strong = true;
 }
 
-$xtpl->assign('UPLOAD_CHECKING_NOTE', !$strong ? $lang_module['upload_checking_note'] : '');
+$xtpl->assign('UPLOAD_CHECKING_NOTE', !$strong ? $nv_Lang->getModule('upload_checking_note') : '');
 
 $upload_chunk_size = '';
 $upload_chunk_size_text = '';

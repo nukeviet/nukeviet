@@ -12,7 +12,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
     die('Stop!!!');
 }
 
-$page_title = $lang_module['smtp_config'];
+$page_title = $nv_Lang->getModule('smtp_config');
 $smtp_encrypted_array = array();
 $smtp_encrypted_array[0] = 'None';
 $smtp_encrypted_array[1] = 'SSL';
@@ -49,7 +49,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
         require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
         $array_phpmod = phpinfo_array(8, 1);
         if (! empty($array_phpmod) and ! array_key_exists('openssl', $array_phpmod)) {
-            $errormess = $lang_module['smtp_error_openssl'];
+            $errormess = $nv_Lang->getModule('smtp_error_openssl');
         }
     }
 
@@ -68,7 +68,7 @@ $array_config['mailer_mode_smtpt_show'] = ($array_config['mailer_mode'] == 'smtp
 
 $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

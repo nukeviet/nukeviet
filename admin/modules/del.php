@@ -23,7 +23,7 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
 
     if (intval($is_sys) != 1) {
         $contents = 'OK_' . $modname;
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['delete'] . ' module "' . $modname . '"', '', $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('delete') . ' module "' . $modname . '"', '', $admin_info['userid']);
 
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
             $module_name_action = $module_name;

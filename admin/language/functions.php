@@ -18,7 +18,7 @@ $select_options = array();
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_language']
+    'custom_title' => $nv_Lang->getGlobal('mod_language')
 );
 
 $allow_func = array( 'main' );

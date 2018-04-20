@@ -12,9 +12,9 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['referer'];
+$page_title = $nv_Lang->getModule('referer');
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['referer'];
+$mod_title = $nv_Lang->getModule('referer');
 
 $sql = 'SELECT COUNT(*), SUM(total), MAX(total) FROM ' . NV_REFSTAT_TABLE;
 $result = $db->query($sql);
@@ -37,19 +37,19 @@ if ($num_items) {
     $host_list = array();
     while (list($host, $count, $last_visit) = $result->fetch(3)) {
         $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-        $bymonth = '<a href="' . NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $lang_module['statbymoth2'] . '</a>';
+        $bymonth = '<a href="' . NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $nv_Lang->getModule('statbymoth2') . '</a>';
         $host_list[$host] = array( $count, $last_visit, $bymonth );
     }
 
     if (! empty($host_list)) {
         $cts = array();
-        $cts['thead'] = array( $lang_module['referer'], $lang_module['hits'], $lang_module['last_visit'] );
+        $cts['thead'] = array( $nv_Lang->getModule('referer'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit') );
         $cts['rows'] = $host_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);
     }
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
     $contents = nv_theme_statistics_allreferers($num_items, $cts, $host_list);
 }

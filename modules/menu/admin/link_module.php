@@ -25,7 +25,7 @@ $stmt->execute();
 list($mod_name, $mod_file, $mod_data) = $stmt->fetch(3);
 
 if (empty($mod_name)) {
-    die($lang_module['add_error_module']);
+    die($nv_Lang->getModule('add_error_module'));
 }
 
 $array_item = array();
@@ -47,7 +47,7 @@ foreach ($funcs_item as $key => $sub_item) {
 
 if (!empty($array_item)) {
     $xtpl = new XTemplate('rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     foreach ($array_item as $key => $item1) {
         $parentid = (isset($item1['parentid'])) ? $item1['parentid'] : 0;

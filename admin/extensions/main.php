@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_global['mod_extensions'];
+$page_title = $nv_Lang->getGlobal('mod_extensions');
 
 $request = array();
 $request['page'] = $nv_Request->get_int('page', 'get', 1);
@@ -35,7 +35,7 @@ if ($request['mode'] != 'search') {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('REQUEST', $request);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
@@ -64,7 +64,7 @@ $error = '';
 if (! empty(NukeViet\Http\Http::$error)) {
     $error = nv_http_get_lang(NukeViet\Http\Http::$error);
 } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
-    $error = $lang_global['error_valid_response'];
+    $error = $nv_Lang->getGlobal('error_valid_response');
 } elseif (! empty($array['error']['message'])) {
     $error = $array['error']['message'];
 }
@@ -74,7 +74,7 @@ if (! empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 } elseif ($array['status'] == 'notlogin') {
-    $xtpl->assign('LOGIN_NOTE', sprintf($lang_module['login_require'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt($client_info['selfurl'])));
+    $xtpl->assign('LOGIN_NOTE', sprintf($nv_Lang->getModule('login_require'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt($client_info['selfurl'])));
     $xtpl->parse('main.login');
 } elseif (empty($array['data'])) {
     $xtpl->parse('main.empty');
@@ -86,7 +86,7 @@ if (! empty($error)) {
         $row['rating_avg'] = ceil($row['rating_avg']);
         $row['type'] = $lang_module['types_' . intval($row['tid'])];
         $row['compatible_class'] = empty($row['compatible']) ? 'text-danger' : 'text-success';
-        $row['compatible_title'] = empty($row['compatible']) ? $lang_module['incompatible'] : $lang_module['compatible'];
+        $row['compatible_title'] = empty($row['compatible']) ? $nv_Lang->getModule('incompatible') : $nv_Lang->getModule('compatible');
 
         if (empty($row['image_small'])) {
             $row['image_small'] = NV_BASE_SITEURL . 'themes/default/images/no_image.gif';
@@ -94,7 +94,7 @@ if (! empty($error)) {
 
         $row['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $row['id'];
         $row['detail_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail&amp;id=' . $row['id'];
-        $row['detail_title'] = sprintf($lang_module['detail_title'], $row['title']);
+        $row['detail_title'] = sprintf($nv_Lang->getModule('detail_title'), $row['title']);
 
         $xtpl->assign('ROW', $row);
 

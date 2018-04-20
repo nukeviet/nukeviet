@@ -40,17 +40,11 @@ function nv_get_submenu($mod)
     $submenu = array();
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
-        //ket noi voi file ngon ngu cua module
-        if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php')) {
-            include NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php')) {
-            include NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php')) {
-            include NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php';
-        }
+        $nv_Lang = new \NukeViet\Core\Language();
+        $nv_Lang->loadModule($mod, true, true, true);
 
         include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';
-        unset($lang_module);
+        unset($nv_Lang);
     }
 
     return $submenu;
@@ -64,7 +58,7 @@ function nv_get_submenu($mod)
  */
 function nv_get_submenu_mod($module_name)
 {
-    global  $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
+    global $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
 
     $submenu = array();
     if (isset($site_mods[$module_name])) {
@@ -72,17 +66,11 @@ function nv_get_submenu_mod($module_name)
         $module_file = $module_info['module_file'];
         $module_data = $module_info['module_data'];
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php')) {
-            //ket noi voi file ngon ngu cua module
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php')) {
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php')) {
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
-            }
+            $nv_Lang = new \NukeViet\Core\Language();
+            $nv_Lang->loadModule($module_file, true, false, true);
 
             include NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
-            unset($lang_module);
+            unset($nv_Lang);
         }
     }
     return $submenu;

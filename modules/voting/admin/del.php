@@ -29,7 +29,7 @@ if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
 
         $contents = "OK_" . $vid;
     } else {
-        $contents = "ERR_" . $lang_module['voting_delete_unsuccess'];
+        $contents = "ERR_" . $nv_Lang->getModule('voting_delete_unsuccess');
     }
 }
 

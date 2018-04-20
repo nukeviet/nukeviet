@@ -24,7 +24,7 @@ if (!nv_function_exists('nv_department_info')) {
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['departmentid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('departmentid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="config_departmentid" class="form-control">';
         $sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1';
         $list = $nv_Cache->db($sql, 'id', $module);
@@ -49,7 +49,7 @@ if (!nv_function_exists('nv_department_info')) {
 
     function nv_department_info($block_config)
     {
-        global $global_config, $site_mods, $nv_Cache, $module_name, $lang_module;
+        global $global_config, $site_mods, $nv_Cache, $module_name, $nv_Lang;
 
         $module = $block_config['module'];
         $module_data = $site_mods[$module]['module_data'];
@@ -77,7 +77,7 @@ if (!nv_function_exists('nv_department_info')) {
         $array_department = $nv_Cache->db($sql, 'id', $module);
 
         $xtpl = new XTemplate('block.department.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
         if (!empty($array_department)) {
             foreach ($array_department as $value => $row) {

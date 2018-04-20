@@ -37,13 +37,13 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $global_config);
 
 $xtpl->parse('main');
 $content = $xtpl->text('main');
 
-$page_title = $lang_module['pagetitle'];
+$page_title = $nv_Lang->getModule('pagetitle');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($content);
 include NV_ROOTDIR . '/includes/footer.php';

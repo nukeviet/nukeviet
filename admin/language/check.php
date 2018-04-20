@@ -12,11 +12,11 @@ if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['nv_lang_check'];
+$page_title = $nv_Lang->getModule('nv_lang_check');
 
 $xtpl = new XTemplate('check.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $array_lang_exit = array();
 
@@ -43,9 +43,9 @@ if (empty($array_lang_exit)) {
 $language_array_source = array( 'vi', 'en' );
 
 $language_check_type = array(
-    0 => $lang_module['nv_check_type_0'],
-    1 => $lang_module['nv_check_type_1'],
-    2 => $lang_module['nv_check_type_2']
+    0 => $nv_Lang->getModule('nv_check_type_0'),
+    1 => $nv_Lang->getModule('nv_check_type_1'),
+    2 => $nv_Lang->getModule('nv_check_type_2')
 );
 
 $typelang = $nv_Request->get_title('typelang', 'post,get', '');
@@ -108,10 +108,10 @@ while (list($idfile_i, $module, $admin_file, ) = $result->fetch(3)) {
     $module = preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module);
     switch ($admin_file) {
         case '1':
-            $langsitename = $lang_module['nv_lang_admin'];
+            $langsitename = $nv_Lang->getModule('nv_lang_admin');
             break;
         case '0':
-            $langsitename = $lang_module['nv_lang_site'];
+            $langsitename = $nv_Lang->getModule('nv_lang_site');
             break;
         default:
             $langsitename = $admin_file;

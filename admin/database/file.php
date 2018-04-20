@@ -18,8 +18,8 @@ if ($global_config['idsite']) {
 }
 
 $xtpl = new XTemplate('files.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $array_content = $array_time = array();
 $files = scandir($log_dir);
@@ -62,7 +62,7 @@ for ($index = $count; $index >= 0; --$index) {
     $xtpl->parse('main.loop');
 }
 $xtpl->assign('BACKUPNOW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=download&amp;checkss=' . NV_CHECK_SESSION);
-$page_title = $lang_module['file_backup'];
+$page_title = $nv_Lang->getModule('file_backup');
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

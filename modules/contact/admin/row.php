@@ -25,13 +25,13 @@ if ($id) {
     $page_title = $frow['full_name'];
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 } else {
-    $page_title = $lang_module['add_row_title'];
+    $page_title = $nv_Lang->getModule('add_row_title');
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
 $xtpl = new XTemplate('row.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $action);
 $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
 $xtpl->assign('PATH', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -120,9 +120,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 
     if (empty($full_name)) {
-        $error = $lang_module['err_part_row_title'];
+        $error = $nv_Lang->getModule('err_part_row_title');
     } elseif (empty($alias)) {
-        $error = $lang_module['error_alias'];
+        $error = $nv_Lang->getModule('error_alias');
     } else {
         $alias = empty($alias) ? change_alias($full_name) : change_alias($alias);
         $admins_list = array();
@@ -186,7 +186,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department');
         } catch (PDOException $e) {
-            $error = $lang_module['duplicate_alias'];
+            $error = $nv_Lang->getModule('duplicate_alias');
             trigger_error($e->getMessage());
         }
     }
@@ -308,7 +308,7 @@ if (! empty($cats)) {
 $a = 0;
 foreach ($adms as $admid => $values) {
     $xtpl->assign('ADMIN', array(
-        'suspend' => ($values['is_suspend']) ? 'class="warning" title="' . $lang_global['admin_suspend'] . '"' : '',
+        'suspend' => ($values['is_suspend']) ? 'class="warning" title="' . $nv_Lang->getGlobal('admin_suspend') . '"' : '',
         'username' => $values['username'],
         'full_name' => nv_show_name_user($values['first_name'], $values['last_name'], $values['username']),
         'email' => $values['email'],

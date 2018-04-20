@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['list'];
+$page_title = $nv_Lang->getModule('list');
 $array = array();
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC';
@@ -24,13 +24,13 @@ if ($num < 1) {
 }
 
 $array_status = array(
-    $lang_module['inactive'],
-    $lang_module['active']
+    $nv_Lang->getModule('inactive'),
+    $nv_Lang->getModule('active')
 );
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $i = 0;
 foreach ($_rows as $row) {

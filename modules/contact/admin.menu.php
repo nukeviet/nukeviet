@@ -13,10 +13,10 @@ if (!defined('NV_ADMIN')) {
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['department'] = $lang_module['department_title'];
-    $submenu['supporter'] = $lang_module['supporter'];
+    $submenu['department'] = $nv_Lang->getModule('department_title');
+    $submenu['supporter'] = $nv_Lang->getModule('supporter');
 }
-$submenu['send'] = $lang_module['send_title'];
+$submenu['send'] = $nv_Lang->getModule('send_title');
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['config'] = $lang_module['config'];
+    $submenu['config'] = $nv_Lang->getModule('config');
 }

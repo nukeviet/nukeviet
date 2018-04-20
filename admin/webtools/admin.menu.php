@@ -12,9 +12,9 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['statistics'] = $lang_module['global_statistics'];
-$submenu['clearsystem'] = $lang_module['clearsystem'];
+$submenu['statistics'] = $nv_Lang->getModule('global_statistics');
+$submenu['clearsystem'] = $nv_Lang->getModule('clearsystem');
 if (empty($global_config['idsite'])) {
-    $submenu['checkupdate'] = $lang_module['checkupdate'];
-    $submenu['config'] = $lang_module['config'];
+    $submenu['checkupdate'] = $nv_Lang->getModule('checkupdate');
+    $submenu['config'] = $nv_Lang->getModule('config');
 }

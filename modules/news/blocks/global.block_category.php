@@ -27,7 +27,7 @@ if (!nv_function_exists('nv_news_category')) {
 
         $html_input = '';
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['catid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('catid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="config_catid" class="form-control">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
@@ -55,10 +55,10 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= '</script>';
         $html .= '</div></div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('title_length') . ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
-        $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
+        $html .= "<option value=\"\">" . $nv_Lang->getBlock('title_length') . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
         }
@@ -94,7 +94,7 @@ if (!nv_function_exists('nv_news_category')) {
      */
     function nv_news_category($block_config)
     {
-        global $module_array_cat, $lang_module, $global_config;
+        global $module_array_cat, $global_config, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_category.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -106,7 +106,7 @@ if (!nv_function_exists('nv_news_category')) {
 
         if (!empty($module_array_cat)) {
             $title_length = $block_config['title_length'];
-            $xtpl->assign('LANG', $lang_module);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
             $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
             foreach ($module_array_cat as $cat) {

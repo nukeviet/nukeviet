@@ -22,7 +22,7 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_menu_blocks($block_config)
 {
-    global $nv_Cache, $global_config, $lang_global;
+    global $nv_Cache, $global_config, $nv_Lang;
 
     $list_cats = array();
     $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
@@ -76,7 +76,7 @@ function nv_menu_blocks($block_config)
     }
 
     $xtpl = new XTemplate($block_config['block_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('BLOCK_THEME', $block_theme);
     $xtpl->assign('BLOCK_CONFIG', $block_config);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);

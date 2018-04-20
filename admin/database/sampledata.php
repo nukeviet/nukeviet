@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $sname = nv_strtolower(nv_substr($nv_Request->get_title('sname', 'post', ''), 0, 50));
     if (preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
         nv_deletefile(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php');
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['sampledata'], 'Delete: ' . $sname, $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('sampledata'), 'Delete: ' . $sname, $admin_info['userid']);
     }
     nv_htmlOutput('OK');
 }
@@ -80,7 +80,7 @@ if ($nv_Request->isset_request('downloadfile', 'get')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['sampledata'], 'Manual Download: ' . $sample_name, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('sampledata'), 'Manual Download: ' . $sample_name, $admin_info['userid']);
 
     $download = new NukeViet\Files\Download($file_data_dump, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'data_' . $sample_name . '.php');
     $download->download_file();
@@ -109,13 +109,13 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
     $array_request['offsetrow'] = $nv_Request->get_int('offsetrow', 'post', 0);
 
     if (empty($array_request['sample_name'])) {
-        $json['message'] = $lang_module['sampledata_error_name'];
+        $json['message'] = $nv_Lang->getModule('sampledata_error_name');
     } elseif (!preg_match('/^([a-z0-9]+)$/', $array_request['sample_name'])) {
-        $json['message'] = $lang_module['sampledata_error_namerule'];
+        $json['message'] = $nv_Lang->getModule('sampledata_error_namerule');
     } elseif (!$array_request['delifexists'] and file_exists(NV_ROOTDIR . '/install/samples/data_' . $array_request['sample_name'] . '.php')) {
-        $json['message'] = $lang_module['sampledata_error_exists'];
+        $json['message'] = $nv_Lang->getModule('sampledata_error_exists');
     } else {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['sampledata'], 'Name: ' . $array_request['sample_name'], $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('sampledata'), 'Name: ' . $array_request['sample_name'], $admin_info['userid']);
 
         // Quét các bảng dữ liệu
         $error = false;
@@ -141,7 +141,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
             }
             $check = file_put_contents($file_data_tmp, serialize($array_tables), LOCK_EX);
             if ($check === false) {
-                $json['message'] = sprintf($lang_module['sampledata_error_writetmp'], NV_TEMP_DIR);
+                $json['message'] = sprintf($nv_Lang->getModule('sampledata_error_writetmp'), NV_TEMP_DIR);
                 $error = true;
             }
         } else {
@@ -154,7 +154,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                 $dump_content = "<?php\n\n" . NV_FILEHEAD . "\n\nif (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n\$sample_base_siteurl = '" . NV_BASE_SITEURL . "';\n\$sql_create_table = array();\n\n";
                 $check = file_put_contents($file_data_dump, $dump_content, LOCK_EX);
                 if ($check === false) {
-                    $json['message'] = sprintf($lang_module['sampledata_error_writetmp'], NV_TEMP_DIR);
+                    $json['message'] = sprintf($nv_Lang->getModule('sampledata_error_writetmp'), NV_TEMP_DIR);
                     $error = true;
                 }
             }
@@ -287,7 +287,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
 
                 $check = file_put_contents($file_data_dump, $content, FILE_APPEND);
                 if ($check === false) {
-                    $json['message'] = sprintf($lang_module['sampledata_error_writetmp'], NV_TEMP_DIR);
+                    $json['message'] = sprintf($nv_Lang->getModule('sampledata_error_writetmp'), NV_TEMP_DIR);
                     $error = true;
                     break;
                 }
@@ -309,11 +309,11 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                 nv_deletefile($file_data_dump);
                 $json['lev'] = 1;
                 $json['reload'] = true;
-                $json['message'] = $lang_module['sampledata_success_1'];
+                $json['message'] = $nv_Lang->getModule('sampledata_success_1');
             } else {
                 $link_download = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;downloadfile=1&amp;sample_name=' . urlencode($array_request['sample_name']);
                 $json['lev'] = 2;
-                $json['message'] = sprintf($lang_module['sampledata_success_2'], $link_download);
+                $json['message'] = sprintf($nv_Lang->getModule('sampledata_success_2'), $link_download);
             }
         }
     }
@@ -322,7 +322,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
     nv_jsonOutput($json);
 }
 
-$page_title = $lang_module['sampledata'];
+$page_title = $nv_Lang->getModule('sampledata');
 
 if (file_exists($file_data_dump)) {
     nv_deletefile($file_data_dump);
@@ -332,7 +332,7 @@ if (file_exists($file_data_tmp)) {
 }
 
 $xtpl = new XTemplate('sampledata.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $error = '';
 $files = nv_scandir(NV_ROOTDIR . '/install/samples', '/^data\_([a-z0-9]+)\.php$/');

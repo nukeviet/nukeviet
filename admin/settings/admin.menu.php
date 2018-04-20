@@ -12,20 +12,20 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['main'] = $lang_module['site_config'];
+$submenu['main'] = $nv_Lang->getModule('site_config');
 if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0)) {
-    $submenu['system'] = $lang_module['global_config'];
+    $submenu['system'] = $nv_Lang->getModule('global_config');
 }
 
 if (isset($admin_mods['language'])) {
-    $submenu['language'] = $lang_global['mod_language'];
+    $submenu['language'] = $nv_Lang->getGlobal('mod_language');
 }
 
-$submenu['smtp'] = $lang_module['smtp_config'];
+$submenu['smtp'] = $nv_Lang->getModule('smtp_config');
 if (defined('NV_IS_GODADMIN')) {
-    $submenu['security'] = $lang_module['security'];
-    $submenu['plugin'] = $lang_module['plugin'];
-    $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
-    $submenu['ftp'] = $lang_module['ftp_config'];
-    $submenu['variables'] = $lang_module['variables'];
+    $submenu['security'] = $nv_Lang->getModule('security');
+    $submenu['plugin'] = $nv_Lang->getModule('plugin');
+    $submenu['cronjobs'] = $nv_Lang->getGlobal('mod_cronjobs');
+    $submenu['ftp'] = $nv_Lang->getModule('ftp_config');
+    $submenu['variables'] = $nv_Lang->getModule('variables');
 }

@@ -16,10 +16,15 @@ class Language
     public static $lang_module = array();
     public static $lang_block = array();
 
+    private $tmplang_global = array();
+    private $tmplang_module = array();
+    private $tmplang_block = array();
+
     private $lang = 'vi';
     private $defaultLang = 'vi';
     private $defaultFiles = array();
     private $defaultIsLoaded = false;
+    private $isTmpLoaded = false;
 
     public function __construct()
     {
@@ -32,9 +37,10 @@ class Language
      * @param mixed $modfile
      * @param bool $admin
      * @param bool $modadmin
+     * @param bool $loadtmp
      * @return
      */
-    public function loadModule($modfile, $admin = false, $modadmin = false)
+    public function loadModule($modfile, $admin = false, $modadmin = false, $loadtmp = false)
     {
         if ($admin and !defined('NV_ADMIN')) {
             return false;
@@ -50,7 +56,7 @@ class Language
                 $this->defaultFiles[] = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
             }
         }
-        $this->load($file);
+        $this->load($file, $loadtmp);
     }
 
     public function loadBlock($admin = false)
@@ -96,7 +102,14 @@ class Language
         $this->load($file);
     }
 
-    private function load($file)
+    /**
+     * Language::load()
+     *
+     * @param mixed $file
+     * @param bool $loadtmp
+     * @return void
+     */
+    private function load($file, $loadtmp = false)
     {
         $lang_translator = $lang_global = $lang_module = $lang_block = array();
 
@@ -105,13 +118,28 @@ class Language
         }
 
         if (!empty($lang_global)) {
-            self::$lang_global = array_merge(self::$lang_global, $lang_global);
+            if ($loadtmp) {
+                $this->isTmpLoaded = true;
+                $this->tmplang_global = array_merge($this->tmplang_global, $lang_global);
+            } else {
+                self::$lang_global = array_merge(self::$lang_global, $lang_global);
+            }
         }
         if (!empty($lang_module)) {
-            self::$lang_module = array_merge(self::$lang_module, $lang_module);
+            if ($loadtmp) {
+                $this->isTmpLoaded = true;
+                $this->tmplang_module = array_merge($this->tmplang_module, $lang_module);
+            } else {
+                self::$lang_module = array_merge(self::$lang_module, $lang_module);
+            }
         }
         if (!empty($lang_block)) {
-            self::$lang_block = array_merge(self::$lang_block, $lang_block);
+            if ($loadtmp) {
+                $this->isTmpLoaded = true;
+                $this->tmplang_block = array_merge($this->tmplang_block, $lang_block);
+            } else {
+                self::$lang_block = array_merge(self::$lang_block, $lang_block);
+            }
         }
 
         unset($lang_translator, $lang_global, $lang_module, $lang_block);
@@ -134,6 +162,14 @@ class Language
             $langvalue = self::$lang_module[$langkey];
         } elseif (isset(self::$lang_block[$langkey])) {
             $langvalue = self::$lang_block[$langkey];
+        } elseif ($this->isTmpLoaded) {
+            if (isset($this->tmplang_global[$langkey])) {
+                $langvalue = $this->tmplang_global[$langkey];
+            } elseif (isset($this->tmplang_module[$langkey])) {
+                $langvalue = $this->tmplang_module[$langkey];
+            } elseif (isset($this->tmplang_block[$langkey])) {
+                $langvalue = $this->tmplang_block[$langkey];
+            }
         }
         if (empty($langvalue)) {
             return $langkey;

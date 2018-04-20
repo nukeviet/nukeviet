@@ -109,13 +109,13 @@ foreach ($global_array_cat as $arr_cat_i) {
     );
 }
 
-$array_cat_search[0]['title'] = $lang_module['search_all'];
+$array_cat_search[0]['title'] = $nv_Lang->getModule('search_all');
 
 $contents = call_user_func('search_theme', $key, $choose, $date_array, $array_cat_search);
 $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
-    $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
+    $contents .= '<div class="alert alert-danger">' . $nv_Lang->getModule('empty_data_search') . '</div>';
 } else {
     $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q=' . $key, true);
     if (strpos($canonicalUrl, NV_MY_DOMAIN) !== 0) {
@@ -358,17 +358,17 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 }
 
 if (empty($key)) {
-    $page_title = $lang_module['search_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
+    $page_title = $nv_Lang->getModule('search_title') . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 } else {
-    $page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'];
+    $page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getModule('search_title');
     if ($page > 2) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
     $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 
 $key_words = $description = 'no';
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

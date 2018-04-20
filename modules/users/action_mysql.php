@@ -24,7 +24,7 @@ if (empty($install_lang['groups'])) {
 
 $sql_drop_module = array();
 
-global $op, $db, $global_config, $db_config, $lang_module;
+global $op, $db, $global_config, $db_config, $nv_Lang;
 
 $array_lang_module_setup = array(); // Những ngôn ngữ mà module này đã cài đặt vào (Bao gồm cả ngôn ngữ đang thao tác)
 $num_module_exists = 0; // Số ngôn ngữ đã cài (Bao gồm cả ngôn ngữ đang thao tác)
@@ -352,13 +352,13 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
             }
         }
     } catch (PDOException $e) {
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['first_name'], 1 => '')))) . " WHERE field='first_name'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['last_name'], 1 => '')))) . " WHERE field='last_name'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['gender'], 1 => '')))) . " WHERE field='gender'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['question'], 1 => '')))) . " WHERE field='question'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['answer'], 1 => '')))) . " WHERE field='answer'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['birthday'], 1 => '')))) . " WHERE field='birthday'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['sig'], 1 => '')))) . " WHERE field='sig'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('first_name'), 1 => '')))) . " WHERE field='first_name'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('last_name'), 1 => '')))) . " WHERE field='last_name'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('gender'), 1 => '')))) . " WHERE field='gender'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('question'), 1 => '')))) . " WHERE field='question'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('answer'), 1 => '')))) . " WHERE field='answer'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('birthday'), 1 => '')))) . " WHERE field='birthday'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('sig'), 1 => '')))) . " WHERE field='sig'";
     }
 
     $lang_module = $lang_module_save;

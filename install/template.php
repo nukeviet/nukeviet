@@ -22,7 +22,7 @@ if (! defined('NV_MAINFILE')) {
  */
 function nv_site_theme($step, $titletheme, $contenttheme)
 {
-    global $lang_module, $languageslist, $language_array, $global_config, $array_samples_data;
+    global $languageslist, $language_array, $global_config, $array_samples_data, $nv_Lang;
 
     $xtpl = new XTemplate('theme.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
@@ -31,18 +31,18 @@ function nv_site_theme($step, $titletheme, $contenttheme)
     $xtpl->assign('LANG_DATA', NV_LANG_DATA);
     $xtpl->assign('MAIN_TITLE', $titletheme);
     $xtpl->assign('MAIN_STEP', $step);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('VERSION', 'v' . $global_config['version']);
 
     $step_bar = array(
-        $lang_module['select_language'],
-        $lang_module['check_chmod'],
-        $lang_module['license'],
-        $lang_module['check_server'],
-        $lang_module['config_database'],
-        $lang_module['website_info'],
-        $lang_module['sample_data'],
-        $lang_module['done']
+        $nv_Lang->getModule('select_language'),
+        $nv_Lang->getModule('check_chmod'),
+        $nv_Lang->getModule('license'),
+        $nv_Lang->getModule('check_server'),
+        $nv_Lang->getModule('config_database'),
+        $nv_Lang->getModule('website_info'),
+        $nv_Lang->getModule('sample_data'),
+        $nv_Lang->getModule('done')
     );
 
     foreach ($step_bar as $i => $step_bar_i) {
@@ -91,7 +91,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
  */
 function nv_step_1()
 {
-    global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
+    global $languageslist, $language_array, $sys_info, $global_config, $nv_Lang;
 
     $xtpl = new XTemplate('step1.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
@@ -109,7 +109,7 @@ function nv_step_1()
     }
 
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     if ($global_config['unofficial_mode']) {
         $xtpl->parse('step.unofficial_mode');
@@ -134,13 +134,13 @@ function nv_step_1()
  */
 function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
 {
-    global $lang_module, $sys_info, $step;
+    global $sys_info, $step, $nv_Lang;
 
     $xtpl = new XTemplate('step2.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 
     if ($nextstep) {
@@ -158,7 +158,7 @@ function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
         $xtpl->assign('DATAFILE', array(
             'dir' => $dir,
             'check' => $check,
-            'classcheck' => ($check == $lang_module['dir_writable']) ? 'highlight_green' : 'highlight_red',
+            'classcheck' => ($check == $nv_Lang->getModule('dir_writable')) ? 'highlight_green' : 'highlight_red',
             'class' => $class
 
         ));
@@ -188,14 +188,14 @@ function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
  */
 function nv_step_3($license)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     $xtpl = new XTemplate('step3.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CONTENT_LICENSE', $license);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->parse('step');
 
     return $xtpl->text('step');
@@ -211,13 +211,13 @@ function nv_step_3($license)
  */
 function nv_step_4($array_resquest, $array_support, $nextstep)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     $xtpl = new XTemplate('step4.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('DATA_REQUEST', $array_resquest);
     $xtpl->assign('DATA_SUPPORT', $array_support);
 
@@ -238,13 +238,13 @@ function nv_step_4($array_resquest, $array_support, $nextstep)
  */
 function nv_step_5($db_config, $nextstep)
 {
-    global $lang_module, $step, $PDODrivers;
+    global $step, $PDODrivers, $nv_Lang;
 
     $xtpl = new XTemplate('step5.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('DATADASE', $db_config);
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 
@@ -297,13 +297,13 @@ function nv_step_5($db_config, $nextstep)
  */
 function nv_step_6($array_data, $nextstep)
 {
-    global $lang_module, $step;
+    global $step, $nv_Lang;
 
     $xtpl = new XTemplate('step6.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('DATA', $array_data);
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
     $xtpl->assign('CHECK_LANG_MULTI', ($array_data['lang_multi']) ? ' checked="checked"' : '');
@@ -330,13 +330,13 @@ function nv_step_6($array_data, $nextstep)
 function nv_step_7($array_data, $nextstep)
 {
     // Chú ý không xóa global $db_config vì bên dưới có dùng khi require
-    global $lang_module, $step, $array_samples_data, $db_config;
+    global $step, $array_samples_data, $db_config, $nv_Lang;
 
     $xtpl = new XTemplate('step7.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('DATA', $array_data);
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 
@@ -353,9 +353,9 @@ function nv_step_7($array_data, $nextstep)
         $xtpl->assign('ROWKEY', $key);
 
         if ($row['compatible']) {
-            $xtpl->assign('MESSAGE', $lang_module['spdata_compatible']);
+            $xtpl->assign('MESSAGE', $nv_Lang->getModule('spdata_compatible'));
         } else {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['spdata_incompatible'], ($row['url'] == '/' ? $lang_module['spdata_root'] : trim($row['url'], '/')), (NV_BASE_SITEURL == '/' ? $lang_module['spdata_root'] : trim(NV_BASE_SITEURL, '/'))));
+            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('spdata_incompatible'), ($row['url'] == '/' ? $nv_Lang->getModule('spdata_root') : trim($row['url'], '/')), (NV_BASE_SITEURL == '/' ? $nv_Lang->getModule('spdata_root') : trim(NV_BASE_SITEURL, '/'))));
         }
 
         $xtpl->parse('step.loop');
@@ -381,14 +381,14 @@ function nv_step_7($array_data, $nextstep)
  */
 function nv_step_8($finish)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     $xtpl = new XTemplate('step8.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('ADMINDIR', NV_ADMINDIR);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     if ($finish == 1) {
         $xtpl->parse('step.finish1');

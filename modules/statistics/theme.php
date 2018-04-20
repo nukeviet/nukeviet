@@ -19,10 +19,10 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
  */
 function nv_theme_statistics_referer($cts, $total)
 {
-    global $module_info, $lang_module;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     if ($total) {
         $xtpl->assign('CTS', $cts);
@@ -63,7 +63,7 @@ function nv_theme_statistics_referer($cts, $total)
  */
 function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
 {
-    global $module_info, $lang_module;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -110,7 +110,7 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
  */
 function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -157,7 +157,7 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
  */
 function nv_theme_statistics_allos($num_items, $os_list, $cts)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -168,7 +168,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
             $a = 0;
             foreach ($cts['rows'] as $key => $value) {
                 $const = 'PLATFORM_' . strtoupper($key);
-                $key = defined($const) ? constant($const) : $lang_global['unknown'];
+                $key = defined($const) ? constant($const) : $nv_Lang->getGlobal('unknown');
 
                 $class = ($a % 2 == 0) ? " class=\"second\"" : "";
                 $xtpl->assign('CLASS', $class);
@@ -206,7 +206,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
  */
 function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -256,7 +256,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
  */
 function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -267,7 +267,7 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
             $a = 0;
             foreach ($cts['rows'] as $key => $value) {
                 if ($key == 'ZZ') {
-                    $value[0] = $lang_global['unknown'];
+                    $value[0] = $nv_Lang->getGlobal('unknown');
                 }
                 $class = ($a % 2 == 0) ? " class=\"second\"" : "";
 
@@ -306,11 +306,11 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
  */
 function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     // Thống kê theo giờ trong ngày
     $xtpl->assign('CTS', $ctsh);
@@ -381,7 +381,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     $a = 0;
     foreach ($ctsc['rows'] as $key => $value) {
         if ($key == 'ZZ') {
-            $value[0] = $lang_global['unknown'];
+            $value[0] = $nv_Lang->getGlobal('unknown');
         }
         $class = ($a % 2 == 0) ? " class=\"second\"" : "";
         $xtpl->assign('CLASS', $class);
@@ -454,7 +454,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     $a = 0;
     foreach ($ctso['rows'] as $key => $value) {
         $const = 'PLATFORM_' . strtoupper($key);
-        $key = defined($const) ? constant($const) : $lang_global['unknown'];
+        $key = defined($const) ? constant($const) : $nv_Lang->getGlobal('unknown');
 
         $class = ($a % 2 == 0) ? " class=\"second\"" : "";
         $xtpl->assign('CLASS', $class);

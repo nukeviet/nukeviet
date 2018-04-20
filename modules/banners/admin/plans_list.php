@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['plans_list'];
+$page_title = $nv_Lang->getModule('plans_list');
 
 $contents = array();
 $contents['containerid'] = "plans_list";

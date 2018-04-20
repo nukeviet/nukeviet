@@ -103,7 +103,7 @@ if (!empty($array_op) and $op == 'main') {
                 $page = intval(substr($array_op[1], 5));
             }
         } elseif ($catid == 0) {
-            $contents = $lang_module['nocatpage'] . $array_op[0];
+            $contents = $nv_Lang->getModule('nocatpage') . $array_op[0];
             if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
                 $page = intval(substr($array_op[0], 5));
             }

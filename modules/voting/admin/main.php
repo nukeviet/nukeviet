@@ -16,15 +16,15 @@ $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY vid AS
 $result = $db->query($sql);
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $i = 0;
 while ($row = $result->fetch()) {
     $sql1 = 'SELECT SUM(hitstotal) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $row['vid'];
     $totalvote = $db->query($sql1)->fetchColumn();
     ++$i;
     $xtpl->assign('ROW', array(
-        'status' => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],
+        'status' => $row['act'] == 1 ? $nv_Lang->getModule('voting_yes') : $nv_Lang->getModule('voting_no'),
         'vid' => $row['vid'],
         'question' => $row['question'],
         'totalvote' => $totalvote,
@@ -41,7 +41,7 @@ if (empty($i)) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['voting_list'];
+$page_title = $nv_Lang->getModule('voting_list');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

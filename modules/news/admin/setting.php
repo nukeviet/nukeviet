@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['setting'];
+$page_title = $nv_Lang->getModule('setting');
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -76,7 +76,7 @@ if (!empty($savesetting)) {
     if ($array_config['elas_use']) {
         $fp = fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
         if (!$fp) {
-            $error = $lang_module['error_elas_host_connect'];
+            $error = $nv_Lang->getModule('error_elas_host_connect');
         }
     }
 
@@ -103,8 +103,8 @@ if (!empty($savesetting)) {
 }
 
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -117,10 +117,10 @@ if (!empty($error)) {
 }
 
 $array_tooltip_position = array(
-    'top' => $lang_module['showtooltip_position_top'],
-    'bottom' => $lang_module['showtooltip_position_bottom'],
-    'left' => $lang_module['showtooltip_position_left'],
-    'right' => $lang_module['showtooltip_position_right']
+    'top' => $nv_Lang->getModule('showtooltip_position_top'),
+    'bottom' => $nv_Lang->getModule('showtooltip_position_bottom'),
+    'left' => $nv_Lang->getModule('showtooltip_position_left'),
+    'right' => $nv_Lang->getModule('showtooltip_position_right')
 );
 
 // Vi tri hien thi tooltip
@@ -167,7 +167,7 @@ for ($i = 0; $i <= 50; ++$i) {
 for ($i = 0; $i <= 6; ++$i) {
     $xtpl->assign('RATING_POINT', array(
         'key' => $i,
-        'title' => ($i == 6) ? $lang_module['no_allowed_rating'] : $i,
+        'title' => ($i == 6) ? $nv_Lang->getModule('no_allowed_rating') : $i,
         "selected" => $i == $module_config[$module_name]['allowed_rating_point'] ? " selected=\"selected\"" : ""
     ));
     $xtpl->parse('main.allowed_rating_point');
@@ -237,10 +237,10 @@ for ($i = 0; $i < 2; $i++) {
 
 // Cau hinh hien thi nguon tin
 $array_config_source = array(
-    0 => $lang_module['config_source_title'],
-    3 => $lang_module['config_source_link'],
-    1 => $lang_module['config_source_link_nofollow'],
-    2 => $lang_module['config_source_logo']
+    0 => $nv_Lang->getModule('config_source_title'),
+    3 => $nv_Lang->getModule('config_source_link'),
+    1 => $nv_Lang->getModule('config_source_link_nofollow'),
+    2 => $nv_Lang->getModule('config_source_logo')
 );
 foreach ($array_config_source as $key => $val) {
     $xtpl->assign('CONFIG_SOURCE', array(
@@ -252,9 +252,9 @@ foreach ($array_config_source as $key => $val) {
 }
 
 $array_imgposition = array(
-    0 => $lang_module['imgposition_0'],
-    1 => $lang_module['imgposition_1'],
-    2 => $lang_module['imgposition_2']
+    0 => $nv_Lang->getModule('imgposition_0'),
+    1 => $nv_Lang->getModule('imgposition_1'),
+    2 => $nv_Lang->getModule('imgposition_2')
 );
 
 // Position images

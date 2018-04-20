@@ -20,7 +20,7 @@ if ($bid > 0) {
     $row = $db->query('SELECT theme, file_name FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
 }
 
-echo "<option value=\"\">" . $lang_module['block_select'] . "</option>\n";
+echo "<option value=\"\">" . $nv_Lang->getModule('block_select') . "</option>\n";
 
 if ($module == 'theme') {
     if (empty($row['theme'])) {

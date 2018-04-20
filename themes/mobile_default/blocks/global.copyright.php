@@ -20,26 +20,26 @@ if (!nv_function_exists('nv_copyright_info')) {
      */
     function nv_copyright_info_config()
     {
-        global $lang_global, $data_block;
+        global $data_block, $nv_Lang;
 
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['copyright_by'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('copyright_by') . ':</label>';
         $html .= '<div class="col-sm-18"><input class="form-control" type="text" name="copyright_by" value="' . nv_htmlspecialchars($data_block['copyright_by']) . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['copyright_url'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('copyright_url') . ':</label>';
         $html .= '<div class="col-sm-18"><input class="form-control" type="text" name="copyright_url" value="' . nv_htmlspecialchars($data_block['copyright_url']) . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['design_by'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('design_by') . ':</label>';
         $html .= '<div class="col-sm-18"><input class="form-control" type="text" name="design_by" value="' . nv_htmlspecialchars($data_block['design_by']) . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['design_url'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('design_url') . ':</label>';
         $html .= '<div class="col-sm-18"><input class="form-control" type="text" name="design_url" value="' . nv_htmlspecialchars($data_block['design_url']) . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['siteterms_url'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('siteterms_url') . ':</label>';
         $html .= '<div class="col-sm-18"><input class="form-control" type="text" name="siteterms_url" value="' . nv_htmlspecialchars($data_block['siteterms_url']) . '"></div>';
         $html .= '</div>';
 
@@ -73,7 +73,7 @@ if (!nv_function_exists('nv_copyright_info')) {
      */
     function nv_copyright_info($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.copyright.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -84,7 +84,7 @@ if (!nv_function_exists('nv_copyright_info')) {
         }
 
         $xtpl = new XTemplate('global.copyright.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
 
         if (empty($block_config['copyright_by'])) {
             $block_config['copyright_by'] = $global_config['site_name'];

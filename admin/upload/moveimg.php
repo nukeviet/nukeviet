@@ -16,26 +16,26 @@ $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (! isset($check_allow_upload_dir['move_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $newfolder = nv_check_path_upload($nv_Request->get_string('newpath', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($newfolder);
 if (! isset($check_allow_upload_dir['create_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $images = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
 
 // Check choose file
 if (empty($images)) {
-    die('ERROR#' . $lang_module['errorNotSelectFile']);
+    die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
 }
 
 // Check file exists
 foreach ($images as  $file) {
     if (! nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-        die('ERROR#' . $lang_module['file_no_exists'] . ': ' . $file);
+        die('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
     }
 }
 
@@ -56,7 +56,7 @@ foreach ($images as $image) {
     $moved_images[] = $file;
 
     if (! nv_copyfile(NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file)) {
-        die('ERROR#' . $lang_module['errorNotCopyFile']);
+        die('ERROR#' . $nv_Lang->getModule('errorNotCopyFile'));
     }
 
     if (isset($array_dirname[$newfolder])) {
@@ -81,7 +81,7 @@ foreach ($images as $image) {
         }
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['move'], $path . '/' . $image . ' -> ' . $newfolder . '/' . $file, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('move'), $path . '/' . $image . ' -> ' . $newfolder . '/' . $file, $admin_info['userid']);
 }
 
 echo 'OK#' . implode('|', $moved_images);

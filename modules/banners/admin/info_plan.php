@@ -21,7 +21,7 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = $lang_module['info_plan'];
+$page_title = $nv_Lang->getModule('info_plan');
 
 $contents = array();
 $contents['containerid'] = array(

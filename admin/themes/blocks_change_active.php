@@ -30,7 +30,7 @@ if (! empty($array_bid)) {
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=' . $db->quote($active) . ' WHERE bid in (' . implode(',', $array_bid) . ')');
     $nv_Cache->delMod('themes');
 
-    echo $lang_module['block_update_success'];
+    echo $nv_Lang->getModule('block_update_success');
 } else {
-    echo $lang_module['block_error_noblock'];
+    echo $nv_Lang->getModule('block_error_noblock');
 }

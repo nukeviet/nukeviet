@@ -15,10 +15,10 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
 
 $captcha_array = array(
-    0 => $lang_module['captcha_0'],
-    1 => $lang_module['captcha_1'],
-    2 => $lang_module['captcha_2'],
-    3 => $lang_module['captcha_3']
+    0 => $nv_Lang->getModule('captcha_0'),
+    1 => $nv_Lang->getModule('captcha_1'),
+    2 => $nv_Lang->getModule('captcha_2'),
+    3 => $nv_Lang->getModule('captcha_3')
 );
 
 $groups_list = nv_groups_list();
@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -132,7 +132,7 @@ if (!empty($mod_name)) {
     $xtpl->assign('OPTION', array(
         'value' => -1,
         'checked' => in_array(-1, $array_allowed_comm) ? ' checked="checked"' : '',
-        'title' => $lang_module['allowed_comm_item']
+        'title' => $nv_Lang->getModule('allowed_comm_item')
     ));
     $xtpl->parse('main.config.allowed_comm');
 
@@ -180,9 +180,9 @@ if (!empty($mod_name)) {
     }
     $xtpl->parse('main.config');
 
-    $page_title = sprintf($lang_module['config_mod_name'], $site_mod_comm[$mod_name]['custom_title']);
+    $page_title = sprintf($nv_Lang->getModule('config_mod_name'), $site_mod_comm[$mod_name]['custom_title']);
 } else {
-    $page_title = $lang_module['config'];
+    $page_title = $nv_Lang->getModule('config');
 
     $weight = 0;
     foreach ($site_mod_comm as $mod_name => $row_mod) {
@@ -192,7 +192,7 @@ if (!empty($mod_name)) {
         $array_view_comm = (! empty($module_config[$mod_name]['view_comm'])) ? explode(',', $module_config[$mod_name]['view_comm']) : array();
 
         if (in_array(-1, $array_allowed_comm)) {
-            $allowed_comm = $lang_module['allowed_comm_item'];
+            $allowed_comm = $nv_Lang->getModule('allowed_comm_item');
         } else {
             $allowed_comm = array();
             foreach ($array_allowed_comm as $_group_id) {

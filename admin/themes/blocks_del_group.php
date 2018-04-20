@@ -66,4 +66,4 @@ if (! empty($array_expression)) {
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
 }
 
-echo $lang_module['block_delete_success'];
+echo $nv_Lang->getModule('block_delete_success');

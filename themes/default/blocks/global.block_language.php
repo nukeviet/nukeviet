@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_block_language')) {
     function nv_block_language($block_config)
     {
-        global $global_config, $lang_global, $language_array;
+        global $global_config, $language_array, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.block_language.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -28,7 +28,7 @@ if (! nv_function_exists('nv_block_language')) {
         $xtpl = new XTemplate('global.block_language.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('SELECT_LANGUAGE', $lang_global['langsite']);
+        $xtpl->assign('SELECT_LANGUAGE', $nv_Lang->getGlobal('langsite'));
 
         // Multiple languages
         if ($global_config['lang_multi'] and sizeof($global_config['allow_sitelangs']) > 1) {

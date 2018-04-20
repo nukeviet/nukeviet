@@ -26,17 +26,17 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         global $site_mods;
 
         $html = '<div class="form-group">';
-        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $lang_block['menu_note_auto'] . '</div></div>';
+        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $nv_Lang->getBlock('menu_note_auto') . '</div></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">';
-        $html .= $lang_block['title_length'];
+        $html .= $nv_Lang->getBlock('title_length');
         $html .= ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= "<input type=\"text\" class=\"form-control\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['module_display'] . ':</label><div class="col-sm-18">';
+        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('module_display') . ':</label><div class="col-sm-18">';
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
             $data_block['module_in_menu'] = array();
@@ -79,7 +79,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      */
     function nv_menu_site_mods($block_config)
     {
-        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
+        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $catid, $home, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -90,7 +90,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         }
 
         $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
@@ -138,8 +138,8 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                     } elseif ($modvalues['module_file'] == 'message') {
                         if (defined('NV_IS_USER')) {
                             $sub_nav_item[] = array(
-                                'note' => $lang_global['your_account'],
-                                'title_trim' => nv_clean60($lang_global['your_account'], $block_config['title_length']),
+                                'note' => $nv_Lang->getGlobal('your_account'),
+                                'title_trim' => nv_clean60($nv_Lang->getGlobal('your_account'), $block_config['title_length']),
                                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=config'
                             );
                         }

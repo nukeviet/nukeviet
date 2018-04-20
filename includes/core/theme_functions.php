@@ -19,7 +19,7 @@ if (! defined('NV_MAINFILE')) {
  */
 function nv_error_info()
 {
-    global $lang_global, $global_config, $error_info;
+    global $global_config, $error_info, $nv_Lang;
 
     if (! defined('NV_IS_ADMIN')) {
         return;
@@ -29,21 +29,21 @@ function nv_error_info()
     }
 
     $errortype = array(
-        E_ERROR => array( $lang_global['error_error'], 'bad.png' ),
-        E_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
-        E_PARSE => array( $lang_global['error_error'], 'bad.png' ),
-        E_NOTICE => array( $lang_global['error_notice'], 'comment.png' ),
-        E_CORE_ERROR => array( $lang_global['error_error'], 'bad.png' ),
-        E_CORE_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
-        E_COMPILE_ERROR => array( $lang_global['error_error'], 'bad.png' ),
-        E_COMPILE_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
-        E_USER_ERROR => array( $lang_global['error_error'], 'bad.png' ),
-        E_USER_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
-        E_USER_NOTICE => array( $lang_global['error_notice'], 'comment.png' ),
-        E_STRICT => array( $lang_global['error_notice'], 'comment.png' ),
-        E_RECOVERABLE_ERROR => array( $lang_global['error_error'], 'bad.png' ),
-        E_DEPRECATED => array( $lang_global['error_notice'], 'comment.png' ),
-        E_USER_DEPRECATED => array( $lang_global['error_warning'], 'warning.png' )
+        E_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
+        E_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
+        E_PARSE => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
+        E_NOTICE => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
+        E_CORE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
+        E_CORE_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
+        E_COMPILE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
+        E_COMPILE_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
+        E_USER_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
+        E_USER_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
+        E_USER_NOTICE => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
+        E_STRICT => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
+        E_RECOVERABLE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
+        E_DEPRECATED => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
+        E_USER_DEPRECATED => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' )
     );
 
     if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl')) {
@@ -61,7 +61,7 @@ function nv_error_info()
     }
 
     $xtpl = new XTemplate('error_info.tpl', $tpl_path);
-    $xtpl->assign('TPL_E_CAPTION', $lang_global['error_info_caption']);
+    $xtpl->assign('TPL_E_CAPTION', $nv_Lang->getGlobal('error_info_caption'));
 
     $a = 0;
     foreach ($error_info as $key => $value) {
@@ -93,7 +93,7 @@ function nv_error_info()
  */
 function nv_info_die($page_title = '', $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
-    global $lang_global, $global_config;
+    global $global_config, $nv_Lang;
 
 	http_response_code($error_code);
 
@@ -126,7 +126,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
     $xtpl->assign('PAGE_TITLE', $page_title);
     $xtpl->assign('HOME_LINK', $global_config['site_url']);
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
@@ -157,12 +157,12 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 
     if (defined('NV_IS_ADMIN') and ! empty($admin_link)) {
         $xtpl->assign('ADMIN_LINK', $admin_link);
-        $xtpl->assign('GO_ADMINPAGE', empty($admin_title) ? $lang_global['admin_page'] : $admin_title);
+        $xtpl->assign('GO_ADMINPAGE', empty($admin_title) ? $nv_Lang->getGlobal('admin_page') : $admin_title);
         $xtpl->parse('main.adminlink');
     }
     if (! empty($site_link)) {
         $xtpl->assign('SITE_LINK', $site_link);
-        $xtpl->assign('GO_SITEPAGE', empty($site_title) ? $lang_global['go_homepage'] : $site_title);
+        $xtpl->assign('GO_SITEPAGE', empty($site_title) ? $nv_Lang->getGlobal('go_homepage') : $site_title);
         $xtpl->parse('main.sitelink');
     }
 
@@ -597,7 +597,7 @@ function nv_css_setproperties($tag, $property_array)
  */
 function nv_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5)
 {
-    global $global_config, $module_info, $lang_module, $page_title;
+    global $global_config, $module_info, $page_title, $nv_Lang;
 
     if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/alert.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
@@ -610,7 +610,7 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
     }
 
     $xtpl = new XTemplate('alert.tpl', $tpl_path);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('LANG_BACK', $lang_back);
     $xtpl->assign('CONTENT', $message_content);
 

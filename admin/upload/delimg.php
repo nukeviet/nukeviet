@@ -15,20 +15,20 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 if (! isset($check_allow_upload_dir['delete_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $files = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
 
 // Check choose file
 if (empty($files)) {
-    die('ERROR#' . $lang_module['errorNotSelectFile']);
+    die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
 }
 
 // Check file exists
 foreach ($files as  $file) {
     if (! nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-        die('ERROR#' . $lang_module['file_no_exists'] . ': ' . $file);
+        die('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
     }
 }
 
@@ -44,7 +44,7 @@ foreach ($files as  $file) {
         $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $array_dirname[$path] . " AND title='" . $file . "'");
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $file, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_delfile'), $path . '/' . $file, $admin_info['userid']);
 }
 
 echo 'OK#Success!!!';

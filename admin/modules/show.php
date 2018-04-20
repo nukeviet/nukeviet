@@ -19,7 +19,7 @@ if (! defined('NV_IS_FILE_MODULES')) {
  */
 function nv_show_funcs()
 {
-    global $nv_Cache, $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
+    global $nv_Cache, $db, $global_config, $site_mods, $nv_Request, $module_file, $nv_Lang;
 
     $mod = $nv_Request->get_title('mod', 'get', '');
 
@@ -209,7 +209,7 @@ function nv_show_funcs()
     }
 
     $xtpl = new XTemplate('aj_show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     foreach ($act_funcs as $funcs => $values) {
         if ($values['show_func']) {
             $values['func_name'] = $funcs;
@@ -267,7 +267,7 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = sprintf($lang_module['funcs_list'], $row['custom_title']);
+$page_title = sprintf($nv_Lang->getModule('funcs_list'), $row['custom_title']);
 
 $contents = array();
 

@@ -53,11 +53,11 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 		    $news_contents['files'] = explode(',', $news_contents['files']);
 
 		    if (!isset($news_contents['files'][$fileid])) {
-		        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+		        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 		    }
 
 		    if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $news_contents['files'][$fileid])) {
-		        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+		        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 		    }
 
 		    $file_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true) . '?download=1&id=' . $fileid;
@@ -143,12 +143,12 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 			    $news_contents['files'] = array();
 
 			    foreach ($files as $id => $file) {
-			        $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $lang_module['click_to_download'];
+			        $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $nv_Lang->getModule('click_to_download');
 			        $news_contents['files'][] = array(
 			            'title' => $file_title,
 			            'key' => md5($id . $file_title),
 			            'ext' => nv_getextension($file_title),
-			            'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
+			            'titledown' => $nv_Lang->getModule('download') . ' ' . (count($files) > 1 ? $id + 1 : ''),
 			            'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
 			            'url' => (!preg_match("/^http*/", $file)) ?  $base_url_rewrite . '?download=1&amp;id=' . $id : $file,
 			            'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $id,
@@ -168,7 +168,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         }
 
         if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
-            $alert = sprintf($lang_module['status_alert'], $lang_module['status_' . $news_contents['status']]);
+            $alert = sprintf($nv_Lang->getModule('status_alert'), $lang_module['status_' . $news_contents['status']]);
             $my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
             $news_contents['allowed_send'] = 0;
             $module_config[$module_name]['socialbutton'] = 0;
@@ -177,7 +177,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 
     if ($publtime == 0) {
         $redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content') . $redirect, 404);
     }
 
     $news_contents['url_sendmail'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
@@ -343,15 +343,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         } else {
             $news_contents['disablerating'] = 0;
         }
-        $news_contents['stringrating'] = sprintf($lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating']);
+        $news_contents['stringrating'] = sprintf($nv_Lang->getModule('stringrating'), $news_contents['total_rating'], $news_contents['click_rating']);
         $news_contents['numberrating'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating'], 1) : 0;
         $news_contents['langstar'] = array(
-            'note' => $lang_module['star_note'],
-            'verypoor' => $lang_module['star_verypoor'],
-            'poor' => $lang_module['star_poor'],
-            'ok' => $lang_module['star_ok'],
+            'note' => $nv_Lang->getModule('star_note'),
+            'verypoor' => $nv_Lang->getModule('star_verypoor'),
+            'poor' => $nv_Lang->getModule('star_poor'),
+            'ok' => $nv_Lang->getModule('star_ok'),
             'good' => $lang_module['star_good}'],
-            'verygood' => $lang_module['star_verygood']
+            'verygood' => $nv_Lang->getModule('star_verygood')
         );
     }
 

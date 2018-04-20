@@ -40,7 +40,7 @@ if (defined('NV_EDITOR')) {
     }
 }
 
-$page_title = $lang_module['content'];
+$page_title = $nv_Lang->getModule('content');
 $key_words = $module_info['keywords'];
 
 // check user post content
@@ -115,7 +115,7 @@ if (!$array_post_user['addcontent']) {
         $array_temp['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
     }
 
-    $array_temp['content'] = $lang_module['error_addcontent'];
+    $array_temp['content'] = $nv_Lang->getModule('error_addcontent');
     $template = $module_info['template'];
 
     if (!file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
@@ -165,7 +165,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             nv_fix_weight_content($rowcontent_old['weight']);
 
             $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['del_content'], $contentid . ' | ' . $client_info['ip'] . $user_content, 0);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('del_content'), $contentid . ' | ' . $client_info['ip'] . $user_content, 0);
 
             if ($rowcontent_old['status'] == 1) {
                 $nv_Cache->delMod($module_name);
@@ -176,21 +176,21 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         }
 
-        $page_title = $lang_module['update_content'];
+        $page_title = $nv_Lang->getModule('update_content');
     } else {
-        $page_title = $lang_module['add_content'];
+        $page_title = $nv_Lang->getModule('add_content');
     }
 
     $array_mod_title[] = array(
         'catid' => 0,
-        'title' => $lang_module['add_content'],
+        'title' => $nv_Lang->getModule('add_content'),
         'link' => $base_url
     );
 
     $array_imgposition = array(
-        0 => $lang_module['imgposition_0'],
-        1 => $lang_module['imgposition_1'],
-        2 => $lang_module['imgposition_2']
+        0 => $nv_Lang->getModule('imgposition_0'),
+        1 => $nv_Lang->getModule('imgposition_1'),
+        2 => $nv_Lang->getModule('imgposition_2')
     );
 
     $rowcontent = array(
@@ -247,7 +247,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $sql = 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
     $result = $db->query($sql);
     $array_topic_module = array();
-    $array_topic_module[0] = $lang_module['topic_sl'];
+    $array_topic_module[0] = $nv_Lang->getModule('topic_sl');
 
     while (list ($topicid_i, $title_i) = $result->fetch(3)) {
         $array_topic_module[$topicid_i] = $title_i;
@@ -315,13 +315,13 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['bodyhtml'] = defined('NV_EDITOR') ? nv_nl2br($bodyhtml, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($bodyhtml)), '<br />');
 
         if (empty($rowcontent['title'])) {
-            $error = $lang_module['error_title'];
+            $error = $nv_Lang->getModule('error_title');
         } elseif (empty($rowcontent['listcatid'])) {
-            $error = $lang_module['error_cat'];
+            $error = $nv_Lang->getModule('error_cat');
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
-            $error = $lang_module['error_bodytext'];
+            $error = $nv_Lang->getModule('error_bodytext');
         } elseif (!nv_capcha_txt($fcode)) {
-            $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+            $error = ($global_config['captcha_type'] == 2 ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect'));
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
                 $rowcontent['status'] = 1;
@@ -413,9 +413,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         nv_insert_notification($module_name, 'post_queue', $content, $rowcontent['id']);
                     }
 
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['add_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('add_content'), $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0);
                 } else {
-                    $error = $lang_module['errorsave'];
+                    $error = $nv_Lang->getModule('errorsave');
                 }
             } else {
                 if ($rowcontent_old['status'] == 1) {
@@ -471,9 +471,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['update_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('update_content'), $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0);
                 } else {
-                    $error = $lang_module['errorsave'];
+                    $error = $nv_Lang->getModule('errorsave');
                 }
             }
 
@@ -484,19 +484,19 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                     $array_temp['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
                     if ($rowcontent['status']) {
-                        $array_temp['content'] = $lang_module['save_content_ok'];
+                        $array_temp['content'] = $nv_Lang->getModule('save_content_ok');
                         $nv_Cache->delMod($module_name);
                     } else {
-                        $array_temp['content'] = $lang_module['save_content_waite'];
+                        $array_temp['content'] = $nv_Lang->getModule('save_content_waite');
                     }
                 } elseif ($rowcontent['status'] == 1 and sizeof($catids)) {
                     $catid = $catids[0];
                     $array_temp['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $rowcontent['alias'] . '-' . $rowcontent['id'];
-                    $array_temp['content'] = $lang_module['save_content_view_page'];
+                    $array_temp['content'] = $nv_Lang->getModule('save_content_view_page');
                     $nv_Cache->delMod($module_name);
                 } else {
                     $array_temp['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-                    $array_temp['content'] = $lang_module['save_content_waite_home'];
+                    $array_temp['content'] = $nv_Lang->getModule('save_content_waite_home');
                 }
 
                 $template = $module_info['template'];
@@ -553,20 +553,20 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     }
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('OP', $module_info['alias']['content']);
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
 
     if ($global_config['captcha_type'] == 2) {
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
     } else {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
         $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
         $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('CHECKSS', $checkss);
@@ -656,7 +656,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $page = intval(substr($array_op[1], 5));
     }
 
-    $contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . NV_CHECK_SESSION) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+    $contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . NV_CHECK_SESSION) . "\">" . $nv_Lang->getModule('add_content') . "</a></h1></div>";
 
     $array_catpage = array();
 
@@ -699,7 +699,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
         // parse content
         $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
         $a = 0;
@@ -710,11 +710,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $array_link_content = array();
 
             if ($array_row_i['is_edit_content']) {
-                $array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['edit'] . "</a>";
+                $array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $nv_Lang->getGlobal('edit') . "</a>";
             }
 
             if ($array_row_i['is_del_content']) {
-                $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['delete'] . "</a>";
+                $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $nv_Lang->getGlobal('delete') . "</a>";
             }
 
             if (!empty($array_link_content)) {
@@ -744,7 +744,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $contents .= $xtpl->text('main');
 
         if ($page > 1) {
-            $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+            $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
         }
     }
 } elseif ($array_post_user['addcontent']) {

@@ -60,7 +60,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
     $choice_seltected = $nv_Request->get_string('choice_seltected', 'post', '');
 
     $xtpl = new XTemplate('fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     if ($choice == 'module') {
         $xtpl->assign('choicesql_name', 'choicesql_' . $choice);
@@ -188,16 +188,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
         if (in_array($dataform['field'], $field_not_allow)) {
-            $error = $lang_module['field_error_not_allow'];
+            $error = $nv_Lang->getModule('field_error_not_allow');
         } elseif (empty($dataform['field'])) {
-            $error = $lang_module['field_error_empty'];
+            $error = $nv_Lang->getModule('field_error_empty');
         } else {
             // Kiểm tra trùng trường dữ liệu
             $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE field= :field');
             $stmt->bindParam(':field', $dataform['field'], PDO::PARAM_STR);
             $stmt->execute();
             if ($stmt->fetchColumn()) {
-                $error = $lang_module['field_error'];
+                $error = $nv_Lang->getModule('field_error');
             }
         }
     }
@@ -241,7 +241,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['default_value'] = $nv_Request->get_title('default_value', 'post', '');
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
-            $error = $lang_module['field_number_error'];
+            $error = $nv_Lang->getModule('field_number_error');
         } else {
             $dataform['field_choices'] = '';
         }
@@ -262,7 +262,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['default_value'] = $dataform['default_value_number'];
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
-            $error = $lang_module['field_number_error'];
+            $error = $nv_Lang->getModule('field_number_error');
         } else {
             $dataform['field_choices'] = serialize(array('number_type' => $dataform['number_type']));
         }
@@ -289,7 +289,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['match_regex'] = $dataform['func_callback'] = '';
         $field_choices['current_date'] = $dataform['current_date'];
         if ($dataform['min_length'] >= $dataform['max_length'] and $dataform['min_length'] != 0) {
-            $error = $lang_module['field_date_error'];
+            $error = $nv_Lang->getModule('field_date_error');
         } else {
             $dataform['field_choices'] = serialize(array('current_date' => $dataform['current_date']));
         }
@@ -314,7 +314,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 unset($field_choices['']);
                 $dataform['field_choices'] = serialize($field_choices);
             } else {
-                $error = $lang_module['field_choices_empty'];
+                $error = $nv_Lang->getModule('field_choices_empty');
             }
         } else {
             $choicesql_module = $nv_Request->get_string('choicesql_module', 'post', '');
@@ -329,7 +329,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
             } else {
-                $error = $lang_module['field_sql_choices_empty'];
+                $error = $nv_Lang->getModule('field_sql_choices_empty');
             }
         }
     }
@@ -460,25 +460,25 @@ if ($nv_Request->isset_request('del', 'post')) {
 }
 
 $array_field_type = array(
-    'number' => $lang_module['field_type_number'],
-    'date' => $lang_module['field_type_date'],
-    'textbox' => $lang_module['field_type_textbox'],
-    'textarea' => $lang_module['field_type_textarea'],
-    'editor' => $lang_module['field_type_editor'],
-    'select' => $lang_module['field_type_select'],
-    'radio' => $lang_module['field_type_radio'],
-    'checkbox' => $lang_module['field_type_checkbox'],
-    'multiselect' => $lang_module['field_type_multiselect']
+    'number' => $nv_Lang->getModule('field_type_number'),
+    'date' => $nv_Lang->getModule('field_type_date'),
+    'textbox' => $nv_Lang->getModule('field_type_textbox'),
+    'textarea' => $nv_Lang->getModule('field_type_textarea'),
+    'editor' => $nv_Lang->getModule('field_type_editor'),
+    'select' => $nv_Lang->getModule('field_type_select'),
+    'radio' => $nv_Lang->getModule('field_type_radio'),
+    'checkbox' => $nv_Lang->getModule('field_type_checkbox'),
+    'multiselect' => $nv_Lang->getModule('field_type_multiselect')
 );
 
 $array_choice_type = array(
-    'field_choicetypes_sql' => $lang_module['field_choicetypes_sql'],
-    'field_choicetypes_text' => $lang_module['field_choicetypes_text']
+    'field_choicetypes_sql' => $nv_Lang->getModule('field_choicetypes_sql'),
+    'field_choicetypes_text' => $nv_Lang->getModule('field_choicetypes_text')
 );
 
 $xtpl = new XTemplate('fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -659,7 +659,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $dataform['show_profile'] = ($dataform['show_profile']) ? ' checked="checked"' : '';
     $dataform['user_editable'] = ($dataform['user_editable']) ? ' checked="checked"' : '';
 
-    $xtpl->assign('CAPTIONFORM', ($fid) ? $lang_module['captionform_edit'] . ': ' . $dataform['fieldid'] : $lang_module['captionform_add']);
+    $xtpl->assign('CAPTIONFORM', ($fid) ? $nv_Lang->getModule('captionform_edit') . ': ' . $dataform['fieldid'] : $nv_Lang->getModule('captionform_add'));
     $xtpl->assign('DATAFORM', $dataform);
     if (empty($fid)) {
         $xtpl->parse('main.load.field');
@@ -694,14 +694,14 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         $xtpl->parse('main.load.choicetypes_add_hidden');
     }
     $array_match_type = array();
-    $array_match_type['none'] = $lang_module['field_match_type_none'];
+    $array_match_type['none'] = $nv_Lang->getModule('field_match_type_none');
     if ($dataform['field_type'] != 'editor' and $dataform['field_type'] != 'textarea') {
-        $array_match_type['alphanumeric'] = $lang_module['field_match_type_alphanumeric'];
-        $array_match_type['email'] = $lang_global['email'];
-        $array_match_type['url'] = $lang_module['field_match_type_url'];
+        $array_match_type['alphanumeric'] = $nv_Lang->getModule('field_match_type_alphanumeric');
+        $array_match_type['email'] = $nv_Lang->getGlobal('email');
+        $array_match_type['url'] = $nv_Lang->getModule('field_match_type_url');
     }
-    $array_match_type['regex'] = $lang_module['field_match_type_regex'];
-    $array_match_type['callback'] = $lang_module['field_match_type_callback'];
+    $array_match_type['regex'] = $nv_Lang->getModule('field_match_type_regex');
+    $array_match_type['callback'] = $nv_Lang->getModule('field_match_type_callback');
     foreach ($array_match_type as $key => $value) {
         $xtpl->assign('MATCH_TYPE', array(
             'key' => $key,
@@ -726,7 +726,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 
-    $page_title = $lang_module['fields'];
+    $page_title = $nv_Lang->getModule('fields');
     $contents = nv_admin_theme($contents);
 }
 

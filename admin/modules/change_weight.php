@@ -49,7 +49,7 @@ $sth2->execute();
 
 $nv_Cache->delMod('modules');
 
-nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['weight'] . ' module: ' . $mod, $weight . ' -> ' . $new_weight, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('weight') . ' module: ' . $mod, $weight . ' -> ' . $new_weight, $admin_info['userid']);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $mod;
