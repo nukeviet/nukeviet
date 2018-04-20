@@ -214,6 +214,8 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $tpl = new \NukeViet\Template\NvSmarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
     $tpl->assign('rows', $array_catpage);
+
+
     return $tpl->fetch('blog.tpl');
 }
 
@@ -593,7 +595,6 @@ function viewcat_two_column($array_content, $array_catpage)
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
     global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $client_info;
-
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
