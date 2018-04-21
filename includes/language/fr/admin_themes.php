@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 10:30:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 10:30:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -140,3 +140,8 @@ $lang_module['show_device_1'] = 'Tous';
 $lang_module['show_device_2'] = 'Afficher mobiles';
 $lang_module['show_device_3'] = 'Afficher sur tablette';
 $lang_module['show_device_4'] = 'Autres équipements';
+
+$lang_module['preview_theme_on'] = 'Autoriser l\'aperçu';
+$lang_module['preview_theme_off'] = 'Annuler l\'aperçu';
+$lang_module['preview_theme_link'] = 'Aperçu de l\'interface du lien';
+$lang_module['preview_theme_link_copied'] = 'Le lien a été copié dans le presse-papiers';

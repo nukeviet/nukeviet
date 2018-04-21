@@ -771,6 +771,24 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         $xtpl->parse('main.post_name');
     }
 
+    if (!empty($news_contents['files'])) {
+        foreach ($news_contents['files'] as $file) {
+            $xtpl->assign('FILE', $file);
+
+            if ($file['ext'] == 'pdf') {
+                $xtpl->parse('main.files.loop.show_quick_viewpdf');
+                $xtpl->parse('main.files.loop.content_quick_viewpdf');
+            } elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
+                $xtpl->parse('main.files.loop.show_quick_viewimg');
+            } else {
+                $xtpl->parse('main.files.loop.show_quick_viewpdf');
+                $xtpl->parse('main.files.loop.content_quick_viewdoc');
+            }
+            $xtpl->parse('main.files.loop');
+        }
+        $xtpl->parse('main.files');
+    }
+
     if (! empty($news_contents['author']) or ! empty($news_contents['source'])) {
         if (! empty($news_contents['author'])) {
             $xtpl->parse('main.author.name');
@@ -1217,4 +1235,22 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
 
     $xtpl->parse('results');
     return $xtpl->text('results');
+}
+
+/**
+ * nv_theme_viewpdf()
+ *
+ * @param mixed $file_url
+ * @return
+ */
+function nv_theme_viewpdf($file_url)
+{
+    global $lang_module, $lang_global;
+    $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_URL', $file_url);
+    $xtpl->parse('main');
+    return $xtpl->text('main');
 }

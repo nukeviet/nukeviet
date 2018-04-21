@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 31, 2015, 09:30:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 31, 2015, 09:30:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -135,6 +135,7 @@ $lang_module['autoinstall_uploaded_filelist'] = 'Liste de fichier';
 $lang_module['autoinstall_uploaded_num_exists'] = 'Nombre de fichiers doublés';
 $lang_module['autoinstall_uploaded_num_invalid'] = 'Nombre de fichiers avec structure incompatible';
 $lang_module['autoinstall_error_uploadfile'] = 'Erreur: ne pas pouvoir mettre en ligne les fichier au système. Verifiez-les ou chmod le dossier tmp';
+$lang_module['autoinstall_error_uploadfile1'] = 'Erreur: Impossible de télécharger le fichier sur le système. Veuillez vérifier que la taille du fichier dépasse %s';
 $lang_module['autoinstall_error_downloaded'] = 'Erreur: Ne trouve pas le fichier mis en ligne';
 $lang_module['autoinstall_error_createfile'] = 'Erreur: N\'arrive pas à sauvegarder le nombre de fichier. Verifier-les ou chmod le dossier tmp';
 $lang_module['autoinstall_error_invalidfile'] = 'Erreur: Fichier .zip est incompatible';

@@ -8,24 +8,47 @@
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_menu_theme_default_footer')) {
+if (!nv_function_exists('nv_menu_theme_default_footer')) {
+    /**
+     * nv_menu_theme_default_footer_config()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_menu_theme_default_footer_config($module, $data_block, $lang_block)
     {
         global $site_mods;
 
-        $html = "\n";
-        foreach ($site_mods as $modname => $modvalues) {
-            $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';
-            $html .= '<div style="float: left" class="w150"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div>';
+        if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
+            $data_block['module_in_menu'] = array();
         }
 
-        return '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
+        $html = '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['module_in_menu'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
+        foreach ($site_mods as $modname => $modvalues) {
+            $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';
+            $html .= '<div class="w150 pull-left"><div class="ellipsis"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div></div>';
+        }
+        $html .= '</div>';
+        $html .= '</div>';
+
+        return $html;
     }
 
+    /**
+     * nv_menu_theme_default_footer_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_menu_theme_default_footer_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -62,11 +85,8 @@ if (! nv_function_exists('nv_menu_theme_default_footer')) {
 
         $a = 0;
         foreach ($site_mods as $modname => $modvalues) {
-            if (in_array($modname, $block_config['module_in_menu']) and ! empty($modvalues['funcs'])) {
-                $_array_menu = array(
-                    'title' => $modvalues['custom_title'],
-                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname
-                );
+            if (in_array($modname, $block_config['module_in_menu']) and !empty($modvalues['funcs'])) {
+                $_array_menu = array('title' => $modvalues['custom_title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname);
                 $xtpl->assign('FOOTER_MENU', $_array_menu);
                 $xtpl->parse('main.footer_menu');
                 ++$a;

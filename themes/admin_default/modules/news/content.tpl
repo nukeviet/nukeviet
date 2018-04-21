@@ -11,8 +11,11 @@
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
-<form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post">
-	<div class="row">
+<form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" onsubmit="return nv_validForm(this,'{MODULE_DATA}', '{ERROR_BODYTEXT}','{ERROR_CAT}');">
+	<div class="row">    
+        <div class="alert alert-danger" id="show_error" style="display: none">
+            
+        </div>        
 		<div class="col-sm-24 col-md-18">
 			<table class="table table-striped table-bordered">
 				<col class="w200" />
@@ -20,7 +23,7 @@
 				<tbody>
 					<tr>
 						<td><strong>{LANG.name}</strong>: <sup class="required">(∗)</sup></td>
-						<td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+						<td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control require" data-mess="{LANG.error_title}" onkeypress="nv_validErrorHidden(this);" style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.alias}: </strong></td>
@@ -37,7 +40,7 @@
 					</tr>
 					<tr>
 						<td><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input id="select-img-post" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input id="select-img-post" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.content_homeimgalt}</td>
@@ -63,6 +66,20 @@
 						</div>
                         </td>
 					</tr>
+                    <tr>
+                        <td style="vertical-align:top"> {LANG.fileattach} <strong>[<a onclick="nv_add_files('{NV_BASE_ADMINURL}', '{UPLOAD_CURRENT}', '{GLANG.delete}', '{GLANG.browse_file}');" href="javascript:void(0);" title="{LANG.add}">{LANG.add}]</a></strong></td>
+                        <td>
+                            <div id="filearea">
+                                <!-- BEGIN: files -->
+                                <div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
+                                    <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px" />
+                                    <input onclick="nv_open_browse('{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOAD_CURRENT}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');return false;" type="button" value="{GLANG.browse_file}" class="selectfile btn btn-primary" />
+                                    <input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
+                                </div>
+                                <!-- END: files -->
+                            </div>
+                        </td>
+                    </tr>
 					<tr>
 						<td><strong>{LANG.content_sourceid}</strong>:</td>
                         <td><input class="form-control" type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width:100%" /></td>
@@ -109,22 +126,44 @@
 							</div>
 						</li>
 						<!-- END:block_cat -->
+                        <li>
+                            <p class="message_head">
+                                <cite>{LANG.content_keyword}:</cite>
+                            </p>
+                            <div class="message_body" style="overflow: auto">
+                                <div class="clearfix uiTokenizer uiInlineTokenizer">
+                                    <div id="keywords" class="tokenarea">
+                                        <!-- BEGIN: keywords -->
+                                        <span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();"> {KEYWORDS} <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+                                        <!-- END: keywords -->
+                                    </div>
+                                    <div class="uiTypeahead">
+                                        <div class="wrap">
+                                            <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+                                            <div class="innerWrap">
+                                                <input id="keywords-search" type="text" placeholder="{LANG.input_keyword}" class="form-control textInput" style="width: 100%;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>                        
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_tag}:</cite>
 							</p>
 							<div class="message_body" style="overflow: auto">
 								<div class="clearfix uiTokenizer uiInlineTokenizer">
-									<div id="keywords" class="tokenarea">
-										<!-- BEGIN: keywords -->
-										<span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();"> {KEYWORDS} <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
-										<!-- END: keywords -->
+									<div id="tags" class="tokenarea">
+										<!-- BEGIN: tags -->
+										<span class="uiToken removable" title="{TAGS}" ondblclick="$(this).remove();"> {TAGS} <input type="hidden" autocomplete="off" name="tags[]" value="{TAGS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+										<!-- END: tags -->
 									</div>
 									<div class="uiTypeahead">
 										<div class="wrap">
 											<input type="hidden" class="hiddenInput" autocomplete="off" value="" />
 											<div class="innerWrap">
-												<input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
+												<input id="tags-search" type="text" placeholder="{LANG.input_tag}" class="form-control textInput" style="width: 100%;" />
 											</div>
 										</div>
 									</div>
@@ -337,18 +376,23 @@
 <div id="message"></div>
 <script type="text/javascript">
 //<![CDATA[
-	var LANG = [];
-	var CFG = [];
-	CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
-	CFG.upload_current = "{UPLOAD_CURRENT}";
-	LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
-	LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
-	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-	<!-- BEGIN: getalias -->
-	$("#idtitle").change(function() {
-		get_alias();
-	});
-	<!-- END: getalias -->
+var nv_num_files = '{NUMFILE}';
+var LANG = [];
+var CFG = [];
+CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
+CFG.upload_current = "{UPLOAD_CURRENT}";
+CFG.id = {rowcontent.id};
+LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
+LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
+var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+<!-- BEGIN: getalias -->
+$("#idtitle").change(function() {
+	get_alias();
+});
+<!-- END: getalias -->
+<!-- BEGIN: holdon_edit -->
+CFG.is_edit_news = true;
+<!-- END: holdon_edit -->
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
@@ -358,3 +402,12 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
 <!-- END:main -->
+
+<!-- BEGIN: editing -->
+<div class="text-center">
+    <h2>{MESSAGE}</h2>
+    <!-- BEGIN: takeover -->
+    <a href="{TAKEOVER_LINK}" class="btn btn-danger">{LANG.dulicate_takeover}</a>
+    <!-- END: takeover -->
+</div>
+<!-- END: editing -->

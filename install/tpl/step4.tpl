@@ -9,7 +9,7 @@
     </tr>
     <tr>
         <th scope="row" class="spec">{LANG.php_version}: {DATA_REQUEST.php_version}</th>
-        <td>{LANG.required_on} >= {DATA_REQUEST.php_required}</td>
+        <td>{LANG.required_on} &gt;= {DATA_REQUEST.php_required_min} {LANG.and} &lt;= {DATA_REQUEST.php_allowed_max}</td>
         <td><span class="{DATA_REQUEST.class_php_support}">{DATA_REQUEST.php_support}</span></td>
     </tr>
     <tr>

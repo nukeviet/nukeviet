@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_department_info')) {
-
     /**
      * nv_department_info()
      *
@@ -24,16 +23,16 @@ if (!nv_function_exists('nv_department_info')) {
         global $site_mods, $nv_Cache;
 
         $html = '';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['departmentid'] . '</td>';
-        $html .= '<td><select name="config_departmentid" class="form-control w200">';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['departmentid'] . ':</label>';
+        $html .= '<div class="col-sm-9"><select name="config_departmentid" class="form-control">';
         $sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1';
         $list = $nv_Cache->db($sql, 'id', $module);
         foreach ($list as $l) {
             $html .= '<option value="' . $l['id'] . '" ' . (($data_block['departmentid'] == $l['id']) ? ' selected="selected"' : '') . '>' . $l['full_name'] . '</option>';
         }
-        $html .= '</select>';
-        $html .= '</tr>';
+        $html .= '</select></div>';
+        $html .= '</div>';
 
         return $html;
     }

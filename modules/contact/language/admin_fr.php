@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -23,6 +23,7 @@ $lang_module['edit_title'] = 'Prévisualiser';
 $lang_module['add_row_title'] = 'Ajouter un département';
 $lang_module['department_title'] = 'Départements';
 $lang_module['department_no_home'] = 'Non illustré dans la page';
+$lang_module['department_parent'] = 'Sous pièces';
 $lang_module['alias'] = 'Alias';
 $lang_module['image'] = 'Image';
 $lang_module['error_alias'] = 'Erreur: N\'a pas d\'alia';
@@ -74,6 +75,13 @@ $lang_module['delall'] = 'Supprimer Tout';
 $lang_module['siteinfo_new'] = 'Messages pas encore lus';
 $lang_module['no_row_contact'] = 'Aucun contact';
 $lang_module['url_for_iframe'] = 'Lien pour iframe';
+$lang_module['supporter'] = 'Le personnel de soutien';
+$lang_module['supporter_add'] = 'Le personnel de soutien supplémentaire';
+$lang_module['supporter_edit'] = 'Modifier le personnel de soutien de l\'information';
+$lang_module['supporter_contact_add'] = 'plus d\'informations';
+$lang_module['add'] = 'plus d\'informations';
+$lang_module['active'] = 'travail';
+$lang_module['full_name'] = 'nom et prénom';
 $lang_module['notification_contact_new'] = '<strong>%s</strong> envoie un mail pour titre <strong>%s</strong>';
 $lang_module['is_default'] = 'Défaut';
 $lang_module['otherContacts'] = 'Autres contact';
@@ -86,17 +94,9 @@ $lang_module['mark_as_unread'] = 'Cocher comme ne pas encore être lu';
 $lang_module['mark_as_read'] = 'Cocher comme déjà lu';
 $lang_module['mark_as_forward'] = 'Vers l\'avant';
 $lang_module['please_choose'] = 'Choisissez au moins un mail dans la liste au dessus';
-$lang_module['department_parent'] = 'Sous pièces';
-$lang_module['supporter'] = 'Le personnel de soutien';
-$lang_module['supporter_add'] = 'Le personnel de soutien supplémentaire';
-$lang_module['supporter_edit'] = 'Modifier le personnel de soutien de l\'information';
-$lang_module['supporter_contact_add'] = 'plus d\'informations';
-$lang_module['add'] = 'plus d\'informations';
-$lang_module['active'] = 'travail';
-$lang_module['full_name'] = 'nom et prénom';
 $lang_module['error_required_departmentid'] = 'Erreur: vous devez saisir des données pour departmentId';
 $lang_module['error_required_full_name'] = 'Erreur: vous devez saisir des données pour Nom complet';
 $lang_module['error_required_phone'] = 'Erreur: vous devez saisir les données pour téléphone';
-$lang_module['forwarded'] = 'Transmis';
 $lang_module['forward'] = 'Transmis à l\'adresse: %s';
+$lang_module['forwarded'] = 'Transmis';
 $lang_module['error_mail_empty'] = 'Erreur: E-mail vide';

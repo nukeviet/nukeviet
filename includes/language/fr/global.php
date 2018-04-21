@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -65,6 +65,7 @@ $lang_global['upass_type_simple'] = 'Mot de passe utilisé est trop facile à de
 $lang_global['password_rule_limit'] = 'Mot de passe invalide: %1$s et %2$d à %3$d caractère';
 $lang_global['password_rule_nolimit'] = 'Les mots de passe doivent être compris entre %1$d et %2$d caractères';
 $lang_global['securitycodeincorrect'] = 'Code de sécurité incorrect';
+$lang_global['securitycodeincorrect1'] = 'L\'authentification est pas encore Robot, s\'il vous plaît revalider';
 $lang_global['loginincorrect'] = 'L\'identifiant et le mot de passe ne correspondent pas';
 $lang_global['admin_loginsuccessfully'] = 'Vous avez réussi à vous identifier. Le système vous transférera à l\'Administration du site';
 $lang_global['incorrect_password'] = 'Mot de passe incorrect';
@@ -92,6 +93,7 @@ $lang_global['password'] = 'Mot de passe';
 $lang_global['password2'] = 'Confirmer le mot de passe';
 $lang_global['captcharefresh'] = 'Rafraîchir';
 $lang_global['securitycode'] = 'Code de sécurité';
+$lang_global['securitycode1'] = 'Vérifiez que vous n\'êtes pas un robot';
 $lang_global['loginsubmit'] = 'Connexion';
 $lang_global['register'] = 'S\'inscrire';
 $lang_global['lostpass'] = 'Mot de passe oublié';
@@ -100,6 +102,7 @@ $lang_global['adminlogininfo'] = 'Veuillez utiliser un identifiant et un mot de 
 $lang_global['site_rss'] = 'RSS - Derniers News';
 $lang_global['copyright'] = '&copy; Copyright %s. Tous droits réservés.';
 $lang_global['phonenumber'] = 'Téléphone';
+$lang_global['address'] = 'Adresse';
 $lang_global['full_name'] = 'Nom complet';
 $lang_global['first_name'] = 'Nom';
 $lang_global['last_name'] = 'Prénom';
@@ -331,9 +334,6 @@ $lang_global['feedback'] = 'Réaction';
 $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés avec l\'étoile (*)';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
-$lang_global['securitycodeincorrect1'] = 'L\'authentification est pas encore Robot, s\'il vous plaît revalider';
-$lang_global['securitycode1'] = 'Vérifiez que vous n\'êtes pas un robot';
-$lang_global['address'] = 'Adresse';
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';

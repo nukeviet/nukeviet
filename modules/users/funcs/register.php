@@ -364,8 +364,7 @@ if ($checkss == $array_register['checkss']) {
             ));
         } else {
             if ($global_config['allowuserreg'] == 2) {
-
-                $register_active_time = isset($global_users_config[register_active_time]) ? $global_users_config[register_active_time] : 86400;
+                $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
                 $subject = $lang_module['account_active'];
@@ -379,6 +378,7 @@ if ($checkss == $array_register['checkss']) {
                 }
             } else {
                 $info = $lang_module['account_register_to_admin'];
+                nv_insert_notification($module_name, 'contact_new', array('title' => $array_register['username']), $userid, 0, 0, 1);
             }
 
             $nv_redirect = '';

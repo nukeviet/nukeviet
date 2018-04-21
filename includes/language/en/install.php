@@ -53,6 +53,7 @@ $lang_module['recommnet'] = 'Recommend';
 $lang_module['request_more'] = 'request more';
 $lang_module['turnoff'] = 'Should be turn off';
 $lang_module['turnon'] = 'Should be turn on';
+$lang_module['and'] = 'and';
 $lang_module['is_support'] = 'Should be support';
 $lang_module['supports_rewrite'] = 'Supports rewrite';
 $lang_module['opendir_support'] = 'PHP support opendir';

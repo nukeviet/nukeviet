@@ -39,7 +39,7 @@ $lang_module['sendcontactok'] = 'Cảm ơn bạn đã quan tâm! Chúng tôi s�
 $lang_module['sendinfo'] = "Thư này được gửi thông qua tiện ích Liên hệ tại website";
 $lang_module['sendinfo2'] = "Thông tin người gửi";
 $lang_module['phone'] = 'Điện thoại';
-$lang_module['address'] = 'Địa chỉ';
+
 $lang_module['fax'] = 'Fax';
 $lang_module['note_s'] = 'Ghi chú';
 $lang_module['department'] = 'Bộ phận';

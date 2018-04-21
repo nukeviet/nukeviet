@@ -150,6 +150,7 @@ $lang_module['autoinstall_uploaded_filelist'] = 'Danh sách các file';
 $lang_module['autoinstall_uploaded_num_exists'] = 'Số file trùng';
 $lang_module['autoinstall_uploaded_num_invalid'] = 'Số file cấu trúc không phù hợp';
 $lang_module['autoinstall_error_uploadfile'] = 'Lỗi: không thể upload file lên hệ thống. Hãy kiểm tra lại hoặc chmod thư mục tmp';
+$lang_module['autoinstall_error_uploadfile1'] = 'Lỗi: không thể upload file lên hệ thống. Hãy kiểm tra lại có thể dung lượng file vượt quá %s';
 $lang_module['autoinstall_error_downloaded'] = 'Lỗi: Không tìm thấy file đã upload';
 $lang_module['autoinstall_error_createfile'] = 'Lỗi: không thể lưu đệm danh sách file. Hãy kiểm tra lại hoặc chmod thư mục tmp';
 $lang_module['autoinstall_error_invalidfile'] = 'Lỗi: File zip không hợp lệ';

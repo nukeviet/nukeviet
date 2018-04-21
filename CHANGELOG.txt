@@ -1,11 +1,65 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.01
+
+- Fix install if db password has special character
+- Fix meta tag og:url and canonical on homepage
+- Module news: Config keyword for article
+- Module language: Allowed to manage lang interface
+- Update config for file robots.txt
+- Module banner: Fix delete banner.
+- Module freecontent: Free field link
+- Module users: Fix edit group, add notification when new account wating for active, group description is not required
+- Fix PDF.js
+- Fix check theme mobile
+- Update theme configuration
+- Extensions: Fix auto invalid theme version
+- Change the extension package upload error message
+- Fixed menu changes when editing admin
+- Fix function nv_user_groups
+- Fix qrcodeLoad theme mobile_default
+- Limited PHP version to install
+- Theme config: Update google fonts
+- Fix bug HTTP class: access to a source that has a redirect
+- Update theme block headline
+- PHPMailer v6.0.3
+- Jquery v3.3.1
+- Ckeditor v4.8.0
+
+NUKEVIET 4.3.00
+
+- Module Upload: Add file path copy function, config chunk upload
+- Module users: Allowed to delete and change status multiple account, fix block login, update Openid icon, fix sort groups, fix delete group
+- Fix cache config theme
+- Fix check rewrite
+- Fix class Files cache: Delete all cache
+- Plugin: add "After run the module" position
+- Update class NukeViet\Core\Error
+- Module contact: Update email send
+- Fix function nv_check_domain
+- Remove aes_encrypt, aes_decrypt in class Encryption
+- Module page: Config alias auto lower string
+- Module comment: Allow attachments to comments, Allowed to use the editor
+- Module news: Allow deactive category, allow search for locked posts, Allows attaching files to posts
+- Config module display on admin index for authors
+- Config SSL for SMTP
+- Update Ckeditor 4.7.3, PDF.js v1.9.426, PHPMailer v6.0.1, Select2 4.0.5
+- Module banners: Fix error delete banner
+- Function nv_is_url: Accept the sign "+" in the URL
+- Change theme manager block
+
+NUKEVIET 4.2.03
+
+- Module news: Config layout for detail
+- Module users: Fix user register
+- Fix Breadcrumbs for PHP 7
+
 NUKEVIET 4.2.02
 - Add feature: Export and install sample data.
 - News: Added sorting feature.
 - Upload: Resize and crop top photos by size
-- Page: add no-dipsplay view type 
+- Page: add no-dipsplay view type
 - Fix some other bugs
 
 NUKEVIET 4.2.01

@@ -6,6 +6,8 @@
  * @Createdate 31/05/2010, 9:36
  */
 
+var LANG = [];
+
 if( typeof( CFG ) == 'undefined' ){
 	var CFG = [];
 	CFG.id = 0;
@@ -33,11 +35,11 @@ var EXT = {
 	startDownload: function(){
 		if( ! EXT.isDownloaded ){
 			EXT.isDownloaded = true;
-			
+
 			$('#warnning').hide();
 			$('#file-download').show();
 			$('#file-download .waiting').show();
-			
+
 			$.ajax({
 				type: 'POST',
 				url: script_name,
@@ -61,9 +63,9 @@ var EXT = {
 		$('#file-download').addClass('text-success');
 		$('#file-download .status').removeClass('fa-meh-o').addClass('fa-smile-o');
 		$('#file-download .complete').show();
-		
+
 		$('#file-download-response').html('<div class="alert alert-success">' + LANG.download_ok + '</div>');
-		
+
 		setTimeout( "EXT.redirect()", 3000 );
 	},
 	handleError: function(m){
@@ -105,7 +107,7 @@ $(document).ready(function(){
 		var username = $('#username').val();
 		var password = $('#password').val();
 		$('#login-result').html('');
-		
+
 		if( username == '' ){
 			$('#login-result').html('<div class="alert alert-danger">' + LANG.username_empty + '</div>');
 		}else if( password == '' ){
@@ -113,10 +115,10 @@ $(document).ready(function(){
 		}else{
 			$('#login-form input, #login-form button').attr('disabled', 'disabled');
 			$('#login-result').html('<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>');
-			
+
 			$.post(
-				script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(), 
-				'username=' + username + '&password=' + password + '&redirect=' + $('[name="redirect"]').val(), 
+				script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
+				'username=' + username + '&password=' + password + '&redirect=' + $('[name="redirect"]').val(),
 				function(res) {
 					$('#login-form input, #login-form button').removeAttr('disabled');
 					$('#login-result').html( res );
@@ -124,7 +126,7 @@ $(document).ready(function(){
 			);
 		}
 	});
-	
+
 	// Manage
 	$('[data-toggle="tooltip"]').tooltip();
 	$('.package-ext').click(function(e){

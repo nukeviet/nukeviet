@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 31, 2015, 09:30:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 31, 2015, 09:30:00 AM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -41,3 +41,9 @@ $lang_module['os'] = 'Systèmes d\'exploitation';
 $lang_module['bot'] = 'Moteurs de recherche';
 $lang_module['referer'] = 'Site';
 $lang_module['refererbysite'] = 'Recenser les liens à partie du site %s';
+$lang_module['access_times'] = 'Les coups';
+$lang_module['access_times1'] = 'les coups';
+$lang_module['hour'] = 'Heure';
+$lang_module['day'] = 'Journée';
+$lang_module['month'] = 'Mois';
+$lang_module['year'] = 'An';

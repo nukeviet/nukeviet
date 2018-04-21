@@ -8,7 +8,7 @@
  * @Createdate 14/6/2010, 16:59
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
+if (!defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
@@ -40,22 +40,22 @@ $ctsy['caption'] = $lang_module['statbyyear'];
 $ctsy['rows'] = $year_list;
 $ctsy['current_year'] = $current_year;
 $ctsy['max'] = $max;
-$ctsy['total'] = array( $lang_global['total'], number_format($total) );
+$ctsy['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
 
 // theo thang
 $month_list = array();
-$month_list['Jan'] = array( 'fullname' => $lang_global['january'], 'count' => 0 );
-$month_list['Feb'] = array( 'fullname' => $lang_global['february'], 'count' => 0 );
-$month_list['Mar'] = array( 'fullname' => $lang_global['march'], 'count' => 0 );
-$month_list['Apr'] = array( 'fullname' => $lang_global['april'], 'count' => 0 );
-$month_list['May'] = array( 'fullname' => $lang_global['may'], 'count' => 0 );
-$month_list['Jun'] = array( 'fullname' => $lang_global['june'], 'count' => 0 );
-$month_list['Jul'] = array( 'fullname' => $lang_global['july'], 'count' => 0 );
-$month_list['Aug'] = array( 'fullname' => $lang_global['august'], 'count' => 0 );
-$month_list['Sep'] = array( 'fullname' => $lang_global['september'], 'count' => 0 );
-$month_list['Oct'] = array( 'fullname' => $lang_global['october'], 'count' => 0 );
-$month_list['Nov'] = array( 'fullname' => $lang_global['november'], 'count' => 0 );
-$month_list['Dec'] = array( 'fullname' => $lang_global['december'], 'count' => 0 );
+$month_list['Jan'] = array('fullname' => $lang_global['january'], 'count' => 0);
+$month_list['Feb'] = array('fullname' => $lang_global['february'], 'count' => 0);
+$month_list['Mar'] = array('fullname' => $lang_global['march'], 'count' => 0);
+$month_list['Apr'] = array('fullname' => $lang_global['april'], 'count' => 0);
+$month_list['May'] = array('fullname' => $lang_global['may'], 'count' => 0);
+$month_list['Jun'] = array('fullname' => $lang_global['june'], 'count' => 0);
+$month_list['Jul'] = array('fullname' => $lang_global['july'], 'count' => 0);
+$month_list['Aug'] = array('fullname' => $lang_global['august'], 'count' => 0);
+$month_list['Sep'] = array('fullname' => $lang_global['september'], 'count' => 0);
+$month_list['Oct'] = array('fullname' => $lang_global['october'], 'count' => 0);
+$month_list['Nov'] = array('fullname' => $lang_global['november'], 'count' => 0);
+$month_list['Dec'] = array('fullname' => $lang_global['december'], 'count' => 0);
 
 $month_list2 = array_chunk($month_list, $current_month_num, true);
 $month_list2 = $month_list2[0];
@@ -80,7 +80,7 @@ $ctsm['caption'] = sprintf($lang_module['statbymoth'], $current_year);
 $ctsm['rows'] = $month_list;
 $ctsm['current_month'] = date('M', NV_CURRENTTIME);
 $ctsm['max'] = $max;
-$ctsm['total'] = array( $lang_global['total'], number_format($total) );
+$ctsm['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
 
 // ngay trong thang
 
@@ -103,18 +103,18 @@ $ctsdm['caption'] = sprintf($lang_module['statbyday'], $current_month_num);
 $ctsdm['rows'] = $day_list;
 $ctsdm['current_day'] = $current_day;
 $ctsdm['max'] = $max;
-$ctsdm['total'] = array( $lang_global['total'], number_format($total) );
+$ctsdm['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
 $ctsdm['numrows'] = $current_number_of_days;
 
 // ngay trong tuan
 $dayofweek_list = array();
-$dayofweek_list['Sunday'] = array( 'fullname' => $lang_global['sunday'], 'count' => 0 );
-$dayofweek_list['Monday'] = array( 'fullname' => $lang_global['monday'], 'count' => 0 );
-$dayofweek_list['Tuesday'] = array( 'fullname' => $lang_global['tuesday'], 'count' => 0 );
-$dayofweek_list['Wednesday'] = array( 'fullname' => $lang_global['wednesday'], 'count' => 0 );
-$dayofweek_list['Thursday'] = array( 'fullname' => $lang_global['thursday'], 'count' => 0 );
-$dayofweek_list['Friday'] = array( 'fullname' => $lang_global['friday'], 'count' => 0 );
-$dayofweek_list['Saturday'] = array( 'fullname' => $lang_global['saturday'], 'count' => 0 );
+$dayofweek_list['Sunday'] = array('fullname' => $lang_global['sunday'], 'count' => 0);
+$dayofweek_list['Monday'] = array('fullname' => $lang_global['monday'], 'count' => 0);
+$dayofweek_list['Tuesday'] = array('fullname' => $lang_global['tuesday'], 'count' => 0);
+$dayofweek_list['Wednesday'] = array('fullname' => $lang_global['wednesday'], 'count' => 0);
+$dayofweek_list['Thursday'] = array('fullname' => $lang_global['thursday'], 'count' => 0);
+$dayofweek_list['Friday'] = array('fullname' => $lang_global['friday'], 'count' => 0);
+$dayofweek_list['Saturday'] = array('fullname' => $lang_global['saturday'], 'count' => 0);
 
 $dayofweek_list2 = "'" . implode("','", array_keys($dayofweek_list)) . "'";
 
@@ -137,10 +137,9 @@ $ctsdw['caption'] = $lang_module['statbydayofweek'];
 $ctsdw['rows'] = $dayofweek_list;
 $ctsdw['current_dayofweek'] = $current_dayofweek;
 $ctsdw['max'] = $max;
-$ctsdw['total'] = array( $lang_global['total'], number_format($total) );
+$ctsdw['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
 
-// gio trong ngay
-
+// Giờ trong ngày
 $max = 0;
 $total = 0;
 $hour_list = array();
@@ -160,23 +159,22 @@ $ctsh['caption'] = $lang_module['statbyhour'];
 $ctsh['rows'] = $hour_list;
 $ctsh['current_hour'] = date('H', NV_CURRENTTIME);
 $ctsh['max'] = $max;
-$ctsh['total'] = array( $lang_global['total'], number_format($total) );
+$ctsh['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
 
 // quoc gia
-$db->sqlreset()
-    ->select('c_val,c_count, last_update')
-    ->from(NV_COUNTER_GLOBALTABLE)
-    ->where("c_type='country' AND c_count!=0")
-    ->order('c_count DESC')
-    ->limit(10);
+$db->sqlreset()->select('c_val,c_count, last_update')->from(NV_COUNTER_GLOBALTABLE)->where("c_type='country' AND c_count!=0")->order('c_count DESC')->limit(10);
 $result = $db->query($db->sql());
 
 $total = 0;
 $countries_list = array();
 while (list($country, $count, $last_visit) = $result->fetch(3)) {
     $fullname = isset($countries[$country]) ? $countries[$country][1] : $lang_global['unknown'];
-    $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-    $countries_list[$country] = array( $fullname, $count, $last_visit );
+    $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+    $countries_list[$country] = array(
+        $fullname,
+        $count,
+        $last_visit
+    );
 
     $total = $total + $count;
 }
@@ -187,25 +185,29 @@ $others = $all - $total;
 
 $ctsc = array();
 $ctsc['caption'] = $lang_module['statbycountry'];
-$ctsc['thead'] = array( $lang_module['country'], $lang_module['hits'], $lang_module['last_visit'] );
+$ctsc['thead'] = array(
+    $lang_module['country'],
+    $lang_module['hits'],
+    $lang_module['last_visit']
+);
 $ctsc['rows'] = $countries_list;
 $ctsc['max'] = $max;
-$ctsc['others'] = array( $lang_module['others'], number_format($others), $lang_module['viewall'] );
+$ctsc['others'] = array(
+    $lang_module['others'],
+    number_format($others, 0, ',', '.'),
+    $lang_module['viewall']
+);
 
 // trinh duyet
-$db->sqlreset()
-    ->select('c_val,c_count, last_update')
-    ->from(NV_COUNTER_GLOBALTABLE)
-    ->where("c_type='browser' AND c_count!=0")
-    ->order('c_count DESC');
+$db->sqlreset()->select('c_val,c_count, last_update')->from(NV_COUNTER_GLOBALTABLE)->where("c_type='browser' AND c_count!=0")->order('c_count DESC');
 $result = $db->query($db->sql());
 
 $total = 0;
 $browsers_list = array();
 
 while (list($browser, $count, $last_visit) = $result->fetch(3)) {
-    $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-    $browsers_list[$browser] = array( $count, $last_visit );
+    $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+    $browsers_list[$browser] = array($count, $last_visit);
 
     $total = $total + $count;
 }
@@ -216,26 +218,29 @@ $others = $all - $total;
 
 $ctsb = array();
 $ctsb['caption'] = $lang_module['statbybrowser'];
-$ctsb['thead'] = array( $lang_module['browser'], $lang_module['hits'], $lang_module['last_visit'] );
+$ctsb['thead'] = array(
+    $lang_module['browser'],
+    $lang_module['hits'],
+    $lang_module['last_visit']
+);
 $ctsb['rows'] = $browsers_list;
 $ctsb['max'] = $max;
-$ctsb['others'] = array( $lang_module['others'], number_format($others), $lang_module['viewall'] );
+$ctsb['others'] = array(
+    $lang_module['others'],
+    number_format($others, 0, ',', '.'),
+    $lang_module['viewall']
+);
 
 // he dieu hanh
-$db->sqlreset()
-    ->select('c_val,c_count, last_update')
-    ->from(NV_COUNTER_GLOBALTABLE)
-    ->where("c_type='os' AND c_count!=0")
-    ->order('c_count DESC')
-    ->limit(10);
+$db->sqlreset()->select('c_val,c_count, last_update')->from(NV_COUNTER_GLOBALTABLE)->where("c_type='os' AND c_count!=0")->order('c_count DESC')->limit(10);
 $result = $db->query($db->sql());
 
 $total = 0;
 $os_list = array();
 
 while (list($os, $count, $last_visit) = $result->fetch(3)) {
-    $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-    $os_list[$os] = array( $count, $last_visit );
+    $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+    $os_list[$os] = array($count, $last_visit);
 
     $total = $total + $count;
 }
@@ -246,12 +251,21 @@ $others = $all - $total;
 
 $ctso = array();
 $ctso['caption'] = $lang_module['statbyos'];
-$ctso['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
+$ctso['thead'] = array(
+    $lang_module['os'],
+    $lang_module['hits'],
+    $lang_module['last_visit']
+);
 $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
-$ctso['others'] = array( $lang_module['others'], number_format($others), $lang_module['viewall'] );
+$ctso['others'] = array(
+    $lang_module['others'],
+    number_format($others, 0, ',', '.'),
+    $lang_module['viewall']
+);
 
 $contents = nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh);
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
