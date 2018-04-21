@@ -110,7 +110,7 @@
 
 		<!-- BEGIN: result -->
 		<div class="clearfix">
-			<h3><a href="{LINK}" title="{TITLEROW}" {TARGET_BLANK}>{TITLEROW}</a></h3>
+			<h3><a href="{LINK}" title="{TITLE}" {TARGET_BLANK}>{TITLEROW}</a></h3>
 			<div class="text-justify col-sm-24">
 				<p>
 					<!-- BEGIN: result_img -->

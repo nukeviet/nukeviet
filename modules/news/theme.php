@@ -1171,7 +1171,8 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
             $catid_i = $value['catid'];
 
             $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl']);
-            $xtpl->assign('TITLEROW', strip_tags(BoldKeywordInStr($value['title'], $key)));
+            $xtpl->assign('TITLE', strip_tags ( $value['title'] ) );
+            $xtpl->assign('TITLEROW', BoldKeywordInStr($value['title'], $key)));
             $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key) . "...");
             $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));
             $xtpl->assign('AUTHOR', BoldKeywordInStr($value['author'], $key));
