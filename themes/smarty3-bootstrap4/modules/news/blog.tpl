@@ -3,7 +3,7 @@
     <div class="col-md-6 masonry-item wow fadeInUp animation-delay-2">
         <article class="card card-success mb-4 wow materialUp animation-delay-5">
             <figure class="ms-thumbnail ms-thumbnail-left">
-                <img src="/uploads/demo/p4.jpg" alt="" class="img-fluid">
+                <img src="{$row.imghome}" alt="" class="">
                 <figcaption class="ms-thumbnail-caption text-center">
                     <div class="ms-thumbnail-caption-content">
                         <h3 class="ms-thumbnail-caption-title">Lorem ipsum dolor sit</h3>
@@ -19,7 +19,8 @@
             </figure>
             <div class="card-body">
                 <h2>
-                    <a href=javascript:void(0)>{$row.title}</a>
+                    <a href={$row.link}>{$row.title}</a>
+                    
                 </h2>
                 <p>{$row.hometext}</p>
                 <div class="row">

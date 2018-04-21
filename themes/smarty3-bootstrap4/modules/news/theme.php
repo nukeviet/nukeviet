@@ -214,6 +214,8 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $tpl = new \NukeViet\Template\NvSmarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
     $tpl->assign('rows', $array_catpage);
+
+
     return $tpl->fetch('blog.tpl');
 }
 
