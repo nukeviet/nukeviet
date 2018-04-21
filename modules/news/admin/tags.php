@@ -165,11 +165,11 @@ $tid = $nv_Request->get_int('tid', 'get', 0);
 
 if ($tid > 0) {
     list($tid, $alias, $description, $image, $keywords) = $db_slave->query('SELECT tid, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
-    $nv_Lang->getModule('add_tags') = $nv_Lang->getModule('edit_tags');
+    $nv_Lang->setModule('add_tags', $nv_Lang->getModule('edit_tags'));
 }
 
-$nv_Lang->getGlobal('title_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 65);
-$nv_Lang->getGlobal('description_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $xtpl = new XTemplate('tags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

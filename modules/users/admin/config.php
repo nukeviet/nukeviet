@@ -260,7 +260,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.nv_unickmax');
     }
 
-    $nv_Lang->getGlobal('unick_type_0') = $nv_Lang->getModule('unick_type_0');
+    $nv_Lang->setGlobal('unick_type_0', $nv_Lang->getModule('unick_type_0'));
     for ($id = 0; $id < 5; $id++) {
         $array = array(
             'id' => $id,
@@ -290,7 +290,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.nv_upassmax');
     }
 
-    $nv_Lang->getGlobal('upass_type_0') = $nv_Lang->getModule('upass_type_0');
+    $nv_Lang->setGlobal('upass_type_0', $nv_Lang->getModule('upass_type_0'));
     for ($id = 0; $id < 5; $id++) {
         $array = array(
             'id' => $id,

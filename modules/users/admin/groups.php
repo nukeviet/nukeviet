@@ -311,7 +311,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
     die('OK');
 }
 
-$nv_Lang->getModule('nametitle') = $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname');
+$nv_Lang->setModule('nametitle', ($global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname')));
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

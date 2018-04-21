@@ -13,13 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 //Ket noi ngon ngu cua module
-if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-} elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_DATA . '.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_DATA . '.php';
-} elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-}
+$nv_Lang->loadModule($module_file);
 
 $allow_func = array(
     'main',

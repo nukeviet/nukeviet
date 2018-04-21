@@ -17,7 +17,7 @@ $error = array();
 $row['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
 if ($row['id'] > 0) {
-    $nv_Lang->getModule('supporter_add') = $nv_Lang->getModule('supporter_edit');
+    $nv_Lang->setModule('supporter_add', $nv_Lang->getModule('supporter_edit'));
     $row = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id=' . $row['id'])->fetch();
     if (empty($row)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);

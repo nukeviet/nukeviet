@@ -257,7 +257,7 @@ if ($i) {
 if (! empty($uid)) {
     list($username, $begintime1, $endtime1) = $db->query("SELECT keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3);
 
-    $nv_Lang->getModule('username_add') = $nv_Lang->getModule('username_edit');
+    $nv_Lang->setModule('username_add', $nv_Lang->getModule('username_edit'));
     $password2 = $password = '';
 }
 
@@ -303,7 +303,7 @@ if ($i) {
 
 if (! empty($cid)) {
     list($id, $keyname, $mask, $begintime, $endtime, $notice) = $db->query("SELECT id, keyname, mask, begintime, endtime, notice FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3);
-    $nv_Lang->getModule('adminip_add') = $nv_Lang->getModule('adminip_edit');
+    $nv_Lang->setModule('adminip_add', $nv_Lang->getModule('adminip_edit'));
 }
 
 $xtpl->assign('IPDATA', array(
