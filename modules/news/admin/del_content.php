@@ -69,10 +69,10 @@ if (!empty($del_array)) {
     }
     $count = sizeof($del_array);
     if ($count) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['permissions_del_content'], implode(', ', $artitle), $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('permissions_del_content'), implode(', ', $artitle), $admin_info['userid']);
     }
     if (!empty($no_del_array)) {
-        $contents = 'ERR_' . $lang_module['error_no_del_content_id'] . ': ' . implode(', ', $no_del_array);
+        $contents = 'ERR_' . $nv_Lang->getModule('error_no_del_content_id') . ': ' . implode(', ', $no_del_array);
     }
 
     nv_fix_weight_content($weight_min);

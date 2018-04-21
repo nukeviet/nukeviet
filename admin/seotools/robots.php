@@ -13,8 +13,8 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 }
 
 $xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             file_put_contents(NV_ROOTDIR . '/robots.txt', $rbcontents, LOCK_EX);
             $redirect = true;
         } else {
-            $xtpl->assign('TITLE', $lang_module['robots_error_writable']);
+            $xtpl->assign('TITLE', $nv_Lang->getModule('robots_error_writable'));
             $xtpl->assign('CONTENT', str_replace(array(
                 "\n",
                 "\t"
@@ -164,7 +164,7 @@ foreach ($robots_other as $file => $value) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['robots'];
+$page_title = $nv_Lang->getModule('robots');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

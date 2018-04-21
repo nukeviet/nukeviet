@@ -77,7 +77,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         }
     }
 
-    $page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
+    $page_title = $nv_Lang->getModule('setup_layout') . ':' . $selectthemes;
 
     $xtpl = new XTemplate('setuplayout.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -85,11 +85,11 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('OP', $op);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if ($nv_Request->isset_request('save', 'post') and $nv_Request->isset_request('func', 'post')) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('setup_layout') . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
         $func_arr_save = $nv_Request->get_array('func', 'post');
 

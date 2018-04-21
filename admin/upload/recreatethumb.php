@@ -17,13 +17,13 @@ $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['create_dir']) or $check_allow_upload_dir['create_dir'] !== true) {
-    nv_htmlOutput('ERROR_' . $lang_module['notlevel']);
+    nv_htmlOutput('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 if (empty($path)) {
-    nv_htmlOutput('ERROR_' . $lang_module['notlevel']);
+    nv_htmlOutput('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
-nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['recreatethumb'], $path, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('recreatethumb'), $path, $admin_info['userid']);
 $_array_filename = array();
 $idf = $nv_Request->get_int('idf', 'post', -1);
 if ($idf < 0) {
@@ -82,4 +82,4 @@ if ($idf < 0) {
     }
 }
 
-nv_htmlOutput('ERROR_' . $lang_module['folder_exists']);
+nv_htmlOutput('ERROR_' . $nv_Lang->getModule('folder_exists'));

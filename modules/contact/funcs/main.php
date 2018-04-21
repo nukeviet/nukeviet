@@ -22,7 +22,7 @@ $alias_department = '';
 $cats = array();
 $cats[] = array(0, '');
 $catsName = array();
-$catsName[] = $lang_module['selectCat'];
+$catsName[] = $nv_Lang->getModule('selectCat');
 $dpDefault = 0;
 if (!empty($array_department)) {
     foreach ($array_department as $k => $department) {
@@ -109,7 +109,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fname',
-            'mess' => $lang_module['error_fullname']));
+            'mess' => $nv_Lang->getModule('error_fullname')));
     }
 
     if (($check_valid_email = nv_check_valid_email($femail)) != '') {
@@ -123,19 +123,19 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'ftitle',
-            'mess' => $lang_module['error_title']));
+            'mess' => $nv_Lang->getModule('error_title')));
     }
     if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fcon',
-            'mess' => $lang_module['error_content']));
+            'mess' => $nv_Lang->getModule('error_content')));
     }
     if (!nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])));
+            'mess' => ($global_config['captcha_type'] == 2 ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect'))));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -223,19 +223,19 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput(array(
             'status' => 'ok',
             'input' => '',
-            'mess' => $lang_module['sendcontactok']));
+            'mess' => $nv_Lang->getModule('sendcontactok')));
     }
 
     nv_jsonOutput(array(
         'status' => 'error',
         'input' => '',
-        'mess' => $lang_module['sendcontactfailed']));
+        'mess' => $nv_Lang->getModule('sendcontactfailed')));
 }
 
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
 
 $full_theme = true;
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;

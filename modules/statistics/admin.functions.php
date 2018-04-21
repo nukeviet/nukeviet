@@ -31,11 +31,11 @@ $allow_func = array(
     'referer'
 );
 
-$submenu['allbots'] = $lang_module['bot'];
-$submenu['allbrowsers'] = $lang_module['browser'];
-$submenu['allcountries'] = $lang_module['country'];
-$submenu['allos'] = $lang_module['os'];
-$submenu['allreferers'] = $lang_module['referer'];
+$submenu['allbots'] = $nv_Lang->getModule('bot');
+$submenu['allbrowsers'] = $nv_Lang->getModule('browser');
+$submenu['allcountries'] = $nv_Lang->getModule('country');
+$submenu['allos'] = $nv_Lang->getModule('os');
+$submenu['allreferers'] = $nv_Lang->getModule('referer');
 
 $module_info['alias'] = array();
 $module_info['alias']['allbots'] = 'allbots';

@@ -42,16 +42,16 @@ if ($nv_Request->isset_request('module', 'post')) {
 
         if (! empty($module_file)) {
             $contents['status'] = 'success';
-            $contents['message'][0] = $lang_module['reinstall_note1'];
+            $contents['message'][0] = $nv_Lang->getModule('reinstall_note1');
 
             // Check sample data file
             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
-                $contents['message'][1] = $lang_module['reinstall_note2'];
-                $contents['message'][2] = $lang_module['reinstall_note3'];
+                $contents['message'][1] = $nv_Lang->getModule('reinstall_note2');
+                $contents['message'][2] = $nv_Lang->getModule('reinstall_note3');
                 $contents['code'] = 1;
             } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
-                $contents['message'][1] = $lang_module['reinstall_note2'];
-                $contents['message'][2] = $lang_module['reinstall_note4'];
+                $contents['message'][1] = $nv_Lang->getModule('reinstall_note2');
+                $contents['message'][2] = $nv_Lang->getModule('reinstall_note4');
                 $contents['code'] = 1;
             }
         }

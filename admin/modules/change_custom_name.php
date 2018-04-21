@@ -44,10 +44,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 }
 
 $contents = array();
-$contents['caption'] = sprintf($lang_module['change_func_name'], $row['func_title'], $row['mod_custom_title']);
-$contents['func_custom_name'] = array( $lang_module['funcs_custom_title'], $func_custom_name, 255, 'func_custom_name' );
-$contents['submit'] = array( $lang_global['submit'], "nv_change_custom_name_submit( " . $id . ",'func_custom_name' );" );
-$contents['cancel'] = array( $lang_global['cancel'], "nv_action_cancel('action');" );
+$contents['caption'] = sprintf($nv_Lang->getModule('change_func_name'), $row['func_title'], $row['mod_custom_title']);
+$contents['func_custom_name'] = array( $nv_Lang->getModule('funcs_custom_title'), $func_custom_name, 255, 'func_custom_name' );
+$contents['submit'] = array( $nv_Lang->getGlobal('submit'), "nv_change_custom_name_submit( " . $id . ",'func_custom_name' );" );
+$contents['cancel'] = array( $nv_Lang->getGlobal('cancel'), "nv_action_cancel('action');" );
 
 $contents = call_user_func('change_custom_name_theme', $contents);
 

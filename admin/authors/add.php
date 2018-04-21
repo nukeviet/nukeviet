@@ -59,23 +59,23 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
     list ($userid, $username, $active, $_group_id, $_in_groups) = $db->query($sql)->fetch(3);
     if (empty($userid)) {
-        nv_htmlOutput($lang_module['add_error_choose']);
+        nv_htmlOutput($nv_Lang->getModule('add_error_choose'));
     }
 
     $sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
     $count = $db->query($sql)->fetchColumn();
     if ($count) {
-        nv_htmlOutput($lang_module['add_error_exist']);
+        nv_htmlOutput($nv_Lang->getModule('add_error_exist'));
     }
 
     if (empty($userid)) {
-        nv_htmlOutput($lang_module['add_error_notexist']);
+        nv_htmlOutput($nv_Lang->getModule('add_error_notexist'));
     }
     if (empty($position)) {
-        nv_htmlOutput($lang_module['position_incorrect']);
+        nv_htmlOutput($nv_Lang->getModule('position_incorrect'));
     }
     if (empty($active)) {
-        nv_htmlOutput(sprintf($lang_module['username_noactive'], $username));
+        nv_htmlOutput(sprintf($nv_Lang->getModule('username_noactive'), $username));
     }
 
     $lev = ($lev != 2 or !defined('NV_IS_GODADMIN')) ? 3 : 2;
@@ -147,10 +147,10 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $session_files = serialize($result);
         $nv_Request->set_Session('nv_admin_profile', $session_files);
 
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['menuadd'], 'Username: ' . $username, $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('menuadd'), 'Username: ' . $username, $admin_info['userid']);
         nv_htmlOutput('OK');
     } else {
-        nv_htmlOutput($lang_module['add_error_diff']);
+        nv_htmlOutput($nv_Lang->getModule('add_error_diff'));
     }
 } else {
     $position = '';
@@ -164,7 +164,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $allow_create_subdirectories = 1;
 }
 
-$page_title = $lang_module['nv_admin_add'];
+$page_title = $nv_Lang->getModule('nv_admin_add');
 
 $mods = array();
 $array_keys = array_keys($site_mods);
@@ -177,10 +177,10 @@ $contents = array();
 
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add';
 $contents['lev'] = array(
-    $lang_module['lev'],
+    $nv_Lang->getModule('lev'),
     $lev,
-    $lang_global['level2'],
-    $lang_global['level3']
+    $nv_Lang->getGlobal('level2'),
+    $nv_Lang->getGlobal('level3')
 );
 
 $editors = array();
@@ -196,45 +196,45 @@ if (!empty($dirs)) {
 
 if (!empty($editors)) {
     $contents['editor'] = array(
-        $lang_module['editor'],
+        $nv_Lang->getModule('editor'),
         $editors,
         $editor,
-        $lang_module['not_use']
+        $nv_Lang->getModule('not_use')
     );
 }
 
 if (!empty($global_config['file_allowed_ext'])) {
     $contents['allow_files_type'] = array(
-        $lang_module['allow_files_type'],
+        $nv_Lang->getModule('allow_files_type'),
         $global_config['file_allowed_ext'],
         $allow_files_type
     );
 }
 
 $contents['allow_modify_files'] = array(
-    $lang_module['allow_modify_files'],
+    $nv_Lang->getModule('allow_modify_files'),
     $allow_modify_files
 );
 $contents['allow_create_subdirectories'] = array(
-    $lang_module['allow_create_subdirectories'],
+    $nv_Lang->getModule('allow_create_subdirectories'),
     $allow_create_subdirectories
 );
 $contents['allow_modify_subdirectories'] = array(
-    $lang_module['allow_modify_subdirectories'],
+    $nv_Lang->getModule('allow_modify_subdirectories'),
     $allow_modify_subdirectories
 );
 
 $contents['mods'] = array(
-    $lang_module['if_level3_selected'],
+    $nv_Lang->getModule('if_level3_selected'),
     $mods
 );
 $contents['position'] = array(
-    $lang_module['position'],
+    $nv_Lang->getModule('position'),
     $position,
-    $lang_module['position_info']
+    $nv_Lang->getModule('position_info')
 );
-$contents['info'] = $lang_module['nv_admin_add_info'];
-$contents['submit'] = $lang_module['nv_admin_add'];
+$contents['info'] = $nv_Lang->getModule('nv_admin_add_info');
+$contents['submit'] = $nv_Lang->getModule('nv_admin_add');
 
 //filtersql
 $filtersql = ' userid NOT IN (SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ')';
@@ -242,7 +242,7 @@ $filtersql = ' userid NOT IN (SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . 
 // Parse content
 $xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('INFO', $contents['info']);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
 $xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));

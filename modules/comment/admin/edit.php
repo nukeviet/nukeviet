@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['edit_title'];
+$page_title = $nv_Lang->getModule('edit_title');
 $cid = $nv_Request->get_int('cid', 'get,post');
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 $row = $db->query($sql)->fetch();
@@ -62,7 +62,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if ($count) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_title'] . ': ' . $row['module'] . ', id: ' . $row['id'] . ', cid: ' . $row['cid'], $row['content'], $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_title') . ': ' . $row['module'] . ', id: ' . $row['id'] . ', cid: ' . $row['cid'], $row['content'], $admin_info['userid']);
 
         if (isset($site_mods[$row['module']])) {
             $mod_info = $site_mods[$row['module']];
@@ -96,8 +96,8 @@ if (!empty($row['attach'])) {
 }
 
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);

@@ -58,7 +58,7 @@ $array_url_instruction['row'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contac
  */
 function nv_getAllowed()
 {
-    global $module_data, $db, $admin_info, $lang_module;
+    global $module_data, $db, $admin_info, $nv_Lang;
 
     $contact_allowed = array(
         'view' => array(),
@@ -67,9 +67,9 @@ function nv_getAllowed()
     );
 
     if (defined('NV_IS_SPADMIN')) {
-        $contact_allowed['view'][0] = $lang_module['is_default'];
-        $contact_allowed['reply'][0] = $lang_module['is_default'];
-        $contact_allowed['obt'][0] = $lang_module['is_default'];
+        $contact_allowed['view'][0] = $nv_Lang->getModule('is_default');
+        $contact_allowed['reply'][0] = $nv_Lang->getModule('is_default');
+        $contact_allowed['obt'][0] = $nv_Lang->getModule('is_default');
     }
 
     $sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';

@@ -17,8 +17,8 @@ $select_options = array();
 $contents = '';
 
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $dirlang = $nv_Request->get_title('dirlang', 'post, get', '');
 if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
@@ -57,7 +57,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
 
     $module = $db->query('SELECT module FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile = ' . $idfile)->fetchColumn();
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'], $module . ' : idfile = ' . $idfile, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_edit') . ' -> ' . $language_array[$dirlang]['name'], $module . ' : idfile = ' . $idfile, $admin_info['userid']);
 
     $pozlang = $nv_Request->get_array('pozlang', 'post', array());
 
@@ -93,7 +93,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface&dirlang=' . $dirlang);
 }
 
-$page_title = $lang_module['nv_admin_edit'] . ': ' . $language_array[$dirlang]['name'];
+$page_title = $nv_Lang->getModule('nv_admin_edit') . ': ' . $language_array[$dirlang]['name'];
 
 if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5($nv_Request->get_int('idfile', 'get') . NV_CHECK_SESSION)) {
     $idfile = $nv_Request->get_int('idfile', 'get');

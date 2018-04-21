@@ -12,9 +12,9 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['browser'];
+$page_title = $nv_Lang->getModule('browser');
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['browser'];
+$mod_title = $nv_Lang->getModule('browser');
 
 $sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='browser' AND c_count!=0";
 $result = $db->query($sql);
@@ -42,13 +42,13 @@ if ($num_items) {
 
     if (! empty($browsers_list)) {
         $cts = array();
-        $cts['thead'] = array( $lang_module['browser'], $lang_module['hits'], $lang_module['last_visit'] );
+        $cts['thead'] = array( $nv_Lang->getModule('browser'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit') );
         $cts['rows'] = $browsers_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);
     }
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts);

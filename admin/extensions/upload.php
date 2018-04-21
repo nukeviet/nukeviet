@@ -12,12 +12,12 @@ if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['autoinstall_install'];
+$page_title = $nv_Lang->getModule('autoinstall_install');
 $set_active_op = 'manage';
 
 $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -33,7 +33,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
     if ($extract == md5($filename . NV_CHECK_SESSION)) {
         if (!file_exists($filename)) {
-            $xtpl->assign('ERROR', $lang_module['autoinstall_error_downloaded']);
+            $xtpl->assign('ERROR', $nv_Lang->getModule('autoinstall_error_downloaded'));
             $xtpl->parse('extract.error');
         } else {
             $zip = new PclZip($filename);
@@ -146,7 +146,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
             }
 
             if (nv_check_ext_config_filecontent($extConfig) !== true) {
-                $xtpl->assign('ERROR', $lang_module['autoinstall_error_downloaded']);
+                $xtpl->assign('ERROR', $nv_Lang->getModule('autoinstall_error_downloaded'));
                 $xtpl->parse('extract.error');
             } elseif (empty($no_extract)) {
                 $array_error_mine = array();
@@ -426,31 +426,31 @@ $info = array();
 
 if ($nv_Request->isset_request('uploaded', 'get')) {
     if (!file_exists($filename)) {
-        $error = $lang_module['autoinstall_error_downloaded'];
+        $error = $nv_Lang->getModule('autoinstall_error_downloaded');
     }
 } elseif ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
     if (!isset($_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'])) {
-        $error = $lang_module['autoinstall_error_downloaded'];
+        $error = $nv_Lang->getModule('autoinstall_error_downloaded');
     } elseif (!$sys_info['zlib_support']) {
-        $error = $lang_global['error_zlib_support'];
+        $error = $nv_Lang->getGlobal('error_zlib_support');
     } elseif (!empty($_FILES['extfile']['error'])) {
-        $error = sprintf($lang_module['autoinstall_error_uploadfile1'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
+        $error = sprintf($nv_Lang->getModule('autoinstall_error_uploadfile1'), nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
     } elseif (is_uploaded_file($_FILES['extfile']['tmp_name'])) {
         if (file_exists($filename)) {
             nv_deletefile($filename);
         }
 
         if (!move_uploaded_file($_FILES['extfile']['tmp_name'], $filename)) {
-            $error = $lang_module['autoinstall_error_uploadfile'];
+            $error = $nv_Lang->getModule('autoinstall_error_uploadfile');
         }
 
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['autoinstall_install'], basename($_FILES['extfile']['name']), $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('autoinstall_install'), basename($_FILES['extfile']['name']), $admin_info['userid']);
 
         if (!file_exists($filename)) {
-            $error = $lang_module['autoinstall_error_downloaded'];
+            $error = $nv_Lang->getModule('autoinstall_error_downloaded');
         }
     } else {
-        $error = $lang_module['autoinstall_error_downloaded'];
+        $error = $nv_Lang->getModule('autoinstall_error_downloaded');
     }
 }
 
@@ -505,7 +505,7 @@ if (empty($error)) {
 
         // Loi khong co file cau hinh
         if ($iniIndex == -1) {
-            $error = $lang_module['autoinstall_error_missing_cfg'];
+            $error = $nv_Lang->getModule('autoinstall_error_missing_cfg');
         } else {
             // Giai nen file config de doc thong tin
             $temp_extract_dir = NV_TEMP_DIR;
@@ -518,26 +518,26 @@ if (empty($error)) {
             $extract = $zip->extractByIndex($iniIndex, PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
 
             if (empty($extract) or !isset($extract[0]['status']) or $extract[0]['status'] != 'ok' or !file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini')) {
-                $error = $lang_module['autoinstall_cantunzip'];
+                $error = $nv_Lang->getModule('autoinstall_cantunzip');
             } else {
                 // Doc, kiem tra thong tin file config.ini
                 $extConfig = nv_parse_ini_file(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini', true);
                 $extConfigCheck = nv_check_ext_config_filecontent($extConfig);
 
                 if (!$extConfigCheck) {
-                    $error = $lang_module['autoinstall_error_cfg_content'];
+                    $error = $nv_Lang->getModule('autoinstall_error_cfg_content');
                 } elseif (!in_array($extConfig['extension']['type'], $arraySysOption['allowExtType'])) {
-                    $error = $lang_module['autoinstall_error_cfg_type'];
+                    $error = $nv_Lang->getModule('autoinstall_error_cfg_type');
                 } elseif (!preg_match($global_config['check_version'], $extConfig['extension']['version'])) {
-                    $error = $lang_module['autoinstall_error_cfg_version'];
+                    $error = $nv_Lang->getModule('autoinstall_error_cfg_version');
                 } elseif (is_array($arraySysOption['checkName'][$extConfig['extension']['type']])) {
                     foreach ($arraySysOption['checkName'][$extConfig['extension']['type']] as $check) {
                         if (!preg_match($check, $extConfig['extension']['name'])) {
-                            $error = $lang_module['autoinstall_error_cfg_name'];
+                            $error = $nv_Lang->getModule('autoinstall_error_cfg_name');
                         }
                     }
                 } elseif (!preg_match($arraySysOption['checkName'][$extConfig['extension']['type']], $extConfig['extension']['name'])) {
-                    $error = $lang_module['autoinstall_error_cfg_name'];
+                    $error = $nv_Lang->getModule('autoinstall_error_cfg_name');
                 }
 
                 @nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini');
@@ -597,7 +597,7 @@ if (empty($error)) {
             }
         }
     } else {
-        $error = $lang_module['autoinstall_error_invalidfile'];
+        $error = $nv_Lang->getModule('autoinstall_error_invalidfile');
     }
 }
 
@@ -607,7 +607,7 @@ if (!empty($error)) {
 }
 
 if (!empty($info)) {
-    $info['exttype'] = isset($lang_module['extType_' . $info['exttype']]) ? $lang_module['extType_' . $info['exttype']] : $lang_module['extType_other'];
+    $info['exttype'] = isset($lang_module['extType_' . $info['exttype']]) ? $lang_module['extType_' . $info['exttype']] : $nv_Lang->getModule('extType_other');
 
     $xtpl->assign('INFO', $info);
     $xtpl->assign('EXTRACTLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION));

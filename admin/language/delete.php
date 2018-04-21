@@ -84,16 +84,16 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
                     trigger_error($e->getMessage());
                 }
             }
-            $contents = $lang_module['nv_lang_deleteok'];
+            $contents = $nv_Lang->getModule('nv_lang_deleteok');
         } else {
-            $contents = $lang_module['nv_lang_delete_error'];
+            $contents = $nv_Lang->getModule('nv_lang_delete_error');
         }
 
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_lang_delete'), $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid']);
 
         $xtpl = new XTemplate('delete.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
         $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting');
         $xtpl->assign('INFO', $contents);
@@ -115,7 +115,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
 
-        $page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
+        $page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_admin_theme($contents);

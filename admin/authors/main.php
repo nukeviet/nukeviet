@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_AUTHORS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['main'];
+$page_title = $nv_Lang->getModule('main');
 
 $admins = array();
 if ($nv_Request->isset_request('id', 'get')) {
@@ -44,9 +44,9 @@ if ($numrows) {
         $email = ! empty($email) ? nv_EncodeEmail($email) : '';
         $level = intval($row['lev']);
         if ($level == 1) {
-            $level_txt = '<strong>' . $lang_global['level1'] . '</strong>';
+            $level_txt = '<strong>' . $nv_Lang->getGlobal('level1') . '</strong>';
         } elseif ($level == 2) {
-            $level_txt = '<strong>' . $lang_global['level2'] . '</strong>';
+            $level_txt = '<strong>' . $nv_Lang->getGlobal('level2') . '</strong>';
         } else {
             $array_mod = array();
             foreach ($list_modules as $row_mod) {
@@ -57,7 +57,7 @@ if ($numrows) {
             $level_txt = implode(', ', $array_mod);
         }
         $last_login = intval($row['last_login']);
-        $last_login = $last_login ? nv_date('l, d/m/Y H:i', $last_login) : $lang_module['last_login0'];
+        $last_login = $last_login ? nv_date('l, d/m/Y H:i', $last_login) : $nv_Lang->getModule('last_login0');
         $last_agent = $row['last_agent'];
 
         $_browser = new NukeViet\Client\Browser($last_agent);
@@ -70,12 +70,12 @@ if ($numrows) {
             $last_reason = array_shift($last_reason);
             list($susp_admin_id, $susp_admin_name) = $db->query('SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($last_reason['start_admin']))->fetch(3);
             $susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
-            $is_suspend = sprintf($lang_module['is_suspend1'], nv_date('d/m/Y H:i', $last_reason['starttime']), $susp_admin_name, $last_reason['info']);
+            $is_suspend = sprintf($nv_Lang->getModule('is_suspend1'), nv_date('d/m/Y H:i', $last_reason['starttime']), $susp_admin_name, $last_reason['info']);
         } elseif (empty($row['active'])) {
-            $is_suspend = $lang_module['is_suspend2'];
+            $is_suspend = $nv_Lang->getModule('is_suspend2');
             $row['is_suspend'] = 1;
         } else {
-            $is_suspend = $lang_module['is_suspend0'];
+            $is_suspend = $nv_Lang->getModule('is_suspend0');
         }
 
         $thead = array();
@@ -113,14 +113,14 @@ if ($numrows) {
         }
 
         if (! empty($thead['edit'])) {
-            $thead['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $row['admin_id'], $lang_global['edit'] );
+            $thead['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $row['admin_id'], $nv_Lang->getGlobal('edit') );
         }
 
         if (! empty($thead['chg_is_suspend'])) {
-            $thead['chg_is_suspend'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $row['admin_id'], $lang_module['chg_is_suspend2'] );
+            $thead['chg_is_suspend'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $row['admin_id'], $nv_Lang->getModule('chg_is_suspend2') );
         }
         if (! empty($thead['del'])) {
-            $thead['del'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $row['admin_id'], $lang_global['delete'] );
+            $thead['del'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $row['admin_id'], $nv_Lang->getGlobal('delete') );
         }
 
         if (empty($row['files_level'])) {
@@ -135,31 +135,31 @@ if ($numrows) {
         $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
 
         $admins[$row['admin_id']] = array();
-        $admins[$row['admin_id']]['caption'] = ($row['admin_id'] == $admin_info['admin_id']) ? sprintf($lang_module['admin_info_title2'], $row['full_name']) : sprintf($lang_module['admin_info_title1'], $row['full_name']);
+        $admins[$row['admin_id']]['caption'] = ($row['admin_id'] == $admin_info['admin_id']) ? sprintf($nv_Lang->getModule('admin_info_title2'), $row['full_name']) : sprintf($nv_Lang->getModule('admin_info_title1'), $row['full_name']);
         $admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['admin_id'];
         $admins[$row['admin_id']]['thead'] = $thead;
         $admins[$row['admin_id']]['options'] = array();
-        $admins[$row['admin_id']]['options']['login'] = array( $lang_module['login'], $login );
-        $admins[$row['admin_id']]['options']['email'] = array( $lang_module['email'], $email );
-        $admins[$row['admin_id']]['options']['full_name'] = array( $lang_module['name'], $row['full_name'] );
-        $admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
-        $admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
-        $admins[$row['admin_id']]['options']['position'] = array( $lang_module['position'], $row['position'] );
-        $admins[$row['admin_id']]['options']['admin_theme'] = array( $lang_module['themeadmin'], (empty($row['admin_theme'])) ? $lang_module['theme_default']: $row['admin_theme'] );
-        $admins[$row['admin_id']]['options']['is_suspend'] = array( $lang_module['is_suspend'], $is_suspend, $row['is_suspend'] );
+        $admins[$row['admin_id']]['options']['login'] = array( $nv_Lang->getModule('login'), $login );
+        $admins[$row['admin_id']]['options']['email'] = array( $nv_Lang->getModule('email'), $email );
+        $admins[$row['admin_id']]['options']['full_name'] = array( $nv_Lang->getModule('name'), $row['full_name'] );
+        $admins[$row['admin_id']]['options']['lev'] = array( $nv_Lang->getModule('lev'), $level_txt );
+        $admins[$row['admin_id']]['options']['lev'] = array( $nv_Lang->getModule('lev'), $level_txt );
+        $admins[$row['admin_id']]['options']['position'] = array( $nv_Lang->getModule('position'), $row['position'] );
+        $admins[$row['admin_id']]['options']['admin_theme'] = array( $nv_Lang->getModule('themeadmin'), (empty($row['admin_theme'])) ? $nv_Lang->getModule('theme_default'): $row['admin_theme'] );
+        $admins[$row['admin_id']]['options']['is_suspend'] = array( $nv_Lang->getModule('is_suspend'), $is_suspend, $row['is_suspend'] );
 
         if (defined('NV_IS_SPADMIN')) {
-            $admins[$row['admin_id']]['options']['editor'] = array( $lang_module['editor'], ! empty($row['editor']) ? $row['editor'] : $lang_module['not_use'] );
-            $admins[$row['admin_id']]['options']['allow_files_type'] = array( $lang_module['allow_files_type'], ! empty($allow_files_type) ? implode(', ', $allow_files_type) : $lang_global['no'] );
-            $admins[$row['admin_id']]['options']['allow_modify_files'] = array( $lang_module['allow_modify_files'], ! empty($allow_modify_files) ? $lang_global['yes'] : $lang_global['no'] );
-            $admins[$row['admin_id']]['options']['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], ! empty($allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no'] );
-            $admins[$row['admin_id']]['options']['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], ! empty($allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no'] );
+            $admins[$row['admin_id']]['options']['editor'] = array( $nv_Lang->getModule('editor'), ! empty($row['editor']) ? $row['editor'] : $nv_Lang->getModule('not_use') );
+            $admins[$row['admin_id']]['options']['allow_files_type'] = array( $nv_Lang->getModule('allow_files_type'), ! empty($allow_files_type) ? implode(', ', $allow_files_type) : $nv_Lang->getGlobal('no') );
+            $admins[$row['admin_id']]['options']['allow_modify_files'] = array( $nv_Lang->getModule('allow_modify_files'), ! empty($allow_modify_files) ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no') );
+            $admins[$row['admin_id']]['options']['allow_create_subdirectories'] = array( $nv_Lang->getModule('allow_create_subdirectories'), ! empty($allow_create_subdirectories) ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no') );
+            $admins[$row['admin_id']]['options']['allow_modify_subdirectories'] = array( $nv_Lang->getModule('allow_modify_subdirectories'), ! empty($allow_modify_subdirectories) ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no') );
 
-            $admins[$row['admin_id']]['options']['regtime'] = array( $lang_module['regtime'], nv_date('l, d/m/Y H:i', $row['regdate']) );
-            $admins[$row['admin_id']]['options']['last_login'] = array( $lang_module['last_login'], $last_login );
-            $admins[$row['admin_id']]['options']['last_ip'] = array( $lang_module['last_ip'], $row['last_ip'] );
-            $admins[$row['admin_id']]['options']['browser'] = array( $lang_module['browser'], $browser['name'] );
-            $admins[$row['admin_id']]['options']['os'] = array( $lang_module['os'], $os['name'] );
+            $admins[$row['admin_id']]['options']['regtime'] = array( $nv_Lang->getModule('regtime'), nv_date('l, d/m/Y H:i', $row['regdate']) );
+            $admins[$row['admin_id']]['options']['last_login'] = array( $nv_Lang->getModule('last_login'), $last_login );
+            $admins[$row['admin_id']]['options']['last_ip'] = array( $nv_Lang->getModule('last_ip'), $row['last_ip'] );
+            $admins[$row['admin_id']]['options']['browser'] = array( $nv_Lang->getModule('browser'), $browser['name'] );
+            $admins[$row['admin_id']]['options']['os'] = array( $nv_Lang->getModule('os'), $os['name'] );
         }
     }
 }
@@ -206,7 +206,7 @@ if (! empty($admins)) {
         }
     } else {
         $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
         $a = 0;
         foreach ($admins as $id => $values) {
@@ -233,13 +233,13 @@ if (! empty($admins)) {
             $data_row['email'] = $values['options']['email'][1];
             $data_row['lev'] = $values['options']['lev'][1];
             $data_row['position'] = $values['options']['position'][1];
-            $data_row['is_suspend'] = ($values['options']['is_suspend'][2]) ? $lang_module['is_suspend2'] : $lang_module['is_suspend0'];
+            $data_row['is_suspend'] = ($values['options']['is_suspend'][2]) ? $nv_Lang->getModule('is_suspend2') : $nv_Lang->getModule('is_suspend0');
 
             $xtpl->assign('DATA', $data_row);
 
             if (! empty($values['thead']['chg_is_suspend'])) {
                 $xtpl->assign('SUSPEND_HREF', $values['thead']['chg_is_suspend'][0]);
-                $xtpl->assign('SUSPEND_NAME', ($values['options']['is_suspend'][2]) ? $lang_module['suspend0'] : $lang_module['suspend1']);
+                $xtpl->assign('SUSPEND_NAME', ($values['options']['is_suspend'][2]) ? $nv_Lang->getModule('suspend0') : $nv_Lang->getModule('suspend1'));
                 $xtpl->parse('main.loop.suspend');
             }
             $xtpl->parse('main.loop');

@@ -20,11 +20,11 @@ if (!defined('NV_SYSTEM')) {
  */
 function nv_banner_theme_main($contents, $manament)
 {
-    global $module_info, $lang_module, $lang_global;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($contents['rows'])) {
         $xtpl->assign('MAIN_PAGE_INFO', $contents['info']);

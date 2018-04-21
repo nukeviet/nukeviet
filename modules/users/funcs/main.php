@@ -17,10 +17,10 @@ if (isset($array_op[0])) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$mod_title = $module_info['custom_title'];
 
 if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
-    $contents = user_info_exit($lang_module['notallowuserlogin']);
+    $contents = user_info_exit($nv_Lang->getModule('notallowuserlogin'));
 } else {
     if (!defined('NV_IS_USER')) {
         $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';

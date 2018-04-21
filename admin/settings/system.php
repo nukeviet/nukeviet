@@ -17,12 +17,12 @@ $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $glo
 unset($adminThemes[0]);
 
 $closed_site_Modes = array();
-$closed_site_Modes[0] = $lang_module['closed_site_0'];
+$closed_site_Modes[0] = $nv_Lang->getModule('closed_site_0');
 if (defined('NV_IS_GODADMIN')) {
-    $closed_site_Modes[1] = $lang_module['closed_site_1'];
+    $closed_site_Modes[1] = $nv_Lang->getModule('closed_site_1');
 }
-$closed_site_Modes[2] = $lang_module['closed_site_2'];
-$closed_site_Modes[3] = $lang_module['closed_site_3'];
+$closed_site_Modes[2] = $nv_Lang->getModule('closed_site_2');
+$closed_site_Modes[3] = $nv_Lang->getModule('closed_site_3');
 
 $allow_sitelangs = array();
 foreach ($global_config['allow_sitelangs'] as $lang_i) {
@@ -192,7 +192,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         );
         $rewrite = nv_rewrite_change($array_config_rewrite);
         if (empty($rewrite[0])) {
-            $errormess .= sprintf($lang_module['err_writable'], $rewrite[1]);
+            $errormess .= sprintf($nv_Lang->getModule('err_writable'), $rewrite[1]);
         }
     } else {
         $nv_Cache->delAll(false);
@@ -204,10 +204,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config_define['nv_debug'] = NV_DEBUG;
 }
 
-$page_title = $lang_module['global_config'];
+$page_title = $nv_Lang->getModule('global_config');
 
 $xtpl = new XTemplate('system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -266,10 +266,10 @@ if (defined('NV_IS_GODADMIN')) {
         }
         $xtpl->parse('main.system.lang_multi');
     }
-    $xtpl->assign('CURRENT_TIME', sprintf($lang_module['current_time'], nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
+    $xtpl->assign('CURRENT_TIME', sprintf($nv_Lang->getModule('current_time'), nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
     $xtpl->assign('TIMEZONEOP', 'byCountry');
     $xtpl->assign('TIMEZONESELECTED', ($array_config_global['site_timezone'] == 'byCountry') ? "selected='selected'" : "");
-    $xtpl->assign('TIMEZONELANGVALUE', $lang_module['timezoneByCountry']);
+    $xtpl->assign('TIMEZONELANGVALUE', $nv_Lang->getModule('timezoneByCountry'));
     $xtpl->parse('main.system.opsite_timezone');
 
     sort($timezone_array);

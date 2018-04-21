@@ -556,7 +556,7 @@ if (empty($contents)) {
 }
 
 if ($page > 1) {
-    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     $description .= ' ' . $page;
 }
 

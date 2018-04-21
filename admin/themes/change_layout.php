@@ -31,9 +31,9 @@ if (empty($row)) {
 $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
 
 if ($sth->execute()) {
-    echo $lang_module['setup_updated_layout'];
+    echo $nv_Lang->getModule('setup_updated_layout');
 } else {
-    echo $lang_module['setup_error_layout'];
+    echo $nv_Lang->getModule('setup_error_layout');
 }
 
 $nv_Cache->delMod('themes');

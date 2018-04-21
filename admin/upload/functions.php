@@ -15,7 +15,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_upload']
+    'custom_title' => $nv_Lang->getGlobal('mod_upload')
 );
 
 define('NV_IS_FILE_ADMIN', true);

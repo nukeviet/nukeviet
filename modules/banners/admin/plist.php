@@ -20,17 +20,17 @@ $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang ASC";
 $result = $db->query($sql);
 
 $contents = array();
-$contents['caption'] = $lang_module['plans_list2'];
-$contents['thead'] = array( $lang_module['title'], $lang_module['blang'], $lang_module['size'], $lang_module['is_act'], $lang_global['actions'] );
-$contents['view'] = $lang_global['detail'];
-$contents['edit'] = $lang_global['edit'];
-$contents['add'] = $lang_module['add_banner'];
-$contents['del'] = $lang_global['delete'];
+$contents['caption'] = $nv_Lang->getModule('plans_list2');
+$contents['thead'] = array( $nv_Lang->getModule('title'), $nv_Lang->getModule('blang'), $nv_Lang->getModule('size'), $nv_Lang->getModule('is_act'), $nv_Lang->getGlobal('actions') );
+$contents['view'] = $nv_Lang->getGlobal('detail');
+$contents['edit'] = $nv_Lang->getGlobal('edit');
+$contents['add'] = $nv_Lang->getModule('add_banner');
+$contents['del'] = $nv_Lang->getGlobal('delete');
 $contents['rows'] = array();
 
 while ($row = $result->fetch()) {
     $contents['rows'][$row['id']]['title'] = $row['title'];
-    $contents['rows'][$row['id']]['blang'] = (! empty($row['blang'])) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'];
+    $contents['rows'][$row['id']]['blang'] = (! empty($row['blang'])) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all');
     $contents['rows'][$row['id']]['size'] = $row['width'] . ' x ' . $row['height'] . 'px';
     $contents['rows'][$row['id']]['act'] = array( 'act_' . $row['id'], $row['act'], "nv_pl_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');" );
     $contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['id'];

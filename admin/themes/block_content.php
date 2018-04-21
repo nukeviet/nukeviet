@@ -17,7 +17,7 @@ $blockredirect = $nv_Request->get_string('blockredirect', 'get');
 
 $selectthemes = $nv_Request->get_string('selectthemes', 'post,get', $global_config['site_theme']);
 if (! (preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 }
 
 $row = array(
@@ -42,7 +42,7 @@ if ($row['bid'] > 0) {
     $row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'])->fetch();
 
     if (empty($row)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
     } else {
         $row_old = $row;
     }
@@ -54,8 +54,8 @@ if ($row['bid'] > 0) {
 $groups_list = nv_groups_list();
 
 $xtpl = new XTemplate('block_content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $row['title'] = str_replace('_', ' ', $matches[1] . ' ' . $matches[2]);
         }
     } else {
-        $error[] = $lang_module['block_error_nsblock'];
+        $error[] = $nv_Lang->getModule('block_error_nsblock');
     }
 
     $row['link'] = $nv_Request->get_title('link', 'post', '');
@@ -145,7 +145,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array_funcid_post = $nv_Request->get_array('func_id', 'post');
 
     if (empty($all_func) and empty($array_funcid_post)) {
-        $error[] = $lang_module['block_no_func'];
+        $error[] = $nv_Lang->getModule('block_no_func');
     }
 
     $row['leavegroup'] = $nv_Request->get_int('leavegroup', 'post', 0);
@@ -298,7 +298,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $data['config'] = $row['config'];
                 $row['bid'] = $db->insert_id($_sql, 'bid', $data);
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_add'), 'Name : ' . $row['title'], $admin_info['userid']);
             } else {
                 $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET
 					module=:module,
@@ -332,7 +332,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                     $nv_Cache->delMod($module);
                 }
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_edit'), 'Name : ' . $row['title'], $admin_info['userid']);
             }
 
             if (! empty($row['bid'])) {
@@ -364,7 +364,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $nv_Cache->delMod('themes');
 
                 // Chuyen huong
-                $xtpl->assign('BLOCKMESS', $is_add ? $lang_module['block_add_success'] : $lang_module['block_update_success']);
+                $xtpl->assign('BLOCKMESS', $is_add ? $nv_Lang->getModule('block_add_success') : $nv_Lang->getModule('block_update_success'));
                 if (empty($blockredirect)) {
                     $xtpl->parse('blockredirect.refresh');
                 } else {
@@ -398,7 +398,7 @@ while (list($id_i, $func_custom_name_i, $in_module_i) = $func_result->fetch(3)) 
 }
 
 // Load position file
-$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content'], 404);
+$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('block_error_fileconfig_title'), $nv_Lang->getModule('block_error_fileconfig_content'), 404);
 $xmlpositions = $xml->xpath('positions');
 $positions = $xmlpositions[0]->position;
 
@@ -473,7 +473,7 @@ if ($row['bid'] != 0) {// Tach ra va tao nhom moi
     $xtpl->parse('main.edit');
 }
 
-$add_block_module = array( 1 => $lang_module['add_block_all_module'], 0 => $lang_module['add_block_select_module'] );
+$add_block_module = array( 1 => $nv_Lang->getModule('add_block_all_module'), 0 => $nv_Lang->getModule('add_block_select_module') );
 
 $i = 1;
 foreach ($add_block_module as $b_key => $b_value) {
@@ -528,7 +528,7 @@ while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     }
 }
 
-$page_title = '&nbsp;&nbsp;' . $lang_module['blocks'] . ': Theme ' . $selectthemes;
+$page_title = '&nbsp;&nbsp;' . $nv_Lang->getModule('blocks') . ': Theme ' . $selectthemes;
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

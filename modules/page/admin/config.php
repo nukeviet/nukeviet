@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['config'];
+$page_title = $nv_Lang->getModule('config');
 
 $array_config = array();
 
@@ -51,16 +51,16 @@ while (list ($c_config_name, $c_config_value) = $result->fetch(3)) {
 }
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' : '');
 $xtpl->assign('COPY_PAGE', $array_config['copy_page'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $array_config['alias_lower'] ? ' checked="checked"' : '');
 
 $view_array = array(
-    $lang_module['config_view_type_0'],
-    $lang_module['config_view_type_1'],
-    $lang_module['config_view_type_2']
+    $nv_Lang->getModule('config_view_type_0'),
+    $nv_Lang->getModule('config_view_type_1'),
+    $nv_Lang->getModule('config_view_type_2')
 );
 foreach ($view_array as $key => $title) {
     $xtpl->assign('VIEWTYPE', array(

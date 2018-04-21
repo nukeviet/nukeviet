@@ -35,10 +35,10 @@ $allow_func = array(
 define('NV_IS_FILE_ADMIN', true);
 
 $targets = array(
-    '_blank' => $lang_module['target_blank'],
-    '_top' => $lang_module['target_top'],
-    '_self' => $lang_module['target_self'],
-    '_parent' => $lang_module['target_parent']
+    '_blank' => $nv_Lang->getModule('target_blank'),
+    '_top' => $nv_Lang->getModule('target_top'),
+    '_self' => $nv_Lang->getModule('target_self'),
+    '_parent' => $nv_Lang->getModule('target_parent')
 );
 
 // Document
@@ -51,24 +51,24 @@ $array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admi
 
 $array_uploadtype = array('images', 'flash');
 $array_exp_time = array(
-    array(0, $lang_module['plan_exp_time_nolimit']),
-    array(86400, sprintf($lang_module['plan_exp_time_d'], 1)),
-    array(604800, sprintf($lang_module['plan_exp_time_w'], 1)),
-    array(1209600, sprintf($lang_module['plan_exp_time_w'], 2)),
-    array(1814400, sprintf($lang_module['plan_exp_time_w'], 3)),
-    array(2592000, sprintf($lang_module['plan_exp_time_m'], 1, 30)),
-    array(5184000, sprintf($lang_module['plan_exp_time_m'], 2, 60)),
-    array(7776000, sprintf($lang_module['plan_exp_time_m'], 3, 90)),
-    array(10368000, sprintf($lang_module['plan_exp_time_m'], 4, 120)),
-    array(12960000, sprintf($lang_module['plan_exp_time_m'], 5, 150)),
-    array(15552000, sprintf($lang_module['plan_exp_time_m'], 6, 180)),
-    array(18144000, sprintf($lang_module['plan_exp_time_m'], 7, 210)),
-    array(20736000, sprintf($lang_module['plan_exp_time_m'], 8, 240)),
-    array(23328000, sprintf($lang_module['plan_exp_time_m'], 9, 270)),
-    array(25920000, sprintf($lang_module['plan_exp_time_m'], 10, 300)),
-    array(28512000, sprintf($lang_module['plan_exp_time_m'], 11, 330)),
-    array(31536000, sprintf($lang_module['plan_exp_time_y'], 1, 365)),
-    array(-1, $lang_module['plan_exp_time_custom'])
+    array(0, $nv_Lang->getModule('plan_exp_time_nolimit')),
+    array(86400, sprintf($nv_Lang->getModule('plan_exp_time_d'), 1)),
+    array(604800, sprintf($nv_Lang->getModule('plan_exp_time_w'), 1)),
+    array(1209600, sprintf($nv_Lang->getModule('plan_exp_time_w'), 2)),
+    array(1814400, sprintf($nv_Lang->getModule('plan_exp_time_w'), 3)),
+    array(2592000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 1, 30)),
+    array(5184000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 2, 60)),
+    array(7776000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 3, 90)),
+    array(10368000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 4, 120)),
+    array(12960000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 5, 150)),
+    array(15552000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 6, 180)),
+    array(18144000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 7, 210)),
+    array(20736000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 8, 240)),
+    array(23328000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 9, 270)),
+    array(25920000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 10, 300)),
+    array(28512000, sprintf($nv_Lang->getModule('plan_exp_time_m'), 11, 330)),
+    array(31536000, sprintf($nv_Lang->getModule('plan_exp_time_y'), 1, 365)),
+    array(-1, $nv_Lang->getModule('plan_exp_time_custom'))
 );
 
 /**
@@ -175,11 +175,11 @@ function nv_fix_banner_weight($pid)
  */
 function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
 {
-    global $global_config, $module_file, $module_upload, $lang_module, $lang_global, $array_exp_time;
+    global $global_config, $module_file, $module_upload, $array_exp_time, $nv_Lang;
 
     $xtpl = new XTemplate('add_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
 
@@ -264,11 +264,11 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
  */
 function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
 {
-    global $global_config, $module_file, $module_upload, $lang_module, $lang_global, $array_exp_time;
+    global $global_config, $module_file, $module_upload, $array_exp_time, $nv_Lang;
 
     $xtpl = new XTemplate('edit_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
 
@@ -438,10 +438,10 @@ function nv_info_pl_theme($contents)
  */
 function nv_add_banner_theme($contents)
 {
-    global $global_config, $module_file, $lang_module;
+    global $global_config, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('add_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
@@ -508,10 +508,10 @@ function nv_add_banner_theme($contents)
  */
 function nv_edit_banner_theme($contents)
 {
-    global $global_config, $module_file, $lang_module;
+    global $global_config, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('edit_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
@@ -607,11 +607,11 @@ function nv_banners_list_theme($contents)
  */
 function nv_b_list_theme($contents, $array_users = array())
 {
-    global $global_config, $module_file, $lang_module, $module_name, $global_config;
+    global $global_config, $module_file, $module_name, $global_config, $nv_Lang;
 
     $xtpl = new XTemplate('b_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('MODULE_NAME', $module_name);
 
     if (defined('NV_BANNER_WEIGHT')) {
@@ -663,10 +663,10 @@ function nv_b_list_theme($contents, $array_users = array())
  */
 function nv_info_b_theme($contents)
 {
-    global $global_config, $module_file, $lang_module, $module_name;
+    global $global_config, $module_file, $module_name, $nv_Lang;
     $xtpl = new XTemplate('info_b.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('MODULE_NAME', $module_name);
     if (isset($contents['act'])) {
         $xtpl->parse('main.act');
@@ -701,10 +701,10 @@ function nv_info_b_theme($contents)
  */
 function nv_show_stat_theme($contents)
 {
-    global $global_config, $module_file, $lang_module, $module_name;
+    global $global_config, $module_file, $module_name, $nv_Lang;
     $xtpl = new XTemplate('show_stat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('MODULE_NAME', $module_name);
     if (!empty($contents[2])) {
         $a = 0;
@@ -735,10 +735,10 @@ function nv_show_stat_theme($contents)
  */
 function nv_show_list_stat_theme($contents)
 {
-    global $global_config, $module_file, $lang_module, $module_name;
+    global $global_config, $module_file, $module_name, $nv_Lang;
     $xtpl = new XTemplate('show_list_stat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('MODULE_NAME', $module_name);
     foreach ($contents['thead'] as $key => $thead) {
         $xtpl->assign('THEAD', $thead);

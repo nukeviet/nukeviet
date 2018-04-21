@@ -13,10 +13,10 @@ if (!defined('NV_SYSTEM')) {
 }
 
 $lang_array = array(
-    'vi' => $lang_module['addads_block_lang_vi'],
-    'en' => $lang_module['addads_block_lang_en'],
-    'ru' => $lang_module['addads_block_lang_ru'],
-    'zz' => $lang_module['addads_block_lang_zz']
+    'vi' => $nv_Lang->getModule('addads_block_lang_vi'),
+    'en' => $nv_Lang->getModule('addads_block_lang_en'),
+    'ru' => $nv_Lang->getModule('addads_block_lang_ru'),
+    'zz' => $nv_Lang->getModule('addads_block_lang_zz')
 );
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE act=1 ORDER BY blang ASC';

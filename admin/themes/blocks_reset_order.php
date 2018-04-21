@@ -118,13 +118,13 @@ if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         }
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_weight'], 'reset position all block', $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_weight'), 'reset position all block', $admin_info['userid']);
     $nv_Cache->delMod('themes');
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
-    echo $lang_module['block_update_success'];
+    echo $nv_Lang->getModule('block_update_success');
 } else {
     echo 'ERROR';
 }

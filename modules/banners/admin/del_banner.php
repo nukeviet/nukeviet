@@ -35,10 +35,10 @@ if (! empty($row)) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_banner', 'bannerid ' . $id, $admin_info['userid']);
     if (defined('NV_IS_AJAX')) {
-        echo $lang_module['delfile_success'];
+        echo $nv_Lang->getModule('delfile_success');
     } else {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banners_list');
     }
 } else {
-    echo $lang_module['delfile_error'];
+    echo $nv_Lang->getModule('delfile_error');
 }

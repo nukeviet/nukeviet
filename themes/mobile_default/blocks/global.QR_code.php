@@ -38,7 +38,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         );
 
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_level']) ? 'qr_level' : $lang_block['qr_level']) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . (empty($nv_Lang->getBlock('qr_level')) ? 'qr_level' : $nv_Lang->getBlock('qr_level')) . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_level">';
 
@@ -51,7 +51,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_pixel_per_point']) ? 'qr_pixel_per_point' : $lang_block['qr_pixel_per_point']) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . (empty($nv_Lang->getBlock('qr_pixel_per_point')) ? 'qr_pixel_per_point' : $nv_Lang->getBlock('qr_pixel_per_point')) . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_pixel_per_point">';
 
@@ -64,7 +64,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_outer_frame']) ? 'qr_outer_frame' : $lang_block['qr_outer_frame']) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . (empty($nv_Lang->getBlock('qr_outer_frame')) ? 'qr_outer_frame' : $nv_Lang->getBlock('qr_outer_frame')) . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_outer_frame">';
 
@@ -105,7 +105,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
      */
     function nv_block_qr_code($block_config)
     {
-        global $page_title, $global_config, $client_info, $lang_global;
+        global $page_title, $global_config, $client_info, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.QR_code.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -116,7 +116,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         }
 
         $xtpl = new XTemplate('global.QR_code.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
         $block_config['selfurl'] = $client_info['selfurl'];

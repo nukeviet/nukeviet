@@ -17,7 +17,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
  * đang bị đình chỉ thì chúng sẽ được trả lại trạng thái trước đó.
  */
 
-$page_title = $lang_module['move'];
+$page_title = $nv_Lang->getModule('move');
 
 $id_array = array();
 $listid = $nv_Request->get_string('listid', 'get,post', '');
@@ -81,7 +81,7 @@ $db->sqlreset()->select('id, title')->from(NV_PREFIXLANG . '_' . $module_data . 
 $result = $db->query($db->sql());
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);

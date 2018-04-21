@@ -12,14 +12,14 @@ if (! defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['extUpd'];
+$page_title = $nv_Lang->getModule('extUpd');
 
 $eid = $nv_Request->get_int('eid', 'get', 0);
 $fid = $nv_Request->get_int('fid', 'get', 0);
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $filename = NV_TEMPNAM_PREFIX . 'extupd_' . NV_CHECK_SESSION . '.zip';
 
@@ -202,7 +202,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
@@ -237,7 +237,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
     if (! empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($apidata['filename']) or ! file_exists($apidata['filename']) or filesize($apidata['filename']) == 0) {
-        $error = $lang_module['extUpdErrorDownload'];
+        $error = $nv_Lang->getModule('extUpdErrorDownload');
     }
 
     if (! empty($error)) {
@@ -259,12 +259,12 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
         }
 
         if ($warning === true) {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_warning'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION)));
+            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('get_update_warning'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION)));
 
             $xtpl->parse('warning');
             echo $xtpl->text('warning');
         } else {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_ok'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION)));
+            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('get_update_ok'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION)));
 
             $xtpl->parse('ok');
             echo $xtpl->text('ok');
@@ -276,7 +276,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
@@ -303,7 +303,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
     if (! empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
-        $error = $lang_global['error_valid_response'];
+        $error = $nv_Lang->getGlobal('error_valid_response');
     } elseif (! empty($array['error']['message'])) {
         $error = $array['error']['message'];
     }
@@ -321,32 +321,32 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
     // Ok co the download
     if ($array['fileInfo'] === 'ready') {
         $array['icon'] = 'fa-check';
-        $array['message'] = $lang_module['extUpdCheckSuccess'];
+        $array['message'] = $nv_Lang->getModule('extUpdCheckSuccess');
         $array['class'] = 'success';
 
         $xtpl->assign('LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5('download' . $eid . $fid . NV_CHECK_SESSION));
         $xtpl->parse('check.ready');
     } elseif ($array['fileInfo'] == 'notlogin') {
         $array['icon'] = 'fa-frown-o';
-        $array['message'] = $lang_module['extUpdNotLogin'];
+        $array['message'] = $nv_Lang->getModule('extUpdNotLogin');
         $array['class'] = 'warning';
 
         $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5($eid . $fid . NV_CHECK_SESSION);
-        $xtpl->assign('MESSAGE', sprintf($lang_module['extUpdLoginRequire'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt($redirect)));
+        $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('extUpdLoginRequire'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt($redirect)));
         $xtpl->parse('check.message');
     } elseif ($array['fileInfo'] == 'unpaid') {
         $array['icon'] = 'fa-frown-o';
-        $array['message'] = $lang_module['extUpdUnpaid'];
+        $array['message'] = $nv_Lang->getModule('extUpdUnpaid');
         $array['class'] = 'warning';
 
-        $xtpl->assign('MESSAGE', sprintf($lang_module['extUpdPaidRequire'], $array['link'] . '#tabs-1'));
+        $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('extUpdPaidRequire'), $array['link'] . '#tabs-1'));
         $xtpl->parse('check.message');
     } else {
         $array['icon'] = 'fa-frown-o';
-        $array['message'] = $lang_module['extUpdInvalid'];
+        $array['message'] = $nv_Lang->getModule('extUpdInvalid');
         $array['class'] = 'danger';
 
-        $xtpl->assign('MESSAGE', $lang_module['extUpdInvalidNote']);
+        $xtpl->assign('MESSAGE', $nv_Lang->getModule('extUpdInvalidNote'));
         $xtpl->parse('check.message');
     }
 
@@ -359,7 +359,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('EID', $eid);
@@ -374,4 +374,4 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . NV_CHECK
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);

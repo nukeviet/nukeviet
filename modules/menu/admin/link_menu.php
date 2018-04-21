@@ -18,7 +18,7 @@ $parentid = $nv_Request->get_int('parentid', 'post', 0);
 $arr_item = array();
 $arr_item[0] = array(
     'key' => 0,
-    'title' => $lang_module['cat0'],
+    'title' => $nv_Lang->getModule('cat0'),
     'selected' => ($parentid == 0) ? ' selected="selected"' : ''
 );
 
@@ -39,7 +39,7 @@ while ($row = $result->fetch()) {
     );
 }
 $xtpl = new XTemplate('rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 foreach ($arr_item as $arr_items) {
     $xtpl->assign('cat', $arr_items);
     $xtpl->parse('main.cat');

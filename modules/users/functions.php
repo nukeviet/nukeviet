@@ -16,7 +16,7 @@ define('NV_IS_MOD_USER', true);
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
 define('NV_2STEP_VERIFICATION_MODULE', 'two-step-verification');
 
-$lang_module['in_groups'] = $lang_global['in_groups'];
+$nv_Lang->setModule('in_groups', $nv_Lang->getGlobal('in_groups'));
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 /**
@@ -29,7 +29,7 @@ require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
  */
 function validUserLog($array_user, $remember, $opid, $current_mode = 0)
 {
-    global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $client_info;
+    global $db, $global_config, $nv_Request, $global_users_config, $module_name, $client_info, $nv_Lang;
 
     $remember = intval($remember);
     $checknum = md5(nv_genpass(10));
@@ -67,7 +67,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
     $nv_Request->set_Cookie('nvloginhash', serialize($user), $live_cookie_time);
 
     if (!empty($global_users_config['active_user_logs'])) {
-        $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $opid) : $lang_module['st_login'];
+        $log_message = $opid ? ($nv_Lang->getModule('userloginviaopt') . ' ' . $opid) : $nv_Lang->getModule('st_login');
         nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);
     }
 }
@@ -80,7 +80,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
  */
 function nv_del_user($userid)
 {
-    global $db, $global_config, $module_name, $user_info, $lang_module;
+    global $db, $global_config, $module_name, $user_info, $nv_Lang;
 
     $sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
     $row = $db->query($sql)->fetch(3);
@@ -119,8 +119,8 @@ function nv_del_user($userid)
             @nv_deletefile(NV_ROOTDIR . '/' . $photo);
         }
 
-        $subject = $lang_module['delconfirm_email_title'];
-        $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
+        $subject = $nv_Lang->getModule('delconfirm_email_title');
+        $message = sprintf($nv_Lang->getModule('delconfirm_email_content'), $userdelete, $global_config['site_name']);
         $message = nl2br($message);
         nv_sendmail($global_config['site_email'], $email, $subject, $message);
         return $userid;

@@ -43,11 +43,11 @@ if ($selectthemes_old != $selectthemes) {
 }
 
 if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
-    $page_title = $lang_module['blocks'] . ':' . $selectthemes;
+    $page_title = $nv_Lang->getModule('blocks') . ':' . $selectthemes;
 
     $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     $xtpl->assign('MODULE_NAME', $module_name);
 
@@ -58,7 +58,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xtpl->assign('SELECTTHEMES', $selectthemes);
 
     $new_drag_block = $nv_Request->get_int('drag_block', 'session', 0) ? 0 : 1;
-    $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+    $lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
 
     $url_dblock = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;drag_block=' . $new_drag_block;
     if (empty($new_drag_block)) {

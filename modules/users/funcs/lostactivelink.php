@@ -25,7 +25,7 @@ if ($global_config['allowuserreg'] != 2) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = $mod_title = $lang_module['lostpass_page_title'];
+$page_title = $mod_title = $nv_Lang->getModule('lostpass_page_title');
 $key_words = $module_info['keywords'];
 
 $data = array();
@@ -54,7 +54,7 @@ if ($checkss == $data['checkss']) {
             if (! empty($check_email) and ! empty($check_login)) {
                 $step = 1;
                 $nv_Request->unset_request('lostactivelink_seccode', 'session');
-                $error = $lang_module['lostactivelink_no_info2'];
+                $error = $nv_Lang->getModule('lostactivelink_no_info2');
             } else {
                 $exp = NV_CURRENTTIME - 86400;
                 if (empty($check_email)) {
@@ -77,7 +77,7 @@ if ($checkss == $data['checkss']) {
 
                     $info = '';
                     if (empty($row['question']) or empty($row['answer'])) {
-                        $info = $lang_module['lostactivelink_question_empty'];
+                        $info = $nv_Lang->getModule('lostactivelink_question_empty');
                     }
 
                     if (! empty($info)) {
@@ -100,8 +100,8 @@ if ($checkss == $data['checkss']) {
                             $checknum = nv_genpass(10);
                             $checknum = md5($checknum);
 
-                            $subject = $lang_module['lostactive_mailtitle'];
-                            $message = sprintf($lang_module['lostactive_active_info'], $row['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
+                            $subject = $nv_Lang->getModule('lostactive_mailtitle');
+                            $message = sprintf($nv_Lang->getModule('lostactive_active_info'), $row['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
                             $ok = nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
 
                             if ($ok) {
@@ -110,9 +110,9 @@ if ($checkss == $data['checkss']) {
                                 $stmt->bindParam(':password', $password, PDO::PARAM_STR);
                                 $stmt->bindParam(':checknum', $checknum, PDO::PARAM_STR);
                                 $stmt->execute();
-                                $info = sprintf($lang_module['lostactivelink_send'], $row['email']);
+                                $info = sprintf($nv_Lang->getModule('lostactivelink_send'), $row['email']);
                             } else {
-                                $info = $lang_global['error_sendmail'];
+                                $info = $nv_Lang->getGlobal('error_sendmail');
                             }
 
                             $contents = user_info_exit($info);
@@ -123,33 +123,33 @@ if ($checkss == $data['checkss']) {
                             include NV_ROOTDIR . '/includes/footer.php';
                         } else {
                             $step = 2;
-                            $error = $lang_module['answer_failed'];
+                            $error = $nv_Lang->getModule('answer_failed');
                         }
                     }
                 } else {
                     $step = 1;
                     $nv_Request->unset_request('lostactivelink_seccode', 'session');
-                    $error = $lang_module['lostactivelink_no_info2'];
+                    $error = $nv_Lang->getModule('lostactivelink_no_info2');
                 }
             }
         } else {
             $step = 1;
             $nv_Request->unset_request('lostactivelink_seccode', 'session');
-            $error = $lang_module['lostactivelink_no_info1'];
+            $error = $nv_Lang->getModule('lostactivelink_no_info1');
         }
     } else {
         $step = 1;
         $nv_Request->unset_request('lostactivelink_seccode', 'session');
-        $error = $lang_global['securitycodeincorrect'];
+        $error = $nv_Lang->getGlobal('securitycodeincorrect');
     }
 }
 
 if ($step == 2) {
     $data['step'] = 2;
-    $data['info'] = empty($error) ? $lang_module['step2'] : '<span style="color:#fb490b;">' . $error . '</span>';
+    $data['info'] = empty($error) ? $nv_Lang->getModule('step2') : '<span style="color:#fb490b;">' . $error . '</span>';
 } else {
     $data['step'] = 1;
-    $data['info'] = empty($error) ? $lang_module['step1'] : '<span style="color:#fb490b;">' . $error . '</span>';
+    $data['info'] = empty($error) ? $nv_Lang->getModule('step1') : '<span style="color:#fb490b;">' . $error . '</span>';
 }
 
 $contents = user_lostactivelink($data, $question);

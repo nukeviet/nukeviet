@@ -15,11 +15,11 @@ if (!defined('NV_IS_FILE_LANG')) {
 $dirlang_old = $nv_Request->get_string('dirlang', 'cookie', NV_LANG_DATA);
 $dirlang = $nv_Request->get_string('dirlang', 'get', $dirlang_old);
 
-$page_title = $lang_module['nv_lang_interface'] . ': ' . $language_array[$dirlang]['name'];
+$page_title = $nv_Lang->getModule('nv_lang_interface') . ': ' . $language_array[$dirlang]['name'];
 
 $xtpl = new XTemplate('interface.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $array_lang_exit = array();
 
@@ -61,10 +61,10 @@ $result = $db->query($sql);
 while (list ($idfile, $module, $admin_file, $langtype, $author_lang) = $result->fetch(3)) {
     switch ($admin_file) {
         case '1':
-            $langsitename = $lang_module['nv_lang_admin'];
+            $langsitename = $nv_Lang->getModule('nv_lang_admin');
             break;
         case '0':
-            $langsitename = $lang_module['nv_lang_site'];
+            $langsitename = $nv_Lang->getModule('nv_lang_site');
             break;
         default:
             $langsitename = $admin_file;

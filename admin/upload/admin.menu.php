@@ -13,9 +13,9 @@ if (! defined('NV_ADMIN')) {
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['thumbconfig'] = $lang_module['thumbconfig'];
-    $submenu['config'] = $lang_module['configlogo'];
+    $submenu['thumbconfig'] = $nv_Lang->getModule('thumbconfig');
+    $submenu['config'] = $nv_Lang->getModule('configlogo');
     if (defined('NV_IS_GODADMIN')) {
-        $submenu['uploadconfig'] = $lang_module['uploadconfig'];
+        $submenu['uploadconfig'] = $nv_Lang->getModule('uploadconfig');
     }
 }

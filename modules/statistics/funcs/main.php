@@ -14,7 +14,7 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
 
 $current_month_num = date('n', NV_CURRENTTIME);
 $current_year = date('Y', NV_CURRENTTIME);
@@ -36,26 +36,26 @@ while (list($year, $count) = $result->fetch(3)) {
 }
 
 $ctsy = array();
-$ctsy['caption'] = $lang_module['statbyyear'];
+$ctsy['caption'] = $nv_Lang->getModule('statbyyear');
 $ctsy['rows'] = $year_list;
 $ctsy['current_year'] = $current_year;
 $ctsy['max'] = $max;
-$ctsy['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
+$ctsy['total'] = array($nv_Lang->getGlobal('total'), number_format($total, 0, ',', '.'));
 
 // theo thang
 $month_list = array();
-$month_list['Jan'] = array('fullname' => $lang_global['january'], 'count' => 0);
-$month_list['Feb'] = array('fullname' => $lang_global['february'], 'count' => 0);
-$month_list['Mar'] = array('fullname' => $lang_global['march'], 'count' => 0);
-$month_list['Apr'] = array('fullname' => $lang_global['april'], 'count' => 0);
-$month_list['May'] = array('fullname' => $lang_global['may'], 'count' => 0);
-$month_list['Jun'] = array('fullname' => $lang_global['june'], 'count' => 0);
-$month_list['Jul'] = array('fullname' => $lang_global['july'], 'count' => 0);
-$month_list['Aug'] = array('fullname' => $lang_global['august'], 'count' => 0);
-$month_list['Sep'] = array('fullname' => $lang_global['september'], 'count' => 0);
-$month_list['Oct'] = array('fullname' => $lang_global['october'], 'count' => 0);
-$month_list['Nov'] = array('fullname' => $lang_global['november'], 'count' => 0);
-$month_list['Dec'] = array('fullname' => $lang_global['december'], 'count' => 0);
+$month_list['Jan'] = array('fullname' => $nv_Lang->getGlobal('january'), 'count' => 0);
+$month_list['Feb'] = array('fullname' => $nv_Lang->getGlobal('february'), 'count' => 0);
+$month_list['Mar'] = array('fullname' => $nv_Lang->getGlobal('march'), 'count' => 0);
+$month_list['Apr'] = array('fullname' => $nv_Lang->getGlobal('april'), 'count' => 0);
+$month_list['May'] = array('fullname' => $nv_Lang->getGlobal('may'), 'count' => 0);
+$month_list['Jun'] = array('fullname' => $nv_Lang->getGlobal('june'), 'count' => 0);
+$month_list['Jul'] = array('fullname' => $nv_Lang->getGlobal('july'), 'count' => 0);
+$month_list['Aug'] = array('fullname' => $nv_Lang->getGlobal('august'), 'count' => 0);
+$month_list['Sep'] = array('fullname' => $nv_Lang->getGlobal('september'), 'count' => 0);
+$month_list['Oct'] = array('fullname' => $nv_Lang->getGlobal('october'), 'count' => 0);
+$month_list['Nov'] = array('fullname' => $nv_Lang->getGlobal('november'), 'count' => 0);
+$month_list['Dec'] = array('fullname' => $nv_Lang->getGlobal('december'), 'count' => 0);
 
 $month_list2 = array_chunk($month_list, $current_month_num, true);
 $month_list2 = $month_list2[0];
@@ -76,11 +76,11 @@ while (list($month, $count) = $result->fetch(3)) {
 }
 
 $ctsm = array();
-$ctsm['caption'] = sprintf($lang_module['statbymoth'], $current_year);
+$ctsm['caption'] = sprintf($nv_Lang->getModule('statbymoth'), $current_year);
 $ctsm['rows'] = $month_list;
 $ctsm['current_month'] = date('M', NV_CURRENTTIME);
 $ctsm['max'] = $max;
-$ctsm['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
+$ctsm['total'] = array($nv_Lang->getGlobal('total'), number_format($total, 0, ',', '.'));
 
 // ngay trong thang
 
@@ -99,22 +99,22 @@ while (list($day, $count) = $result->fetch(3)) {
 }
 
 $ctsdm = array();
-$ctsdm['caption'] = sprintf($lang_module['statbyday'], $current_month_num);
+$ctsdm['caption'] = sprintf($nv_Lang->getModule('statbyday'), $current_month_num);
 $ctsdm['rows'] = $day_list;
 $ctsdm['current_day'] = $current_day;
 $ctsdm['max'] = $max;
-$ctsdm['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
+$ctsdm['total'] = array($nv_Lang->getGlobal('total'), number_format($total, 0, ',', '.'));
 $ctsdm['numrows'] = $current_number_of_days;
 
 // ngay trong tuan
 $dayofweek_list = array();
-$dayofweek_list['Sunday'] = array('fullname' => $lang_global['sunday'], 'count' => 0);
-$dayofweek_list['Monday'] = array('fullname' => $lang_global['monday'], 'count' => 0);
-$dayofweek_list['Tuesday'] = array('fullname' => $lang_global['tuesday'], 'count' => 0);
-$dayofweek_list['Wednesday'] = array('fullname' => $lang_global['wednesday'], 'count' => 0);
-$dayofweek_list['Thursday'] = array('fullname' => $lang_global['thursday'], 'count' => 0);
-$dayofweek_list['Friday'] = array('fullname' => $lang_global['friday'], 'count' => 0);
-$dayofweek_list['Saturday'] = array('fullname' => $lang_global['saturday'], 'count' => 0);
+$dayofweek_list['Sunday'] = array('fullname' => $nv_Lang->getGlobal('sunday'), 'count' => 0);
+$dayofweek_list['Monday'] = array('fullname' => $nv_Lang->getGlobal('monday'), 'count' => 0);
+$dayofweek_list['Tuesday'] = array('fullname' => $nv_Lang->getGlobal('tuesday'), 'count' => 0);
+$dayofweek_list['Wednesday'] = array('fullname' => $nv_Lang->getGlobal('wednesday'), 'count' => 0);
+$dayofweek_list['Thursday'] = array('fullname' => $nv_Lang->getGlobal('thursday'), 'count' => 0);
+$dayofweek_list['Friday'] = array('fullname' => $nv_Lang->getGlobal('friday'), 'count' => 0);
+$dayofweek_list['Saturday'] = array('fullname' => $nv_Lang->getGlobal('saturday'), 'count' => 0);
 
 $dayofweek_list2 = "'" . implode("','", array_keys($dayofweek_list)) . "'";
 
@@ -133,11 +133,11 @@ while (list($dayofweek, $count) = $result->fetch(3)) {
 }
 
 $ctsdw = array();
-$ctsdw['caption'] = $lang_module['statbydayofweek'];
+$ctsdw['caption'] = $nv_Lang->getModule('statbydayofweek');
 $ctsdw['rows'] = $dayofweek_list;
 $ctsdw['current_dayofweek'] = $current_dayofweek;
 $ctsdw['max'] = $max;
-$ctsdw['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
+$ctsdw['total'] = array($nv_Lang->getGlobal('total'), number_format($total, 0, ',', '.'));
 
 // Giờ trong ngày
 $max = 0;
@@ -155,11 +155,11 @@ while (list($hour, $count) = $result->fetch(3)) {
 }
 
 $ctsh = array();
-$ctsh['caption'] = $lang_module['statbyhour'];
+$ctsh['caption'] = $nv_Lang->getModule('statbyhour');
 $ctsh['rows'] = $hour_list;
 $ctsh['current_hour'] = date('H', NV_CURRENTTIME);
 $ctsh['max'] = $max;
-$ctsh['total'] = array($lang_global['total'], number_format($total, 0, ',', '.'));
+$ctsh['total'] = array($nv_Lang->getGlobal('total'), number_format($total, 0, ',', '.'));
 
 // quoc gia
 $db->sqlreset()->select('c_val,c_count, last_update')->from(NV_COUNTER_GLOBALTABLE)->where("c_type='country' AND c_count!=0")->order('c_count DESC')->limit(10);
@@ -168,7 +168,7 @@ $result = $db->query($db->sql());
 $total = 0;
 $countries_list = array();
 while (list($country, $count, $last_visit) = $result->fetch(3)) {
-    $fullname = isset($countries[$country]) ? $countries[$country][1] : $lang_global['unknown'];
+    $fullname = isset($countries[$country]) ? $countries[$country][1] : $nv_Lang->getGlobal('unknown');
     $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
     $countries_list[$country] = array(
         $fullname,
@@ -184,18 +184,18 @@ list($all, $max) = $result->fetch(3);
 $others = $all - $total;
 
 $ctsc = array();
-$ctsc['caption'] = $lang_module['statbycountry'];
+$ctsc['caption'] = $nv_Lang->getModule('statbycountry');
 $ctsc['thead'] = array(
-    $lang_module['country'],
-    $lang_module['hits'],
-    $lang_module['last_visit']
+    $nv_Lang->getModule('country'),
+    $nv_Lang->getModule('hits'),
+    $nv_Lang->getModule('last_visit')
 );
 $ctsc['rows'] = $countries_list;
 $ctsc['max'] = $max;
 $ctsc['others'] = array(
-    $lang_module['others'],
+    $nv_Lang->getModule('others'),
     number_format($others, 0, ',', '.'),
-    $lang_module['viewall']
+    $nv_Lang->getModule('viewall')
 );
 
 // trinh duyet
@@ -217,18 +217,18 @@ list($all, $max) = $result->fetch(3);
 $others = $all - $total;
 
 $ctsb = array();
-$ctsb['caption'] = $lang_module['statbybrowser'];
+$ctsb['caption'] = $nv_Lang->getModule('statbybrowser');
 $ctsb['thead'] = array(
-    $lang_module['browser'],
-    $lang_module['hits'],
-    $lang_module['last_visit']
+    $nv_Lang->getModule('browser'),
+    $nv_Lang->getModule('hits'),
+    $nv_Lang->getModule('last_visit')
 );
 $ctsb['rows'] = $browsers_list;
 $ctsb['max'] = $max;
 $ctsb['others'] = array(
-    $lang_module['others'],
+    $nv_Lang->getModule('others'),
     number_format($others, 0, ',', '.'),
-    $lang_module['viewall']
+    $nv_Lang->getModule('viewall')
 );
 
 // he dieu hanh
@@ -250,18 +250,18 @@ list($all, $max) = $result->fetch(3);
 $others = $all - $total;
 
 $ctso = array();
-$ctso['caption'] = $lang_module['statbyos'];
+$ctso['caption'] = $nv_Lang->getModule('statbyos');
 $ctso['thead'] = array(
-    $lang_module['os'],
-    $lang_module['hits'],
-    $lang_module['last_visit']
+    $nv_Lang->getModule('os'),
+    $nv_Lang->getModule('hits'),
+    $nv_Lang->getModule('last_visit')
 );
 $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
 $ctso['others'] = array(
-    $lang_module['others'],
+    $nv_Lang->getModule('others'),
     number_format($others, 0, ',', '.'),
-    $lang_module['viewall']
+    $nv_Lang->getModule('viewall')
 );
 
 $contents = nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh);

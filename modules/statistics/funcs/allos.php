@@ -12,9 +12,9 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['os'];
+$page_title = $nv_Lang->getModule('os');
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['os'];
+$mod_title = $nv_Lang->getModule('os');
 
 $sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->query($sql);
@@ -43,13 +43,13 @@ if ($num_items) {
 
     if (! empty($os_list)) {
         $cts = array();
-        $cts['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
+        $cts['thead'] = array( $nv_Lang->getModule('os'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit') );
         $cts['rows'] = $os_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);
     }
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allos($num_items, $os_list, $cts);

@@ -13,8 +13,8 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $a = 0;
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY weight';
@@ -41,7 +41,7 @@ foreach ($array_department as $row) {
         $xtpl->parse('main.row.option');
     }
 
-    $array = array( $lang_global['disable'], $lang_global['active'], $lang_module['department_no_home'] );
+    $array = array( $nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home') );
 
     foreach ($array as $key => $val) {
         $xtpl->assign('STATUS', array(
@@ -66,7 +66,7 @@ $xtpl->assign('URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['department_title'];
+$page_title = $nv_Lang->getModule('department_title');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

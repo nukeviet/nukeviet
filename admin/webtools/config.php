@@ -30,8 +30,8 @@ if ($submit) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-$page_title = $lang_module['config'];
-$lang_module['hour'] = $lang_global['hour'];
+$page_title = $nv_Lang->getModule('config');
+$nv_Lang->setModule('hour', $nv_Lang->getGlobal('hour'));
 
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -39,7 +39,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('AUTOCHECKUPDATE', ($global_config['autocheckupdate']) ? ' checked="checked"' : '');
 
 for ($i = 1; $i <= 100; ++$i) {

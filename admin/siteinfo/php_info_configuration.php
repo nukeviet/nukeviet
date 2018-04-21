@@ -12,15 +12,15 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['configuration_php'];
+$page_title = $nv_Lang->getModule('configuration_php');
 
 require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
 $xtpl = new XTemplate('configuration_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 $array = phpinfo_array(4, 1);
-$caption = $lang_module['configuration_php'];
-$thead = array( $lang_module['directive'], $lang_module['local_value'], $lang_module['master_value'] );
+$caption = $nv_Lang->getModule('configuration_php');
+$thead = array( $nv_Lang->getModule('directive'), $nv_Lang->getModule('local_value'), $nv_Lang->getModule('master_value') );
 
 if (! empty($array['PHP Core'])) {
     $xtpl->assign('CAPTION', $caption);

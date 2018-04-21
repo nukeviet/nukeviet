@@ -15,17 +15,17 @@ if (!defined('NV_MAINFILE')) {
 $global_array_genders = array(
     'N' => array(
         'key' => 'N',
-        'title' => $lang_module['na'],
+        'title' => $nv_Lang->getModule('na'),
         'selected' => ''
     ),
     'M' => array(
         'key' => 'M',
-        'title' => $lang_module['male'],
+        'title' => $nv_Lang->getModule('male'),
         'selected' => ''
     ),
     'F' => array(
         'key' => 'F',
-        'title' => $lang_module['female'],
+        'title' => $nv_Lang->getModule('female'),
         'selected' => ''
     )
 );

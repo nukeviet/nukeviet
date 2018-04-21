@@ -20,7 +20,7 @@ $allow_func = array(
     'change_active'
 );
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['config'] = $lang_module['config'];
+    $submenu['config'] = $nv_Lang->getModule('config');
     $allow_func[] = 'config';
 }
 

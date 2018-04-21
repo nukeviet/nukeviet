@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['block'];
+$page_title = $nv_Lang->getModule('block');
 
 $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db_slave->query($sql);
@@ -83,8 +83,8 @@ foreach ($array_block as $xbid => $blockname) {
 }
 
 $xtpl = new XTemplate('block.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -95,7 +95,7 @@ $listid = $nv_Request->get_string('listid', 'get', '');
 if ($listid == '' and $bid) {
     $xtpl->assign('BLOCK_LIST', nv_show_block_list($bid));
 } else {
-    $page_title = $lang_module['addtoblock'];
+    $page_title = $nv_Lang->getModule('addtoblock');
     $id_array = array_map('intval', explode(',', $listid));
 
     $db_slave->sqlreset()

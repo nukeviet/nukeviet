@@ -42,7 +42,7 @@ foreach ($userids as $userid) {
 
     $query = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id IN (1,2,3) AND userid=' . $userid);
     if ($query->fetchColumn()) {
-        $error = $lang_module['delete_group_system'];
+        $error = $nv_Lang->getModule('delete_group_system');
     } else {
         $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
 
@@ -65,8 +65,8 @@ foreach ($userids as $userid) {
             @nv_deletefile(NV_ROOTDIR . '/' . $photo);
         }
 
-        $subject = $lang_module['delconfirm_email_title'];
-        $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
+        $subject = $nv_Lang->getModule('delconfirm_email_title');
+        $message = sprintf($nv_Lang->getModule('delconfirm_email_content'), $userdelete, $global_config['site_name']);
         $message = nl2br($message);
         nv_sendmail($global_config['site_email'], $email, $subject, $message);
     }

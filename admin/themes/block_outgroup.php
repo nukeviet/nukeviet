@@ -52,10 +52,10 @@ if ($func_id > 0 and isset($row['bid'])) {
 
         $nv_Cache->delMod('themes');
 
-        echo $lang_module['block_front_outgroup_success'] . $new_bid;
+        echo $nv_Lang->getModule('block_front_outgroup_success') . $new_bid;
     } catch (PDOException $e) {
-        echo $lang_module['block_front_outgroup_error_update'];
+        echo $nv_Lang->getModule('block_front_outgroup_error_update');
     }
 } else {
-    echo $lang_module['block_front_outgroup_cancel'];
+    echo $nv_Lang->getModule('block_front_outgroup_cancel');
 }

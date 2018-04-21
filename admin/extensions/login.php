@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['login_pagetitle'];
+$page_title = $nv_Lang->getModule('login_pagetitle');
 
 $request = array();
 $request['username'] = $nv_Request->get_title('username', 'post', '');
@@ -20,8 +20,8 @@ $request['password'] = $nv_Request->get_title('password', 'post', '');
 $request['redirect'] = $nv_Request->get_title('redirect', 'post,get', '');
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('REQUEST', $request);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
@@ -57,7 +57,7 @@ if (! empty($request['username']) and ! empty($request['password'])) {
     if (! empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
-        $error = $lang_global['error_valid_response'];
+        $error = $nv_Lang->getGlobal('error_valid_response');
     } elseif (! empty($array['error']['message'])) {
         $error = $array['error']['message'];
     }

@@ -35,19 +35,19 @@ if (!$ip_exclusion) {
         include NV_ROOTDIR . '/includes/header.php';
         if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
             $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
-            $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
+            $xtpl->assign('PAGE_TITLE', $nv_Lang->getGlobal('flood_page_title'));
             $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
             $xtpl->assign('IMG_WIDTH', 33);
             $xtpl->assign('IMG_HEIGHT', 8);
-            $xtpl->assign('FLOOD_BLOCKER_INFO1', $lang_global['flood_info1']);
-            $xtpl->assign('FLOOD_BLOCKER_INFO2', $lang_global['flood_info2']);
-            $xtpl->assign('FLOOD_BLOCKER_INFO3', $lang_global['sec']);
+            $xtpl->assign('FLOOD_BLOCKER_INFO1', $nv_Lang->getGlobal('flood_info1'));
+            $xtpl->assign('FLOOD_BLOCKER_INFO2', $nv_Lang->getGlobal('flood_info2'));
+            $xtpl->assign('FLOOD_BLOCKER_INFO3', $nv_Lang->getGlobal('sec'));
             $xtpl->assign('FLOOD_BLOCKER_TIME', $flb->flood_block_time);
             $xtpl->parse('main');
             echo $xtpl->text('main');
             exit();
         } else {
-            trigger_error($lang_global['flood_info1'], 256);
+            trigger_error($nv_Lang->getGlobal('flood_info1'), 256);
         }
     }
 

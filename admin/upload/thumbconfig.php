@@ -64,7 +64,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     $thumb_quality = $nv_Request->get_int('q', 'post', 0);
 
     if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
-        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($lang_module['prViewExampleError1'], $lang_module['prViewExampleError'])));
+        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($nv_Lang->getModule('prViewExampleError1'), $nv_Lang->getModule('prViewExampleError'))));
     }
 
     $return = array('status' => 'error');
@@ -91,7 +91,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     }
 
     if (empty($image_demo)) {
-        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($lang_module['file_no_exists'], $lang_module['prViewExampleError2'])));
+        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($nv_Lang->getModule('file_no_exists'), $nv_Lang->getModule('prViewExampleError2'))));
     }
 
     $image_demo['sizes'] = explode('|', $image_demo['sizes']);
@@ -147,17 +147,17 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $thumb_type = array();
 $i = 0;
-$lang_module['thumb_type_0'] = '';
+$nv_Lang->setModule('thumb_type_0', '');
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query($sql);
 while ($data = $result->fetch()) {
     if ($data['did'] == 0) {
-        $data['dirname'] = $lang_module['thumb_dir_default'];
+        $data['dirname'] = $nv_Lang->getModule('thumb_dir_default');
         $forid = 1;
     } else {
         $forid = 0;
@@ -189,7 +189,7 @@ for ($id = 0; $id < 5; $id++) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['thumbconfig'];
+$page_title = $nv_Lang->getModule('thumbconfig');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
