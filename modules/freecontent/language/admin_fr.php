@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 31, 2015, 09:30:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 31, 2015, 09:30:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -52,7 +52,6 @@ $lang_module['content_target_self'] = '_self';
 $lang_module['content_target_parent'] = '_parent';
 $lang_module['content_target_top'] = '_haut';
 $lang_module['content_title_error'] = 'Le nom de contenu ne peut pas être blanc';
-$lang_module['content_link_error'] = 'Semble que ce n\'est pas un bon lien';
 $lang_module['content_total_rows'] = 'Totale';
 $lang_module['content_delete'] = 'Supprimer le contenu';
 $lang_module['content_delete_confirm'] = 'Les données supprimées ne peut pas être reconstruites après, voulez-vous les supprimer?';

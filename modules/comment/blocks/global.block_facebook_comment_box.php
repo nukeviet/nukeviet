@@ -8,31 +8,39 @@
  * @Createdate Sat, 08 Feb 2014 06:33:39 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_facebook_comment_box_blocks')) {
+if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
+    /**
+     * nv_block_config_facebook_comment_box_blocks()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_facebook_comment_box_blocks($module, $data_block, $lang_block)
     {
         $html = '';
 
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['facebookappid'] . '</td>';
-        $html .= '	<td><input type="text" name="config_facebookappid" size="50" value="' . $data_block['facebookappid'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['width'] . '</td>';
-        $html .= '	<td><input type="text" name="config_width" size="5" value="' . $data_block['width'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= ' <td>' . $lang_block['numpost'] . '</td>';
-        $html .= ' <td><input type="text" name="config_numpost" size="5" value="' . $data_block['numpost'] . '"/></td>';
-        $html .= '</tr>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['facebookappid'] . ':</label>';
+        $html .= '	<div class="col-sm-18"><input class="form-control" type="text" name="config_facebookappid" value="' . $data_block['facebookappid'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['width'] . ':</label>';
+        $html .= '	<div class="col-sm-18"><input class="form-control" type="text" name="config_width" value="' . $data_block['width'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= ' <label class="control-label col-sm-6">' . $lang_block['numpost'] . ':</label>';
+        $html .= ' <div class="col-sm-18"><input class="form-control" type="text" name="config_numpost" value="' . $data_block['numpost'] . '"/></div>';
+        $html .= '</div>';
 
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['scheme'] . '</td>';
-        $html .= '	<td> <select name="config_scheme"> ';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['scheme'] . ':</label>';
+        $html .= '	<div class="col-sm-9"> <select class="form-control" name="config_scheme"> ';
 
         $se1 = ($data_block['scheme'] == 'light') ? 'selected="selected"' : '';
         $se2 = ($data_block['scheme'] == 'dark') ? 'selected="selected"' : '';
@@ -41,11 +49,18 @@ if (! nv_function_exists('nv_facebook_comment_box_blocks')) {
         $html .= ' <option value="dark"' . $se2 . ' >Dark </option>';
 
         $html .= ' <\select>';
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= '</div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_facebook_comment_box_blocks_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_facebook_comment_box_blocks_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -60,11 +75,17 @@ if (! nv_function_exists('nv_facebook_comment_box_blocks')) {
         return $return;
     }
 
+    /**
+     * nv_facebook_comment_box_blocks()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv_facebook_comment_box_blocks($block_config)
     {
         global $client_info, $module_name;
         $content = '';
-        if (! defined('FACEBOOK_JSSDK')) {
+        if (!defined('FACEBOOK_JSSDK')) {
             $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
             $facebookappid = (isset($module_config[$module_name]['facebookappid'])) ? $module_config[$module_name]['facebookappid'] : $block_config['facebookappid'];
 

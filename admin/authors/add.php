@@ -44,11 +44,11 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $modules = $nv_Request->get_array('modules', 'post', array());
     $position = $nv_Request->get_title('position', 'post', '', 1);
 
+    $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
-        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($userid);
+        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($userid) . ' OR md5username=' . $db->quote($md5username);
     } else {
-        $md5username = nv_md5safe($userid);
-        $sql = 'SELECT userid, username, active, group_id, in_groups  FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
+        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
     }
     list ($userid, $username, $active, $_group_id, $_in_groups) = $db->query($sql)->fetch(3);
     if (empty($userid)) {

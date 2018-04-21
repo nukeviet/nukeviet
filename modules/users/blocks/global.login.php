@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_login')) {
-
     /**
      * nv_block_config_login()
      *
@@ -25,26 +24,26 @@ if (!nv_function_exists('nv_block_login')) {
     function nv_block_config_login($module, $data_block, $lang_block)
     {
         $html = '';
-        $html .= '<tr>';
-        $html .= '  <td>' . $lang_block['display_mode'] . '</td>';
-        $html .= '  <td><select class="w300 form-control" name="config_display_mode">';
+        $html .= '<div class="form-group">';
+        $html .= '  <label class="control-label col-sm-6">' . $lang_block['display_mode'] . ':</label>';
+        $html .= '  <div class="col-sm-9"><select class="form-control" name="config_display_mode">';
 
         for ($i = 0; $i <= 1; $i++) {
             $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
         }
 
-        $html .= '  </select></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '  <td>' . $lang_block['popup_register'] . '</td>';
-        $html .= '  <td><select class="w300 form-control" name="config_popup_register">';
+        $html .= '  </select></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '  <label class="control-label col-sm-6">' . $lang_block['popup_register'] . ':</label>';
+        $html .= '  <div class="col-sm-9"><select class="form-control" name="config_popup_register">';
 
         for ($i = 0; $i <= 1; $i++) {
             $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
         }
 
-        $html .= '  </select></td>';
-        $html .= '</tr>';
+        $html .= '  </select></div>';
+        $html .= '</div>';
         return $html;
     }
 
@@ -88,22 +87,42 @@ if (!nv_function_exists('nv_block_login')) {
             } else {
                 $block_theme = 'default';
             }
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/users.css')) {
+                $block_css = $global_config['module_theme'];
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/users.css')) {
+                $block_css = $global_config['site_theme'];
+            } else {
+                $block_css = '';
+            }
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/users.js')) {
+                $block_js = $global_config['module_theme'];
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/users.js')) {
+                $block_js = $global_config['site_theme'];
+            } else {
+                $block_js = 'default';
+            }
 
             $xtpl = new XTemplate('block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 
             if ($mod_file != $module_file) {
-                if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php')) {
-                    include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+                if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php')) {
+                    include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
                 } else {
                     include NV_ROOTDIR . '/modules/users/language/vi.php';
                 }
-                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/users.css' . '">';
+                if (!empty($block_css)) {
+                    $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
+                }
+            } else {
+                global $lang_module;
             }
 
             $xtpl->assign('LANG', $lang_module);
             $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('BLOCKID', $blockID);
             $xtpl->assign('BLOCK_THEME', $block_theme);
+            $xtpl->assign('BLOCK_CSS', $block_css);
+            $xtpl->assign('BLOCK_JS', $block_js);
 
             if (defined('NV_IS_USER')) {
                 if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
@@ -211,6 +230,7 @@ if (!nv_function_exists('nv_block_login')) {
 
                 if (defined('NV_OPENID_ALLOWED')) {
                     $icons = array(
+                        'single-sign-on' => 'lock',
                         'google' => 'google-plus',
                         'facebook' => 'facebook'
                     );

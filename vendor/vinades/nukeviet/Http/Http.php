@@ -16,12 +16,12 @@ class Http
      * Variable to set dir
      */
     private $root_dir = '';
-    private $tmp_dir = '';
+    private static $tmp_dir = '';
 
     /**
      * All site config
      */
-    private $site_config = array(
+    private static $site_config = array(
         'version' => '4.x',
         'sitekey' => 'default',
         'site_charset' => 'utf-8',
@@ -51,14 +51,14 @@ class Http
         $this->root_dir = preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__file__) . $store_dir)));
 
         // Custom some config
-        if (! empty($config['version'])) {
-            $this->site_config['version'] = $config['version'];
+        if (!empty($config['version'])) {
+            Http::$site_config['version'] = $config['version'];
         }
-        if (! empty($config['version'])) {
-            $this->site_config['sitekey'] = $config['sitekey'];
+        if (!empty($config['version'])) {
+            Http::$site_config['sitekey'] = $config['sitekey'];
         }
-        if (! empty($config['site_charset'])) {
-            $this->site_config['site_charset'] = $config['site_charset'];
+        if (!empty($config['site_charset'])) {
+            Http::$site_config['site_charset'] = $config['site_charset'];
         }
 
         // Find my domain
@@ -68,16 +68,18 @@ class Http
         $server_port = ($server_port == '80') ? '' : (':' . $server_port);
 
         if (filter_var($server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-            $this->site_config['my_domain'] = $server_protocol . '://' . $server_name . $server_port;
+            Http::$site_config['my_domain'] = $server_protocol . '://' . $server_name . $server_port;
         } else {
-            $this->site_config['my_domain'] = $server_protocol . '://[' . $server_name . ']' . $server_port;
+            Http::$site_config['my_domain'] = $server_protocol . '://[' . $server_name . ']' . $server_port;
         }
 
         // Check user custom temp dir
-        $this->tmp_dir = $this->root_dir . '/' . $tmp_dir;
+        if (!is_null($tmp_dir)) {
+            Http::$tmp_dir = $this->root_dir . '/' . $tmp_dir;
 
-        if (! is_dir($this->tmp_dir)) {
-            $this->tmp_dir = $this->root_dir . '/tmp';
+            if (!is_dir(Http::$tmp_dir)) {
+                Http::$tmp_dir = $this->root_dir . '/tmp';
+            }
         }
     }
 
@@ -95,7 +97,7 @@ class Http
             'redirection' => 5,
             'requested' => 0,  // Number requested if redirection
             'httpversion' => 1.0,
-            'user-agent' => 'NUKEVIET CMS ' . $this->site_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5($this->site_config['sitekey']),
+            'user-agent' => 'NUKEVIET CMS ' . Http::$site_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5(Http::$site_config['sitekey']),
             'referer' => null,
             'reject_unsafe_urls' => false,
             'blocking' => true,
@@ -137,19 +139,19 @@ class Http
         //}
 
         // Determine if this request is to OUR install of NukeViet
-        $homeURL = parse_url($this->site_config['my_domain']);
+        $homeURL = parse_url(Http::$site_config['my_domain']);
         $args['local'] = $homeURL['host'] == $infoURL['host'] or 'localhost' == $infoURL['host'];
         unset($homeURL);
 
         // If Stream but no file, default is a file in temp dir with base $url name
         if ($args['stream'] and empty($args['filename'])) {
-            $args['filename'] = $this->tmp_dir . '/' . basename($url);
+            $args['filename'] = Http::$tmp_dir . '/' . basename($url);
         }
 
         // Check if streaming a file
         if ($args['stream']) {
             $args['blocking'] = true;
-            if (! @is_writable(dirname($args['filename']))) {
+            if (!@is_writable(dirname($args['filename']))) {
                 $this->set_error(3);
                 return false;
             }
@@ -160,7 +162,7 @@ class Http
             $args['headers'] = array();
         }
 
-        if (! is_array($args['headers'])) {
+        if (!is_array($args['headers'])) {
             $processedHeaders = Http::processHeaders($args['headers'], $url);
             $args['headers'] = $processedHeaders['headers'];
         }
@@ -185,7 +187,7 @@ class Http
             unset($args['headers']['referer']);
         }
 
-        if ($args['httpversion'] == '1.1' and ! isset($args['headers']['connection'])) {
+        if ($args['httpversion'] == '1.1' and !isset($args['headers']['connection'])) {
             $args['headers']['connection'] = 'close';
         }
 
@@ -193,18 +195,18 @@ class Http
 
         Http::mbstring_binary_safe_encoding();
 
-        if (! isset($args['headers']['Accept-Encoding'])) {
+        if (!isset($args['headers']['Accept-Encoding'])) {
             if ($encoding = Encoding::accept_encoding($url, $args)) {
                 $args['headers']['Accept-Encoding'] = $encoding;
             }
         }
 
-        if ((! is_null($args['body']) and '' != $args['body']) or $args['method'] == 'POST' or $args['method'] == 'PUT') {
+        if ((!is_null($args['body']) and '' != $args['body']) or $args['method'] == 'POST' or $args['method'] == 'PUT') {
             if (is_array($args['body']) or is_object($args['body'])) {
                 $args['body'] = http_build_query($args['body'], null, '&');
 
-                if (! isset($args['headers']['Content-Type'])) {
-                    $args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . $this->site_config['site_charset'];
+                if (!isset($args['headers']['Content-Type'])) {
+                    $args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . Http::$site_config['site_charset'];
                 }
             }
 
@@ -212,7 +214,7 @@ class Http
                 $args['body'] = null;
             }
 
-            if (! isset($args['headers']['Content-Length']) and ! isset($args['headers']['content-length'])) {
+            if (!isset($args['headers']['Content-Length']) and !isset($args['headers']['content-length'])) {
                 $args['headers']['Content-Length'] = strlen($args['body']);
             }
         }
@@ -226,7 +228,7 @@ class Http
         }
 
         // Append cookies that were used in this request to the response
-        if (! empty($args['cookies'])) {
+        if (!empty($args['cookies'])) {
             $cookies_set = array();
             foreach ($response['cookies'] as $key => $value) {
                 if (is_object($value)) {
@@ -237,7 +239,7 @@ class Http
             }
 
             foreach ($args['cookies'] as $cookie) {
-                if (! in_array($cookie->name, $cookies_set) and $cookie->test($url)) {
+                if (!in_array($cookie->name, $cookies_set) and $cookie->test($url)) {
                     $response['cookies'][] = $cookie;
                 }
             }
@@ -253,7 +255,7 @@ class Http
      */
     private function get_Env($key)
     {
-        if (! is_array($key)) {
+        if (!is_array($key)) {
             $key = array( $key );
         }
 
@@ -326,7 +328,7 @@ class Http
 
         $class = $this->_get_first_available_transport($args, $url);
 
-        if (! $class) {
+        if (!$class) {
             $this->set_error(4);
             return false;
         }
@@ -359,7 +361,7 @@ class Http
             return;
         }
 
-        if (! $reset) {
+        if (!$reset) {
             $encoding = mb_internal_encoding();
             array_push($encodings, $encoding);
             mb_internal_encoding('ISO-8859-1');
@@ -390,7 +392,7 @@ class Http
     public static function handle_redirects($url, $args, $response)
     {
         // If no redirects are present, or, redirects were not requested, perform no action.
-        if (! isset($response['headers']['location']) or $args['redirection'] === 0) {
+        if (!isset($response['headers']['location']) or $args['redirection'] === 0) {
             return false;
         }
 
@@ -416,13 +418,13 @@ class Http
 
         // POST requests should not POST to a redirected location
         if ($args['method'] == 'POST') {
-            if (in_array($response['response']['code'], array( 302, 303 ))) {
+            if (in_array($response['response']['code'], array(302, 303))) {
                 $args['method'] = 'GET';
             }
         }
 
         // Include valid cookies in the redirect process
-        if (! empty($response['cookies'])) {
+        if (!empty($response['cookies'])) {
             foreach ($response['cookies'] as $cookie) {
                 if ($cookie->test($redirect_location)) {
                     $args['cookies'][] = $cookie;
@@ -430,7 +432,8 @@ class Http
             }
         }
 
-        return Http::request($redirect_location, $args);
+        $http = new Http(array(), null);
+        return $http->request($redirect_location, $args);
     }
 
     /**
@@ -450,11 +453,11 @@ class Http
             return $maybe_relative_path;
         }
 
-        if (! $url_parts = @parse_url($url)) {
+        if (!$url_parts = @parse_url($url)) {
             return $maybe_relative_path;
         }
 
-        if (! $relative_url_parts = @parse_url($maybe_relative_path)) {
+        if (!$relative_url_parts = @parse_url($maybe_relative_path)) {
             return $maybe_relative_path;
         }
 
@@ -465,14 +468,14 @@ class Http
         }
 
         // Start off with the Absolute URL path
-        $path = ! empty($url_parts['path']) ? $url_parts['path'] : '/';
+        $path = !empty($url_parts['path']) ? $url_parts['path'] : '/';
 
         // If it's a root-relative path, then great
-        if (! empty($relative_url_parts['path']) and $relative_url_parts['path'][0] == '/') {
+        if (!empty($relative_url_parts['path']) and $relative_url_parts['path'][0] == '/') {
             $path = $relative_url_parts['path'];
         }
         // Else it's a relative path
-        elseif (! empty($relative_url_parts['path'])) {
+        elseif (!empty($relative_url_parts['path'])) {
             // Strip off any file components from the absolute path
             $path = substr($path, 0, strrpos($path, '/') + 1);
 
@@ -489,7 +492,7 @@ class Http
         }
 
         // Add the Query string
-        if (! empty($relative_url_parts['query'])) {
+        if (!empty($relative_url_parts['query'])) {
             $path .= '?' . $relative_url_parts['query'];
         }
 
@@ -527,14 +530,14 @@ class Http
      */
     public function _get_first_available_transport($args, $url = null)
     {
-        $request_order = array( 'Curl', 'Streams' );
+        $request_order = array('Curl', 'Streams');
 
         // Loop over each transport on each HTTP request looking for one which will serve this request's needs
         foreach ($request_order as $transport) {
             $class = 'NukeViet\\Http\\' . $transport;
 
             // Check to see if this transport is a possibility, calls the transport statically
-            if (! call_user_func(array( $class, 'test' ), $args, $url)) {
+            if (!call_user_func(array( $class, 'test' ), $args, $url)) {
                 continue;
             }
 
@@ -554,7 +557,7 @@ class Http
     {
         if (is_object($args)) {
             $args = get_object_vars($args);
-        } elseif (! is_array($args)) {
+        } elseif (!is_array($args)) {
             $args = $this->parse_str($args);
         }
 
@@ -596,7 +599,7 @@ class Http
         // If a redirection has taken place, The headers for each page request may have been passed.
         // In this case, determine the final HTTP header and parse from there.
         for ($i = sizeof($headers) - 1; $i >= 0; $i --) {
-            if (! empty($headers[$i]) and strpos($headers[$i], ':') === false) {
+            if (!empty($headers[$i]) and strpos($headers[$i], ':') === false) {
                 $headers = array_splice($headers, $i);
                 break;
             }
@@ -622,7 +625,7 @@ class Http
             $value = trim($value);
 
             if (isset($newheaders[$key])) {
-                if (! is_array($newheaders[$key])) {
+                if (!is_array($newheaders[$key])) {
                     $newheaders[$key] = array( $newheaders[$key] );
                 }
 
@@ -650,10 +653,10 @@ class Http
      */
     public static function buildCookieHeader(&$args)
     {
-        if (! empty($args['cookies'])) {
+        if (!empty($args['cookies'])) {
             // Upgrade any name => value cookie pairs to NukeViet\Http\Cookie instances
             foreach ($args['cookies'] as $name => $value) {
-                if (! is_object($value)) {
+                if (!is_object($value)) {
                     $args['cookies'][$name] = new Cookie(array( 'name' => $name, 'value' => $value ));
                 }
             }

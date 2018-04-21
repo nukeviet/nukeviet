@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 31, 2015, 09:30:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 31, 2015, 09:30:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -74,6 +74,8 @@ $lang_module['perpagecomm'] = 'Nombre de commentaires affichés sur une page';
 $lang_module['perpagecomm_note'] = 'Entrez au moins 1 et pas plus de 100';
 $lang_module['timeoutcomm'] = 'Temps (s) minimum entre chaque poste commentaire';
 $lang_module['timeoutcomm_note'] = 'Entrez 0 pour un nombre illimité. Remarque devrait permettre captcha si choisir cette valeur est 0, la valeur est pas applicable pour l\'administrateur';
+$lang_module['allowattachcomm'] = 'Active les pièces jointes';
+$lang_module['alloweditorcomm'] = 'Autorise l\'éditeur';
 $lang_module['adminscomm'] = 'Admin gère les commentaires';
 $lang_module['view_comm'] = 'Ceux qui ont le droit de regarder les commentaires';
 $lang_module['allowed_comm'] = 'Ceux qui ont le droit d\'écrire les commentaires';
@@ -90,3 +92,7 @@ $lang_module['captcha_2'] = 'On n\'est pas le responsable des commentaires';
 $lang_module['captcha_3'] = 'Présente dans tous les cas';
 $lang_module['siteinfo_queue_comments'] = 'Le nombre de commentaire en liste d\'attente d\'être vérifié';
 $lang_module['notification_comment_queue'] = 'Commentaire messages de modération par %s<br /><em>%s</em>';
+$lang_module['attach'] = 'Joindre un fichier';
+$lang_module['attach_choose'] = 'Sélectionnez';
+$lang_module['attach_view'] = 'Accès';
+$lang_module['attach_download'] = 'Télécharger les pièces jointes';

@@ -6,6 +6,18 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+$(function() {
+    $('[data-toggle="collapsepdf"]').each(function() {
+        $('#' + $(this).attr('id')).on('shown.bs.collapse', function() {
+            $(this).find('iframe').attr('src', $(this).data('src'));
+        });
+    });
+    $('[data-toggle="newsattachimage"]').click(function(e) {
+        e.preventDefault();
+        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width:auto;"/></div>');
+    });
+});
+
 function sendrating(id, point, newscheckss) {
     if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
         $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
@@ -69,7 +81,7 @@ function fix_news_image(){
                 w = $(this).data('width');
                 h = $(this).data('height');
             }
-            
+
             if( w > newsW ){
                 $(this).prop('width', newsW);
                 $(this).prop('height', h * newsW / w);

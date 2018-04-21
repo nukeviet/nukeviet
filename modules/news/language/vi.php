@@ -90,6 +90,7 @@ $lang_module['search_modul_title'] = 'Tin tức';
 $lang_module['type_title'] = 'Lựa chọn kiểu tìm kiếm';
 $lang_module['finter_title'] = 'Thời gian';
 $lang_module['source_title'] = 'Nguồn tin';
+$lang_module['tags'] = 'Tags';
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['no_permission'] = 'Bạn không được phép xem bài viết';
 $lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
@@ -154,4 +155,8 @@ $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
 
 $lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
+$lang_module['click_to_download'] = 'Nhấn vào để tải file.';
+$lang_module['files'] = 'File đính kèm';
 $lang_module['default_layout'] = 'Mặc định';
+$lang_module['download'] = 'Tập tin';
+$lang_module['quick_view_pdf'] = 'Xem trước';

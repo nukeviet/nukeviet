@@ -170,7 +170,7 @@ if (!empty($mod_name)) {
     }
 
     // Thao luan mac dinh khi tao bai viet moi
-    while (list($i, $title_i) = each($captcha_array)) {
+    foreach ($captcha_array as $i => $title_i) {
         $xtpl->assign('OPTION', array(
             'key' => $i,
             'title' => $title_i,

@@ -33,7 +33,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
     $error = $lang_module['uploadError1'];
 } elseif (!isset($_FILES) and !nv_is_url($nv_Request->get_string('fileurl', 'post,get'))) {
     $error = $lang_module['uploadError2'];
-} elseif (isset($_FILES['upload']) and $global_config['upload_chunk_size'] > 0 and (empty($chunk_upload['name']) or empty($_FILES['upload']['name']) or ($chunk_upload['name'] != $_FILES['upload']['name'] and $_FILES['upload']['name'] != 'blob') or $chunk_upload['chunks'] < 1 or $chunk_upload['chunk'] >= $chunk_upload['chunks'])) {
+} elseif (isset($_FILES['upload']) and $global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 1 and (empty($chunk_upload['name']) or empty($_FILES['upload']['name']) or ($chunk_upload['name'] != $_FILES['upload']['name'] and $_FILES['upload']['name'] != 'blob') or $chunk_upload['chunk'] >= $chunk_upload['chunks'])) {
     $error = $lang_module['uploadError3'];
 } else {
     $type = $nv_Request->get_string('type', 'post,get');

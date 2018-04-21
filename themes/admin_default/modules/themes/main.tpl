@@ -1,62 +1,75 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
 <!-- BEGIN: error -->
 <div id="edit">&nbsp;</div>
 <div class="alert alert-danger"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></div>
 <!-- END: error -->
-<div class="table-responsive">
-	<table class="table table-striped table-bordered">
-		<tbody>
-		<tr>
-			<!-- BEGIN: loop -->
-			<!-- BEGIN: active -->
-			<td style="padding-left:50px;width:50%;background-color:#FFDBB7">
-			<!-- END: active -->
-			<!-- BEGIN: deactive -->
-			<td style="padding-left:50px;width:50%">
-			<!-- END: deactive -->
-			<p>
-				<strong>{ROW.name}</strong> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><strong>{ROW.author}</strong></a>
-			</p>
-			<p>
-				<a href="#" title="{ROW.name}"><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px" onclick="modalShow(modal_title_{ROW.value}, modal_body_{ROW.value});"/></a>
-			</p>
-			<p style="font-size:13px;margin-top:10px;font-weight:bold">
-				<!-- BEGIN: link_setting -->
-				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_setting}</a>
-				<!-- END: link_setting -->
-				<!-- BEGIN: link_active -->
-				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a>
-				<!-- END: link_active -->
-				<!-- BEGIN: link_delete -->
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_delete}</a>
-				<!-- END: link_delete -->
-			<p style="font-size:13px">
-				{ROW.description}
-			</p>
-			<p style="font-size:13px;margin-top:10px">
-				{LANG.theme_created_folder} <span style="background-color:#E5F4FD">/themes/{ROW.value}/</span>
-			</p>
-			<p style="font-size:13px;margin-top:20px">
-				{LANG.theme_created_position} {POSITION}
-			</p>
-			<!-- BEGIN: endtr -->
-			</td>
-		</tr>
-		<tr>
-			<!-- END: endtr -->
-			<!-- BEGIN: endtd -->
-			</td>
-			<!-- END: endtd -->
-			<script>
-				var modal_title_{ROW.value} = '<strong>{ROW.name}</strong><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
-				var modal_body_{ROW.value} = '<img src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" alt="" class="center-block img-responsive" />';
-			</script>
-			<!-- END: loop -->
-		</tr>
-	</tbody>
-	</table>
+<div class="row">
+    <!-- BEGIN: loop -->
+    <div class="col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+            <div class="nv-themelist{THEME_ACTIVE}">
+                <div class="themelistthumb">
+                    <img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}"/>
+                    <!-- BEGIN: actions -->
+                    <div class="actions">
+                        <div class="ctn">
+                            <!-- BEGIN: link_setting -->
+                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-fw fa-sun-o"></i>{LANG.theme_created_setting}</a>
+                            <!-- END: link_setting -->
+                            <!-- BEGIN: link_active -->
+                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-sun-o fa-fw"></i>{LANG.theme_created_activate}</a>
+                            <!-- END: link_active -->
+                            <!-- BEGIN: link_delete -->
+                            <a href="javascript:void(0);" class="btn btn-default btn-block delete ellipsis" title="{ROW.value}"><i class="fa fa-trash-o fa-fw"></i>{LANG.theme_delete}</a>
+                            <!-- END: link_delete -->
+                        </div>
+                    </div>
+                    <!-- END: actions -->
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-14">
+                            <h3 class="ellipsis"><span>{ROW.name}</span></h3>
+                        </div>
+                        <div class="col-xs-10">
+                            <a href="#" data-toggle="viewthemedetail" data-target="#theme-detail-{ROW.value}" class="btn btn-sm btn-small btn-{BTN_ACTIVE} pull-right themedetail">{GLANG.detail}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="theme-detail-{ROW.value}" class="hidden" title="{GLANG.detail}">
+                <div class="nv-theme-detail">
+                    <!-- BEGIN: preview -->
+                    <div class="form-group clearfix">
+                        <div class="pull-right">
+                            <a href="#" class="btn btn-primary" data-toggle="previewtheme" data-value="{ROW.value}"><i class="fa fa-fw fa-spinner fa-spin hidden"></i><span>{TEXT_PREVIEW}</span></a>
+                        </div>
+                        <label class="preview-label"{SHOW_PREVIEW2}>{LANG.preview_theme_link}:</label>
+                    </div>
+                    <div class="preview-link form-group{SHOW_PREVIEW1}">
+                        <div class="input-group">
+                            <input type="text" class="form-control selectedfocus" value="{LINK_PREVIEW}"/>
+                            <div class="input-group-btn">
+                                <a href="javascript:void(0);" class="btn btn-default preview-link-btn" data-clipboard-text="{LINK_PREVIEW}" data-title="{LANG.preview_theme_link_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="0"><i class="fa fa-copy"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: preview -->
+                    <div class="dthumb">
+                        <img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}"/>
+                    </div>
+                    <h1>{ROW.name}</h1>
+                    <p class="author">{LANG.theme_created_by}: <a href="{ROW.website}" title="{LANG.theme_created_website}" target="_blank"><strong>{ROW.author}</strong></a></p>
+                    <p class="tinfo">{ROW.description}</p>
+                    <p class="tdir">{LANG.theme_created_folder} <code>/themes/{ROW.value}/</code></p>
+                    <p class="tpos">{LANG.theme_created_position} <code>{POSITION}</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: loop -->
 </div>
-
 <script type="text/javascript">
 //<![CDATA[
 LANG.theme_delete_confirm = '{LANG.theme_delete_confirm}';

@@ -16,7 +16,10 @@ $_mod_table = ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['pre
 $access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 
-$allow_func = array('main', 'getuserid');
+$allow_func = array(
+    'main',
+    'getuserid'
+);
 $level = $admin_info['level'];
 if (isset($access_admin['access_addus'][$level]) and $access_admin['access_addus'][$level] == 1) {
     $submenu['user_add'] = $lang_module['user_add'];
@@ -47,14 +50,16 @@ if ($module_data == 'users' and isset($admin_mods['authors'])) {
     $allow_func[] = 'authors';
 }
 
-if (defined('NV_IS_SPADMIN') and empty($global_config['idsite'])) {
-    $submenu['question'] = $lang_module['question'];
-    $submenu['siteterms'] = $lang_module['siteterms'];
-    $allow_func[] = 'question';
-    $allow_func[] = 'siteterms';
-    if (defined('NV_IS_GODADMIN')) {
-        $submenu['fields'] = $lang_module['fields'];
-        $allow_func[] = 'fields';
+if (defined('NV_IS_SPADMIN')) {
+    if (empty($global_config['idsite'])) {
+        $submenu['question'] = $lang_module['question'];
+        $submenu['siteterms'] = $lang_module['siteterms'];
+        $allow_func[] = 'question';
+        $allow_func[] = 'siteterms';
+        if (defined('NV_IS_GODADMIN')) {
+            $submenu['fields'] = $lang_module['fields'];
+            $allow_func[] = 'fields';
+        }
     }
     $submenu['config'] = $lang_module['config'];
     $allow_func[] = 'config';

@@ -140,3 +140,8 @@ $lang_module['show_device_1'] = 'Show all device';
 $lang_module['show_device_2'] = 'Show in mobile';
 $lang_module['show_device_3'] = 'Show in tablet';
 $lang_module['show_device_4'] = 'Show other device';
+
+$lang_module['preview_theme_on'] = 'Enable preview';
+$lang_module['preview_theme_off'] = 'Disable preview';
+$lang_module['preview_theme_link'] = 'Preview link';
+$lang_module['preview_theme_link_copied'] = 'The link has been copied to the clipboard';

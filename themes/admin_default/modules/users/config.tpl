@@ -146,17 +146,19 @@
                     <td><input name="is_user_forum" value="1" type="checkbox"{DATA.is_user_forum} /></td>
                 </tr>
                 <!-- END: user_forum -->
+                <!-- BEGIN: dir_forum -->
                 <tr>
                     <td>{LANG.dir_forum}</td>
                     <td>
                         <select class="form-control w200" name="dir_forum">
                             <option value="">&nbsp;</option>
-                            <!-- BEGIN: dir_forum -->
+                            <!-- BEGIN: loop -->
                             <option value="{DIR_FORUM.id}"{DIR_FORUM.select}> {DIR_FORUM.value}</option>
-                            <!-- END: dir_forum -->
+                            <!-- END: loop -->
                         </select>
                     </td>
                 </tr>
+                <!-- END: dir_forum -->
                 <tr>
                     <td>{LANG.whoviewlistuser}</td>
                     <td>

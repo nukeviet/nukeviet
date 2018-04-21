@@ -566,7 +566,7 @@ function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array()
     $_groups = array();
     $_2step_require = false;
 
-    if (!empty($in_groups)) {
+    if (!empty($in_groups) or !empty($manual_groups)) {
         $query = 'SELECT group_id, title, require_2step_admin, require_2step_site, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
         $list = $nv_Cache->db($query, '', 'users');
         if (!empty($list)) {
@@ -1460,11 +1460,11 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
         return false;
     }
 
-    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
+    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
         return false;
     }
 

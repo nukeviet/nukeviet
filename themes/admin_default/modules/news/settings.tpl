@@ -115,14 +115,6 @@
 					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.facebookAppIDNote}</span></td>
 				</tr>
 				<tr>
-					<th>{LANG.setting_alias_lower}</th>
-					<td><input type="checkbox" value="1" name="alias_lower"{ALIAS_LOWER}/></td>
-				</tr>
-				<tr>
-					<th>{LANG.tags_alias}</th>
-					<td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
-				</tr>
-				<tr>
 					<th>{LANG.structure_image_upload}</th>
 					<td>
 					<select class="form-control" name="structure_upload" id="structure_upload">
@@ -141,6 +133,14 @@
 						</select>
 					</td>
 				</tr>
+                <tr>
+                    <th>{LANG.setting_alias_lower}</th>
+                    <td><input type="checkbox" value="1" name="alias_lower"{ALIAS_LOWER}/></td>
+                </tr>
+                <tr>
+                    <th>{LANG.tags_alias}</th>
+                    <td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
+                </tr>                
 				<tr>
 					<th>{LANG.setting_auto_tags}</th>
 					<td><input type="checkbox" value="1" name="auto_tags"{AUTO_TAGS}/></td>
@@ -149,6 +149,10 @@
 					<th>{LANG.setting_tags_remind}</th>
 					<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
 				</tr>
+                <tr>
+                    <th>{LANG.setting_keywords_tag}</th>
+                    <td><input type="checkbox" value="1" name="keywords_tag"{KEYWORDS_TAG}/></td>
+                </tr>                
 				<tr>
 					<th>{LANG.setting_copy_news}</th>
 					<td><input type="checkbox" value="1" name="copy_news"{COPY_NEWS}/></td>

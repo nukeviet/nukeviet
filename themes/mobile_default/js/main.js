@@ -67,12 +67,12 @@ function contentScrt() {
     winHelp && winHelpHide();
     scrt = $(window).scrollTop();
     scrtRangeY = scrt - oldScrt;
-    
+
     0 >= scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-refresh", !0) : $(".bttop").find("em").removeClass("fa-refresh").toggleClass("fa-chevron-up", !0)
-    
+
     if(Math.abs(scrtRangeY) <= scrtRangeOffset)
         return;
-        
+
     if (scrt > oldScrt && scrt > headerH){
         $('header.first-child').removeClass('header-down').addClass('header-up');
     } else {
@@ -85,7 +85,7 @@ function contentScrt() {
     } else {
         $('#footer').removeClass('footer-up').addClass('footer-down');
     }
-    
+
     oldScrt = scrt;
 }
 
@@ -169,10 +169,10 @@ function tipShow(a, b, callback) {
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
                     var btn = false, pnum = 0, btnselector = '';
-                    
+
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-                    
+
                     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
                         ele = nv_recaptcha_elements[i];
                         if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
@@ -221,10 +221,10 @@ function ftipShow(a, b, callback) {
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
                     var btn = false, pnum = 0, btnselector = '';
-                    
+
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-                    
+
                     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
                         ele = nv_recaptcha_elements[i];
                         if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
@@ -291,7 +291,7 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(q).on('load', function() {
+    $(b).on('load', function() {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
@@ -341,10 +341,10 @@ function modalShow(a, b, callback) {
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
                     var btn = false, pnum = 0, btnselector = '';
-                    
+
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-                    
+
                     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
                         ele = nv_recaptcha_elements[i];
                         if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
@@ -656,7 +656,7 @@ $(window).on('load', function() {
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }());
-    
+
     0 < $(".twitter-share-button").length && function() {
         var a = document.createElement("script");
         a.type = "text/javascript";

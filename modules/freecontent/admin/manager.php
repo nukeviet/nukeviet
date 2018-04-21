@@ -186,19 +186,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
         );
     }
 
-    if (! empty($data['link'])) {
-        if (! preg_match("/\:\/\//i", $data['link'])) {
-            $data['link'] = 'http://' . $data['link'];
-        }
-
-        if (! nv_is_url($data['link'])) {
-            $error[] = array(
-                'name' => 'link',
-                'value' => $lang_module['content_link_error']
-            );
-        }
-    }
-
     // Prosess image
     if (is_file(NV_DOCUMENT_ROOT . $data['image'])) {
         $data['image'] = substr($data['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));

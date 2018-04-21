@@ -15,7 +15,8 @@ if (!defined('NV_MAINFILE')) {
 $global_code_defined = array(
     'cat_visible_status' => array(1, 2),
     'cat_locked_status' => 10,
-    'row_locked_status' => 20
+    'row_locked_status' => 20,
+    'edit_timeout' => 180
 );
 
 $order_articles = $module_config[$module_name]['order_articles'];
