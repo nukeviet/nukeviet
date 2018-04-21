@@ -59,6 +59,20 @@ class Language
     }
 
     /**
+     * Language::changeLang()
+     *
+     * @param mixed $lang
+     * @return void
+     */
+    public function changeLang($lang)
+    {
+        $this->lang = $lang;
+        $this->tmplang_global = array();
+        $this->tmplang_module = array();
+        $this->tmplang_block = array();
+    }
+
+    /**
      * Language::loadModule()
      *
      * @param mixed $modfile
