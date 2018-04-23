@@ -1,4 +1,4 @@
-      <div class="ms-hero-page-override ms-hero-img-keyboard ms-hero-bg-primary mb-6">
+<div class="ms-hero-page-override ms-hero-img-keyboard ms-hero-bg-primary mb-6">
         <div class="container">
           <div class="text-center">
             <span class="ms-logo ms-logo-lg ms-logo-white center-block mb-2 mt-2 animated zoomInDown animation-delay-5">M</span>

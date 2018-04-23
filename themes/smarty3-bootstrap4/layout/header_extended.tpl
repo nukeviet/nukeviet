@@ -157,16 +157,27 @@
   <!--ms-header-primary-->
  
   <div class="container container-full ">
+    <div class="row">
           <div class="col-md-4">
-              [HEAD_RIGHT]
+            [HEAD_RIGHT]
+          </div>
+            
+          <div class="col-md-8">
+            
+                  [RIGHT1]
+              
             </div>
             
-            <div class="col-md-8">
-              [RIGHT1]
-            </div>
+          </div>
+    </div>
   </div>
 </header>
       <!-- end header -->
       <!-- start menu_site -->
+     
       [MENU_SITE]
+      </div>
       <!-- end menu_site -->
+      
+        [RIGHT2]
+      
