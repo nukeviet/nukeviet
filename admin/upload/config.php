@@ -13,15 +13,15 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 $array_logo_position = array(
-    'bottomRight' => $lang_module['logoposbottomright'],
-    'bottomLeft' => $lang_module['logoposbottomleft'],
-    'bottomCenter' => $lang_module['logoposbottomcenter'],
-    'centerRight' => $lang_module['logoposcenterright'],
-    'centerLeft' => $lang_module['logoposcenterleft'],
-    'centerCenter' => $lang_module['logoposcentercenter'],
-    'topRight' => $lang_module['logopostopright'],
-    'topLeft' => $lang_module['logopostopleft'],
-    'topCenter' => $lang_module['logopostopcenter']
+    'bottomRight' => $nv_Lang->getModule('logoposbottomright'),
+    'bottomLeft' => $nv_Lang->getModule('logoposbottomleft'),
+    'bottomCenter' => $nv_Lang->getModule('logoposbottomcenter'),
+    'centerRight' => $nv_Lang->getModule('logoposcenterright'),
+    'centerLeft' => $nv_Lang->getModule('logoposcenterleft'),
+    'centerCenter' => $nv_Lang->getModule('logoposcentercenter'),
+    'topRight' => $nv_Lang->getModule('logopostopright'),
+    'topLeft' => $nv_Lang->getModule('logopostopleft'),
+    'topCenter' => $nv_Lang->getModule('logopostopcenter')
 );
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-$page_title = $lang_module['configlogo'];
+$page_title = $nv_Lang->getModule('configlogo');
 
 if (! empty($global_config['upload_logo']) and ! nv_is_url($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
     $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
@@ -88,7 +88,7 @@ $xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('OP', $op);
 $xtpl->assign('AUTOLOGOSIZE', $array_autologosize);
 
@@ -118,7 +118,7 @@ foreach ($site_mods as $mod => $value) {
 $a++;
 $xtpl->assign('MOD_VALUE', 'all');
 $xtpl->assign('LEV_CHECKED', ($global_config['autologomod'] == 'all') ? 'checked="checked"' : '');
-$xtpl->assign('CUSTOM_TITLE', '<strong>' . $lang_module['autologomodall'] . '</strong>');
+$xtpl->assign('CUSTOM_TITLE', '<strong>' . $nv_Lang->getModule('autologomodall') . '</strong>');
 
 $xtpl->parse('main.loop1.loop2');
 $xtpl->parse('main.loop1');

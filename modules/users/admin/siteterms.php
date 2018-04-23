@@ -16,7 +16,7 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
 }
 
-$page_title = $lang_module['siteterms'];
+$page_title = $nv_Lang->getModule('siteterms');
 
 $error = $content = '';
 
@@ -33,7 +33,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $content = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
 
     if (empty($content)) {
-        $error = $lang_module['error_content'];
+        $error = $nv_Lang->getModule('error_content');
     } else {
         if ($mode == 'edit') {
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET
@@ -50,9 +50,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
         $stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
         if ($stmt->execute()) {
-            $error = $lang_module['saveok'];
+            $error = $nv_Lang->getModule('saveok');
         } else {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     }
 }
@@ -60,8 +60,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 $content = htmlspecialchars(nv_editor_br2nl($content));
 
 $xtpl = new XTemplate('siteterms.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 if (! empty($error)) {

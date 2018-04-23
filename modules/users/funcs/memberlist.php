@@ -14,7 +14,7 @@ if (! defined('NV_IS_MOD_USER')) {
 
 $page_title = $module_info['funcs'][$op]['func_site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['listusers'];
+$mod_title = $nv_Lang->getModule('listusers');
 
 if (!nv_user_in_groups($global_config['whoviewuser'])) {
     header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
@@ -24,7 +24,7 @@ if (!nv_user_in_groups($global_config['whoviewuser'])) {
 // Them vao tieu de
 $array_mod_title[] = array(
     'catid' => 0,
-    'title' => $lang_module['listusers'],
+    'title' => $nv_Lang->getModule('listusers'),
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op
 );
 
@@ -169,7 +169,7 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
 
         $item['regdate'] = nv_date('d/m/Y', $item['regdate']);
         $item['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=memberlist/' . change_alias($item['username']) . '-' . $item['md5username'];
-        $item['gender'] = ($item['gender'] == 'M') ? $lang_module['male'] : ($item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na']);
+        $item['gender'] = ($item['gender'] == 'M') ? $nv_Lang->getModule('male') : ($item['gender'] == 'F' ? $nv_Lang->getModule('female') : $nv_Lang->getModule('na'));
 
         $users_array[$item['userid']] = $item;
     }
@@ -182,12 +182,12 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
 
     // Them vao tieu de trang
     if (! empty($orderby)) {
-        $page_title .= ' ' . sprintf($lang_module['listusers_sort_by'], $lang_module['listusers_sort_by_' . $orderby], $lang_module['listusers_order_' . $sortby]);
+        $page_title .= ' ' . sprintf($nv_Lang->getModule('listusers_sort_by'), $lang_module['listusers_sort_by_' . $orderby], $lang_module['listusers_order_' . $sortby]);
     }
 
     // Tieu de khi phan trang
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . sprintf($lang_module['page'], ceil($page / $per_page));
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . sprintf($nv_Lang->getModule('page'), ceil($page / $per_page));
     }
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);

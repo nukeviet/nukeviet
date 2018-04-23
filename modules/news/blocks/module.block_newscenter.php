@@ -26,55 +26,55 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         global $nv_Cache, $site_mods;
 
         $tooltip_position = array(
-            'top' => $lang_block['tooltip_position_top'],
-            'bottom' => $lang_block['tooltip_position_bottom'],
-            'left' => $lang_block['tooltip_position_left'],
-            'right' => $lang_block['tooltip_position_right']
+            'top' => $nv_Lang->getBlock('tooltip_position_top'),
+            'bottom' => $nv_Lang->getBlock('tooltip_position_bottom'),
+            'left' => $nv_Lang->getBlock('tooltip_position_left'),
+            'right' => $nv_Lang->getBlock('tooltip_position_right')
         );
 
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('numrow') . ':</label>';
         $html .= '	  <div class="col-sm-18"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/>';
         $html .= '  </div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['width'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('width') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '      <input type="width" name="config_width" class="form-control" value="' . $data_block['width'] . '"/>';
         $html .= '  </div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['height'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('height') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '    <input type="height" name="config_height" class="form-control" value="' . $data_block['height'] . '"/>';
         $html .= '  </div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['length_title'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('length_title') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '    <input type="text" class="form-control" name="config_length_title" value="' . $data_block['length_title'] . '"/>';
         $html .= '  </div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['length_hometext'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('length_hometext') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '	  <input type="text" class="form-control" name="config_length_hometext" value="' . $data_block['length_hometext'] . '"/>';
         $html .= '  </div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['length_othertitle'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('length_othertitle') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '	  <input type="text" class="form-control" name="config_length_othertitle" value="' . $data_block['length_othertitle'] . '"/>';
         $html .= '  </div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('showtooltip') . ':</label>';
         $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-4">';
@@ -83,7 +83,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group margin-bottom-sm">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getBlock('tooltip_position') . '</div>';
         $html .= '<select name="config_tooltip_position" class="form-control">';
 
         foreach ($tooltip_position as $key => $value) {
@@ -95,7 +95,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getBlock('tooltip_length') . '</div>';
         $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';
@@ -105,7 +105,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['nocatid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('nocatid') . ':</label>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
         $html .= '<div class="col-sm-18">';
@@ -162,7 +162,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
      */
     function nv_news_block_newscenter($block_config)
     {
-        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
+        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $db, $module_config, $module_info, $nv_Lang;
         $order_articles_by = ($module_config[$module_name]['order_articles']) ? 'weight' : 'publtime';
 
         $db->sqlreset()
@@ -179,7 +179,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $list = $nv_Cache->db($db->sql(), 'id', $module_name);
         if (!empty($list)) {
             $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-            $xtpl->assign('lang', $lang_module);
+            $xtpl->assign('lang', \NukeViet\Core\Language::$lang_module);
             $xtpl->assign('TEMPLATE', $module_info['template']);
 
             $_first = true;

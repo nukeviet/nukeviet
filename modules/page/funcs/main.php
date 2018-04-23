@@ -101,7 +101,7 @@ if ($page_config['viewtype'] == 2) {
     // Xem theo danh sách
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
-    $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+    $mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
     $per_page = $page_config['per_page'];
 
     $array_data = array();
@@ -126,7 +126,7 @@ if ($page_config['viewtype'] == 2) {
     $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_page_main_list($array_data, $generate_page);

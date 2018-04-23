@@ -17,7 +17,7 @@ $modname = $nv_Request->get_title('mod', 'post');
 $sample = $nv_Request->get_int('sample', 'post', 0);
 
 if (! empty($modname) and preg_match($global_config['check_module'], $modname)) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['recreate'] . ' module "' . $modname . '"', '', $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('recreate') . ' module "' . $modname . '"', '', $admin_info['userid']);
     $contents = nv_setup_data_module(NV_LANG_DATA, $modname, $sample);
 }
 

@@ -22,10 +22,10 @@ if (! defined('NV_IS_MOD_NEWS')) {
  */
 function viewcat_grid_new($array_catpage, $catid, $generate_page)
 {
-    global $site_mods, $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
+    global $site_mods, $module_name, $module_upload, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page, $nv_Lang;
 
     $xtpl = new XTemplate('viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -126,10 +126,10 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
  */
 function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
-    global $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat;
+    global $module_name, $module_upload, $module_config, $module_info, $global_array_cat, $nv_Lang;
 
     $xtpl = new XTemplate('viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -200,10 +200,10 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
  */
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
-    global $site_mods, $global_array_cat, $module_name, $module_upload, $lang_module, $module_config, $module_info, $catid, $page;
+    global $site_mods, $global_array_cat, $module_name, $module_upload, $module_config, $module_info, $catid, $page, $nv_Lang;
 
     $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -296,7 +296,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $xtpl->parse('main.viewcatloop');
 
     if (! empty($array_cat_other)) {
-        $xtpl->assign('ORTHERNEWS', $lang_module['other']);
+        $xtpl->assign('ORTHERNEWS', $nv_Lang->getModule('other'));
 
         foreach ($array_cat_other as $array_row_i) {
             $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
@@ -335,10 +335,10 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
  */
 function viewcat_top($array_catcontent, $generate_page)
 {
-    global $site_mods, $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global $site_mods, $module_name, $module_upload, $module_config, $module_info, $global_array_cat, $catid, $page, $nv_Lang;
 
     $xtpl = new XTemplate('viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
 
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -410,10 +410,10 @@ function viewcat_top($array_catcontent, $generate_page)
  */
 function viewsubcat_main($viewcat, $array_cat)
 {
-    global $module_name, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
+    global $module_name, $site_mods, $global_array_cat, $module_config, $module_info, $nv_Lang;
 
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
     $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
 
@@ -462,7 +462,7 @@ function viewsubcat_main($viewcat, $array_cat)
                     }
                     if ($limit >= 3) {
                         $more = array(
-                            'title' => $lang_module['more'],
+                            'title' => $nv_Lang->getModule('more'),
                             'link' => $global_array_cat[$catid]['link']
                         );
                         $xtpl->assign('MORE', $more);
@@ -545,10 +545,10 @@ function viewsubcat_main($viewcat, $array_cat)
  */
 function viewcat_two_column($array_content, $array_catpage)
 {
-    global $site_mods, $module_name, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
+    global $site_mods, $module_name, $module_upload, $module_config, $module_info, $global_array_cat, $catid, $page, $nv_Lang;
 
     $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
 
     if ($catid and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -701,13 +701,13 @@ function viewcat_two_column($array_content, $array_catpage)
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $client_info;
+    global $global_config, $module_info, $module_name, $module_config, $client_info, $nv_Lang;
 
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG_GLOBAL', $lang_global);
+    $xtpl->assign('LANG_GLOBAL', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
 
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
@@ -937,11 +937,11 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
  */
 function no_permission()
 {
-    global $module_info, $lang_module;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
-    $xtpl->assign('NO_PERMISSION', $lang_module['no_permission']);
+    $xtpl->assign('NO_PERMISSION', $nv_Lang->getModule('no_permission'));
     $xtpl->parse('no_permission');
     return $xtpl->text('no_permission');
 }
@@ -959,10 +959,10 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $lang_module, $module_info, $module_name, $module_config, $topicid;
+    global $module_info, $module_name, $module_config, $topicid, $nv_Lang;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
     if (! empty($description)) {
@@ -1029,23 +1029,23 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
  */
 function sendmail_themme($sendmail)
 {
-    global $module_info, $global_config, $lang_module, $lang_global;
+    global $module_info, $global_config, $nv_Lang;
 
     $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('SENDMAIL', $sendmail);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
     if ($global_config['gfx_chk'] > 0) {
         if ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
             $xtpl->parse('main.content.recaptcha');
         } else {
             $xtpl->assign('GFX_NUM', NV_GFX_NUM);
-            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+            $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
             $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
             $xtpl->parse('main.content.captcha');
@@ -1075,11 +1075,11 @@ function sendmail_themme($sendmail)
  */
 function news_print($result)
 {
-    global $module_info, $lang_module;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('CONTENT', $result);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     if (! empty($result['image']['width'])) {
         if ($result['image']['position'] == 1) {
@@ -1131,10 +1131,10 @@ function news_print($result)
  */
 function search_theme($key, $check_num, $date_array, $array_cat_search)
 {
-    global $module_name, $module_info, $lang_module, $module_name;
+    global $module_name, $module_info, $module_name, $nv_Lang;
 
     $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -1176,13 +1176,13 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
  */
 function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid)
 {
-    global $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
+    global $module_info, $module_name, $global_array_cat, $module_config, $global_config, $nv_Lang;
 
     $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('KEY', $key);
     $xtpl->assign('IMG_WIDTH', $module_config[$module_name]['homewidth']);
-    $xtpl->assign('TITLE_MOD', $lang_module['search_modul_title']);
+    $xtpl->assign('TITLE_MOD', $nv_Lang->getModule('search_modul_title'));
 
     if (! empty($array_content)) {
         foreach ($array_content as $value) {
@@ -1210,7 +1210,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
 
     if ($numRecord == 0) {
         $xtpl->assign('KEY', $key);
-        $xtpl->assign('INMOD', $lang_module['search_modul_title']);
+        $xtpl->assign('INMOD', $nv_Lang->getModule('search_modul_title'));
         $xtpl->parse('results.noneresult');
     }
 
@@ -1245,10 +1245,10 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
  */
 function nv_theme_viewpdf($file_url)
 {
-    global $lang_module, $lang_global;
+    global $nv_Lang;
     $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');

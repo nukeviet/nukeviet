@@ -65,18 +65,18 @@ if ($id > 0 and $catid > 0) {
                 $message = '';
                 $success = '';
                 if ($global_config['gfx_chk'] > 0 and ! nv_capcha_txt($nv_seccode)) {
-                    $err_name = $lang_global['securitycodeincorrect'];
+                    $err_name = $nv_Lang->getGlobal('securitycodeincorrect');
                 } elseif (empty($name)) {
-                    $err_name = $lang_module['sendmail_err_name'];
+                    $err_name = $nv_Lang->getModule('sendmail_err_name');
                 } elseif (empty($err_email) and empty($err_youremail)) {
-                    $subject = $lang_module['sendmail_subject'] . $name;
-                    $message .= $lang_module['sendmail_welcome'] . ' <strong>' . $global_config['site_name'] . '</strong> ' . $lang_module['sendmail_welcome1'] . '<br /><br />' . $content . '<br /><br />' . $hometext . ' <br/><br /><strong>' . $lang_module['sendmail_welcome2'] . '</strong><br />' . $link;
+                    $subject = $nv_Lang->getModule('sendmail_subject') . $name;
+                    $message .= $nv_Lang->getModule('sendmail_welcome') . ' <strong>' . $global_config['site_name'] . '</strong> ' . $nv_Lang->getModule('sendmail_welcome1') . '<br /><br />' . $content . '<br /><br />' . $hometext . ' <br/><br /><strong>' . $nv_Lang->getModule('sendmail_welcome2') . '</strong><br />' . $link;
                     $from = array( $name, $youremail );
                     $check = nv_sendmail($from, $to_mail, $subject, $message);
                     if ($check) {
-                        $success = $lang_module['sendmail_success'] . '<strong> ' . $to_mail . '</strong>';
+                        $success = $nv_Lang->getModule('sendmail_success') . '<strong> ' . $to_mail . '</strong>';
                     } else {
-                        $err_name = $lang_module['sendmail_success_err'];
+                        $err_name = $nv_Lang->getModule('sendmail_success_err');
                     }
                 }
                 $result = array(

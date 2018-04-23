@@ -25,11 +25,11 @@ if (defined('NV_IS_USER_FORUM')) {
 
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
-    $page_title = $lang_module['register'];
+    $page_title = $nv_Lang->getModule('register');
     $key_words = $module_info['keywords'];
-    $mod_title = $lang_module['register'];
+    $mod_title = $nv_Lang->getModule('register');
 
-    $contents = user_info_exit($lang_module['no_allowuserreg']);
+    $contents = user_info_exit($nv_Lang->getModule('no_allowuserreg'));
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -51,32 +51,32 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
  */
 function nv_check_username_reg($login)
 {
-    global $db, $lang_module, $global_users_config, $global_config;
+    global $db, $global_users_config, $global_config, $nv_Lang;
 
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
     if ("'" . $login . "'" != $db->quote($login)) {
-        return sprintf($lang_module['account_deny_name'], $login);
+        return sprintf($nv_Lang->getModule('account_deny_name'), $login);
     }
 
     if (!empty($global_users_config['deny_name']) and preg_match('/' . $global_users_config['deny_name'] . '/i', $login)) {
-        return sprintf($lang_module['account_deny_name'], $login);
+        return sprintf($nv_Lang->getModule('account_deny_name'), $login);
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE md5username= :md5username');
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['account_registered_name'], $login);
+        return sprintf($nv_Lang->getModule('account_registered_name'), $login);
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE md5username= :md5username');
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['account_registered_name'], $login);
+        return sprintf($nv_Lang->getModule('account_registered_name'), $login);
     }
 
     return '';
@@ -91,7 +91,7 @@ function nv_check_username_reg($login)
  */
 function nv_check_email_reg($email)
 {
-    global $db, $lang_module, $global_users_config;
+    global $db, $global_users_config, $nv_Lang;
 
     $error = nv_check_valid_email($email);
     if ($error != '') {
@@ -99,7 +99,7 @@ function nv_check_email_reg($email)
     }
 
     if (!empty($global_users_config['deny_email']) and preg_match('/' . $global_users_config['deny_email'] . '/i', $email)) {
-        return sprintf($lang_module['email_deny_name'], $email);
+        return sprintf($nv_Lang->getModule('email_deny_name'), $email);
     }
 
     list($left, $right) = explode('@', $email);
@@ -112,21 +112,21 @@ function nv_check_email_reg($email)
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['email_registered_name'], $email);
+        return sprintf($nv_Lang->getModule('email_registered_name'), $email);
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['email_registered_name'], $email);
+        return sprintf($nv_Lang->getModule('email_registered_name'), $email);
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['email_registered_name'], $email);
+        return sprintf($nv_Lang->getModule('email_registered_name'), $email);
     }
 
     return '';
@@ -198,14 +198,14 @@ if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_regi
 }
 
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
-    $lang_module['register'] = $lang_module['add_users'];
-    $lang_module['info'] = $lang_module['info_user'];
+    $nv_Lang->getModule('register') = $nv_Lang->getModule('add_users');
+    $nv_Lang->getModule('info') = $nv_Lang->getModule('info_user');
 }
 
 // Dang ky thong thuong
-$page_title = $lang_module['register'];
+$page_title = $nv_Lang->getModule('register');
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['register'];
+$mod_title = $nv_Lang->getModule('register');
 
 $array_field_config = array();
 $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
@@ -265,7 +265,7 @@ if ($checkss == $array_register['checkss']) {
         reg_result(array(
             'status' => 'error',
             'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'mess' => ($global_config['captcha_type'] == 2 ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect'))
         ));
     }
 
@@ -297,7 +297,7 @@ if ($checkss == $array_register['checkss']) {
         reg_result(array(
             'status' => 'error',
             'input' => 're_password',
-            'mess' => $lang_global['passwordsincorrect']
+            'mess' => $nv_Lang->getGlobal('passwordsincorrect')
         ));
     }
 
@@ -305,7 +305,7 @@ if ($checkss == $array_register['checkss']) {
         reg_result(array(
             'status' => 'error',
             'input' => 'agreecheck',
-            'mess' => $lang_global['agreecheck_empty']
+            'mess' => $nv_Lang->getGlobal('agreecheck_empty')
         ));
     }
 
@@ -362,24 +362,24 @@ if ($checkss == $array_register['checkss']) {
             reg_result(array(
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['err_no_save_account']
+                'mess' => $nv_Lang->getModule('err_no_save_account')
             ));
         } else {
             if ($global_config['allowuserreg'] == 2) {
                 $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
-                $subject = $lang_module['account_active'];
-                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                $subject = $nv_Lang->getModule('account_active');
+                $message = sprintf($nv_Lang->getModule('account_active_info'), $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
 
                 if ($send) {
-                    $info = $lang_module['account_active_mess'];
+                    $info = $nv_Lang->getModule('account_active_mess');
                 } else {
-                    $info = $lang_module['account_active_mess_error_mail'];
+                    $info = $nv_Lang->getModule('account_active_mess_error_mail');
                 }
             } else {
-                $info = $lang_module['account_register_to_admin'];
+                $info = $nv_Lang->getModule('account_register_to_admin');
                 nv_insert_notification($module_name, 'contact_new', array('title' => $array_register['username']), $userid, 0, 0, 1);
             }
 
@@ -434,7 +434,7 @@ if ($checkss == $array_register['checkss']) {
             reg_result(array(
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['err_no_save_account']
+                'mess' => $nv_Lang->getModule('err_no_save_account')
             ));
         } else {
             $query_field['userid'] = $userid;
@@ -445,12 +445,12 @@ if ($checkss == $array_register['checkss']) {
             }
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
-            $subject = $lang_module['account_register'];
+            $subject = $nv_Lang->getModule('account_register');
             $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
             if (strpos($_url, NV_MY_DOMAIN) !== 0) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
-            $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
+            $message = sprintf($nv_Lang->getModule('account_register_info'), $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
             nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
 
             if (defined('ACCESS_ADDUS')) {
@@ -480,7 +480,7 @@ if ($checkss == $array_register['checkss']) {
             reg_result(array(
                 'status' => 'ok',
                 'input' => nv_url_rewrite($url, true),
-                'mess' => $lang_module['register_ok']
+                'mess' => $nv_Lang->getModule('register_ok')
             ));
         }
     }

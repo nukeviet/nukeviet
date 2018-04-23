@@ -17,8 +17,8 @@ if (defined('NV_EDITOR')) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $post = array();
 $post['title'] = $nv_Request->get_title('title', 'post');
 $post['email'] = $nv_Request->get_title('email', 'post');
@@ -29,11 +29,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
     
     if (empty($post['email'])) {
-        $error = $lang_module['error_mail_empty'];
+        $error = $nv_Lang->getModule('error_mail_empty');
     } elseif (strip_tags($mess_content) == '') {
-        $error = $lang_module['no_content_send_title'];
+        $error = $nv_Lang->getModule('no_content_send_title');
     } elseif (empty($post['title'])) {
-        $error = $lang_module['error_title'];
+        $error = $nv_Lang->getModule('error_title');
     } else {
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
         $mail->Subject($post['title']);
@@ -48,9 +48,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         
         $mail->Content($mess_content);
         if ($mail->Send()) {
-            $error = $lang_module['send_suc_send_title'];
+            $error = $nv_Lang->getModule('send_suc_send_title');
         } else {
-            $error = $lang_global['error_sendmail_admin'] . ': ' . $mail->ErrorInfo;
+            $error = $nv_Lang->getGlobal('error_sendmail_admin') . ': ' . $mail->ErrorInfo;
         }
     }
 

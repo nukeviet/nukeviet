@@ -20,7 +20,7 @@ if (empty($topictitle)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics');
 }
 
-$page_title = $lang_module['topic_page'] . ': ' . $topictitle;
+$page_title = $nv_Lang->getModule('topic_page') . ': ' . $topictitle;
 
 $global_array_cat = array();
 
@@ -42,8 +42,8 @@ $result = $db_slave->query($sql);
 $generate_page = nv_generate_page(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;topicid=' . $topicid, $num_items, $per_page, $page);
 
 $xtpl = new XTemplate('topicsnews.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('TOPICID', $topicid);
 $xtpl->assign('GENERATE_PAGE', $generate_page);
 

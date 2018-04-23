@@ -27,7 +27,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['vid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('vid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="vid" class="form-control">';
         $sql = 'SELECT vid, question,acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', $module);
@@ -67,7 +67,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
      */
     function nv_block_voting_select($block_config, $global_array_cat)
     {
-        global $nv_Cache, $global_config, $site_mods, $module_name, $my_footer, $client_info, $lang_global;
+        global $nv_Cache, $global_config, $site_mods, $module_name, $my_footer, $client_info, $nv_Lang;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -104,17 +104,17 @@ if (!nv_function_exists('nv_block_voting_select')) {
                     'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                     'accept' => $current_voting['acceptcm'],
                     'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
-                    'errsm' => $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
+                    'errsm' => $current_voting['acceptcm'] > 1 ? sprintf($nv_Lang->getModule('voting_warning_all'), $current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
                     'vid' => $current_voting['vid'],
                     'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
                     'action' => $action,
-                    'langresult' => $lang_module['voting_result'],
-                    'langsubmit' => $lang_module['voting_hits']
+                    'langresult' => $nv_Lang->getModule('voting_result'),
+                    'langsubmit' => $nv_Lang->getModule('voting_hits')
                 );
 
                 $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
                 $xtpl->assign('VOTING', $voting_array);
-                $xtpl->assign('LANG', $lang_module);
+                $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
                 foreach ($list as $row) {
                     if (!empty($row['url'])) {
@@ -131,11 +131,11 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 if ($voting_array['active_captcha']) {
                     if ($global_config['captcha_type'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
                         $xtpl->parse('main.has_captcha.recaptcha');
                     } else {
-                        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
+                        $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
                         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
                         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);

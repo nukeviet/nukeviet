@@ -16,19 +16,19 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
 if ($nv_Request->get_title('logempty', 'post', '') == md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid'])) {
     if ($db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_logs')) {
         $nv_Cache->delMod($module_name);
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['log_empty_log'], 'All', $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('log_empty_log'), 'All', $admin_info['userid']);
         die('OK');
     } else {
-        die($lang_module['log_del_error']);
+        die($nv_Lang->getModule('log_del_error'));
     }
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-$contents = 'NO_' . $lang_module['log_del_error'];
+$contents = 'NO_' . $nv_Lang->getModule('log_del_error');
 $number_del = 0;
 if ($id > 0) {
     if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id)) {
-        $contents = 'OK_' . $lang_module['log_del_ok'];
+        $contents = 'OK_' . $nv_Lang->getModule('log_del_ok');
         ++$number_del;
     }
 } else {
@@ -41,9 +41,9 @@ if ($id > 0) {
             ++$number_del;
         }
     }
-    $contents = 'OK_' . $lang_module['log_del_ok'];
+    $contents = 'OK_' . $nv_Lang->getModule('log_del_ok');
 }
 
-nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang_module['logs_title'], $number_del, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('delete') . ' ' . $nv_Lang->getModule('logs_title'), $number_del, $admin_info['userid']);
 
 nv_htmlOutput($contents);

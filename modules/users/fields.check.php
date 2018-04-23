@@ -35,7 +35,7 @@ foreach ($array_field_config as $row_f) {
                 nv_jsonOutput(array(
                     'status' => 'error',
                     'input' => $field_input_name,
-                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                 ));
             } else {
                 $value = ($number_type == 1) ? intval($value) : floatval($value);
@@ -44,7 +44,7 @@ foreach ($array_field_config as $row_f) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                        'mess' => sprintf($nv_Lang->getModule('field_min_max_value'), $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                     ));
                 }
             }
@@ -59,20 +59,20 @@ foreach ($array_field_config as $row_f) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
+                        'mess' => sprintf($nv_Lang->getModule('field_min_max_value'), $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
                     ));
                 } elseif ($row_f['field'] == 'birthday' and !empty($global_users_config['min_old_user']) and ($m[3] > (date('Y') - $global_users_config['min_old_user']) or ($m[3] == (date('Y') - $global_users_config['min_old_user']) and ($m[2] > date('n') or ($m[2] == date('n') and $m[1] > date('j')))))) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
+                        'mess' => sprintf($nv_Lang->getModule('old_min_user_error'), $global_users_config['min_old_user'])
                     ));
                 }
             } else {
                 nv_jsonOutput(array(
                     'status' => 'error',
                     'input' => $field_input_name,
-                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                 ));
             }
         } elseif ($row_f['field_type'] == 'textbox') {
@@ -81,7 +81,7 @@ foreach ($array_field_config as $row_f) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                     ));
                 }
             } elseif ($row_f['match_type'] == 'email') {
@@ -97,7 +97,7 @@ foreach ($array_field_config as $row_f) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                     ));
                 }
             } elseif ($row_f['match_type'] == 'regex') {
@@ -105,7 +105,7 @@ foreach ($array_field_config as $row_f) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                     ));
                 }
             } elseif ($row_f['match_type'] == 'callback') {
@@ -114,7 +114,7 @@ foreach ($array_field_config as $row_f) {
                         nv_jsonOutput(array(
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                         ));
                     }
                 } else {
@@ -134,7 +134,7 @@ foreach ($array_field_config as $row_f) {
                 nv_jsonOutput(array(
                     'status' => 'error',
                     'input' => $field_input_name,
-                    'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                    'mess' => sprintf($nv_Lang->getModule('field_min_max_error'), $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                 ));
             }
         } elseif ($row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor') {
@@ -146,7 +146,7 @@ foreach ($array_field_config as $row_f) {
                     nv_jsonOutput(array(
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                     ));
                 }
             } elseif ($row_f['match_type'] == 'callback') {
@@ -155,7 +155,7 @@ foreach ($array_field_config as $row_f) {
                         nv_jsonOutput(array(
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                         ));
                     }
                 } else {
@@ -174,7 +174,7 @@ foreach ($array_field_config as $row_f) {
                 nv_jsonOutput(array(
                     'status' => 'error',
                     'input' => $field_input_name,
-                    'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                    'mess' => sprintf($nv_Lang->getModule('field_min_max_error'), $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                 ));
             }
         } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
@@ -191,7 +191,7 @@ foreach ($array_field_config as $row_f) {
                 nv_jsonOutput(array(
                     'status' => 'error',
                     'input' => $field_input_name,
-                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    'mess' => sprintf($nv_Lang->getModule('field_match_type_error'), $row_f['title'])
                 ));
             }
         }
@@ -203,7 +203,7 @@ foreach ($array_field_config as $row_f) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => $field_input_name,
-            'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title'])
+            'mess' => sprintf($nv_Lang->getModule('field_match_type_required'), $row_f['title'])
         ));
     }
     

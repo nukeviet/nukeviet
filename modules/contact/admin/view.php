@@ -47,8 +47,8 @@ if (! $is_read) {
 $page_title = $module_info['site_title'];
 
 $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $sender_name = $row['sender_name'];
 $sender_id = intval($row['sender_id']);

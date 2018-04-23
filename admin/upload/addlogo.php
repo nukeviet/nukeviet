@@ -11,27 +11,27 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['addlogo'];
+$page_title = $nv_Lang->getModule('addlogo');
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (! isset($check_allow_upload_dir['delete_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_QUOTES);
 $file = basename($file);
 
 if (empty($file) or ! nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    die('ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file);
+    die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $file);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x', 'post') and $nv_Request->isset_request('y', 'post')) {
     if (file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
         $upload_logo = NV_ROOTDIR . '/' . $global_config['upload_logo'];
     } else {
-        die('ERROR#' . $lang_module['notlogo']);
+        die('ERROR#' . $nv_Lang->getModule('notlogo'));
     }
 
     $config_logo = array();
@@ -74,7 +74,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
 
         die('OK#' . basename($file));
     } else {
-        die('ERROR#' . $lang_module['notlevel']);
+        die('ERROR#' . $nv_Lang->getModule('notlevel'));
     }
 }
 

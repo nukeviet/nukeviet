@@ -19,12 +19,12 @@ if ($bid) {
     $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
 }
 
-$page_title = $lang_module['content_list'] . ': ' . $block['title'];
+$page_title = $nv_Lang->getModule('content_list') . ': ' . $block['title'];
 
 // Write row
 $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -64,10 +64,10 @@ if ($num_rows < 1) {
         $row['status_text'] = $lang_module['content_status_' . $row['status']];
         
         if ($row['start_time'] > 0) {
-            $row['status_text'] .= '. ' . $lang_module['content_status_note0'] . ' ' . nv_date('H:i:s d/m/Y', $row['start_time']);
+            $row['status_text'] .= '. ' . $nv_Lang->getModule('content_status_note0') . ' ' . nv_date('H:i:s d/m/Y', $row['start_time']);
             
             if ($row['end_time'] > 0) {
-                $row['status_text'] .= '. ' .  sprintf($row['status'] == 2 ? $lang_module['content_status_note2'] : $lang_module['content_status_note1'], nv_date('H:i:s d/m/Y', $row['end_time']));
+                $row['status_text'] .= '. ' .  sprintf($row['status'] == 2 ? $nv_Lang->getModule('content_status_note2') : $nv_Lang->getModule('content_status_note1'), nv_date('H:i:s d/m/Y', $row['end_time']));
             }
         }
         

@@ -17,7 +17,7 @@ function nv_block_config_menu($module, $data_block, $lang_block)
     global $nv_Cache;
     $html = '';
     $html .= "<div class=\"form-group\">";
-    $html .= "	<label class=\"control-label col-sm-6\">" . $lang_block['menu'] . ":</label>";
+    $html .= "	<label class=\"control-label col-sm-6\">" . $nv_Lang->getBlock('menu') . ":</label>";
     $html .= "	<div class=\"col-sm-9\"><select name=\"menuid\" class=\"form-control\">\n";
 
     $sql = "SELECT * FROM " . NV_PREFIXLANG . "_menu ORDER BY id DESC";
@@ -32,7 +32,7 @@ function nv_block_config_menu($module, $data_block, $lang_block)
     $html .= "</div>";
     $html .= "<div class=\"form-group\">";
     $html .= "<label class=\"control-label col-sm-6\">";
-    $html .= $lang_block['title_length'];
+    $html .= $nv_Lang->getBlock('title_length');
     $html .= ":</label>";
     $html .= "<div class=\"col-sm-18\">";
     $html .= "<input type=\"text\" class=\"form-control\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";

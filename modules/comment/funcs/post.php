@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }
 
-$contents = 'ERR_' . $lang_module['comment_unsuccess'];
+$contents = 'ERR_' . $nv_Lang->getModule('comment_unsuccess');
 $module = $nv_Request->get_string('module', 'post');
 
 if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($site_mods[$module])) {
@@ -85,7 +85,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                 }
             }
             if ($show_captcha and ! nv_capcha_txt($code)) {
-                $contents = 'ERR_' . $lang_global['securitycodeincorrect'];
+                $contents = 'ERR_' . $nv_Lang->getGlobal('securitycodeincorrect');
             } elseif ($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout) {
                 $pid = $nv_Request->get_int('pid', 'post', 0);
 
@@ -167,12 +167,12 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                             }
 
                             if (!$status) {
-                                $comment_success = $lang_module['comment_success_queue'];
+                                $comment_success = $nv_Lang->getModule('comment_success_queue');
 
                                 // Gui thong bao kiem duyet
                                 nv_insert_notification($module_name, 'comment_queue', array( 'content' => strip_tags($content) ), $new_id);
                             } else {
-                                $comment_success = $lang_module['comment_success'];
+                                $comment_success = $nv_Lang->getModule('comment_success');
                             }
                             $contents = 'OK_' . nv_base64_encode($comment_success);
                         }
@@ -182,7 +182,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                 }
             } else {
                 $timeout = nv_convertfromSec($difftimeout - NV_CURRENTTIME + $timeout);
-                $timeoutmsg = sprintf($lang_module['comment_timeout'], $timeout);
+                $timeoutmsg = sprintf($nv_Lang->getModule('comment_timeout'), $timeout);
                 $contents = 'ERR_' . $timeoutmsg;
             }
         }

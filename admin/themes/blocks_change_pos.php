@@ -85,7 +85,7 @@ if ($bid > 0) {
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
-    echo $lang_module['block_update_success'];
+    echo $nv_Lang->getModule('block_update_success');
 } else {
     echo 'ERROR';
 }

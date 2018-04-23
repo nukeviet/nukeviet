@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['upload_manager'];
+$page_title = $nv_Lang->getModule('upload_manager');
 $contents = '';
 
 $path = (defined('NV_IS_SPADMIN')) ? '' : NV_UPLOADS_DIR;
@@ -43,7 +43,7 @@ if ($type != 'image' and $type != 'flash') {
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 if ($popup) {
-    $lang_module['browse_file'] = $lang_global['browse_file'];
+    $nv_Lang->setModule('browse_file', $nv_Lang->getGlobal('browse_file'));
     $sys_max_size = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
 
     $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
@@ -53,7 +53,7 @@ if ($popup) {
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_MAX_SIZE', nv_convertfromBytes($sys_max_size));
     $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size);
     $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);

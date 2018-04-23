@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['main_caption'];
+$page_title = $nv_Lang->getModule('main_caption');
 
 $contents = array();
 $contents['containerid'] = array();

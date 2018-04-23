@@ -68,17 +68,17 @@ if (defined('NV_IS_SPADMIN')) {
 $allow_func = array( 'main', 'view', 'stop', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'alias', 'topicajax', 'sourceajax', 'tagsajax' );
 
 if (! isset($site_mods['cms'])) {
-    $submenu['content'] = $lang_module['content_add'];
+    $submenu['content'] = $nv_Lang->getModule('content_add');
 }
 
 if ($NV_IS_ADMIN_MODULE) {
-    $submenu['cat'] = $lang_module['categories'];
-    $submenu['tags'] = $lang_module['tags'];
-    $submenu['groups'] = $lang_module['block'];
-    $submenu['topics'] = $lang_module['topics'];
-    $submenu['sources'] = $lang_module['sources'];
-    $submenu['admins'] = $lang_module['admin'];
-    $submenu['setting'] = $lang_module['setting'];
+    $submenu['cat'] = $nv_Lang->getModule('categories');
+    $submenu['tags'] = $nv_Lang->getModule('tags');
+    $submenu['groups'] = $nv_Lang->getModule('block');
+    $submenu['topics'] = $nv_Lang->getModule('topics');
+    $submenu['sources'] = $nv_Lang->getModule('sources');
+    $submenu['admins'] = $nv_Lang->getModule('admin');
+    $submenu['setting'] = $nv_Lang->getModule('setting');
 
     $allow_func[] = 'cat';
     $allow_func[] = 'change_cat';

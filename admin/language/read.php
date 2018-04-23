@@ -21,7 +21,7 @@ if (!defined('NV_IS_FILE_LANG')) {
  */
 function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 {
-    global $db, $global_config, $include_lang, $lang_module;
+    global $db, $global_config, $include_lang, $nv_Lang;
 
     $include_lang = '';
     $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
@@ -92,7 +92,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             $data['author'] = serialize($lang_translator_save);
             $idfile = $db->insert_id('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)', 'idfile', $data);
             if (empty($idfile)) {
-                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang), 404);
+                nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang), 404);
             }
         } else {
             // Cập nhật lại tác giả cho các file đã có trong CSDL
@@ -112,7 +112,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                 $sth->bindParam(':author', $author, PDO::PARAM_STR, strlen($author));
                 $sth->execute();
             } catch (PDOException $e) {
-                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $e->getMessage(), 404);
+                nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $e->getMessage(), 404);
             }
         }
 
@@ -192,12 +192,12 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         return '';
     } else {
         $include_lang = '';
-        return $lang_module['nv_error_exit_module'] . ' : ' . $module;
+        return $nv_Lang->getModule('nv_error_exit_module') . ' : ' . $module;
     }
 }
 
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
-$page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
+$page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 
 if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_SESSION) and preg_match("/^([a-z]{2})$/", $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
     $array_filename = array();
@@ -255,8 +255,8 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
     $nv_Request->set_Cookie('dirlang', $dirlang, NV_LIVE_COOKIE_TIME);
 
     $xtpl = new XTemplate('read.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 
     foreach ($array_filename as $name) {

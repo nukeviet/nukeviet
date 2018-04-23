@@ -12,4 +12,4 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['content'] = $lang_module['voting_add'];
+$submenu['content'] = $nv_Lang->getModule('voting_add');

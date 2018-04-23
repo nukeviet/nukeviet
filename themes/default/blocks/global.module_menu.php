@@ -21,7 +21,7 @@ if (! nv_function_exists('nv_module_menu')) {
      */
     function nv_module_menu()
     {
-        global $global_config, $module_info, $lang_global, $module_name, $op;
+        global $global_config, $module_info, $module_name, $op, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.module_menu.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -32,7 +32,7 @@ if (! nv_function_exists('nv_module_menu')) {
         }
 
         $xtpl = new XTemplate('global.module_menu.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $block_theme);
         

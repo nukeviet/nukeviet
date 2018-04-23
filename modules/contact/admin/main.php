@@ -18,7 +18,7 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
     $sends = $nv_Request->get_array('sends', 'post', array());
     if (empty($sends)) {
-        nv_jsonOutput(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ));
+        nv_jsonOutput(array( 'status' => 'error', 'mess' => $nv_Lang->getModule('please_choose') ));
     }
 
     foreach ($sends as $id) {
@@ -33,8 +33,8 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 $page_title = $module_info['site_title'];
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $contact_allowed = nv_getAllowed();
 
@@ -74,13 +74,13 @@ if (! empty($contact_allowed['view'])) {
             	$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 	            if ($row['is_reply']==1) {
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
-	                $status = $lang_module['tt2_row_title'];
+	                $status = $nv_Lang->getModule('tt2_row_title');
 	            }elseif ($row['is_reply']==2) {
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14 );
-	                $status = $lang_module['tt2_row_title'];
+	                $status = $nv_Lang->getModule('tt2_row_title');
 	            }else{
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );
-	                $status = $lang_module['tt1_row_title'];
+	                $status = $nv_Lang->getModule('tt1_row_title');
 	            }
             }
 

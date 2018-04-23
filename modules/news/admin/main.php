@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['content_list'];
+$page_title = $nv_Lang->getModule('content_list');
 $stype = $nv_Request->get_string('stype', 'get', '-');
 $sstatus = $nv_Request->get_int('sstatus', 'get', -1);
 $catid = $nv_Request->get_int('catid', 'get', 0);
@@ -88,7 +88,7 @@ $val_cat_content = array();
 $val_cat_content[] = array(
     'value' => 0,
     'selected' => ($catid == 0) ? ' selected="selected"' : '',
-    'title' => $lang_module['search_cat_all']
+    'title' => $nv_Lang->getModule('search_cat_all')
 );
 
 $array_cat_view = array();
@@ -141,12 +141,12 @@ if (!defined('NV_IS_ADMIN_MODULE') and $catid > 0 and !in_array($catid, $array_c
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main');
 }
 $array_search = array(
-    '-' => '---' . $lang_module['search_type'] . '---',
-    'title' => $lang_module['search_title'],
-    'bodytext' => $lang_module['search_bodytext'],
-    'author' => $lang_module['search_author'],
-    'admin_id' => $lang_module['search_admin'],
-    'sourcetext' => $lang_module['sources']
+    '-' => '---' . $nv_Lang->getModule('search_type') . '---',
+    'title' => $nv_Lang->getModule('search_title'),
+    'bodytext' => $nv_Lang->getModule('search_bodytext'),
+    'author' => $nv_Lang->getModule('search_author'),
+    'admin_id' => $nv_Lang->getModule('search_admin'),
+    'sourcetext' => $nv_Lang->getModule('sources')
 );
 $array_in_rows = array(
     'title',
@@ -162,14 +162,14 @@ $array_in_ordername = array(
     'hitscm'
 );
 $array_status_view = array(
-    '-' => '---' . $lang_module['search_status'] . '---',
-    '5' => $lang_module['status_5'],
-    '1' => $lang_module['status_1'],
-    '0' => $lang_module['status_0'],
-    '6' => $lang_module['status_6'],
-    '4' => $lang_module['status_4'],
-    '2' => $lang_module['status_2'],
-    '3' => $lang_module['status_3']
+    '-' => '---' . $nv_Lang->getModule('search_status') . '---',
+    '5' => $nv_Lang->getModule('status_5'),
+    '1' => $nv_Lang->getModule('status_1'),
+    '0' => $nv_Lang->getModule('status_0'),
+    '6' => $nv_Lang->getModule('status_6'),
+    '4' => $nv_Lang->getModule('status_4'),
+    '2' => $nv_Lang->getModule('status_2'),
+    '3' => $nv_Lang->getModule('status_3')
 );
 $array_status_class = array(
     '5' => 'danger',
@@ -183,21 +183,21 @@ $array_status_class = array(
 
 $_permission_action = array();
 $array_list_action = array(
-    'delete' => $lang_global['delete'],
-    're-published' => $lang_module['re_published'],
-    'publtime' => $lang_module['publtime'],
-    'stop' => $lang_module['status_0'],
-    'waiting' => $lang_module['status_action_0']
+    'delete' => $nv_Lang->getGlobal('delete'),
+    're-published' => $nv_Lang->getModule('re_published'),
+    'publtime' => $nv_Lang->getModule('publtime'),
+    'stop' => $nv_Lang->getModule('status_0'),
+    'waiting' => $nv_Lang->getModule('status_action_0')
 );
 
 // Chuyen sang cho duyet
 if (defined('NV_IS_ADMIN_MODULE')) {
-    $array_list_action['declined'] = $lang_module['declined'];
-    $array_list_action['block'] = $lang_module['addtoblock'];
-    $array_list_action['addtotopics'] = $lang_module['addtotopics'];
-    $array_list_action['move'] = $lang_module['move'];
+    $array_list_action['declined'] = $nv_Lang->getModule('declined');
+    $array_list_action['block'] = $nv_Lang->getModule('addtoblock');
+    $array_list_action['addtotopics'] = $nv_Lang->getModule('addtotopics');
+    $array_list_action['move'] = $nv_Lang->getModule('move');
 } elseif ($check_declined) { //Neu co quyen duyet bai thi
-    $array_list_action['declined'] = $lang_module['declined'];
+    $array_list_action['declined'] = $nv_Lang->getModule('declined');
 }
 
 if (!in_array($stype, array_keys($array_search))) {
@@ -503,7 +503,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'title' => $title,
             'publtime' => $publtime,
             'status_id' => $status,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $lang_module['status_' . $status],
             'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
@@ -688,7 +688,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'publtime' => $publtime,
             'status_id' => $status,
             'weight' => $weight,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $lang_module['status_' . $status],
             'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
@@ -714,7 +714,7 @@ $fixedkey = $global_code_defined['row_locked_status'] + 1;
 $sl = ($fixedkey == $sstatus) ? ' selected="selected"' : '';
 $search_status[] = array(
     'key' => $fixedkey,
-    'value' => $lang_module['status_lockbycat'],
+    'value' => $nv_Lang->getModule('status_lockbycat'),
     'selected' => $sl
 );
 
@@ -811,8 +811,8 @@ $base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $or
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -866,7 +866,7 @@ foreach ($data as $row) {
     }
 
     if ($row['status_id'] == 4 and empty($row['title'])) {
-        $row['title'] = $lang_module['no_name'];
+        $row['title'] = $nv_Lang->getModule('no_name');
     }
     $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']]['username'] : '';
     $xtpl->assign('ROW', $row);

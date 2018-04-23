@@ -19,7 +19,7 @@ if ($admin_info['level'] == 1) {
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_siteinfo']
+    'custom_title' => $nv_Lang->getGlobal('mod_siteinfo')
 );
 
 //Document

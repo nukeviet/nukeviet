@@ -24,18 +24,18 @@ if (!nv_function_exists('nv_news_block_news')) {
     function nv_block_config_news($module, $data_block, $lang_block)
     {
         $tooltip_position = array(
-            'top' => $lang_block['tooltip_position_top'],
-            'bottom' => $lang_block['tooltip_position_bottom'],
-            'left' => $lang_block['tooltip_position_left'],
-            'right' => $lang_block['tooltip_position_right']
+            'top' => $nv_Lang->getBlock('tooltip_position_top'),
+            'bottom' => $nv_Lang->getBlock('tooltip_position_bottom'),
+            'left' => $nv_Lang->getBlock('tooltip_position_left'),
+            'right' => $nv_Lang->getBlock('tooltip_position_right')
         );
 
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('numrow') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('showtooltip') . ':</label>';
         $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-4">';
@@ -44,7 +44,7 @@ if (!nv_function_exists('nv_news_block_news')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group margin-bottom-sm">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getBlock('tooltip_position') . '</div>';
         $html .= '<select name="config_tooltip_position" class="form-control">';
 
         foreach ($tooltip_position as $key => $value) {
@@ -56,7 +56,7 @@ if (!nv_function_exists('nv_news_block_news')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getBlock('tooltip_length') . '</div>';
         $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';

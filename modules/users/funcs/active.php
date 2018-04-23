@@ -37,7 +37,7 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = $mod_title = $lang_module['register'];
+$page_title = $mod_title = $nv_Lang->getModule('register');
 $key_words = $module_info['keywords'];
 
 $check_update_user = false;
@@ -108,7 +108,7 @@ if ($checknum == $row['checknum']) {
                 }
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
                 $check_update_user = true;
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . ' | ' . $client_info['ip'], 0);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('account_active_log'), $row['username'] . ' | ' . $client_info['ip'], 0);
             } else {
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             }
@@ -120,20 +120,20 @@ if ($checknum == $row['checknum']) {
 
 if ($check_update_user) {
     if ($is_change_email) {
-        $info = $lang_module['account_change_mail_ok'] . "<br /><br />\n";
+        $info = $nv_Lang->getModule('account_change_mail_ok') . "<br /><br />\n";
     } else {
-        $info = $lang_module['account_active_ok'] . "<br /><br />\n";
+        $info = $nv_Lang->getModule('account_active_ok') . "<br /><br />\n";
     }
 } else {
     if ($is_change_email) {
-        $info = $lang_module['account_active_error'] . "<br /><br />\n";
+        $info = $nv_Lang->getModule('account_active_error') . "<br /><br />\n";
     } else {
-        $info = $lang_module['account_change_mail_error'] . "<br /><br />\n";
+        $info = $nv_Lang->getModule('account_change_mail_error') . "<br /><br />\n";
     }
 }
 
 $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
-$info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_login'] . "</a>]";
+$info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $nv_Lang->getModule('redirect_to_login') . "</a>]";
 
 $contents = user_info_exit($info);
 $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . "\" />";

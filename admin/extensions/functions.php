@@ -20,7 +20,7 @@ $array_url_instruction['manage'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:man
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_extensions']
+    'custom_title' => $nv_Lang->getGlobal('mod_extensions')
 );
 
 $allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage' );

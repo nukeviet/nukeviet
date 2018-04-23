@@ -31,8 +31,8 @@ if (defined('NV_EDITOR')) {
 }
 
 $xtpl = new XTemplate('reply.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('POST', $row);
 
 $is_read = intval($row['is_read']);
@@ -103,7 +103,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id);
         } else {
-            $error = $lang_global['error_sendmail_admin'];
+            $error = $nv_Lang->getGlobal('error_sendmail_admin');
         }
     }
 } else {

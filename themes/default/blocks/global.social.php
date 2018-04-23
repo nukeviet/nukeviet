@@ -24,19 +24,19 @@ if (!nv_function_exists('nv_menu_theme_social')) {
     function nv_menu_theme_social_config($module, $data_block, $lang_block)
     {
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['facebook'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('facebook') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_facebook" class="form-control" value="' . $data_block['facebook'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['google_plus'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('google_plus') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_google_plus" class="form-control" value="' . $data_block['google_plus'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['youtube'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('youtube') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_youtube" class="form-control" value="' . $data_block['youtube'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['twitter'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('twitter') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_twitter" class="form-control" value="' . $data_block['twitter'] . '"/></div>';
         $html .= '</div>';
         return $html;
@@ -69,7 +69,7 @@ if (!nv_function_exists('nv_menu_theme_social')) {
      */
     function nv_menu_theme_social($block_config)
     {
-        global $global_config, $site_mods, $lang_global;
+        global $global_config, $site_mods, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.social.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -81,7 +81,7 @@ if (!nv_function_exists('nv_menu_theme_social')) {
 
         $xtpl = new XTemplate('global.social.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('DATA', $block_config);
         if (!empty($block_config['facebook'])) {

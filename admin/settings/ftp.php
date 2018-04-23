@@ -14,10 +14,10 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 
 $error = '';
 
-$page_title = $lang_module['ftp_config'];
+$page_title = $nv_Lang->getModule('ftp_config');
 
 $xtpl = new XTemplate('ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -42,7 +42,7 @@ if ($sys_info['ftp_support']) {
         $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
 
         if (! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass) {
-            die('ERROR|' . $lang_module['ftp_error_full']);
+            die('ERROR|' . $nv_Lang->getModule('ftp_error_full'));
         }
 
         $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
@@ -56,7 +56,7 @@ if ($sys_info['ftp_support']) {
 
             if ($ftp_root === false) {
                 $ftp->close();
-                die('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : ( string )$ftp->error));
+                die('ERROR|' . (empty($ftp->error) ? $nv_Lang->getModule('ftp_error_detect_root') : ( string )$ftp->error));
             }
 
             $ftp->close();
@@ -64,7 +64,7 @@ if ($sys_info['ftp_support']) {
         }
 
         $ftp->close();
-        die('ERROR|' . $lang_module['ftp_error_detect_root']);
+        die('ERROR|' . $nv_Lang->getModule('ftp_error_detect_root'));
     }
 
     if ($nv_Request->isset_request('ftp_server', 'post')) {
@@ -84,7 +84,7 @@ if ($sys_info['ftp_support']) {
                 $error = ( string )$ftp->error;
             } elseif ($ftp->chdir($ftp_path) === false) {
                 $array_config['ftp_check_login'] = 2;
-                $error = $lang_global['ftp_error_path'];
+                $error = $nv_Lang->getGlobal('ftp_error_path');
             } else {
                 $check_files = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
                 $list_files = $ftp->listDetail($ftp_path, 'all');
@@ -102,7 +102,7 @@ if ($sys_info['ftp_support']) {
                     $array_config['ftp_check_login'] = 1;
                 } else {
                     $array_config['ftp_check_login'] = 2;
-                    $error = $lang_global['ftp_error_path'];
+                    $error = $nv_Lang->getGlobal('ftp_error_path');
                 }
             }
             $ftp->close();

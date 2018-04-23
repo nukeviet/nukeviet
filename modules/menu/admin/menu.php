@@ -21,20 +21,20 @@ $error = '';
 if ($nv_Request->get_int('save', 'post')) {
     $arr['title'] = $nv_Request->get_title('title', 'post', '', 1);
     if (empty($arr['title'])) {
-        $error = $lang_module['error_menu_block'];
+        $error = $nv_Lang->getModule('error_menu_block');
     } elseif ($arr['id'] == 0) {
         $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (title) VALUES ( :title )";
         $data_insert = array();
         $data_insert['title'] = $arr['title'];
         $arr['id'] = $db->insert_id($sql, 'id', $data_insert);
         if (empty($arr['id'])) {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     } else {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title WHERE id =' . $arr['id']);
         $stmt->bindParam(':title', $arr['title'], PDO::PARAM_STR);
         if (! $stmt->execute()) {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     }
     if (empty($error)) {
@@ -127,12 +127,12 @@ if ($nv_Request->get_int('save', 'post')) {
     $result = $db->query($sql);
     $arr = $result->fetch();
     if (empty($arr)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
     }
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -152,10 +152,10 @@ foreach ($site_mods as $mod_name => $modvalues) {
 }
 
 if ($arr['id']) {
-    $page_title = $lang_module['edit_menu'];
+    $page_title = $nv_Lang->getModule('edit_menu');
     $op = '';
 } else {
-    $page_title = $lang_module['add_menu'];
+    $page_title = $nv_Lang->getModule('add_menu');
 }
 
 $xtpl->parse('main');

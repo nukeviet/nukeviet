@@ -14,13 +14,13 @@ if (!defined('NV_ADMIN')) {
 
 $allow_func = array('main', 'notification');
 if (defined('NV_IS_GODADMIN')) {
-    $submenu['system_info'] = $lang_module['site_configs_info'];
+    $submenu['system_info'] = $nv_Lang->getModule('site_configs_info');
 
     if (nv_function_exists('phpinfo')) {
-        $submenu['php_info_configuration'] = $lang_module['configuration_php'];
-        $submenu['php_info_modules'] = $lang_module['extensions'];
-        $submenu['php_info_environment'] = $lang_module['environment_php'];
-        $submenu['php_info_variables'] = $lang_module['variables_php'];
+        $submenu['php_info_configuration'] = $nv_Lang->getModule('configuration_php');
+        $submenu['php_info_modules'] = $nv_Lang->getModule('extensions');
+        $submenu['php_info_environment'] = $nv_Lang->getModule('environment_php');
+        $submenu['php_info_variables'] = $nv_Lang->getModule('variables_php');
 
         $allow_func[] = 'php_info_configuration';
         $allow_func[] = 'php_info_modules';
@@ -34,5 +34,5 @@ if (defined('NV_IS_GODADMIN')) {
 
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'logs';
-    $submenu['logs'] = $lang_module['logs_title'];
+    $submenu['logs'] = $nv_Lang->getModule('logs_title');
 }

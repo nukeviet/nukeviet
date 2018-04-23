@@ -23,7 +23,7 @@ if (!nv_function_exists('nv_company_info')) {
      */
     function nv_company_info_config($module, $data_block, $lang_block)
     {
-        global $lang_global, $selectthemes;
+        global $selectthemes, $nv_Lang;
 
         // Find language file
         if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php')) {
@@ -31,31 +31,31 @@ if (!nv_function_exists('nv_company_info')) {
         }
 
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_name'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_name') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_name" value="' . $data_block['company_name'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_sortname'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_sortname') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_sortname" value="' . $data_block['company_sortname'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_regcode'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_regcode') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_regcode" value="' . $data_block['company_regcode'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_regplace'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_regplace') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_regplace" value="' . $data_block['company_regplace'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_licensenumber'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_licensenumber') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_licensenumber" value="' . $data_block['company_licensenumber'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_responsibility'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_responsibility') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_responsibility" value="' . $data_block['company_responsibility'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_address'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_address') . ':</label>';
         $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-xs-16">';
@@ -63,8 +63,8 @@ if (!nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '<div class="col-xs-8">';
         $html .= '<select name="config_company_showmap" id="config_company_mapshow" class="form-control" onchange="return controlMap(true);">
-					<option value="0"' . (empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $lang_block['cominfo_map_no'] . '</option>
-					<option value="1"' . (!empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $lang_block['cominfo_map_yes'] . '</option>
+					<option value="0"' . (empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('cominfo_map_no') . '</option>
+					<option value="1"' . (!empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('cominfo_map_yes') . '</option>
 				  </select>';
         $html .= '</div>';
         $html .= '</div>';
@@ -104,30 +104,30 @@ if (!nv_function_exists('nv_company_info')) {
 				  </div>';
         $html .= '</div>';
         $html .= '<div class="col-xs-12">';
-        $html .= '<button class="btn btn-default" onclick="modalShow(\'' . $lang_block['cominfo_map_guide_title'] . '\',\'' . $lang_block['cominfo_map_guide_content'] . '\');return!1;">' . $lang_block['cominfo_map_guide_title'] . '</button>';
+        $html .= '<button class="btn btn-default" onclick="modalShow(\'' . $nv_Lang->getBlock('cominfo_map_guide_title') . '\',\'' . $nv_Lang->getBlock('cominfo_map_guide_content') . '\');return!1;">' . $nv_Lang->getBlock('cominfo_map_guide_title') . '</button>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_phone'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_phone') . ':</label>';
         $html .= '<div class="col-sm-18">
 					<div class="margin-bottom"><input type="text" class="form-control" name="config_company_phone" value="' . $data_block['company_phone'] . '"></div>
-					<button class="btn btn-default btn-xs" onclick="modalShow(\'' . $lang_global['phone_note_title'] . '\',\'' . $lang_global['phone_note_content'] . '\');return!1;">' . $lang_global['phone_note_title'] . '</button>
+					<button class="btn btn-default btn-xs" onclick="modalShow(\'' . $nv_Lang->getGlobal('phone_note_title') . '\',\'' . $nv_Lang->getGlobal('phone_note_content') . '\');return!1;">' . $nv_Lang->getGlobal('phone_note_title') . '</button>
 				  </div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_fax'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_fax') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_fax" value="' . $data_block['company_fax'] . '"></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_email'] . ':</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_email') . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_global['company_website'] . ':</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_website') . ':</label>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
         $html .= '<script type="text/javascript">$.getScript("' . NV_BASE_SITEURL . 'themes/default/js/block.global.company_info.js");</script>';
         $html .= '</div>';
 
@@ -174,7 +174,7 @@ if (!nv_function_exists('nv_company_info')) {
      */
     function nv_company_info($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.company_info.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -187,7 +187,7 @@ if (!nv_function_exists('nv_company_info')) {
         $block_config['company_mapapikey'] = $global_config['googleMapsAPI'];
 
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('DATA', $block_config);
 
@@ -201,14 +201,14 @@ if (!nv_function_exists('nv_company_info')) {
         $key = array();
         $i = 0;
         if (!empty($block_config['company_regcode'])) {
-            $key[$i] = $lang_global['company_regcode2'] . ': ' . $block_config['company_regcode'];
+            $key[$i] = $nv_Lang->getGlobal('company_regcode2') . ': ' . $block_config['company_regcode'];
             if (!empty($block_config['company_regplace'])) {
-                $key[$i] .= ', ' . $lang_global['company_regplace'] . ' ' . $block_config['company_regplace'];
+                $key[$i] .= ', ' . $nv_Lang->getGlobal('company_regplace') . ' ' . $block_config['company_regplace'];
             }
             ++$i;
         }
         if (!empty($block_config['company_licensenumber'])) {
-            $key[$i] = $lang_global['company_licensenumber'] . ': ' . $block_config['company_licensenumber'];
+            $key[$i] = $nv_Lang->getGlobal('company_licensenumber') . ': ' . $block_config['company_licensenumber'];
             ++$i;
         }
 

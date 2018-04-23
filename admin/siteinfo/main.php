@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_global['mod_siteinfo'];
+$page_title = $nv_Lang->getGlobal('mod_siteinfo');
 
 //Noi dung chinh cua trang
 $info = $pending_info = array();
@@ -37,7 +37,7 @@ foreach ($site_mods as $mod => $value) {
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 // Kiem tra file nang cap tren he thong
 if (defined('NV_IS_GODADMIN') and file_exists(NV_ROOTDIR . '/install/update_data.php')) {
@@ -102,7 +102,7 @@ if (! empty($info) or ! empty($pending_info)) {
 // Thong tin phien ban NukeViet
 if (defined('NV_IS_GODADMIN')) {
     $field = array();
-    $field[] = array( 'key' => $lang_module['version_user'], 'value' => $global_config['version'] );
+    $field[] = array( 'key' => $nv_Lang->getModule('version_user'), 'value' => $global_config['version'] );
     if (file_exists(NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml')) {
         $new_version = simplexml_load_file(NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml');
     } else {
@@ -112,17 +112,17 @@ if (defined('NV_IS_GODADMIN')) {
     $info = '';
     if (! empty($new_version)) {
         $field[] = array(
-            'key' => $lang_module['version_news'], //
-            'value' => sprintf($lang_module['newVersion_detail'], ( string )$new_version->version, nv_date('d/m/Y H:i', strtotime($new_version->date)))
+            'key' => $nv_Lang->getModule('version_news'), //
+            'value' => sprintf($nv_Lang->getModule('newVersion_detail'), ( string )$new_version->version, nv_date('d/m/Y H:i', strtotime($new_version->date)))
         );
 
         if (nv_version_compare($global_config['version'], $new_version->version) < 0) {
-            $info = sprintf($lang_module['newVersion_info'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate');
+            $info = sprintf($nv_Lang->getModule('newVersion_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate');
         }
     }
 
     $xtpl->assign('ULINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate');
-    $xtpl->assign('CHECKVERSION', $lang_module['checkversion']);
+    $xtpl->assign('CHECKVERSION', $nv_Lang->getModule('checkversion'));
 
     foreach ($field as $key => $value) {
         $xtpl->assign('KEY', $value['key']);

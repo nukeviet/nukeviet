@@ -32,7 +32,7 @@ if (defined('NV_IS_GODADMIN')) {
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_settings']
+    'custom_title' => $nv_Lang->getGlobal('mod_settings')
 );
 
 unset($page_title, $select_options);

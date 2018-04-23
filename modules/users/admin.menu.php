@@ -22,11 +22,11 @@ $allow_func = array(
 );
 $level = $admin_info['level'];
 if (isset($access_admin['access_addus'][$level]) and $access_admin['access_addus'][$level] == 1) {
-    $submenu['user_add'] = $lang_module['user_add'];
+    $submenu['user_add'] = $nv_Lang->getModule('user_add');
     $allow_func[] = 'user_add';
 }
 if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_waiting'][$level] == 1) {
-    $submenu['user_waiting'] = $lang_module['member_wating'];
+    $submenu['user_waiting'] = $nv_Lang->getModule('member_wating');
     $allow_func[] = 'user_waiting';
     $allow_func[] = 'setactive';
     $allow_func[] = 'setofficial';
@@ -41,26 +41,26 @@ if (isset($access_admin['access_delus'][$level]) and $access_admin['access_delus
 }
 $access['checked_passus'] = (isset($access_admin['access_passus'][$level]) and $access_admin['access_passus'][$level] == 1) ? ' checked="checked" ' : '';
 if (isset($access_admin['access_groups'][$level]) and $access_admin['access_groups'][$level] == 1) {
-    $submenu['groups'] = $lang_global['mod_groups'];
+    $submenu['groups'] = $nv_Lang->getGlobal('mod_groups');
     $allow_func[] = 'groups';
 }
 
 if ($module_data == 'users' and isset($admin_mods['authors'])) {
-    $submenu['authors'] = $lang_global['mod_authors'];
+    $submenu['authors'] = $nv_Lang->getGlobal('mod_authors');
     $allow_func[] = 'authors';
 }
 
 if (defined('NV_IS_SPADMIN')) {
     if (empty($global_config['idsite'])) {
-        $submenu['question'] = $lang_module['question'];
-        $submenu['siteterms'] = $lang_module['siteterms'];
+        $submenu['question'] = $nv_Lang->getModule('question');
+        $submenu['siteterms'] = $nv_Lang->getModule('siteterms');
         $allow_func[] = 'question';
         $allow_func[] = 'siteterms';
         if (defined('NV_IS_GODADMIN')) {
-            $submenu['fields'] = $lang_module['fields'];
+            $submenu['fields'] = $nv_Lang->getModule('fields');
             $allow_func[] = 'fields';
         }
     }
-    $submenu['config'] = $lang_module['config'];
+    $submenu['config'] = $nv_Lang->getModule('config');
     $allow_func[] = 'config';
 }

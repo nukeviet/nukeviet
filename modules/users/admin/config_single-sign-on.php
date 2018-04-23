@@ -60,7 +60,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         trigger_error($e->getMessage());
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['config'], $page_title, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('config'), $page_title, $admin_info['userid']);
     $nv_Cache->delAll();
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass());
 } elseif (isset($global_config['config_sso'])) {
@@ -113,7 +113,7 @@ foreach ($_cas_config['config_field_lock'] as $key => $value) {
 
 $xtpl = new XTemplate('config_single-sign-on.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $oauth_config);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $_cas_config);
 $xtpl->assign('FIELD_LOCK', $field_lock);
 
@@ -179,7 +179,7 @@ foreach ($language as $i) {
 $usertype = array(
     0 => array(
         'value' => 'default',
-        'name' => $lang_module['default']
+        'name' => $nv_Lang->getModule('default')
     ),
     1 => array(
         'value' => 'edir',
@@ -219,9 +219,9 @@ foreach ($arr as $i) {
     $values = array();
     $values['value'] = $i;
     if ($i == 0) {
-        $values['name'] = $lang_global['no'];
+        $values['name'] = $nv_Lang->getGlobal('no');
     } else {
-        $values['name'] = $lang_global['yes'];
+        $values['name'] = $nv_Lang->getGlobal('yes');
     }
     $values['select'] = ($i == $_cas_config['cas_proxy']) ? 'selected="selected"' : '';
     $xtpl->assign('PROXY', $values);

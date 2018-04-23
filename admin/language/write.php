@@ -21,7 +21,7 @@ if (!defined('NV_IS_FILE_LANG')) {
  */
 function nv_admin_write_lang($dirlang, $idfile)
 {
-    global $db, $language_array, $global_config, $include_lang, $lang_module;
+    global $db, $language_array, $global_config, $include_lang, $nv_Lang;
 
     list ($module, $admin_file, $langtype, $author_lang) = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . intval($idfile))->fetch(3);
 
@@ -67,7 +67,7 @@ function nv_admin_write_lang($dirlang, $idfile)
         }
 
         if ($include_lang == '') {
-            return $lang_module['nv_error_write_module'] . ' : ' . $module;
+            return $nv_Lang->getModule('nv_error_write_module') . ' : ' . $module;
         } else {
             if (preg_match('/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})[\-\/\.\,\\s]{2}(0?\d|[1]{1}\d|2[0-4]{1})[\-\/\.\:]{1}([0-5]?[0-9])$/', $array_translator['createdate'], $m)) {
                 $createdate = mktime($m[4], $m[5], 0, $m[2], $m[1], $m[3]);
@@ -129,19 +129,19 @@ function nv_admin_write_lang($dirlang, $idfile)
                 $number_bytes = file_put_contents($include_lang, trim($content_lang), LOCK_EX);
                 if (empty($number_bytes)) {
                     $errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
-                    return $lang_module['nv_error_write_file'] . ' : ' . $errfile;
+                    return $nv_Lang->getModule('nv_error_write_file') . ' : ' . $errfile;
                 }
             }
         }
         return '';
     } else {
-        return $lang_module['nv_error_exit_module'] . ' : ' . $module;
+        return $nv_Lang->getModule('nv_error_exit_module') . ' : ' . $module;
     }
 }
 
 $xtpl = new XTemplate('write.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $include_lang = '';
 $page_title = $language_array[$dirlang]['name'];

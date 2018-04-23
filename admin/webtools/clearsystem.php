@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_WEBTOOLS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['clearsystem'];
+$page_title = $nv_Lang->getModule('clearsystem');
 
 /**
  * nv_clear_files()
@@ -46,7 +46,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 if (defined('NV_IS_GODADMIN')) {
     $xtpl->parse('main.godadmin');
@@ -55,7 +55,7 @@ if (defined('NV_IS_GODADMIN')) {
 if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request('deltype', 'post')) {
     $deltype = $nv_Request->get_typed_array('deltype', 'post', 'string', array());
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['clearsystem'], implode(", ", $deltype), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('clearsystem'), implode(", ", $deltype), $admin_info['userid']);
     clearstatcache();
     if (in_array('clearcache', $deltype)) {
         if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {

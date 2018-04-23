@@ -84,7 +84,7 @@ function deleteAvatar()
     }
 }
 
-$page_title = $lang_module['avatar_pagetitle'];
+$page_title = $nv_Lang->getModule('avatar_pagetitle');
 
 $array = array();
 $array['success'] = 0;
@@ -99,7 +99,7 @@ if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post'))
     nv_jsonOutput(array(
         'status' => 'ok',
         'input' => 'ok',
-        'mess' => $lang_module['editinfo_ok']
+        'mess' => $nv_Lang->getModule('editinfo_ok')
     ));
 }
 
@@ -114,7 +114,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
     $array['crop_height'] = $array['avatar_height'] = $nv_Request->get_int('crop_height', 'post', 0);
 
     if ($array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
-        $array['error'] = $lang_module['avatar_error_data'];
+        $array['error'] = $nv_Lang->getModule('avatar_error_data');
     } else {
         $upload = new NukeViet\Files\Upload(array(
             'images'
@@ -156,7 +156,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
                     $array['success'] = 1;
                 }
             } else {
-                $array['error'] = $lang_module['avatar_error_save'];
+                $array['error'] = $nv_Lang->getModule('avatar_error_save');
             }
             @nv_deletefile($upload_info['name']);
         } else {

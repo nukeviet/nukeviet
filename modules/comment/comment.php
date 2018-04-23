@@ -139,7 +139,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
  */
 function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '', $header = 1)
 {
-    global $module_config, $nv_Request, $lang_module_comment, $module_info, $global_config, $lang_global;
+    global $module_config, $nv_Request, $lang_module_comment, $module_info, $global_config, $nv_Lang;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (! empty($module) and isset($module_config[$module]['activecomm'])) {
@@ -172,7 +172,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                     $form_login['display'] = 1;
                     if (!isset($allowed_tmp['7'])) {
                         // Thành viên chính thức
-                        $form_login['groups'][0] = $lang_global['level4'];
+                        $form_login['groups'][0] = $nv_Lang->getGlobal('level4');
                     } else {
                         // Thành viên chính thức hoặc thành viên mới
                         $form_login['groups'][0] = $lang_module_comment['user'];
@@ -244,7 +244,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
  */
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '', $header = 1)
 {
-    global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $lang_module_comment, $module_name;
+    global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_module_comment, $module_name, $nv_Lang;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
     $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
@@ -252,7 +252,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('LANG', $lang_module_comment);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('TEMPLATE_CSS', $templateCSS);
     $xtpl->assign('TEMPLATE_JS', $templateJS);
@@ -337,8 +337,8 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
                 $xtpl->assign('GFX_NUM', -1);
                 $xtpl->parse('main.allowed_comm.recaptcha');
             } else {
-                $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
+                $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
                 $xtpl->assign('GFX_NUM', NV_GFX_NUM);
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);

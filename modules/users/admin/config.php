@@ -36,7 +36,7 @@ $array_config = array();
 
 $oauth_config = $nv_Request->get_title('oauth_config', 'post,get');
 if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php')) {
-    $page_title = sprintf($lang_module['oauth_config'], $oauth_config);
+    $page_title = sprintf($nv_Lang->getModule('oauth_config'), $oauth_config);
 
     require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
 } else {
@@ -172,7 +172,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $db->query($sql);
             nv_save_file_config_global();
         }
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('ChangeConfigModule'), '', $admin_info['userid']);
         $nv_Cache->delAll();
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     } else {
@@ -203,20 +203,20 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['active_user_logs'] = !empty($array_config['active_user_logs']) ? ' checked="checked"' : '';
 
     $array_name_show = array(
-        0 => $lang_module['lastname_firstname'],
-        1 => $lang_module['firstname_lastname']
+        0 => $nv_Lang->getModule('lastname_firstname'),
+        1 => $nv_Lang->getModule('firstname_lastname')
     );
 
     $array_registertype = array(
-        0 => $lang_module['active_not_allow'],
-        1 => $lang_module['active_all'],
-        2 => $lang_module['active_email'],
-        3 => $lang_module['active_admin_check']
+        0 => $nv_Lang->getModule('active_not_allow'),
+        1 => $nv_Lang->getModule('active_all'),
+        2 => $nv_Lang->getModule('active_email'),
+        3 => $nv_Lang->getModule('active_admin_check')
     );
     $array_openid_processing = array(
-        0 => $lang_module['openid_processing_0'],
-        3 => $lang_module['openid_processing_3'],
-        4 => $lang_module['openid_processing_4']
+        0 => $nv_Lang->getModule('openid_processing_0'),
+        3 => $nv_Lang->getModule('openid_processing_3'),
+        4 => $nv_Lang->getModule('openid_processing_4')
     );
 
     $ignorefolders = array(
@@ -229,8 +229,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('DATA', $array_config);
     $xtpl->assign('USER_CHECK_PASS_TIME', round($global_config['user_check_pass_time'] / 60));
 
@@ -260,7 +260,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.nv_unickmax');
     }
 
-    $lang_global['unick_type_0'] = $lang_module['unick_type_0'];
+    $nv_Lang->getGlobal('unick_type_0') = $nv_Lang->getModule('unick_type_0');
     for ($id = 0; $id < 5; $id++) {
         $array = array(
             'id' => $id,
@@ -290,7 +290,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.nv_upassmax');
     }
 
-    $lang_global['upass_type_0'] = $lang_module['upass_type_0'];
+    $nv_Lang->getGlobal('upass_type_0') = $nv_Lang->getModule('upass_type_0');
     for ($id = 0; $id < 5; $id++) {
         $array = array(
             'id' => $id,
@@ -385,7 +385,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 'checked' => $checked,
                 'disabled' => $disabled,
                 'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
-                'note' => sprintf($lang_module['oauth_config'], $m[1] . ' ' . $m[2])
+                'note' => sprintf($nv_Lang->getModule('oauth_config'), $m[1] . ' ' . $m[2])
             );
 
             $xtpl->assign('OPENID', $openid_assign);
@@ -401,15 +401,15 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_access = array(
         array(
             'id' => 1,
-            'title' => $lang_global['level1']
+            'title' => $nv_Lang->getGlobal('level1')
         ),
         array(
             'id' => 2,
-            'title' => $lang_global['level2']
+            'title' => $nv_Lang->getGlobal('level2')
         ),
         array(
             'id' => 3,
-            'title' => $lang_global['level3']
+            'title' => $nv_Lang->getGlobal('level3')
         )
     );
 
@@ -435,7 +435,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 
-    $page_title = $lang_module['config'];
+    $page_title = $nv_Lang->getModule('config');
 }
 
 include NV_ROOTDIR . '/includes/header.php';

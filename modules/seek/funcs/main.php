@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('q', 'get')) {
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
-        $search['errorInfo'] = sprintf($lang_module['searchQueryError'], NV_MIN_SEARCH_LENGTH);
+        $search['errorInfo'] = sprintf($nv_Lang->getModule('searchQueryError'), NV_MIN_SEARCH_LENGTH);
     } else {
         if (! empty($search['mod']) and isset($array_mod[$search['mod']])) {
             $mods = array( $search['mod'] => $array_mod[$search['mod']] );
@@ -96,7 +96,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
 
         if (empty($search['content'])) {
-            $search['content'] = $lang_module['search_none'] . ' &quot;' . $search['key'] . '&quot;';
+            $search['content'] = $nv_Lang->getModule('search_none') . ' &quot;' . $search['key'] . '&quot;';
         }
     }
 }
@@ -109,12 +109,12 @@ if (! empty($search['key'])) {
     $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];
 
     if ($search['page'] > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $search['page'];
+        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $search['page'];
     }
 }
 
 $key_words = $description = 'no';
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -50,11 +50,11 @@ if (empty($func_id) or empty($selectedmodule)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks');
 }
 
-$page_title = $lang_module['blocks_by_funcs'] . ': ' . $selectthemes;
+$page_title = $nv_Lang->getModule('blocks_by_funcs') . ': ' . $selectthemes;
 
 $xtpl = new XTemplate('blocks_func.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -130,7 +130,7 @@ while ($row = $sth->fetch()) {
         'title' => $row['title'],
         'module' => $row['module'],
         'file_name' => $row['file_name'],
-        'active' => $row['active'] ? $lang_global['yes'] : $lang_global['no']
+        'active' => $row['active'] ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no')
     ));
 
     $numposition = $blocks_positions[$row['position']];

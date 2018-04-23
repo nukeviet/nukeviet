@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 if (empty($module_config[$module_name]['instant_articles_active'])) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 }
 
 if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
@@ -25,7 +25,7 @@ if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
         if (php_sapi_name() !== 'cgi-fcgi') {
             header('status: 401 Unauthorized');
         }
-        nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_module['insrss_not_auth'], 401);
+        nv_info_die($global_config['site_description'], $nv_Lang->getGlobal('site_info'), $nv_Lang->getModule('insrss_not_auth'), 401);
     }
 }
 

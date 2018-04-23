@@ -28,24 +28,24 @@ if (empty($row)) {
 }
 
 $contents = '';
-$mod_title = $page_title = sprintf($lang_module['refererbysite'], $host);
+$mod_title = $page_title = sprintf($nv_Lang->getModule('refererbysite'), $host);
 $key_words = $module_info['keywords'];
 
 $cts = array();
 $cts['caption'] = $page_title;
 $cts['rows'] = array();
-$cts['rows']['Jan'] = array( 'fullname' => $lang_global['january'], 'count' => $row['month01'] );
-$cts['rows']['Feb'] = array( 'fullname' => $lang_global['february'], 'count' => $row['month02'] );
-$cts['rows']['Mar'] = array( 'fullname' => $lang_global['march'], 'count' => $row['month03'] );
-$cts['rows']['Apr'] = array( 'fullname' => $lang_global['april'], 'count' => $row['month04'] );
-$cts['rows']['May'] = array( 'fullname' => $lang_global['may'], 'count' => $row['month05'] );
-$cts['rows']['Jun'] = array( 'fullname' => $lang_global['june'], 'count' => $row['month06'] );
-$cts['rows']['Jul'] = array( 'fullname' => $lang_global['july'], 'count' => $row['month07'] );
-$cts['rows']['Aug'] = array( 'fullname' => $lang_global['august'], 'count' => $row['month08'] );
-$cts['rows']['Sep'] = array( 'fullname' => $lang_global['september'], 'count' => $row['month09'] );
-$cts['rows']['Oct'] = array( 'fullname' => $lang_global['october'], 'count' => $row['month10'] );
-$cts['rows']['Nov'] = array( 'fullname' => $lang_global['november'], 'count' => $row['month11'] );
-$cts['rows']['Dec'] = array( 'fullname' => $lang_global['december'], 'count' => $row['month12'] );
+$cts['rows']['Jan'] = array( 'fullname' => $nv_Lang->getGlobal('january'), 'count' => $row['month01'] );
+$cts['rows']['Feb'] = array( 'fullname' => $nv_Lang->getGlobal('february'), 'count' => $row['month02'] );
+$cts['rows']['Mar'] = array( 'fullname' => $nv_Lang->getGlobal('march'), 'count' => $row['month03'] );
+$cts['rows']['Apr'] = array( 'fullname' => $nv_Lang->getGlobal('april'), 'count' => $row['month04'] );
+$cts['rows']['May'] = array( 'fullname' => $nv_Lang->getGlobal('may'), 'count' => $row['month05'] );
+$cts['rows']['Jun'] = array( 'fullname' => $nv_Lang->getGlobal('june'), 'count' => $row['month06'] );
+$cts['rows']['Jul'] = array( 'fullname' => $nv_Lang->getGlobal('july'), 'count' => $row['month07'] );
+$cts['rows']['Aug'] = array( 'fullname' => $nv_Lang->getGlobal('august'), 'count' => $row['month08'] );
+$cts['rows']['Sep'] = array( 'fullname' => $nv_Lang->getGlobal('september'), 'count' => $row['month09'] );
+$cts['rows']['Oct'] = array( 'fullname' => $nv_Lang->getGlobal('october'), 'count' => $row['month10'] );
+$cts['rows']['Nov'] = array( 'fullname' => $nv_Lang->getGlobal('november'), 'count' => $row['month11'] );
+$cts['rows']['Dec'] = array( 'fullname' => $nv_Lang->getGlobal('december'), 'count' => $row['month12'] );
 
 $total = 0;
 $max = 0;
@@ -59,7 +59,7 @@ foreach ($cts['rows'] as $key => $month) {
 if ($total) {
     $cts['current_month'] = date('M', NV_CURRENTTIME);
     $cts['max'] = $max;
-    $cts['total'] = array( $lang_global['total'], number_format($total) );
+    $cts['total'] = array( $nv_Lang->getGlobal('total'), number_format($total) );
 }
 
 $contents = nv_theme_statistics_referer($cts, $total);

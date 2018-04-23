@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['addtotopics'];
+$page_title = $nv_Lang->getModule('addtotopics');
 
 $id_array = array();
 $listid = $nv_Request->get_string('listid', 'get,post', '');
@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('topicsid', 'post')) {
 
     $nv_Cache->delMod($module_name);
 
-    exit($lang_module['topic_update_success']);
+    exit($nv_Lang->getModule('topic_update_success'));
 }
 
 $db->sqlreset()
@@ -54,8 +54,8 @@ if ($listid == '') {
 $result = $db->query($db->sql());
 
 $xtpl = new XTemplate('addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 while (list($id, $title) = $result->fetch(3)) {
     $xtpl->assign('ROW', array(

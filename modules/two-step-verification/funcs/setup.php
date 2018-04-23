@@ -63,7 +63,7 @@ if ($checkss == NV_CHECK_SESSION) {
         nv_json_result(array(
             'status' => 'error',
             'input' => 'opt',
-            'mess' => $lang_module['wrong_confirm']
+            'mess' => $nv_Lang->getModule('wrong_confirm')
         ));
     }
 

@@ -23,11 +23,11 @@ if (! defined('NV_IS_MOD_CONTACT')) {
  */
 function contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info, $alias_url;
+    global $module_info, $alias_url, $nv_Lang;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CHECKSS', $checkss);
     $xtpl->assign('CONTENT', $array_content);
 
@@ -174,12 +174,12 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
  */
 function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info, $global_config;
+    global $module_info, $global_config, $nv_Lang;
 
     $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('CONTENT', $array_content);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
 
@@ -189,13 +189,13 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 
     if ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->parse('main.recaptcha');
     } else {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
         $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
         $xtpl->parse('main.captcha');
     }
@@ -235,10 +235,10 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
  */
 function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
 {
-    global $global_config, $lang_module, $module_info, $array_department, $client_info;
+    global $global_config, $module_info, $array_department, $client_info, $nv_Lang;
 
     $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('SITE_URL', $global_config['site_url']);
     $xtpl->assign('FULLNAME', $fname);

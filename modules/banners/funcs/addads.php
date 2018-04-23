@@ -19,8 +19,8 @@ if (!defined('NV_IS_BANNER_CLIENT')) {
 }
 
 $xtpl = new XTemplate('addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('NV_BASE_URLSITE', NV_BASE_SITEURL);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
@@ -48,19 +48,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     if (!nv_capcha_txt($array['captcha'])) {
-        $error[] = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+        $error[] = ($global_config['captcha_type'] == 2 ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect'));
     } elseif (empty($array['title'])) {
-        $error[] = $lang_module['title_empty'];
+        $error[] = $nv_Lang->getModule('title_empty');
     } elseif (empty($array['blockid'])) {
-        $error[] = $lang_module['plan_not_selected'];
+        $error[] = $nv_Lang->getModule('plan_not_selected');
     } elseif (!isset($global_array_uplans[$array['blockid']])) {
-        $error[] = $lang_module['plan_wrong_selected'];
+        $error[] = $nv_Lang->getModule('plan_wrong_selected');
     } elseif (empty($global_array_uplans[$array['blockid']]['uploadtype']) and !empty($global_array_uplans[$array['blockid']]['require_image'])) {
-        $error[] = $lang_module['upload_blocked'];
+        $error[] = $nv_Lang->getModule('upload_blocked');
     } elseif ((!empty($array['url']) and !nv_is_url($array['url'])) or (empty($global_array_uplans[$array['blockid']]['require_image']) and empty($array['url']))) {
-        $error[] = $lang_module['click_url_invalid'];
+        $error[] = $nv_Lang->getModule('click_url_invalid');
     } elseif (!isset($_FILES['image']) and !empty($global_array_uplans[$array['blockid']]['require_image'])) {
-        $error[] = $lang_module['file_upload_empty'];
+        $error[] = $nv_Lang->getModule('file_upload_empty');
     } elseif (!empty($global_array_uplans[$array['blockid']]['require_image'])) {
         $upload = new NukeViet\Files\Upload(explode(',', $global_array_uplans[$array['blockid']]['uploadtype']), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
         $upload->setLanguage($lang_global);
@@ -117,11 +117,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $id = $db->insert_id($sql, 'id', $data_insert);
 
         if ($id) {
-            $xtpl->assign('pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '">');
+            $xtpl->assign('pagetitle', $nv_Lang->getModule('addads_success') . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '">');
         }
     }
 } else {
-    $xtpl->assign('pagetitle', $lang_module['addads_pagetitle']);
+    $xtpl->assign('pagetitle', $nv_Lang->getModule('addads_pagetitle'));
     $array['blockid'] = 0;
     $array['title'] = '';
     $array['description'] = '';
@@ -131,7 +131,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 $result = $db->query("SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC");
 
 foreach ($global_array_uplans as $row) {
-    $row['title'] .= ' (' . (empty($row['blang']) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']]) . ')';
+    $row['title'] .= ' (' . (empty($row['blang']) ? $nv_Lang->getModule('addads_block_lang_all') : $lang_array[$row['blang']]) . ')';
     $row['typeimage'] = $row['require_image'] ? 'true' : 'false';
     $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);
     $row['selected'] = $array['blockid'] == $row['id'] ? ' selected="selected"' : '';
@@ -142,15 +142,15 @@ foreach ($global_array_uplans as $row) {
 $xtpl->assign('DATA', $array);
 
 if ($global_config['captcha_type'] == 2) {
-    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+    $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
     $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
     $xtpl->parse('main.recaptcha');
 } else {
-    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+    $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
     $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
     $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+    $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
     $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
     $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
     $xtpl->parse('main.captcha');

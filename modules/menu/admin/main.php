@@ -17,7 +17,7 @@ $arr = array();
 
 $arr['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
-$page_title = $lang_module['m_list'];
+$page_title = $nv_Lang->getModule('m_list');
 
 // Delete menu
 if ($nv_Request->isset_request('del', 'post')) {
@@ -77,9 +77,9 @@ while ($row = $query2->fetch()) {
 
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 if (empty($array)) {
-    $xtpl->assign('ERROR', $lang_module['data_no']);
+    $xtpl->assign('ERROR', $nv_Lang->getModule('data_no'));
     $xtpl->parse('main.error');
 } else {
     foreach ($array as $row) {

@@ -33,11 +33,11 @@ function nv_error_theme($title, $content, $code)
  */
 function nv_mailHTML($title, $content, $footer = '')
 {
-    global $global_config, $lang_global;
+    global $global_config, $nv_Lang;
     $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
     $xtpl->assign('GCONFIG', $global_config);
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MESSAGE_TITLE', $title);
     $xtpl->assign('MESSAGE_CONTENT', $content);
     $xtpl->assign('MESSAGE_FOOTER', $footer);
@@ -53,13 +53,13 @@ function nv_mailHTML($title, $content, $footer = '')
  */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $nv_plugin_area;
-    
+    global $home, $array_mod_title, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $nv_plugin_area, $nv_Lang;
+
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
     if (!file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file)) {
-        nv_info_die($lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content']);
+        nv_info_die($nv_Lang->getGlobal('error_layout_title'), $nv_Lang->getGlobal('error_layout_title'), $nv_Lang->getGlobal('error_layout_content'));
     }
 
     if (isset($global_config['sitetimestamp'])) {
@@ -81,7 +81,7 @@ function nv_site_theme($contents, $full = true)
     $tpl = new \NukeViet\Template\NvSmarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
 
-    $tpl->assign('LANG', $lang_global);
+    $tpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme']);
     $tpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['user_check_pass_time']) - 62) * 1000);
     $tpl->assign('MODULE_NAME', $module_name);

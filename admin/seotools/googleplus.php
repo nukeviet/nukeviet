@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['googleplus_page_title'];
+$page_title = $nv_Lang->getModule('googleplus_page_title');
 
 // Sua
 if ($nv_Request->isset_request('edit', 'post')) {
@@ -142,8 +142,8 @@ if ($nv_Request->isset_request('changemod', 'post')) {
     die('OK');
 }
 $xtpl = new XTemplate('googleplus.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 // Danh sach
 if ($nv_Request->isset_request('qlist', 'post')) {

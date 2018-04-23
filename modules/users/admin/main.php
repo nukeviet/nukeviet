@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $table_caption = $lang_module['list_module_title'];
+$page_title = $table_caption = $nv_Lang->getModule('list_module_title');
 
 $usactive = ($global_config['idsite']) ? 3 : -1;
 $usactive_old = $nv_Request->get_int('usactive', 'cookie', $usactive);
@@ -42,25 +42,25 @@ $methods = array(
     'userid' => array(
         'key' => 'userid',
         'sql' => 'userid',
-        'value' => $lang_module['search_id'],
+        'value' => $nv_Lang->getModule('search_id'),
         'selected' => ''
     ),
     'username' => array(
         'key' => 'username',
         'sql' => 'username',
-        'value' => $lang_module['search_account'],
+        'value' => $nv_Lang->getModule('search_account'),
         'selected' => ''
     ),
     'fullname' => array(
         'key' => 'fullname',
         'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
-        'value' => $lang_module['search_name'],
+        'value' => $nv_Lang->getModule('search_name'),
         'selected' => ''
     ),
     'email' => array(
         'key' => 'email',
         'sql' => 'email',
-        'value' => $lang_module['search_mail'],
+        'value' => $nv_Lang->getModule('search_mail'),
         'selected' => ''
     )
 );
@@ -87,7 +87,7 @@ if (!empty($methodvalue)) {
         $methods[$method]['selected'] = ' selected="selected"';
     }
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
-    $table_caption = $lang_module['search_page_title'];
+    $table_caption = $nv_Lang->getModule('search_page_title');
 }
 
 
@@ -134,7 +134,7 @@ while ($row = $result2->fetch()) {
         'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
-        'level' => $lang_module['level0'],
+        'level' => $nv_Lang->getModule('level0'),
         'is_admin' => false,
         'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'])),
         'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username']
@@ -153,13 +153,13 @@ if (!empty($admin_in)) {
     while ($row = $query->fetch()) {
         $users_list[$row['admin_id']]['is_delete'] = false;
         if ($row['lev'] == 1) {
-            $users_list[$row['admin_id']]['level'] = $lang_global['level1'];
+            $users_list[$row['admin_id']]['level'] = $nv_Lang->getGlobal('level1');
             $users_list[$row['admin_id']]['img'] = 'admin1';
         } elseif ($row['lev'] == 2) {
-            $users_list[$row['admin_id']]['level'] = $lang_global['level2'];
+            $users_list[$row['admin_id']]['level'] = $nv_Lang->getGlobal('level2');
             $users_list[$row['admin_id']]['img'] = 'admin2';
         } else {
-            $users_list[$row['admin_id']]['level'] = $lang_global['level3'];
+            $users_list[$row['admin_id']]['level'] = $nv_Lang->getGlobal('level3');
             $users_list[$row['admin_id']]['img'] = 'admin3';
         }
 
@@ -186,15 +186,15 @@ if (!empty($admin_in)) {
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $head_tds = array();
-$head_tds['userid']['title'] = $lang_module['userid'];
+$head_tds['userid']['title'] = $nv_Lang->getModule('userid');
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
-$head_tds['username']['title'] = $lang_module['account'];
+$head_tds['username']['title'] = $nv_Lang->getModule('account');
 $head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=username&amp;sorttype=ASC';
-$head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
+$head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname');
 $head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=full_name&amp;sorttype=ASC';
-$head_tds['email']['title'] = $lang_module['email'];
+$head_tds['email']['title'] = $nv_Lang->getModule('email');
 $head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
-$head_tds['regdate']['title'] = $lang_module['register_date'];
+$head_tds['regdate']['title'] = $nv_Lang->getModule('register_date');
 $head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
 
 foreach ($orders as $order) {
@@ -208,8 +208,8 @@ foreach ($orders as $order) {
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -283,9 +283,9 @@ foreach ($users_list as $u) {
 
 $has_footer = false;
 $array_action = array(
-    'del' => $lang_module['delete'],
-    'active' => $lang_module['memberlist_active'],
-    'unactive' => $lang_module['memberlist_unactive']
+    'del' => $nv_Lang->getModule('delete'),
+    'active' => $nv_Lang->getModule('memberlist_active'),
+    'unactive' => $nv_Lang->getModule('memberlist_unactive')
 );
 if ($has_choose) {
     $has_footer = true;

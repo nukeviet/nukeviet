@@ -28,7 +28,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $html = '';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['blockid'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('blockid') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_blockid" class="form-control">';
 
@@ -44,7 +44,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrows'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('numrows') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_numrows" class="form-control">';
 

@@ -23,11 +23,11 @@ if (defined('NV_IS_GODADMIN')) {
         $login_result = ftp_login($conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass']);
 
         if ((! $conn_id) or (! $login_result)) {
-            $error[] = $lang_module['checkchmod_error_account'];
+            $error[] = $nv_Lang->getModule('checkchmod_error_account');
         } elseif (ftp_chdir($conn_id, $global_config['ftp_path'])) {
             $ftp_check_login = 1;
         } else {
-            $error[] = $lang_module['checkchmod_error_path'];
+            $error[] = $nv_Lang->getModule('checkchmod_error_path');
         }
     }
 
@@ -46,7 +46,7 @@ if (defined('NV_IS_GODADMIN')) {
         } else {
             //try chmod unix command
             if (! chmod(NV_ROOTDIR . '/' . $dir, 0777)) {
-                $error[] = $lang_module['checkchmod_error_unable_chmod'] . $dir;
+                $error[] = $nv_Lang->getModule('checkchmod_error_unable_chmod') . $dir;
             }
         }
     }
@@ -54,6 +54,6 @@ if (defined('NV_IS_GODADMIN')) {
     if (! empty($error)) {
         echo implode('', $error);
     } else {
-        echo $lang_module['checkchmod_success'];
+        echo $nv_Lang->getModule('checkchmod_success');
     }
 }

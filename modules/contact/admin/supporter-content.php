@@ -17,7 +17,7 @@ $error = array();
 $row['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
 if ($row['id'] > 0) {
-    $lang_module['supporter_add'] = $lang_module['supporter_edit'];
+    $nv_Lang->getModule('supporter_add') = $nv_Lang->getModule('supporter_edit');
     $row = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id=' . $row['id'])->fetch();
     if (empty($row)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
@@ -57,11 +57,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (empty($row['departmentid'])) {
-        $error[] = $lang_module['error_required_departmentid'];
+        $error[] = $nv_Lang->getModule('error_required_departmentid');
     } elseif (empty($row['full_name'])) {
-        $error[] = $lang_module['error_required_full_name'];
+        $error[] = $nv_Lang->getModule('error_required_full_name');
     } elseif (empty($row['phone'])) {
-        $error[] = $lang_module['error_required_phone'];
+        $error[] = $nv_Lang->getModule('error_required_phone');
     } elseif (!empty($row['email']) and ($error_email = nv_check_valid_email($row['email'])) != '') {
         $error[] = $error_email;
     }
@@ -103,8 +103,8 @@ $sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $module_data . '_dep
 $array_department = $nv_Cache->db($sql, 'id', $module_name);
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_UPLOAD', $module_upload);
 $xtpl->assign('OP', $op);
@@ -140,7 +140,7 @@ if (!empty($error)) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['supporter_add'];
+$page_title = $nv_Lang->getModule('supporter_add');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

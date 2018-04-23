@@ -48,21 +48,21 @@ include NV_ROOTDIR . '/includes/core/dump.php' ;
 $result = nv_dump_save($contents);
 
 $xtpl = new XTemplate('save.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 if (empty($result)) {
-    $xtpl->assign('ERROR', sprintf($lang_module['save_error'], NV_LOGS_DIR . '/dump_backup'));
+    $xtpl->assign('ERROR', sprintf($nv_Lang->getModule('save_error'), NV_LOGS_DIR . '/dump_backup'));
     $xtpl->parse('main.error');
 } else {
     $file = explode('_', $file_name);
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['savefile'], 'File name: ' . end($file), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savefile'), 'File name: ' . end($file), $admin_info['userid']);
 
     $xtpl->assign('LINK_DOWN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file_name . '&amp;checkss=' . md5($file_name . NV_CHECK_SESSION));
 
     $xtpl->parse('main.result');
 }
 
-$page_title = $lang_module['save_data'];
+$page_title = $nv_Lang->getModule('save_data');
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

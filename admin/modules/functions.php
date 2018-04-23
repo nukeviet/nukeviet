@@ -15,7 +15,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 $menu_top = array(
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_modules']
+    'custom_title' => $nv_Lang->getGlobal('mod_modules')
 );
 
 define('NV_IS_FILE_MODULES', true);
@@ -389,12 +389,12 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
  */
 function main_theme($contents)
 {
-    global $global_config, $module_file, $lang_global, $lang_module;
+    global $global_config, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CONTENT', $contents);
 
     $xtpl->parse('main');
@@ -413,11 +413,11 @@ function main_theme($contents)
  */
 function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weight_list)
 {
-    global $global_config, $module_file, $lang_global;
+    global $global_config, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CAPTION', $contents['caption']);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (! empty($act_modules)) {
         foreach ($contents['thead'] as $thead) {
@@ -583,11 +583,11 @@ function change_site_title_theme($contents)
  */
 function setup_modules($array_head, $array_modules, $array_virtual_head, $array_virtual_modules)
 {
-    global $global_config, $module_file, $lang_global, $lang_module;
+    global $global_config, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('setup_modules.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CAPTION', $array_head['caption']);
 
     foreach ($array_head['head'] as $thead) {

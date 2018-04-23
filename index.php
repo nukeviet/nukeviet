@@ -158,11 +158,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
 
             // Ket noi ngon ngu cua module
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
-                require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
-                require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-            }
+            $nv_Lang->loadModule($module_file);
 
             // Xem trước giao diện
             if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $nv_preview_theme . '/theme.php')) {
@@ -275,11 +271,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme.php';
 
             // Ket noi ngon ngu theo theme
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php')) {
-                require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php')) {
-                require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php';
-            }
+            $nv_Lang->loadTheme($global_config['module_theme']);
 
             // Xac dinh template module
             $module_info['template'] = $global_config['module_theme'];
@@ -331,11 +323,11 @@ if (preg_match($global_config['check_module'], $module_name)) {
             nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
         } elseif (!defined('NV_IS_ADMIN') and ($groups_view == '2' or $groups_view == '1')) {
             // Exit
-            nv_info_die($lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'], 404);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('site_info'), $nv_Lang->getGlobal('module_for_admin'), 404);
         } elseif (defined('NV_IS_USER') and !nv_user_in_groups($groups_view)) {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
         }
     }
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);

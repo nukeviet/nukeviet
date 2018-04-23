@@ -55,10 +55,10 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php')) {
     // Connect with file theme configuration
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php';
 } else {
-    $contents = '<h2 class="center vcenter" style="margin: 50px;">' . sprintf($lang_module['config_not_exit'], $selectthemes) . '</h2>';
+    $contents = '<h2 class="center vcenter" style="margin: 50px;">' . sprintf($nv_Lang->getModule('config_not_exit'), $selectthemes) . '</h2>';
 }
 
-$page_title = $lang_module['config'] . ':' . $selectthemes;
+$page_title = $nv_Lang->getModule('config') . ':' . $selectthemes;
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

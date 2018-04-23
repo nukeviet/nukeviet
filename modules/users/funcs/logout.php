@@ -17,10 +17,10 @@ if (!defined('NV_IS_USER') and !defined('NV_IS_1STEP_USER')) {
 }
 
 if (defined('NV_IS_ADMIN')) {
-    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $user_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, 0);
+    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $user_info['username'] . '] ' . $nv_Lang->getGlobal('admin_logout_title'), ' Client IP:' . NV_CLIENT_IP, 0);
     $nv_Request->unset_request('admin,online', 'session');
 } elseif (!empty($global_users_config['active_user_logs'])) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $user_info['username'] . '] ' . $lang_module['userlogout'], ' Client IP:' . NV_CLIENT_IP, 0);
+    nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $user_info['username'] . '] ' . $nv_Lang->getModule('userlogout'), ' Client IP:' . NV_CLIENT_IP, 0);
 }
 
 $url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
@@ -36,7 +36,7 @@ if (defined('NV_IS_USER_FORUM')) {
 
 $nv_ajax_login = $nv_Request->get_int('nv_ajax_login', 'post', 0);
 if ($nv_ajax_login) {
-    $info = $lang_module['logout_ok'] . '<br /><br /><img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif">';
+    $info = $nv_Lang->getModule('logout_ok') . '<br /><br /><img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif">';
     include NV_ROOTDIR . '/includes/header.php';
     echo $info;
     include NV_ROOTDIR . '/includes/footer.php';
@@ -45,11 +45,11 @@ if ($nv_ajax_login) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
 
-$info = $lang_module['logout_ok'] . '<br /><br />';
+$info = $nv_Lang->getModule('logout_ok') . '<br /><br />';
 $info .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />';
-$info .= '[<a href="' . $url_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]';
+$info .= '[<a href="' . $url_redirect . '">' . $nv_Lang->getModule('redirect_to_back') . '</a>]';
 
 $contents = user_info_exit($info);
 $contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite($url_redirect) . '" />';

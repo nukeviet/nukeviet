@@ -12,7 +12,7 @@ if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['stats_views'];
+$page_title = $nv_Lang->getModule('stats_views');
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -21,8 +21,8 @@ if (!defined('NV_IS_BANNER_CLIENT')) {
 $xtpl = new XTemplate('stats.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 $xtpl->assign('NV_BASE_URLSITE', NV_BASE_SITEURL);
 $xtpl->assign('charturl', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=viewmap');
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MANAGEMENT', $manament);
 $xtpl->parse('main.management');
 

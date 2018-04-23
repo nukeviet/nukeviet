@@ -15,7 +15,7 @@ if ((! defined('NV_SYSTEM') and ! defined('NV_ADMIN')) or ! defined('NV_MAINFILE
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
 
 // Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
-global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global;
+global $db, $nv_Request, $nv_plugin_area, $headers, $nv_Lang;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -23,7 +23,7 @@ $contents = nv_url_rewrite($contents);
 if (! defined('NV_IS_AJAX')) {
     $contents = nv_change_buffer($contents);
     if (defined('NV_IS_SPADMIN')) {
-        $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($lang_global['memory_time_usage'], nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
+        $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($nv_Lang->getGlobal('memory_time_usage'), nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }
 }
 

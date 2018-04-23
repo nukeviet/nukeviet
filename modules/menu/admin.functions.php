@@ -23,9 +23,9 @@ $allow_func = array( 'main', 'menu', 'rows', 'link_menu', 'link_module', 'change
 
 // Loai lien ket
 $type_target = array();
-$type_target[1] = $lang_module['type_target1'];
-$type_target[2] = $lang_module['type_target2'];
-$type_target[3] = $lang_module['type_target3'];
+$type_target[1] = $nv_Lang->getModule('type_target1');
+$type_target[2] = $nv_Lang->getModule('type_target2');
+$type_target[3] = $nv_Lang->getModule('type_target3');
 
 /**
  * nv_list_menu()
@@ -61,7 +61,7 @@ function nv_list_menu()
  */
 function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
 {
-    global $db, $lang_global, $module_name, $module_data, $op;
+    global $db, $module_name, $module_data, $op, $nv_Lang;
 
     $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
@@ -135,7 +135,7 @@ function nv_menu_del_sub($id, $parentid)
  */
 function nv_menu_get_submenu($id, $alias_selected, $array_item, $sp_i)
 {
-    global  $array_submenu, $sp, $mod_name;
+    global $array_submenu, $sp, $mod_name;
     foreach ($array_item as $item2) {
         if (isset($item2['parentid']) and $item2['parentid'] == $id) {
             $item2['title'] = $sp_i . $item2['title'];

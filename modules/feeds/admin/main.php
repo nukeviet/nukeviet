@@ -12,7 +12,7 @@ if (! defined('NV_IS_RSS_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['content'];
+$page_title = $nv_Lang->getModule('content');
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -39,8 +39,8 @@ if (empty($bodytext)) {
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 if ($is_edit) {
     $bodytext = htmlspecialchars(nv_editor_br2nl($bodytext));

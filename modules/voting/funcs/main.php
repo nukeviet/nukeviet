@@ -45,19 +45,19 @@ if (empty($vid)) {
 
     if (!empty($allowed)) {
         $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
         foreach ($allowed as $current_voting) {
             $voting_array = array(
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
                 'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
-                'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], (int) $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
+                'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($nv_Lang->getModule('voting_warning_all'), (int) $current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
                 'vid' => $current_voting['vid'],
                 'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
                 'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name,
-                'langresult' => $lang_module['voting_result'],
-                'langsubmit' => $lang_module['voting_hits'],
+                'langresult' => $nv_Lang->getModule('voting_result'),
+                'langsubmit' => $nv_Lang->getModule('voting_hits'),
                 'publtime' => nv_date('l - d/m/Y H:i', $current_voting['publ_time'])
             );
             $xtpl->assign('VOTING', $voting_array);
@@ -80,11 +80,11 @@ if (empty($vid)) {
             if ($voting_array['active_captcha']) {
                 if ($global_config['captcha_type'] == 2) {
                     $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                    $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
                     $xtpl->parse('main.loop.has_captcha.recaptcha');
                 } else {
-                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                    $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
+                    $xtpl->assign('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
                     $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                     $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
                     $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
@@ -160,7 +160,7 @@ if (empty($vid)) {
 
     if ($count) {
         if ($row['active_captcha'] and !nv_capcha_txt($captcha)) {
-            die('ERROR|' . $lang_global['securitycodeincorrect']);
+            die('ERROR|' . $nv_Lang->getGlobal('securitycodeincorrect'));
         }
 
         $acceptcm = (int) $row['acceptcm'];
@@ -169,15 +169,15 @@ if (empty($vid)) {
         if (file_exists($dir . '/' . $logfile)) {
             $timeout = filemtime($dir . '/' . $logfile);
             $timeout = ceil(($difftimeout - NV_CURRENTTIME + $vtime) / 60);
-            $note = sprintf($lang_module['timeoutmsg'], $timeout);
+            $note = sprintf($nv_Lang->getModule('timeoutmsg'), $timeout);
         } elseif ($count <= $acceptcm) {
             $in = implode(',', $array_id);
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
             $db->query($sql);
             file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
-            $note = $lang_module['okmsg'];
+            $note = $nv_Lang->getModule('okmsg');
         } else {
-            $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+            $note = ($acceptcm > 1) ? sprintf($nv_Lang->getModule('voting_warning_all'), $acceptcm) : $nv_Lang->getModule('voting_warning_accept1');
         }
     }
 
@@ -194,9 +194,9 @@ if (empty($vid)) {
 
     $pubtime = nv_date('l - d/m/Y H:i', $row['publ_time']);
     $lang = array(
-        'total' => $lang_module['voting_total'],
-        'counter' => $lang_module['voting_counter'],
-        'publtime' => $lang_module['voting_pubtime']
+        'total' => $nv_Lang->getModule('voting_total'),
+        'counter' => $nv_Lang->getModule('voting_counter'),
+        'publtime' => $nv_Lang->getModule('voting_pubtime')
     );
     $voting = array(
         'question' => $row['question'],

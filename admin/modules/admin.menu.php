@@ -12,8 +12,8 @@ if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['setup'] = $lang_module['modules'];
-$submenu['vmodule'] = $lang_module['vmodule_add'];
+$submenu['setup'] = $nv_Lang->getModule('modules');
+$submenu['vmodule'] = $nv_Lang->getModule('vmodule_add');
 
 $allow_func = array(
     'main',

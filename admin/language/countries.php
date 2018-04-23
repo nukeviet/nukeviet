@@ -12,10 +12,10 @@ if (! defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['countries'];
+$page_title = $nv_Lang->getModule('countries');
 
 $array_lang_setup = array();
-$array_lang_setup[] = array( '', $lang_module['site_lang'] );
+$array_lang_setup[] = array( '', $nv_Lang->getModule('site_lang') );
 
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query($sql);
@@ -52,7 +52,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $nb = 0;
 foreach ($countries as $key => $value) {

@@ -81,7 +81,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->execute();
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('modules') . ' ' . $setmodule, '', $admin_info['userid']);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
             }
         }
@@ -90,7 +90,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
-$page_title = $lang_module['modules'];
+$page_title = $nv_Lang->getModule('modules');
 $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
 $modules_data = array();
 
@@ -236,25 +236,25 @@ foreach ($modules_data as $row) {
 }
 
 $array_head = array(
-    'caption' => $lang_module['module_sys'],
+    'caption' => $nv_Lang->getModule('module_sys'),
     'head' => array(
-        $lang_module['weight'],
-        $lang_module['module_name'],
-        $lang_module['version'],
-        $lang_module['settime'],
-        $lang_module['author'],
+        $nv_Lang->getModule('weight'),
+        $nv_Lang->getModule('module_name'),
+        $nv_Lang->getModule('version'),
+        $nv_Lang->getModule('settime'),
+        $nv_Lang->getModule('author'),
         ''
     )
 );
 
 $array_virtual_head = array(
-    'caption' => $lang_module['vmodule'],
+    'caption' => $nv_Lang->getModule('vmodule'),
     'head' => array(
-        $lang_module['weight'],
-        $lang_module['module_name'],
-        $lang_module['vmodule_file'],
-        $lang_module['settime'],
-        $lang_module['vmodule_note'],
+        $nv_Lang->getModule('weight'),
+        $nv_Lang->getModule('module_name'),
+        $nv_Lang->getModule('vmodule_file'),
+        $nv_Lang->getModule('settime'),
+        $nv_Lang->getModule('vmodule_note'),
         ''
     )
 );

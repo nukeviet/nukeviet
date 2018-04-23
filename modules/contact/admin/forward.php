@@ -37,9 +37,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
 
     if ($forward_to == '') {
-        $error = $lang_module['error_mail_empty'];
+        $error = $nv_Lang->getModule('error_mail_empty');
     } elseif (strip_tags($mess_content) == '') {
-        $error = $lang_module['no_content_send_title'];
+        $error = $nv_Lang->getModule('no_content_send_title');
     } else {
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
 
@@ -55,7 +55,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $mail->Subject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
-            $content = sprintf($lang_module['forward'], $forward_to)  . '</br>' . $mess_content;
+            $content = sprintf($nv_Lang->getModule('forward'), $forward_to)  . '</br>' . $mess_content;
             $sth->bindParam(':reply_content', $content, PDO::PARAM_STR, strlen($content));
             $sth->execute();
 
@@ -63,12 +63,12 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id);
         } else {
-            $error = $lang_global['error_sendmail_admin'];
+            $error = $nv_Lang->getGlobal('error_sendmail_admin');
         }
     }
 
 } else {
-    $mess_content .= '-----------------------' . $lang_module['forwarded'] . '-------------------------<br />';
+    $mess_content .= '-----------------------' . $nv_Lang->getModule('forwarded') . '-------------------------<br />';
     $mess_content .= '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';
     $mess_content .= '<strong>Sent:</strong> ' . date('r', $row['send_time']) . '<br />';
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
@@ -88,8 +88,8 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 $row['email'] = $forward_to;
 $xtpl = new XTemplate('forward.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('POST', $row);
 $is_read = intval($row['is_read']);
 if (!$is_read) {

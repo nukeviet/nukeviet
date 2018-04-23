@@ -21,7 +21,7 @@ try {
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->execute();
     if ($sth->fetchColumn() and $global_config['site_theme'] != $theme) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['theme_delete'], 'theme ' . $theme, $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('theme_delete'), 'theme ' . $theme, $admin_info['userid']);
 
         if (preg_match($global_config['check_theme_mobile'], $theme)) {
             $sth = $db->prepare("UPDATE " . NV_MODULES_TABLE . " SET mobile='' WHERE mobile = :theme");
@@ -50,9 +50,9 @@ try {
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_blocks_weight');
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_blocks_groups');
 
-        echo $lang_module['theme_delete_success'];
+        echo $nv_Lang->getModule('theme_delete_success');
     } else {
-        echo $lang_module['theme_delete_unsuccess'];
+        echo $nv_Lang->getModule('theme_delete_unsuccess');
     }
 } catch (PDOException $e) {
     die($e->getMessage());

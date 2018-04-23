@@ -21,7 +21,7 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
     require NV_ROOTDIR . '/includes/language/en/admin_seotools.php';
 }
 
-$page_title = $lang_module['rpc'];
+$page_title = $nv_Lang->getModule('rpc');
 if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     $id = $nv_Request->get_int('id', 'post,get', '');
     if ($id > 0) {
@@ -46,9 +46,9 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
                     $getdata = $nv_Request->get_int('getdata', 'post,get', '0');
                     if (empty($getdata)) {
-                        $page_title = $lang_module['rpc'] . ': ' . $news_contents['title'];
+                        $page_title = $nv_Lang->getModule('rpc') . ': ' . $news_contents['title'];
                         $xtpl = new XTemplate('rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/seotools');
-                        $xtpl->assign('LANG', $lang_module);
+                        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
                         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
                         $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
                         $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -86,7 +86,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         if (($timeout != 0) and ($timeout < 60)) {
                             $timeout = 60 - $timeout;
                             $timeout = nv_convertfromSec($timeout);
-                            $finish->nodeValue = 'glb|' . sprintf($lang_module['rpc_error_timeout'], $timeout);
+                            $finish->nodeValue = 'glb|' . sprintf($nv_Lang->getModule('rpc_error_timeout'), $timeout);
                             $content = $xml2->saveXML();
                             @Header('Content-Type: text/xml; charset=utf-8');
                             print_r($content);
@@ -163,13 +163,13 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         die();
                     }
                 } else {
-                    $msg1 = $lang_module['content_saveok'];
-                    $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
+                    $msg1 = $nv_Lang->getModule('content_saveok');
+                    $msg2 = $nv_Lang->getModule('content_main') . ' ' . $module_info['custom_title'];
 
                     $contents .= "<div align=\"center\">";
                     $contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
                     $contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
-                    $contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $lang_module['rpc_ping_page'] . "</a></strong>";
+                    $contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $nv_Lang->getModule('rpc_ping_page') . "</a></strong>";
                     $contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
                     $contents .= "</div>";
                     $contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . $nv_redirect2 . "\" />";

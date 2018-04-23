@@ -27,23 +27,23 @@ $plans = array();
 $plans_form = array();
 
 while ($row = $result->fetch()) {
-    $plans[$row['id']] = $row['title'] . ' (' . (!empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ')';
+    $plans[$row['id']] = $row['title'] . ' (' . (!empty($row['blang']) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ')';
     $plans_form[$row['id']] = $row['form'];
 }
 
 $contents = array();
 $contents['thead'] = array(
-    $lang_module['title'],
-    $lang_module['in_plan'],
-    $lang_module['of_user'],
-    $lang_module['publ_date'],
-    $lang_module['exp_date'],
-    $lang_module['is_act'],
-    $lang_global['actions']
+    $nv_Lang->getModule('title'),
+    $nv_Lang->getModule('in_plan'),
+    $nv_Lang->getModule('of_user'),
+    $nv_Lang->getModule('publ_date'),
+    $nv_Lang->getModule('exp_date'),
+    $nv_Lang->getModule('is_act'),
+    $nv_Lang->getGlobal('actions')
 );
-$contents['view'] = $lang_global['detail'];
-$contents['edit'] = $lang_global['edit'];
-$contents['del'] = $lang_global['delete'];
+$contents['view'] = $nv_Lang->getGlobal('detail');
+$contents['edit'] = $nv_Lang->getGlobal('edit');
+$contents['del'] = $nv_Lang->getGlobal('delete');
 $contents['rows'] = array();
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ';
@@ -57,9 +57,9 @@ $aray_act = array(
 );
 
 if ($pid > 0 and isset($plans[$pid])) {
-    $contents['thead'][1] = $lang_module['click_url'];
+    $contents['thead'][1] = $nv_Lang->getModule('click_url');
     if ($plans_form[$pid] == 'sequential' and in_array($act, array(0, 1, 3))) {
-        array_unshift($contents['thead'], $lang_module['weight']);
+        array_unshift($contents['thead'], $nv_Lang->getModule('weight'));
         define('NV_BANNER_WEIGHT', true);
     }
 }
@@ -68,18 +68,18 @@ if (in_array($act, $aray_act)) {
     $where[] = 'act=' . $nv_Request->get_int('act', 'get');
     $contents['caption'] = $lang_module['banners_list' . $act];
 } else {
-    $contents['caption'] = $lang_module['banners_list'];
+    $contents['caption'] = $nv_Lang->getModule('banners_list');
 }
 
 if ($clid > 0) {
     $user = $db->query('SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $clid)->fetch();
     if (!empty($user)) {
         $where[] = 'clid=' . $clid;
-        $contents['caption'] .= ' ' . sprintf($lang_module['banners_list_cl'], $user['username']);
+        $contents['caption'] .= ' ' . sprintf($nv_Lang->getModule('banners_list_cl'), $user['username']);
     }
 } elseif ($pid > 0 and isset($plans[$pid])) {
     $where[] = 'pid=' . $pid;
-    $contents['caption'] .= ' ' . sprintf($lang_module['banners_list_pl'], $plans[$pid]);
+    $contents['caption'] .= ' ' . sprintf($nv_Lang->getModule('banners_list_pl'), $plans[$pid]);
 }
 if (!empty($where)) {
     $sql .= implode(' AND ', $where);
@@ -152,7 +152,7 @@ foreach ($rows as $row) {
 
     $contents['rows'][$row['id']]['clid'] = $row['clid'];
     $contents['rows'][$row['id']]['publ_date'] = date('d/m/Y', $row['publ_time']);
-    $contents['rows'][$row['id']]['exp_date'] = !empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : $lang_module['unlimited'];
+    $contents['rows'][$row['id']]['exp_date'] = !empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : $nv_Lang->getModule('unlimited');
     $contents['rows'][$row['id']]['act'] = array(
         'act_' . $row['id'],
         $row['act'],
