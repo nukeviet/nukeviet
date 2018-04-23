@@ -446,7 +446,7 @@ for ($i = 1; $i <= 4; ++$i) {
     $xtpl->assign('ACTIVE_DEVICE', array(
         'key' => $i,
         'checked' => (in_array($i, $active_device)) ? ' checked="checked"' : '',
-        'title' => $lang_module['show_device_' . $i] ));
+        'title' => $nv_Lang->getModule('show_device_' . $i) ));
     $xtpl->parse('main.active_device');
 }
 

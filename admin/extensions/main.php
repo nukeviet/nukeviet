@@ -84,7 +84,7 @@ if (! empty($error)) {
 
     foreach ($array['data'] as $row) {
         $row['rating_avg'] = ceil($row['rating_avg']);
-        $row['type'] = $lang_module['types_' . intval($row['tid'])];
+        $row['type'] = $nv_Lang->getModule('types_' . intval($row['tid']));
         $row['compatible_class'] = empty($row['compatible']) ? 'text-danger' : 'text-success';
         $row['compatible_title'] = empty($row['compatible']) ? $nv_Lang->getModule('incompatible') : $nv_Lang->getModule('compatible');
 

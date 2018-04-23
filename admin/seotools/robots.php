@@ -129,7 +129,7 @@ foreach ($files as $file) {
         for ($i = 0; $i <= 2; $i++) {
             $option = array(
                 'value' => $i,
-                'title' => $lang_module['robots_type_' . $i],
+                'title' => $nv_Lang->getModule('robots_type_' . $i),
                 'selected' => ($type == $i) ? ' selected="selected"' : ''
             );
 
@@ -151,7 +151,7 @@ foreach ($robots_other as $file => $value) {
     for ($i = 0; $i <= 2; $i++) {
         $option = array(
             'value' => $i,
-            'title' => $lang_module['robots_type_' . $i],
+            'title' => $nv_Lang->getModule('robots_type_' . $i),
             'selected' => ($value == $i) ? ' selected="selected"' : ''
         );
 

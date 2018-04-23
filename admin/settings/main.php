@@ -186,7 +186,7 @@ $xtpl->assign('VALUE', $value_setting);
 
 foreach ($array_theme_type as $theme_type) {
     $xtpl->assign('THEME_TYPE', $theme_type);
-    $xtpl->assign('THEME_TYPE_TXT', $lang_global['theme_type_' . $theme_type]);
+    $xtpl->assign('THEME_TYPE_TXT', $nv_Lang->getGlobal('theme_type_' . $theme_type));
     $xtpl->assign('THEME_TYPE_CHECKED', in_array($theme_type, $global_config['array_theme_type']) ? ' checked="checked"' : '');
     $xtpl->parse('main.theme_type');
 }

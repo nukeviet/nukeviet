@@ -109,7 +109,7 @@ while ($row = $_query->fetch()) {
 foreach ($_nv_plugin_area as $area => $nv_plugin_area_i) {
     $_sizeof = sizeof($nv_plugin_area_i);
     foreach ($nv_plugin_area_i as $row) {
-        $row['plugin_area'] = ($row['weight'] == 1) ? $lang_module['plugin_area_' . $row['plugin_area']] : '';
+        $row['plugin_area'] = ($row['weight'] == 1) ? $nv_Lang->getModule('plugin_area_' . $row['plugin_area']) : '';
         $row['plugin_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dpid=' . $row['pid'] . '&amp;checkss=' . md5($row['pid'] . '-' . NV_CHECK_SESSION);
         $xtpl->assign('DATA', $row);
         for ($i = 1; $i <= $_sizeof; $i++) {
@@ -149,7 +149,7 @@ if (!empty($plugin_new)) {
                     $_index = $positions[$j]->id;
                     if ($_index >= 1 and $_index <= 4) {
                         $xtpl->assign('AREA_VALUE', $_index);
-                        $xtpl->assign('AREA_TEXT', $lang_module['plugin_area_' . $_index]);
+                        $xtpl->assign('AREA_TEXT', $nv_Lang->getModule('plugin_area_' . $_index));
                         $xtpl->parse('main.add.area');
                     }
                 }

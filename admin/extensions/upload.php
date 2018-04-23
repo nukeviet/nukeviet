@@ -607,7 +607,7 @@ if (!empty($error)) {
 }
 
 if (!empty($info)) {
-    $info['exttype'] = isset($lang_module['extType_' . $info['exttype']]) ? $lang_module['extType_' . $info['exttype']] : $nv_Lang->getModule('extType_other');
+    $info['exttype'] = $nv_Lang->getModule('extType_' . $info['exttype']);
 
     $xtpl->assign('INFO', $info);
     $xtpl->assign('EXTRACTLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION));

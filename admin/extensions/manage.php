@@ -515,7 +515,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
 $array_extType = array( 'module', 'block', 'theme', 'cronjob', 'other', 'sys', 'admin' );
 $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype='] = $nv_Lang->getModule('manage');
 foreach ($array_extType as $_type) {
-    $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype=' . $_type] = $lang_module['extType_' . $_type];
+    $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype=' . $_type] = $nv_Lang->getModule('extType_' . $_type);
 }
 
 $selecttype_old = $nv_Request->get_string('selecttype', 'cookie', '');
@@ -599,7 +599,7 @@ foreach ($array_langs as $lang) {
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename';
 if (in_array($selecttype, $array_extType)) {
     $sql .= ' AND type = ' . $db->quote($selecttype);
-    $page_title .= ': ' . $lang_module['extType_' . $selecttype];
+    $page_title .= ': ' . $nv_Lang->getModule('extType_' . $selecttype);
 }
 $sql .= ' ORDER BY addtime DESC';
 $result = $db->query($sql);
@@ -626,7 +626,7 @@ while ($row = $result->fetch()) {
 
     $row['url_package'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('package_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
     $row['url_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('delete_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
-    $row['type'] = isset($lang_module['extType_' . $row['type']]) ? $lang_module['extType_' . $row['type']] : $nv_Lang->getModule('extType_other');
+    $row['type'] = $nv_Lang->getModule('extType_' . $row['type']);
     $row['version'] = array_filter(explode(" ", $row['version']));
 
     if (sizeof($row['version']) == 2) {

@@ -31,7 +31,7 @@ while ($row = $result->fetch()) {
     $contents[$row['id']]['detail'][$nv_Lang->getModule('is_sys')] = ! empty($row['is_sys']) ? $nv_Lang->getModule('system') : $nv_Lang->getModule('client');
     $contents[$row['id']]['detail'][$nv_Lang->getModule('act')] = ! empty($row['act']) ? $nv_Lang->getModule('act1') : $nv_Lang->getModule('act0');
     $contents[$row['id']]['detail'][$nv_Lang->getModule('last_time')] = ! empty($row['last_time']) ? nv_date('l, d/m/Y H:i', $row['last_time']) : $nv_Lang->getModule('last_time0');
-    $contents[$row['id']]['detail'][$nv_Lang->getModule('last_result')] = empty($row['last_time']) ? $nv_Lang->getModule('last_result_empty') : $lang_module['last_result' . $row['last_result']];
+    $contents[$row['id']]['detail'][$nv_Lang->getModule('last_result')] = empty($row['last_time']) ? $nv_Lang->getModule('last_result_empty') : $nv_Lang->getModule('last_result' . $row['last_result']);
 
     if (empty($row['act'])) {
         $next_time = 'n/a';

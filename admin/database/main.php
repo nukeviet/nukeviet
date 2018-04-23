@@ -42,7 +42,7 @@ $contents = array();
 $contents['captions']['database_info'] = sprintf($nv_Lang->getModule('database_info'), $database['db_dbname']);
 
 foreach ($database as $key => $values) {
-    $contents['database'][$lang_module[$key]] = $values;
+    $contents['database'][$nv_Lang->getModule($key)] = $values;
 }
 unset($database);
 
