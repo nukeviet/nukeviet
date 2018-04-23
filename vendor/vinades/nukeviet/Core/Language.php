@@ -61,15 +61,18 @@ class Language
     /**
      * Language::changeLang()
      *
-     * @param mixed $lang
+     * @param string $lang
      * @return void
      */
-    public function changeLang($lang)
+    public function changeLang($lang = '')
     {
-        $this->lang = $lang;
+        if (!empty($lang)) {
+            $this->lang = $lang;
+        }
         $this->tmplang_global = array();
         $this->tmplang_module = array();
         $this->tmplang_block = array();
+        $this->isTmpLoaded = false;
     }
 
     /**

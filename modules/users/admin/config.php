@@ -265,7 +265,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array = array(
             'id' => $id,
             'select' => ($global_config['nv_unick_type'] == $id) ? ' selected="selected"' : '',
-            'value' => $lang_global['unick_type_' . $id]
+            'value' => $nv_Lang->getGlobal('unick_type_' . $id)
         );
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unick_type');
@@ -295,7 +295,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array = array(
             'id' => $id,
             'select' => ($global_config['nv_upass_type'] == $id) ? ' selected="selected"' : '',
-            'value' => $lang_global['upass_type_' . $id]
+            'value' => $nv_Lang->getGlobal('upass_type_' . $id)
         );
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upass_type');

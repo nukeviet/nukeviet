@@ -557,7 +557,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         die($nv_Lang->getModule('error_group_not_found'));
     }
     $xtpl->assign('GID', $group_id);
-    $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
+    $title = ($group_id < 10) ? $nv_Lang->getGlobal('level' . $group_id) : $groupsList[$group_id]['title'];
 
     $array_userid = array();
     $array_number = array();
@@ -635,7 +635,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
         foreach ($group_users as $_type => $arr_userids) {
-            $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
+            $xtpl->assign('PTITLE', $nv_Lang->getModule($_type . '_in_group_caption', $title, number_format($array_number[$_type], 0, ',', '.')));
             $stt=1;
             foreach ($arr_userids as $_userid) {
 

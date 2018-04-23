@@ -117,7 +117,7 @@ if (empty($row['active2step'])) {
     $sql = "SELECT * FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid'];
     $result = $db->query($sql);
     while ($code = $result->fetch()) {
-        $code['status'] = $lang_module['user_2step_codes_s' . $code['is_used']];
+        $code['status'] = $nv_Lang->getModule('user_2step_codes_s' . $code['is_used']);
         $code['time_creat'] = $code['time_creat'] ? nv_date('H:i:s d/m/Y', $code['time_creat']) : '';
         $code['time_used'] = $code['time_used'] ? nv_date('H:i:s d/m/Y', $code['time_used']) : '';
         $xtpl->assign('CODE', $code);

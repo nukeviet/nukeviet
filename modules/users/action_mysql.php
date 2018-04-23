@@ -321,17 +321,7 @@ if ($lang == 'vi') {
 
 // Cài lại module users thì không thao tác gì tới CSDL
 if ($module_data != 'users' or $op != 'recreate_mod') {
-    $lang_module_save = $lang_module;
-    $lang_module = array();
-    $lang_translator = array();
-
-    if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
-    } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-    } else {
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/vi.php';
-    }
+    $nv_Lang->loadModule($module_file, false, false, true);
 
     // Build lại lang bảng field
     try {
@@ -341,7 +331,7 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
             $_row['language'] = unserialize($_row['language']);
             if (!isset($_row['language'][$lang])) {
                 if (!empty($_row['system'])) {
-                    $_row['language'][$lang] = array(0 => $lang_module[$_row['field']], 1 => '');
+                    $_row['language'][$lang] = array(0 => $nv_Lang->getModule($_row['field']), 1 => '');
                 } elseif (isset($_row['language'][$set_lang_data])) {
                     $_row['language'][$lang] = array(0 => ucfirst(nv_EncString($_row['language'][$set_lang_data][0])), 1 => ucfirst(nv_EncString($_row['language'][$set_lang_data][1])));
                 } else {
@@ -361,5 +351,5 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $nv_Lang->getModule('sig'), 1 => '')))) . " WHERE field='sig'";
     }
 
-    $lang_module = $lang_module_save;
+    $nv_Lang->changeLang();
 }

@@ -230,7 +230,7 @@ for ($i = $_bg; $i >= 0; $i--) {
     $m = array(
         'key' => $i,
         'selected' => ($i == $usactive) ? ' selected="selected"' : '',
-        'value' => $lang_module['usactive_' . $i]
+        'value' => $nv_Lang->getModule('usactive_' . $i)
     );
     $xtpl->assign('USACTIVE', $m);
     $xtpl->parse('main.usactive');

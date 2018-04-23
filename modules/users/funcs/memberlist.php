@@ -182,7 +182,7 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
 
     // Them vao tieu de trang
     if (! empty($orderby)) {
-        $page_title .= ' ' . sprintf($nv_Lang->getModule('listusers_sort_by'), $lang_module['listusers_sort_by_' . $orderby], $lang_module['listusers_order_' . $sortby]);
+        $page_title .= ' ' . sprintf($nv_Lang->getModule('listusers_sort_by'), $nv_Lang->getModule('listusers_sort_by_' . $orderby), $nv_Lang->getModule('listusers_order_' . $sortby));
     }
 
     // Tieu de khi phan trang
