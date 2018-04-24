@@ -357,7 +357,7 @@ if ($admin_id != $admin_info['userid']) {
     $edit_admin_mods = array();
     $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
     while ($_row = $result->fetch()) {
-        $_row['custom_title'] = $nv_Lang->getGlobal($_row['lang_key']);
+        $_row['custom_title'] = $nv_Lang->existsGlobal($_row['lang_key']) ? $nv_Lang->get($_row['lang_key']) : $_row['module'];
         $edit_admin_mods[$_row['module']] = $_row;
     }
 } else {

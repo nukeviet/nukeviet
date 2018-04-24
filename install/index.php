@@ -28,9 +28,9 @@ if (!in_array(NV_LANG_DATA, $languageslist)) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . $languageslist[0] . '&step=1');
 }
 
-require_once NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
-require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php';
-require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php';
+$nv_Lang->loadModule('users');
+$nv_Lang->loadBlock(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php');
+
 require_once NV_ROOTDIR . '/install/template.php';
 require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 

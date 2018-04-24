@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_menu_site_mods_config($module, $data_block, $nv_Lang)
@@ -57,10 +57,10 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      * nv_menu_site_mods_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_menu_site_mods_submit($module, $lang_block)
+    function nv_menu_site_mods_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();

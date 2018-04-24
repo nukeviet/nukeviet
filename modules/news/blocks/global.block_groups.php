@@ -18,7 +18,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_block_config_news_groups($module, $data_block, $nv_Lang)
@@ -98,10 +98,10 @@ if (! nv_function_exists('nv_block_news_groups')) {
      * nv_block_config_news_groups_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_block_config_news_groups_submit($module, $lang_block)
+    function nv_block_config_news_groups_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();
