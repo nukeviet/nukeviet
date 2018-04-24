@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_department_info')) {
      *
      * @return
      */
-    function nv_block_config_contact_department($module, $data_block, $lang_block)
+    function nv_block_config_contact_department($module, $data_block, $nv_Lang)
     {
         global $site_mods, $nv_Cache;
 

@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_block_data_config_html')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_data_config_html($module, $data_block, $lang_block)
+    function nv_block_data_config_html($module, $data_block, $nv_Lang)
     {
         if (defined('NV_EDITOR')) {
             require NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

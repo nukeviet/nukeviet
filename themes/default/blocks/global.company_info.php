@@ -13,7 +13,7 @@ if (! defined('NV_MAINFILE')) {
 }
 
 if (! nv_function_exists('nv_company_info')) {
-    function nv_company_info_config($module, $data_block, $lang_block)
+    function nv_company_info_config($module, $data_block, $nv_Lang)
     {
         global $selectthemes, $nv_Lang;
 

@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_company_info')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_company_info_config($module, $data_block, $lang_block)
+    function nv_company_info_config($module, $data_block, $nv_Lang)
     {
         global $selectthemes, $nv_Lang;
 

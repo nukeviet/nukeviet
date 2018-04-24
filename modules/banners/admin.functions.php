@@ -211,7 +211,7 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
     for ($i = 1; $i >= 0; $i--) {
         $require_image = array(
             'key' => $i,
-            'title' => $lang_module['require_image' . $i],
+            'title' => $nv_Lang->getModule('require_image' . $i),
             'checked' => $i == $contents['require_image'] ? ' checked="checked"' : ''
         );
         $xtpl->assign('REQUIRE_IMAGE', $require_image);
@@ -300,7 +300,7 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
     for ($i = 1; $i >= 0; $i--) {
         $require_image = array(
             'key' => $i,
-            'title' => $lang_module['require_image' . $i],
+            'title' => $nv_Lang->getModule('require_image' . $i),
             'checked' => $i == $contents['require_image'] ? ' checked="checked"' : ''
         );
         $xtpl->assign('REQUIRE_IMAGE', $require_image);

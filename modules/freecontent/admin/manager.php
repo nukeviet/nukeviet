@@ -145,7 +145,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
         'status' => ! $message ? 'success' : 'error',
         'message' => $message,
         'responCode' => $status,
-        'responText' => $lang_module['content_status_' . $status]
+        'responText' => $nv_Lang->getModule('content_status_' . $status)
     ));
 }
 

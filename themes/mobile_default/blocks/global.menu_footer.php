@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_menu_theme_default_footer_config($module, $data_block, $lang_block)
+    function nv_menu_theme_default_footer_config($module, $data_block, $nv_Lang)
     {
         global $site_mods;
 

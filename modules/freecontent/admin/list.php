@@ -49,7 +49,7 @@ if ($num_rows < 1) {
     $xtpl->parse('main.empty');
 } else {
     $xtpl->assign('NUM_ROWS', $num_rows);
-    
+
     foreach ($array as $row) {
         if (! empty($row['image'])) {
             if (file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $row['image'])) {
@@ -60,26 +60,26 @@ if ($num_rows < 1) {
                 $row['image'] = '';
             }
         }
-        
-        $row['status_text'] = $lang_module['content_status_' . $row['status']];
-        
+
+        $row['status_text'] = $nv_Lang->getModule('content_status_' . $row['status']);
+
         if ($row['start_time'] > 0) {
             $row['status_text'] .= '. ' . $nv_Lang->getModule('content_status_note0') . ' ' . nv_date('H:i:s d/m/Y', $row['start_time']);
-            
+
             if ($row['end_time'] > 0) {
                 $row['status_text'] .= '. ' .  sprintf($row['status'] == 2 ? $nv_Lang->getModule('content_status_note2') : $nv_Lang->getModule('content_status_note1'), nv_date('H:i:s d/m/Y', $row['end_time']));
             }
         }
-        
+
         $xtpl->assign('ROW', $row);
-        
+
         if (! empty($row['image'])) {
             $xtpl->parse('main.rows.loop.image');
         }
-        
+
         $xtpl->parse('main.rows.loop');
     }
-    
+
     $xtpl->parse('main.rows');
 }
 
