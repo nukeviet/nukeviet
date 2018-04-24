@@ -32,18 +32,5 @@
         {/foreach}
 	</head>
     <body>
-        <div class="card-body" style="padding-left:100px;">
-            <div class="card">
-                <div class="card-header">
-                    Ví dụ dùng ngôn ngữ
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{$NLANG->get('admin_logout_title')}</li>
-                    <li class="list-group-item">{$NLANG->get('admin_ipincorrect', '12.1.1.1')}</li>
-                    <li class="list-group-item">{$NLANG->get('unick_type_3')}</li>
-                    <li class="list-group-item">{$NLANG->get('loginincorrect')}</li>
-                    <li class="list-group-item">{$NLANG->get('memory_time_usage', '12MB', '5')}</li>
-                    <li class="list-group-item">{$NLANG->get('KEY_NOT_EXISTS')}</li>
-                </div>
-            </div>
+       
         </div>

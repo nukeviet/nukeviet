@@ -1,5 +1,5 @@
 <div class="ms-footbar-block">
-    <h3 class="ms-footbar-title text-center mb-2">Last Articles</h3>
+    <h3 class="ms-footbar-title text-center mb-2">{$title1}</h3>
     <div class="ms-footer-media">
         {foreach $row as $ra}
         <div class="media">

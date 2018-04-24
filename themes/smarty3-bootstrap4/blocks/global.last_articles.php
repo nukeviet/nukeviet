@@ -22,15 +22,27 @@ if (!nv_function_exists('nv_block_last_articles')) {
      * @return
      */
     function nv_block_last_articles_config($module, $data_block, $lang_block)
+
     {
         global $nv_Cache, $site_mods;
+
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
-        $html .= '  <div class="col-sm-18"><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></div>';
-        $html .= '</div>';
+        $html .= '  <label class="control-label col-sm-6">' . $lang_block['title1'] . ':</label>';
+        $html .= '  <div class="col-sm-18">
+                    <input type="text" name="config_title1" class="form-control w100" size="5" value="' . $data_block['title1'] . '"/></div>';
+        $html .= '  </div>';
 
         $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '  <label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '  <div class="col-sm-18">
+                    <input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '  </div>';
+
+        $html .= '</div>';
+
+
         return $html;
     }
 
@@ -48,7 +60,7 @@ if (!nv_function_exists('nv_block_last_articles')) {
         $return = array();
         $return['error'] = array();
         $return['config'] = array();
-
+        $return['config']['config_title1'] = $nv_Request->get_title('config_title1', 'post');
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
 
         return $return;
@@ -63,19 +75,18 @@ if (!nv_function_exists('nv_block_last_articles')) {
      */
     function nv_block_last_articles($block_config)
     {
-        // print_r($block_config); die("ok");
+
         global $global_config, $lang_global,$db,$site_mods;
+        $title1 = $block_config['config_title1'];
         $number = $block_config['numrow'];
-
-        $sql = "SELECT id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link FROM nv4_vi_news_rows ORDER BY id DESC LIMIT $number";
-
+        $sql = "SELECT id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link FROM ".NV_PREFIXLANG."_news_rows ORDER BY id DESC LIMIT $number";
         $stmt = $db->query($sql);
         $array_news = $stmt->fetchAll();
 
 
 
         for($i=0;$i<$number;$i++){
-            $sql1 = "SELECT title, alias FROM nv4_vi_news_cat WHERE catid =".$array_news["$i"]['catid'];
+            $sql1 = "SELECT title, alias FROM ".NV_PREFIXLANG."_news_cat WHERE catid =".$array_news["$i"]['catid'];
             $stmt1 = $db->query($sql1);
             $row1 = $stmt1->fetch();
 
@@ -100,6 +111,7 @@ if (!nv_function_exists('nv_block_last_articles')) {
             $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
             $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
             $tpl->assign('row',$array_news);
+            $tpl->assign('title1',$title1);
 
 
             return $tpl->fetch('global.last_articles.tpl');
