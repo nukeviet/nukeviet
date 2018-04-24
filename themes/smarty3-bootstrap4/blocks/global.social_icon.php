@@ -18,19 +18,23 @@ if (!nv_function_exists('nv_block_social_icon')) {
     function nv_menu_theme_social_config($module, $data_block, $lang_block)
 
     {
+        $html .='';
 
-        $html = '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['title12'] . ':</label>';
-        $html .= '  <div class="col-sm-18"><input type="text" name="config_title12" class="form-control" value="' . $data_block['title12'] . '"/></div>';
+        $html .= '<div class="form-group">';
+        $html .= '  <label class="control-label col-sm-6">' . $lang_block['title1'] . ':</label>';
+        $html .= '  <div class="col-sm-18"><input type="text" name="config_title1" class="form-control" value="' . $data_block['title1'] . '"/></div>';
         $html .= '</div>';
-        $html = '<div class="form-group">';
+
+        $html .= '<div class="form-group">';
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['facebook'] . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_facebook" class="form-control" value="' . $data_block['facebook'] . '"/></div>';
         $html .= '</div>';
+
         $html .= '<div class="form-group">';
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['google_plus'] . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_google_plus" class="form-control" value="' . $data_block['google_plus'] . '"/></div>';
         $html .= '</div>';
+
         $html .= '<div class="form-group">';
         $html .= '  <label class="control-label col-sm-6">' .  $lang_block['youtube'] . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_youtube" class="form-control" value="' . $data_block['youtube'] . '"/></div>';
@@ -39,14 +43,19 @@ if (!nv_function_exists('nv_block_social_icon')) {
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['twitter'] . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_twitter" class="form-control" value="' . $data_block['twitter'] . '"/></div>';
         $html .= '</div>';
+
         $html .= '<div class="form-group">';
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['instagram'] . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_instagram" class="form-control" value="' . $data_block['instagram'] . '"/></div>';
         $html .= '</div>';
+
         $html .= '<div class="form-group">';
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['github'] . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_github" class="form-control" value="' . $data_block['github'] . '"/></div>';
         $html .= '</div>';
+
+
+
         return $html;
     }
 
