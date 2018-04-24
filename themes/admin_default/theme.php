@@ -35,16 +35,14 @@ function nv_mailHTML($title, $content, $footer='')
  */
 function nv_get_submenu($mod)
 {
-    global $module_name, $global_config, $admin_mods;
+    global $module_name, $global_config, $admin_mods, $nv_Lang;
 
     $submenu = array();
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
-        $nv_Lang = new \NukeViet\Core\Language();
         $nv_Lang->loadModule($mod, true, true, true);
-
         include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';
-        unset($nv_Lang);
+        $nv_Lang->changeLang();
     }
 
     return $submenu;
@@ -58,7 +56,7 @@ function nv_get_submenu($mod)
  */
 function nv_get_submenu_mod($module_name)
 {
-    global $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
+    global $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods, $nv_Lang;
 
     $submenu = array();
     if (isset($site_mods[$module_name])) {
@@ -66,11 +64,9 @@ function nv_get_submenu_mod($module_name)
         $module_file = $module_info['module_file'];
         $module_data = $module_info['module_data'];
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php')) {
-            $nv_Lang = new \NukeViet\Core\Language();
             $nv_Lang->loadModule($module_file, true, false, true);
-
             include NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
-            unset($nv_Lang);
+            $nv_Lang->changeLang();
         }
     }
     return $submenu;

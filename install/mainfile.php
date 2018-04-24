@@ -127,7 +127,9 @@ define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 
 //Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
+$nv_Lang = new \NukeViet\Core\Language();
+$nv_Lang->loadGlobal();
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 $global_config['cookie_path'] = $nv_Request->cookie_path;
 //vd: /ten_thu_muc_chua_site/

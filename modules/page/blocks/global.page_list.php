@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_page_list')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_block_config_page_list($module, $data_block, $nv_Lang)
@@ -39,10 +39,10 @@ if (!nv_function_exists('nv_page_list')) {
      * nv_block_config_page_list_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_block_config_page_list_submit($module, $lang_block)
+    function nv_block_config_page_list_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();

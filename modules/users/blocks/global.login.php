@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_block_login')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_block_config_login($module, $data_block, $nv_Lang)
@@ -29,7 +29,7 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '  <div class="col-sm-9"><select class="form-control" name="config_display_mode">';
 
         for ($i = 0; $i <= 1; $i++) {
-            $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
+            $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('display_mode' . $i) . '</option>';
         }
 
         $html .= '  </select></div>';
@@ -39,7 +39,7 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '  <div class="col-sm-9"><select class="form-control" name="config_popup_register">';
 
         for ($i = 0; $i <= 1; $i++) {
-            $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
+            $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('popup_register' . $i) . '</option>';
         }
 
         $html .= '  </select></div>';
@@ -51,10 +51,10 @@ if (!nv_function_exists('nv_block_login')) {
      * nv_block_config_login_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_block_config_login_submit($module, $lang_block)
+    function nv_block_config_login_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();

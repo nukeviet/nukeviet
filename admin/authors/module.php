@@ -71,7 +71,7 @@ foreach ($rows as $row) {
         $xtpl->assign('WEIGHT', array( 'key' => $i, 'selected' => ($i == $row['weight']) ? ' selected="selected"' : '' ));
         $xtpl->parse('main.loop.weight');
     }
-    $row['custom_title'] = $nv_Lang->getGlobal($row['lang_key']);
+    $row['custom_title'] = $nv_Lang->existsGlobal($row['lang_key']) ? $nv_Lang->get($row['lang_key']) : $row['module'];
     $chang_act = array();
     for ($i = 1; $i <= 3; $i++) {
         $chang_act[$i] = ($row['act_' . $i]) ? ' checked="checked"' : '';

@@ -30,7 +30,7 @@ include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 $admin_mods = array();
 $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC');
 while ($row = $result->fetch()) {
-    $row['custom_title'] = $nv_Lang->get($row['lang_key']);
+    $row['custom_title'] = $nv_Lang->existsGlobal($row['lang_key']) ? $nv_Lang->get($row['lang_key']) : $row['module'];
     $admin_mods[$row['module']] = $row;
 }
 

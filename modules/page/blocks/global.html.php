@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_block_data_config_html')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_block_data_config_html($module, $data_block, $nv_Lang)
@@ -41,10 +41,10 @@ if (!nv_function_exists('nv_block_data_config_html')) {
      * nv_block_data_config_html_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_block_data_config_html_submit($module, $lang_block)
+    function nv_block_data_config_html_submit($module, $nv_Lang)
     {
         global $nv_Request;
 

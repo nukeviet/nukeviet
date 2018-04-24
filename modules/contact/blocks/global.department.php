@@ -37,7 +37,7 @@ if (!nv_function_exists('nv_department_info')) {
         return $html;
     }
 
-    function nv_block_config_contact_department_submit($module, $lang_block)
+    function nv_block_config_contact_department_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();
