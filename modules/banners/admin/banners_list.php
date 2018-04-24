@@ -27,7 +27,7 @@ $contents = array();
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE ";
 if (in_array($nv_Request->get_int('act', 'get', 1), array(0, 2, 3, 4))) {
     $sql .= "act=" . $nv_Request->get_int('act', 'get');
-    $contents['caption'] = $lang_module['banners_list' . $nv_Request->get_int('act', 'get')];
+    $contents['caption'] = $nv_Lang->getModule('banners_list' . $nv_Request->get_int('act', 'get'));
 } else {
     $sql .= "act=1";
     $contents['caption'] = $nv_Lang->getModule('banners_list1');

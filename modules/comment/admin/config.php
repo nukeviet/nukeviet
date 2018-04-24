@@ -119,7 +119,7 @@ if (!empty($mod_name)) {
     for ($i = 0; $i <= 2; ++$i) {
         $xtpl->assign('OPTION', array(
             'key' => $i,
-            'title' => $lang_module['auto_postcomm_' . $i],
+            'title' => $nv_Lang->getModule('auto_postcomm_' . $i),
             'selected' => $i == $module_config[$mod_name]['auto_postcomm'] ? ' selected="selected"' : ''
         ));
         $xtpl->parse('main.config.auto_postcomm');
@@ -163,7 +163,7 @@ if (!empty($mod_name)) {
     for ($i = 0; $i <= 2; ++$i) {
         $xtpl->assign('OPTION', array(
             'key' => $i,
-            'title' => $lang_module['sortcomm_' . $i],
+            'title' => $nv_Lang->getModule('sortcomm_' . $i),
             'selected' => $i == $module_config[$mod_name]['sortcomm'] ? ' selected="selected"' : ''
         ));
         $xtpl->parse('main.config.sortcomm');
@@ -213,7 +213,7 @@ if (!empty($mod_name)) {
         $row['admin_title'] = $admin_title;
         $row['allowed_comm'] =$allowed_comm;
         $row['view_comm'] = $view_comm;
-        $row['auto_postcomm'] = $lang_module['auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']];
+        $row['auto_postcomm'] = $nv_Lang->getModule('auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']);
         $row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'circle-o';
         $row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'circle-o';
         $xtpl->assign('ROW', $row);

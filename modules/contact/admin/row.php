@@ -314,7 +314,7 @@ foreach ($adms as $admid => $values) {
         'email' => $values['email'],
         'admid' => $admid,
         'img' => 'admin' . $values['level'],
-        'level' => $lang_global['level' . $values['level']],
+        'level' => $nv_Lang->getGlobal('level' . $values['level']),
         'view_level' => ($values['level'] === 1 or (! empty($view_level) and in_array($admid, $view_level))) ? ' checked="checked"' : '',
         'reply_level' => ($values['level'] === 1 or (! empty($reply_level) and in_array($admid, $reply_level))) ? ' checked="checked"' : '',
         'obt_level' => (! empty($obt_level) and in_array($admid, $obt_level)) ? ' checked="checked"' : '',

@@ -348,13 +348,13 @@ function nv_check_valid_login($login, $max, $min)
             break;
         case 4:
             $_login = str_replace('@', '', $login);
-            return ($login != strip_punctuation($_login) ? $lang_global['unick_type_' . $type] : '');
+            return ($login != strip_punctuation($_login) ? $nv_Lang->getGlobal('unick_type_' . $type) : '');
             break;
         default:
             return '';
     }
     if (! preg_match($pattern, $login)) {
-        return $lang_global['unick_type_' . $type];
+        return $nv_Lang->getGlobal('unick_type_' . $type);
     }
     return '';
 }
@@ -386,19 +386,19 @@ function nv_check_valid_pass($pass, $max, $min)
     $type = $global_config['nv_upass_type'];
     if ($type == 1) {
         if (! (preg_match('#[a-z]#ui', $pass) and preg_match('#[0-9]#u', $pass))) {
-            return $lang_global['upass_type_' . $type];
+            return $nv_Lang->getGlobal('upass_type_' . $type);
         }
     } elseif ($type == 3) {
         if (! (preg_match('#[A-Z]#u', $pass) and preg_match('#[0-9]#u', $pass))) {
-            return $lang_global['upass_type_' . $type];
+            return $nv_Lang->getGlobal('upass_type_' . $type);
         }
     } elseif ($type == 2) {
         if (! (preg_match('#[^A-Za-z0-9]#u', $pass) and preg_match('#[a-z]#ui', $pass) and preg_match('#[0-9]#u', $pass))) {
-            return $lang_global['upass_type_' . $type];
+            return $nv_Lang->getGlobal('upass_type_' . $type);
         }
     } elseif ($type == 4) {
         if (! (preg_match('#[^A-Za-z0-9]#u', $pass) and preg_match('#[A-Z]#u', $pass) and preg_match('#[0-9]#u', $pass))) {
-            return $lang_global['upass_type_' . $type];
+            return $nv_Lang->getGlobal('upass_type_' . $type);
         }
     }
 

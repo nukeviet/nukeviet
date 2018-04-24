@@ -31,7 +31,7 @@ function nv_groups_list($mod_data = 'users')
         $result = $db->query('SELECT group_id, title, idsite FROM ' . $_mod_table . '_groups WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
         while ($row = $result->fetch()) {
             if ($row['group_id'] < 9) {
-                $row['title'] = $lang_global['level' . $row['group_id']];
+                $row['title'] = $nv_Lang->getGlobal('level' . $row['group_id']);
             }
             $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
         }
@@ -809,8 +809,8 @@ function nv_http_get_lang($input)
         return '';
     }
 
-    if (!empty($lang_global['error_code_' . $input['code']])) {
-        return $lang_global['error_code_' . $input['code']];
+    if ($nv_Lang->existsGlobal('error_code_' . $input['code'])) {
+        return $nv_Lang->getGlobal('error_code_' . $input['code']);
     }
 
     if (!empty($input['message'])) {

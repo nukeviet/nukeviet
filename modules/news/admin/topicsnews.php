@@ -51,7 +51,7 @@ $i = 0;
 while ($row = $result->fetch()) {
     ++$i;
     $row['publtime'] = nv_date('H:i d/m/y', $row['publtime']);
-    $row['status'] = $lang_module['status_' . $row['status']];
+    $row['status'] = $nv_Lang->getModule('status_' . $row['status']);
     $row['hitstotal'] = number_format($row['hitstotal'], 0, ',', '.');
     $row['hitscm'] = number_format($row['hitscm'], 0, ',', '.');
     $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];

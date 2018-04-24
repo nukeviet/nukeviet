@@ -76,7 +76,7 @@ $contents['rows'][] = array($nv_Lang->getModule('target'), $targets[$row['target
 $contents['rows'][] = array($nv_Lang->getModule('add_date'), date('d/m/Y H:i', $row['add_time']));
 $contents['rows'][] = array($nv_Lang->getModule('publ_date'), date('d/m/Y H:i', $row['publ_time']));
 $contents['rows'][] = array($nv_Lang->getModule('exp_date'), (!empty($row['exp_time']) ? date('d/m/Y H:i', $row['exp_time']) : $nv_Lang->getModule('unlimited')));
-$contents['rows'][] = array($nv_Lang->getGlobal('status'), $lang_module['act' . $row['act']]);
+$contents['rows'][] = array($nv_Lang->getGlobal('status'), $nv_Lang->getModule('act' . $row['act']));
 $contents['rows'][] = array($nv_Lang->getModule('hits_total'), $row['hits_total']);
 
 $current_month = date('n');

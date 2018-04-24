@@ -503,7 +503,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'title' => $title,
             'publtime' => $publtime,
             'status_id' => $status,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $lang_module['status_' . $status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $nv_Lang->getModule('status_' . $status),
             'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
@@ -688,7 +688,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'publtime' => $publtime,
             'status_id' => $status,
             'weight' => $weight,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $lang_module['status_' . $status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $nv_Lang->getModule('status_' . $status),
             'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
@@ -706,7 +706,7 @@ for ($i = 0; $i <= 10; $i++) {
     $sl = ($i == $sstatus) ? ' selected="selected"' : '';
     $search_status[] = array(
         'key' => $i,
-        'value' => $lang_module['status_' . $i],
+        'value' => $nv_Lang->getModule('status_' . $i),
         'selected' => $sl
     );
 }

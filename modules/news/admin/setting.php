@@ -229,7 +229,7 @@ foreach ($array_structure_image as $type => $dir) {
 for ($i = 0; $i < 2; $i++) {
     $xtpl->assign('ORDER_ARTICLES', array(
         'key' => $i,
-        'title' => $lang_module['order_articles_' . $i],
+        'title' => $nv_Lang->getModule('order_articles_' . $i),
         'selected' => $i == $module_config[$module_name]['order_articles'] ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.order_articles');

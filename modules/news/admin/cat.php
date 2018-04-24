@@ -322,7 +322,7 @@ for ($i = 0; $i <= 2; $i++) {
     $data = array(
         'value' => $i,
         'selected' => ($viewdescription == $i) ? ' checked="checked"' : '',
-        'title' => $lang_module['viewdescription_' . $i]
+        'title' => $nv_Lang->getModule('viewdescription_' . $i)
     );
     $xtpl->assign('VIEWDESCRIPTION', $data);
     $xtpl->parse('main.content.viewdescription');

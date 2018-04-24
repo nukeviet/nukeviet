@@ -103,9 +103,13 @@ class Language
         $this->load($file, $loadtmp);
     }
 
-    public function loadBlock($admin = false)
+    public function loadBlock($file)
     {
-        $lang_translator = $lang_global = array($admin = false);
+        if (is_array($file)) {
+            self::$lang_block = array_merge(self::$lang_block, $file);
+        } else {
+            $this->load($file);
+        }
     }
 
     /**
@@ -303,5 +307,38 @@ class Language
     public function setBlock($langkey, $langvalue)
     {
         self::$lang_block[$langkey] = $langvalue;
+    }
+
+    /**
+     * Language::existsGlobal()
+     *
+     * @param mixed $langkey
+     * @return
+     */
+    public function existsGlobal($langkey)
+    {
+        return isset(self::$lang_global[$langkey]);
+    }
+
+    /**
+     * Language::existsModule()
+     *
+     * @param mixed $langkey
+     * @return
+     */
+    public function existsModule($langkey)
+    {
+        return isset(self::$lang_module[$langkey]);
+    }
+
+    /**
+     * Language::existsBlock()
+     *
+     * @param mixed $langkey
+     * @return
+     */
+    public function existsBlock($langkey)
+    {
+        return isset(self::$lang_block[$langkey]);
     }
 }
