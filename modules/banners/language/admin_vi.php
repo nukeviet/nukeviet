@@ -132,3 +132,5 @@ $lang_module['plan_exp_time_m'] = '%s tháng (%s ngày)';
 $lang_module['plan_exp_time_y'] = '%s năm (%s ngày)';
 $lang_module['exp_date_nochoose'] = 'Quảng cáo sẽ luôn hiển thị nếu không chọn ngày ở đây';
 $lang_module['publ_time_info'] = 'Hệ thống tự lấy thời gian bắt đầu ngay lúc thêm quảng cáo nếu không chọn ngày ở đây';
+$lang_module['enter_keyword'] = 'Nhập từ khóa';
+$lang_module['all_plan'] = 'Tất cả các khối';
