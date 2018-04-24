@@ -198,8 +198,8 @@ if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_regi
 }
 
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
-    $nv_Lang->getModule('register') = $nv_Lang->getModule('add_users');
-    $nv_Lang->getModule('info') = $nv_Lang->getModule('info_user');
+    $nv_Lang->setModule('register', $nv_Lang->getModule('add_users'));
+    $nv_Lang->setModule('info', $nv_Lang->getModule('info_user'));
 }
 
 // Dang ky thong thuong

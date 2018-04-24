@@ -170,8 +170,8 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
 }
-$nv_Lang->getGlobal('title_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 65);
-$nv_Lang->getGlobal('description_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

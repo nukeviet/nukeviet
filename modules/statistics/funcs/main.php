@@ -14,7 +14,7 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
+$mod_title = $module_info['custom_title'];
 
 $current_month_num = date('n', NV_CURRENTTIME);
 $current_year = date('Y', NV_CURRENTTIME);

@@ -563,7 +563,7 @@ $xtpl->assign('FLDATA', array(
 for ($i = 0; $i <= 3; $i++) {
     $two_step_verification = array(
         'key' => $i,
-        'title' => $lang_module['two_step_verification' . $i],
+        'title' => $nv_Lang->getModule('two_step_verification' . $i),
         'selected' => $i == $array_config_global['two_step_verification'] ? ' selected="selected"' : ''
     );
     $xtpl->assign('TWO_STEP_VERIFICATION', $two_step_verification);

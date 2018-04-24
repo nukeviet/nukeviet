@@ -139,7 +139,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         $xtpl->assign('ACTIVE_DEVICE', array(
             'key' => $i,
             'checked' => (in_array($i, $active_device)) ? ' checked="checked"' : '',
-            'title' => $lang_module['show_device_' . $i]
+            'title' => $nv_Lang->getModule('show_device_' . $i)
         ));
         $xtpl->parse('main.active_device');
     }

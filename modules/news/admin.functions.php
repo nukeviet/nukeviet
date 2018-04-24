@@ -632,7 +632,7 @@ function nv_show_block_list($bid)
         foreach ($array_block as $row) {
             $xtpl->assign('ROW', array(
                 'publtime' => nv_date('H:i d/m/Y', $row['publtime']),
-                'status' => $lang_module['status_' . $row['status']],
+                'status' => $nv_Lang->getModule('status_' . $row['status']),
                 'hitstotal' => number_format($row['hitstotal'], 0, ',', '.'),
                 'hitscm' => number_format($row['hitscm'], 0, ',', '.'),
                 'id' => $row['id'],

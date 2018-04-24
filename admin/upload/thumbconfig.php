@@ -167,7 +167,7 @@ while ($data = $result->fetch()) {
             $type = array(
                 'id' => $id,
                 'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',
-                'name' => $lang_module['thumb_type_' . $id]
+                'name' => $nv_Lang->getModule('thumb_type_' . $id)
             );
             $xtpl->assign('TYPE', $type);
             $xtpl->parse('main.loop.thumb_type');
@@ -181,7 +181,7 @@ while ($data = $result->fetch()) {
 }
 
 for ($id = 0; $id < 5; $id++) {
-    $type = array( 'id' => $id, 'name' => $lang_module['thumb_type_' . $id] );
+    $type = array( 'id' => $id, 'name' => $nv_Lang->getModule('thumb_type_' . $id) );
     $xtpl->assign('TYPE', $type);
     $xtpl->parse('main.other_type');
 }

@@ -88,11 +88,11 @@ if (! empty($savecat)) {
 $bid = $nv_Request->get_int('bid', 'get', 0);
 if ($bid > 0) {
     list($bid, $title, $alias, $description, $image, $keywords) = $db->query("SELECT bid, title, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat where bid=" . $bid)->fetch(3);
-    $nv_Lang->getModule('add_block_cat') = $nv_Lang->getModule('edit_block_cat');
+    $nv_Lang->setModule('add_block_cat', $nv_Lang->getModule('edit_block_cat'));
 }
 
-$nv_Lang->getGlobal('title_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 65);
-$nv_Lang->getGlobal('description_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $xtpl = new XTemplate('groups.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

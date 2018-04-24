@@ -149,7 +149,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
 
 	$xtpl = new XTemplate('getuserid.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme']);
 
-	$nv_Lang->getModule('fullname') = $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname');
+	$nv_Lang->setModule('fullname', ($global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname')));
 	$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 	$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 	$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -480,7 +480,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
     die('OK');
 }
 
-$nv_Lang->getModule('nametitle') = $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname');
+$nv_Lang->setModule('nametitle', ($global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname')));
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -557,7 +557,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         die($nv_Lang->getModule('error_group_not_found'));
     }
     $xtpl->assign('GID', $group_id);
-    $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
+    $title = ($group_id < 10) ? $nv_Lang->getGlobal('level' . $group_id) : $groupsList[$group_id]['title'];
 
     $array_userid = array();
     $array_number = array();
@@ -635,7 +635,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
         foreach ($group_users as $_type => $arr_userids) {
-            $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
+            $xtpl->assign('PTITLE', $nv_Lang->getModule($_type . '_in_group_caption', $title, number_format($array_number[$_type], 0, ',', '.')));
             $stt=1;
             foreach ($arr_userids as $_userid) {
 

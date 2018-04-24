@@ -218,7 +218,7 @@ $xtpl->assign('OP', $op);
 for ($i = 0; $i <= 2; $i ++) {
     $ssl_https = array(
         'key' => $i,
-        'title' => $lang_module['ssl_https_' . $i],
+        'title' => $nv_Lang->getModule('ssl_https_' . $i),
         'selected' => $i == $global_config['ssl_https'] ? ' selected="selected"' : ''
     );
 

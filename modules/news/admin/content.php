@@ -1176,8 +1176,8 @@ if (empty($array_cat_check_content)) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$nv_Lang->getGlobal('title_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 65);
-$nv_Lang->getGlobal('description_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $rowcontent['style_content_bodytext_required'] = $rowcontent['external_link'] ? 'hidden' : '';
 
@@ -1197,7 +1197,7 @@ $xtpl->assign('ERROR_CAT', str_replace('\'', '\\\'', $nv_Lang->getModule('error_
 
 if ($rowcontent['id'] > 0) {
     $op = '';
-    $nv_Lang->getModule('save_temp') = $nv_Lang->getModule('save');
+    $nv_Lang->setModule('save_temp', $nv_Lang->getModule('save'));
 }
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 

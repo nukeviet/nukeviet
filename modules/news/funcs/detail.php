@@ -168,7 +168,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         }
 
         if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
-            $alert = sprintf($nv_Lang->getModule('status_alert'), $lang_module['status_' . $news_contents['status']]);
+            $alert = sprintf($nv_Lang->getModule('status_alert'), $nv_Lang->getModule('status_' . $news_contents['status']));
             $my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
             $news_contents['allowed_send'] = 0;
             $module_config[$module_name]['socialbutton'] = 0;

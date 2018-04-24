@@ -311,7 +311,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
     die('OK');
 }
 
-$nv_Lang->getModule('nametitle') = $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname');
+$nv_Lang->setModule('nametitle', ($global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname')));
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -333,7 +333,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         die($nv_Lang->getModule('error_group_not_found'));
     }
     $xtpl->assign('GID', $group_id);
-    $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
+    $title = ($group_id < 10) ? $nv_Lang->getGlobal('level' . $group_id) : $groupsList[$group_id]['title'];
 
     $array_userid = array();
     $array_number = array();
@@ -411,7 +411,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
         foreach ($group_users as $_type => $arr_userids) {
-            $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
+            $xtpl->assign('PTITLE', $nv_Lang->getModule($_type . '_in_group_caption', $title, number_format($array_number[$_type], 0, ',', '.')));
             foreach ($arr_userids as $_userid) {
 
                 $row = $array_userid[$_userid];
@@ -719,7 +719,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         for ($i = 0; $i <= 2; $i ++) {
             $group_type = array(
                 'key' => $i,
-                'title' => $lang_module['group_type_' . $i],
+                'title' => $nv_Lang->getModule('group_type_' . $i),
                 'selected' => $i == $post['group_type'] ? ' selected="selected"' : ''
             );
 
@@ -816,7 +816,7 @@ if ($nv_Request->isset_request('list', 'get')) {
 
             $loop['act'] .= ' disabled="disabled"';
             if ($group_id < 9) {
-                $loop['title'] = $lang_global['level' . $group_id];
+                $loop['title'] = $nv_Lang->getGlobal('level' . $group_id);
             }
         }
         $xtpl->assign('LOOP', $loop);

@@ -368,7 +368,7 @@ if (empty($key)) {
 }
 
 $key_words = $description = 'no';
-$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
+$mod_title = $module_info['custom_title'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

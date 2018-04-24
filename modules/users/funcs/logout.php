@@ -45,7 +45,7 @@ if ($nv_ajax_login) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
+$mod_title = $module_info['custom_title'];
 
 $info = $nv_Lang->getModule('logout_ok') . '<br /><br />';
 $info .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />';

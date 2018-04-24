@@ -98,7 +98,7 @@ if (! empty($savecat)) {
 $array['topicid'] = $nv_Request->get_int('topicid', 'get', 0);
 if ($array['topicid'] > 0) {
     list($array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords']) = $db->query("SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'])->fetch(3);
-    $nv_Lang->getModule('add_topic') = $nv_Lang->getModule('edit_topic');
+    $nv_Lang->setModule('add_topic', $nv_Lang->getModule('edit_topic'));
 }
 
 if (is_file(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $array['image'])) {

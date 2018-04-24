@@ -289,8 +289,8 @@ if (!empty($array_cat_list)) {
     }
 }
 
-$nv_Lang->getGlobal('title_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 65);
-$nv_Lang->getGlobal('description_suggest_max') = sprintf($nv_Lang->getGlobal('length_suggest_max'), 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;

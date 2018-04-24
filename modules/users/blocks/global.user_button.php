@@ -126,8 +126,8 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('NV_REDIRECT', '');
         $xtpl->assign('CHECKSS', NV_CHECK_SESSION);
 
-        $username_rule = empty($global_config['nv_unick_type']) ? sprintf($nv_Lang->getGlobal('username_rule_nolimit'), $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($nv_Lang->getGlobal('username_rule_limit'), $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
-        $password_rule = empty($global_config['nv_upass_type']) ? sprintf($nv_Lang->getGlobal('password_rule_nolimit'), $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($nv_Lang->getGlobal('password_rule_limit'), $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+        $username_rule = empty($global_config['nv_unick_type']) ? sprintf($nv_Lang->getGlobal('username_rule_nolimit'), $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($nv_Lang->getGlobal('username_rule_limit'), $nv_Lang->getGlobal('unick_type_' . $global_config['nv_unick_type']), $global_config['nv_unickmin'], $global_config['nv_unickmax']);
+        $password_rule = empty($global_config['nv_upass_type']) ? sprintf($nv_Lang->getGlobal('password_rule_nolimit'), $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($nv_Lang->getGlobal('password_rule_limit'), $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']), $global_config['nv_upassmin'], $global_config['nv_upassmax']);
 
         $xtpl->assign('USERNAME_RULE', $username_rule);
         $xtpl->assign('PASSWORD_RULE', $password_rule);

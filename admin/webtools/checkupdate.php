@@ -155,7 +155,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                     }
 
                     $xtpl->assign('EXTNAME', $value['name']);
-                    $xtpl->assign('EXTTYPE', isset($lang_module['extType_' . $value['type']]) ? $lang_module['extType_' . $value['type']] : $value['type']);
+                    $xtpl->assign('EXTTYPE', $nv_Lang->getModule('extType_' . $value['type']));
                     $xtpl->assign('EXTINFO', $info);
 
                     foreach ($tooltip as $t) {

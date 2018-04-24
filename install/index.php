@@ -610,10 +610,10 @@ if ($step == 1) {
                     define('NV_IS_MODADMIN', true);
 
                     $module_name = 'modules';
-                    $nv_Lang->getModule('modules') = '';
-                    $nv_Lang->getModule('vmodule_add') = '';
-                    $nv_Lang->getModule('autoinstall') = '';
-                    $nv_Lang->getGlobal('mod_modules') = '';
+                    $nv_Lang->setModule('modules', '');
+                    $nv_Lang->setModule('vmodule_add', '');
+                    $nv_Lang->setModule('autoinstall', '');
+                    $nv_Lang->setGlobal('mod_modules', '');
 
                     define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
                     require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
@@ -913,7 +913,7 @@ if ($step == 1) {
                             define('NV_IS_MODADMIN', true);
 
                             $module_name = 'upload';
-                            $nv_Lang->getGlobal('mod_upload') = 'upload';
+                            $nv_Lang->setGlobal('mod_upload', 'upload');
                             $global_config['upload_logo'] = '';
 
                             define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
@@ -1075,7 +1075,7 @@ if ($step == 1) {
     }
     $array_data['error'] = $error;
     $title = $nv_Lang->getModule('website_info');
-    $nv_Lang->getModule('admin_pass_note') = $lang_global['upass_type_' . $global_config['nv_upass_type']];
+    $nv_Lang->setModule('admin_pass_note', $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']));
     $contents = nv_step_6($array_data, $nextstep);
 } elseif ($step == 7) {
     // Nếu không có dữ liệu mẫu chuyển sang bước tiếp theo

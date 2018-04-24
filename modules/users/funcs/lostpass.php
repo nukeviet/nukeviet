@@ -51,7 +51,7 @@ function lost_pass_sendMail($row)
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $nv_Lang->getModule('lostpass_email_subject') = sprintf($nv_Lang->getModule('lostpass_email_subject'), NV_MY_DOMAIN);
+        $nv_Lang->setModule('lostpass_email_subject', $nv_Lang->getModule('lostpass_email_subject', NV_MY_DOMAIN));
         $message = sprintf($nv_Lang->getModule('lostpass_email_content'), $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
         if (!nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('lostpass_email_subject'), $message)) {
             nv_jsonOutput(array(

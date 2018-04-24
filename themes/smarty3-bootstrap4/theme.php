@@ -81,6 +81,8 @@ function nv_site_theme($contents, $full = true)
     $tpl = new \NukeViet\Template\NvSmarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
 
+    $tpl->assign('NLANG', $nv_Lang);
+
     $tpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme']);
     $tpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['user_check_pass_time']) - 62) * 1000);

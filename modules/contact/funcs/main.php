@@ -235,7 +235,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($nv_Lang->getModule('main_title')) ? $nv_Lang->getModule('main_title') : $module_info['custom_title'];
+$mod_title = $module_info['custom_title'];
 
 $full_theme = true;
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
