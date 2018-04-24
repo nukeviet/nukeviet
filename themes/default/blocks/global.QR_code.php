@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_block_qr_code_config($module, $data_block, $nv_Lang)
@@ -26,10 +26,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         global $selectthemes;
 
         // Find language file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php')) {
-            include NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php';
-        }
-
+        $nv_Lang->loadBlock(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php');
         $array_levels = array(
             'L',
             'M',
@@ -38,7 +35,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         );
 
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($nv_Lang->getBlock('qr_level')) ? 'qr_level' : $nv_Lang->getBlock('qr_level')) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('qr_level') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_level">';
 
@@ -51,7 +48,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($nv_Lang->getBlock('qr_pixel_per_point')) ? 'qr_pixel_per_point' : $nv_Lang->getBlock('qr_pixel_per_point')) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('qr_pixel_per_point') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_pixel_per_point">';
 
@@ -64,7 +61,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($nv_Lang->getBlock('qr_outer_frame')) ? 'qr_outer_frame' : $nv_Lang->getBlock('qr_outer_frame')) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('qr_outer_frame') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_outer_frame">';
 
@@ -83,10 +80,10 @@ if (!nv_function_exists('nv_block_qr_code')) {
      * nv_block_qr_code_config_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_block_qr_code_config_submit($module, $lang_block)
+    function nv_block_qr_code_config_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();

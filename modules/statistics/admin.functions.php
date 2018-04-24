@@ -57,6 +57,12 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
 
+/**
+ * nv_site_theme()
+ *
+ * @param mixed $contents
+ * @return
+ */
 function nv_site_theme($contents)
 {
     return nv_admin_theme($contents);

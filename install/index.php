@@ -28,9 +28,9 @@ if (!in_array(NV_LANG_DATA, $languageslist)) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . $languageslist[0] . '&step=1');
 }
 
-require_once NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
-require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php';
-require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php';
+$nv_Lang->loadModule('users');
+$nv_Lang->loadBlock(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php');
+
 require_once NV_ROOTDIR . '/install/template.php';
 require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
@@ -1244,7 +1244,7 @@ if ($step == 1) {
             if (empty($db->connect)) {
                 die('Sorry! Could not connect to data server');
             }
-            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (
+            $sth = $db->prepare('INSERT IGNORE INTO ' . $db_config['prefix'] . '_ips (
                 type, ip, mask, area, begintime, endtime, notice
             ) VALUES (
                 1, :ip, 0, 1, ' . NV_CURRENTTIME . ', 0, \'\'

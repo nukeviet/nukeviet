@@ -18,7 +18,7 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      *
      * @param mixed $module
      * @param mixed $data_block
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
     function nv_menu_theme_default_footer_config($module, $data_block, $nv_Lang)
@@ -46,10 +46,10 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      * nv_menu_theme_default_footer_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_menu_theme_default_footer_submit($module, $lang_block)
+    function nv_menu_theme_default_footer_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();

@@ -222,12 +222,15 @@ class Language
             } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset($this->tmplang_block[$langkey])) {
                 $langvalue = $this->tmplang_block[$langkey];
             }
-        } elseif (($type == self::TYPE_LANG_GLOBAL or $type == self::TYPE_LANG_ALL) and isset(self::$lang_global[$langkey])) {
-            $langvalue = self::$lang_global[$langkey];
-        } elseif (($type == self::TYPE_LANG_MODULE or $type == self::TYPE_LANG_ALL) and isset(self::$lang_module[$langkey])) {
-            $langvalue = self::$lang_module[$langkey];
-        } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset(self::$lang_block[$langkey])) {
-            $langvalue = self::$lang_block[$langkey];
+        }
+        if (!$langvalue) {
+            if (($type == self::TYPE_LANG_GLOBAL or $type == self::TYPE_LANG_ALL) and isset(self::$lang_global[$langkey])) {
+                $langvalue = self::$lang_global[$langkey];
+            } elseif (($type == self::TYPE_LANG_MODULE or $type == self::TYPE_LANG_ALL) and isset(self::$lang_module[$langkey])) {
+                $langvalue = self::$lang_module[$langkey];
+            } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset(self::$lang_block[$langkey])) {
+                $langvalue = self::$lang_block[$langkey];
+            }
         }
         if (empty($langvalue)) {
             return $langkey;
