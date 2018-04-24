@@ -36,7 +36,6 @@ if (! empty($file_name)) {
                 $path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
             }
         }
-        //die($path_file_php .'=--->'. $path_file_ini .'=--->'. $path_file_lang);
     } elseif (isset($site_mods[$module]) and preg_match($global_config['check_block_module'], $file_name, $matches)) {
         $module_file = $site_mods[$module]['module_file'];
 
@@ -94,12 +93,11 @@ if (! empty($file_name)) {
                         }
                     }
 
-                    $lang_block = array();
                     // Ngon ngu cua block
-
                     if (! empty($path_file_lang)) {
-                        require $path_file_lang;
+                        $nv_Lang->loadBlock($path_file_lang);
                     } else {
+                        $lang_block = array();
                         $xmllanguage = $xml->xpath('language');
                         $language = (empty($xmllanguage)) ? array() : ( array )$xmllanguage[0];
 
@@ -111,10 +109,11 @@ if (! empty($file_name)) {
                             $key = array_keys($array_config);
                             $lang_block = array_combine($key, $key);
                         }
+                        $nv_Lang->setBlock($lang_block);
                     }
 
                     // Goi ham xu ly hien thi block
-                    $contents = call_user_func($function_name, $module, $data_block, $lang_block);
+                    $contents = call_user_func($function_name, $module, $data_block, $nv_Lang);
                 }
             }
         }

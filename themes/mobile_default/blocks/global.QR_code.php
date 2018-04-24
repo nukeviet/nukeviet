@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_qr_code_config($module, $data_block, $lang_block)
+    function nv_block_qr_code_config($module, $data_block, $nv_Lang)
     {
         global $selectthemes;
 

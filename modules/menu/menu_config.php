@@ -12,7 +12,7 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-function nv_block_config_menu($module, $data_block, $lang_block)
+function nv_block_config_menu($module, $data_block, $nv_Lang)
 {
     global $nv_Cache;
     $html = '';

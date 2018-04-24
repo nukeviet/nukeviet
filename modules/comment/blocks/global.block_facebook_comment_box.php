@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_facebook_comment_box_blocks($module, $data_block, $lang_block)
+    function nv_block_config_facebook_comment_box_blocks($module, $data_block, $nv_Lang)
     {
         $html = '';
 

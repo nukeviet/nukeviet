@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_block_headline')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_news_headline($module, $data_block, $lang_block)
+    function nv_block_config_news_headline($module, $data_block, $nv_Lang)
     {
         $tooltip_position = array(
             'top' => $nv_Lang->getBlock('tooltip_position_top'),

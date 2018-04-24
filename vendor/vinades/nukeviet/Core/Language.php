@@ -103,13 +103,15 @@ class Language
         $this->load($file, $loadtmp);
     }
 
+    /**
+     * Language::loadBlock()
+     *
+     * @param mixed $file
+     * @return void
+     */
     public function loadBlock($file)
     {
-        if (is_array($file)) {
-            self::$lang_block = array_merge(self::$lang_block, $file);
-        } else {
-            $this->load($file);
-        }
+        $this->load($file);
     }
 
     /**
@@ -277,36 +279,48 @@ class Language
      * Language::setModule()
      *
      * @param mixed $langkey
-     * @param mixed $langvalue
+     * @param string $langvalue
      * @return void
      */
-    public function setModule($langkey, $langvalue)
+    public function setModule($langkey, $langvalue = '')
     {
-        self::$lang_module[$langkey] = $langvalue;
+        if (is_array($langkey)) {
+            self::$lang_module = array_merge(self::$lang_module, $langkey);
+        } else {
+            self::$lang_module[$langkey] = $langvalue;
+        }
     }
 
     /**
      * Language::setGlobal()
      *
      * @param mixed $langkey
-     * @param mixed $langvalue
+     * @param string $langvalue
      * @return void
      */
-    public function setGlobal($langkey, $langvalue)
+    public function setGlobal($langkey, $langvalue = '')
     {
-        self::$lang_global[$langkey] = $langvalue;
+        if (is_array($langkey)) {
+            self::$lang_global = array_merge(self::$lang_global, $langkey);
+        } else {
+            self::$lang_global[$langkey] = $langvalue;
+        }
     }
 
     /**
      * Language::setBlock()
      *
      * @param mixed $langkey
-     * @param mixed $langvalue
+     * @param string $langvalue
      * @return void
      */
-    public function setBlock($langkey, $langvalue)
+    public function setBlock($langkey, $langvalue = '')
     {
-        self::$lang_block[$langkey] = $langvalue;
+        if (is_array($langkey)) {
+            self::$lang_block = array_merge(self::$lang_block, $langkey);
+        } else {
+            self::$lang_block[$langkey] = $langvalue;
+        }
     }
 
     /**

@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_tophits_blocks($module, $data_block, $lang_block)
+    function nv_block_config_tophits_blocks($module, $data_block, $nv_Lang)
     {
         global $nv_Cache, $site_mods;
         $tooltip_position = array(

@@ -172,12 +172,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 include_once $path_file_php;
 
                 if (nv_function_exists($submit_function)) {
-                    $lang_block = array();
                     // Ngon ngu cua block
-
                     if (!empty($path_file_lang)) {
                         $nv_Lang->loadBlock($path_file_lang);
                     } else {
+                        $lang_block = array();
                         $xmllanguage = $xml->xpath('language');
                         $language = (empty($xmllanguage)) ? array() : ( array )$xmllanguage[0];
 
@@ -192,11 +191,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                             $key = array_keys($language);
                             $lang_block = array_combine($key, $key);
                         }
-                        $nv_Lang->loadBlock($lang_block);
+                        $nv_Lang->setBlock($lang_block);
                     }
 
                     // Goi ham xu ly hien thi block
-                    $array_config = call_user_func($submit_function, $module, $lang_block);
+                    $array_config = call_user_func($submit_function, $module, $nv_Lang);
 
                     if (! empty($array_config['config'])) {
                         $row['config'] = serialize($array_config['config']);
