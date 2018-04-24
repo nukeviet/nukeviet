@@ -32,7 +32,7 @@ $contents['rows']['blang'] = array($nv_Lang->getModule('blang'), (!empty($row['b
 $contents['rows']['form'] = array($nv_Lang->getModule('form'), $row['form']);
 $contents['rows']['size'] = array($nv_Lang->getModule('size'), $row['width'] . ' x ' . $row['height'] . 'px');
 $contents['rows']['is_act'] = array($nv_Lang->getModule('is_act'), $row['act'] ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no'));
-$contents['rows']['require_image'] = array($nv_Lang->getModule('require_image'), $lang_module['require_image' . $row['require_image']]);
+$contents['rows']['require_image'] = array($nv_Lang->getModule('require_image'), $nv_Lang->getModule('require_image' . $row['require_image']));
 $contents['rows']['uploadtype'] = array($nv_Lang->getModule('uploadtype'), str_replace(',', ', ', $row['uploadtype']));
 
 $uploadgroup = array();

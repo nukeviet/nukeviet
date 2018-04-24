@@ -66,7 +66,7 @@ if ($pid > 0 and isset($plans[$pid])) {
 
 if (in_array($act, $aray_act)) {
     $where[] = 'act=' . $nv_Request->get_int('act', 'get');
-    $contents['caption'] = $lang_module['banners_list' . $act];
+    $contents['caption'] = $nv_Lang->getModule('banners_list' . $act);
 } else {
     $contents['caption'] = $nv_Lang->getModule('banners_list');
 }

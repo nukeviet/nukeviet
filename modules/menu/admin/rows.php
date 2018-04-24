@@ -599,7 +599,7 @@ if (!empty($error)) {
 for ($i = 0; $i <= 2; ++$i) {
     $xtpl->assign('ACTIVE_TYPE', array(
         'key' => $i,
-        'title' => $lang_module['add_type_active_' . $i],
+        'title' => $nv_Lang->getModule('add_type_active_' . $i),
         'selected' => $post['active_type'] == $i ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.active_type');

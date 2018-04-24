@@ -58,7 +58,7 @@ $xtpl->assign('DATA', $array);
 for ($i = 0; $i <= 1; ++$i) {
     $sendcopymode = array(
         'key' => $i,
-        'title' => $lang_module['config_sendcopymode' . $i],
+        'title' => $nv_Lang->getModule('config_sendcopymode' . $i),
         'selected' => $i == $array['sendcopymode'] ? ' selected="selected"' : ''
     );
     $xtpl->assign('SENDCOPYMODE', $sendcopymode);

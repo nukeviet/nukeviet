@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_news_category')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_news_category($module, $data_block, $lang_block)
+    function nv_block_config_news_category($module, $data_block, $nv_Lang)
     {
         global $nv_Cache, $site_mods;
 

@@ -103,9 +103,15 @@ class Language
         $this->load($file, $loadtmp);
     }
 
-    public function loadBlock($admin = false)
+    /**
+     * Language::loadBlock()
+     *
+     * @param mixed $file
+     * @return void
+     */
+    public function loadBlock($file)
     {
-        $lang_translator = $lang_global = array($admin = false);
+        $this->load($file);
     }
 
     /**
@@ -273,35 +279,80 @@ class Language
      * Language::setModule()
      *
      * @param mixed $langkey
-     * @param mixed $langvalue
+     * @param string $langvalue
      * @return void
      */
-    public function setModule($langkey, $langvalue)
+    public function setModule($langkey, $langvalue = '')
     {
-        self::$lang_module[$langkey] = $langvalue;
+        if (is_array($langkey)) {
+            self::$lang_module = array_merge(self::$lang_module, $langkey);
+        } else {
+            self::$lang_module[$langkey] = $langvalue;
+        }
     }
 
     /**
      * Language::setGlobal()
      *
      * @param mixed $langkey
-     * @param mixed $langvalue
+     * @param string $langvalue
      * @return void
      */
-    public function setGlobal($langkey, $langvalue)
+    public function setGlobal($langkey, $langvalue = '')
     {
-        self::$lang_global[$langkey] = $langvalue;
+        if (is_array($langkey)) {
+            self::$lang_global = array_merge(self::$lang_global, $langkey);
+        } else {
+            self::$lang_global[$langkey] = $langvalue;
+        }
     }
 
     /**
      * Language::setBlock()
      *
      * @param mixed $langkey
-     * @param mixed $langvalue
+     * @param string $langvalue
      * @return void
      */
-    public function setBlock($langkey, $langvalue)
+    public function setBlock($langkey, $langvalue = '')
     {
-        self::$lang_block[$langkey] = $langvalue;
+        if (is_array($langkey)) {
+            self::$lang_block = array_merge(self::$lang_block, $langkey);
+        } else {
+            self::$lang_block[$langkey] = $langvalue;
+        }
+    }
+
+    /**
+     * Language::existsGlobal()
+     *
+     * @param mixed $langkey
+     * @return
+     */
+    public function existsGlobal($langkey)
+    {
+        return isset(self::$lang_global[$langkey]);
+    }
+
+    /**
+     * Language::existsModule()
+     *
+     * @param mixed $langkey
+     * @return
+     */
+    public function existsModule($langkey)
+    {
+        return isset(self::$lang_module[$langkey]);
+    }
+
+    /**
+     * Language::existsBlock()
+     *
+     * @param mixed $langkey
+     * @return
+     */
+    public function existsBlock($langkey)
+    {
+        return isset(self::$lang_block[$langkey]);
     }
 }

@@ -21,7 +21,7 @@ if (!function_exists('nv_block_vertica_menu_note')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_vertica_menu_note($module, $data_block, $lang_block)
+    function nv_block_vertica_menu_note($module, $data_block, $nv_Lang)
     {
         $html = '';
         $html .= "<div class=\"form-group\">";

@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_comment_new')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_comment_new($module, $data_block, $lang_block)
+    function nv_block_comment_new($module, $data_block, $nv_Lang)
     {
         $html = '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('titlelength') . ':</label>';

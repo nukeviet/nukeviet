@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_page_list')) {
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_config_page_list($module, $data_block, $lang_block)
+    function nv_block_config_page_list($module, $data_block, $nv_Lang)
     {
         $html = '';
         $html .= '<div class="form-group">';
