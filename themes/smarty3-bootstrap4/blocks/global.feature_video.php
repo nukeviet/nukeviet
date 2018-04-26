@@ -79,9 +79,6 @@ if (!nv_function_exists('nv_block_feature_video')) {
         $stmt = $db->query($sql);
         $row = $stmt->fetch();
 
-
-
-
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.feature_video.tpl')) {
             $block_theme = $global_config['module_theme'];
         } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.feature_video.tpl')) {
@@ -93,7 +90,12 @@ if (!nv_function_exists('nv_block_feature_video')) {
         $tpl = new \NukeViet\Template\NvSmarty();
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
+
         $tpl->assign('row',$row);
+        if(preg_match("/^(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/watch\?v\=([^\&]+)\&?(.*?)$/is", $row['externalpath'], $m)){
+            $tpl->assign('code',$m['4']);
+
+        }
 
         return $tpl->fetch('global.feature_video.tpl');
     }
