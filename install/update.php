@@ -67,15 +67,13 @@ if (!empty($update_lang) and (in_array($update_lang, $array_lang_update)) and fi
 define('NV_LANG_UPDATE', $update_lang);
 
 unset($dirs, $languageslist, $file, $data_update_lang, $array_lang_update, $cookie_lang, $update_lang);
-if (NV_LANG_UPDATE != NV_LANG_DATA) {
-    unset($lang_module, $lang_global);
-}
 
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/global.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/admin_global.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/install.php';
-
-$lang_module = array_merge($lang_module, $nv_update_config['lang'][NV_LANG_UPDATE]);
+// Thiết lập lại ngôn ngữ cập nhật
+$nv_Lang->setLang(NV_LANG_UPDATE);
+$nv_Lang->loadGlobal();
+$nv_Lang->loadGlobal(true);
+$nv_Lang->loadBlock(NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/install.php');
+$nv_Lang->setModule($nv_update_config['lang'][NV_LANG_UPDATE]);
 unset($nv_update_config['lang']);
 
 /**
@@ -105,8 +103,7 @@ class NvUpdate
         global $db, $nv_Lang;
 
         $this->db = $db;
-        $this->lang = $lang_module;
-        $this->glang = $lang_global;
+        $this->lang = $nv_Lang;
         $this->config = $nv_update_config;
     }
 
@@ -215,7 +212,7 @@ class NvUpdate
         $return = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/config_update_' . $this->config['packageID'] . '.php', $content_config, LOCK_EX);
 
         if ($return === false) {
-            $message = sprintf($this->lang['update_error_log_data'], NV_DATADIR);
+            $message = $this->lang->getModule('update_error_log_data', NV_DATADIR);
             $contents = $this->call_error($message);
 
             include NV_ROOTDIR . '/includes/header.php';
@@ -276,7 +273,7 @@ class NvUpdate
 
                     if (!is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
                         // Nhat ki that bai
-                        $logs_message[] = $this->lang['update_log_creat_dir'] . ' ' . $cp . $p;
+                        $logs_message[] = $this->lang->getModule('update_log_creat_dir') . ' ' . $cp . $p;
                         $logs_status[] = false;
 
                         // Luu nhat ki
@@ -285,11 +282,11 @@ class NvUpdate
                         if ($is_ftp === true) {
                             $ftp->close();
                         }
-                        return $this->lang['update_error_creat_dir'] . ' ' . $cp . $p;
+                        return $this->lang->getModule('update_error_creat_dir') . ' ' . $cp . $p;
                     }
 
                     // Nhat ki thanh cong
-                    $logs_message[] = $this->lang['update_log_creat_dir'] . ' ' . $cp . $p;
+                    $logs_message[] = $this->lang->getModule('update_log_creat_dir') . ' ' . $cp . $p;
                     $logs_status[] = true;
                 }
                 $cp .= $p . '/';
@@ -315,7 +312,7 @@ class NvUpdate
 
                 if (file_exists(NV_ROOTDIR . '/install/update/' . $file_i)) {
                     // Nhat ki that bai
-                    $logs_message[] = $this->lang['update_log_move_file'] . ' ' . $file_i;
+                    $logs_message[] = $this->lang->getModule('update_log_move_file') . ' ' . $file_i;
                     $logs_status[] = false;
 
                     // Luu nhat ki
@@ -325,11 +322,11 @@ class NvUpdate
                         $ftp->close();
                     }
 
-                    return $this->lang['update_error_move_file'] . ' ' . $file_i;
+                    return $this->lang->getModule('update_error_move_file') . ' ' . $file_i;
                 }
 
                 // Nhat ki thanh cong
-                $logs_message[] = $this->lang['update_log_move_file'] . ' ' . $file_i;
+                $logs_message[] = $this->lang->getModule('update_log_move_file') . ' ' . $file_i;
                 $logs_status[] = true;
             }
         }
@@ -375,7 +372,7 @@ class NvUpdate
             return array();
         }
         $my_sys_info = $this->getsysinfo();
-        $sys_info = $lang_module = array();
+        $sys_info = array();
         $sys_info['ini_set_support'] = false;
         $sys_info['disable_functions'] = $my_sys_info['disable_functions'];
 
@@ -394,15 +391,15 @@ class NvUpdate
             if (empty($sys_info[$key])) {
                 if (isset($lang_module[$key])) {
                     $langkey = $lang_module[$key];
-                } elseif (isset($this->lang[$key])) {
-                    $langkey = $this->lang[$key];
+                } elseif ($this->lang->existsModule($key)) {
+                    $langkey = $this->lang->getModule($key);
                 } else {
                     $langkey = str_replace('_', ' ', $key);
                 }
                 if ($key == 'php_support') {
                     $langkey .= ' &gt;= ' . preg_replace('/\.([0-9]+)$/', '', $sys_info['php_required_min']) . ', &lt;= ' . preg_replace('/\.([0-9]+)$/', '', $sys_info['php_allowed_max']);
                 }
-                $result[$key] = array($langkey, $this->lang['not_compatible']);
+                $result[$key] = array($langkey, $this->lang->getModule('not_compatible'));
             }
         }
 
@@ -423,18 +420,17 @@ class NvUpdate
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
         $xtpl->assign('NV_LANG_UPDATE', NV_LANG_UPDATE);
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
 
         if (!empty($this->config['formodule'])) {
             // Lay module_file lam tieu de luon
-
-            $xtpl->assign('SITE_TITLE', $this->config['type'] == 1 ? sprintf($this->lang['updatemod_title_update'], $this->config['formodule']) : sprintf($this->lang['updatemod_title_upgrade'], $this->config['formodule']));
+            $xtpl->assign('SITE_TITLE', $this->config['type'] == 1 ? $this->lang->getModule('updatemod_title_update', $this->config['formodule']) : $this->lang->getModule('updatemod_title_upgrade', $this->config['formodule']));
         } else {
-            $xtpl->assign('SITE_TITLE', $this->config['type'] == 1 ? $this->lang['update_site_title_update'] : $this->lang['update_site_title_upgrade']);
+            $xtpl->assign('SITE_TITLE', $this->config['type'] == 1 ? $this->lang->getModule('update_site_title_update') : $this->lang->getModule('update_site_title_upgrade'));
         }
 
-        $xtpl->assign('CONTENT_TITLE', $this->lang['update_step_title_' . $this->config['step']]);
+        $xtpl->assign('CONTENT_TITLE', $this->lang->getModule('update_step_title_' . $this->config['step']));
 
         $xtpl->assign('MODULE_CONTENT', $contents);
 
@@ -451,7 +447,7 @@ class NvUpdate
             }
         }
 
-        $step_bar = array( $this->lang['update_step_1'], $this->lang['update_step_2'], $this->lang['update_step_3'] );
+        $step_bar = array($this->lang->getModule('update_step_1'), $this->lang->getModule('update_step_2'), $this->lang->getModule('update_step_3'));
 
         foreach ($step_bar as $i => $step_bar_i) {
             $n = $i + 1;
@@ -485,7 +481,7 @@ class NvUpdate
     {
 
         $xtpl = new XTemplate('updatestep1.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
@@ -494,7 +490,7 @@ class NvUpdate
 
         $xtpl->assign('RELEASE_DATE', !empty($this->config['release_date']) ? nv_date('d/m/Y H:i:s', $this->config['release_date']) : 'N/A');
         $xtpl->assign('ALLOW_OLD_VERSION', !empty($this->config['allow_old_version']) ? implode(', ', $this->config['allow_old_version']) : 'N/A');
-        $xtpl->assign('UPDATE_AUTO_TYPE', isset($this->config['update_auto_type']) ? $this->lang['update_auto_type_' . $this->config['update_auto_type']] : 'N/A');
+        $xtpl->assign('UPDATE_AUTO_TYPE', isset($this->config['update_auto_type']) ? $this->lang->getModule('update_auto_type_' . $this->config['update_auto_type']) : 'N/A');
 
         $array['ability_class'] = $array['isupdate_allow'] ? 'highlight_green' : 'highlight_red';
         $xtpl->assign('DATA', $array);
@@ -535,7 +531,7 @@ class NvUpdate
         global $global_config;
 
         $xtpl = new XTemplate('updatestep2.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -546,7 +542,7 @@ class NvUpdate
             if ($array['data_backuped']) {
                 // Thong bao da backup CSDL vao luc
 
-                $xtpl->assign('DATA_MESSAGE', sprintf($this->lang['update_data_backuped'], nv_date('H:i d/m/Y', $array['data_backuped'])));
+                $xtpl->assign('DATA_MESSAGE', $this->lang->getModule('update_data_backuped', nv_date('H:i d/m/Y', $array['data_backuped'])));
                 $xtpl->parse('main.step1.data_backuped');
             }
 
@@ -564,7 +560,7 @@ class NvUpdate
             if ($array['file_backuped']) {
                 // Thong bao da backup CODE vao luc
 
-                $xtpl->assign('FILE_MESSAGE', sprintf($this->lang['update_file_backuped'], nv_date('H:i d/m/Y', $array['file_backuped'])));
+                $xtpl->assign('FILE_MESSAGE', $this->lang->getModule('update_file_backuped', nv_date('H:i d/m/Y', $array['file_backuped'])));
                 $xtpl->parse('main.step1.file_backuped');
             }
 
@@ -591,7 +587,7 @@ class NvUpdate
                 // Cong viec lien quan CSDL
                 if (!empty($array['data_list'])) {
                     foreach ($array['data_list'] as $w) {
-                        $w['title'] = isset($this->lang[$w['langkey']]) ? $this->lang[$w['langkey']] : 'N/A';
+                        $w['title'] = $this->lang->existsModule($w['langkey']) ? $this->lang->getModule($w['langkey']) : 'N/A';
 
                         $xtpl->assign('ROW', $w);
                         $xtpl->parse('main.step2.automatic.data.loop');
@@ -631,7 +627,7 @@ class NvUpdate
                 if (!empty($array['stopprocess'])) {
                     // Dung cong viec do loi
                     global $nv_update_config;
-                    $xtpl->assign('ERROR_MESSAGE', sprintf($this->lang['update_task_error_message'], $array['stopprocess']['title'], $nv_update_config['support_website']));
+                    $xtpl->assign('ERROR_MESSAGE', $this->lang->getModule('update_task_error_message', $array['stopprocess']['title'], $nv_update_config['support_website']));
                     $xtpl->parse('main.step3.data.errorProcess');
                 } elseif ($array['AllPassed'] == true) {
                     // Hoan tat cong viec va chuyen sang buoc tiep theo
@@ -672,13 +668,13 @@ class NvUpdate
                 }
             }
 
-            $xtpl->assign('OK_MESSAGE', sprintf($this->lang['update_move_complete'], sizeof($nv_update_config['updatelog']['file_list'])));
+            $xtpl->assign('OK_MESSAGE', $this->lang->getModule('update_move_complete', sizeof($nv_update_config['updatelog']['file_list'])));
 
             if (empty($array['file_list'])) {
                 $xtpl->parse('main.step4.complete');
                 $xtpl->parse('main.step4.next_step');
             } else {
-                $xtpl->assign('PROCESS_MESSAGE', sprintf($this->lang['update_move_num'], sizeof($array['file_list']), sizeof($nv_update_config['updatelog']['file_list'])));
+                $xtpl->assign('PROCESS_MESSAGE', $this->lang->getModule('update_move_num', sizeof($array['file_list']), sizeof($nv_update_config['updatelog']['file_list'])));
                 $xtpl->parse('main.step4.process');
             }
 
@@ -718,7 +714,7 @@ class NvUpdate
         global $global_config;
 
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -747,7 +743,7 @@ class NvUpdate
         global $global_config;
 
         $xtpl = new XTemplate('packageerror.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
@@ -767,7 +763,7 @@ class NvUpdate
     public function version_info($array)
     {
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -792,16 +788,16 @@ class NvUpdate
         global $global_config;
 
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
         $i = 0;
         foreach ($exts as $mod) {
             if (($mod['type'] == 'module' and in_array($mod['name'], array('banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'))) or ($mod['type'] == 'theme' and in_array($mod['name'], array('default', 'mobile_default')))) {
-                $mod['note'] = $this->lang['update_mod_uptodate'];
+                $mod['note'] = $this->lang->getModule('update_mod_uptodate');
             } else {
-                $mod['note'] = $this->lang['update_mod_othermod'];
+                $mod['note'] = $this->lang->getModule('update_mod_othermod');
             }
 
             $mod['class'] = $i++ % 2 ? 'specalt' : 'spec';
@@ -827,7 +823,7 @@ class NvUpdate
         global $global_config;
 
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
@@ -877,8 +873,8 @@ class NvUpdate
 
         $contents = '';
         if (!file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log)) {
-            $contents .= $this->lang['update_log_start'] . ': ' . $time . "\n";
-            nv_insert_logs(NV_LANG_UPDATE, 'update', $this->lang['update_log_start'], $time, $admin_info['userid']);
+            $contents .= $this->lang->getModule('update_log_start') . ': ' . $time . "\n";
+            nv_insert_logs(NV_LANG_UPDATE, 'update', $this->lang->getModule('update_log_start'), $time, $admin_info['userid']);
         }
 
         foreach ($content as $key => $mess) {
@@ -899,7 +895,7 @@ class NvUpdate
     public function call_error($message)
     {
         $xtpl = new XTemplate('updateerror.tpl', NV_ROOTDIR . '/install/tpl');
-        $xtpl->assign('LANG', $this->lang);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('MESSAGE', $message);
 
@@ -1386,7 +1382,7 @@ if ($nv_update_config['step'] == 1) {
                         foreach ($nv_update_config['updatelog']['data_list'] as $k => $v) {
                             if ($is_get_next == true) {
                                 $return['funcname'] = $k;
-                                $v['title'] = isset($lang_module[$v['langkey']]) ? $lang_module[$v['langkey']] : 'N/A';
+                                $v['title'] = $nv_Lang->existsModule($v['langkey']) ? $nv_Lang->getModule($v['langkey']) : 'N/A';
                                 $return['functitle'] = $v['title'];
                                 break;
                             }
@@ -1399,7 +1395,7 @@ if ($nv_update_config['step'] == 1) {
                         $return['url'] = $check_return['link'];
                         $return['funcname'] = $func;
                         $langkey = $nv_update_config['updatelog']['data_list'][$func]['langkey'];
-                        $return['functitle'] = isset($lang_module[$langkey]) ? $lang_module[$langkey] : 'N/A';
+                        $return['functitle'] = $nv_Lang->existsModule($langkey) ? $nv_Lang->getModule($langkey) : 'N/A';
                         unset($langkey);
                     }
                 }
@@ -1418,7 +1414,7 @@ if ($nv_update_config['step'] == 1) {
 
                 // Ghi logs
                 $langkey = $nv_update_config['updatelog']['data_list'][$func]['langkey'];
-                $functitle = isset($lang_module[$langkey]) ? $lang_module[$langkey] : 'N/A';
+                $functitle = $nv_Lang->existsModule($langkey) ? $nv_Lang->getModule($langkey) : 'N/A';
                 $log_message = $functitle . ($check_return['message'] ? (' - ' . $check_return['message']) : '');
                 $NvUpdate->log($nv_update_config, $log_message, $check_return['status']);
 
@@ -1442,7 +1438,7 @@ if ($nv_update_config['step'] == 1) {
 
             foreach ($nv_update_config['updatelog']['data_list'] as $funcsname => $task) {
                 // Xuat tieu de
-                $task['title'] = isset($lang_module[$task['langkey']]) ? $lang_module[$task['langkey']] : 'N/A';
+                $task['title'] = $nv_Lang->existsModule($task['langkey']) ? $nv_Lang->getModule($task['langkey']) : 'N/A';
 
                 // Khoi tao ham tiep theo thuc hien
                 if (empty($array['nextfunction'])) {
@@ -1490,7 +1486,7 @@ if ($nv_update_config['step'] == 1) {
                     $array['stopprocess'] = array( 'id' => $funcsname, 'title' => $task['title'] );
                 }
 
-                $status_title = $lang_module['update_task' . $class_trim];
+                $status_title = $nv_Lang->getModule('update_task' . $class_trim);
 
                 $array['task'][$funcsname] = array(
                     'id' => $funcsname,
