@@ -129,7 +129,6 @@
 	var CFG = [];
 	CFG.checksess = '{checksess}';
 	CFG.url_del = '{URL_DEL}';
-	CFG.back_url = '{BACK_URL}';
 	//]]>
 </script>
 <!-- END: main -->

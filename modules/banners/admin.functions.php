@@ -607,15 +607,32 @@ function nv_banners_list_theme($contents)
  */
 function nv_b_list_theme($contents, $array_users = array())
 {
-    global $global_config, $module_file, $lang_module, $module_name, $global_config;
+    global $global_config, $module_file, $lang_module, $module_name, $global_config, $lang_global;
 
     $xtpl = new XTemplate('b_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
 
     if (defined('NV_BANNER_WEIGHT')) {
         $xtpl->parse('main.nv_banner_weight');
+    }
+
+    if (!empty($contents['searchform'])) {
+        $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
+        $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
+        $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
+        $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+        $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+
+        foreach ($contents['plans'] as $plan) {
+            $plan['selected'] = $plan['id'] == $contents['pid'] ? ' selected="selected"' : '';
+            $xtpl->assign('PLAN', $plan);
+            $xtpl->parse('main.searchform.plan');
+        }
+
+        $xtpl->parse('main.searchform');
     }
 
     foreach ($contents['thead'] as $key => $thead) {
@@ -768,10 +785,25 @@ function nv_show_list_stat_theme($contents)
  */
 function nv_main_theme($contents)
 {
-    global $global_config, $module_file;
+    global $global_config, $module_file, $lang_global, $lang_module, $module_name;
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
+    $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
+    $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
+    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+    $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+
+    foreach ($contents['plans'] as $plan) {
+        $plan['selected'] = $plan['id'] == $contents['pid'] ? ' selected="selected"' : '';
+        $xtpl->assign('PLAN', $plan);
+        $xtpl->parse('main.plan');
+    }
+
     foreach ($contents['containerid'] as $containerid) {
         $xtpl->assign('CONTAINERID', $containerid);
         $xtpl->parse('main.loop1');

@@ -272,7 +272,6 @@ $xtpl->assign('URL_CANCEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE .
 $xtpl->assign('DISABLE', $disabled);
 $xtpl->assign('DATA_SEARCH', $data_search);
 $xtpl->assign('DATA_ORDER', $order);
-$xtpl->assign('BACK_URL', $base_url);
 
 foreach ($array_lang as $lang) {
     $xtpl->assign('lang', $lang);
