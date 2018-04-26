@@ -326,8 +326,8 @@ function preview() {
             $("#FileAbsolutePathBtn").mouseout(function() {
                 $(this).tooltip('destroy');
             });
-            var clipboard1 = new Clipboard('#FileRelativePathBtn');
-            var clipboard2 = new Clipboard('#FileAbsolutePathBtn');
+            var clipboard1 = new ClipboardJS('#FileRelativePathBtn');
+            var clipboard2 = new ClipboardJS('#FileAbsolutePathBtn');
             clipboard1.on('success', function(e) {
                 $(e.trigger).tooltip('show');
             });
