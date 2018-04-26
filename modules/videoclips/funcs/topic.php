@@ -67,7 +67,7 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS a.*,b.view FROM `" . NV_PREFIXLANG . "_" . $m
     LIMIT " . $pgnum . "," . $configMods['otherClipsNum'];
 
 $xtpl = new XTemplate("topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULECONFIG', $configMods);
 $xtpl->assign('TEMPLATE', $module_info['template']);
@@ -75,7 +75,7 @@ $xtpl->assign('MODULE_THEME', $module_info['module_theme']);
 
 if (!empty($_otherTopic['main']) or !empty($_otherTopic['sub'])) {
     if (!empty($_otherTopic['main'])) {
-        $xtpl->assign('OTHETP', $lang_module['otherTopic']);
+        $xtpl->assign('OTHETP', $nv_Lang->getModule('otherTopic'));
         foreach ($_otherTopic['main'] as $_ottp) {
             $href = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $_ottp['alias'];
             $xtpl->assign('OTHERTOPIC', array(

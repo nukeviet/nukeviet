@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_block_feature_video')) {
      */
     function nv_block_feature_video($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.feature_video.tpl')) {
             $block_theme = $global_config['module_theme'];

@@ -15,42 +15,42 @@ if (!defined('NV_MAINFILE')) {
 if (!nv_function_exists('nv_block_social_icon')) {
 
 
-    function nv_menu_theme_social_config($module, $data_block, $lang_block)
+    function nv_menu_theme_social_config($module, $data_block, $nv_Lang)
 
     {
         $html .='';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['title1'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('title1') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_title1" class="form-control" value="' . $data_block['title1'] . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['facebook'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('facebook') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_facebook" class="form-control" value="' . $data_block['facebook'] . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['google_plus'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('google_plus') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_google_plus" class="form-control" value="' . $data_block['google_plus'] . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' .  $lang_block['youtube'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' .  $nv_Lang->getBlock('youtube') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_youtube" class="form-control" value="' . $data_block['youtube'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['twitter'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('twitter') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_twitter" class="form-control" value="' . $data_block['twitter'] . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['instagram'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('instagram') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_instagram" class="form-control" value="' . $data_block['instagram'] . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['github'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('github') . ':</label>';
         $html .= '  <div class="col-sm-18"><input type="text" name="config_github" class="form-control" value="' . $data_block['github'] . '"/></div>';
         $html .= '</div>';
 
@@ -63,10 +63,10 @@ if (!nv_function_exists('nv_block_social_icon')) {
      * nv_menu_theme_social_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_menu_theme_social_submit($module, $lang_block)
+    function nv_menu_theme_social_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();
@@ -90,7 +90,7 @@ if (!nv_function_exists('nv_block_social_icon')) {
     function nv_block_social_icon($block_config)
 
     {
-        global $global_config, $lang_global;
+        global $global_config, $nv_Lang;
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.social_icon.tpl')) {
             $block_theme = $global_config['module_theme'];
         } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.social_icon.tpl')) {

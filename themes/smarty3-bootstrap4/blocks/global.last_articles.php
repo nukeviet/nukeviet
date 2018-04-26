@@ -17,25 +17,25 @@ if (!nv_function_exists('nv_block_last_articles')) {
      * nv_block_config_tophits_blocks()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @param mixed $lang_block
      * @return
      */
-    function nv_block_last_articles_config($module, $data_block, $lang_block)
+    function nv_block_last_articles_config($module, $data_block, $nv_Lang)
 
     {
         global $nv_Cache, $site_mods;
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['title1'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('title1') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="config_title1" class="form-control w100" size="5" value="' . $data_block['title1'] . '"/></div>';
         $html .= '  </div>';
 
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('numrow') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '  </div>';
@@ -51,10 +51,10 @@ if (!nv_function_exists('nv_block_last_articles')) {
      * nv_block_config_tophits_blocks_submit()
      *
      * @param mixed $module
-     * @param mixed $lang_block
+     * @param mixed $nv_Lang
      * @return
      */
-    function nv_block_last_articles_config_submit($module, $lang_block)
+    function nv_block_last_articles_config_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();
@@ -76,7 +76,7 @@ if (!nv_function_exists('nv_block_last_articles')) {
     function nv_block_last_articles($block_config)
     {
 
-        global $global_config, $lang_global,$db,$site_mods;
+        global $global_config, $db, $site_mods, $nv_Lang;
         $title1 = $block_config['config_title1'];
         $number = $block_config['numrow'];
         $sql = "SELECT id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link FROM ".NV_PREFIXLANG."_news_rows ORDER BY id DESC LIMIT $number";

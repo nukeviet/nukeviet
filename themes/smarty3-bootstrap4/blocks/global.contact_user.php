@@ -39,7 +39,7 @@ if (!nv_function_exists('nv_block_contact_user')) {
         return $html;
     }
 
-    function nv_block_config_contact_department_submit($module, $lang_block)
+    function nv_block_config_contact_department_submit($module, $nv_Lang)
     {
         global $nv_Request;
         $return = array();
@@ -56,7 +56,7 @@ if (!nv_function_exists('nv_block_contact_user')) {
      */
     function nv_block_contact_user($block_config)
     {
-        global $global_config, $lang_global, $site_mods,$db;
+        global $global_config, $site_mods, $db, $nv_Lang;
         $departmentid = $block_config['departmentid'];
 
 

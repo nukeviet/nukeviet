@@ -42,7 +42,7 @@ if (empty($topicList)) {
     exit();
 }
 
-$page_title = $lang_module['main'];
+$page_title = $nv_Lang->getModule('main');
 $contents = "";
 
 $sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip";
@@ -55,8 +55,8 @@ if (empty($count['count']) and !$nv_Request->isset_request('add', 'get')) {
 }
 
 $xtpl = new XTemplate($op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -118,13 +118,13 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         $where = isset($post['id']) ? " id!=" . $post['id'] . " AND" : "";
 
         if (empty($post['title'])) {
-            $info = $lang_module['error1'];
+            $info = $nv_Lang->getModule('error1');
             $is_error = true;
         } elseif (empty($post['hometext'])) {
-            $info = $lang_module['error7'];
+            $info = $nv_Lang->getModule('error7');
             $is_error = true;
         } elseif (empty($post['internalpath']) and empty($post['externalpath'])) {
-            $info = $lang_module['error5'];
+            $info = $nv_Lang->getModule('error5');
             $is_error = true;
         }
 
@@ -140,7 +140,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             }
 
             if (empty($post['img'])) {
-                $info = $lang_module['error6'];
+                $info = $nv_Lang->getModule('error6');
                 $is_error = true;
             }
         }
@@ -176,7 +176,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
                 $db->query($query);
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['editClip'], "Id: " . $post['id'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('editClip'), "Id: " . $post['id'], $admin_info['userid']);
             } else {
                 $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_clip VALUES
                 (NULL, " . $post['tid'] . ", " . $db->quote($post['title']) . ", " . $db->quote($post['alias']) . ",
@@ -190,7 +190,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_hit VALUES (" . $_id . ", 0, 0, 0, 0);";
                 $db->query($query);
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addClip'], "Id: " . $_id, $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addClip'), "Id: " . $_id, $admin_info['userid']);
             }
             $nv_Cache->delMod($module_name);
             if ($post['redirect']) {
@@ -228,10 +228,10 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
     if (isset($post['id'])) {
         $post['action'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&edit&id=" . $post['id'];
-        $informationtitle = $lang_module['editClip'];
+        $informationtitle = $nv_Lang->getModule('editClip');
     } else {
         $post['action'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&add";
-        $informationtitle = $lang_module['addClip'];
+        $informationtitle = $nv_Lang->getModule('addClip');
         $xtpl->parse('add.auto_get_alias');
     }
 
@@ -273,10 +273,10 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     $db->query($query);
 
     $nv_Cache->delMod($module_name);
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['cstatus'], "Id: " . $id, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('cstatus'), "Id: " . $id, $admin_info['userid']);
 
-    $alt = $newStatus ? $lang_module['status1'] : $lang_module['status0'];
-    $tit = $newStatus ? $lang_module['tit1'] : $lang_module['tit0'];
+    $alt = $newStatus ? $nv_Lang->getModule('status1') : $nv_Lang->getModule('status0');
+    $tit = $newStatus ? $nv_Lang->getModule('tit1') : $nv_Lang->getModule('tit0');
     $icon = $newStatus ? '<i style="color: red; font-size: 16px" class="fa fa-check-square-o"></i>' : '<i style="color: #333; font-size: 16px" class="fa fa-square-o"></i>';
 
 
@@ -289,7 +289,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip WHERE id = " . $id;
     $db->query($query);
     $nv_Cache->delMod($module_name);
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['delClip'], "Id: " . $id, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delClip'), "Id: " . $id, $admin_info['userid']);
     die('OK');
 }
 
@@ -301,7 +301,7 @@ foreach ($topicList as $id => $name) {
 
 $where = "";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
-$ptitle = $lang_module['main'];
+$ptitle = $nv_Lang->getModule('main');
 
 $_where = array();
 $q = $nv_Request->get_title('q', 'get', '');
@@ -319,7 +319,7 @@ if ($nv_Request->isset_request('tid', 'get')) {
         }
 
         $base_url .= "&tid=" . $top;
-        $ptitle = sprintf($lang_module['listClipByTid'], $topicList[$top]['title']);
+        $ptitle = sprintf($nv_Lang->getModule('listClipByTid'), $topicList[$top]['title']);
     }
 }
 
@@ -348,8 +348,8 @@ while ($row = $result->fetch()) {
     $row['adddate'] = date("d-m-Y H:i", $row['addtime']);
     $row['topicname'] = isset($topicList[$row['tid']]) ? $topicList[$row['tid']]['title'] : "";
     $row['icon'] = $row['status'] ? '<i class="fa fa-check-square-o" style="color: red; font-size: 16px"></i>' : '<i style="color: #333; font-size: 16px" class="fa fa-square-o"></i>';
-    $row['status'] = $row['status'] ? $lang_module['tit1'] : $lang_module['tit0'];
-    $row['alt'] = $row['status'] ? $lang_module['status1'] : $lang_module['status0'];
+    $row['status'] = $row['status'] ? $nv_Lang->getModule('tit1') : $nv_Lang->getModule('tit0');
+    $row['alt'] = $row['status'] ? $nv_Lang->getModule('status1') : $nv_Lang->getModule('status0');
     $row['link_view'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=video-' . $row['alias'], true);
     $xtpl->assign('DATA', $row);
     $xtpl->parse('main.loop');

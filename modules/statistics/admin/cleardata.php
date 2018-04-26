@@ -12,12 +12,12 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['cleardata'];
+$page_title = $nv_Lang->getModule('cleardata');
 
 $xtpl = new XTemplate('cleardata.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $clearall = $nv_Request->isset_request('all', 'post');
@@ -82,7 +82,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 }
 
 if ($global_config['lang_multi']) {
-    $xtpl->assign('ALLLANG_MSG', sprintf($lang_module['clear_alllang_msg'], $language_array[NV_LANG_DATA]['name']));
+    $xtpl->assign('ALLLANG_MSG', sprintf($nv_Lang->getModule('clear_alllang_msg'), $language_array[NV_LANG_DATA]['name']));
     $xtpl->assign('ALLLANG', $alllang ? ' checked="checked"' : '');
     $xtpl->parse('main.clearalllang1');
     $xtpl->parse('main.clearalllang2');

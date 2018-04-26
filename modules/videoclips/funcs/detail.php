@@ -26,7 +26,7 @@ $num = $result->rowCount();
 if (!$num) {
     $headerStatus = substr(php_sapi_name(), 0, 3) == 'cgi' ? "Status:" : $_SERVER['SERVER_PROTOCOL'];
     header($headerStatus . " 404 Not Found");
-    nv_info_die($lang_global['error_404_title'], $lang_global['site_info'], $lang_global['error_404_title']);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('site_info'), $nv_Lang->getGlobal('error_404_title'));
     die();
 }
 
@@ -110,7 +110,7 @@ $array_mod_title[] = array( //
 $cpgnum = 0;
 
 $xtpl = new XTemplate("detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('TEMPLATE', $module_info['template']);
 $xtpl->assign('MODULE_THEME', $module_info['module_theme']);

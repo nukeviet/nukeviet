@@ -785,10 +785,10 @@ function nv_show_list_stat_theme($contents)
  */
 function nv_main_theme($contents)
 {
-    global $global_config, $module_file, $lang_global, $lang_module, $module_name;
+    global $global_config, $module_file, $module_name, $nv_Lang;
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
     $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);

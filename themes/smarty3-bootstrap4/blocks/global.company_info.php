@@ -13,38 +13,38 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_company_info')) {
-    function nv_company_info_config($module, $data_block, $lang_block)
+    function nv_company_info_config($module, $data_block, $nv_Lang)
 
     {
         global $selectthemes, $nv_Lang;
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['company_address'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('company_address') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="company_address" class="form-control " value="' . $data_block['company_address'] . '"/></div>';
         $html .= '  </div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['company_headquarters'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('company_headquarters') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="company_headquarters" class="form-control " value="' . $data_block['company_headquarters'] . '"/></div>';
         $html .= '  </div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['company_email'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('company_email') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="company_email" class="form-control " value="' . $data_block['company_email'] . '"/></div>';
         $html .= '  </div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['company_cellphonenumber'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('company_cellphonenumber') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="company_cellphonenumber" class="form-control " value="' . $data_block['company_cellphonenumber'] . '"/></div>';
         $html .= '  </div>';
 
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $lang_block['company_deskphonenumber'] . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('company_deskphonenumber') . ':</label>';
         $html .= '  <div class="col-sm-18">
                     <input type="text" name="company_deskphonenumber" class="form-control " value="' . $data_block['company_deskphonenumber'] . '"/></div>';
         $html .= '  </div>';
@@ -82,7 +82,7 @@ if (!nv_function_exists('nv_block_company_info')) {
      */
     function nv_block_company_info($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config, $nv_Lang;
 
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.company_info.tpl')) {

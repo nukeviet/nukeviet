@@ -24,12 +24,12 @@ if ($nv_Request->isset_request('remove', 'post')) {
     die('OK');
 }
 
-$page_title = $lang_module['vbroken'];
+$page_title = $nv_Lang->getModule('vbroken');
 $contents = "";
 
 $xtpl = new XTemplate($op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULE_URL', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE);
 $xtpl->assign('NV_ADMIN_THEME', $global_config['module_theme']);
@@ -53,7 +53,7 @@ if ($all_page) {
         $row['topicUrl'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=topic&edit=1&tid=" . $row['tid'];
         $row['topicname'] = isset($topicList[$row['tid']]) ? $topicList[$row['tid']]['title'] : "";
         $row['icon'] = $row['status'] ? "enabled" : "disabled";
-        $row['status'] = $row['status'] ? $lang_module['status1'] : $lang_module['status0'];
+        $row['status'] = $row['status'] ? $nv_Lang->getModule('status1') : $nv_Lang->getModule('status0');
         $xtpl->assign('DATA', $row);
         $xtpl->parse('main.loop');
         $a++;

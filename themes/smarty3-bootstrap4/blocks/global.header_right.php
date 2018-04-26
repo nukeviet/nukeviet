@@ -22,7 +22,7 @@ if (!nv_function_exists('nv_block_header_right')) {
      */
     function nv_block_header_right($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config, $nv_Lang;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.header_right.tpl')) {
             $block_theme = $global_config['module_theme'];
