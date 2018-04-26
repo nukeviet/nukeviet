@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_WEBTOOLS')) {
+if (!defined('NV_IS_FILE_WEBTOOLS')) {
     die('Stop!!!');
 }
 
@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $statistics_timezone = nv_substr($nv_Request->get_title('statistics_timezone', 'post', '', 0), 0, 255);
 
-    if (! empty($statistics_timezone) and in_array($statistics_timezone, $timezone_array)) {
+    if (!empty($statistics_timezone) and in_array($statistics_timezone, $timezone_array)) {
         $array_config_global['statistics_timezone'] = $statistics_timezone;
     } else {
         $array_config_global['statistics_timezone'] = NV_SITE_TIMEZONE_NAME;
@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $array_config_global['googleAnalyticsID'] = nv_substr($nv_Request->get_title('googleAnalyticsID', 'post', '', 1), 0, 20);
 
-    if (! preg_match('/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'])) {
+    if (!preg_match('/^UA\-\d{4,}\-\d+$/', $array_config_global['googleAnalyticsID'])) {
         $array_config_global['googleAnalyticsID'] = '';
     }
 
