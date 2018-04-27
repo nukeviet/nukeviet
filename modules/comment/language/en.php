@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -45,3 +45,4 @@ $lang_module['delete'] = 'Delete';
 $lang_module['like_unsuccess'] = 'You have already rated this comment earlier';
 $lang_module['attach'] = 'File attach';
 $lang_module['attachdownload'] = 'Download attach';
+$lang_module['user'] = 'Member';
