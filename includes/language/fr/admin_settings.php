@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -253,3 +253,6 @@ $lang_module['two_step_verification_note'] = 'Remarque: Cette configuration appl
 $lang_module['site_phone'] = 'Nom du fichier Téléphone';
 $lang_module['googleMapsAPI'] = 'Google Maps API key';
 $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guides obtiennent clé API</a>';
+$lang_module['noflood_ip_add'] = 'Ajouter une adresse IP pour ignorer le contrôle d\'inondation';
+$lang_module['noflood_ip_edit'] = 'Correction du contournement de l\'inondation IP';
+$lang_module['noflood_ip_list'] = 'L\'IP contourne le contrôle d\'inondation';
