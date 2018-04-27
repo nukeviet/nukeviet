@@ -100,3 +100,8 @@ $lang_module['error_required_phone'] = 'Error: Phone field is required';
 $lang_module['forwarded'] = 'Forwarded';
 $lang_module['forward'] = 'Forward to: %s';
 $lang_module['error_mail_empty'] = 'Error: Empty email';
+
+$lang_module['config'] = 'Configurer le module';
+$lang_module['config_sendcopymode'] = 'Le droit d\'envoyer une copie à l\'email';
+$lang_module['config_sendcopymode0'] = 'Les membres ont un email authentifié';
+$lang_module['config_sendcopymode1'] = 'Tous les utilisateurs';

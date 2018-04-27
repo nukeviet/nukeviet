@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -20,8 +20,8 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['comment'] = 'Reader Comments';
-$lang_module['comment_login'] = 'You must login to comment this article';
-$lang_module['comment_register_groups'] = 'You need is member of groups <strong>%1$s</strong> must can comment this post. Click <a href="%2$s" title="Register groups">here</a> to register!';
+$lang_module['comment_login'] = 'You need to log in as <strong>%s</strong> to be able to comment';
+$lang_module['comment_register_groups'] = 'You need is member of groups <strong>%1$s</strong> must can comment. Click <a href="%2$s" title="Register groups">here</a> to register!';
 $lang_module['comment_success'] = 'Successful comments';
 $lang_module['comment_success_queue'] = 'Sended success. Your comment will display after approval';
 $lang_module['comment_unsuccess'] = 'Error processing the data or incomplete data';
@@ -45,3 +45,4 @@ $lang_module['delete'] = 'Delete';
 $lang_module['like_unsuccess'] = 'You have already rated this comment earlier';
 $lang_module['attach'] = 'File attach';
 $lang_module['attachdownload'] = 'Download attach';
+$lang_module['user'] = 'Member';

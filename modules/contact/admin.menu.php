@@ -15,6 +15,8 @@ if (!defined('NV_ADMIN')) {
 if (defined('NV_IS_SPADMIN')) {
     $submenu['department'] = $lang_module['department_title'];
     $submenu['supporter'] = $lang_module['supporter'];
-    $submenu['content'] = $lang_module['content'];
 }
 $submenu['send'] = $lang_module['send_title'];
+if (defined('NV_IS_SPADMIN')) {
+    $submenu['config'] = $lang_module['config'];
+}

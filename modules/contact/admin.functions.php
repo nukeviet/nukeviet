@@ -21,7 +21,7 @@ if (defined('NV_IS_SPADMIN')) {
         'department',
         'row',
         'del_department',
-        'content',
+        'config',
         'view',
         'change_status',
         'change_weight',
@@ -44,7 +44,7 @@ if (defined('NV_IS_SPADMIN')) {
 
 //Tài liệu hướng dẫn
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact';
-$array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#nội_dung_thong_bao_tren_trang_lien_hệ';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#cấu_hinh_module';
 $array_url_instruction['supporter'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#hiển_thị_danh_sach_cac_nhan_vien_hỗ_trợ';
 $array_url_instruction['department'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#quản_ly_cac_bộ_phận';
 $array_url_instruction['send'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contact#gửi_phản_hồi';

@@ -24,7 +24,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+
 	// Delete update package
 	$('.delete_update_backage').click(function() {
 		if (confirm(nv_is_del_confirm[0])) {
@@ -42,7 +42,7 @@ $(document).ready(function(){
 		}
 		return !1;
 	});
-	
+
 	// Logs
 	if( $.fn.datepicker ){
 		$("#from,#to").datepicker({
@@ -98,7 +98,7 @@ $(document).ready(function(){
 				success : function(data) {
 					var s = data.split('_');
 					if (s[0] == 'OK')
-						window.location = CFG.back_url;
+						location.reload();
 					alert(s[1]);
 				}
 			});
@@ -115,7 +115,7 @@ $(document).ready(function(){
 				success : function(data) {
 					var s = data.split('_');
 					if (s[0] == 'OK') {
-						window.location = CFG.back_url;
+						location.reload();
 					} else {
 						alert(s[1]);
 					}
@@ -140,7 +140,7 @@ $(document).ready(function(){
 			});
 		}
 	});
-    
+
     // List notification
     var nfcLists = $('#notification-lists');
     if (nfcLists.length) {

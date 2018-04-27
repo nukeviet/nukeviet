@@ -119,8 +119,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 }
 
                 if (! empty($src)) {
-                    $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $src)) ? $src : NV_MY_DOMAIN . $src;
-
+                    $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $news_contents['homeimgfile'])) ? $news_contents['homeimgfile'] : NV_MY_DOMAIN . $news_contents['homeimgfile'];
                     if ($news_contents['imgposition'] > 0) {
                         $news_contents['image'] = array(
                             'src' => $src,
@@ -172,6 +171,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $alert = sprintf($lang_module['status_alert'], $lang_module['status_' . $news_contents['status']]);
             $my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
             $news_contents['allowed_send'] = 0;
+            $module_config[$module_name]['socialbutton'] = 0;
         }
     }
 

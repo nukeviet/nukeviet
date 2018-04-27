@@ -46,7 +46,7 @@ if (empty($vid)) {
     if (!empty($allowed)) {
         $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
         $xtpl->assign('LANG', $lang_module);
-        
+
         foreach ($allowed as $current_voting) {
             $voting_array = array(
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
@@ -93,10 +93,10 @@ if (empty($vid)) {
                 }
                 $xtpl->parse('main.loop.has_captcha');
             }
-            
+
             $xtpl->parse('main.loop');
         }
-        
+
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
     }

@@ -17,12 +17,18 @@ $page_title = $lang_module['banners_list'];
 $sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC";
 $result = $db->query($sql);
 
+$contents = array();
+$contents['searchform'] = true;
+$contents['plans'] = array();
+$contents['keyword'] = $nv_Request->get_title('q', 'get', '');
+$contents['pid'] = $nv_Request->get_int('pid', 'get', 0);
+$contents['clid'] = $nv_Request->get_int('clid', 'get', 0);
+
 $plans = array();
 while ($row = $result->fetch()) {
+    $contents['plans'][] = $row;
     $plans[$row['id']] = $row['title'] . " (" . (!empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
 }
-
-$contents = array();
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE ";
 if (in_array($nv_Request->get_int('act', 'get', 1), array(0, 2, 3, 4))) {
@@ -33,12 +39,16 @@ if (in_array($nv_Request->get_int('act', 'get', 1), array(0, 2, 3, 4))) {
     $contents['caption'] = $lang_module['banners_list1'];
 }
 
-if ($nv_Request->get_bool('clid', 'get') and isset($clients[$nv_Request->get_int('clid', 'get')])) {
-    $sql .= " AND clid=" . $nv_Request->get_int('clid', 'get');
-    $contents['caption'] .= " " . sprintf($lang_module['banners_list_cl'], $clients[$nv_Request->get_int('clid', 'get')]);
-} elseif ($nv_Request->get_bool('pid', 'get') and isset($plans[$nv_Request->get_int('pid', 'get')])) {
-    $sql .= " AND pid=" . $nv_Request->get_int('pid', 'get');
-    $contents['caption'] .= " " . sprintf($lang_module['banners_list_pl'], $plans[$nv_Request->get_int('pid', 'get')]);
+if (isset($clients[$contents['clid']])) {
+    $sql .= " AND clid=" . $contents['clid'];
+    $contents['caption'] .= " " . sprintf($lang_module['banners_list_cl'], $clients[$contents['clid']]);
+} elseif (isset($plans[$contents['pid']])) {
+    $sql .= " AND pid=" . $contents['pid'];
+    $contents['caption'] .= " " . sprintf($lang_module['banners_list_pl'], $plans[$contents['pid']]);
+}
+if (!empty($contents['keyword'])) {
+    $keyword = $db->dblikeescape($contents['keyword']);
+    $sql .= " AND (title LIKE '%" . $keyword . "%' OR file_alt LIKE '%" . $keyword . "%' OR click_url LIKE '%" . $keyword . "%' OR bannerhtml LIKE '%" . $keyword . "%')";
 }
 
 $sql .= " ORDER BY id DESC";

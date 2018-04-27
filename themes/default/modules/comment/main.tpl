@@ -112,7 +112,7 @@
 		<!-- BEGIN: form_login-->
 		<div class="alert alert-danger fade in">
 			<!-- BEGIN: message_login -->
-			<a title="{GLANG.loginsubmit}" href="#" onclick="return loginForm('');">{LANG.comment_login}</a>
+			<a title="{GLANG.loginsubmit}" href="#" onclick="return loginForm('');">{LOGIN_MESSAGE}</a>
 			<!-- END: message_login -->
 
 			<!-- BEGIN: message_register_group -->

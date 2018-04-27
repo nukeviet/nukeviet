@@ -519,7 +519,12 @@ foreach ($array_extType as $_type) {
 }
 
 $selecttype_old = $nv_Request->get_string('selecttype', 'cookie', '');
-$selecttype = $nv_Request->get_string('selecttype', 'get', $selecttype_old);
+$selecttype = $nv_Request->get_string('selecttype', 'get', '');
+if ($nv_Request->isset_request('selecttype', 'get') and empty($selecttype)) {
+    $nv_Request->unset_request('selecttype', 'cookie');
+} elseif (empty($selecttype)) {
+    $selecttype = $selecttype_old;
+}
 
 if (! in_array($selecttype, $array_extType)) {
     $selecttype = '';

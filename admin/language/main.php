@@ -14,7 +14,9 @@ if (!defined('NV_IS_FILE_LANG')) {
 
 $page_title = $lang_module['nv_lang_data'];
 $_md5_lang_multi = md5('lang_multi_' . NV_CHECK_SESSION);
-$lang_module['nv_data_note'] = sprintf($lang_module['nv_data_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&lang_multi=' . $_md5_lang_multi);
+if (!$global_config['lang_multi']) {
+    $lang_module['nv_data_note'] = sprintf($lang_module['nv_data_note2'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&lang_multi=' . $_md5_lang_multi) . ' ' . $lang_module['nv_data_note'];
+}
 
 $_lang_multi = $nv_Request->get_title('lang_multi', 'get', '');
 

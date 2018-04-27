@@ -81,6 +81,15 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
     }
 }
 
+/**
+ * nv_comment_get_reply()
+ *
+ * @param mixed $cid
+ * @param mixed $module
+ * @param mixed $session_id
+ * @param mixed $sortcomm
+ * @return
+ */
 function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 {
     global $db_slave, $module_config;
@@ -115,9 +124,22 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
     return $data_reply_comment;
 }
 
+/**
+ * nv_comment_module()
+ *
+ * @param mixed $module
+ * @param mixed $checkss
+ * @param mixed $area
+ * @param mixed $id
+ * @param mixed $allowed
+ * @param mixed $page
+ * @param string $status_comment
+ * @param integer $header
+ * @return
+ */
 function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '', $header = 1)
 {
-    global $module_config, $nv_Request, $lang_module_comment, $module_info;
+    global $module_config, $nv_Request, $lang_module_comment, $module_info, $global_config, $lang_global;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (! empty($module) and isset($module_config[$module]['activecomm'])) {
@@ -125,25 +147,48 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
             $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
+            if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
+                require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
+            } else {
+                require NV_ROOTDIR . '/modules/comment/language/en.php';
+            }
+            $lang_module_comment = $lang_module;
+
             // Kiểm tra quyền xem bình luận
             $form_login = array(
-                'display' => 0
+                'display' => 0, // Có hiển thị form login hay ẩn
+                'mode' => 'direct', // Trực tiếp đăng nhập hay đăng nhập nhóm
+                'link' => '', // Link thông báo
+                'groups' => array() // Các nhóm cần tham gia vào, hoặc đăng nhập dưới quyền
             );
             $view_comm = nv_user_in_groups($module_config[$module]['view_comm']);
-
             $allowed_comm = nv_user_in_groups($allowed);
-            if (! ($view_comm and $allowed_comm) and ! defined('NV_IS_USER')) {
-                $form_login['display'] = 1;
+            // Xử lý nếu có quyền xem và không có quyền bình
+            if ($view_comm and !$allowed_comm and $global_config['allowuserlogin']) {
                 $allowed_tmp = explode(',', $allowed);
-                if (sizeof($allowed_tmp) == 1) {
-                    $_in_admin = array_intersect($allowed_tmp, array( 1, 2, 3 ));
-                    if (! empty($_in_admin)) {
-                        $form_login['display'] = 0;
+                $allowed_tmp = array_flip(array_diff($allowed_tmp, array(1, 2 , 3))); // Loại nhóm quản trị ra
+                if ((isset($allowed_tmp['4']) or isset($allowed_tmp['7']))) {
+                    // Thành viên chính thức hoặc thành viên mới thì đăng nhập trực tiếp
+                    $form_login['display'] = 1;
+                    if (!isset($allowed_tmp['7'])) {
+                        // Thành viên chính thức
+                        $form_login['groups'][0] = $lang_global['level4'];
                     } else {
-                        $form_login['list_groups'] = $allowed;
+                        // Thành viên chính thức hoặc thành viên mới
+                        $form_login['groups'][0] = $lang_module_comment['user'];
                     }
                 } else {
-                    $form_login['list_groups'] = $allowed;
+                    $list_groups = array_intersect_key(nv_groups_list_pub(), $allowed_tmp);
+                    if (!empty($list_groups)) {
+                        $form_login['display'] = 1;
+                        $form_login['mode'] = 'reggroups';
+                        $form_login['groups'] = $list_groups;
+                        if (defined('NV_IS_USER')) {
+                            $form_login['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/group';
+                        } else {
+                            $form_login['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=editinfo/group', true));
+                        }
+                    }
                 }
             }
 
@@ -168,13 +213,6 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                     $is_delete = true;
                 }
             }
-
-            if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
-                require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
-            } else {
-                require NV_ROOTDIR . '/modules/comment/language/en.php';
-            }
-            $lang_module_comment = $lang_module;
             if ($view_comm) {
                 $comment_array = nv_comment_data($module, $area, $id, $allowed_comm, $page, $sortcomm, $base_url);
                 $comment = nv_comment_module_data($module, $comment_array, $is_delete);
@@ -321,26 +359,13 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 
         $xtpl->parse('main.allowed_comm');
     } elseif ($form_login['display']) {
-        // Ajax login
-        if ($form_login['list_groups'] == 4) {
+        if ($form_login['mode'] == 'direct') {
+            // Thành viên đăng nhập trực tiếp
+            $xtpl->assign('LOGIN_MESSAGE', sprintf($lang_module_comment['comment_login'], $form_login['groups'][0]));
             $xtpl->parse('main.form_login.message_login');
         } else {
-            $list_groups_name = '';
-            $list_groups = nv_groups_list_pub();
-            $form_login['list_groups'] = explode(',', $form_login['list_groups']);
-            $i = 0;
-            foreach ($form_login['list_groups'] as $group_id) {
-                if (isset($list_groups[$group_id])) {
-                    if ($i == 0) {
-                        $list_groups_name .= $list_groups[$group_id];
-                    } else {
-                        $list_groups_name .= ', ' . $list_groups[$group_id];
-                    }
-                    $i++;
-                }
-            }
-            $url_groups = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo';
-            $xtpl->assign('LANG_REG_GROUPS', sprintf($lang_module_comment['comment_register_groups'], $list_groups_name, $url_groups));
+            // Tham gia nhóm để bình luận
+            $xtpl->assign('LANG_REG_GROUPS', sprintf($lang_module_comment['comment_register_groups'], implode(', ', $form_login['groups']), $form_login['link']));
             $xtpl->parse('main.form_login.message_register_group');
         }
         $xtpl->parse('main.form_login');
@@ -350,6 +375,14 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     return $xtpl->text('main');
 }
 
+/**
+ * nv_comment_module_data()
+ *
+ * @param mixed $module
+ * @param mixed $comment_array
+ * @param mixed $is_delete
+ * @return
+ */
 function nv_comment_module_data($module, $comment_array, $is_delete)
 {
     global $global_config, $module_config, $lang_module_comment;
@@ -407,6 +440,14 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
     }
 }
 
+/**
+ * nv_comment_module_data_reply()
+ *
+ * @param mixed $module
+ * @param mixed $comment_array
+ * @param mixed $is_delete
+ * @return
+ */
 function nv_comment_module_data_reply($module, $comment_array, $is_delete)
 {
     global $global_config, $module_file, $module_config, $lang_module_comment;

@@ -42,9 +42,7 @@ while ($row = $result->fetch()) {
     $admin_mods[$row['module']] = $row;
 }
 
-$main_module = $db->query('SELECT main_module FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_info['userid'])->fetchColumn();
-
-$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $main_module));
+$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $admin_info['main_module']));
 if (preg_match($global_config['check_module'], $module_name)) {
     $include_functions = $include_file = $include_menu = $lang_file = $mod_theme_file = '';
     $module_data = $module_file = $module_name;
@@ -121,13 +119,14 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
         }
 
-        //ket noi voi giao dien chung cua admin
-        require NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme.php';
+        // Ket noi voi giao dien chung cua admin
+        $admin_info['admin_theme'] = (!empty($admin_info['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme.php')) ? $admin_info['admin_theme'] : $global_config['admin_theme'];
+        require NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php';
 
         // Ket noi giao dien cua module
         $global_config['module_theme'] = '';
-        if (is_dir(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/modules/' . $module_file)) {
-            $global_config['module_theme'] = $global_config['admin_theme'];
+        if (is_dir(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/modules/' . $module_file)) {
+            $global_config['module_theme'] = $admin_info['admin_theme'];
         } elseif (is_dir(NV_ROOTDIR . '/themes/admin_default/modules/' . $module_file)) {
             $global_config['module_theme'] = 'admin_default';
         }

@@ -512,8 +512,9 @@ $(document).ready(function(){
 		var alt = "homeimgalt";
 		var path = CFG.uploads_dir_user;
 		var currentpath = CFG.upload_current;
+		var currentfile = $('#homeimg').val();
 		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + encodeURIComponent(path) + "&type=" + type + "&currentpath=" + encodeURIComponent(currentpath) + '&currentfile=' + encodeURIComponent(currentfile), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('.submit-post').hover(function(){

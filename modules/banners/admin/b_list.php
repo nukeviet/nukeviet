@@ -19,6 +19,7 @@ if (!defined('NV_IS_AJAX')) {
 $act = $nv_Request->get_int('act', 'get', 0);
 $clid = $nv_Request->get_int('clid', 'get', 0);
 $pid = $nv_Request->get_int('pid', 'get');
+$keyword = $nv_Request->get_title('q', 'get', '');
 
 $sql = 'SELECT id, title, blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
@@ -58,7 +59,7 @@ $aray_act = array(
 
 if ($pid > 0 and isset($plans[$pid])) {
     $contents['thead'][1] = $lang_module['click_url'];
-    if ($plans_form[$pid] == 'sequential' and in_array($act, array(0, 1, 3))) {
+    if ($plans_form[$pid] == 'sequential' and in_array($act, array(0, 1, 3)) and empty($keyword)) {
         array_unshift($contents['thead'], $lang_module['weight']);
         define('NV_BANNER_WEIGHT', true);
     }
@@ -80,6 +81,10 @@ if ($clid > 0) {
 } elseif ($pid > 0 and isset($plans[$pid])) {
     $where[] = 'pid=' . $pid;
     $contents['caption'] .= ' ' . sprintf($lang_module['banners_list_pl'], $plans[$pid]);
+}
+if (!empty($keyword)) {
+    $keyword = $db->dblikeescape($keyword);
+    $where[] = "(title LIKE '%" . $keyword . "%' OR file_alt LIKE '%" . $keyword . "%' OR click_url LIKE '%" . $keyword . "%' OR bannerhtml LIKE '%" . $keyword . "%')";
 }
 if (!empty($where)) {
     $sql .= implode(' AND ', $where);

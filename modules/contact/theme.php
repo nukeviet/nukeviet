@@ -183,6 +183,10 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
 
+    if ($array_content['sendcopy']) {
+        $xtpl->parse('main.sendcopy');
+    }
+
     if ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);

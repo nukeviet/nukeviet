@@ -268,7 +268,7 @@ $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '
 $sth->execute(array('default', 'news', 'module.block_newscenter.php', $install_lang['blocks_groups']['news']['module.block_newscenter'], '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}'));
 $sth->execute(array('default', 'banners', 'global.banners.php', $install_lang['blocks_groups']['banners']['global.banners1'], '', 'no_title', '[TOP]', 0, '1', '6', 0, 2, 'a:1:{s:12:"idplanbanner";i:1;}'));
 
-$sth->execute(array('default', 'news', 'global.block_category.php', $install_lang['blocks_groups']['news']['global.block_category'], '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}'));
+$sth->execute(array('default', 'news', 'global.block_category.php', $install_lang['blocks_groups']['news']['global.block_category'], '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:0;}'));
 $sth->execute(array('default', 'theme', 'global.module_menu.php', 'Module Menu', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 2, ''));
 $sth->execute(array('default', 'banners', 'global.banners.php', $install_lang['blocks_groups']['banners']['global.banners2'], '', 'no_title', '[LEFT]', 0, '1', '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}'));
 $sth->execute(array('default', 'statistics', 'global.counter.php', $install_lang['blocks_groups']['statistics']['global.counter'], '', 'primary', '[LEFT]', 0, '1', '6', 1, 4, ''));

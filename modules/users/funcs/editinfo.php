@@ -627,7 +627,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         $nv_Request->unset_request('verifykey', 'session');
 
-        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email= :email WHERE userid=' . $edit_userid);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
         $stmt->bindParam(':email', $nv_email, PDO::PARAM_STR);
         $stmt->execute();
 

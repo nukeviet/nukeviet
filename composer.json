@@ -26,12 +26,11 @@
         "ext-mbstring": "*",
         "ext-gd": "*",
         "vinades/nukeviet": "dev-master",
-        "gregwar/captcha": "1.*",
         "and/oauth": "^0.7-dev",
-        "phpmailer/phpmailer": "v6.0.3",
         "pclzip/pclzip": "^2.8",
         "endroid/qrcode": "^1.9.1",
         "true/punycode": "^2.1",
-        "facebook/facebook-instant-articles-sdk-php": "v1.5.6"
+        "gregwar/captcha": "^1.1",
+        "phpmailer/phpmailer": "^6.0"
     }
 }
