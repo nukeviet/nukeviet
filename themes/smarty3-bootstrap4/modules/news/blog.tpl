@@ -3,7 +3,7 @@
     <div class="col-md-6 masonry-item wow fadeInUp animation-delay-2">
         <article class="card card-success mb-4 wow materialUp animation-delay-5">
             <figure class="ms-thumbnail ms-thumbnail-left">
-                <img src="{$row.imghome}" alt="" class="">
+                <img src="/uploads/news/{$row.homeimgfile}" alt="" class="">
                 <figcaption class="ms-thumbnail-caption text-center">
                     <div class="ms-thumbnail-caption-content">
                         <h3 class="ms-thumbnail-caption-title">Lorem ipsum dolor sit</h3>

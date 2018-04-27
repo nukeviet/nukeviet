@@ -216,6 +216,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $tpl->assign('rows', $array_catpage);
 
 
+
     return $tpl->fetch('blog.tpl');
 }
 

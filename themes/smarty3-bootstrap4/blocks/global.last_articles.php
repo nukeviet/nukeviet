@@ -97,7 +97,7 @@ if (!nv_function_exists('nv_block_last_articles')) {
             $array_news["$i"]['acate'] = $row1['alias'];
             $array_news["$i"]['link'] = $link;
             $array_news["$i"]['link1'] = $link1;
-
+        }
 
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.last_articles.tpl')) {
                 $block_theme = $global_config['module_theme'];
@@ -117,7 +117,7 @@ if (!nv_function_exists('nv_block_last_articles')) {
             return $tpl->fetch('global.last_articles.tpl');
         }
     }
-}
+
     if (defined('NV_SYSTEM')) {
         $content = nv_block_last_articles($block_config);
     }
