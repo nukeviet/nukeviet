@@ -111,4 +111,21 @@ $(document).ready(function() {
             sd.disabled = true;
         }
     });
+    
+    // ctrl + enter post comment    
+    var data = $('#formcomment form').data();
+    if (data.editor) {
+        CKEDITOR.instances['commentcontent'].on('key', function(event) {
+            if (event.data.keyCode === 1114125) {
+                $('#buttoncontent').click();
+            }
+        });
+    } else {
+        $('#commentcontent').on("keydown", function(e) {
+            if (e.ctrlKey && e.keyCode == 13) {
+                $('#buttoncontent').click();
+            }
+        });
+
+    }
 });

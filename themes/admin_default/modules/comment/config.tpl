@@ -141,6 +141,10 @@
                     <td><strong>{LANG.alloweditorcomm}</strong></td>
                     <td><input type="checkbox" value="1" name="alloweditorcomm"{ALLOWEDITORCOMM}/></td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.allowautolink}</strong></td>
+                    <td><input type="checkbox" value="1" name="allowautolink"{ALLOWAUTOLINK}/></td>
+                </tr>
 			</tbody>
 		</table>
 	</div>
