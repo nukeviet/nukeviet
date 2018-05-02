@@ -2,6 +2,7 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-4 ms-footer-col">
+            [MENU_FOOTER]
               [QR_CODE]
             </div>
             <div class="col-lg-5 col-md-7 ms-footer-col ms-footer-alt-color">
