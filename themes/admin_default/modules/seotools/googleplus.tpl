@@ -46,7 +46,10 @@
 			<tr>
 				<td class="text-right"><strong>{LANG.googleplus_add}: </strong></td>
 				<td class="text-center"><input class="form-control" name="new_profile" id="new_profile" type="text" maxlength="255" /></td>
-				<td colspan="2"><input class="w250 form-control pull-left" name="new_title" id="new_title" type="text" maxlength="255" style="margin-right: 5px;" /> <input name="Button1" class="btn btn-info" type="button" value="{LANG.submit}" onclick="nv_add_googleplus();return;" /></td>
+				<td colspan="2">
+                    <input class="w250 form-control pull-left" name="new_title" id="new_title" type="text" maxlength="255" style="margin-right: 5px;" />
+                    <input name="Button1" class="btn btn-info" type="button" value="{LANG.submit}" onclick="nv_add_googleplus();return;" />
+                </td>
 			</tr>
 		</tfoot>
 		<tbody>

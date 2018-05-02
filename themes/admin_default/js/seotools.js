@@ -83,8 +83,9 @@ function nv_add_googleplus() {
 	}
 
 	var nv_timer = nv_settimeout_disable('new_title', 5000);
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=googleplus&nocache=' + new Date().getTime(), 'add=1&idprofile=' + new_profile.value + '&title=' + encodeURIComponent(new_title.value), function(res) {
-		if (res == 'OK') {
+	var nv_timer2 = nv_settimeout_disable('new_profile', 5000);
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=googleplus&nocache=' + new Date().getTime(), 'add=1&idprofile=' + encodeURIComponent(new_profile.value) + '&title=' + encodeURIComponent(new_title.value), function(res) {
+        if (res == 'OK') {
 			nv_show_list_googleplus();
 		} else {
 			alert(nv_content);
