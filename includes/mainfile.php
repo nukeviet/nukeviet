@@ -22,7 +22,7 @@ define('NV_START_TIME', microtime(true));
 define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $nv_hooks = $nv_plugins = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -124,6 +124,12 @@ require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
+
+// Load các plugin
+foreach ($nv_plugins as $_plugin) {
+    require NV_ROOTDIR . '/includes/plugin/' . $_plugin;
+}
+unset($_plugin);
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
@@ -277,10 +283,11 @@ if (isset($nv_plugin_area[1])) {
 }
 
 // Bat dau phien lam viec cua Database
-$db = $db_slave = new NukeViet\Core\Database($db_config);
+$db = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
     trigger_error('Sorry! Could not connect to data server', 256);
 }
+$db_slave = nv_apply_hook('db_slave_connect', array($db, $db_config), $db);
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
 

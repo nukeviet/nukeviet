@@ -1678,7 +1678,7 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
 
-        $rewrite_string = (defined('NV_IS_REWRITE_OBSOLUTE') ? NV_MY_DOMAIN : '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        $rewrite_string = nv_apply_hook('get_rewrite_domain', array(), '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
 
         if (!empty($query_array)) {
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
@@ -2040,4 +2040,59 @@ function nv_set_authorization()
         unset($usr_pass);
     }
     return array( 'auth_user' => $auth_user, 'auth_pw' => $auth_pw );
+}
+
+/**
+ * nv_has_hook()
+ *
+ * @param mixed $tag
+ * @return
+ */
+function nv_has_hook($tag)
+{
+    global $nv_hooks;
+    return !empty($nv_hooks[$tag]);
+}
+
+/**
+ * nv_apply_hook()
+ *
+ * @param mixed $tag
+ * @param mixed $args
+ * @param mixed $default
+ * @return
+ */
+function nv_apply_hook($tag, $args = array(), $default = null)
+{
+    global $nv_hooks;
+    if (!isset($nv_hooks[$tag])) {
+        return $default;
+    }
+    $value = $default;
+    foreach ($nv_hooks[$tag] as $priority_funcs) {
+        foreach ($priority_funcs as $func) {
+            $value = call_user_func($func, $args);
+        }
+    }
+    return $value;
+}
+
+/**
+ * nv_add_hook()
+ *
+ * @param mixed $tag
+ * @param mixed $function_name
+ * @param integer $priority
+ * @return void
+ */
+function nv_add_hook($tag, $function_name, $priority = 10)
+{
+    global $nv_hooks;
+    if (!isset($nv_hooks[$tag])) {
+        $nv_hooks[$tag] = array();
+    }
+    if (!isset($nv_hooks[$tag][$priority])) {
+        $nv_hooks[$tag][$priority] = array();
+    }
+    $nv_hooks[$tag][$priority][] = $function_name;
 }

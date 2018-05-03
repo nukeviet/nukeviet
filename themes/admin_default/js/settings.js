@@ -20,10 +20,6 @@ function nv_is_del_cron(cronid) {
 	return false;
 }
 
-function nv_chang_weight(pid) {
-	window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&pid=' + pid + '&weight=' + $('#weight_' + pid).val();
-}
-
 $(document).ready(function(){
 	// System
 	$('#cdn_download').click(function() {

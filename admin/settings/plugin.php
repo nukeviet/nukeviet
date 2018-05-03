@@ -14,6 +14,7 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $errormess = $nv_Lang->getModule('plugin_info');
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
+$page_title = $nv_Lang->getModule('plugin');
 
 $plugin_file = $nv_Request->get_title('plugin_file', 'post,get');
 if ($nv_Request->isset_request('plugin_file', 'post')) {
@@ -94,81 +95,42 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
-$plugin_new = array();
-$plugin_all = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);
-
-$nv_plugin_array = array();
-$_nv_plugin_area = array();
-$_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
-$_query = $db->query($_sql);
-while ($row = $_query->fetch()) {
-    $_nv_plugin_area[$row['plugin_area']][] = $row;
-    $nv_plugin_array[] = $row['plugin_file'];
+$sql = "SELECT DISTINCT plugin_area FROM " . $db_config['prefix'] . "_plugin";
+$result = $db->query($sql);
+$array_plugin_area = array();
+while ($row = $result->fetch()) {
+    $array_plugin_area[$row['plugin_area']] = $row['plugin_area'];
 }
 
-foreach ($_nv_plugin_area as $area => $nv_plugin_area_i) {
-    $_sizeof = sizeof($nv_plugin_area_i);
-    foreach ($nv_plugin_area_i as $row) {
-        $row['plugin_area'] = ($row['weight'] == 1) ? $nv_Lang->getModule('plugin_area_' . $row['plugin_area']) : '';
-        $row['plugin_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dpid=' . $row['pid'] . '&amp;checkss=' . md5($row['pid'] . '-' . NV_CHECK_SESSION);
-        $xtpl->assign('DATA', $row);
-        for ($i = 1; $i <= $_sizeof; $i++) {
-            $xtpl->assign('WEIGHT_SELECTED', ($i == $row['weight']) ? ' selected="selected"' : '');
-            $xtpl->assign('WEIGHT', $i);
-            $xtpl->parse('main.loop.weight');
-        }
-        $xtpl->parse('main.loop');
-    }
+$array_search = array(
+    'plugin_area' => $nv_Request->get_title('a', 'get', '')
+);
+if (!empty($array_search['plugin_area']) and !isset($array_plugin_area[$array_search['plugin_area']])) {
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-foreach ($plugin_all as $_file) {
-    if (!in_array($_file, $nv_plugin_array)) {
-        $plugin_new[] = $_file;
-    }
+// Xuất các plugin trong CSDL
+$sql = "SELECT * FROM " . $db_config['prefix'] . "_plugin";
+if (!empty($array_search['plugin_area'])) {
+    $sql .= " WHERE plugin_area=" . $db->quote($array_search['plugin_area']);
 }
 
-if ($errormess != '') {
-    $xtpl->assign('ERROR', $errormess);
-    $xtpl->parse('main.error');
+$result = $db->query($sql);
+while ($row = $result->fetch()) {
+    $xtpl->assign('ROW', $row);
+    $xtpl->parse('main.loop');
 }
 
-if (!empty($plugin_new)) {
-    foreach ($plugin_new as $_file) {
-        $xtpl->assign('PLUGIN_FILE', $_file);
-        $xtpl->assign('PLUGIN_SELECTED', $_file == $plugin_file ? 'selected="selected"' : '');
-        $xtpl->parse('main.add.file');
-    }
-
-    $array_plugin_position = array();
-    if (preg_match($pattern_plugin, $plugin_file, $_m) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
-        if (file_exists(NV_ROOTDIR . '/includes/plugin/' . $_m[1] . '.ini')) {
-            if ($xml = @simplexml_load_file(NV_ROOTDIR . '/includes/plugin/' . $_m[1] . '.ini')) {
-                $position = $xml->xpath('positions');
-                $positions = $position[0]->position;
-                for ($j = 0, $count = sizeof($positions); $j < $count; ++$j) {
-                    $_index = $positions[$j]->id;
-                    if ($_index >= 1 and $_index <= 4) {
-                        $xtpl->assign('AREA_VALUE', $_index);
-                        $xtpl->assign('AREA_TEXT', $nv_Lang->getModule('plugin_area_' . $_index));
-                        $xtpl->parse('main.add.area');
-                    }
-                }
-                $info = $xml->xpath('info');
-                if (!empty($info[0]->description)) {
-                    $xtpl->assign('NAME', $info[0]->name);
-                    $xtpl->assign('DESCRIPTION', $info[0]->description);
-                    $xtpl->parse('main.add.info');
-                }
-            }
-        }
-    }
-    $xtpl->parse('main.add');
+foreach ($array_plugin_area as $plugin_area) {
+    $xtpl->assign('PLUGIN_AREA_SELECTED', $plugin_area == $array_search['plugin_area'] ? ' selected="selected"' : '');
+    $xtpl->assign('PLUGIN_AREA', $plugin_area);
+    $xtpl->parse('main.plugin_area');
 }
+
+// Xuất các plugin chưa thêm vào CSDL
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
-
-$page_title = $nv_Lang->getModule('plugin');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

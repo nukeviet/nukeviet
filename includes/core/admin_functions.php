@@ -210,13 +210,13 @@ function nv_save_file_config_global()
 
     $content_config .= "\n";
 
-    $nv_plugin_area = array();
+    $nv_plugins = array();
     $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
     $_query = $db->query($_sql);
     while ($row = $_query->fetch()) {
-        $nv_plugin_area[$row['plugin_area']][] = $row['plugin_file'];
+        $nv_plugins[] = $row['plugin_file'];
     }
-    $content_config .= "\$nv_plugin_area=" . nv_var_export($nv_plugin_area) . ";\n\n";
+    $content_config .= "\$nv_plugins=" . nv_var_export($nv_plugins) . ";\n\n";
 
     $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
     $nv_Cache->delAll();
@@ -894,4 +894,23 @@ function nv_save_file_ips($type = 0)
     }
 
     return true;
+}
+
+/**
+ * nv_get_plugin_area()
+ *
+ * @param mixed $file_path
+ * @return
+ */
+function nv_get_plugin_area($file_path)
+{
+    global $nv_hooks;
+    $nv_hooks_backup = $nv_hooks;
+    $nv_hooks = array();
+
+    require $file_path;
+
+    $plugin_area = array_keys($nv_hooks);
+    $nv_hooks = $nv_hooks_backup;
+    return $plugin_area;
 }

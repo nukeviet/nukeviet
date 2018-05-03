@@ -15,7 +15,7 @@ if ((! defined('NV_SYSTEM') and ! defined('NV_ADMIN')) or ! defined('NV_MAINFILE
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
 
 // Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
-global $db, $nv_Request, $nv_plugin_area, $headers, $nv_Lang;
+global $db, $nv_Request, $nv_plugin_area, $headers, $nv_Lang, $global_config;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -26,13 +26,7 @@ if (! defined('NV_IS_AJAX')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($nv_Lang->getGlobal('memory_time_usage'), nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }
 }
-
-if (isset($nv_plugin_area[3])) {
-    // Kết nối với các plugin Trước khi website gửi nội dung tới trình duyệt
-    foreach ($nv_plugin_area[3] as $_fplugin) {
-        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
-    }
-}
+$contents = nv_apply_hook('change_site_buffer', array($global_config, $contents), $contents);
 
 $html_headers = $global_config['others_headers'];
 if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
