@@ -39,10 +39,10 @@
                 </div>
             </div>
 		</div>
+        <div class="tip">
+            <div id="tip" data-content=""></div>
+        </div>
 	</header>
-    <div class="tip">
-        <div id="tip" data-content=""></div>
-    </div>
     <div class="wrap">
     	<section>
     		<div id="body">
