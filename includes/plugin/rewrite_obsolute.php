@@ -14,4 +14,4 @@ if (! defined('NV_MAINFILE')) {
 
 nv_add_hook('get_rewrite_domain', function() {
     return NV_MY_DOMAIN;
-});
+}, $priority);

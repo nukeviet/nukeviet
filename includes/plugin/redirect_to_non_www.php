@@ -16,4 +16,4 @@ nv_add_hook('check_server', function() {
     if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
         nv_redirect_location('http' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . substr($_SERVER['HTTP_HOST'], 4) . $_SERVER['REQUEST_URI']);
     }
-});
+}, $priority);

@@ -53,4 +53,4 @@ nv_add_hook('db_slave_connect', function($vars) {
         $db_slave = $db;
     }
     return $db_slave;
-});
+}, $priority);

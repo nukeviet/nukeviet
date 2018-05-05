@@ -214,7 +214,13 @@ function nv_save_file_config_global()
     $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
     $_query = $db->query($_sql);
     while ($row = $_query->fetch()) {
-        $nv_plugins[] = $row['plugin_file'];
+        if (!isset($nv_plugins[$row['plugin_area']])) {
+            $nv_plugins[$row['plugin_area']] = array();
+        }
+        $nv_plugins[$row['plugin_area']][$row['weight']] = $row['plugin_file'];
+    }
+    foreach ($nv_plugins as $_tag => $_data) {
+        krsort($nv_plugins[$_tag]);
     }
     $content_config .= "\$nv_plugins=" . nv_var_export($nv_plugins) . ";\n\n";
 
@@ -907,6 +913,7 @@ function nv_get_plugin_area($file_path)
     global $nv_hooks;
     $nv_hooks_backup = $nv_hooks;
     $nv_hooks = array();
+    $priority = 10;
 
     require $file_path;
 

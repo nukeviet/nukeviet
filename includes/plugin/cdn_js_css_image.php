@@ -23,4 +23,4 @@ nv_add_hook('change_site_buffer', function($vars) {
     }
 
     return $contents;
-});
+}, $priority);

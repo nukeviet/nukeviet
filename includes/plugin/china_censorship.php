@@ -32,4 +32,4 @@ nv_add_hook('modify_global_config', function($vars) {
     }
 
     return $global_config;
-});
+}, $priority);

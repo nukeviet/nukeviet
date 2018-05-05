@@ -38,4 +38,4 @@ nv_add_hook('get_qr_code', function($vars) {
         }
         exit();
     }
-});
+}, $priority);
