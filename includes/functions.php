@@ -2060,18 +2060,24 @@ function nv_has_hook($tag)
  * @param mixed $tag
  * @param mixed $args
  * @param mixed $default
+ * @param string $module
  * @return
  */
-function nv_apply_hook($tag, $args = array(), $default = null)
+function nv_apply_hook($tag, $args = array(), $default = null, $module = '')
 {
-    global $nv_hooks;
+    global $nv_hooks, $sys_mods;
     if (!isset($nv_hooks[$tag])) {
         return $default;
     }
     $value = $default;
     foreach ($nv_hooks[$tag] as $priority_funcs) {
         foreach ($priority_funcs as $func) {
-            $value = call_user_func($func, $args);
+            if ($func['module']) {
+                $module_info = isset($sys_mods[$func['module']]) ? $sys_mods[$func['module']] : array();
+                $value = call_user_func($func['callback'], $args, $func['module'], $module_info, $module);
+            } else {
+                $value = call_user_func($func['callback'], $args);
+            }
         }
     }
     return $value;
@@ -2083,9 +2089,10 @@ function nv_apply_hook($tag, $args = array(), $default = null)
  * @param mixed $tag
  * @param mixed $function_name
  * @param integer $priority
+ * @param string $module_name
  * @return void
  */
-function nv_add_hook($tag, $function_name, $priority = 10)
+function nv_add_hook($tag, $function_name, $priority = 10, $module_name = '')
 {
     global $nv_hooks;
     if (!isset($nv_hooks[$tag])) {
@@ -2094,5 +2101,8 @@ function nv_add_hook($tag, $function_name, $priority = 10)
     if (!isset($nv_hooks[$tag][$priority])) {
         $nv_hooks[$tag][$priority] = array();
     }
-    $nv_hooks[$tag][$priority][] = $function_name;
+    $nv_hooks[$tag][$priority][] = array(
+        'callback' => $function_name,
+        'module' => $module_name
+    );
 }

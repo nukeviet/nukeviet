@@ -128,10 +128,11 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 // Load các plugin
 foreach ($nv_plugins as $_parea => $pdata) {
     foreach ($pdata as $priority => $_plugin) {
-        require NV_ROOTDIR . '/includes/plugin/' . $_plugin;
+        $module_name = $_plugin[1];
+        require NV_ROOTDIR . '/' . $_plugin[0];
     }
 }
-unset($_parea, $_plugin, $pdata, $priority);
+unset($_parea, $_plugin, $pdata, $priority, $module_name);
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {

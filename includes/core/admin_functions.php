@@ -217,7 +217,12 @@ function nv_save_file_config_global()
         if (!isset($nv_plugins[$row['plugin_area']])) {
             $nv_plugins[$row['plugin_area']] = array();
         }
-        $nv_plugins[$row['plugin_area']][$row['weight']] = $row['plugin_file'];
+        if (empty($row['plugin_module_name'])) {
+            $plugin_file = 'includes/plugin/' . $row['plugin_file'];
+        } else {
+            $plugin_file = 'modules/' . $row['plugin_module_name'] . '/hooks/' . $row['plugin_file'];
+        }
+        $nv_plugins[$row['plugin_area']][$row['weight']] = array($plugin_file, $row['plugin_module_name']);
     }
     foreach ($nv_plugins as $_tag => $_data) {
         krsort($nv_plugins[$_tag]);

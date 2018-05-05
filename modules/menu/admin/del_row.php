@@ -20,10 +20,10 @@ $id = $nv_Request->get_int('id', 'post', 0);
 $mid = $nv_Request->get_int('mid', 'post', 0);
 $parentid = $nv_Request->get_int('parentid', 'post', 0);
 
-if (!nv_menu_del_sub($id, $parentid)) {
+if (!$nv_menu->delRow($id, $parentid)) {
     die('NO_' . $id);
 }
-menu_fix_order($mid);
+$nv_menu->fixMenuOrder($mid);
 $nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
