@@ -27,6 +27,9 @@ $type_target[1] = $nv_Lang->getModule('type_target1');
 $type_target[2] = $nv_Lang->getModule('type_target2');
 $type_target[3] = $nv_Lang->getModule('type_target3');
 
+require NV_ROOTDIR . '/modules/' . $module_file . '/admin.class.php';
+$nv_menu = new nv_menu($module_data, $module_name, $admin_info);
+
 /**
  * nv_list_menu()
  *
@@ -48,84 +51,6 @@ function nv_list_menu()
     }
 
     return $list;
-}
-
-/**
- * menu_fix_order()
- *
- * @param mixed $mid
- * @param integer $parentid
- * @param integer $order
- * @param integer $lev
- * @return
- */
-function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
-{
-    global $db, $module_name, $module_data, $op, $nv_Lang;
-
-    $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
-
-    $array_cat_order = array();
-    while ($row = $result->fetch()) {
-        $array_cat_order[] = $row['id'];
-    }
-    $result->closeCursor();
-
-    $weight = 0;
-    if ($parentid > 0) {
-        ++$lev;
-    } else {
-        $lev = 0;
-    }
-
-    foreach ($array_cat_order as $catid_i) {
-        ++$order;
-        ++$weight;
-        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . $weight . ", sort=" . $order . ", lev='" . $lev . "' WHERE id=" . intval($catid_i);
-        $db->query($sql);
-        $order = menu_fix_order($mid, $catid_i, $order, $lev);
-    }
-
-    return $order;
-}
-
-function nv_menu_del_sub($id, $parentid)
-{
-    global $module_data, $module_name, $db, $admin_info;
-
-    $sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
-    $row = $db->query($sql)->fetch();
-
-    if (empty($row)) {
-        return false;
-    }
-
-    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-    if ($db->exec($sql)) {
-        // Cap nhat cho menu cha
-        if ($parentid > 0) {
-            $sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
-            $subitem = $db->query($sql)->fetch();
-            if (! empty($subitem)) {
-                $subitem = implode(',', array_diff(array_filter(array_unique(explode(',', $subitem['subitem']))), array( $id )));
-
-                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid);
-                $stmt->bindParam(':subitem', $subitem, PDO::PARAM_STR, strlen($subitem));
-                $stmt->execute();
-            }
-        }
-
-        $subitem = (! empty($row['subitem'])) ? explode(',', $row['subitem']) : array();
-        foreach ($subitem as $id) {
-            $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-
-            list($parentid) = $db->query($sql)->fetch(3);
-            nv_menu_del_sub($id, $parentid);
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
-        }
-    }
-    return true;
 }
 
 /**

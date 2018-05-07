@@ -232,17 +232,18 @@ $lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
 $lang_module['cdn_download'] = 'Download các file javascript, css';
 
 $lang_module['plugin'] = 'Thiết lập Plugin';
-$lang_module['plugin_info'] = 'Plugin thi phải là file php được chứa trong thư mục &ldquo;<strong>includes/plugin/</strong>&rdquo;. Các Plugin này sẽ luôn luôn chạy cùng hệ thống khi được kích hoạt';
 $lang_module['plugin_file'] = 'File thực thi';
-$lang_module['plugin_area'] = 'Khu vực';
-$lang_module['plugin_area_1'] = 'Trước khi kết nối CSDL';
-$lang_module['plugin_area_2'] = 'Trước khi gọi các module';
-$lang_module['plugin_area_3'] = 'Trước khi website gửi nội dung tới trình duyệt';
-$lang_module['plugin_area_4'] = 'Sau khi gọi các module';
-$lang_module['plugin_number'] = 'Số thứ tự';
+$lang_module['plugin_area'] = 'Hook';
+$lang_module['plugin_viewarea'] = 'Xem theo Hook';
+$lang_module['plugin_number'] = 'Ưu tiên';
 $lang_module['plugin_func'] = 'Chức năng';
 $lang_module['plugin_add'] = 'Thêm plugin';
-$lang_module['plugin_file_delete'] = 'Xóa khỏi hệ thống';
+$lang_module['plugin_status_ok'] = 'Tương thích';
+$lang_module['plugin_status_error'] = 'Không tương thích';
+$lang_module['plugin_integrate'] = 'Tích hợp';
+$lang_module['plugin_integrated'] = 'Các plugin đã tích hợp';
+$lang_module['plugin_available'] = 'Các plugin khả dụng khác';
+$lang_module['plugin_note'] = 'Nếu có nhiều plugin cùng hook, hãy xem theo từng hook cụ thể để có thể thay đổi độ ưu tiên của mỗi plugin';
 
 $lang_module['notification_config'] = 'Cấu hình chức năng thông báo';
 $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt động mới';

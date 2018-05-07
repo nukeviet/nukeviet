@@ -41,7 +41,7 @@ while ($row = $result->fetch()) {
 
 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid);
 
-menu_fix_order($mid);
+$nv_menu->fixMenuOrder($mid);
 $nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';

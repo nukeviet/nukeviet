@@ -121,6 +121,7 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
             }
         }
 
+        nv_apply_hook('after_module_deleted', array($modname, $admin_info));
         $nv_Cache->delAll();
     }
 }

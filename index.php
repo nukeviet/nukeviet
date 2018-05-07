@@ -19,8 +19,10 @@ define('NV_SYSTEM', true);
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
-
 require NV_ROOTDIR . '/includes/core/user_functions.php';
+
+// Xuất ảnh QR-CODE
+nv_apply_hook('get_qr_code', $nv_Request);
 
 // Google Sitemap
 if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_string(NV_NAME_VARIABLE, 'get') == 'SitemapIndex') {

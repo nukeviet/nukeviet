@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
             $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
 
             list ($parentid) = $db->query($sql)->fetch(3);
-            nv_menu_del_sub($subid, $parentid);
+            $nv_menu->delRow($subid, $parentid);
         }
     }
 
@@ -70,7 +70,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
 
     if (!empty($array_sub_id)) {
         $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $id);
-        menu_fix_order($mid, $id);
+        $nv_menu->fixMenuOrder($mid, $id);
         $nv_Cache->delMod($module_name);
     }
     die('OK_' . $nv_Lang->getModule('action_menu_reload_success'));
@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             $data_insert['css'] = $post['css'];
 
             if ($db->insert_id($sql, 'id', $data_insert)) {
-                menu_fix_order($post['mid']);
+                $nv_menu->fixMenuOrder($post['mid']);
 
                 if ($post['parentid'] != 0) {
                     $arr_item_menu = array();
@@ -326,10 +326,10 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     $db->query($sql);
                 }
 
-                menu_fix_order($post['mid']);
+                $nv_menu->fixMenuOrder($post['mid']);
 
                 if ($post['mid'] != $mid_old) {
-                    menu_fix_order($mid_old);
+                    $nv_menu->fixMenuOrder($mid_old);
                 }
 
                 if ($post['parentid'] != 0) {
@@ -366,9 +366,9 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_request('idcheck', 'post')) {
     $array_id = $nv_Request->get_typed_array('idcheck', 'post', 'int');
     foreach ($array_id as $id) {
-        nv_menu_del_sub($id, $post['parentid']);
+        $nv_menu->delRow($id, $post['parentid']);
     }
-    menu_fix_order($post['mid']);
+    $nv_menu->fixMenuOrder($post['mid']);
     $nv_Cache->delMod($module_name);
 }
 
