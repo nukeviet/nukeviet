@@ -12,6 +12,6 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-nv_add_hook('get_rewrite_domain', function() {
+nv_add_hook($module_name, 'get_rewrite_domain', $priority, function() {
     return NV_MY_DOMAIN;
-}, $priority);
+});

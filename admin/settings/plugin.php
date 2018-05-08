@@ -65,9 +65,16 @@ while ($row = $result->fetch()) {
             $xtpl->parse('main.loop.weight');
         }
 
+        if (empty($row['plugin_module_name'])) {
+            $xtpl->parse('main.loop.delete');
+            $xtpl->parse('main.loop.type_sys');
+        } else {
+            $xtpl->parse('main.loop.type_module');
+        }
+
         $xtpl->parse('main.loop');
     }
-    $array_plugin_db[] = (empty($row['plugin_module_name']) ? '--' : $row['plugin_module_name']) . ':' . $row['plugin_module_all'] . ':' . $row['plugin_file'];
+    $array_plugin_db[] = (empty($row['plugin_module_name']) ? '__' : $row['plugin_module_name']) . ':' . $row['plugin_file'];
 }
 
 foreach ($array_plugin_area as $plugin_area) {
@@ -81,7 +88,7 @@ $file_plugins = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);
 $available_plugins = array();
 
 foreach ($file_plugins as $_plugin) {
-    $_key = '--:0:' . $_plugin;
+    $_key = '__:' . $_plugin;
     if (!in_array($_key, $array_plugin_db)) {
         $available_plugins[md5($_key)] = array(
             'file' => $_plugin,
@@ -103,7 +110,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
     $plugin_area = $available_plugins[$_key]['area'][0];
 
     // Lấy vị trí mới
-    $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $db->quote($plugin_area) . ' AND plugin_module_name=\'\' AND plugin_module_all=0';
+    $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $db->quote($plugin_area) . ' AND hook_module=\'\'';
     $weight = $db->query($_sql)->fetchColumn();
     $weight = intval($weight) + 1;
 

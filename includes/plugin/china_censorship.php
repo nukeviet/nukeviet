@@ -17,7 +17,7 @@ if (!defined('NV_MAINFILE')) {
  Tất cả các tiện ích online của Google và một số mạng xã hội khác đều bị chặn, Vì vậy những site sử dụng NukeViet đều bị "đơ" khi xem từ IP của TQ.
  */
 
-nv_add_hook('modify_global_config', function($vars) {
+nv_add_hook($module_name, 'modify_global_config', $priority, function($vars) {
     $global_config = $vars[0];
     $client_info = $vars[1];
 
@@ -32,4 +32,4 @@ nv_add_hook('modify_global_config', function($vars) {
     }
 
     return $global_config;
-}, $priority);
+});

@@ -227,15 +227,15 @@ $(document).ready(function(){
 
 	$('#modal-reinstall-module').on('show.bs.modal', function(e){
 		var $this = $(this);
-		
+
 		$this.find('.load').removeClass('hidden');
 		$this.find('.content').addClass('hidden');
 		$this.find('.submit').prop('disabled', true);
-		
+
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setup_module_check&nocache=' + new Date().getTime(),
 			data: 'module=' + $this.data('title'),
 			dataType: 'json',
 			success: function(e){
@@ -257,14 +257,14 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+
 	// Submit re-install
 	$('#modal-reinstall-module .submit').click(function(){
 		var $container = $('#modal-reinstall-module');
 		var $this = $(this);
-		
+
 		$this.prop('disabled', true);
-		
+
 		$.ajax({
 			type: 'POST',
 			cache: false,
@@ -282,49 +282,87 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+
 	// Setup module
 	$('.nv-setup-module').click(function(e){
 		e.preventDefault();
-		
+
 		var $this = $(this);
 		var $container = $('#modal-setup-module');
 		var link = $this.prop('href');
-		
+
 		$('#modal-setup-module').data('link', link);
-		
+
 		if( $this.prev().is('.fa-spin') || link == '' || link == '#' || link.match(/javascript\:void/g) ){
 			return;
 		}
-		
+
 		$this.prev().addClass('fa-spin');
-		
+
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setup_module_check&nocache=' + new Date().getTime(),
 			data: 'module=' + $this.data('title') + '&setup=1',
 			dataType: 'json',
 			success: function(e){
 				$this.prev().removeClass('fa-spin');
-				
-				if( e.status == 'success' ){
-					if( e.code == 0 ){
+
+				if (e.status == 'success') {
+					if (e.code == 0 && !e.ishook) {
 						window.location = link;
 						return;
+					} else if (e.code == 1) {
+					   $container.find('.message').html(e.message.splice(1, 2).join('. ') + '.');
 					}
-					
-					$container.find('.message').html( e.message.splice(1, 2).join('. ') + '.' );
+
+                    if (e.ishook) {
+                        $container.find('.checkmodulehook').removeClass('hidden');
+                        if (e.hookerror != '') {
+                            $container.find('.messagehook').html(e.hookerror).removeClass('hidden');
+                            $container.find('.submit').addClass('hidden');
+                        }
+
+                        var hook_files = new Array();
+                        $('#hookmodulechoose', $container).html('');
+                        $.each(e.hookfiles, function(k, v) {
+                            hook_files.push(k);
+                            var html = '<div class="form-group">' +
+                            	'<div class="col-xs-6 text-right">' +
+                            		'<label class="control-label">' + e.hookmgs[k] + ':</label>' +
+                            	'</div>' +
+                            	'<div class="col-xs-12">' +
+                            		'<select class="form-control hookmods">';
+                            $.each(v, function(k2, v2) {
+                                html += '<option value="' + v2.title + '">' + v2.title + ' (' + v2.custom_title + ')' + '</option>';
+                            });
+                            html += '</select></div></div>';
+                            if (v.length) {
+                                $('#hookmodulechoose', $container).append(html);
+                            }
+                        });
+
+                        $('[name="hook_files"]', $container).val(hook_files.join('|'));
+                    }
 					$container.modal('show');
 				}
 			}
 		});
 	});
-	
+
 	// Submit setup option
 	$('#modal-setup-module .submit').click(function(){
 		var $this = $('#modal-setup-module');
 		$this.modal('hide');
-		window.location = $this.data('link') + '&sample=' + $this.find('.option').val();
+        var link = $this.data('link') + '&sample=' + $this.find('.option').val();
+        if ($('.checkmodulehook', $this).is(':visible')) {
+            link += '&hook_files=' + encodeURIComponent($('[name="hook_files"]').val());
+            var hook_mods = new Array();
+            $('.hookmods', $this).each(function(k, v) {
+                hook_mods.push($(this).val());
+            });
+            link += '&hook_mods=' + hook_mods.join('|');
+        }
+		window.location = link;
 	});
 });

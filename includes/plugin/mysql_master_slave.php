@@ -31,7 +31,7 @@ if (! defined('NV_MAINFILE')) {
  * $db_config['slave'][3]['dbpass'] = 'dbpass_slave';*
  */
 
-nv_add_hook('db_slave_connect', function($vars) {
+nv_add_hook($module_name, 'db_slave_connect', $priority, function($vars) {
     $db = $vars[0];
     $db_config = $vars[1];
 
@@ -53,4 +53,4 @@ nv_add_hook('db_slave_connect', function($vars) {
         $db_slave = $db;
     }
     return $db_slave;
-}, $priority);
+});

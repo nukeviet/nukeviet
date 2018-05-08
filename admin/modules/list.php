@@ -15,6 +15,21 @@ if (! defined('NV_IS_FILE_MODULES')) {
 $act_modules = $deact_modules = $bad_modules = $weight_list = array();
 $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
 
+// Lấy danh sách các plugin có trong hệ thống
+$array_plugins = array();
+/**
+ * Để đoạn này thì nếu module khác có HOOK của module này thì module này không xóa được
+$sql = 'SELECT plugin_module_name, hook_module FROM ' . $db_config['prefix'] . '_plugin';
+$result = $db->query($sql);
+
+while ($row = $result->fetch()) {
+    if (!isset($array_plugins[$row['hook_module']])) {
+        $array_plugins[$row['hook_module']] = array();
+    }
+    $array_plugins[$row['hook_module']][] = $row['plugin_module_name'];
+}
+ */
+
 // Lay danh sach cac module co trong he thong
 $new_modules = array();
 
@@ -86,7 +101,7 @@ while ($row = $result->fetch()) {
     $mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
 
     $mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $nv_Lang->getGlobal('edit') );
-    $mod['del'] = ($row['is_sys'] == 0 or $row['title'] != $row['module_file']) ? array( "nv_mod_del('" . $row['title'] . "');", $nv_Lang->getGlobal('delete') ) : array();
+    $mod['del'] = (($row['is_sys'] == 0 or $row['title'] != $row['module_file']) and !isset($array_plugins[$row['title']])) ? array( "nv_mod_del('" . $row['title'] . "');", $nv_Lang->getGlobal('delete') ) : array();
 
     if ($row['title'] == $global_config['site_home_module']) {
         $row['is_sys'] = 1;

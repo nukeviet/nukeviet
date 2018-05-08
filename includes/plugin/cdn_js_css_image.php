@@ -12,7 +12,7 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-nv_add_hook('change_site_buffer', function($vars) {
+nv_add_hook($module_name, 'change_site_buffer', $priority, function($vars) {
     $global_config = $vars[0];
     $contents = $vars[1];
 
@@ -23,4 +23,4 @@ nv_add_hook('change_site_buffer', function($vars) {
     }
 
     return $contents;
-}, $priority);
+});
