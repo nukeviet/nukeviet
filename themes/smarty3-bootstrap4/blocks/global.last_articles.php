@@ -112,6 +112,7 @@ if (!nv_function_exists('nv_block_last_articles')) {
             $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
             $tpl->assign('row',$array_news);
             $tpl->assign('title1',$title1);
+           // print_r($array_news); die("ok");
 
 
             return $tpl->fetch('global.last_articles.tpl');

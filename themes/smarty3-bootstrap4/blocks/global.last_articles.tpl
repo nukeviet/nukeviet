@@ -12,9 +12,17 @@
                     <a href="{$ra.link}">{$ra.title}</a>
                 </h4>
                 <div class="media-footer">
-                    <span> <i class="zmdi zmdi-time color-info-light"></i> {$ra.publtime|date_format}
-                    </span> <span> <i class="zmdi zmdi-folder-outline color-warning-light"></i> <a href="{$ra.link1}">{$ra.cate}</a>
+                    <span> <i class="zmdi zmdi-time color-info-light"></i> {$ra.publtime|date_format} </span>
+                    {if $ra.id%3==0}
+                    <span> <i class="zmdi zmdi-folder-outline color-warning-light"></i> <a href="{$ra.link1}">{$ra.cate}</a>
                     </span>
+                    {elseif $ra.id%3==1}
+                     <span> <i class="zmdi zmdi-folder-outline color-danger mr-05"></i> <a href="{$ra.link1}">{$ra.cate}</a>
+                    </span>
+                    {else}
+                   <span> <i class="zmdi zmdi-folder-outline color-royal-light mr-05"></i> <a href="{$ra.link1}">{$ra.cate}</a>
+                    </span>
+                    {/if}
                 </div>
             </div>
         </div>

@@ -141,6 +141,7 @@ if (!nv_function_exists('nv_block_navigation')) {
         $tpl->assign('row',$array_news);
         $tpl->assign('title1',$title1);
         $tpl->assign('cates',$cates);
+
         $tpl->assign('count',$count);
         $tpl->assign('tags',$rowstags);
         return $tpl->fetch('global.navigation.tpl');
