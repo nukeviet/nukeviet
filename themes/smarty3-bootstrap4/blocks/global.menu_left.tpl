@@ -36,7 +36,7 @@
              
              		{foreach $menu_lefts as $menu_leftss}
 	              <li>
-	                <a href="index.html">{$menu_leftss.title}</a>
+	                <a href="{$menu_leftss.link}">{$menu_leftss.title}</a>
 	              </li>
 	              	{/foreach}
               	
@@ -51,7 +51,7 @@
          {foreach $menuleftanimate as $menuleftanimates}
          	
           <li>
-            <a class="link" href="component-typography.html">
+            <a class="link" href="{$menuleftanimates.link}">
               <i class="zmdi zmdi-view-compact"></i>{$menuleftanimates.title}</a>
           </li>
           {/foreach}

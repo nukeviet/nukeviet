@@ -16,7 +16,7 @@
             <ul class="navbar-nav">
            <!--  menu loại 1 -->
               <li class="nav-item dropdown active">
-                <a href="#" class="nav-link dropdown-toggle animated fadeIn animation-delay-7" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name="home">Home
+                <a href="#" class="nav-link dropdown-toggle animated fadeIn animation-delay-7" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name="home">{$titletab.title}
                   <i class="zmdi zmdi-chevron-down"></i>
                 </a>
                 <ul class="dropdown-menu">
@@ -42,7 +42,7 @@
                         <ul class="ms-tab-menu-right-container">
 	                        {foreach $menu_tabs as $menu_tabss}
 	                          <li class= {$menu_tabss.css}>
-	                            <a href="index.html">{$menu_tabss.title}</a>
+	                            <a href="{$menu_tabss.link}">{$menu_tabss.title}</a>
 	                          </li>
 	                         {/foreach}
                           
@@ -58,7 +58,7 @@
               
            <!--  menu loại 2 -->
               <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle animated fadeIn animation-delay-7" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name="page">Pages
+                <a href="#" class="nav-link dropdown-toggle animated fadeIn animation-delay-7" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name="page">{$titledrop.title}
                   <i class="zmdi zmdi-chevron-down"></i>
                 </a>
                 <ul class="dropdown-menu">
@@ -70,7 +70,7 @@
                     <ul class="dropdown-menu dropdown-menu-left">
                     	{foreach $menu_drops as $menu_dropss}
                       <li>
-                        <a class="dropdown-item" href="/material-style/page-about.html">{$menu_dropss.title}</a>
+                        <a class="dropdown-item" href="{$menu_dropss.link}">{$menu_dropss.title}</a>
                       </li>
                       	{/foreach}
                       
@@ -80,14 +80,11 @@
                   </li>
                   {/foreach}
                   
-                  <li>
-                    <a class="dropdown-item" href="/material-style/page-all.html" class="dropdown-link">All Pages</a>
-                  </li>
                 </ul>
               </li>
            <!-- menu loại 3 -->
               <li class="nav-item dropdown dropdown-megamenu-container">
-                <a href="#" class="nav-link dropdown-toggle animated fadeIn animation-delay-7" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name="component">UI Elements
+                <a href="#" class="nav-link dropdown-toggle animated fadeIn animation-delay-7" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name="component">{$titleanimate.title}
                   <i class="zmdi zmdi-chevron-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-megamenu animated fadeIn animated-2x">
@@ -102,12 +99,12 @@
                         <div class="megamenu-block animated fadeInLeft animated-2x">
                         	
                           <h3 class="megamenu-block-title">
-                            <i class="fa fa-bold"></i> {$menuanimates.title}</h3>
+                            <i class="{$menuanimates.css}"></i> {$menuanimates.title}</h3>
                             
                           <ul class="megamenu-block-list">
                           		{foreach $menu_animates as $menu_animatess}
                             <li>
-                              <a class="withripple" href="/material-style/component-typography.html">
+                              <a class="withripple" href="{$menu_animatess.link}">
                                 <i class="fa fa-font"></i> {$menu_animatess.title}</a>
                             </li>
                           		{/foreach}
@@ -128,12 +125,12 @@
                         <div class="megamenu-block animated fadeInLeft animated-2x">
                         	
                           <h3 class="megamenu-block-title">
-                            <i class="fa fa-bold"></i> {$menuanimates.title}</h3>
+                            <i class="{$menuanimates.css}"></i> {$menuanimates.title}</h3>
                             
                           <ul class="megamenu-block-list">
                           		{foreach $menu_animates as $menu_animatess}
                             <li>
-                              <a class="withripple" href="/material-style/component-typography.html">
+                              <a class="withripple" href="{$menu_animatess.link}">
                                 <i class="fa fa-font"></i> {$menu_animatess.title}</a>
                             </li>
                           		{/foreach}
@@ -151,15 +148,15 @@
                     	{foreach $menu_animate as $menu_animates}
                             {if $menuanimates@key == $menu_animates@key and $menuanimates@key ==3 or $menuanimates@key==4}	
 
-                        <div class="megamenu-block animated fadeInLeft animated-2x">
+                        <div class="megamenu-block animated fadeInRight animated-2x">
                         	
                           <h3 class="megamenu-block-title">
-                            <i class="fa fa-bold"></i> {$menuanimates.title}</h3>
+                            <i class="{$menuanimates.css}"></i> {$menuanimates.title}</h3>
                             
                           <ul class="megamenu-block-list">
                           		{foreach $menu_animates as $menu_animatess}
                             <li>
-                              <a class="withripple" href="/material-style/component-typography.html">
+                              <a class="withripple" href="{$menu_animatess.link}">
                                 <i class="fa fa-font"></i> {$menu_animatess.title}</a>
                             </li>
                           		{/foreach}
@@ -175,23 +172,22 @@
                       <div class="col-sm-3 megamenu-col">
                     {foreach $menuanimate as $menuanimates}
                     	{foreach $menu_animate as $menu_animates}
-                            {if $menuanimates@key == $menu_animates@key and $menuanimates@key >2}	
+                            {if $menuanimates@key == $menu_animates@key and $menuanimates@key >4}	
 
-                        <div class="megamenu-block animated fadeInLeft animated-2x">
+                        <div class="megamenu-block animated fadeInRight animated-2x">
                         	
                           <h3 class="megamenu-block-title">
-                            <i class="fa fa-bold"></i> {$menuanimates.title}</h3>
+                            <i class="{$menuanimates.css}"></i> {$menuanimates.title}</h3>
                             
                           <ul class="megamenu-block-list">
                           		{foreach $menu_animates as $menu_animatess}
                             <li>
-                              <a class="withripple" href="/material-style/component-typography.html">
+                              <a class="withripple" href="{$menu_animatess.link}">
                                 <i class="fa fa-font"></i> {$menu_animatess.title}</a>
                             </li>
                           		{/foreach}
                           </ul>    	
-                        </div>
-                        
+                        </div> 
 							{/if}
                         {/foreach}
 	
