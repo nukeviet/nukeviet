@@ -1678,7 +1678,7 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
 
-        $rewrite_string = nv_apply_hook('get_rewrite_domain', array(), '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', array(), '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
 
         if (!empty($query_array)) {
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
@@ -2043,41 +2043,37 @@ function nv_set_authorization()
 }
 
 /**
- * nv_has_hook()
- *
- * @param mixed $tag
- * @return
- */
-function nv_has_hook($tag)
-{
-    global $nv_hooks;
-    return !empty($nv_hooks[$tag]);
-}
-
-/**
  * nv_apply_hook()
  *
- * @param mixed $tag
- * @param mixed $args
- * @param mixed $default
- * @param string $module
+ * @param string $module => Module khởi chạy
+ * @param mixed $tag => Khóa
+ * @param mixed $args => Tham số truyền vào
+ * @param mixed $default => Dữ liệu mặc định trả về nếu hook không tồn tại
  * @return
  */
-function nv_apply_hook($tag, $args = array(), $default = null, $module = '')
+function nv_apply_hook($module = '', $tag, $args = array(), $default = null)
 {
     global $nv_hooks, $sys_mods;
-    if (!isset($nv_hooks[$tag])) {
+    // Kiểm tra module khởi chạy tồn tại
+    if ((!empty($module) and !isset($sys_mods[$module])) or !isset($nv_hooks[$module][$tag])) {
         return $default;
     }
     $value = $default;
-    foreach ($nv_hooks[$tag] as $priority_funcs) {
+    foreach ($nv_hooks[$module][$tag] as $priority_funcs) {
         foreach ($priority_funcs as $func) {
-            if ($func['module']) {
-                $module_info = isset($sys_mods[$func['module']]) ? $sys_mods[$func['module']] : array();
-                $value = call_user_func($func['callback'], $args, $func['module'], $module_info, $module);
-            } else {
-                $value = call_user_func($func['callback'], $args);
+            // Thông tin module khởi chạy nếu có
+            $from_data = array();
+            if (isset($sys_mods[$module])) {
+                $from_data['module_name'] = $module;
+                $from_data['module_info'] = $sys_mods[$module];
             }
+            // Thông tin module nhận dữ liệu nếu có
+            $receive_data = array();
+            if (isset($sys_mods[$func['module']])) {
+                $receive_data['module_name'] = $func['module'];
+                $receive_data['module_info'] = $sys_mods[$func['module']];
+            }
+            $value = call_user_func($func['callback'], $args, $from_data, $receive_data);
         }
     }
     return $value;
@@ -2086,23 +2082,27 @@ function nv_apply_hook($tag, $args = array(), $default = null, $module = '')
 /**
  * nv_add_hook()
  *
+ * @param mixed $module_name
  * @param mixed $tag
- * @param mixed $function_name
  * @param integer $priority
- * @param string $module_name
+ * @param mixed $function_name
+ * @param string $hook_module
  * @return void
  */
-function nv_add_hook($tag, $function_name, $priority = 10, $module_name = '')
+function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_module = '')
 {
     global $nv_hooks;
-    if (!isset($nv_hooks[$tag])) {
-        $nv_hooks[$tag] = array();
+    if (!isset($nv_hooks[$module_name])) {
+        $nv_hooks[$module_name] = array();
     }
-    if (!isset($nv_hooks[$tag][$priority])) {
-        $nv_hooks[$tag][$priority] = array();
+    if (!isset($nv_hooks[$module_name][$tag])) {
+        $nv_hooks[$module_name][$tag] = array();
     }
-    $nv_hooks[$tag][$priority][] = array(
+    if (!isset($nv_hooks[$module_name][$tag][$priority])) {
+        $nv_hooks[$module_name][$tag][$priority] = array();
+    }
+    $nv_hooks[$module_name][$tag][$priority][] = array(
         'callback' => $function_name,
-        'module' => $module_name
+        'module' => $hook_module
     );
 }

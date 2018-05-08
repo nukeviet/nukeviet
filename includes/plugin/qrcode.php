@@ -11,7 +11,7 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-nv_add_hook('get_qr_code', function($vars) {
+nv_add_hook($module_name, 'get_qr_code', $priority, function($vars) {
     $nv_Request = $vars;
     if ($nv_Request->get_string('second', 'get') == 'qr') {
         $url = $nv_Request->get_string('u', 'get', '');
@@ -38,4 +38,4 @@ nv_add_hook('get_qr_code', function($vars) {
         }
         exit();
     }
-}, $priority);
+});

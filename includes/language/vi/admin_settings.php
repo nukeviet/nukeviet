@@ -244,6 +244,9 @@ $lang_module['plugin_integrate'] = 'Tích hợp';
 $lang_module['plugin_integrated'] = 'Các plugin đã tích hợp';
 $lang_module['plugin_available'] = 'Các plugin khả dụng khác';
 $lang_module['plugin_note'] = 'Nếu có nhiều plugin cùng hook, hãy xem theo từng hook cụ thể để có thể thay đổi độ ưu tiên của mỗi plugin';
+$lang_module['plugin_type'] = 'Loại';
+$lang_module['plugin_type_sys'] = 'Hệ thống';
+$lang_module['plugin_type_module'] = 'Module';
 
 $lang_module['notification_config'] = 'Cấu hình chức năng thông báo';
 $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt động mới';

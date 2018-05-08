@@ -126,13 +126,16 @@ require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
 // Load các plugin
-foreach ($nv_plugins as $_parea => $pdata) {
-    foreach ($pdata as $priority => $_plugin) {
-        $module_name = $_plugin[1];
-        require NV_ROOTDIR . '/' . $_plugin[0];
+foreach ($nv_plugins as $_phook => $pdatahook) {
+    foreach ($pdatahook as $_parea => $pdata) {
+        foreach ($pdata as $priority => $_plugin) {
+            $module_name = $_phook;
+            $hook_module = $_plugin[1];
+            require NV_ROOTDIR . '/' . $_plugin[0];
+        }
     }
 }
-unset($_parea, $_plugin, $pdata, $priority, $module_name);
+unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook);
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
@@ -290,7 +293,7 @@ $db = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
     trigger_error('Sorry! Could not connect to data server', 256);
 }
-$db_slave = nv_apply_hook('db_slave_connect', array($db, $db_config), $db);
+$db_slave = nv_apply_hook('', 'db_slave_connect', array($db, $db_config), $db);
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
 

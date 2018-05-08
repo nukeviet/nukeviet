@@ -8,15 +8,17 @@
  * @Createdate Dec 3, 2010 11:24:58 AM
  */
 
+// Xác định xem sẽ dùng hook của module nào
+$nv_hook_module = 'news';
+
 // Reload lại menu khi module bị xóa
-$callback = function($vars, $from_data, $receive_data) {
+$callback = function($vars, $module_name, $module_info) {
     global $db, $nv_Cache, $admin_info;
 
     $del_modname = $vars[0];
     //$del_admin_info = $vars[1];
-    $module_name = $receive_data['module_name'];
-    $module_data = $receive_data['module_info']['module_data'];
-    $module_file = $receive_data['module_info']['module_file'];
+    $module_data = $module_info['module_data'];
+    $module_file = $module_info['module_file'];
 
     $sql = 'SELECT id, parentid, mid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE module_name=' . $db->quote($del_modname);
     $lists = $db->query($sql)->fetchAll();
@@ -30,4 +32,4 @@ $callback = function($vars, $from_data, $receive_data) {
     }
     $nv_Cache->delMod($module_name);
 };
-nv_add_hook($module_name, 'after_module_deleted', $priority, $callback, $hook_module);
+nv_add_hook($module_name, 'news_deleted', $priority, $callback);

@@ -24,6 +24,7 @@
                 <!-- END: col_weight -->
                 <th class="w300">{LANG.plugin_area}</th>
                 <th>{LANG.plugin_file}</th>
+                <th class="w200">{LANG.plugin_type}</th>
                 <th class="w200 text-center">{LANG.plugin_func}</th>
             </tr>
         </thead>
@@ -41,8 +42,14 @@
                 <!-- END: weight -->
                 <td>{ROW.plugin_area}</td>
                 <td>{ROW.plugin_file}</td>
+                <td>
+                    <!-- BEGIN: type_sys -->{LANG.plugin_type_sys}<!-- END: type_sys -->
+                    <!-- BEGIN: type_module -->{LANG.plugin_type_module}<!-- END: type_module -->
+                </td>
                 <td class="text-center">
+                    <!-- BEGIN: delete -->
                     <a onclick="nv_del_plugin({ROW.pid});" href="javascript:void(0);" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i>{LANG.isdel}</a>
+                    <!-- END: delete -->
                 </td>
             </tr>
             <!-- END: loop -->

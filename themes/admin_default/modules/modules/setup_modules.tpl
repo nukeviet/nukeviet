@@ -74,6 +74,11 @@
 						</select>
 					</div>
 				</div>
+                <div class="checkmodulehook hidden">
+                    <p class="text-danger messagehook hidden"></p>
+                    <input type="hidden" name="hook_files" value=""/>
+                    <div class="hookmodulechoose form-horizontal" id="hookmodulechoose"></div>
+                </div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary submit">{GLANG.submit}</button>

@@ -211,21 +211,30 @@ function nv_save_file_config_global()
     $content_config .= "\n";
 
     $nv_plugins = array();
-    $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
+    $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY hook_module, plugin_area ASC, weight ASC';
     $_query = $db->query($_sql);
     while ($row = $_query->fetch()) {
-        if (!isset($nv_plugins[$row['plugin_area']])) {
-            $nv_plugins[$row['plugin_area']] = array();
+        // Xác định HOOK gọi từ module hay hệ thống
+        if (!isset($nv_plugins[$row['hook_module']])) {
+            $nv_plugins[$row['hook_module']] = array();
         }
+        // Xác định tiếp HOOK theo TAG
+        if (!isset($nv_plugins[$row['hook_module']][$row['plugin_area']])) {
+            $nv_plugins[$row['hook_module']][$row['plugin_area']] = array();
+        }
+        // Xác định file plugin
         if (empty($row['plugin_module_name'])) {
             $plugin_file = 'includes/plugin/' . $row['plugin_file'];
         } else {
-            $plugin_file = 'modules/' . $row['plugin_module_name'] . '/hooks/' . $row['plugin_file'];
+            $plugin_file = 'modules/' . $row['plugin_module_file'] . '/hooks/' . $row['plugin_file'];
         }
-        $nv_plugins[$row['plugin_area']][$row['weight']] = array($plugin_file, $row['plugin_module_name']);
+        $nv_plugins[$row['hook_module']][$row['plugin_area']][$row['weight']] = array($plugin_file, $row['plugin_module_name']);
     }
-    foreach ($nv_plugins as $_tag => $_data) {
-        krsort($nv_plugins[$_tag]);
+    // Sắp xếp lại
+    foreach ($nv_plugins as $_hookmod => $_datahook) {
+        foreach ($_datahook as $_tag => $_data) {
+            krsort($nv_plugins[$_hookmod][$_tag]);
+        }
     }
     $content_config .= "\$nv_plugins=" . nv_var_export($nv_plugins) . ";\n\n";
 
@@ -919,10 +928,34 @@ function nv_get_plugin_area($file_path)
     $nv_hooks_backup = $nv_hooks;
     $nv_hooks = array();
     $priority = 10;
+    $module_name = '';
 
     require $file_path;
 
     $plugin_area = array_keys($nv_hooks);
     $nv_hooks = $nv_hooks_backup;
     return $plugin_area;
+}
+
+/**
+ * nv_get_hook_require()
+ *
+ * @param mixed $file_path
+ * @return
+ */
+function nv_get_hook_require($file_path)
+{
+    global $nv_hooks;
+    $nv_hooks_backup = $nv_hooks;
+    $nv_hooks = array();
+    $priority = 10;
+    $module_name = '';
+
+    require $file_path;
+
+    $nv_hooks = $nv_hooks_backup;
+    if (!isset($nv_hook_module)) {
+        return '';
+    }
+    return $nv_hook_module;
 }

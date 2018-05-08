@@ -33,5 +33,5 @@ $allow_func = array(
     'change_custom_name',
     'change_site_title',
     'change_block_weight',
-    'check_sample_data'
+    'setup_module_check'
 );

@@ -292,7 +292,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   plugin_file varchar(50) NOT NULL,
   plugin_area varchar(50) NOT NULL DEFAULT '',
   plugin_module_name varchar(50) NOT NULL DEFAULT '',
-  plugin_module_all tinyint(1) NOT NULL DEFAULT '0',
+  plugin_module_file varchar(50) NOT NULL DEFAULT '',
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
   UNIQUE KEY plugin (plugin_file, plugin_module_name)

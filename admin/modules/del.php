@@ -86,6 +86,7 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         $sth->execute();
 
+        // Kiểm tra module này trên các ngôn ngữ khác
         $check_exit_mod = false;
 
         $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1');
@@ -100,6 +101,11 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
             }
         }
 
+        /**
+         * Nếu ngôn ngữ khác không tồn tại thì
+         * Xóa các thư mục uploads, assets, CSDL dir upload
+         * Xóa các plugin của module nếu có
+         */
         if (! $check_exit_mod) {
             if ($module_file != $modname) {
                 $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :module AND type=\'module\'');
@@ -119,9 +125,13 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
             }
+
+            if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_module_name=' . $db->quote($modname))) {
+                nv_save_file_config_global();
+            }
         }
 
-        nv_apply_hook('after_module_deleted', array($modname, $admin_info));
+        nv_apply_hook('', 'after_module_deleted', array($modname, $admin_info));
         $nv_Cache->delAll();
     }
 }

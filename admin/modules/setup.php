@@ -28,6 +28,18 @@ $setmodule = $nv_Request->get_title('setmodule', 'get', '', 1);
 if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
     if ($nv_Request->get_title('checkss', 'get') == md5('setmodule' . $setmodule . NV_CHECK_SESSION)) {
         $sample = $nv_Request->get_int('sample', 'get', 0);
+        $hook_files = $nv_Request->get_title('hook_files', 'get', '');
+        $hook_mods = $nv_Request->get_title('hook_mods', 'get', '');
+        $hook_files = array_filter(explode('|', $hook_files));
+        $hook_mods = array_filter(explode('|', $hook_mods));
+
+        $hook_data = array();
+        foreach ($hook_files as $fkey => $file) {
+            if (empty($hook_mods[$fkey]) or !isset($sys_mods[$hook_mods[$fkey]])) {
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            }
+            $hook_data[$file] = $hook_mods[$fkey];
+        }
 
         $sth = $db->prepare('SELECT basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
         $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
@@ -37,6 +49,30 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
         if (!empty($modrow)) {
             if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module)) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            }
+
+            // Kiểm tra các module liên quan nếu module này có hook
+            $array_hooks = array();
+            if (is_dir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks')) {
+                $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks', '/^[a-zA-Z0-9]+\.php$/');
+                if (!empty($hooks)) {
+                    foreach ($hooks as $hook) {
+                        $plugin_area = nv_get_plugin_area(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks/' . $hook);
+                        if (sizeof($plugin_area) == 1) {
+                            $require_module = nv_get_hook_require(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks/' . $hook);
+                            if (!empty($require_module) and !isset($hook_data[$hook]) or $sys_mods[$hook_data[$hook]]['module_file'] != $require_module) {
+                                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+                            }
+                            $array_hooks[] = array(
+                                'plugin_file' => $hook,
+                                'plugin_area' => $plugin_area[0],
+                                'hook_module' => $hook_data[$hook]
+                            );
+                        }
+                    }
+                }
+            } else {
+                $array_hooks = array();
             }
 
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MODULES_TABLE)->fetchColumn();
@@ -80,6 +116,32 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                 $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=1 WHERE title=:title');
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->execute();
+
+                // Cài đặt hook
+                if (!empty($array_hooks)) {
+                    foreach ($array_hooks as $hook) {
+                        try {
+                            // Lấy vị trí mới
+                            $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $db->quote($hook['plugin_area']) . ' AND hook_module=' . $db->quote($hook['hook_module']);
+                            $weight = $db->query($_sql)->fetchColumn();
+                            $weight = intval($weight) + 1;
+
+                            $db->query('INSERT INTO ' . $db_config['prefix'] . '_plugin (
+                                plugin_file, plugin_area, plugin_module_name, plugin_module_file, hook_module, weight
+                            ) VALUES (
+                                ' . $db->quote($hook['plugin_file']) . ',
+                                ' . $db->quote($hook['plugin_area']) . ',
+                                ' . $db->quote($setmodule) . ',
+                                ' . $db->quote($modrow['basename']) . ',
+                                ' . $db->quote($hook['hook_module']) . ',
+                                ' . $weight . '
+                            )');
+                        } catch (PDOException $e) {
+                            trigger_error('Plugin exists: ' . $e->getMessage());
+                        }
+                    }
+                    nv_save_file_config_global();
+                }
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('modules') . ' ' . $setmodule, '', $admin_info['userid']);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);

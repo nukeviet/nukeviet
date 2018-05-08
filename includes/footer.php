@@ -26,7 +26,7 @@ if (! defined('NV_IS_AJAX')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($nv_Lang->getGlobal('memory_time_usage'), nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }
 }
-$contents = nv_apply_hook('change_site_buffer', array($global_config, $contents), $contents);
+$contents = nv_apply_hook('', 'change_site_buffer', array($global_config, $contents), $contents);
 
 $html_headers = $global_config['others_headers'];
 if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
