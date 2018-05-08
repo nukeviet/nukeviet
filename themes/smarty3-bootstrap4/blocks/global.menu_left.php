@@ -13,6 +13,45 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_block_menu_left')) {
 
+
+    function nv_block_config_menu_left($module, $data_block, $nv_Lang)
+    {
+        global $nv_Cache;
+        //print_r($data_block); die("ok");
+        $html = '';
+        $html .= "<div class=\"form-group\">";
+        $html .= "	<label class=\"control-label col-sm-6\">" . $nv_Lang->getBlock('menu') . ":</label>";
+        $html .= "	<div class=\"col-sm-9\"><select name=\"menuid\" class=\"form-control\">\n";
+
+        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_menu ORDER BY id DESC";
+        // Module menu của hệ thống không ảo hóa, do đó chỉ định cache trực tiếp vào module tránh lỗi khi gọi file từ giao diện
+        $list = $nv_Cache->db($sql, 'id', 'menu');
+        foreach ($list as $l) {
+            $sel = ($data_block['menuid'] == $l['id']) ? ' selected' : '';
+            $html .= "<option value=\"" . $l['id'] . "\" " . $sel . ">" . $l['title'] . "</option>\n";
+        }
+
+        $html .= "	</select></div>\n";
+        $html .= "</div>";
+
+
+        return $html;
+    }
+
+
+    function nv_block_config_menu_left_submit($module, $nv_Lang)
+    {
+        global $nv_Request;
+        $return = array();
+        $return['error'] = array();
+        $return['config'] = array();
+        $return['config']['menuid'] = $nv_Request->get_int('menuid', 'post', 0);
+
+        return $return;
+    }
+
+
+
     /**
      * nv_block_menu_left()
      *
@@ -21,7 +60,54 @@ if (!nv_function_exists('nv_block_menu_left')) {
      */
     function nv_block_menu_left($block_config)
     {
-        global $global_config, $nv_Lang;
+
+        global $db, $global_config, $nv_Lang;
+
+
+        $list_cats = array();
+        $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
+        $stmt = $db->query($sql);
+        $list= $stmt->fetchAll();
+
+
+        foreach ($list as $row) {
+            if (nv_user_in_groups($row['groups_view'])) {
+                if ($row['link'] != '' and $row['link'] != '#') {
+                    $row['link'] = nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true);
+                    switch ($row['target']) {
+                        case 1:
+                            $row['target'] = '';
+                            break;
+                        case 3:
+                            $row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+                            break;
+                        default:
+                            $row['target'] = ' onclick="this.target=\'_blank\'"';
+                    }
+                } else {
+                    $row['target'] = '';
+                }
+
+                if (!empty($row['icon']) and file_exists(NV_UPLOADS_REAL_DIR . '/menu/' . $row['icon'])) {
+                    $row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
+                } else {
+                    $row['icon'] = '';
+                }
+                $list_cats[$row['parentid']][$row['id']] = array(
+                    'id' => $row['id'],
+                    'title' => $row['title'],
+                    'title_trim' => nv_clean60($row['title'], $block_config['title_length']),
+                    'target' => $row['target'],
+                    'note' => empty($row['note']) ? $row['title'] : $row['note'],
+                    'link' => nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true),
+                    'icon' => (empty($row['icon'])) ? '' : NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'],
+                    'css' => $row['css'],
+                    'active_type' => $row['active_type']
+                );
+
+            }
+        }
+
 
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.menu_left.tpl')) {
@@ -47,10 +133,60 @@ if (!nv_function_exists('nv_block_menu_left')) {
             'height' => $size[1]
         );
         $tpl->assign('logo', $_logo);
+        if (!empty($list_cats)) {
+            $title_menu_left = array();
+            $menu_left = array();
+            $menuleftanimate = array();
+            foreach ($list_cats[0] as $id => $item) {
+            if($item['css'] != 'animate'){
+
+                foreach ($list_cats[0] as $id1 => $item1) {
+                    if( $id1 == $id){
+                        $title_menu_left[] = $item1['title'];
+                        $menuleft = array();
+                        $menuleft = nv_get_bootstrap_submenu($id1, $list_cats);
+
+                        $menu_left[] = $menuleft;
+                        }
+                    }
+                }
+            }
+           // print_r($title_menu_left); die("ok");
+            $tpl->assign('title_menu_left',$title_menu_left);
+            $tpl->assign('menu_left',$menu_left);
+
+            foreach ($list_cats[0] as $id => $item) {
+                if($item['css'] == 'animate'){
+                    foreach ($list_cats[0] as $id1 => $item1) {
+                        if( $id1 == $id){
+
+                            $menuleftanimate[] =$item1;
+
+
+
+                        }
+                    }
+                }
+            }
+
+
+            $tpl->assign('menuleftanimate',$menuleftanimate);
+        }
+
         return $tpl->fetch('global.menu_left.tpl');
     }
 }
+/* function nv_get_bootstrap_submenu($id, $array_menu)
+{
+    if (!empty($array_menu[$id])) {
+        $result1 = array();
+        foreach ($array_menu[$id] as $sid => $smenu) {
+            $result1[] = $smenu;
+        }
+    }
+    return $result1;
 
+} */
 if (defined('NV_SYSTEM')) {
     $content = nv_block_menu_left($block_config);
 }

@@ -201,7 +201,12 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
 
-    global $global_config, $nv_Lang;
+    global $db, $global_config, $nv_Lang;
+
+    $sql = "SELECT * FROM nv4_vi_news_cat";
+    $stmt = $db->query($sql);
+    $category = $stmt->fetchAll();
+
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/blog.tpl')) {
         $block_theme = $global_config['module_theme'];
@@ -214,6 +219,8 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $tpl = new \NukeViet\Template\NvSmarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
     $tpl->assign('rows', $array_catpage);
+    $tpl->assign('category',$category);
+
 
 
 

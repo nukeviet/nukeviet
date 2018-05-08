@@ -43,10 +43,16 @@
                           <div class="media-footer text-small">
                             <span class="mr-1">
                               <i class="zmdi zmdi-time color-info mr-05"></i> {$ra.publtime|date_format}</span>
-                            <span>
-                              <i class="zmdi zmdi-folder-outline color-success mr-05"></i>
-                              <a href="{$ra.link1}">{$ra.cate}</a>
-                            </span>
+                            {if $ra.id%3==0}
+                    		<span class ="mr-1"> <i class="zmdi zmdi-folder-outline color-warning-light"></i> <a href="{$ra.link1}">{$ra.cate}</a>
+                    		</span>
+                              {elseif $ra.id%3==1}
+		                    <span> <i class="zmdi zmdi-folder-outline color-danger mr-05"></i> <a href="{$ra.link1}">{$ra.cate}</a>
+		                    </span>
+		                    {else}
+		                    <span> <i class="zmdi zmdi-folder-outline color-royal-light mr-05"></i> <a href="{$ra.link1}">{$ra.cate}</a>
+		                    </span>
+		                    {/if}
                           </div>
                         </div>
                       </div>
@@ -57,10 +63,33 @@
                 <div role="tabpanel" class="tab-pane fade" id="categories">
                   <div class="list-group">
                   {foreach $cates as $cate}
+                  	 {if $cate@key%5==0}
                     <a href="{$cate.link}" class="list-group-item list-group-item-action withripple">
                       <i class=" color-info zmdi zmdi-cocktail"></i>{$cate.title}
                       <span class="ml-auto badge-pill badge-pill-info">{$cate.numcate}</span>
                     </a>
+                    {elseif $cate@key%5==1}
+                    <a href="{$cate.link}" class="list-group-item list-group-item-action withripple">
+                      <i class="  color-warning zmdi zmdi-collection-image"></i>{$cate.title}
+                      <span class="ml-auto badge-pill badge-pill-warning">{$cate.numcate}</span>
+                    </a>
+                    {elseif $cate@key%5==2}
+                    <a href="{$cate.link}" class="list-group-item list-group-item-action withripple">
+                      <i class="  color-danger zmdi zmdi-case-check"></i>{$cate.title}
+                      <span class="ml-auto badge-pill badge-pill-danger">{$cate.numcate}</span>
+                    </a>
+                    {elseif $cate@key%5==3}
+                    <a href="{$cate.link}" class="list-group-item list-group-item-action withripple">
+                      <i class="  color-royal zmdi zmdi-folder-star-alt"></i>{$cate.title}
+                      <span class="ml-auto badge-pill badge-pill-royal">{$cate.numcate}</span>
+                    </a>
+                    {else}
+                    <a href="{$cate.link}" class="list-group-item list-group-item-action withripple">
+                      <i class="  color-success zmdi zmdi-play-circle-outline"></i>{$cate.title}
+                      <span class="ml-auto badge-pill badge-pill-success">{$cate.numcate}</span>
+                    </a>
+                    {/if}
+                    
                     
                     {/foreach}
                   </div>

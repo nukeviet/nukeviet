@@ -18,7 +18,6 @@ if (!nv_function_exists('nv_block_menu_site')) {
         global $nv_Cache;
         //print_r($data_block); die("ok");
         $html = '';
-
         $html .= "<div class=\"form-group\">";
         $html .= "	<label class=\"control-label col-sm-6\">" . $nv_Lang->getBlock('menu') . ":</label>";
         $html .= "	<div class=\"col-sm-9\"><select name=\"menuid\" class=\"form-control\">\n";
@@ -45,7 +44,6 @@ if (!nv_function_exists('nv_block_menu_site')) {
         $return = array();
         $return['error'] = array();
         $return['config'] = array();
-
         $return['config']['menuid'] = $nv_Request->get_int('menuid', 'post', 0);
 
         return $return;
@@ -60,10 +58,33 @@ if (!nv_function_exists('nv_block_menu_site')) {
      */
 
 
+
+
+
+
+
     function nv_block_menu_site($block_config)
     {
 
        global $db, $global_config, $nv_Lang;
+
+     /*  $sql = "SELECT * FROM nv4_vi_menu_rows WHERE mid=".$block_config['menuid']." AND parentid =0";
+
+       $stmt = $db->query($sql);
+       $list = $stmt->fetchAll();
+       for($i=0;$i<count($list);$i++){
+           $sql1 = "SELECT * FROM nv4_vi_menu_rows WHERE parentid = ".$list[$i]['id'];
+           $stmt1 = $db->query($sql1);
+           $result[] = $stmt1->fetchAll();
+       }
+       $length1 = count($result);
+       $result1 = array();
+       for($i=0;$i<count($result);$i++){
+           $result1 = $result[$i];
+
+
+       }
+ */
        //print_r($block_config); die("ok");
 
         $list_cats = array();
@@ -71,8 +92,6 @@ if (!nv_function_exists('nv_block_menu_site')) {
         $stmt = $db->query($sql);
         $list= $stmt->fetchAll();
        // print_r($list); die("ok");
-
-
 
         foreach ($list as $row) {
             if (nv_user_in_groups($row['groups_view'])) {
@@ -97,22 +116,22 @@ if (!nv_function_exists('nv_block_menu_site')) {
                 } else {
                     $row['icon'] = '';
                 }
-                $list_cats[$row['id']] = array(
+                $list_cats[$row['parentid']][$row['id']] = array(
                     'id' => $row['id'],
-                    'parentid' => $row['parentid'],
-                    'subcats' => $row['subitem'],
                     'title' => $row['title'],
                     'title_trim' => nv_clean60($row['title'], $block_config['title_length']),
                     'target' => $row['target'],
                     'note' => empty($row['note']) ? $row['title'] : $row['note'],
-                    'link' => $row['link'],
-                    'icon' => $row['icon'],
-                    'html_class' => $row['css'],
-                    'current' => nv_menu_check_current($row['link'], $row['active_type'])
+                    'link' => nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true),
+                    'icon' => (empty($row['icon'])) ? '' : NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'],
+                    'css' => $row['css'],
+                    'active_type' => $row['active_type']
                 );
+
             }
         }
-       // print_r($list_cats); die("ok");
+        ///Maaux forech cho menu vaf sub menu
+
 
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.menu_site.tpl')) {
@@ -131,6 +150,7 @@ if (!nv_function_exists('nv_block_menu_site')) {
         if (!file_exists(NV_ROOTDIR . '/' . $logo)) {
             $logo = $global_config['site_logo'];
         }
+
         $_logo = array(
             'src' => NV_BASE_SITEURL . $logo,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA,
@@ -138,8 +158,102 @@ if (!nv_function_exists('nv_block_menu_site')) {
             'height' => $size[1]
         );
         $tpl->assign('logo', $_logo);
+
+        if (!empty($list_cats)) {
+            $menu_rest = array();
+            $title_menu_rest = array();
+
+            foreach ($list_cats[0] as $id => $item) {
+                if($item['css']=='tabs'){
+                    $menutab = array();
+                    $menutab = nv_get_bootstrap_submenu($id, $list_cats);
+                    $menu_tabs = array();
+                    $menu_tabs = nv_get_bootstrap_submenu1($id, $list_cats);
+                    $tpl->assign('menutab',$menutab);
+                    $tpl->assign('menu_tab',$menu_tabs);
+                } elseif($item['css']=='drop'){
+                    $menudrop = array();
+                    $menudrop = nv_get_bootstrap_submenu($id, $list_cats);
+                    $menu_drop = array();
+                    $menu_drop = nv_get_bootstrap_submenu1($id, $list_cats);
+                    $tpl->assign('menudrop',$menudrop);
+                    $tpl->assign('menu_drop',$menu_drop);
+
+                }elseif($item['css']=='animate'){
+                    $menuanimate = array();
+                    $menuanimate = nv_get_bootstrap_submenu($id, $list_cats);
+                    $menu_animate = array();
+                    $menu_animate = nv_get_bootstrap_submenu1($id, $list_cats);
+                    $tpl->assign('menuanimate',$menuanimate);
+                    $tpl->assign('menu_animate',$menu_animate);
+                }
+                else {
+                    foreach ($list_cats[0] as $id1 => $item1) {
+                        if( $id1 == $id){
+                            $title_menu_rest[] = $item1['title'];
+                            $menurest = array();
+                            $menurest = nv_get_bootstrap_submenu($id1, $list_cats);
+                            $menu_rest[] = $menurest;
+                        }
+                    }
+
+                }
+
+            }
+
+            $tpl->assign('title_menu_rest',$title_menu_rest);
+            $tpl->assign('menu_rest',$menu_rest);
+
+
+
+
+        }
+
+
         return $tpl->fetch('global.menu_site.tpl');
     }
+}
+
+function nv_get_bootstrap_submenu($id, $array_menu)
+{
+    if (!empty($array_menu[$id])) {
+            $result1 = array();
+            foreach ($array_menu[$id] as $sid => $smenu) {
+                    $result1[] = $smenu;
+         }
+    }
+    return $result1;
+
+}
+
+function nv_get_bootstrap_submenu1($id, $array_menu)
+{
+
+    if (!empty($array_menu[$id])) {
+
+
+        $result2 = array();
+        foreach ($array_menu[$id] as $sid => $smenu) {
+
+            if (isset($array_menu[$sid])) {
+                $result = array();
+                foreach ($array_menu[$sid] as $ssid => $ssmenu) {
+
+                    $result[]= $ssmenu;
+                }
+                $result2[]= $result;
+
+
+            }
+
+
+
+        }
+        return $result2;
+
+    }
+
+
 }
 
 if (defined('NV_SYSTEM')) {
