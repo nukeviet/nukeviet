@@ -223,7 +223,7 @@ function nv_save_file_config_global()
             $nv_plugins[$row['hook_module']][$row['plugin_area']] = array();
         }
         // Xác định file plugin
-        if (empty($row['plugin_module_name'])) {
+        if (empty($row['plugin_module_file'])) {
             $plugin_file = 'includes/plugin/' . $row['plugin_file'];
         } else {
             $plugin_file = 'modules/' . $row['plugin_module_file'] . '/hooks/' . $row['plugin_file'];
@@ -929,10 +929,14 @@ function nv_get_plugin_area($file_path)
     $nv_hooks = array();
     $priority = 10;
     $module_name = '';
+    $hook_module = '';
 
     require $file_path;
 
-    $plugin_area = array_keys($nv_hooks);
+    $plugin_area = array();
+    foreach ($nv_hooks as $event_module => $data) {
+        $plugin_area = array_merge_recursive($plugin_area, array_keys($data));
+    }
     $nv_hooks = $nv_hooks_backup;
     return $plugin_area;
 }
@@ -950,6 +954,7 @@ function nv_get_hook_require($file_path)
     $nv_hooks = array();
     $priority = 10;
     $module_name = '';
+    $hook_module = '';
 
     require $file_path;
 
@@ -958,4 +963,28 @@ function nv_get_hook_require($file_path)
         return '';
     }
     return $nv_hook_module;
+}
+
+/**
+ * nv_get_hook_revmod()
+ *
+ * @param mixed $file_path
+ * @return
+ */
+function nv_get_hook_revmod($file_path)
+{
+    global $nv_hooks;
+    $nv_hooks_backup = $nv_hooks;
+    $nv_hooks = array();
+    $priority = 10;
+    $module_name = '';
+    $hook_module = '';
+
+    require $file_path;
+
+    $nv_hooks = $nv_hooks_backup;
+    if (!isset($nv_receive_module)) {
+        return '';
+    }
+    return $nv_receive_module;
 }

@@ -25,7 +25,7 @@
                 <th class="w300">{LANG.plugin_area}</th>
                 <th>{LANG.plugin_file}</th>
                 <th class="w200">{LANG.plugin_type}</th>
-                <th class="w200 text-center">{LANG.plugin_func}</th>
+                <th class="w150 text-center">{LANG.plugin_func}</th>
             </tr>
         </thead>
         <tbody>
@@ -40,11 +40,11 @@
                     </select>
                 </td>
                 <!-- END: weight -->
-                <td>{ROW.plugin_area}</td>
+                <td>{ROW.hook_module}{ROW.plugin_area}</td>
                 <td>{ROW.plugin_file}</td>
                 <td>
                     <!-- BEGIN: type_sys -->{LANG.plugin_type_sys}<!-- END: type_sys -->
-                    <!-- BEGIN: type_module -->{LANG.plugin_type_module}<!-- END: type_module -->
+                    <!-- BEGIN: type_module -->{LANG.plugin_type_module}:{ROW.plugin_module_name}<!-- END: type_module -->
                 </td>
                 <td class="text-center">
                     <!-- BEGIN: delete -->
@@ -64,14 +64,16 @@
         <thead>
             <th class="w300">{LANG.plugin_area}</th>
             <th>{LANG.plugin_file}</th>
+            <th class="w200">{LANG.plugin_type}</th>
             <th class="w200">{LANG.act}</th>
-            <th class="text-center w200">{LANG.plugin_func}</th>
+            <th class="text-center w150">{LANG.plugin_func}</th>
         </thead>
         <tbody>
             <!-- BEGIN: loop -->
             <tr>
-                <td>{ROW.parea}</td>
+                <td>{ROW.hook_module}{ROW.parea}</td>
                 <td>{ROW.file}</td>
+                <td>{ROW.type}</td>
                 <td>
                     <!-- BEGIN: status_ok -->{LANG.plugin_status_ok}<!-- END: status_ok -->
                     <!-- BEGIN: status_error -->{LANG.plugin_status_error}<!-- END: status_error -->
@@ -96,3 +98,55 @@ $(function() {
 });
 </script>
 <!-- END: main -->
+
+<!-- BEGIN: setting -->
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{ERROR}</div>
+<!-- END: error -->
+<form method="post" action="{FORM_ACTION}">
+    <!-- BEGIN: no_hook_module -->
+    <div class="alert alert-danger">{NO_HOOK_MODULE}</div>
+    <!-- END: no_hook_module -->
+    <!-- BEGIN: no_receive_module -->
+    <div class="alert alert-danger">{NO_RECEIVE_MODULE}</div>
+    <!-- END: no_receive_module -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <tbody>
+                <!-- BEGIN: hook_module -->
+                <tr>
+                    <td class="w200"><strong>{LANG.plugin_choose_hook_module}</strong></td>
+                    <td>
+                        <select class="form-control w300" name="hook_module">
+                            <!-- BEGIN: loop -->
+                            <option value="{HOOK_MODULE.key}"{HOOK_MODULE.selected}>{HOOK_MODULE.title}</option>
+                            <!-- END: loop -->
+                        </select>
+                    </td>
+                </tr>
+                <!-- END: hook_module -->
+                <!-- BEGIN: receive_module -->
+                <tr>
+                    <td class="w200"><strong>{LANG.plugin_choose_receive_module}</strong></td>
+                    <td>
+                        <select class="form-control w300" name="receive_module">
+                            <!-- BEGIN: loop -->
+                            <option value="{RECEIVE_MODULE.key}"{RECEIVE_MODULE.selected}>{RECEIVE_MODULE.title}</option>
+                            <!-- END: loop -->
+                        </select>
+                    </td>
+                </tr>
+                <!-- END: receive_module -->
+                <!-- BEGIN: submit -->
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input type="submit" name="submit" class="btn btn-primary" value="{GLANG.save}"/>
+                    </td>
+                </tr>
+                <!-- END: submit -->
+            </tbody>
+        </table>
+    </div>
+</form>
+<!-- END: setting -->

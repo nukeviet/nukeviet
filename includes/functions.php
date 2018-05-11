@@ -2082,11 +2082,11 @@ function nv_apply_hook($module = '', $tag, $args = array(), $default = null)
 /**
  * nv_add_hook()
  *
- * @param mixed $module_name
- * @param mixed $tag
- * @param integer $priority
- * @param mixed $function_name
- * @param string $hook_module
+ * @param mixed $module_name => Module xảy ra event
+ * @param mixed $tag => TAG
+ * @param integer $priority => Ưu tiên
+ * @param mixed $function_name => Hàm chạy
+ * @param string $hook_module => Module sử dụng dữ liệu
  * @return void
  */
 function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_module = '')

@@ -58,18 +58,23 @@ if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request(
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('clearsystem'), implode(", ", $deltype), $admin_info['userid']);
     clearstatcache();
     if (in_array('clearcache', $deltype)) {
+        $files = array();
         if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {
             while (($modname = readdir($dh)) !== false) {
                 if (preg_match($global_config['check_module'], $modname)) {
                     $cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
-                    $files = nv_clear_files($cacheDir, NV_CACHEDIR . '/' . $modname);
-                    foreach ($files as $file) {
-                        $xtpl->assign('DELFILE', $file);
-                        $xtpl->parse('main.delfile.loop');
+                    $_files = nv_clear_files($cacheDir, NV_CACHEDIR . '/' . $modname);
+                    if (!empty($_files)) {
+                        $files = array_merge_recursive($files, $_files);
                     }
                 }
             }
             closedir($dh);
+        }
+        $files = nv_apply_hook('', 'after_clear_cache_manually', array($files), $files);
+        foreach ($files as $file) {
+            $xtpl->assign('DELFILE', $file);
+            $xtpl->parse('main.delfile.loop');
         }
         $nv_Cache->delAll();
         if (defined('NV_IS_GODADMIN')) {
@@ -136,6 +141,7 @@ if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request(
         if (in_array('clearip_logs', $deltype)) {
             $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
             $files = nv_clear_files($dir, NV_LOGS_DIR . '/ip_logs');
+            $files = nv_apply_hook('', 'after_clear_ip_logs', array($files), $files);
             foreach ($files as $file) {
                 $xtpl->assign('DELFILE', $file);
                 $xtpl->parse('main.delfile.loop');
