@@ -171,11 +171,11 @@ function nv_save_file_config_global()
     $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1 ORDER BY weight ASC';
     $result = $db->query($sql);
 
-    $c_config_value = array();
+    $setup_langs = array();
     while ($row = $result->fetch()) {
-        $c_config_value[] = $row['lang'];
+        $setup_langs[] = $row['lang'];
     }
-    $content_config .= "\$global_config['setup_langs']=array('" . implode("','", $c_config_value) . "');\n";
+    $content_config .= "\$global_config['setup_langs']=array('" . implode("','", $setup_langs) . "');\n";
 
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
@@ -211,29 +211,34 @@ function nv_save_file_config_global()
     $content_config .= "\n";
 
     $nv_plugins = array();
-    $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY hook_module, plugin_area ASC, weight ASC';
-    $_query = $db->query($_sql);
-    while ($row = $_query->fetch()) {
-        // Xác định HOOK gọi từ module hay hệ thống
-        if (!isset($nv_plugins[$row['hook_module']])) {
-            $nv_plugins[$row['hook_module']] = array();
+    foreach ($setup_langs as $lang) {
+        $nv_plugins[$lang] = array();
+        $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=\'all\' OR plugin_lang=\'' . $lang . '\' ORDER BY hook_module, plugin_area ASC, weight ASC';
+        $_query = $db->query($_sql);
+        while ($row = $_query->fetch()) {
+            // Xác định HOOK gọi từ module hay hệ thống
+            if (!isset($nv_plugins[$lang][$row['hook_module']])) {
+                $nv_plugins[$lang][$row['hook_module']] = array();
+            }
+            // Xác định tiếp HOOK theo TAG
+            if (!isset($nv_plugins[$lang][$row['hook_module']][$row['plugin_area']])) {
+                $nv_plugins[$lang][$row['hook_module']][$row['plugin_area']] = array();
+            }
+            // Xác định file plugin
+            if (empty($row['plugin_module_file'])) {
+                $plugin_file = 'includes/plugin/' . $row['plugin_file'];
+            } else {
+                $plugin_file = 'modules/' . $row['plugin_module_file'] . '/hooks/' . $row['plugin_file'];
+            }
+            $nv_plugins[$lang][$row['hook_module']][$row['plugin_area']][$row['weight']] = array($plugin_file, $row['plugin_module_name']);
         }
-        // Xác định tiếp HOOK theo TAG
-        if (!isset($nv_plugins[$row['hook_module']][$row['plugin_area']])) {
-            $nv_plugins[$row['hook_module']][$row['plugin_area']] = array();
-        }
-        // Xác định file plugin
-        if (empty($row['plugin_module_file'])) {
-            $plugin_file = 'includes/plugin/' . $row['plugin_file'];
-        } else {
-            $plugin_file = 'modules/' . $row['plugin_module_file'] . '/hooks/' . $row['plugin_file'];
-        }
-        $nv_plugins[$row['hook_module']][$row['plugin_area']][$row['weight']] = array($plugin_file, $row['plugin_module_name']);
     }
     // Sắp xếp lại
-    foreach ($nv_plugins as $_hookmod => $_datahook) {
-        foreach ($_datahook as $_tag => $_data) {
-            krsort($nv_plugins[$_hookmod][$_tag]);
+    foreach ($nv_plugins as $lang => $langdata) {
+        foreach ($langdata as $_hookmod => $_datahook) {
+            foreach ($_datahook as $_tag => $_data) {
+                krsort($nv_plugins[$lang][$_hookmod][$_tag]);
+            }
         }
     }
     $content_config .= "\$nv_plugins=" . nv_var_export($nv_plugins) . ";\n\n";

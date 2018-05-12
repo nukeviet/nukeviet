@@ -34,6 +34,7 @@ function nv_delete_table_sys($lang)
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_referer_stats';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modthemes';
     $sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs DROP ' . $lang . '_cron_name';
+    $sql_drop_table[] = 'DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=\'' . $lang . '\'';
 
     return $sql_drop_table;
 }

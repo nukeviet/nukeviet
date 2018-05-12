@@ -122,13 +122,14 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                     foreach ($array_hooks as $hook) {
                         try {
                             // Lấy vị trí mới
-                            $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $db->quote($hook['plugin_area']) . ' AND hook_module=' . $db->quote($hook['hook_module']);
+                            $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=' . $db->quote(NV_LANG_DATA) . ' AND plugin_area=' . $db->quote($hook['plugin_area']) . ' AND hook_module=' . $db->quote($hook['hook_module']);
                             $weight = $db->query($_sql)->fetchColumn();
                             $weight = intval($weight) + 1;
 
                             $db->query('INSERT INTO ' . $db_config['prefix'] . '_plugin (
-                                plugin_file, plugin_area, plugin_module_name, plugin_module_file, hook_module, weight
+                                plugin_lang, plugin_file, plugin_area, plugin_module_name, plugin_module_file, hook_module, weight
                             ) VALUES (
+                                ' . $db->quote(NV_LANG_DATA) . ',
                                 ' . $db->quote($hook['plugin_file']) . ',
                                 ' . $db->quote($hook['plugin_area']) . ',
                                 ' . $db->quote($setmodule) . ',

@@ -126,7 +126,23 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
             }
 
-            if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_module_name=' . $db->quote($modname))) {
+            $plugin_deleted = 0;
+            $sql = "SELECT * FROM " . $db_config['prefix'] . "_plugin WHERE plugin_lang=" . $db->quote(NV_LANG_DATA) . " AND plugin_module_file!='' AND plugin_module_name=" . $db->quote($modname);
+            $plugins = $db->query($sql)->fetchAll();
+            foreach ($plugins as $plugin) {
+                if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $plugin['pid'])) {
+                    $plugin_deleted++;
+                    // Sắp xếp lại thứ tự
+                    $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\') AND plugin_area=' . $db->quote($plugin['plugin_area']) . ' AND hook_module=' . $db->quote($plugin['hook_module']) . ' ORDER BY weight ASC';
+                    $result = $db->query($sql);
+                    $weight = 0;
+                    while ($row = $result->fetch()) {
+                        ++$weight;
+                        $db->query('UPDATE ' . $db_config['prefix'] . '_plugin SET weight=' . $weight . ' WHERE pid=' . $row['pid']);
+                    }
+                }
+            }
+            if ($plugin_deleted > 0) {
                 nv_save_file_config_global();
             }
         }

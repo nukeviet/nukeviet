@@ -289,6 +289,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   pid tinyint(4) NOT NULL AUTO_INCREMENT,
+  plugin_lang varchar(3) NOT NULL DEFAULT 'all',
   plugin_file varchar(50) NOT NULL,
   plugin_area varchar(50) NOT NULL DEFAULT '',
   plugin_module_name varchar(50) NOT NULL DEFAULT '',
@@ -296,7 +297,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   hook_module varchar(50) NOT NULL DEFAULT '',
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
-  UNIQUE KEY plugin (plugin_area, plugin_module_name, hook_module)
+  UNIQUE KEY plugin (plugin_lang, plugin_area, plugin_module_name, hook_module)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (

@@ -250,6 +250,7 @@ $lang_module['plugin_type_module'] = 'Module';
 $lang_module['plugin_error_exists_module'] = 'Lỗi: Module %s không tồn tại';
 $lang_module['plugin_error_no_hook'] = 'Plugin này lấy dữ liệu từ module %s. Bạn cần cài trước module %s hoặc module ảo của nó';
 $lang_module['plugin_error_no_receive'] = 'Plugin này xử lý dữ liệu cho module %s. Bạn cần cài trước module %s hoặc module ảo của nó';
+$lang_module['plugin_error_exists'] = 'Plugin cho các module này đã tồn tại. Mời bạn chọn module khác';
 $lang_module['plugin_choose_hook_module'] = 'Chọn module nguồn';
 $lang_module['plugin_choose_receive_module'] = 'Chọn module đích';
 

@@ -125,18 +125,6 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
-// Load các plugin
-foreach ($nv_plugins as $_phook => $pdatahook) {
-    foreach ($pdatahook as $_parea => $pdata) {
-        foreach ($pdata as $priority => $_plugin) {
-            $module_name = $_phook;
-            $hook_module = $_plugin[1];
-            require NV_ROOTDIR . '/' . $_plugin[0];
-        }
-    }
-}
-unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook);
-
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
     trigger_error('Hi and Good-bye!!!', 256);
@@ -175,7 +163,6 @@ define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
 
-
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
 // Ngon ngu
@@ -183,6 +170,18 @@ require NV_ROOTDIR . '/includes/language.php';
 $nv_Lang = new \NukeViet\Core\Language();
 $nv_Lang->loadGlobal();
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
+
+// Load các plugin
+foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
+    foreach ($pdatahook as $_parea => $pdata) {
+        foreach ($pdata as $priority => $_plugin) {
+            $module_name = $_phook;
+            $hook_module = $_plugin[1];
+            require NV_ROOTDIR . '/' . $_plugin[0];
+        }
+    }
+}
+unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook);
 
 $domains = explode(',', $global_config['my_domains']);
 if (!in_array(NV_SERVER_NAME, $domains)) {

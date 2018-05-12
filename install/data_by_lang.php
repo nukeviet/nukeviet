@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -113,7 +113,7 @@ $array_funcid_mod = array();
 $func_result = $db->query('SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
 while (list($func_id_i, $func_name, $in_module) = $func_result->fetch(3)) {
     $array_funcid[] = $func_id_i;
-    if (! isset($array_funcid_mod[$in_module])) {
+    if (!isset($array_funcid_mod[$in_module])) {
         $array_funcid_mod[$in_module] = array();
     }
     $array_funcid_mod[$in_module][$func_name] = $func_id_i;
@@ -322,7 +322,7 @@ while ($row = $func_result->fetch()) {
             $rowini = ( array )$blocks[$i];
             if (isset($rowini['funcs']) and $rowini['module'] == $row['module'] and $rowini['file_name'] == $row['file_name']) {
                 $array_funcid_i = array();
-                if (! is_array($rowini['funcs'])) {
+                if (!is_array($rowini['funcs'])) {
                     $rowini['funcs'] = array( $rowini['funcs'] );
                 }
                 foreach ($rowini['funcs'] as $_funcs_list) {
@@ -366,15 +366,13 @@ if ($result->fetchColumn()) {
     $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'");
 }
 
-if(!empty($menu_rows_lev0))
-{
+if (!empty($menu_rows_lev0)) {
     $result = $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 
     $is_yes_sub = !empty($menu_rows_lev1) ? array_unique(array_keys($menu_rows_lev1)) : array();
     $menu_y_sub = array();
-    if(!empty($is_yes_sub))
-    {
-        foreach($is_yes_sub as $mys){
+    if (!empty($is_yes_sub)) {
+        foreach ($is_yes_sub as $mys) {
             $menu_y_sub[$mys] = array();
             $menu_y_sub[$mys]['subsize'] = sizeof($menu_rows_lev1[$mys]);
         }
@@ -387,17 +385,37 @@ if(!empty($menu_rows_lev0))
     $d = sizeof($menu_rows_lev0);
     $executes = array();
     $subitem = array();
-    foreach($menu_rows_lev0 as $m => $item)
-    {
-        $executes[$a] = array($a, 0, $item['title'], $item['link'], $a, $b, 0, '', $item['groups_view'], $m, $item['op']);
+    foreach ($menu_rows_lev0 as $m => $item) {
+        $executes[$a] = array(
+            $a,
+            0,
+            $item['title'],
+            $item['link'],
+            $a,
+            $b,
+            0,
+            '',
+            $item['groups_view'],
+            $m,
+            $item['op']);
         $subitem[$a] = array();
-        if(isset($menu_y_sub[$m])) {
-            for($c = 1; $c <= $menu_y_sub[$m]['subsize']; ++$c)
-            {
+        if (isset($menu_y_sub[$m])) {
+            for ($c = 1; $c <= $menu_y_sub[$m]['subsize']; ++$c) {
                 ++$b;
                 ++$d;
                 $e = $c - 1;
-                $executes[$d] = array($d, $a, $menu_rows_lev1[$m][$e]['title'], $menu_rows_lev1[$m][$e]['link'], $c, $b, 1, '', $menu_rows_lev1[$m][$e]['groups_view'], $m, $menu_rows_lev1[$m][$e]['op']);
+                $executes[$d] = array(
+                    $d,
+                    $a,
+                    $menu_rows_lev1[$m][$e]['title'],
+                    $menu_rows_lev1[$m][$e]['link'],
+                    $c,
+                    $b,
+                    1,
+                    '',
+                    $menu_rows_lev1[$m][$e]['groups_view'],
+                    $m,
+                    $menu_rows_lev1[$m][$e]['op']);
                 $subitem[$a][] = $d;
             }
         }
@@ -406,9 +424,12 @@ if(!empty($menu_rows_lev0))
     }
 
     ksort($executes);
-    foreach($executes as $id => $execute)
-    {
-        if(!empty($subitem[$id])) $execute[7] = implode(",",$subitem[$id]);
+    foreach ($executes as $id => $execute) {
+        if (!empty($subitem[$id]))
+            $execute[7] = implode(",", $subitem[$id]);
         $sth->execute($execute);
     }
 }
+
+// Các plugin của module
+$db->query("INSERT INTO " . $db_config['prefix'] . "_plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES ('" . $lang_data . "', 'del_menu_row.php', 'after_module_deleted', 'menu', 'menu', 1)");
