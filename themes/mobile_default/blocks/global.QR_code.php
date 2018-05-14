@@ -25,7 +25,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
     {
         global $selectthemes;
 
-        $nv_Lang->loadBlock(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php');
+        $nv_Lang->loadTheme($selectthemes);
         $array_levels = array(
             'L',
             'M',

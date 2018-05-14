@@ -29,7 +29,7 @@ if (!in_array(NV_LANG_DATA, $languageslist)) {
 }
 
 $nv_Lang->loadModule('users');
-$nv_Lang->loadBlock(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php');
+$nv_Lang->loadInstall(NV_LANG_DATA);
 
 require_once NV_ROOTDIR . '/install/template.php';
 require_once NV_ROOTDIR . '/includes/core/admin_functions.php';

@@ -22,8 +22,6 @@ class Language
 
     private $lang = 'vi';
     private $defaultLang = 'vi';
-    private $defaultFiles = array();
-    private $defaultIsLoaded = false;
     private $isTmpLoaded = false;
 
     const TYPE_LANG_ALL = 0;
@@ -90,15 +88,17 @@ class Language
             return false;
         }
         if ($modadmin and $admin) {
+            if ($this->lang != $this->defaultLang) {
+                $file = NV_ROOTDIR . '/includes/language/' . $this->defaultLang . '/admin_' . $modfile . '.php';
+                $this->load($file, $loadtmp);
+            }
             $file = NV_ROOTDIR . '/includes/language/' . $this->lang . '/admin_' . $modfile . '.php';
-            if ($this->lang != $this->defaultLang) {
-                $this->defaultFiles[] = NV_ROOTDIR . '/includes/language/' . $this->defaultLang . '/admin_' . $modfile . '.php';
-            }
         } else {
-            $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->lang . '.php';
             if ($this->lang != $this->defaultLang) {
-                $this->defaultFiles[] = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
+                $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
+                $this->load($file, $loadtmp);
             }
+            $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->lang . '.php';
         }
         $this->load($file, $loadtmp);
     }
@@ -115,6 +115,25 @@ class Language
     }
 
     /**
+     * Language::loadInstall()
+     *
+     * @param mixed $lang
+     * @return
+     */
+    public function loadInstall($lang)
+    {
+        if (!defined('NV_ADMIN')) {
+            return false;
+        }
+        if ($lang != $this->defaultLang) {
+            $file = NV_ROOTDIR . '/includes/language/' . $this->defaultLang . '/install.php';
+            $this->load($file);
+        }
+        $file = NV_ROOTDIR . '/includes/language/' . $lang . '/install.php';
+        $this->load($file);
+    }
+
+    /**
      * Language::loadTheme()
      *
      * @param mixed $theme
@@ -126,10 +145,11 @@ class Language
         if ($admin and !defined('NV_ADMIN')) {
             return false;
         }
-        $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . ($admin ? 'admin_' : '') . $this->lang . '.php';
         if ($this->lang != $this->defaultLang) {
-            $this->defaultFiles[] = NV_ROOTDIR . '/themes/' . $theme . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
+            $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
+            $this->load($file);
         }
+        $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . ($admin ? 'admin_' : '') . $this->lang . '.php';
         $this->load($file);
     }
 
@@ -145,10 +165,11 @@ class Language
             return false;
         }
         $fileName = ($admin ? 'admin_' : '') . 'global.php';
-        $file = NV_ROOTDIR . '/includes/language/' . $this->lang . '/' . $fileName;
         if ($this->lang != $this->defaultLang) {
-            $this->defaultFiles[] = NV_ROOTDIR . '/includes/language/' . $this->defaultLang . '/' . $fileName;
+            $file = NV_ROOTDIR . '/includes/language/' . $this->defaultLang . '/' . $fileName;
+            $this->load($file);
         }
+        $file = NV_ROOTDIR . '/includes/language/' . $this->lang . '/' . $fileName;
         $this->load($file);
     }
 

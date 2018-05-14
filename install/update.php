@@ -72,7 +72,7 @@ unset($dirs, $languageslist, $file, $data_update_lang, $array_lang_update, $cook
 $nv_Lang->setLang(NV_LANG_UPDATE);
 $nv_Lang->loadGlobal();
 $nv_Lang->loadGlobal(true);
-$nv_Lang->loadBlock(NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/install.php');
+$nv_Lang->loadInstall(NV_LANG_UPDATE);
 $nv_Lang->setModule($nv_update_config['lang'][NV_LANG_UPDATE]);
 unset($nv_update_config['lang']);
 
