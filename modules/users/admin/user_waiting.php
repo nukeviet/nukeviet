@@ -118,6 +118,10 @@ if ($nv_Request->isset_request('act', 'get')) {
         } else {
             $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
         }
+
+        $user_data = $row;
+        nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
+        nv_apply_hook($module_name, 'user_waiting_active_in_admin', array($userid, $user_data));
     }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting');
 }

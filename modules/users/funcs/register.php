@@ -383,6 +383,8 @@ if ($checkss == $array_register['checkss']) {
                 nv_insert_notification($module_name, 'contact_new', array('title' => $array_register['username']), $userid, 0, 0, 1);
             }
 
+            nv_apply_hook($module_name, 'new_user_waiting', array($userid, $array_register));
+
             $nv_redirect = '';
             reg_result(array(
                 'status' => 'ok',
@@ -477,6 +479,9 @@ if ($checkss == $array_register['checkss']) {
             }
             $nv_Cache->delMod($module_name);
             $nv_redirect = '';
+            $user_data = $array_register;
+            nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
+            nv_apply_hook($module_name, 'new_registered_user', array($userid, $user_data));
             reg_result(array(
                 'status' => 'ok',
                 'input' => nv_url_rewrite($url, true),

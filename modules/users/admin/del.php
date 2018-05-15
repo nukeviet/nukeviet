@@ -70,6 +70,8 @@ foreach ($userids as $userid) {
         $message = nl2br($message);
         nv_sendmail($global_config['site_email'], $email, $subject, $message);
     }
+
+    nv_apply_hook($module_name, 'user_delete', array($userid));
 }
 
 $nv_Cache->delMod($module_name);

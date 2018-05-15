@@ -545,6 +545,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
         $nv_Cache->delMod($module_name);
 
+        $user_data = $reg_attribs;
+        $server = $reg_attribs['server'];
+        nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
+        nv_apply_hook($module_name, 'user_add_by_openid', array($userid, $user_data, $server));
+
         opidr(array(
             'status' => 'success',
             'mess' => $nv_Lang->getModule('login_ok')
@@ -604,6 +609,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ));
         }
         $nv_Cache->delMod($module_name);
+
+        $array_register = $reg_attribs;
+        $server = $reg_attribs['server'];
+        nv_apply_hook($module_name, 'new_user_waiting', array($userid, $array_register));
+        nv_apply_hook($module_name, 'new_user_waiting_by_openid', array($userid, $array_register, $server));
 
         opidr(array(
             'status' => 'success',

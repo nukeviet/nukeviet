@@ -302,6 +302,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         @nv_sendmail($global_config['site_email'], $_user['email'], $subject, $message);
     }
 
+    $user_data = $_user;
+    nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
+    nv_apply_hook($module_name, 'user_add_in_admin', array($userid, $user_data));
+
     nv_jsonOutput(array(
         'status' => 'ok',
         'input' => '',
