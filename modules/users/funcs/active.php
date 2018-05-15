@@ -114,6 +114,10 @@ if ($checknum == $row['checknum']) {
             }
 
             $nv_Cache->delMod($module_name);
+
+            $user_data = $row;
+            nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
+            nv_apply_hook($module_name, 'user_waiting_active_self', array($userid, $user_data));
         }
     }
 }
