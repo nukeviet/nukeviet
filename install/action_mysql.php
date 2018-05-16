@@ -27,6 +27,11 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   position varchar(255) NOT NULL,
   main_module varchar(50) NOT NULL DEFAULT 'siteinfo',
   admin_theme varchar(100) NOT NULL DEFAULT '',
+  api_description varchar(255) NOT NULL DEFAULT '',
+  api_roles varchar(255) NOT NULL DEFAULT '',
+  api_key varchar(50) NOT NULL DEFAULT '',
+  api_secret varchar(50) NOT NULL DEFAULT '',
+  api_last_access int(11) NOT NULL DEFAULT '0',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -35,7 +40,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   last_login int(11) unsigned NOT NULL DEFAULT '0',
   last_ip varchar(45) DEFAULT '',
   last_agent varchar(255) DEFAULT '',
-   PRIMARY KEY (admin_id)
+  PRIMARY KEY (admin_id)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
@@ -60,6 +65,16 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   checksum varchar(32) DEFAULT '',
   PRIMARY KEY (mid),
   UNIQUE KEY module (module)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
+  role_id smallint(4) NOT NULL AUTO_INCREMENT,
+  role_title varchar(250) NOT NULL DEFAULT '',
+  role_description text NOT NULL,
+  role_data text NOT NULL,
+  addtime int(11) NOT NULL DEFAULT '0',
+  edittime int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (role_id)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (

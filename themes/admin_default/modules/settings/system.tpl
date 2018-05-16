@@ -132,6 +132,10 @@
                     <td><strong>{LANG.error_send_email}</strong></td>
                     <td><input type="text" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.remote_api_access}</strong></td>
+                    <td><label><input type="checkbox" name="remote_api_access" value="1"{CHECKED_REMOTE_API_ACCESS}/> {LANG.remote_api_access_help}</label></td>
+                </tr>
                 <!-- END: system -->
                 <tr>
                     <td><strong>{LANG.searchEngineUniqueID}</strong></td>

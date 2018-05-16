@@ -163,6 +163,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $array_config_global['cdn_url'] = $cdn_url . $_p;
             }
         }
+        $array_config_global['remote_api_access'] = (int)$nv_Request->get_bool('remote_api_access', 'post', 0);
 
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
@@ -239,6 +240,7 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_ERROR_SET_LOGS', ($array_config_global['error_set_logs']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_REWRITE_ENABLE', ($array_config_global['rewrite_enable'] == 1) ? ' checked ' : '');
     $xtpl->assign('CHECKED_REWRITE_OPTIONAL', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
+    $xtpl->assign('CHECKED_REMOTE_API_ACCESS', ($array_config_global['remote_api_access'] == 1) ? ' checked ' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
 

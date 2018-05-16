@@ -134,3 +134,33 @@ function nv_admin_edit_result($result)
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
+
+// Đây là ví dụ về API action. Sau này sẽ phát triển sau
+$array_api_actions = array();
+$array_api_actions['system'] = array(
+    'add_baned_ip',
+    'send_mail',
+);
+$array_api_actions['user'] = array(
+    'add_user',
+);
+$array_api_actions['admin'] = array(
+    'add_admin',
+);
+$array_api_actions['theme'] = array(
+    'active_theme',
+);
+$array_api_actions['extension'] = array(
+    'delete_extension',
+);
+$array_api_actions['file'] = array(
+    'delete_file',
+    'add_file',
+    'add_folder',
+    'delete_folder',
+);
+$array_api_actions['module'] = array(
+    'delete_module',
+    'change_status_module',
+    'recreat_module',
+);

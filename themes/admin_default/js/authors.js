@@ -50,3 +50,38 @@ $("#checkall").click(function(){
 $("#uncheckall").click(function() {
 	$("input[name='modules[]']:checkbox").prop("checked", false);
 });
+
+$(document).ready(function() {
+    $('[data-toggle="apicat"]').click(function(e) {
+        e.preventDefault();
+        $('[data-toggle="apicat"]').removeClass('active');
+        $(this).addClass('active');
+        $('[data-toggle="apichid"]').hide();
+        $($(this).attr('href')).show();
+        $('[name="current_cat"]').val($(this).data('cat'));
+    });
+    $('[data-toggle="apicheck"]').click(function(e) {
+        e.preventDefault();
+        $($(this).attr('href')).find('[type="checkbox"]').prop('checked', true);
+    });
+    $('[data-toggle="apiuncheck"]').click(function(e) {
+        e.preventDefault();
+        $($(this).attr('href')).find('[type="checkbox"]').prop('checked', false);
+    });
+    $('[data-toggle="apiroledetail"]').click(function(e) {
+        e.preventDefault();
+        modalShow($(this).data('title'), $($(this).attr('href')).html());
+    });
+    $('[data-toggle="apiroledel"]').click(function(e) {
+        e.preventDefault();
+    	if (confirm(nv_is_del_confirm[0])) {
+    		$.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=api-roles&nocache=' + new Date().getTime(), 'del=1&role_id=' + $(this).data('id'), function(res) {
+    			if (res == 'OK') {
+    				location.reload();
+    			} else {
+    				alert(nv_is_del_confirm[2]);
+    			}
+    		});
+    	}
+    });
+});

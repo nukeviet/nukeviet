@@ -157,3 +157,27 @@ $lang_module['custom_title'] = 'Tiêu đề';
 $lang_module['main_module'] = 'Module trang chính';
 $lang_module['themeadmin'] = 'Giao diện người quản trị';
 $lang_module['theme_default'] = 'Mặc định theo cấu hình site';
+
+$lang_module['api_roles'] = 'Quản lý API Roles';
+$lang_module['api_roles_list'] = 'Danh sách API Roles';
+$lang_module['api_roles_empty'] = 'Chưa có API Role nào được thêm. Mời bạn hoàn thành mẫu bên dưới để thêm mới API Role';
+$lang_module['api_roles_add'] = 'Tạo mới API Role';
+$lang_module['api_roles_edit'] = 'Sửa API Role';
+$lang_module['api_roles_title'] = 'Tên gọi API Role';
+$lang_module['api_roles_description'] = 'Mô tả API Role';
+$lang_module['api_roles_allowed'] = 'Các API được phép truy cập';
+$lang_module['api_roles_error_title'] = 'Lỗi: Chưa nhập tên gọi API Role';
+$lang_module['api_roles_error_exists'] = 'Lỗi: Tên gọi API Role này đã có, mời nhập tên gọi khác để tránh nhầm lẫn';
+$lang_module['api_roles_error_role'] = 'Lỗi: Chưa có API nào được chọn';
+$lang_module['api_roles_checkall'] = 'Chọn tất cả';
+$lang_module['api_roles_uncheckall'] = 'Bỏ chọn tất cả';
+$lang_module['api_roles_detail'] = 'Chi tiết các quyền truy cập API của';
+$lang_module['api_addtime'] = 'Tạo lúc';
+$lang_module['api_edittime'] = 'Cập nhật';
+
+$lang_module['api_system'] = 'Hệ thống';
+$lang_module['api_user'] = 'Thành viên';
+
+$lang_module['api_cr'] = 'Quyền truy cập API';
+$lang_module['api_cr_error_role_empty'] = 'Chưa có API Role được tạo, hãy tạo API Role trước. Hệ thống sẽ tự động chuyển trến trang tạo API Role trong giây lát';
+$lang_module['api_remote_off'] = 'Remote API <strong>đang tắt</strong>, các tài khoản được phép truy cập API bên dưới sẽ chỉ thực hiện các cuộc gọi API bên trong. Nếu cần thực hiện cuộc gọi API từ bên ngoài, hãy <strong><a href="%s" target="_blank">bật Remote API tại đây</a></strong>';

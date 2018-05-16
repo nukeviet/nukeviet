@@ -30,7 +30,11 @@ if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['s
 
 if (defined('NV_IS_GODADMIN')) {
     $submenu['module'] = $nv_Lang->getModule('module_admin');
+    $submenu['api-credentials'] = $nv_Lang->getModule('api_cr');
+    $submenu['api-roles'] = $nv_Lang->getModule('api_roles');
     $submenu['config'] = $nv_Lang->getModule('config');
     $allow_func[] = 'module';
+    $allow_func[] = 'api-credentials';
+    $allow_func[] = 'api-roles';
     $allow_func[] = 'config';
 }
