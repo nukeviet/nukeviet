@@ -1,8 +1,9 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: empty -->
-<div class="alert alert-info">{LANG.api_roles_empty}</div>
+<div class="alert alert-info">{LANG.api_roles_empty}.</div>
 <!-- END: empty -->
 <!-- BEGIN: data -->
+<div class="alert alert-info">{LANG.api_role_notice}.</div>
 <form>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
@@ -66,14 +67,14 @@
                         <td><textarea class="form-control w350" name="role_description" rows="4">{DATA.role_description}</textarea></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><strong>{LANG.api_roles_allowed}<!-- BEGIN: total_api_enabled --> ({TOTAL_API_ENABLED})<!-- END: total_api_enabled --></strong></td>
+                        <td colspan="2"><strong id="apiRoleAll">{LANG.api_roles_allowed}<!-- BEGIN: total_api_enabled --> <span>({TOTAL_API_ENABLED})</span><!-- END: total_api_enabled --></strong></td>
                     </tr>
                     <tr>
                         <td>
                             <div class="root-api-actions">
                                 <ul>
                                     <!-- BEGIN: api_actions1 -->
-                                    <li><a data-toggle="apicat" data-cat="{ROOT_ACTION_KEY}" href="#api-child-{ROOT_ACTION_KEY}"{CAT_ACTIVE}>{ROOT_ACTION_NAME}<!-- BEGIN: cat_api_enabled --> ({CAT_API_ENABLED})<!-- END: cat_api_enabled --></a></li>
+                                    <li><a data-toggle="apicat" data-cat="{ROOT_ACTION_KEY}" href="#api-child-{ROOT_ACTION_KEY}"{CAT_ACTIVE}>{ROOT_ACTION_NAME}<!-- BEGIN: cat_api_enabled --> <span>({CAT_API_ENABLED})</span><!-- END: cat_api_enabled --></a></li>
                                     <!-- END: api_actions1 -->
                                 </ul>
                             </div>
@@ -87,7 +88,7 @@
                                             <div class="row">
                                                 <!-- BEGIN: loop -->
                                                 <div class="col-sm-12">
-                                                    <label><input type="checkbox" name="api_{ROOT_ACTION_KEY}[]" value="{ACTION_KEY}"{ACTION_CHECKED}/>{ACTION_NAME}</label>
+                                                    <label><input data-toggle="apiroleit" type="checkbox" name="api_{ROOT_ACTION_KEY}[]" value="{ACTION_KEY}"{ACTION_CHECKED}/>{ACTION_NAME}</label>
                                                 </div>
                                                 <!-- END: loop -->
                                             </div>

@@ -27,11 +27,6 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   position varchar(255) NOT NULL,
   main_module varchar(50) NOT NULL DEFAULT 'siteinfo',
   admin_theme varchar(100) NOT NULL DEFAULT '',
-  api_description varchar(255) NOT NULL DEFAULT '',
-  api_roles varchar(255) NOT NULL DEFAULT '',
-  api_key varchar(50) NOT NULL DEFAULT '',
-  api_secret varchar(50) NOT NULL DEFAULT '',
-  api_last_access int(11) NOT NULL DEFAULT '0',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -75,6 +70,20 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (role_id)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credential (
+  admin_id int(11) unsigned NOT NULL,
+  credential_title varchar(255) NOT NULL DEFAULT '',
+  credential_ident varchar(50) NOT NULL DEFAULT '',
+  credential_secret varchar(250) NOT NULL DEFAULT '',
+  api_roles varchar(255) NOT NULL DEFAULT '',
+  addtime int(11) NOT NULL DEFAULT '0',
+  edittime int(11) NOT NULL DEFAULT '0',
+  last_access int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY credential_ident (credential_ident),
+  UNIQUE KEY credential_secret (credential_secret),
+  KEY admin_id (admin_id)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (

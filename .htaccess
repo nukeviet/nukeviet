@@ -56,6 +56,8 @@ ErrorDocument 504 /error.php?code=504
 <IfModule mod_rewrite.c>
 RewriteEngine On
 #RewriteBase /
+RewriteCond %{REQUEST_METHOD} !^(POST) [NC]
+RewriteRule ^api\.php(.*?)$ - [F]
 RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
 RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]
 RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]

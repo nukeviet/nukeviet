@@ -40,3 +40,8 @@
 .child-apis .child-apis-item {
     display: none;
 }
+
+.credential-result {
+    max-width: 600px;
+    margin: 0 auto;
+}
