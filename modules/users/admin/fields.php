@@ -347,12 +347,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     required, show_register, user_editable,
                     show_profile, class, language, default_value) VALUES
                     ('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
-                    '" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
+                    :match_regex, :func_callback,
                     " . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
                     " . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
                     " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
 
                 $data_insert = array();
+                $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
+                $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
                 $data_insert['class'] = $dataform['class'];
                 $data_insert['default_value'] = $dataform['default_value'];
                 $dataform['fid'] = $db->insert_id($sql, 'fid', $data_insert);
@@ -379,7 +381,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $query = "UPDATE " . NV_MOD_TABLE . "_field SET";
             if ($text_fields == 1) {
                 $query .= " match_type='" . $dataform['match_type'] . "',
-                match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
+                match_regex=:match_regex, func_callback=:func_callback, ";
             }
             $query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
                 required = '" . $dataform['required'] . "',
@@ -394,6 +396,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 WHERE fid = " . $dataform['fid'];
 
             $stmt = $db->prepare($query);
+            if ($text_fields == 1) {
+                $dataform['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
+                $dataform['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
+                $stmt->bindParam(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
+                $stmt->bindParam(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
+            }
             $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
             $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
             $save = $stmt->execute();
@@ -407,15 +415,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
                         $type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
                     } elseif ($dataform['max_length'] <= 65536) {
                         //2^16 TEXT
-    
                         $type_date = 'TEXT NOT NULL';
                     } elseif ($dataform['max_length'] <= 16777216) {
                         //2^24 MEDIUMTEXT
-    
                         $type_date = 'MEDIUMTEXT NOT NULL';
                     } elseif ($dataform['max_length'] <= 4294967296) {
                         //2^32 LONGTEXT
-    
                         $type_date = 'LONGTEXT NOT NULL';
                     }
                     $save = false;
@@ -498,10 +503,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
     $_rows = $db->query($sql)->fetchAll();
     $num = sizeof($_rows);
-    
+
     // Các trường hệ thống luôn ở trên đầu, do đó bắt đầu weight từ khi có trường tùy chỉnh
     $fieldsys_offset = 0;
-    
+
     if ($num) {
         foreach ($_rows as $row) {
             $language = unserialize($row['language']);
@@ -524,7 +529,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 ));
                 $xtpl->parse('main.data.loop.weight');
             }
-            
+
             if ($row['system'] == 1) {
                 $xtpl->assign('DISABLED_WEIGHT', 'disabled');
                 $fieldsys_offset++;
@@ -618,9 +623,9 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if ($fid == 0 or $text_fields == 0) {
         $number = 1;
         $disable_edit_choose = ($dataform['fieldid'] == 'gender' and !empty($dataform['fid']));
-        
+
         $xtpl->assign('FIELD_CHOICES_READONLY', $disable_edit_choose ? ' readonly="readonly"' : '');
-        
+
         if (!empty($field_choices)) {
             foreach ($field_choices as $key => $value) {
                 $xtpl->assign('FIELD_CHOICES', array(
