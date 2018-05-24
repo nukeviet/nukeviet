@@ -16,7 +16,7 @@ use PDOException;
 /**
  * extends for PDO
  */
-class Database extends pdo
+class Database extends PDO
 {
     public $connect = 0;
     public $server = '';
@@ -111,7 +111,7 @@ class Database extends pdo
         }
         return false;
     }
-    
+
     /**
      * Database::affected_rows_count()
      * Get the number of affected rows by the last INSERT, UPDATE, REPLACE or DELETE query
