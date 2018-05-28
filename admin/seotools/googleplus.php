@@ -40,8 +40,8 @@ if ($nv_Request->isset_request('add', 'post')) {
         die('Wrong URL');
     }
 
-    $title = $nv_Request->get_title('title', 'post', '', 1);
-    $idprofile = $nv_Request->get_title('idprofile', 'post', '', 1);
+    $title = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 250);
+    $idprofile = nv_substr($nv_Request->get_title('idprofile', 'post', '', 1), 0, 25);
 
     if (empty($title)) {
         die('NO');
@@ -50,8 +50,9 @@ if ($nv_Request->isset_request('add', 'post')) {
     $weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_googleplus')->fetchColumn();
     $weight = intval($weight) + 1;
     try {
-        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_googleplus (title, idprofile, weight, add_time, edit_time) VALUES ( :title, ' . $idprofile . ', ' . $weight . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')');
+        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_googleplus (title, idprofile, weight, add_time, edit_time) VALUES ( :title, :idprofile, ' . $weight . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')');
         $sth->bindParam(':title', $title, PDO::PARAM_STR);
+        $sth->bindParam(':idprofile', $idprofile, PDO::PARAM_STR);
         $sth->execute();
     } catch (PDOException $e) {
         die('NO');

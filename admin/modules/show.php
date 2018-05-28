@@ -27,7 +27,7 @@ function nv_show_funcs()
         exit(0);
     }
 
-    $sth = $db->prepare('SELECT module_file, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :mod');
+    $sth = $db->prepare('SELECT module_file, module_upload, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :mod');
     $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
     $sth->execute();
     $row = $sth->fetch();
@@ -60,6 +60,7 @@ function nv_show_funcs()
 
     if (file_exists($version_file)) {
         $module_name = $mod;
+        $module_upload = $row['module_upload'];
         require_once $version_file;
     }
 

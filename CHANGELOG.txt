@@ -2,7 +2,30 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.3.02
+- Fix save google analytics id
+- Update gregwar/captcha v1.1.5, PHPMailer v6.0.5, ClipboardJS v2.0.0, Chart.js v2.7.2, Plupload 3.1.2, Ckeditor 4.9.2
+- Fix delete site logs
+- Fix set up with sample data
+- Module banners: Added search features in Admin
+- Module statistic: Added statistical deletion function
+- Browse to file location from ckeditor
+- Module contact: Config who allowed to sendcopy
+- Remove Facebook SDK
+- Module voting: Allowed to view result in admin
+- Config static extensions for ignore check update
+- Fix search extension
+- Module language: Edit multi-language activation notification
+- Add config for debug mode
 - Config theme for admin
+- Fix anti iframe
+- Added features to manage the ip exclusion for anti-flood
+- Change the security settings interface
+- Module users: Fix user active, save email verification time
+- Module comment: Fix delete comment
+- Module news: Fix meta og:image, fix error add news with error data input, hide social sharing buttons when administrators view unpublished articles
+- Update menu lang interface for theme admin
+- Module upload: Fix resize and crop image, browse to the previously selected file
+- Allow preview theme
 
 NUKEVIET 4.3.01
 

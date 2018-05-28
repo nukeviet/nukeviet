@@ -317,33 +317,34 @@ class CaptchaBuilder implements CaptchaBuilderInterface
      */
     protected function writePhrase($image, $phrase, $font, $width, $height)
     {
-        $length = strlen($phrase);
+        $length = mb_strlen($phrase);
         if ($length === 0) {
-            return imagecolorallocate($image, 0, 0, 0);
+            return \imagecolorallocate($image, 0, 0, 0);
         }
 
         // Gets the text size and start position
         $size = $width / $length - $this->rand(0, 3) - 1;
-        $box = imagettfbbox($size, 0, $font, $phrase);
+        $box = \imagettfbbox($size, 0, $font, $phrase);
         $textWidth = $box[2] - $box[0];
         $textHeight = $box[1] - $box[7];
         $x = ($width - $textWidth) / 2;
         $y = ($height - $textHeight) / 2 + $size;
 
-        if (!count($this->textColor)) {
+        if (!$this->textColor) {
             $textColor = array($this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150));
         } else {
             $textColor = $this->textColor;
         }
-        $col = imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
+        $col = \imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
 
         // Write the letters one by one, with random angle
         for ($i=0; $i<$length; $i++) {
-            $box = imagettfbbox($size, 0, $font, $phrase[$i]);
+            $symbol = mb_substr($phrase, $i, 1);
+            $box = \imagettfbbox($size, 0, $font, $symbol);
             $w = $box[2] - $box[0];
             $angle = $this->rand(-$this->maxAngle, $this->maxAngle);
             $offset = $this->rand(-$this->maxOffset, $this->maxOffset);
-            imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $phrase[$i]);
+            \imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $symbol);
             $x += $w;
         }
 
@@ -682,7 +683,7 @@ class CaptchaBuilder implements CaptchaBuilderInterface
         $imageType = finfo_file($finfo, $backgroundImage);
         finfo_close($finfo);
 
-        if (!in_array ($imageType, $this->allowedBackgroundImageTypes)) {
+        if (!in_array($imageType, $this->allowedBackgroundImageTypes)) {
             throw new Exception('Invalid background image type! Allowed types are: ' . join(', ', $this->allowedBackgroundImageTypes));
         }
 
