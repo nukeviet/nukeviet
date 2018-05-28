@@ -32,7 +32,7 @@ require NV_ROOTDIR . '/includes/constants.php';
 $server_name = trim((isset($_SERVER['HTTP_HOST']) and ! empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
 $server_name = preg_replace('/^[a-z]+\:\/\//i', '', $server_name);
 $server_name = preg_replace('/(\:[0-9]+)$/', '', $server_name);
-$server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($_SERVER['HTTPS'] == 'on') ? 's' : '');
+$server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . ((isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on') ? 's' : '');
 $server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
 if (filter_var($server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
     $my_current_domain = $server_protocol . '://' . $server_name . $server_port;
