@@ -31,7 +31,7 @@ if (!nv_function_exists('nv_block_about')) {
             $block_theme = 'default';
         }
 
-        $tpl = new \NukeViet\Template\NvSmarty();
+        $tpl = new \NukeViet\Template\Smarty();
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
 
         return $tpl->fetch('global.about.tpl');

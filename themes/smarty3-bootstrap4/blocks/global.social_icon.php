@@ -99,7 +99,7 @@ if (!nv_function_exists('nv_block_social_icon')) {
             $block_theme = 'default';
         }
 
-        $tpl = new \NukeViet\Template\NvSmarty();
+        $tpl = new \NukeViet\Template\Smarty();
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
         $tpl->assign('row',$block_config);

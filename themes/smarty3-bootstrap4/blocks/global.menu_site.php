@@ -115,7 +115,7 @@ if (!nv_function_exists('nv_block_menu_site')) {
             $block_theme = 'default';
         }
 
-        $tpl = new \NukeViet\Template\NvSmarty();
+        $tpl = new \NukeViet\Template\Smarty();
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
         $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);

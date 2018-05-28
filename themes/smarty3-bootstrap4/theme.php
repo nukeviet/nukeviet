@@ -78,7 +78,7 @@ function nv_site_theme($contents, $full = true)
         }
     }
 
-    $tpl = new \NukeViet\Template\NvSmarty();
+    $tpl = new \NukeViet\Template\Smarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
 
     $tpl->assign('NLANG', $nv_Lang);

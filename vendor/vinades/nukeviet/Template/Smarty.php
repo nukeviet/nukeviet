@@ -10,8 +10,6 @@
 
 namespace NukeViet\Template;
 
-use Smarty;
-
 /**
  * Class này mặc định sửa dụng sau khi core được load
  * Các hằng, tài nguyên nghiễm phiên dùng được
@@ -20,10 +18,10 @@ use Smarty;
 //    define('NV_ROOTDIR', preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__) . '/../../../../'))));
 //}
 
-class NvSmarty extends Smarty
+class Smarty extends \Smarty
 {
     /**
-     * NvSmarty::__construct()
+     * Smarty::__construct()
      *
      * @param mixed $config
      * @return void

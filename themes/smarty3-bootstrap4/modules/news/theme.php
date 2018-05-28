@@ -216,7 +216,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         $block_theme = 'default';
     }
 
-    $tpl = new \NukeViet\Template\NvSmarty();
+    $tpl = new \NukeViet\Template\Smarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
     $tpl->assign('rows', $array_catpage);
     $tpl->assign('category',$category);

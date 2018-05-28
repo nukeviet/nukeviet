@@ -87,7 +87,7 @@ if (!nv_function_exists('nv_block_feature_video')) {
             $block_theme = 'default';
         }
 
-        $tpl = new \NukeViet\Template\NvSmarty();
+        $tpl = new \NukeViet\Template\Smarty();
         $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $tpl->assign('NV_BASE_TEMPLATE', NV_BASE_SITEURL . 'themes/' . $block_theme);
 
