@@ -168,7 +168,12 @@ function nv_admin_checkdata($adm_session_value)
     $admin_info['2step_require'] = $check_in_groups[1];
     $admin_info['current_openid'] = '';
     $admin_info['st_login'] = !empty($admin_info['password']) ? true : false;
-    $admin_info['valid_question'] = (!empty($admin_info['question']) and !empty($admin_info['answer'])) ? true : false;
+    if ($global_config['allowquestion']) {
+        $admin_info['valid_question'] = (!empty($admin_info['question']) and !empty($admin_info['answer'])) ? true : false;
+    } else {
+        $admin_info['valid_question'] = true;
+    }
+
     $admin_info['current_mode'] = 5;
 
     unset($admin_info['lev'], $admin_info['files_level'], $admin_info['password'], $admin_info['question'], $admin_info['answer'], $admin_info['check_num']);
