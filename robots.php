@@ -8,11 +8,10 @@
  * @Createdate 4/12/2010, 17:25
  */
 
-define('NV_MAINFILE', true);
+define('NV_SYSTEM', true);
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
 
-require NV_ROOTDIR . '/includes/constants.php';
-require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
+require NV_ROOTDIR . '/includes/mainfile.php';
 
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 if (file_exists($cache_file)) {
