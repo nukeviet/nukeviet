@@ -129,8 +129,8 @@ $(document).ready(function() {
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    var clipboard1 = new Clipboard('#credential_ident_btn');
-    var clipboard2 = new Clipboard('#credential_secret_btn');
+    var clipboard1 = new ClipboardJS('#credential_ident_btn');
+    var clipboard2 = new ClipboardJS('#credential_secret_btn');
     clipboard1.on('success', function(e) {
         $(e.trigger).tooltip('show');
     });
