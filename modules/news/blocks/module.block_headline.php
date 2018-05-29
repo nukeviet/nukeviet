@@ -142,6 +142,8 @@ if (!nv_function_exists('nv_block_headline')) {
         $xtpl->assign('TEMPLATE', $module_info['template']);
 
         $images = array();
+
+        // Tab 1: Tab có ảnh
         if (!empty($array_bid_content[1]['content'])) {
             $hot_news = $array_bid_content[1]['content'];
             $a = 0;
@@ -160,6 +162,7 @@ if (!nv_function_exists('nv_block_headline')) {
                 if (!empty($images_url)) {
                     $hot_news_i['image_alt'] = !empty($hot_news_i['homeimgalt']) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
                     $hot_news_i['imgID'] = $a;
+                    $hot_news_i['imagefull'] = $images_url;
                     $images[] = $images_url;
                     $xtpl->assign('HOTSNEWS', $hot_news_i);
                     $xtpl->parse('main.hots_news_img.loop');
