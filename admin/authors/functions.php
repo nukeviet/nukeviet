@@ -135,6 +135,22 @@ function nv_admin_edit_result($result)
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+/**
+ * @TODO Viết tiếp sau
+ */
+function nv_get_listapi()
+{
+    $files = nv_scandir(NV_ROOTDIR . '/includes/api', '/^[^0-9]+[a-zA-Z0-9\_]{0,}$/');
+    foreach ($files as $file) {
+        $fileContent = file_get_contents(NV_ROOTDIR . '/includes/api/' . $file);
+        $className = '';
+        if (preg_match('/class[\s]+([^0-9]+[a-z0-9\_]{0,})[\s]+implements[\s]+IApi[\r\n\s\t]*\{/', $fileContent, $m)) {
+            $className = $m[1];
+        }
+        //
+    }
+}
+
 // Đây là ví dụ về API action. Sau này sẽ phát triển sau
 $array_api_actions = array();
 $array_api_actions['system'] = array(

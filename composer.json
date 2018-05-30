@@ -36,7 +36,8 @@
     },
     "autoload": {
         "psr-4": {
-            "NukeViet\\Module\\": "modules"
+            "NukeViet\\Module\\": "modules",
+            "NukeViet\\Api\\": "includes/api"
         }
     }
 }

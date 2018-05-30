@@ -12,5 +12,25 @@ namespace NukeViet\Api;
 
 class Api
 {
-    //
+    const ADMIN_LEV_GOD = 1;
+    const ADMIN_LEV_SP = 2;
+    const ADMIN_LEV_MOD = 3;
+
+    /**
+     * @param string $module
+     * @return number
+     */
+    public static function test($module = '')
+    {
+        return preg_match('/^[^0-9]+[a-z0-9]{0,}$/', $module);
+    }
+
+    /**
+     * @param string $key
+     * @return number
+     */
+    public static function textParamKey($key = '')
+    {
+        return (!is_numeric($key) and preg_match('/^[a-zA-Z0-9\_\-]+$/', $key));
+    }
 }

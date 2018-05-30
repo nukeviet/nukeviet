@@ -2112,15 +2112,47 @@ function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_m
  * @param string[] $params
  * @param string $adminidentity
  * @param string $module
+ * @param string $modtitle
  */
-function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
+function nv_local_api($cmd, $params, $adminidentity = '', $module = '', $modtitle = '')
 {
     // Default api trả về error
     $apiresults = new NukeViet\Api\ApiResult();
 
-    // Kiểm tra tư cách admin
+    // Xác định class name
+    if (NukeViet\Api\Api::test($module)) {
+        $classname = 'NukeViet\\Module\\' . ucfirst($module) . '\\Api\\' . ucfirst($cmd);
+    } else {
+        $classname = 'NukeViet\\Api\\' . ucfirst($cmd);
+    }
 
-    $apiresults->setSuccess()->setCode(NukeViet\Api\ApiResult::CODE_MISSING_FUNCTION);
+    if (!class_exists($classname)) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_API_NOT_EXISTS)->setMessage('API not exists!!!');
+        return $apiresults->getResult();
+    }
 
-    return $apiresults->getResult();
+    // @TODO thực thi code kiểm tra quyền hạn admin
+
+    if (!is_array($params)) {
+        $params = [];
+    }
+
+    $_POSTbackup = $_POST;
+    $_POST = [];
+
+    foreach ($params as $_key => $_value) {
+        if (NukeViet\Api\Api::textParamKey($_key)) {
+            $_POST[$_key] = $_value;
+        }
+    }
+
+    // Thực hiện API
+    $api = new $classname();
+    $api->setResultHander($apiresults);
+    $api->setModule($modtitle);
+    $return = $api->execute();
+
+    $_POST = $_POSTbackup;
+
+    return $return;
 }

@@ -19,6 +19,7 @@ class ApiResult
     const CODE_REQUIRE_ADMINIDENT = '0001';
     const CODE_WRONG_TYPE = '0002';
     const CODE_MISSING_FUNCTION = '0003';
+    const CODE_API_NOT_EXISTS = '0004';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 
