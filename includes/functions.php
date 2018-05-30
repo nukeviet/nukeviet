@@ -1188,7 +1188,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         return true;
-    } catch (phpmailerException $e) {
+    } catch (PHPMailer\PHPMailer\Exception $e) {
         trigger_error($e->errorMessage(), E_USER_WARNING);
 
         return false;
@@ -1916,7 +1916,7 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
  * nv_redirect_location()
  *
  * @param string $url
- * @param interger $error_code
+ * @param integer $error_code
  * @return void
  *
  */
@@ -1943,7 +1943,7 @@ function nv_redirect_encrypt($url)
 /**
  * nv_redirect_decrypt()
  *
- * @param tring $string
+ * @param string $string
  * @param boolean $insite
  * @return string
  *
