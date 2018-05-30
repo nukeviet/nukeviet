@@ -20,7 +20,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\OptionsResolver\\' => 34,
-            'Symfony\\Component\\Finder\\' => 25,
         ),
         'P' => 
         array (
@@ -32,6 +31,7 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'N' => 
         array (
+            'NukeViet\\Module\\' => 16,
             'NukeViet\\' => 9,
         ),
         'L' => 
@@ -40,7 +40,7 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'G' => 
         array (
-            'Gregwar\\' => 8,
+            'Gregwar\\Captcha\\' => 16,
         ),
         'E' => 
         array (
@@ -61,10 +61,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
-        'Symfony\\Component\\Finder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/finder',
-        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
@@ -72,6 +68,10 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'OAuth\\' => 
         array (
             0 => __DIR__ . '/..' . '/and/oauth/src',
+        ),
+        'NukeViet\\Module\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules',
         ),
         'NukeViet\\' => 
         array (
@@ -81,9 +81,9 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             0 => __DIR__ . '/..' . '/league/url/src',
         ),
-        'Gregwar\\' => 
+        'Gregwar\\Captcha\\' => 
         array (
-            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
+            0 => __DIR__ . '/..' . '/gregwar/captcha',
         ),
         'Endroid\\QrCode\\' => 
         array (

@@ -2106,3 +2106,21 @@ function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_m
         'module' => $hook_module
     );
 }
+
+/**
+ * @param string $cmd
+ * @param string[] $params
+ * @param string $adminidentity
+ * @param string $module
+ */
+function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
+{
+    // Default api trả về error
+    $apiresults = new NukeViet\Api\ApiResult();
+
+    // Kiểm tra tư cách admin
+
+    $apiresults->setSuccess()->setCode(NukeViet\Api\ApiResult::CODE_MISSING_FUNCTION);
+
+    return $apiresults->getResult();
+}
