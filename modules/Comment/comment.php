@@ -147,10 +147,10 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
             $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
-            if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
-                require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
+            if (file_exists(NV_ROOTDIR . '/modules/Comment/language/' . NV_LANG_INTERFACE . '.php')) {
+                require NV_ROOTDIR . '/modules/Comment/language/' . NV_LANG_INTERFACE . '.php';
             } else {
-                require NV_ROOTDIR . '/modules/comment/language/en.php';
+                require NV_ROOTDIR . '/modules/Comment/language/en.php';
             }
             $lang_module_comment = $lang_module;
 
@@ -246,11 +246,11 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 {
     global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_module_comment, $module_name, $nv_Lang;
 
-    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
-    $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
-    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
+    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Comment/main.tpl') ? $global_config['module_theme'] : 'default';
+    $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/Comment.css') ? $global_config['module_theme'] : 'default';
+    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/Comment.js') ? $global_config['module_theme'] : 'default';
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
+    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/Comment');
     $xtpl->assign('LANG', $lang_module_comment);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
@@ -387,10 +387,10 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
 {
     global $global_config, $module_config, $lang_module_comment;
 
-    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
+    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Comment/comment.tpl') ? $global_config['module_theme'] : 'default';
 
     if (! empty($comment_array['comment'])) {
-        $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
+        $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/Comment');
         $xtpl->assign('TEMPLATE', $template);
         $xtpl->assign('LANG', $lang_module_comment);
 
@@ -452,9 +452,9 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete)
 {
     global $global_config, $module_file, $module_config, $lang_module_comment;
 
-    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
+    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Comment/comment.tpl') ? $global_config['module_theme'] : 'default';
 
-    $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
+    $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/Comment');
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('LANG', $lang_module_comment);
 

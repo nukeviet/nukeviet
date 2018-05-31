@@ -42,7 +42,7 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
         $allowed = $clip['comm'];
     }
     define('NV_PER_PAGE_COMMENT', 5); //Số bản ghi hiển thị bình luận
-    require_once NV_ROOTDIR . '/modules/comment/comment.php';
+    require_once NV_ROOTDIR . '/modules/Comment/comment.php';
     $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
     $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
 

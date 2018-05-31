@@ -82,7 +82,7 @@ if ($page_config['viewtype'] == 2) {
         if ($allowed == '-1') {
             $allowed = $rowdetail['activecomm'];
         }
-        require_once NV_ROOTDIR . '/modules/comment/comment.php';
+        require_once NV_ROOTDIR . '/modules/Comment/comment.php';
         $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
         $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
 

@@ -376,7 +376,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         if ($allowed == '-1') {
             $allowed = $news_contents['allowed_comm'];
         }
-        require_once NV_ROOTDIR . '/modules/comment/comment.php';
+        require_once NV_ROOTDIR . '/modules/Comment/comment.php';
         $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
         $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
 
