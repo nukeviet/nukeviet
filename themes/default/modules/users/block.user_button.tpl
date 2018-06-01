@@ -23,7 +23,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- END: datepicker -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/Users.js"></script>
 <!-- END: main -->
 
 <!-- BEGIN: signed -->
@@ -74,5 +74,5 @@
     </div>
 </div>
 <!-- END FORFOOTER -->
-<script src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
+<script src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/Users.js"></script>
 <!-- END: signed -->

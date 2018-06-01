@@ -242,7 +242,7 @@ function nv_admin_theme($contents, $head_site = 1)
         if (! empty($admin_info['photo']) and file_exists(NV_ROOTDIR . '/' . $admin_info['photo'])) {
             $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . $admin_info['photo']);
         } else {
-            $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png');
+            $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png');
         }
 
         // Vertical menu

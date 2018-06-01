@@ -404,10 +404,10 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
 
             if (! empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
-            } elseif (is_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png')) {
-                $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
+            } elseif (is_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/Users/no_avatar.png')) {
+                $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/Users/no_avatar.png';
             } else {
-                $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png';
             }
 
             if (! empty($comment_array_i['userid'])) {
@@ -469,7 +469,7 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete)
         if (! empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
             $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
         } else {
-            $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
+            $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/Users/no_avatar.png';
         }
 
         if (! empty($comment_array_i['userid'])) {

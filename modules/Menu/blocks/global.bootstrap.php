@@ -14,7 +14,7 @@ if (! defined('NV_MAINFILE')) {
 
 if (defined('NV_IS_FILE_THEMES')) {
     // include config theme
-    require NV_ROOTDIR . '/modules/menu/menu_config.php';
+    require NV_ROOTDIR . '/modules/Menu/menu_config.php';
 }
 
 if (! nv_function_exists('nv_menu_bootstrap')) {
@@ -65,9 +65,9 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
     {
         global $nv_Cache, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $catid, $home, $nv_Lang;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/global.bootstrap.tpl')) {
+        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/Menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['site_theme'];
         } else {
             $block_theme = 'default';
@@ -103,7 +103,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
             }
         }
 
-        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
+        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Menu');
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('BLOCK_THEME', $block_theme);
@@ -155,7 +155,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
      */
     function nv_get_bootstrap_submenu($id, $array_menu, &$submenu_active, $block_theme)
     {
-        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
+        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Menu');
 
         if (! empty($array_menu[$id])) {
             foreach ($array_menu[$id] as $sid => $smenu) {

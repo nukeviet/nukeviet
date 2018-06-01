@@ -839,10 +839,10 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
     $username = $nv_Request->get_title('ajaxqueryusername', 'post', '');
     $return = array();
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png')) {
-        $default_photo = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png';
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/images/Users/no_avatar.png')) {
+        $default_photo = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/Users/no_avatar.png';
     } else {
-        $default_photo = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+        $default_photo = NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png';
     }
 
     if (nv_strlen($username) >= 3) {

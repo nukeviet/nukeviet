@@ -28,9 +28,9 @@ if (defined('NV_IS_USER_FORUM')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
 } else {
     $nv_Request->unset_request('nvloginhash', 'cookie');
-    if ($user_info['current_mode'] == 4 and file_exists(NV_ROOTDIR . '/modules/users/login/cas-' . $user_info['openid_server'] . '.php')) {
+    if ($user_info['current_mode'] == 4 and file_exists(NV_ROOTDIR . '/modules/Users/login/cas-' . $user_info['openid_server'] . '.php')) {
         define('CAS_LOGOUT_URL_REDIRECT', $url_redirect);
-        include NV_ROOTDIR . '/modules/users/login/cas-' . $user_info['openid_server'] . '.php';
+        include NV_ROOTDIR . '/modules/Users/login/cas-' . $user_info['openid_server'] . '.php';
     }
 }
 

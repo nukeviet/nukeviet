@@ -30,7 +30,7 @@ function nv_theme_statistics_referer($cts, $total)
         foreach ($cts['rows'] as $m) {
             if (!empty($m['count'])) {
                 $xtpl->assign('M', number_format($m['count']));
-                $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif');
+                $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg.gif');
                 $xtpl->assign('HEIGHT', ceil(($m['count'] / $cts['max']) * 200));
 
                 $xtpl->parse('main.loop.img');
@@ -81,7 +81,7 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
                 if ($value[0]) {
                     $proc = ceil(($value[0] / $cts['max']) * 100);
 
-                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
                     $xtpl->assign('WIDTH', $proc * 3);
 
                     $xtpl->parse('main.loop.img');
@@ -128,7 +128,7 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
                 if ($value[0]) {
                     $proc = ceil(($value[0] / $cts['max']) * 100);
 
-                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
                     $xtpl->assign('WIDTH', $proc * 3);
 
                     $xtpl->parse('main.loop.img');
@@ -177,7 +177,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
                 if ($value[0]) {
                     $proc = ceil(($value[0] / $cts['max']) * 100);
 
-                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
                     $xtpl->assign('WIDTH', $proc * 3);
 
                     $xtpl->parse('main.loop.img');
@@ -226,7 +226,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
                 if ($value[0]) {
                     $proc = ceil(($value[0] / $cts['max']) * 100);
 
-                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
                     $xtpl->assign('WIDTH', $proc * 3);
 
                     $xtpl->parse('main.loop.img');
@@ -277,7 +277,7 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
                 if ($value[1]) {
                     $proc = ceil(($value[1] / $cts['max']) * 100);
 
-                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+                    $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
                     $xtpl->assign('WIDTH', $proc * 3);
 
                     $xtpl->parse('main.loop.img');
@@ -390,7 +390,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
         if ($value[1]) {
             $proc = ceil(($value[1] / $ctsc['max']) * 100);
 
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
             $xtpl->assign('WIDTH', $proc * 3);
 
             $xtpl->parse('main.ct.loop.img');
@@ -426,7 +426,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
 
         if ($value[0]) {
             $proc = ceil(($value[0] / $ctsb['max']) * 100);
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
             $xtpl->assign('WIDTH', $proc * 3);
 
             $xtpl->parse('main.br.loop.img');
@@ -463,7 +463,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
         if ($value[0]) {
             $proc = ceil(($value[0] / $ctso['max']) * 100);
 
-            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif');
+            $xtpl->assign('SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/Statistics/bg2.gif');
             $xtpl->assign('WIDTH', $proc * 3);
 
             $xtpl->parse('main.os.loop.img');

@@ -433,7 +433,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $custom_fields['sig'] = $array_data['sig'];
     $array_field_config = array_intersect_key($array_field_config, array('first_name' => 1, 'last_name' => 1, 'gender' => 1, 'birthday' => 1, 'sig' => 1));
 
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    require NV_ROOTDIR . '/modules/Users/fields.check.php';
 
     if (empty($array_data['first_name'])) {
         $array_data['first_name'] = !empty($row['first_name']) ? $row['first_name'] : $row['username'];
@@ -724,7 +724,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $custom_fields['answer'] = $array_data['answer'];
     $array_field_config = array_intersect_key($array_field_config, array('question' => 1, 'answer' => 1));
 
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    require NV_ROOTDIR . '/modules/Users/fields.check.php';
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
         nv_jsonOutput(array(
@@ -835,7 +835,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
 
     $array_field_config = array_diff_key($array_field_config, array('first_name' => 1, 'last_name' => 1, 'gender' => 1, 'birthday' => 1, 'sig' => 1, 'question' => 1, 'answer' => 1));
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    require NV_ROOTDIR . '/modules/Users/fields.check.php';
 
     $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $edit_userid);
 

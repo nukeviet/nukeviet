@@ -267,9 +267,9 @@ function user_login($is_ajax = false)
     global $module_info, $global_config, $module_name, $op, $nv_header, $nv_redirect, $nv_Lang;
 
     if ($is_ajax) {
-        $xtpl = new XTemplate('ajax_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
+        $xtpl = new XTemplate('ajax_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/Users');
     } else {
-        $xtpl = new XTemplate('login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
+        $xtpl = new XTemplate('login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/Users');
     }
 
     $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login');
@@ -392,7 +392,7 @@ function user_openid_login($gfx_chk, $attribs)
 {
     global $module_info, $global_config, $module_name, $nv_redirect, $nv_Lang;
 
-    $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
+    $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/Users');
 
     $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);

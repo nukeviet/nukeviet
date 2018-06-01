@@ -106,7 +106,7 @@
 	top: 24px;
 	width: 100%;
 	height: 32px;
-	background: transparent url(../images/videoclips/play.png) no-repeat
+	background: transparent url(../images/Videoclips/play.png) no-repeat
 		center center;
 	text-align: center
 }
@@ -135,7 +135,7 @@
 }
 
 .detailContent .videoplayer .cont {
-	background: #000 url(../images/videoclips/wait.gif) no-repeat center
+	background: #000 url(../images/Videoclips/wait.gif) no-repeat center
 		center;
 	margin: 0 auto;
 	position: relative
@@ -198,7 +198,7 @@
 }
 
 .videoInfo a.likeButton img.like {
-	background: transparent url(../images/videoclips/like.png) no-repeat
+	background: transparent url(../images/Videoclips/like.png) no-repeat
 		left top;
 	width: 15px;
 	height: 14px;
@@ -206,7 +206,7 @@
 }
 
 .videoInfo a.likeButton img.unlike {
-	background: transparent url(../images/videoclips/like.png) no-repeat
+	background: transparent url(../images/Videoclips/like.png) no-repeat
 		left -14px;
 	width: 15px;
 	height: 14px;
@@ -215,7 +215,7 @@
 }
 
 .videoInfo a.likeButton img.broken {
-	background: transparent url(../images/videoclips/like.png) no-repeat
+	background: transparent url(../images/Videoclips/like.png) no-repeat
 		left -28px;
 	width: 15px;
 	height: 14px;
@@ -441,7 +441,7 @@
 }
 
 .commentList .brokenIcon {
-	background: transparent url(../images/videoclips/icons.png) no-repeat
+	background: transparent url(../images/Videoclips/icons.png) no-repeat
 		left -28px;
 	width: 14px;
 	height: 14px;
@@ -450,7 +450,7 @@
 }
 
 .commentList .delcommIcon {
-	background: transparent url(../images/videoclips/icons.png) no-repeat
+	background: transparent url(../images/Videoclips/icons.png) no-repeat
 		left -14px;
 	width: 14px;
 	height: 14px;

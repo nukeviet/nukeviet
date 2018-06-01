@@ -28,10 +28,10 @@ if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
         $global_config['avatar_width'] = $global_users_config['avatar_width'];
         $global_config['avatar_height'] = $global_users_config['avatar_height'];
 
-        if (file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php')) {
-            include NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php')) {
-            include NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php';
+        if (file_exists(NV_ROOTDIR . '/modules/Users/login/oauth-' . $server . '.php')) {
+            include NV_ROOTDIR . '/modules/Users/login/oauth-' . $server . '.php';
+        } elseif (file_exists(NV_ROOTDIR . '/modules/Users/login/cas-' . $server . '.php')) {
+            include NV_ROOTDIR . '/modules/Users/login/cas-' . $server . '.php';
         }
     }
 }

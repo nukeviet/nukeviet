@@ -96,13 +96,13 @@ if (!nv_function_exists('nv_news_category')) {
     {
         global $module_array_cat, $global_config, $nv_Lang;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_category.tpl')) {
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/News/block_category.tpl')) {
             $block_theme = $global_config['module_theme'];
         } else {
             $block_theme = 'default';
         }
 
-        $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
+        $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/News');
 
         if (!empty($module_array_cat)) {
             $title_length = $block_config['title_length'];
@@ -144,7 +144,7 @@ if (!nv_function_exists('nv_news_category')) {
         if (empty($list_sub)) {
             return "";
         } else {
-            $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
+            $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/News');
 
             $list = explode(',', $list_sub);
             foreach ($list as $catid) {

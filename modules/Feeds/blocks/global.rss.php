@@ -153,16 +153,16 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     {
         global $global_config;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/feeds/global.rss.tpl')) {
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Feeds/global.rss.tpl')) {
             $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/feeds/global.rss.tpl')) {
+        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/Feeds/global.rss.tpl')) {
             $block_theme = $global_config['site_theme'];
         } else {
             $block_theme = 'default';
         }
 
         $a = 1;
-        $xtpl = new XTemplate('global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/feeds');
+        $xtpl = new XTemplate('global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Feeds');
         $array_rrs = nv_get_rss($block_config['url']);
         $title_length = isset($block_config['title_length']) ? intval($block_config['title_length']) : 0;
         foreach ($array_rrs as $item) {

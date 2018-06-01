@@ -35,10 +35,10 @@ $groups_list = nv_groups_list();
 $array_config = array();
 
 $oauth_config = $nv_Request->get_title('oauth_config', 'post,get');
-if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php')) {
+if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOTDIR . '/modules/Users/admin/config_' . $oauth_config . '.php')) {
     $page_title = sprintf($nv_Lang->getModule('oauth_config'), $oauth_config);
 
-    require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
+    require NV_ROOTDIR . '/modules/Users/admin/config_' . $oauth_config . '.php';
 } else {
     if ($nv_Request->isset_request('submit', 'post')) {
         $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
@@ -365,7 +365,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     $servers = $array_config['openid_servers'];
 
-    $openid_files = @scandir(NV_ROOTDIR . '/modules/users/login');
+    $openid_files = @scandir(NV_ROOTDIR . '/modules/Users/login');
     foreach ($openid_files as $server) {
         if (preg_match('/^(cas|oauth)\-([a-z0-9\-\_]+)\.php$/', $server, $m)) {
             $checked = (!empty($servers) and in_array($m[2], $servers)) ? ' checked="checked"' : '';
@@ -389,7 +389,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             );
 
             $xtpl->assign('OPENID', $openid_assign);
-            if (file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')) {
+            if (file_exists(NV_ROOTDIR . '/modules/Users/admin/config_' . $m[2] . '.php')) {
                 $xtpl->parse('main.openid_servers.config');
             } else {
                 $xtpl->parse('main.openid_servers.noconfig');

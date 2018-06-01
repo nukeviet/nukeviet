@@ -75,7 +75,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
 
-    require_once NV_ROOTDIR . '/modules/contact/sign.php';
+    require_once NV_ROOTDIR . '/modules/Contact/sign.php';
     $mess_content .= $sign_content;
 }
 

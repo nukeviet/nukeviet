@@ -94,8 +94,8 @@ if (!nv_function_exists('nv_block_voting_select')) {
                     $block_theme = 'default';
                 }
 
-                if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/voting.js')) {
-                    $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/voting.js\"></script>\n";
+                if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/Voting.js')) {
+                    $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/Voting.js\"></script>\n";
                 }
 
                 $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";

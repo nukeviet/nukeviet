@@ -573,7 +573,7 @@ $(function() {
     }, 120);
     //FeedBack Button
     if( $('#contactButton').length ){
-        var script = $('<script type="text/javascript">').attr("src",nv_base_siteurl + "themes/mobile_default/js/contact.js");
+        var script = $('<script type="text/javascript">').attr("src",nv_base_siteurl + "themes/mobile_default/js/Contact.js");
         $("body").append(script);
     }
     // Google map

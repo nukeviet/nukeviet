@@ -14,10 +14,10 @@ if (! defined('NV_MAINFILE')) {
 
 if (defined('NV_IS_FILE_THEMES')) {
     //include config theme
-    require NV_ROOTDIR . '/modules/menu/menu_config.php';
+    require NV_ROOTDIR . '/modules/Menu/menu_config.php';
 }
 
 if (defined('NV_SYSTEM')) {
-    require_once NV_ROOTDIR . '/modules/menu/menu_blocks.php';
+    require_once NV_ROOTDIR . '/modules/Menu/menu_blocks.php';
     $content = nv_menu_blocks($block_config);
 }

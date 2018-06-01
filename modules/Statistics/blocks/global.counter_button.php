@@ -17,15 +17,15 @@ if (! nv_function_exists('nv_block_counter_button')) {
     {
         global $global_config, $db, $nv_Lang;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/statistics/global.counter_button.tpl')) {
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Statistics/global.counter_button.tpl')) {
             $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/statistics/global.counter_button.tpl')) {
+        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/Statistics/global.counter_button.tpl')) {
             $block_theme = $global_config['site_theme'];
         } else {
             $block_theme = 'default';
         }
 
-        $xtpl = new XTemplate('global.counter_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics');
+        $xtpl = new XTemplate('global.counter_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Statistics');
 
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/');

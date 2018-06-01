@@ -118,10 +118,10 @@ while ($data = $result->fetch()) {
                 if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
                     $data['photo'] = NV_BASE_SITEURL . $admin_info['photo'];
                 } else {
-                    $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                    $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png';
                 }
             } else {
-                $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png';
                 $data['send_from'] = $nv_Lang->getGlobal('level5');
             }
 

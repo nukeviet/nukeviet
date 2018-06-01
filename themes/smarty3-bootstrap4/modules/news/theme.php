@@ -208,16 +208,16 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $category = $stmt->fetchAll();
 
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/blog.tpl')) {
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/News/blog.tpl')) {
         $block_theme = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/news/blog.tpl')) {
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/News/blog.tpl')) {
         $block_theme = $global_config['site_theme'];
     } else {
         $block_theme = 'default';
     }
 
     $tpl = new \NukeViet\Template\Smarty();
-    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
+    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/News');
     $tpl->assign('rows', $array_catpage);
     $tpl->assign('category',$category);
 

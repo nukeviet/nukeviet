@@ -18,7 +18,7 @@
 <style type="text/css">
 	.style_nav {
 		position: relative;
-		background: url("{NV_BASE_SITEURL}themes/{BLOCK_THEME}/images/menu/nen.png") repeat-x;
+		background: url("{NV_BASE_SITEURL}themes/{BLOCK_THEME}/images/Menu/nen.png") repeat-x;
 		height: 60px;
 		line-height: 32px;
 		z-index: 990

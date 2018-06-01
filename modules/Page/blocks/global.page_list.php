@@ -73,15 +73,15 @@ if (!nv_function_exists('nv_page_list')) {
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
         if (!empty($list)) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.page_list.tpl')) {
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Page/block.page_list.tpl')) {
                 $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/page/block.page_list.tpl')) {
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/Page/block.page_list.tpl')) {
                 $block_theme = $global_config['site_theme'];
             } else {
                 $block_theme = 'default';
             }
 
-            $xtpl = new XTemplate('block.page_list.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
+            $xtpl = new XTemplate('block.page_list.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Page');
 
             foreach ($list as $l) {
                 $l['title_clean60'] = nv_clean60($l['title'], $block_config['title_length']);

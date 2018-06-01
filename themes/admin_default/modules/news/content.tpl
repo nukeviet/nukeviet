@@ -400,7 +400,7 @@ CFG.is_edit_news = true;
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.cookie.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/News_content.js"></script>
 <!-- END:main -->
 
 <!-- BEGIN: editing -->

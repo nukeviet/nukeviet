@@ -80,38 +80,38 @@ if (!nv_function_exists('nv_block_login')) {
         $mod_file = $site_mods[$module]['module_file'];
 
         if ($global_config['allowuserlogin']) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/users/block.login.tpl')) {
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/Users/block.login.tpl')) {
                 $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/users/block.login.tpl')) {
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/Users/block.login.tpl')) {
                 $block_theme = $global_config['site_theme'];
             } else {
                 $block_theme = 'default';
             }
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/users.css')) {
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/Users.css')) {
                 $block_css = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/users.css')) {
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/Users.css')) {
                 $block_css = $global_config['site_theme'];
             } else {
                 $block_css = '';
             }
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/users.js')) {
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/Users.js')) {
                 $block_js = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/users.js')) {
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/Users.js')) {
                 $block_js = $global_config['site_theme'];
             } else {
                 $block_js = 'default';
             }
 
-            $xtpl = new XTemplate('block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
+            $xtpl = new XTemplate('block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Users');
 
             if ($mod_file != $module_file) {
-                if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php')) {
-                    include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
+                if (file_exists(NV_ROOTDIR . '/modules/Users/language/' . NV_LANG_INTERFACE . '.php')) {
+                    include NV_ROOTDIR . '/modules/Users/language/' . NV_LANG_INTERFACE . '.php';
                 } else {
-                    include NV_ROOTDIR . '/modules/users/language/vi.php';
+                    include NV_ROOTDIR . '/modules/Users/language/vi.php';
                 }
                 if (!empty($block_css)) {
-                    $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
+                    $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/Users.css">';
                 }
             } else {
                 global $nv_Lang;
@@ -128,7 +128,7 @@ if (!nv_function_exists('nv_block_login')) {
                 if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
                     $avata = NV_BASE_SITEURL . $user_info['photo'];
                 } else {
-                    $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
+                    $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/Users/no_avatar.png';
                 }
 
                 $user_info['current_login_txt'] = nv_date('d/m, H:i', $user_info['current_login']);

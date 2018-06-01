@@ -312,7 +312,7 @@ if ($checkss == $array_register['checkss']) {
     // Kiểm tra trường dữ liệu
     $query_field = array('userid' => 0);
     $userid = 0;
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    require NV_ROOTDIR . '/modules/Users/fields.check.php';
 
     $password = $crypt->hash_password($array_register['password'], $global_config['hashprefix']);
     $checknum = nv_genpass(10);
