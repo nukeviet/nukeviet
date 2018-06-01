@@ -1,0 +1,303 @@
+.news {
+	clear: both;
+	margin: 2px 0;
+	text-align: right
+}
+
+.news label {
+	border-bottom: 1px dotted #ccc;
+	display: inline;
+	float: left;
+	text-align: left;
+	width: 150px
+}
+
+.news input {
+	width: 380px
+}
+
+.news select {
+	width: 382px
+}
+
+.news_checkbox {
+	width: 18px !important
+}
+
+.collapse_buttons, .collapse_buttons {
+	width: 280px
+}
+
+.message_list {
+	list-style: none;
+	margin: 0;
+	padding: 0
+}
+
+.message_list li {
+	background: url(../images/message-bar.gif) no-repeat;
+	margin: 0;
+	padding: 0
+}
+
+.message_head .timestamp, .show_all_message, .collpase_all_message {
+	color: #666
+}
+
+.message_head {
+	cursor: pointer;
+	font-size: 95%;
+	padding: 0px 10px;
+	position: relative
+}
+
+.message_head .timestamp {
+	position: absolute;
+	right: 10px;
+	top: 5px
+}
+
+.timestamp {
+	font-size: 85%
+}
+
+.message_head cite {
+	font-size: 100%;
+	font-style: normal;
+	font-weight: 700
+}
+
+.message_body {
+	padding: 0px 10px 15px
+}
+
+.collapse_buttons {
+	border-top: solid 1px #e4e4e4;
+	padding: 5px 0;
+	text-align: right
+}
+
+.collapse_buttons a {
+	float: right;
+	margin-left: 15px
+}
+
+.show_all_message {
+	background: url(../images/tall-down-arrow.gif) no-repeat right center;
+	padding-right: 12px
+}
+
+.collpase_all_message {
+	background: url(../images/collapse-all.gif) no-repeat right center;
+	padding-right: 12px
+}
+
+.divbor {
+	border: 1px solid #DADADA;
+	padding: 8px
+}
+
+.divbor td {
+	padding: 8px
+}
+
+.gray {
+	background: #F0F0F0;
+	border: 1px solid #DADADA;
+	margin-bottom: 2px;
+	padding: 0 4px 4px
+}
+
+ul li {
+	list-style: none
+}
+
+select, input {
+	font-family: Arial;
+	font-size: 13px
+}
+
+.newserror {
+	background: #F8F8F8;
+	border: 1px solid #F2F2F2;
+	color: red;
+	display: block;
+	font-size: 12px;
+	font-weight: 700;
+	margin-bottom: 2px;
+	padding: 10px
+}
+
+.news input, .news select, .textareas, .message_body textarea, .message_body select {
+	border: 1px solid #ccc
+}
+
+/* as fb */
+.uiInlineTokenizer .uiToken {
+    top: 2px;
+}
+
+.uiInlineTokenizer {
+    border: 1px solid #BDC7D8;
+    cursor: text;
+}
+.uiCloseButtonSmall {
+    background-image: url("../images/delfb.png");
+    height: 11px;
+    margin-top: 1px;
+    width: 11px;
+}
+.uiCloseButton {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+.uiTypeahead{
+    border-top: 1px solid #ccc;
+}
+.uiTypeahead .innerWrap {
+    overflow: hidden;
+}
+.uiTypeahead .textInput {
+    background:none !important;
+    border: none!important;
+    border: 0 none;
+    outline: 0 none;
+    -webkit-box-shadow: 0 0 0 #fff;
+    -moz-box-shadow: 0 0 0 #fff;
+    box-shadow: 0 0 0 #fff;
+}
+.uiTypeahead .selected {
+    background-color: #E2E8F6;
+}
+.uiTypeaheadDisabled, .uiTypeaheadDisabled div.wrap {
+    border-color: #CCCCCC;
+}
+.uiTypeaheadDisabled div.wrap {
+    background: none repeat scroll 0 0 #E2E2E2;
+}
+.uiToken {
+    background: #E6E6E6;
+    border: 1px solid #ccc;
+    border-radius: 2px 2px 2px 2px;
+    color: #1C2A47;
+    cursor: default;
+    display: block;
+    float: left;
+    height: 25px;
+	line-height: 24px;
+    margin: 0 4px 4px 0;
+    padding: 0 3px;
+    position: relative;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.uiToken .remove {
+    margin: 2px 0 -2px 1px;
+    outline: medium none;
+}
+.uiTokenSelected {
+    background-color: #6D84B4;
+    border-color: #3B5998;
+    color: #FFFFFF;
+}
+.uiTokenGray {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border-color: gray;
+}
+.uiTokenizer {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.tokenarea {
+    overflow: hidden;
+    padding-left: 3px;
+}
+.uiContextualTypeaheadView {
+    position: static;
+}
+.uiTypeaheadView ul {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #333333 #333333 #293E6A;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    overflow: hidden;
+    padding: 2px 0;
+}
+.uiTypeaheadView .freeform {
+    border-top-color: #DDDDDD;
+    padding: 2px 6px 1px;
+    text-align: center;
+}
+
+/* Icon info */
+.news-inf-icons{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+.news-inf-icons li{
+	display: inline-block;
+	padding-left: 10px;
+}
+.news-inf-icons li:first-child{
+	padding-left: 0;
+}
+@media only screen and (min-width:320px) and (max-width: 992px) {
+	.form-control{
+		padding: 6px 0px;
+	}
+}
+.breadcrumb-catnav {
+    font-size: 13px;
+    line-height: 1.2em;
+    background-color: #f5f5f5;
+    padding: 8px 15px;
+    display: block;
+    border: 1px solid #e1e1e8;
+    border-radius: 0;
+}
+.btn-cattool {
+    text-align: left;
+    padding-right: 20px!important;
+}
+.btn-cattool .caret {
+    float: right;
+    margin-top: 7px;
+    margin-right: -14px;
+}
+.dropdown-cattool-ctn {
+    margin: 0 -14px;
+    overflow: auto;
+    max-height: 250px;
+}
+.dropdown-cattool {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.dropdown-cattool > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    text-align: left;
+    min-width: 100px;
+}
+.dropdown-cattool > li > a:hover,
+.dropdown-cattool > li > a.active {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+

@@ -1,0 +1,139 @@
+.control-label-inline {
+    margin: 5px 0 0 10px;
+}
+
+.margin-right {
+    margin-right: 10px;
+}
+
+#users .search {
+	border-left: 4px solid #1F7BE5;
+	padding: 10px 20px
+}
+
+#users tr.header {
+	background: #8AB0FF
+}
+
+#users tr.header td {
+	padding: 4px 10px
+}
+
+#users tr.header td a {
+	text-decoration: none;
+	font-weight: 700
+}
+
+#users tr.header td a:hover {
+	text-decoration: underline
+}
+
+#users .txt {
+	width: 400px;
+	padding: 2px
+}
+
+.myh3 {
+	background: url('../images/arrows/arrow3_red.gif') no-repeat left center;
+	margin: 10px 0;
+	font: 800 13px Tahoma, Arial, Verdana, sans-serif;
+	text-indent: 14px
+}
+
+.myh3 a {
+	color: #333
+}
+
+.red {
+	color: red
+}
+
+#ablist {
+	margin: 5px;
+	padding: 10px;
+	background: #F2F2F2
+}
+
+#pageContent .result {
+	margin: 10px 0;
+	font: 800 13px Tahoma, Arial, Verdana, sans-serif;
+	color: red
+}
+
+#pageContent dl {
+	padding: 4px;
+	background: #FFF
+}
+
+#pageContent input[type=text].txt {
+	width: 280px
+}
+
+#pageContent textarea.txt {
+	width: 400px;
+	height: 100px
+}
+
+#pageContent label {
+	font: 400 12px/20px Tahoma, Arial, Verdana, sans-serif
+}
+
+#pageContent dd {
+	width: 150px
+}
+
+#pageContent dd, #pageContent dt {
+	float: left
+}
+
+.center {
+	text-align: center
+}
+
+.fixbg {
+	background-color: #e4e4e4 !important
+}
+
+.fl {
+	float: left
+}
+
+.fr {
+	float: right
+}
+
+.fixwidthinput {
+	width: 98%
+}
+
+.asc {
+	padding-right: 10px;
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-image: url('../images/arrows/tall-up-arrow.gif')
+}
+
+.desc {
+	padding-right: 10px;
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-image: url('../images/arrows/tall-down-arrow.gif')
+}
+
+.group-allow-area{
+    max-height: 200px;
+    overflow: auto;
+}
+
+/* EDIT INFO */
+#change-photo{
+	display: none;
+}
+
+.twostepp {
+    padding-left: 15px!important;
+}
+.disabled {
+   pointer-events: none;
+   cursor: default;
+}
