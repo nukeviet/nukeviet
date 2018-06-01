@@ -55,7 +55,7 @@
 <!-- END: data -->
 <script type="text/javascript">
 	function open_browse_forward() {
-		nv_open_browse('{NV_BASE_ADMINURL}index.php?' + nv_name_variable + '=contact&' + nv_fc_variable + '=forward&id=1, 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');
+		nv_open_browse('{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '={MODULE_NAME}&' + nv_fc_variable + '=forward&id=1', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');
 	}
 </script>
 <!-- END: main -->
