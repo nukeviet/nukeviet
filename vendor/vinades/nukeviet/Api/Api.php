@@ -29,7 +29,7 @@ class Api
      * @param string $key
      * @return number
      */
-    public static function textParamKey($key = '')
+    public static function testParamKey($key = '')
     {
         return (!is_numeric($key) and preg_match('/^[a-zA-Z0-9\_\-]+$/', $key));
     }

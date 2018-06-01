@@ -2121,9 +2121,9 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '', $modtitl
 
     // Xác định class name
     if (NukeViet\Api\Api::test($module)) {
-        $classname = 'NukeViet\\Module\\' . ucfirst($module) . '\\Api\\' . ucfirst($cmd);
+        $classname = 'NukeViet\\Module\\' . ucfirst($module) . '\\Api\\' . $cmd;
     } else {
-        $classname = 'NukeViet\\Api\\' . ucfirst($cmd);
+        $classname = 'NukeViet\\Api\\' . $cmd;
     }
 
     if (!class_exists($classname)) {
@@ -2141,7 +2141,7 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '', $modtitl
     $_POST = [];
 
     foreach ($params as $_key => $_value) {
-        if (NukeViet\Api\Api::textParamKey($_key)) {
+        if (NukeViet\Api\Api::testParamKey($_key)) {
             $_POST[$_key] = $_value;
         }
     }

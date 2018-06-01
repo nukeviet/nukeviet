@@ -136,47 +136,84 @@ function nv_admin_edit_result($result)
 }
 
 /**
- * @TODO Viết tiếp sau
+ * @return array[]
  */
-function nv_get_listapi()
+function nv_get_api_actions()
 {
-    $files = nv_scandir(NV_ROOTDIR . '/includes/api', '/^[^0-9]+[a-zA-Z0-9\_]{0,}$/');
-    foreach ($files as $file) {
-        $fileContent = file_get_contents(NV_ROOTDIR . '/includes/api/' . $file);
-        $className = '';
-        if (preg_match('/class[\s]+([^0-9]+[a-z0-9\_]{0,})[\s]+implements[\s]+IApi[\r\n\s\t]*\{/', $fileContent, $m)) {
-            $className = $m[1];
-        }
-        //
-    }
-}
+    global $nv_Lang, $sys_mods;
 
-// Đây là ví dụ về API action. Sau này sẽ phát triển sau
-$array_api_actions = array();
-$array_api_actions['system'] = array(
-    'add_baned_ip',
-    'send_mail',
-);
-$array_api_actions['user'] = array(
-    'add_user',
-);
-$array_api_actions['admin'] = array(
-    'add_admin',
-);
-$array_api_actions['theme'] = array(
-    'active_theme',
-);
-$array_api_actions['extension'] = array(
-    'delete_extension',
-);
-$array_api_actions['file'] = array(
-    'delete_file',
-    'add_file',
-    'add_folder',
-    'delete_folder',
-);
-$array_api_actions['module'] = array(
-    'delete_module',
-    'change_status_module',
-    'recreat_module',
-);
+    $array_apis = [
+        '' => []
+    ];
+    $array_keys = $array_apis;
+
+    // Các API của hệ thống
+    $files = nv_scandir(NV_ROOTDIR . '/includes/api', '/(.*?)/');
+    foreach ($files as $file) {
+        if (preg_match('/^([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
+            $class_name = $m[1];
+            $class_namespaces = 'NukeViet\\Api\\' . $class_name;
+            if (nv_class_exists($class_namespaces)) {
+                $class_cat = $class_namespaces::getCat();
+                if (!isset($array_apis[''][$class_cat])) {
+                    $array_apis[''][$class_cat] = [
+                        'title' => $nv_Lang->getModule('api_' . $class_cat),
+                        'apis' => []
+                    ];
+                }
+                $array_apis[''][$class_cat]['apis'][$class_name] = [
+                    'title' => $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name),
+                    'cmd' => $class_name
+                ];
+                $array_keys[''][$class_name] = $class_name;
+            }
+        }
+    }
+
+    // Các API của module cung cấp
+    foreach ($sys_mods as $module_name => $module_info) {
+        $module_file = $module_info['module_file'];
+        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/Api')) {
+            // Đọc ngôn ngữ tạm của module
+            $nv_Lang->loadModule($module_file, true, false, true);
+
+            // Lấy các API
+            $files = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/Api', '/(.*?)/');
+            foreach ($files as $file) {
+                if (preg_match('/^([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
+                    $class_name = $m[1];
+                    $class_namespaces = 'NukeViet\\Module\\' . $module_file . '\\Api\\' . $class_name;
+                    if (nv_class_exists($class_namespaces)) {
+                        $class_cat = $class_namespaces::getCat();
+
+                        // Xác định key
+                        if (!isset($array_keys[$module_name])) {
+                            $array_keys[$module_name] = [];
+                        }
+                        $array_keys[$module_name][$class_name] = $class_name;
+
+                        // Xác định cây thư mục
+                        if (!isset($array_apis[$module_name])) {
+                            $array_apis[$module_name] = [];
+                        }
+                        if (!isset($array_apis[$module_name][$class_cat])) {
+                            $array_apis[$module_name][$class_cat] = [
+                                'title' => $class_cat ? $nv_Lang->getModule('api_' . $class_cat) : '',
+                                'apis' => []
+                            ];
+                        }
+                        $array_apis[$module_name][$class_cat]['apis'][$class_name] = [
+                            'title' => $class_cat ? $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name) : $nv_Lang->getModule('api_' . $class_name),
+                            'cmd' => $class_name
+                        ];
+                    }
+                }
+            }
+
+            // Xóa ngôn ngữ tạm
+            $nv_Lang->changeLang();
+        }
+    }
+
+    return [$array_apis, $array_keys];
+}

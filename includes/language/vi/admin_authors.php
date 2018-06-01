@@ -177,9 +177,6 @@ $lang_module['api_addtime'] = 'Tạo lúc';
 $lang_module['api_edittime'] = 'Cập nhật';
 $lang_module['api_role_notice'] = 'Lưu ý: Tùy theo cấp độ của tài khoản quản trị được cấp phép mà các API được quyền sử dụng trong mỗi API Role sẽ được xác định lại';
 
-$lang_module['api_system'] = 'Hệ thống';
-$lang_module['api_user'] = 'Thành viên';
-
 $lang_module['api_cr'] = 'Quyền truy cập API';
 $lang_module['api_cr_error_role_empty'] = 'Chưa có API Role được tạo, hãy tạo API Role trước. Hệ thống sẽ tự động chuyển trến trang tạo API Role trong giây lát';
 $lang_module['api_remote_off'] = 'Remote API <strong>đang tắt</strong>, các tài khoản được phép truy cập API bên dưới sẽ chỉ thực hiện các cuộc gọi API bên trong. Nếu cần thực hiện cuộc gọi API từ bên ngoài, hãy <strong><a href="%s" target="_blank">bật Remote API tại đây</a></strong>';
@@ -199,3 +196,7 @@ $lang_module['api_cr_credential_ident'] = 'Khóa truy cập';
 $lang_module['api_cr_credential_secret'] = 'Mã bí mật';
 $lang_module['api_cr_back'] = 'Đã sao chép xong';
 $lang_module['api_cr_notice'] = 'Chú ý: Giữ an toàn cho mã bí mật và khóa truy cập đặc biệt là mã bí mật. Nếu mã bí mật và khóa truy cập bị lộ, kẻ phá hoại có thể thực hiện các thao tác không mong muốn';
+
+$lang_module['api_System'] = 'Hệ thống';
+$lang_module['api_System_SendMail'] = 'Gửi email';
+

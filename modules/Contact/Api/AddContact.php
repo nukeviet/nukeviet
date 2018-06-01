@@ -8,9 +8,13 @@
  * @Createdate Jun 20, 2010 8:59:32 PM
  */
 
-namespace NukeViet\Api;
+namespace NukeViet\Module\Contact\Api;
 
-class SendMail implements IApi
+use NukeViet\Api\Api;
+use NukeViet\Api\ApiResult;
+use NukeViet\Api\IApi;
+
+class AddContact implements IApi
 {
     private $result;
 
@@ -44,7 +48,7 @@ class SendMail implements IApi
      */
     public static function getCat()
     {
-        return 'System';
+        return '';
     }
 
     /**

@@ -13,6 +13,9 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 }
 
 $page_title = $nv_Lang->getModule('api_roles');
+$array_api_actions = nv_get_api_actions();
+$array_api_keys = $array_api_actions[1];
+$array_api_actions = $array_api_actions[0];
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -22,9 +25,9 @@ $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_role ORDER BY role_id DESC';
 $result = $db->query($sql);
 
-$array = array();
+$array = [];
 while ($row = $result->fetch()) {
-    $row['role_data'] = empty($row['role_data']) ? array() : unserialize($row['role_data']);
+    $row['role_data'] = empty($row['role_data']) ? [] : unserialize($row['role_data']);
     $array[$row['role_id']] = $row;
 }
 
@@ -93,10 +96,10 @@ if ($role_id) {
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;role_id=' . $role_id;
     $array_post = $array[$role_id];
     if (!isset($array_post['role_data']['sys'])) {
-        $array_post['role_data']['sys'] = array();
+        $array_post['role_data']['sys'] = [];
     }
     if (!isset($array_post['role_data'][NV_LANG_DATA])) {
-        $array_post['role_data'][NV_LANG_DATA] = array();
+        $array_post['role_data'][NV_LANG_DATA] = [];
     }
 } else {
     $table_caption = $nv_Lang->getModule('api_roles_add');
@@ -105,30 +108,38 @@ if ($role_id) {
         'role_title' => '',
         'role_description' => ''
     );
-    $array_post['role_data'] = array();
-    $array_post['role_data']['sys'] = array();
-    $array_post['role_data'][NV_LANG_DATA] = array();
+    $array_post['role_data'] = [];
+    $array_post['role_data']['sys'] = [];
+    $array_post['role_data'][NV_LANG_DATA] = [];
 }
 
 $is_submit_form = false;
 if ($nv_Request->isset_request('submit', 'post')) {
     $is_submit_form = true;
     $current_cat = $nv_Request->get_title('current_cat', 'post', '');
-    if (!isset($array_api_actions[$current_cat])) {
-        $current_cat = '';
-    }
 
     $array_post['role_title'] = nv_substr($nv_Request->get_title('role_title', 'post', ''), 0, 250);
     $array_post['role_description'] = nv_substr($nv_Request->get_textarea('role_description', '', ''), 0, 250);
-    $array_post['role_data'] = array();
-    $array_post['role_data']['sys'] = array();
-    $array_post['role_data'][NV_LANG_DATA] = array();
+    $array_post['role_data'] = [];
+    // Các API của hệ thống
+    $array_post['role_data']['sys'] = [];
+    // Các API của module theo ngôn ngữ
+    $array_post['role_data'][NV_LANG_DATA] = [];
 
-    foreach ($array_api_actions as $root_cat => $cat_actions) {
-        $cat_action_submit = $nv_Request->get_typed_array('api_' . $root_cat, 'post', 'string', array());
-        $cat_action_submit = array_intersect($cat_action_submit, $cat_actions);
-        if (!empty($cat_action_submit)) {
-            $array_post['role_data']['sys'][$root_cat] = $cat_action_submit;
+    // Lấy các API được phép
+    foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
+        // Các API không có CAT
+        $api_nocat = $nv_Request->get_typed_array('api_' . $keysysmodule, 'post', 'string', []);
+        $api_cat = [];
+        foreach ($sysmodule_data as $catkey => $catapis) {
+            $api_cat = array_merge_recursive($api_cat, $nv_Request->get_typed_array('api_' . $keysysmodule . '_' . $catkey, 'post', 'string', []));
+        }
+        $api_submits = array_filter(array_unique(array_merge_recursive($api_nocat, $api_cat)));
+        $api_submits = array_intersect($api_submits, $array_api_keys[$keysysmodule]);
+        if (empty($keysysmodule)) {
+            $array_post['role_data']['sys'] = $api_submits;
+        } elseif (!empty($api_submits)) {
+            $array_post['role_data'][NV_LANG_DATA][$keysysmodule] = $api_submits;
         }
     }
 
@@ -140,7 +151,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     if (empty($array_post['role_title'])) {
         $error = $nv_Lang->getModule('api_roles_error_title');
-    } elseif (empty($array_post['role_data']['sys'])) {
+    } elseif (empty($array_post['role_data']['sys']) and empty($array_post['role_data'][NV_LANG_DATA])) {
         $error = $nv_Lang->getModule('api_roles_error_role');
     } elseif ($is_exists) {
         $error = $nv_Lang->getModule('api_roles_error_exists');
@@ -168,7 +179,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             ) VALUES (
                 :role_title, :role_description, :role_data, ' . NV_CURRENTTIME . '
             )';
-            $array_insert = array();
+            $array_insert = [];
             $array_insert['role_title'] = $array_post['role_title'];
             $array_insert['role_description'] = $array_post['role_description'];
             $array_insert['role_data'] = serialize($array_post['role_data']);
@@ -191,39 +202,81 @@ if ($nv_Request->isset_request('submit', 'post')) {
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('TABLE_CAPTION', $table_caption);
 
-$root_cat_order = 0;
+$cat_order = 0;
 $total_api_enabled = 0;
-foreach ($array_api_actions as $root_cat => $cat_actions) {
-    $root_cat_order++;
-    $iscurrent = (($root_cat_order == 1 and empty($current_cat)) or $current_cat == $root_cat) ? true : false;
-    $xtpl->assign('ROOT_ACTION_KEY', $root_cat);
-    $xtpl->assign('ROOT_ACTION_NAME', $nv_Lang->getModule('api_' . $root_cat));
-    $xtpl->assign('CHILD_DISPLAY', $iscurrent ? ' style="display: block;"' : '');
-    $xtpl->assign('CAT_ACTIVE', $iscurrent ? ' class="active"' : '');
 
-    if ($root_cat_order == 1 and empty($current_cat)) {
-        $current_cat = $root_cat;
+foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
+    $cat1_is_active = ($keysysmodule == $current_cat and !empty($current_cat)) ? true : false;
+    $cat1_total_api = 0;
+
+    // Lev1: Hệ thống hoặc các module
+    $xtpl->assign('CAT1_KEY', $keysysmodule);
+    $xtpl->assign('CAT1_NAME', $keysysmodule ? $site_mods[$keysysmodule]['custom_title'] : $nv_Lang->getModule('api_System'));
+
+    // Lev 2: Các cat của hệ thống hoặc các module, trong HTML đối xử ngang nhau
+    foreach ($sysmodule_data as $catkey => $catapis) {
+        $cat_order++;
+
+        if (!empty($catkey)) {
+            $cat2_key = $keysysmodule . '_' . $catkey;
+            $cat2_is_active = ($cat2_key == $current_cat or (!$cat1_is_active and $cat_order == 1 and empty($current_cat))) ? true : false;
+            $cat2_total_api = 0;
+
+            $xtpl->assign('CAT2_KEY', $cat2_key);
+            $xtpl->assign('CAT2_NAME', '&nbsp; &nbsp; ' . $catapis['title']);
+            $xtpl->assign('CAT2_ACTIVE', $cat2_is_active ? ' class="active"' : '');
+
+            // Các API của lev1 (Các api có cat của lev2 trống)
+            $xtpl->assign('CTN_KEY', $cat2_key);
+            $xtpl->assign('CTN_DISPLAY', $cat2_is_active ? ' style="display: block;"' : '');
+
+
+            foreach ($catapis['apis'] as $api) {
+                $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $array_post['role_data']['sys'])) or (!empty($keysysmodule) and isset($array_post['role_data'][NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $array_post['role_data'][NV_LANG_DATA][$keysysmodule])));
+                $total_api_enabled += $api_checked ? 1 : 0;
+                $cat2_total_api += $api_checked ? 1 : 0;
+
+                $xtpl->assign('API_CMD', $api['cmd']);
+                $xtpl->assign('API_NAME', $api['title']);
+                $xtpl->assign('API_CHECKED', $api_checked ? ' checked="checked"' : '');
+                $xtpl->parse('main.catcontents.loop');
+            }
+
+            if ($cat2_total_api) {
+                $xtpl->assign('CAT_API_ENABLED', $cat2_total_api);
+                $xtpl->parse('main.catlev1.catlev2.cat_api_enabled');
+            }
+
+            $xtpl->parse('main.catcontents');
+            $xtpl->parse('main.catlev1.catlev2');
+        } else {
+            // Các API của lev1 (Các api có cat của lev2 trống)
+            $xtpl->assign('CTN_KEY', $keysysmodule);
+            $xtpl->assign('CTN_DISPLAY', $cat1_is_active ? ' style="display: block;"' : '');
+
+            foreach ($catapis['apis'] as $api) {
+                $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $array_post['role_data']['sys'])) or (!empty($keysysmodule) and isset($array_post['role_data'][NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $array_post['role_data'][NV_LANG_DATA][$keysysmodule])));
+                $total_api_enabled += $api_checked ? 1 : 0;
+                $cat1_total_api += $api_checked ? 1 : 0;
+
+                $xtpl->assign('API_CMD', $api['cmd']);
+                $xtpl->assign('API_NAME', $api['title']);
+                $xtpl->assign('API_CHECKED', $api_checked ? ' checked="checked"' : '');
+                $xtpl->parse('main.catcontents.loop');
+            }
+
+            $xtpl->parse('main.catcontents');
+        }
     }
 
-    $cat_api_enabled = !empty($array_post['role_data']['sys'][$root_cat]) ? sizeof($array_post['role_data']['sys'][$root_cat]) : 0;
+    $xtpl->assign('CAT1_ACTIVE', $cat1_is_active ? ' class="active"' : '');
 
-    foreach ($cat_actions as $action) {
-        $api_enabled = (!empty($array_post['role_data']['sys'][$root_cat]) and in_array($action, $array_post['role_data']['sys'][$root_cat])) ? true : false;
-        $xtpl->assign('ACTION_KEY', $action);
-        $xtpl->assign('ACTION_NAME', $nv_Lang->getModule('api_' . $root_cat . '_' . $action));
-        $xtpl->assign('ACTION_CHECKED', $api_enabled ? ' checked="checked"' : '');
-        $xtpl->parse('main.api_actions2.loop');
-
-        $total_api_enabled += ($api_enabled ? 1 : 0);
+    if ($cat1_total_api) {
+        $xtpl->assign('CAT_API_ENABLED', $cat1_total_api);
+        $xtpl->parse('main.catlev1.cat_api_enabled');
     }
 
-    if ($cat_api_enabled) {
-        $xtpl->assign('CAT_API_ENABLED', $cat_api_enabled);
-        $xtpl->parse('main.api_actions1.cat_api_enabled');
-    }
-
-    $xtpl->parse('main.api_actions1');
-    $xtpl->parse('main.api_actions2');
+    $xtpl->parse('main.catlev1');
 }
 
 $xtpl->assign('DATA', $array_post);

@@ -18,12 +18,6 @@ interface IApi
     public function setModule();
 
     /**
-     * Lấy được command của API
-     * Mục đích để làm khóa lang hiển thị ngôn ngữ
-     */
-    public static function getCmd();
-
-    /**
      * Lấy được quyền hạn sử dụng của admin
      * Admin tối cao, điều hành chung hay quản lý module được sử dụng
      */
