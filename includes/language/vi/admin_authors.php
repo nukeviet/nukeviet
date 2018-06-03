@@ -159,6 +159,8 @@ $lang_module['main_module'] = 'Module trang chính';
 $lang_module['themeadmin'] = 'Giao diện người quản trị';
 $lang_module['theme_default'] = 'Mặc định theo cấu hình site';
 
+$lang_module['api_addtime'] = 'Tạo lúc';
+$lang_module['api_edittime'] = 'Cập nhật';
 $lang_module['api_roles'] = 'Quản lý API Roles';
 $lang_module['api_roles_list'] = 'Danh sách API Roles';
 $lang_module['api_roles_empty'] = 'Chưa có API Role nào được thêm. Mời bạn hoàn thành mẫu bên dưới để thêm mới API Role';
@@ -173,13 +175,14 @@ $lang_module['api_roles_error_role'] = 'Lỗi: Chưa có API nào được chọ
 $lang_module['api_roles_checkall'] = 'Chọn tất cả';
 $lang_module['api_roles_uncheckall'] = 'Bỏ chọn tất cả';
 $lang_module['api_roles_detail'] = 'Chi tiết các API của';
-$lang_module['api_addtime'] = 'Tạo lúc';
-$lang_module['api_edittime'] = 'Cập nhật';
 $lang_module['api_role_notice'] = 'Lưu ý: Tùy theo cấp độ của tài khoản quản trị được cấp phép mà các API được quyền sử dụng trong mỗi API Role sẽ được xác định lại';
+$lang_module['api_role_notice_lang'] = 'Các API của hệ thống sẽ hiệu lực đối với tất cả các ngôn ngữ. Các API của module chỉ có hiệu lực đối với ngôn ngữ hiện tại.';
+
+$lang_module['api_of_system'] = 'Hệ thống';
 
 $lang_module['api_cr'] = 'Quyền truy cập API';
 $lang_module['api_cr_error_role_empty'] = 'Chưa có API Role được tạo, hãy tạo API Role trước. Hệ thống sẽ tự động chuyển trến trang tạo API Role trong giây lát';
-$lang_module['api_remote_off'] = 'Remote API <strong>đang tắt</strong>, các tài khoản được phép truy cập API bên dưới sẽ chỉ thực hiện các cuộc gọi API bên trong. Nếu cần thực hiện cuộc gọi API từ bên ngoài, hãy <strong><a href="%s" target="_blank">bật Remote API tại đây</a></strong>';
+$lang_module['api_remote_off'] = 'Remote API <strong>đang tắt</strong>, các tài khoản được phép truy cập API bên dưới sẽ không thể thực hiện các cuộc gọi API. Để thực hiện được cuộc gọi API, hãy <strong><a href="%s" target="_blank">bật Remote API tại đây</a></strong>';
 $lang_module['api_cr_last_access_none'] = 'Chưa';
 $lang_module['api_cr_last_access'] = 'Dùng gần đây';
 $lang_module['api_cr_add'] = 'Thêm quyền truy cập API';
@@ -197,6 +200,6 @@ $lang_module['api_cr_credential_secret'] = 'Mã bí mật';
 $lang_module['api_cr_back'] = 'Đã sao chép xong';
 $lang_module['api_cr_notice'] = 'Chú ý: Giữ an toàn cho mã bí mật và khóa truy cập đặc biệt là mã bí mật. Nếu mã bí mật và khóa truy cập bị lộ, kẻ phá hoại có thể thực hiện các thao tác không mong muốn';
 
-$lang_module['api_System'] = 'Hệ thống';
+$lang_module['api_System'] = 'Các chức năng hệ thống';
 $lang_module['api_System_SendMail'] = 'Gửi email';
 

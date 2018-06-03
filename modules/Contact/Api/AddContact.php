@@ -19,23 +19,6 @@ class AddContact implements IApi
     private $result;
 
     /**
-     *
-     */
-    public function __construct()
-    {
-        // @TODO làm gì ở đây thì viết sau giờ chưa nghĩ ra :D
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \NukeViet\Api\IApi::setModule()
-     */
-    public function setModule()
-    {
-        // @TODO làm gì ở đây thì viết sau giờ chưa nghĩ ra :D
-    }
-
-    /**
      * @return number
      */
     public static function getAdminLev()
@@ -71,6 +54,9 @@ class AddContact implements IApi
         // @TODO code xử lý đặt ở đây, muốn viết gì viết thoải mái
 
         $asdasd = $nv_Request->get_title('asdasd', 'post', 'KHONG CO DU LIEU DAU VAO');
+
+        print_r($asdasd);
+        die();
 
         return  $this->$result->getResult();
     }

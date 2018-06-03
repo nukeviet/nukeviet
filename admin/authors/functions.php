@@ -145,7 +145,7 @@ function nv_get_api_actions()
     $array_apis = [
         '' => []
     ];
-    $array_keys = $array_apis;
+    $array_keys = $array_cats = $array_apis;
 
     // Các API của hệ thống
     $files = nv_scandir(NV_ROOTDIR . '/includes/api', '/(.*?)/');
@@ -155,6 +155,8 @@ function nv_get_api_actions()
             $class_namespaces = 'NukeViet\\Api\\' . $class_name;
             if (nv_class_exists($class_namespaces)) {
                 $class_cat = $class_namespaces::getCat();
+                $cat_title = $nv_Lang->getModule('api_' . $class_cat);
+                $api_title = $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name);
                 if (!isset($array_apis[''][$class_cat])) {
                     $array_apis[''][$class_cat] = [
                         'title' => $nv_Lang->getModule('api_' . $class_cat),
@@ -162,10 +164,15 @@ function nv_get_api_actions()
                     ];
                 }
                 $array_apis[''][$class_cat]['apis'][$class_name] = [
-                    'title' => $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name),
+                    'title' => $api_title,
                     'cmd' => $class_name
                 ];
                 $array_keys[''][$class_name] = $class_name;
+                $array_cats[''][$class_name] = [
+                    'key' => $class_cat,
+                    'title' => $cat_title,
+                    'api_title' => $api_title
+                ];
             }
         }
     }
@@ -185,6 +192,8 @@ function nv_get_api_actions()
                     $class_namespaces = 'NukeViet\\Module\\' . $module_file . '\\Api\\' . $class_name;
                     if (nv_class_exists($class_namespaces)) {
                         $class_cat = $class_namespaces::getCat();
+                        $cat_title = $class_cat ? $nv_Lang->getModule('api_' . $class_cat) : '';
+                        $api_title = $class_cat ? $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name) : $nv_Lang->getModule('api_' . $class_name);
 
                         // Xác định key
                         if (!isset($array_keys[$module_name])) {
@@ -198,13 +207,23 @@ function nv_get_api_actions()
                         }
                         if (!isset($array_apis[$module_name][$class_cat])) {
                             $array_apis[$module_name][$class_cat] = [
-                                'title' => $class_cat ? $nv_Lang->getModule('api_' . $class_cat) : '',
+                                'title' => $cat_title,
                                 'apis' => []
                             ];
                         }
                         $array_apis[$module_name][$class_cat]['apis'][$class_name] = [
-                            'title' => $class_cat ? $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name) : $nv_Lang->getModule('api_' . $class_name),
+                            'title' => $api_title,
                             'cmd' => $class_name
+                        ];
+
+                        // Phân theo cat
+                        if (!isset($array_cats[$module_name])) {
+                            $array_cats[$module_name] = [];
+                        }
+                        $array_cats[$module_name][$class_name] = [
+                            'key' => $class_cat,
+                            'title' => $cat_title,
+                            'api_title' => $api_title
                         ];
                     }
                 }
@@ -215,5 +234,5 @@ function nv_get_api_actions()
         }
     }
 
-    return [$array_apis, $array_keys];
+    return [$array_apis, $array_keys, $array_cats];
 }

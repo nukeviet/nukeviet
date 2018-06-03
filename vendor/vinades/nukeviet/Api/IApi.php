@@ -13,11 +13,6 @@ namespace NukeViet\Api;
 interface IApi
 {
     /**
-     * Thiết lập API cấp bởi module nào
-     */
-    public function setModule();
-
-    /**
      * Lấy được quyền hạn sử dụng của admin
      * Admin tối cao, điều hành chung hay quản lý module được sử dụng
      */

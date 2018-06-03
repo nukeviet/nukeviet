@@ -19,23 +19,6 @@ class DeleteDepartment implements IApi
     private $result;
 
     /**
-     *
-     */
-    public function __construct()
-    {
-        // @TODO làm gì ở đây thì viết sau giờ chưa nghĩ ra :D
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \NukeViet\Api\IApi::setModule()
-     */
-    public function setModule()
-    {
-        // @TODO làm gì ở đây thì viết sau giờ chưa nghĩ ra :D
-    }
-
-    /**
      * @return number
      */
     public static function getAdminLev()

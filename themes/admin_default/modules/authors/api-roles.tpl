@@ -23,7 +23,7 @@
                 <!-- BEGIN: loop -->
                 <tr>
                     <td>
-                        <a href="#apiroledetail{ROW.role_id}" data-toggle="apiroledetail" data-title="{LANG.api_roles_detail}: {ROW.role_title}">{ROW.role_title}</a> <strong class="text-danger">({TOTAL_API_ENABLED})</strong>
+                        <a href="#apiroledetail{ROW.role_id}" data-toggle="apiroledetail" data-title="{LANG.api_roles_detail}: {ROW.role_title}">{ROW.role_title}</a> <strong class="text-danger">({ROW.apitotal})</strong>
                     </td>
                     <td>{ROW.role_description}</td>
                     <td>{ROW.addtime}</td>
@@ -42,11 +42,11 @@
     <!-- BEGIN: cat -->
     <div class="form-group">
         <h2>
-            <strong>{ROOT_ACTION_NAME}</strong>:
+            <strong>{CAT_NAME}</strong>:
         </h2>
         <div class="row">
             <!-- BEGIN: loop -->
-            <div class="col-xs-12">{ACTION_NAME}</div>
+            <div class="col-xs-12">{API_NAME}</div>
             <!-- END: loop -->
         </div>
     </div>
@@ -55,6 +55,9 @@
 <!-- END: loop_detail -->
 <!-- END: data -->
 <div id="addeditarea">
+    <!-- BEGIN: note_lang -->
+    <div class="alert alert-info">{LANG.api_role_notice_lang}</div>
+    <!-- END: note_lang -->
     <!-- BEGIN: error -->
     <div class="alert alert-danger">{ERROR}</div>
     <!-- END: error -->

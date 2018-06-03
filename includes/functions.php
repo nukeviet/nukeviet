@@ -2112,27 +2112,92 @@ function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_m
  * @param string[] $params
  * @param string $adminidentity
  * @param string $module
- * @param string $modtitle
  */
-function nv_local_api($cmd, $params, $adminidentity = '', $module = '', $modtitle = '')
+function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
 {
     // Default api trả về error
     $apiresults = new NukeViet\Api\ApiResult();
 
-    // Xác định class name
+    /*
+     * Kiểm tra nếu là API của module
+     * API là kiểu chạy sau khi tài nguyên của hệ thống đã load
+     * Do đó chỉ cần truyền module_name vào và căn cứ $sys_mods để lấy các thông tin còn lại
+     * Khác với HOOK phải tuyền module_file vào để xác định
+     */
     if (NukeViet\Api\Api::test($module)) {
-        $classname = 'NukeViet\\Module\\' . ucfirst($module) . '\\Api\\' . $cmd;
+        global $sys_mods;
+        if (!isset($sys_mods[$module])) {
+            $apiresults->setCode(NukeViet\Api\ApiResult::CODE_MODULE_NOT_EXISTS)->setMessage('Module not exists!!!');
+            return $apiresults->getResult();
+        }
+
+        $module_info = $sys_mods[$module];
+        $module_file = $module_info['module_file'];
+        $classname = 'NukeViet\\Module\\' . $module_file . '\\Api\\' . $cmd;
+    } elseif ($module != '') {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_MODULE_INVALID)->setMessage('Module is invalid!!!');
+        return $apiresults->getResult();
     } else {
         $classname = 'NukeViet\\Api\\' . $cmd;
     }
 
+    // Class tồn tại
     if (!class_exists($classname)) {
         $apiresults->setCode(NukeViet\Api\ApiResult::CODE_API_NOT_EXISTS)->setMessage('API not exists!!!');
         return $apiresults->getResult();
     }
 
-    // @TODO thực thi code kiểm tra quyền hạn admin
+    // Kiểm tra quyền hạn admin
+    if (empty($adminidentity) and !defined('NV_IS_ADMIN')) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_ADMIN_IDENT)->setMessage('Admin Ident is required if no admin logged!!!');
+        return $apiresults->getResult();
+    }
+    if ($adminidentity) {
+        global $db;
+        if (is_numeric($adminidentity)) {
+            $where = 'tb2.userid=' . intval($adminidentity);
+        } else {
+            $where = 'tb2.username=' . $db->quote($adminidentity);
+        }
+        $sql = 'SELECT tb1.admin_id, tb1.lev, tb2.username FROM ' . NV_AUTHORS_GLOBALTABLE . ' tb1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2
+        ON tb1.admin_id=tb2.userid WHERE tb1.is_suspend=0 AND tb2.active=1 AND ' . $where;
+        $admin_info = $db->query($sql)->fetch();
+        if (empty($admin_info)) {
+            $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_ADMIN_FOUND)->setMessage('No admin found!!!');
+            return $apiresults->getResult();
+        }
+        NukeViet\Api\Api::setAdminId($admin_info['admin_id']);
+        NukeViet\Api\Api::setAdminLev($admin_info['lev']);
+        NukeViet\Api\Api::setAdminName($admin_info['username']);
+    } else {
+        global $admin_info;
+        NukeViet\Api\Api::setAdminId($admin_info['admin_id']);
+        NukeViet\Api\Api::setAdminLev($admin_info['level']);
+        NukeViet\Api\Api::setAdminName($admin_info['username']);
+    }
 
+    /*
+     * Nếu API của module kiểm tra xem admin có phải là Admin module không
+     * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
+     */
+    if ($module != '' and NukeViet\Api\Api::getAdminLev() > 2 and !in_array(NukeViet\Api\Api::getAdminId(), explode(',', $sys_mods[$module]['admins']))) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)->setMessage('Admin do not have the right to manage this module!!!');
+        return $apiresults->getResult();
+    }
+
+    // Kiểm tra quyền thực thi API theo quy định của API
+    if ($classname::getAdminLev() < NukeViet\Api\Api::getAdminLev()) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_ADMINLEV_NOT_ENOUGH)->setMessage('Admin level not enough to perform this api!!!');
+        return $apiresults->getResult();
+    }
+
+    // Lưu thông tin module nếu là API của module để sử dụng trong API
+    if ($module != '') {
+        NukeViet\Api\Api::setModuleName($module);
+        NukeViet\Api\Api::setModuleInfo($module_info);
+    }
+
+    // Sau khi đã xong tất cả các bước kiểm tra quyền thì tiến hành chạy API
     if (!is_array($params)) {
         $params = [];
     }
@@ -2149,10 +2214,10 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '', $modtitl
     // Thực hiện API
     $api = new $classname();
     $api->setResultHander($apiresults);
-    $api->setModule($modtitle);
     $return = $api->execute();
 
     $_POST = $_POSTbackup;
+    NukeViet\Api\Api::reset();
 
     return $return;
 }

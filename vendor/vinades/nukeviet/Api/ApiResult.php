@@ -20,6 +20,12 @@ class ApiResult
     const CODE_WRONG_TYPE = '0002';
     const CODE_MISSING_FUNCTION = '0003';
     const CODE_API_NOT_EXISTS = '0004';
+    const CODE_MODULE_NOT_EXISTS = '0005';
+    const CODE_MODULE_INVALID = '0006';
+    const CODE_NO_ADMIN_IDENT = '0007';
+    const CODE_NO_ADMIN_FOUND = '0008';
+    const CODE_NO_MODADMIN_RIGHT = '0009';
+    const CODE_ADMINLEV_NOT_ENOUGH = '0010';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 

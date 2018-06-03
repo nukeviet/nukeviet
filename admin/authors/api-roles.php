@@ -14,6 +14,7 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 
 $page_title = $nv_Lang->getModule('api_roles');
 $array_api_actions = nv_get_api_actions();
+$array_api_cats = $array_api_actions[2];
 $array_api_keys = $array_api_actions[1];
 $array_api_actions = $array_api_actions[0];
 
@@ -28,6 +29,45 @@ $result = $db->query($sql);
 $array = [];
 while ($row = $result->fetch()) {
     $row['role_data'] = empty($row['role_data']) ? [] : unserialize($row['role_data']);
+
+    // Xử lý các API theo cat
+    $row['apis'] = [];
+    $row['apis'][''] = $row['apis'][NV_LANG_DATA] = [];
+    $row['apitotal'] = 0;
+    if (!empty($row['role_data']['sys'])) {
+        foreach ($row['role_data']['sys'] as $api_cmd) {
+            $cat = $array_api_cats[''][$api_cmd];
+            if (!isset($row['apis'][''][$cat['key']])) {
+                $row['apis'][''][$cat['key']] = [
+                    'title' => $cat['title'],
+                    'apis' => []
+                ];
+            }
+            $row['apis'][''][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
+            $row['apitotal']++;
+        }
+    }
+    if (!empty($row['role_data'][NV_LANG_DATA])) {
+        foreach ($row['role_data'][NV_LANG_DATA] as $mod_title => $mod_data) {
+            if (isset($array_api_cats[$mod_title])) {
+                foreach ($mod_data as $api_cmd) {
+                    $cat = $array_api_cats[$mod_title][$api_cmd];
+                    if (!isset($row['apis'][NV_LANG_DATA][$mod_title])) {
+                        $row['apis'][NV_LANG_DATA][$mod_title] = [];
+                    }
+                    if (!isset($row['apis'][NV_LANG_DATA][$mod_title][$cat['key']])) {
+                        $row['apis'][NV_LANG_DATA][$mod_title][$cat['key']] = [
+                            'title' => $cat['title'],
+                            'apis' => []
+                        ];
+                    }
+                    $row['apis'][NV_LANG_DATA][$mod_title][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
+                    $row['apitotal']++;
+                }
+            }
+        }
+    }
+
     $array[$row['role_id']] = $row;
 }
 
@@ -51,33 +91,38 @@ if (empty($array)) {
     $xtpl->parse('main.empty');
 } else {
     foreach ($array as $row) {
-        $total_api_enabled = 0;
-
         $row['link_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;role_id=' . $row['role_id'];
         $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
         $row['edittime'] = $row['edittime'] ? nv_date('H:i d/m/Y', $row['edittime']) : '';
 
         $xtpl->assign('ROW', $row);
 
-        foreach ($row['role_data']['sys'] as $root_cat => $cat_actions) {
-            if (isset($array_api_actions[$root_cat]) and !empty($cat_actions)) {
-                $xtpl->assign('ROOT_ACTION_NAME', $nv_Lang->getModule('api_' . $root_cat));
+        $xtpl->parse('main.data.loop');
 
-                foreach ($cat_actions as $action) {
-                    if (in_array($action, $array_api_actions[$root_cat])) {
-                        $total_api_enabled += 1;
-                        $xtpl->assign('ACTION_NAME', $nv_Lang->getModule('api_' . $root_cat . '_' . $action));
-                        $xtpl->parse('main.data.loop_detail.cat.loop');
-                    }
+        // Xuất modal các API
+        if (!empty($row['apis'][''])) {
+            foreach ($row['apis'][''] as $cat_key => $cat_data) {
+                $xtpl->assign('CAT_NAME', $nv_Lang->getModule('api_of_system') . '<i class="fa fa-angle-double-right fa-fw" aria-hidden="true"></i>' . $cat_data['title']);
+                foreach ($cat_data['apis'] as $api_data) {
+                    $xtpl->assign('API_NAME', $api_data);
+                    $xtpl->parse('main.data.loop_detail.cat.loop');
                 }
-
                 $xtpl->parse('main.data.loop_detail.cat');
             }
         }
+        if (!empty($row['apis'][NV_LANG_DATA])) {
+            foreach ($row['apis'][NV_LANG_DATA] as $mod_title => $mod_data) {
+                foreach ($mod_data as $cat_key => $cat_data) {
+                    $xtpl->assign('CAT_NAME', empty($cat_data['title']) ? $site_mods[$mod_title]['custom_title'] : ($site_mods[$mod_title]['custom_title'] . '<i class="fa fa-angle-double-right fa-fw" aria-hidden="true"></i>' . $cat_data['title']));
+                    foreach ($cat_data['apis'] as $api_data) {
+                        $xtpl->assign('API_NAME', $api_data);
+                        $xtpl->parse('main.data.loop_detail.cat.loop');
+                    }
+                    $xtpl->parse('main.data.loop_detail.cat');
+                }
+            }
+        }
 
-        $xtpl->assign('TOTAL_API_ENABLED', $total_api_enabled);
-
-        $xtpl->parse('main.data.loop');
         $xtpl->parse('main.data.loop_detail');
     }
 
@@ -211,7 +256,7 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
 
     // Lev1: Hệ thống hoặc các module
     $xtpl->assign('CAT1_KEY', $keysysmodule);
-    $xtpl->assign('CAT1_NAME', $keysysmodule ? $site_mods[$keysysmodule]['custom_title'] : $nv_Lang->getModule('api_System'));
+    $xtpl->assign('CAT1_NAME', $keysysmodule ? $site_mods[$keysysmodule]['custom_title'] : $nv_Lang->getModule('api_of_system'));
 
     // Lev 2: Các cat của hệ thống hoặc các module, trong HTML đối xử ngang nhau
     foreach ($sysmodule_data as $catkey => $catapis) {
@@ -290,6 +335,9 @@ if ($total_api_enabled) {
 if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
+}
+if (!$is_submit_form) {
+    $xtpl->parse('main.note_lang');
 }
 
 if ($role_id) {
