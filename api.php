@@ -72,6 +72,14 @@ Api::setAdminName($credential_data['username']);
 $api_request = [];
 $api_request['action'] = $nv_Request->get_title('action', 'post', '');
 $api_request['module'] = $nv_Request->get_title('module', 'post', '');
+$api_request['language'] = $nv_Request->get_title(NV_LANG_VARIABLE, 'post', '');
+
+// Nếu site đa ngôn ngữ bắt buộc phải truyền tham số language
+if (sizeof($global_config['allow_sitelangs']) > 1 and empty($api_request['language'])) {
+    $apiresults->setCode(ApiResult::CODE_MISSING_LANG)->setMessage('Lang Data is required for multi-language website!!!')->returnResult();
+} elseif (!empty($api_request['language']) and NV_LANG_DATA != $api_request['language']) {
+    $apiresults->setCode(ApiResult::CODE_WRONG_LANG)->setMessage('Wrong Lang Data!!!')->returnResult();
+}
 
 // Xác định các quyền được thiết lập trong CSDL
 $credential_data['api_roles'] = array_filter(explode(',', $credential_data['api_roles']));
@@ -124,6 +132,8 @@ if (empty($api_request['action'])) {
     $classname = 'NukeViet\\Module\\' . $module_file . '\\Api\\' . $api_request['action'];
 }
 
+define('NV_ADMIN', true);
+
 // Class tồn tại
 if (!class_exists($classname)) {
     $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)->setMessage('API not exists!!!')->returnResult();
@@ -147,9 +157,11 @@ if (!empty($api_request['module'])) {
     Api::setModuleInfo($module_info);
 }
 
+// Ghi nhật ký
+nv_insert_logs(NV_LANG_DATA, $api_request['module'], 'LOG_REMOTE_API_REQUEST', 'Command: ' . $api_request['action'], $credential_data['admin_id']);
+
 unset($credential_data, $api_request);
 
-define('NV_ADMIN', true);
 $nv_Lang->loadGlobal(true);
 require NV_ROOTDIR . '/includes/core/admin_functions.php';
 require NV_ROOTDIR . '/includes/core/user_functions.php';

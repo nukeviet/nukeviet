@@ -32,14 +32,17 @@ class ApiResult
     const CODE_AUTH_FAIL = '0014';
     const CODE_MISSING_REQUEST_CMD = '0015';
     const CODE_LANG_NOT_EXISTS = '0016';
+    const CODE_WRONG_LANG = '0017';
+    const CODE_MISSING_LANG = '0018';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 
-    private $result = [
+    private $result = [];
+
+    private $resultDefault = [
         'status' => '',
         'code' => '',
-        'message' => '',
-        'data' => []
+        'message' => ''
     ];
 
     /**
@@ -47,6 +50,7 @@ class ApiResult
      */
     public function __construct()
     {
+        $this->result = $this->resultDefault;
         $this->result['status'] = self::API_ERROR;
         $this->result['code'] = self::CODE_UNKONW;
     }
@@ -98,17 +102,25 @@ class ApiResult
     }
 
     /**
-     * @param array $data
+     * @param string $key
+     * @param [] $data
+     * @throws Exception
      * @return \NukeViet\Api\ApiResult
      */
-    public function setData($data = [])
+    public function set($key, $data)
     {
-        $this->result['data'] = $data;
+        if (!is_string($key)) {
+            throw new Exception('Invaild Data Key');
+        }
+        if (is_null($data) or is_resource($data)) {
+            throw new Exception('Invaild Data Type');
+        }
+        $this->result[$key] = $data;
         return $this;
     }
 
     /**
-     * @throws Exception
+     * @return string
      */
     public function getResult()
     {

@@ -10,6 +10,10 @@
 
 namespace NukeViet\Api;
 
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
+
 class SendMail implements IApi
 {
     private $result;

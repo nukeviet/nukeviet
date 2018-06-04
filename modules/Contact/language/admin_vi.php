@@ -107,8 +107,3 @@ $lang_module['config'] = 'Cấu hình module';
 $lang_module['config_sendcopymode'] = 'Quyền gửi bản sao tới email';
 $lang_module['config_sendcopymode0'] = 'Thành viên đã xác thực email';
 $lang_module['config_sendcopymode1'] = 'Tất cả người dùng';
-
-$lang_module['api_Department'] = 'Phòng ban';
-$lang_module['api_Department_GetDepartment'] = 'Danh sách phòng ban';
-$lang_module['api_Department_DeleteDepartment'] = 'Xóa phòng ban';
-$lang_module['api_AddContact'] = 'Tạo liên hệ mới';
