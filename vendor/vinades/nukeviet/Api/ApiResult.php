@@ -26,6 +26,12 @@ class ApiResult
     const CODE_NO_ADMIN_FOUND = '0008';
     const CODE_NO_MODADMIN_RIGHT = '0009';
     const CODE_ADMINLEV_NOT_ENOUGH = '0010';
+    const CODE_REMOTE_OFF = '0011';
+    const CODE_SYS_ERROR = '0012';
+    const CODE_NO_CREDENTIAL_FOUND = '0013';
+    const CODE_AUTH_FAIL = '0014';
+    const CODE_MISSING_REQUEST_CMD = '0015';
+    const CODE_LANG_NOT_EXISTS = '0016';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 
@@ -92,9 +98,27 @@ class ApiResult
     }
 
     /**
+     * @param array $data
+     * @return \NukeViet\Api\ApiResult
+     */
+    public function setData($data = [])
+    {
+        $this->result['data'] = $data;
+        return $this;
+    }
+
+    /**
      * @throws Exception
      */
     public function getResult()
+    {
+        return json_encode($this->result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function returnResult()
     {
         if (!function_exists('nv_jsonOutput')) {
             throw new Exception('Missing function nv_jsonOutput!!!', self::CODE_MISSING_FUNCTION);

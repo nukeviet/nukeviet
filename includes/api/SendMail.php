@@ -36,7 +36,7 @@ class SendMail implements IApi
      */
     public function setResultHander(ApiResult $result)
     {
-        $this->$result = $result;
+        $this->result = $result;
     }
 
     /**
@@ -47,12 +47,34 @@ class SendMail implements IApi
     {
         global $nv_Request;
 
-        // @TODO code xử lý đặt ở đây, muốn viết gì viết thoải mái
+        $from_name = $nv_Request->get_title('from_name', 'post', '');
+        $from_email = $nv_Request->get_title('from_email', 'post', '');
+        $to_email = $nv_Request->get_title('to_email', 'post', '');
+        $email_subject = $nv_Request->get_title('email_subject', 'post', '');
+        $email_message = $nv_Request->get_title('email_message', 'post', '');
 
-        $asdasd = $nv_Request->get_title('asdasd', 'post', 'KHONG CO DU LIEU DAU VAO');
+        if (($check = nv_check_valid_email($from_email)) != '') {
+            $this->result->setMessage($check);
+        } elseif (($check2 = nv_check_valid_email($to_email)) != '') {
+            $this->result->setMessage($check2);
+        } elseif (empty($email_subject)) {
+            $this->result->setMessage('No email subject');
+        } elseif (empty($email_subject)) {
+            $this->result->setMessage('No message');
+        } else {
+            if (empty($from_name)) {
+                $from = $from_email;
+            } else {
+                $from = [$from_name, $from_email];
+            }
+            $check_send = nv_sendmail($from, $to_email, $email_subject, $email_message);
+            if ($check_send) {
+                $this->result->setSuccess();
+            } else {
+                $this->result->setMessage('Can\'t send email');
+            }
+        }
 
-        $this->$result->setSuccess();
-
-        return  $this->$result->getResult();
+        return $this->result->getResult();
     }
 }
