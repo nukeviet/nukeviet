@@ -74,3 +74,5 @@ $lang_module['config_save'] = 'Lưu cấu hình';
 
 $lang_module['setting_copy_page'] = 'Cho phép copy bài viết';
 $lang_module['title_copy_page'] = 'Sao chép bài viết';
+
+$lang_module['api_CreatArticle'] = 'Tạo bài viết';

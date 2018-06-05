@@ -133,6 +133,10 @@ if (empty($api_request['action'])) {
 }
 
 define('NV_ADMIN', true);
+define('NV_REMOTE_API', true);
+
+// Ngôn ngữ Admin Global
+$nv_Lang->loadGlobal(true);
 
 // Class tồn tại
 if (!class_exists($classname)) {
@@ -155,6 +159,9 @@ if (!empty($api_request['module'])) {
 
     Api::setModuleName($api_request['module']);
     Api::setModuleInfo($module_info);
+
+    // Ngôn ngữ admin của module nếu API của module
+    $nv_Lang->loadModule($module_info['module_file'], true);
 }
 
 // Ghi nhật ký
@@ -162,7 +169,6 @@ nv_insert_logs(NV_LANG_DATA, $api_request['module'], 'LOG_REMOTE_API_REQUEST', '
 
 unset($credential_data, $api_request);
 
-$nv_Lang->loadGlobal(true);
 require NV_ROOTDIR . '/includes/core/admin_functions.php';
 require NV_ROOTDIR . '/includes/core/user_functions.php';
 
