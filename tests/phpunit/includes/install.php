@@ -36,6 +36,8 @@ if ($step == 5) {
     $_POST['dbport'] = NV_DB_TESTS_DBPORT;
 
     $_POST['db_detete'] = true;
+
+    define('NV_DEBUG', 1);
 } elseif ($step == 6) {
     // Các thông số cấu hình site test
     $_POST['site_name'] = NV_SITE_TESTS_TITLE;

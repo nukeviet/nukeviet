@@ -107,7 +107,9 @@ define('NV_ANTI_IFRAME', 1);
 define('NV_ANTI_AGENT', 0);
 
 // Chế độ phát triển
-define('NV_DEBUG', 0);
+if (!defined('NV_DEBUG')) {
+    define('NV_DEBUG', 0);
+}
 
 $nv_parse_ini_timezone = array(
     'Pacific/Midway' => array( 'winter_offset' => -39600, 'summer_offset' => -39600 ),
