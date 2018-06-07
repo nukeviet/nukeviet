@@ -10,8 +10,24 @@
  */
 
 define('NV_TEST_ROOTDIR', rtrim(str_replace('\\', '/', realpath(__DIR__ . '/../../../')), '/'));
+define('NV_TEST_DIR', NV_TEST_ROOTDIR . '/tests/phpunit/includes');
+define('NV_ROOTDIR', NV_TEST_ROOTDIR . '/src');
 
 require NV_TEST_ROOTDIR . '/vendor/autoload.php';
 
-/** @test */
-echo 'Init...' . PHP_EOL;
+// Load file cấu hình test
+require NV_TEST_ROOTDIR . '/tests-config.php';
+
+// Cài đặt site mới
+if (is_file(NV_ROOTDIR . '/config.php')) {
+    unlink(NV_ROOTDIR . '/config.php');
+}
+echo('Installing... ' . PHP_EOL);
+for ($i = 1; $i <= 8; $i++) {
+    echo('Step ' . $i . '...' . PHP_EOL);
+    unset($installRes);
+    exec(NV_PHP_CMD . ' ' . escapeshellarg(NV_TEST_DIR . '/install.php') . ' ' . escapeshellarg($i) . ' ', $installRes);
+    if ($installRes[0] !== 'OK') {
+        die('Test failed: Error install new site in step ' . $i . PHP_EOL);
+    }
+}

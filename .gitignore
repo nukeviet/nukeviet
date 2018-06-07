@@ -1,5 +1,6 @@
 vendor
 phpunit.bat
+tests-config.php
 
 # Base ignore
 /.buildpath

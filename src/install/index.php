@@ -12,7 +12,11 @@ define('NV_ADMIN', true);
 
 require_once 'mainfile.php';
 
-$file_config_temp = NV_TEMP_DIR . '/config_' . NV_CHECK_SESSION . '.php';
+if (defined('NV_TESTS_INSTALL')) {
+    $file_config_temp = NV_TEMP_DIR . '/config_tests.php';
+} else {
+    $file_config_temp = NV_TEMP_DIR . '/config_' . NV_CHECK_SESSION . '.php';
+}
 
 $dirs = nv_scandir(NV_ROOTDIR . '/includes/language', '/^([a-z]{2})/');
 
@@ -45,9 +49,14 @@ if (is_file(NV_ROOTDIR . '/' . $file_config_temp)) {
 $array_samples_data = nv_scandir(NV_ROOTDIR . '/install/samples', '/^data\_([a-z0-9]+)\.php$/');
 
 $contents = '';
-$step = $nv_Request->get_int('step', 'post,get', 1);
+$nv_pass_step = false;
 
-$maxstep = $nv_Request->get_int('maxstep', 'session', 1);
+if (defined('NV_TESTS_INSTALL')) {
+    $maxstep = $step + 1;
+} else {
+    $step = $nv_Request->get_int('step', 'post,get', 1);
+    $maxstep = $nv_Request->get_int('maxstep', 'session', 1);
+}
 
 if ($step <= 0 or $step > 8) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1');
@@ -74,6 +83,7 @@ if ($step == 1) {
     $title = $nv_Lang->getModule('select_language');
 
     $contents = nv_step_1();
+    $nv_pass_step = true;
 } elseif ($step == 2) {
     // Tu dong nhan dang Remove Path
     if ($nv_Request->isset_request('tetectftp', 'post')) {
@@ -271,6 +281,7 @@ if ($step == 1) {
             $nextstep = 0;
         }
     }
+    $nv_pass_step = $nextstep == 1;
 
     if (!nv_save_file_config($db_config, $global_config) and $ftp_check_login == 1) {
         ftp_chmod($conn_id, 0777, $file_config_temp);
@@ -299,6 +310,7 @@ if ($step == 1) {
     }
 
     $contents = nv_step_3($license);
+    $nv_pass_step = true;
 } elseif ($step == 4) {
     $nextstep = 0;
     $title = $nv_Lang->getModule('check_server');
@@ -349,7 +361,7 @@ if ($step == 1) {
         $array_support['class_' . $_key] = ($_support) ? 'highlight_green' : 'highlight_red';
         $array_support[$_key] = ($_support) ? $nv_Lang->getModule('compatible') : $nv_Lang->getModule('not_compatible');
     }
-
+    $nv_pass_step = $nextstep == 1;
     $contents = nv_step_4($array_resquest, $array_support, $nextstep);
 } elseif ($step == 5) {
     $nextstep = 0;
@@ -727,7 +739,7 @@ if ($step == 1) {
                         ++$step;
                         $nv_Request->set_Session('maxstep', $step);
 
-                        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+                        defined('NV_TESTS_INSTALL') ? die('OK') : nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                     }
                 }
             }
@@ -1057,7 +1069,7 @@ if ($step == 1) {
                             }
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)");
 
-                            nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+                            defined('NV_TESTS_INSTALL') ? die('OK') : nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                         } else {
                             $error = sprintf($nv_Lang->getModule('file_not_writable'), NV_DATADIR . '/config_global.php');
                         }
@@ -1082,7 +1094,7 @@ if ($step == 1) {
     if (empty($array_samples_data)) {
         $maxstep = 8;
         $nv_Request->set_Session('maxstep', $maxstep);
-        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
+        defined('NV_TESTS_INSTALL') ? die('OK') : nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
     }
 
     if ($nv_Request->isset_request('submit', 'post')) {
@@ -1132,7 +1144,7 @@ if ($step == 1) {
         $nv_Cache->delAll();
         $maxstep = 8;
         $nv_Request->set_Session('maxstep', $maxstep);
-        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
+        defined('NV_TESTS_INSTALL') ? die('OK') : nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
     }
 
     $title = $nv_Lang->getModule('sample_data');
@@ -1260,6 +1272,11 @@ if ($step == 1) {
 
     $title = $nv_Lang->getModule('done');
     $contents = nv_step_8($finish);
+    $nv_pass_step = true;
+}
+
+if (defined('NV_TESTS_INSTALL') and $nv_pass_step) {
+    die('OK');
 }
 
 echo nv_site_theme($step, $title, $contents);
@@ -1310,7 +1327,7 @@ function nv_save_file_config()
         $content .= "\$global_config['cached'] = 'files';\n";
         $content .= "\$global_config['session_handler'] = 'files';\n";
         $content .= "\$global_config['extension_setup'] = 3; // 0: No, 1: Upload, 2: NukeViet Store, 3: Upload + NukeViet Store\n";
-        $content .= "// Readmore: https://wiki.nukeviet.vn/nukeviet4:advanced_setting:file_config";
+        $content .= "// Readmore: https://wiki.nukeviet.vn/nukeviet4:advanced_setting:file_config\n";
 
         if ($step < 7) {
             $content .= "\$global_config['cookie_prefix'] = '" . $global_config['cookie_prefix'] . "';\n";
@@ -1345,7 +1362,7 @@ function nv_save_file_config()
             $content .= "\$global_config['ftp_check_login'] = '" . $global_config['ftp_check_login'] . "';\n";
         }
 
-        file_put_contents(NV_ROOTDIR . '/' . $file_config_temp, trim($content), LOCK_EX);
+        file_put_contents(NV_ROOTDIR . '/' . $file_config_temp, trim($content) . "\n", LOCK_EX);
         //Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();

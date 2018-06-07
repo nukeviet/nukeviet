@@ -23,7 +23,9 @@ $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_h
 $editor = false;
 
 //Xac dinh thu muc goc cua site
-define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
+if (!defined('NV_ROOTDIR')) {
+    define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__FILE__, PATHINFO_DIRNAME) . '/../')));
+}
 
 $sys_info['disable_classes'] = (($disable_classes = ini_get("disable_classes")) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
 $sys_info['disable_functions'] = (($disable_functions = ini_get("disable_functions")) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();

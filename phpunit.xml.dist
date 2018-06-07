@@ -7,4 +7,7 @@
             <directory suffix=".php">tests/phpunit/tests</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <const name="NV_IS_TEST_MODE" value="1" />
+    </php>
 </phpunit>
