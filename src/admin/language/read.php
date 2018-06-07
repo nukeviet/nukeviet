@@ -60,7 +60,6 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     }
 
     if ($include_lang != '' and file_exists($include_lang)) {
-        $lang_module_temp = $lang_module;
         $lang_module = array();
         $lang_global = array();
         $lang_block = array();
@@ -188,7 +187,6 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             }
         }
 
-        $lang_module = $lang_module_temp;
         return '';
     } else {
         $include_lang = '';

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -103,6 +103,7 @@ $lang_module['config'] = 'Configuration';
 $lang_module['funcs'] = 'Functions';
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';
+$lang_module['value_copied'] = 'Copied';
 $lang_module['adminip'] = 'Admin IP';
 $lang_module['adminip_ip'] = 'IP';
 $lang_module['adminip_timeban'] = 'Start';
@@ -154,3 +155,43 @@ $lang_module['custom_title'] = 'Title';
 $lang_module['main_module'] = 'Main module';
 $lang_module['themeadmin'] = 'Administration theme';
 $lang_module['theme_default'] = 'Default';
+$lang_module['api_addtime'] = 'Add time';
+$lang_module['api_edittime'] = 'Edit time';
+$lang_module['api_roles'] = 'Manage Roles API';
+$lang_module['api_roles_list'] = 'List of API Roles';
+$lang_module['api_roles_empty'] = 'No API Role yet added. Please complete the form below to add the new API Role';
+$lang_module['api_roles_add'] = 'Create new API Role';
+$lang_module['api_roles_edit'] = 'Edit API Role';
+$lang_module['api_roles_title'] = 'Name';
+$lang_module['api_roles_description'] = 'Description';
+$lang_module['api_roles_allowed'] = 'APIs allowed to access';
+$lang_module['api_roles_error_title'] = 'Error: The API Role name was not entered';
+$lang_module['api_roles_error_exists'] = 'Error: This API Role Name already exists, please enter a different name to avoid confusion';
+$lang_module['api_roles_error_role'] = 'Error: No APIs selected';
+$lang_module['api_roles_checkall'] = 'Select all';
+$lang_module['api_roles_uncheckall'] = 'Deselect all';
+$lang_module['api_roles_detail'] = 'Details APIs of';
+$lang_module['api_role_notice'] = 'Note: Depending on the level of the licensed administrator account the APIs used in each Role API will be redefined.';
+$lang_module['api_role_notice_lang'] = 'System APIs are valid for all languages. APIs of the module are only valid for the current language.';
+$lang_module['api_of_system'] = 'System';
+$lang_module['api_cr'] = 'API Credential';
+$lang_module['api_cr_error_role_empty'] = 'No API Role is created, please create a Role API first. The system will automatically switch to the Role API creation page in a moment';
+$lang_module['api_remote_off'] = 'Remote API <strong>is off</strong>, accounts with API access below will not be able to place API calls. To make an API call, <strong><a href="%s" target="_blank">enable the Remote API here</a></strong>';
+$lang_module['api_cr_last_access_none'] = 'None';
+$lang_module['api_cr_last_access'] = 'Recently used';
+$lang_module['api_cr_add'] = 'Add API Credential';
+$lang_module['api_cr_edit'] = 'Edit API Credential';
+$lang_module['api_cr_title'] = 'Describe the rights';
+$lang_module['api_cr_for_admin'] = 'Select administrator';
+$lang_module['api_cr_roles'] = 'Select API Role';
+$lang_module['api_cr_roles1'] = 'API Role';
+$lang_module['api_cr_error_title'] = 'Error: Please enter an API access description';
+$lang_module['api_cr_error_admin'] = 'Error: Please select administrator';
+$lang_module['api_cr_error_roles'] = 'Error: Please select the API Role';
+$lang_module['api_cr_result'] = 'Here is the access key and the secret code. You need to keep the secret code in a safe place before leaving this screen. After leaving this screen you will not be able to retrieve the secret code. If you lose the access and secret code you need to recreate other API access.';
+$lang_module['api_cr_credential_ident'] = 'Access keys';
+$lang_module['api_cr_credential_secret'] = 'Secret code';
+$lang_module['api_cr_back'] = 'Done copied';
+$lang_module['api_cr_notice'] = 'Note: Keep your secret code secret and special access keys secret. If the secret code and the access key are exposed, the saboteurs can perform undesirable operations';
+$lang_module['api_System'] = 'System functions';
+$lang_module['api_System_SendMail'] = 'Send email';

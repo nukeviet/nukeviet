@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Sep 19, 2012, 09:05:00 PM
@@ -83,8 +83,6 @@ $lang_module['error4'] = 'Error! New data were not recorded due to unknown cause
 $lang_module['error5'] = 'Error! Video file was not specified';
 $lang_module['error6'] = 'Error! Picture was not specified';
 $lang_module['error7'] = 'Error! Please report content in the Description box';
+$lang_module['error_required_alias'] = 'Error: You need enter value for Static Link';
 $lang_module['alias'] = 'Alias';
-$lang_module['commnum'] = 'Number of comments per page';
-$lang_module['cbroken'] = 'Bad Content';
-$lang_module['error8'] = 'Error! Please report content in the textarea';
 $lang_module['per_title'] = 'The number of title characters is cut off';

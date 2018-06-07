@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -32,6 +32,7 @@ $lang_module['caption_badmod'] = 'List error modules';
 $lang_module['caption_newmod'] = 'List deactive modules';
 $lang_module['module_name'] = 'Module';
 $lang_module['custom_title'] = 'Name';
+$lang_module['site_title'] = 'Value for site title';
 $lang_module['admin_title'] = 'Title of administration section';
 $lang_module['weight'] = 'Order';
 $lang_module['in_menu'] = 'Top Menu';
@@ -55,6 +56,7 @@ $lang_module['funcs_layout'] = 'Using layouts';
 $lang_module['funcs_in_submenu'] = 'Menu';
 $lang_module['funcs_subweight'] = 'Index';
 $lang_module['activate_rss'] = 'Activate RSS';
+$lang_module['activate_sitemap'] = 'Activate the sitemap';
 $lang_module['module_sys'] = 'System modules';
 $lang_module['vmodule'] = 'Virtual modules';
 $lang_module['vmodule_add'] = 'Add virtual module';
@@ -64,8 +66,10 @@ $lang_module['vmodule_note'] = 'Note';
 $lang_module['vmodule_select'] = 'Select module';
 $lang_module['vmodule_blockquote'] = 'Note: Module name only accept regular characters, numerals and underscore';
 $lang_module['vmodule_exit'] = 'Error: Module you have put in the system.';
+$lang_module['vmodule_maxlength'] = 'Maximum 50 characters';
 $lang_module['back'] = 'Back';
 $lang_module['change_func_name'] = 'Rename function "%s" of module "%s"';
+$lang_module['change_func_sitetitle'] = 'Rename site funtion "% s" of module "% s"';
 $lang_module['change_fun_alias'] = 'Rename alias "%s" of module "%s"';
 $lang_module['description'] = 'Description';
 $lang_module['reinstall_module'] = 'Reinstall module';
@@ -79,7 +83,5 @@ $lang_module['reinstall_note4'] = 'This sample data is not currently available f
 $lang_module['setup_option'] = 'Choose the option';
 $lang_module['setup_option_0'] = 'Just setup module';
 $lang_module['setup_option_1'] = 'Setup module and install the sample data';
-$lang_module['vmodule_maxlength'] = 'Maximum 50 characters';
-$lang_module['site_title'] = 'Value for site title';
-$lang_module['change_func_sitetitle'] = 'Rename site funtion "% s" of module "% s"';
-$lang_module['activate_sitemap'] = 'Activate the sitemap';
+$lang_module['error_no_hook_module'] = 'To install this module you need to install the following module or virtual module respectively: <strong>%s</strong>';
+$lang_module['select_hook_module'] = 'Choose hook module %s';
