@@ -556,7 +556,7 @@ while ($row = $result->fetch()) {
     $array_langs[$row['lang']] = $row['lang'];
 }
 
-// Array modules exists
+// Danh sách các module trong CSDL
 $array_modules_exists = array();
 
 foreach ($array_langs as $lang) {

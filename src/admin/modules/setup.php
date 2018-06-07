@@ -155,7 +155,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
 
 $page_title = $nv_Lang->getModule('modules');
 $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
-$modules_data = array();
+$modules_data = $module_file_db = [];
 
 $is_delCache = false;
 
@@ -165,7 +165,9 @@ $result = $db->query($sql_data);
 while ($row = $result->fetch()) {
     if (array_key_exists($row['basename'], $modules_exit)) {
         $modules_data[$row['title']] = $row;
+        $module_file_db[$row['basename']] = $row['basename'];
     } else {
+        // Xóa khỏi CSDL các module bị xóa thủ công bằng tay
         $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
         $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
         $sth->execute();
@@ -183,20 +185,21 @@ if ($is_delCache) {
 }
 
 $check_addnews_modules = false;
-$arr_module_news = array_diff_key($modules_exit, $modules_data);
+$arr_module_news = array_diff_key($modules_exit, $module_file_db);
 
-foreach ($arr_module_news as $module_name_i => $arr) {
-    $check_file_main = NV_ROOTDIR . '/modules/' . $module_name_i . '/funcs/main.php';
-    $check_file_functions = NV_ROOTDIR . '/modules/' . $module_name_i . '/functions.php';
+// Thêm các module chưa có trong CSDL do upload thủ công
+foreach ($arr_module_news as $module_file_i => $arr) {
+    $check_file_main = NV_ROOTDIR . '/modules/' . $module_file_i . '/funcs/main.php';
+    $check_file_functions = NV_ROOTDIR . '/modules/' . $module_file_i . '/functions.php';
 
-    $check_admin_main = NV_ROOTDIR . '/modules/' . $module_name_i . '/admin/main.php';
-    $check_admin_functions = NV_ROOTDIR . '/modules/' . $module_name_i . '/admin.functions.php';
+    $check_admin_main = NV_ROOTDIR . '/modules/' . $module_file_i . '/admin/main.php';
+    $check_admin_functions = NV_ROOTDIR . '/modules/' . $module_file_i . '/admin.functions.php';
 
     if ((file_exists($check_file_main) and filesize($check_file_main) != 0 and file_exists($check_file_functions) and filesize($check_file_functions) != 0) or (file_exists($check_admin_main) and filesize($check_admin_main) != 0 and file_exists($check_admin_functions) and filesize($check_admin_functions) != 0)) {
         $check_addnews_modules = true;
 
         $module_version = array();
-        $version_file = NV_ROOTDIR . '/modules/' . $module_name_i . '/version.php';
+        $version_file = NV_ROOTDIR . '/modules/' . $module_file_i . '/version.php';
 
         if (file_exists($version_file)) {
             require_once $version_file;
@@ -205,7 +208,7 @@ foreach ($arr_module_news as $module_name_i => $arr) {
         if (empty($module_version)) {
             $timestamp = NV_CURRENTTIME - date('Z', NV_CURRENTTIME);
             $module_version = array(
-                'name' => $module_name_i,
+                'name' => $module_file_i,
                 'modfuncs' => 'main',
                 'is_sysmod' => 0,
                 'virtual' => 0,
@@ -225,16 +228,21 @@ foreach ($arr_module_news as $module_name_i => $arr) {
         $version = $module_version['version'] . ' ' . $date_ver;
         $note = $module_version['note'];
         $author = $module_version['author'];
-        $module_data = preg_replace('/(\W+)/i', '_', $module_name_i);
+        $module_data = preg_replace('/(\W+)/i', '_', strtolower($module_file_i));
+        $module_title = strtolower($module_file_i);
 
         // Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
         $module_version['virtual'] = ($module_version['virtual'] == 1) ? 1 : 0;
 
-        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (
-			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
+        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (
+            type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note
+        ) VALUES (
+			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ',
+            :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note
+        )');
 
-        $sth->bindParam(':title', $module_name_i, PDO::PARAM_STR);
-        $sth->bindParam(':basename', $module_name_i, PDO::PARAM_STR);
+        $sth->bindParam(':title', $module_title, PDO::PARAM_STR);
+        $sth->bindParam(':basename', $module_file_i, PDO::PARAM_STR);
         $sth->bindParam(':table_prefix', $module_data, PDO::PARAM_STR);
         $sth->bindParam(':version', $version, PDO::PARAM_STR);
         $sth->bindParam(':author', $author, PDO::PARAM_STR);
