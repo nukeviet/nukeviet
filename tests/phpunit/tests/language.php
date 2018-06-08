@@ -127,4 +127,17 @@ class TestsLanguageBase extends TestCase
             }
         }
     }
+
+    /**
+     * Kiểm tra các biến $lang_module, $lang_global, $lang_block
+     */
+    public function testOldLangRedundant()
+    {
+        $allfiles = list_all_php_file(NV_ROOTDIR);
+
+        foreach ($allfiles as $filepath) {
+            $filecontents = file_get_contents(NV_ROOTDIR . '/' . $filepath);
+            $this->assertEquals(0, preg_match("/\\$(lang_global|lang_module|lang_block)[\s]*\[/", $filecontents), 'File: ' . $filepath);
+        }
+    }
 }

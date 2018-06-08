@@ -21,3 +21,42 @@ function _tests_default_server()
     $_SERVER['HTTP_USER_AGENT'] = 'NUKEVIET CMS. Developed by VINADES. Url: http://nukeviet.vn';
     $_SERVER['SERVER_SOFTWARE'] = 'sd';
 }
+
+/**
+ * Liệt kê tất cả các file PHP trừ file ngôn ngữ và thư mục vendor
+ *
+ * @param string $dir
+ * @param string $base_dir
+ * @return string[]
+ */
+function list_all_php_file($dir = '', $base_dir = '')
+{
+    $file_list = array();
+
+    if (is_dir($dir)) {
+        $array_filedir = scandir($dir);
+
+        foreach ($array_filedir as $v) {
+            if ($v == '.' or $v == '..') {
+                continue;
+            }
+
+            if (is_dir($dir . '/' . $v)) {
+                foreach (list_all_php_file($dir . '/' . $v, $base_dir . '/' . $v) as $file) {
+                    $file_list[] = $file;
+                }
+            } else {
+                if (
+                    preg_match('/\.php$/', $v) and !preg_match('/^\/?(data|vendor)\//', $base_dir . '/' . $v) and
+                    !preg_match('/\/?includes\/language/', $base_dir . '/' . $v) and
+                    !preg_match('/\/?modules\/(.*?)\/language/', $base_dir . '/' . $v) and
+                    !preg_match('/\/?themes\/(.*?)\/language/', $base_dir . '/' . $v)
+                    ) {
+                        $file_list[] = preg_replace('/^\//', '', $base_dir . '/' . $v);
+                    }
+            }
+        }
+    }
+
+    return $file_list;
+}
