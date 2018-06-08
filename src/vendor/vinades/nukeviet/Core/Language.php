@@ -104,7 +104,7 @@ class Language
     }
 
     /**
-     * Language::loadBlock()
+     * Đọc ngôn ngữ block, gần như là alias của phương thức loadFile
      *
      * @param mixed $file
      * @return void
@@ -112,6 +112,17 @@ class Language
     public function loadBlock($file)
     {
         $this->load($file);
+    }
+
+    /**
+     * Đọc một file ngôn ngữ bất kỳ
+     *
+     * @param string $file
+     * @param boolean $loadtmp
+     */
+    public function loadFile($file, $loadtmp = false)
+    {
+        $this->load($file, $loadtmp);
     }
 
     /**
@@ -367,6 +378,15 @@ class Language
     public function existsModule($langkey)
     {
         return isset(self::$lang_module[$langkey]);
+    }
+
+    /**
+     * @param string $langkey
+     * @return boolean
+     */
+    public function existsTmpModule($langkey)
+    {
+        return isset($this->tmplang_module[$langkey]);
     }
 
     /**

@@ -363,34 +363,33 @@ class NvUpdate
     public function checksys()
     {
         if (!empty($this->config['formodule'])) {
-            return array();
+            return [];
         }
 
         $file_ini = NV_ROOTDIR . '/install/update/install/ini.php';
         $file_lang = NV_ROOTDIR . '/install/update/includes/language/' . NV_LANG_UPDATE . '/install.php';
         if (!file_exists($file_ini)) {
-            return array();
+            return [];
         }
         $my_sys_info = $this->getsysinfo();
-        $sys_info = array();
+        $sys_info = [];
         $sys_info['ini_set_support'] = false;
         $sys_info['disable_functions'] = $my_sys_info['disable_functions'];
 
         include $file_ini;
 
-        if (file_exists($file_lang)) {
-            include $file_lang;
+        // Đọc tạm ngôn ngữ cài đặt của phiên bản mới nếu có
+        $this->lang->loadFile($file_lang, true);
+
+        if (!isset($nv_resquest_serverext_key) or !is_array($nv_resquest_serverext_key)) {
+            $nv_resquest_serverext_key = [];
         }
 
-        if (empty($nv_resquest_serverext_key)) {
-            return array();
-        }
-
-        $result = array();
+        $result = [];
         foreach ($nv_resquest_serverext_key as $key) {
             if (empty($sys_info[$key])) {
-                if (isset($lang_module[$key])) {
-                    $langkey = $lang_module[$key];
+                if (isset($this->lang->existsTmpModule($key))) {
+                    $langkey = $this->lang->getModule($key);
                 } elseif ($this->lang->existsModule($key)) {
                     $langkey = $this->lang->getModule($key);
                 } else {
@@ -402,6 +401,9 @@ class NvUpdate
                 $result[$key] = array($langkey, $this->lang->getModule('not_compatible'));
             }
         }
+
+        // Reset ngôn ngữ tạm
+        $this->lang->changeLang();
 
         return $result;
     }
