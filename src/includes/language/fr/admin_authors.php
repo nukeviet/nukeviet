@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -103,6 +103,7 @@ $lang_module['config'] = 'Configuration';
 $lang_module['funcs'] = 'Fonctionalités';
 $lang_module['checkall'] = 'Sélectionner tout';
 $lang_module['uncheckall'] = 'Désélectionner tout';
+$lang_module['value_copied'] = 'Copié';
 $lang_module['adminip'] = 'Gestion de IP connecté à l\'administration';
 $lang_module['adminip_ip'] = 'IP';
 $lang_module['adminip_timeban'] = 'Commencer';
@@ -154,3 +155,43 @@ $lang_module['custom_title'] = 'Titre';
 $lang_module['main_module'] = 'Module de la page principale';
 $lang_module['themeadmin'] = 'Thème de l\'Administration';
 $lang_module['theme_default'] = 'Défaut';
+$lang_module['api_addtime'] = 'Créé à';
+$lang_module['api_edittime'] = 'Mis à jour à';
+$lang_module['api_roles'] = 'Gérer l\'API des rôles';
+$lang_module['api_roles_list'] = 'Liste des rôles de l\'API';
+$lang_module['api_roles_empty'] = 'Aucun rôle d\'API n\'a encore été ajouté. Veuillez compléter le formulaire ci-dessous pour ajouter le nouveau rôle de l\'API';
+$lang_module['api_roles_add'] = 'Créer un nouveau rôle API';
+$lang_module['api_roles_edit'] = 'Modifier le rôle de l\'API';
+$lang_module['api_roles_title'] = 'Nom de rôle de l\'API';
+$lang_module['api_roles_description'] = 'Rôle de description d\'API';
+$lang_module['api_roles_allowed'] = 'API autorisées à accéder';
+$lang_module['api_roles_error_title'] = 'Erreur: le nom du rôle de l\'API n\'a pas été entré';
+$lang_module['api_roles_error_exists'] = 'Erreur: Ce nom de rôle d\'API existe déjà. Veuillez entrer un nom différent pour éviter toute confusion.';
+$lang_module['api_roles_error_role'] = 'Erreur: Aucune API sélectionnée';
+$lang_module['api_roles_checkall'] = 'Sélectionner tout';
+$lang_module['api_roles_uncheckall'] = 'Décocher tout';
+$lang_module['api_roles_detail'] = 'Détails des API';
+$lang_module['api_role_notice'] = 'Remarque: Selon le niveau du compte d\'administrateur sous licence, les API utilisées dans chaque API de rôle seront redéfinies.';
+$lang_module['api_role_notice_lang'] = 'Les API système sont valides pour toutes les langues. Les API du module ne sont valides que pour la langue actuelle.';
+$lang_module['api_of_system'] = 'Système';
+$lang_module['api_cr'] = 'Accès à l\'API';
+$lang_module['api_cr_error_role_empty'] = 'Aucun rôle d\'API n\'est créé. Veuillez d\'abord créer une API de rôle. Le système bascule automatiquement sur la page de création de l\'API de rôle dans un instant';
+$lang_module['api_remote_off'] = 'L\'API distante <strong>étant désactivée</strong>, les comptes disposant d\'un accès API ci-dessous ne pourront pas passer d\'appels d\'API. Pour effectuer un appel d\'API, <strong><a href="%s" target="_blank">activer l\'API à distance ici</a></strong>';
+$lang_module['api_cr_last_access_none'] = 'Pas encore';
+$lang_module['api_cr_last_access'] = 'Récemment utilisé';
+$lang_module['api_cr_add'] = 'Ajouter un accès à l\'API';
+$lang_module['api_cr_edit'] = 'Corriger l\'accès à l\'API';
+$lang_module['api_cr_title'] = 'Décrivez les droits';
+$lang_module['api_cr_for_admin'] = 'Sélectionnez l\'administrateur';
+$lang_module['api_cr_roles'] = 'Sélectionnez le rôle de l\'API';
+$lang_module['api_cr_roles1'] = 'Rôle API';
+$lang_module['api_cr_error_title'] = 'Erreur: Veuillez entrer une description d\'accès à l\'API';
+$lang_module['api_cr_error_admin'] = 'Erreur: Veuillez sélectionner l\'administrateur';
+$lang_module['api_cr_error_roles'] = 'Erreur: Veuillez sélectionner l\'API de rôle';
+$lang_module['api_cr_result'] = 'Voici la clé d\'accès et le code secret. Vous devez garder le code secret dans un endroit sûr avant de quitter cet écran. Après avoir quitté cet écran, vous ne serez pas en mesure de récupérer le code secret. Si vous perdez l\'accès et le code secret, vous devez recréer un autre accès à l\'API.';
+$lang_module['api_cr_credential_ident'] = 'Touches d\'accès';
+$lang_module['api_cr_credential_secret'] = 'Code secret';
+$lang_module['api_cr_back'] = 'Fait copié';
+$lang_module['api_cr_notice'] = 'Note: Gardez votre code secret secret et vos clés d\'accès spéciales secrètes. Si le code secret et la clé d\'accès sont exposés, les saboteurs peuvent effectuer des opérations indésirables';
+$lang_module['api_System'] = 'Fonctions du système';
+$lang_module['api_System_SendMail'] = 'Envoyer un email';
