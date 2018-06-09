@@ -23,7 +23,7 @@ define('NV_IS_MOD_VIDEOCLIPS', true);
 function nv_settopics($id, $list, $name)
 {
     global $module_name;
-    
+
     $name = $list[$id]['title'] . " &raquo; " . $name;
     $parentid = $list[$id]['parentid'];
     if ($parentid) $name = nv_settopics($parentid, $list, $name);
@@ -38,10 +38,10 @@ function nv_settopics($id, $list, $name)
 function nv_list_topics()
 {
     global $db, $module_data, $module_name, $module_info;
-    
+
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topic` WHERE `status`=1 ORDER BY `parentid`,`weight` ASC";
     $result = $db->query($sql);
-    
+
     $list = array();
     while ($row = $result->fetch()) {
         $list[$row['id']] = array(
@@ -55,15 +55,15 @@ function nv_list_topics()
             'keywords' => $row['keywords']
         );
     }
-    
+
     $list2 = array();
-    
+
     if (!empty($list)) {
         foreach ($list as $row) {
             if (!$row['parentid'] or isset($list[$row['parentid']])) {
                 $list2[$row['id']] = $list[$row['id']];
                 $list2[$row['id']]['name'] = $list[$row['id']]['title'];
-                
+
                 if ($row['parentid']) {
                     $list2[$row['parentid']]['subcats'][] = $row['id'];
                     $list2[$row['id']]['name'] = nv_settopics($row['parentid'], $list, $list2[$row['id']]['name']);
@@ -71,7 +71,7 @@ function nv_list_topics()
             }
         }
     }
-    
+
     return $list2;
 }
 
@@ -108,7 +108,6 @@ foreach ($topicList as $key => $_topicList) {
 }
 
 if (isset($array_op[0]) and !empty($array_op[0]) and !preg_match("/^page\-(\d+)$/", $array_op[0], $matches)) {
-    
     if (preg_match('/^(video)\-([a-z0-9\-]+)$/i', $array_op[0], $matches)) {
         $op = 'detail';
         $alias_url = $matches[2];

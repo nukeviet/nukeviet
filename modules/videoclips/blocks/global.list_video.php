@@ -12,20 +12,33 @@ if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 
 if (!nv_function_exists('nv4_block_list_video')) {
-
+    /**
+     * nv_block_config_list_video()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_list_video($module, $data_block, $lang_block)
     {
         global $site_mods;
 
-        $html_input = '';
         $html = '';
-        $html = '<tr>';
-        $html .= '<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '<td><input type="text" class="form-control w200" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '<div class="col-sm-8"><input type="text" class="form-control" name="config_numrow" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_list_video_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_list_video_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -36,6 +49,12 @@ if (!nv_function_exists('nv4_block_list_video')) {
         return $return;
     }
 
+    /**
+     * nv4_block_list_video()
+     *
+     * @param mixed $block_config
+     * @return
+     */
     function nv4_block_list_video($block_config)
     {
         global $global_config, $db, $site_mods, $module_name, $module_info, $module_file;

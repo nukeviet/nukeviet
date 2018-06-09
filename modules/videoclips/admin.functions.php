@@ -15,14 +15,15 @@ $allow_func = array(
     'topic',
     'vbroken',
     'cbroken',
-    'config'
+    'config',
+    'view'
 );
 
 define('NV_IS_FILE_ADMIN', true);
 
 /**
  * nv_settopics()
- * 
+ *
  * @param mixed $list2
  * @param mixed $id
  * @param mixed $list
@@ -37,7 +38,7 @@ function nv_settopics($list2, $id, $list, $m = 0, $num = 0)
     for ($i = 0; $i < $num; ++$i) {
         $defis .= "--";
     }
-    
+
     if (isset($list[$id])) {
         foreach ($list[$id] as $value) {
             if ($value['id'] != $m) {
@@ -54,7 +55,7 @@ function nv_settopics($list2, $id, $list, $m = 0, $num = 0)
 
 /**
  * nv_listTopics()
- * 
+ *
  * @param mixed $parentid
  * @param integer $m
  * @return
@@ -62,7 +63,7 @@ function nv_settopics($list2, $id, $list, $m = 0, $num = 0)
 function nv_listTopics($parentid, $m = 0)
 {
     global $db, $module_data;
-    
+
     $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topic` ORDER BY `parentid`,`weight` ASC";
     $result = $db->query($sql);
     $list = array();
@@ -80,9 +81,9 @@ function nv_listTopics($parentid, $m = 0)
         ) //
 ;
     }
-    
+
     if (empty($list)) return $list;
-    
+
     $list2 = array();
     foreach ($list[0] as $value) {
         if ($value['id'] != $m) {
@@ -92,14 +93,14 @@ function nv_listTopics($parentid, $m = 0)
             }
         }
     }
-    
+
     return $list2;
 }
 
 function nv_myAlias($alias, $mode = 0, $id = 0, $_id = 1)
 {
     global $db, $module_data;
-    
+
     if ($mode == 1) //Edit Topic
 {
         $where1 = "";
@@ -111,7 +112,7 @@ function nv_myAlias($alias, $mode = 0, $id = 0, $_id = 1)
     } else {
         $where1 = $where2 = "";
     }
-    
+
     if ((list ($count) = $db->sql_fetchrow($db->query("SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_clip` WHERE" . $where1 . " `alias`=" . $db->quote($alias)))) and $count != 0) {
         if (preg_match("/^(.*)\-(\d+)$/", $alias, $matches)) {
             $alias = $matches[1];
@@ -125,6 +126,6 @@ function nv_myAlias($alias, $mode = 0, $id = 0, $_id = 1)
         }
         $alias = nv_myAlias($alias . "-" . $_id, $mode, $id, ++$_id);
     }
-    
+
     return $alias;
 }

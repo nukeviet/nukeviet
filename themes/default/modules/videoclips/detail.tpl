@@ -1,8 +1,8 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_FILE}_jquery.autoresize.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_THEME}_jquery.autoresize.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_THEME}_jquery.matchHeight-min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/{MODULE_THEME}/jwplayer/jwplayer.js"></script>
 <script type="text/javascript">jwplayer.key="KzcW0VrDegOG/Vl8Wb9X3JLUql+72MdP1coaag==";</script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/jquery.matchHeight-min.js"></script>
 <div class="detailContent clearfix">
     <div class="message" id="mesHide"></div>
     <!-- BEGIN: video_flash -->
