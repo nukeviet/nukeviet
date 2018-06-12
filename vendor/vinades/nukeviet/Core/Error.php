@@ -573,7 +573,7 @@ class Error
             }
 
         }
-        if ((NV_DEBUG or (!$log_is_displayed and $this->error_set_logs)) and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
+        if (NV_DEBUG and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
             $this->_display();
         }
     }
