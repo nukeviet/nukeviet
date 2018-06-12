@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
-
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <form id="ltablesearch{BLOCKID}" action="{FORM_ACTION}" method="get" onsubmit="return nv_check_search_laws(this);">
     <!-- BEGIN: no_rewrite -->
     <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
@@ -113,6 +113,8 @@
 </form>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('#lclearform{BLOCKID}').click(function() {
@@ -133,7 +135,9 @@ $(document).ready(function() {
         e.preventDefault();
         var a = $(this);
         if( a.hasClass('advance')){
-            $('#advance').slideDown();
+            $('#advance').slideDown(function() {
+            	select2search();
+            });
             a.html('<em class="fa fa-search">&nbsp;</em>{LANG.search_simple}');
             a.removeClass('advance');
             $('input[name="is_advance"]').val(1);
@@ -144,7 +148,14 @@ $(document).ready(function() {
             $('input[name="is_advance"]').val(0);
         }
     });
+    select2search();
 });
+function select2search() {
+	var form = $('#ltablesearch{BLOCKID}');
+	if ($('#advance', form).is(':visible')) {
+	    $('[name="area"],[name="cat"],[name="approval"],[name="status"],[name="signer"],[name="subject"],[name="examine"]', form).select2();
+	}
+}
 function nv_check_search_laws(data) {
     if (($('#ls_key').val() == '' ) && ($('#ls_cat').val() == 0 ) && ($('#ls_area').val() == 0 ) && ($('#ls_subject').val() == 0 ) && ($('#ls_signer').val() == 0 ) && ($('#ls_status').val() == 0 ) && ($('#ls_from').val() == '' ) && ($('#ls_to').val() == '' )) {
         alert('{LANG.search_alert}');
