@@ -81,7 +81,7 @@
 		<tr>
 			<th style="width:100px"> {LANG.pos} </th>
 			<th> {LANG.title} </th>
-			<th style="width:120px">&nbsp;</th>
+			<th style="width:120px">{LANG.feature}</th>
 		</tr>
 	</thead>
 	<tbody>

@@ -147,7 +147,7 @@
 				<th> {LANG.pos} </th>
 				<th> {LANG.title} </th>
 				<th>{LANG.newicon} ({LANG.day})</th>
-				<th>&nbsp;</th>
+				<th>{LANG.feature}</th>
 			</tr>
 		</thead>
 		<tbody>
