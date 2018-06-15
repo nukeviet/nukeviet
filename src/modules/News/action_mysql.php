@@ -254,67 +254,64 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	  PRIMARY KEY (id)
 	) ENGINE=InnoDB";
 
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'st_links', '10')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'homewidth', '100')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'homeheight', '150')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'blockwidth', '70')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'blockheight', '75')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'imagefull', '460')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'copyright', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'showtooltip', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tooltip_position', 'bottom')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tooltip_length', '150')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'showhometext', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'timecheckstatus', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'config_source', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'show_no_image', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_rating_point', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'facebookappid', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'socialbutton', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'alias_lower', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_alias', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_tags', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_remind', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'keywords_tag', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'copy_news', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'structure_upload', 'Ym')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'imgposition', '2')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'htmlhometext', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'order_articles', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+    ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right'),
+    ('" . $lang . "', '" . $module_name . "', 'per_page', '20'),
+    ('" . $lang . "', '" . $module_name . "', 'st_links', '10'),
+    ('" . $lang . "', '" . $module_name . "', 'homewidth', '100'),
+    ('" . $lang . "', '" . $module_name . "', 'homeheight', '150'),
+    ('" . $lang . "', '" . $module_name . "', 'blockwidth', '70'),
+    ('" . $lang . "', '" . $module_name . "', 'blockheight', '75'),
+    ('" . $lang . "', '" . $module_name . "', 'imagefull', '460'),
+    ('" . $lang . "', '" . $module_name . "', 'copyright', ''),
+    ('" . $lang . "', '" . $module_name . "', 'showtooltip', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'tooltip_position', 'bottom'),
+    ('" . $lang . "', '" . $module_name . "', 'tooltip_length', '150'),
+    ('" . $lang . "', '" . $module_name . "', 'showhometext', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'timecheckstatus', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'config_source', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'show_no_image', ''),
+    ('" . $lang . "', '" . $module_name . "', 'allowed_rating_point', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'facebookappid', ''),
+    ('" . $lang . "', '" . $module_name . "', 'socialbutton', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'alias_lower', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'tags_alias', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'auto_tags', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'tags_remind', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'keywords_tag', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'copy_news', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'structure_upload', 'Ym'),
+    ('" . $lang . "', '" . $module_name . "', 'imgposition', '2'),
+    ('" . $lang . "', '" . $module_name . "', 'htmlhometext', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'order_articles', '1'),
 
-// Cau hinh elasticseach
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_use', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_host', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_port', '9200')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_index', '')";
+    ('" . $lang . "', '" . $module_name . "', 'elas_use', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'elas_host', ''),
+    ('" . $lang . "', '" . $module_name . "', 'elas_port', '9200'),
+    ('" . $lang . "', '" . $module_name . "', 'elas_index', ''),
 
-// Bai viet tuc thoi
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_active', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_template', 'default')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_httpauth', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_username', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_password', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_livetime', '60')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_gettime', '120')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_auto', '1')";
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_active', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_template', 'default'),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_httpauth', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_username', ''),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_password', ''),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_livetime', '60'),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_gettime', '120'),
+    ('" . $lang . "', '" . $module_name . "', 'instant_articles_auto', '1'),
 
-// Comments
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '6')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '4')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'perpagecomm', '5')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'timeoutcomm', '360')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowattachcomm', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'alloweditorcomm', '0')";
+    ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1'),
+    ('" . $lang . "', '" . $module_name . "', 'view_comm', '6'),
+    ('" . $lang . "', '" . $module_name . "', 'setcomm', '4'),
+    ('" . $lang . "', '" . $module_name . "', 'activecomm', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'emailcomm', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'adminscomm', ''),
+    ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'captcha', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'perpagecomm', '5'),
+    ('" . $lang . "', '" . $module_name . "', 'timeoutcomm', '360'),
+    ('" . $lang . "', '" . $module_name . "', 'allowattachcomm', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'alloweditorcomm', '0'),
 
-// Cau hinh dang bai ngoai trang
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'frontend_edit_alias', '0')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'frontend_edit_layout', '1')";
+    ('" . $lang . "', '" . $module_name . "', 'frontend_edit_alias', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'frontend_edit_layout', '1')";

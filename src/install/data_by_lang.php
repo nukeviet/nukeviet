@@ -31,81 +31,84 @@ $sth->execute(array( 'freecontent', 'FreeContent', 'freecontent', 'freecontent',
 $sth->execute(array( 'two-step-verification', 'TwoStepVerification', 'twostepverification', 'twostepverification', 'TwoStepVerification', $install_lang['modules']['two_step_verification'], $install_lang['modules']['two_step_verification_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 15, 1, '', 0, 0));
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs');
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+$_array_insert = array();
 //About
-$sth->execute(array( 'main', 'main', 'Main', 'about', 1, 0, 1, ''));
-$sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, ''));
-$sth->execute(array( 'rss', 'rss', 'Rss', 'about', 0, 0, 0, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'about', 1, 0, 1, '')";
+$_array_insert[] = "( 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, '')";
+$_array_insert[] = "( 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '')";
 //News
-$sth->execute(array( 'main', 'main', 'Main', 'news', 1, 0, 1, ''));
-$sth->execute(array( 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 2, ''));
-$sth->execute(array( 'topic', 'topic', 'Topic', 'news', 1, 0, 3, ''));
-$sth->execute(array( 'content', 'content', 'Content', 'news', 1, 1, 4, ''));
-$sth->execute(array( 'detail', 'detail', 'Detail', 'news', 1, 0, 5, ''));
-$sth->execute(array( 'tag', 'tag', 'Tag', 'news', 1, 0, 6, ''));
-$sth->execute(array( 'rss', 'rss', 'Rss', 'news', 1, 1, 7, ''));
-$sth->execute(array( 'search', 'search', 'Search', 'news', 1, 1, 8, ''));
-$sth->execute(array( 'groups', 'groups', 'Groups', 'news', 1, 0, 9, ''));
-$sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, ''));
-$sth->execute(array( 'print', 'print', 'Print', 'news', 0, 0, 0, ''));
-$sth->execute(array( 'rating', 'rating', 'Rating', 'news', 0, 0, 0, ''));
-$sth->execute(array( 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, ''));
-$sth->execute(array( 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, ''));
-$sth->execute(array( 'instant-rss', 'instant-rss', 'Instant Articles RSS', 'news', 0, 0, 0, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'news', 1, 0, 1, '')";
+$_array_insert[] = "( 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 2, '')";
+$_array_insert[] = "( 'topic', 'topic', 'Topic', 'news', 1, 0, 3, '')";
+$_array_insert[] = "( 'content', 'content', 'Content', 'news', 1, 1, 4, '')";
+$_array_insert[] = "( 'detail', 'detail', 'Detail', 'news', 1, 0, 5, '')";
+$_array_insert[] = "( 'tag', 'tag', 'Tag', 'news', 1, 0, 6, '')";
+$_array_insert[] = "( 'rss', 'rss', 'Rss', 'news', 1, 1, 7, '')";
+$_array_insert[] = "( 'search', 'search', 'Search', 'news', 1, 1, 8, '')";
+$_array_insert[] = "( 'groups', 'groups', 'Groups', 'news', 1, 0, 9, '')";
+$_array_insert[] = "( 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, '')";
+$_array_insert[] = "( 'print', 'print', 'Print', 'news', 0, 0, 0, '')";
+$_array_insert[] = "( 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '')";
+$_array_insert[] = "( 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, '')";
+$_array_insert[] = "( 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '')";
+$_array_insert[] = "( 'instant-rss', 'instant-rss', 'Instant Articles RSS', 'news', 0, 0, 0, '')";
+
 //Users
-$sth->execute(array( 'main', 'main', 'Main', 'users', 1, 0, 1, ''));
-$sth->execute(array( 'login', 'login', $install_lang['modfuncs']['users']['login'], 'users', 1, 1, 2, ''));
-$sth->execute(array( 'register', 'register', $install_lang['modfuncs']['users']['register'], 'users', 1, 1, 3, ''));
-$sth->execute(array( 'lostpass', 'lostpass', $install_lang['modfuncs']['users']['lostpass'], 'users', 1, 1, 4, ''));
-$sth->execute(array( 'active', 'active', $install_lang['modfuncs']['users']['active'], 'users', 1, 0, 5, ''));
-$sth->execute(array( 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 6, ''));
-$sth->execute(array( 'editinfo', 'editinfo', $install_lang['modfuncs']['users']['editinfo'], 'users', 1, 1, 7, ''));
-$sth->execute(array( 'memberlist', 'memberlist', $install_lang['modfuncs']['users']['memberlist'], 'users', 1, 1, 8, ''));
-$sth->execute(array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, ''));
-$sth->execute(array( 'logout', 'logout', $install_lang['modfuncs']['users']['logout'], 'users', 1, 1, 10, ''));
-$sth->execute(array( 'groups', 'groups', $install_lang['modfuncs']['users']['groups'], 'users', 1, 0, 11, ''));
-$sth->execute(array( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'users', 1, 0, 1, '')";
+$_array_insert[] = "( 'login', 'login', '" . $install_lang['modfuncs']['users']['login'] . "', 'users', 1, 1, 2, '')";
+$_array_insert[] = "( 'register', 'register', '" . $install_lang['modfuncs']['users']['register'] . "', 'users', 1, 1, 3, '')";
+$_array_insert[] = "( 'lostpass', 'lostpass', '" . $install_lang['modfuncs']['users']['lostpass'] . "', 'users', 1, 1, 4, '')";
+$_array_insert[] = "( 'active', 'active', '" . $install_lang['modfuncs']['users']['active'] . "', 'users', 1, 0, 5, '')";
+$_array_insert[] = "( 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 6, '')";
+$_array_insert[] = "( 'editinfo', 'editinfo', '" . $install_lang['modfuncs']['users']['editinfo'] . "', 'users', 1, 1, 7, '')";
+$_array_insert[] = "( 'memberlist', 'memberlist', '" . $install_lang['modfuncs']['users']['memberlist'] . "', 'users', 1, 1, 8, '')";
+$_array_insert[] = "( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, '')";
+$_array_insert[] = "( 'logout', 'logout', '" . $install_lang['modfuncs']['users']['logout'] . "', 'users', 1, 1, 10, '')";
+$_array_insert[] = "( 'groups', 'groups', '" . $install_lang['modfuncs']['users']['groups'] . "', 'users', 1, 0, 11, '')";
+$_array_insert[] = "( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '')";
 //Statistics
-$sth->execute(array( 'main', 'main', 'Main', 'statistics', 1, 0, 1, ''));
-$sth->execute(array( 'allreferers', 'allreferers', $install_lang['modfuncs']['statistics']['allreferers'], 'statistics', 1, 1, 2, ''));
-$sth->execute(array( 'allcountries', 'allcountries', $install_lang['modfuncs']['statistics']['allcountries'], 'statistics', 1, 1, 3, ''));
-$sth->execute(array( 'allbrowsers', 'allbrowsers', $install_lang['modfuncs']['statistics']['allbrowsers'], 'statistics', 1, 1, 4, ''));
-$sth->execute(array( 'allos', 'allos', $install_lang['modfuncs']['statistics']['allos'], 'statistics', 1, 1, 5, ''));
-$sth->execute(array( 'allbots', 'allbots', $install_lang['modfuncs']['statistics']['allbots'], 'statistics', 1, 1, 6, ''));
-$sth->execute(array( 'referer', 'referer', $install_lang['modfuncs']['statistics']['referer'], 'statistics', 1, 0, 7, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'statistics', 1, 0, 1, '')";
+$_array_insert[] = "( 'allreferers', 'allreferers', '" . $install_lang['modfuncs']['statistics']['allreferers'] . "', 'statistics', 1, 1, 2, '')";
+$_array_insert[] = "( 'allcountries', 'allcountries', '" . $install_lang['modfuncs']['statistics']['allcountries'] . "', 'statistics', 1, 1, 3, '')";
+$_array_insert[] = "( 'allbrowsers', 'allbrowsers', '" . $install_lang['modfuncs']['statistics']['allbrowsers'] . "', 'statistics', 1, 1, 4, '')";
+$_array_insert[] = "( 'allos', 'allos', '" . $install_lang['modfuncs']['statistics']['allos'] . "', 'statistics', 1, 1, 5, '')";
+$_array_insert[] = "( 'allbots', 'allbots', '" . $install_lang['modfuncs']['statistics']['allbots'] . "', 'statistics', 1, 1, 6, '')";
+$_array_insert[] = "( 'referer', 'referer', '" . $install_lang['modfuncs']['statistics']['referer'] . "', 'statistics', 1, 0, 7, '')";
 //Banners
-$sth->execute(array( 'main', 'main', 'Main', 'banners', 1, 0, 1, ''));
-$sth->execute(array( 'addads', 'addads', 'Addads', 'banners', 1, 0, 2, ''));
-$sth->execute(array( 'clientinfo', 'clientinfo', 'Clientinfo', 'banners', 1, 0, 3, ''));
-$sth->execute(array( 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, ''));
-$sth->execute(array( 'cledit', 'cledit', 'Cledit', 'banners', 0, 0, 0, ''));
-$sth->execute(array( 'click', 'click', 'Click', 'banners', 0, 0, 0, ''));
-$sth->execute(array( 'clinfo', 'clinfo', 'Clinfo', 'banners', 0, 0, 0, ''));
-$sth->execute(array( 'logininfo', 'logininfo', 'Logininfo', 'banners', 0, 0, 0, ''));
-$sth->execute(array( 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'banners', 1, 0, 1, '')";
+$_array_insert[] = "( 'addads', 'addads', 'Addads', 'banners', 1, 0, 2, '')";
+$_array_insert[] = "( 'clientinfo', 'clientinfo', 'Clientinfo', 'banners', 1, 0, 3, '')";
+$_array_insert[] = "( 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '')";
+$_array_insert[] = "( 'cledit', 'cledit', 'Cledit', 'banners', 0, 0, 0, '')";
+$_array_insert[] = "( 'click', 'click', 'Click', 'banners', 0, 0, 0, '')";
+$_array_insert[] = "( 'clinfo', 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '')";
+$_array_insert[] = "( 'logininfo', 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '')";
+$_array_insert[] = "( 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '')";
 //Comment
-$sth->execute(array( 'main', 'main', 'main', 'comment', 1, 0, 1, ''));
-$sth->execute(array( 'post', 'post', 'post', 'comment', 1, 0, 2, ''));
-$sth->execute(array( 'like', 'like', 'Like', 'comment', 1, 0, 3, ''));
-$sth->execute(array( 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, ''));
-$sth->execute(array( 'down', 'down', 'Down', 'comment', 1, 0, 5, ''));
+$_array_insert[] = "( 'main', 'main', 'main', 'comment', 1, 0, 1, '')";
+$_array_insert[] = "( 'post', 'post', 'post', 'comment', 1, 0, 2, '')";
+$_array_insert[] = "( 'like', 'like', 'Like', 'comment', 1, 0, 3, '')";
+$_array_insert[] = "( 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '')";
+$_array_insert[] = "( 'down', 'down', 'Down', 'comment', 1, 0, 5, '')";
 //Page
-$sth->execute(array( 'main', 'main', 'Main', 'page', 1, 0, 1, ''));
-$sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, ''));
-$sth->execute(array( 'rss', 'rss', 'Rss', 'page', 0, 0, 0, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'page', 1, 0, 1, '')";
+$_array_insert[] = "( 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '')";
+$_array_insert[] = "( 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '')";
 //Siteterms
-$sth->execute(array( 'main', 'main', 'Main', 'siteterms', 1, 0, 1, ''));
-$sth->execute(array( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, ''));
-$sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'siteterms', 1, 0, 1, '')";
+$_array_insert[] = "( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, '')";
+$_array_insert[] = "( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, '')";
 //Two-Step Verification
-$sth->execute(array( 'main', 'main', 'Main', 'two-step-verification', 1, 0, 1, ''));
-$sth->execute(array( 'confirm', 'confirm', 'Confirm', 'two-step-verification', 1, 0, 2, ''));
-$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 3, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'two-step-verification', 1, 0, 1, '')";
+$_array_insert[] = "( 'confirm', 'confirm', 'Confirm', 'two-step-verification', 1, 0, 2, '')";
+$_array_insert[] = "( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 3, '')";
 //Others
-$sth->execute(array( 'main', 'main', 'Main', 'contact', 1, 0, 1, ''));
-$sth->execute(array( 'main', 'main', 'Main', 'voting', 1, 0, 1, ''));
-$sth->execute(array( 'main', 'main', 'Main', 'seek', 1, 0, 1, ''));
-$sth->execute(array( 'main', 'main', 'Main', 'feeds', 1, 0, 1, ''));
+$_array_insert[] = "( 'main', 'main', 'Main', 'contact', 1, 0, 1, '')";
+$_array_insert[] = "( 'main', 'main', 'Main', 'voting', 1, 0, 1, '')";
+$_array_insert[] = "( 'main', 'main', 'Main', 'seek', 1, 0, 1, '')";
+$_array_insert[] = "( 'main', 'main', 'Main', 'feeds', 1, 0, 1, '')";
+
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES '.implode(',', $_array_insert));
 
 $array_funcid = array();
 $array_funcid_mod = array();
@@ -220,23 +223,24 @@ $themes_mobile['main'] = array(
 );
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)');
-$sth->execute(array( 0, 'left-main-right', 'default'));
-$sth->execute(array(0, 'main', 'mobile_default'));
+$_array_insert = array();
+$_array_insert[] = "(0, 'left-main-right', 'default')";
+$_array_insert[] = "(0, 'main', 'mobile_default')";
 
 foreach ($array_funcid as $funcid) {
     foreach ($themes_default as $_key => $_vals) {
         if (in_array($funcid, $_vals)) {
-            $sth->execute(array( $funcid, $_key, 'default'));
+            $_array_insert[] = "(" . $funcid . ", '" . $_key . "', 'default')";
         }
     }
 
     foreach ($themes_mobile as $_key => $_vals) {
         if (in_array($funcid, $_vals)) {
-            $sth->execute(array( $funcid, $_key, 'mobile_default'));
+            $_array_insert[] = "(" . $funcid . ", '" . $_key . "', 'mobile_default')";
         }
     }
 }
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES ' . implode(', ', $_array_insert));
 
 $company = array();
 $company['company_name'] = $install_lang['vinades_fullname'];
@@ -308,6 +312,7 @@ $sth->execute(array('mobile_default', 'theme', 'global.company_info.php', $insta
 
 // Thiet lap Block
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight');
+$_array_insert = array();
 $func_result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC');
 $array_weight_block = array();
 while ($row = $func_result->fetch()) {
@@ -345,10 +350,10 @@ while ($row = $func_result->fetch()) {
             $weight = 1;
         }
         $array_weight_block[$row['theme']][$row['position']][$func_id] = $weight;
-
-        $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')');
+        $_array_insert[] = '(' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')';
     }
 }
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight (bid, func_id, weight) VALUES '.implode(', ', $_array_insert));
 
 $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
 $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");

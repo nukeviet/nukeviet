@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:42
  */
-
 define('NV_ADMIN', true);
 
 require_once 'mainfile.php';
@@ -366,8 +365,6 @@ if ($step == 1) {
 } elseif ($step == 5) {
     $step5startTime = microtime(true);
 
-
-
     $nextstep = 0;
     $db_config['error'] = '';
     $db_config['dbtype'] = $nv_Request->get_string('dbtype', 'post', $db_config['dbtype']);
@@ -697,6 +694,7 @@ if ($step == 1) {
                     $modules = $result->fetchAll();
 
                     foreach ($modules as $key => $row) {
+                        $_startTime = microtime(true);
                         $setmodule = $row['title'];
 
                         if (in_array($row['module_file'], $modules_exit)) {
@@ -709,9 +707,8 @@ if ($step == 1) {
                             unset($modules[$key]);
                             $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title=' . $db->quote($setmodule));
                         }
+                        file_put_contents(NV_ROOTDIR . '/log.log', 'Cài đặt CSDL cho module ' . $setmodule . ' tốn ' . round(((microtime(true) - $_startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
                     }
-
-                    file_put_contents(NV_ROOTDIR . '/log.log', 'Cài đặt CSDL cho module tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
                     // Cai dat du lieu mau he thong
                     try {
@@ -742,10 +739,14 @@ if ($step == 1) {
                     }
 
                     // Cai dat du lieu mau module
+                    $_startTime = microtime(true);
                     include_once NV_ROOTDIR . '/install/data_by_lang.php';
+                    file_put_contents(NV_ROOTDIR . '/log.log', 'Cài đặt data_by_lang: ' . round(((microtime(true) - $_startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
+
                     //$db->beginTransaction();
                     try {
                         foreach ($modules as $row) {
+                            $_startTime = microtime(true);
                             $module_name = $row['title'];
                             $module_file = $row['module_file'];
                             $module_data = $row['module_data'];
@@ -762,6 +763,7 @@ if ($step == 1) {
                                     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'");
                                 }
                             }
+                            file_put_contents(NV_ROOTDIR . '/log.log', 'Cài đặt Data module ' . $module_name . ': ' . round(((microtime(true) - $_startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
                         }
                     } catch (PDOException $e) {
                         $db_config['error'] = $e->getMessage();
@@ -987,32 +989,33 @@ if ($step == 1) {
                             }
 
                             // Data Counter
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'start', 0, 0, 0)");
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'last', 0, 0, 0)");
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)");
+                            $_array_insert = array();
+                            $_array_insert[] = "('c_time', 'start', 0, 0, 0)";
+                            $_array_insert[] = "('c_time', 'last', 0, 0, 0)";
+                            $_array_insert[] = "('total', 'hits', 0, 0, 0)";
 
                             $year = date('Y');
                             for ($i = 0; $i < 9; $i++) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)");
+                                $_array_insert[] = "('year', '" . $year . "', 0, 0, 0)";
                                 ++$year;
                             }
 
                             $ar_tmp = explode(',', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec');
                             foreach ($ar_tmp as $month) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)");
+                                $_array_insert[] = "('month', '" . $month . "', 0, 0, 0)";
                             }
 
                             for ($i = 1; $i < 32; $i++) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
+                                $_array_insert[] = "('day', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)";
                             }
 
                             $ar_tmp = explode(',', 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday');
                             foreach ($ar_tmp as $dayofweek) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)");
+                                $_array_insert[] = "('dayofweek', '" . $dayofweek . "', 0, 0, 0)";
                             }
 
                             for ($i = 0; $i < 24; $i++) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
+                                $_array_insert[] = "('hour', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)";
                             }
 
                             $bots = array(
@@ -1023,7 +1026,7 @@ if ($step == 1) {
                                 'w3cvalidator'
                             );
                             foreach ($bots as $_bot) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote($_bot) . ", 0, 0, 0)");
+                                $_array_insert[] = "('bot', " . $db->quote($_bot) . ", 0, 0, 0)";
                             }
 
                             $tmp_array = array(
@@ -1066,12 +1069,12 @@ if ($step == 1) {
                                 'phoenix'
                             );
                             foreach ($tmp_array as $_browser) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote($_browser) . ", 0, 0, 0)");
+                                $_array_insert[] = "('browser', " . $db->quote($_browser) . ", 0, 0, 0)";
                             }
 
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)");
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)");
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)");
+                            $_array_insert[] = "('browser', 'Mobile', 0, 0, 0)";
+                            $_array_insert[] = "('browser', 'bots', 0, 0, 0)";
+                            $_array_insert[] = "('browser', 'Unknown', 0, 0, 0)";
 
                             $tmp_array = array(
                                 'unknown',
@@ -1103,14 +1106,15 @@ if ($step == 1) {
                                 'palm'
                             );
                             foreach ($tmp_array as $_os) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote($_os) . ", 0, 0, 0)");
+                                $_array_insert[] = "('os', " . $db->quote($_os) . ", 0, 0, 0)";
                             }
 
                             foreach ($countries as $_country => $v) {
-                                $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', " . $db->quote($_country) . ", 0, 0, 0)");
+                                $_array_insert[] = "('country', " . $db->quote($_country) . ", 0, 0, 0)";
                             }
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)");
+                            $_array_insert[] = "('country', 'unkown', 0, 0, 0)";
 
+                            $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES " . implode(', ', $_array_insert));
                             //$db->commit();
 
                             defined('NV_TESTS_INSTALL') ? die('OK') : nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
