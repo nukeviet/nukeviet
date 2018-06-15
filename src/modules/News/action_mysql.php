@@ -72,10 +72,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	  groups_view varchar(255) DEFAULT '',
       status smallint(4) NOT NULL DEFAULT '1',
 	  PRIMARY KEY (catid),
-	  UNIQUE KEY alias (alias),
+	  UNIQUE KEY alias (alias(191)),
 	  KEY parentid (parentid),
 	  KEY status (status)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources (
 	 sourceid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -86,8 +86,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 add_time int(11) unsigned NOT NULL,
 	 edit_time int(11) unsigned NOT NULL,
 	 PRIMARY KEY (sourceid),
-	 UNIQUE KEY title (title)
-	) ENGINE=MyISAM";
+	 UNIQUE KEY title (title(191))
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics (
 	 topicid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -100,9 +100,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 add_time int(11) NOT NULL DEFAULT '0',
 	 edit_time int(11) NOT NULL DEFAULT '0',
 	 PRIMARY KEY (topicid),
-	 UNIQUE KEY title (title),
-	 UNIQUE KEY alias (alias)
-	) ENGINE=MyISAM";
+	 UNIQUE KEY title (title(191)),
+	 UNIQUE KEY alias (alias(191))
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (
 	 bid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -117,16 +117,16 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 add_time int(11) NOT NULL DEFAULT '0',
 	 edit_time int(11) NOT NULL DEFAULT '0',
 	 PRIMARY KEY (bid),
-	 UNIQUE KEY title (title),
-	 UNIQUE KEY alias (alias)
-	) ENGINE=MyISAM";
+	 UNIQUE KEY title (title(191)),
+	 UNIQUE KEY alias (alias(191))
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block (
 	 bid smallint(5) unsigned NOT NULL,
 	 id int(11) unsigned NOT NULL,
 	 weight int(11) unsigned NOT NULL,
 	 UNIQUE KEY bid (bid,id)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
 	 id int(11) unsigned NOT NULL auto_increment,
@@ -164,8 +164,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 KEY catid (catid),
 	 KEY topicid (topicid),
 	 KEY admin_id (admin_id),
-	 KEY author (author),
-	 KEY title (title),
+	 KEY author (author(191)),
+	 KEY title (title(191)),
 	 KEY addtime (addtime),
 	 KEY edittime (edittime),
 	 KEY publtime (publtime),
@@ -173,7 +173,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 KEY status (status),
 	 KEY instant_active (instant_active),
 	 KEY instant_creatauto (instant_creatauto)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (
 	 id int(11) unsigned NOT NULL,
@@ -191,7 +191,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	 allowed_save tinyint(1) NOT NULL default '0',
 	 gid mediumint(8) NOT NULL default '0',
 	 PRIMARY KEY (id)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_logs (
 	 id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -203,7 +203,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	 PRIMARY KEY (id),
 	 KEY sid (sid),
 	 KEY userid (userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post (
 	 group_id smallint(5) NOT NULL,
@@ -212,7 +212,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	 editcontent tinyint(4) NOT NULL,
 	 delcontent tinyint(4) NOT NULL,
 	 PRIMARY KEY (group_id)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins (
 	 userid mediumint(8) unsigned NOT NULL default '0',
@@ -224,7 +224,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 del_content tinyint(4) NOT NULL default '0',
 	 app_content tinyint(4) NOT NULL default '0',
 	 UNIQUE KEY userid (userid,catid)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
 	 tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -234,8 +234,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 description text,
 	 keywords varchar(255) DEFAULT '',
 	 PRIMARY KEY (tid),
-	 UNIQUE KEY alias (alias)
-	) ENGINE=MyISAM";
+	 UNIQUE KEY alias (alias(191))
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (
 	 id int(11) NOT NULL,
@@ -243,7 +243,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 keyword varchar(65) NOT NULL,
 	 UNIQUE KEY id_tid (id,tid),
 	 KEY tid (tid)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
 	  id mediumint(8) unsigned NOT NULL,
@@ -252,7 +252,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	  time_late int(11) NOT NULL,
 	  ip varchar(50) NOT NULL,
 	  PRIMARY KEY (id)
-	) ENGINE=MyISAM";
+	) ENGINE=InnoDB";
 
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";

@@ -35,4 +35,4 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (cid),
  KEY mod_id (module,area,id),
  KEY post_time (post_time)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";

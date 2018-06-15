@@ -107,6 +107,10 @@ function nv_dump_save($params)
     while ($item = $result->fetch()) {
         unset($m);
         if (in_array($item['name'], $params['tables'])) {
+            /*
+             * MyISAM cho ra chính xác số row, các enginee khác chỉ là số xấp xỉ
+             * Xem https://dev.mysql.com/doc/refman/8.0/en/show-table-status.html
+             */
             if ($item['engine'] != 'MyISAM') {
                 $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
             }

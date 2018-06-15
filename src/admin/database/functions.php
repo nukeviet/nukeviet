@@ -62,6 +62,10 @@ function nv_show_tables()
     while ($item = $result->fetch()) {
         $tables_size = floatval($item['data_length']) + floatval($item['index_length']);
 
+        /*
+         * MyISAM cho ra chính xác số row, các enginee khác chỉ là số xấp xỉ
+         * Xem https://dev.mysql.com/doc/refman/8.0/en/show-table-status.html
+         */
         if ($item['engine'] != 'MyISAM') {
             if ($item['rows'] < 100000) {
                 $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
@@ -194,6 +198,10 @@ function nv_show_tab()
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
+    /*
+     * MyISAM cho ra chính xác số row, các enginee khác chỉ là số xấp xỉ
+     * Xem https://dev.mysql.com/doc/refman/8.0/en/show-table-status.html
+     */
     if ($item['engine'] != 'MyISAM') {
         $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
     }

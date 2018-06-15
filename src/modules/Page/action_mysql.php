@@ -41,14 +41,14 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  hitstotal MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
  hot_post TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
- UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+ UNIQUE KEY alias (alias(191))
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config (
  config_name varchar(30) NOT NULL,
  config_value varchar(255) NOT NULL,
  UNIQUE KEY config_name (config_name)
-)ENGINE=MyISAM";
+)ENGINE=InnoDB";
 
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('viewtype', '0'),

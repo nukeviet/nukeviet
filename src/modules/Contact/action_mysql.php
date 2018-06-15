@@ -38,9 +38,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  weight smallint(5) NOT NULl,
  is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
- UNIQUE KEY full_name (full_name),
- UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+ UNIQUE KEY full_name (full_name(191)),
+ UNIQUE KEY alias (alias(191))
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -59,7 +59,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  is_reply tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  KEY sender_name (sender_name)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply (
  rid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -69,7 +69,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  reply_aid mediumint(8) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (rid),
  KEY id (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_supporter (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -82,7 +82,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  act tinyint(1) unsigned NOT NULL DEFAULT '1',
  weight smallint(5) NOT NULl,
  PRIMARY KEY (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 // Cấu hình mặc định của module
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'bodytext', '')";

@@ -364,6 +364,10 @@ if ($step == 1) {
     $nv_pass_step = $nextstep == 1;
     $contents = nv_step_4($array_resquest, $array_support, $nextstep);
 } elseif ($step == 5) {
+    $step5startTime = microtime(true);
+
+
+
     $nextstep = 0;
     $db_config['error'] = '';
     $db_config['dbtype'] = $nv_Request->get_string('dbtype', 'post', $db_config['dbtype']);
@@ -569,6 +573,8 @@ if ($step == 1) {
             $sql_create_table = array();
             $sql_drop_table = array();
 
+            file_put_contents(NV_ROOTDIR . '/log.log', 'Bắt đầu tạo bảng dữ liệu tốn ' . round(((microtime(true) - $step5startTime) * 1000), 2) . 'ms' . PHP_EOL, FILE_APPEND);
+
             define('NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors');
             define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
             define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
@@ -584,6 +590,7 @@ if ($step == 1) {
 
             if ($num_table > 0) {
                 if ($db_config['db_detete'] == 1) {
+                    //$db->beginTransaction();
                     foreach ($sql_drop_table as $_sql) {
                         try {
                             $db->query($_sql);
@@ -595,10 +602,17 @@ if ($step == 1) {
                         }
                     }
                     $num_table = 0;
+                    if (empty($db_config['error'])) {
+                        //$db->commit();
+                    } else {
+                        //$db->rollBack();
+                    }
                 } else {
                     $db_config['error'] = $nv_Lang->getModule('db_err_prefix');
                 }
             }
+
+            file_put_contents(NV_ROOTDIR . '/log.log', 'Xóa CSDL hiện tại tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
             $db_config['num_table'] = $num_table;
 
@@ -606,6 +620,7 @@ if ($step == 1) {
                 nv_save_file_config();
                 require_once NV_ROOTDIR . '/install/data.php';
 
+                //$db->beginTransaction();
                 foreach ($sql_create_table as $_sql) {
                     try {
                         $db->query($_sql);
@@ -616,6 +631,13 @@ if ($step == 1) {
                         break;
                     }
                 }
+                if (empty($db_config['error'])) {
+                    //$db->commit();
+                } else {
+                    //$db->rollBack();
+                }
+
+                file_put_contents(NV_ROOTDIR . '/log.log', 'Tạo bảng CSDL mới tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
                 // Cai dat du lieu cho cac module
                 if (empty($db_config['error'])) {
@@ -637,6 +659,7 @@ if ($step == 1) {
                     require_once NV_ROOTDIR . '/includes/action_' . $db_config['dbtype'] . '.php';
 
                     $sql_create_table = nv_create_table_sys(NV_LANG_DATA);
+                    //$db->beginTransaction();
                     foreach ($sql_create_table as $_sql) {
                         try {
                             $db->query($_sql);
@@ -647,7 +670,14 @@ if ($step == 1) {
                             break;
                         }
                     }
+                    if (empty($db_config['error'])) {
+                        //$db->commit();
+                    } else {
+                        //$db->rollBack();
+                    }
                     unset($sql_create_table);
+
+                    file_put_contents(NV_ROOTDIR . '/log.log', 'Tạo bảng CSDL theo ngôn ngữ tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
                     $filesavedata = NV_LANG_DATA;
                     $lang_data = NV_LANG_DATA;
@@ -681,6 +711,8 @@ if ($step == 1) {
                         }
                     }
 
+                    file_put_contents(NV_ROOTDIR . '/log.log', 'Cài đặt CSDL cho module tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
+
                     // Cai dat du lieu mau he thong
                     try {
                         // Xoa du lieu tai bang nvx_vi_modules
@@ -711,6 +743,7 @@ if ($step == 1) {
 
                     // Cai dat du lieu mau module
                     include_once NV_ROOTDIR . '/install/data_by_lang.php';
+                    //$db->beginTransaction();
                     try {
                         foreach ($modules as $row) {
                             $module_name = $row['title'];
@@ -734,6 +767,13 @@ if ($step == 1) {
                         $db_config['error'] = $e->getMessage();
                         trigger_error($e->getMessage());
                     }
+                    if (empty($db_config['error'])) {
+                        //$db->commit();
+                    } else {
+                        //$db->rollBack();
+                    }
+
+                    file_put_contents(NV_ROOTDIR . '/log.log', 'Cài đặt CSDL mẫu hệ thống tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
                     if (empty($db_config['error'])) {
                         ++$step;
@@ -932,6 +972,8 @@ if ($step == 1) {
                             define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
                             require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/upload/functions.php';
 
+                            //$db->beginTransaction();
+
                             $real_dirlist = array();
                             foreach ($allow_upload_dir as $dir) {
                                 $real_dirlist = nv_listUploadDir($dir, $real_dirlist);
@@ -1068,6 +1110,8 @@ if ($step == 1) {
                                 $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', " . $db->quote($_country) . ", 0, 0, 0)");
                             }
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)");
+
+                            //$db->commit();
 
                             defined('NV_TESTS_INSTALL') ? die('OK') : nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                         } else {

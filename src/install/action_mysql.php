@@ -36,7 +36,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   last_ip varchar(45) DEFAULT '',
   last_agent varchar(255) DEFAULT '',
   PRIMARY KEY (admin_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
   notice varchar(255) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY keyname (keyname)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   mid mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -60,7 +60,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   checksum varchar(32) DEFAULT '',
   PRIMARY KEY (mid),
   UNIQUE KEY module (module)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
   role_id smallint(4) NOT NULL AUTO_INCREMENT,
@@ -70,7 +70,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (role_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credential (
   admin_id int(11) unsigned NOT NULL,
@@ -82,9 +82,9 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credentia
   edittime int(11) NOT NULL DEFAULT '0',
   last_access int(11) NOT NULL DEFAULT '0',
   UNIQUE KEY credential_ident (credential_ident),
-  UNIQUE KEY credential_secret (credential_secret),
+  UNIQUE KEY credential_secret (credential_secret(191)),
   KEY admin_id (admin_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
   lang varchar(3) NOT NULL DEFAULT 'sys',
@@ -92,7 +92,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
   config_name varchar(30) NOT NULL DEFAULT '',
   config_value text,
   UNIQUE KEY lang (lang,module,config_name)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -108,7 +108,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
   last_result tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY is_sys (is_sys)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -117,7 +117,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
   lang_key varchar(50) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY filelang (idfile,lang_key,langtype)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
   idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -125,8 +125,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
   admin_file varchar(200) NOT NULL DEFAULT '0',
   langtype varchar(50) NOT NULL DEFAULT 'lang_module',
   PRIMARY KEY (idfile),
-  UNIQUE KEY module (module,admin_file)
-) ENGINE=MyISAM";
+  UNIQUE KEY module (module,admin_file(191))
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
   session_id varchar(50) DEFAULT NULL,
@@ -146,14 +146,14 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
   secure tinyint(1) NOT NULL DEFAULT '0',
   UNIQUE KEY cookiename (name, domain, path),
   KEY name (name)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
   lang char(2) NOT NULL,
   setup tinyint(1) NOT NULL DEFAULT '0',
   weight smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (lang)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extensions (
   id int(11) NOT NULL DEFAULT '0',
@@ -170,7 +170,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
   UNIQUE KEY title (type, title),
   KEY id (id),
   KEY type (type)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
   idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -180,7 +180,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files
   lastmodified int(11) unsigned NOT NULL DEFAULT '0',
   duplicate smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (idfile)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
   bid mediumint(8) NOT NULL DEFAULT '0',
@@ -199,7 +199,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
   KEY click_country (click_country),
   KEY click_browse_key (click_browse_key),
   KEY click_os_key (click_os_key)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
   id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -215,8 +215,8 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
   uploadgroup varchar(255) NOT NULL DEFAULT '',
   exp_time int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
-  KEY title (title)
-) ENGINE=MyISAM";
+  KEY title (title(191))
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -242,7 +242,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
   PRIMARY KEY (id),
   KEY pid (pid),
   KEY clid (clid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -255,7 +255,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
   notice varchar(255) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY ip (ip, type)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -267,7 +267,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
   userid mediumint(8) unsigned NOT NULL,
   log_time int(11) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
   did mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -278,8 +278,8 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
   thumb_height smallint(6) NOT NULL DEFAULT '0',
   thumb_quality tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (did),
-  UNIQUE KEY name (dirname)
-) ENGINE=MyISAM";
+  UNIQUE KEY name (dirname(191))
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
   name varchar(245) NOT NULL,
@@ -295,10 +295,10 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
   did int(11) NOT NULL DEFAULT '0',
   title varchar(245) NOT NULL DEFAULT '',
   alt varchar(255) NOT NULL DEFAULT '',
-  UNIQUE KEY did (did,title),
+  UNIQUE KEY did (did,title(191)),
   KEY userid (userid),
   KEY type (type)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
   gid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -309,7 +309,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
   edit_time int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (gid),
   UNIQUE KEY idprofile (idprofile)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   pid tinyint(4) NOT NULL AUTO_INCREMENT,
@@ -322,7 +322,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
   UNIQUE KEY plugin (plugin_lang, plugin_area, plugin_module_name, hook_module)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
    c_type varchar(100) NOT NULL,
@@ -331,7 +331,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
    c_count int(11) unsigned NOT NULL DEFAULT '0',
    " . NV_LANG_DATA . "_count int(11) unsigned NOT NULL DEFAULT '0',
    UNIQUE KEY c_type (c_type,c_val)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -346,4 +346,4 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   add_time int(11) unsigned NOT NULL,
   view tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";

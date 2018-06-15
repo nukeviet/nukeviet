@@ -131,14 +131,14 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     UNIQUE KEY md5username (md5username),
     UNIQUE KEY email (email),
     KEY idsite (idsite)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_config (
     config varchar(100) NOT NULL,
     content text,
     edit_time int(11) unsigned NOT NULL DEFAULT '0',
     PRIMARY KEY (config)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_question (
     qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -148,8 +148,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     add_time int(11) unsigned NOT NULL DEFAULT '0',
     edit_time int(11) unsigned NOT NULL DEFAULT '0',
     PRIMARY KEY (qid),
-    UNIQUE KEY title (title,lang)
-) ENGINE=MyISAM";
+    UNIQUE KEY title (title(191),lang)
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_backupcodes (
     userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -158,7 +158,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     time_used int(11) unsigned NOT NULL DEFAULT '0',
     time_creat int(11) unsigned NOT NULL DEFAULT '0',
     UNIQUE KEY userid (userid, code)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups (
     group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -181,9 +181,9 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     siteus tinyint(4) unsigned NOT NULL DEFAULT '0',
     config varchar(250) DEFAULT '',
     PRIMARY KEY (group_id),
-    UNIQUE KEY ktitle (title,idsite),
+    UNIQUE KEY ktitle (title(191),idsite),
     KEY exp_time (exp_time)
-) ENGINE=MyISAM AUTO_INCREMENT=10";
+) ENGINE=InnoDB AUTO_INCREMENT=10";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups_users (
     group_id smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -192,7 +192,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     approved tinyint(1) unsigned NOT NULL DEFAULT '0',
     data text NOT NULL,
     PRIMARY KEY (group_id,userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_reg (
     userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -215,7 +215,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     UNIQUE KEY login (username),
     UNIQUE KEY md5username (md5username),
     UNIQUE KEY email (email)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_openid (
     userid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -225,7 +225,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     PRIMARY KEY (opid),
     KEY userid (userid),
     KEY email (email)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field (
     fid mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -249,12 +249,12 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     system TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
     PRIMARY KEY (fid),
     UNIQUE KEY field (field)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info (
     userid mediumint(8) unsigned NOT NULL,
     PRIMARY KEY (userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462)";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('password_simple', '000000|1234|2000|12345|111111|123123|123456|11223344|654321|696969|1234567|12345678|87654321|123456789|23456789|1234567890|66666666|68686868|66668888|88888888|99999999|999999999|1234569|12345679|aaaaaa|abc123|abc123@|abc@123|admin123|admin123@|admin@123|nuke123|nuke123@|nuke@123|adobe1|adobe123|azerty|baseball|dragon|football|harley|iloveyou|jennifer|jordan|letmein|macromedia|master|michael|monkey|mustang|password|photoshop|pussy|qwerty|shadow|superman|hoilamgi|khongbiet|khongco|khongcopass', " . NV_CURRENTTIME . ")";

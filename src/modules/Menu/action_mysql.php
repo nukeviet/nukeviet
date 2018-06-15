@@ -41,11 +41,11 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  KEY parentid (parentid, mid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,
  PRIMARY KEY (id),
  UNIQUE KEY title (title)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";

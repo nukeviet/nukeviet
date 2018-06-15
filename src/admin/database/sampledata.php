@@ -126,6 +126,10 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
             $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($db_config['prefix'] . '_%'));
             while ($row = $result->fetch()) {
                 if (!in_array($row['name'], $array_ignore_save)) {
+                    /*
+                     * MyISAM cho ra chính xác số row, các enginee khác chỉ là số xấp xỉ
+                     * Xem https://dev.mysql.com/doc/refman/8.0/en/show-table-status.html
+                     */
                     if ($row['engine'] != 'MyISAM') {
                         $row['rows'] = $db->query("SELECT COUNT(*) FROM " . $row['name'])->fetchColumn();
                     }
