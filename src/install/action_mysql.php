@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 // Ten cac table cua CSDL dung chung cho he thong
-
 $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
 while ($item = $result->fetch()) {
     $sql_drop_table[] = 'DROP TABLE ' . $item['name'];

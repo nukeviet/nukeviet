@@ -588,6 +588,7 @@ if ($step == 1) {
             if ($num_table > 0) {
                 if ($db_config['db_detete'] == 1) {
                     //$db->beginTransaction();
+                    $db->query('SET foreign_key_checks = 0');
                     foreach ($sql_drop_table as $_sql) {
                         try {
                             $db->query($_sql);
@@ -598,6 +599,7 @@ if ($step == 1) {
                             break;
                         }
                     }
+                    $db->query('SET foreign_key_checks = 1');
                     $num_table = 0;
                     if (empty($db_config['error'])) {
                         //$db->commit();
@@ -609,7 +611,7 @@ if ($step == 1) {
                 }
             }
 
-            file_put_contents(NV_ROOTDIR . '/log.log', 'Xóa CSDL hiện tại tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
+            file_put_contents(NV_ROOTDIR . '/log.log', 'Xóa CSDL hiện tại tốn ' . round(((microtime(true) - $step5startTime) * 1), 4) . 's' . PHP_EOL, FILE_APPEND);
 
             $db_config['num_table'] = $num_table;
 
