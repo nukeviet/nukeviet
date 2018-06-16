@@ -71,7 +71,6 @@ $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv
 $sys_info['supports_rewrite'] = false;
 if (function_exists('apache_get_modules')) {
     $apache_modules = apache_get_modules();
-
     if (in_array('mod_rewrite', $apache_modules)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
@@ -79,6 +78,13 @@ if (function_exists('apache_get_modules')) {
     if (isset($_SERVER['IIS_UrlRewriteModule']) and (php_sapi_name() == 'cgi-fcgi') and class_exists('DOMDocument')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
     } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+        $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+    }
+} else {
+    $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
+    if ($_check_rewrite == 'mod_rewrite works') {
+        $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+    } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
 }

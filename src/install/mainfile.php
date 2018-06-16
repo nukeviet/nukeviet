@@ -42,8 +42,19 @@ define('NV_FILES_DIR', NV_ASSETS_DIR);
 
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
-require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
+// Các hằng info server
+$server_domain_info = NukeViet\Core\Request::getServerDomain();
+define('NV_SERVER_NAME', $server_domain_info['server_name']);
+define('NV_SERVER_PROTOCOL', $server_domain_info['server_protocol']);
+define('NV_SERVER_PORT', $server_domain_info['server_port']);
+define('NV_MY_DOMAIN', $server_domain_info['domain']);
+if (!defined('NV_BASE_SITEURL')) {
+    define('NV_BASE_SITEURL', preg_replace("/\/install$/", "/", $server_domain_info['base_siteurl']));
+}
+unset($server_domain_info);
+
+require NV_ROOTDIR . '/includes/xtemplate.class.php';
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
 $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
@@ -98,22 +109,10 @@ $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true
 //Ket noi voi class xu ly request
 $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 
-define('NV_SERVER_NAME', $nv_Request->server_name);
-//vd: mydomain1.com
-define('NV_SERVER_PROTOCOL', $nv_Request->server_protocol);
-//vd: http
-define('NV_SERVER_PORT', $nv_Request->server_port);
-//vd: 80
-define('NV_MY_DOMAIN', $nv_Request->my_current_domain);
-//vd: http://mydomain1.com:80
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 //vd: HTTP/1.0
 define('NV_USER_AGENT', $nv_Request->user_agent);
 //HTTP_USER_AGENT
-if (!defined('NV_BASE_SITEURL')) {
-    define("NV_BASE_SITEURL", preg_replace("/\/install$/", "/", $nv_Request->base_siteurl));
-    //vd: /ten_thu_muc_chua_site/
-}
 if (!defined('NV_BASE_ADMINURL')) {
     define("NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/');
     //vd: /ten_thu_muc_chua_site/admin/

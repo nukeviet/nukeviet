@@ -13,6 +13,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES
+    (1, 'siteinfo', 'mod_siteinfo', 1, 1, 1, 1, ''),
     (2, 'authors', 'mod_authors', 2, 1, 1, 1, ''),
     (3, 'settings', 'mod_settings', 3, 1, 1, 0, ''),
     (4, 'database', 'mod_database', 4, 1, 0, 0, ''),

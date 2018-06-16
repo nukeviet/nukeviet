@@ -15,6 +15,9 @@ class Request
 {
     const IS_HEADERS_SENT = 'Warning: Headers already sent';
     const INCORRECT_IP = 'Incorrect IP address specified';
+
+    private static $static_method_loaded = false;
+
     public $session_id;
     public $doc_root;
     public $site_url;
@@ -36,6 +39,7 @@ class Request
     public $request_uri;
     public $user_agent;
     public $search_engine = '';
+
     private $request_default_mode = 'request';
     private $allow_request_mods = array( 'get', 'post', 'request', 'cookie', 'session', 'env', 'server' );
     private $cookie_prefix = 'NV4';
@@ -127,6 +131,54 @@ class Request
         $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
         $this->sessionStart($_ssl_https);
         $_REQUEST = array_merge($_POST, array_diff_key($_GET, $_POST));
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getServerDomain()
+    {
+        $server_name = trim((isset($_SERVER['HTTP_HOST']) and ! empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
+        $server_name = preg_replace('/^[a-z]+\:\/\//i', '', $server_name);
+        $server_name = preg_replace('/(\:[0-9]+)$/', '', $server_name);
+        $server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($_SERVER['HTTPS'] == 'on') ? 's' : '');
+        $server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
+        if (filter_var($server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+            $my_current_domain = $server_protocol . '://' . $server_name . $server_port;
+        } else {
+            $my_current_domain = $server_protocol . '://[' . $server_name . ']' . $server_port;
+        }
+
+        $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
+        if ($base_siteurl == DIRECTORY_SEPARATOR) {
+            $base_siteurl = '';
+        }
+        if (! empty($base_siteurl)) {
+            $base_siteurl = str_replace(DIRECTORY_SEPARATOR, '/', $base_siteurl);
+        }
+        if (! empty($base_siteurl)) {
+            $base_siteurl = preg_replace('/[\/]+$/', '', $base_siteurl);
+        }
+        if (! empty($base_siteurl)) {
+            $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
+        }
+        if (defined('NV_WYSIWYG') and ! defined('NV_ADMIN')) {
+            $base_siteurl = preg_replace('#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl);
+        } elseif (defined('NV_IS_UPDATE')) {
+            // Update se bao gom ca admin nen update phai dat truoc
+            $base_siteurl = preg_replace('#/install(.*)$#', '', $base_siteurl);
+        } elseif (defined('NV_ADMIN')) {
+            $base_siteurl = preg_replace('#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl);
+        } elseif (! empty($base_siteurl)) {
+            $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
+        }
+        return [
+            'server_name' => $server_name,
+            'server_protocol' => $server_protocol,
+            'server_port' => $server_port,
+            'base_siteurl' => $base_siteurl,
+            'domain' => $my_current_domain
+        ];
     }
 
     /**

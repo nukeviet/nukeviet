@@ -364,8 +364,7 @@ function nv_check_rewrite_file()
     global $sys_info;
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return true;
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
@@ -373,8 +372,7 @@ function nv_check_rewrite_file()
         $htaccess = @file_get_contents(NV_ROOTDIR . '/.htaccess');
 
         return (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess));
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
