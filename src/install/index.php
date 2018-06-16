@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:42
  */
+
 define('NV_ADMIN', true);
 
 require_once 'mainfile.php';

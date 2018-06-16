@@ -67,7 +67,9 @@ define('NV_SERVER_NAME', $server_name);// vd: mydomain1.com
 define('NV_SERVER_PROTOCOL', $server_protocol);// vd: http
 define('NV_SERVER_PORT', $server_port);// vd: 80
 define('NV_MY_DOMAIN', $my_current_domain);// vd: http://mydomain1.com:80
-define('NV_BASE_SITEURL', $base_siteurl . '/');// vd: /ten_thu_muc_chua_site/
+if (!defined('NV_BASE_SITEURL')) {
+    define('NV_BASE_SITEURL', $base_siteurl . '/');// vd: /ten_thu_muc_chua_site/
+}
 
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
     require realpath(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME);
@@ -148,17 +150,18 @@ $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
-define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
-// vd: /ten_thu_muc_chua_site/admin/
+if (!defined('NV_BASE_ADMINURL')) {
+    define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
+    // vd: /ten_thu_muc_chua_site/admin/
+}
 
-
-define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
-// D:/AppServ/www
-
+if (!defined('NV_DOCUMENT_ROOT')) {
+    define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
+    // D:/AppServ/www
+}
 
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
-
 
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung

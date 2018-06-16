@@ -110,12 +110,18 @@ define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 //vd: HTTP/1.0
 define('NV_USER_AGENT', $nv_Request->user_agent);
 //HTTP_USER_AGENT
-define("NV_BASE_SITEURL", preg_replace("/\/install$/", "/", $nv_Request->base_siteurl));
-//vd: /ten_thu_muc_chua_site/
-define("NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/');
-//vd: /ten_thu_muc_chua_site/admin/
-define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
-// D:/AppServ/www
+if (!defined('NV_BASE_SITEURL')) {
+    define("NV_BASE_SITEURL", preg_replace("/\/install$/", "/", $nv_Request->base_siteurl));
+    //vd: /ten_thu_muc_chua_site/
+}
+if (!defined('NV_BASE_ADMINURL')) {
+    define("NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/');
+    //vd: /ten_thu_muc_chua_site/admin/
+}
+if (!defined('NV_DOCUMENT_ROOT')) {
+    define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
+    // D:/AppServ/www
+}
 define('NV_EOL', (strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? "\r\n" : (strtoupper(substr(PHP_OS, 0, 3) == 'MAC') ? "\r" : "\n")));
 //Ngat dong
 define('NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR);
@@ -158,17 +164,18 @@ $client_info['agent'] = $nv_Request->user_agent;
 
 $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id']);
 
-//Chan truy cap neu HTTP_USER_AGENT == 'none'
+// Chan truy cap neu HTTP_USER_AGENT == 'none'
 if (NV_USER_AGENT == "none") {
     trigger_error('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256);
 }
 
-//Captcha
+// Captcha
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     include_once NV_ROOTDIR . '/includes/core/captcha.php';
 }
 
-//Class ma hoa du lieu
+// Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
+// Cache
 $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
