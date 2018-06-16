@@ -58,7 +58,7 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     } elseif (strpos($_server_software[0], 'nginx') !== false) {
         $sys_info['supports_rewrite'] = 'nginx';
     } else {
-        $_check_rewrite = file_get_contents(NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
+        $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
         if ($_check_rewrite == 'mod_rewrite works') {
             $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
         } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
