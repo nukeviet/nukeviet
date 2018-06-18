@@ -1,0 +1,47 @@
+.root-api-actions,
+.child-apis .child-apis-item-ctn {
+    max-height: 400px;
+    overflow: auto;
+}
+.child-apis .child-apis-item-ctn {
+    padding: 0 5px;
+}
+
+.root-api-actions ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.root-api-actions ul li {
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px #ddd solid;
+}
+
+.root-api-actions ul li:last-child {
+    border-bottom: 0;
+}
+
+.root-api-actions ul li a {
+    padding: 8px 0 8px 0;
+    text-decoration: none;
+    display: block;
+}
+
+.root-api-actions ul li a.active {
+    font-weight: 700;
+}
+
+.child-apis .child-apis-item-tool {
+    margin-top: 10px;
+}
+
+.child-apis .child-apis-item {
+    display: none;
+}
+
+.credential-result {
+    max-width: 600px;
+    margin: 0 auto;
+}
