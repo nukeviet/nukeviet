@@ -28,7 +28,7 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
     $comment_array = array();
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
 
-    $_where = 'a.module=' .$db_slave->quote($module);
+    $_where = 'a.module=' . $db_slave->quote($module);
     if ($area) {
         $_where .= ' AND a.area= ' . $area;
     }
@@ -414,6 +414,10 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
                 $comment_array_i['post_name'] = nv_show_name_user($comment_array_i['first_name'], $comment_array_i['last_name']);
             }
 
+            if (!empty($module_config[$module]['allowautolink'])) {
+                $comment_array_i['content'] = nv_auto_detect_link(nv_unhtmlspecialchars($comment_array_i['content']));
+            }
+
             $xtpl->assign('COMMENT', $comment_array_i);
 
             if ($module_config[$module]['emailcomm'] and ! empty($comment_array_i['post_email'])) {
@@ -476,6 +480,10 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete)
             $comment_array_i['post_name'] = nv_show_name_user($comment_array_i['first_name'], $comment_array_i['last_name']);
         }
 
+        if (!empty($module_config[$module]['allowautolink'])) {
+            $comment_array_i['content'] = nv_auto_detect_link(nv_unhtmlspecialchars($comment_array_i['content']));
+        }
+
         $xtpl->assign('COMMENT', $comment_array_i);
 
         if ($module_config[$module]['emailcomm'] and ! empty($comment_array_i['post_email'])) {
@@ -494,4 +502,18 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete)
     }
     $xtpl->parse('children');
     return $xtpl->text('children');
+}
+
+/**
+ * @param string $text
+ * @return string
+ */
+function nv_auto_detect_link($text)
+{
+    $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+    if (preg_match($reg_exUrl, $text, $url)) {
+        return preg_replace($reg_exUrl, "<a href=\"{$url[0]}\">{$url[0]}</a> ", $text);
+    } else {
+        return $text;
+    }
 }

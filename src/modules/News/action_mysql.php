@@ -312,6 +312,7 @@ $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module,
     ('" . $lang . "', '" . $module_name . "', 'timeoutcomm', '360'),
     ('" . $lang . "', '" . $module_name . "', 'allowattachcomm', '0'),
     ('" . $lang . "', '" . $module_name . "', 'alloweditorcomm', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'allowautolink', '0'),
 
     ('" . $lang . "', '" . $module_name . "', 'frontend_edit_alias', '0'),
     ('" . $lang . "', '" . $module_name . "', 'frontend_edit_layout', '1')";

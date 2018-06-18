@@ -32,7 +32,6 @@ $lang_module['number'] = 'Numero';
 $lang_module['err_row_title'] = 'Inexistant';
 $lang_module['part_row_title'] = 'Département';
 $lang_module['email_row_title'] = 'E-mail';
-$lang_module['address'] = 'Adresse';
 $lang_module['note_row_title'] = 'Notée';
 $lang_module['bt_save_row_title'] = 'Sauver';
 $lang_module['bt_reset_row_title'] = 'Rafraîchir';

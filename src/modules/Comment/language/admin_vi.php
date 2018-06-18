@@ -78,6 +78,7 @@ $lang_module['timeoutcomm'] = 'Thời gian (giây) tối thiểu giữa hai lầ
 $lang_module['timeoutcomm_note'] = 'Nhập 0 nếu không giới hạn. Lưu ý nên bật captcha nếu chọn giá trị này là 0, giá trị này không tính cho Admin';
 $lang_module['allowattachcomm'] = 'Cho phép đính kèm file';
 $lang_module['alloweditorcomm'] = 'Cho phép trình soạn thảo';
+$lang_module['allowautolink'] = 'Tự động nhận diện liên kết trong nội dung';
 
 $lang_module['adminscomm'] = 'Admin quản lý bình luận';
 $lang_module['view_comm'] = 'Ai được phép xem bình luận';
