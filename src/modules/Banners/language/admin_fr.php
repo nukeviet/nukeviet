@@ -31,7 +31,6 @@ $lang_module['act3'] = 'Suspendu';
 $lang_module['act4'] = 'En attente d\'acceptation';
 $lang_module['change_act'] = 'Suspendre/Activer';
 $lang_module['add_banner'] = 'Ajouter une publicité';
-$lang_module['add_banner_client'] = 'Ajouter des annonces aux clients et &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Blocks publicitaires';
 $lang_module['plans_list2'] = 'Liste des Blocks publicitaires';
 $lang_module['in_plan'] = 'Dans le bloque';

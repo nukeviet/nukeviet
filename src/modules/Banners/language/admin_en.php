@@ -117,7 +117,6 @@ $lang_module['assign_to_user'] = 'Assign to a user';
 $lang_module['require_image0'] = 'Textlink';
 $lang_module['require_image1'] = 'Image/Flash';
 $lang_module['act4'] = 'Queue';
-$lang_module['add_banner_client'] = 'Add banner for user &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['assign_to_user_tip'] = 'Enter username or full name to search then select from the drop down list. To find the correct username, enter = in front. If left blank, the system will be automatically assigned to the admin';
 $lang_module['assign_to_user_err'] = 'Error: User %s doesn\'t exists';
 $lang_module['of_user'] = 'Poster';
