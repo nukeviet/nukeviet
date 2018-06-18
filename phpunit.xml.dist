@@ -1,0 +1,13 @@
+<phpunit 
+    bootstrap="tests/phpunit/includes/bootstrap.php"
+    colors="true"
+    >
+    <testsuites>
+        <testsuite name="NukeViet Test Suite">
+            <directory suffix=".php">tests/phpunit/tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <const name="NV_IS_TEST_MODE" value="1" />
+    </php>
+</phpunit>

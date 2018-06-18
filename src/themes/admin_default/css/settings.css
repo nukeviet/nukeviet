@@ -1,0 +1,16 @@
+.setting-tabcontent {
+    margin: 0 0 15px 0;
+}
+.setting-tabcontenttop {
+    margin-top: 15px;
+}
+.setting-tabnav > li.active > a,
+.setting-tabnav > li.active > a:hover,
+.setting-tabnav > li.active > a:focus {
+    background-color: #f9f9f9!important;
+}
+.setting-tabcontent .table-first,
+.setting-tabcontent .table-first tbody tr:first-child td,
+.setting-tabcontent .table-first tbody tr:first-child th {
+    border-top: 0!important;
+}
