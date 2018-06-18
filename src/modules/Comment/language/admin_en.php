@@ -92,6 +92,7 @@ $lang_module['siteinfo_queue_comments'] = 'Total commments need approval';
 $lang_module['notification_comment_queue'] = 'Comment moderation posts by %s<br /><em>%s</em>';
 $lang_module['allowattachcomm'] = 'Allow Attach';
 $lang_module['alloweditorcomm'] = 'Allow editor';
+$lang_module['allowautolink'] = 'Automatically detect links in content';
 $lang_module['attach'] = 'File attach';
 $lang_module['attach_download'] = 'Download attach';
 $lang_module['attach_choose'] = 'Choose';

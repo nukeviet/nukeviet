@@ -46,6 +46,9 @@
                     </div>
 				</div>
 			</div>
+            <div id="tip" data-content="">
+                <div class="bg"></div>
+            </div>
 		</header>
 		<nav class="second-nav" id="menusite">
 			<div class="container">
@@ -66,9 +69,6 @@
                 </div>
                 <div class="contactDefault">
                 [CONTACT_DEFAULT]
-                </div>
-                <div id="tip" data-content="">
-                    <div class="bg"></div>
                 </div>
             </div>
         </nav>

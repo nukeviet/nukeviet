@@ -277,7 +277,7 @@ $sth->execute(array('default', 'theme', 'global.module_menu.php', 'Module Menu',
 $sth->execute(array('default', 'banners', 'global.banners.php', $install_lang['blocks_groups']['banners']['global.banners2'], '', 'no_title', '[LEFT]', 0, '1', '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}'));
 $sth->execute(array('default', 'statistics', 'global.counter.php', $install_lang['blocks_groups']['statistics']['global.counter'], '', 'primary', '[LEFT]', 0, '1', '6', 1, 4, ''));
 
-$sth->execute(array('default', 'about', 'global.about.php', $install_lang['blocks_groups']['about']['global.about'], '', 'border', '[RIGHT]', 0, '1', '6', 1, 1, ''));
+$sth->execute(array('default', 'about', 'global.about.php', $install_lang['blocks_groups']['about']['global.about'], '', 'border', '[RIGHT]', 0, '1', '6', 1, 1, 'a:4:{s:12:"title_length";i:0;s:15:"bodytext_length";i:300;s:5:"rowid";i:0;s:10:"show_image";i:0;}'));
 $sth->execute(array('default', 'banners', 'global.banners.php', $install_lang['blocks_groups']['banners']['global.banners3'], '', 'no_title', '[RIGHT]', 0, '1', '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:3;}'));
 $sth->execute(array('default', 'voting', 'global.voting_random.php', $install_lang['blocks_groups']['voting']['global.voting_random'], '', 'primary', '[RIGHT]', 0, '1', '6', 1, 3, ''));
 $sth->execute(array('default', 'news', 'global.block_tophits.php', $install_lang['blocks_groups']['news']['global.block_tophits'], '', 'primary', '[RIGHT]', 0, '1', '6', 1, 4, 'a:6:{s:10:"number_day";i:3650;s:6:"numrow";i:10;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:7:"nocatid";a:2:{i:0;i:10;i:1;i:11;}}'));
