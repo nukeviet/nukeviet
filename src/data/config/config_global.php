@@ -8,16 +8,14 @@
  * @Createdate Sun, 23 Apr 2017 04:03:27 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
-$sys_info['disable_classes']=array();
-$sys_info['disable_functions']=array();
-$sys_info['ini_set_support']= true;
-$sys_info['supports_rewrite']='rewrite_mode_apache';
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
 define('NV_ANTI_AGENT', 0);
 define('NV_ANTI_IFRAME', 0);
+define('NV_DEBUG', 0);
 define('NV_GFX_HEIGHT', 40);
 define('NV_GFX_NUM', 6);
 define('NV_GFX_WIDTH', 150);
@@ -46,8 +44,6 @@ $global_config['dump_backup_ext']='gz';
 $global_config['dump_interval']=1;
 $global_config['error_send_email']='admin@nukeviet.vn';
 $global_config['error_set_logs']=1;
-$global_config['facebook_client_id']='';
-$global_config['facebook_client_secret']='';
 $global_config['file_allowed_ext']=array('adobe','archives','audio','documents','flash','images','real','video');
 $global_config['forbid_extensions']=array('php','php3','php4','php5','phtml','inc');
 $global_config['forbid_mimes']=array();
@@ -58,8 +54,6 @@ $global_config['ftp_server']='localhost';
 $global_config['ftp_user_name']='';
 $global_config['ftp_user_pass']='qRKq-Egt0ElJCcuw0g0_nKkSqvhILdBJSQnLsNINP5w,';
 $global_config['gfx_chk']=3;
-$global_config['google_client_id']='';
-$global_config['google_client_secret']='';
 $global_config['gzip_method']=1;
 $global_config['is_flood_blocker']=1;
 $global_config['is_login_blocker']=1;
@@ -81,6 +75,7 @@ $global_config['read_type']=0;
 $global_config['recaptcha_secretkey']='';
 $global_config['recaptcha_sitekey']='';
 $global_config['recaptcha_type']='image';
+$global_config['remote_api_access']=0;
 $global_config['rewrite_enable']=1;
 $global_config['rewrite_endurl']='/';
 $global_config['rewrite_exturl']='.html';
@@ -91,15 +86,15 @@ $global_config['site_keywords']='NukeViet, portal, mysql, php';
 $global_config['site_lang']='vi';
 $global_config['site_timezone']='byCountry';
 $global_config['spadmin_add_admin']=1;
-$global_config['ssl_https']=0;
 $global_config['str_referer_blocker']=0;
 $global_config['timestamp']=1;
 $global_config['two_step_verification']=0;
 $global_config['upload_alt_require']=1;
 $global_config['upload_auto_alt']=1;
 $global_config['upload_checking_mode']='strong';
+$global_config['upload_chunk_size']=0;
 $global_config['useactivate']=2;
-$global_config['version']='4.1.02';
+$global_config['version']='5.0.00';
 $global_config['check_rewrite_file']=1;
 $global_config['allow_request_mods']=array('get','post','cookie','session','request','env','server');
 $global_config['request_default_mode']='request';
@@ -108,6 +103,7 @@ $global_config['send_errors_list']=256;
 $global_config['error_log_path']='data/logs/error_logs';
 $global_config['error_log_filename']='error_log';
 $global_config['error_log_fileext']='log';
+$global_config['setup_langs']=array('vi');
 $global_config['allowed_html_tags']=array('embed','object','param','a','b','blockquote','br','caption','col','colgroup','div','em','h1','h2','h3','h4','h5','h6','hr','i','img','li','p','span','strong','s','sub','sup','table','tbody','td','th','tr','u','ul','ol','iframe','figure','figcaption','video','audio','source','track','code','pre');
 $global_config['engine_allowed']=array('Google'=>array('host_pattern'=>'google.', 'query_param'=>'q'), 'Yahoo'=>array('host_pattern'=>'yahoo.', 'query_param'=>'p'), 'MSN'=>array('host_pattern'=>'search.msn', 'query_param'=>'q'), 'Localhost'=>array('host_pattern'=>'localhost', 'query_param'=>'q'));
 
