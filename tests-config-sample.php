@@ -11,6 +11,7 @@
 
 // Thiết lập hệ thống test
 define('NV_PHP_CMD', 'php');
+define('NV_BASE_SITEURL', '/');
 
 // Thông tin site test
 define('NV_TESTS_DOMAIN', 'nukeviet.vn');
