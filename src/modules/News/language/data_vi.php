@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
  */
+
 if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
@@ -49,13 +50,19 @@ if (!function_exists('nv_news_check_image_exit')) {
 }
 
 // News: cat
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (1, 0, 'Tin tức', '', 'Tin-tuc', '', '', '', 0, 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 4, '2', '', '', 1274986690, 1274986690, '6', 1)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (2, 0, 'Sản phẩm', '', 'San-pham', '', '', '', 0, 2, 5, 0, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274986705, 1274986705, '6', 1)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (8, 1, 'Thông cáo báo chí', '', 'thong-cao-bao-chi', '', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987105, 1274987244, '6', 1)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (9, 1, 'Tin công nghệ', '', 'Tin-cong-nghe', '', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987212, 1274987212, '6', 1)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (10, 0, 'Đối tác', '', 'Doi-tac', '', '', '', 0, 3, 9, 0, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987460, 1274987460, '6', 1)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (11, 0, 'Tuyển dụng', '', 'Tuyen-dung', '', '', '', 0, 4, 12, 0, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987538, 1274987538, '6', 1)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status) VALUES (12, 1, 'Bản tin nội bộ', '', 'Ban-tin-noi-bo', '', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987902, 1274987902, '6', 1)");
+$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
+    catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev,
+    viewcat, numsubcat, subcatid, numlinks, newday, keywords, admins, add_time, edit_time, groups_view, status
+) VALUES
+    (1, 0, 'Tin tức', '', 'Tin-tuc', '', '', '', 0, 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 4, '2', '', '', 1274986690, 1274986690, '6', 1),
+    (2, 0, 'Sản phẩm', '', 'San-pham', '', '', '', 0, 2, 5, 0, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274986705, 1274986705, '6', 1),
+    (8, 1, 'Thông cáo báo chí', '', 'thong-cao-bao-chi', '', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987105, 1274987244, '6', 1),
+    (9, 1, 'Tin công nghệ', '', 'Tin-cong-nghe', '', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987212, 1274987212, '6', 1),
+    (10, 0, 'Đối tác', '', 'Doi-tac', '', '', '', 0, 3, 9, 0, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987460, 1274987460, '6', 1),
+    (11, 0, 'Tuyển dụng', '', 'Tuyen-dung', '', '', '', 0, 4, 12, 0, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987538, 1274987538, '6', 1),
+    (12, 1, 'Bản tin nội bộ', '', 'Ban-tin-noi-bo', '', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 4, '2', '', '', 1274987902, 1274987902, '6', 1)
+";
+$db->query($sql);
 
 // News: bodyhtml, bodytext
 $sth_detail = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (:id, '', '', :bodyhtml, :sourcetext, 2, 0, 1, 1, 1, 0)");
@@ -240,18 +247,23 @@ $sth->execute(array(
 // Topic
 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics VALUES (1, 'NukeViet 4', 'NukeViet-4', '', 'NukeViet 4', 1, 'NukeViet 4', 1445396011, 1445396011)");
 
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (bid, adddefault, numbers,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES (1, 0, 4,'Tin tiêu điểm', 'Tin-tieu-diem', '', 'Tin tiêu điểm', 1, '', 1279945710, 1279956943)");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (bid, adddefault, numbers,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES (2, 1, 4, 'Tin mới nhất', 'Tin-moi-nhat', '', 'Tin mới nhất', 2, '', 1279945725, 1279956445)");
+$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (
+    bid, adddefault, numbers,title, alias, image, description, weight, keywords, add_time, edit_time
+) VALUES
+    (1, 0, 4,'Tin tiêu điểm', 'Tin-tieu-diem', '', 'Tin tiêu điểm', 1, '', 1279945710, 1279956943),
+    (2, 1, 4, 'Tin mới nhất', 'Tin-moi-nhat', '', 'Tin mới nhất', 2, '', 1279945725, 1279956445)
+");
 
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (1, 1, 1)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 17, 1)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 16, 2)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 15, 3)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 14, 4)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 12, 5)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 11, 6)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 1, 7)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 6, 8)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block (bid, id, weight) VALUES
+(1, 1, 1),
+(2, 17, 1),
+(2, 16, 2),
+(2, 15, 3),
+(2, 14, 4),
+(2, 12, 5),
+(2, 11, 6),
+(2, 1, 7),
+(2, 6, 8)');
 
 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (`tid`, `numnews`, `alias`, `image`, `description`, `keywords`) VALUES
 (1, 0, 'nguồn-mở', '', '', 'nguồn mở'),
