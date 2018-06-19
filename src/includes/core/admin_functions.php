@@ -241,9 +241,9 @@ function nv_save_file_config_global()
             }
         }
     }
-    $content_config .= "\$nv_plugins=" . nv_var_export($nv_plugins) . ";\n\n";
+    $content_config .= "\$nv_plugins=" . nv_var_export($nv_plugins) . ";\n";
 
-    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
+    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", $content_config, LOCK_EX);
     $nv_Cache->delAll();
 
     //Resets the contents of the opcode cache
