@@ -24,6 +24,8 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'P' => 
         array (
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
         'O' => 
@@ -32,6 +34,7 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'N' => 
         array (
+            'Nyholm\\Psr7\\' => 12,
             'NukeViet\\Module\\' => 16,
             'NukeViet\\Api\\' => 13,
             'NukeViet\\' => 9,
@@ -40,6 +43,16 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             'League\\Url\\' => 11,
         ),
+        'I' => 
+        array (
+            'Interop\\Http\\Factory\\' => 21,
+        ),
+        'H' => 
+        array (
+            'Http\\Promise\\' => 13,
+            'Http\\Message\\' => 13,
+            'Http\\Client\\' => 12,
+        ),
         'G' => 
         array (
             'Gregwar\\' => 8,
@@ -47,6 +60,10 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
+        ),
+        'B' => 
+        array (
+            'Buzz\\' => 5,
         ),
     );
 
@@ -67,6 +84,14 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
@@ -74,6 +99,10 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'OAuth\\' => 
         array (
             0 => __DIR__ . '/..' . '/and/oauth/src',
+        ),
+        'Nyholm\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nyholm/psr7/src',
         ),
         'NukeViet\\Module\\' => 
         array (
@@ -86,11 +115,26 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'NukeViet\\' => 
         array (
             0 => __DIR__ . '/..' . '/vinades/nukeviet',
-            1 => __DIR__ . '/..' . '/vinades/nukeviet',
         ),
         'League\\Url\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/url/src',
+        ),
+        'Interop\\Http\\Factory\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/http-interop/http-factory/src',
+        ),
+        'Http\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/promise/src',
+        ),
+        'Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/message-factory/src',
+        ),
+        'Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/httplug/src',
         ),
         'Gregwar\\' => 
         array (
@@ -99,6 +143,10 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
+        ),
+        'Buzz\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib',
         ),
     );
 
@@ -112,13 +160,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
             'Gregwar\\Cache' => 
             array (
                 0 => __DIR__ . '/..' . '/gregwar/cache',
-            ),
-        ),
-        'B' => 
-        array (
-            'Buzz' => 
-            array (
-                0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib',
             ),
         ),
     );
