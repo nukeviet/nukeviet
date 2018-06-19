@@ -3,7 +3,6 @@
 		"php" : ">=5.5.0",
 		"ext-mbstring" : "*",
 		"ext-gd" : "*",
-		"vinades/nukeviet" : "dev-master",
 		"and/oauth" : "^0.7-dev",
 		"pclzip/pclzip" : "^2.8",
 		"endroid/qrcode" : "^1.9.1",
@@ -14,8 +13,9 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"NukeViet\\Module\\" : "../modules",
-			"NukeViet\\Api\\" : "../includes/api"
+			"NukeViet\\" : "vendor/vinades/nukeviet",
+			"NukeViet\\Api\\" : "api",
+			"NukeViet\\Module\\" : "../modules"
 		}
 	}
 }

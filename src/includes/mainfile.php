@@ -30,7 +30,10 @@ $editor = false;
 require NV_ROOTDIR . '/includes/constants.php';
 
 // Vendor autoload
-require NV_ROOTDIR . '/vendor/autoload.php';
+require NV_ROOTDIR . '/includes/vendor/autoload.php';
+if (file_exists(NV_ROOTDIR . '/vendor/autoload.php')) {
+    require NV_ROOTDIR . '/vendor/autoload.php';
+}
 
 // Các hằng info server
 $server_domain_info = NukeViet\Core\Request::getServerDomain();

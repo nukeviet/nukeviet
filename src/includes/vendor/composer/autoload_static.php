@@ -77,15 +77,16 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'NukeViet\\Module\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/modules',
+            0 => __DIR__ . '/../..' . '/../modules',
         ),
         'NukeViet\\Api\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/includes/api',
+            0 => __DIR__ . '/../..' . '/api',
         ),
         'NukeViet\\' => 
         array (
             0 => __DIR__ . '/..' . '/vinades/nukeviet',
+            1 => __DIR__ . '/..' . '/vinades/nukeviet',
         ),
         'League\\Url\\' => 
         array (
