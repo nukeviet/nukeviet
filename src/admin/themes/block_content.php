@@ -66,6 +66,8 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 
+use NukeViet\Ultis;
+
 if ($nv_Request->isset_request('confirm', 'post')) {
     $error = array();
     $list_file_name = $nv_Request->get_title('file_name', 'post', '', 0);
@@ -75,7 +77,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $module = $row['module'] = nv_substr($nv_Request->get_title('module_type', 'post', '', 0), 0, 55);
     $row['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 255);
 
-    $path_file_php = $path_file_ini = $path_file_lang = '';
+    $path_file_php = $path_file_ini = $block_type = $block_dir = '';
 
     unset($matches);
     if ($module == 'theme') {
@@ -88,28 +90,16 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         if ($module == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) {
             $path_file_php = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name;
             $path_file_ini = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
-
-            if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php')) {
-                $path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php')) {
-                $path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php')) {
-                $path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
-            }
+            $block_type = Ultis::TYPE_THEME;
+            $block_dir = $selectthemes;
         } elseif (isset($site_mods[$module])) {
             $mod_file = $site_mods[$module]['module_file'];
 
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name) and file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) {
                 $path_file_php = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name;
                 $path_file_ini = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
-
-                if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php')) {
-                    $path_file_lang = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php';
-                } elseif (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php')) {
-                    $path_file_lang = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php';
-                } elseif (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php')) {
-                    $path_file_lang = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
-                }
+                $block_type = Ultis::TYPE_MODULE;
+                $block_dir = $module_file;
             }
         }
 
@@ -172,30 +162,17 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 include_once $path_file_php;
 
                 if (nv_function_exists($submit_function)) {
-                    // Ngon ngu cua block
-                    if (!empty($path_file_lang)) {
-                        $nv_Lang->loadBlock($path_file_lang);
-                    } else {
-                        $lang_block = array();
-                        $xmllanguage = $xml->xpath('language');
-                        $language = (empty($xmllanguage)) ? array() : ( array )$xmllanguage[0];
-
-                        if (isset($language[NV_LANG_INTERFACE])) {
-                            $lang_block = ( array )$language[NV_LANG_INTERFACE];
-                        } elseif (isset($language['en'])) {
-                            $lang_block = ( array )$language['en'];
-                        } else {
-                            $xmlkey = $xml->xpath('config');
-                            $language = ( array )$xmlkey[0];
-
-                            $key = array_keys($language);
-                            $lang_block = array_combine($key, $key);
-                        }
-                        $nv_Lang->setBlock($lang_block);
+                    if ($block_type == Ultis::TYPE_MODULE) {
+                        $nv_Lang->loadModule($block_dir, false, true);
+                    } elseif ($block_type == Ultis::TYPE_THEME) {
+                        $nv_Lang->loadTheme($block_dir, true);
                     }
 
                     // Goi ham xu ly hien thi block
                     $array_config = call_user_func($submit_function, $module, $nv_Lang);
+
+                    // Xóa lang tạm giải phóng bộ nhớ
+                    $nv_Lang->changeLang();
 
                     if (! empty($array_config['config'])) {
                         $row['config'] = serialize($array_config['config']);

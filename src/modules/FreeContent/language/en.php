@@ -62,3 +62,6 @@ $lang_module['content_status_note0'] = 'Effective at the';
 $lang_module['content_status_note1'] = 'Will expire at %s';
 $lang_module['content_status_note2'] = 'Expired at %s';
 $lang_module['mng'] = 'Content management';
+
+$lang_module['block_blockid'] = 'Select block';
+$lang_module['block_numrows'] = 'Total content display';

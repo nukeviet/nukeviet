@@ -103,17 +103,6 @@ class Language
     }
 
     /**
-     * Đọc ngôn ngữ block, gần như là alias của phương thức loadFile
-     *
-     * @param mixed $file
-     * @return void
-     */
-    public function loadBlock($file)
-    {
-        $this->load($file);
-    }
-
-    /**
      * Đọc một file ngôn ngữ bất kỳ
      *
      * @param string $file
@@ -147,20 +136,17 @@ class Language
      * Language::loadTheme()
      *
      * @param mixed $theme
-     * @param bool $admin
+     * @param boolean $loadtmp
      * @return
      */
-    public function loadTheme($theme, $admin = false)
+    public function loadTheme($theme, $loadtmp = false)
     {
-        if ($admin and !defined('NV_ADMIN')) {
-            return false;
-        }
         if ($this->lang != $this->defaultLang) {
-            $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
-            $this->load($file);
+            $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . $this->defaultLang . '.php';
+            $this->load($file, $loadtmp);
         }
-        $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . ($admin ? 'admin_' : '') . $this->lang . '.php';
-        $this->load($file);
+        $file = NV_ROOTDIR . '/themes/' . $theme . '/language/' . $this->lang . '.php';
+        $this->load($file, $loadtmp);
     }
 
     /**

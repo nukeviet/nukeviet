@@ -62,3 +62,6 @@ $lang_module['content_status_note0'] = 'Valable à';
 $lang_module['content_status_note1'] = 'Valable jusqu\'à %s';
 $lang_module['content_status_note2'] = 'Expiré à %s';
 $lang_module['mng'] = 'Gestion des contenus';
+
+$lang_module['block_blockid'] = 'Choisir un bloque';
+$lang_module['block_numrows'] = 'Nombre de contenu présentes';

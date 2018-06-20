@@ -62,3 +62,6 @@ $lang_module['content_status_note0'] = 'Hiệu lực vào lúc';
 $lang_module['content_status_note1'] = 'Sẽ hết hạn lúc %s';
 $lang_module['content_status_note2'] = 'Đã hết hạn lúc %s';
 $lang_module['mng'] = 'Quản lý nội dung';
+
+$lang_module['block_blockid'] = 'Chọn khối';
+$lang_module['block_numrows'] = 'Số nội dung hiển thị';

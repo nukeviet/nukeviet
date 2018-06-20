@@ -42,17 +42,10 @@ function nv_admin_write_lang($dirlang, $idfile)
         $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
         if (preg_match('/^theme\_(.*?)$/', $module, $m)) {
-            if ($admin_file == 1) {
-                // Ngôn ngữ admin của giao diện
-                $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/admin_' . $dirlang . '.php';
-            } else {
-                // Ngôn ngữ ngoài site của giao diện
-                $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/' . $dirlang . '.php';
-            }
+            // Ngôn ngữ của giao diện
+            $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/' . $dirlang . '.php';
         } elseif (in_array($module, $modules_exit) and preg_match('/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)$/', $admin_file)) {
             $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file . '_' . $dirlang . '.php';
-        } elseif (in_array($module, $modules_exit) and $admin_file == 1) {
-            $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php';
         } elseif (in_array($module, $modules_exit) and $admin_file == 0) {
             $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
         } elseif ($module == 'global' and $admin_file == 1) {
