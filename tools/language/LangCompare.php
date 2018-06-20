@@ -43,7 +43,7 @@ if (isset($_POST['deleteSession'])) {
 }
 
 $currentModule = 'Banners';
-$lang = 'vi';
+$lang = 'fr';
 
 // Biến chứa ngôn ngữ cuối cùng
 $finalLangTranslator = $finalLangModule = [];
@@ -188,9 +188,12 @@ if (isset($_POST['writeData'])) {
         $content_lang .= "\$lang_module['" . $lang_key . "'] = '" . $lang_value . "';\n";
     }
 
-    echo('<pre><code>');
-    echo (htmlspecialchars($content_lang));
-    die('</code></pre>');
+    // Xóa ngôn ngữ admin nếu có
+    if (file_exists(NV_ROOTDIR . '/modules/' . $currentModule . '/language/admin_' . $lang . '.php')) {
+        unlink(NV_ROOTDIR . '/modules/' . $currentModule . '/language/admin_' . $lang . '.php');
+    }
+
+    file_put_contents(NV_ROOTDIR . '/modules/' . $currentModule . '/language/' . $lang . '.php', $content_lang, LOCK_EX);
 
     // Xóa thông tin và làm lại
     unset($_SESSION['finalLangTranslator'], $_SESSION['finalLangModule']);
