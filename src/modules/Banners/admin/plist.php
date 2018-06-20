@@ -24,7 +24,7 @@ $contents['caption'] = $nv_Lang->getModule('plans_list2');
 $contents['thead'] = array( $nv_Lang->getModule('title'), $nv_Lang->getModule('blang'), $nv_Lang->getModule('size'), $nv_Lang->getModule('is_act'), $nv_Lang->getGlobal('actions') );
 $contents['view'] = $nv_Lang->getGlobal('detail');
 $contents['edit'] = $nv_Lang->getGlobal('edit');
-$contents['add'] = $nv_Lang->getModule('add_banner');
+$contents['add'] = $nv_Lang->getModule('add_banner_admin');
 $contents['del'] = $nv_Lang->getGlobal('delete');
 $contents['rows'] = array();
 
