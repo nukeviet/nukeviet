@@ -12,7 +12,6 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
-$lang_siteinfo = nv_get_lang_module($mod);
 $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 
 $_arr_siteinfo = array();
@@ -33,7 +32,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
 // So thanh vien
 if ($_arr_siteinfo['number_user'] > 0) {
     $siteinfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_user'],
+        'key' => $nv_Lang->getModule('siteinfo_user'),
         'value' => number_format($_arr_siteinfo['number_user'])
     );
 }
@@ -41,7 +40,7 @@ if ($_arr_siteinfo['number_user'] > 0) {
 // So thanh vien doi kich hoat
 if ($_arr_siteinfo['number_user_reg'] > 0) {
     $pendinginfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_waiting'],
+        'key' => $nv_Lang->getModule(siteinfo_waiting),
         'value' => number_format($_arr_siteinfo['number_user_reg']),
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
     );
@@ -73,7 +72,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     if (!empty($pending_lists)) {
         foreach ($pending_lists as $row) {
             $pendinginfo[] = array(
-                'key' => sprintf($lang_siteinfo['group_user_peding'], $row['title']),
+                'key' => $nv_Lang->getModule('group_user_peding', $row['title']),
                 'value' => number_format($row['num_users'], 0, ',', '.'),
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=groups&userlist=' . $row['group_id']
             );

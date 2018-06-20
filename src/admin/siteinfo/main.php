@@ -22,7 +22,13 @@ foreach ($site_mods as $mod => $value) {
         $siteinfo = $pendinginfo = array();
         $mod_data = $value['module_data'];
 
+        // Đọc tạm ngôn ngữ của module
+        $nv_Lang->loadModule($value['module_file'], false, true);
+
         include NV_ROOTDIR . '/modules/' . $value['module_file'] . '/siteinfo.php' ;
+
+        // Xóa ngôn ngữ đã đọc tạm
+        $nv_Lang->changeLang();
 
         if (! empty($siteinfo)) {
             $info[$mod]['caption'] = $value['custom_title'];

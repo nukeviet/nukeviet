@@ -161,7 +161,7 @@ if (!empty($api_request['module'])) {
     Api::setModuleInfo($module_info);
 
     // Ngôn ngữ admin của module nếu API của module
-    $nv_Lang->loadModule($module_info['module_file'], true);
+    $nv_Lang->loadModule($module_info['module_file']);
 }
 
 // Ghi nhật ký

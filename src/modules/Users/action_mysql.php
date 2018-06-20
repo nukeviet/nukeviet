@@ -321,7 +321,7 @@ if ($lang == 'vi') {
 
 // Cài lại module users thì không thao tác gì tới CSDL
 if ($module_data != 'users' or $op != 'recreate_mod') {
-    $nv_Lang->loadModule($module_file, false, false, true);
+    $nv_Lang->loadModule($module_file, false, true);
 
     // Build lại lang bảng field
     try {

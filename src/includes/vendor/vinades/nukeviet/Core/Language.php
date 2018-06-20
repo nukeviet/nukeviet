@@ -77,17 +77,16 @@ class Language
      * Language::loadModule()
      *
      * @param mixed $modfile
-     * @param bool $admin
      * @param bool $modadmin
      * @param bool $loadtmp
      * @return
      */
-    public function loadModule($modfile, $admin = false, $modadmin = false, $loadtmp = false)
+    public function loadModule($modfile, $modadmin = false, $loadtmp = false)
     {
-        if ($admin and !defined('NV_ADMIN')) {
+        if ($modadmin and !defined('NV_ADMIN')) {
             return false;
         }
-        if ($modadmin and $admin) {
+        if ($modadmin) {
             if ($this->lang != $this->defaultLang) {
                 $file = NV_ROOTDIR . '/includes/language/' . $this->defaultLang . '/admin_' . $modfile . '.php';
                 $this->load($file, $loadtmp);
@@ -95,10 +94,10 @@ class Language
             $file = NV_ROOTDIR . '/includes/language/' . $this->lang . '/admin_' . $modfile . '.php';
         } else {
             if ($this->lang != $this->defaultLang) {
-                $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->defaultLang . '.php';
+                $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . $this->defaultLang . '.php';
                 $this->load($file, $loadtmp);
             }
-            $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . ($admin ? 'admin_' : '') . $this->lang . '.php';
+            $file = NV_ROOTDIR . '/modules/' . $modfile . '/language/' . $this->lang . '.php';
         }
         $this->load($file, $loadtmp);
     }

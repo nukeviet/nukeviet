@@ -125,7 +125,13 @@ while ($data = $result->fetch()) {
                 $data['send_from'] = $nv_Lang->getGlobal('level5');
             }
 
+            // Đọc tạm ngôn ngữ của module
+            $nv_Lang->loadModule($site_mods[$data['module']]['module_file'], false, true);
+
             include NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php';
+
+            // Xóa ngôn ngữ đã đọc tạm
+            $nv_Lang->changeLang();
         }
 
         $data['add_time_iso'] = nv_date(DATE_ISO8601, $data['add_time']);

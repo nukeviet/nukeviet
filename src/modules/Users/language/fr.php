@@ -107,7 +107,7 @@ $lang_module['account_deny_name'] = 'Désolé, le compte %s est interdit';
 $lang_module['email_deny_name'] = 'Désolé, cet e-mail %s est interdit';
 $lang_module['email_registered_name'] = 'Cet E-mail %s a été enregistré. Si c\'est vous, utilisez l\'outil Mot de passe oublié pour le réinitialiser';
 $lang_module['account_register'] = 'Votre compte a été créé';
-$lang_module['account_register_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s activated. Your login information:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account: %4$s<br /><br />Password: %5$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
+$lang_module['account_register_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s activated. Your login information:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account: %4$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
 $lang_module['account_register_to_admin'] = 'Votre compte a été créé, mais il doit être activé par l\'administrateur. Nous allons vérifier et vous informer le résultat';
 $lang_module['account_active'] = 'Infos pour l\'activation du compte';
 $lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br />Password: %6$s<br /><br />Activate expired on %7$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';

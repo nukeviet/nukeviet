@@ -40,7 +40,7 @@ function nv_get_submenu($mod)
     $submenu = array();
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
-        $nv_Lang->loadModule($mod, true, true, true);
+        $nv_Lang->loadModule($mod, true, true);
         include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';
         $nv_Lang->changeLang();
     }
@@ -64,7 +64,7 @@ function nv_get_submenu_mod($module_name)
         $module_file = $module_info['module_file'];
         $module_data = $module_info['module_data'];
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php')) {
-            $nv_Lang->loadModule($module_file, true, false, true);
+            $nv_Lang->loadModule($module_file, false, true);
             include NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
             $nv_Lang->changeLang();
         }
