@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Apr 15, 2011, 02:22:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Apr 15, 2011, 08:22:00 AM
+*/
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '15/04/2011, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -81,7 +81,6 @@ $lang_module['add_type_css'] = 'Tên lớp CSS.';
 $lang_module['add_type_css_info'] = 'Tên class (CSS) để xác định giao diện menu này.';
 $lang_module['add_error_module'] = 'Lỗi: Không có module nào được chỉ định';
 $lang_module['add_error_module_exist'] = 'Lỗi: Module không tồn tại';
-
 $lang_module['action_menu_reload'] = 'Nạp lại';
 $lang_module['action_menu_reload_confirm'] = 'Hành động này sẽ nạp lại các thành phần là chủ đề của module hiện tại. Bạn có muốn tiếp tục?';
 $lang_module['action_menu_reload_success'] = 'Đã nạp lại menu thành công!';

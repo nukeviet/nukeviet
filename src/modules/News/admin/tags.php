@@ -210,7 +210,7 @@ if ($incomplete) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $nv_Lang->getModule('tags');
+$page_title = $nv_Lang->getModule('tags_manager');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

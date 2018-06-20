@@ -286,6 +286,6 @@
 	</div>
 </form>
 <div class="alert alert-info">
-	{LANG.info}
+	{LANG.sso_info}
 </div>
 <!-- END: main -->

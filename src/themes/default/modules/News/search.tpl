@@ -71,7 +71,7 @@
 			<div class="form-group">
 				<label class="col-sm-7 control-label">&nbsp;</label>
 				<div class="col-sm-17">
-					<input type="submit" class="btn btn-primary" value="{LANG.search_title}"/>
+					<input type="submit" class="btn btn-primary" value="{LANG.search_submit}"/>
 				</div>
 			</div>
 		</div>
@@ -152,7 +152,7 @@
 					</div>
 					<div class="col-md-8"><input type="text" name="q" maxlength="255" value="{KEY}" id="sbi" class="form-control" />
 					</div>
-					<div class="col-md-8"><input type="submit" name="sa" value="{LANG.search_title}" id="sbb" class="btn btn-default">
+					<div class="col-md-8"><input type="submit" name="sa" value="{LANG.search_submit}" id="sbb" class="btn btn-default">
 					</div>
 				</div>
 

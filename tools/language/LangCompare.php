@@ -13,6 +13,7 @@ define('NV_ADMIN', true);
 define('NV_MAINFILE', true);
 
 session_start();
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
 if ($base_siteurl == DIRECTORY_SEPARATOR) {
@@ -42,7 +43,7 @@ if (isset($_POST['deleteSession'])) {
     die();
 }
 
-$currentModule = 'Banners';
+$currentModule = 'Users';
 $lang = 'fr';
 
 // Biến chứa ngôn ngữ cuối cùng

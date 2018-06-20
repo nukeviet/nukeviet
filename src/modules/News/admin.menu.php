@@ -73,7 +73,7 @@ if (! isset($site_mods['cms'])) {
 
 if ($NV_IS_ADMIN_MODULE) {
     $submenu['cat'] = $nv_Lang->getModule('categories');
-    $submenu['tags'] = $nv_Lang->getModule('tags');
+    $submenu['tags'] = $nv_Lang->getModule('tags_manager');
     $submenu['groups'] = $nv_Lang->getModule('block');
     $submenu['topics'] = $nv_Lang->getModule('topics');
     $submenu['sources'] = $nv_Lang->getModule('sources');

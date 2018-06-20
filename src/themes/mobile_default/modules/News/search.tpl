@@ -47,7 +47,7 @@
 
 			<div class="form-group form-inline">
 				<div class="col-md-8 text-right">&nbsp;</div>
-	  			<div class="col-md-16"><input type="submit" class="btn btn-primary" value="{LANG.search_title}"/></div>
+	  			<div class="col-md-16"><input type="submit" class="btn btn-primary" value="{LANG.search_submit}"/></div>
 			</div>
 
 		</div>
@@ -116,7 +116,7 @@ $(document).ready(function() {
 					<div class="form-group">
 						<div class="col-md-8"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></div>
 						<div class="col-md-8"><input type="text" name="q" maxlength="255" value="{KEY}" id="sbi" class="form-control" /></div>
-						<div class="col-md-8"><input type="submit" name="sa" value="{LANG.search_title}" id="sbb" class="btn btn-default"></div>
+						<div class="col-md-8"><input type="submit" name="sa" value="{LANG.search_submit}" id="sbb" class="btn btn-default"></div>
 					</div>
 
 					<div class="form-group">

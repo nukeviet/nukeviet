@@ -3,10 +3,10 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Nov 06, 2017, 10:37:40 AM
+* @Createdate Jun 20, 2018, 02:09:22 AM
 */
 
 if (!defined('NV_MAINFILE')) {
