@@ -29,10 +29,6 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     if (preg_match('/^theme\_(.*?)$/', $module, $m)) {
         // Ngôn ngữ của giao diện
         $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/' . $dirlang . '.php';
-    } elseif (preg_match('/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/', $admin_file, $m)) {
-        // Block các module
-        $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file;
-        $admin_file = 'block.' . $m[1] . '.' . $m[2];
     } elseif ($module == 'global' and $admin_file == 1) {
         // Global trong quản trị
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
@@ -54,7 +50,6 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     if ($include_lang != '' and file_exists($include_lang)) {
         $lang_module = array();
         $lang_global = array();
-        $lang_block = array();
         $lang_translator = array();
 
         include $include_lang;
@@ -107,13 +102,11 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             }
         }
 
-        $array_full_readlang = array(
+        $array_full_readlang = [
             'lang_global' => $lang_global,
-            'lang_module' => $lang_module,
-            'lang_block' => $lang_block
-        );
-        $array_lang_key = array();
-        $array_lang_value = array();
+            'lang_module' => $lang_module
+        ];
+        $array_lang_key = $array_lang_value = [];
 
         $columns_array = $db->columns_array(NV_LANGUAGE_GLOBALTABLE . '_file');
         foreach ($columns_array as $row) {
@@ -217,12 +210,6 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
         // Đọc ngôn ngữ các module
         nv_admin_read_lang($dirlang, $module, 0);
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
-
-        $blocks = nv_scandir(NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/');
-        foreach ($blocks as $file_i) {
-            // Đọc ngôn ngữ các block của module tương ứng
-            nv_admin_read_lang($dirlang, $module, $file_i);
-        }
     }
 
     $dirs1 = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme']);

@@ -12,13 +12,11 @@ namespace NukeViet\Core;
 
 class Language
 {
-    public static $lang_global = array();
-    public static $lang_module = array();
-    public static $lang_block = array();
+    public static $lang_global = [];
+    public static $lang_module = [];
 
-    private $tmplang_global = array();
-    private $tmplang_module = array();
-    private $tmplang_block = array();
+    private $tmplang_global = [];
+    private $tmplang_module = [];
 
     private $lang = 'vi';
     private $defaultLang = 'vi';
@@ -27,7 +25,6 @@ class Language
     const TYPE_LANG_ALL = 0;
     const TYPE_LANG_GLOBAL = 1;
     const TYPE_LANG_MODULE = 2;
-    const TYPE_LANG_BLOCK = 3;
 
     /**
      * Language::__construct()
@@ -48,12 +45,10 @@ class Language
     public function setLang($lang)
     {
         $this->lang = $lang;
-        self::$lang_block = array();
-        self::$lang_module = array();
-        self::$lang_global = array();
-        $this->tmplang_global = array();
-        $this->tmplang_module = array();
-        $this->tmplang_block = array();
+        self::$lang_global = [];
+        self::$lang_module = [];
+        $this->tmplang_global = [];
+        $this->tmplang_module = [];
     }
 
     /**
@@ -67,9 +62,8 @@ class Language
         if (!empty($lang)) {
             $this->lang = $lang;
         }
-        $this->tmplang_global = array();
-        $this->tmplang_module = array();
-        $this->tmplang_block = array();
+        $this->tmplang_global = [];
+        $this->tmplang_module = [];
         $this->isTmpLoaded = false;
     }
 
@@ -178,7 +172,7 @@ class Language
      */
     private function load($file, $loadtmp = false)
     {
-        $lang_translator = $lang_global = $lang_module = $lang_block = array();
+        $lang_translator = $lang_global = $lang_module = [];
 
         if (file_exists($file)) {
             require $file;
@@ -200,16 +194,8 @@ class Language
                 self::$lang_module = array_merge(self::$lang_module, $lang_module);
             }
         }
-        if (!empty($lang_block)) {
-            if ($loadtmp) {
-                $this->isTmpLoaded = true;
-                $this->tmplang_block = array_merge($this->tmplang_block, $lang_block);
-            } else {
-                self::$lang_block = array_merge(self::$lang_block, $lang_block);
-            }
-        }
 
-        unset($lang_translator, $lang_global, $lang_module, $lang_block);
+        unset($lang_translator, $lang_global, $lang_module);
     }
 
     /**
@@ -236,8 +222,6 @@ class Language
                 $langvalue = $this->tmplang_global[$langkey];
             } elseif (($type == self::TYPE_LANG_MODULE or $type == self::TYPE_LANG_ALL) and isset($this->tmplang_module[$langkey])) {
                 $langvalue = $this->tmplang_module[$langkey];
-            } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset($this->tmplang_block[$langkey])) {
-                $langvalue = $this->tmplang_block[$langkey];
             }
         }
         if (!$langvalue) {
@@ -245,8 +229,6 @@ class Language
                 $langvalue = self::$lang_global[$langkey];
             } elseif (($type == self::TYPE_LANG_MODULE or $type == self::TYPE_LANG_ALL) and isset(self::$lang_module[$langkey])) {
                 $langvalue = self::$lang_module[$langkey];
-            } elseif (($type == self::TYPE_LANG_BLOCK or $type == self::TYPE_LANG_ALL) and isset(self::$lang_block[$langkey])) {
-                $langvalue = self::$lang_block[$langkey];
             }
         }
         if (empty($langvalue)) {
@@ -273,16 +255,6 @@ class Language
     public function getModule()
     {
         return $this->_get(func_get_args(), func_num_args(), self::TYPE_LANG_MODULE);
-    }
-
-    /**
-     * Language::getBlock()
-     *
-     * @return
-     */
-    public function getBlock()
-    {
-        return $this->_get(func_get_args(), func_num_args(), self::TYPE_LANG_BLOCK);
     }
 
     /**
@@ -328,22 +300,6 @@ class Language
     }
 
     /**
-     * Language::setBlock()
-     *
-     * @param mixed $langkey
-     * @param string $langvalue
-     * @return void
-     */
-    public function setBlock($langkey, $langvalue = '')
-    {
-        if (is_array($langkey)) {
-            self::$lang_block = array_merge(self::$lang_block, $langkey);
-        } else {
-            self::$lang_block[$langkey] = $langvalue;
-        }
-    }
-
-    /**
      * Language::existsGlobal()
      *
      * @param mixed $langkey
@@ -372,16 +328,5 @@ class Language
     public function existsTmpModule($langkey)
     {
         return isset($this->tmplang_module[$langkey]);
-    }
-
-    /**
-     * Language::existsBlock()
-     *
-     * @param mixed $langkey
-     * @return
-     */
-    public function existsBlock($langkey)
-    {
-        return isset(self::$lang_block[$langkey]);
     }
 }
