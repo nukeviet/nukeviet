@@ -25,21 +25,21 @@ if (!nv_function_exists('nv_block_login')) {
     {
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('display_mode') . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getModule('display_mode') . ':</label>';
         $html .= '  <div class="col-sm-9"><select class="form-control" name="config_display_mode">';
 
         for ($i = 0; $i <= 1; $i++) {
-            $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('display_mode' . $i) . '</option>';
+            $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $nv_Lang->getModule('display_mode' . $i) . '</option>';
         }
 
         $html .= '  </select></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getBlock('popup_register') . ':</label>';
+        $html .= '  <label class="control-label col-sm-6">' . $nv_Lang->getModule('popup_register') . ':</label>';
         $html .= '  <div class="col-sm-9"><select class="form-control" name="config_popup_register">';
 
         for ($i = 0; $i <= 1; $i++) {
-            $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('popup_register' . $i) . '</option>';
+            $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $nv_Lang->getModule('popup_register' . $i) . '</option>';
         }
 
         $html .= '  </select></div>';

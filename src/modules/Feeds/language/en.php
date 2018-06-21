@@ -21,3 +21,12 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['content'] = 'Content';
 $lang_module['save'] = 'Save';
+$lang_module['url'] = 'Url rss';
+$lang_module['number'] = 'Number of items to display';
+$lang_module['isdescription'] = 'Display description';
+$lang_module['ishtml'] = 'Description Using HTML';
+$lang_module['title_length'] = 'Number of cat title characters';
+$lang_module['ispubdate'] = 'Display the date pubdate';
+$lang_module['istarget'] = 'Open link in new window';
+$lang_module['error_url'] = 'Rss path you put in wrong';
+$lang_module['error_template'] = 'You need to select a template for the block';

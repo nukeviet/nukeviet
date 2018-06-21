@@ -74,3 +74,4 @@ $lang_module['config_save'] = 'Save config';
 $lang_module['setting_copy_page'] = 'Allowed to copy the article';
 $lang_module['title_copy_page'] = 'Copy the article';
 $lang_module['api_CreatArticle'] = 'Creat Article';
+$lang_module['htmlcontent'] = 'Enter to block content';

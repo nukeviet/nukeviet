@@ -26,17 +26,17 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         global $site_mods;
 
         $html = '<div class="form-group">';
-        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $nv_Lang->getBlock('menu_note_auto') . '</div></div>';
+        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $nv_Lang->getModule('menu_note_auto') . '</div></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">';
-        $html .= $nv_Lang->getBlock('title_length');
+        $html .= $nv_Lang->getModule('title_length');
         $html .= ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= "<input type=\"text\" class=\"form-control\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('module_display') . ':</label><div class="col-sm-18">';
+        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('module_display') . ':</label><div class="col-sm-18">';
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
             $data_block['module_in_menu'] = array();

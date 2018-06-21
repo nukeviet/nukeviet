@@ -118,3 +118,7 @@ $lang_module['notification_comment_queue'] = 'Kiểm duyệt bình luận gửi 
 $lang_module['attach_choose'] = 'Chọn';
 $lang_module['attach_view'] = 'Truy cập';
 $lang_module['attach_download'] = 'Tải đính kèm';
+$lang_module['width'] = 'Width';
+$lang_module['numpost'] = 'Num posts';
+$lang_module['scheme'] = 'Color Scheme';
+$lang_module['facebookappid'] = 'Facebook Appid';

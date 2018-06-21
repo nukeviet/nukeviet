@@ -6,7 +6,7 @@
 * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 02:22:00 PM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (!defined('NV_MAINFILE')) {
@@ -168,3 +168,4 @@ $lang_module['exp_date_nochoose'] = 'Ads will always show if the date is not her
 $lang_module['publ_time_info'] = 'The self-time system starts at the time of adding the ad if no date is selected here';
 $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
+$lang_module['idplanbanner'] = 'Select banner';

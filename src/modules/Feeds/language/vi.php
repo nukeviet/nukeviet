@@ -21,3 +21,12 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['content'] = 'Nội dung thông báo';
 $lang_module['save'] = 'Lưu bài viết';
+$lang_module['url'] = 'Đường dẫn tới file rss';
+$lang_module['number'] = 'Số mục muốn hiển thị';
+$lang_module['isdescription'] = 'Hiện thị miêu tả';
+$lang_module['ishtml'] = 'Sử dụng HTML miêu tả';
+$lang_module['title_length'] = 'Số ký tự của tiêu đề';
+$lang_module['ispubdate'] = 'Hiện ngày gửi';
+$lang_module['istarget'] = 'Mở liên kết bằng cửa sổ mới';
+$lang_module['error_url'] = 'Đường dẫn Rss bạn đưa vào không đúng';
+$lang_module['error_template'] = 'Bạn cần chọn template cho block';

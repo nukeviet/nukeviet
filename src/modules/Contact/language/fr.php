@@ -126,3 +126,4 @@ $lang_module['config'] = 'Module config';
 $lang_module['config_sendcopymode'] = 'Who can send a copy to email';
 $lang_module['config_sendcopymode0'] = 'Users have authenticated email';
 $lang_module['config_sendcopymode1'] = 'All users';
+$lang_module['departmentid'] = 'Sélectionnez un département';

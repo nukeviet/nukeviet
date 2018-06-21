@@ -28,21 +28,21 @@ if (!nv_function_exists('nv_message_page')) {
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('title_length') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('title_length') . ':</label>';
         $html .= '	<div class="col-sm-9"><input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('bodytext_length') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('bodytext_length') . ':</label>';
         $html .= '	<div class="col-sm-9"><input type="text" class="form-control" name="config_bodytext_length" value="' . $data_block['bodytext_length'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="text-right col-sm-6">' . $nv_Lang->getBlock('show_image') . ':</label>';
+        $html .= '	<label class="text-right col-sm-6">' . $nv_Lang->getModule('show_image') . ':</label>';
         $ck = $data_block['show_image'] ? 'checked="checked"' : '';
         $html .= '	<div class="col-sm-9"><input type="checkbox" name="config_show_image" value="1" ' . $ck . '/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('rowid') . ':</label>';
-        $html .= '	<div class="col-sm-9"><select class="form-control" name="config_rowid"><option value="0">---' . $nv_Lang->getBlock('rowid_select') . '---</option>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('rowid') . ':</label>';
+        $html .= '	<div class="col-sm-9"><select class="form-control" name="config_rowid"><option value="0">---' . $nv_Lang->getModule('rowid_select') . '---</option>';
 
         $result = $db->query('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . ' WHERE status=1');
         while (list ($id, $title) = $result->fetch(3)) {
@@ -50,7 +50,7 @@ if (!nv_function_exists('nv_message_page')) {
             $html .= '<option value="' . $id . '" ' . $sl . '>' . $title . '</option>';
         }
 
-        $html .= '  </select><span class="help-block">' . $nv_Lang->getBlock('rowid_note') . '</span></div>';
+        $html .= '  </select><span class="help-block">' . $nv_Lang->getModule('rowid_note') . '</span></div>';
         $html .= '</div>';
         return $html;
     }

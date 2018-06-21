@@ -27,7 +27,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('vid') . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('vid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="vid" class="form-control">';
         $sql = 'SELECT vid, question,acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', $module);

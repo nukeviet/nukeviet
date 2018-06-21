@@ -100,7 +100,7 @@ foreach ($array_modules as $module_file) {
                     } elseif (isset($finalLangModuleNew[$_key]) and $finalLangModuleNew[$_key] != $_value) {
                         $_key_new = 'bl_' . $_key;
                         // Nếu key chuyển mà có thì báo lỗi
-                        if (isset($finalLangModuleNew[$_key_new])) {
+                        if (isset($finalLangModuleNew[$_key_new]) and $finalLangModuleNew[$_key_new] != $_value) {
                             die('Error key exists ' . $_key_new . ' lang ' . $lang . ' module ' . $module_file . ' block ' . $block_info['php_file']);
                         }
                         // Nếu có key mà khác lang thì chuyển key prefix
@@ -188,3 +188,5 @@ foreach ($array_modules as $module_file) {
         }
     }
 }
+
+echo 'Complete!!!!!!!' . PHP_EOL;

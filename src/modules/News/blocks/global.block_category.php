@@ -27,7 +27,7 @@ if (!nv_function_exists('nv_news_category')) {
 
         $html_input = '';
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('catid') . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('catid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="config_catid" class="form-control">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
@@ -55,10 +55,10 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= '</script>';
         $html .= '</div></div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('title_length') . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('title_length') . ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
-        $html .= "<option value=\"\">" . $nv_Lang->getBlock('title_length') . "</option>\n";
+        $html .= "<option value=\"\">" . $nv_Lang->getModule('title_length') . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
         }

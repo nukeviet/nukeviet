@@ -6,7 +6,7 @@
 * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 05:30:00 PM
+* @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (!defined('NV_MAINFILE')) {
@@ -168,3 +168,5 @@ $lang_module['exp_date_nochoose'] = 'Les annonces seront diffusées toujours, si
 $lang_module['publ_time_info'] = 'Les systèmes automatiques prennent le temps commence le moment plus de publicité sinon sélectionner des dates ici';
 $lang_module['enter_keyword'] = 'Entrez des mots clés';
 $lang_module['all_plan'] = 'Tous les plans';
+$lang_module['idplanbanner'] = 'Sélectionnez le fichier';
+$lang_module['bl_blang_all'] = 'Toutes les langues';

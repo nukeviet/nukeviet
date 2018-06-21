@@ -25,7 +25,7 @@ if (!function_exists('nv_block_vertica_menu_note')) {
     {
         $html = '';
         $html .= "<div class=\"form-group\">";
-        $html .= "	<div class=\"col-sm-18 col-sm-offset-6\"><div class=\"alert alert-info panel-block-content-last\">" . $nv_Lang->getBlock('menu_note_auto') . "</div></div>";
+        $html .= "	<div class=\"col-sm-18 col-sm-offset-6\"><div class=\"alert alert-info panel-block-content-last\">" . $nv_Lang->getModule('menu_note_auto') . "</div></div>";
         $html .= "</div>";
         return $html;
     }

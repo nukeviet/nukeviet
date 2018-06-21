@@ -118,3 +118,7 @@ $lang_module['allowautolink'] = 'Automatically detect links in content';
 $lang_module['attach_download'] = 'Download attach';
 $lang_module['attach_choose'] = 'Choose';
 $lang_module['attach_view'] = 'Download';
+$lang_module['width'] = 'Width';
+$lang_module['numpost'] = 'Num posts';
+$lang_module['scheme'] = 'Color Scheme';
+$lang_module['facebookappid'] = 'Facebook Appid';

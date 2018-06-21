@@ -29,7 +29,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $return = '';
 
         $html = "<input class=\"form-control\" name=\"config_url\" type=\"text\" value=\"" . $data_block['url'] . "\"/>";
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('url') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('url') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
         $html = "<select class=\"form-control\" name=\"config_number\">\n";
         for ($index = 1; $index <= 50; ++$index) {
@@ -37,7 +37,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
             $html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
         }
         $html .= "</select>\n";
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('number') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('number') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
         $data_block['title_length'] = isset($data_block['title_length']) ? intval($data_block['title_length']) : 0;
         $html = "<select class=\"form-control\" name=\"config_title_length\">\n";
@@ -46,24 +46,24 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
             $html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
         }
         $html .= "</select>\n";
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('title_length') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('title_length') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
         $sel = (intval($data_block['isdescription']) == 1) ? "checked=\"checked\"" : "";
         $html = "<input type=\"checkbox\" name=\"config_isdescription\" value=\"1\" " . $sel . " /> " . $nv_Lang->getModule('block_yes') . "\n";
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('isdescription') . '</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('isdescription') . '</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
         $sel = (intval($data_block['ishtml']) == 1) ? "checked=\"checked\"" : "";
         $html = "<input type=\"checkbox\" name=\"config_ishtml\" value=\"1\" " . $sel . " /> " . $nv_Lang->getModule('block_yes') . "\n";
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('ishtml') . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('ishtml') . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
         $sel = (intval($data_block['ispubdate']) == 1) ? "checked=\"checked\"" : "";
         $html = "<input type=\"checkbox\" name=\"config_ispubdate\" value=\"1\" " . $sel . " /> " . $nv_Lang->getModule('block_yes') . "\n";
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('ispubdate') . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('ispubdate') . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
         $sel = (intval($data_block['istarget']) == 1) ? "checked=\"checked\"" : "";
         $html = "<input type=\"checkbox\" name=\"config_istarget\" value=\"1\" " . $sel . " /> " . $nv_Lang->getModule('block_yes') . "\n";
 
-        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('istarget') . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
+        $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('istarget') . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
         return $return;
     }
@@ -90,7 +90,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $return['config']['istarget'] = $nv_Request->get_int('config_istarget', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 0);
         if (!nv_is_url($return['config']['url'])) {
-            $return['error'][] = $nv_Lang->getBlock('error_url');
+            $return['error'][] = $nv_Lang->getModule('error_url');
         }
         return $return;
     }

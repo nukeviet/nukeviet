@@ -74,3 +74,4 @@ $lang_module['config_save'] = 'Sauvegarder la configuration';
 $lang_module['setting_copy_page'] = 'Page de copie';
 $lang_module['title_copy_page'] = 'Copier l\'article';
 $lang_module['api_CreatArticle'] = 'Créer des articles';
+$lang_module['htmlcontent'] = 'Entrer le contenu du block';
