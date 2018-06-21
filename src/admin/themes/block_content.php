@@ -99,7 +99,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $path_file_php = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name;
                 $path_file_ini = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
                 $block_type = Ultis::TYPE_MODULE;
-                $block_dir = $module_file;
+                $block_dir = $mod_file;
             }
         }
 
