@@ -24,19 +24,19 @@ if (!nv_function_exists('nv_menu_theme_social')) {
     function nv_menu_theme_social_config($module, $data_block, $nv_Lang)
     {
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('facebook') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('facebook') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_facebook" class="form-control" value="' . $data_block['facebook'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('google_plus') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('google_plus') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_google_plus" class="form-control" value="' . $data_block['google_plus'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('youtube') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('youtube') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_youtube" class="form-control" value="' . $data_block['youtube'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('twitter') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('twitter') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_twitter" class="form-control" value="' . $data_block['twitter'] . '"/></div>';
         $html .= '</div>';
         return $html;

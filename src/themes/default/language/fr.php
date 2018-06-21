@@ -6,8 +6,18 @@
 * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jan 31, 2018, 01:08:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
+
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
+
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
+$lang_translator['createdate'] = '04/03/2010, 15:22';
+$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['info'] = '';
+$lang_translator['langtype'] = 'lang_module';
 
 $lang_module['qr_level'] = 'Qualité des images';
 $lang_module['qr_pixel_per_point'] = 'Taille de QR-code ';
@@ -16,12 +26,10 @@ $lang_module['cominfo_map_guide_title'] = 'Guide de construire la carte de Googl
 $lang_module['cominfo_map_guide_content'] = '<ul><li>Saisissez l\'adresse dans la case, choisir une parmi les adresse dans la liste des adresses qui est compatible à Google MAP.</li><li>Vous pouvez cliquez sur la carte pour cocher l\'adresse que vous voulez</li><li>Kéo thả chuột trên điểm đánh dấu để di chuyển nó phù hợp với tọa độ địa chỉ công ty của bạn</li><li>Long clique au dessus et deplacer le pointeur de la souris pour deplacer la carte, tourner la roulette pour modifier la taille de la carte</li></ul>';
 $lang_module['cominfo_map_yes'] = 'Activez Google MAP';
 $lang_module['cominfo_map_no'] = 'Désactivew Google MAP';
-
 $lang_module['general'] = 'Configuration générale';
 $lang_module['allpages'] = 'Toute la page';
 $lang_module['content'] = 'Contenu';
 $lang_module['block'] = 'Bloque';
-
 $lang_module['color'] = 'Couleur';
 $lang_module['font_size'] = 'Taille';
 $lang_module['font_family'] = 'Font';
@@ -55,12 +63,11 @@ $lang_module['style'] = 'Interface';
 $lang_module['radius'] = 'Arrondir les angles';
 $lang_module['heading'] = 'Titre';
 $lang_module['customcss'] = 'CSS personnalisé';
-
 $lang_module['note'] = 'Note: Ne remplissez que pour les objets dont vous voulez modifier la configuration de l\'interface par défaut';
 $lang_module['block_note'] = 'Les configurations générale des bloques (Bloque de l\'interface, bloques des rubriques des nouvelles,...)';
 $lang_module['general_css_note'] = 'Ecrivez le contenu du css ici';
 $lang_module['module_in_menu'] = 'Les modules affichent sur le menu';
-
 $lang_module['save'] = 'Sauvegardez la configuration';
 $lang_module['exp'] = 'exemple';
 $lang_module['gfont_note'] = 'Choisir le font au: <a href="https://www.google.com/fonts" target="_blank" rel="nofollow">https://www.google.com/fonts</a>';
+$lang_module['bl_module_in_menu'] = 'Choisissez le module';
