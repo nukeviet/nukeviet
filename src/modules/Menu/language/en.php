@@ -101,3 +101,4 @@ $lang_module['type'] = 'Menu type';
 $lang_module['m_type1'] = 'Nav_bar';
 $lang_module['m_type2'] = 'Vertical';
 $lang_module['m_type3'] = 'Treeview';
+$lang_module['menu_note_auto'] = 'Note: This block retrieves non-customizable auto menus in the admin area';

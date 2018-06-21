@@ -482,3 +482,6 @@ $lang_module['height'] = 'Image Height';
 $lang_module['length_title'] = 'Other title length character';
 $lang_module['length_hometext'] = 'Hometext length character';
 $lang_module['length_othertitle'] = 'Length other title';
+$lang_module['bl_title_length'] = 'Title max length';
+$lang_module['titlelength'] = 'Title length';
+$lang_module['titlenote'] = 'Enter 0 if not cut';

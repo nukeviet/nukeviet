@@ -118,3 +118,7 @@ $lang_module['notification_comment_queue'] = 'Commentaire messages de modératio
 $lang_module['attach_choose'] = 'Sélectionnez';
 $lang_module['attach_view'] = 'Accès';
 $lang_module['attach_download'] = 'Télécharger les pièces jointes';
+$lang_module['width'] = 'Width';
+$lang_module['numpost'] = 'Num posts';
+$lang_module['scheme'] = 'Color Scheme';
+$lang_module['facebookappid'] = 'Facebook Appid';

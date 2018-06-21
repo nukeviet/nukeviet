@@ -25,7 +25,6 @@ if (!nv_function_exists('nv_block_qr_code')) {
     {
         global $selectthemes;
 
-        $nv_Lang->loadTheme($selectthemes);
         $array_levels = array(
             'L',
             'M',

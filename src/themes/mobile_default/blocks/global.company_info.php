@@ -23,9 +23,7 @@ if (!nv_function_exists('nv_company_info')) {
      */
     function nv_company_info_config($module, $data_block, $nv_Lang)
     {
-        global $selectthemes, $nv_Lang;
-
-        $nv_Lang->loadTheme($selectthemes);
+        global $selectthemes;
 
         $html = '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_name') . ':</label>';
