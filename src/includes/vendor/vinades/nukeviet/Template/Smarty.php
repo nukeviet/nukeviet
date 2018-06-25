@@ -14,9 +14,6 @@ namespace NukeViet\Template;
  * Class này mặc định sửa dụng sau khi core được load
  * Các hằng, tài nguyên nghiễm phiên dùng được
  */
-//if (!defined('NV_ROOTDIR')) {
-//    define('NV_ROOTDIR', preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__) . '/../../../../'))));
-//}
 
 class Smarty extends \Smarty
 {

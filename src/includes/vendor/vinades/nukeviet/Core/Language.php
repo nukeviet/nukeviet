@@ -213,8 +213,8 @@ class Language
         }
 
         $langkey = $funcArgs[0];
-        unset($funcArgs[0]);
         $args = $funcArgs;
+        unset($args[0]);
 
         $langvalue = '';
         if ($this->isTmpLoaded) {
@@ -233,6 +233,13 @@ class Language
         }
         if (empty($langvalue)) {
             return $langkey;
+        }
+        /*
+         * Khi bật chế độ debug, hiển thị cảnh cáo nếu như đọc ngôn ngữ module
+         * Mà key lang tồn tại ở ngôn ngữ global và giá trị là như nhau
+         */
+        if (NV_DEBUG and $type == self::TYPE_LANG_MODULE and isset(self::$lang_global[$langkey]) and $this->_get($funcArgs, $funcNum, self::TYPE_LANG_GLOBAL) == $langvalue) {
+            trigger_error('You are using a language key available in lang global &gt;&gt;&gt;&gt; ' . $langkey);
         }
         return (empty($args) ? $langvalue : vsprintf($langvalue, $args));
     }
