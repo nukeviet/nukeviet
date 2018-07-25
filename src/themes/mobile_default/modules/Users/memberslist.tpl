@@ -9,7 +9,7 @@
     		</colgroup>
     		<thead>
     			<tr>
-    				<td><a href="{username}">{LANG.account}</a></td>
+    				<td><a href="{username}">{LANG.username}</a></td>
     				<td><a href="{gender}">{LANG.gender}</a></td>
     				<td><a href="{regdate}">{LANG.regdate}</a></td>
     			</tr>

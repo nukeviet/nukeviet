@@ -53,7 +53,7 @@ if (!empty($row['description'])) {
 }
 
 $contents['edit'] = array(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id, $nv_Lang->getGlobal('edit'));
-$contents['add'] = array(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;pid=' . $id, $nv_Lang->getModule('add_banner'));
+$contents['add'] = array(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;pid=' . $id, $nv_Lang->getModule('add_banner_admin'));
 $contents['del'] = array('nv_pl_del2(' . $id . ');', $nv_Lang->getGlobal('delete'));
 $contents['act'] = array('nv_pl_chang_act2(' . $id . ');', $nv_Lang->getModule('change_act'));
 

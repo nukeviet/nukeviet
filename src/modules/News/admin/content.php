@@ -1126,7 +1126,7 @@ if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/'
 $array_catid_in_row = explode(',', $rowcontent['listcatid']);
 
 $array_topic_module = array();
-$array_topic_module[0] = $nv_Lang->getModule('topic_sl');
+$array_topic_module[0] = $nv_Lang->getModule('topic_sl_admin');
 if (!empty($rowcontent['topicid'])) {
     $db->sqlreset()
         ->select('topicid, title')
@@ -1197,7 +1197,7 @@ $xtpl->assign('ERROR_CAT', str_replace('\'', '\\\'', $nv_Lang->getModule('error_
 
 if ($rowcontent['id'] > 0) {
     $op = '';
-    $nv_Lang->setModule('save_temp', $nv_Lang->getModule('save'));
+    $nv_Lang->setModule('save_temp_admin', $nv_Lang->getModule('save'));
 }
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 

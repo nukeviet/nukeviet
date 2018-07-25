@@ -23,6 +23,7 @@
 /src/uploads/logo_*
 /src/install/default.php
 /src/composer.lock
+/src/includes/composer.lock
 
 composer.lock
 #vendor test ignore 

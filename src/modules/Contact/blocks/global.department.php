@@ -24,7 +24,7 @@ if (!nv_function_exists('nv_department_info')) {
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('departmentid') . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('departmentid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="config_departmentid" class="form-control">';
         $sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1';
         $list = $nv_Cache->db($sql, 'id', $module);

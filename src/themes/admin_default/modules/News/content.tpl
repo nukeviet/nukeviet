@@ -358,7 +358,7 @@
 		<!-- END:status_save -->
 
 		<!-- BEGIN:status_4 -->
-		<input class="btn btn-warning submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-warning submit-post" name="status4" type="submit" value="{LANG.save_temp_admin}" />
 		<!-- END:status_4 -->
 		<!-- BEGIN:status_5 -->
 		<input class="btn btn-primary submit-post" name="status5" type="submit" value="{LANG.status_5}" />

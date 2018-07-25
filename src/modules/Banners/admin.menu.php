@@ -15,4 +15,4 @@ if (!defined('NV_ADMIN')) {
 $submenu['plans_list'] = $nv_Lang->getModule('plans_list');
 $submenu['add_plan'] = $nv_Lang->getModule('add_plan');
 $submenu['banners_list'] = $nv_Lang->getModule('banners_list');
-$submenu['add_banner'] = $nv_Lang->getModule('add_banner');
+$submenu['add_banner'] = $nv_Lang->getModule('add_banner_admin');

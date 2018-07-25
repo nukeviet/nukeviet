@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $nv_Lang->getModule('add_banner');
+$page_title = $nv_Lang->getModule('add_banner_admin');
 
 $contents = array();
 $contents['upload_blocked'] = '';
@@ -27,7 +27,7 @@ if (preg_match('/flash/', NV_ALLOW_FILES_TYPE)) {
 }
 
 if (empty($contents['file_allowed_ext'])) {
-    $contents['upload_blocked'] = $nv_Lang->getModule('upload_blocked');
+    $contents['upload_blocked'] = $nv_Lang->getModule('upload_blocked_admin');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme(nv_add_banner_theme($contents));
@@ -247,7 +247,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 $contents['info'] = (!empty($error)) ? $error : $nv_Lang->getModule('add_banner_info');
 $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
-$contents['submit'] = $nv_Lang->getModule('add_banner');
+$contents['submit'] = $nv_Lang->getModule('add_banner_admin');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
 $contents['title'] = array(
     $nv_Lang->getModule('title'),

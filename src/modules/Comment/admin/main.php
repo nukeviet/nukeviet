@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $nv_Lang->getModule('comment');
+$page_title = $nv_Lang->getModule('comment_manager');
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $module = $nv_Request->get_title('module', 'get');

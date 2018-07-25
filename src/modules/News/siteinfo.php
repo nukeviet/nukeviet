@@ -12,8 +12,6 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
-$lang_siteinfo = nv_get_lang_module($mod);
-
 $_arr_siteinfo = array();
 $cacheFile = NV_LANG_DATA . '_siteinfo_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
@@ -55,14 +53,14 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
 
 // Tong so bai viet
 $siteinfo[] = array(
-    'key' => $lang_siteinfo['siteinfo_publtime'],
+    'key' => $nv_Lang->getModule('siteinfo_publtime'),
     'value' => number_format($_arr_siteinfo['number_publtime'])
 );
 
 //So bai viet thanh vien gui toi
 if ($_arr_siteinfo['number_users_send'] > 0) {
     $siteinfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_users_send'],
+        'key' => $nv_Lang->getModule('siteinfo_users_send'),
         'value' => number_format($_arr_siteinfo['number_users_send'])
     );
 }
@@ -70,7 +68,7 @@ if ($_arr_siteinfo['number_users_send'] > 0) {
 // So bai viet cho dang tu dong
 if ($_arr_siteinfo['number_pending'] > 0) {
     $siteinfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_pending'],
+        'key' => $nv_Lang->getModule('siteinfo_pending'),
         'value' => number_format($_arr_siteinfo['number_pending'])
     );
 }
@@ -78,7 +76,7 @@ if ($_arr_siteinfo['number_pending'] > 0) {
 // So bai viet da het han
 if ($_arr_siteinfo['number_expired'] > 0) {
     $siteinfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_expired'],
+        'key' => $nv_Lang->getModule('siteinfo_expired'),
         'value' => number_format($_arr_siteinfo['number_expired'])
     );
 }
@@ -86,7 +84,7 @@ if ($_arr_siteinfo['number_expired'] > 0) {
 // So bai viet sap het han
 if ($_arr_siteinfo['number_exptime'] > 0) {
     $siteinfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_exptime'],
+        'key' => $nv_Lang->getModule('siteinfo_exptime'),
         'value' => number_format($_arr_siteinfo['number_exptime'])
     );
 }
@@ -94,7 +92,7 @@ if ($_arr_siteinfo['number_exptime'] > 0) {
 // Tong so binh luan duoc dang
 if ($_arr_siteinfo['number_comment'] > 0) {
     $siteinfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_comment'],
+        'key' => $nv_Lang->getModule('siteinfo_comment'),
         'value' => number_format($_arr_siteinfo['number_comment'])
     );
 }
@@ -102,7 +100,7 @@ if ($_arr_siteinfo['number_comment'] > 0) {
 // Nhac nho cac tu khoa chua co mo ta
 if (!empty($module_config[$mod]['tags_remind']) and $_arr_siteinfo['number_incomplete'] > 0) {
     $pendinginfo[] = array(
-        'key' => $lang_siteinfo['siteinfo_tags_incomplete'],
+        'key' => $nv_Lang->getModule('siteinfo_tags_incomplete'),
         'value' => number_format($_arr_siteinfo['number_incomplete']),
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=tags&amp;incomplete=1'
     );

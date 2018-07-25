@@ -358,9 +358,9 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 }
 
 if (empty($key)) {
-    $page_title = $nv_Lang->getModule('search_title') . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
+    $page_title = $nv_Lang->getModule('search_submit') . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 } else {
-    $page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getModule('search_title');
+    $page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getModule('search_submit');
     if ($page > 2) {
         $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->getGlobal('page') . ' ' . $page;
     }

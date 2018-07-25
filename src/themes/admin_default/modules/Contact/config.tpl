@@ -17,7 +17,7 @@
                     </select></td>
                 </tr>
                 <tr>
-                    <th class="text-right">{LANG.content}</th>
+                    <th class="text-right">{LANG.content_config}</th>
                     <td>{DATA.bodytext}</td>
                 </tr>
             </tbody>

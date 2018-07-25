@@ -44,13 +44,7 @@ if ($selectthemes_old != $selectthemes) {
 
 if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php')) {
     // Connect with file language interface configuration
-    if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-        require NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_DATA . '.php')) {
-        require NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_DATA . '.php';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_en.php')) {
-        require NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_en.php';
-    }
+    $nv_Lang->loadTheme($selectthemes);
 
     // Connect with file theme configuration
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php';

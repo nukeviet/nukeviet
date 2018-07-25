@@ -24,14 +24,14 @@ if (!nv_function_exists('nv_block_headline')) {
     function nv_block_config_news_headline($module, $data_block, $nv_Lang)
     {
         $tooltip_position = array(
-            'top' => $nv_Lang->getBlock('tooltip_position_top'),
-            'bottom' => $nv_Lang->getBlock('tooltip_position_bottom'),
-            'left' => $nv_Lang->getBlock('tooltip_position_left'),
-            'right' => $nv_Lang->getBlock('tooltip_position_right')
+            'top' => $nv_Lang->getModule('tooltip_position_top'),
+            'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
+            'left' => $nv_Lang->getModule('tooltip_position_left'),
+            'right' => $nv_Lang->getModule('tooltip_position_right')
         );
 
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('showtooltip') . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('bl_showtooltip') . ':</label>';
         $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-4">';
@@ -40,7 +40,7 @@ if (!nv_function_exists('nv_block_headline')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group margin-bottom-sm">';
-        $html .= '<div class="input-group-addon">' . $nv_Lang->getBlock('tooltip_position') . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getModule('bl_tooltip_position') . '</div>';
         $html .= '<select name="config_tooltip_position" class="form-control">';
 
         foreach ($tooltip_position as $key => $value) {
@@ -52,7 +52,7 @@ if (!nv_function_exists('nv_block_headline')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-addon">' . $nv_Lang->getBlock('tooltip_length') . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getModule('tooltip_length') . '</div>';
         $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';

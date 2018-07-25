@@ -9,7 +9,7 @@
     		</colgroup>
     		<thead>
     			<tr class="bg-lavender">
-    				<td><a href="{username}" class="black text-uppercase">{LANG.account}</a></td>
+    				<td><a href="{username}" class="black text-uppercase">{LANG.username}</a></td>
     				<td><a href="{gender}" class="black text-uppercase">{LANG.gender}</a></td>
     				<td><a href="{regdate}" class="black text-uppercase">{LANG.regdate}</a></td>
     			</tr>

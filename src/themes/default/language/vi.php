@@ -1,18 +1,73 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+* @Language Tiếng Việt
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
-$lang_block['qr_level'] = 'Chất lượng hình';
-$lang_block['qr_pixel_per_point'] = 'Size của QR-code ';
-$lang_block['qr_outer_frame'] = 'Đường viền của QR-code';
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
-$lang_block['cominfo_map_guide_title'] = 'Hướng dẫn xây dựng bản đồ Google';
-$lang_block['cominfo_map_guide_content'] = '<ul><li>Nhập địa chỉ vào ô, tại danh sách các địa chỉ đổ xuống chọn một địa chỉ hợp lệ với Google MAP.</li><li>Bạn cũng có thể nhấp chuột trái vào bản đồ để tự đánh dấu địa chỉ tùy thích</li><li>Kéo thả chuột trên điểm đánh dấu để di chuyển nó phù hợp với tọa độ địa chỉ công ty của bạn</li><li>Kéo thả chuột trái để di chuyển bản đồ, lăn chuột giữa để có tỷ lệ bản đồ theo ý muốn</li></ul>';
-$lang_block['cominfo_map_yes'] = 'Bật Google MAP';
-$lang_block['cominfo_map_no'] = 'Tắt Google MAP';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
+$lang_translator['createdate'] = '04/03/2010, 15:22';
+$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['info'] = '';
+$lang_translator['langtype'] = 'lang_module';
+
+$lang_module['qr_level'] = 'Chất lượng hình';
+$lang_module['qr_pixel_per_point'] = 'Size của QR-code ';
+$lang_module['qr_outer_frame'] = 'Đường viền của QR-code';
+$lang_module['cominfo_map_guide_title'] = 'Hướng dẫn xây dựng bản đồ Google';
+$lang_module['cominfo_map_guide_content'] = '<ul><li>Nhập địa chỉ vào ô, tại danh sách các địa chỉ đổ xuống chọn một địa chỉ hợp lệ với Google MAP.</li><li>Bạn cũng có thể nhấp chuột trái vào bản đồ để tự đánh dấu địa chỉ tùy thích</li><li>Kéo thả chuột trên điểm đánh dấu để di chuyển nó phù hợp với tọa độ địa chỉ công ty của bạn</li><li>Kéo thả chuột trái để di chuyển bản đồ, lăn chuột giữa để có tỷ lệ bản đồ theo ý muốn</li></ul>';
+$lang_module['cominfo_map_yes'] = 'Bật Google MAP';
+$lang_module['cominfo_map_no'] = 'Tắt Google MAP';
+$lang_module['general'] = 'Thiết lập chung';
+$lang_module['allpages'] = 'Toàn trang';
+$lang_module['content'] = 'Nội dung';
+$lang_module['block'] = 'Khối block';
+$lang_module['color'] = 'Màu chữ';
+$lang_module['font_size'] = 'Kích thước';
+$lang_module['font_family'] = 'Phông chữ';
+$lang_module['font_style'] = 'Kiểu chữ';
+$lang_module['font_style_bold'] = 'Đậm';
+$lang_module['font_style_italic'] = 'Nghiêng';
+$lang_module['background'] = 'Nền';
+$lang_module['background_imgage'] = 'Đường dẫn ảnh';
+$lang_module['background_imgage_repeat'] = 'Repeat';
+$lang_module['background_imgage_postion'] = 'Vị trí';
+$lang_module['margin'] = 'Margin';
+$lang_module['margin_all'] = 'Margin all';
+$lang_module['margin_top'] = 'Margin top';
+$lang_module['margin_bottom'] = 'Margin bottom';
+$lang_module['margin_left'] = 'Margin left';
+$lang_module['margin_right'] = 'Margin right';
+$lang_module['padding'] = 'Padding';
+$lang_module['padding_all'] = 'Padding all';
+$lang_module['padding_top'] = 'Padding top';
+$lang_module['padding_bottom'] = 'Padding bottom';
+$lang_module['padding_left'] = 'Padding left';
+$lang_module['padding_right'] = 'Padding right';
+$lang_module['size'] = 'Kích thước';
+$lang_module['size_width'] = 'Rộng';
+$lang_module['size_height'] = 'Cao';
+$lang_module['link'] = 'Liên kết';
+$lang_module['header'] = 'Đầu trang';
+$lang_module['footer'] = 'Chân trang';
+$lang_module['border'] = 'Đường viền';
+$lang_module['style'] = 'Giao diện';
+$lang_module['radius'] = 'Bo góc';
+$lang_module['heading'] = 'Tiêu đề';
+$lang_module['customcss'] = 'CSS tùy chỉnh';
+$lang_module['note'] = 'Lưu ý: Chỉ nhập giá trị cho những đối tượng muốn thay đổi so với cấu hình giao diện mặc định';
+$lang_module['block_note'] = 'Thiết lập chung cho các thành phần block (Block giao diện, khối chuyên mục tin tức,...)';
+$lang_module['general_css_note'] = 'Soạn thảo nội dung css vào đây';
+$lang_module['module_in_menu'] = 'Các module hiển thị tại menu';
+$lang_module['save'] = 'Lưu cấu hình';
+$lang_module['exp'] = 'Ví dụ';
+$lang_module['gfont_note'] = 'Chọn font tại: <a href="https://www.google.com/fonts" target="_blank" rel="nofollow">https://www.google.com/fonts</a>';
+$lang_module['bl_module_in_menu'] = 'Các module hiển thị';

@@ -41,7 +41,7 @@ if (preg_match('/flash/', NV_ALLOW_FILES_TYPE)) {
 }
 
 if (empty($contents['file_allowed_ext'])) {
-    $contents['upload_blocked'] = $nv_Lang->getModule('upload_blocked');
+    $contents['upload_blocked'] = $nv_Lang->getModule('upload_blocked_admin');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme(nv_edit_banner_theme($contents));

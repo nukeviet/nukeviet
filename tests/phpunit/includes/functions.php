@@ -47,7 +47,9 @@ function list_all_php_file($dir = '', $base_dir = '')
                 }
             } else {
                 if (
-                    preg_match('/\.php$/', $v) and !preg_match('/^\/?(data|vendor)\//', $base_dir . '/' . $v) and
+                    preg_match('/\.php$/', $v) and
+                    !preg_match('/^\/?(data|vendor)\//', $base_dir . '/' . $v) and
+                    !preg_match('/^\/?includes\/vendor\//', $base_dir . '/' . $v) and
                     !preg_match('/\/?includes\/language/', $base_dir . '/' . $v) and
                     !preg_match('/\/?modules\/(.*?)\/language/', $base_dir . '/' . $v) and
                     !preg_match('/\/?themes\/(.*?)\/language/', $base_dir . '/' . $v)

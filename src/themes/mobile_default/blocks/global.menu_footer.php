@@ -30,7 +30,7 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
         }
 
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getBlock('module_in_menu') . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('bl_module_in_menu') . ':</label>';
         $html .= '<div class="col-sm-18">';
         foreach ($site_mods as $modname => $modvalues) {
             $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';

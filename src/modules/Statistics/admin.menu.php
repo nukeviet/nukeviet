@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN')) {
 }
 
 //Ket noi ngon ngu cua module
-$nv_Lang->loadModule($module_file, false, false, true);
+$nv_Lang->loadModule($module_file, false, true);
 
 $allow_func = array(
     'main',

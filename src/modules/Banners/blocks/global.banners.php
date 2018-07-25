@@ -26,13 +26,13 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
         global $db, $language_array;
 
         $html = "<select name=\"config_idplanbanner\" class=\"form-control\">\n";
-        $html .= "<option value=\"\">" . $nv_Lang->getBlock('idplanbanner') . "</option>\n";
+        $html .= "<option value=\"\">" . $nv_Lang->getModule('idplanbanner') . "</option>\n";
         $query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
         $result = $db->query($query);
 
         while ($row_bpn = $result->fetch()) {
             $value = $row_bpn['title'] . " (";
-            $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $nv_Lang->getBlock('blang_all')) . ", ";
+            $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $nv_Lang->getModule('bl_blang_all')) . ", ";
             $value .= $row_bpn['form'] . ", ";
             $value .= $row_bpn['width'] . "x" . $row_bpn['height'] . "px";
             $value .= ")";
@@ -42,7 +42,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
         }
 
         $html .= "</select>\n";
-        return '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getBlock('idplanbanner') . ':</label><div class="col-sm-9">' . $html . '</div></div>';
+        return '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('idplanbanner') . ':</label><div class="col-sm-9">' . $html . '</div></div>';
     }
 
     /**
@@ -61,7 +61,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
         $return['config']['idplanbanner'] = $nv_Request->get_int('config_idplanbanner', 'post', 0);
 
         if (empty($return['config']['idplanbanner'])) {
-            $return['error'][] = $nv_Lang->getBlock('idplanbanner');
+            $return['error'][] = $nv_Lang->getModule('idplanbanner');
         }
 
         return $return;

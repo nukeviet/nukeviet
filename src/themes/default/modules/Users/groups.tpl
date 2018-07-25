@@ -51,7 +51,7 @@
 			<thead>
 				<tr>
 					<th class="text-center"> {LANG.STT} </th>
-					<th> {LANG.account} </th>
+					<th> {LANG.username} </th>
 					<th> {LANG.nametitle} </th>
 					<th class="text-center"> {GLANG.actions} </th>
 				</tr>
@@ -116,7 +116,7 @@ $("a.denied").click(function() {
 			<thead>
 				<tr>
 					<th class="text-center"> {LANG.STT} </th>
-					<th> {LANG.account} </th>
+					<th> {LANG.username} </th>
 					<th> {LANG.nametitle} </th>
 					<th class="text-center"> {GLANG.actions} </th>
 				</tr>
@@ -181,7 +181,7 @@ $("a.demote").click(function() {
 			<thead>
 				<tr>
 					<th class="text-center"> {LANG.STT} </th>
-					<th> {LANG.account} </th>
+					<th> {LANG.username} </th>
 					<th> {LANG.nametitle} </th>
 					<th class="text-center"> {GLANG.actions} </th>
 				</tr>

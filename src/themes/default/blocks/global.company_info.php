@@ -15,9 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_company_info')) {
     function nv_company_info_config($module, $data_block, $nv_Lang)
     {
-        global $selectthemes, $nv_Lang;
-
-        $nv_Lang->loadTheme($selectthemes);
+        global $selectthemes;
 
         $html = '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_name') . ':</label>';
@@ -52,8 +50,8 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '<div class="col-xs-8">';
         $html .= '<select name="config_company_showmap" id="config_company_mapshow" class="form-control" onchange="return controlMap(true);">
-					<option value="0"' . (empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('cominfo_map_no') . '</option>
-					<option value="1"' . (! empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getBlock('cominfo_map_yes') . '</option>
+					<option value="0"' . (empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getModule('cominfo_map_no') . '</option>
+					<option value="1"' . (! empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getModule('cominfo_map_yes') . '</option>
 				  </select>';
         $html .= '</div>';
         $html .= '</div>';
@@ -93,7 +91,7 @@ if (! nv_function_exists('nv_company_info')) {
 				  </div>';
         $html .= '</div>';
         $html .= '<div class="col-xs-12">';
-        $html .= '<button class="btn btn-default" onclick="modalShow(\'' . $nv_Lang->getBlock('cominfo_map_guide_title') . '\',\'' . $nv_Lang->getBlock('cominfo_map_guide_content') . '\');return!1;">' . $nv_Lang->getBlock('cominfo_map_guide_title') . '</button>';
+        $html .= '<button class="btn btn-default" onclick="modalShow(\'' . $nv_Lang->getModule('cominfo_map_guide_title') . '\',\'' . $nv_Lang->getModule('cominfo_map_guide_content') . '\');return!1;">' . $nv_Lang->getModule('cominfo_map_guide_title') . '</button>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';

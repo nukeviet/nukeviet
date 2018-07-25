@@ -71,7 +71,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $include_file = NV_ROOTDIR . '/modules/' . $module_file . '/admin/' . $op . '.php';
 
         //Ket noi ngon ngu cua module
-        $nv_Lang->loadModule($module_file, true);
+        $nv_Lang->loadModule($module_file);
     } elseif (isset($admin_mods[$module_name])) {
         $module_info = $admin_mods[$module_name];
         if (md5($module_info['module'] . '#' . $module_info['act_1'] . '#' . $module_info['act_2'] . '#' . $module_info['act_3'] . '#' . $global_config['sitekey'])) {
@@ -81,7 +81,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             $include_file = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/' . $op . '.php';
 
             // Ket noi voi file ngon ngu cua module
-            $nv_Lang->loadModule($module_file, true, true);
+            $nv_Lang->loadModule($module_file, true);
         }
     }
 

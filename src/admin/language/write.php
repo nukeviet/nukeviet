@@ -42,26 +42,22 @@ function nv_admin_write_lang($dirlang, $idfile)
         $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
         if (preg_match('/^theme\_(.*?)$/', $module, $m)) {
-            if ($admin_file == 1) {
-                // Ngôn ngữ admin của giao diện
-                $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/admin_' . $dirlang . '.php';
-            } else {
-                // Ngôn ngữ ngoài site của giao diện
-                $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/' . $dirlang . '.php';
-            }
-        } elseif (in_array($module, $modules_exit) and preg_match('/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)$/', $admin_file)) {
-            $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file . '_' . $dirlang . '.php';
-        } elseif (in_array($module, $modules_exit) and $admin_file == 1) {
-            $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php';
+            // Ngôn ngữ của giao diện
+            $include_lang = NV_ROOTDIR . '/themes/' . $m[1] . '/language/' . $dirlang . '.php';
         } elseif (in_array($module, $modules_exit) and $admin_file == 0) {
+            // Ngôn ngữ các module ngoài site
             $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
         } elseif ($module == 'global' and $admin_file == 1) {
+            // Ngôn ngữ global admin
             $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
         } elseif ($module == 'global' and $admin_file == 0) {
+            // Ngôn ngữ global site
             $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
         } elseif ($module == 'install' and $admin_file == 0) {
+            // Ngôn ngữ cài đặt
             $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
         } else {
+            // Ngôn ngữ module admin
             $admin_file = 1;
             $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
         }
@@ -87,26 +83,22 @@ function nv_admin_write_lang($dirlang, $idfile)
             $content_lang .= "* @Createdate " . gmdate("M d, Y, h:i:s A", $createdate) . "\n";
             $content_lang .= "*/\n";
 
-            if ($langtype != 'lang_theme') {
-                if ($admin_file) {
-                    $content_lang .= "\nif (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {";
-                } else {
-                    $content_lang .= "\nif (!defined('NV_MAINFILE')) {";
-                }
-
-                $content_lang .= "\n    die('Stop!!!');\n}\n\n";
-
-                $array_translator['info'] = (isset($array_translator['info'])) ? $array_translator['info'] : "";
-
-                $content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
-                $content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";
-                $content_lang .= "\$lang_translator['copyright'] = '" . $array_translator['copyright'] . "';\n";
-                $content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
-                $content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
-                $content_lang .= "\n";
+            if ($admin_file) {
+                $content_lang .= "\nif (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {";
             } else {
-                $content_lang .= "\n";
+                $content_lang .= "\nif (!defined('NV_MAINFILE')) {";
             }
+
+            $content_lang .= "\n    die('Stop!!!');\n}\n\n";
+
+            $array_translator['info'] = (isset($array_translator['info'])) ? $array_translator['info'] : "";
+
+            $content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
+            $content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";
+            $content_lang .= "\$lang_translator['copyright'] = '" . $array_translator['copyright'] . "';\n";
+            $content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
+            $content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
+            $content_lang .= "\n";
 
             $numrows = 0;
             $current_langtype = '';

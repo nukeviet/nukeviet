@@ -182,7 +182,7 @@ function nv_get_api_actions()
         $module_file = $module_info['module_file'];
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/Api')) {
             // Đọc ngôn ngữ tạm của module
-            $nv_Lang->loadModule($module_file, true, false, true);
+            $nv_Lang->loadModule($module_file, false, true);
 
             // Lấy các API
             $files = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/Api', '/(.*?)/');

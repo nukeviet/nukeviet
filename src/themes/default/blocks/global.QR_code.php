@@ -26,7 +26,6 @@ if (!nv_function_exists('nv_block_qr_code')) {
         global $selectthemes;
 
         // Find language file
-        $nv_Lang->loadTheme($selectthemes);
         $array_levels = array(
             'L',
             'M',
@@ -35,7 +34,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         );
 
         $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('qr_level') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('qr_level') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_level">';
 
@@ -48,7 +47,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('qr_pixel_per_point') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('qr_pixel_per_point') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_pixel_per_point">';
 
@@ -61,7 +60,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getBlock('qr_outer_frame') . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('qr_outer_frame') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_outer_frame">';
 
