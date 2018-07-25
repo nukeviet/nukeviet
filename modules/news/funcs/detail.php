@@ -142,16 +142,16 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 			    $files = $news_contents['files'];
 			    $news_contents['files'] = array();
 
-			    foreach ($files as $id => $file) {
+			    foreach ($files as $file_id => $file) {
 			        $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $lang_module['click_to_download'];
 			        $news_contents['files'][] = array(
 			            'title' => $file_title,
-			            'key' => md5($id . $file_title),
+			            'key' => md5($file_id . $file_title),
 			            'ext' => nv_getextension($file_title),
-			            'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
+			            'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
 			            'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
-			            'url' => (!preg_match("/^http*/", $file)) ?  $base_url_rewrite . '?download=1&amp;id=' . $id : $file,
-			            'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $id,
+			            'url' => (!preg_match("/^http*/", $file)) ?  $base_url_rewrite . '?download=1&amp;id=' . $file_id : $file,
+			            'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $file_id,
 			            'urldoc' => (preg_match("/^http*/", $file)) ? $file : 'https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file
 			        );
 			    }
