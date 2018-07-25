@@ -52,7 +52,6 @@ $lang_module['edit_plan'] = 'Sửa Khối quảng cáo';
 $lang_module['info_plan'] = 'Thông tin về Khối quảng cáo';
 $lang_module['info_plan_caption'] = 'Thông tin về khối quảng cáo &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plan_not_selected'] = 'Bạn chưa chọn Khối cho quảng cáo';
-$lang_module['click_url_invalid'] = 'URL khi click vào quảng cáo sai';
 $lang_module['file_upload_empty'] = 'Hình quảng cáo chưa được xác định';
 $lang_module['upload_blocked'] = 'Việc tải lên các file hình ảnh và flash đã bị cấm bởi hệ thống, vì vậy bạn không thể thêm quảng cáo. Hãy kiểm tra lại cấu hình của site hoặc việc cấp phép các kiểu file được tải lên trong tài khoản quản trị của bạn';
 $lang_module['add_banner_info'] = 'Để thêm quảng cáo mới, bạn cần khai báo đầy đủ vào các ô trống dưới đây';
