@@ -48,7 +48,6 @@ $lang_module['addads_block_lang_ru'] = 'Russian';
 $lang_module['addads_block_lang_zz'] = 'Other';
 $lang_module['title_empty'] = 'Title is empty';
 $lang_module['plan_not_selected'] = 'You must select plan';
-$lang_module['click_url_invalid'] = 'Invalid URL';
 $lang_module['file_upload_empty'] = 'Empty image';
 $lang_module['upload_blocked'] = 'Upload image and flash fail for this plan. Please contact the site administrator.';
 $lang_module['addads_require_login'] = 'Only registed member can use this feature';

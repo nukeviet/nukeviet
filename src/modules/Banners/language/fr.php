@@ -49,7 +49,6 @@ $lang_module['addads_block_lang_zz'] = 'Autre langue';
 $lang_module['title_empty'] = 'Erreur: manque de titre';
 $lang_module['plan_not_selected'] = 'Veuillez sélectionner le block pour cette publicité';
 $lang_module['plan_wrong_selected'] = 'Bloquer les annonces que vous n\'existe pas';
-$lang_module['click_url_invalid'] = 'Lien invalide';
 $lang_module['file_upload_empty'] = 'Erreur: manque d\'image';
 $lang_module['upload_blocked'] = 'Le transfert de fichier flash est interdit par le système, donc vous ne pouvez pas ajouter les publicités. Vérifiez la configuration du site ou l\'autorisation des fichiers transférés.';
 $lang_module['addads_require_login'] = 'Cette fonctinonalité est réservée uniquement aux utilisateurs enregistrées';

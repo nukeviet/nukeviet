@@ -49,7 +49,6 @@ $lang_module['addads_block_lang_zz'] = 'Khác';
 $lang_module['title_empty'] = 'Tiêu đề chưa được khai báo';
 $lang_module['plan_not_selected'] = 'Bạn chưa chọn Khối cho quảng cáo';
 $lang_module['plan_wrong_selected'] = 'Khối cho quảng cáo bạn chọn không tồn tại';
-$lang_module['click_url_invalid'] = 'URL khi click vào quảng cáo không hợp lệ';
 $lang_module['file_upload_empty'] = 'Hình quảng cáo chưa được xác định';
 $lang_module['upload_blocked'] = 'Việc tải lên các file hình ảnh và flash ở khối quảng cáo này đã bị cấm bởi hệ thống, vì vậy bạn không thể thêm quảng cáo. Hãy liên hệ với quản trị site về điều này';
 $lang_module['addads_require_login'] = 'Chức năng này chỉ dành cho khách hàng đã đăng ký';
