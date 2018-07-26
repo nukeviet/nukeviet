@@ -306,36 +306,45 @@ $groups_list = array();
 
 $types = array('basic');
 
+// Trưởng nhóm không thể sửa ảnh đại diện và câu hỏi bí mật của thành viên
 if (!defined('ACCESS_EDITUS')) {
     $types[] = 'avatar';
     $types[] = 'question';
 }
+// Thành viên đổi mật khẩu hoặc trưởng nhóm có quyền đổi mật khẩu
 if (!defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_PASSUS'))) {
     $types[] = 'password';
 }
+// Thành viên mới có quyền bật tắt xác thực hai bước
 if (!defined('ACCESS_EDITUS')) {
     $types[] = '2step';
 }
+// Thành viên có quyền đổi tên đăng nhập
 if ($array_data['allowloginchange'] and !defined('ACCESS_EDITUS')) {
     $types[] = 'username';
 }
+// Thành viên có quyền đổi email
 if ($array_data['allowmailchange'] and !defined('ACCESS_EDITUS')) {
     $types[] = 'email';
 }
+// Thành viên quản lý OpenID
 if (defined('NV_OPENID_ALLOWED') and !defined('ACCESS_EDITUS')) {
     $types[] = 'openid';
 }
+// Bật đăng ký vào nhóm công cộng. Thành viên tự đăng ký tham gia
 if ($global_config['allowuserpublic'] and !defined('ACCESS_EDITUS')) {
     $groups_list = nv_groups_list_pub2();
     if (!empty($groups_list)) {
         $types[] = 'group';
     }
 }
+// Thành viên quản lý chế độ an toàn
+if (!defined('ACCESS_EDITUS')) {
+    $types[] = 'safemode';
+}
+// Các trường tùy chỉnh
 if (sizeof($array_field_config) > 7) {
     $types[] = 'others';
-}
-if (sizeof($array_field_config) > 7 and !defined('ACCESS_EDITUS')) {
-    $types[] = 'safemode';
 }
 
 // Trường hợp trưởng nhóm truy cập sửa thông tin member
@@ -350,7 +359,7 @@ if (defined('ACCESS_EDITUS')) {
     $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo';
 }
 
-//OpenID add
+// OpenID add
 if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) {
     $server = $nv_Request->get_string('server', 'get', '');
     $result = $nv_Request->isset_request('result', 'get');
