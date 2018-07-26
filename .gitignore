@@ -24,6 +24,7 @@
 /src/install/default.php
 /src/composer.lock
 /src/includes/composer.lock
+/src/log.log
 
 composer.lock
 #vendor test ignore 
