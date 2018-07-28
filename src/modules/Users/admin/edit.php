@@ -434,6 +434,7 @@ if (defined('NV_IS_USER_FORUM')) {
     }
 
     $have_custom_fields = false;
+    $have_name_field = false;
     foreach ($array_field_config as $row) {
         $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
         $row['required'] = ($row['required']) ? 'required' : '';
@@ -450,6 +451,7 @@ if (defined('NV_IS_USER_FORUM')) {
             $xtpl->assign('FIELD', $row);
             if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
                 $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
+                $have_name_field = true;
             } else {
                 $show_key = 'show_' . $row['field'];
             }
@@ -467,9 +469,6 @@ if (defined('NV_IS_USER_FORUM')) {
                 $xtpl->parse('main.edit_user.' . $show_key . '.description');
             }
             $xtpl->parse('main.edit_user.' . $show_key);
-            if ($row['field'] == 'gender') {
-                $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
-            }
         } else {
             if ($row['required']) {
                 $xtpl->parse('main.edit_user.field.loop.required');
@@ -547,6 +546,9 @@ if (defined('NV_IS_USER_FORUM')) {
             $xtpl->parse('main.edit_user.field.loop');
             $have_custom_fields = true;
         }
+    }
+    if ($have_name_field) {
+        $xtpl->parse('main.edit_user.name_show_' . $global_config['name_show']);
     }
     if ($have_custom_fields) {
         $xtpl->parse('main.edit_user.field');
