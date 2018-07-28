@@ -3,6 +3,8 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.03
 
+- Clipboard.js v2.0.1
+- gregwar/captcha v1.1.6
 - Module banners: allows to enter links freely 
 - Module news: fixed bug when attaching file 
 - Module comment: fix quote comment when post name is empty 
