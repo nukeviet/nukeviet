@@ -25,7 +25,6 @@ class Request
     public $server_protocol;
     public $server_port;
     public $my_current_domain;
-    public $my_domains;
     public $headerstatus;
     public $session_save_path;
     public $cookie_path;
@@ -123,7 +122,7 @@ class Request
         if (extension_loaded('filter') and filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
             $this->is_filter = true;
         }
-        $this->Initialize($config['my_domains']);
+        $this->Initialize();
         $this->get_cookie_save_path();
 
         $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
@@ -228,10 +227,9 @@ class Request
     /**
      * Request::Initialize()
      *
-     * @param mixed $my_domains
      * @return
      */
-    private function Initialize($my_domains)
+    private function Initialize()
     {
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
@@ -329,15 +327,6 @@ class Request
         }
 
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
-        $domains = array();
-        if (empty($my_domains)) {
-            $domains = ( array )$this->server_name;
-        } else {
-            $domains = array_map('trim', explode(',', $my_domains));
-            $domains = array_map('strtolower', $domains);
-        }
-        $this->my_domains = array_unique($domains);
-
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
         $this->referer = $this->get_Env(array( 'HTTP_REFERER', 'Referer' ));
         if (!empty($this->referer)) {

@@ -80,7 +80,7 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
 
     if (! empty($data_search['to'])) {
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $data_search['to'], $match)) {
-            $to = mktime(0, 0, 0, $match[2], $match[1], $match[3]);
+            $to = mktime(23, 59, 59, $match[2], $match[1], $match[3]);
             $array_where[] = 'log_time <= ' . $to;
             $base_url .= '&amp;to=' . $data_search['to'];
         }

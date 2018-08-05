@@ -117,8 +117,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $nv_Lang->getModule('plan_not_selected');
     } elseif (!empty($error_assign_user)) {
         $error = $error_assign_user;
-    } elseif (!empty($click_url) and !nv_is_url($click_url)) {
-        $error = $nv_Lang->getModule('click_url_invalid');
     } elseif (!is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 && empty($file_name)) {
         $error = $nv_Lang->getModule('file_upload_empty');
     } else {

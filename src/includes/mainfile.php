@@ -57,6 +57,14 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 }
 
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
+
+if (empty($global_config['my_domains'])) {
+    $global_config['my_domains'] = [NV_SERVER_NAME];
+} else {
+    $global_config['my_domains'] = array_map('trim', explode(',', $global_config['my_domains']));
+    $global_config['my_domains'] = array_map('strtolower', $global_config['my_domains']);
+}
+
 require NV_ROOTDIR . '/includes/ini.php';
 
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
@@ -160,10 +168,9 @@ foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
 }
 unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook);
 
-$domains = explode(',', $global_config['my_domains']);
-if (!in_array(NV_SERVER_NAME, $domains)) {
+if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
-    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
+    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
     nv_info_die($nv_Lang->get('error_404_title'), $nv_Lang->get('error_404_title'), $nv_Lang->get('error_404_content'), 400, '', '', '', '');
 }
 // Ket noi Cache
@@ -186,9 +193,6 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain;
 
 // vd: http://mydomain1.com/ten_thu_muc_chua_site
 $global_config['site_url'] = $nv_Request->site_url;
-
-// vd: array( 'mydomain1.com', 'mydomain2.com' )
-$global_config['my_domains'] = $nv_Request->my_domains;
 
 // vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
