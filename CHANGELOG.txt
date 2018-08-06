@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.03
 
+- Fix tag contains special characters
 - Clipboard.js v2.0.1
 - gregwar/captcha v1.1.6
 - Module banners: allows to enter links freely 
