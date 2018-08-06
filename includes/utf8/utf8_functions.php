@@ -262,6 +262,19 @@ function change_alias($alias)
 }
 
 /**
+ * change_alias_tags()
+ *
+ * @return
+ */
+function change_alias_tags($alias)
+{
+    // Pho phép dấu .
+    $search = ['&lt;lt;', '&gt;gt;', '&#039;', '&quot;', '&lt;', '&gt;', '!', '*', '\'', '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '#', '[', ']', '"', '%', '-', '_', '<', '>', '\\', '^', '`', '{', '|', '}', '~'];
+    $alias = preg_replace(['/[ ]+/u', '/^[\-]+/u', '/[\-]+$/u'], ['-', '', ''], str_replace($search, ' ', $alias));
+    return $alias;
+}
+
+/**
  * nv_clean60()
  *
  * @param mixed $string
@@ -283,10 +296,10 @@ function nv_clean60($string, $num = 60, $specialchars = false)
             $string = nv_substr($string, 0, $num) . '...';
         }
     }
-    
+
     if ($specialchars) {
         $string = nv_htmlspecialchars($string);
     }
-    
+
     return $string;
 }
