@@ -39,7 +39,7 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
     $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
     if ($num_items) {
         $emailcomm = $module_config[$module]['emailcomm'];
-        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail')->limit($per_page_comment)->offset(($page - 1) * $per_page_comment);
+        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')->limit($per_page_comment)->offset(($page - 1) * $per_page_comment);
 
         if ($sortcomm == 1) {
             $db_slave->order('a.cid ASC');
@@ -411,7 +411,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
             }
 
             if (! empty($comment_array_i['userid'])) {
-                $comment_array_i['post_name'] = nv_show_name_user($comment_array_i['first_name'], $comment_array_i['last_name']);
+                $comment_array_i['post_name'] = nv_show_name_user($comment_array_i['first_name'], $comment_array_i['last_name'], $comment_array_i['username']);
             }
 
             $xtpl->assign('COMMENT', $comment_array_i);
