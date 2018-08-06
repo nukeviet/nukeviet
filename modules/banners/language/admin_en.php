@@ -48,7 +48,6 @@ $lang_module['edit_plan'] = 'Edit block advertising';
 $lang_module['info_plan'] = 'Block advertising\'s information';
 $lang_module['info_plan_caption'] = 'Block advertising\'s information &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plan_not_selected'] = 'You don\'t select block\'s advertising';
-$lang_module['click_url_invalid'] = 'Invalid url';
 $lang_module['file_upload_empty'] = 'Invalid advertising image';
 $lang_module['upload_blocked'] = 'System have been reject to upload image and flash file, So you can\'t advertise. Please check your configuration system or the types of file are not allow to upload';
 $lang_module['add_banner_info'] = 'T add advertising, Please declare fully the box below';
