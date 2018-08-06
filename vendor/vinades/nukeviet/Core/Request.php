@@ -24,7 +24,6 @@ class Request
     public $server_protocol;
     public $server_port;
     public $my_current_domain;
-    public $my_domains;
     public $headerstatus;
     public $session_save_path;
     public $cookie_path;
@@ -52,7 +51,7 @@ class Request
     private $disabletags = array( 'applet', 'body', 'basefont', 'head', 'html', 'id', 'meta', 'xml', 'blink', 'link', 'style', 'script', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base' );
     private $disabledattributes = array( 'action', 'background', 'codebase', 'dynsrc', 'lowsrc' );
     private $disablecomannds = array( 'base64_decode', 'cmd', 'passthru', 'eval', 'exec', 'system', 'fopen', 'fsockopen', 'file', 'file_get_contents', 'readfile', 'unlink' );
-    
+
     /**
      * Request::__construct()
      *
@@ -96,7 +95,7 @@ class Request
         if (empty($ip)) {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
-        
+
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
         } else {
@@ -110,25 +109,25 @@ class Request
             }
             $ip2long = base_convert($r_ip, 2, 10);
         }
-        
+
         if ($ip2long == - 1 or $ip2long === false) {
             trigger_error(Request::INCORRECT_IP, 256);
         }
         $this->ip_addr = $ip2long;
-        
+
         $this->cookie_key = md5($this->cookie_key);
-        
+
         if (extension_loaded('filter') and filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
             $this->is_filter = true;
         }
-        $this->Initialize($config['my_domains']);
+        $this->Initialize();
         $this->get_cookie_save_path();
-        
+
         $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
         $this->sessionStart($_ssl_https);
         $_REQUEST = array_merge($_POST, array_diff_key($_GET, $_POST));
     }
-    
+
     /**
      * Request::get_Env()
      *
@@ -153,7 +152,7 @@ class Request
         }
         return '';
     }
-    
+
     /**
      * Request::fixQuery()
      *
@@ -174,14 +173,11 @@ class Request
             }
         }
     }
-    
+
     /**
-     * Request::Initialize()
      *
-     * @param mixed $my_domains
-     * @return
      */
-    private function Initialize($my_domains)
+    private function Initialize()
     {
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
@@ -231,7 +227,7 @@ class Request
         if (! empty($doc_root)) {
             $doc_root = preg_replace('/[\/]+$/', '', $doc_root);
         }
-        
+
         if (defined('NV_BASE_SITEURL')) {
             $base_siteurl = preg_replace('/[\/]+$/', '', NV_BASE_SITEURL);
         } else {
@@ -252,7 +248,7 @@ class Request
                 $base_siteurl = preg_replace('#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl);
             } elseif (defined('NV_IS_UPDATE')) {
                 // Update se bao gom ca admin nen update phai dat truoc
-                
+
                 $base_siteurl = preg_replace('#/install(.*)$#', '', $base_siteurl);
             } elseif (defined('NV_ADMIN')) {
                 $base_siteurl = preg_replace('#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl);
@@ -260,7 +256,7 @@ class Request
                 $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
             }
         }
-        
+
         if (NV_ROOTDIR !== $doc_root . $base_siteurl) {
             $doc_root = NV_ROOTDIR;
             $count = substr_count($base_siteurl, '/');
@@ -272,7 +268,7 @@ class Request
         $_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
         $_SERVER['SERVER_PORT'] = $this->get_Env('SERVER_PORT');
         $_SERVER['SERVER_PROTOCOL'] = $this->get_Env('SERVER_PROTOCOL');
-        
+
         if (defined('NV_SERVER_NAME')) {
             $this->server_name = NV_SERVER_NAME;
         } else {
@@ -280,7 +276,7 @@ class Request
             $this->server_name = preg_replace('/(\:[0-9]+)$/', '', $this->server_name);
         }
         $_SERVER['SERVER_NAME'] = $this->server_name;
-        
+
         $this->base_siteurl = $base_siteurl;
         $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
         $this->doc_root = $doc_root;
@@ -294,7 +290,7 @@ class Request
         } else {
             $this->server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
         }
-        
+
         if (defined('NV_MY_DOMAIN')) {
             $this->my_current_domain = NV_MY_DOMAIN;
         } else {
@@ -304,17 +300,9 @@ class Request
                 $this->my_current_domain = $this->server_protocol . '://[' . $this->server_name . ']' . $this->server_port;
             }
         }
-        
+
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
-        $domains = array();
-        if (empty($my_domains)) {
-            $domains = ( array )$this->server_name;
-        } else {
-            $domains = array_map('trim', explode(',', $my_domains));
-            $domains = array_map('strtolower', $domains);
-        }
-        $this->my_domains = array_unique($domains);
-        
+
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
         $this->referer = $this->get_Env(array( 'HTTP_REFERER', 'Referer' ));
         if (! empty($this->referer)) {
@@ -368,7 +356,7 @@ class Request
             header('Location: ' . $this->site_url);
             exit(0);
         }
-        
+
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
         $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
         if(!empty($user_agent)) $user_agent = trim($user_agent);
@@ -378,7 +366,7 @@ class Request
         $this->user_agent = $user_agent;
         $_SERVER['HTTP_USER_AGENT'] = $user_agent;
     }
-    
+
     /**
      * Request::get_cookie_save_path()
      *
@@ -390,7 +378,7 @@ class Request
         $cookie_domain = preg_replace('/^([w]{3})\./', '', $this->server_name);
         $this->cookie_domain = (preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain)) ? '.' . $cookie_domain : '';
     }
-    
+
     /**
      * Request::sessionStart()
      *
@@ -401,14 +389,14 @@ class Request
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
-        
+
         $_secure = ($this->server_protocol == 'https' and $_ssl_https == 1) ? 1 : 0;
         session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, $_secure, 1);
-        
+
         session_name($this->cookie_prefix . '_sess');
         session_start();
         $session_id = session_id();
-        
+
         $_SESSION = (isset($_SESSION) and is_array($_SESSION)) ? $_SESSION : array();
         if (sizeof($_SESSION)) {
             $array_keys = array_keys($_SESSION);
@@ -421,7 +409,7 @@ class Request
         }
         $this->session_id = $session_id;
     }
-    
+
     /**
      * Request::chr_hexdec_callback()
      *
@@ -432,7 +420,7 @@ class Request
     {
         return chr(hexdec($m[1]));
     }
-    
+
     /**
      * Request::chr_callback()
      *
@@ -443,7 +431,7 @@ class Request
     {
         return chr($m[1]);
     }
-    
+
     /**
      * Request::color_hex2rgb_callback()
      *
@@ -463,7 +451,7 @@ class Request
         $l = $l / 3;
         return 'rgb(' . (hexdec(substr($color, 0, 1 * $l))) . ', ' . (hexdec(substr($color, 1 * $l, 1 * $l))) . ', ' . (hexdec(substr($color, 2 * $l, 1 * $l))) . ');';
     }
-    
+
     /**
      * Request::unhtmlentities()
      *
@@ -485,7 +473,7 @@ class Request
         $value = str_ireplace($search, '<', $value);
         return $value;
     }
-    
+
     /**
      * Request::filterAttr()
      *
@@ -495,32 +483,32 @@ class Request
     private function filterAttr($attrSet)
     {
         $newSet = array();
-        
+
         for ($i = 0, $count = sizeof($attrSet); $i < $count; ++$i) {
             if (! $attrSet[$i]) {
                 continue;
             }
             $attrSubSet = array_map('trim', explode('=', trim($attrSet[$i]), 2));
             $attrSubSet[0] = strtolower($attrSubSet[0]);
-            
+
             if (! preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes) or preg_match('/^on/i', $attrSubSet[0])) {
                 continue;
             }
-            
+
             if (! empty($attrSubSet[1])) {
                 $attrSubSet[1] = preg_replace('/[ ]+/', ' ', $attrSubSet[1]);
                 $attrSubSet[1] = preg_replace("/^\"(.*)\"$/", "\\1", $attrSubSet[1]);
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", "\\1", $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(array( '"', '&quot;' ), "'", $attrSubSet[1]);
-                
+
                 if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
                     continue;
                 }
-                
+
                 if (! empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $attrSubSet[1])) {
                     continue;
                 }
-                
+
                 $value = $this->unhtmlentities($attrSubSet[1]);
                 $search = array(
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
@@ -534,15 +522,15 @@ class Request
                     'window' => '/w\s*i\s*n\s*d\s*o\s*w/si'
                 );
                 $value = preg_replace(array_values($search), array_keys($search), $value);
-                
+
                 if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $value)) {
                     continue;
                 }
-                
+
                 if (! empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $value)) {
                     continue;
                 }
-                
+
                 $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', array( $this, 'color_hex2rgb_callback' ), $attrSubSet[1]);
             } elseif ($attrSubSet[1] !== '0') {
                 $attrSubSet[1] = $attrSubSet[0];
@@ -551,7 +539,7 @@ class Request
         }
         return $newSet;
     }
-    
+
     /**
      * Request::filterTags()
      *
@@ -567,52 +555,52 @@ class Request
                     $vid = $match[4][$key];
                     $width = intval(preg_replace("/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
                     $height = intval(preg_replace("/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
-                    
+
                     $width = ($width > 0) ? $width : 480;
                     $height = ($height > 0) ? $height : 360;
-                    
+
                     $ojwplayer = '<object height="' . $height . '" width="' . $width . '"><param name="movie" value="//www.youtube.com/v/' . $vid . '?rel=0&amp;hl=pt_BR&amp;version=3" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed allowfullscreen="true" allowscriptaccess="always" height="' . $height . '" src="//www.youtube.com/v/' . $vid . '?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3" type="application/x-shockwave-flash" width="' . $width . '"></embed></object>';
                     $source = str_replace($_m, $ojwplayer, $source);
                 }
             }
         }
-        
+
         $preTag = null;
         $postTag = $source;
         $tagOpen_start = strpos($source, '<');
-        
+
         while ($tagOpen_start !== false) {
             $preTag .= substr($postTag, 0, $tagOpen_start);
             $postTag = substr($postTag, $tagOpen_start);
             $fromTagOpen = substr($postTag, 1);
             $tagOpen_end = strpos($fromTagOpen, '>');
-            
+
             if ($tagOpen_end === false) {
                 break;
             }
-            
+
             $tagOpen_nested = strpos($fromTagOpen, '<');
-            
+
             if (($tagOpen_nested !== false) and ($tagOpen_nested < $tagOpen_end)) {
                 $preTag .= substr($postTag, 0, ($tagOpen_nested + 1));
                 $postTag = substr($postTag, ($tagOpen_nested + 1));
                 $tagOpen_start = strpos($postTag, '<');
                 continue;
             }
-            
+
             $tagOpen_nested = (strpos($fromTagOpen, '<') + $tagOpen_start + 1);
             $currentTag = substr($fromTagOpen, 0, $tagOpen_end);
             $tagLength = strlen($currentTag);
-            
+
             if (! $tagOpen_end) {
                 $preTag .= $postTag;
                 $tagOpen_start = strpos($postTag, '<');
             }
-            
+
             $tagLeft = $currentTag;
             $attrSet = array();
             $currentSpace = strpos($tagLeft, ' ');
-            
+
             if (substr($currentTag, 0, 1) == '/') {
                 $isCloseTag = true;
                 list($tagName) = explode(' ', $currentTag);
@@ -622,19 +610,19 @@ class Request
                 list($tagName) = explode(' ', $currentTag);
                 $tagName = strtolower($tagName);
             }
-            
+
             if ((! preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) or in_array($tagName, $this->disabletags)) {
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
                 continue;
             }
-            
+
             while ($currentSpace !== false) {
                 $fromSpace = substr($tagLeft, ($currentSpace + 1));
                 $nextSpace = strpos($fromSpace, ' ');
                 $openQuotes = strpos($fromSpace, '"');
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
-                
+
                 if (strpos($fromSpace, '=') !== false) {
                     if (($openQuotes !== false) and (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
                         $attr = substr($fromSpace, 0, ($closeQuotes + 1));
@@ -644,38 +632,38 @@ class Request
                 } else {
                     $attr = substr($fromSpace, 0, $nextSpace);
                 }
-                
+
                 if (! $attr) {
                     $attr = $fromSpace;
                 }
-                
+
                 $attrSet[] = $attr;
                 $tagLeft = substr($fromSpace, strlen($attr));
                 $currentSpace = strpos($tagLeft, ' ');
             }
-            
+
             if (! $isCloseTag) {
                 $preTag .= '{@[' . $tagName;
-                
+
                 if (! empty($attrSet)) {
                     $attrSet = $this->filterAttr($attrSet);
                     $preTag .= ' ' . implode(' ', $attrSet);
                 }
-                
+
                 $preTag .= (strpos($fromTagOpen, '</' . $tagName)) ? ']@}' : ' /]@}';
             } else {
                 $preTag .= '{@[/' . $tagName . ']@}';
             }
-            
+
             $postTag = substr($postTag, ($tagLength + 2));
             $tagOpen_start = strpos($postTag, '<');
         }
-        
+
         $preTag .= $postTag;
         $preTag = str_replace(array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $preTag);
         return trim(str_replace(array( "[@{", "}@]", "{@[", "]@}" ), array( '"', '"', "<", '>' ), $preTag));
     }
-    
+
     /**
      * Request::security_get()
      *
@@ -694,7 +682,7 @@ class Request
                 if ($decode == true) {
                     $value = urldecode($value);
                 }
-                
+
                 $value = str_replace(array( "\t", "\r", "\n", "../" ), "", $value);
                 $value = $this->unhtmlentities($value);
                 unset($matches);
@@ -708,7 +696,7 @@ class Request
         }
         return $value;
     }
-    
+
     /**
      * Request::security_post()
      *
@@ -725,7 +713,7 @@ class Request
         } else {
             // Fix block tag
             $value = str_replace(array( '[', ']' ), array( '&#91;', '&#93;' ), $value);
-            
+
             if (preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches)) {
                 $value = str_replace($matches[0], $matches[1], $value);
             }
@@ -733,7 +721,7 @@ class Request
         }
         return $value;
     }
-    
+
     /**
      * Request::security_cookie()
      *
@@ -744,7 +732,7 @@ class Request
     {
         return $value;
     }
-    
+
     /**
      * Request::security_session()
      *
@@ -755,7 +743,7 @@ class Request
     {
         return $value;
     }
-    
+
     /**
      * Request::parse_mode()
      *
@@ -776,7 +764,7 @@ class Request
         }
         return array_values($mode);
     }
-    
+
     /**
      * Request::base64Encode()
      *
@@ -787,7 +775,7 @@ class Request
     {
         return strtr(base64_encode($input), '+/=', '-_,');
     }
-    
+
     /**
      * Request::base64Decode()
      *
@@ -798,7 +786,7 @@ class Request
     {
         return base64_decode(strtr($input, '-_,', '+/='));
     }
-    
+
     /**
      * Request::encodeCookie()
      *
@@ -816,7 +804,7 @@ class Request
         }
         return $this->base64Encode($result);
     }
-    
+
     /**
      * Request::decodeCookie()
      *
@@ -835,7 +823,7 @@ class Request
         }
         return $result;
     }
-    
+
     /**
      * Request::get_value()
      *
@@ -917,7 +905,7 @@ class Request
         }
         return $default;
     }
-    
+
     /**
      * Request::set_Cookie()
      *
@@ -943,10 +931,10 @@ class Request
         if (! empty($expire)) {
             $expire += NV_CURRENTTIME;
         }
-        
+
         return setcookie($name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
     }
-    
+
     /**
      * Request::set_Session()
      *
@@ -967,7 +955,7 @@ class Request
         $_SESSION[$name] = $value;
         return true;
     }
-    
+
     /**
      * Request::unset_request()
      *
@@ -1013,9 +1001,9 @@ class Request
                         continue;
                     }
                     $expire = NV_CURRENTTIME - 3600;
-                    
+
                     setcookie($name2, '', $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
-                    
+
                     unset($_COOKIE[$name2]);
                 }
             } elseif ($arr == 'session') {
@@ -1053,7 +1041,7 @@ class Request
             }
         }
     }
-    
+
     /**
      * Request::isset_request()
      *
@@ -1122,7 +1110,7 @@ class Request
         }
         return true;
     }
-    
+
     /**
      * Request::get_bool()
      *
@@ -1136,7 +1124,7 @@ class Request
     {
         return ( bool )$this->get_value($name, $mode, $default, $decode);
     }
-    
+
     /**
      * Request::get_int()
      *
@@ -1150,7 +1138,7 @@ class Request
     {
         return ( int )$this->get_value($name, $mode, $default, $decode);
     }
-    
+
     /**
      * Request::get_float()
      *
@@ -1164,7 +1152,7 @@ class Request
     {
         return ( float )$this->get_value($name, $mode, $default, $decode);
     }
-    
+
     /**
      * Request::get_string()
      *
@@ -1178,7 +1166,7 @@ class Request
     {
         return ( string )$this->get_value($name, $mode, $default, $decode);
     }
-    
+
     /**
      * Request::_get_title()
      *
@@ -1193,13 +1181,13 @@ class Request
         if (( bool )$specialchars == true) {
             $search = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~' );
             $replace = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
-            
+
             $value = str_replace($replace, $search, $value);
             $value = str_replace("&#x23;", "#", $value);
             $value = str_replace($search, $replace, $value);
             $value = preg_replace("/([^\&]+)\#/", "\\1&#x23;", $value);
         }
-        
+
         if (! empty($preg_replace)) {
             if (isset($preg_replace['pattern']) and ! empty($preg_replace['pattern']) and isset($preg_replace['replacement'])) {
                 $value = preg_replace($preg_replace['pattern'], $preg_replace['replacement'], $value);
@@ -1207,7 +1195,7 @@ class Request
         }
         return trim($value);
     }
-    
+
     /**
      * Request::get_title()
      *
@@ -1223,7 +1211,7 @@ class Request
         $value = ( string )$this->get_value($name, $mode, $default);
         return $this->_get_title($value, $specialchars, $preg_replace);
     }
-    
+
     /**
      * Request::_get_editor()
      *
@@ -1240,7 +1228,7 @@ class Request
         }
         return trim($value);
     }
-    
+
     /**
      * Request::get_editor()
      *
@@ -1255,7 +1243,7 @@ class Request
         $value = ( string )$this->get_value($name, 'post', $default);
         return $this->_get_editor($value, $allowed_html_tags);
     }
-    
+
     /**
      * Request::_get_textarea()
      *
@@ -1280,7 +1268,7 @@ class Request
         }
         return trim($value);
     }
-    
+
     /**
      * Request::get_textarea()
      *
@@ -1295,7 +1283,7 @@ class Request
         $value = ( string )$this->get_value($name, 'post', $default);
         return $this->_get_textarea($value, $allowed_html_tags, $save);
     }
-    
+
     /**
      * Request::get_array()
      *
@@ -1309,7 +1297,7 @@ class Request
     {
         return ( array )$this->get_value($name, $mode, $default, $decode);
     }
-    
+
     /**
      * Request::get_typed_array()
      *
