@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -33,7 +33,7 @@ $array_data = array();
 while (list($keywords) = $sth->fetch(3)) {
     $keywords = explode(',', $keywords);
     foreach ($keywords as $_keyword) {
-        $array_data[] = str_replace('-', ' ', $_keyword) ;
+        $array_data[] = nv_unhtmlspecialchars(str_replace('-', ' ', $_keyword));
     }
 }
 
