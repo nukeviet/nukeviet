@@ -432,6 +432,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'rss' => $row['rss'],
                     'sitemap' => $row['sitemap'],
                     'gid' => $row['gid'],
+                    'icon' => $row['icon'],
                     'funcs' => array()
                 );
             }

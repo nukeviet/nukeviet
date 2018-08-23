@@ -52,13 +52,15 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   mid mediumint(8) NOT NULL AUTO_INCREMENT,
   module varchar(50) NOT NULL,
   lang_key varchar(50) NOT NULL DEFAULT '',
+  icon varchar(100) NOT NULL DEFAULT '',
   weight mediumint(8) NOT NULL DEFAULT '0',
   act_1 tinyint(4) NOT NULL DEFAULT '0',
   act_2 tinyint(4) NOT NULL DEFAULT '1',
   act_3 tinyint(4) NOT NULL DEFAULT '1',
   checksum varchar(32) DEFAULT '',
   PRIMARY KEY (mid),
-  UNIQUE KEY module (module)
+  UNIQUE KEY module (module),
+  UNIQUE KEY icon (icon)
 ) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (

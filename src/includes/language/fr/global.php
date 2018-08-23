@@ -67,7 +67,6 @@ $lang_global['password_rule_nolimit'] = 'Les mots de passe doivent être compris
 $lang_global['securitycodeincorrect'] = 'Code de sécurité incorrect';
 $lang_global['securitycodeincorrect1'] = 'L\'authentification est pas encore Robot, s\'il vous plaît revalider';
 $lang_global['loginincorrect'] = 'L\'identifiant et le mot de passe ne correspondent pas';
-$lang_global['admin_loginsuccessfully'] = 'Vous avez réussi à vous identifier. Le système vous transférera à l\'Administration du site';
 $lang_global['incorrect_password'] = 'Mot de passe incorrect';
 $lang_global['userlogin_blocked'] = 'Vous devez être connecté %s fois échoué, verrouiller temporairement journal système jusqu\'à %s';
 $lang_global['2teplogin_totppin_label'] = 'Entrez le code de vérification de l\'application Google Authenticator';

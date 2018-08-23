@@ -67,7 +67,6 @@ $lang_global['password_rule_nolimit'] = 'Password must be between %1$d to %2$d c
 $lang_global['securitycodeincorrect'] = 'Security Code is invalid';
 $lang_global['securitycodeincorrect1'] = 'Unverified i\'m not a robot, please verify again!';
 $lang_global['loginincorrect'] = 'The system can not find information correctly with your declaration. Username or password do not match';
-$lang_global['admin_loginsuccessfully'] = 'You have successfully logged. The system will transfer you to the site administration area';
 $lang_global['incorrect_password'] = 'Password is incorrect';
 $lang_global['userlogin_blocked'] = 'You are logged after failure%, temporarily locking system login to% s';
 $lang_global['2teplogin_totppin_label'] = 'Enter the verification code from the Google Authenticator app';
