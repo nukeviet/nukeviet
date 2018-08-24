@@ -1095,11 +1095,11 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                     $mail->SMTPSecure = '';
             }
             $mail->SMTPOptions = array(
-            		'ssl' => array(
-            				'verify_peer' => ($global_config['verify_peer_ssl'] == 1) ? true : false,
-            				'verify_peer_name' => ($global_config['verify_peer_name_ssl'] == 1) ? true : false,
-            				'allow_self_signed' => true
-            		)
+                    'ssl' => array(
+                            'verify_peer' => ($global_config['verify_peer_ssl'] == 1) ? true : false,
+                            'verify_peer_name' => ($global_config['verify_peer_name_ssl'] == 1) ? true : false,
+                            'allow_self_signed' => true
+                    )
             );
 
             if (filter_var($global_config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
@@ -1745,8 +1745,8 @@ function nv_insert_logs($lang = '', $module_name = '', $name_key = '', $note_act
     global $db_config, $db;
 
     $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_logs
-		(lang, module_name, name_key, note_action, link_acess, userid, log_time) VALUES
-		(:lang, :module_name, :name_key, :note_action, :link_acess, :userid, ' . NV_CURRENTTIME . ')');
+        (lang, module_name, name_key, note_action, link_acess, userid, log_time) VALUES
+        (:lang, :module_name, :name_key, :note_action, :link_acess, :userid, ' . NV_CURRENTTIME . ')');
     $sth->bindParam(':lang', $lang, PDO::PARAM_STR);
     $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
     $sth->bindParam(':name_key', $name_key, PDO::PARAM_STR);
@@ -1846,8 +1846,8 @@ function nv_insert_notification($module, $type, $content = array(), $obid = 0, $
         !empty($content) and $content = serialize($content);
 
         $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
-		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
-		(:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)';
+        (send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
+        (:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)';
         $data_insert = array();
         $data_insert['send_to'] = $send_to;
         $data_insert['send_from'] = $send_from;
@@ -1923,7 +1923,7 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 function nv_redirect_location($url, $error_code = 301)
 {
     http_response_code($error_code);
-    Header('Location: ' . nv_url_rewrite($url, true));
+    Header('Location: ' . str_replace('&amp;', '&', nv_url_rewrite($url, true)));
     exit(0);
 }
 
