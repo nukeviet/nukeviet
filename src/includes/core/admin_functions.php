@@ -535,6 +535,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "ErrorDocument 408 /error.php?code=408\n";
         $config_contents .= "ErrorDocument 500 /error.php?code=500\n";
         $config_contents .= "ErrorDocument 502 /error.php?code=502\n";
+        $config_contents .= "ErrorDocument 503 /error.php?code=503\n";
         $config_contents .= "ErrorDocument 504 /error.php?code=504\n\n";
         $config_contents .= "<IfModule mod_deflate.c>\n";
         $config_contents .= "  <FilesMatch \"\.(css|js|xml|ttf)$\">\n";
@@ -586,7 +587,7 @@ function nv_server_config_change($array_config)
     $return = true;
     if (!empty($filename) and !empty($config_contents)) {
         try {
-            $filesize = file_put_contents($filename, $config_contents, LOCK_EX);
+            $filesize = file_put_contents($filename, $config_contents . "\n", LOCK_EX);
             if (empty($filesize)) {
                 $return = false;
             }

@@ -581,7 +581,7 @@ if ($is_submit_form) {
 
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords']);
-    $rowcontent['tags'] = $nv_Request->get_array('tags', 'post', '');
+    $rowcontent['tags'] = $nv_Request->get_typed_array('tags', 'post', 'title', []);
     $rowcontent['tags'] = implode(', ', $rowcontent['tags']);
 
     // Tu dong xac dinh tags
@@ -1023,7 +1023,7 @@ if ($is_submit_form) {
                 foreach ($tags as $_tag) {
                     $_tag = str_replace('&', ' ', $_tag);
                     if (!in_array($_tag, $array_tags_old)) {
-                        $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($_tag) : str_replace(' ', '-', $_tag);
+                        $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($_tag) : change_alias_tags($_tag);
                         $alias_i = nv_strtolower($alias_i);
                         $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                         $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
