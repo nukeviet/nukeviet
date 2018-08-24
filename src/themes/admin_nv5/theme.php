@@ -118,13 +118,14 @@ function nv_admin_theme($contents, $head_site = 1)
     $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('MODULE_FILE', $module_file);
-    $tpl->assign('NV_ADMIN_THEME', $admin_info['admin_theme']);
+    $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
     $tpl->assign('NV_SAFEMODE', $admin_info['safemode']);
     $tpl->assign('SITE_FAVICON', $site_favicon);
     $tpl->assign('NV_SITE_TIMEZONE_OFFSET', round(NV_SITE_TIMEZONE_OFFSET / 3600));
     $tpl->assign('NV_CURRENTTIME', nv_date('T', NV_CURRENTTIME));
     $tpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
     $tpl->assign('THEME_SITE_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+    $tpl->assign('SITE_CHARSET', $global_config['site_charset']);
 
     // JS và CSS của module
     if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css')) {

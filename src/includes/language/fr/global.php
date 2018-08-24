@@ -97,6 +97,7 @@ $lang_global['loginsubmit'] = 'Connexion';
 $lang_global['register'] = 'S\'inscrire';
 $lang_global['lostpass'] = 'Mot de passe oublié';
 $lang_global['logininfo'] = 'S\'il vous plaît vous connecter à votre compte afin que vous puissiez utiliser tous les outils du site';
+$lang_global['login_remember'] = 'Rappelez-vous le compte';
 $lang_global['adminlogininfo'] = 'Veuillez utiliser un identifiant et un mot de passe valide pour accéder à l\'administration';
 $lang_global['site_rss'] = 'RSS - Derniers News';
 $lang_global['copyright'] = '&copy; Copyright %s. Tous droits réservés.';

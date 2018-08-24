@@ -102,6 +102,7 @@ $lang_global['loginsubmit'] = 'Đăng nhập';
 $lang_global['register'] = 'Đăng ký';
 $lang_global['lostpass'] = 'Quên mật khẩu';
 $lang_global['logininfo'] = 'Hãy đăng nhập thành viên để trải nghiệm đầy đủ các tiện ích trên site';
+$lang_global['login_remember'] = 'Nhớ tài khoản';
 $lang_global['adminlogininfo'] = 'Để đăng nhập quản trị, vui lòng khai báo tất cả các ô trống dưới đây';
 $lang_global['site_rss'] = 'RSS - Tin mới';
 $lang_global['copyright'] = '&copy; Copyright %s. All right reserved';

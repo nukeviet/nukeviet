@@ -9736,6 +9736,38 @@ h1 .small, h1 small, h2 .small, h2 small, h3 .small, h3 small, h4 .small, h4 sma
   color: #404040;
 }
 
+.alert-primary:not(.alert-icon):not(.alert-simple) .message a {
+  color: #caddfc;
+}
+
+.alert-secondary:not(.alert-icon):not(.alert-simple) .message a {
+  color: #d6d8db;
+}
+
+.alert-success:not(.alert-icon):not(.alert-simple) .message a {
+  color: #c6e7cf;
+}
+
+.alert-info:not(.alert-icon):not(.alert-simple) .message a {
+  color: #bee5eb;
+}
+
+.alert-warning:not(.alert-icon):not(.alert-simple) .message a {
+  color: #feecb9;
+}
+
+.alert-danger:not(.alert-icon):not(.alert-simple) .message a {
+  color: #f9cac6;
+}
+
+.alert-light:not(.alert-icon):not(.alert-simple) .message a {
+  color: #fdfdfe;
+}
+
+.alert-dark:not(.alert-icon):not(.alert-simple) .message a {
+  color: #c6c8ca;
+}
+
 /* Button */
 .btn-space, .btn-vspace {
   margin-bottom: 5px;
@@ -13068,7 +13100,7 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
 }
 
 .splash-container {
-  max-width: 401px;
+  max-width: 362px;
   margin: 100px auto 0 auto;
 }
 .splash-container .card {

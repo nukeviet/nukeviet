@@ -97,6 +97,7 @@ $lang_global['loginsubmit'] = 'Login';
 $lang_global['register'] = 'Register';
 $lang_global['lostpass'] = 'Forgot password';
 $lang_global['logininfo'] = 'All tools on this site will be available when you\'re logged in';
+$lang_global['login_remember'] = 'Remember';
 $lang_global['adminlogininfo'] = 'Please use a valid username and password to login to the Control Panel';
 $lang_global['site_rss'] = 'RSS - NEWS';
 $lang_global['copyright'] = '&copy; Copyright %s. All right reserved';

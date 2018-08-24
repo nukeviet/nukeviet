@@ -2,7 +2,7 @@
 <html lang="{$LANG->get('Content_Language')}" xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns#">
     <head>
         <title>{$NV_SITE_TITLE}</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-type" content="text/html; charset={$SITE_CHARSET}" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="{$SITE_DESCRIPTION}">
         <meta name="author" content="{$NV_SITE_COPYRIGHT}">

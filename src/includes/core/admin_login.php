@@ -96,6 +96,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
 
     $array['username'] = $nv_Request->get_title('nv_login', 'post', '', 1);
     $array['password'] = $nv_Request->get_title('nv_password', 'post', '');
+    $array['login_remember'] = intval($nv_Request->get_bool('login_remember', 'post', false));
     $array['totppin'] = $nv_Request->get_title('nv_totppin', 'post', '');
     $array['backupcodepin'] = $nv_Request->get_title('nv_backupcodepin', 'post', '');
     $array['captcha_require'] = (($global_config['gfx_chk'] == 1 and $nv_Request->get_title('admin_dismiss_captcha', 'session', '') != md5($array['username'])));
@@ -270,6 +271,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
     $array = [
         'username' => '',
         'password' => '',
+        'login_remember' => 0,
         'totppin' => '',
         'backupcodepin' => '',
         'captcha_require' => ($global_config['gfx_chk'] == 1),
@@ -278,6 +280,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
 }
 
 $array['login_step'] = $login_step;
+$array['captcha_type'] = $global_config['captcha_type'];
 
 // Ngôn ngôn ngữ admin
 $nv_Lang->loadGlobal(true);

@@ -76,3 +76,4 @@ $lang_global['email'] = 'Email';
 $lang_global['phonenumber'] = 'Phone';
 $lang_global['interface_current_menu'] = 'Current module';
 $lang_global['interface_other_menu'] = 'Other modules';
+$lang_global['login_remember_admin'] = 'This option will allow administrators to log in multiple locations';

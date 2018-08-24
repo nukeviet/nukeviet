@@ -6,3 +6,32 @@
  * @Createdate 2-9-2010 14:43
  */
 
+/* Row captcha */
+.nv-row-captcha {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.nv-row-captcha>.ipt {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.nv-row-captcha>.img,
+.nv-row-captcha>.rfs {
+    flex: 0;
+}
+
+.nv-row-captcha>.rfs {
+    padding-left: 10px;
+}
+
+.nv-row-recaptcha {
+    display: flex;
+    justify-content: center;
+}
+
+.nv-row-recaptcha>div {
+    flex: 0;
+}
