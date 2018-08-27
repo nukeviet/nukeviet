@@ -13154,6 +13154,52 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
   margin: 0;
 }
 
+/* Error page */
+.nv-error-page {
+  background: #ffffff;
+  background: url("../images/404-bg-top.png"), -moz-linear-gradient(left, #ffffff 0%, #ecf3f8 100%);
+  background: url("../images/404-bg-top.png"), -webkit-linear-gradient(left, #ffffff 0%, #ecf3f8 100%);
+  background: url("../images/404-bg-top.png"), linear-gradient(to right, #ffffff 0%, #ecf3f8 100%);
+  background-position: top center, 0 0;
+  background-repeat: no-repeat, no-repeat;
+}
+.nv-error-page > .wrapper {
+  background-image: url("../images/404-bg-bottom.png");
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  padding-top: 0;
+}
+.nv-error-page > .wrapper .main-content-wrapper {
+  margin: 0;
+}
+.nv-error-page > .wrapper .main-content-wrapper .error-container {
+  text-align: center;
+  margin-top: 150px;
+}
+
+@media (max-width: 767.98px) {
+  .nv-error-page > .wrapper .main-content-wrapper .error-container {
+    margin-top: 50px;
+  }
+}
+.nv-error-page .error-number {
+  font-size: 13.846rem;
+  line-height: 13.846rem;
+}
+.nv-error-page .error-title {
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+.nv-error-page .error-description {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-size: 1.692rem;
+  font-weight: 300;
+}
+.nv-error-page .error-goback-btn .btn {
+  min-width: 155px;
+}
+
 /* Style plugin scrollbar */
 .ps__rail-y {
   width: 10px;

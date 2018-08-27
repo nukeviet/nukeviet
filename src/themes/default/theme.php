@@ -351,15 +351,3 @@ function nv_site_theme($contents, $full = true)
 
     return $sitecontent;
 }
-
-/**
- *  nv_error_theme()
- *
- * @param string $title
- * @param string $content
- * @param integer $code
- */
-function nv_error_theme($title, $content, $code)
-{
-    nv_info_die($title, $title, $content, $code);
-}
