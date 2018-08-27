@@ -10,7 +10,7 @@
 
 define('NV_SYSTEM', true);
 
-// Xac dinh thu muc goc cua site
+// Thư mục gốc của site
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
@@ -26,7 +26,7 @@ if (!in_array($global_config['current_theme_type'], $global_config['array_theme_
 $is_mobile = false;
 $theme_type = '';
 $_theme_mobile = $global_config['mobile_theme'];
-if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des']))) or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))) and !empty($_theme_mobile) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme.php')) {
+if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des']))) or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))) and !empty($_theme_mobile) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme_error.php')) {
     $site_theme = $_theme_mobile;
     $is_mobile = true;
     $theme_type = 'm';
@@ -36,10 +36,10 @@ if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type'])
     }
 
     $_theme = $global_config['site_theme'];
-    if (!empty($_theme) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/theme.php')) {
+    if (!empty($_theme) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/theme_error.php')) {
         $site_theme = $_theme;
         $theme_type = $global_config['current_theme_type'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/default/theme.php')) {
+    } elseif (file_exists(NV_ROOTDIR . '/themes/default/theme_error.php')) {
         $site_theme = 'default';
         $theme_type = $global_config['current_theme_type'];
     } else {
@@ -54,35 +54,7 @@ if ($theme_type != $global_config['current_theme_type']) {
 }
 unset($theme_type);
 
-// Doc file cau hinh giao dien
-$cache_file = NV_LANG_DATA . '_' . $site_theme . '_configposition_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
-    $theme_config_positions = unserialize($cache);
-} else {
-    $_themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini'));
-    if (isset($_themeConfig['positions']['position']['name'])) {
-        $theme_config_positions = array(
-            $_themeConfig['positions']['position']
-        );
-    } elseif (isset($_themeConfig['positions']['position'])) {
-        $theme_config_positions = $_themeConfig['positions']['position'];
-    } else {
-        $theme_config_positions = array();
-        $_ini_file = file_get_contents(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini');
-        if (preg_match_all('/<position>[\t\n\s]+<name>(.*?)<\/name>[\t\n\s]+<tag>(\[[a-zA-Z0-9_]+\])<\/tag>[\t\n\s]+<\/position>/s', $_ini_file, $_m)) {
-            foreach ($_m[1] as $_key => $value) {
-                $theme_config_positions[] = array(
-                    'name' => $value,
-                    'tag' => $_m[2][$_key]
-                );
-            }
-        }
-    }
-    if (!empty($theme_config_positions)) {
-        $nv_Cache->setItem('themes', $cache_file, serialize($theme_config_positions));
-    }
-}
-require NV_ROOTDIR . '/themes/' . $site_theme . '/theme.php';
+$global_config['module_theme'] = $site_theme;
 
 // Ket noi ngon ngu theo theme
 $nv_Lang->loadTheme($site_theme);
@@ -128,8 +100,4 @@ if ($nv_Lang->existsGlobal('error_' . $error_code . '_content')) {
     }
 }
 
-if (function_exists('nv_error_theme')) {
-    nv_error_theme($title, $content, $error_code);
-} else {
-    nv_info_die($title, $title, $content, $error_code);
-}
+nv_info_die($title, $title, $content, $error_code);
