@@ -86,59 +86,23 @@
                             <li class="nav-item dropdown">
                                 <a href="{$NV_GO_CLIENTSECTOR_URL}" role="button" aria-expanded="false" class="nav-link" title="{$LANG->get('go_clientsector')}"><i class="fas fa-home"></i></a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" role="button" aria-expanded="false" class="nav-link" data-toggle="dropdown"><i class="fas fa-bell"></i><span class="indicator"></span></a>
+                            {if $NOTIFICATION_ACTIVE}
+                            <li class="nav-item dropdown" id="main-notifications">
+                                <a href="#" role="button" aria-expanded="false" class="nav-link icon-notifications" data-toggle="dropdown"><i class="fas fa-bell"></i><span class="indicator d-none"></span></a>
                                 <ul class="dropdown-menu main-notifications">
                                     <li>
-                                        <div class="title">Thông báo<span class="badge badge-pill">4</span></div>
+                                        <div class="title">{$LANG->get('notification')}<span class="badge badge-pill"></span></div>
                                         <div class="list">
-                                            <div class="nv-scroller">
-                                                <div class="content">
-                                                    <ul>
-                                                        <li class="notification notification-unread">
-                                                            <a href="#">
-                                                                <div class="image"><img src="assets/images/avatar2.png" alt="Avatar"></div>
-                                                                <div class="notification-info">
-                                                                    <div class="text"><span class="user-name">vuthao</span> vừa gửi liên hệ với tiêu đề <strong>Thử nghiệm NukeViet</strong>.</div>
-                                                                    <span class="date">Cách đây 2 phút</span>
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                        <li class="notification">
-                                                            <a href="#">
-                                                                <div class="image"><img src="assets/images/avatar3.png" alt="Avatar"></div>
-                                                                <div class="notification-info">
-                                                                    <div class="text"><span class="user-name">thehung</span> đăng bài viết <strong>Phát triển NukeViet 5.0</strong> chờ duyệt.</div>
-                                                                    <span class="date">Cách đây hơn 1 tiếng</span>
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                        <li class="notification">
-                                                            <a href="#">
-                                                                <div class="image"><img src="assets/images/avatar4.png" alt="Avatar"></div>
-                                                                <div class="notification-info">
-                                                                    <div class="text"><span class="user-name">hoaquynhtim99</span> đăng tài liệu chờ duyệt <strong>Tài liệu cho nhà phát triển</strong>.</div>
-                                                                    <span class="date">1 ngày trước</span>
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                        <li class="notification">
-                                                            <a href="#">
-                                                                <div class="image"><img src="assets/images/avatar5.png" alt="Avatar"></div>
-                                                                <div class="notification-info">
-                                                                    <div class="text">Cronjob <span class="user-name">Gửi liên hệ</span> bị đình chỉ hoạt động do lỗi.</div>
-                                                                    <span class="date">13:20 20/06/2018</span>
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                            <div class="nv-notification-scroller">
+                                                <div class="content"></div>
                                             </div>
+                                            <div class="loader text-center"><i class="fas fa-spinner fa-spin"></i></div>
                                         </div>
-                                        <div class="footer"><a href="#">Xem tất cả</a></div>
+                                        <div class="footer"><a href="{$NV_GO_ALL_NOTIFICATION}">{$LANG->get('view_all')}</a></div>
                                     </li>
                                 </ul>
                             </li>
+                            {/if}
                             <li class="nav-item dropdown">
                                 <a href="#" role="button" aria-expanded="false" class="nav-link" data-toggle="dropdown"><i class="fas fa-th"></i></a>
                                 <div class="dropdown-menu main-sys-menu">
@@ -237,7 +201,7 @@
                                                         <ul>
                                                             <li class="f-link"><a href="{$rowmenu.link}">{$LANG->get('Home')}</a></li>
                                                             {foreach from=$rowmenu['subs'] item=smenutitle key=smenukey}
-                                                            <li><a href="{$smenukey}">{$smenutitle}</a></li>
+                                                            <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}">{$smenutitle}</a></li>
                                                             {/foreach}
                                                         </ul>
                                                     </div>
@@ -257,15 +221,30 @@
 
             <div class="main-content-wrapper">
                 <div class="main-content">
-                    <div class="page-head clearfix">
-                        <h2 class="page-head-title">{$PAGE_TITLE}</h2>
-                        <nav aria-label="breadcrumb" role="navigation">
-                            <ol class="breadcrumb page-head-nav">
-                                <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li class="breadcrumb-item"><a href="#">Các thành phần UI</a></li>
-                                <li class="breadcrumb-item active">Cards</li>
-                            </ol>
-                        </nav>
+                    <div class="page-head">
+                        <div class="page-head-title">
+                            {if not empty($BREADCRUMBS)}
+                            <nav aria-label="breadcrumb" role="navigation">
+                                <ol class="breadcrumb page-head-nav">
+                                    {foreach from=$BREADCRUMBS item=row}
+                                    <li class="breadcrumb-item{if not empty($row['active'])} active{/if}">{if not empty($row['link']) and empty($row['active'])}<a href="{$row.link}">{$row.title}</a>{else}{$row.title}{/if}</li>
+                                    {/foreach}
+                                </ol>
+                            </nav>
+                            {else}
+                            <h2 title="{$PAGE_TITLE}">{$PAGE_TITLE}</h2>
+                            {/if}
+                        </div>
+                        {if isset($NV_GO_CLIENTMOD) or isset($NV_URL_INSTRUCTION)}
+                        <div class="module-btns">
+                            {if isset($NV_URL_INSTRUCTION)}
+                            <a target="_blank" href="{$NV_URL_INSTRUCTION}" title="{$LANG->get('go_instrucion')}"><i class="fas fa-book"></i></a>
+                            {/if}
+                            {if isset($NV_GO_CLIENTMOD)}
+                            <a target="_blank" href="{$NV_GO_CLIENTMOD}" title="{$LANG->get('go_clientmod')}"><i class="fas fa-globe-asia"></i></a>
+                            {/if}
+                        </div>
+                        {/if}
                     </div>
                     <div class="page-body">
                         {$MODULE_CONTENT}
@@ -273,7 +252,7 @@
                 </div>
                 <div class="main-footer">
                     <div class="stat-img">
-                        <a title="NUKEVIET CMS" href="http://nukeviet.vn" target="_blank"><img alt="NUKEVIET CMS" src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/images/banner_nukeviet_88x15.jpg" class="imgstatnkv"></a>
+                        <a title="NUKEVIET CMS" href="https://nukeviet.vn/" target="_blank"><img alt="NUKEVIET CMS" src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/images/banner_nukeviet_88x15.jpg" class="imgstatnkv"></a>
                     </div>
                     <div class="memory-info">
                         {if $memory_time_usage}
@@ -361,4 +340,9 @@
     </body>
     <script src="{$NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/js/nv.core.js"></script>
     <script src="{$NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/js/nv.main.js"></script>
+    {if $NOTIFICATION_ACTIVE}
+    <script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/jquery/jquery.timeago.js"></script>
+    <script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/language/jquery.timeago-{$NV_LANG_DATA}.js"></script>
+    <script src="{$NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/js/nv.notification.js"></script>
+    {/if}
 </html>

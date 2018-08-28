@@ -157,7 +157,6 @@ $lang_module['log_empty_log'] = 'Supprimer tous les historiques du système';
 $lang_module['update_package_detected'] = 'Mise à jours disponibles, le site sera en suspens. Merci de faire 1 de 2 procès suivants avant que le site puisse remet en marche';
 $lang_module['update_package_delete'] = 'Supprimer la mise à jour';
 $lang_module['update_package_do'] = 'Mettre à jour';
-$lang_module['notification'] = 'Notifier';
 $lang_module['notification_empty'] = '<p align="center">Aucune annonce!</p>';
 $lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';

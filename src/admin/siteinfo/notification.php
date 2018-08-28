@@ -14,15 +14,15 @@ if (!defined('NV_MAINFILE')) {
 
 $allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
 
-$page_title = $nv_Lang->getModule('notification');
+$page_title = $nv_Lang->getGlobal('notification');
 
-// Reset notification
+// Đánh dấu tất cả các thông báo đã đọc
 if ($nv_Request->isset_request('notification_reset', 'post')) {
     $db->query('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1 WHERE view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
     die();
 }
 
-// Get count notification
+// Lấy số thông báo chưa xem
 if ($nv_Request->isset_request('notification_get', 'get')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -141,6 +141,24 @@ while ($data = $result->fetch()) {
             $array_data[$data['id']] = $data;
         }
     }
+}
+
+// Dữ liệu ajax
+if ($is_ajax) {
+    $contents = '';
+
+    if (!empty($array_data)) {
+        $tpl = new \NukeViet\Template\Smarty();
+        $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('DATA', $array_data);
+
+        $contents = $tpl->fetch('notification_ajax.tpl');
+    }
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo $contents;
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 $xtpl = new XTemplate('notification.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/siteinfo');

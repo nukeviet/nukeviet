@@ -213,6 +213,7 @@ function nv_admin_theme($contents, $head_site = 1)
             if ($m != $module_name) {
                 // Các module khác
                 $array_mod_menu[] = [
+                    'name' => $m,
                     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m,
                     'title' => $v,
                     'icon' => isset($site_mods[$m]) ? $site_mods[$m]['icon'] : '',
@@ -254,10 +255,23 @@ function nv_admin_theme($contents, $head_site = 1)
 
         // Ngôn ngữ
         $tpl->assign('ARRAY_LANGS', $array_lang_admin);
+
+        // Thông báo
+        $tpl->assign('NOTIFICATION_ACTIVE', $global_config['notification_active']);
+        $tpl->assign('NV_GO_ALL_NOTIFICATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=notification');
+
+        // Tài liệu module và xem ngoài site
+        if (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
+            $tpl->assign('NV_GO_CLIENTMOD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+        }
+        if (isset($array_url_instruction[$op])) {
+            $tpl->assign('NV_URL_INSTRUCTION', $array_url_instruction[$op]);
+        }
     }
 
     $tpl->assign('THEME_ERROR_INFO', nv_error_info());
     $tpl->assign('PAGE_TITLE', $page_title);
+    $tpl->assign('BREADCRUMBS', $array_mod_title);
     $tpl->assign('MODULE_CONTENT', $contents);
     $tpl->assign('NV_COPYRIGHT', $nv_Lang->get('copyright', $global_config['site_name']));
 

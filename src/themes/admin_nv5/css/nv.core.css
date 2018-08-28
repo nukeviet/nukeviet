@@ -12521,16 +12521,28 @@ textarea.form-control {
 }
 
 .nv-scroller,
+.nv-notification-scroller,
 .nv-left-sidebar-scroller {
   position: relative !important;
   overflow: hidden !important;
 }
 
-.main-notifications .nv-scroller {
+.main-notifications > li > .list {
+  position: relative;
+}
+.main-notifications > li > .list > .loader {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: none;
+}
+
+.main-notifications .nv-notification-scroller {
   height: 235px;
 }
 
-.main-notifications .nv-scroller > .content > ul {
+.main-notifications .nv-notification-scroller > .content > ul {
   list-style: none;
   padding-left: 0;
 }
@@ -13019,29 +13031,56 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
 .main-content {
   min-height: calc(100vh - 122px);
 }
-
 .main-content > .page-head {
   background-color: #fff;
   border-bottom: 1px #e5e5e5 solid;
   padding: 0 25px;
+  display: flex;
+  flex-wrap: nowrap;
 }
-
+.main-content > .page-head > .page-head-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.main-content > .page-head > .module-btns {
+  flex: 0;
+  white-space: nowrap;
+  line-height: 50px;
+}
+.main-content > .page-head > .module-btns a {
+  display: inline-block;
+  margin-left: 20px;
+  color: #6b6b6b;
+  font-size: 1.384rem;
+}
 .main-content > .page-head h2 {
   line-height: 50px;
   padding: 0;
   margin: 0;
-  float: left;
   color: #6b6b6b;
   font-size: 2.154rem;
   font-weight: 300;
+  display: inline-block;
 }
-
 .main-content > .page-head .breadcrumb {
   margin: 0;
   padding: 0;
-  float: right;
   line-height: 50px;
   background-color: transparent;
+  font-size: 2.154rem;
+  font-weight: 300;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.main-content > .page-head .breadcrumb > li {
+  display: inline-block;
+}
+.main-content > .page-head .breadcrumb > li a {
+  color: #6b6b6b;
 }
 
 .main-content > .page-body {

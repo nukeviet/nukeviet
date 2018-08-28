@@ -105,7 +105,7 @@ $lang_module['supporter_contact_add'] = 'Add information';
 $lang_module['add'] = 'Add';
 $lang_module['active'] = 'Active';
 $lang_module['full_name'] = 'Full name';
-$lang_module['notification_contact_new'] = '<strong />%s mailing contact title<strong />%s';
+$lang_module['notification_contact_new'] = '<span class="user-name">%s</span> mailing contact title <strong>%s</strong>';
 $lang_module['is_default'] = 'Default';
 $lang_module['otherContacts'] = 'Other contact';
 $lang_module['otherVar'] = 'Name';
