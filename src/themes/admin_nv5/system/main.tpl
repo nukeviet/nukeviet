@@ -177,7 +177,18 @@
                                                         <ul>
                                                             <li class="f-link{if $MOD_CURRENT['active']} active{/if}"><a href="{$MOD_CURRENT.link}">{$LANG->get('Home')}</a></li>
                                                             {foreach from=$MOD_CURRENT['subs'] item=crrsub}
+                                                            {if not empty($crrsub['subs'])}
+                                                            <li class="parent{if $crrsub['active']} active{/if}{if $crrsub['open']} open{/if}">
+                                                                <a href="{$crrsub.link}"><span>{$crrsub.title}</span><span class="toggle"><i class="fas"></i></span></a>
+                                                                <ul class="sub-menu">
+                                                                    {foreach from=$crrsub['subs'] item=crrsublv2}
+                                                                    <li{if $crrsublv2['active']} class="active"{/if}><a href="{$crrsublv2.link}"><span>{$crrsublv2.title}</span></a></li>
+                                                                    {/foreach}
+                                                                </ul>
+                                                            </li>
+                                                            {else}
                                                             <li{if $crrsub['active']} class="active"{/if}><a href="{$crrsub.link}"><span>{$crrsub.title}</span></a></li>
+                                                            {/if}
                                                             {/foreach}
                                                         </ul>
                                                     </div>

@@ -233,10 +233,22 @@ function nv_admin_theme($contents, $head_site = 1)
                         $subs = [];
                         $subs['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $_op;
                         $subs['active'] = ((!empty($op) and $op == $_op) or (!empty($set_active_op) and $set_active_op == $_op)) ? true : false;
+                        $subs['open'] = false;
                         $subs['subs'] = [];
                         if (is_array($_op_title) and isset($_op_title['submenu'])) {
                             // Có menu cấp 3
                             $subs['title'] = $_op_title['title'];
+                            foreach ($_op_title['submenu'] as $s_op => $s_op_title) {
+                                $isSub2Active = ((!empty($op) and $op == $s_op) or (!empty($set_active_op) and $set_active_op == $s_op)) ? true : false;
+                                $subs['subs'][] = [
+                                    'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $s_op,
+                                    'title' => $s_op_title,
+                                    'active' => $isSub2Active
+                                ];
+                                if ($isSub2Active) {
+                                    $subs['open'] = true;
+                                }
+                            }
                         } else {
                             // Tới menu cấp 2
                             $subs['title'] = $_op_title;
