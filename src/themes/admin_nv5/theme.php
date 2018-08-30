@@ -259,6 +259,9 @@ function nv_admin_theme($contents, $head_site = 1)
             }
         }
 
+        // Thiết lập giao diện
+        $tpl->assign('CONFIG_THEME', isset($admin_info['config_theme'][$admin_info['admin_theme']]) ? $admin_info['config_theme'][$admin_info['admin_theme']] : []);
+
         $tpl->assign('MOD_MENU', $array_mod_menu);
         $tpl->assign('MOD_CURRENT', $array_mod_current);
 
@@ -304,4 +307,18 @@ function nv_admin_theme($contents, $head_site = 1)
     }
 
     return $sitecontent;
+}
+
+// Lưu thiết lập giao diện
+if ($nv_Request->isset_request('nv_change_theme_config', 'post')) {
+    $collapsed_leftsidebar = (int)$nv_Request->get_bool('collapsed_leftsidebar', 'post', false);
+    $config_theme = $admin_info['config_theme'];
+    $config_theme[$admin_info['admin_theme']] = [
+        'collapsed_leftsidebar' => $collapsed_leftsidebar
+    ];
+    $sql = "UPDATE " . NV_AUTHORS_GLOBALTABLE . " SET config_theme=" . $db->quote(serialize($config_theme)) . " WHERE admin_id=" . $admin_info['admin_id'];
+    if ($db->exec($sql)) {
+        nv_htmlOutput('OK');
+    }
+    nv_htmlOutput('ERROR');
 }

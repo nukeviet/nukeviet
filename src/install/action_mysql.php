@@ -26,6 +26,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   position varchar(255) NOT NULL,
   main_module varchar(50) NOT NULL DEFAULT 'siteinfo',
   admin_theme varchar(100) NOT NULL DEFAULT '',
+  config_theme text NOT NULL COMMENT 'Các thiết lập cho giao diện',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',

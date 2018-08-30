@@ -103,6 +103,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $admin_info['admin_theme'] = (!empty($admin_info['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme.php')) ? $admin_info['admin_theme'] : $global_config['admin_theme'];
         require NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php';
 
+        // Load ngôn ngữ giao diện
+        $nv_Lang->loadTheme($admin_info['admin_theme']);
+
         // Ket noi giao dien cua module
         $global_config['module_theme'] = '';
         if (is_dir(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/modules/' . $module_file)) {

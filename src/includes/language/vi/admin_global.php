@@ -82,4 +82,4 @@ $lang_global['interface_current_menu'] = 'Đang thao tác';
 $lang_global['interface_other_menu'] = 'Các module khác';
 $lang_global['login_remember_admin'] = 'Tùy chọn này sẽ cho phép tài khoản quản trị có thể đăng nhập nhiều nơi';
 
-$lang_module['notification'] = 'Thông báo';
+$lang_global['notification'] = 'Thông báo';
