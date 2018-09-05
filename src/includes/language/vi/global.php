@@ -344,6 +344,7 @@ $lang_global['required'] = 'Chú ý: Bạn cần khai báo tất cả các ô c�
 
 $lang_global['on'] = 'Bật';
 $lang_global['off'] = 'Tắt';
+$lang_global['close'] = 'Đóng';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';

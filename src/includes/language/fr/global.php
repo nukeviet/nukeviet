@@ -334,6 +334,7 @@ $lang_global['feedback'] = 'Réaction';
 $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés avec l\'étoile (*)';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
+$lang_global['close'] = 'Fermé';
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';

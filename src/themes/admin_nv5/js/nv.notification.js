@@ -13,26 +13,24 @@ var nvNotificationScrollbar = false;
 /*
  * Query vĩnh viễn để tính số thông báo mới
  */
-function nv_get_notification(timestamp) {
+function nv_get_notification() {
     if (nvNotificationTimer) {
         clearTimeout(nvNotificationTimer);
     }
-    var queryString = {
-        'notification_get': 1,
-        'timestamp': timestamp
-    };
     $.ajax({
         type: 'GET',
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
-        data: queryString,
+        data: {
+            'notification_get': 1
+        },
         success: function(data) {
             var indicator = $('#main-notifications>.icon-notifications .indicator');
-            if (data.data_from_file > 0) {
+            if (data.new > 0) {
                 indicator.removeClass('d-none');
             } else {
                 indicator.addClass('d-none');
             }
-            $('#main-notifications>.main-notifications>li>.title .badge').html(data.data_from_file);
+            $('#main-notifications>.main-notifications>li>.title .badge').html(data.total);
             nvNotificationTimer = setTimeout("nv_get_notification()", 30000);
         },
         error: function(jqXHR, exception) {
@@ -72,6 +70,7 @@ $(document).ready(function() {
             nvNotificationScrollbar.destroy();
             nvNotificationScrollbar = false;
         }
+        notification_reset();
         $('#main-notifications .nv-notification-scroller .content').html('');
         $('#main-notifications .loader').show();
         nvNotificationPage = 1;
@@ -83,5 +82,29 @@ $(document).ready(function() {
                 wheelPropagation: false
             });
         });
+    });
+
+    /*
+     * Khi nhấp vô thông báo trên header
+     * Đánh dấu thông báo đó là đã đọc
+     */
+    $('#main-notifications .nv-notification-scroller .content').delegate('ul>li', 'click', function(e) {
+        if ($(this).hasClass('notification-unread')) {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+                data: {
+                    'setviewed': 1,
+                    'id': $(this).data('id')
+                },
+                cache: false,
+                success: function(data) {
+                    // Không làm gì cả
+                },
+                error: function(jqXHR, exception) {
+                    // Không làm gì cả
+                }
+            });
+        }
     });
 });

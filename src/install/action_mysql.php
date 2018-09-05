@@ -347,5 +347,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   content text NOT NULL,
   add_time int(11) unsigned NOT NULL,
   view tinyint(1) unsigned NOT NULL DEFAULT '0',
+  is_new tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Mới gửi đến',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB";
