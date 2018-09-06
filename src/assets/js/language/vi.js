@@ -34,6 +34,7 @@ var nv_loadingTitle = "Click để thôi";
 var nv_focusTitle = "Click để xem tiếp";
 var nv_fullExpandTitle = "Mở rộng kích thước thực tế (f)";
 var nv_restoreTitle = "Click để đóng hình ảnh, Click và kéo để di chuyển. Sử dụng phím mũi tên Tiếp theo và Quay lại.";
+var nv_please_selrow = "Vui lòng chọn ít nhất một dòng";
 
 var nv_error_login = "Lỗi: Bạn chưa khai báo tài khoản hoặc khai báo không đúng. Tài khoản phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]";
 var nv_error_password = "Lỗi: Bạn chưa khai báo mật khẩu hoặc khai báo không đúng. Mật khẩu phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]";

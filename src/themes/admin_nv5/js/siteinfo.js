@@ -97,8 +97,7 @@ $(document).ready(function(){
                 data : 'listall=' + listall,
                 success : function(data) {
                     var s = data.split('_');
-                    if (s[0] == 'OK')
-                        location.reload();
+                    if (s[0] == 'OK'){location.reload();}
                     alert(s[1]);
                 }
             });
@@ -131,16 +130,12 @@ $(document).ready(function(){
                 url : script_name,
                 data : nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty=" + CFG.checksess,
                 success : function(data) {
-                    if (data == 'OK')
-                        window.location = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";
-                    else
-                        alert(data);
+                    if (data == 'OK'){window.location = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";} else {alert(data);}
                     $("#logempty").removeAttr("disabled");
                 }
             });
         }
     });
-
 
     // Xóa thông báo
     $('[data-toggle="del-notification"]').on('click', function(e) {
@@ -166,7 +161,7 @@ $(document).ready(function(){
         }
     });
 
-    // Đánh dấu đã đọc
+    // Đánh dấu đã đọc thông báo
     $('[data-toggle="view-notification"]').on('click', function(e) {
         e.preventDefault();
         $.ajax({
@@ -185,4 +180,45 @@ $(document).ready(function(){
             }
         });
     });
+
+    // Xóa danh sách thông báo
+    $('[data-toggle="del-notifications"]').on('click', function(e) {
+        e.preventDefault();
+        nv_notification_actions('delete');
+    });
+
+    // Đánh dấu đã đọc danh sách thông báo
+    $('[data-toggle="view-notifications"]').on('click', function(e) {
+        e.preventDefault();
+        nv_notification_actions('setviewed');
+    });
 });
+
+function nv_notification_actions(action) {
+    var ids = [];
+    $('#list-notifications [name="idcheck[]"]:checked').each(function() {
+        ids.push($(this).val());
+    });
+    if (ids.length <= 0) {
+        alert(nv_please_selrow);
+        return;
+    }
+    if (action == 'delete' && !confirm(nv_is_del_confirm[0])) {
+        return;
+    }
+    var postData = {};
+    postData[action] = 1;
+    postData['ids'] = ids.join(',');
+    $.ajax({
+        type: 'POST',
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+        data: postData,
+        cache: false,
+        success: function(data) {
+            location.reload();
+        },
+        error: function(jqXHR, exception) {
+            location.reload();
+        }
+    });
+}

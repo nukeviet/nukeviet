@@ -158,6 +158,6 @@ $lang_module['update_package_detected'] = 'Detects updated package, the website 
 $lang_module['update_package_delete'] = 'Delete the update package';
 $lang_module['update_package_do'] = 'Update';
 $lang_module['notification_empty'] = '<p align="center">No Notification!</p>';
-$lang_module['notification_module_auto_deactive'] = 'Module <strong />%s  has stopped operation due to error';
-$lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong />%s  has stopped operation due to error';
+$lang_module['notification_module_auto_deactive'] = 'has stopped operation module <strong>%s</strong> because error';
+$lang_module['notification_cronjobs_auto_deactive'] = 'has stopped operation cronjob <strong>%s</strong> because error';
 $lang_module['notification_hide'] = 'Hide this notification';

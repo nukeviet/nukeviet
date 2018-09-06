@@ -102,27 +102,25 @@ $num_rows = $result->rowCount();
 while ($data = $result->fetch()) {
     if (isset($admin_mods[$data['module']]) or isset($site_mods[$data['module']])) {
         $mod = $data['module'];
-        $data['content'] = !empty($data['content']) ? unserialize($data['content']) : '';
+        $data['content'] = !empty($data['content']) ? unserialize($data['content']) : [];
 
-        // Hien thi thong bao tu cac module he thong
         if ($data['module'] == 'modules') {
+            // Thông báo từ phần quản lý module
             if ($data['type'] == 'auto_deactive_module') {
-                $data['title'] = sprintf($nv_Lang->getModule('notification_module_auto_deactive'), $data['content']['custom_title']);
+                $data['title'] = $nv_Lang->getModule('notification_module_auto_deactive', $data['content']['custom_title']);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'];
+                $data['send_from'] = $nv_Lang->getGlobal('system');
             }
-        }
-
-        if ($data['module'] == 'settings') {
+        } elseif ($data['module'] == 'settings') {
+            // Thông báo từ phần cronjobs
             if ($data['type'] == 'auto_deactive_cronjobs') {
                 $cron_title = $db->query('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $data['content']['cron_id'])->fetchColumn();
-                $data['title'] = sprintf($nv_Lang->getModule('notification_cronjobs_auto_deactive'), $cron_title);
+                $data['title'] = $nv_Lang->getModule('notification_cronjobs_auto_deactive', $cron_title);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=cronjobs';
+                $data['send_from'] = $nv_Lang->getGlobal('system');
             }
-        }
-
-        // Hien thi tu cac module
-        if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php')) {
-            // Hien thi thong bao tu cac module site
+        } elseif (isset($site_mods[$data['module']]) and file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php')) {
+            // Thông báo từ các module ngoài site
             if ($data['send_from'] > 0) {
                 $user_info = $db->query('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $data['send_from'])->fetch();
                 if ($user_info) {
@@ -132,12 +130,12 @@ while ($data = $result->fetch()) {
                 }
 
                 if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
-                    $data['photo'] = NV_BASE_SITEURL . $admin_info['photo'];
+                    $data['photo'] = NV_BASE_SITEURL . $user_info['photo'];
                 } else {
-                    $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png';
+                    $data['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/Users/no-avatar.png';
                 }
             } else {
-                $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/Users/no_avatar.png';
+                $data['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/Users/no-avatar.png';
                 $data['send_from'] = $nv_Lang->getGlobal('level5');
             }
 
@@ -156,6 +154,7 @@ while ($data = $result->fetch()) {
         $data['add_time'] = nv_date('H:i d/m/Y', $data['add_time']);
 
         if (!empty($data['title'])) {
+            $data['title2'] = nv_ucfirst($data['title']);
             $array_data[$data['id']] = $data;
         }
     }

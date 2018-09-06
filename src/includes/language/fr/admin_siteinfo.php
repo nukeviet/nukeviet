@@ -158,6 +158,6 @@ $lang_module['update_package_detected'] = 'Mise à jours disponibles, le site se
 $lang_module['update_package_delete'] = 'Supprimer la mise à jour';
 $lang_module['update_package_do'] = 'Mettre à jour';
 $lang_module['notification_empty'] = '<p align="center">Aucune annonce!</p>';
-$lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';
-$lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';
+$lang_module['notification_module_auto_deactive'] = 's\'arrête d\'exécuter module <strong>%s</strong> à cause d\'erreur';
+$lang_module['notification_cronjobs_auto_deactive'] = 's\'arrête d\'exécuter cronjob <strong>%s</strong> à cause d\'erreur';
 $lang_module['notification_hide'] = 'Masquer cette notification';

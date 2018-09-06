@@ -159,8 +159,8 @@ $lang_module['update_package_delete'] = 'Xóa gói cập nhật';
 $lang_module['update_package_do'] = 'Thực hiện cập nhật';
 
 $lang_module['notification_empty'] = 'Chưa có thông báo!';
-$lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> đã ngưng hoạt động do lỗi';
-$lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> đã ngưng hoạt động do lỗi';
+$lang_module['notification_module_auto_deactive'] = 'đã ngưng hoạt động module <strong>%s</strong> do lỗi';
+$lang_module['notification_cronjobs_auto_deactive'] = 'đã ngưng hoạt động cronjobs <strong>%s</strong> do lỗi';
 $lang_module['notification_hide'] = 'Ẩn thông báo này';
 $lang_module['notification_s0'] = 'Tất cả trạng thái';
 $lang_module['notification_s1'] = 'Chưa xem';

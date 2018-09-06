@@ -105,7 +105,7 @@ $lang_module['supporter_contact_add'] = 'Thêm thông tin';
 $lang_module['add'] = 'Thêm mới';
 $lang_module['active'] = 'Hoạt động';
 $lang_module['full_name'] = 'Họ tên';
-$lang_module['notification_contact_new'] = '<span class="user-name">%s</span> gửi thư liên hệ với tiêu đề <strong>%s</strong>';
+$lang_module['notification_contact_new'] = 'gửi thư liên hệ với tiêu đề <strong>%s</strong>';
 $lang_module['is_default'] = 'Mặc định';
 $lang_module['otherContacts'] = 'Liên hệ khác';
 $lang_module['otherVar'] = 'Tên gọi';

@@ -27,7 +27,7 @@
                 </form>
             </div>
         </div>
-        <form>
+        <form id="list-notifications">
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
@@ -52,8 +52,8 @@
                             </td>
                             <td class="cell-detail has-round-image">
                                 <img src="{$row.photo}" alt="{$row.send_from}">
+                                <span>{$row.title2}</span>
                                 <span class="cell-detail-description">{$row.send_from}</span>
-                                <span>{$row.title}</span>
                             </td>
                             <td class="cell-detail">
                                 <span>{$row.add_time_d}</span>
@@ -75,7 +75,7 @@
             <div class="btn-group">
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" data-boundary="window">{$LANG->get('do_with_selected')} <span class="icon-dropdown fas fa-chevron-down"></span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item" href="#" data-toggle="del-notifications"><i class="icon fas fa-circle"></i>{$LANG->get('notification_mark_read')}</a>
+                    <a class="dropdown-item" href="#" data-toggle="view-notifications"><i class="icon fas fa-circle"></i>{$LANG->get('notification_mark_read')}</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-toggle="del-notifications"><i class="icon far fa-trash-alt"></i>{$LANG->get('delete')}</a>
                 </div>

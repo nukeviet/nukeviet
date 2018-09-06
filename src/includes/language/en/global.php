@@ -333,6 +333,7 @@ $lang_global['feedback'] = 'Feedback';
 $lang_global['required'] = 'Note: You need to declare all the boxes marked with an asterisk (*).';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'Off';
+$lang_global['system'] = 'System';
 $lang_global['address'] = 'Address';
 $lang_global['close'] = 'Close';
 $lang_global['country_AD'] = 'Andorra';
