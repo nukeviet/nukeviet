@@ -7,20 +7,22 @@
  */
 
 $(document).ready(function(){
-    // System info
-    $("#checkchmod").click(function(event){
-        event.preventDefault();
-        var url = $(this).attr("href");
-        $("#checkchmod").hide();
-        $("#wait").html('<img class="refresh" src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt=""/>');
+    // Kiểm tra CHMOD các thư mục
+    $("#checkchmod").on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($this.hasClass('fa-spin')) {
+            return;
+        }
+        $this.attr('class', 'fas fa-spinner fa-spin');
         $.ajax({
             type : "POST",
-            url : url,
+            url : $this.data('url'),
             data : "",
             success : function(data) {
-                $("#wait").html("");
+                $this.attr('class', 'fas fa-wrench');
                 alert(data);
-                $("#checkchmod").show();
+                location.reload();
             }
         });
     });

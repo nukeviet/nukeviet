@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_SITEINFO')) {
+if (!defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
@@ -18,11 +18,11 @@ if (defined('NV_IS_GODADMIN')) {
     $error = array();
     $ftp_check_login = 0;
 
-    if (! empty($global_config['ftp_server']) and ! empty($global_config['ftp_user_name']) and ! empty($global_config['ftp_user_pass'])) {
+    if (!empty($global_config['ftp_server']) and !empty($global_config['ftp_user_name']) and !empty($global_config['ftp_user_pass'])) {
         $conn_id = ftp_connect($global_config['ftp_server'], $global_config['ftp_port'], 10);
         $login_result = ftp_login($conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass']);
 
-        if ((! $conn_id) or (! $login_result)) {
+        if ((!$conn_id) or (!$login_result)) {
             $error[] = $nv_Lang->getModule('checkchmod_error_account');
         } elseif (ftp_chdir($conn_id, $global_config['ftp_path'])) {
             $ftp_check_login = 1;
@@ -36,22 +36,22 @@ if (defined('NV_IS_GODADMIN')) {
     }
     foreach ($array_dir as $dir) {
         if ($ftp_check_login == 1) {
-            if (! is_dir(NV_ROOTDIR . '/' . $dir)) {
+            if (!is_dir(NV_ROOTDIR . '/' . $dir)) {
                 ftp_mkdir($conn_id, $dir);
             }
 
-            if (! is_writable(NV_ROOTDIR . '/' . $dir)) {
+            if (!is_writable(NV_ROOTDIR . '/' . $dir)) {
                 nv_chmod_dir($conn_id, $dir, true);
             }
         } else {
             //try chmod unix command
-            if (! chmod(NV_ROOTDIR . '/' . $dir, 0777)) {
+            if (!chmod(NV_ROOTDIR . '/' . $dir, 0777)) {
                 $error[] = $nv_Lang->getModule('checkchmod_error_unable_chmod') . $dir;
             }
         }
     }
 
-    if (! empty($error)) {
+    if (!empty($error)) {
         echo implode('', $error);
     } else {
         echo $nv_Lang->getModule('checkchmod_success');

@@ -205,6 +205,7 @@
                     {/if}
                 </div>
                 <div class="page-body">
+                    {$THEME_ERROR_INFO}
                     {$MODULE_CONTENT}
                 </div>
             </div>

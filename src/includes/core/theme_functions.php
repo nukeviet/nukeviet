@@ -22,61 +22,30 @@ function nv_error_info()
     global $global_config, $error_info, $nv_Lang;
 
     if (!defined('NV_IS_ADMIN')) {
-        return;
+        return '';
     }
     if (empty($error_info)) {
-        return;
+        return '';
     }
 
-    $errortype = array(
-        E_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_PARSE => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_NOTICE => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_CORE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_CORE_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_COMPILE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_COMPILE_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_USER_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_USER_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_USER_NOTICE => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_STRICT => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_RECOVERABLE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_DEPRECATED => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_USER_DEPRECATED => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' )
-    );
-
-    if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
-        $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/images/icons/';
+    global $template;
+    if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme_error_info.php')) {
+        $template = $global_config['admin_theme'];
     } elseif (defined('NV_ADMIN')) {
-        $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
-        $image_path = NV_BASE_SITEURL . 'themes/admin_default/images/';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/error_info.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
-        $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
+        $template = 'admin_default';
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/theme_error_info.php')) {
+        $template = $global_config['site_theme'];
     } else {
-        $tpl_path = NV_ROOTDIR . '/themes/default/system';
-        $image_path = NV_BASE_SITEURL . 'themes/default/images/icons/';
+        $template = 'default';
     }
 
-    $xtpl = new XTemplate('error_info.tpl', $tpl_path);
-    $xtpl->assign('TPL_E_CAPTION', $nv_Lang->getGlobal('error_info_caption'));
+    // File xử lý giao diện
+    require NV_ROOTDIR . '/themes/' . $template . '/theme_error_info.php';
 
-    $a = 0;
-    foreach ($error_info as $key => $value) {
-        $xtpl->assign('TPL_E_CLASS', ($a % 2) ? ' class="second"' : '');
-        $xtpl->assign('TPL_E_ALT', $errortype[$value['errno']][0]);
-        $xtpl->assign('TPL_E_SRC', $image_path . $errortype[$value['errno']][1]);
-        $xtpl->assign('TPL_E_ERRNO', $errortype[$value['errno']][0]);
-        $xtpl->assign('TPL_E_MESS', $value['info']);
-        $xtpl->set_autoreset();
-        $xtpl->parse('error_info.error_item');
-        ++$a;
-    }
+    $contents = nv_error_info_theme($error_info);
+    unset($template);
 
-    $xtpl->parse('error_info');
-    return $xtpl->text('error_info');
+    return $contents;
 }
 
 /**
@@ -195,7 +164,7 @@ function nv_xmlOutput($content, $lastModified)
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
         $tidy->cleanRepair();
-        $content = ( string )$tidy;
+        $content = (string) $tidy;
     } else {
         $content = trim($content);
     }
@@ -259,7 +228,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
     global $global_config, $client_info;
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
-    //Chi co tac dung voi IE6 va Chrome
+    // Chi co tac dung voi IE6 va Chrome
     $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
     $xtpl->assign('CHARSET', $global_config['site_charset']);
     $xtpl->assign('SITELANG', $global_config['site_lang']);
@@ -470,7 +439,7 @@ function nv_xmlSitemapIndex_generate()
         foreach ($global_config['allow_sitelangs'] as $lang) {
             $sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while (list($modname) = $result->fetch(3)) {
+            while (list ($modname) = $result->fetch(3)) {
                 $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
                 $row = $xml->addChild('sitemap');
                 $row->addChild('loc', $link);
@@ -532,7 +501,7 @@ function nv_css_setproperties($tag, $property_array)
                 $css .= $property . ':' . $value . ';';
             }
         } elseif (!empty($value)) {
-            $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
+            $value = substr(trim($value), - 1) == ';' ? $value : $value . ';';
             $css .= $value;
         }
     }
