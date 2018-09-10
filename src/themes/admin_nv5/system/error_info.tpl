@@ -8,7 +8,7 @@
                 <tbody>
                     {foreach from=$DATA item=row}
                     <tr>
-                        <td>{$ERROR_TYPE[$row['errno']][1]}</td>
+                        <td style="width: 20px;">{$ERROR_TYPE[$row['errno']][1]}</td>
                         <td><strong>{$ERROR_TYPE[$row['errno']][0]}:</strong> {$row.info} </td>
                     </tr>
                     {/foreach}

@@ -1,21 +1,25 @@
-<!-- BEGIN: main -->
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION}</caption>
-		<thead>
-			<tr>
-				<th> {THEAD0} </th>
-				<th> {THEAD1} </th>
-			</tr>
-		</thead>
-		<tbody>
-		<!-- BEGIN: loop -->
-			<tr>
-				<td style="white-space: nowrap"> {KEY} </td>
-				<td> {VALUE} </td>
-			</tr>
-		<!-- END: loop -->
-		</tbody>
-	</table>
+{if not empty($DATA['Environment'])}
+<div class="card card-table">
+    <div class="card-header">{$LANG->get('environment_php')}</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 50%">{$LANG->get('variable')}</th>
+                        <th style="width: 50%">{$LANG->get('value')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$DATA['Environment'] key=key item=value}
+                    <tr>
+                        <td>{$key}</td>
+                        <td>{$value}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<!-- END: main -->
+{/if}

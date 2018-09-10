@@ -1,33 +1,35 @@
-<!-- BEGIN: main -->
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em>{MODULE}</caption>
-		<colgroup>
-			<col style="width: 40%"/>
-			<col style="width: 30%"/>
-			<col style="width: 30%"/>
-		</colgroup>
-		<thead>
-			<tr>
-				<th> {THEAD0} </th>
-				<th> {THEAD1} </th>
-				<th> {THEAD2} </th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td> {KEY} </td>
-				<!-- BEGIN: if -->
-				<td colspan="2"> {VALUE} </td>
-				<!-- END: if -->
-				<!-- BEGIN: else -->
-				<th> {VALUE0} </th>
-				<th> {VALUE1} </th>
-				<!-- END: else -->
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+{if !empty($DATA)}
+{foreach from=$DATA key=module item=mod_vals}
+<div class="card card-table">
+    <div class="card-header">{$module}</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 33.3333333%">{$LANG->get('directive')}</th>
+                        <th style="width: 33.3333333%">{$LANG->get('local_value')}</th>
+                        <th style="width: 33.3333333%">{$LANG->get('master_value')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$mod_vals key=key item=row}
+                    <tr>
+                        <td>{$key}</td>
+                        {if not is_array($row)}
+                        <td colspan="2">{$row}</td>
+                        {elseif isset($row[1])}
+                        <td>{$row[0]}</td>
+                        <td>{$row[1]}</td>
+                        {else}
+                        <td colspan="2"></td>
+                        {/if}
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<!-- END: main -->
+{/foreach}
+{/if}

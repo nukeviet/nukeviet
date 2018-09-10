@@ -9699,6 +9699,9 @@ h1 .small, h1 small, h2 .small, h2 small, h3 .small, h3 small, h4 .small, h4 sma
   border-left: 3px solid #343a40;
   padding-left: 17px;
 }
+.table tr th.sorting a {
+  color: #404040;
+}
 
 /* Alert */
 .alert {

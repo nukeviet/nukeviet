@@ -8,47 +8,40 @@
  * @Createdate 11-10-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_SITEINFO')) {
+if (!defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
 // Eg: $id = nv_insert_logs('lang','module name','name key','note',1, 'link acess');
 
-// Call jquery datepicker
-$my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
-
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-
 $page_title = $nv_Lang->getModule('logs_title');
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
-$data = array();
-$array_userid = array();
-$disabled = ' disabled="disabled"';
+$data = [];
+$array_userid = [];
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 // Search data
 $data_search = array(
-    'q' => $nv_Lang->getModule('filter_enterkey'),
+    'q' => '',
     'from' => '',
     'to' => '',
     'lang' => '',
     'module' => '',
-    'user' => ''
+    'user' => '',
+    'is_search' => false
 );
 
-$array_where = array();
+$array_where = [];
 
 $check_like = false;
-if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('checksess', 'get')) {
+if ($nv_Request->isset_request('checksess', 'get')) {
     $checksess = $nv_Request->get_title('checksess', 'get', '');
 
     if ($checksess != md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid'])) {
         nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($nv_Lang->getModule('filter_check_log'), $op), $admin_info['username'] . ' - ' . $admin_info['userid'], 0);
-
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 
@@ -58,19 +51,19 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
         'to' => $nv_Request->get_title('to', 'get', ''),
         'lang' => $nv_Request->get_title('lang', 'get', ''),
         'module' => $nv_Request->get_title('module', 'get', ''),
-        'user' => $nv_Request->get_title('user', 'get', '')
+        'user' => $nv_Request->get_title('user', 'get', ''),
+        'is_search' => true
     );
 
-    $base_url .= '&amp;filter=1&amp;checksess=' . $checksess;
-    $disabled = '';
+    $base_url .= '&amp;checksess=' . $checksess;
 
-    if (! empty($data_search['q']) and $data_search['q'] != $nv_Lang->getModule('filter_enterkey')) {
+    if (!empty($data_search['q']) and $data_search['q'] != $nv_Lang->getModule('filter_enterkey')) {
         $base_url .= '&amp;q=' . $data_search['q'];
         $array_where[] = "( name_key LIKE :keyword1 OR note_action LIKE :keyword2 )";
         $check_like = true;
     }
 
-    if (! empty($data_search['from'])) {
+    if (!empty($data_search['from'])) {
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $data_search['from'], $match)) {
             $from = mktime(0, 0, 0, $match[2], $match[1], $match[3]);
             $array_where[] = 'log_time >= ' . $from;
@@ -78,7 +71,7 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
         }
     }
 
-    if (! empty($data_search['to'])) {
+    if (!empty($data_search['to'])) {
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $data_search['to'], $match)) {
             $to = mktime(23, 59, 59, $match[2], $match[1], $match[3]);
             $array_where[] = 'log_time <= ' . $to;
@@ -86,19 +79,19 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
         }
     }
 
-    if (! empty($data_search['lang'])) {
+    if (!empty($data_search['lang'])) {
         if (in_array($data_search['lang'], array_keys($language_array))) {
             $array_where[] = 'lang=' . $db->quote($data_search['lang']);
             $base_url .= '&amp;lang=' . $data_search['lang'];
         }
     }
 
-    if (! empty($data_search['module'])) {
+    if (!empty($data_search['module'])) {
         $array_where[] = 'module_name=' . $db->quote($data_search['module']);
         $base_url .= '&amp;module=' . $data_search['module'];
     }
 
-    if (! empty($data_search['user'])) {
+    if (!empty($data_search['user'])) {
         $user_tmp = ($data_search['user'] == 'system') ? 0 : ( int )$data_search['user'];
 
         $array_where[] = 'userid=' . $user_tmp;
@@ -107,8 +100,8 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
 }
 
 // Order data
-$order = array();
-$check_order = array( 'ASC', 'DESC', 'NO' );
+$order = [];
+$check_order = array('ASC', 'DESC', 'NO');
 $opposite_order = array(
     'NO' => 'ASC',
     'DESC' => 'ASC',
@@ -132,12 +125,12 @@ $order['module']['order'] = $nv_Request->get_title('order_module', 'get', 'NO');
 $order['time']['order'] = $nv_Request->get_title('order_time', 'get', 'NO');
 
 foreach ($order as $key => $check) {
-    if (! in_array($check['order'], $check_order)) {
+    if (!in_array($check['order'], $check_order)) {
         $order[$key]['order'] = 'NO';
     }
 
     $order[$key]['data'] = array(
-        'class' => 'order' . strtolower($order[$key]['order']),
+        'key' => strtolower($order[$key]['order']),
         'url' => $base_url . '&amp;order_' . $key . '=' . $opposite_order[$order[$key]['order']],
         'title' => sprintf($nv_Lang->getModule('filter_order_by'), $lang_order_2[$key]) . ' ' . $lang_order_1[$order[$key]['order']]
     );
@@ -146,7 +139,7 @@ foreach ($order as $key => $check) {
 $db->sqlreset()
     ->select('COUNT(*)')
     ->from($db_config['prefix'] . '_logs');
-if (! empty($array_where)) {
+if (!empty($array_where)) {
     $db->where(implode(' AND ', $array_where));
 }
 
@@ -183,19 +176,23 @@ $sth->execute();
 
 while ($data_i = $sth->fetch()) {
     if ($data_i['userid'] != 0) {
-        if (! in_array($data_i['userid'], $array_userid)) {
+        if (!in_array($data_i['userid'], $array_userid)) {
             $array_userid[] = $data_i['userid'];
         }
     }
 
-    $data_i['time'] = nv_date('d/m/Y h:i:s A', $data_i['log_time']);
+    $data_i['time'] = nv_date('d/m/Y H:i:s', $data_i['log_time']);
     $data[] = $data_i;
-    unset($data_i);
 }
 
-$data_users = array();
+// Chuyển về trang chính khi điều kiện lọc không có kết quả
+if ($page > 1 and empty($data)) {
+    nv_redirect_location($base_url);
+}
+
+$data_users = [];
 $data_users[0] = 'system';
-if (! empty($array_userid)) {
+if (!empty($array_userid)) {
     $result_users = $db->query('SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')');
     while ($data_i = $result_users->fetch()) {
         $data_users[$data_i['userid']] = $data_i['username'];
@@ -204,121 +201,33 @@ if (! empty($array_userid)) {
 }
 
 $list_lang = nv_siteinfo_getlang();
-$array_lang = array();
-$array_lang[] = array(
-    'key' => '',
-    'title' => $nv_Lang->getModule('filter_lang'),
-    'selected' => ($data_search['lang'] == '') ? ' selected="selected"' : ''
-);
-
-foreach ($list_lang as $lang) {
-    $array_lang[] = array(
-        'key' => $lang,
-        'title' => $language_array[$lang]['name'],
-        'selected' => ($data_search['lang'] == $lang) ? ' selected="selected"' : ''
-    );
-}
-
 $list_module = nv_siteinfo_getmodules();
-$array_module = array();
-$array_module[] = array(
-    'key' => '',
-    'title' => $nv_Lang->getModule('filter_module'),
-    'selected' => ($data_search['module'] == '') ? ' selected="selected"' : ''
-);
-
-foreach ($list_module as $module) {
-    $array_module[] = array(
-        'key' => $module,
-        'title' => isset($site_mods[$module]) ? $site_mods[$module]['custom_title'] : (isset($admin_mods[$module]) ? $admin_mods[$module]['custom_title'] : $module),
-        'selected' => ($data_search['module'] == $module) ? ' selected="selected"' : ''
-    );
-}
-
 $list_user = nv_siteinfo_getuser();
-$array_user = array();
-$array_user[] = array(
-    'key' => '',
-    'title' => $nv_Lang->getModule('filter_user'),
-    'selected' => ($data_search['user'] == '') ? ' selected="selected"' : ''
-);
-$array_user[] = array(
-    'key' => 'system',
-    'title' => $nv_Lang->getModule('filter_system'),
-    'selected' => ($data_search['user'] == 'system') ? ' selected="selected"' : ''
-);
-
-foreach ($list_user as $user) {
-    $array_user[] = array(
-        'key' => $user['userid'],
-        'title' => $user['username'],
-        'selected' => (( int )$data_search['user'] == $user['userid']) ? ' selected="selected"' : ''
-    );
-}
-
 $logs_del = in_array('logs_del', $allow_func) ? true : false;
 
-$xtpl = new XTemplate('logs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
-$xtpl->assign('checksess', md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid']));
-$xtpl->assign('URL_DEL', $base_url . '&' . NV_OP_VARIABLE . '=logs_del');
-$xtpl->assign('URL_CANCEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('DISABLE', $disabled);
-$xtpl->assign('DATA_SEARCH', $data_search);
-$xtpl->assign('DATA_ORDER', $order);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('DATA_SEARCH', $data_search);
+$tpl->assign('ARRAY_LANG', $list_lang);
+$tpl->assign('LANGUAGE_ARRAY', $language_array);
+$tpl->assign('ARRAY_MODULE', $list_module);
+$tpl->assign('SITE_MODS', $site_mods);
+$tpl->assign('ADMIN_MODS', $admin_mods);
+$tpl->assign('ARRAY_USER', $list_user);
+$tpl->assign('URL_CANCEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('CHECKSESS', md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid']));
+$tpl->assign('URL_DEL', $base_url . '&' . NV_OP_VARIABLE . '=logs_del');
+$tpl->assign('DATA_ORDER', $order);
+$tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $num_items, $per_page, $page));
+$tpl->assign('ALLOW_DELETE', $logs_del);
+$tpl->assign('DATA', $data);
+$tpl->assign('DATA_USER', $data_users);
 
-foreach ($array_lang as $lang) {
-    $xtpl->assign('lang', $lang);
-    $xtpl->parse('main.lang');
-}
-
-foreach ($array_module as $module) {
-    $xtpl->assign('module', $module);
-    $xtpl->parse('main.module');
-}
-
-foreach ($array_user as $user) {
-    $xtpl->assign('user', $user);
-    $xtpl->parse('main.user');
-}
-
-$a = 0;
-foreach ($data as $data_i) {
-    if (! empty($data_users[$data_i['userid']])) {
-        $data_i['username'] = $data_users[$data_i['userid']];
-    } else {
-        $data_i['username'] = 'unknown';
-    }
-
-    $data_i['custom_title'] = isset($site_mods[$data_i['module_name']]) ? $site_mods[$data_i['module_name']]['custom_title'] : (isset($admin_mods[$data_i['module_name']]) ? $admin_mods[$data_i['module_name']]['custom_title'] : $data_i['module_name']);
-
-    $xtpl->assign('DATA', $data_i);
-    if ($logs_del) {
-        $xtpl->assign('DEL_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=log&amp;' . NV_OP_VARIABLE . '=logs_del&amp;id=' . $data_i['id']);
-        $xtpl->parse('main.row.delete');
-    }
-    $xtpl->parse('main.row');
-    ++$a;
-}
-
-if ($logs_del) {
-    $xtpl->parse('main.foot_delete');
-    $xtpl->parse('main.head_delete');
-}
-$generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-if (! empty($generate_page)) {
-    $xtpl->assign('GENERATE_PAGE', $generate_page);
-    $xtpl->parse('main.generate_page');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('logs.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

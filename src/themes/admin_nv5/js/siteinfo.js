@@ -45,95 +45,100 @@ $(document).ready(function(){
         return !1;
     });
 
-    // Logs
-    if( $.fn.datepicker ){
-        $("#from,#to").datepicker({
-            showOn : "both",
-            dateFormat : "dd.mm.yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonText : '{LANG.select}',
-            showButtonPanel : true,
-            showOn : 'focus'
-        });
-    }
-    $('input[name=clear]').click(function() {
-        $('#filter-form .text').val('');
-        $('input[name=q]').val(LANG.filter_enterkey);
+    /*
+     * Nhật ký hệ thống
+     */
+    // Xóa form tìm kiếm
+    $('#clear-log-search-form').on('click', function() {
+        $('#log-search-form').find('[type="text"]').val('');
+        $('#log-search-form').find('select option').removeAttr('selected');
+        $(".select2").val('').trigger('change');
     });
-    $('input[name=action]').click(function() {
-        var f_q = $('input[name=q]').val();
-        var f_from = $('input[name=from]').val();
-        var f_to = $('input[name=to]').val();
-        var f_lang = $('select[name=lang]').val();
-        var f_module = $('select[name=module]').val();
-        var f_user = $('select[name=user]').val();
-        if ((f_q != LANG.filter_enterkey && f_q != '' ) || f_from != '' || f_to != '' || f_lang != '' || f_user != '' || f_module != '') {
-            $('#filter-form input, #filter-form select').attr('disabled', 'disabled');
-            window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + '=logs&filter=1&checksess=' + CFG.checksess + '&q=' + f_q + '&from=' + f_from + '&to=' + f_to + '&lang=' + f_lang + '&module=' + f_module + '&user=' + f_user;
-        } else {
-            alert(LANG.filter_err_submit);
-        }
-    });
-    $("#check_all").click(function() {
-        if ($("#check_all").prop("checked")) {
-            $('input.list').prop("checked", true);
-        } else {
-            $('input.list').prop("checked", false);
-        }
-    });
-    $('#delall').click(function() {
-        var listall = [];
-        $('input.list:checked').each(function() {
-            listall.push($(this).val());
-        });
-        if (listall.length < 1) {
-            alert(LANG.log_del_no_items);
-            return false;
-        }
-        if (confirm(LANG.log_del_confirm)) {
+
+    // Xóa nhật ký (1 dòng)
+    $('[data-toggle="del-log"]').click(function(e) {
+        e.preventDefault();
+        if (confirm($(this).data('message'))) {
             $.ajax({
-                type : 'POST',
-                url : CFG.url_del,
-                data : 'listall=' + listall,
-                success : function(data) {
-                    var s = data.split('_');
-                    if (s[0] == 'OK'){location.reload();}
-                    alert(s[1]);
-                }
-            });
-        }
-    });
-    $('a.delete').click(function(event) {
-        event.preventDefault();
-        if (confirm(LANG.log_del_confirm)) {
-            var href = $(this).attr('href');
-            $.ajax({
-                type : 'POST',
-                url : href,
-                data : '',
-                success : function(data) {
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logs_del&nocache=' + new Date().getTime(),
+                data: {
+                    'id': $(this).data('id')
+                },
+                cache: false,
+                success: function(data) {
                     var s = data.split('_');
                     if (s[0] == 'OK') {
                         location.reload();
                     } else {
                         alert(s[1]);
                     }
+                },
+                error: function(jqXHR, exception) {
+                    alert(nv_is_del_confirm[2]);
+                    location.reload();
                 }
             });
         }
     });
-    $("#logempty").click(function() {
-        if (confirm(LANG.log_del_confirm)) {
-            $("#logempty").attr("disabled", "disabled");
+
+    // Xóa nhật ký (nhiều dòng)
+    $('[data-toggle="del-logs"]').click(function(e) {
+        e.preventDefault();
+        var ids = [];
+        $('#list-logs [name="idcheck[]"]:checked').each(function() {
+            ids.push($(this).val());
+        });
+        if (ids.length <= 0) {
+            alert(nv_please_selrow);
+            return;
+        }
+        if (confirm($(this).data('message'))) {
             $.ajax({
-                type : 'POST',
-                url : script_name,
-                data : nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty=" + CFG.checksess,
-                success : function(data) {
-                    if (data == 'OK'){window.location = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";} else {alert(data);}
-                    $("#logempty").removeAttr("disabled");
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logs_del&nocache=' + new Date().getTime(),
+                data: {
+                    'listall': ids.join(',')
+                },
+                cache: false,
+                success: function(data) {
+                    var s = data.split('_');
+                    if (s[0] == 'OK') {
+                        location.reload();
+                    } else {
+                        alert(s[1]);
+                    }
+                },
+                error: function(jqXHR, exception) {
+                    alert(nv_is_del_confirm[2]);
+                    location.reload();
+                }
+            });
+        }
+    });
+
+    // Xóa toàn bộ nhật ký
+    $('[data-toggle="del-all-logs"]').click(function(e) {
+        e.preventDefault();
+        if (confirm($(this).data('message'))) {
+            $(this).prop("disabled", true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logs_del&nocache=' + new Date().getTime(),
+                data: {
+                    'logempty': $(this).data('checksess')
+                },
+                cache: false,
+                success: function(data) {
+                    if (data == 'OK') {
+                        location.reload();
+                    } else {
+                        alert(data);
+                    }
+                },
+                error: function(jqXHR, exception) {
+                    alert(nv_is_del_confirm[2]);
+                    location.reload();
                 }
             });
         }
@@ -145,7 +150,7 @@ $(document).ready(function(){
         if (confirm(nv_is_del_confirm[0])) {
             $.ajax({
                 type: 'POST',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
                 data: {
                     'delete': 1,
                     'id': $(this).data('id')
@@ -168,7 +173,7 @@ $(document).ready(function(){
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
             data: {
                 'setviewed': 1,
                 'id': $(this).data('id')
@@ -213,7 +218,7 @@ function nv_notification_actions(action) {
     postData['ids'] = ids.join(',');
     $.ajax({
         type: 'POST',
-        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
         data: postData,
         cache: false,
         success: function(data) {
