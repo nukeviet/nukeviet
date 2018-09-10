@@ -55,6 +55,9 @@ $lang_global['unick_type_4'] = 'Tên đăng nhập chỉ được sử dụng Un
 $lang_global['username_rule_limit'] = 'Tên đăng nhập không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
 $lang_global['username_rule_nolimit'] = 'Tên đăng nhập phải từ %1$d đến %2$d ký tự';
 
+$lang_global['rule_alphanumeric'] = 'Chỉ dùng chữ số, chữ cái, và ký tự gạch dưới (_)';
+$lang_global['rule_numeric'] = 'Chỉ dùng chữ số 0-9';
+
 $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai báo';
 $lang_global['passwordlong'] = 'Mật khẩu quá dài. Chỉ chấp nhận mật khẩu có số ký tự tối đa là %1$d';
 $lang_global['passwordadjective'] = 'Mật khẩu quá ngắn. Ít nhất phải có %1$d ký tự';
