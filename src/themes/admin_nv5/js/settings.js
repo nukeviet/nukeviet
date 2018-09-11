@@ -116,45 +116,46 @@ $(document).ready(function(){
         }
     });
 
-    // Site setting
-    $(".selectimg").click(function() {
-        var area = $(this).attr('data-name');
-        var path = "";
-        var currentpath = "images";
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
-
-    // FTP setting
+    // Tự nhận diện FTP
     $('#autodetectftp').click(function() {
+        var btn = $(this);
+        if (btn.find('i').hasClass('fa-spin')) {
+            return false;
+        }
+
         var ftp_server = $('input[name="ftp_server"]').val();
         var ftp_user_name = $('input[name="ftp_user_name"]').val();
         var ftp_user_pass = $('input[name="ftp_user_pass"]').val();
         var ftp_port = $('input[name="ftp_port"]').val();
-
         if (ftp_server == '' || ftp_user_name == '' || ftp_user_pass == '') {
-            alert(LANG.ftp_error_full);
+            alert(btn.data('errormsg'));
             return;
         }
-
-        $(this).attr('disabled', 'disabled');
-
-        var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
-        var url = CFG.detect_ftp;
+        btn.find('i').addClass('fa-spin');
 
         $.ajax({
-            type : "POST",
-            url : url,
-            data : data,
-            success : function(c) {
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=ftp&nocache=' + new Date().getTime(),
+            data: {
+                'ftp_server': ftp_server,
+                'ftp_port': ftp_port,
+                'ftp_user_name': ftp_user_name,
+                'ftp_user_pass': ftp_user_pass,
+                'tetectftp': 1
+            },
+            cache: false,
+            success: function(c) {
                 c = c.split('|');
                 if (c[0] == 'OK') {
-                    $('#ftp_path_iavim').val(c[1]);
+                    $('#ftp_path').val(c[1]);
                 } else {
                     alert(c[1]);
                 }
-                $('#autodetectftp').removeAttr('disabled');
+                btn.find('i').removeClass('fa-spin');
+            },
+            error: function(jqXHR, exception) {
+                alert('Request Error!!!');
+                btn.find('i').removeClass('fa-spin');
             }
         });
     });

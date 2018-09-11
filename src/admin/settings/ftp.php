@@ -8,21 +8,18 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 $error = '';
-
 $page_title = $nv_Lang->getModule('ftp_config');
 
-$xtpl = new XTemplate('ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('SYS_INFO', $sys_info);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 if ($sys_info['ftp_support']) {
     $array_config = array();
@@ -41,13 +38,13 @@ if ($sys_info['ftp_support']) {
         $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
         $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
 
-        if (! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass) {
+        if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
             die('ERROR|' . $nv_Lang->getModule('ftp_error_full'));
         }
 
         $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
-        if (! empty($ftp->error)) {
+        if (!empty($ftp->error)) {
             $ftp->close();
             die('ERROR|' . ( string )$ftp->error);
         } else {
@@ -70,7 +67,7 @@ if ($sys_info['ftp_support']) {
     if ($nv_Request->isset_request('ftp_server', 'post')) {
         $array_config['ftp_check_login'] = 0;
 
-        if (! empty($array_config['ftp_server']) and ! empty($array_config['ftp_user_name']) and ! empty($array_config['ftp_user_pass'])) {
+        if (!empty($array_config['ftp_server']) and !empty($array_config['ftp_user_name']) and !empty($array_config['ftp_user_pass'])) {
             $ftp_server = nv_unhtmlspecialchars($array_config['ftp_server']);
             $ftp_port = intval($array_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
@@ -79,7 +76,7 @@ if ($sys_info['ftp_support']) {
 
             $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
-            if (! empty($ftp->error)) {
+            if (!empty($ftp->error)) {
                 $array_config['ftp_check_login'] = 3;
                 $error = ( string )$ftp->error;
             } elseif ($ftp->chdir($ftp_path) === false) {
@@ -90,7 +87,7 @@ if ($sys_info['ftp_support']) {
                 $list_files = $ftp->listDetail($ftp_path, 'all');
 
                 $a = 0;
-                if (! empty($list_files)) {
+                if (!empty($list_files)) {
                     foreach ($list_files as $filename) {
                         if (in_array($filename['name'], $check_files)) {
                             ++$a;
@@ -125,20 +122,11 @@ if ($sys_info['ftp_support']) {
         $array_config['ftp_user_pass'] = $ftp_user_pass;
     }
 
-    $xtpl->assign('VALUE', $array_config);
-    $xtpl->assign('DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-
-    if (! empty($error)) {
-        $xtpl->assign('ERROR', $error);
-        $xtpl->parse('main.error');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
-} else {
-    $xtpl->parse('no_support');
-    $contents = $xtpl->text('no_support');
+    $tpl->assign('DATA', $array_config);
+    $tpl->assign('ERROR', $error);
 }
+
+$contents = $tpl->fetch('ftp.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
