@@ -215,7 +215,7 @@
                     <input type="hidden" name="flid" value="{$FLID}" />
                     <input type="hidden" name="selectedtab" value="{$SELECTEDTAB}"/>
                     <div class="form-group row">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="add_flip">{$LANG->get('banip_address')}</label>
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="add_flip">{$LANG->get('banip_address')} <i class="text-danger">(*)</i></label>
                         <div class="col-12 col-sm-8 col-lg-6">
                             <input type="text" class="form-control form-control-sm" id="add_flip" name="flip" value="{$FLDATA['flip']}" placeholder="xxx.xxx.xxx.xxx">
                         </div>
@@ -386,7 +386,7 @@
                     <input type="hidden" name="selectedtab" value="{$SELECTEDTAB}"/>
                     <input type="hidden" name="cid" value="{$DATA.cid}"/>
                     <div class="form-group row">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="banip_ip">{$LANG->get('banip_address')}</label>
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="banip_ip">{$LANG->get('banip_address')} <i class="text-danger">(*)</i></label>
                         <div class="col-12 col-sm-8 col-lg-6">
                             <input type="text" class="form-control form-control-sm" id="banip_ip" name="ip" value="{$DATA['ip']}" placeholder="xxx.xxx.xxx.xxx">
                         </div>
@@ -403,7 +403,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="banip_area">{$LANG->get('banip_area')}</label>
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="banip_area">{$LANG->get('banip_area')} <i class="text-danger">(*)</i></label>
                         <div class="col-12 col-sm-8 col-lg-6">
                             <select class="form-control form-control-sm" id="banip_area" name="area">
                                 <option value="0">{$AREA_ARRAY[0]}</option>

@@ -16,7 +16,7 @@
     <div class="card-body">
         <form method="post" action="{$FORM_ACTION}" autocomplete="off">
             <div class="form-group row">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="ftp_server">{$LANG->get('server')}</label>
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="ftp_server">{$LANG->get('server')} <i class="text-danger">(*)</i></label>
                 <div class="col-12 col-sm-8 col-lg-6">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 flex-shrink-1">
