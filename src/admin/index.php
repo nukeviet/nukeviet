@@ -17,6 +17,10 @@ require NV_ROOTDIR . '/includes/mainfile.php';
 
 // Admin dang nhap
 if (!defined('NV_IS_ADMIN') or !isset($admin_info) or empty($admin_info)) {
+    // Request bằng ajax lúc admin bị thoát trả về kết quả rỗng
+    if (defined('NV_IS_AJAX')) {
+        nv_htmlOutput('');
+    }
     require NV_ROOTDIR . '/includes/core/admin_access.php';
     require NV_ROOTDIR . '/includes/core/admin_login.php';
     exit(0);
@@ -102,6 +106,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
         // Ket noi voi giao dien chung cua admin
         $admin_info['admin_theme'] = (!empty($admin_info['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme.php')) ? $admin_info['admin_theme'] : $global_config['admin_theme'];
         require NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php';
+
+        // Load ngôn ngữ giao diện
+        $nv_Lang->loadTheme($admin_info['admin_theme']);
 
         // Ket noi giao dien cua module
         $global_config['module_theme'] = '';

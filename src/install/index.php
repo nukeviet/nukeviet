@@ -874,7 +874,11 @@ if ($step == 1) {
                     $sth->bindParam(':answer_question', $array_data['answer_question'], PDO::PARAM_STR);
                     $ok1 = $sth->execute();
 
-                    $ok2 = $db->exec("INSERT INTO " . $db_config['prefix'] . "_authors (admin_id, editor, lev, files_level, position, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')");
+                    $ok2 = $db->exec("INSERT INTO " . $db_config['prefix'] . "_authors (
+                        admin_id, editor, lev, files_level, position, config_theme, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent
+                    ) VALUES(
+                        " . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', '', 0, 0, 0, '', '', 0, '', ''
+                    )");
 
                     if ($ok1 and $ok2) {
                         try {

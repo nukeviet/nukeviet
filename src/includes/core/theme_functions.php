@@ -8,7 +8,7 @@
  * @Createdate 4/13/2010 20:00
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -21,62 +21,31 @@ function nv_error_info()
 {
     global $global_config, $error_info, $nv_Lang;
 
-    if (! defined('NV_IS_ADMIN')) {
-        return;
+    if (!defined('NV_IS_ADMIN')) {
+        return '';
     }
     if (empty($error_info)) {
-        return;
+        return '';
     }
 
-    $errortype = array(
-        E_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_PARSE => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_NOTICE => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_CORE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_CORE_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_COMPILE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_COMPILE_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_USER_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_USER_WARNING => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' ),
-        E_USER_NOTICE => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_STRICT => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_RECOVERABLE_ERROR => array( $nv_Lang->getGlobal('error_error'), 'bad.png' ),
-        E_DEPRECATED => array( $nv_Lang->getGlobal('error_notice'), 'comment.png' ),
-        E_USER_DEPRECATED => array( $nv_Lang->getGlobal('error_warning'), 'warning.png' )
-    );
-
-    if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
-        $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/images/icons/';
+    global $template;
+    if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme_error_info.php')) {
+        $template = $global_config['admin_theme'];
     } elseif (defined('NV_ADMIN')) {
-        $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
-        $image_path = NV_BASE_SITEURL . 'themes/admin_default/images/';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/error_info.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
-        $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
+        $template = 'admin_default';
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/theme_error_info.php')) {
+        $template = $global_config['site_theme'];
     } else {
-        $tpl_path = NV_ROOTDIR . '/themes/default/system';
-        $image_path = NV_BASE_SITEURL . 'themes/default/images/icons/';
+        $template = 'default';
     }
 
-    $xtpl = new XTemplate('error_info.tpl', $tpl_path);
-    $xtpl->assign('TPL_E_CAPTION', $nv_Lang->getGlobal('error_info_caption'));
+    // File xử lý giao diện
+    require NV_ROOTDIR . '/themes/' . $template . '/theme_error_info.php';
 
-    $a = 0;
-    foreach ($error_info as $key => $value) {
-        $xtpl->assign('TPL_E_CLASS', ($a % 2) ? ' class="second"' : '');
-        $xtpl->assign('TPL_E_ALT', $errortype[$value['errno']][0]);
-        $xtpl->assign('TPL_E_SRC', $image_path . $errortype[$value['errno']][1]);
-        $xtpl->assign('TPL_E_ERRNO', $errortype[$value['errno']][0]);
-        $xtpl->assign('TPL_E_MESS', $value['info']);
-        $xtpl->set_autoreset();
-        $xtpl->parse('error_info.error_item');
-        ++$a;
-    }
+    $contents = nv_error_info_theme($error_info);
+    unset($template);
 
-    $xtpl->parse('error_info');
-    return $xtpl->text('error_info');
+    return $contents;
 }
 
 /**
@@ -93,83 +62,39 @@ function nv_error_info()
  */
 function nv_info_die($page_title = '', $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
-    global $global_config, $nv_Lang;
+    global $global_config;
 
-	http_response_code($error_code);
+    http_response_code($error_code);
 
     if (empty($page_title)) {
         $page_title = $global_config['site_description'];
     }
 
     // Get theme
-    $template = '';
-    if (defined('NV_ADMIN') and isset($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
+    if (defined('NV_ADMIN') and isset($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme_error.php')) {
+        // 404 của admin
         $template = $global_config['admin_theme'];
-    } elseif (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
+    } elseif (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/admin_default/theme_error.php')) {
+        // 404 của admin mặc định
         $template = 'admin_default';
-    } elseif (isset($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
+    } elseif (isset($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme_error.php')) {
+        // 404 site theo module
         $template = $global_config['module_theme'];
-    } elseif (isset($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
+    } elseif (isset($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/theme_error.php')) {
+        // 404 site theo site
         $template = $global_config['site_theme'];
     } else {
-        $tpl_path = NV_ROOTDIR . '/themes/default/system';
+        // 404 site mặc định
         $template = 'default';
     }
 
-    $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
+    // File xử lý giao diện
+    require NV_ROOTDIR . '/themes/' . $template . '/theme_error.php';
 
-    $xtpl = new XTemplate('info_die.tpl', $tpl_path);
-    $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
-    $xtpl->assign('PAGE_TITLE', $page_title);
-    $xtpl->assign('HOME_LINK', $global_config['site_url']);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
-
-    $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
-    if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
-        $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
-    }
-    $xtpl->assign('SITE_FAVICON', $site_favicon);
-
-    if (isset($size[1])) {
-        if ($size[0] > 490) {
-            $size[1] = ceil(490 * $size[1] / $size[0]);
-            $size[0] = 490;
-        }
-        $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
-        $xtpl->assign('WIDTH', $size[0]);
-        $xtpl->assign('HEIGHT', $size[1]);
-        if (isset($size['mime']) and $size['mime'] == 'application/x-shockwave-flash') {
-            $xtpl->parse('main.swf');
-        } else {
-            $xtpl->parse('main.image');
-        }
-    }
-    $xtpl->assign('INFO_TITLE', $info_title);
-    $xtpl->assign('INFO_CONTENT', $info_content);
-
-    if (defined('NV_IS_ADMIN') and ! empty($admin_link)) {
-        $xtpl->assign('ADMIN_LINK', $admin_link);
-        $xtpl->assign('GO_ADMINPAGE', empty($admin_title) ? $nv_Lang->getGlobal('admin_page') : $admin_title);
-        $xtpl->parse('main.adminlink');
-    }
-    if (! empty($site_link)) {
-        $xtpl->assign('SITE_LINK', $site_link);
-        $xtpl->assign('GO_SITEPAGE', empty($site_title) ? $nv_Lang->getGlobal('go_homepage') : $site_title);
-        $xtpl->parse('main.sitelink');
-    }
-
-    $xtpl->parse('main');
+    $contents = nv_error_theme($page_title, $info_title, $info_content, $error_code, $admin_link, $admin_title, $site_link, $site_title, $template);
 
     include NV_ROOTDIR . '/includes/header.php';
-    $xtpl->out('main');
+    echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
@@ -239,7 +164,7 @@ function nv_xmlOutput($content, $lastModified)
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
         $tidy->cleanRepair();
-        $content = ( string )$tidy;
+        $content = (string) $tidy;
     } else {
         $content = trim($content);
     }
@@ -248,7 +173,7 @@ function nv_xmlOutput($content, $lastModified)
     @Header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
     @Header('Content-Type: text/xml; charset=utf-8');
 
-    if (! empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
+    if (!empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
         @Header('Cache-Control: no-cache, pre-check=0, post-check=0');
     } else {
         @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
@@ -269,10 +194,10 @@ function nv_xmlOutput($content, $lastModified)
         $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate') ? 'deflate' : 'none');
 
         if ($encoding != 'none') {
-            if (! strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') and preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            if (!strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') and preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
                 $version = floatval($matches[1]);
 
-                if ($version < 6 or ($version == 6 and ! strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
+                if ($version < 6 or ($version == 6 and !strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
                     $encoding = 'none';
                 }
             }
@@ -303,7 +228,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
     global $global_config, $client_info;
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
-    //Chi co tac dung voi IE6 va Chrome
+    // Chi co tac dung voi IE6 va Chrome
     $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
     $xtpl->assign('CHARSET', $global_config['site_charset']);
     $xtpl->assign('SITELANG', $global_config['site_lang']);
@@ -338,12 +263,12 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
     $channel['pubDate'] = 0;
     $channel['modified'] = 0;
 
-    if (! empty($items)) {
+    if (!empty($items)) {
         foreach ($items as $item) {
-            if (! empty($item['title']) and ! empty($item['link'])) {
+            if (!empty($item['title']) and !empty($item['link'])) {
                 $item['title'] = nv_htmlspecialchars($item['title']);
 
-                if (isset($item['pubdate']) and ! empty($item['pubdate'])) {
+                if (isset($item['pubdate']) and !empty($item['pubdate'])) {
                     $item['pubdate'] = intval($item['pubdate']);
                     $channel['pubDate'] = max($channel['pubDate'], $item['pubdate']);
                     if ($timemode == 'ISO8601') {
@@ -366,16 +291,16 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 
                 $xtpl->assign('ITEM', $item);
 
-                if (isset($item['guid']) and ! empty($item['guid'])) {
+                if (isset($item['guid']) and !empty($item['guid'])) {
                     $xtpl->parse('main.item.guid');
                 }
-                if (isset($item['pubdate']) and ! empty($item['pubdate'])) {
+                if (isset($item['pubdate']) and !empty($item['pubdate'])) {
                     $xtpl->parse('main.item.pubdate');
                 }
-                if (isset($item['author']) and ! empty($item['author'])) {
+                if (isset($item['author']) and !empty($item['author'])) {
                     $xtpl->parse('main.item.author');
                 }
-                if (isset($item['content']) and ! empty($item['content'])) {
+                if (isset($item['content']) and !empty($item['content'])) {
                     if (!empty($item['content']['image'])) {
                         $xtpl->parse('main.item.content.image');
                     }
@@ -413,7 +338,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 
     $lastModified = NV_CURRENTTIME;
 
-    if (! empty($channel['pubDate'])) {
+    if (!empty($channel['pubDate'])) {
         $lastModified = $channel['pubDate'];
         if ($timemode == 'ISO8601') {
             $channel['pubDate'] = date('c', $channel['pubDate']);
@@ -428,18 +353,18 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 
     $xtpl->assign('CHANNEL', $channel);
 
-    if (! empty($channel['description'])) {
+    if (!empty($channel['description'])) {
         $xtpl->parse('main.description');
     }
 
-    if (! empty($channel['pubDate'])) {
+    if (!empty($channel['pubDate'])) {
         $xtpl->parse('main.pubDate');
     }
 
     $image = file_exists(NV_ROOTDIR . '/' . $global_config['site_logo']) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/images/logo.png';
     $image = nv_ImageInfo($image, 144, true, NV_UPLOADS_REAL_DIR);
 
-    if (! empty($image)) {
+    if (!empty($image)) {
         $resSize = nv_imageResize($image['width'], $image['height'], 144, 400);
         $image['width'] = $resSize['width'];
         $image['height'] = $resSize['height'];
@@ -472,7 +397,7 @@ function nv_xmlSitemap_generate($url)
     $lastModified = time() - 86400;
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement($sitemapHeader);
-    if (! empty($url)) {
+    if (!empty($url)) {
         foreach ($url as $key => $values) {
             $values['link'] = nv_url_rewrite($values['link'], true);
             if (strpos($values['link'], NV_MY_DOMAIN) !== 0) {
@@ -514,7 +439,7 @@ function nv_xmlSitemapIndex_generate()
         foreach ($global_config['allow_sitelangs'] as $lang) {
             $sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while (list($modname) = $result->fetch(3)) {
+            while (list ($modname) = $result->fetch(3)) {
                 $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
                 $row = $xml->addChild('sitemap');
                 $row->addChild('loc', $link);
@@ -561,26 +486,26 @@ function nv_css_setproperties($tag, $property_array)
     if (empty($tag)) {
         return '';
     }
-    if (! is_array($property_array)) {
+    if (!is_array($property_array)) {
         return $property_array;
     }
 
     $css = '';
     foreach ($property_array as $property => $value) {
         if ($property != 'customcss') {
-            if (! empty($property) and ! empty($value)) {
+            if (!empty($property) and !empty($value)) {
                 $property = str_replace('_', '-', $property);
                 if ($property == 'background-image') {
                     $value = "url('" . $value . "')";
                 }
                 $css .= $property . ':' . $value . ';';
             }
-        } elseif (! empty($value)) {
-            $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
+        } elseif (!empty($value)) {
+            $value = substr(trim($value), - 1) == ';' ? $value : $value . ';';
             $css .= $value;
         }
     }
-    ! empty($css) and $css = $tag . '{' . $css . '}';
+    !empty($css) and $css = $tag . '{' . $css . '}';
     return $css;
 }
 

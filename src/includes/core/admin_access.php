@@ -23,7 +23,7 @@ function nv_admin_checkip()
 
     if ($global_config['block_admin_ip']) {
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php')) {
-            $array_adminip = array();
+            $array_adminip = [];
             include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
 
             if (empty($array_adminip)) {
@@ -56,7 +56,7 @@ function nv_admin_checkfirewall()
 
     if ($global_config['admfirewall']) {
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php')) {
-            $adv_admins = array();
+            $adv_admins = [];
             include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
 
             if (empty($adv_admins)) {
@@ -97,38 +97,39 @@ function nv_admin_checkdata($adm_session_value)
     $array_admin = unserialize($adm_session_value);
 
     if (!isset($array_admin['admin_id']) or !is_numeric($array_admin['admin_id']) or $array_admin['admin_id'] <= 0 or !isset($array_admin['checknum']) or !preg_match('/^[a-z0-9]{32}$/', $array_admin['checknum'])) {
-        return array();
+        return [];
     }
 
-    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme, a.check_num check_num, a.last_agent current_agent,
-		a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
-		b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
-		b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
-		b.password password, b.question question, b.answer answer, b.safemode safemode, b.email_verification_time email_verification_time
-		FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
-		WHERE a.admin_id = ' . $array_admin['admin_id'] . '
-		AND a.lev!=0
-		AND a.is_suspend=0
-		AND b.userid=a.admin_id
-		AND b.active=1';
+    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme,
+        a.config_theme config_theme, a.check_num check_num, a.last_agent current_agent,
+        a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
+        b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
+        b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
+        b.password password, b.question question, b.answer answer, b.safemode safemode, b.email_verification_time email_verification_time
+        FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
+        WHERE a.admin_id = ' . $array_admin['admin_id'] . '
+        AND a.lev!=0
+        AND a.is_suspend=0
+        AND b.userid=a.admin_id
+        AND b.active=1';
     $admin_info = $db->query($sql)->fetch();
     if (empty($admin_info)) {
-        return array();
+        return [];
     }
 
     if (strcasecmp($array_admin['checknum'], $admin_info['check_num']) != 0 or    //check_num
         !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or strcasecmp($array_admin['current_agent'], $admin_info['current_agent']) != 0 or    //user_agent
         !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or strcasecmp($array_admin['current_ip'], $admin_info['current_ip']) != 0 or    //IP
         !isset($array_admin['current_login']) or empty($array_admin['current_login']) or strcasecmp($array_admin['current_login'], intval($admin_info['current_login'])) != 0) {    //current_login
-        return array();
+        return [];
     }
 
     if (empty($admin_info['files_level'])) {
-        $allow_files_type = array();
+        $allow_files_type = [];
         $allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
     } else {
         list($allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories) = explode('|', $admin_info['files_level']);
-        $allow_files_type = !empty($allow_files_type) ? explode(',', $allow_files_type) : array();
+        $allow_files_type = !empty($allow_files_type) ? explode(',', $allow_files_type) : [];
         $allow_files_type2 = array_values(array_intersect($allow_files_type, $global_config['file_allowed_ext']));
         if ($allow_files_type != $allow_files_type2) {
             $update = implode(',', $allow_files_type2);
@@ -149,6 +150,7 @@ function nv_admin_checkdata($adm_session_value)
     $admin_info['allow_modify_files'] = intval($allow_modify_files);
     $admin_info['allow_create_subdirectories'] = intval($allow_create_subdirectories);
     $admin_info['allow_modify_subdirectories'] = intval($allow_modify_subdirectories);
+    $admin_info['config_theme'] = empty($admin_info['config_theme']) ? [] : unserialize($admin_info['config_theme']);
 
     if (empty($admin_info['first_name'])) {
         $admin_info['first_name'] = $admin_info['username'];

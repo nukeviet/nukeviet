@@ -32,7 +32,7 @@ $lang_global['error_404_title'] = 'Lỗi truy cập 404';
 $lang_global['error_404_content'] = 'Lỗi 404: Trang web mà bạn đã cố gắng truy cập không tồn tại trên máy chủ của website.';
 $lang_global['error_layout_title'] = 'Lỗi xử lý giao diện';
 $lang_global['error_layout_content'] = 'Lỗi, hệ thống không tồn tại giao diện, bạn cần liên hệ với quản trị site để sửa lại';
-$lang_global['logout'] = 'Thoát';
+$lang_global['logout'] = 'Đăng xuất';
 $lang_global['admin_logout_title'] = 'Thoát khỏi tài khoản Quản trị';
 $lang_global['admin_logout_ok'] = 'Toàn bộ thông tin đăng nhập Quản trị đã được xóa. Bạn đã thoát khỏi tài khoản Quản trị';
 $lang_global['admin_logout_question'] = 'Bạn thực sự muốn thoát khỏi tài khoản Quản trị';
@@ -43,6 +43,7 @@ $lang_global['reset'] = 'Thiết lập lại';
 $lang_global['fail'] = 'Thất bại';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';
+$lang_global['All'] = 'Tất cả';
 
 $lang_global['username_empty'] = 'Tên đăng nhập chưa được khai báo';
 $lang_global['usernamelong'] = 'Tên đăng nhập quá dài. Chỉ chấp nhận tên có số ký tự tối đa là %1$d';
@@ -53,6 +54,9 @@ $lang_global['unick_type_3'] = 'Tên đăng nhập chỉ được sử dụng ch
 $lang_global['unick_type_4'] = 'Tên đăng nhập chỉ được sử dụng Unicode, không có các ký tự đặc biệt';
 $lang_global['username_rule_limit'] = 'Tên đăng nhập không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
 $lang_global['username_rule_nolimit'] = 'Tên đăng nhập phải từ %1$d đến %2$d ký tự';
+
+$lang_global['rule_alphanumeric'] = 'Chỉ dùng chữ số, chữ cái, và ký tự gạch dưới (_)';
+$lang_global['rule_numeric'] = 'Chỉ dùng chữ số 0-9';
 
 $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai báo';
 $lang_global['passwordlong'] = 'Mật khẩu quá dài. Chỉ chấp nhận mật khẩu có số ký tự tối đa là %1$d';
@@ -70,7 +74,6 @@ $lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['securitycodeincorrect1'] = 'Chưa xác thực không phải là Robot, vui lòng xác thực lại';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên đăng nhập hoặc Mật khẩu truy cập';
-$lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực Quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
 $lang_global['userlogin_blocked'] = 'Bạn đã đăng nhập thất bại %s lần, hệ thống tạm khóa đăng nhập cho đến %s';
 
@@ -103,6 +106,7 @@ $lang_global['loginsubmit'] = 'Đăng nhập';
 $lang_global['register'] = 'Đăng ký';
 $lang_global['lostpass'] = 'Quên mật khẩu';
 $lang_global['logininfo'] = 'Hãy đăng nhập thành viên để trải nghiệm đầy đủ các tiện ích trên site';
+$lang_global['login_remember'] = 'Nhớ tài khoản';
 $lang_global['adminlogininfo'] = 'Để đăng nhập quản trị, vui lòng khai báo tất cả các ô trống dưới đây';
 $lang_global['site_rss'] = 'RSS - Tin mới';
 $lang_global['copyright'] = '&copy; Copyright %s. All right reserved';
@@ -344,6 +348,8 @@ $lang_global['required'] = 'Chú ý: Bạn cần khai báo tất cả các ô c�
 
 $lang_global['on'] = 'Bật';
 $lang_global['off'] = 'Tắt';
+$lang_global['close'] = 'Đóng';
+$lang_global['system'] = 'Hệ thống';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';

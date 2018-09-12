@@ -84,7 +84,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
             }
         }
 
-        if ($global_config['nv_auto_resize'] and ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT)) {
+        if ($global_config['nv_auto_resize'] and ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][1] > NV_MAX_HEIGHT)) {
             $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1]);
             $createImage->resizeXY(NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
@@ -179,7 +179,8 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 }
 
 $editor = $nv_Request->get_title('editor', 'post,get', '');
-$CKEditorFuncNum = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
+// FIXME Biến này tạm thời không dùng nhưng để tránh các lỗi khác vẫn để ở đây
+// $CKEditorFuncNum = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
 
 if (!preg_match("/^([a-zA-Z0-9\-\_]+)$/", $editor)) {
     $editor = '';
@@ -196,7 +197,12 @@ if (!empty($error)) {
 
         nv_jsonOutput($array_data);
     } elseif ($editor == 'ckeditor') {
-        echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $error . "');</script>";
+        nv_jsonOutput([
+            'uploaded' => 0,
+            'error' => [
+                'message' => $error
+            ]
+        ]);
     } else {
         echo 'ERROR_' . $error;
     }
@@ -215,8 +221,8 @@ if (!empty($error)) {
         }
 
         $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-    		(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt) VALUES
-    		('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)");
+            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt) VALUES
+            ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)");
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
         $sth->execute();
@@ -233,7 +239,11 @@ if (!empty($error)) {
 
             nv_jsonOutput($array_data);
         } else {
-            echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";
+            nv_jsonOutput([
+                'uploaded' => 1,
+                'fileName' => $upload_info['basename'],
+                'url' => NV_BASE_SITEURL . $path . "/" . $upload_info['basename']
+            ]);
         }
     } else {
         echo $upload_info['basename'];

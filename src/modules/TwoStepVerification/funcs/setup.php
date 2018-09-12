@@ -41,15 +41,17 @@ function nv_json_result($array)
 
 // Show QR-Image
 if (isset($array_op[1]) and $array_op[1] == 'qr-image') {
-    $qrCode = new Endroid\QrCode\QrCode();
     $url = 'otpauth://totp/' . $user_info['email'] . '?secret=' . $secretkey . '&issuer=' . urlencode(NV_SERVER_NAME . ' | ' . $user_info['username']);
+    $qrCode = new Endroid\QrCode\QrCode($url);
 
-    header('Content-type: image/png');
-    $qrCode->setText($url)
-        ->setErrorCorrection('medium')
-        ->setModuleSize(4)
-        ->setImageType('png')
-        ->render();
+    $qrCode->setSize(300);
+    $qrCode->setWriterByName('png');
+    $qrCode->setMargin(10);
+    $qrCode->setEncoding('UTF-8');
+    $qrCode->setErrorCorrectionLevel(Endroid\QrCode\ErrorCorrectionLevel::MEDIUM);
+
+    header('Content-Type: '. $qrCode->getContentType());
+    echo $qrCode->writeString();
     exit();
 }
 

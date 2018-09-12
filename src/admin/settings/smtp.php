@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -31,8 +31,9 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
 } else {
     $array_config['smtp_ssl'] = intval($global_config['smtp_ssl']);
 }
-$array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', 0);
-$array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', 0);
+$array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', $global_config['verify_peer_ssl']);
+$array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', $global_config['verify_peer_name_ssl']);
+
 if ($nv_Request->isset_request('mailer_mode', 'post')) {
     $smtp_password = $array_config['smtp_password'];
     $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
@@ -48,7 +49,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
     if ($array_config['smtp_ssl'] == 1 and $array_config['mailer_mode'] == 'smtp') {
         require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
         $array_phpmod = phpinfo_array(8, 1);
-        if (! empty($array_phpmod) and ! array_key_exists('openssl', $array_phpmod)) {
+        if (!empty($array_phpmod) and !array_key_exists('openssl', $array_phpmod)) {
             $errormess = $nv_Lang->getModule('smtp_error_openssl');
         }
     }
@@ -59,52 +60,16 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
     $array_config['smtp_password'] = $smtp_password;
 }
 
-$array_config['smtp_ssl_checked'] = ($array_config['smtp_ssl'] == 1) ? ' checked="checked"' : '';
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('DATA', $array_config);
+$tpl->assign('SMTP_ENCRYPTED', $smtp_encrypted_array);
+$tpl->assign('GLOBAL_CONFIG', $global_config);
+$tpl->assign('ERROR', $errormess);
 
-$array_config['mailer_mode_smtpt'] = ($array_config['mailer_mode'] == 'smtp') ? ' checked="checked"' : '';
-$array_config['mailer_mode_sendmail'] = ($array_config['mailer_mode'] == 'sendmail') ? ' checked="checked"' : '';
-$array_config['mailer_mode_phpmail'] = ($array_config['mailer_mode'] == '') ? ' checked="checked"' : '';
-$array_config['mailer_mode_smtpt_show'] = ($array_config['mailer_mode'] == 'smtp') ? '' : ' style="display: none" ';
-
-$xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('DATA', $array_config);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
-
-foreach ($smtp_encrypted_array as $id => $value) {
-    $encrypted = array(
-        'id' => $id,
-        'value' => $value,
-        'sl' => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : '',
-    );
-
-    $xtpl->assign('EMCRYPTED', $encrypted);
-    $xtpl->parse('smtp.encrypted_connection');
-}
-if($global_config['verify_peer_ssl'] == 1) {
-	$xtpl->assign('PEER_SSL_YES', 'checked="checked"');
-}
-else {
-	$xtpl->assign('PEER_SSL_NO', 'checked="checked"');
-}
-if($global_config['verify_peer_name_ssl'] == 1) {
-	$xtpl->assign('PEER_NAME_SSL_YES', 'checked="checked"');
-}
-else {
-	$xtpl->assign('PEER_NAME_SSL_NO', 'checked="checked"');
-}
-if ($errormess != '') {
-    $xtpl->assign('ERROR', $errormess);
-    $xtpl->parse('smtp.error');
-}
-
-$xtpl->parse('smtp');
-$contents = $xtpl->text('smtp');
+$contents = $tpl->fetch('smtp.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

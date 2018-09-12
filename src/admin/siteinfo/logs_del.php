@@ -8,18 +8,18 @@
  * @Createdate 11-10-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_SITEINFO')) {
+if (!defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
-// Delete all log
+// Xóa toàn bộ nhật ký hệ thống
 if ($nv_Request->get_title('logempty', 'post', '') == md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid'])) {
     if ($db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_logs')) {
         $nv_Cache->delMod($module_name);
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('log_empty_log'), 'All', $admin_info['userid']);
-        die('OK');
+        nv_htmlOutput('OK');
     } else {
-        die($nv_Lang->getModule('log_del_error'));
+        nv_htmlOutput($nv_Lang->getModule('log_del_error'));
     }
 }
 

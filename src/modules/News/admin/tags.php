@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -29,7 +29,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $db_slave->where('description = \'\'');
     }
 
-    if (! empty($q)) {
+    if (!empty($q)) {
         $q = strip_punctuation($q);
         $db_slave->where('keywords LIKE :keywords');
     } else {
@@ -38,7 +38,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
     }
 
     $sth = $db_slave->prepare($db_slave->sql());
-    if (! empty($q)) {
+    if (!empty($q)) {
         $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
     }
     $sth->execute();
@@ -109,24 +109,21 @@ list($tid, $title, $alias, $description, $image, $keywords) = array( 0, '', '', 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $tid = $nv_Request->get_int('tid', 'post', 0);
     $keywords = $nv_Request->get_title('keywords', 'post', '');
     $alias = $nv_Request->get_title('alias', 'post', '');
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
-    $alias = str_replace('&', ' ', $alias);
-    $alias = str_replace('-', ' ', nv_unhtmlspecialchars($alias));
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;
-    $keywords = array_map('strip_punctuation', $keywords);
     $keywords = array_map('trim', $keywords);
-    $keywords = array_diff($keywords, array( '' ));
+    $keywords = array_diff($keywords, array(''));
     $keywords = array_unique($keywords);
     $keywords = implode(',', $keywords);
 
-    $alias = str_replace(' ', '-', strip_punctuation($alias));
+    $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($alias) : change_alias_tags($alias);
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
@@ -186,7 +183,7 @@ $xtpl->assign('alias', $alias);
 $xtpl->assign('keywords', $keywords);
 $xtpl->assign('description', nv_htmlspecialchars(nv_br2nl($description)));
 
-if (! empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
+if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
     $currentpath = dirname($image);
 }
@@ -194,7 +191,7 @@ $xtpl->assign('image', $image);
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }

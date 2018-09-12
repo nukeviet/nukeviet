@@ -227,8 +227,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
             } else {
                 $module_info['layout_funcs'] = array();
                 $sth = $db->prepare('SELECT f.func_name, t.layout FROM ' . NV_MODFUNCS_TABLE . ' f
-					INNER JOIN ' . NV_PREFIXLANG . '_modthemes t ON f.func_id=t.func_id
-					WHERE f.in_module = :module AND t.theme= :theme');
+                    INNER JOIN ' . NV_PREFIXLANG . '_modthemes t ON f.func_id=t.func_id
+                    WHERE f.in_module = :module AND t.theme= :theme');
                 $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
                 $sth->bindParam(':theme', $global_config['module_theme'], PDO::PARAM_STR);
                 $sth->execute();

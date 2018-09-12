@@ -17,7 +17,6 @@ var nv_is_recreate_confirm = new Array('Êtes-vous sûr de vouloir \'ré-install
 var nv_is_add_user_confirm = new Array('Êtes-vous sûr de vouloir ajouter les nouveaux membres au groupe?','\'Ajout\' de nouveaux membres au groupe avec succcès',' \'Ajout \' échoué pour une raison inconnue');
 var nv_is_exclude_user_confirm = new Array('Êtes-vous sûr de vouloir éliminer ce membre?','\'Élimination\' réussie',' \'Élimination\  échouée pour une raison inconnue');
 
-
 var nv_formatString = "jj.mm.aaaa";
 var nv_gotoString = "Aller au mois actuel";
 var nv_todayString = "Aujourd'hui c'est";
@@ -29,12 +28,12 @@ var nv_selectMonthMessage = "Cliquez pour sélectionner un mois.";
 var nv_selectYearMessage = "Cliquez pour sélectionner un an.";
 var nv_selectDateMessage = "Sélectionnez [date] comme date.";
 
-
 var nv_loadingText = "Chargement...";
 var nv_loadingTitle = "Cliquez pour annuler";
 var nv_focusTitle = "Cliquez pour mettre au premier plan";
 var nv_fullExpandTitle = "Expandre à la taille réelle (f)";
 var nv_restoreTitle = "Cliquez pour fermer l'image, Cliquez et glissez pour déplacer. Utilisez les flèches pour Précédente et Suivante.";
+var nv_please_selrow = "Veuillez sélectionner au moins une rangée";
 
 var nv_error_login = "Erreur: Vous n'avez pas rempli votre compte ou les infos du compte sont incorrectes. Le compte se combine de lettres latines, de chiffres et tiret. Maximum [max], minimum [min] caractères.";
 var nv_error_password = "Erreur: Vous n'avez pas rempli le mot de passe ou le mot de passe n'est pas correct. Le mot de passe se combine de lettres latines, de chiffres et tiret. Maximum [max], minimum [min] caractères.";

@@ -34,6 +34,7 @@ var nv_loadingTitle = "Click to cancel";
 var nv_focusTitle = "Click to bring to front";
 var nv_fullExpandTitle = "Expand to actual size (f)";
 var nv_restoreTitle = "Click to close image, click and drag to move. Use arrow keys for next and previous.";
+var nv_please_selrow = "Please select at least one row";
 
 var nv_error_login = "Error: You haven't fill your account or account information incorrect. Account include Latin characters, numbers, underscore. Max characters is [max], min characters is [min]";
 var nv_error_password = "Error: You haven't fill your password or password information incorrect. Password include Latin characters, numbers, underscore. Max characters is [max], min characters is [min]";

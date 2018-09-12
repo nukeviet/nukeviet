@@ -26,6 +26,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   position varchar(255) NOT NULL,
   main_module varchar(50) NOT NULL DEFAULT 'siteinfo',
   admin_theme varchar(100) NOT NULL DEFAULT '',
+  config_theme text NOT NULL COMMENT 'Các thiết lập cho giao diện',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -52,13 +53,15 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   mid mediumint(8) NOT NULL AUTO_INCREMENT,
   module varchar(50) NOT NULL,
   lang_key varchar(50) NOT NULL DEFAULT '',
+  icon varchar(100) NOT NULL DEFAULT '',
   weight mediumint(8) NOT NULL DEFAULT '0',
   act_1 tinyint(4) NOT NULL DEFAULT '0',
   act_2 tinyint(4) NOT NULL DEFAULT '1',
   act_3 tinyint(4) NOT NULL DEFAULT '1',
   checksum varchar(32) DEFAULT '',
   PRIMARY KEY (mid),
-  UNIQUE KEY module (module)
+  UNIQUE KEY module (module),
+  UNIQUE KEY icon (icon)
 ) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
@@ -344,5 +347,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   content text NOT NULL,
   add_time int(11) unsigned NOT NULL,
   view tinyint(1) unsigned NOT NULL DEFAULT '0',
+  is_new tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Mới gửi đến',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB";

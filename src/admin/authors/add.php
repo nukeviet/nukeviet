@@ -108,8 +108,8 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
     $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "
-		(admin_id, editor, lev, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
-		( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
+        (admin_id, editor, lev, files_level, position, admin_theme, config_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
+        ( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, '', 0,'', '', 0, '', ''	)");
     $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
     $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
