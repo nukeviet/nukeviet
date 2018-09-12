@@ -179,7 +179,8 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 }
 
 $editor = $nv_Request->get_title('editor', 'post,get', '');
-$CKEditorFuncNum = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
+// FIXME Biến này tạm thời không dùng nhưng để tránh các lỗi khác vẫn để ở đây
+// $CKEditorFuncNum = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
 
 if (!preg_match("/^([a-zA-Z0-9\-\_]+)$/", $editor)) {
     $editor = '';
@@ -196,7 +197,12 @@ if (!empty($error)) {
 
         nv_jsonOutput($array_data);
     } elseif ($editor == 'ckeditor') {
-        echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $error . "');</script>";
+        nv_jsonOutput([
+            'uploaded' => 0,
+            'error' => [
+                'message' => $error
+            ]
+        ]);
     } else {
         echo 'ERROR_' . $error;
     }
@@ -233,7 +239,11 @@ if (!empty($error)) {
 
             nv_jsonOutput($array_data);
         } else {
-            echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";
+            nv_jsonOutput([
+                'uploaded' => 1,
+                'fileName' => $upload_info['basename'],
+                'url' => NV_BASE_SITEURL . $path . "/" . $upload_info['basename']
+            ]);
         }
     } else {
         echo $upload_info['basename'];
