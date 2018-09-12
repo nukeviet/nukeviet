@@ -15,11 +15,11 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label>{$LANG->get('filter_from')}:</label>
-                                    <input type="text" class="form-control form-control-sm datepicker" name="from" value="{$DATA_SEARCH.from}" autocomplete="off">
+                                    <input type="text" class="form-control form-control-sm bsdatepicker" name="from" value="{$DATA_SEARCH.from}" autocomplete="off">
                                 </div>
                                 <div class="col-6">
                                     <label>{$LANG->get('filter_to')}:</label>
-                                    <input type="text" class="form-control form-control-sm datepicker" name="to" value="{$DATA_SEARCH.to}" autocomplete="off">
+                                    <input type="text" class="form-control form-control-sm bsdatepicker" name="to" value="{$DATA_SEARCH.to}" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -168,8 +168,8 @@ $(document).ready(function() {
         width: "100%",
         containerCssClass: "select2-sm"
     });
-    $(".datepicker").datepicker({
-        autoclose: !0,
+    $(".bsdatepicker").datepicker({
+        autoclose: 1,
         templates: {
             rightArrow: '<i class="fas fa-chevron-right"></i>',
             leftArrow: '<i class="fas fa-chevron-left"></i>'

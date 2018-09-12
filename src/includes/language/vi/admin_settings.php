@@ -117,12 +117,12 @@ $lang_module['current_time'] = 'Giờ hiện tại: %s';
 $lang_module['date_pattern'] = 'Kiểu hiển thị ngày tháng năm';
 $lang_module['time_pattern'] = 'Kiểu hiển thị giờ phút';
 $lang_module['gzip_method'] = 'Bật chế độ gzip';
-$lang_module['proxy_blocker'] = 'Kiểm tra và chặn các máy tính dùng proxy';
+$lang_module['proxy_blocker'] = 'Kiểm tra và chặn proxy';
 $lang_module['proxy_blocker_0'] = 'Không kiểm tra';
 $lang_module['proxy_blocker_1'] = 'Kiểm tra nhẹ';
 $lang_module['proxy_blocker_2'] = 'Kiểm tra vừa';
 $lang_module['proxy_blocker_3'] = 'Kiểm tra tuyệt đối';
-$lang_module['str_referer_blocker'] = 'Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ';
+$lang_module['str_referer_blocker'] = 'Kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ';
 $lang_module['my_domains'] = 'Các domain chạy site, cách nhau bởi dấu phảy';
 $lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(Có dạng 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">xem chi tiết</a>)';
 
@@ -159,14 +159,15 @@ $lang_module['banip_del_success'] = 'Đã xóa thành công !';
 $lang_module['banip_area_front'] = 'Ngoài site';
 $lang_module['banip_area_admin'] = 'Khu vực admin';
 $lang_module['banip_area_both'] = 'Cả admin và ngoài site';
-$lang_module['banip_delete_confirm'] = 'Bạn có chắc muốn xóa ip này ra khỏi danh sách bị ban?';
+$lang_module['banip_delete_confirm'] = 'Bạn có chắc muốn xóa ip này ra khỏi danh sách?';
 $lang_module['banip_mask'] = 'Mask IP';
 $lang_module['banip_edit'] = 'Sửa';
 $lang_module['banip_delete'] = 'Xóa';
 $lang_module['banip_error_ip'] = 'Hãy nhập Ip cần ban';
 $lang_module['banip_error_area'] = 'Bạn cần chọn khu vực';
 $lang_module['banip_error_validip'] = 'Lỗi: Bạn cần nhập IP đúng chuẩn';
-$lang_module['banip_error_write'] = 'Lỗi: Bạn đã không cấp quyền để hệ thống có thể ghi file, hãy CHMOD thư mục <strong>%s</strong> ở chế độ 0777 hoặc "Change permission" để hệ thống có thể ghi file, nếu không hãy tạo file banip.php với nội dung bên dưới và đặt vào thư mục <strong>%s</strong>';
+$lang_module['banip_error_write'] = 'Bạn đã không cấp quyền để hệ thống có thể ghi file, hãy CHMOD thư mục <strong>%s</strong> ở chế độ 0777 hoặc "Change permission" để hệ thống có thể ghi file, nếu không hãy tạo file banip.php với nội dung bên dưới và đặt vào thư mục <strong>%s</strong>';
+$lang_module['banip_error_write_title'] = 'Lỗi ghi file';
 
 $lang_module['nv_admin_add'] = 'Thêm công việc';
 $lang_module['nv_admin_edit'] = 'Sửa công việc';
@@ -263,11 +264,12 @@ $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu kh
 $lang_module['notification_day'] = 'ngày';
 
 $lang_module['is_login_blocker'] = 'Kích hoạt chức năng chặn đăng nhập sai nhiều lần';
+$lang_module['login_number_tracking_label'] = 'Sai tối đa';
 $lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoảng thời gian theo dõi';
 $lang_module['login_time_tracking'] = 'Thời gian theo dõi';
 $lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';
 
-$lang_module['two_step_verification'] = 'Yêu cầu xác thực đăng nhập hai bước tại';
+$lang_module['two_step_verification'] = 'Yêu cầu xác thực hai bước';
 $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Khu vực quản trị';
 $lang_module['two_step_verification2'] = 'Khu vực ngoài site';

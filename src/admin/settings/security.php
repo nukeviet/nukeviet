@@ -205,19 +205,12 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
 
 $nv_Lang->setModule('two_step_verification_note', sprintf($nv_Lang->getModule('two_step_verification_note'), $nv_Lang->getModule('two_step_verification0'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups'));
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('SELECTEDTAB', $selectedtab);
-for ($i = 0; $i <= 3; ++$i) {
-    $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
-}
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->registerPlugin('modifier', 'date', 'date');
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('SELECTEDTAB', $selectedtab);
 
 // Xử lý các IP bị cấm
 $error = array();
@@ -261,8 +254,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($error)) {
         if ($cid > 0) {
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
-				SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
-				WHERE id=' . $cid);
+                SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
+                WHERE id=' . $cid);
             $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
             $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
@@ -281,15 +274,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $save = nv_save_file_ips(0);
 
         if ($save !== true) {
-            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
-            $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
-            $xtpl->parse('main.manual_save');
+            $tpl->assign('MANUAL_WRITE_MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
+            $tpl->assign('MANUAL_WRITE_CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
         }
     } else {
-        $xtpl->assign('ERROR_SAVE', implode('<br/>', $error));
-        $xtpl->parse('main.error_save');
+        $tpl->assign('ERROR', implode('<br/>', $error));
     }
 } else {
     $id = $ip = $mask = $area = $begintime = $endtime = $notice = '';
@@ -361,15 +352,13 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
         $save = nv_save_file_ips(1);
 
         if ($save !== true) {
-            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
-            $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
-            $xtpl->parse('main.manual_save');
+            $tpl->assign('MANUAL_WRITE_MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
+            $tpl->assign('MANUAL_WRITE_CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
         }
     } else {
-        $xtpl->assign('ERROR_SAVE', implode('<br/>', $error));
-        $xtpl->parse('main.error_save');
+        $tpl->assign('ERROR', implode('<br/>', $error));
     }
 } else {
     if (!empty($flid)) {
@@ -387,84 +376,29 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
         $array_flip['flip'] = '';
         $array_flip['flarea'] = '';
         $array_flip['flmask'] = '';
-        $array_flip['flbegintime'] = '';
+        $array_flip['flbegintime'] = NV_CURRENTTIME;
         $array_flip['flendtime'] = '';
         $array_flip['flnotice'] = '';
     }
 }
 
 if (!empty($errormess)) {
-    $xtpl->assign('ERROR_SAVE', $errormess);
-    $xtpl->parse('main.error_save');
+    $tpl->assign('ERROR', $errormess);
 }
 
-$xtpl->assign('IS_FLOOD_BLOCKER', ($array_config_flood['is_flood_blocker']) ? ' checked="checked"' : '');
-$xtpl->assign('MAX_REQUESTS_60', $array_config_flood['max_requests_60']);
-$xtpl->assign('MAX_REQUESTS_300', $array_config_flood['max_requests_300']);
-
-$xtpl->assign('ANTI_AGENT', $array_config_define['nv_anti_agent'] ? ' checked="checked"' : '');
-foreach ($proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v) {
-    $xtpl->assign('PROXYSELECTED', ($array_config_global['proxy_blocker'] == $proxy_blocker_i) ? ' selected="selected"' : '');
-    $xtpl->assign('PROXYOP', $proxy_blocker_i);
-    $xtpl->assign('PROXYVALUE', $proxy_blocker_v);
-    $xtpl->parse('main.proxy_blocker');
-}
-$xtpl->assign('REFERER_BLOCKER', ($array_config_global['str_referer_blocker']) ? ' checked="checked"' : '');
-$xtpl->assign('ANTI_IFRAME', $array_config_define['nv_anti_iframe'] ? ' checked="checked"' : '');
-
-$xtpl->assign('IS_LOGIN_BLOCKER', ($array_config_global['is_login_blocker']) ? ' checked="checked"' : '');
-$xtpl->assign('LOGIN_NUMBER_TRACKING', $array_config_global['login_number_tracking']);
-$xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']);
-$xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);
-
-foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang) {
-    $array = array(
-        "value" => $gfx_chk_i,
-        "select" => ($array_config_captcha['gfx_chk'] == $gfx_chk_i) ? ' selected="selected"' : '',
-        "text" => $gfx_chk_lang
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.opcaptcha');
+if ($array_config_captcha['recaptcha_secretkey']) {
+    $array_config_captcha['recaptcha_secretkey'] = $crypt->decrypt($array_config_captcha['recaptcha_secretkey']);
 }
 
-foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
-    $array = array(
-        'value' => $captcha_type_i,
-        'select' => ($array_config_captcha['captcha_type'] == $captcha_type_i) ? ' selected="selected"' : '',
-        'text' => $captcha_type_lang
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.captcha_type');
-}
-
-$xtpl->assign('RECAPTCHA_SITEKEY', $array_config_captcha['recaptcha_sitekey']);
-$xtpl->assign('RECAPTCHA_SECRETKEY', $array_config_captcha['recaptcha_secretkey'] ? $crypt->decrypt($array_config_captcha['recaptcha_secretkey']) : '');
-
-$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_captcha['captcha_type'] == 2) ? ' style="display:none;"' : '');
-$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_captcha['captcha_type'] == 2) ? '' : ' style="display:none;"');
-
-foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
-    $array = array(
-        'value' => $recaptcha_type_key,
-        'select' => ($array_config_captcha['recaptcha_type'] == $recaptcha_type_key) ? ' selected="selected"' : '',
-        'text' => $recaptcha_type_title
-    );
-    $xtpl->assign('RECAPTCHA_TYPE', $array);
-    $xtpl->parse('main.recaptcha_type');
-}
-
-for ($i = 2; $i < 10; $i++) {
-    $array = array(
-        'value' => $i,
-        'select' => ($i == $array_define_captcha['nv_gfx_num']) ? ' selected="selected"' : '',
-        'text' => $i
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.nv_gfx_num');
-}
-$xtpl->assign('NV_GFX_WIDTH', $array_define_captcha['nv_gfx_width']);
-$xtpl->assign('NV_GFX_HEIGHT', $array_define_captcha['nv_gfx_height']);
-$xtpl->assign('NV_ALLOWED_HTML_TAGS', $array_config_define['nv_allowed_html_tags']);
+$tpl->assign('CONFIG_FLOOD', $array_config_flood);
+$tpl->assign('CONFIG_GLOBAL', $array_config_global);
+$tpl->assign('CONFIG_DEFINE', $array_config_define);
+$tpl->assign('PROXY_BLOCKER', $proxy_blocker_array);
+$tpl->assign('CAPTCHA_ARRAY', $captcha_array);
+$tpl->assign('CAPTCHA_TYPE', $captcha_type_array);
+$tpl->assign('CONFIG_CAPTCHA', $array_config_captcha);
+$tpl->assign('RECAPTCHA_TYPE', $recaptcha_type_array);
+$tpl->assign('DEFINE_CAPTCHA', $array_define_captcha);
 
 $mask_text_array = array();
 $mask_text_array[0] = '255.255.255.255';
@@ -478,101 +412,38 @@ $banip_area_array[1] = $nv_Lang->getModule('banip_area_front');
 $banip_area_array[2] = $nv_Lang->getModule('banip_area_admin');
 $banip_area_array[3] = $nv_Lang->getModule('banip_area_both');
 
-$xtpl->assign('MASK_TEXT_ARRAY', $mask_text_array);
-$xtpl->assign('BANIP_AREA_ARRAY', $banip_area_array);
+$tpl->assign('MASK_ARRAY', $mask_text_array);
+$tpl->assign('AREA_ARRAY', $banip_area_array);
 
 // Danh sách các IP cấm
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=0 ORDER BY ip DESC';
-$result = $db->query($sql);
-$i = 0;
-while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
-    ++$i;
-    $xtpl->assign('ROW', array(
-        'dbip' => $dbip,
-        'dbmask' => $mask_text_array[$dbmask],
-        'dbarea' => $banip_area_array[$dbarea],
-        'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
-        'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $nv_Lang->getModule('banip_nolimit'),
-        'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;id=' . $dbid,
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;del=1&amp;id=' . $dbid
-    ));
-
-    $xtpl->parse('main.listip.loop');
-}
-if ($i) {
-    $xtpl->parse('main.listip');
-}
+$tpl->assign('LISTIP', $db->query($sql)->fetchAll());
 
 if (!empty($cid)) {
     list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $cid)->fetch(3);
     $nv_Lang->setModule('banip_add', $nv_Lang->getModule('banip_edit'));
 }
 
-$xtpl->assign('BANIP_TITLE', ($cid) ? $nv_Lang->getModule('banip_title_edit') : $nv_Lang->getModule('banip_title_add'));
-$xtpl->assign('DATA', array(
+$tpl->assign('BANIP_TITLE', ($cid) ? $nv_Lang->getModule('banip_title_edit') : $nv_Lang->getModule('banip_title_add'));
+$tpl->assign('DATA', [
     'cid' => $cid,
     'ip' => $ip,
-    'selected3' => ($mask == 3) ? ' selected="selected"' : '',
-    'selected2' => ($mask == 2) ? ' selected="selected"' : '',
-    'selected1' => ($mask == 1) ? ' selected="selected"' : '',
-    'selected_area_1' => ($area == 1) ? ' selected="selected"' : '',
-    'selected_area_2' => ($area == 2) ? ' selected="selected"' : '',
-    'selected_area_3' => ($area == 3) ? ' selected="selected"' : '',
-    'begintime' => !empty($begintime) ? date('d/m/Y', $begintime) : '',
-    'endtime' => !empty($endtime) ? date('d/m/Y', $endtime) : '',
-    'notice' => $notice
-));
+    'mask' => $mask,
+    'area' => $area,
+    'begintime' => $begintime,
+    'endtime' => $endtime,
+    'notice' => $notice,
+]);
 
 // Danh sách các IP không bị kiểm tra Flood
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=1 ORDER BY ip DESC';
-$result = $db->query($sql);
-$i = 0;
-while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
-    ++$i;
-    $xtpl->assign('ROW', array(
-        'dbip' => $dbip,
-        'dbmask' => $mask_text_array[$dbmask],
-        'dbarea' => $banip_area_array[$dbarea],
-        'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
-        'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $nv_Lang->getModule('banip_nolimit'),
-        'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;flid=' . $dbid,
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;fldel=1&amp;flid=' . $dbid
-    ));
+$tpl->assign('NOFLIPS', $db->query($sql)->fetchAll());
 
-    $xtpl->parse('main.noflips.loop');
-}
-if ($i) {
-    $xtpl->parse('main.noflips');
-}
+$tpl->assign('NOFLOODIP_TITLE', !empty($flid) ? $nv_Lang->getModule('noflood_ip_edit') : $nv_Lang->getModule('noflood_ip_add'));
+$tpl->assign('FLDATA', $array_flip);
+$tpl->assign('FLID', $flid);
 
-$xtpl->assign('NOFLOODIP_TITLE', !empty($flcid) ? $nv_Lang->getModule('noflood_ip_edit') : $nv_Lang->getModule('noflood_ip_add'));
-$xtpl->assign('FLDATA', array(
-    'flid' => $flid,
-    'flip' => $array_flip['flip'],
-    'selected3' => ($array_flip['flmask'] == 3) ? ' selected="selected"' : '',
-    'selected2' => ($array_flip['flmask'] == 2) ? ' selected="selected"' : '',
-    'selected1' => ($array_flip['flmask'] == 1) ? ' selected="selected"' : '',
-    'selected_area_1' => ($array_flip['flarea'] == 1) ? ' selected="selected"' : '',
-    'selected_area_2' => ($array_flip['flarea'] == 2) ? ' selected="selected"' : '',
-    'selected_area_3' => ($array_flip['flarea'] == 3) ? ' selected="selected"' : '',
-    'begintime' => !empty($array_flip['flbegintime']) ? date('d/m/Y', $array_flip['flbegintime']) : '',
-    'endtime' => !empty($array_flip['flendtime']) ? date('d/m/Y', $array_flip['flendtime']) : '',
-    'notice' => $array_flip['flnotice']
-));
-
-for ($i = 0; $i <= 3; $i++) {
-    $two_step_verification = array(
-        'key' => $i,
-        'title' => $nv_Lang->getModule('two_step_verification' . $i),
-        'selected' => $i == $array_config_global['two_step_verification'] ? ' selected="selected"' : ''
-    );
-    $xtpl->assign('TWO_STEP_VERIFICATION', $two_step_verification);
-    $xtpl->parse('main.two_step_verification');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
-
+$contents = $tpl->fetch($op . '.tpl');
 $page_title = $nv_Lang->getModule('security');
 
 include NV_ROOTDIR . '/includes/header.php';

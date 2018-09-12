@@ -68,30 +68,19 @@ $(document).ready(function(){
         $('[data-toggle="controlrw1"]').change();
     });
 
-    // Smtp
-    $("input[name=mailer_mode]").click(function() {
-        var type = $(this).val();
-        if (type == "smtp") {
-            $("#smtp").show();
+    // Cấu hình SMTP
+    $('[name="mailer_mode"]').on('change', function() {
+        if ($(this).val() == 'smtp') {
+            $('#mailer_mode_smtp').removeClass('d-none');
         } else {
-            $("#smtp").hide();
+            $('#mailer_mode_smtp').addClass('d-none');
         }
     });
 
-    // Security
-    if($.fn.datepicker) {
-        $(".datepicker, #start_date").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true
-        });
-    }
+    // Các thiết lập an ninh
     $('a.deleteone-ip').click(function() {
-        if (confirm(LANG.banip_delete_confirm)) {
+        var btn = $(this);
+        if (confirm(btn.data('msgc'))) {
             var url = $(this).attr('href');
             var selectedtab = $('[name="gselectedtab"]').val();
             $.ajax({
@@ -99,7 +88,7 @@ $(document).ready(function(){
                 url : url,
                 data : '',
                 success : function(data) {
-                    alert(LANG.banip_del_success);
+                    alert(btn.data('msgs'));
                     window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security&selectedtab=" + selectedtab;
                 }
             });
@@ -108,11 +97,11 @@ $(document).ready(function(){
     });
     $('[data-toggle="ctcaptcha"]').change(function() {
         if ($(this).val() == '2') {
-            $('[data-captcha="typebasic"]').hide();
-            $('[data-captcha="typerecaptcha"]').show();
+            $('[data-captcha="typebasic"]').addClass('d-none');
+            $('[data-captcha="typerecaptcha"]').removeClass('d-none');
         } else {
-            $('[data-captcha="typebasic"]').show();
-            $('[data-captcha="typerecaptcha"]').hide();
+            $('[data-captcha="typebasic"]').removeClass('d-none');
+            $('[data-captcha="typerecaptcha"]').addClass('d-none');
         }
     });
 
