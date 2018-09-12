@@ -2,14 +2,14 @@
     <div class="card-body">
         <form method="post" action="{$FORM_ACTION}" autocomplete="off">
             <div class="form-group row">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cookie_prefix">{$LANG->get('cookie_prefix')}</label>
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cookie_prefix">{$LANG->get('cookie_prefix')} <i class="text-danger">(*)</i></label>
                 <div class="col-12 col-sm-8 col-lg-6">
                     <input type="text" class="form-control form-control-sm" id="cookie_prefix" name="cookie_prefix" value="{$DATA['cookie_prefix']}">
                     <span class="form-text text-muted">{$LANG->get('rule_alphanumeric')}</span>
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="session_prefix">{$LANG->get('session_prefix')}</label>
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="session_prefix">{$LANG->get('session_prefix')} <i class="text-danger">(*)</i></label>
                 <div class="col-12 col-sm-8 col-lg-6">
                     <input type="text" class="form-control form-control-sm" id="session_prefix" name="session_prefix" value="{$DATA['session_prefix']}">
                     <span class="form-text text-muted">{$LANG->get('rule_alphanumeric')}</span>

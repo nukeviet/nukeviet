@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 1:58
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -87,58 +87,8 @@ function nv_admin_add_theme($contents)
         $xtpl->parse('main.min');
     }
 
-    $xtpl->assign('DELETE', ! empty($contents['del'][1]) ? ' checked="checked"' : '');
+    $xtpl->assign('DELETE', !empty($contents['del'][1]) ? ' checked="checked"' : '');
 
     $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
- * main_theme()
- *
- * @param mixed $contents
- * @return
- */
-function main_theme($contents)
-{
-    if (empty($contents)) {
-        return '';
-    }
-
-    global $global_config, $module_file;
-
-    $xtpl = new XTemplate('cronjobs_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
-    foreach ($contents as $id => $values) {
-        $xtpl->assign('DATA', array(
-            'caption' => $values['caption'],
-            'edit' => empty($values['edit']) ? array() : $values['edit'],
-            'disable' => empty($values['disable']) ? array() : $values['disable'],
-            'delete' => empty($values['delete']) ? array() : $values['delete'],
-            'id' => $id
-        ));
-
-        if (! empty($values['edit'][0])) {
-            $xtpl->parse('main.edit');
-        }
-        if (! empty($values['disable'][0])) {
-            $xtpl->parse('main.disable');
-        }
-        if (! empty($values['delete'][0])) {
-            $xtpl->parse('main.delete');
-        }
-
-        foreach ($values['detail'] as $key => $value) {
-            $xtpl->assign('ROW', array(
-                'key' => $key,
-                'value' => $value
-            ));
-
-            $xtpl->parse('main.loop');
-        }
-
-        $xtpl->parse('main');
-    }
-
     return $xtpl->text('main');
 }

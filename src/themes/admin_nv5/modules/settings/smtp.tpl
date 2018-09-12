@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-divider"></div>
                 <div class="form-group row">
-                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="smtp_host">{$LANG->get('outgoing')}</label>
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="smtp_host">{$LANG->get('outgoing')} <i class="text-danger">(*)</i></label>
                     <div class="col-12 col-sm-8 col-lg-6">
                         <input type="text" class="form-control form-control-sm" id="smtp_host" name="smtp_host" value="{$DATA['smtp_host']}">
                     </div>
