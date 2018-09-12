@@ -161,3 +161,7 @@ $lang_module['notification_empty'] = '<p align="center">No Notification!</p>';
 $lang_module['notification_module_auto_deactive'] = 'has stopped operation module <strong>%s</strong> because error';
 $lang_module['notification_cronjobs_auto_deactive'] = 'has stopped operation cronjob <strong>%s</strong> because error';
 $lang_module['notification_hide'] = 'Hide this notification';
+$lang_module['notification_s0'] = 'All status';
+$lang_module['notification_s1'] = 'Unread';
+$lang_module['notification_s2'] = 'Watched';
+$lang_module['notification_mark_read'] = 'Marked as read';

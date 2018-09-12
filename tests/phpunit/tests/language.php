@@ -73,8 +73,8 @@ class TestsLanguageBase extends TestCase
                     $compareLang2 = empty($lang_module) ? $lang_global : $lang_module;
                     $redundant = array_diff_key($compareLang2, $compareLang1);
                     $notTranslated = array_diff_key($compareLang1, $compareLang2);
-                    $this->assertCount(0, $redundant, 'Redundant lang ' . $lang . ':' . PHP_EOL . implode(PHP_EOL, array_keys($redundant)));
-                    $this->assertCount(0, $notTranslated, 'Not Translated lang ' . $lang . ':' . PHP_EOL . implode(PHP_EOL, array_keys($notTranslated)));
+                    $this->assertCount(0, $redundant, 'Redundant lang includes ' . $lang . ' file ' . $file . ':' . PHP_EOL . implode(PHP_EOL, array_keys($redundant)));
+                    $this->assertCount(0, $notTranslated, 'Not Translated lang includes ' . $lang . ' file ' . $file . ':' . PHP_EOL . implode(PHP_EOL, array_keys($notTranslated)));
                 }
             }
         }
