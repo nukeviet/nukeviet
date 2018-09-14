@@ -182,6 +182,9 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows (id
     (2, 'vinades', 2, 1, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 2),
     (3, 'Quang cao giua trang', 1, 1, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";
 
+// FIXME ID 3, 4 dùng để dev giao diện admin_nv5, sau khi dev xong xóa đi
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (pid, plugin_file, plugin_area, weight) VALUES
     (1, 'qrcode.php', 'get_qr_code', 1),
-    (2, 'cdn_js_css_image.php', 'change_site_buffer', 1)";
+    (2, 'cdn_js_css_image.php', 'change_site_buffer', 1),
+    (3, 'get_global_admin_theme.php', 'get_global_admin_theme', 1),
+    (4, 'get_module_admin_theme.php', 'get_module_admin_theme', 1)";
