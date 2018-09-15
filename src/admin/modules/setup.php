@@ -295,7 +295,10 @@ foreach ($modules_data as $row) {
             $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5('setmodule' . $row['title'] . NV_CHECK_SESSION);
 
             if (strtolower($mod['module_file']) == $mod['title']) {
-                $array_modules[] = $mod;
+                // Chỉ hiển thị những module gốc chưa thiết lập
+                if (!empty($mod['url_setup'])) {
+                    $array_modules[] = $mod;
+                }
 
                 if ($row['is_virtual']) {
                     $mod_virtual[] = $mod['title'];
