@@ -339,6 +339,7 @@ $lang_global['off'] = 'Off';
 $lang_global['system'] = 'System';
 $lang_global['address'] = 'Address';
 $lang_global['close'] = 'Close';
+$lang_global['order'] = 'Order';
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'United Arab Emirates';
 $lang_global['country_AF'] = 'Afghanistan';

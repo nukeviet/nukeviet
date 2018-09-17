@@ -286,6 +286,7 @@ define('NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language');
 define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
 define('NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs');
 define('NV_NOTIFICATION_GLOBALTABLE', $db_config['prefix'] . '_notification');
+define('NV_EMAILTEMPLATES_GLOBALTABLE', $db_config['prefix'] . '_emailtemplates');
 
 define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
 define('NV_BANNERS_GLOBALTABLE', $db_config['prefix'] . '_banners');

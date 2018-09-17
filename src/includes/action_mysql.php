@@ -8,12 +8,17 @@
  * @Createdate Jun 20, 2010 8:59:32 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification');
 
+/**
+ * @param string $table_des
+ * @param string $table_src
+ * @return number
+ */
 function nv_copy_structure_table($table_des, $table_src)
 {
     global $db;
@@ -21,6 +26,10 @@ function nv_copy_structure_table($table_des, $table_src)
     return $db->exec('CREATE TABLE ' . $table_des . ' LIKE ' . $table_src);
 }
 
+/**
+ * @param string $lang
+ * @return string[]
+ */
 function nv_delete_table_sys($lang)
 {
     global $db_config;
@@ -36,9 +45,23 @@ function nv_delete_table_sys($lang)
     $sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs DROP ' . $lang . '_cron_name';
     $sql_drop_table[] = 'DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=\'' . $lang . '\'';
 
+    // Xóa các trường theo ngôn ngữ email template
+    $sql_drop_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates
+      DROP " . $lang . "_title,
+      DROP " . $lang . "_subject,
+      DROP " . $lang . "_content
+    ";
+    $sql_drop_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories
+      DROP " . $lang . "_title
+    ";
+
     return $sql_drop_table;
 }
 
+/**
+ * @param string $lang
+ * @return string[]
+ */
 function nv_create_table_sys($lang)
 {
     global $db_config, $global_config, $db;
@@ -209,6 +232,44 @@ function nv_create_table_sys($lang)
 
     $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
     $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs ADD " . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
+
+    /*
+     * Tạo các trường theo ngôn ngữ email template
+     * Copy dữ liệu sang các trường
+     * Thêm khóa cho các trường
+     */
+    $array_columns = $db->columns_array($db_config['prefix'] . '_emailtemplates');
+    $default_lang = '';
+    foreach ($array_columns as $_colkey => $_coldata) {
+        if (preg_match('/^([a-z]{2})\_content$/', $_colkey, $m)) {
+            $default_lang = $m[1];
+            break;
+        }
+    }
+
+    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates
+        ADD " . $lang . "_title varchar(250) NOT NULL DEFAULT '',
+        ADD " . $lang . "_subject varchar(250) NOT NULL DEFAULT '',
+        ADD " . $lang . "_content mediumtext NOT NULL
+    ";
+    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories
+        ADD " . $lang . "_title varchar(250) NOT NULL
+    ";
+
+    if (!empty($default_lang)) {
+        $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_emailtemplates SET
+            " . $lang . "_title = " . $default_lang . "_title
+        ";
+        $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_emailtemplates_categories SET
+            " . $lang . "_title = " . $default_lang . "_title
+        ";
+    }
+    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates
+        ADD UNIQUE " . $lang . "_title (" . $lang . "_title(191))
+    ";
+    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories
+        ADD UNIQUE " . $lang . "_title (" . $lang . "_title(191))
+    ";
 
     return $sql_create_table;
 }

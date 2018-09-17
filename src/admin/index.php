@@ -117,6 +117,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
             $global_config['module_theme'] = $admin_info['admin_theme'];
         } elseif (is_dir(NV_ROOTDIR . '/themes/admin_default/modules/' . $module_file)) {
             $global_config['module_theme'] = 'admin_default';
+        } else {
+            $global_config['module_theme'] = '';
         }
         // Hook để tùy chỉnh giao diện theo module trong admin
         $global_config['module_theme'] = nv_apply_hook('', 'get_module_admin_theme', [$global_config['module_theme'], $module_name, $module_info, $op], $global_config['module_theme']);

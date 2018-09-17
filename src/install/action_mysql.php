@@ -12,6 +12,12 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+/*
+ * Xóa hết các bảng prefix trùng với prefix cài đặt
+ * Khởi tạo các bảng dùng cho hệ thống
+ * Là file chạy đầu tiên trong quá trình tạo CSDL
+ */
+
 // Ten cac table cua CSDL dung chung cho he thong
 $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
 while ($item = $result->fetch()) {
@@ -349,4 +355,33 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   view tinyint(1) unsigned NOT NULL DEFAULT '0',
   is_new tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Mới gửi đến',
   PRIMARY KEY (id)
+) ENGINE=InnoDB";
+
+// CSDL module email templates
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates (
+  emailid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  catid smallint(4) unsigned NOT NULL DEFAULT '0',
+  time_add int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo lúc',
+  time_update int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Cập nhật lúc',
+  send_name varchar(255) NOT NULL DEFAULT '' COMMENT 'Tên người gửi',
+  send_email varchar(255) NOT NULL DEFAULT '' COMMENT 'Email người gửi',
+  send_cc text NOT NULL COMMENT 'CC Emails',
+  send_bcc text NOT NULL COMMENT 'BCC Emails',
+  attachments text NOT NULL COMMENT 'Đính kèm',
+  is_system tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Của hệ thống hay không',
+  is_plaintext tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Gửi dạng text thuần hay có định dạng',
+  is_disabled tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Đình chỉ gửi mail hay không',
+  default_subject varchar(250) NOT NULL DEFAULT '' COMMENT 'Tiêu đề email tất cả các ngôn ngữ',
+  default_content mediumtext NOT NULL COMMENT 'Nội dung email tất cả các ngôn ngữ',
+  PRIMARY KEY (emailid),
+  KEY catid (catid)
+) ENGINE=InnoDB";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates_categories (
+  catid smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  time_add int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo lúc',
+  time_update int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Cập nhật lúc',
+  weight smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT 'Sắp thứ tự',
+  is_system tinyint(1) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (catid)
 ) ENGINE=InnoDB";

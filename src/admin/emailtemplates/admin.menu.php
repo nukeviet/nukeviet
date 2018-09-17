@@ -5,13 +5,12 @@
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 20:59
+ * @Createdate 07/30/2013 10:27
  */
 
-if (!defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$sql_drop_module = [];
-
-$sql_create_module = $sql_drop_module;
+$submenu['contents'] = $nv_Lang->getModule('add_template');
+$submenu['categories'] = $nv_Lang->getModule('categories');

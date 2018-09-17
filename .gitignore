@@ -61,6 +61,8 @@ composer.lock
 /src/assets/download
 /src/assets/*.jpg
 /src/uploads/download
+/src/assets/emailtemplates/*.jpg
+/src/uploads/emailtemplates/*.jpg
 /src/uploads/users/*.jpg
 /src/uploads/contact/*.jpg
 /src/uploads/about/*.jpg

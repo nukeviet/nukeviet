@@ -322,6 +322,7 @@ $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 $lang_global['unknown'] = 'Không xác định';
 $lang_global['joinnow'] = 'Chúng tôi trên mạng xã hội';
 $lang_global['contactUs'] = 'Thông tin liên hệ';
+$lang_global['order'] = 'Thứ tự';
 
 $lang_global['company_name'] = 'Tên chính thức';
 $lang_global['company_sortname'] = 'Tên viết tắt';

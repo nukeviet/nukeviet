@@ -23,7 +23,8 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
     (8, 'modules', 'mod_modules', 'fas fa-cubes', 8, 1, 1, 0, ''),
     (9, 'themes', 'mod_themes', 'fas fa-adjust', 9, 1, 1, 0, ''),
     (10, 'extensions', 'mod_extensions', 'fas fa-layer-group', 10, 1, 0, 0, ''),
-    (11, 'upload', 'mod_upload', 'fas fa-file-alt', 11, 1, 1, 1, '')";
+    (11, 'upload', 'mod_upload', 'fas fa-file-alt', 11, 1, 1, 1, ''),
+    (12, 'emailtemplates', 'mod_emailtemplates', 'fas fa-envelope', 12, 1, 1, 0, '')";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
