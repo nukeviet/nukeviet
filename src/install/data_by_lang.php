@@ -438,3 +438,22 @@ if (!empty($menu_rows_lev0)) {
 
 // Các plugin của module
 $db->query("INSERT INTO " . $db_config['prefix'] . "_plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES ('" . $lang_data . "', 'del_menu_row.php', 'after_module_deleted', 'menu', 'Menu', 1)");
+
+// Danh mục mẫu email
+if (!empty($module_data) and $module_data == 'language') {
+    // Cập nhật lang
+    $db->query("UPDATE " . $db_config['prefix'] . "_emailtemplates_categories SET " . $lang_data . "_title=" . $db->quote($install_lang['emailtemplates']['cat_system']) . " WHERE catid=1");
+    $db->query("UPDATE " . $db_config['prefix'] . "_emailtemplates_categories SET " . $lang_data . "_title=" . $db->quote($install_lang['emailtemplates']['cat_author']) . " WHERE catid=2");
+    $db->query("UPDATE " . $db_config['prefix'] . "_emailtemplates_categories SET " . $lang_data . "_title=" . $db->quote($install_lang['emailtemplates']['cat_user']) . " WHERE catid=3");
+    $db->query("UPDATE " . $db_config['prefix'] . "_emailtemplates_categories SET " . $lang_data . "_title=" . $db->quote($install_lang['emailtemplates']['cat_module']) . " WHERE catid=4");
+} else {
+    // Thêm mới
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_emailtemplates_categories (
+        catid, time_add, weight, is_system, " . $lang_data . "_title
+    ) VALUES
+        (1, " . NV_CURRENTTIME . ", 1, 1, " . $db->quote($install_lang['emailtemplates']['cat_system']) . "),
+        (2, " . NV_CURRENTTIME . ", 2, 1, " . $db->quote($install_lang['emailtemplates']['cat_author']) . "),
+        (3, " . NV_CURRENTTIME . ", 3, 1, " . $db->quote($install_lang['emailtemplates']['cat_user']) . "),
+        (4, " . NV_CURRENTTIME . ", 4, 1, " . $db->quote($install_lang['emailtemplates']['cat_module']) . ")
+    ");
+}

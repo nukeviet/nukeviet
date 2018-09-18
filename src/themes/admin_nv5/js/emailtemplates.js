@@ -57,6 +57,33 @@ $(document).ready(function() {
         }
     });
 
+    // Xóa mẫu email
+    $('[data-toggle="deltpl"]').on('click', function(e) {
+        e.preventDefault();
+        var emailid = $(this).data('emailid');
+        if (confirm(nv_is_del_confirm[0])) {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+                data: {
+                    'delete': 1,
+                    'emailid': emailid
+                },
+                cache: false,
+                success: function(res) {
+                    var r_split = res.split('_');
+                    if (r_split[0] != 'OK') {
+                        alert(nv_is_change_act_confirm[2]);
+                    }
+                    location.reload();
+                },
+                error: function(jqXHR, exception) {
+                    location.reload();
+                }
+            });
+        }
+    });
+
     // Xóa đính kèm
     $(document).delegate('[data-toggle="attdel"]', 'click', function(e) {
         e.preventDefault();
@@ -75,3 +102,5 @@ $(document).ready(function() {
         $('#tpl-attachments').append($('#tpl-attach-temp').html());
     });
 });
+
+//updatePerfectScrollbar

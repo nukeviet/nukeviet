@@ -118,9 +118,23 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($data['title'])) {
         $error = $nv_Lang->getModule('categories_error_title');
     } else {
-        $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . NV_LANG_DATA . '_title = :title' . ($catid ? ' AND catid != ' . $catid : '');
-        $sth = $db->prepare($sql);
-        $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
+        if (!$catid) {
+            // Kiểm tra trùng lặp trên tất cả các ngôn ngữ khi thêm mới
+            $sql_or = [];
+            foreach ($global_config['setup_langs'] as $lang) {
+                $sql_or[] = $lang . '_title = :' . $lang . '_title';
+            }
+            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . implode(' OR ', $sql_or);
+            $sth = $db->prepare($sql);
+            foreach ($global_config['setup_langs'] as $lang) {
+                $sth->bindParam(':' . $lang . '_title', $data['title'], PDO::PARAM_STR);
+            }
+        } else {
+            // Kiểm tra trùng lặp trên ngôn ngữ hiện tại khi sửa
+            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . NV_LANG_DATA . '_title = :title AND catid != ' . $catid;
+            $sth = $db->prepare($sql);
+            $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
+        }
         $sth->execute();
         $num = $sth->fetchColumn();
 
@@ -133,16 +147,28 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $weight = $result->fetch();
                 $weight = $weight['weight'] + 1;
 
-                $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories (time_add, time_update, weight, is_system, ' . NV_LANG_DATA . '_title) VALUES (
-                    ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $weight . ', 0, :title
+                $field_title = $field_value = '';
+                foreach ($global_config['setup_langs'] as $lang) {
+                    $field_title .= ', ' . $lang . '_title';
+                    $field_value .= ', :' . $lang . '_title';
+                }
+
+                $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories (time_add, time_update, weight, is_system' . $field_title . ') VALUES (
+                    ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $weight . ', 0' . $field_value . '
                 )';
             } else {
-                $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET time_update = ' . NV_CURRENTTIME . ', ' . NV_LANG_DATA . '_title=:title WHERE catid = ' . $catid;
+                $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET time_update = ' . NV_CURRENTTIME . ', ' . NV_LANG_DATA . '_title=:' . NV_LANG_DATA . '_title WHERE catid = ' . $catid;
             }
 
             try {
                 $sth = $db->prepare($sql);
-                $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
+                if (!$catid) {
+                    foreach ($global_config['setup_langs'] as $lang) {
+                        $sth->bindParam(':' . $lang . '_title', $data['title'], PDO::PARAM_STR);
+                    }
+                } else {
+                    $sth->bindParam(':' . NV_LANG_DATA . '_title', $data['title'], PDO::PARAM_STR);
+                }
                 $sth->execute();
 
                 if ($sth->rowCount()) {

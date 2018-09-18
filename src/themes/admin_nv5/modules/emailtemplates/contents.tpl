@@ -51,10 +51,11 @@
                 <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('tpl_is_disabled')}</label>
                 <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
                     <label class="custom-control custom-checkbox custom-control-inline mb-1">
-                        <input class="custom-control-input" type="checkbox" name="is_plaintext" value="1"{if $DATA['is_plaintext']} checked="checked"{/if}><span class="custom-control-label"> {$LANG->get('tpl_is_disabled_help')}</span>
+                        <input class="custom-control-input" type="checkbox" name="is_disabled" value="1"{if $DATA['is_disabled']} checked="checked"{/if}><span class="custom-control-label"> {$LANG->get('tpl_is_disabled_help')}</span>
                     </label>
                 </div>
             </div>
+            {if not $DATA['is_system']}
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tpl_title">{$LANG->get('tpl_title')} <i class="text-danger">(*)</i></label>
                 <div class="col-12 col-sm-8 col-lg-6">
@@ -72,6 +73,7 @@
                     </select>
                 </div>
             </div>
+            {/if}
         </div>
     </div>
     <div class="card card-border-color card-border-color-primary">
@@ -133,6 +135,34 @@
         </div>
     </div>
 </form>
+
+<div class="card">
+    <div class="card-header card-header-divider">
+        {$LANG->get('merge_field')}
+        <div class="card-subtitle">{$LANG->get('merge_field_help')}</div>
+    </div>
+    <div class="pr-4 pb-4 pt-3">
+        <div class="nv-scroller merge-fields-area" data-wheel="true">
+            <div class="content px-4">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div id="merge-fields-content"></div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <h4 class="mt-0 pt-0">{$LANG->get('merge_field_guild1')}</h4>
+                        {$LANG->get('merge_field_guild2')}
+                        {literal}<pre><code>{if $username eq "hoaquynhtim99"}<br>Is Admin<br>{/if}</code></pre>{/literal}
+                        {$LANG->get('merge_field_guild3')}.
+                        <h4>{$LANG->get('merge_field_guild4')}</h4>
+                        {$LANG->get('merge_field_guild5')}
+                        {literal}<pre><code>{foreach from=$array_users item=user}<br>User: {$user}<br>{/foreach}</code></pre>{/literal}
+                        {$LANG->get('merge_field_guild6')}.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <link data-offset="0" rel="stylesheet" href="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/select2.min.css">
 

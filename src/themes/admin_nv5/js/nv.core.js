@@ -152,7 +152,7 @@ $(document).ready(function() {
     // Thanh cuộn
     $('.nv-scroller').each(function(k, v) {
         nvScrollbar[k] = new PerfectScrollbar(v, {
-            wheelPropagation: false
+            wheelPropagation: $(this).data('wheel') ? true : false
         });
     });
 

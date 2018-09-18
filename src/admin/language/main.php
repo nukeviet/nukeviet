@@ -199,7 +199,6 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 $menu_rows_lev0 = array(); //DO NOT DELETE THIS LINE
                 $menu_rows_lev1 = array(); //DO NOT DELETE THIS LINE
 
-
                 include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
                 $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules ORDER BY weight ASC');

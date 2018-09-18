@@ -8,11 +8,11 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$install_lang['modules'] = array();
+$install_lang['modules'] = [];
 $install_lang['modules']['about'] = 'About';
 $install_lang['modules']['about_for_acp'] = '';
 $install_lang['modules']['news'] = 'News';
@@ -43,8 +43,8 @@ $install_lang['modules']['freecontent_for_acp'] = '';
 $install_lang['modules']['two_step_verification'] = '2-Step Verification';
 $install_lang['modules']['two_step_verification_for_acp'] = '';
 
-$install_lang['modfuncs'] = array();
-$install_lang['modfuncs']['users'] = array();
+$install_lang['modfuncs'] = [];
+$install_lang['modfuncs']['users'] = [];
 $install_lang['modfuncs']['users']['login'] = 'Login';
 $install_lang['modfuncs']['users']['register'] = 'Register';
 $install_lang['modfuncs']['users']['lostpass'] = 'Password recovery';
@@ -54,7 +54,7 @@ $install_lang['modfuncs']['users']['memberlist'] = 'Members list';
 $install_lang['modfuncs']['users']['logout'] = 'Logout';
 $install_lang['modfuncs']['users']['groups'] = 'Group management';
 
-$install_lang['modfuncs']['statistics'] = array();
+$install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'By referrers';
 $install_lang['modfuncs']['statistics']['allcountries'] = 'By countries';
 $install_lang['modfuncs']['statistics']['allbrowsers'] = 'By browsers ';
@@ -62,30 +62,30 @@ $install_lang['modfuncs']['statistics']['allos'] = 'By operating system';
 $install_lang['modfuncs']['statistics']['allbots'] = 'By search engines';
 $install_lang['modfuncs']['statistics']['referer'] = 'By month';
 
-$install_lang['blocks_groups'] = array();
-$install_lang['blocks_groups']['news'] = array();
+$install_lang['blocks_groups'] = [];
+$install_lang['blocks_groups']['news'] = [];
 $install_lang['blocks_groups']['news']['module.block_newscenter'] = 'Breaking news';
 $install_lang['blocks_groups']['news']['global.block_category'] = 'Category';
 $install_lang['blocks_groups']['news']['global.block_tophits'] = 'Top Hits';
-$install_lang['blocks_groups']['banners'] = array();
+$install_lang['blocks_groups']['banners'] = [];
 $install_lang['blocks_groups']['banners']['global.banners1'] = 'Center Banner';
 $install_lang['blocks_groups']['banners']['global.banners2'] = 'Left Banner';
 $install_lang['blocks_groups']['banners']['global.banners3'] = 'Right Banner';
-$install_lang['blocks_groups']['statistics'] = array();
+$install_lang['blocks_groups']['statistics'] = [];
 $install_lang['blocks_groups']['statistics']['global.counter'] = 'Statistics';
-$install_lang['blocks_groups']['about'] = array();
+$install_lang['blocks_groups']['about'] = [];
 $install_lang['blocks_groups']['about']['global.about'] = 'About';
-$install_lang['blocks_groups']['voting'] = array();
+$install_lang['blocks_groups']['voting'] = [];
 $install_lang['blocks_groups']['voting']['global.voting_random'] = 'Voting';
-$install_lang['blocks_groups']['users'] = array();
+$install_lang['blocks_groups']['users'] = [];
 $install_lang['blocks_groups']['users']['global.user_button'] = 'Member login';
-$install_lang['blocks_groups']['theme'] = array();
+$install_lang['blocks_groups']['theme'] = [];
 $install_lang['blocks_groups']['theme']['global.company_info'] = 'Managing company';
 $install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Main categories';
-$install_lang['blocks_groups']['freecontent'] = array();
+$install_lang['blocks_groups']['freecontent'] = [];
 $install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Introduction';
 
-$install_lang['cron'] = array();
+$install_lang['cron'] = [];
 $install_lang['cron']['cron_online_expired_del'] = 'Delete expired online status';
 $install_lang['cron']['cron_dump_autobackup'] = 'Automatic backup database';
 $install_lang['cron']['cron_auto_del_temp_download'] = 'Empty temporary files';
@@ -104,6 +104,13 @@ $install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock
 $install_lang['vinades_address'] = "Room 1706 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam";
 $install_lang['nukeviet_description'] = 'Sharing success, connect passions';
 $install_lang['disable_site_content'] = 'For technical reasons Web site temporary not available. we are very sorry for that inconvenience!';
+
+// Ngôn ngữ dữ liệu cho phần mẫu email
+$install_lang['emailtemplates'] = [];
+$install_lang['emailtemplates']['cat_system'] = 'System Messages';
+$install_lang['emailtemplates']['cat_author'] = 'Author Messages';
+$install_lang['emailtemplates']['cat_user'] = 'User Messages';
+$install_lang['emailtemplates']['cat_module'] = 'Module Messages';
 
 $menu_rows_lev0['about'] = array(
     'title' => $install_lang['modules']['about'],
@@ -136,7 +143,7 @@ $menu_rows_lev0['contact'] = array(
     'op' => ''
 );
 
-$menu_rows_lev1['users'] = array();
+$menu_rows_lev1['users'] = [];
 $menu_rows_lev1['users'][] = array(
     'title' => $install_lang['modfuncs']['users']['login'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=login",

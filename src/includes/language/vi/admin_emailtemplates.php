@@ -23,6 +23,7 @@ $lang_module['errorsave'] = 'Lỗi không xác định dẫn đến không thể
 $lang_module['add_template'] = 'Thêm mẫu email';
 $lang_module['edit_template'] = 'Sửa mẫu email';
 $lang_module['categories'] = 'Danh mục mẫu email';
+$lang_module['categories_other'] = 'Chưa được xếp loại';
 $lang_module['categories_list'] = 'Danh sách các danh mục';
 $lang_module['categories_add'] = 'Thêm danh mục';
 $lang_module['categories_edit'] = 'Sửa danh mục';
@@ -52,3 +53,15 @@ $lang_module['default_content_info'] = 'Áp dụng cho tất cả các ngôn ng�
 $lang_module['lang_content'] = 'Nội dung email theo ngôn ngữ';
 $lang_module['lang_content_info'] = 'Áp dụng riêng cho <strong>%s</strong>';
 $lang_module['tpl_list'] = 'Danh sách các mẫu email';
+$lang_module['tpl_is_active'] = 'Đang nhận email';
+$lang_module['tpl_is_disabled'] = 'Ngừng gửi email';
+$lang_module['tpl_is_disabled_label'] = 'Dừng';
+$lang_module['tpl_custom_label'] = 'Tùy biến';
+$lang_module['merge_field'] = 'Các trường hỗ trợ';
+$lang_module['merge_field_help'] = 'Các trường này tùy thuộc vào danh mục email, chúng sẽ tự động được thay bằng giá trị tương ứng khi xuất ra nội dung email';
+$lang_module['merge_field_guild1'] = 'Cách hiển thị có điều kiện';
+$lang_module['merge_field_guild2'] = 'Hiển thị nội dung dựa vào điều kiện của một biến. Ví dụ:';
+$lang_module['merge_field_guild3'] = 'Chi tiết hơn, mời xem tại <a href="https://www.smarty.net/docs/en/language.function.if.tpl" target="_blank">đây</a>';
+$lang_module['merge_field_guild4'] = 'Xuất ra dạng vòng lặp';
+$lang_module['merge_field_guild5'] = 'Duyệt mảng để xuất ra các phần tử trong mảng đó. Ví dụ:';
+$lang_module['merge_field_guild6'] = 'Chi tiết hơn, mời xem tại <a href="https://www.smarty.net/docs/en/language.function.foreach.tpl" target="_blank">đây</a>';

@@ -51,14 +51,19 @@ if (!empty($emailid)) {
         'default_subject' => '',
         'default_content' => '',
         'lang_subject' => '',
-        'lang_content' => ''
+        'lang_content' => '',
+        'is_system' => 0
     ];
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
     $page_title = $nv_Lang->getModule('add_template');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
-    $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
+    if (empty($array['is_system'])) {
+        $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
+        $array['title'] = $nv_Request->get_title('title', 'post', '');
+    }
+
     $array['send_name'] = $nv_Request->get_title('send_name', 'post', '');
     $array['send_email'] = $nv_Request->get_title('send_email', 'post', '');
     $array['send_cc'] = $nv_Request->get_title('send_cc', 'post', '');
@@ -66,7 +71,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['is_plaintext'] = intval($nv_Request->get_bool('is_plaintext', 'post', false));
     $array['is_disabled'] = intval($nv_Request->get_bool('is_disabled', 'post', false));
     $array['attachments'] = $nv_Request->get_typed_array('attachments', 'post', 'string', []);
-    $array['title'] = $nv_Request->get_title('title', 'post', '');
     $array['default_subject'] = $nv_Request->get_title('default_subject', 'post', '');
     $array['default_content'] = $nv_Request->get_editor('default_content', '', NV_ALLOWED_HTML_TAGS);
     $array['lang_subject'] = $nv_Request->get_title('lang_subject', 'post', '');
@@ -115,9 +119,23 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }elseif (empty($array['default_content'])) {
         $error = $nv_Lang->getModule('tpl_error_default_content');
     } else {
-        $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE ' . NV_LANG_DATA . '_title = :title' . ($array['emailid'] ? ' AND emailid != ' . $array['emailid'] : '');
-        $sth = $db->prepare($sql);
-        $sth->bindParam(':title', $array['title'], PDO::PARAM_STR);
+        if (!$array['emailid']) {
+            // Kiểm tra trùng lặp trên tất cả các ngôn ngữ khi thêm mới
+            $sql_or = [];
+            foreach ($global_config['setup_langs'] as $lang) {
+                $sql_or[] = $lang . '_title = :' . $lang . '_title';
+            }
+            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE ' . implode(' OR ', $sql_or);
+            $sth = $db->prepare($sql);
+            foreach ($global_config['setup_langs'] as $lang) {
+                $sth->bindParam(':' . $lang . '_title', $array['title'], PDO::PARAM_STR);
+            }
+        } else {
+            // Kiểm tra trùng lặp trên ngôn ngữ hiện tại khi sửa
+            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE ' . NV_LANG_DATA . '_title = :title AND emailid != ' . $array['emailid'];
+            $sth = $db->prepare($sql);
+            $sth->bindParam(':title', $array['title'], PDO::PARAM_STR);
+        }
         $sth->execute();
         $num = $sth->fetchColumn();
 
@@ -125,12 +143,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $error = $nv_Lang->getModule('tpl_error_exists');
         } else {
             if (!$array['emailid']) {
+                $field_title = $field_value = '';
+                foreach ($global_config['setup_langs'] as $lang) {
+                    $field_title .= ', ' . $lang . '_title, ' . $lang . '_subject, ' . $lang . '_content';
+                    $field_value .= ', :' . $lang . '_title, :' . $lang . '_subject, :' . $lang . '_content';
+                }
+
                 $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' (
-                    catid, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled, default_subject, default_content,
-                    ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_subject, ' . NV_LANG_DATA . '_content
+                    catid, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled, default_subject, default_content' . $field_title . '
                 ) VALUES (
-                    ' . $array['catid'] . ', ' . NV_CURRENTTIME . ', :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0, ' . $array['is_plaintext'] . ', ' . $array['is_disabled'] . ',
-                    :default_subject, :default_content, :lang_title, :lang_subject, :lang_content
+                    ' . $array['catid'] . ', ' . NV_CURRENTTIME . ', :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0, ' . $array['is_plaintext'] . ',
+                    ' . $array['is_disabled'] . ', :default_subject, :default_content' . $field_value . '
                 )';
             } else {
                 $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET
@@ -145,9 +168,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     is_disabled = ' . $array['is_disabled'] . ',
                     default_subject = :default_subject,
                     default_content = :default_content,
-                    ' . NV_LANG_DATA . '_title = :lang_title,
-                    ' . NV_LANG_DATA . '_subject = :lang_subject,
-                    ' . NV_LANG_DATA . '_content = :lang_content
+                    ' . NV_LANG_DATA . '_title = :' . NV_LANG_DATA . '_title,
+                    ' . NV_LANG_DATA . '_subject = :' . NV_LANG_DATA . '_subject,
+                    ' . NV_LANG_DATA . '_content = :' . NV_LANG_DATA . '_content
                 WHERE emailid = ' . $array['emailid'];
             }
 
@@ -166,9 +189,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $sth->bindParam(':attachments', $attachments, PDO::PARAM_STR, strlen($attachments));
                 $sth->bindParam(':default_subject', $array['default_subject'], PDO::PARAM_STR);
                 $sth->bindParam(':default_content', $default_content, PDO::PARAM_STR, strlen($default_content));
-                $sth->bindParam(':lang_title', $array['title'], PDO::PARAM_STR);
-                $sth->bindParam(':lang_subject', $array['lang_subject'], PDO::PARAM_STR);
-                $sth->bindParam(':lang_content', $lang_content, PDO::PARAM_STR, strlen($lang_content));
+
+                if (!$array['emailid']) {
+                    foreach ($global_config['setup_langs'] as $lang) {
+                        $sth->bindParam(':' . $lang . '_title', $array['title'], PDO::PARAM_STR);
+                        $sth->bindValue(':' . $lang . '_subject', '', PDO::PARAM_STR);
+                        $sth->bindValue(':' . $lang . '_content', '', PDO::PARAM_STR);
+                    }
+                } else {
+                    $sth->bindParam(':' . NV_LANG_DATA . '_title', $array['title'], PDO::PARAM_STR);
+                    $sth->bindParam(':' . NV_LANG_DATA . '_subject', $array['lang_subject'], PDO::PARAM_STR);
+                    $sth->bindParam(':' . NV_LANG_DATA . '_content', $lang_content, PDO::PARAM_STR, strlen($lang_content));
+                }
                 $sth->execute();
 
                 if ($sth->rowCount()) {
