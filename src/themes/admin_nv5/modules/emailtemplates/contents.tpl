@@ -73,6 +73,25 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tpl_pids">{$LANG->get('tpl_plugin')}</label>
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <select class="select2 select2-sm" id="tpl_pids" name="pids[]" multiple="multiple">
+                        {foreach from=$PLUGINS item=row}
+                        <option value="{$row.pid}"{if in_array($row.pid, $DATA['pids'])} selected="selected"{/if}>{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>
+                        {/foreach}
+                    </select>
+                    <div class="form-text text-muted">{$LANG->get('tpl_plugin_help')}</div>
+                </div>
+            </div>
+            {else}
+            <div class="d-none">
+                <select name="pids[]" multiple="multiple">
+                    {foreach from=$PLUGINS item=row}
+                    <option value="{$row.pid}"{if in_array($row.pid, $DATA['pids'])} selected="selected"{/if}>{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>
+                    {/foreach}
+                </select>
+            </div>
             {/if}
         </div>
     </div>
@@ -175,6 +194,65 @@ $(document).ready(function() {
         width: "100%",
         containerCssClass: "select2-sm"
     });
+    var fieldTimer;
+    $('[name="pids[]"]').on('change', function() {
+        if (fieldTimer) {
+            clearTimeout(fieldTimer);
+        }
+        $('#merge-fields-content').html('');
+        var pids = $(this).val();
+        if (pids.length < 1) {
+            updatePerfectScrollbar();
+            return;
+        }
+        fieldTimer = setTimeout(function() {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=contents&nocache=' + new Date().getTime(),
+                data: {
+                    'getMergeFields': 1,
+                    'pids': pids
+                },
+                cache: false,
+                success: function(res) {
+                    $('#merge-fields-content').html(res);
+                    fieldTimer = 0;
+                    updatePerfectScrollbar();
+                },
+                error: function(jqXHR, exception) {
+                    fieldTimer = 0;
+                    updatePerfectScrollbar();
+                }
+            });
+        }, 500);
+    });
+    $('[name="pids[]"]').trigger('change');
+    var focusEditor = 'emailtemplates_default_content';
+    if (typeof CKEDITOR != 'undefined') {
+        CKEDITOR.instances.emailtemplates_default_content.on('focus', function() {
+            focusEditor = 'emailtemplates_default_content';
+        });
+        CKEDITOR.instances.emailtemplates_lang_content.on('focus', function() {
+            focusEditor = 'emailtemplates_lang_content';
+        });
+    } else {
+        $('#emailtemplates_default_content').on('focus', function() {
+            focusEditor = 'emailtemplates_default_content';
+        });
+        $('#emailtemplates_lang_content').on('focus', function() {
+            focusEditor = 'emailtemplates_lang_content';
+        });
+    }
+    {literal}
+    $(document).delegate('[data-toggle="fchoose"]', 'click', function(e) {
+        e.preventDefault();
+        if (typeof CKEDITOR != 'undefined') {
+            CKEDITOR.instances[focusEditor].insertHtml(' {' + $(this).data('value') + '}');
+        } else {
+            $('#' + focusEditor).val($('#' + focusEditor).val() + ' {' + $(this).data('value') + '}');
+        }
+    });
+    {/literal}
 });
 </script>
 

@@ -162,11 +162,12 @@ foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
         foreach ($pdata as $priority => $_plugin) {
             $module_name = $_phook;
             $hook_module = $_plugin[1];
+            $pid = $_plugin[2];
             require NV_ROOTDIR . '/' . $_plugin[0];
         }
     }
 }
-unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook);
+unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook, $pid);
 
 if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';

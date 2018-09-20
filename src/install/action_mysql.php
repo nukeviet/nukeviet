@@ -329,7 +329,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   hook_module varchar(50) NOT NULL DEFAULT '',
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
-  UNIQUE KEY plugin (plugin_lang, plugin_area, plugin_module_name, hook_module)
+  UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
 ) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
@@ -360,6 +360,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
 // CSDL module email templates
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates (
   emailid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  pids varchar(255) NOT NULL DEFAULT '' COMMENT 'Các plugin xử lý dữ liệu',
   catid smallint(4) unsigned NOT NULL DEFAULT '0',
   time_add int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo lúc',
   time_update int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Cập nhật lúc',
@@ -377,6 +378,8 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates 
   KEY catid (catid)
 ) ENGINE=InnoDB";
 
+$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates AUTO_INCREMENT=1001;";
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates_categories (
   catid smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   time_add int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo lúc',
@@ -385,3 +388,5 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates_
   is_system tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (catid)
 ) ENGINE=InnoDB";
+
+$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories AUTO_INCREMENT=101;";

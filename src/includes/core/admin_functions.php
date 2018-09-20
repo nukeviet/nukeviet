@@ -26,7 +26,7 @@ function nv_groups_list($mod_data = 'users')
     } else {
         global $db, $db_config, $global_config, $nv_Lang;
 
-        $groups = array();
+        $groups = [];
         $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
         $result = $db->query('SELECT group_id, title, idsite FROM ' . $_mod_table . '_groups WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
         while ($row = $result->fetch()) {
@@ -102,7 +102,7 @@ function nv_save_file_config_global()
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
 
-    $config_variable = array();
+    $config_variable = [];
     $allowed_html_tags = '';
     $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
@@ -171,7 +171,7 @@ function nv_save_file_config_global()
     $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1 ORDER BY weight ASC';
     $result = $db->query($sql);
 
-    $setup_langs = array();
+    $setup_langs = [];
     while ($row = $result->fetch()) {
         $setup_langs[] = $row['lang'];
     }
@@ -186,12 +186,12 @@ function nv_save_file_config_global()
     $content_config .= "\$global_config['allowed_html_tags']=array(" . $allowed_html_tags . ");\n";
 
     //Xac dinh cac search_engine
-    $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : array();
+    $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : [];
     $content_config .= "\$global_config['engine_allowed']=" . nv_var_export($engine_allowed) . ";\n";
     $content_config .= "\n";
 
     $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
-    $tmp_array = array();
+    $tmp_array = [];
     $lang_array_exit = nv_scandir(NV_ROOTDIR . '/includes/language', "/^[a-z]{2}+$/");
     foreach ($lang_array_exit as $lang) {
         $tmp_array[$lang] = $language_array[$lang];
@@ -210,19 +210,19 @@ function nv_save_file_config_global()
 
     $content_config .= "\n";
 
-    $nv_plugins = array();
+    $nv_plugins = [];
     foreach ($setup_langs as $lang) {
-        $nv_plugins[$lang] = array();
+        $nv_plugins[$lang] = [];
         $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=\'all\' OR plugin_lang=\'' . $lang . '\' ORDER BY hook_module, plugin_area ASC, weight ASC';
         $_query = $db->query($_sql);
         while ($row = $_query->fetch()) {
             // Xác định HOOK gọi từ module hay hệ thống
             if (!isset($nv_plugins[$lang][$row['hook_module']])) {
-                $nv_plugins[$lang][$row['hook_module']] = array();
+                $nv_plugins[$lang][$row['hook_module']] = [];
             }
             // Xác định tiếp HOOK theo TAG
             if (!isset($nv_plugins[$lang][$row['hook_module']][$row['plugin_area']])) {
-                $nv_plugins[$lang][$row['hook_module']][$row['plugin_area']] = array();
+                $nv_plugins[$lang][$row['hook_module']][$row['plugin_area']] = [];
             }
             // Xác định file plugin
             if (empty($row['plugin_module_file'])) {
@@ -230,7 +230,9 @@ function nv_save_file_config_global()
             } else {
                 $plugin_file = 'modules/' . $row['plugin_module_file'] . '/hooks/' . $row['plugin_file'];
             }
-            $nv_plugins[$lang][$row['hook_module']][$row['plugin_area']][$row['weight']] = array($plugin_file, $row['plugin_module_name']);
+            $nv_plugins[$lang][$row['hook_module']][$row['plugin_area']][$row['weight']] = [
+                $plugin_file, $row['plugin_module_name'], $row['pid']
+            ];
         }
     }
     // Sắp xếp lại
@@ -286,7 +288,7 @@ function nv_geVersion($updatetime = 3600)
         );
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = !empty($array['body']) ? @unserialize($array['body']) : array();
+        $array = !empty($array['body']) ? @unserialize($array['body']) : [];
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -694,7 +696,7 @@ function nv_getExtVersion($updatetime = 3600)
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename ORDER BY title ASC';
         $result = $db->query($sql);
 
-        $array = $array_ext_ids = array();
+        $array = $array_ext_ids = [];
         while ($row = $result->fetch()) {
             $row['version'] = explode(' ', $row['version']);
 
@@ -706,7 +708,7 @@ function nv_getExtVersion($updatetime = 3600)
                 'current_release' => trim($row['version'][1]),
                 'remote_version' => '',
                 'remote_release' => 0,
-                'updateable' => array(), // Thong tin cac phien ban co the update
+                'updateable' => [], // Thong tin cac phien ban co the update
                 'author' => $row['author'],
                 'license' => '',
                 'mode' => $row['is_sys'] ? 'sys' : 'other',
@@ -737,7 +739,7 @@ function nv_getExtVersion($updatetime = 3600)
             );
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = !empty($apidata['body']) ? @unserialize($apidata['body']) : array();
+            $apidata = !empty($apidata['body']) ? @unserialize($apidata['body']) : [];
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {
@@ -908,10 +910,10 @@ function nv_save_file_ips($type = 0)
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
-    $content_config .= "\$array_" . $variable_name . "_site = array();\n";
+    $content_config .= "\$array_" . $variable_name . "_site = [];\n";
     $content_config .= $content_config_site;
     $content_config .= "\n";
-    $content_config .= "\$array_" . $variable_name . "_admin = array();\n";
+    $content_config .= "\$array_" . $variable_name . "_admin = [];\n";
     $content_config .= $content_config_admin;
 
     $write = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php', $content_config, LOCK_EX);
@@ -924,7 +926,7 @@ function nv_save_file_ips($type = 0)
 }
 
 /**
- * nv_get_plugin_area()
+ * Lấy các tag từ file
  *
  * @param mixed $file_path
  * @return
@@ -933,14 +935,14 @@ function nv_get_plugin_area($file_path)
 {
     global $nv_hooks;
     $nv_hooks_backup = $nv_hooks;
-    $nv_hooks = array();
+    $nv_hooks = [];
     $priority = 10;
     $module_name = '';
     $hook_module = '';
 
     require $file_path;
 
-    $plugin_area = array();
+    $plugin_area = [];
     foreach ($nv_hooks as $event_module => $data) {
         $plugin_area = array_merge_recursive($plugin_area, array_keys($data));
     }
@@ -949,7 +951,7 @@ function nv_get_plugin_area($file_path)
 }
 
 /**
- * nv_get_hook_require()
+ * Lấy module xảy ra sự kiện từ file
  *
  * @param mixed $file_path
  * @return
@@ -958,7 +960,7 @@ function nv_get_hook_require($file_path)
 {
     global $nv_hooks;
     $nv_hooks_backup = $nv_hooks;
-    $nv_hooks = array();
+    $nv_hooks = [];
     $priority = 10;
     $module_name = '';
     $hook_module = '';
@@ -973,7 +975,7 @@ function nv_get_hook_require($file_path)
 }
 
 /**
- * nv_get_hook_revmod()
+ * Lấy module nhận dữ liệu từ file
  *
  * @param mixed $file_path
  * @return
@@ -982,7 +984,7 @@ function nv_get_hook_revmod($file_path)
 {
     global $nv_hooks;
     $nv_hooks_backup = $nv_hooks;
-    $nv_hooks = array();
+    $nv_hooks = [];
     $priority = 10;
     $module_name = '';
     $hook_module = '';

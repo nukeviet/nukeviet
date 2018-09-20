@@ -12,6 +12,37 @@ if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
     die('Stop!!!');
 }
 
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+
+// Lấy các plugin xử lý dữ liệu
+$sql = "SELECT pid, plugin_file, plugin_module_name FROM " . $db_config['prefix'] . "_plugin WHERE plugin_area='get_email_merge_fields' AND hook_module='' ORDER BY weight ASC";
+$array_mplugins = [];
+$result = $db->query($sql);
+while ($row = $result->fetch()) {
+    $array_mplugins[$row['pid']] = $row;
+}
+
+// List các merge fields
+if ($nv_Request->isset_request('getMergeFields', 'post')) {
+    $pids = $nv_Request->get_typed_array('pids', 'post', 'int', []);
+    $pids = array_intersect($pids, array_keys($array_mplugins));
+
+    $args = [
+        'mode' => 'PRE',
+        'setpids' => $pids
+    ];
+    $merge_fields = nv_apply_hook('', 'get_email_merge_fields', $args, [], 1);
+    $tpl->assign('FIELDS', $merge_fields);
+
+    $contents = $tpl->fetch('contents_fields.tpl');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo $contents;
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
 $emailid = $nv_Request->get_int('emailid', 'post,get', 0);
 $error = '';
 
@@ -33,6 +64,7 @@ if (!empty($emailid)) {
     $array['send_cc'] = explode(',', $array['send_cc']);
     $array['send_bcc'] = explode(',', $array['send_bcc']);
     $array['attachments'] = explode(',', $array['attachments']);
+    $array['pids'] = explode(',', $array['pids']);
 
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;emailid=' . $emailid;
     $page_title = $nv_Lang->getModule('edit_template');
@@ -52,7 +84,8 @@ if (!empty($emailid)) {
         'default_content' => '',
         'lang_subject' => '',
         'lang_content' => '',
-        'is_system' => 0
+        'is_system' => 0,
+        'pids' => []
     ];
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
     $page_title = $nv_Lang->getModule('add_template');
@@ -75,6 +108,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['default_content'] = $nv_Request->get_editor('default_content', '', NV_ALLOWED_HTML_TAGS);
     $array['lang_subject'] = $nv_Request->get_title('lang_subject', 'post', '');
     $array['lang_content'] = $nv_Request->get_editor('lang_content', '', NV_ALLOWED_HTML_TAGS);
+    $array['pids'] = $nv_Request->get_typed_array('pids', 'post', 'int', []);
+    $array['pids'] = array_intersect($array['pids'], array_keys($array_mplugins));
 
     if (!empty($array['catid']) and !isset($global_array_cat[$array['catid']])) {
         $array['catid'] = 0;
@@ -150,14 +185,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
 
                 $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' (
-                    catid, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled, default_subject, default_content' . $field_title . '
+                    catid, pids, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled, default_subject, default_content' . $field_title . '
                 ) VALUES (
-                    ' . $array['catid'] . ', ' . NV_CURRENTTIME . ', :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0, ' . $array['is_plaintext'] . ',
-                    ' . $array['is_disabled'] . ', :default_subject, :default_content' . $field_value . '
+                    ' . $array['catid'] . ', ' . $db->quote(implode(',', $array['pids'])) . ', ' . NV_CURRENTTIME . ', :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0,
+                    ' . $array['is_plaintext'] . ', ' . $array['is_disabled'] . ', :default_subject, :default_content' . $field_value . '
                 )';
             } else {
                 $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET
                     catid = ' . $array['catid'] . ',
+                    pids = ' . $db->quote(implode(',', $array['pids'])) . ',
                     time_update = ' . NV_CURRENTTIME . ',
                     send_name = :send_name,
                     send_email = :send_email,
@@ -246,15 +282,13 @@ if (empty($array['attachments'])) {
     $array['attachments'][] = '';
 }
 
-$tpl = new \NukeViet\Template\Smarty();
-$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$tpl->assign('LANG', $nv_Lang);
 $tpl->assign('FORM_ACTION', $form_action);
 $tpl->assign('DATA', $array);
 $tpl->assign('ERROR', $error);
 $tpl->assign('LANG_NAME', $language_array[NV_LANG_DATA]['name']);
 $tpl->assign('CATS', $global_array_cat);
 $tpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('PLUGINS', $array_mplugins);
 
 $contents = $tpl->fetch('contents.tpl');
 

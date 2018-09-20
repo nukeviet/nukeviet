@@ -102,5 +102,3 @@ $(document).ready(function() {
         $('#tpl-attachments').append($('#tpl-attach-temp').html());
     });
 });
-
-//updatePerfectScrollbar
