@@ -112,8 +112,8 @@ use NukeViet\Template\Email\Tpl as EmailTpl;
 $install_lang['emailtemplates'] = [];
 $install_lang['emailtemplates']['cats'] = [];
 $install_lang['emailtemplates']['cats'][EmailCat::CAT_SYSTEM] = 'Email của hệ thống';
-$install_lang['emailtemplates']['cats'][EmailCat::CAT_AUTHOR] = 'Email về quản trị';
 $install_lang['emailtemplates']['cats'][EmailCat::CAT_USER] = 'Email về tài khoản';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_AUTHOR] = 'Email về quản trị';
 $install_lang['emailtemplates']['cats'][EmailCat::CAT_MODULE] = 'Email của các module';
 
 $install_lang['emailtemplates']['emails'] = [];
@@ -160,42 +160,42 @@ $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SAFE_KEY] = [
     'c' => 'Xin chào {$user_full_name},<br /><br />Bạn đã gửi yêu cầu sử dụng chế độ an toàn tại website {$site_name}. Dưới đây là mã xác minh dùng cho việc kích hoạt hoặc tắt chế độ an toàn:<br /><br /><strong>{$code}</strong><br /><br />Mã xác minh này chỉ có tác dụng bật-tắt chế độ an toàn một lần duy nhất. Sau khi bạn tắt chế độ an toàn, mã xác minh này sẽ vô giá trị.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}.<br /><br /><br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SELF_EDIT] = [
-    'pids' => '3',
+    'pids' => '13',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thư thông báo đã cập nhật tài khoản',
     's' => 'Cập nhật thông tin tài khoản thành công',
     'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được cập nhật với {$edit_label} mới là <strong>{$new_value}</strong>.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}.<br /><br /><br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_ADMIN_EDIT] = [
-    'pids' => '3',
+    'pids' => '14',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thư thông báo quản trị sửa tài khoản thành viên',
     's' => 'Tài khoản của bạn đã được cập nhật',
     'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được cập nhật. Dưới đây là thông tin đăng nhập mới:<br /><br />URL: <a href="{$login_url}">{$login_url}</a><br />Tên tài khoản: {$user_username}{if $send_password}<br />Mật khẩu: {$user_password}{/if}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_VERIFY_EMAIL] = [
-    'pids' => '3',
+    'pids' => '15',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thư xác nhận thay đổi email tài khoản',
     's' => 'Thông tin kích hoạt thay đổi email',
     'c' => 'Xin chào {$user_full_name},<br /><br />Bạn đã gửi đề nghị thay đổi địa chỉ email của Tài khoản cá nhân trên website {$site_name}. Để hoàn tất thay đổi này, bạn cần xác nhận địa chị email mới bằng cách nhập Mã xác minh dưới đây vào ô tương ứng tại khu vực Sửa thông tin tài khoản:<br /><br />Mã xác minh: <strong>{$code}</strong><br /><br />Mã này hết hạn vào {$timeout}.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_GROUP_JOIN] = [
-    'pids' => '3',
+    'pids' => '16',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thông báo có yêu cầu tham gia nhóm',
     's' => 'Yêu cầu tham gia nhóm',
     'c' => 'Xin chào trưởng nhóm <strong>{$leader_name}</strong>,<br /><br /><strong>{$user_full_name}</strong> đã gửi yêu cầu tham gia nhóm <strong>{$group_name}</strong> do bạn đang quản lý. Bạn cần xét duyệt yêu cầu này!<br /><br />Vui lòng truy cập <a href="{$link}">liên kết này</a> để xét duyệt thành viên.'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_ACTIVE] = [
-    'pids' => '3',
+    'pids' => '17',
     'catid' => EmailCat::CAT_USER,
     't' => 'Lấy lại link kích hoạt tài khoản',
     's' => 'Thông tin kích hoạt tài khoản',
     'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="{$active_link}">{$active_link}</a><br />Các thông tin cần thiết:<br />Tài khoản: {$user_username}<br />Email: {$user_email}<br />Mật khẩu: {$user_password}<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến {$timeout}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_PASS] = [
-    'pids' => '3',
+    'pids' => '18',
     'catid' => EmailCat::CAT_USER,
     't' => 'Khôi phục mật khẩu thành viên',
     's' => 'Hướng dẫn khôi phục mật khẩu',

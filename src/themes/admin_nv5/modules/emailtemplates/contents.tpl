@@ -201,10 +201,6 @@ $(document).ready(function() {
         }
         $('#merge-fields-content').html('');
         var pids = $(this).val();
-        if (pids.length < 1) {
-            updatePerfectScrollbar();
-            return;
-        }
         fieldTimer = setTimeout(function() {
             $.ajax({
                 type: 'POST',

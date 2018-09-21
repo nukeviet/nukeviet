@@ -197,5 +197,11 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (pid, plu
     (10, 'emf_new_user_info.php', 'get_email_merge_fields', 'users', 'Users', 8),
     (11, 'emf_admin_add_user.php', 'get_email_merge_fields', 'users', 'Users', 9),
     (12, 'emf_user_safekey.php', 'get_email_merge_fields', 'users', 'Users', 10),
+    (13, 'emf_user_self_edit.php', 'get_email_merge_fields', 'users', 'Users', 11),
+    (14, 'emf_user_admin_edit.php', 'get_email_merge_fields', 'users', 'Users', 12),
+    (15, 'emf_verify_email.php', 'get_email_merge_fields', 'users', 'Users', 13),
+    (16, 'emf_group_join.php', 'get_email_merge_fields', 'users', 'Users', 14),
+    (17, 'emf_lostactive_link.php', 'get_email_merge_fields', 'users', 'Users', 15),
+    (18, 'emf_lostpass.php', 'get_email_merge_fields', 'users', 'Users', 16),
     (1001, 'get_global_admin_theme.php', 'get_global_admin_theme', '', '', 1),
     (1002, 'get_module_admin_theme.php', 'get_module_admin_theme', '', '', 1)";

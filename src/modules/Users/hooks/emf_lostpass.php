@@ -22,12 +22,16 @@ $callback = function($vars, $from_data, $receive_data) {
             'name' => $nv_Lang->getModule('full_name'),
             'data' => '' // Dữ liệu ở đây
         ];
+        $merge_fields['code'] = [
+            'name' => $nv_Lang->getModule('verifykey'),
+            'data' => '' // Dữ liệu ở đây
+        ];
         $merge_fields['site_name'] = [
             'name' => $nv_Lang->getGlobal('site_name'),
             'data' => '' // Dữ liệu ở đây
         ];
-        $merge_fields['new_code'] = [
-            'name' => $nv_Lang->getModule('user_2step_newcodes'),
+        $merge_fields['timeout'] = [
+            'name' => $nv_Lang->getModule('merge_field_timeout'),
             'data' => '' // Dữ liệu ở đây
         ];
 

@@ -26,8 +26,12 @@ $callback = function($vars, $from_data, $receive_data) {
             'name' => $nv_Lang->getGlobal('site_name'),
             'data' => '' // Dữ liệu ở đây
         ];
-        $merge_fields['new_code'] = [
-            'name' => $nv_Lang->getModule('user_2step_newcodes'),
+        $merge_fields['edit_label'] = [
+            'name' => $nv_Lang->getModule('merge_field_edit_label'),
+            'data' => '' // Dữ liệu ở đây
+        ];
+        $merge_fields['new_value'] = [
+            'name' => $nv_Lang->getModule('merge_field_new_value'),
             'data' => '' // Dữ liệu ở đây
         ];
 
