@@ -2297,7 +2297,8 @@ function nv_get_email_template($emailid)
         'attachments' => $attachments,
         'subject' => empty($email_data['lang_subject']) ? $email_data['default_subject'] : $email_data['lang_subject'],
         'content' => empty($email_data['lang_content']) ? $email_data['default_content'] : $email_data['lang_content'],
-        'is_disabled' => $email_data['is_disabled']
+        'is_disabled' => $email_data['is_disabled'],
+        'is_plaintext' => $email_data['is_plaintext']
     ];
 
     return $data;
@@ -2343,6 +2344,11 @@ function nv_sendmail_from_template($emailid, $data = [])
 
         $email_content = $tpl->fetch('string:' . $email_data['content']);
         $email_subject = $tpl->fetch('string:' . $email_data['subject']);
+        if ($email_data['is_plaintext']) {
+            $email_content = nv_nl2br(strip_tags($email_content));
+        } else {
+            $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $subject);
+        }
 
         $result = nv_sendmail($email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc']);
     }

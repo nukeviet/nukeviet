@@ -8,38 +8,31 @@
  * @Createdate Dec 3, 2010 11:24:58 AM
  */
 
-// Các trường dữ liệu khi gửi email thông tin kích hoạt tài khoản đến email của thành viên
+// Các trường dữ liệu khi đình chỉ hoặc kích hoạt quản trị
 $callback = function($vars, $from_data, $receive_data) {
     $merge_fields = [];
 
     if (in_array($vars['pid'], $vars['setpids'])) {
         global $nv_Lang;
 
-        // Đọc ngôn ngữ tạm của module
-        $nv_Lang->loadModule($receive_data['module_info']['module_file'], false, true);
-
-        $merge_fields['user_full_name'] = [
-            'name' => $nv_Lang->getModule('full_name'),
-            'data' => '' // Dữ liệu ở đây
-        ];
-        $merge_fields['user_username'] = [
-            'name' => $nv_Lang->getGlobal('username'),
-            'data' => '' // Dữ liệu ở đây
-        ];
-        $merge_fields['user_email'] = [
-            'name' => $nv_Lang->getGlobal('email'),
-            'data' => '' // Dữ liệu ở đây
-        ];
-        $merge_fields['active_deadline'] = [
-            'name' => $nv_Lang->getModule('merge_field_active_deadline'),
+        $merge_fields['is_suspend'] = [
+            'name' => $nv_Lang->getGlobal('merge_field_is_suspend'),
             'data' => '' // Dữ liệu ở đây
         ];
         $merge_fields['site_name'] = [
             'name' => $nv_Lang->getGlobal('site_name'),
             'data' => '' // Dữ liệu ở đây
         ];
-        $merge_fields['active_link'] = [
-            'name' => $nv_Lang->getModule('merge_field_active_link'),
+        $merge_fields['suspend_time'] = [
+            'name' => $nv_Lang->getGlobal('merge_field_time'),
+            'data' => '' // Dữ liệu ở đây
+        ];
+        $merge_fields['suspend_reason'] = [
+            'name' => $nv_Lang->getGlobal('merge_field_reason'),
+            'data' => '' // Dữ liệu ở đây
+        ];
+        $merge_fields['contact_link'] = [
+            'name' => $nv_Lang->getGlobal('merge_field_contact_link'),
             'data' => '' // Dữ liệu ở đây
         ];
 
@@ -53,8 +46,6 @@ $callback = function($vars, $from_data, $receive_data) {
                 }
             }
         }
-
-        $nv_Lang->changeLang();
     }
 
     return $merge_fields;

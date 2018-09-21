@@ -44,6 +44,7 @@ $lang_global['fail'] = 'Thất bại';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';
 $lang_global['All'] = 'Tất cả';
+$lang_global['site_name'] = 'Tên website';
 
 $lang_global['username_empty'] = 'Tên đăng nhập chưa được khai báo';
 $lang_global['usernamelong'] = 'Tên đăng nhập quá dài. Chỉ chấp nhận tên có số ký tự tối đa là %1$d';

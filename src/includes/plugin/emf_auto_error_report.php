@@ -8,35 +8,20 @@
  * @Createdate Dec 3, 2010 11:24:58 AM
  */
 
-// Dữ liệu thông báo tài khoản được tạo/kích hoạt
+// Các trường dữ liệu khi gửi thông báo lỗi đến email quản trị
 $callback = function($vars, $from_data, $receive_data) {
     $merge_fields = [];
 
     if (in_array($vars['pid'], $vars['setpids'])) {
         global $nv_Lang;
 
-        // Đọc ngôn ngữ tạm của module
-        $nv_Lang->loadModule($receive_data['module_info']['module_file'], false, true);
-
-        $merge_fields['user_full_name'] = [
-            'name' => $nv_Lang->getModule('full_name'),
-            'data' => '' // Dữ liệu ở đây
-        ];
         $merge_fields['site_name'] = [
             'name' => $nv_Lang->getGlobal('site_name'),
             'data' => '' // Dữ liệu ở đây
         ];
-        $merge_fields['login_link'] = [
-            'name' => $nv_Lang->getModule('merge_field_login_link'),
-            'data' => '' // Dữ liệu ở đây
-        ];
-        $merge_fields['user_username'] = [
-            'name' => $nv_Lang->getGlobal('username'),
-            'data' => '' // Dữ liệu ở đây
-        ];
 
         if ($vars['mode'] != 'PRE') {
-            // Field dữ liệu cho các fields
+            // Fill dữ liệu cho các fields
             foreach ($merge_fields as $fkey => $fval) {
                 if (isset($vars[$fkey])) {
                     $merge_fields[$fkey]['data'] = $vars[$fkey];
@@ -45,8 +30,6 @@ $callback = function($vars, $from_data, $receive_data) {
                 }
             }
         }
-
-        $nv_Lang->changeLang();
     }
 
     return $merge_fields;

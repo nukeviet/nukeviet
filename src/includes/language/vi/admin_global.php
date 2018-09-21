@@ -85,3 +85,18 @@ $lang_global['login_remember_admin'] = 'Tùy chọn này sẽ cho phép tài kho
 
 $lang_global['notification'] = 'Thông báo';
 $lang_global['do_with_selected'] = 'Với các dòng chọn';
+
+$lang_global['merge_field_author_delete_time'] = 'Thời gian xóa';
+$lang_global['merge_field_author_delete_reason'] = 'Lý do xóa';
+$lang_global['merge_field_contact_link'] = 'Liên kết gửi liên hệ';
+$lang_global['merge_field_is_suspend'] = 'Đình chỉ (1) hay kích hoạt lại (0)';
+$lang_global['merge_field_time'] = 'Thời gian thực hiện';
+$lang_global['merge_field_reason'] = 'Lý do thực hiện';
+$lang_global['merge_field_sys_siteurl'] = 'Đường dẫn site trên url';
+$lang_global['merge_field_sys_nv'] = 'Biến module';
+$lang_global['merge_field_sys_op'] = 'Biến function các module';
+$lang_global['merge_field_sys_langvar'] = 'Biến ngôn ngữ';
+$lang_global['merge_field_sys_langdata'] = 'Khóa ngôn ngữ data';
+$lang_global['merge_field_sys_langinterface'] = 'Khóa ngôn ngữ giao diện';
+$lang_global['merge_field_sys_assetsdir'] = 'Thư mục thumb của hệ thống';
+$lang_global['merge_field_sys_filesdir'] = 'Thư mục thumb của các module';

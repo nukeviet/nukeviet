@@ -125,35 +125,35 @@ $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_EMAIL_ACTIVE] = [
     'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="{$active_link}">{$active_link}</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: {$user_username}<br />Email: {$user_email}<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến {$active_deadline}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_DELETE] = [
-    'pids' => '3',
+    'pids' => '8',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thư thông báo xóa tài khoản',
     's' => 'Thư thông báo xóa tài khoản',
     'c' => 'Xin chào {$user_full_name} ({$user_username}),<br /><br />Chúng tôi rất lấy làm tiếc thông báo về việc tài khoản của bạn đã bị xóa khỏi website {$site_name}.'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_NEW_2STEP_CODE] = [
-    'pids' => '3',
+    'pids' => '9',
     'catid' => EmailCat::CAT_USER,
     't' => 'Gửi mã dự phòng mới',
     's' => 'Mã dự phòng mới',
     'c' => 'Xin chào {$user_full_name},<br /><br />Mã dự phòng cho tài khoản của bạn tại website {$site_name} đã được thay đổi. Dưới đây là mã dự phòng mới:<br /><br />{foreach from=$new_code item=code}{$code}<br />{/foreach}<br /><br />Bạn chú ý giữ mã dự phòng an toàn. Nếu mất điện thoại và mất cả mã dự phòng bạn sẽ không thể truy cập vào tài khoản của mình được nữa.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_NEW_INFO] = [
-    'pids' => '4',
+    'pids' => '10',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thông báo tài khoản được tạo/kích hoạt',
     's' => 'Tài khoản của bạn đã được tạo',
     'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$login_link}">{$login_link}</a><br />Tên tài khoản: {$user_username}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_ADMIN_ADDED] = [
-    'pids' => '3',
+    'pids' => '11',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thông báo tài khoản được quản trị khởi tạo',
     's' => 'Tài khoản của bạn đã được tạo',
     'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được khởi tạo. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$login_link}">{$login_link}</a><br />Tên tài khoản: {$user_username}<br />Mật khẩu: {$user_password}<br /><br />Chúng tôi khuyến cáo bạn nên đổi mật khẩu trước khi sử dụng tài khoản.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SAFE_KEY] = [
-    'pids' => '3',
+    'pids' => '12',
     'catid' => EmailCat::CAT_USER,
     't' => 'Thư xác minh bật chế độ an toàn',
     's' => 'Mã xác minh chế độ an toàn',
@@ -202,21 +202,21 @@ $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_PASS] = [
     'c' => 'Xin chào {$user_full_name},<br /><br />Bạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập tài khoản cá nhân tại website {$site_name}. Để thay đổi mật khẩu, bạn cần nhập mã xác minh dưới đây vào ô tương ứng tại khu vực thay đổi mật khẩu.<br /><br />Mã xác minh: <strong>{$code}</strong></a><br /><br />Mã này chỉ được sử dụng một lần và trước thời hạn: {$timeout}.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_DELETE] = [
-    'pids' => '3',
+    'pids' => '5',
     'catid' => EmailCat::CAT_AUTHOR,
     't' => 'Xóa tài khoản quản trị',
     's' => 'Thông báo từ website {$site_name}',
     'c' => 'Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị xóa vào {$delete_time}{if not empty($delete_reason)} vì lý do: {$delete_reason}{/if}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_SUSPEND] = [
-    'pids' => '3',
+    'pids' => '6',
     'catid' => EmailCat::CAT_AUTHOR,
     't' => 'Đình chỉ/Kích hoạt lại quản trị site',
     's' => 'Thông báo từ website {$site_name}',
-    'c' => '{if $is_suspend}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị đình chỉ hoạt động vào {$suspend_time} vì lý do: {$suspend_reason}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}{else}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã hoạt động trở lại vào {$unsuspend_time}.<br />Trước đó tài khoản này đã bị đình chỉ hoạt động vì lý do: {$suspend_reason}{/if}'
+    'c' => '{if $is_suspend}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị đình chỉ hoạt động vào {$suspend_time} vì lý do: {$suspend_reason}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}{else}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã hoạt động trở lại vào {$suspend_time}.<br />Trước đó tài khoản này đã bị đình chỉ hoạt động vì lý do: {$suspend_reason}{/if}'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTO_ERROR_REPORT] = [
-    'pids' => '3',
+    'pids' => '7',
     'catid' => EmailCat::CAT_SYSTEM,
     't' => 'Email tự động thông báo lỗi',
     's' => 'Cảnh báo từ website {$site_name}',

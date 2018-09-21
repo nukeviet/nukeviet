@@ -320,7 +320,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
 ) ENGINE=InnoDB";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
-  pid tinyint(4) NOT NULL AUTO_INCREMENT,
+  pid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   plugin_lang varchar(3) NOT NULL DEFAULT 'all',
   plugin_file varchar(50) NOT NULL,
   plugin_area varchar(50) NOT NULL DEFAULT '',
@@ -331,6 +331,8 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   PRIMARY KEY (pid),
   UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
 ) ENGINE=InnoDB";
+
+$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_plugin AUTO_INCREMENT=1001;";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
    c_type varchar(100) NOT NULL,

@@ -34,6 +34,17 @@ if ($nv_Request->isset_request('getMergeFields', 'post')) {
         'setpids' => $pids
     ];
     $merge_fields = nv_apply_hook('', 'get_email_merge_fields', $args, [], 1);
+
+    // Các field của hệ thống luôn khả dụng với mọi trình xử lý
+    $merge_fields['NV_BASE_SITEURL'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_siteurl')];
+    $merge_fields['NV_NAME_VARIABLE'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_nv')];
+    $merge_fields['NV_OP_VARIABLE'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_op')];
+    $merge_fields['NV_LANG_VARIABLE'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_langvar')];
+    $merge_fields['NV_LANG_DATA'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_langdata')];
+    $merge_fields['NV_LANG_INTERFACE'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_langinterface')];
+    $merge_fields['NV_ASSETS_DIR'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_assetsdir')];
+    $merge_fields['NV_FILES_DIR'] = ['name' => $nv_Lang->getGlobal('merge_field_sys_filesdir')];
+
     $tpl->assign('FIELDS', $merge_fields);
 
     $contents = $tpl->fetch('contents_fields.tpl');
