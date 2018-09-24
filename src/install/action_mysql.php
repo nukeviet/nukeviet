@@ -362,6 +362,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
 // CSDL module email templates
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates (
   emailid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  sys_pids varchar(255) NOT NULL DEFAULT '' COMMENT 'Các plugin xử lý dữ liệu của hệ thống',
   pids varchar(255) NOT NULL DEFAULT '' COMMENT 'Các plugin xử lý dữ liệu',
   catid smallint(4) unsigned NOT NULL DEFAULT '0',
   time_add int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo lúc',

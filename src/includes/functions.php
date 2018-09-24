@@ -2269,7 +2269,7 @@ function nv_get_email_template($emailid)
 {
     global $db;
 
-    $sql = "SELECT pids, send_name, send_email, send_cc, send_bcc, attachments, is_plaintext, is_disabled, default_subject, default_content,
+    $sql = "SELECT sys_pids, pids, send_name, send_email, send_cc, send_bcc, attachments, is_plaintext, is_disabled, default_subject, default_content,
     " . NV_LANG_DATA . "_subject lang_subject, " . NV_LANG_DATA . "_content lang_content FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE emailid=:emailid";
     $sth = $db->prepare($sql);
     $sth->bindParam(':emailid', $emailid, PDO::PARAM_INT);
@@ -2290,7 +2290,7 @@ function nv_get_email_template($emailid)
 
     // Dữ liệu trả về
     $data = [
-        'pids' => array_filter(explode(',', $email_data['pids'])),
+        'pids' => array_filter(array_unique(array_merge_recursive(explode(',', $email_data['sys_pids']), explode(',', $email_data['pids'])))),
         'from' => [$email_data['send_name'], $email_data['send_email']],
         'cc' => array_filter(explode(',', $email_data['send_cc'])),
         'bcc' => array_filter(explode(',', $email_data['send_bcc'])),

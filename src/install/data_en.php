@@ -204,23 +204,23 @@ $install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_PASS] = [
 $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_DELETE] = [
     'pids' => '5',
     'catid' => EmailCat::CAT_AUTHOR,
-    't' => 'Xóa tài khoản quản trị',
-    's' => 'Thông báo từ website {$site_name}',
-    'c' => 'Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị xóa vào {$delete_time}{if not empty($delete_reason)} vì lý do: {$delete_reason}{/if}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}'
+    't' => 'Delete admin account',
+    's' => 'Notification from website {$site_name}',
+    'c' => 'Administrator {$site_name} notify:<br />Your administrator account in {$site_name} website deleted {$delete_time}{if not empty($delete_reason)} Reason: {$delete_reason}{/if}.<br />.<br />If you have any questions... Email {$contact_link}'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_SUSPEND] = [
     'pids' => '6',
     'catid' => EmailCat::CAT_AUTHOR,
-    't' => 'Đình chỉ/Kích hoạt lại quản trị site',
-    's' => 'Thông báo từ website {$site_name}',
-    'c' => '{if $is_suspend}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị đình chỉ hoạt động vào {$suspend_time} vì lý do: {$suspend_reason}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}{else}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã hoạt động trở lại vào {$suspend_time}.<br />Trước đó tài khoản này đã bị đình chỉ hoạt động vì lý do: {$suspend_reason}{/if}'
+    't' => 'Suspend/Re-enable the site administrator',
+    's' => 'Notification from website {$site_name}',
+    'c' => '{if $is_suspend}Information from {$site_name} Aministrators:<br />Your administrator account of {$site_name} is suspended at {$suspend_time} reason: {$suspend_reason}.<br />If you have any questions... Email: {$contact_link}{else}Information from {$site_name} Aministrators:<br />Your administrator account of {$site_name} is active at {$suspend_time}.<br />Your account has been suspended because: {$suspend_reason}{/if}'
 ];
 $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTO_ERROR_REPORT] = [
     'pids' => '7',
     'catid' => EmailCat::CAT_SYSTEM,
-    't' => 'Email tự động thông báo lỗi',
-    's' => 'Cảnh báo từ website {$site_name}',
-    'c' => 'Hệ thống đã nhận được một số thông báo. Bạn hãy mở file đính kèm để xem chi tiết'
+    't' => 'Email auto-notification error',
+    's' => 'Error report from website {$site_name}',
+    'c' => 'The system received some error messages. Please open the attached file for details.'
 ];
 
 $menu_rows_lev0['about'] = array(

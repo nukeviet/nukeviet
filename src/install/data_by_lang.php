@@ -478,7 +478,7 @@ if (!empty($module_data) and $module_data == 'language') {
         )";
     }
     $db->query("INSERT INTO " . $db_config['prefix'] . "_emailtemplates (
-        emailid, pids, catid, time_add, send_cc, send_bcc, attachments, is_system, default_subject, default_content,
+        emailid, sys_pids, catid, time_add, send_cc, send_bcc, attachments, is_system, default_subject, default_content,
         " . $lang_data . "_title, " . $lang_data . "_subject, " . $lang_data . "_content
     ) VALUES " . implode(", ", $sql_emailtpl));
 }

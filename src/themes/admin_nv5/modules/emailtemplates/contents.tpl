@@ -56,6 +56,7 @@
                 </div>
             </div>
             {if not $DATA['is_system']}
+            {* Tên và danh mục không thể sửa đổi đối với các trường hệ thống *}
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tpl_title">{$LANG->get('tpl_title')} <i class="text-danger">(*)</i></label>
                 <div class="col-12 col-sm-8 col-lg-6">
@@ -73,26 +74,34 @@
                     </select>
                 </div>
             </div>
+            {/if}
+            {* Các plugin của hệ thống bắt buộc chọn và không thể sửa *}
+            {if $DATA['is_system']}
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('tpl_pluginsys')}</label>
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <select class="select2 select2-sm" multiple="multiple" disabled="disabled" tabindex="-1">
+                        {foreach from=$PLUGINS item=row}
+                        {if in_array($row.pid, $DATA['sys_pids'])}<option selected="selected">{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>{/if}
+                        {/foreach}
+                    </select>
+                    <div class="form-text text-muted">{$LANG->get('tpl_pluginsys_help')}</div>
+                </div>
+            </div>
+            {/if}
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="tpl_pids">{$LANG->get('tpl_plugin')}</label>
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <select class="select2 select2-sm" id="tpl_pids" name="pids[]" multiple="multiple">
                         {foreach from=$PLUGINS item=row}
+                        {if not in_array($row.pid, $DATA['sys_pids'])}
                         <option value="{$row.pid}"{if in_array($row.pid, $DATA['pids'])} selected="selected"{/if}>{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>
+                        {/if}
                         {/foreach}
                     </select>
                     <div class="form-text text-muted">{$LANG->get('tpl_plugin_help')}</div>
                 </div>
             </div>
-            {else}
-            <div class="d-none">
-                <select name="pids[]" multiple="multiple">
-                    {foreach from=$PLUGINS item=row}
-                    <option value="{$row.pid}"{if in_array($row.pid, $DATA['pids'])} selected="selected"{/if}>{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>
-                    {/foreach}
-                </select>
-            </div>
-            {/if}
         </div>
     </div>
     <div class="card card-border-color card-border-color-primary">

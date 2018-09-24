@@ -76,6 +76,7 @@ if (!empty($emailid)) {
     $array['send_bcc'] = explode(',', $array['send_bcc']);
     $array['attachments'] = explode(',', $array['attachments']);
     $array['pids'] = explode(',', $array['pids']);
+    $array['sys_pids'] = explode(',', $array['sys_pids']);
 
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;emailid=' . $emailid;
     $page_title = $nv_Lang->getModule('edit_template');
@@ -96,7 +97,8 @@ if (!empty($emailid)) {
         'lang_subject' => '',
         'lang_content' => '',
         'is_system' => 0,
-        'pids' => []
+        'pids' => [],
+        'sys_pids' => []
     ];
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
     $page_title = $nv_Lang->getModule('add_template');
@@ -106,6 +108,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($array['is_system'])) {
         $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
         $array['title'] = $nv_Request->get_title('title', 'post', '');
+        $array['sys_pids'] = [];
     }
 
     $array['send_name'] = $nv_Request->get_title('send_name', 'post', '');
@@ -120,7 +123,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['lang_subject'] = $nv_Request->get_title('lang_subject', 'post', '');
     $array['lang_content'] = $nv_Request->get_editor('lang_content', '', NV_ALLOWED_HTML_TAGS);
     $array['pids'] = $nv_Request->get_typed_array('pids', 'post', 'int', []);
-    $array['pids'] = array_intersect($array['pids'], array_keys($array_mplugins));
+    $array['pids'] = array_intersect(array_unique(array_filter(array_diff($array['pids'], $array['sys_pids']))), array_keys($array_mplugins));
 
     if (!empty($array['catid']) and !isset($global_array_cat[$array['catid']])) {
         $array['catid'] = 0;
