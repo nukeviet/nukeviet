@@ -21,14 +21,10 @@ $callback = function($vars, $from_data, $receive_data) {
         ];
 
         if ($vars['mode'] != 'PRE') {
+            global $global_config;
+
             // Fill dữ liệu cho các fields
-            foreach ($merge_fields as $fkey => $fval) {
-                if (isset($vars[$fkey])) {
-                    $merge_fields[$fkey]['data'] = $vars[$fkey];
-                } else {
-                    $merge_fields[$fkey]['data'] = null;
-                }
-            }
+            $merge_fields['site_name']['data'] = $global_config['site_name'];
         }
     }
 

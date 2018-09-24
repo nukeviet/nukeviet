@@ -2307,9 +2307,10 @@ function nv_get_email_template($emailid)
 /**
  * @param int $emailid
  * @param array $data
+ * @param string $attachments
  * @return boolean
  */
-function nv_sendmail_from_template($emailid, $data = [])
+function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
 {
     global $global_config;
 
@@ -2332,6 +2333,9 @@ function nv_sendmail_from_template($emailid, $data = [])
     if (empty($email_data['from'][1])) {
         $email_data['from'][1] = $global_config['site_email'];
     }
+    if (!empty($attachments)) {
+        $email_data['attachments'] = array_merge_recursive(array_unique(array_filter(array_map('trim', explode(',', $attachments)))));
+    }
 
     foreach ($data as $row) {
         $_args = array_merge($args, $row['data']);
@@ -2347,7 +2351,7 @@ function nv_sendmail_from_template($emailid, $data = [])
         if ($email_data['is_plaintext']) {
             $email_content = nv_nl2br(strip_tags($email_content));
         } else {
-            $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $subject);
+            $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
         }
 
         $result = nv_sendmail($email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc']);

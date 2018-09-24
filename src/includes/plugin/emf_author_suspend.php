@@ -37,14 +37,18 @@ $callback = function($vars, $from_data, $receive_data) {
         ];
 
         if ($vars['mode'] != 'PRE') {
-            // Field dữ liệu cho các fields
-            foreach ($merge_fields as $fkey => $fval) {
-                if (isset($vars[$fkey])) {
-                    $merge_fields[$fkey]['data'] = $vars[$fkey];
-                } else {
-                    $merge_fields[$fkey]['data'] = null;
-                }
-            }
+            $admin_info = $vars[1];
+            $global_config = $vars[2];
+            $new_reason = $vars[3];
+            $last_reason = $vars[4];
+
+            $contact_link = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
+
+            $merge_fields['is_suspend']['data'] = $vars[0];
+            $merge_fields['site_name']['data'] = $global_config['site_name'];
+            $merge_fields['suspend_time']['data'] = nv_date('d/m/Y H:i', NV_CURRENTTIME);
+            $merge_fields['suspend_reason']['data'] = $vars[0] ? $new_reason : $last_reason['info'];
+            $merge_fields['contact_link']['data'] = $contact_link;
         }
     }
 

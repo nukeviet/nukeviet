@@ -33,14 +33,16 @@ $callback = function($vars, $from_data, $receive_data) {
         ];
 
         if ($vars['mode'] != 'PRE') {
-            // Field dữ liệu cho các fields
-            foreach ($merge_fields as $fkey => $fval) {
-                if (isset($vars[$fkey])) {
-                    $merge_fields[$fkey]['data'] = $vars[$fkey];
-                } else {
-                    $merge_fields[$fkey]['data'] = null;
-                }
-            }
+            $admin_info = $vars[0];
+            $global_config = $vars[1];
+            $reason = $vars[2];
+
+            $contact_link = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
+
+            $merge_fields['site_name']['data'] = $global_config['site_name'];
+            $merge_fields['delete_time']['data'] = nv_date('d/m/Y H:i', NV_CURRENTTIME);
+            $merge_fields['delete_reason']['data'] = $reason;
+            $merge_fields['contact_link']['data'] = $contact_link;
         }
     }
 
