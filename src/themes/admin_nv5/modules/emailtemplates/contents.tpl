@@ -80,9 +80,9 @@
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('tpl_pluginsys')}</label>
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <select class="select2 select2-sm" multiple="multiple" disabled="disabled" tabindex="-1">
+                    <select class="select2 select2-sm" multiple="multiple" disabled="disabled" tabindex="-1" id="tpl_sys_pids">
                         {foreach from=$PLUGINS item=row}
-                        {if in_array($row.pid, $DATA['sys_pids'])}<option selected="selected">{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>{/if}
+                        {if in_array($row.pid, $DATA['sys_pids'])}<option value="{$row.pid}" selected="selected">{if empty({$row.plugin_module_name})}{$LANG->get('system')}{else}Module {$row.plugin_module_name}{/if}:{$row.plugin_file}</option>{/if}
                         {/foreach}
                     </select>
                     <div class="form-text text-muted">{$LANG->get('tpl_pluginsys_help')}</div>
@@ -210,6 +210,11 @@ $(document).ready(function() {
         }
         $('#merge-fields-content').html('');
         var pids = $(this).val();
+        if ($('#tpl_sys_pids').length) {
+            $('#tpl_sys_pids').find('option').each(function() {
+                pids.push($(this).attr('value'));
+            });
+        }
         fieldTimer = setTimeout(function() {
             $.ajax({
                 type: 'POST',
