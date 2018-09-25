@@ -36,14 +36,15 @@ $callback = function($vars, $from_data, $receive_data) {
         ];
 
         if ($vars['mode'] != 'PRE') {
-            // Field dữ liệu cho các fields
-            foreach ($merge_fields as $fkey => $fval) {
-                if (isset($vars[$fkey])) {
-                    $merge_fields[$fkey]['data'] = $vars[$fkey];
-                } else {
-                    $merge_fields[$fkey]['data'] = null;
-                }
-            }
+            $group_info = $vars[0];
+            //$global_config = $vars[1];
+            $url_group = $vars[2];
+            $user_info = $vars[3];
+
+            $merge_fields['user_full_name']['data'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
+            $merge_fields['leader_name']['data'] = $group_info['title'];
+            $merge_fields['group_name']['data'] = $group_info['title'];
+            $merge_fields['link']['data'] = $url_group;
         }
 
         $nv_Lang->changeLang();

@@ -44,14 +44,16 @@ $callback = function($vars, $from_data, $receive_data) {
         ];
 
         if ($vars['mode'] != 'PRE') {
-            // Field dữ liệu cho các fields
-            foreach ($merge_fields as $fkey => $fval) {
-                if (isset($vars[$fkey])) {
-                    $merge_fields[$fkey]['data'] = $vars[$fkey];
-                } else {
-                    $merge_fields[$fkey]['data'] = null;
-                }
-            }
+            $user_info = $vars[0];
+            $link = $vars[1];
+            $global_config = $vars[2];
+
+            $merge_fields['user_full_name']['data'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
+            $merge_fields['user_username']['data'] = $user_info['username'];
+            $merge_fields['user_password']['data'] = $user_info['password1'];
+            $merge_fields['site_name']['data'] = $global_config['site_name'];
+            $merge_fields['login_url']['data'] = $link;
+            $merge_fields['send_password']['data'] = (empty($user_info['password1']) ? false : true);
         }
 
         $nv_Lang->changeLang();

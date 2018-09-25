@@ -26,24 +26,18 @@ $callback = function($vars, $from_data, $receive_data) {
             'name' => $nv_Lang->getGlobal('site_name'),
             'data' => '' // Dữ liệu ở đây
         ];
-        $merge_fields['login_link'] = [
-            'name' => $nv_Lang->getModule('merge_field_login_link'),
-            'data' => '' // Dữ liệu ở đây
-        ];
         $merge_fields['code'] = [
             'name' => $nv_Lang->getModule('safe_key'),
             'data' => '' // Dữ liệu ở đây
         ];
 
         if ($vars['mode'] != 'PRE') {
-            // Field dữ liệu cho các fields
-            foreach ($merge_fields as $fkey => $fval) {
-                if (isset($vars[$fkey])) {
-                    $merge_fields[$fkey]['data'] = $vars[$fkey];
-                } else {
-                    $merge_fields[$fkey]['data'] = null;
-                }
-            }
+            $user_info = $vars[0];
+            $global_config = $vars[1];
+
+            $merge_fields['user_full_name']['data'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
+            $merge_fields['site_name']['data'] = $global_config['site_name'];
+            $merge_fields['code']['data'] = $user_info['safekey'];
         }
 
         $nv_Lang->changeLang();

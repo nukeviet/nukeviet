@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_IS_MOD_USER')) {
+if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
@@ -46,12 +46,12 @@ $step = 1;
 $error = $question = '';
 
 if ($checkss == $data['checkss']) {
-    if ((! empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'])) {
-        if (! empty($data['userField'])) {
+    if ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'])) {
+        if (!empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField']);
             $check_login = nv_check_valid_login($data['userField'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
 
-            if (! empty($check_email) and ! empty($check_login)) {
+            if (!empty($check_email) and !empty($check_login)) {
                 $step = 1;
                 $nv_Request->unset_request('lostactivelink_seccode', 'session');
                 $error = $nv_Lang->getModule('lostactivelink_no_info2');
@@ -67,7 +67,7 @@ if ($checkss == $data['checkss']) {
                 $stmt->execute();
                 $row = $stmt->fetch();
 
-                if (! empty($row)) {
+                if (!empty($row)) {
                     $step = 2;
                     if (empty($seccode)) {
                         $nv_Request->set_Session('lostactivelink_seccode', md5($data['nv_seccode']));
@@ -80,7 +80,7 @@ if ($checkss == $data['checkss']) {
                         $info = $nv_Lang->getModule('lostactivelink_question_empty');
                     }
 
-                    if (! empty($info)) {
+                    if (!empty($info)) {
                         $nv_Request->unset_request('lostactivelink_seccode', 'session');
 
                         $contents = user_info_exit($info);
@@ -100,11 +100,18 @@ if ($checkss == $data['checkss']) {
                             $checknum = nv_genpass(10);
                             $checknum = md5($checknum);
 
-                            $subject = $nv_Lang->getModule('lostactive_mailtitle');
-                            $message = sprintf($nv_Lang->getModule('lostactive_active_info'), $row['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
-                            $ok = nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
-
-                            if ($ok) {
+                            $send_data = [[
+                                'to' => [$row['email']],
+                                'data' => [
+                                    $row,
+                                    $global_config,
+                                    NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum,
+                                    $password_new,
+                                    ($row['regdate'] + 86400)
+                                ]
+                            ]];
+                            $send = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_LOST_ACTIVE, $send_data);
+                            if ($send) {
                                 $password = $crypt->hash_password($password_new, $global_config['hashprefix']);
                                 $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_reg SET password= :password, checknum= :checknum WHERE userid=' . $row['userid']);
                                 $stmt->bindParam(':password', $password, PDO::PARAM_STR);

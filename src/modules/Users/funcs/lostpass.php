@@ -40,20 +40,17 @@ function lost_pass_sendMail($row)
         $passlostkey = md5($row['userid'] . $key . $global_config['sitekey']);
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
-
-        $name = $global_config['name_show'] ? array(
-            $row['first_name'],
-            $row['last_name']
-        ) : array(
-            $row['last_name'],
-            $row['first_name']
-        );
-        $name = array_filter($name);
-        $name = implode(' ', $name);
-        $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $nv_Lang->setModule('lostpass_email_subject', $nv_Lang->getModule('lostpass_email_subject', NV_MY_DOMAIN));
-        $message = sprintf($nv_Lang->getModule('lostpass_email_content'), $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
-        if (!nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('lostpass_email_subject'), $message)) {
+        $send_data = [[
+            'to' => [$row['email']],
+            'data' => [
+                $row,
+                $global_config,
+                $key,
+                $pa
+            ]
+        ]];
+        $send = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_LOST_PASS, $send_data);
+        if (!$send) {
             nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => '',
@@ -281,18 +278,16 @@ if ($checkss == $data['checkss']) {
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? array(
-        $row['first_name'],
-        $row['last_name']
-    ) : array(
-        $row['last_name'],
-        $row['first_name']
-    );
-    $name = array_filter($name);
-    $name = implode(' ', $name);
-    $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-    $message = sprintf($nv_Lang->getModule('edit_mail_content'), $name, $sitename, $nv_Lang->getGlobal('password'), $new_password);
-    @nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('edit_mail_subject'), $message);
+    $send_data = [[
+        'to' => [$row['email']],
+        'data' => [
+            $row,
+            $nv_Lang->getGlobal('password'),
+            $new_password,
+            $global_config
+        ]
+    ]];
+    nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_SELF_EDIT, $send_data);
 
     $redirect = nv_redirect_decrypt($nv_redirect, true);
     $url = !empty($redirect) ? $redirect : nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);

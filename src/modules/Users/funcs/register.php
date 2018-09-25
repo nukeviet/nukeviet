@@ -454,13 +454,19 @@ if ($checkss == $array_register['checkss']) {
             }
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
-            $subject = $nv_Lang->getModule('account_register');
             $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
             if (strpos($_url, NV_MY_DOMAIN) !== 0) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
-            $message = sprintf($nv_Lang->getModule('account_register_info'), $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
-            nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
+            $send_data = [[
+                'to' => [$array_register['email']],
+                'data' => [
+                    $array_register,
+                    $global_config,
+                    $_url
+                ]
+            ]];
+            nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_NEW_INFO, $send_data);
 
             if (defined('ACCESS_ADDUS')) {
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/' . $group_id;
