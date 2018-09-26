@@ -101,10 +101,15 @@ if (empty($row['active2step'])) {
         }
 
         if ($nv_Request->get_int('sendmail', 'post', 0) == 1) {
-            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
-            $subject = $nv_Lang->getModule('user_2step_newcodes');
-            $message = sprintf($nv_Lang->getModule('user_2step_bodymail'), $full_name, $global_config['site_name'], implode('<br />', $new_code));
-            @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
+            $send_data = [[
+                'to' => [$row['email']],
+                'data' => [
+                    $row,
+                    $new_code,
+                    $global_config
+                ]
+            ]];
+            $send = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_NEW_2STEP_CODE, $send_data);
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_reset_user2step_codes', 'userid ' . $row['userid'], $admin_info['userid']);

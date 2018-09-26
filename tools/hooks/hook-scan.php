@@ -54,13 +54,17 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
     $linecontents = trim(preg_replace('/^(.*?)' . preg_quote($m[0], '/') . '(.*?)$/', '\\2', $linecontents));
 
     $return_var = '';
-    if (preg_match('/\)[\s]*\,[\s]*\$([0-9a-zA-Z\_]+)[\s]*\)[\s]*\;/', $linecontents, $m)) {
-        $return_var = '$' . $m[1];
+    if (preg_match('/(\)|\])[\s]*\,[\s]*\$([0-9a-zA-Z\_\'"\[\]]+)[\s]*\)[\s]*\;/', $linecontents, $m)) {
+        $return_var = '$' . $m[2];
     }
 
+    if (!empty($return_var)) {
+        $linecontents = preg_replace('/\,[\s]*' . preg_quote($return_var, '/') . '[\s]*/', '', $linecontents);
+    }
+    
     $array_para = array();
-    if (preg_match('/^array[\s]*\(([\sa-zA-Z0-9\_\$\,]+)\)(\,|\)|\s)/', $linecontents, $m)) {
-        $array_para = array_map('trim', explode(',', $m[1]));
+    if (preg_match('/^(array[\s]*\(|\[)([\sa-zA-Z0-9\_\$\,\'\"\[\]]+)(\)\)|\]\))\;$/', $linecontents, $m)) {
+        $array_para = array_map('trim', explode(',', $m[2]));
     }
 
     $array_table_rows = array();
@@ -180,13 +184,13 @@ foreach ($hook_modules as $mod => $modData) {
 }
 
 foreach ($hook_sys as $tag => $data) {
-    echo("  * [[<a style=\"text-decoration: none;\" href=\"?f=" . urlencode($data['file']) . "&amp;c=" . urlencode($data['code']) . "#highlight\" target=\"_blank\">codex:hooks-reference:" . $tag . "|" . $tag . "</a>]]\n");
+    echo("  * [[<a style=\"text-decoration: none;\" href=\"?f=" . urlencode($data['file']) . "&amp;c=" . urlencode($data['code']) . "#highlight\" target=\"_blank\">nukeviet5:codex:hooks-reference:" . $tag . "|" . $tag . "</a>]]\n");
 }
 
 foreach ($hook_modules as $module => $datas) {
     echo("\n<h2 style=\"margin:0;padding:0;\">===== Hook của module " . $module . " =====</h2>\n");
     foreach ($datas as $tag => $data) {
-        echo("  * [[<a style=\"text-decoration: none;\" href=\"?f=" . urlencode($data['file']) . "&amp;c=" . urlencode($data['code']) . "#highlight\" target=\"_blank\">codex:hooks-reference:" . $module . ":" . $tag . "|" . $tag . "</a>]]\n");
+        echo("  * [[<a style=\"text-decoration: none;\" href=\"?f=" . urlencode($data['file']) . "&amp;c=" . urlencode($data['code']) . "#highlight\" target=\"_blank\">nukeviet5:codex:hooks-reference:" . $module . ":" . $tag . "|" . $tag . "</a>]]\n");
     }
 }
 

@@ -40,7 +40,7 @@ if ($_arr_siteinfo['number_user'] > 0) {
 // So thanh vien doi kich hoat
 if ($_arr_siteinfo['number_user_reg'] > 0) {
     $pendinginfo[] = array(
-        'key' => $nv_Lang->getModule(siteinfo_waiting),
+        'key' => $nv_Lang->getModule('siteinfo_waiting'),
         'value' => number_format($_arr_siteinfo['number_user_reg']),
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
     );

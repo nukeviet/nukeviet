@@ -21,7 +21,7 @@ $(document).ready(function() {
     });
 
     // Chọn ảnh
-    $('[data-toggle="browsefile"]').on('click', function(e) {
+    $(document).delegate('[data-toggle="browsefile"]', 'click', function(e) {
         e.preventDefault();
         var path = $(this).data('path');
         var currentpath = $(this).data('cpath');

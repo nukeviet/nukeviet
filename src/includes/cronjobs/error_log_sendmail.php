@@ -27,10 +27,13 @@ function cron_auto_sendmail_error_log()
     $file = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/sendmail.' . $error_log_fileext;
 
     if (file_exists($file) and filesize($file) > 0) {
-        $result = nv_sendmail(array( $global_config['site_name'], $global_config['site_email'] ), $global_config['error_send_email'], sprintf($nv_Lang->getGlobal('error_sendmail_subject'), $global_config['site_name']), $nv_Lang->getGlobal('error_sendmail_content'), $file);
-
+        $send_data = [[
+            'to' => [$global_config['error_send_email']],
+            'data' => []
+        ]];
+        $result = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_AUTO_ERROR_REPORT, $send_data, $file);
         if ($result) {
-            if (! @unlink($file)) {
+            if (!@unlink($file)) {
                 $result = false;
             }
         }

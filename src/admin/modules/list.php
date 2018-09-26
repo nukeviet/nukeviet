@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 15:48
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['c
 // Lấy danh sách các plugin có trong hệ thống
 $array_plugins = array();
 /**
- * Để đoạn này thì nếu module khác có HOOK của module này thì module này không xóa được
+ * Để đoạn này thì nếu module khác có HOOK của module này => module này không xóa được
 $sql = 'SELECT plugin_module_name, hook_module FROM ' . $db_config['prefix'] . '_plugin';
 $result = $db->query($sql);
 
@@ -45,7 +45,7 @@ while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
         'version' => $version
     );
 
-    if (! isset($modules_exit[$mod_file])) {
+    if (!isset($modules_exit[$mod_file])) {
         $act2[] = $m;
     }
 }
@@ -75,16 +75,15 @@ while ($row = $result->fetch()) {
     }
 
     $mod = array();
-    $m = $row['module_file'];
-    $mf = $row['module_file'];
+    $_module_file = strtolower($row['title']);
 
-    if (! isset($new_modules[$mf])) {
+    if (!isset($new_modules[$_module_file])) {
         $row['act'] == 2;
         $row['is_sys'] = '';
         $row['version'] = '';
     } else {
-        $row['is_sys'] = $new_modules[$row['module_file']]['is_sys'];
-        $row['version'] = $new_modules[$row['module_file']]['version'];
+        $row['is_sys'] = $new_modules[$_module_file]['is_sys'];
+        $row['version'] = $new_modules[$_module_file]['version'];
     }
 
     if ($row['title'] == $global_config['site_home_module']) {
@@ -101,7 +100,7 @@ while ($row = $result->fetch()) {
     $mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
 
     $mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $nv_Lang->getGlobal('edit') );
-    $mod['del'] = (($row['is_sys'] == 0 or $row['title'] != $row['module_file']) and !isset($array_plugins[$row['title']])) ? array( "nv_mod_del('" . $row['title'] . "');", $nv_Lang->getGlobal('delete') ) : array();
+    $mod['del'] = (($row['is_sys'] == 0 or $row['title'] != $_module_file) and !isset($array_plugins[$row['title']])) ? array( "nv_mod_del('" . $row['title'] . "');", $nv_Lang->getGlobal('delete') ) : array();
 
     if ($row['title'] == $global_config['site_home_module']) {
         $row['is_sys'] = 1;

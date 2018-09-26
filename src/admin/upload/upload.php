@@ -179,8 +179,6 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 }
 
 $editor = $nv_Request->get_title('editor', 'post,get', '');
-// FIXME Biến này tạm thời không dùng nhưng để tránh các lỗi khác vẫn để ở đây
-// $CKEditorFuncNum = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
 
 if (!preg_match("/^([a-zA-Z0-9\-\_]+)$/", $editor)) {
     $editor = '';

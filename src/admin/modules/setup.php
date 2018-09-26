@@ -94,9 +94,9 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
 
             try {
                 $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . "
-					(title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES
-					(:title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1)
-				");
+                    (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES
+                    (:title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1)
+                ");
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
                 $sth->bindParam(':module_data', $modrow['table_prefix'], PDO::PARAM_STR);
@@ -154,6 +154,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
 }
 
 $page_title = $nv_Lang->getModule('modules');
+// Hệ thống module file có phân biệt chữ hoa chữ thường
 $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
 $modules_data = $module_file_db = [];
 
@@ -237,7 +238,7 @@ foreach ($arr_module_news as $module_file_i => $arr) {
         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (
             type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note
         ) VALUES (
-			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ',
+            \'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ',
             :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note
         )');
 
@@ -258,7 +259,7 @@ if ($check_addnews_modules) {
     }
 }
 
-// Lay danh sach cac module co trong ngon ngu
+// Các module đã có trong CSDL theo ngôn ngữ
 $modules_for_title = array();
 $modules_for_file = array();
 
@@ -270,7 +271,7 @@ while ($row = $result->fetch()) {
     }
 }
 
-// Kiem tra module moi
+// Kiểm tra module mới
 $news_modules_for_file = array_diff_key($modules_data, $modules_for_file);
 
 $array_modules = $array_virtual_modules = $mod_virtual = array();
@@ -289,12 +290,15 @@ foreach ($modules_data as $row) {
             $mod['module_file'] = $row['basename'];
             $mod['version'] = preg_replace_callback('/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['version']);
             $mod['addtime'] = nv_date('H:i:s d/m/Y', $row['addtime']);
-            $mod['author'] = $row['author'];
+            $mod['author'] = nv_htmlspecialchars($row['author']);
             $mod['note'] = $row['note'];
             $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5('setmodule' . $row['title'] . NV_CHECK_SESSION);
 
-            if ($mod['module_file'] == $mod['title']) {
-                $array_modules[] = $mod;
+            if (strtolower($mod['module_file']) == $mod['title']) {
+                // Chỉ hiển thị những module gốc chưa thiết lập
+                if (!empty($mod['url_setup'])) {
+                    $array_modules[] = $mod;
+                }
 
                 if ($row['is_virtual']) {
                     $mod_virtual[] = $mod['title'];

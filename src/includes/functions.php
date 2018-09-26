@@ -1062,9 +1062,12 @@ function nv_get_keywords($content, $keyword_limit = 20)
  * @param string $subject
  * @param string $message
  * @param string $files
+ * @param boolean $AddEmbeddedImage
+ * @param string|array $cc
+ * @param string|array $bcc
  * @return
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false)
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $cc = '', $bcc = '')
 {
     global $global_config, $sys_info;
 
@@ -1161,6 +1164,23 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
         foreach ($to as $_to) {
             $mail->addAddress($_to);
+        }
+
+        if (!empty($cc)) {
+            if (!is_array($cc)) {
+                $cc = [$cc];
+            }
+            foreach ($cc as $_cc) {
+                $mail->addCC($_cc);
+            }
+        }
+        if (!empty($bcc)) {
+            if (!is_array($bcc)) {
+                $bcc = [$bcc];
+            }
+            foreach ($bcc as $_bcc) {
+                $mail->addBCC($_bcc);
+            }
         }
 
         $mail->Subject = nv_unhtmlspecialchars($subject);
@@ -2049,33 +2069,50 @@ function nv_set_authorization()
  * @param mixed $tag => Khóa
  * @param mixed $args => Tham số truyền vào
  * @param mixed $default => Dữ liệu mặc định trả về nếu hook không tồn tại
+ * @param mixed $return_type => Để trống thì dữ liệu trả về là giá trị cuối cùng. 1: Gộp các mảng. 2: Gộp không phân biệt key
  * @return
  */
-function nv_apply_hook($module = '', $tag, $args = array(), $default = null)
+function nv_apply_hook($module = '', $tag, $args = [], $default = null, $return_type = 0)
 {
     global $nv_hooks, $sys_mods;
     // Kiểm tra module khởi chạy tồn tại
     if ((!empty($module) and !isset($sys_mods[$module])) or !isset($nv_hooks[$module][$tag])) {
         return $default;
     }
-    $value = $default;
+    $value = null;
     foreach ($nv_hooks[$module][$tag] as $priority_funcs) {
         foreach ($priority_funcs as $func) {
             // Thông tin module khởi chạy nếu có
-            $from_data = array();
+            $from_data = [];
             if (isset($sys_mods[$module])) {
                 $from_data['module_name'] = $module;
                 $from_data['module_info'] = $sys_mods[$module];
             }
             // Thông tin module nhận dữ liệu nếu có
-            $receive_data = array();
+            $receive_data = [];
             if (isset($sys_mods[$func['module']])) {
                 $receive_data['module_name'] = $func['module'];
                 $receive_data['module_info'] = $sys_mods[$func['module']];
             }
-            $value = call_user_func($func['callback'], $args, $from_data, $receive_data);
+            // Đưa tham số ID trong CSDL vào các biến
+            $args['pid'] = $func['pid'];
+            $_value = call_user_func($func['callback'], $args, $from_data, $receive_data);
+            if (!is_null($_value)) {
+                if (empty($return_type)) {
+                    $value = $_value;
+                } elseif (is_array($_value)) {
+                    if (is_null($value)) {
+                        $value = [];
+                    }
+                    $value = ($return_type == 1 ? array_merge($_value, $value) : array_merge_recursive($_value, $value));
+                }
+            }
         }
     }
+    if (is_null($value)) {
+        return $default;
+    }
+
     return $value;
 }
 
@@ -2087,24 +2124,26 @@ function nv_apply_hook($module = '', $tag, $args = array(), $default = null)
  * @param integer $priority => Ưu tiên
  * @param mixed $function_name => Hàm chạy
  * @param string $hook_module => Module sử dụng dữ liệu
+ * @param integer $pid => ID quản lý trong CSDL
  * @return void
  */
-function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_module = '')
+function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_module = '', $pid = 0)
 {
     global $nv_hooks;
     if (!isset($nv_hooks[$module_name])) {
-        $nv_hooks[$module_name] = array();
+        $nv_hooks[$module_name] = [];
     }
     if (!isset($nv_hooks[$module_name][$tag])) {
-        $nv_hooks[$module_name][$tag] = array();
+        $nv_hooks[$module_name][$tag] = [];
     }
     if (!isset($nv_hooks[$module_name][$tag][$priority])) {
-        $nv_hooks[$module_name][$tag][$priority] = array();
+        $nv_hooks[$module_name][$tag][$priority] = [];
     }
-    $nv_hooks[$module_name][$tag][$priority][] = array(
+    $nv_hooks[$module_name][$tag][$priority][] = [
         'callback' => $function_name,
-        'module' => $hook_module
-    );
+        'module' => $hook_module,
+        'pid' => $pid
+    ];
 }
 
 /**
@@ -2220,4 +2259,107 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
     NukeViet\Api\Api::reset();
 
     return $return;
+}
+
+/**
+ * @param integer $emailid
+ * @return boolean|mixed
+ */
+function nv_get_email_template($emailid)
+{
+    global $db;
+
+    $sql = "SELECT sys_pids, pids, send_name, send_email, send_cc, send_bcc, attachments, is_plaintext, is_disabled, default_subject, default_content,
+    " . NV_LANG_DATA . "_subject lang_subject, " . NV_LANG_DATA . "_content lang_content FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE emailid=:emailid";
+    $sth = $db->prepare($sql);
+    $sth->bindParam(':emailid', $emailid, PDO::PARAM_INT);
+    $sth->execute();
+    $email_data = $sth->fetch();
+    if (empty($email_data)) {
+        // Không
+        return false;
+    }
+
+    $attachments = [];
+    $email_data['attachments'] = explode(',', $email_data['attachments']);
+    foreach ($email_data['attachments'] as $attachment) {
+        if (is_file(NV_UPLOADS_REAL_DIR . '/emailtemplates/' . $attachment)) {
+            $attachments[] = NV_UPLOADS_REAL_DIR . '/emailtemplates/' . $attachment;
+        }
+    }
+
+    // Dữ liệu trả về
+    $data = [
+        'pids' => array_filter(array_unique(array_merge_recursive(explode(',', $email_data['sys_pids']), explode(',', $email_data['pids'])))),
+        'from' => [$email_data['send_name'], $email_data['send_email']],
+        'cc' => array_filter(explode(',', $email_data['send_cc'])),
+        'bcc' => array_filter(explode(',', $email_data['send_bcc'])),
+        'attachments' => $attachments,
+        'subject' => empty($email_data['lang_subject']) ? $email_data['default_subject'] : $email_data['lang_subject'],
+        'content' => empty($email_data['lang_content']) ? $email_data['default_content'] : $email_data['lang_content'],
+        'is_disabled' => $email_data['is_disabled'],
+        'is_plaintext' => $email_data['is_plaintext']
+    ];
+
+    return $data;
+}
+
+/**
+ * @param int $emailid
+ * @param array $data
+ * @param string $attachments
+ * @return boolean
+ */
+function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
+{
+    global $global_config;
+
+    $email_data = nv_get_email_template($emailid);
+    if ($email_data === false) {
+        return false;
+    }
+    if ($email_data['is_disabled'] or empty($data)) {
+        return true;
+    }
+
+    $args = [
+        'mode' => 'FULL',
+        'setpids' => $email_data['pids']
+    ];
+    $result = true;
+    if (empty($email_data['from'][0])) {
+        $email_data['from'][0] = $global_config['site_name'];
+    }
+    if (empty($email_data['from'][1])) {
+        $email_data['from'][1] = $global_config['site_email'];
+    }
+    if (!empty($attachments)) {
+        $email_data['attachments'] = array_merge_recursive(array_unique(array_filter(array_map('trim', explode(',', $attachments)))));
+    }
+
+    try {
+        foreach ($data as $row) {
+            $_args = array_merge($args, $row['data']);
+            $merge_fields = nv_apply_hook('', 'get_email_merge_fields', $_args, [], 1);
+
+            $tpl = new \NukeViet\Template\Smarty();
+            foreach ($merge_fields as $field_key => $field_value) {
+                $tpl->assign($field_key, $field_value['data']);
+            }
+
+            $email_content = $tpl->fetch('string:' . $email_data['content']);
+            $email_subject = $tpl->fetch('string:' . $email_data['subject']);
+            if ($email_data['is_plaintext']) {
+                $email_content = nv_nl2br(strip_tags($email_content));
+            } else {
+                $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
+            }
+
+            $result = nv_sendmail($email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc']);
+        }
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return $result;
 }

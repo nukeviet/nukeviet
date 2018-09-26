@@ -23,7 +23,8 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
     (8, 'modules', 'mod_modules', 'fas fa-cubes', 8, 1, 1, 0, ''),
     (9, 'themes', 'mod_themes', 'fas fa-adjust', 9, 1, 1, 0, ''),
     (10, 'extensions', 'mod_extensions', 'fas fa-layer-group', 10, 1, 0, 0, ''),
-    (11, 'upload', 'mod_upload', 'fas fa-file-alt', 11, 1, 1, 1, '')";
+    (11, 'upload', 'mod_upload', 'fas fa-file-alt', 11, 1, 1, 1, ''),
+    (12, 'emailtemplates', 'mod_emailtemplates', 'fas fa-envelope', 12, 1, 1, 0, '')";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
@@ -182,6 +183,24 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows (id
     (2, 'vinades', 2, 1, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 2),
     (3, 'Quang cao giua trang', 1, 1, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (pid, plugin_file, plugin_area, weight) VALUES
-    (1, 'qrcode.php', 'get_qr_code', 1),
-    (2, 'cdn_js_css_image.php', 'change_site_buffer', 1)";
+// FIXME ID 1001, 1002 dùng để dev giao diện admin_nv5, sau khi dev xong xóa đi
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (pid, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES
+    (1, 'qrcode.php', 'get_qr_code', '', '', 1),
+    (2, 'cdn_js_css_image.php', 'change_site_buffer', '', '', 1),
+    (3, 'emf_active_via_email.php', 'get_email_merge_fields', 'users', 'Users', 1),
+    (5, 'emf_author_delete.php', 'get_email_merge_fields', '', '', 2),
+    (6, 'emf_author_suspend.php', 'get_email_merge_fields', '', '', 3),
+    (7, 'emf_auto_error_report.php', 'get_email_merge_fields', '', '', 4),
+    (8, 'emf_delete_user.php', 'get_email_merge_fields', 'users', 'Users', 5),
+    (9, 'emf_new_2step_code.php', 'get_email_merge_fields', 'users', 'Users', 6),
+    (10, 'emf_new_user_info.php', 'get_email_merge_fields', 'users', 'Users', 7),
+    (11, 'emf_admin_add_user.php', 'get_email_merge_fields', 'users', 'Users', 8),
+    (12, 'emf_user_safekey.php', 'get_email_merge_fields', 'users', 'Users', 9),
+    (13, 'emf_user_self_edit.php', 'get_email_merge_fields', 'users', 'Users', 10),
+    (14, 'emf_user_admin_edit.php', 'get_email_merge_fields', 'users', 'Users', 11),
+    (15, 'emf_verify_email.php', 'get_email_merge_fields', 'users', 'Users', 12),
+    (16, 'emf_group_join.php', 'get_email_merge_fields', 'users', 'Users', 13),
+    (17, 'emf_lostactive_link.php', 'get_email_merge_fields', 'users', 'Users', 14),
+    (18, 'emf_lostpass.php', 'get_email_merge_fields', 'users', 'Users', 15),
+    (1001, 'get_global_admin_theme.php', 'get_global_admin_theme', '', '', 1),
+    (1002, 'get_module_admin_theme.php', 'get_module_admin_theme', '', '', 1)";

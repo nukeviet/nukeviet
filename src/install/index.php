@@ -571,6 +571,7 @@ if ($step == 1) {
             $sql_create_table = array();
             $sql_drop_table = array();
 
+            // FIXME xóa sau khi tối ưu CSDL
             file_put_contents(NV_ROOTDIR . '/log.log', 'Bắt đầu tạo bảng dữ liệu tốn ' . round(((microtime(true) - $step5startTime) * 1000), 2) . 'ms' . PHP_EOL, FILE_APPEND);
 
             define('NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors');
@@ -612,6 +613,7 @@ if ($step == 1) {
                 }
             }
 
+            // FIXME xóa sau khi tối ưu CSDL
             file_put_contents(NV_ROOTDIR . '/log.log', 'Xóa CSDL hiện tại tốn ' . round(((microtime(true) - $step5startTime) * 1), 4) . 's' . PHP_EOL, FILE_APPEND);
 
             $db_config['num_table'] = $num_table;
@@ -637,6 +639,7 @@ if ($step == 1) {
                     //$db->rollBack();
                 }
 
+                // FIXME xóa sau khi tối ưu CSDL
                 file_put_contents(NV_ROOTDIR . '/log.log', 'Tạo bảng CSDL mới tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
                 // Cai dat du lieu cho cac module
@@ -677,6 +680,7 @@ if ($step == 1) {
                     }
                     unset($sql_create_table);
 
+                    // FIXME xóa sau khi tối ưu CSDL
                     file_put_contents(NV_ROOTDIR . '/log.log', 'Tạo bảng CSDL theo ngôn ngữ tốn ' . round(((microtime(true) - $step5startTime) * 1), 2) . 's' . PHP_EOL, FILE_APPEND);
 
                     $filesavedata = NV_LANG_DATA;

@@ -366,13 +366,20 @@ if ($checkss == $array_register['checkss']) {
             ));
         } else {
             if ($global_config['allowuserreg'] == 2) {
+                // Gửi email kích hoạt tài khoản
                 $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
-                $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
-
-                $subject = $nv_Lang->getModule('account_active');
-                $message = sprintf($nv_Lang->getModule('account_active_info'), $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
-                $send = nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
-
+                $send_data = [[
+                    'to' => [$array_register['email']],
+                    'data' => [
+                        'user_full_name' => nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']),
+                        'user_username' => $array_register['username'],
+                        'user_email' => $array_register['email'],
+                        'active_deadline' => nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time),
+                        'site_name' => $global_config['site_name'],
+                        'active_link' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum
+                    ]
+                ]];
+                $send = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_EMAIL_ACTIVE, $send_data);
                 if ($send) {
                     $info = $nv_Lang->getModule('account_active_mess');
                 } else {
@@ -447,13 +454,19 @@ if ($checkss == $array_register['checkss']) {
             }
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
-            $subject = $nv_Lang->getModule('account_register');
             $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
             if (strpos($_url, NV_MY_DOMAIN) !== 0) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
-            $message = sprintf($nv_Lang->getModule('account_register_info'), $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
-            nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
+            $send_data = [[
+                'to' => [$array_register['email']],
+                'data' => [
+                    $array_register,
+                    $global_config,
+                    $_url
+                ]
+            ]];
+            nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_NEW_INFO, $send_data);
 
             if (defined('ACCESS_ADDUS')) {
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/' . $group_id;

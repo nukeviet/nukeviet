@@ -20,6 +20,7 @@ $userids = $nv_Request->get_title('userid', 'post', '');
 $userids = array_filter(array_unique(array_map('intval', array_map('trim', explode(',', $userids)))));
 
 $error = '';
+$send_data = [];
 
 foreach ($userids as $userid) {
     $sql = 'SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
@@ -44,8 +45,6 @@ foreach ($userids as $userid) {
     if ($query->fetchColumn()) {
         $error = $nv_Lang->getModule('delete_group_system');
     } else {
-        $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
-
         $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
         if (!$result) {
             continue;
@@ -66,16 +65,30 @@ foreach ($userids as $userid) {
         if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
             @nv_deletefile(NV_ROOTDIR . '/' . $photo);
         }
-        
+
         if (sizeof($userids) < 5) {
-            $subject = $nv_Lang->getModule('delconfirm_email_title');
-            $message = sprintf($nv_Lang->getModule('delconfirm_email_content'), $userdelete, $global_config['site_name']);
-            $message = nl2br($message);
-            nv_sendmail($global_config['site_email'], $email, $subject, $message);
+            $send_data[] = [
+                'to' => [$email],
+                'data' => [
+                    $group_id,
+                    $username,
+                    $first_name,
+                    $last_name,
+                    $email,
+                    $photo,
+                    $in_groups,
+                    $idsite,
+                    $global_config
+                ]
+            ];
         }
     }
 
     nv_apply_hook($module_name, 'user_delete', array($userid));
+}
+
+if (!empty($send_data)) {
+    nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_DELETE, $send_data);
 }
 
 $nv_Cache->delMod($module_name);

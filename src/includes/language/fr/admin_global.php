@@ -78,3 +78,4 @@ $lang_global['interface_current_menu'] = 'Module actuel';
 $lang_global['interface_other_menu'] = 'Autres modules';
 $lang_global['login_remember_admin'] = 'Cette option permettra aux administrateurs de se connecter à plusieurs endroits';
 $lang_global['notification'] = 'Notifier';
+$lang_global['do_with_selected'] = 'Avec sélectionné';

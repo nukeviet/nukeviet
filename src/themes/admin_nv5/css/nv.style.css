@@ -6,6 +6,18 @@
  * @Createdate 2-9-2010 14:43
  */
 
+.w70 {
+    width: 70px!important;
+}
+
+.mw200 {
+    min-width: 200px!important;
+}
+
+.mw100 {
+    min-width: 100px!important;
+}
+
 /* Row captcha */
 .nv-row-captcha {
     display: flex;

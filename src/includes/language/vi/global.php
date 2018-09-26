@@ -44,6 +44,7 @@ $lang_global['fail'] = 'Thất bại';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';
 $lang_global['All'] = 'Tất cả';
+$lang_global['site_name'] = 'Tên website';
 
 $lang_global['username_empty'] = 'Tên đăng nhập chưa được khai báo';
 $lang_global['usernamelong'] = 'Tên đăng nhập quá dài. Chỉ chấp nhận tên có số ký tự tối đa là %1$d';
@@ -238,8 +239,6 @@ $lang_global['error_warning'] = 'Lỗi cảnh báo';
 $lang_global['error_notice'] = 'Nên chú ý';
 $lang_global['error_sendmail'] = 'Lỗi: Hệ thống không gửi được email, Vui lòng liên hệ với Quản trị site để được giúp đỡ';
 $lang_global['error_sendmail_admin'] = 'Lỗi: Hệ thống không gửi được email, Vui lòng liên hệ với Quản trị site để cấu hình lại chức năng gửi mail';
-$lang_global['error_sendmail_subject'] = 'Cảnh báo từ website %s';
-$lang_global['error_sendmail_content'] = 'Hệ thống đã nhận được một số thông báo. Bạn hãy mở file đính kèm để xem chi tiết';
 $lang_global['search'] = 'Tìm kiếm';
 $lang_global['drag_block'] = 'Bật kéo thả block';
 $lang_global['no_drag_block'] = 'Tắt kéo thả block';
@@ -322,6 +321,7 @@ $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 $lang_global['unknown'] = 'Không xác định';
 $lang_global['joinnow'] = 'Chúng tôi trên mạng xã hội';
 $lang_global['contactUs'] = 'Thông tin liên hệ';
+$lang_global['order'] = 'Thứ tự';
 
 $lang_global['company_name'] = 'Tên chính thức';
 $lang_global['company_sortname'] = 'Tên viết tắt';

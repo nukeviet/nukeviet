@@ -161,3 +161,7 @@ $lang_module['notification_empty'] = '<p align="center">Aucune annonce!</p>';
 $lang_module['notification_module_auto_deactive'] = 's\'arrête d\'exécuter module <strong>%s</strong> à cause d\'erreur';
 $lang_module['notification_cronjobs_auto_deactive'] = 's\'arrête d\'exécuter cronjob <strong>%s</strong> à cause d\'erreur';
 $lang_module['notification_hide'] = 'Masquer cette notification';
+$lang_module['notification_s0'] = 'Tous les statuts';
+$lang_module['notification_s1'] = 'Non lu';
+$lang_module['notification_s2'] = 'Regardé';
+$lang_module['notification_mark_read'] = 'Marqué comme lu';

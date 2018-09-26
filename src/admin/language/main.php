@@ -112,6 +112,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
     $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '', 1);
 
     if ($nv_Request->isset_request('activelang', 'get') and $checksess == md5('activelang_' . $keylang . NV_CHECK_SESSION) and preg_match('/^[a-z]{2}$/', $keylang)) {
+        // Kích hoạt ngôn ngữ data
         if (empty($global_config['idsite'])) {
             $activelang = $nv_Request->get_int('activelang', 'get', 0);
             $allow_sitelangs = $global_config['allow_sitelangs'];
@@ -141,6 +142,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=site&' . NV_OP_VARIABLE . '=edit&idsite=' . $global_config['idsite']);
         }
     } elseif ($checksess == md5($keylang . NV_CHECK_SESSION) and in_array($keylang, $lang_array_exit)) {
+        // Cài đặt mới ngôn ngữ data
         if (isset($array_lang_setup[$keylang]) and $array_lang_setup[$keylang] == 1) {
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_admin_theme($nv_Lang->getModule('nv_data_setup'));
@@ -196,7 +198,6 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 $install_lang = array(); //DO NOT DELETE THIS LINE
                 $menu_rows_lev0 = array(); //DO NOT DELETE THIS LINE
                 $menu_rows_lev1 = array(); //DO NOT DELETE THIS LINE
-
 
                 include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
@@ -309,6 +310,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             include NV_ROOTDIR . '/includes/footer.php';
         }
     } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'])) {
+        // Xóa ngôn ngữ data
         define('NV_IS_FILE_MODULES', true);
 
         $lang = $deletekeylang;

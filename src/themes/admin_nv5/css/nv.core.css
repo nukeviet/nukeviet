@@ -11944,7 +11944,7 @@ textarea.form-control {
 }
 
 .form-control-xs {
-  height: 30px;
+  height: 30px !important;
   font-size: 0.9231rem;
   padding: 6px 9px;
 }

@@ -242,18 +242,14 @@ if ((int)$row['safemode'] > 0) {
         if ($nv_Request->isset_request('resend', 'post')) {
             $ss_safesend = $nv_Request->get_int('safesend', 'session', 0);
             if ($ss_safesend < NV_CURRENTTIME) {
-                $name = $global_config['name_show'] ? array(
-                    $row['first_name'],
-                    $row['last_name']
-                ) : array(
-                    $row['last_name'],
-                    $row['first_name']
-                );
-                $name = array_filter($name);
-                $name = implode(' ', $name);
-                $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-                $message = sprintf($nv_Lang->getModule('safe_send_content'), $name, $sitename, $row['safekey']);
-                @nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('safe_send_subject'), $message);
+                $send_data = [[
+                    'to' => [$row['email']],
+                    'data' => [
+                        $row,
+                        $global_config
+                    ]
+                ]];
+                nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_SAFE_KEY, $send_data);
 
                 $ss_safesend = NV_CURRENTTIME + 600;
                 $nv_Request->set_Session('safesend', $ss_safesend);
@@ -501,18 +497,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $stmt->bindParam(':md5username', $md5_username, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? array(
-        $row['first_name'],
-        $row['last_name']
-    ) : array(
-        $row['last_name'],
-        $row['first_name']
-    );
-    $name = array_filter($name);
-    $name = implode(' ', $name);
-    $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-    $message = sprintf($nv_Lang->getModule('edit_mail_content'), $name, $sitename, $nv_Lang->getGlobal('username'), $nv_username);
-    @nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('edit_mail_subject'), $message);
+    $send_data = [[
+        'to' => [$row['email']],
+        'data' => [
+            $row,
+            $nv_Lang->getGlobal('username'),
+            $nv_username,
+            $global_config
+        ]
+    ]];
+    nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_SELF_EDIT, $send_data);
 
     nv_jsonOutput(array(
         'status' => 'ok',
@@ -583,19 +577,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             $nv_Request->set_Session('verikey', (NV_CURRENTTIME + 300) . '|' . $p . '|' . $verikey);
         }
 
-        $p = nv_date('H:i d/m/Y', $p);
-        $name = $global_config['name_show'] ? array(
-            $row['first_name'],
-            $row['last_name']
-        ) : array(
-            $row['last_name'],
-            $row['first_name']
-        );
-        $name = array_filter($name);
-        $name = implode(' ', $name);
-        $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $message = sprintf($nv_Lang->getModule('email_active_info'), $name, $sitename, $verikey, $p);
-        @nv_sendmail($global_config['site_email'], $nv_email, $nv_Lang->getModule('email_active'), $message);
+        $send_data = [[
+            'to' => [$nv_email],
+            'data' => [
+                $row,
+                $global_config,
+                $verikey,
+                $p
+            ]
+        ]];
+        nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_VERIFY_EMAIL, $send_data);
 
         nv_jsonOutput(array(
             'status' => 'error',
@@ -640,18 +631,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $stmt->bindParam(':email', $nv_email, PDO::PARAM_STR);
         $stmt->execute();
 
-        $name = $global_config['name_show'] ? array(
-            $row['first_name'],
-            $row['last_name']
-        ) : array(
-            $row['last_name'],
-            $row['first_name']
-        );
-        $name = array_filter($name);
-        $name = implode(' ', $name);
-        $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $message = sprintf($nv_Lang->getModule('edit_mail_content'), $name, $sitename, $nv_Lang->getGlobal('email'), $nv_email);
-        @nv_sendmail($global_config['site_email'], $nv_email, $nv_Lang->getModule('edit_mail_subject'), $message);
+        $send_data = [[
+            'to' => [$nv_email],
+            'data' => [
+                $row,
+                $nv_Lang->getGlobal('email'),
+                $nv_email,
+                $global_config
+            ]
+        ]];
+        nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_SELF_EDIT, $send_data);
 
         nv_jsonOutput(array(
             'status' => 'ok',
@@ -704,18 +693,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? array(
-        $row['first_name'],
-        $row['last_name']
-    ) : array(
-        $row['last_name'],
-        $row['first_name']
-    );
-    $name = array_filter($name);
-    $name = implode(' ', $name);
-    $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-    $message = sprintf($nv_Lang->getModule('edit_mail_content'), $name, $sitename, $nv_Lang->getGlobal('password'), $new_password);
-    @nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('edit_mail_subject'), $message);
+    $send_data = [[
+        'to' => [$row['email']],
+        'data' => [
+            $row,
+            $nv_Lang->getGlobal('password'),
+            $new_password,
+            $global_config
+        ]
+    ]];
+    nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_SELF_EDIT, $send_data);
 
     nv_jsonOutput(array(
         'status' => 'ok',
@@ -811,20 +798,27 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                     while (list($email) = $result->fetch(3)) {
                         $array_leader[] = $email;
                     }
+                    $url_group = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
+                    if (strpos($url_group, NV_MY_DOMAIN) !== 0) {
+                        $url_group = NV_MY_DOMAIN . $url_group;
+                    }
                     if (!empty($array_leader)) {
                         $array_leader = array_unique($array_leader);
+                        $send_data = [];
+
                         foreach ($array_leader as $email) {
-                            $mail_from = array(
-                                $global_config['site_name'],
-                                $global_config['site_email']
-                            );
-                            $url_group = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
-                            if (strpos($url_group, NV_MY_DOMAIN) !== 0) {
-                                $url_group = NV_MY_DOMAIN . $url_group;
-                            }
-                            $message = sprintf($nv_Lang->getModule('group_join_queue_message'), $groups_list[$gid]['title'], $user_info['full_name'], $groups_list[$gid]['title'], $url_group);
-                            @nv_sendmail($mail_from, $email, $nv_Lang->getModule('group_join_queue'), $message);
+                            $send_data[] = [
+                                'to' => [$email],
+                                'data' => [
+                                    $groups_list[$gid],
+                                    $global_config,
+                                    $url_group,
+                                    $user_info
+                                ]
+                            ];
                         }
+
+                        nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_GROUP_JOIN, $send_data);
                     }
                 }
             }
@@ -880,18 +874,14 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         $ss_safesend = $nv_Request->get_int('safesend', 'session', 0);
         if ($ss_safesend < NV_CURRENTTIME) {
-            $name = $global_config['name_show'] ? array(
-                $row['first_name'],
-                $row['last_name']
-            ) : array(
-                $row['last_name'],
-                $row['first_name']
-            );
-            $name = array_filter($name);
-            $name = implode(' ', $name);
-            $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-            $message = sprintf($nv_Lang->getModule('safe_send_content'), $name, $sitename, $row['safekey']);
-            @nv_sendmail($global_config['site_email'], $row['email'], $nv_Lang->getModule('safe_send_subject'), $message);
+            $send_data = [[
+                'to' => [$row['email']],
+                'data' => [
+                    $row,
+                    $global_config
+                ]
+            ]];
+            nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_SAFE_KEY, $send_data);
 
             $ss_safesend = NV_CURRENTTIME + 600;
             $nv_Request->set_Session('safesend', $ss_safesend);

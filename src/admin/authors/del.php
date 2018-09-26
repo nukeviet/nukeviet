@@ -8,11 +8,11 @@
  * @Createdate 2-1-2010 21:23
  */
 
-if (! defined('NV_IS_FILE_AUTHORS')) {
+if (!defined('NV_IS_FILE_AUTHORS')) {
     die('Stop!!!');
 }
 
-if (! defined('NV_IS_SPADMIN')) {
+if (!defined('NV_IS_SPADMIN')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
@@ -29,7 +29,7 @@ if (empty($row)) {
 }
 
 
-if ($row['lev'] == 1 or (! defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
+if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
@@ -69,7 +69,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
 
     if (empty($adminpass)) {
         $error = $nv_Lang->getGlobal('admin_password_empty');
-    } elseif (! nv_checkAdmpass($adminpass)) {
+    } elseif (!nv_checkAdmpass($adminpass)) {
         $error = sprintf($nv_Lang->getGlobal('adminpassincorrect'), $adminpass);
         $adminpass = '';
     } else {
@@ -77,8 +77,8 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
             $is_delCache = false;
             $array_keys = array_keys($site_mods);
             foreach ($array_keys as $mod) {
-                if (! empty($mod)) {
-                    if (! empty($site_mods[$mod]['admins'])) {
+                if (!empty($mod)) {
+                    if (!empty($site_mods[$mod]['admins'])) {
                         $admins = explode(',', $site_mods[$mod]['admins']);
                         if (in_array($admin_id, $admins)) {
                             $admins = array_diff($admins, array( $admin_id ));
@@ -107,7 +107,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id);
-            if (! empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
+            if (!empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
                 @nv_deletefile(NV_ROOTDIR . '/' . $row_user['photo']);
             }
         }
@@ -120,41 +120,16 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
         $db->query('OPTIMIZE TABLE ' . NV_AUTHORS_GLOBALTABLE);
 
         if ($sendmail) {
-            $title = sprintf($nv_Lang->getModule('delete_sendmail_title'), $global_config['site_name']);
-            $my_sig = (! empty($admin_info['sig'])) ? $admin_info['sig'] : 'All the best';
-            $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
-            if (empty($reason)) {
-                $message = sprintf($nv_Lang->getModule('delete_sendmail_mess0'), $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $my_mail);
-            } else {
-                $message = sprintf($nv_Lang->getModule('delete_sendmail_mess1'), $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $reason, $my_mail);
-            }
-
-            $message = trim($message);
-
-            $mess = $message;
-            $mess = nv_nl2br($mess, '<br />');
-
-            $xtpl = new XTemplate('message.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system');
-
-            $xtpl->assign('SITE_NAME', $global_config['site_name']);
-            $xtpl->assign('SITE_SLOGAN', $global_config['site_description']);
-            $xtpl->assign('SITE_EMAIL', $global_config['site_email']);
-            $xtpl->assign('SITE_FONE', $global_config['site_phone']);
-            $xtpl->assign('SITE_URL', $global_config['site_url']);
-            $xtpl->assign('TITLE', $title);
-            $xtpl->assign('CONTENT', $mess);
-            $xtpl->assign('AUTHOR_SIG', $my_sig);
-            $xtpl->assign('AUTHOR_NAME', $admin_info['username']);
-            $xtpl->assign('AUTHOR_POS', $admin_info['position']);
-            $xtpl->assign('AUTHOR_EMAIL', $my_mail);
-
-            $xtpl->parse('main');
-            $content = $xtpl->text('main');
-
-            $from = array( $admin_info['username'], $my_mail );
-            $to = $row_user['email'];
-            $send = nv_sendmail($from, $to, $title, $content);
-            if (! $send) {
+            $send_data = [[
+                'to' => [$row_user['email']],
+                'data' => [
+                    $admin_info,
+                    $global_config,
+                    $reason
+                ]
+            ]];
+            $send = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_AUTHOR_DELETE, $send_data);
+            if (!$send) {
                 $page_title = $nv_Lang->getGlobal('error_info_caption');
                 $contents = $nv_Lang->getGlobal('error_sendmail_admin') . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
 
@@ -171,8 +146,8 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
 }
 
 $contents = array();
-$contents['is_error'] = (! empty($error)) ? 1 : 0;
-$contents['title'] = (! empty($error)) ? $error : sprintf($nv_Lang->getModule('delete_sendmail_info'), $row_user['username']);
+$contents['is_error'] = (!empty($error)) ? 1 : 0;
+$contents['title'] = (!empty($error)) ? $error : sprintf($nv_Lang->getModule('delete_sendmail_info'), $row_user['username']);
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
 $contents['sendmail'] = $sendmail;
 

@@ -8,11 +8,11 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$install_lang['modules'] = array();
+$install_lang['modules'] = [];
 $install_lang['modules']['about'] = 'Giới thiệu';
 $install_lang['modules']['about_for_acp'] = '';
 $install_lang['modules']['news'] = 'Tin Tức';
@@ -43,8 +43,8 @@ $install_lang['modules']['freecontent_for_acp'] = '';
 $install_lang['modules']['two_step_verification'] = 'Xác thực hai bước';
 $install_lang['modules']['two_step_verification_for_acp'] = '';
 
-$install_lang['modfuncs'] = array();
-$install_lang['modfuncs']['users'] = array();
+$install_lang['modfuncs'] = [];
+$install_lang['modfuncs']['users'] = [];
 $install_lang['modfuncs']['users']['login'] = 'Đăng nhập';
 $install_lang['modfuncs']['users']['register'] = 'Đăng ký';
 $install_lang['modfuncs']['users']['lostpass'] = 'Khôi phục mật khẩu';
@@ -54,7 +54,7 @@ $install_lang['modfuncs']['users']['memberlist'] = 'Danh sách thành viên';
 $install_lang['modfuncs']['users']['logout'] = 'Thoát';
 $install_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
 
-$install_lang['modfuncs']['statistics'] = array();
+$install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'Theo đường dẫn đến site';
 $install_lang['modfuncs']['statistics']['allcountries'] = 'Theo quốc gia';
 $install_lang['modfuncs']['statistics']['allbrowsers'] = 'Theo trình duyệt';
@@ -62,30 +62,30 @@ $install_lang['modfuncs']['statistics']['allos'] = 'Theo hệ điều hành';
 $install_lang['modfuncs']['statistics']['allbots'] = 'Theo máy chủ tìm kiếm';
 $install_lang['modfuncs']['statistics']['referer'] = 'Đường dẫn đến site theo tháng';
 
-$install_lang['blocks_groups'] = array();
-$install_lang['blocks_groups']['news'] = array();
+$install_lang['blocks_groups'] = [];
+$install_lang['blocks_groups']['news'] = [];
 $install_lang['blocks_groups']['news']['module.block_newscenter'] = 'Tin mới nhất';
 $install_lang['blocks_groups']['news']['global.block_category'] = 'Chủ đề';
 $install_lang['blocks_groups']['news']['global.block_tophits'] = 'Tin xem nhiều';
-$install_lang['blocks_groups']['banners'] = array();
+$install_lang['blocks_groups']['banners'] = [];
 $install_lang['blocks_groups']['banners']['global.banners1'] = 'Quảng cáo giữa trang';
 $install_lang['blocks_groups']['banners']['global.banners2'] = 'Quảng cáo cột trái';
 $install_lang['blocks_groups']['banners']['global.banners3'] = 'Quảng cáo cột phải';
-$install_lang['blocks_groups']['statistics'] = array();
+$install_lang['blocks_groups']['statistics'] = [];
 $install_lang['blocks_groups']['statistics']['global.counter'] = 'Thống kê';
-$install_lang['blocks_groups']['about'] = array();
+$install_lang['blocks_groups']['about'] = [];
 $install_lang['blocks_groups']['about']['global.about'] = 'Giới thiệu';
-$install_lang['blocks_groups']['voting'] = array();
+$install_lang['blocks_groups']['voting'] = [];
 $install_lang['blocks_groups']['voting']['global.voting_random'] = 'Thăm dò ý kiến';
-$install_lang['blocks_groups']['users'] = array();
+$install_lang['blocks_groups']['users'] = [];
 $install_lang['blocks_groups']['users']['global.user_button'] = 'Đăng nhập thành viên';
-$install_lang['blocks_groups']['theme'] = array();
+$install_lang['blocks_groups']['theme'] = [];
 $install_lang['blocks_groups']['theme']['global.company_info'] = 'Công ty chủ quản';
 $install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Các chuyên mục chính';
-$install_lang['blocks_groups']['freecontent'] = array();
+$install_lang['blocks_groups']['freecontent'] = [];
 $install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Sản phẩm';
 
-$install_lang['cron'] = array();
+$install_lang['cron'] = [];
 $install_lang['cron']['cron_online_expired_del'] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';
 $install_lang['cron']['cron_dump_autobackup'] = 'Tự động lưu CSDL';
 $install_lang['cron']['cron_auto_del_temp_download'] = 'Xóa các file tạm trong thư mục tmp';
@@ -100,10 +100,128 @@ $install_lang['groups']['NukeViet-Fans'] = 'Nhóm những người hâm mộ h�
 $install_lang['groups']['NukeViet-Admins'] = 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet';
 $install_lang['groups']['NukeViet-Programmers'] = 'Nhóm Lập trình viên hệ thống NukeViet';
 
-$install_lang['vinades_fullname'] = "Công ty cổ phần phát triển nguồn mở Việt Nam";
-$install_lang['vinades_address'] = "Phòng 1706 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";
+$install_lang['vinades_fullname'] = 'Công ty cổ phần phát triển nguồn mở Việt Nam';
+$install_lang['vinades_address'] = 'Phòng 1706 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội';
 $install_lang['nukeviet_description'] = 'Chia sẻ thành công, kết nối đam mê';
 $install_lang['disable_site_content'] = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
+
+// Ngôn ngữ dữ liệu cho phần mẫu email
+use NukeViet\Template\Email\Cat as EmailCat;
+use NukeViet\Template\Email\Tpl as EmailTpl;
+
+$install_lang['emailtemplates'] = [];
+$install_lang['emailtemplates']['cats'] = [];
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_SYSTEM] = 'Email của hệ thống';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_USER] = 'Email về tài khoản';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_AUTHOR] = 'Email về quản trị';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_MODULE] = 'Email của các module';
+
+$install_lang['emailtemplates']['emails'] = [];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_EMAIL_ACTIVE] = [
+    'pids' => '3',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Kích hoạt tài khoản qua email',
+    's' => 'Thông tin kích hoạt tài khoản',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="{$active_link}">{$active_link}</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: {$user_username}<br />Email: {$user_email}<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến {$active_deadline}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_DELETE] = [
+    'pids' => '8',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thư thông báo xóa tài khoản',
+    's' => 'Thư thông báo xóa tài khoản',
+    'c' => 'Xin chào {$user_full_name} ({$user_username}),<br /><br />Chúng tôi rất lấy làm tiếc thông báo về việc tài khoản của bạn đã bị xóa khỏi website {$site_name}.'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_NEW_2STEP_CODE] = [
+    'pids' => '9',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Gửi mã dự phòng mới',
+    's' => 'Mã dự phòng mới',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Mã dự phòng cho tài khoản của bạn tại website {$site_name} đã được thay đổi. Dưới đây là mã dự phòng mới:<br /><br />{foreach from=$new_code item=code}{$code}<br />{/foreach}<br /><br />Bạn chú ý giữ mã dự phòng an toàn. Nếu mất điện thoại và mất cả mã dự phòng bạn sẽ không thể truy cập vào tài khoản của mình được nữa.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_NEW_INFO] = [
+    'pids' => '10',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thông báo tài khoản được tạo/kích hoạt',
+    's' => 'Tài khoản của bạn đã được tạo',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$login_link}">{$login_link}</a><br />Tên tài khoản: {$user_username}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_ADMIN_ADDED] = [
+    'pids' => '11',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thông báo tài khoản được quản trị khởi tạo',
+    's' => 'Tài khoản của bạn đã được tạo',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được khởi tạo. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$login_link}">{$login_link}</a><br />Tên tài khoản: {$user_username}<br />Mật khẩu: {$user_password}<br /><br />Chúng tôi khuyến cáo bạn nên đổi mật khẩu trước khi sử dụng tài khoản.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SAFE_KEY] = [
+    'pids' => '12',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thư xác minh bật chế độ an toàn',
+    's' => 'Mã xác minh chế độ an toàn',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Bạn đã gửi yêu cầu sử dụng chế độ an toàn tại website {$site_name}. Dưới đây là mã xác minh dùng cho việc kích hoạt hoặc tắt chế độ an toàn:<br /><br /><strong>{$code}</strong><br /><br />Mã xác minh này chỉ có tác dụng bật-tắt chế độ an toàn một lần duy nhất. Sau khi bạn tắt chế độ an toàn, mã xác minh này sẽ vô giá trị.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}.<br /><br /><br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SELF_EDIT] = [
+    'pids' => '13',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thư thông báo đã cập nhật tài khoản',
+    's' => 'Cập nhật thông tin tài khoản thành công',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được cập nhật với {$edit_label} mới là <strong>{$new_value}</strong>.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}.<br /><br /><br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_ADMIN_EDIT] = [
+    'pids' => '14',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thư thông báo quản trị sửa tài khoản thành viên',
+    's' => 'Tài khoản của bạn đã được cập nhật',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đã được cập nhật. Dưới đây là thông tin đăng nhập mới:<br /><br />URL: <a href="{$login_url}">{$login_url}</a><br />Tên tài khoản: {$user_username}{if $send_password}<br />Mật khẩu: {$user_password}{/if}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_VERIFY_EMAIL] = [
+    'pids' => '15',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thư xác nhận thay đổi email tài khoản',
+    's' => 'Thông tin kích hoạt thay đổi email',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Bạn đã gửi đề nghị thay đổi địa chỉ email của Tài khoản cá nhân trên website {$site_name}. Để hoàn tất thay đổi này, bạn cần xác nhận địa chị email mới bằng cách nhập Mã xác minh dưới đây vào ô tương ứng tại khu vực Sửa thông tin tài khoản:<br /><br />Mã xác minh: <strong>{$code}</strong><br /><br />Mã này hết hạn vào {$timeout}.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_GROUP_JOIN] = [
+    'pids' => '16',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Thông báo có yêu cầu tham gia nhóm',
+    's' => 'Yêu cầu tham gia nhóm',
+    'c' => 'Xin chào trưởng nhóm <strong>{$leader_name}</strong>,<br /><br /><strong>{$user_full_name}</strong> đã gửi yêu cầu tham gia nhóm <strong>{$group_name}</strong> do bạn đang quản lý. Bạn cần xét duyệt yêu cầu này!<br /><br />Vui lòng truy cập <a href="{$link}">liên kết này</a> để xét duyệt thành viên.'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_ACTIVE] = [
+    'pids' => '17',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Lấy lại link kích hoạt tài khoản',
+    's' => 'Thông tin kích hoạt tài khoản',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Tài khoản của bạn tại website {$site_name} đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="{$active_link}">{$active_link}</a><br />Các thông tin cần thiết:<br />Tài khoản: {$user_username}<br />Email: {$user_email}<br />Mật khẩu: {$user_password}<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến {$timeout}<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_PASS] = [
+    'pids' => '18',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Khôi phục mật khẩu thành viên',
+    's' => 'Hướng dẫn khôi phục mật khẩu',
+    'c' => 'Xin chào {$user_full_name},<br /><br />Bạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập tài khoản cá nhân tại website {$site_name}. Để thay đổi mật khẩu, bạn cần nhập mã xác minh dưới đây vào ô tương ứng tại khu vực thay đổi mật khẩu.<br /><br />Mã xác minh: <strong>{$code}</strong></a><br /><br />Mã này chỉ được sử dụng một lần và trước thời hạn: {$timeout}.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_DELETE] = [
+    'pids' => '5',
+    'catid' => EmailCat::CAT_AUTHOR,
+    't' => 'Xóa tài khoản quản trị',
+    's' => 'Thông báo từ website {$site_name}',
+    'c' => 'Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị xóa vào {$delete_time}{if not empty($delete_reason)} vì lý do: {$delete_reason}{/if}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_SUSPEND] = [
+    'pids' => '6',
+    'catid' => EmailCat::CAT_AUTHOR,
+    't' => 'Đình chỉ/Kích hoạt lại quản trị site',
+    's' => 'Thông báo từ website {$site_name}',
+    'c' => '{if $is_suspend}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã bị đình chỉ hoạt động vào {$suspend_time} vì lý do: {$suspend_reason}.<br />Mọi đề nghị, thắc mắc... xin gửi đến địa chỉ {$contact_link}{else}Ban quản trị website {$site_name} xin thông báo:<br />Tài khoản quản trị của bạn tại website {$site_name} đã hoạt động trở lại vào {$suspend_time}.<br />Trước đó tài khoản này đã bị đình chỉ hoạt động vì lý do: {$suspend_reason}{/if}'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_AUTO_ERROR_REPORT] = [
+    'pids' => '7',
+    'catid' => EmailCat::CAT_SYSTEM,
+    't' => 'Email tự động thông báo lỗi',
+    's' => 'Cảnh báo từ website {$site_name}',
+    'c' => 'Hệ thống đã nhận được một số thông báo. Bạn hãy mở file đính kèm để xem chi tiết'
+];
 
 $menu_rows_lev0['about'] = array(
     'title' => $install_lang['modules']['about'],
@@ -148,7 +266,7 @@ $menu_rows_lev0['contact'] = array(
     'op' => ''
 );
 
-$menu_rows_lev1['about'] = array();
+$menu_rows_lev1['about'] = [];
 $menu_rows_lev1['about'][] = array(
     'title' => 'Giới thiệu về NukeViet',
     'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet" . $global_config['rewrite_exturl'],
@@ -198,7 +316,7 @@ $menu_rows_lev1['about'][] = array(
     'op' => 'ung-ho-ho-tro-va-tham-gia-phat-trien-nukeviet'
 );
 
-$menu_rows_lev1['news'] = array();
+$menu_rows_lev1['news'] = [];
 $menu_rows_lev1['news'][] = array(
     'title' => 'Đối tác',
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=Doi-tac",

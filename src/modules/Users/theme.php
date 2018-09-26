@@ -974,10 +974,10 @@ function user_welcome()
     $_user_info['gender'] = ($user_info['gender'] == 'M') ? $nv_Lang->getModule('male') : ($user_info['gender'] == 'F' ? $nv_Lang->getModule('female') : $nv_Lang->getModule('na'));
     $_user_info['birthday'] = empty($user_info['birthday']) ? $nv_Lang->getModule('na') : nv_date('d/m/Y', $user_info['birthday']);
     $_user_info['regdate'] = nv_date('d/m/Y', $user_info['regdate']);
-    $_user_info['view_mail'] = empty($user_info['view_mail']) ? $nv_Lang->getModule('no') : $nv_Lang->getModule('yes');
+    $_user_info['view_mail'] = empty($user_info['view_mail']) ? $nv_Lang->getGlobal('no') : $nv_Lang->getGlobal('yes');
     $_user_info['last_login'] = empty($user_info['last_login']) ? '' : nv_date('l, d/m/Y H:i', $user_info['last_login']);
     $_user_info['current_login'] = nv_date('l, d/m/Y H:i', $user_info['current_login']);
-    $_user_info['st_login'] = !empty($user_info['st_login']) ? $nv_Lang->getModule('yes') : $nv_Lang->getModule('no');
+    $_user_info['st_login'] = !empty($user_info['st_login']) ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no');
     $_user_info['active2step'] = !empty($user_info['active2step']) ? $nv_Lang->getGlobal('on') : $nv_Lang->getGlobal('off');
 
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {

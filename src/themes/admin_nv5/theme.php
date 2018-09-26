@@ -118,7 +118,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('MODULE_FILE', $module_file);
-    $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
+    $tpl->assign('NV_ADMIN_THEME', $admin_info['admin_theme']);
     $tpl->assign('NV_SAFEMODE', $admin_info['safemode']);
     $tpl->assign('SITE_FAVICON', $site_favicon);
     $tpl->assign('NV_SITE_TIMEZONE_OFFSET', round(NV_SITE_TIMEZONE_OFFSET / 3600));

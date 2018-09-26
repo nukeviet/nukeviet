@@ -8,11 +8,11 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$install_lang['modules'] = array();
+$install_lang['modules'] = [];
 $install_lang['modules']['about'] = 'About';
 $install_lang['modules']['about_for_acp'] = '';
 $install_lang['modules']['news'] = 'News';
@@ -43,8 +43,8 @@ $install_lang['modules']['freecontent_for_acp'] = '';
 $install_lang['modules']['two_step_verification'] = '2-Step Verification';
 $install_lang['modules']['two_step_verification_for_acp'] = '';
 
-$install_lang['modfuncs'] = array();
-$install_lang['modfuncs']['users'] = array();
+$install_lang['modfuncs'] = [];
+$install_lang['modfuncs']['users'] = [];
 $install_lang['modfuncs']['users']['login'] = 'Login';
 $install_lang['modfuncs']['users']['register'] = 'Register';
 $install_lang['modfuncs']['users']['lostpass'] = 'Password recovery';
@@ -54,7 +54,7 @@ $install_lang['modfuncs']['users']['memberlist'] = 'Members list';
 $install_lang['modfuncs']['users']['logout'] = 'Logout';
 $install_lang['modfuncs']['users']['groups'] = 'Group management';
 
-$install_lang['modfuncs']['statistics'] = array();
+$install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'By referrers';
 $install_lang['modfuncs']['statistics']['allcountries'] = 'By countries';
 $install_lang['modfuncs']['statistics']['allbrowsers'] = 'By browsers ';
@@ -62,30 +62,30 @@ $install_lang['modfuncs']['statistics']['allos'] = 'By operating system';
 $install_lang['modfuncs']['statistics']['allbots'] = 'By search engines';
 $install_lang['modfuncs']['statistics']['referer'] = 'By month';
 
-$install_lang['blocks_groups'] = array();
-$install_lang['blocks_groups']['news'] = array();
+$install_lang['blocks_groups'] = [];
+$install_lang['blocks_groups']['news'] = [];
 $install_lang['blocks_groups']['news']['module.block_newscenter'] = 'Breaking news';
 $install_lang['blocks_groups']['news']['global.block_category'] = 'Category';
 $install_lang['blocks_groups']['news']['global.block_tophits'] = 'Top Hits';
-$install_lang['blocks_groups']['banners'] = array();
+$install_lang['blocks_groups']['banners'] = [];
 $install_lang['blocks_groups']['banners']['global.banners1'] = 'Center Banner';
 $install_lang['blocks_groups']['banners']['global.banners2'] = 'Left Banner';
 $install_lang['blocks_groups']['banners']['global.banners3'] = 'Right Banner';
-$install_lang['blocks_groups']['statistics'] = array();
+$install_lang['blocks_groups']['statistics'] = [];
 $install_lang['blocks_groups']['statistics']['global.counter'] = 'Statistics';
-$install_lang['blocks_groups']['about'] = array();
+$install_lang['blocks_groups']['about'] = [];
 $install_lang['blocks_groups']['about']['global.about'] = 'About';
-$install_lang['blocks_groups']['voting'] = array();
+$install_lang['blocks_groups']['voting'] = [];
 $install_lang['blocks_groups']['voting']['global.voting_random'] = 'Voting';
-$install_lang['blocks_groups']['users'] = array();
+$install_lang['blocks_groups']['users'] = [];
 $install_lang['blocks_groups']['users']['global.user_button'] = 'Member login';
-$install_lang['blocks_groups']['theme'] = array();
+$install_lang['blocks_groups']['theme'] = [];
 $install_lang['blocks_groups']['theme']['global.company_info'] = 'Managing company';
 $install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Main categories';
-$install_lang['blocks_groups']['freecontent'] = array();
+$install_lang['blocks_groups']['freecontent'] = [];
 $install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Introduction';
 
-$install_lang['cron'] = array();
+$install_lang['cron'] = [];
 $install_lang['cron']['cron_online_expired_del'] = 'Delete expired online status';
 $install_lang['cron']['cron_dump_autobackup'] = 'Automatic backup database';
 $install_lang['cron']['cron_auto_del_temp_download'] = 'Empty temporary files';
@@ -104,6 +104,124 @@ $install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock
 $install_lang['vinades_address'] = "Room 1706 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam";
 $install_lang['nukeviet_description'] = 'Sharing success, connect passions';
 $install_lang['disable_site_content'] = 'For technical reasons Web site temporary not available. we are very sorry for that inconvenience!';
+
+// Ngôn ngữ dữ liệu cho phần mẫu email
+use NukeViet\Template\Email\Cat as EmailCat;
+use NukeViet\Template\Email\Tpl as EmailTpl;
+
+$install_lang['emailtemplates'] = [];
+$install_lang['emailtemplates']['cats'] = [];
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_SYSTEM] = 'System Messages';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_USER] = 'User Messages';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_AUTHOR] = 'Admin Messages';
+$install_lang['emailtemplates']['cats'][EmailCat::CAT_MODULE] = 'Module Messages';
+
+$install_lang['emailtemplates']['emails'] = [];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_EMAIL_ACTIVE] = [
+    'pids' => '3',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Account activation via email',
+    's' => 'Activate information',
+    'c' => 'Hi {$user_full_name},<br /><br />Your account at website {$site_name} waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="{$active_link}">{$active_link}</a><br /><br />Account information:<br /><br />Account: {$user_username}<br />Email: {$user_email}<br /><br />Activate expired on {$active_deadline}<br /><br />This is email automatic sending from website {$site_name}.<br /><br />Site administrator'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_DELETE] = [
+    'pids' => '8',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Email notification to delete account',
+    's' => 'Email notification to delete account',
+    'c' => 'Hi {$user_full_name} ({$user_username}),<br />We are so sorry to delete your account at website {$site_name}.'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_NEW_2STEP_CODE] = [
+    'pids' => '9',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Send new backup code',
+    's' => 'New backup code',
+    'c' => 'Hello {$user_full_name},<br /><br /> backup code to your account at the website {$site_name} has been changed. Here is a new backup code: <br /><br />{foreach from=$new_code item=code}{$code}<br />{/foreach}<br /><br /> You keep your backup safe. If you lose your phone and lose your backup code, you will no longer be able to access your account. <br /><br /> This is an automated message sent to your e-mail from website {$site_name}. If you do not understand the content of this letter, simply delete it. <br /><br /> Site Admin'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_NEW_INFO] = [
+    'pids' => '10',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Account notification created/activated',
+    's' => 'Your account was created',
+    'c' => 'Hi {$user_full_name},<br /><br />Your account at website {$site_name} activated. Your login information:<br /><br />URL: <a href="{$login_link}">{$login_link}</a><br /><br />Account: {$user_username}<br /><br /><br />This is email automatic sending from website {$site_name}.<br /><br />Site administrator'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_ADMIN_ADDED] = [
+    'pids' => '11',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Account notification created by admin',
+    's' => 'Your account was created',
+    'c' => 'Hello {$user_full_name},<br /><br /> Your account at website {$site_name} has been created. Here are the logins: <br /><br />URL: <a href="{$login_link}">{$login_link}</a><br /> Account Name: {$user_username}<br /> < Password: {$user_password}<br /><br />We recommend that you change your password before using your account. <br /> <br /> This is an automated message sent to Your email box from {$site_name}. website. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SAFE_KEY] = [
+    'pids' => '12',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Safe mode verification code',
+    's' => 'Safe mode verification code',
+    'c' => 'Hello {$user_full_name},<br /><br />You sent a request using safe mode in website {$site_name}. Below is a verifykey for activating or off safe mode:<br /><br /><strong>{$code}</strong><br /><br />This verifykey only works on-off safe mode once only. After you turn off safe mode, this verification code will be worthless.<br /><br />These are automatic messages sent to your e-mail inbox from website {$site_name}.<br /><br /><br /><br />Administration site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_SELF_EDIT] = [
+    'pids' => '13',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Account update notification',
+    's' => 'Update account infomation success',
+    'c' => 'Hello {$user_full_name},<br /><br />Your account on the website {$site_name} has been updated with {$edit_label} new <strong>{$new_value}</strong>.<br /><br />These are automatic messages sent to your e-mail inbox from website {$site_name}.<br /><br /><br /><br />Administration site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_ADMIN_EDIT] = [
+    'pids' => '14',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Notification about administrator modifying account information',
+    's' => 'Your account has been updated',
+    'c' => 'Hello {$user_full_name},<br /><br /> Your account at website {$site_name} has been updated. Here are the new login information: <br /><br />URL: <a href="{$login_url}">{$login_url}</a><br /> Account Name: {$user_username}{if $send_password}<br /> Password: {$user_password}{/if}<br /> <br /> This is an automated message sent to your email from {$site_name}. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_VERIFY_EMAIL] = [
+    'pids' => '15',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Confirmation email account change confirmation',
+    's' => 'Activation information for changing email',
+    'c' => 'Hello {$user_full_name},<br /><br />You sent a request to change the email address of the personal Account on the website {$site_name}. To complete this change, you must confirm your new email address by entering the verifykey below in the appropriate fields in the area Edit Account Information:<br /><br />Verifykey: <strong>{$code}</strong><br /><br />This key expires on {$timeout}.<br /><br />These are automatic messages sent to your e-mail inbox from website {$site_name}. If you do not understand anything about the contents of this letter, simply delete it.<br /><br /><br /><br />Administration site'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_GROUP_JOIN] = [
+    'pids' => '16',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Notice of group member request',
+    's' => 'Request to join group',
+    'c' => 'Hello leader <strong>{$leader_name}</strong>,<br /><br /><strong>{$user_full_name}</strong> has sent the request to join the group <strong>{$group_name}</strong> because you are managing. You need to approve this request! <br /> <br /> Please <a href="{$link}"> visit this link </a> to approve membership.'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_ACTIVE] = [
+    'pids' => '17',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Recover account activation link',
+    's' => 'Activate information',
+    'c' => 'Hi {$user_full_name},<br /><br />Your account at website {$site_name} waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="{$active_link}">{$active_link}</a><br /><br />Account information:<br /><br />Account: {$user_username}<br />Email: {$user_email}<br />Password: {$user_password}<br /><br />Activate expired on {$timeout}<br /><br />This is email automatic sending from website {$site_name}.<br /><br />Site administrator'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_USER_LOST_PASS] = [
+    'pids' => '18',
+    'catid' => EmailCat::CAT_USER,
+    't' => 'Recover user password',
+    's' => 'Guide password recovery in website {$site_name}',
+    'c' => 'Hello {$user_full_name},<br /><br />You propose to change my login password at the website {$site_name}. To change your password, you will need to enter the verification code below in the corresponding box at the password change area.<br /><br />Verification code: <strong>%3$s</strong><br /><br />This code is only used once and before the deadline of %4$s<br />This letter is automatically sent to your email inbox from site {$site_name}. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_DELETE] = [
+    'pids' => '5',
+    'catid' => EmailCat::CAT_AUTHOR,
+    't' => 'Delete admin account',
+    's' => 'Notification from website {$site_name}',
+    'c' => 'Administrator {$site_name} notify:<br />Your administrator account in {$site_name} website deleted {$delete_time}{if not empty($delete_reason)} Reason: {$delete_reason}{/if}.<br />.<br />If you have any questions... Email {$contact_link}'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_AUTHOR_SUSPEND] = [
+    'pids' => '6',
+    'catid' => EmailCat::CAT_AUTHOR,
+    't' => 'Suspend/Re-enable the site administrator',
+    's' => 'Notification from website {$site_name}',
+    'c' => '{if $is_suspend}Information from {$site_name} Aministrators:<br />Your administrator account of {$site_name} is suspended at {$suspend_time} reason: {$suspend_reason}.<br />If you have any questions... Email: {$contact_link}{else}Information from {$site_name} Aministrators:<br />Your administrator account of {$site_name} is active at {$suspend_time}.<br />Your account has been suspended because: {$suspend_reason}{/if}'
+];
+$install_lang['emailtemplates']['emails'][EmailTpl::E_AUTO_ERROR_REPORT] = [
+    'pids' => '7',
+    'catid' => EmailCat::CAT_SYSTEM,
+    't' => 'Email auto-notification error',
+    's' => 'Error report from website {$site_name}',
+    'c' => 'The system received some error messages. Please open the attached file for details.'
+];
 
 $menu_rows_lev0['about'] = array(
     'title' => $install_lang['modules']['about'],
@@ -136,7 +254,7 @@ $menu_rows_lev0['contact'] = array(
     'op' => ''
 );
 
-$menu_rows_lev1['users'] = array();
+$menu_rows_lev1['users'] = [];
 $menu_rows_lev1['users'][] = array(
     'title' => $install_lang['modfuncs']['users']['login'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=login",
