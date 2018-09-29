@@ -120,7 +120,9 @@ $lang_module['proxy_blocker_2'] = 'Contrôle moyen';
 $lang_module['proxy_blocker_3'] = 'Contrôle strict';
 $lang_module['str_referer_blocker'] = 'Activer le contrôle des liens vers le site depuis l\'exterieur';
 $lang_module['my_domains'] = 'Les domaines du site';
-$lang_module['searchEngineUniqueID'] = 'ID de moteur de recherche Google<br />(forma 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">voir détails</a>)';
+$lang_module['my_domains_help'] = 'S\'il y a plusieurs domaines, chaque domaine est séparé par une virgule';
+$lang_module['searchEngineUniqueID'] = 'ID de moteur de recherche Google';
+$lang_module['searchEngineUniqueID_help'] = ' 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">voir les détails</a>';
 $lang_module['variables'] = 'Configuration du cookie session';
 $lang_module['cookie_prefix'] = 'Préfixe de cookie';
 $lang_module['session_prefix'] = 'Préfixe de session';
@@ -247,7 +249,6 @@ $lang_module['notification_config'] = 'Configuration du fonctionnement d\'annonc
 $lang_module['notification_active'] = 'Lever les annonces en cas de nouvelles activations';
 $lang_module['notification_autodel'] = 'Supprimer automatiquement après un temps';
 $lang_module['notification_autodel_note'] = 'Remplir <strong>0</strong> si vous ne voulez pas supprimer automatiquement';
-$lang_module['notification_day'] = 'jour';
 $lang_module['is_login_blocker'] = 'Activer journal bloc fonction incorrectement plusieurs fois';
 $lang_module['login_number_tracking_label'] = 'Erreur maximale';
 $lang_module['login_number_tracking'] = 'Mauvaises connexions piste maximale période';

@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 28/10/2012, 14:51
  */
 
-if (! defined('NV_IS_FILE_SETTINGS')) {
+if (!defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
@@ -36,7 +36,7 @@ if (NV_CHECK_SESSION == $nv_Request->get_string('cdndl', 'get')) {
                             $filename = $thisdir . '/' . $dircont[$i];
                             $allowzip[] = $filename;
                             $filename = dirname($filename) . '/index.html';
-                            if (! in_array($filename, $allowzip)) {
+                            if (!in_array($filename, $allowzip)) {
                                 if (file_exists($filename)) {
                                     $allowzip[] = $filename;
                                 }
@@ -46,7 +46,7 @@ if (NV_CHECK_SESSION == $nv_Request->get_string('cdndl', 'get')) {
                             $allowzip[] = $filename;
                             $css = file_get_contents($filename);
                             $filename = dirname($filename) . '/index.html';
-                            if (! in_array($filename, $allowzip)) {
+                            if (!in_array($filename, $allowzip)) {
                                 if (file_exists($filename)) {
                                     $allowzip[] = $filename;
                                 }
@@ -61,7 +61,7 @@ if (NV_CHECK_SESSION == $nv_Request->get_string('cdndl', 'get')) {
                                         if (file_exists($filename)) {
                                             $allowzip[] = $filename;
                                             $filename = dirname($filename) . '/index.html';
-                                            if (! in_array($filename, $allowzip)) {
+                                            if (!in_array($filename, $allowzip)) {
                                                 if (file_exists($filename)) {
                                                     $allowzip[] = $filename;
                                                 }
@@ -73,7 +73,7 @@ if (NV_CHECK_SESSION == $nv_Request->get_string('cdndl', 'get')) {
                                 }
                             }
                         }
-                    } elseif (is_dir($current_file) and ! in_array($current_file, $dir_no_scan)) {
+                    } elseif (is_dir($current_file) and !in_array($current_file, $dir_no_scan)) {
                         $stack[] = $current_file;
                     }
                 }

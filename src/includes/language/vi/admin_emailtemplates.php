@@ -62,7 +62,7 @@ $lang_module['tpl_plugin_help'] = 'Chọn plugin xử lý các merge fields tron
 $lang_module['tpl_pluginsys'] = 'Trình xử lý dữ liệu hệ thống';
 $lang_module['tpl_pluginsys_help'] = 'Các trình xử lý này cố định với mẫu email của hệ thống và không thể thay đổi. Nếu bạn muốn bổ sung, hãy chọn thêm bên dưới';
 $lang_module['merge_field'] = 'Các trường hỗ trợ';
-$lang_module['merge_field_help'] = 'Các trường này tùy thuộc vào danh mục email, chúng sẽ tự động được thay bằng giá trị tương ứng khi xuất ra nội dung email. Nhấp vào mô tả của các biến để điền vào trình soạn thảo';
+$lang_module['merge_field_help'] = 'Các trường sẽ tự động được thay bằng giá trị tương ứng khi xuất ra nội dung email. Nhấp vào mô tả của các biến để điền vào trình soạn thảo';
 $lang_module['merge_field_guild1'] = 'Cách hiển thị có điều kiện';
 $lang_module['merge_field_guild2'] = 'Hiển thị nội dung dựa vào điều kiện của một biến. Ví dụ:';
 $lang_module['merge_field_guild3'] = 'Chi tiết hơn, mời xem tại <a href="https://www.smarty.net/docs/en/language.function.if.tpl" target="_blank">đây</a>';
