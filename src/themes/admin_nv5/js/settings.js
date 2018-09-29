@@ -11,7 +11,7 @@ function nv_is_del_cron(cronid) {
         $.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&nocache=" + new Date().getTime(), function(res) {
             if (res == 1) {
                 alert(nv_is_del_confirm[1]);
-                window.location.href = window.location.href;
+                location.reload();
             } else {
                 alert(nv_is_del_confirm[2]);
             }
