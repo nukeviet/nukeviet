@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 21:47
  */
 
-if (! defined('NV_IS_FILE_DATABASE')) {
+if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 
@@ -27,7 +27,7 @@ $tabs = array();
 
 $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
 while ($item = $result->fetch()) {
-    if (empty($tables) or (! empty($tables) and in_array($item['name'], $tables))) {
+    if (empty($tables) or (!empty($tables) and in_array($item['name'], $tables))) {
         $totalfree += $item['data_free'];
         $tabs[] = substr($item['name'], strlen($db_config['prefix']) + 1);
         $db->query('OPTIMIZE TABLE ' . $item['name']);
@@ -35,7 +35,7 @@ while ($item = $result->fetch()) {
 }
 $result->closeCursor();
 
-$totalfree = ! empty($totalfree) ? nv_convertfromBytes($totalfree) : 0;
+$totalfree = !empty($totalfree) ? nv_convertfromBytes($totalfree) : 0;
 
 $content = sprintf($nv_Lang->getModule('optimize_result'), implode(', ', $tabs), $totalfree);
 

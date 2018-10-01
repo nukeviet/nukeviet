@@ -19,7 +19,10 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function($vars) {
     $module_info = $vars[2];
     $op = $vars[3];
 
-    if (defined('NV_ADMIN') and in_array($module_name, ['emailtemplates', 'siteinfo', 'settings']) and !($module_name == 'siteinfo' and $op == 'main')) {
+    if (defined('NV_ADMIN') and in_array($module_name, [
+        'emailtemplates', 'siteinfo', 'settings',
+        'database'
+    ]) and !($module_name == 'siteinfo' and $op == 'main')) {
         $admin_theme = 'admin_nv5';
     }
 
