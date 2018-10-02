@@ -8,20 +8,22 @@
  * @Createdate 9/9/2010, 6:38
  */
 
-if (! defined('NV_IS_FILE_WEBTOOLS')) {
+if (!defined('NV_IS_FILE_WEBTOOLS')) {
     die('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('get_update');
 $set_active_op = 'checkupdate';
 
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+
 $version = trim($nv_Request->get_title('version', 'get', ''));
 $package = $nv_Request->get_int('package', 'get', 0);
 
+// Giải nén gói cập nhật
 if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $package . NV_CHECK_SESSION)) {
-    $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . NV_CHECK_SESSION . '.zip';
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
@@ -51,7 +53,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             // login with username and password
             $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
 
-            if ((! $conn_id) or (! $login_result)) {
+            if ((!$conn_id) or (!$login_result)) {
                 $ftp_check_login = 3;
             } elseif (ftp_chdir($conn_id, $ftp_path)) {
                 $ftp_check_login = 1;
@@ -68,12 +70,12 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
 
             foreach ($ziplistContent as $array_file) {
-                if (! empty($array_file['folder']) and ! file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                if (!empty($array_file['folder']) and !file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
                     $cp = '';
                     $e = explode('/', $array_file['filename']);
 
                     foreach ($e as $p) {
-                        if (! empty($p) and ! is_dir(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p)) {
+                        if (!empty($p) and !is_dir(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p)) {
                             ftp_mkdir($conn_id, $temp_extract_dir . '/' . $cp . $p);
                             if (substr($sys_info['os'], 0, 3) != 'WIN') {
                                 ftp_chmod($conn_id, 0777, $temp_extract_dir . '/' . $cp . $p);
@@ -100,22 +102,22 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             foreach ($ziplistContent as $array_file) {
                 $dir_name = '';
 
-                if (! empty($array_file['folder']) and ! file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
+                if (!empty($array_file['folder']) and !file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
                     $dir_name = $array_file['filename'];
-                } elseif (! file_exists(NV_ROOTDIR . '/' . dirname($array_file['filename']))) {
+                } elseif (!file_exists(NV_ROOTDIR . '/' . dirname($array_file['filename']))) {
                     $dir_name = dirname($array_file['filename']);
                 }
 
-                if (! empty($dir_name)) {
+                if (!empty($dir_name)) {
                     $cp = '';
                     $e = explode('/', $dir_name);
 
                     foreach ($e as $p) {
-                        if (! empty($p) and ! is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
-                            if (! ($ftp_check_login == 1 and ftp_mkdir($conn_id, $cp . $p))) {
+                        if (!empty($p) and !is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
+                            if (!($ftp_check_login == 1 and ftp_mkdir($conn_id, $cp . $p))) {
                                 @mkdir(NV_ROOTDIR . '/' . $cp . $p);
                             }
-                            if (! is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
+                            if (!is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
                                 $error_create_folder[] = $cp . $p;
                                 break;
                             }
@@ -132,12 +134,12 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
                 foreach ($ziplistContent as $array_file) {
                     if (empty($array_file['folder'])) {
                         if (file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
-                            if (! ($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
+                            if (!($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
                                 nv_deletefile(NV_ROOTDIR . '/' . $array_file['filename']);
                             }
                         }
 
-                        if (! ($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
+                        if (!($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
                             @rename(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], NV_ROOTDIR . '/' . $array_file['filename']);
                         }
 
@@ -158,55 +160,25 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
         }
 
-        if (! empty($no_extract)) {
-            $i = 0;
-            foreach ($no_extract as $tmp) {
-                $xtpl->assign('FILENAME', $tmp);
-                $xtpl->parse('complete.no_extract.loop');
-                ++$i;
-            }
+        asort($no_extract);
+        asort($error_create_folder);
+        asort($error_move_folder);
 
-            $xtpl->parse('complete.no_extract');
-        } elseif (! empty($error_create_folder)) {
-            $i = 0;
-            asort($error_create_folder);
+        $tpl->assign('NO_EXTRACT', $no_extract);
+        $tpl->assign('ERROR_CREATE_FOLDER', $error_create_folder);
+        $tpl->assign('ERROR_MOVE_FOLDER', $error_move_folder);
+        $tpl->assign('URL_GO', NV_BASE_SITEURL . 'install/update.php');
 
-            foreach ($error_create_folder as $tmp) {
-                $xtpl->assign('FILENAME', $tmp);
-                $xtpl->parse('complete.error_create_folder.loop');
-                ++$i;
-            }
-
-            $xtpl->parse('complete.error_create_folder');
-        } elseif (! empty($error_move_folder)) {
-            $i = 0;
-            asort($error_move_folder);
-
-            foreach ($error_move_folder as $tmp) {
-                $xtpl->assign('FILENAME', $tmp);
-                $xtpl->parse('complete.error_move_folder.loop');
-                ++$i;
-            }
-
-            $xtpl->parse('complete.error_move_folder');
-        } else {
-            $xtpl->assign('URL_GO', NV_BASE_SITEURL . 'install/update.php');
-            $xtpl->parse('complete.ok');
-        }
-
-        $xtpl->parse('complete');
-        echo $xtpl->text('complete');
+        $html = $tpl->fetch('getupdate_extract.tpl');
+        nv_htmlOutput($html);
     }
 
-    die();
+    nv_htmlOutput('');
 }
 
+// Tải về gói cập nhật
 if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version . $package . NV_CHECK_SESSION)) {
-    $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
-
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . NV_CHECK_SESSION . '.zip';
 
     // Debug
@@ -233,18 +205,13 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
 
     $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
-    if (! empty(NukeViet\Http\Http::$error)) {
+    if (!empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-    } elseif (empty($apidata['filename']) or ! file_exists($apidata['filename'])) {
+    } elseif (empty($apidata['filename']) or !file_exists($apidata['filename'])) {
         $error = $nv_Lang->getModule('get_update_error_file_download');
     }
 
-    if (! empty($error)) {
-        $xtpl->assign('ERROR', $error);
-
-        $xtpl->parse('error');
-        echo $xtpl->text('error');
-    } else {
+    if (empty($error))  {
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
         $ziplistContent = $zip->listContent();
 
@@ -263,10 +230,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
         }
 
         if ($warning == 1) {
-            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('get_update_warning'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)));
-
-            $xtpl->parse('warning');
-            echo $xtpl->text('warning');
+            $tpl->assign('MESSAGE', sprintf($nv_Lang->getModule('get_update_warning'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)));
         } elseif ($warning == 2) {
             $error = $nv_Lang->getModule('get_update_error_file_download');
             $new_version = nv_geVersion(NV_CURRENTTIME);
@@ -276,32 +240,24 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
                     $error .= ' ' . sprintf($nv_Lang->getModule('get_update_error_file_download1'), $manual_link);
                 }
             }
-
-            $xtpl->assign('ERROR', $error);
-            $xtpl->parse('error');
-            echo $xtpl->text('error');
         } else {
-            $xtpl->assign('MESSAGE', sprintf($nv_Lang->getModule('get_update_ok'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)));
-
-            $xtpl->parse('ok');
-            echo $xtpl->text('ok');
+            $tpl->assign('MESSAGE', sprintf($nv_Lang->getModule('get_update_ok'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)));
         }
+
+        $tpl->assign('WARNING_LEVEL', $warning);
     }
 
-    die();
+    $tpl->assign('ERROR', $error);
+
+    $html = $tpl->fetch('getupdate_download.tpl');
+    nv_htmlOutput($html);
 }
 
+// Load trang xong dùng ajax để download (vì download có thể lâu)
 if ($nv_Request->get_title('checksess', 'get', '') == md5($version . $package . NV_CHECK_SESSION)) {
-    $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-    $xtpl->assign('VERSION', $version);
-    $xtpl->assign('PACKAGE', $package);
-    $xtpl->assign('CHECKSESS', md5('download' . $version . $package . NV_CHECK_SESSION));
+    $tpl->assign('AJAX_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&version=' . $version . '&package=' . $package . '&checksess=' . md5('download' . $version . $package . NV_CHECK_SESSION) . '&num=' . nv_genpass(10));
 
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $contents = $tpl->fetch('getupdate.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);

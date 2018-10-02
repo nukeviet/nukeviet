@@ -27,6 +27,10 @@
     user-select: none;
 }
 
+.cursor-pointer {
+    cursor: pointer!important;
+}
+
 /* Row captcha */
 .nv-row-captcha {
     display: flex;
