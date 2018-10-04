@@ -7,7 +7,7 @@
 {else}
 <div role="alert" class="alert alert-primary alert-dismissible">
     <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-    <div class="icon"><i class="far fa-times-circle"></i></div>
+    <div class="icon"><i class="fas fa-info-circle"></i></div>
     <div class="message">{$LANG->get('sampledata_note')}</div>
 </div>
 {/if}
@@ -41,7 +41,7 @@
         {if empty($FILES)}
         <div role="alert" class="alert alert-primary alert-dismissible">
             <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-            <div class="icon"><i class="far fa-times-circle"></i></div>
+            <div class="icon"><i class="fas fa-info-circle"></i></div>
             <div class="message">{$LANG->get('sampledata_empty')}</div>
         </div>
         {else}

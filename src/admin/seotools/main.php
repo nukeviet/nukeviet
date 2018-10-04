@@ -8,7 +8,7 @@
  * @Createdate 9/9/2010, 6:38
  */
 
-if (! defined('NV_IS_FILE_SEOTOOLS')) {
+if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 

@@ -48,7 +48,7 @@
                                 {* Thông tin nâng cấp *}
                                 <div role="alert" class="alert alert-{$row.upmode} alert-dismissible">
                                     <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-                                    <div class="icon"><i class="far fa-times-circle"></i></div>
+                                    <div class="icon"><i class="{if $row.upmode eq 'danger'}far fa-times-circle{elseif $row.upmode eq 'warning'}fas fa-exclamation-triangle{else}fas fa-check{/if}"></i></div>
                                     <div class="message">{$row.upmess}</div>
                                 </div>
                                 {/if}

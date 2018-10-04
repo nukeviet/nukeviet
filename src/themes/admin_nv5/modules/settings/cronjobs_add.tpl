@@ -7,7 +7,7 @@
 {else}
 <div role="alert" class="alert alert-primary alert-dismissible">
     <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-    <div class="icon"><i class="far fa-times-circle"></i></div>
+    <div class="icon"><i class="fas fa-info-circle"></i></div>
     <div class="message">{if $IS_ADD}{$LANG->get('nv_admin_add_title')}{else}{$LANG->get('nv_admin_edit_title')}{/if}</div>
 </div>
 {/if}

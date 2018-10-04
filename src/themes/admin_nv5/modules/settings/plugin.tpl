@@ -1,6 +1,6 @@
 <div role="alert" class="alert alert-primary alert-dismissible">
     <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-    <div class="icon"><i class="far fa-times-circle"></i></div>
+    <div class="icon"><i class="fas fa-info-circle"></i></div>
     <div class="message">{$LANG->get('plugin_note')}</div>
 </div>
 <div class="card card-table">

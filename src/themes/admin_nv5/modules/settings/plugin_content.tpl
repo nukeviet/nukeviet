@@ -11,14 +11,14 @@
             {if $IS_HOOK_MODULE and empty($HOOK_MODS)}
             <div role="alert" class="alert alert-primary alert-dismissible">
                 <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-                <div class="icon"><i class="far fa-times-circle"></i></div>
+                <div class="icon"><i class="fas fa-info-circle"></i></div>
                 <div class="message">{$NO_HOOK_MODULE}</div>
             </div>
             {/if}
             {if empty($RECEIVE_MODS)}
             <div role="alert" class="alert alert-primary alert-dismissible">
                 <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
-                <div class="icon"><i class="far fa-times-circle"></i></div>
+                <div class="icon"><i class="fas fa-info-circle"></i></div>
                 <div class="message">{$NO_RECEIVE_MODULE}</div>
             </div>
             {/if}

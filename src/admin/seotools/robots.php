@@ -12,14 +12,10 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
-$xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 
@@ -27,7 +23,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $robots_data = $nv_Request->get_array('filename', 'post');
     $fileother = $nv_Request->get_array('fileother', 'post');
     $optionother = $nv_Request->get_array('optionother', 'post');
-    $robots_other = array();
+    $robots_other = [];
     foreach ($fileother as $key => $value) {
         if (!empty($value)) {
             $robots_other[$value] = intval($optionother[$key]);
@@ -44,7 +40,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $redirect = false;
     if (!$global_config['check_rewrite_file'] or !$global_config['rewrite_enable']) {
-        $rbcontents = array();
+        $rbcontents = [];
         $rbcontents[] = 'User-agent: *';
 
         foreach ($robots_data as $key => $value) {
@@ -59,19 +55,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         $rbcontents = implode("\n", $rbcontents);
 
-        if (is_writable(NV_ROOTDIR . '/robots.txt')) {
+        if (!is_writable(NV_ROOTDIR . '/robots.txt')) {
             file_put_contents(NV_ROOTDIR . '/robots.txt', $rbcontents, LOCK_EX);
             $redirect = true;
         } else {
-            $xtpl->assign('TITLE', $nv_Lang->getModule('robots_error_writable'));
-            $xtpl->assign('CONTENT', str_replace(array(
-                "\n",
-                "\t"
-            ), array(
-                '<br />',
-                '&nbsp;&nbsp;&nbsp;&nbsp;'
-            ), nv_htmlspecialchars($rbcontents)));
-            $xtpl->parse('main.nowrite');
+            $tpl->assign('ERROR_WRITE_FILE', nv_htmlspecialchars($rbcontents));
         }
     }
 
@@ -80,8 +68,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-$robots_data = array();
-$robots_other = array();
+$robots_data = [];
+$robots_other = [];
 
 if (file_exists($cache_file)) {
     include $cache_file;
@@ -108,9 +96,12 @@ if ($global_config['rewrite_enable']) {
 }
 $files = scandir(NV_ROOTDIR, true);
 sort($files);
-$contents = array();
+$contents = [];
 $contents[] = 'User-agent: *';
+
+$array_files = [];
 $number = 0;
+
 foreach ($files as $file) {
     if (!preg_match('/^\.(.*)$/', $file)) {
         if (is_dir(NV_ROOTDIR . '/' . $file)) {
@@ -119,51 +110,27 @@ foreach ($files as $file) {
             $file = '/' . $file;
         }
 
-        $data = array(
+        $array_files[] = [
             'number' => ++$number,
-            'filename' => $file
-        );
-
-        $type = isset($robots_data[$file]) ? $robots_data[$file] : 1;
-
-        for ($i = 0; $i <= 2; $i++) {
-            $option = array(
-                'value' => $i,
-                'title' => $nv_Lang->getModule('robots_type_' . $i),
-                'selected' => ($type == $i) ? ' selected="selected"' : ''
-            );
-
-            $xtpl->assign('OPTION', $option);
-            $xtpl->parse('main.loop.option');
-        }
-
-        $xtpl->assign('DATA', $data);
-        $xtpl->parse('main.loop');
+            'filename' => $file,
+            'type' => isset($robots_data[$file]) ? $robots_data[$file] : 1,
+            'isother' => false
+        ];
     }
 }
+
 foreach ($robots_other as $file => $value) {
-    $data = array(
+    $array_files[] = [
         'number' => ++$number,
-        'filename' => $file
-    );
-    $xtpl->assign('DATA', $data);
-
-    for ($i = 0; $i <= 2; $i++) {
-        $option = array(
-            'value' => $i,
-            'title' => $nv_Lang->getModule('robots_type_' . $i),
-            'selected' => ($value == $i) ? ' selected="selected"' : ''
-        );
-
-        $xtpl->assign('OPTION', $option);
-        $xtpl->parse('main.other.option');
-    }
-    $xtpl->parse('main.other');
+        'filename' => $file,
+        'type' => $value,
+        'isother' => true
+    ];
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('FILES', $array_files);
 
+$contents = $tpl->fetch('robots.tpl');
 $page_title = $nv_Lang->getModule('robots');
 
 include NV_ROOTDIR . '/includes/header.php';
