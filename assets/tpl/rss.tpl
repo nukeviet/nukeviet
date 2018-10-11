@@ -28,8 +28,8 @@
             <url>{IMAGE.src}</url>
             <title>{IMAGE.title}</title>
             <link>{IMAGE.link}</link>
-            <width>{IMAGE.width}</width>
-            <height>{IMAGE.height}</height>
+            <width></width>
+            <height>45</height>
         </image>
         <!-- END: image -->
         <!-- BEGIN: item -->
