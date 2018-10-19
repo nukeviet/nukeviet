@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 9:32
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -16,18 +16,18 @@ if ($nv_Request->isset_request('module', 'post')) {
     $module_name = $nv_Request->get_title('module', 'post');
     $is_setup = $nv_Request->get_int('setup', 'post', 0);
 
-    $contents = array(
+    $contents = [
         'status' => 'error',
         'module' => $module_name,
-        'message' => array( 0 => 'Module not exists' ),
+        'message' => ['Module not exists'],
         'code' => 0,
         'ishook' => false,
         'hookerror' => '',
-        'hookfiles' => array(),
-        'hookmgs' => array()
-    );
+        'hookfiles' => [],
+        'hookmgs' => []
+    ];
 
-    if (! empty($module_name) and preg_match($global_config['check_module'], $module_name)) {
+    if (!empty($module_name) and preg_match($global_config['check_module'], $module_name)) {
         $sth = $db->prepare('SELECT module_file FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
         $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
         $sth->execute();
@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('module', 'post')) {
             }
         }
 
-        if (! empty($module_file)) {
+        if (!empty($module_file)) {
             $contents['status'] = 'success';
             $contents['message'][0] = $nv_Lang->getModule('reinstall_note1');
 
@@ -61,16 +61,16 @@ if ($nv_Request->isset_request('module', 'post')) {
 
             // Quét các hook của module
             if (is_dir(NV_ROOTDIR . '/modules/' . $module_file . '/hooks')) {
-                $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/hooks', '/^[a-zA-Z0-9]+\.php$/');
+                $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/hooks', '/^[a-zA-Z0-9\_]+\.php$/');
                 if (!empty($hooks)) {
-                    $missing_modules = array();
+                    $missing_modules = [];
                     $stt = 0;
 
                     foreach ($hooks as $hook) {
                         $require_module = nv_get_hook_require(NV_ROOTDIR . '/modules/' . $module_file . '/hooks/' . $hook);
                         if (!empty($require_module)) {
                             $contents['ishook'] = true;
-                            $contents['hookfiles'][$hook] = array();
+                            $contents['hookfiles'][$hook] = [];
                             $contents['hookmgs'][$hook] = $nv_Lang->getModule('select_hook_module', $hook);
                             foreach ($sys_mods as $module => $mod) {
                                 if ($mod['module_file'] == $require_module) {

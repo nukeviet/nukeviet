@@ -21,7 +21,7 @@ function nv_change_weight(lang) {
     var nv_timer = nv_settimeout_disable('change_weight_' + lang, 5000);
     var new_weight = $('#change_weight_' + lang).val();
     $.post(
-        script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 
+        script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
         'changeweight=1&keylang=' + lang + '&new_weight=' + new_weight, function(res) {
         nv_change_weight_res(res);
     });

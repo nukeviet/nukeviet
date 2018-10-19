@@ -23,6 +23,7 @@ if ($global_config['idsite']) {
 
 $title = $note = $modfile = $error = '';
 $modules_site = array_map('strtolower', nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
+
 if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $modfile = $nv_Request->get_title('module_file', 'post', '', 1);
@@ -30,9 +31,14 @@ if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $title = strtolower(change_alias($title));
 
     $modules_admin = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
-    $error = $nv_Lang->getModule('vmodule_exit');
 
-    if (!empty($title) and !empty($modfile) and !in_array($title, $modules_site) and !in_array($title, $modules_admin) and preg_match($global_config['check_module'], $title) and preg_match($global_config['check_module'], $modfile)) {
+    if (empty($title)) {
+        $error = $nv_Lang->getModule('vmodule_no_title');
+    } elseif (empty($modfile) or !preg_match($global_config['check_module'], $modfile)) {
+        $error = $nv_Lang->getModule('vmodule_no_file');
+    } elseif (in_array($title, $modules_site) or in_array($title, $modules_admin) or !preg_match($global_config['check_module'], $title)) {
+        $error = $nv_Lang->getModule('vmodule_exit');
+    } else {
         $version = '';
         $author = '';
         $note = nv_nl2br($note, '<br />');
@@ -71,37 +77,35 @@ if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
 
 $page_title = $nv_Lang->getModule('vmodule_add');
 
-$xtpl = new XTemplate('vmodule.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-if ($error) {
-    $nv_Lang->setModule('vmodule_blockquote', $nv_Lang->getModule('vmodule_exit'));
-    $xtpl->parse('main.error');
-}
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
-$xtpl->assign('TITLE', $title);
-$xtpl->assign('NOTE', $note);
+$tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+$tpl->assign('ERROR', $error);
+$tpl->assign('DATA', [
+    'title' => $title,
+    'note' => $note,
+    'modfile' => $modfile
+]);
 
 $sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE is_virtual=1 AND type=\'module\' ORDER BY addtime ASC';
 $result = $db->query($sql);
 
+$array_module = [];
 while (list($modfile_i) = $result->fetch(3)) {
     if (in_array($modfile_i, $modules_site)) {
         if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module)) {
             continue;
         }
-        $xtpl->assign('MODFILE', array( 'key' => $modfile_i, 'selected' => ($modfile_i == $modfile) ? ' selected="selected"' : '' ));
-        $xtpl->parse('main.modfile');
+        $array_module[] = $modfile_i;
     }
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('ARRAY_MODULE', $array_module);
+
+$contents = $tpl->fetch('vmodule.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

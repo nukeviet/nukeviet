@@ -21,7 +21,8 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function($vars) {
 
     if (defined('NV_ADMIN') and in_array($module_name, [
         'emailtemplates', 'siteinfo', 'settings',
-        'database', 'webtools', 'seotools', 'language'
+        'database', 'webtools', 'seotools', 'language',
+        'modules'
     ]) and !($module_name == 'siteinfo' and $op == 'main')) {
         $admin_theme = 'admin_nv5';
     }

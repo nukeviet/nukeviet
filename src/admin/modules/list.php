@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 15:48
@@ -79,7 +79,7 @@ while ($row = $result->fetch()) {
 
     if (!isset($new_modules[$_module_file])) {
         $row['act'] == 2;
-        $row['is_sys'] = '';
+        $row['is_sys'] = 0;
         $row['version'] = '';
     } else {
         $row['is_sys'] = $new_modules[$_module_file]['is_sys'];
@@ -88,24 +88,20 @@ while ($row = $result->fetch()) {
 
     if ($row['title'] == $global_config['site_home_module']) {
         $row['is_sys'] = 1;
-        $mod['act'][2] = 1;
     }
 
     $weight_list[] = $row['weight'];
 
-    $mod['title'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show&amp;mod=' . $row['title'], $row['title'] );
+    $mod['title'] = $row['title'];
     $mod['version'] = preg_replace_callback('/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['version']);
     $mod['custom_title'] = $row['custom_title'];
-    $mod['weight'] = array( $row['weight'], "nv_chang_weight('" . $row['title'] . "');" );
-    $mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
+    $mod['weight'] = $row['weight'];
+    $mod['act'] = $row['act'];
+    $mod['is_sys'] = $row['is_sys'];
 
-    $mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $nv_Lang->getGlobal('edit') );
-    $mod['del'] = (($row['is_sys'] == 0 or $row['title'] != $_module_file) and !isset($array_plugins[$row['title']])) ? array( "nv_mod_del('" . $row['title'] . "');", $nv_Lang->getGlobal('delete') ) : array();
-
-    if ($row['title'] == $global_config['site_home_module']) {
-        $row['is_sys'] = 1;
-        $mod['act'][2] = 1;
-    }
+    $mod['link_show'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show&amp;mod=' . $row['title'];
+    $mod['link_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'];
+    $mod['allowed_del'] = (($row['is_sys'] == 0 or $row['title'] != $_module_file) and !isset($array_plugins[$row['title']])) ? true : false;
 
     if ($row['act'] == 1) {
         $act_modules[$row['title']] = $mod;
@@ -126,6 +122,17 @@ $contents['caption'] = array($nv_Lang->getModule('caption_actmod'), $nv_Lang->ge
 $contents['thead'] = array($nv_Lang->getModule('weight'), $nv_Lang->getModule('module_name'), $nv_Lang->getModule('custom_title'), $nv_Lang->getModule('version'), $nv_Lang->getGlobal('activate'), $nv_Lang->getGlobal('actions'));
 
 $contents = list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weight_list);
+
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+
+$tpl->assign('ACT_MODULES', $act_modules);
+$tpl->assign('DEACT_MODULES', $deact_modules);
+$tpl->assign('BAD_MODULES', $bad_modules);
+$tpl->assign('WEIGHT_LIST', $weight_list);
+
+$contents = $tpl->fetch('list.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
