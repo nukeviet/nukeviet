@@ -353,6 +353,9 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
             if (!empty($data_content['homeimgfile'])) {
                 $xtpl->parse('main.imagemodal');
             }
+        } else {
+            $xtpl->parse('main.popup');
+            $xtpl->parse('main.popupid');
         }
 
         if (!empty($pro_config['show_product_code']) and !empty($data_content['product_code'])) {
@@ -1607,7 +1610,7 @@ function nv_download_content($data_content)
  */
 function nv_template_viewgrid($array_data, $page = '')
 {
-    global $module_info, $lang_module, $lang_global, $module_name, $module_data, $module_file, $module_upload, $pro_config, $op, $compareid;
+    global $module_info, $lang_module, $lang_global, $module_name, $module_data, $module_file, $module_upload, $pro_config, $op, $compareid, $global_array_shops_cat;
 
     $xtpl = new XTemplate('viewgird.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);

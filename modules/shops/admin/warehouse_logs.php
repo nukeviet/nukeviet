@@ -14,6 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 if (!$pro_config['active_warehouse']) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
+
 }
 
 $wid = $nv_Request->get_int('wid', 'get', 0);
@@ -24,6 +25,7 @@ if ($wid > 0) {
     $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.user_id=t2.userid WHERE t1.wid=' . $wid);
     if ($result->rowCount() == 0) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=warehouse');
+
     }
     $array_warehouse = $result->fetch();
     $page_title = $array_warehouse['title'];
@@ -174,11 +176,11 @@ if ($wid > 0) {
     while ($view = $sth->fetch()) {
         $view['full_name'] = !empty($view['last_name']) ? $view['first_name'] . ' ' . $view['last_name'] : $view['username'];
         $view['addtime'] = nv_date('H:i d/m/Y', $view['addtime']);
-        $result = $db->query('SELECT price, money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs WHERE wid=' . $view['wid']);
+        $result = $db->query('SELECT price, quantity, money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs WHERE wid=' . $view['wid']);
         $view['total_product'] = $result->rowCount();
         $view['total_price'] = 0;
         while ($row = $result->fetch()) {
-            $view['total_price'] += nv_currency_conversion($row['price'], $row['money_unit'], $pro_config['money_unit']);
+            $view['total_price'] += nv_currency_conversion($row['price'] * $row['quantity'], $row['money_unit'], $pro_config['money_unit']);
         }
         $view['total_price'] = nv_number_format($view['total_price']);
         $view['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;wid=' . $view['wid'];

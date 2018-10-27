@@ -301,7 +301,7 @@ div.step_bar a.step_current {
 }
 
 #detail {
-    margin: 5px !important;
+    margin: 5px;
 }
 
 #detail .zoom_img {
@@ -314,6 +314,15 @@ div.step_bar a.step_current {
 
 #detail ul.product_info li {
     margin-bottom: 5px;
+}
+
+.prodetail-popup {
+    margin: 0!important;
+}
+
+.prodetail-popup > .panel {
+    border: 0!important;
+    box-shadow: none!important;
 }
 
 /* TAB */
@@ -1472,4 +1481,16 @@ a.btn-default {
 
 .lSSlideWrapper{
     margin-bottom: 15px
+}
+
+/* Popup to set cart */
+.sh-popup-modal {
+    display: block!important;
+}
+
+.popup-product-detail {
+    display: block;
+    width: 100%;
+    border: 0;
+    overflow: hidden;
 }

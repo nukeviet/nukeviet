@@ -20,6 +20,7 @@ $sql = 'SELECT id, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_
 $result_unit = $db->query($sql);
 if ($result_unit->rowCount() == 0) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=prounit');
+
 } else {
     while ($row = $result_unit->fetch()) {
         $array_unit[$row['id']] = $row;
@@ -384,7 +385,7 @@ if ($pro_config['active_warehouse']) {
     $array_list_action['warehouse'] = $lang_module['warehouse'];
 }
 
-while (list($catid_i, $title_i) = each($array_list_action)) {
+foreach ($array_list_action as $catid_i => $title_i) {
     $xtpl->assign('ACTION', array(
         'key' => $catid_i,
         'title' => $title_i

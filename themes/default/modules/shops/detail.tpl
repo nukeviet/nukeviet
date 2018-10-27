@@ -1,6 +1,15 @@
 <!-- BEGIN: main -->
 <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/css/lightslider.min.css" rel="stylesheet" type="text/css">
-<div id="detail">
+<div itemscope itemtype="http://schema.org/Product" style="display: none">
+    <span itemprop="name">{TITLE}</span> <img itemprop="image" src="{SRC_PRO_FULL}" alt="{TITLE}" /> <span itemprop="description">{hometext}</span> <span itemprop="mpn">{PRODUCT_CODE}</span>
+    <!-- BEGIN: allowed_rating_snippets -->
+    <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"> <span itemprop="ratingValue">{RATE_VALUE}</span> {LANG.trong} <span itemprop="reviewCount">{RATE_TOTAL} </span> {LANG.dg}
+    </span>
+    <!-- END: allowed_rating_snippets -->
+    <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"> <span itemprop="category">{CAT_TITLE}</span> <!-- BEGIN: price1 --> <span itemprop="price">{PRICE.sale_format}</span> <span itemprop="priceCurrency">{PRICE.unit}</span> <!-- END: price1 --> <span itemprop="availability">{LANG.detail_pro_number}: {PRODUCT_NUMBER} {pro_unit}</span>
+    </span>
+</div>
+<div id="detail"<!-- BEGIN: popupid --> class="prodetail-popup"<!-- END: popupid -->>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -266,14 +275,14 @@
 	var detail_error_group = '{LANG.detail_error_group}';
 	function check_quantity( _this ){
 		$('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
-		if( _this.is(':checked') )
-		{
+		if( _this.is(':checked') ) {
 		    _this.parent().css('border-color', 'blue');
 		}
 		$('#group_error').css( 'display', 'none' );
 		<!-- BEGIN: check_price -->
 		check_price( '{proid}', '{pro_unit}' );
 		<!-- END: check_price -->
+        resize_popup();
 	}
 </script>
 <script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/js/lightslider.min.js"></script>
@@ -288,11 +297,18 @@ $(document).ready(function() {
         enableDrag: false,
         currentPagerPosition:'left',
         onSliderLoad: function(el) {
-            el.lightGallery({
-                selector: '#imageGallery .lslide'
-            });
-        }   
-    });  
+            //el.lightGallery({
+            //    selector: '#imageGallery .lslide'
+            //});
+        }
+    });
   });
 </script>
+<!-- BEGIN: popup -->
+<script type="text/javascript">
+$(window).on('load', function() {
+    resize_popup();
+});
+</script>
+<!-- END: popup -->
 <!-- END: main -->
