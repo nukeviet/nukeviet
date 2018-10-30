@@ -107,6 +107,12 @@ if ($checknum == $row['checknum']) {
                     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
                 }
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
+
+                // Callback sau khi đăng ký
+                if (nv_function_exists('nv_user_register_callback')) {
+                    nv_user_register_callback($userid);
+                }
+
                 $check_update_user = true;
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . ' | ' . $client_info['ip'], 0);
             } else {
