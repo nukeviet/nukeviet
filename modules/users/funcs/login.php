@@ -610,11 +610,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
         $nv_Cache->delMod($module_name);
 
-        // Callback sau khi đăng ký
-        if (nv_function_exists('nv_user_register_callback')) {
-            nv_user_register_callback($userid);
-        }
-
         opidr(array(
             'status' => 'success',
             'mess' => $lang_module['account_register_to_admin']

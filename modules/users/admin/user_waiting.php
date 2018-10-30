@@ -105,6 +105,11 @@ if ($nv_Request->isset_request('act', 'get')) {
             }
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
 
+            // Callback sau khi đăng ký
+            if (nv_function_exists('nv_user_register_callback')) {
+                nv_user_register_callback($userid);
+            }
+
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
 
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
