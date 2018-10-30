@@ -383,6 +383,11 @@ if ($checkss == $array_register['checkss']) {
                 nv_insert_notification($module_name, 'contact_new', array('title' => $array_register['username']), $userid, 0, 0, 1);
             }
 
+            // Callback sau khi đăng ký
+            if (nv_function_exists('nv_user_register_callback')) {
+                nv_user_register_callback($userid);
+            }
+
             $nv_redirect = '';
             reg_result(array(
                 'status' => 'ok',
@@ -476,6 +481,12 @@ if ($checkss == $array_register['checkss']) {
                 }
             }
             $nv_Cache->delMod($module_name);
+
+            // Callback sau khi đăng ký
+            if (nv_function_exists('nv_user_register_callback')) {
+                nv_user_register_callback($userid);
+            }
+
             $nv_redirect = '';
             reg_result(array(
                 'status' => 'ok',
