@@ -44,6 +44,7 @@ $lang_global['fail'] = 'Échoué';
 $lang_global['firewallsystem'] = 'Section d\'Administration';
 $lang_global['firewallincorrect'] = 'Le parefeu a bloqué votre session d\'administration!';
 $lang_global['All'] = 'Tous';
+$lang_global['site_name'] = 'Nom du site';
 $lang_global['username_empty'] = 'Nom du compte n\'a pas été entré';
 $lang_global['usernamelong'] = 'Nom du compte trop long. Maximum %1$d caractères';
 $lang_global['usernameadjective'] = 'Nom du compte trop court. Minimum %1$d caractères';

@@ -388,7 +388,7 @@ class NvUpdate
         $result = [];
         foreach ($nv_resquest_serverext_key as $key) {
             if (empty($sys_info[$key])) {
-                if (isset($this->lang->existsTmpModule($key))) {
+                if ($this->lang->existsTmpModule($key)) {
                     $langkey = $this->lang->getModule($key);
                 } elseif ($this->lang->existsModule($key)) {
                     $langkey = $this->lang->getModule($key);

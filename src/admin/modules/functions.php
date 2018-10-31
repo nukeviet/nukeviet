@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 5:53
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -156,7 +156,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
     list($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
 
-    if (! empty($module_file)) {
+    if (!empty($module_file)) {
         $module_version = array();
         $version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
 
@@ -164,7 +164,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             include $version_file;
         }
 
-        $arr_modfuncs = (isset($module_version['modfuncs']) and ! empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : array();
+        $arr_modfuncs = (isset($module_version['modfuncs']) and !empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : array();
 
         // Delete config value in prefix_config table
         $sth = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module");
@@ -185,7 +185,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
             include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ;
 
-            if (! empty($sql_create_module)) {
+            if (!empty($sql_create_module)) {
                 foreach ($sql_create_module as $sql) {
                     try {
                         $db->query($sql);
@@ -207,15 +207,15 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         $arr_show_func = array();
         $new_funcs = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/funcs', $global_config['check_op_file']);
 
-        if (! empty($new_funcs)) {
+        if (!empty($new_funcs)) {
             // Get default layout
             $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout', $global_config['check_op_layout']);
-            if (! empty($layout_array)) {
+            if (!empty($layout_array)) {
                 $layout_array = preg_replace($global_config['check_op_layout'], '\\1', $layout_array);
             }
 
             $selectthemes = 'default';
-            if (! empty($module_theme) and file_exists(NV_ROOTDIR . '/themes/' . $module_theme . '/config.ini')) {
+            if (!empty($module_theme) and file_exists(NV_ROOTDIR . '/themes/' . $module_theme . '/config.ini')) {
                 $selectthemes = $module_theme;
             } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini')) {
                 $selectthemes = $global_config['site_theme'];
@@ -244,13 +244,13 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             }
 
             $_layoutdefault = (isset($module_version['layoutdefault'])) ? $module_version['layoutdefault'] : '';
-            if (! empty($_layoutdefault)) {
+            if (!empty($_layoutdefault)) {
                 $_layout_mod = explode(';', $_layoutdefault);
                 foreach ($_layout_mod as $_layout_fun) {
                     list($layout_name, $_func) = explode(':', trim($_layout_fun));
                     $arr_f = explode(',', trim($_func));
                     foreach ($arr_f as $f) {
-                        if (! isset($array_layout_func_default[$module_name][$f])) {
+                        if (!isset($array_layout_func_default[$module_name][$f])) {
                             $array_layout_func_default[$module_name][$f] = $layout_name;
                         }
                     }
@@ -286,8 +286,8 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     $data['in_module'] = $module_name;
 
                     $arr_func_id[$func] = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
-						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data);
+                        (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
+                         (:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data);
                     if ($arr_func_id[$func]) {
                         $layout = $layoutdefault;
                         if (isset($array_layout_func_default[$module_name][$func])) {
@@ -318,7 +318,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         }
 
         // Creat upload dirs
-        if (isset($module_version['uploads_dir']) and ! empty($module_version['uploads_dir'])) {
+        if (isset($module_version['uploads_dir']) and !empty($module_version['uploads_dir'])) {
             $sth_dir = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)');
 
             foreach ($module_version['uploads_dir'] as $path) {
@@ -327,7 +327,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
                 foreach ($arr_p as $p) {
                     if (trim($p) != '') {
-                        if (! is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
+                        if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
                             $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $cp, $p);
                             if ($mk[0]) {
                                 try {
@@ -345,14 +345,14 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         }
 
         // Creat assets dirs
-        if (isset($module_version['files_dir']) and ! empty($module_version['files_dir'])) {
+        if (isset($module_version['files_dir']) and !empty($module_version['files_dir'])) {
             foreach ($module_version['files_dir'] as $path) {
                 $cp = '';
                 $arr_p = explode('/', $path);
 
                 foreach ($arr_p as $p) {
                     if (trim($p) != '') {
-                        if (! is_dir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp . $p)) {
+                        if (!is_dir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp . $p)) {
                             nv_mkdir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp, $p);
                         }
                         $cp .= $p . '/';
@@ -382,26 +382,6 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 }
 
 /**
- * main_theme()
- *
- * @param mixed $contents
- * @return
- */
-function main_theme($contents)
-{
-    global $global_config, $module_file, $nv_Lang;
-
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('CONTENT', $contents);
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
  * list_theme()
  *
  * @param mixed $contents
@@ -419,7 +399,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
     $xtpl->assign('CAPTION', $contents['caption']);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-    if (! empty($act_modules)) {
+    if (!empty($act_modules)) {
         foreach ($contents['thead'] as $thead) {
             $xtpl->assign('THEAD', $thead);
             $xtpl->parse('main.act_modules.thead');
@@ -438,7 +418,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
                 $xtpl->parse('main.act_modules.loop.weight');
             }
 
-            if (! empty($values['del'])) {
+            if (!empty($values['del'])) {
                 $xtpl->parse('main.act_modules.loop.delete');
             }
 
@@ -448,7 +428,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
         $xtpl->parse('main.act_modules');
     }
 
-    if (! empty($deact_modules)) {
+    if (!empty($deact_modules)) {
         foreach ($contents['thead'] as $thead) {
             $xtpl->assign('THEAD', $thead);
             $xtpl->parse('main.deact_modules.thead');
@@ -467,7 +447,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
                 $xtpl->parse('main.deact_modules.loop.weight');
             }
 
-            if (! empty($values['del'])) {
+            if (!empty($values['del'])) {
                 $xtpl->parse('main.deact_modules.loop.delete');
             }
 
@@ -477,7 +457,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
         $xtpl->parse('main.deact_modules');
     }
 
-    if (! empty($bad_modules)) {
+    if (!empty($bad_modules)) {
         foreach ($contents['thead'] as $thead) {
             $xtpl->assign('THEAD', $thead);
             $xtpl->parse('main.bad_modules.thead');
@@ -496,7 +476,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
                 $xtpl->parse('main.bad_modules.loop.weight');
             }
 
-            if (! empty($values['del'])) {
+            if (!empty($values['del'])) {
                 $xtpl->parse('main.bad_modules.loop.delete');
             }
 
@@ -504,34 +484,6 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
         }
 
         $xtpl->parse('main.bad_modules');
-    }
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
- * show_funcs_theme()
- *
- * @param mixed $contents
- * @return
- */
-function show_funcs_theme($contents)
-{
-    global $global_config, $module_file;
-
-    $xtpl = new XTemplate('show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('CONTENT', $contents);
-
-    if (! empty($contents['ajax'][0])) {
-        $xtpl->parse('main.ajax0');
-        $xtpl->parse('main.loading0');
-    }
-
-    if (! empty($contents['ajax'][1])) {
-        $xtpl->parse('main.ajax1');
-        $xtpl->parse('main.loading1');
     }
 
     $xtpl->parse('main');
@@ -567,66 +519,6 @@ function change_site_title_theme($contents)
 
     $xtpl = new XTemplate('change_site_title_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENT', $contents);
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
- * setup_modules()
- *
- * @param mixed $array_head
- * @param mixed $array_modules
- * @param mixed $array_virtual_head
- * @param mixed $array_virtual_modules
- * @return
- */
-function setup_modules($array_head, $array_modules, $array_virtual_head, $array_virtual_modules)
-{
-    global $global_config, $module_file, $nv_Lang;
-
-    $xtpl = new XTemplate('setup_modules.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('CAPTION', $array_head['caption']);
-
-    foreach ($array_head['head'] as $thead) {
-        $xtpl->assign('HEAD', $thead);
-        $xtpl->parse('main.head');
-    }
-
-    $a = 0;
-    foreach ($array_modules as $mod => $values) {
-        $xtpl->assign('ROW', array(
-            'stt' => ++$a,
-            'values' => $values
-        ));
-
-        $xtpl->parse('main.loop');
-    }
-
-    if (! empty($array_virtual_modules)) {
-        $xtpl->assign('VCAPTION', $array_virtual_head['caption']);
-
-        foreach ($array_virtual_head['head'] as $thead) {
-            $xtpl->assign('VHEAD', $thead);
-            $xtpl->parse('main.vmodule.vhead');
-        }
-
-        $a = 0;
-        foreach ($array_virtual_modules as $mod => $values) {
-            $xtpl->assign('VROW', array(
-                'stt' => ++$a,
-                'values' => $values
-            ));
-            if (! empty($values['url_setup'])) {
-                $xtpl->parse('main.vmodule.loop.setup');
-            }
-            $xtpl->parse('main.vmodule.loop');
-        }
-
-        $xtpl->parse('main.vmodule');
-    }
 
     $xtpl->parse('main');
     return $xtpl->text('main');

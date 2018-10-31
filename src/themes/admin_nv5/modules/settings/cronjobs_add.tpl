@@ -1,92 +1,131 @@
-<!-- BEGIN: main -->
-<div class="alert alert-info <!-- BEGIN: error -->alert-danger<!-- END: error -->">
-	{DATA.title}
+{if not empty($ERROR)}
+<div role="alert" class="alert alert-danger alert-dismissible">
+    <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+    <div class="icon"><i class="far fa-times-circle"></i></div>
+    <div class="message">{$ERROR}</div>
 </div>
-<form method="post" action="{DATA.action}">
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover">
-			<colgroup>
-				<col class="w200">
-				<col class="w20">
-				<col class="w350">
-				<col>
-			</colgroup>
-			<tfoot>
-				<tr>
-					<td colspan="4" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_add" type="submit" value="{DATA.submit}" /></td>
-				</tr>
-			</tfoot>
-			<tbody>
-				<tr>
-					<td>{DATA.cron_name.0}:</td>
-					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="form-control" name="cron_name" id="cron_name" type="text" value="{DATA.cron_name.1}" maxlength="{DATA.cron_name.2}" /></td>
-					<td>&nbsp;</td>
-				</tr>
-	
-				<tr>
-					<td>{DATA.run_file.0}:</td>
-					<td>&nbsp;</td>
-					<td>
-					<select name="run_file" class="form-control">
-						<option value="">{DATA.run_file.1}</option>
-						<!-- BEGIN: run_file -->
-						<option value="{RUN_FILE.key}"{RUN_FILE.selected}>{RUN_FILE.key}</option>
-						<!-- END: run_file -->
-					</select></td>
-					<td><span>&lArr;</span> {DATA.run_file.4}</td>
-				</tr>
-	
-				<tr>
-					<td>{DATA.run_func.0}:</td>
-					<td><sup class="required">&lowast;</sup></td>
-					<td><input class="form-control" name="run_func_iavim" id="run_func_iavim" type="text" value="{DATA.run_func.1}" maxlength="{DATA.run_func.2}" /></td>
-					<td><span>&lArr;</span> {DATA.run_func.3}</td>
-				</tr>
-	
-				<tr>
-					<td>{DATA.params.0}:</td>
-					<td>&nbsp;</td>
-					<td><input class="form-control" name="params_iavim" id="params_iavim" type="text" value="{DATA.params.1}" maxlength="{DATA.params.2}" /></td>
-					<td><span>&lArr;</span> {DATA.params.3}</td>
-				</tr>
-	
-				<tr>
-					<td>{DATA.start_time.0}:</td>
-					<td>&nbsp;</td>
-					<td>
-					<select name="hour" class="form-control pull-left" style="width: 70px">
-						<!-- BEGIN: hour -->
-						<option value="{HOUR.key}"{HOUR.selected}>{HOUR.key}</option>
-						<!-- END: hour -->
-					</select> 
-					<span class="pull-left text-middle">&nbsp;{DATA.hour.0}&nbsp;</span>
-					<select name="min" class="form-control pull-left" style="width: 70px">
-						<!-- BEGIN: min -->
-						<option value="{MIN.key}"{MIN.selected}>{MIN.key}</option>
-						<!-- END: min -->
-					</select>
-					<span class="pull-left text-middle">&nbsp;{DATA.min.0}&nbsp;</span>
-					<span class="pull-left text-middle">&nbsp;{DATA.start_time.1}&nbsp;</span>
-					<input name="start_date" id="start_date" value="{DATA.start_time.2}" class="form-control pull-left" style="width: 90px;" maxlength="10" readonly="readonly" type="text" /></td>
-					<td>&nbsp;</td>
-				</tr>
-	
-				<tr>
-					<td>{DATA.interval.0}:</td>
-					<td>&nbsp;</td>
-					<td><input name="interval_iavim" id="interval_iavim" type="text" value="{DATA.interval.1}" class="w100 form-control pull-left" maxlength="{DATA.interval.2}" /><span class="text-middle">&nbsp;{DATA.interval.3}</span></td>
-					<td><span>&lArr;</span> {DATA.interval.4}</td>
-				</tr>
-				<tr>
-					<td>{DATA.del.0}:</td>
-					<td>&nbsp;</td>
-					<td><input name="del" type="checkbox" value="1"{DELETE} /></td>
-					<td>&nbsp;</td>
-				</tr>
-	
-			</tbody>
-		</table>
-	</div>
+{else}
+<div role="alert" class="alert alert-primary alert-dismissible">
+    <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+    <div class="icon"><i class="fas fa-info-circle"></i></div>
+    <div class="message">{if $IS_ADD}{$LANG->get('nv_admin_add_title')}{else}{$LANG->get('nv_admin_edit_title')}{/if}</div>
+</div>
+{/if}
+<form method="post" action="{$FORM_ACTION}" autocomplete="off">
+    <div class="card card-border-color card-border-color-primary">
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cron_name">{$LANG->get('cron_name')} <i class="text-danger">(*)</i></label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <input type="text" class="form-control form-control-sm" id="cron_name" name="cron_name" value="{$DATA['cron_name']}" maxlength="100">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="run_file">{$LANG->get('run_file')}</label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <select class="select2" id="run_file" name="run_file">
+                        <option value="">{$LANG->get('file_none')}</option>
+                        {foreach from=$FILELIST item=file}
+                        <option value="{$file}"{if $file eq $DATA['run_file']} selected="selected"{/if}>{$file}</option>
+                        {/foreach}
+                    </select>
+                    <span class="form-text text-muted">{$LANG->get('run_file_info')}</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="run_func_iavim">{$LANG->get('run_func')} <i class="text-danger">(*)</i></label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <input type="text" class="form-control form-control-sm" id="run_func_iavim" name="run_func_iavim" value="{$DATA['run_func']}" maxlength="255">
+                    <span class="form-text text-muted">{$LANG->get('run_func_info')}</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="params_iavim">{$LANG->get('params')}</label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <input type="text" class="form-control form-control-sm" id="params_iavim" name="params_iavim" value="{$DATA['params']}" maxlength="255">
+                    <span class="form-text text-muted">{$LANG->get('params_info')}</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="ftp_server">{$LANG->get('start_time')}</label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 flex-shrink-1">
+                            <select class="form-control form-control-sm" name="hour">
+                                {for $key=0 to 23}
+                                <option value="{$key}"{if $key eq $DATA['hour']} selected="selected"{/if}>{$key}</option>
+                                {/for}
+                            </select>
+                        </div>
+                        <div class="flex-grow-0 flex-shrink-0 pr-1 pl-1">{$LANG->get('hour')}</div>
+                        <div class="flex-grow-1 flex-shrink-1">
+                            <select class="form-control form-control-sm" name="min">
+                                {for $key=0 to 59}
+                                <option value="{$key}"{if $key eq $DATA['min']} selected="selected"{/if}>{$key}</option>
+                                {/for}
+                            </select>
+                        </div>
+                        <div class="flex-grow-0 flex-shrink-0 pr-1 pl-1">{$LANG->get('min')}, {$LANG->get('day')}</div>
+                        <div class="flex-grow-1 flex-shrink-1">
+                            <input type="text" class="form-control form-control-sm bsdatepicker" id="start_date" name="start_date" value="{"d/m/Y"|date:$DATA['start_time']}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row pb-1">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="interval_iavim">{$LANG->get('interval')}</label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 flex-shrink-1">
+                            <input type="text" class="form-control form-control-sm" id="interval_iavim" name="interval_iavim" value="{$DATA['interval']}" maxlength="11">
+                        </div>
+                        <div class="flex-grow-0 flex-shrink-0 pl-2">{$LANG->get('min')}</div>
+                    </div>
+                    <span class="form-text text-muted">{$LANG->get('interval_info')}</span>
+                </div>
+            </div>
+            <div class="form-group row pt-0 pb-0">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cron_del">{$LANG->get('is_del')}</label>
+                <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                    <label class="custom-control custom-checkbox custom-control-inline">
+                        <input class="custom-control-input" type="checkbox" id="cron_del" name="del" value="1"{if {$DATA['del']}} checked="checked"{/if}><span class="custom-control-label"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row mb-0 pb-0 pt-0">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right"></label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <input name="save" type="hidden" value="1" />
+                    <button class="btn btn-space btn-primary" type="submit" name="go_add">{$LANG->get('submit')}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
-<!-- END: main -->
+
+<link data-offset="0" rel="stylesheet" href="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/select2.min.css">
+<link data-offset="0" rel="stylesheet" href="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+
+<script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/i18n/{$NV_LANG_INTERFACE}.js"></script>
+<script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/bootstrap-datepicker/locales/bootstrap-datepicker.{$NV_LANG_INTERFACE}.min.js"></script>
+<script>
+$(document).ready(function() {
+    $(".select2").select2({
+        width: "100%",
+        containerCssClass: "select2-sm"
+    });
+    $(".bsdatepicker").datepicker({
+        autoclose: 1,
+        templates: {
+            rightArrow: '<i class="fas fa-chevron-right"></i>',
+            leftArrow: '<i class="fas fa-chevron-left"></i>'
+        },
+        language: '{$NV_LANG_INTERFACE}',
+        orientation: 'auto',
+        todayHighlight: true,
+        format: 'dd/mm/yyyy'
+    });
+});
+</script>

@@ -44,6 +44,7 @@ $lang_global['fail'] = 'Fail';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Firewall system is blocked to access your Administration account!';
 $lang_global['All'] = 'All';
+$lang_global['site_name'] = 'Website name';
 $lang_global['username_empty'] = 'Username has not been declared';
 $lang_global['usernamelong'] = 'Username too length. Limit %1$d characters';
 $lang_global['usernameadjective'] = 'Username too short. Minimum %1$d characters';

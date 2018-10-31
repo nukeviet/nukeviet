@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 21:49
  */
 
-if (! defined('NV_IS_FILE_DATABASE')) {
+if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ $ext = $nv_Request->get_title('ext', 'post', '');
 
 if (empty($tables)) {
     $tables = array();
-} elseif (! is_array($tables)) {
+} elseif (!is_array($tables)) {
     $tables = array( $tables );
 }
 
@@ -47,25 +47,23 @@ $contents['filename'] = $log_dir . '/' . $file_name;
 include NV_ROOTDIR . '/includes/core/dump.php' ;
 $result = nv_dump_save($contents);
 
-$xtpl = new XTemplate('save.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
+$error = '';
 if (empty($result)) {
-    $xtpl->assign('ERROR', sprintf($nv_Lang->getModule('save_error'), NV_LOGS_DIR . '/dump_backup'));
-    $xtpl->parse('main.error');
+    $error = $nv_Lang->getModule('save_error', NV_LOGS_DIR . '/dump_backup');
 } else {
     $file = explode('_', $file_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savefile'), 'File name: ' . end($file), $admin_info['userid']);
-
-    $xtpl->assign('LINK_DOWN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file_name . '&amp;checkss=' . md5($file_name . NV_CHECK_SESSION));
-
-    $xtpl->parse('main.result');
+    $tpl->assign('LINK_DOWN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file_name . '&amp;checkss=' . md5($file_name . NV_CHECK_SESSION));
 }
 
+$tpl->assign('ERROR', $error);
 $page_title = $nv_Lang->getModule('save_data');
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('save.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

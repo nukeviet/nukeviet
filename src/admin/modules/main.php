@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 9:32
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -18,11 +18,11 @@ if (sizeof($site_mods) < 1) {
 
 $page_title = $nv_Lang->getModule('main');
 
-$contents = array();
-$contents['div_id'] = 'list_mods';
-$contents['ajax'] = 'nv_show_list_mods();';
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
-$contents = call_user_func('main_theme', $contents);
+$contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

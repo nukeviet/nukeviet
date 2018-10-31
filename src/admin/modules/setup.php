@@ -283,7 +283,7 @@ foreach ($modules_data as $row) {
         }
 
         if (array_key_exists($row['title'], $news_modules_for_file)) {
-            $mod = array();
+            $mod = [];
             $mod['title'] = $row['title'];
             $mod['is_sys'] = $row['is_sys'];
             $mod['virtual'] = $row['is_virtual'];
@@ -310,31 +310,14 @@ foreach ($modules_data as $row) {
     }
 }
 
-$array_head = array(
-    'caption' => $nv_Lang->getModule('module_sys'),
-    'head' => array(
-        $nv_Lang->getModule('weight'),
-        $nv_Lang->getModule('module_name'),
-        $nv_Lang->getModule('version'),
-        $nv_Lang->getModule('settime'),
-        $nv_Lang->getModule('author'),
-        ''
-    )
-);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
-$array_virtual_head = array(
-    'caption' => $nv_Lang->getModule('vmodule'),
-    'head' => array(
-        $nv_Lang->getModule('weight'),
-        $nv_Lang->getModule('module_name'),
-        $nv_Lang->getModule('vmodule_file'),
-        $nv_Lang->getModule('settime'),
-        $nv_Lang->getModule('vmodule_note'),
-        ''
-    )
-);
+$tpl->assign('ARRAY_MODULES', $array_modules);
+$tpl->assign('VIRTUAL_MODULES', $array_virtual_modules);
 
-$contents .= call_user_func('setup_modules', $array_head, $array_modules, $array_virtual_head, $array_virtual_modules);
+$contents = $tpl->fetch('setup_modules.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -19,7 +19,11 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function($vars) {
     $module_info = $vars[2];
     $op = $vars[3];
 
-    if (defined('NV_ADMIN') and in_array($module_name, ['emailtemplates', 'siteinfo', 'settings']) and !($module_name == 'settings' and $op == 'system') and !($module_name == 'siteinfo' and $op == 'main')) {
+    if (defined('NV_ADMIN') and in_array($module_name, [
+        'emailtemplates', 'siteinfo', 'settings',
+        'database', 'webtools', 'seotools', 'language',
+        'modules'
+    ]) and !($module_name == 'siteinfo' and $op == 'main')) {
         $module_theme = 'admin_nv5';
     }
 

@@ -8,10 +8,10 @@
 
 function nv_is_del_cron(cronid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&nocache=" + new Date().getTime(), function(res) {
+        $.get(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&nocache=" + new Date().getTime(), function(res) {
             if (res == 1) {
                 alert(nv_is_del_confirm[1]);
-                window.location.href = window.location.href;
+                location.reload();
             } else {
                 alert(nv_is_del_confirm[2]);
             }
@@ -22,7 +22,7 @@ function nv_is_del_cron(cronid) {
 
 function nv_del_plugin(pid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'del=1&pid=' + pid, function(res) {
+        $.post(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'del=1&pid=' + pid, function(res) {
             location.reload();
         });
     }
@@ -31,7 +31,7 @@ function nv_del_plugin(pid) {
 function nv_change_plugin_weight(pid) {
     var nv_timer = nv_settimeout_disable('weight_' + pid, 3000);
     var new_weight = document.getElementById('weight_' + pid).options[document.getElementById('weight_' + pid).selectedIndex].value;
-    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'changeweight=1&pid=' + pid + '&new_weight=' + new_weight, function(res) {
+    $.post(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'changeweight=1&pid=' + pid + '&new_weight=' + new_weight, function(res) {
         var r_split = res.split('_');
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -45,7 +45,7 @@ function nv_change_plugin_weight(pid) {
 $(document).ready(function(){
     // System
     $('#cdn_download').click(function() {
-        window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
+        window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + $(this).data('cdndl');
     });
     $('[data-toggle="controlrw1"]').change(function() {
         var rewrite_optional = $(this).is(':checked');
@@ -149,11 +149,10 @@ $(document).ready(function(){
         });
     });
 
-    $('#ssl_https').change(function(){
+    $('#ssl_https').on('change', function(){
         var val = $(this).data('val');
         var mode = $(this).val();
-
-        if( mode != 0 && val == 0 && ! confirm(LANG.note_ssl) ){
+        if (mode != 0 && val == 0 && !confirm($(this).data('message'))) {
             $(this).val('0');
             return;
         }

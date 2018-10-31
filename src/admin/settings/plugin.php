@@ -15,14 +15,13 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
 $page_title = $nv_Lang->getModule('plugin');
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->registerPlugin('modifier', 'implode', 'implode');
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
 
 // Lấy list các HOOK theo module hoặc hệ thống
 $sql = "SELECT DISTINCT plugin_area, hook_module FROM " . $db_config['prefix'] . "_plugin WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
@@ -58,42 +57,18 @@ if (!empty($array_search['plugin_area'])) {
 
     $sql .= " ORDER BY weight ASC";
     $max_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE (plugin_lang=\'all\' OR plugin_lang=\'' . NV_LANG_DATA . '\') AND plugin_area=' . $db->quote($array_search['s_plugin_area']) . ' AND hook_module=' . $db->quote($array_search['s_hook_module']))->fetchColumn();
-    $xtpl->parse('main.col_weight');
 } else {
     $sql .= " ORDER BY hook_module ASC, plugin_area ASC";
 }
 $result = $db->query($sql);
 $array_plugin_db = array();
 
+$array = [];
 while ($row = $result->fetch()) {
     $key = ($row['hook_module'] ? $site_mods[$row['hook_module']]['module_file'] : '__') . ':' . $row['plugin_area'] . ':' . ($row['plugin_module_name'] ? $site_mods[$row['plugin_module_name']]['module_file'] : '__');
     if (empty($array_search['plugin_area']) or ($array_search['s_plugin_area'] == $row['plugin_area'] and $array_search['s_hook_module'] == $row['hook_module'])) {
         $row['hook_module'] = empty($row['hook_module']) ? '' : ($row['hook_module'] . ':');
-        $xtpl->assign('ROW', $row);
-
-        if (!empty($array_search['plugin_area'])) {
-            for ($i = 1; $i <= $max_weight; $i++) {
-                $weight = array(
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                );
-                $xtpl->assign('WEIGHT', $weight);
-                $xtpl->parse('main.loop.weight.loop');
-            }
-            $xtpl->parse('main.loop.weight');
-        }
-
-        if (empty($row['plugin_module_name'])) {
-            $xtpl->parse('main.loop.type_sys');
-        } else {
-            $xtpl->parse('main.loop.type_module');
-        }
-        if (empty($row['plugin_module_file'])) {
-            $xtpl->parse('main.loop.delete');
-        }
-
-        $xtpl->parse('main.loop');
+        $array[] = $row;
     }
     if (isset($array_plugin_db[$key])) {
         $array_plugin_db[$key] += 1;
@@ -102,11 +77,10 @@ while ($row = $result->fetch()) {
     }
 }
 
-foreach ($array_plugin_area as $plugin_area) {
-    $xtpl->assign('PLUGIN_AREA_SELECTED', $plugin_area == $array_search['plugin_area'] ? ' selected="selected"' : '');
-    $xtpl->assign('PLUGIN_AREA', $plugin_area);
-    $xtpl->parse('main.plugin_area');
-}
+$tpl->assign('PLUGIN_DB', $array);
+$tpl->assign('PLUGIN_DB_NUM', $max_weight);
+$tpl->assign('PLUGIN_AREA', $array_plugin_area);
+$tpl->assign('SEARCH', $array_search);
 
 // Chuyển module của site theo dạng module_file để xác định số plugin
 $array_plstat_bymod = array();
@@ -164,7 +138,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
     // Thiết lập plugin module
     if (!empty($available_plugins[$_key]['receive_module'])) {
         $page_title .= ': ' . $plugin_file;
-        $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;plugin_file=' . $plugin_file . '&amp;rand=' . nv_genpass());
+        $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;plugin_file=' . $plugin_file . '&amp;rand=' . nv_genpass());
 
         // Xác định module nguồn và module đích
         $array_hook_mods = $array_receive_mods = array();
@@ -208,46 +182,31 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
         }
 
         if (!$is_submit or $error) {
-            if (!empty($error)) {
-                $xtpl->assign('ERROR', $error);
-                $xtpl->parse('setting.error');
-            }
+            $tpl->assign('ERROR', $error);
 
             $submit_allowed = true;
+            $is_hook_module = false;
             // Xuất module hook
             if (!empty($available_plugins[$_key]['hook_module'])) {
-                foreach ($array_hook_mods as $hook_module) {
-                    $hook_module['selected'] = $hook_module['key'] == $plugin_hook_module ? ' selected="selected"' : '';
-                    $xtpl->assign('HOOK_MODULE', $hook_module);
-                    $xtpl->parse('setting.hook_module.loop');
-                }
-                if ($array_hook_mods) {
-                    $xtpl->parse('setting.hook_module');
-                } else {
-                    $xtpl->assign('NO_HOOK_MODULE', $nv_Lang->getModule('plugin_error_no_hook', $available_plugins[$_key]['hook_module'], $available_plugins[$_key]['hook_module']));
-                    $xtpl->parse('setting.no_hook_module');
+                $is_hook_module = true;
+                if (empty($array_hook_mods)) {
                     $submit_allowed = false;
                 }
             }
-            foreach ($array_receive_mods as $receive_module) {
-                $receive_module['selected'] = $receive_module['key'] == $plugin_module_name ? ' selected="selected"' : '';
-                $xtpl->assign('RECEIVE_MODULE', $receive_module);
-                $xtpl->parse('setting.receive_module.loop');
-            }
-            if ($array_receive_mods) {
-                $xtpl->parse('setting.receive_module');
-            } else {
-                $xtpl->assign('NO_RECEIVE_MODULE', $nv_Lang->getModule('plugin_error_no_receive', $available_plugins[$_key]['receive_module'], $available_plugins[$_key]['receive_module']));
-                $xtpl->parse('setting.no_receive_module');
+            if (empty($array_receive_mods)) {
                 $submit_allowed = false;
             }
 
-            if ($submit_allowed) {
-                $xtpl->parse('setting.submit');
-            }
+            $tpl->assign('NO_HOOK_MODULE', $nv_Lang->getModule('plugin_error_no_hook', $available_plugins[$_key]['hook_module'], $available_plugins[$_key]['hook_module']));
+            $tpl->assign('NO_RECEIVE_MODULE', $nv_Lang->getModule('plugin_error_no_receive', $available_plugins[$_key]['receive_module'], $available_plugins[$_key]['receive_module']));
+            $tpl->assign('HOOK_MODS', $array_hook_mods);
+            $tpl->assign('RECEIVE_MODS', $array_receive_mods);
+            $tpl->assign('SUBMIT_ALLOWED', $submit_allowed);
+            $tpl->assign('PLUGIN_HOOK_MODULE', $plugin_hook_module);
+            $tpl->assign('PLUGIN_MODULE_NAME', $plugin_module_name);
+            $tpl->assign('IS_HOOK_MODULE', $is_hook_module);
 
-            $xtpl->parse('setting');
-            $contents = $xtpl->text('setting');
+            $contents = $tpl->fetch('plugin_content.tpl');
 
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_admin_theme($contents);
@@ -345,34 +304,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 }
 
 // Các plugin chưa được tích hợp
-if (!empty($available_plugins)) {
-    foreach ($available_plugins as $plugin) {
-        $plugin['parea'] = implode(', ', $plugin['area']);
-        $plugin['hook_module'] = empty($plugin['hook_module']) ? '' : ($plugin['hook_module'] . ':');
+$tpl->assign('RAND', nv_genpass());
+$tpl->assign('AVAILABLE_PLUGINS', $available_plugins);
 
-        if (empty($plugin['receive_module'])) {
-            $plugin['type'] = $nv_Lang->getModule('plugin_type_sys');
-        } else {
-            $plugin['type'] = $nv_Lang->getModule('plugin_type_module') . ':' . $plugin['receive_module'];
-        }
-
-        $xtpl->assign('ROW', $plugin);
-
-        if (sizeof($plugin['area']) == 1) {
-            $xtpl->assign('LINK_INTEGRATE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;plugin_file=' . $plugin['file'] . '&amp;rand=' . nv_genpass());
-            $xtpl->parse('main.available.loop.status_ok');
-            $xtpl->parse('main.available.loop.integrate');
-        } else {
-            $xtpl->parse('main.available.loop.status_error');
-        }
-
-        $xtpl->parse('main.available.loop');
-    }
-    $xtpl->parse('main.available');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch($op . '.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_WEBTOOLS')) {
+if (!defined('NV_IS_FILE_WEBTOOLS')) {
     die('Stop!!!');
 }
 
@@ -31,27 +31,16 @@ if ($submit) {
 }
 
 $page_title = $nv_Lang->getModule('config');
-$nv_Lang->setModule('hour', $nv_Lang->getGlobal('hour'));
 
-$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('AUTOCHECKUPDATE', ($global_config['autocheckupdate']) ? ' checked="checked"' : '');
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
-for ($i = 1; $i <= 100; ++$i) {
-    $xtpl->assign('VALUE', $i);
-    $xtpl->assign('TEXT', $i);
-    $xtpl->assign('SELECTED', ($i == $global_config['autoupdatetime'] ? ' selected="selected"' : ''));
-    $xtpl->parse('main.updatetime');
-}
+$tpl->assign('DATA', $global_config);
 
-$xtpl->parse('main');
-$content = $xtpl->text('main');
+$contents = $tpl->fetch('config.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme($content);
+echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

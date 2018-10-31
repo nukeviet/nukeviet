@@ -8,21 +8,21 @@
  * @Createdate 2-1-2010 21:39
  */
 
-if (! defined('NV_IS_FILE_SETTINGS')) {
+if (!defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-if (! empty($id)) {
+if (!empty($id)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_atc', 'id ' . $id, $admin_info['userid']);
 
     $sql = 'SELECT act FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND (is_sys=0 OR act=0)';
     $row = $db->query($sql)->fetch();
 
-    if (! empty($row)) {
+    if (!empty($row)) {
         $act = intval($row['act']);
-        $new_act = (! empty($act)) ? 0 : 1;
+        $new_act = (!empty($act)) ? 0 : 1;
         $db->query('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET act=' . $new_act . ' WHERE id=' . $id);
     }
 }

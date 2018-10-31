@@ -84,4 +84,5 @@ $lang_module['global_statistics'] = 'Statistics config';
 $lang_module['statistic'] = 'Activate statistics';
 $lang_module['statistics_timezone'] = 'Time zone for statistics';
 $lang_module['online_upd'] = 'Activate monitoring online users';
-$lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
+$lang_module['googleAnalyticsID'] = 'Google Analytics ID';
+$lang_module['googleAnalyticsID_help'] = 'UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>';

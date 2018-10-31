@@ -1,94 +1,115 @@
-<!-- BEGIN: main -->
-<div class="alert alert-info">{LANG.plugin_note}</div>
-<form action="{NV_BASE_ADMINURL}index.php" method="get" id="formSearchPlugin">
-    <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
-    <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
-    <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
-    <div class="form-group form-inline">
-        {LANG.plugin_viewarea}:
-        <select name="a" class="form-control w250">
-            <option value="">--</option>
-            <!-- BEGIN: plugin_area -->
-            <option value="{PLUGIN_AREA}"{PLUGIN_AREA_SELECTED}>{PLUGIN_AREA}</option>
-            <!-- END: plugin_area -->
-        </select>
+<div role="alert" class="alert alert-primary alert-dismissible">
+    <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+    <div class="icon"><i class="fas fa-info-circle"></i></div>
+    <div class="message">{$LANG->get('plugin_note')}</div>
+</div>
+<div class="card card-table">
+    <div class="card-header">
+        {$LANG->get('plugin_integrated')}
     </div>
-</form>
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <caption><i class="fa fa-fw fa-file"></i>{LANG.plugin_integrated}</caption>
-        <thead>
-            <tr class="text-center">
-                <!-- BEGIN: col_weight -->
-                <th class="w100">{LANG.plugin_number}</th>
-                <!-- END: col_weight -->
-                <th class="w300">{LANG.plugin_area}</th>
-                <th>{LANG.plugin_file}</th>
-                <th class="w200">{LANG.plugin_type}</th>
-                <th class="w150 text-center">{LANG.plugin_func}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- BEGIN: loop -->
-            <tr>
-                <!-- BEGIN: weight -->
-                <td>
-                    <select id="weight_{ROW.pid}" onchange="nv_change_plugin_weight('{ROW.pid}');" class="form-control">
-                        <!-- BEGIN: loop -->
-                        <option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
-                        <!-- END: loop -->
+    <div class="card-body">
+        <div class="row card-body-search-form search-form-right pt-0">
+            <div class="col-12">
+                <form action="{$NV_BASE_ADMINURL}index.php" method="get" class="form-inline" id="formSearchPlugin">
+                    <input type="hidden" name="{$NV_LANG_VARIABLE}" value="{$NV_LANG_DATA}"/>
+                    <input type="hidden" name="{$NV_NAME_VARIABLE}" value="{$MODULE_NAME}"/>
+                    <input type="hidden" name="{$NV_OP_VARIABLE}" value="{$OP}"/>
+                    <label>{$LANG->get('plugin_viewarea')}: </label>
+                    <select name="a" class="form-control form-control-sm">
+                        <option value="">--</option>
+                        {foreach from=$PLUGIN_AREA item=row}
+                        <option value="{$row}"{if $row eq $SEARCH['plugin_area']} selected="selected"{/if}>{$row}</option>
+                        {/foreach}
                     </select>
-                </td>
-                <!-- END: weight -->
-                <td>{ROW.hook_module}{ROW.plugin_area}</td>
-                <td>{ROW.plugin_file}</td>
-                <td>
-                    <!-- BEGIN: type_sys -->{LANG.plugin_type_sys}<!-- END: type_sys -->
-                    <!-- BEGIN: type_module -->{LANG.plugin_type_module}:{ROW.plugin_module_name}<!-- END: type_module -->
-                </td>
-                <td class="text-center">
-                    <!-- BEGIN: delete -->
-                    <a onclick="nv_del_plugin({ROW.pid});" href="javascript:void(0);" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i>{LANG.isdel}</a>
-                    <!-- END: delete -->
-                </td>
-            </tr>
-            <!-- END: loop -->
-        </tbody>
-    </table>
+                </form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        {if not empty($SEARCH['plugin_area'])}
+                        <th style="width:5%;">{$LANG->get('plugin_number')}</th>
+                        {/if}
+                        <th style="width:30%;">{$LANG->get('plugin_area')}</th>
+                        <th style="width:35%;">{$LANG->get('plugin_file')}</th>
+                        <th style="width:15%;">{$LANG->get('plugin_type')}</th>
+                        <th class="text-right text-nowrap" style="width:10%;">{$LANG->get('plugin_func')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$PLUGIN_DB item=row}
+                    <tr>
+                        {if not empty($SEARCH['plugin_area'])}
+                        <td>
+                            <select id="weight_{$row.pid}" class="form-control form-control-xs w70" onchange="nv_change_plugin_weight('{$row.pid}');">
+                                {for $weight=1 to $PLUGIN_DB_NUM}
+                                <option value="{$weight}"{if $weight eq $row.weight} selected="selected"{/if}>{$weight}</option>
+                                {/for}
+                            </select>
+                        </td>
+                        {/if}
+                        <td>{$row['hook_module']}{$row['plugin_area']}</td>
+                        <td>{$row['plugin_file']}</td>
+                        <td>{if empty($row['plugin_module_name'])}{$LANG->get('plugin_type_sys')}{else}{$LANG->get('plugin_type_module')}:{$row.plugin_module_name}{/if}</td>
+                        <td class="text-right text-nowrap">
+                            {if empty($row.plugin_module_file)}
+                            <a onclick="nv_del_plugin({$row.pid});" href="javascript:void(0);" class="btn btn-sm btn-danger"><i class="icon icon-left fas fa-trash-alt"></i> {$LANG->get('isdel')}</a>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<!-- BEGIN: available -->
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <caption><i class="fa fa-fw fa-file"></i>{LANG.plugin_available}</caption>
-        <thead>
-            <th class="w300">{LANG.plugin_area}</th>
-            <th>{LANG.plugin_file}</th>
-            <th class="w200">{LANG.plugin_type}</th>
-            <th class="w200">{LANG.act}</th>
-            <th class="text-center w150">{LANG.plugin_func}</th>
-        </thead>
-        <tbody>
-            <!-- BEGIN: loop -->
-            <tr>
-                <td>{ROW.hook_module}{ROW.parea}</td>
-                <td>{ROW.file}</td>
-                <td>{ROW.type}</td>
-                <td>
-                    <!-- BEGIN: status_ok -->{LANG.plugin_status_ok}<!-- END: status_ok -->
-                    <!-- BEGIN: status_error -->{LANG.plugin_status_error}<!-- END: status_error -->
-                </td>
-                <td class="text-center">
-                    <!-- BEGIN: integrate -->
-                    <a href="{LINK_INTEGRATE}" class="btn btn-xs btn-default"><i class="fa fa-cog fa-fw"></i>{LANG.plugin_integrate}</a>
-                    <!-- END: integrate -->
-                </td>
-            </tr>
-            <!-- END: loop -->
-        </tbody>
-    </table>
+{if not empty($AVAILABLE_PLUGINS)}
+<div class="card card-table">
+    <div class="card-header">
+        {$LANG->get('plugin_available')}
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:25%;">{$LANG->get('plugin_area')}</th>
+                        <th style="width:25%;">{$LANG->get('plugin_file')}</th>
+                        <th style="width:25%;">{$LANG->get('plugin_type')}</th>
+                        <th style="width:15%;">{$LANG->get('act')}</th>
+                        <th class="text-right text-nowrap" style="width:10%;">{$LANG->get('plugin_func')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$AVAILABLE_PLUGINS item=row}
+                    <tr>
+                        <td>{if not empty($row.hook_module)}{$row.hook_module}:{/if}{", "|implode:$row.area}</td>
+                        <td>{$row['file']}</td>
+                        <td>
+                            {if empty($row.receive_module)}
+                            {$LANG->get('plugin_type_sys')}
+                            {else}
+                            {$LANG->get('plugin_type_module')}:{$row.receive_module}
+                            {/if}
+                        </td>
+                        <td>
+                            {if sizeof($row['area']) eq 1}<span class="text-success">{$LANG->get('plugin_status_ok')}</span>{else}<span class="text-danger">{$LANG->get('plugin_status_error')}</span>{/if}
+                        </td>
+                        <td class="text-right text-nowrap">
+                            {if sizeof($row['area']) eq 1}
+                            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}={$OP}&amp;plugin_file={$row['file']}&amp;rand={$RAND}" class="btn btn-sm btn-secondary"><i class="icon icon-left fas fa-cog"></i> {$LANG->get('plugin_integrate')}</a>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<!-- END: available -->
+{/if}
 
 <script type="text/javascript">
 $(function() {
@@ -97,56 +118,3 @@ $(function() {
     });
 });
 </script>
-<!-- END: main -->
-
-<!-- BEGIN: setting -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
-<form method="post" action="{FORM_ACTION}">
-    <!-- BEGIN: no_hook_module -->
-    <div class="alert alert-danger">{NO_HOOK_MODULE}</div>
-    <!-- END: no_hook_module -->
-    <!-- BEGIN: no_receive_module -->
-    <div class="alert alert-danger">{NO_RECEIVE_MODULE}</div>
-    <!-- END: no_receive_module -->
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <tbody>
-                <!-- BEGIN: hook_module -->
-                <tr>
-                    <td class="w200"><strong>{LANG.plugin_choose_hook_module}</strong></td>
-                    <td>
-                        <select class="form-control w300" name="hook_module">
-                            <!-- BEGIN: loop -->
-                            <option value="{HOOK_MODULE.key}"{HOOK_MODULE.selected}>{HOOK_MODULE.title}</option>
-                            <!-- END: loop -->
-                        </select>
-                    </td>
-                </tr>
-                <!-- END: hook_module -->
-                <!-- BEGIN: receive_module -->
-                <tr>
-                    <td class="w200"><strong>{LANG.plugin_choose_receive_module}</strong></td>
-                    <td>
-                        <select class="form-control w300" name="receive_module">
-                            <!-- BEGIN: loop -->
-                            <option value="{RECEIVE_MODULE.key}"{RECEIVE_MODULE.selected}>{RECEIVE_MODULE.title}</option>
-                            <!-- END: loop -->
-                        </select>
-                    </td>
-                </tr>
-                <!-- END: receive_module -->
-                <!-- BEGIN: submit -->
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        <input type="submit" name="submit" class="btn btn-primary" value="{GLANG.save}"/>
-                    </td>
-                </tr>
-                <!-- END: submit -->
-            </tbody>
-        </table>
-    </div>
-</form>
-<!-- END: setting -->

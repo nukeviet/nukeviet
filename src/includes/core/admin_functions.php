@@ -939,6 +939,7 @@ function nv_get_plugin_area($file_path)
     $priority = 10;
     $module_name = '';
     $hook_module = '';
+    $pid = 0;
 
     require $file_path;
 
@@ -964,6 +965,7 @@ function nv_get_hook_require($file_path)
     $priority = 10;
     $module_name = '';
     $hook_module = '';
+    $pid = 0;
 
     require $file_path;
 
@@ -988,6 +990,7 @@ function nv_get_hook_revmod($file_path)
     $priority = 10;
     $module_name = '';
     $hook_module = '';
+    $pid = 0;
 
     require $file_path;
 

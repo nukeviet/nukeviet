@@ -12055,6 +12055,11 @@ textarea.form-control {
   top: 2px;
 }
 
+.table thead th .custom-control-sm.custom-control,
+.table tbody td .custom-control-sm.custom-control {
+  top: 0;
+}
+
 .custom-control-label {
   position: static;
   display: inline-block;

@@ -8,12 +8,21 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_SEOTOOLS')) {
+if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('rpc_setting');
+
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+
+$server_supported = false;
 if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
+    $server_supported = true;
+
     if ($nv_Request->isset_request('submitprcservice', 'post')) {
         $prcservice = $nv_Request->get_array('prcservice', 'post');
         $prcservice = implode(',', $prcservice);
@@ -26,42 +35,19 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
     $prcservice = (isset($module_config[$module_name]['prcservice'])) ? $module_config[$module_name]['prcservice'] : '';
-    $prcservice = (! empty($prcservice)) ? explode(',', $prcservice) : array();
-
-    $xtpl = new XTemplate('rpc_setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-
-    $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('OP', $op);
-
-    $xtpl->assign('HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    $xtpl->assign('IMGPATH', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/' . $module_file);
-    $a = 0;
+    $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : array();
 
     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
-    foreach ($services as $key => $service) {
-        $a++;
-        $xtpl->assign('SERVICE', array(
-            'id' => $key,
-            'title' => $service[1],
-            'checked' => (! isset($module_config[$module_name]['prcservice']) or in_array($service[1], $prcservice)) ? 'checked="checked"' : '',
-            'icon' => (isset($service[3]) ? $service[3] : '')
-        ));
-        if (isset($service[3]) and ! empty($service[3])) {
-            $xtpl->parse('main.service.icon');
-        } else {
-            $xtpl->parse('main.service.noticon');
-        }
-        $xtpl->parse('main.service');
-    }
 
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
-} else {
-    $contents = 'System not support function php "curl_init" !';
+    $tpl->assign('IMGPATH', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/' . $module_file);
+    $tpl->assign('SERVICES', $services);
+    $tpl->assign('PRCSERVICE', $prcservice);
+    $tpl->assign('CHECKOPT1', !isset($module_config[$module_name]['prcservice']));
 }
+
+$tpl->assign('SERVER_SUPPORTED', $server_supported);
+
+$contents = $tpl->fetch('rpc_setting.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
