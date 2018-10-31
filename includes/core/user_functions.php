@@ -462,9 +462,12 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $id_profile_googleplus, $canonicalUrl, $module_info, $db_config, $nv_Cache;
+    global $id_profile_googleplus, $canonicalUrl, $module_info, $db_config, $nv_Cache, $client_info;
 
     $return = array();
+
+    $return[] = array( 'rel' => 'alternate', 'href' => $client_info['selfurl'], 'hreflang' => NV_LANG_DATA );
+
     if (! empty($canonicalUrl)) {
         $return[] = array( 'rel' => 'canonical', 'href' => $canonicalUrl );
     }
