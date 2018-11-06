@@ -1,7 +1,8 @@
-{if not empty($ACT_MODULES)}
+{foreach from=$ARR_MODULES item=arrsdata}
+{if not empty($arrsdata.2)}
 <div class="card card-table">
     <div class="card-header">
-        {$LANG->get('caption_actmod')}
+        {$arrsdata.1}
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -17,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {foreach from=$ACT_MODULES key=mod item=row}
+                    {foreach from=$arrsdata.2 key=mod item=row}
                     <tr>
                         <td>
                             <select class="form-control form-control-xs w70" id="change_weight_{$mod}" onchange="nv_chang_weight('{$row.title}');">
@@ -31,13 +32,13 @@
                         <td class="text-nowrap">{$row.version}</td>
                         <td class="text-nowrap">
                             <div class="switch-button switch-button-sm">
-                                <input type="checkbox" name="change_act_{$mod}" id="change_act_{$mod}" onclick="nv_chang_act('{$mod}');" checked="checked"{if $row.is_sys} disabled="disabled"{/if}><span><label for="change_act_{$mod}"></label></span>
+                                <input type="checkbox" name="change_act_{$mod}" id="change_act_{$mod}" onclick="nv_chang_act('{$mod}');"{if $arrsdata.0 eq 'act'} checked="checked"{/if}{if $row.is_sys} disabled="disabled"{/if}><span><label for="change_act_{$mod}"></label></span>
                             </div>
                         </td>
                         <td class="text-right text-nowrap">
                             <a href="{$row.link_edit}" class="btn btn-sm btn-secondary"><i class="icon icon-left fas fa-pencil-alt"></i> {$LANG->get('edit')}</a>
                             <a href="#" data-title="{$mod}" class="btn btn-sm btn-secondary nv-reinstall-module"><i class="icon icon-left far fa-sun"></i> {$LANG->get('recreate')}</a>
-                            {if $row.is_sys}
+                            {if not $row.is_sys}
                             <a href="#" onclick="return nv_mod_del('{$mod}');" class="btn btn-sm btn-danger"><i class="icon icon-left fas fa-trash-alt"></i> {$LANG->get('delete')}</a>
                             {/if}
                         </td>
@@ -49,3 +50,4 @@
     </div>
 </div>
 {/if}
+{/foreach}

@@ -113,7 +113,7 @@
                                 {/if}
                                 {if !empty($MOD_CURRENT)}
                                 <li class="divider">{$LANG->get('interface_current_menu')}</li>
-                                <li class="{if !empty($MOD_CURRENT['subs'])}parent {/if}active{if not $CONFIG_THEME['collapsed_leftsidebar']} open{/if}">
+                                <li class="{if !empty($MOD_CURRENT['subs'])}parent {/if}active{if empty($CONFIG_THEME['collapsed_leftsidebar'])} open{/if}">
                                     <a href="{$MOD_CURRENT.link}"><i class="{$MOD_CURRENT.icon} icon" title="{$MOD_CURRENT.title}"></i><span>{$MOD_CURRENT.title}</span>{if !empty($MOD_CURRENT['subs'])}<span class="toggle"><i class="fas"></i></span>{/if}</a>
                                     {if !empty($MOD_CURRENT['subs'])}
                                     <ul class="sub-menu">

@@ -12,11 +12,11 @@ if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
-$act_modules = $deact_modules = $bad_modules = $weight_list = array();
+$act_modules = $deact_modules = $bad_modules = $weight_list = [];
 $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
 
 // Lấy danh sách các plugin có trong hệ thống
-$array_plugins = array();
+$array_plugins = [];
 /**
  * Để đoạn này thì nếu module khác có HOOK của module này => module này không xóa được
 $sql = 'SELECT plugin_module_name, hook_module FROM ' . $db_config['prefix'] . '_plugin';
@@ -24,20 +24,20 @@ $result = $db->query($sql);
 
 while ($row = $result->fetch()) {
     if (!isset($array_plugins[$row['hook_module']])) {
-        $array_plugins[$row['hook_module']] = array();
+        $array_plugins[$row['hook_module']] = [];
     }
     $array_plugins[$row['hook_module']][] = $row['plugin_module_name'];
 }
  */
 
 // Lay danh sach cac module co trong he thong
-$new_modules = array();
+$new_modules = [];
 
 $sql = 'SELECT title, basename, is_sys, version FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY title ASC';
 $result = $db->query($sql);
 
 $is_delCache = false;
-$act2 = array();
+$act2 = [];
 while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
     $new_modules[$m] = array(
         'module_file' => $mod_file,
@@ -57,7 +57,7 @@ if (!empty($act2)) {
 }
 
 // Lay danh sach cac module co trong ngon ngu
-$modules_data = array();
+$modules_data = [];
 
 $iw = 0;
 $sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
@@ -74,7 +74,7 @@ while ($row = $result->fetch()) {
         $is_delCache = true;
     }
 
-    $mod = array();
+    $mod = [];
     $_module_file = strtolower($row['title']);
 
     if (!isset($new_modules[$_module_file])) {
@@ -117,19 +117,15 @@ if ($is_delCache) {
     $nv_Cache->delMod('modules');
 }
 
-$contents = array();
-$contents['caption'] = array($nv_Lang->getModule('caption_actmod'), $nv_Lang->getModule('caption_deactmod'), $nv_Lang->getModule('caption_badmod'), $nv_Lang->getModule('caption_newmod'));
-$contents['thead'] = array($nv_Lang->getModule('weight'), $nv_Lang->getModule('module_name'), $nv_Lang->getModule('custom_title'), $nv_Lang->getModule('version'), $nv_Lang->getGlobal('activate'), $nv_Lang->getGlobal('actions'));
-
-$contents = list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weight_list);
-
 $tpl = new \NukeViet\Template\Smarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $tpl->assign('LANG', $nv_Lang);
 
-$tpl->assign('ACT_MODULES', $act_modules);
-$tpl->assign('DEACT_MODULES', $deact_modules);
-$tpl->assign('BAD_MODULES', $bad_modules);
+$tpl->assign('ARR_MODULES', [
+    ['act', $nv_Lang->getModule('caption_actmod'), $act_modules],
+    ['deact', $nv_Lang->getModule('caption_deactmod'), $deact_modules],
+    ['bad', $nv_Lang->getModule('caption_badmod'), $bad_modules]
+]);
 $tpl->assign('WEIGHT_LIST', $weight_list);
 
 $contents = $tpl->fetch('list.tpl');
