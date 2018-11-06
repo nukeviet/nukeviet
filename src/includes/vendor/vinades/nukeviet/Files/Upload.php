@@ -905,7 +905,7 @@ class Upload
         $this->is_img = false;
         $this->img_info = array();
 
-        if ($this->chunk_total > 1) {
+        if ($this->chunk_total > 0) {
             $userfile['name'] = $this->chunk_filename;
         }
 
@@ -921,7 +921,7 @@ class Upload
             return $return;
         }
 
-        if ($this->chunk_total > 1) {
+        if ($this->chunk_total > 0) {
             $return['error'] = $this->check_save_path($this->chunk_tmpdir);
             if (!empty($return['error'])) {
                 return $return;
@@ -946,7 +946,7 @@ class Upload
             $filename = $filename2;
         }
 
-        if ($this->chunk_total > 1) {
+        if ($this->chunk_total > 0) {
             $chunkComplete = false;
             if (!preg_match('/\/$/', $this->chunk_tmpdir)) {
                 $this->chunk_tmpdir = $this->chunk_tmpdir . '/';

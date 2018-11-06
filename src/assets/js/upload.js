@@ -1851,7 +1851,7 @@ var NVUPLOAD = {
                 file_data_name: 'upload',
                 multipart: true,
                 filters : {
-               	    max_file_size : nv_max_size_bytes,
+                       max_file_size : nv_max_size_bytes,
                     mime_types: []
                 },
                 chunk_size: nv_chunk_size,
@@ -1946,6 +1946,7 @@ var NVUPLOAD = {
                     // Event on one file finish uploaded (Maybe success or error)
                     FileUploaded: function(up, file, response) {
                         (isDebugMode && console.log("Plupload: Event file uploaded"));
+                        (isDebugMode && console.log(response));
                         response = response.response;
                         NVUPLOAD.handleStatus(file, response);
                     },
