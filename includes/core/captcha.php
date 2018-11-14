@@ -21,12 +21,7 @@ $datekey = date('F j');
 $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
 $code = substr($rcode, 2, NV_GFX_NUM);
 
-if ($global_config['captcha_type'] === 1) {
-    $builder = new Gregwar\Captcha\CaptchaBuilder($code);
-    $builder->build(NV_GFX_WIDTH, NV_GFX_HEIGHT);
-    header('Content-type: image/jpeg');
-    $builder->output();
-} elseif ($global_config['captcha_type'] === 0) {
+if ($global_config['captcha_type'] === 0) {
     $image = imagecreate(NV_GFX_WIDTH, NV_GFX_HEIGHT);
     $bgc = imagecolorallocate($image, 240, 240, 240);
     imagefilledrectangle($image, 0, 0, NV_GFX_WIDTH, NV_GFX_HEIGHT, $bgc);

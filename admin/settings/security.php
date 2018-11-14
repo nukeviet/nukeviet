@@ -30,7 +30,7 @@ $captcha_array = array(
     7 => $lang_module['captcha_7']
 );
 
-$captcha_type_array = array(0 => $lang_module['captcha_type_0'], 1 => $lang_module['captcha_type_1'], 2 => $lang_module['captcha_type_2']);
+$captcha_type_array = array(0 => $lang_module['captcha_type_0'], 2 => $lang_module['captcha_type_2']);
 $recaptcha_type_array = array('image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']);
 
 $errormess = '';
