@@ -62,11 +62,10 @@ if (defined('NV_IS_ADMIN')) {
                     $user_info = $db->query($_sql)->fetch();
                     if (!empty($user_info)) {
                         if (empty($global_config['allowuserloginmulti'])) {
-                            if (strcasecmp($user['checknum'], $user_info['checknum']) == 0 and //checknum
-                            isset($user['current_agent']) and strcasecmp($user['current_agent'], $user_info['current_agent']) == 0 and //user_agent
-                            isset($user['current_ip']) and strcasecmp($user['current_ip'], $user_info['current_ip']) == 0 and //current IP
-                            isset($user['current_login']) and strcasecmp($user['current_login'], intval($user_info['current_login'])) == 0) {
-                                //current login
+                            if (($user['checknum'] === $user_info['checknum']) and //checknum
+                                isset($user['current_agent']) and ($user['current_agent'] === $user_info['current_agent']) and //user_agent
+                                isset($user['current_ip']) and ($user['current_ip'] === $user_info['current_ip']) and //current IP
+                                isset($user['current_login']) and ($user['current_login'] === $user_info['current_login'])) { //current login
                                 $checknum = true;
                             } else {
                                 $checknum = false;
