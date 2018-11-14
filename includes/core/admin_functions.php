@@ -404,6 +404,11 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
+        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap/{R:4}\" appendQueryString=\"false\" />\n";
+        $rewrite_rule .= " </rule>\n";
+
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
         $rewrite_rule .= " 	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
@@ -446,6 +451,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap [L]\n";
+        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
 
         // Rewrite for other module's rule
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
@@ -472,7 +478,7 @@ function nv_rewrite_change($array_config_global)
     $return = true;
     if (!empty($filename) and !empty($rewrite_rule)) {
         try {
-            $filesize = file_put_contents($filename, $rewrite_rule, LOCK_EX);
+            $filesize = file_put_contents($filename, trim($rewrite_rule) . "\n", LOCK_EX);
             if (empty($filesize)) {
                 $return = false;
             }
@@ -509,6 +515,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "ErrorDocument 408 /error.php?code=408\n";
         $config_contents .= "ErrorDocument 500 /error.php?code=500\n";
         $config_contents .= "ErrorDocument 502 /error.php?code=502\n";
+        $config_contents .= "ErrorDocument 503 /error.php?code=503\n";
         $config_contents .= "ErrorDocument 504 /error.php?code=504\n\n";
         $config_contents .= "<IfModule mod_deflate.c>\n";
         $config_contents .= "  <FilesMatch \"\.(css|js|xml|ttf)$\">\n";
@@ -560,7 +567,7 @@ function nv_server_config_change($array_config)
     $return = true;
     if (!empty($filename) and !empty($config_contents)) {
         try {
-            $filesize = file_put_contents($filename, $config_contents, LOCK_EX);
+            $filesize = file_put_contents($filename, $config_contents . "\n", LOCK_EX);
             if (empty($filesize)) {
                 $return = false;
             }

@@ -86,7 +86,11 @@ if (defined('NV_IS_ADMIN')) {
                             $user_info['last_ip'] = $user['last_ip'];
                             $user_info['last_openid'] = $user['last_openid'];
                             $user_info['st_login'] = !empty($user_info['password']) ? true : false;
-                            $user_info['valid_question'] = (!empty($user_info['question']) and !empty($user_info['answer'])) ? true : false;
+                            if ($global_config['allowquestion']) {
+                                $user_info['valid_question'] = (!empty($user_info['question']) and !empty($user_info['answer'])) ? true : false;
+                            } else {
+                                $user_info['valid_question'] = true;
+                            }
                             $user_info['current_mode'] = isset($user['current_mode']) ? $user['current_mode'] : 0;
 
                             unset($user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer'], $check_in_groups);

@@ -72,13 +72,13 @@ class Error
     );
     private $track_fatal_error = array(
         array(
-            'file' => 'vendor/vinades/nukeviet/Cache/CRedis.php',
+            'file' => 'vendor/vinades/nukeviet/Cache/Redis.php',
             'pattern' => array(
                 array('/[\'|"]Redis[\'|"] not found/i', 'PHP Redis Extension does not exists!')
             )
         ),
         array(
-            'file' => 'vendor/vinades/nukeviet/Cache/Memcacheds.php',
+            'file' => 'vendor/vinades/nukeviet/Cache/Memcached.php',
             'pattern' => array(
                 array('/[\'|"]Memcached[\'|"] not found/i', 'PHP Memcached Extension does not exists!')
             )
@@ -573,7 +573,7 @@ class Error
             }
 
         }
-        if ((NV_DEBUG or (!$log_is_displayed and $this->error_set_logs)) and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
+        if (NV_DEBUG and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
             $this->_display();
         }
     }

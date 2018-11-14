@@ -33,7 +33,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
     $error = $lang_module['uploadError1'];
 } elseif (!isset($_FILES) and !nv_is_url($nv_Request->get_string('fileurl', 'post,get'))) {
     $error = $lang_module['uploadError2'];
-} elseif (isset($_FILES['upload']) and $global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 1 and (empty($chunk_upload['name']) or empty($_FILES['upload']['name']) or ($chunk_upload['name'] != $_FILES['upload']['name'] and $_FILES['upload']['name'] != 'blob') or $chunk_upload['chunk'] >= $chunk_upload['chunks'])) {
+} elseif (isset($_FILES['upload']) and $global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 0 and (empty($chunk_upload['name']) or empty($_FILES['upload']['name']) or ($chunk_upload['name'] != $_FILES['upload']['name'] and $_FILES['upload']['name'] != 'blob') or $chunk_upload['chunk'] >= $chunk_upload['chunks'])) {
     $error = $lang_module['uploadError3'];
 } else {
     $type = $nv_Request->get_string('type', 'post,get');
@@ -57,7 +57,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
         // Upload Chunk (nhiều phần)
-        if ($global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 1) {
+        if ($global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 0) {
             $upload->setChunkOption($chunk_upload);
         }
         $upload_info = $upload->save_file($_FILES['upload'], NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize']);
@@ -84,7 +84,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
             }
         }
 
-        if ($global_config['nv_auto_resize'] and ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT)) {
+        if ($global_config['nv_auto_resize'] and ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][1] > NV_MAX_HEIGHT)) {
             $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1]);
             $createImage->resizeXY(NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
@@ -179,7 +179,6 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 }
 
 $editor = $nv_Request->get_title('editor', 'post,get', '');
-$CKEditorFuncNum = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
 
 if (!preg_match("/^([a-zA-Z0-9\-\_]+)$/", $editor)) {
     $editor = '';
@@ -196,7 +195,12 @@ if (!empty($error)) {
 
         nv_jsonOutput($array_data);
     } elseif ($editor == 'ckeditor') {
-        echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '', '" . $error . "');</script>";
+        nv_jsonOutput([
+            'uploaded' => 0,
+            'error' => [
+                'message' => $error
+            ]
+        ]);
     } else {
         echo 'ERROR_' . $error;
     }
@@ -215,8 +219,8 @@ if (!empty($error)) {
         }
 
         $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-    		(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt) VALUES
-    		('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)");
+            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt) VALUES
+            ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)");
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
         $sth->execute();
@@ -233,7 +237,11 @@ if (!empty($error)) {
 
             nv_jsonOutput($array_data);
         } else {
-            echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";
+            nv_jsonOutput([
+                'uploaded' => 1,
+                'fileName' => $upload_info['basename'],
+                'url' => NV_BASE_SITEURL . $path . "/" . $upload_info['basename']
+            ]);
         }
     } else {
         echo $upload_info['basename'];

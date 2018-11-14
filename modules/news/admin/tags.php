@@ -116,17 +116,14 @@ if (! empty($savecat)) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
-    $alias = str_replace('&', ' ', $alias);
-    $alias = str_replace('-', ' ', nv_unhtmlspecialchars($alias));
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;
-    $keywords = array_map('strip_punctuation', $keywords);
     $keywords = array_map('trim', $keywords);
-    $keywords = array_diff($keywords, array( '' ));
+    $keywords = array_diff($keywords, array(''));
     $keywords = array_unique($keywords);
     $keywords = implode(',', $keywords);
 
-    $alias = str_replace(' ', '-', strip_punctuation($alias));
+    $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($alias) : change_alias_tags($alias);
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {

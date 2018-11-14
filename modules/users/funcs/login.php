@@ -218,9 +218,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Neu da co trong CSDL
      */
     $stmt = $db->prepare('SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive, b.safemode AS safemode FROM ' . NV_MOD_TABLE . '_openid a, ' . NV_MOD_TABLE . ' b
-		WHERE a.opid= :opid
-		AND a.email= :email
-		AND a.userid=b.userid');
+        WHERE a.opid= :opid
+        AND a.email= :email
+        AND a.userid=b.userid');
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
@@ -476,22 +476,22 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
-    		question, answer, passlostkey, view_mail, remember, in_groups,
-    		active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+            question, answer, passlostkey, view_mail, remember, in_groups,
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
         ) VALUES (
-    		" . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
+            " . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
             :username,
-    		:md5username,
-    		'',
-    		:email,
-    		:first_name,
-    		:last_name,
-    		:gender,
-    		'', 0,
-    		" . NV_CURRENTTIME . ",
-    		'', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . ",
+            :md5username,
+            '',
+            :email,
+            :first_name,
+            :last_name,
+            :gender,
+            '', 0,
+            " . NV_CURRENTTIME . ",
+            '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . ",
             -1
-		)";
+        )";
 
         $data_insert = array();
         $data_insert['username'] = $reg_attribs['username'];
@@ -542,6 +542,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
         $stmt->execute();
 
+        // Callback sau khi đăng ký
+        if (nv_function_exists('nv_user_register_callback')) {
+            nv_user_register_callback($userid);
+        }
+
         validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
         $nv_Cache->delMod($module_name);
 
@@ -573,19 +578,19 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
             username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info
         ) VALUES (
-			:username,
-			:md5username,
-			'',
-			:email,
-			:first_name,
-			:last_name,
-			" . NV_CURRENTTIME . ",
-			'',
-			'',
-			'',
-			:users_info,
+            :username,
+            :md5username,
+            '',
+            :email,
+            :first_name,
+            :last_name,
+            " . NV_CURRENTTIME . ",
+            '',
+            '',
+            '',
+            :users_info,
             :openid_info
-		)";
+        )";
 
         $data_insert = array();
         $data_insert['username'] = $reg_attribs['username'];

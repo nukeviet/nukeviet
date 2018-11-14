@@ -1,6 +1,20 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.03
+
+- Fix tag contains special characters
+- Clipboard.js v2.0.1
+- gregwar/captcha v1.1.6
+- Module banners: allows to enter links freely 
+- Module news: fixed bug when attaching file 
+- Module comment: fix quote comment when post name is empty 
+- Fix save file ini
+- Fix search system logs
+- Fix check server support rewrite
+- Turn off error messages when debug mode off
+- Module users: Fix update group statistics when delete user, fix user custom field, fix user safe mode 
+
 NUKEVIET 4.3.02
 - Fix save google analytics id
 - Update gregwar/captcha v1.1.5, PHPMailer v6.0.5, ClipboardJS v2.0.0, Chart.js v2.7.2, Plupload 3.1.2, Ckeditor 4.9.2

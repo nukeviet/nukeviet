@@ -8,13 +8,13 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $mark = $nv_Request->get_title('mark', 'post', '');
 
-if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
+if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
     $sends = $nv_Request->get_array('sends', 'post', array());
     if (empty($sends)) {
@@ -35,10 +35,11 @@ $page_title = $module_info['site_title'];
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('MODULE_NAME', $module_name);
 
 $contact_allowed = nv_getAllowed();
 
-if (! empty($contact_allowed['view'])) {
+if (!empty($contact_allowed['view'])) {
     $in = implode(',', array_keys($contact_allowed['view']));
 
     $page = $nv_Request->get_int('page', 'get', 1);
@@ -104,7 +105,7 @@ if (! empty($contact_allowed['view'])) {
 
         $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.data.generate_page');
         }

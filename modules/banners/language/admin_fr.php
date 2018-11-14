@@ -52,7 +52,6 @@ $lang_module['edit_plan'] = 'Modifier la bannière';
 $lang_module['info_plan'] = 'Infos de la bannière';
 $lang_module['info_plan_caption'] = 'Infos de la bannière &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plan_not_selected'] = 'Vous n\'avez pas choisi la bannière';
-$lang_module['click_url_invalid'] = 'Lien incorrect';
 $lang_module['file_upload_empty'] = 'Manque de bannière';
 $lang_module['upload_blocked'] = 'Vous ne pouvez pas ajouter les banières par ce que le transfert d\'image et de flash est interdit par le système. Merci de vérifier les configurations du serveur ou de l\'administration du site';
 $lang_module['add_banner_info'] = 'Pour ajouter une publicité, remplissez les infos aux champs ci-dessous';

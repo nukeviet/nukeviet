@@ -18,8 +18,8 @@ $module_version = array(
     'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,memberlist',
     'is_sysmod' => 1,
     'virtual' => 1,
-    'version' => '4.3.02',
-    'date' => 'Wednesday, May 2, 2018 4:00:00 PM GMT+07:00',
+    'version' => '4.3.03',
+    'date' => 'Monday, August 6, 2018 5:00:00 PM GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => ''
 );

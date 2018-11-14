@@ -476,6 +476,12 @@ if ($checkss == $array_register['checkss']) {
                 }
             }
             $nv_Cache->delMod($module_name);
+
+            // Callback sau khi đăng ký
+            if (nv_function_exists('nv_user_register_callback')) {
+                nv_user_register_callback($userid);
+            }
+
             $nv_redirect = '';
             reg_result(array(
                 'status' => 'ok',

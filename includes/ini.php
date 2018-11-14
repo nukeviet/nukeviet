@@ -18,7 +18,8 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
 
 $iniSaveTime = 0;
 $ini_list = ini_get_all(null, false);
-$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', $server_name) . '.php';
+$ini_server = in_array($server_name, $global_config['my_domains']) ? $server_name : $global_config['my_domains'][0];
+$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', $ini_server) . '.php';
 @include_once $config_ini_file;
 if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config = "<?php" . "\n\n";
@@ -58,7 +59,7 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     } elseif (strpos($_server_software[0], 'nginx') !== false) {
         $sys_info['supports_rewrite'] = 'nginx';
     } else {
-        $_check_rewrite = file_get_contents(NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
+        $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
         if ($_check_rewrite == 'mod_rewrite works') {
             $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
         } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
