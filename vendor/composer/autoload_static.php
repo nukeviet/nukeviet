@@ -19,7 +19,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\OptionsResolver\\' => 34,
-            'Symfony\\Component\\Finder\\' => 25,
         ),
         'P' => 
         array (
@@ -36,10 +35,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'L' => 
         array (
             'League\\Url\\' => 11,
-        ),
-        'G' => 
-        array (
-            'Gregwar\\' => 8,
         ),
         'E' => 
         array (
@@ -60,10 +55,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
-        'Symfony\\Component\\Finder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/finder',
-        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
@@ -79,10 +70,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'League\\Url\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/url/src',
-        ),
-        'Gregwar\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
         'Endroid\\QrCode\\' => 
         array (
