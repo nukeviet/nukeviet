@@ -119,7 +119,7 @@ function nv_admin_checkdata($adm_session_value)
     if (($array_admin['checknum'] !== $admin_info['check_num']) or    //check_num
         !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) or    //user_agent
         !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) or    //IP
-        !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== $admin_info['current_login'])) {    //current_login
+        !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login']))) {    //current_login
         return array();
     }
 

@@ -65,7 +65,7 @@ if (defined('NV_IS_ADMIN')) {
                             if (($user['checknum'] === $user_info['checknum']) and //checknum
                                 isset($user['current_agent']) and ($user['current_agent'] === $user_info['current_agent']) and //user_agent
                                 isset($user['current_ip']) and ($user['current_ip'] === $user_info['current_ip']) and //current IP
-                                isset($user['current_login']) and ($user['current_login'] === $user_info['current_login'])) { //current login
+                                isset($user['current_login']) and ($user['current_login'] === intval($user_info['current_login']))) { //current login
                                 $checknum = true;
                             } else {
                                 $checknum = false;
