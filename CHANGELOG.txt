@@ -1,19 +1,31 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.04
+
+- Fix admin can not login
+- Add user register callback
+- Sitemap: Can split module sitemap
+- Remove gregwar/captcha
+- Fixed RSS image height
+- Fix upload file from ckeditor
+- Fix function nv_redirect_location
+- Fix upload and auto resize image
+- Fix security bug. Thanks hungnguyenmz and Zepto Team
+
 NUKEVIET 4.3.03
 
 - Fix tag contains special characters
 - Clipboard.js v2.0.1
 - gregwar/captcha v1.1.6
-- Module banners: allows to enter links freely 
-- Module news: fixed bug when attaching file 
-- Module comment: fix quote comment when post name is empty 
+- Module banners: allows to enter links freely
+- Module news: fixed bug when attaching file
+- Module comment: fix quote comment when post name is empty
 - Fix save file ini
 - Fix search system logs
 - Fix check server support rewrite
 - Turn off error messages when debug mode off
-- Module users: Fix update group statistics when delete user, fix user custom field, fix user safe mode 
+- Module users: Fix update group statistics when delete user, fix user custom field, fix user safe mode
 
 NUKEVIET 4.3.02
 - Fix save google analytics id
@@ -212,11 +224,11 @@ NUKEVIET 4.0.29 Final Releases May 19, 2016
 - Fix update, upgrade system and extentions
 - Fix check update, auto update
 - Module users:
-	Add feature for group's leader (creat user, delete user, accept user, delete user, change password),
-	Update theme redirect login,
-	Update facebook login
-	Change rule for view list users
-	Remove Admin Relogin
+    Add feature for group's leader (creat user, delete user, accept user, delete user, change password),
+    Update theme redirect login,
+    Update facebook login
+    Change rule for view list users
+    Remove Admin Relogin
 - Module extensions: Fix download file
 - Add more options for module's theme mobile
 - Support statisics for CocCoc browser
@@ -310,8 +322,8 @@ NUKEVIET 4.0.23 (Open beta 9)
 - Update module Users.
 - Change Admin-toolbar
 - Update variables for javascript:
-	 nv_siteroot -> nv_base_siteurl
-	 nv_sitelang -> nv_lang_data
+     nv_siteroot -> nv_base_siteurl
+     nv_sitelang -> nv_lang_data
 - Update Language Français, thank Nguyễn Phú Thành.
 - Update CKEditor 4.5.3
 - Class resquest: Fix block tag
@@ -419,133 +431,133 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.13 (88 commits: from commit/
 NUKEVIET 4.0.11 (Close beta 11)
 CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commit/f73da99 to commit/7143a90)
 - System
-	+ Use PDO class to replace MySQL class which used in Nukeviet 3 to use many different database. Curently Nukeviet support MySQL, MariaDB, Oracle database
-	+ Nukeviet 4.0 be optimize to save web server resource and running on web server installed PHP 5.3, 5.4, 5.5
-	+ Fixed setup mutillanguage mode. If the website on single language is turn on eliminating language characters in url. Remove module name in the url.
-	+ Add notification system to admin control panel.
-	+ Rename modules search =>seek, rss =>feeds
+    + Use PDO class to replace MySQL class which used in Nukeviet 3 to use many different database. Curently Nukeviet support MySQL, MariaDB, Oracle database
+    + Nukeviet 4.0 be optimize to save web server resource and running on web server installed PHP 5.3, 5.4, 5.5
+    + Fixed setup mutillanguage mode. If the website on single language is turn on eliminating language characters in url. Remove module name in the url.
+    + Add notification system to admin control panel.
+    + Rename modules search =>seek, rss =>feeds
 
-	+ Add furture module Comment to manage comment in another module.
-	+ Change method cache storeage, each module cache will be store in a folder. Cache be store by domain.
-	+ Support Vietnamese domain name.
-	+ Hosting CDN for javascript, css
-	+ Configue Vietnamese Keyboard (If site installed Vietnamese language.
-	+ Encrypt passwords of FTP account, Account mail SMTP.
-	+ Many values at file /includes/constants.php will be configue in admin control panel.
+    + Add furture module Comment to manage comment in another module.
+    + Change method cache storeage, each module cache will be store in a folder. Cache be store by domain.
+    + Support Vietnamese domain name.
+    + Hosting CDN for javascript, css
+    + Configue Vietnamese Keyboard (If site installed Vietnamese language.
+    + Encrypt passwords of FTP account, Account mail SMTP.
+    + Many values at file /includes/constants.php will be configue in admin control panel.
 
-	+ Add IPV6 library to detected coutry by IPV6.
-	+ Fix erro when use flash logo.
-	+ Change the system check for update
-	+ Fixed rewirte on IIS7 with Unicode Permalinks.
-	+ Change method management block, use popup to manage block.
-	+ Add optional feature when website use https protocol
-	+ Add plugin rewirte_absolute to change links into obsolute links.
-	+ Add feature warning by javascript when turning pages editing without save unfinished.
-	+ Additional display warning almost time expried login (automatical timeout).
+    + Add IPV6 library to detected coutry by IPV6.
+    + Fix erro when use flash logo.
+    + Change the system check for update
+    + Fixed rewirte on IIS7 with Unicode Permalinks.
+    + Change method management block, use popup to manage block.
+    + Add optional feature when website use https protocol
+    + Add plugin rewirte_absolute to change links into obsolute links.
+    + Add feature warning by javascript when turning pages editing without save unfinished.
+    + Additional display warning almost time expried login (automatical timeout).
 
-	+ Add configuration check and block computers to if does not agent to don’t have edit code.
-	+ Remove sitemap ping of Yahoo, Ask
-	+ Manage files put into database, support search file.
+    + Add configuration check and block computers to if does not agent to don’t have edit code.
+    + Remove sitemap ping of Yahoo, Ask
+    + Manage files put into database, support search file.
 
 - Module extensions
-	+ Add module extensions: Manage and install applications from Nukeviet Store.
-	+ Move method installation themes, modules to manage by module module extensions.
+    + Add module extensions: Manage and install applications from Nukeviet Store.
+    + Move method installation themes, modules to manage by module module extensions.
 
 - Module upload
-	+ Database of module upload is put into site database, support search file.
-	+ Configue thumbnail for each module, size, and quanlity.
-	+ The modules use illustration as module News will creat only one thumb image for each image upload to reduce number of files
-	+ Additional automatical resize image which uploaded to host to the configued size
-	+ Module uploads allows select and work on mutil file, operation with mouse and shortkey common
-	+ Fixed upload image from URL if the link contain blank space.
-	+ Features fill ALT tag for image: After image file uploade completed, the program will ask rename and describe photo to SEO image.
+    + Database of module upload is put into site database, support search file.
+    + Configue thumbnail for each module, size, and quanlity.
+    + The modules use illustration as module News will creat only one thumb image for each image upload to reduce number of files
+    + Additional automatical resize image which uploaded to host to the configued size
+    + Module uploads allows select and work on mutil file, operation with mouse and shortkey common
+    + Fixed upload image from URL if the link contain blank space.
+    + Features fill ALT tag for image: After image file uploade completed, the program will ask rename and describe photo to SEO image.
 
 - The editor
-	+ Use the ckeditor 4.4.7
-	+ Integrate mathematical formulas
-	+ The feature show a script code in the post, highlight code.
+    + Use the ckeditor 4.4.7
+    + Integrate mathematical formulas
+    + The feature show a script code in the post, highlight code.
 
 - Themes
-	+ Redesign theme of admin control panel base on bootstrap, responsive.
-	+ Use bootstrap framework html, css. Support customizable theme on many devices.
-	+ Additional breadcrumbs in admin control panel theme for the necessary features.
-	+ Add features configue by theme (customizable theme at ACP).
-	+ Remove module name on breakcrumb
-	+ Add two fix blocks on screen to advertising on the sides.
+    + Redesign theme of admin control panel base on bootstrap, responsive.
+    + Use bootstrap framework html, css. Support customizable theme on many devices.
+    + Additional breadcrumbs in admin control panel theme for the necessary features.
+    + Add features configue by theme (customizable theme at ACP).
+    + Remove module name on breakcrumb
+    + Add two fix blocks on screen to advertising on the sides.
 
 - Module News
-	+ Decentralization management to each topic.
-	+ Add “New” icon for new articles of the topic.
-	+ Add features enable to moving articles from a categories to another.
+    + Decentralization management to each topic.
+    + Add “New” icon for new articles of the topic.
+    + Add features enable to moving articles from a categories to another.
 
-	+ Fixed the features of filter by keywords, the keywords in tags instead the keywords from dictionary.
-	+ Additional colors to the article status in admin control panel. Additional the article status: Draft, Deny, re-published (Re-publish the old articles).
-	+ Add the features report the status of articles not published and only be viewed by admin outside (To avoid link of those article send by admin are unavailable with others).
+    + Fixed the features of filter by keywords, the keywords in tags instead the keywords from dictionary.
+    + Additional colors to the article status in admin control panel. Additional the article status: Draft, Deny, re-published (Re-publish the old articles).
+    + Add the features report the status of articles not published and only be viewed by admin outside (To avoid link of those article send by admin are unavailable with others).
 
-	+ Add the feature show illustrate image of categorise.
-	+ Allows linebreak in short introduction
-	+ Add default configuration show illustrate image in detail page.
+    + Add the feature show illustrate image of categorise.
+    + Allows linebreak in short introduction
+    + Add default configuration show illustrate image in detail page.
 
-	+ Additional show tooltip in list articles, blocks.
-	+ Show numbers article view in admin control panel.
+    + Additional show tooltip in list articles, blocks.
+    + Show numbers article view in admin control panel.
 
 - Integrate the feature ping article.
-	+ Optimize html tags for SEO.
-	+ Add feature Tags for the article: Confige site name – keywords - description for each Tag as groups management.
-	+ Add social network tools: Like facebook, G	+ , twitter button, comment of facebook (Block in module comment).
+    + Optimize html tags for SEO.
+    + Add feature Tags for the article: Confige site name – keywords - description for each Tag as groups management.
+    + Add social network tools: Like facebook, G	+ , twitter button, comment of facebook (Block in module comment).
 
 - Replace module about by module page
-	+ Have illustrate image, note, description (support for SEO).
-	+ Config show tools of Like facebook, G	+ , Twitter
-	+ Config comment facebook feature in use.
-	+ Config  Google 	+  authentication (Copyright, similar module news)
-	+ Config each article use a layout, it mean each article has one theme.
-	+ Add RSS for module page.
-	+ Configuration alternatives shown the article in the main page.
-	+ Add list article block.
+    + Have illustrate image, note, description (support for SEO).
+    + Config show tools of Like facebook, G	+ , Twitter
+    + Config comment facebook feature in use.
+    + Config  Google 	+  authentication (Copyright, similar module news)
+    + Config each article use a layout, it mean each article has one theme.
+    + Add RSS for module page.
+    + Configuration alternatives shown the article in the main page.
+    + Add list article block.
 
 - Module user
-	+ Replace OpenID by OAuth 1.x and Oauth 2.0 to login via google, facebook.
-	+ Add phpCAS library to login SSO via CAS server, and get information via LDAP.
-	+ Add feature customizable user fields data.
-	+ Add feature config decentralization use module Users.
-	+ Add configuration to allows control username character when registering.
-	+ Add configuration  to allows control passwords complexity.
-	+ Fixed passwords recovery mechanism
-	+ Add feature forbiden use simply passwords.
-	+ Add feature lock account, delete account when delete website admin account.
-	+ Add feature creat random passwords for admin.
-	+ Use username or e-mail to log in.
-	+ Change decentralization of features according to user groups.
-	+ Add feature allows account under admin in the administrator log in and add configuration of it.
-	+ Split field full_name to first_name and last_name, configure display names (full name – surename).
+    + Replace OpenID by OAuth 1.x and Oauth 2.0 to login via google, facebook.
+    + Add phpCAS library to login SSO via CAS server, and get information via LDAP.
+    + Add feature customizable user fields data.
+    + Add feature config decentralization use module Users.
+    + Add configuration to allows control username character when registering.
+    + Add configuration  to allows control passwords complexity.
+    + Fixed passwords recovery mechanism
+    + Add feature forbiden use simply passwords.
+    + Add feature lock account, delete account when delete website admin account.
+    + Add feature creat random passwords for admin.
+    + Use username or e-mail to log in.
+    + Change decentralization of features according to user groups.
+    + Add feature allows account under admin in the administrator log in and add configuration of it.
+    + Split field full_name to first_name and last_name, configure display names (full name – surename).
 
 - Module download
-	+  Fixed the navigation of links
-	+  Fixed description when show detail.
+    +  Fixed the navigation of links
+    +  Fixed description when show detail.
 
 - Add module SEO tool.
-	+ Gather configurations and web SEO tool to this moudle.
-	+ Add feature remove module name in url when disable mutillanguage mode.
-	+ Add feature change the path of the module for easy SEO url.
-	+ Add feature authentication Google +  (copyright).
-	+ Add feature Ping to search engine.
-	+ Support Meta OG of facebook. Add new meta ogp, add data for $meta_property array.
-	+ Support insert Meta GEO via Meta- Tags configuration.
+    + Gather configurations and web SEO tool to this moudle.
+    + Add feature remove module name in url when disable mutillanguage mode.
+    + Add feature change the path of the module for easy SEO url.
+    + Add feature authentication Google +  (copyright).
+    + Add feature Ping to search engine.
+    + Support Meta OG of facebook. Add new meta ogp, add data for $meta_property array.
+    + Support insert Meta GEO via Meta- Tags configuration.
 
 - Module staticts
-	+ Change the mechanism calculating the number of hits the site. Recount after visitor don’t active in 30 minutes.
-	+ Only admin can see default configure.
+    + Change the mechanism calculating the number of hits the site. Recount after visitor don’t active in 30 minutes.
+    + Only admin can see default configure.
 
 - Module banner
-	+  Add feature of display banner: banner flash is replacing by photo on mobile browsers (Because adobe flash don’t run on some browsers).
-	+ Add feature for ad: when click ad, choose open: In new windows, in current windows…
-	+ Add global.department.php block (display department contact information).
-	+ Admin can answer customer more times, the system log all the replies.
+    +  Add feature of display banner: banner flash is replacing by photo on mobile browsers (Because adobe flash don’t run on some browsers).
+    + Add feature for ad: when click ad, choose open: In new windows, in current windows…
+    + Add global.department.php block (display department contact information).
+    + Admin can answer customer more times, the system log all the replies.
 
 - Module menu
-	+ Change menu management more visually.
-	+ Split menu types  into block menu distinct.
+    + Change menu management more visually.
+    + Split menu types  into block menu distinct.
 
 NUKEVIET 3.4.02 (3.4.02.r1929) Releases Jan 9, 2014
 CODE: http://code.google.com/p/nuke-viet/source/list (r1759 to r1929)
@@ -657,119 +669,119 @@ Remove features:
 NUKEVIET 3.2 Official (3.2.00.r1203)
 CODE: http://code.google.com/p/nuke-viet/source/list (r931 to r1203)
 - SYSTEM
-	+ Fix Duplicate title tags and meta descriptions.
-	+ Fix update by revision feature
-	+ Config domain allows use localhost
-	+ Config method update language pack by revision.
-	+ Fixed 404 erro when url contain special character.
-	+ Update editor, fixed quick upload in the editor.
-	+ Update JW Player 5.5. Add feature select image illustration for plugin JW Player of the editor.
-	+ Check server status, if CPU use >80 % will report “Server too busy. Please try again later”.
-	+ Edit to customizable tool bar of admin control panel.
-	+ Redefine theme is using at time configure.
-	+ Fix not detected theme when install new module.
-	+ Fix module rss, and modules relation with module rss.
-	+ Delete caches of modules when changing configuration block.
-	+ Fixed erro at file image.class.php.
-	+ Fixed chmod in used FTP.
-	+ Fixed install module: Allows modules don’t have outside function.
-	+ Fixed system for functions outside of module is not obligatory.
-	+ Fixed block menu when theme by module.
-	+ Update jQuery and plugins: jQuery v1.5.2, jQuery UI.
-	+ Use class phpsvnclient: In case commit file use Replace.
-	+ Upgrade openid.class.php
-	+ Fixed function check mimetype when upload file.
-	+ Add feature delete module has not used (Delete files of the modules).
-	+ Rewrite for servers which are not supported.
-	+ Fixed XML Sitemap index on hosting which not support full rewrite.
-	+ Fixed file Sitemap.xml to Google Webmaster Tools detect easier.
-	+ Fixed erro misindentified module while enable rewrite feature.
-	+ Improve to can rewrite single url.
-	+ Rewrite links while sending mail.
-	+ Add rewriteBase into file .htaccess
-	+ Fixed rewrite in case the hosting does not support zlib lead to not loaded css, js.
-	+ Fixed rewrite on IIS7 to not lose configuration at file web.config. Fixed check rewrite on IIS7.
+    + Fix Duplicate title tags and meta descriptions.
+    + Fix update by revision feature
+    + Config domain allows use localhost
+    + Config method update language pack by revision.
+    + Fixed 404 erro when url contain special character.
+    + Update editor, fixed quick upload in the editor.
+    + Update JW Player 5.5. Add feature select image illustration for plugin JW Player of the editor.
+    + Check server status, if CPU use >80 % will report “Server too busy. Please try again later”.
+    + Edit to customizable tool bar of admin control panel.
+    + Redefine theme is using at time configure.
+    + Fix not detected theme when install new module.
+    + Fix module rss, and modules relation with module rss.
+    + Delete caches of modules when changing configuration block.
+    + Fixed erro at file image.class.php.
+    + Fixed chmod in used FTP.
+    + Fixed install module: Allows modules don’t have outside function.
+    + Fixed system for functions outside of module is not obligatory.
+    + Fixed block menu when theme by module.
+    + Update jQuery and plugins: jQuery v1.5.2, jQuery UI.
+    + Use class phpsvnclient: In case commit file use Replace.
+    + Upgrade openid.class.php
+    + Fixed function check mimetype when upload file.
+    + Add feature delete module has not used (Delete files of the modules).
+    + Rewrite for servers which are not supported.
+    + Fixed XML Sitemap index on hosting which not support full rewrite.
+    + Fixed file Sitemap.xml to Google Webmaster Tools detect easier.
+    + Fixed erro misindentified module while enable rewrite feature.
+    + Improve to can rewrite single url.
+    + Rewrite links while sending mail.
+    + Add rewriteBase into file .htaccess
+    + Fixed rewrite in case the hosting does not support zlib lead to not loaded css, js.
+    + Fixed rewrite on IIS7 to not lose configuration at file web.config. Fixed check rewrite on IIS7.
 
 - Theme
-	+ Devide language of block to single file.
-	+ Theme default: fixed erro not rewrite link of statisticts.
-	+ Fixed erro undisplay content of block html which contain special character.
-	+ Fixed theme management: Delete block when delete theme.
+    + Devide language of block to single file.
+    + Theme default: fixed erro not rewrite link of statisticts.
+    + Fixed erro undisplay content of block html which contain special character.
+    + Fixed theme management: Delete block when delete theme.
 
 - Web tools
-	+ Add feature delete IP logs
-	+ Add select all works in cleanup system.
-	+ Config check Nukeviet version feature.
-	+ Update upgrade function via Revision. Only get the updates in the directory /trunk/nukeviet 3.2
-	+ Fixed Revision update function in system folder is renamed.
-	+ Update by Revision. On the hostings need FTP to creat folder and move file.
+    + Add feature delete IP logs
+    + Add select all works in cleanup system.
+    + Config check Nukeviet version feature.
+    + Update upgrade function via Revision. Only get the updates in the directory /trunk/nukeviet 3.2
+    + Fixed Revision update function in system folder is renamed.
+    + Update by Revision. On the hostings need FTP to creat folder and move file.
 
 - System log
-	+ Record system log in these important events.
-	+ Add tool filter system log, change type of arrangement system log default.
-	+ Update module users
-	+ Allows user register in public group.
-	+ Add configuration for users retrieve passwords without be ask secret questions.
-	+ Fixed error not add, edit users when mechanism forum.
-	+ Fixed error GodAdmin unable to delete admin.
-	+ Fixed error active user account.
-	+ Disable autocomplete function at edit user accounts.
-	+ Fixed error can not change e-mail while loging in.
-	+ Remove dots befor @ character while check valid of e-mail (uname@gmail.com =u.name@gmail.com)
-	+ Block login: Fixed path of avata, OpenID image.
+    + Record system log in these important events.
+    + Add tool filter system log, change type of arrangement system log default.
+    + Update module users
+    + Allows user register in public group.
+    + Add configuration for users retrieve passwords without be ask secret questions.
+    + Fixed error not add, edit users when mechanism forum.
+    + Fixed error GodAdmin unable to delete admin.
+    + Fixed error active user account.
+    + Disable autocomplete function at edit user accounts.
+    + Fixed error can not change e-mail while loging in.
+    + Remove dots befor @ character while check valid of e-mail (uname@gmail.com =u.name@gmail.com)
+    + Block login: Fixed path of avata, OpenID image.
 
 - Module News
-	+ Fixed time post article. Time post article must  after time creat article.
-	+ Delete cache of module when users delete article.
-	+ Fixed incorrect image display of the article in block headline.
-	+ Fixed error show titles of articles that have not posted in sitemap.
-	+ Fixed page breaking error while config module “By title, the new up”.
-	+ Fixed rss links of News vitualization module at theme modern.
-	+ Fixed error can not edit information resource.
-	+ Fixed delete thumb when delete article.
-	+ Fixed form comment for theme modern.
-	+ Fixed show comment, fixed page breaking at comment management.
-	+ Devide HTML and PHP
+    + Fixed time post article. Time post article must  after time creat article.
+    + Delete cache of module when users delete article.
+    + Fixed incorrect image display of the article in block headline.
+    + Fixed error show titles of articles that have not posted in sitemap.
+    + Fixed page breaking error while config module “By title, the new up”.
+    + Fixed rss links of News vitualization module at theme modern.
+    + Fixed error can not edit information resource.
+    + Fixed delete thumb when delete article.
+    + Fixed form comment for theme modern.
+    + Fixed show comment, fixed page breaking at comment management.
+    + Devide HTML and PHP
 
 - Module menu
-	+ Add feature management menus.
-	+ Fixed error functions be shown in menu of module User (customizable via login status).
-	+ Fixed function name of menus to use many type menu at the same time.
-	+ Block menu smooth_navigational don’t show sub menu of module weblinks.
-	+ Module Language
-	+ Manage block language
+    + Add feature management menus.
+    + Fixed error functions be shown in menu of module User (customizable via login status).
+    + Fixed function name of menus to use many type menu at the same time.
+    + Block menu smooth_navigational don’t show sub menu of module weblinks.
+    + Module Language
+    + Manage block language
 
 - Module FAQ:
-	+ Fixed module to not obligatory enter question to topic and add presentation.
-	+ Module download: Fixed path avata of user.
+    + Fixed module to not obligatory enter question to topic and add presentation.
+    + Module download: Fixed path avata of user.
 
 - Module about:
-	+ Fixed error show inactive article.
+    + Fixed error show inactive article.
 
 - Merge Module Shop project to Nukeviet 3.2
-	CODE: http://code.google.com/p/nuke-viet/source/list (r2)
-	+ Organize shop presentation by criteria: Product type, product group, new update product…
-	+ The feature to see and select product: Categorise product type, the same product, sample product, product most viewed..
-	+ Shop cart: Add  allows order product to shop cart.
-	+ Pay online by ATM card throught payment system of Nganluong.vn
-	+ Send order: Member website submit order.
-	+ Deal history: Show deal historys of members.
-	+ The system administrator functions include:
-	+ Currency management: Allows add, edit, delete currency.
-	+ Manage payment gateways mecharnismed: Config payment gateways  if use 1 or more onlien payment gateways.
-	+ Configuration: Set parameters for the sales system.
-	+ Management product units: Add, edit, delete product unit.
-	+ Manage product categorise: Add, edit, delete
-	+ Managet product group (by criteria): add, edit, delete.
-	+ Manage blocks (product group).
-	+ Manage list of manufacturers.
-	+ Manage list products: add, edit, delete, search..
-	+ Manage of orders and print invoices.
-	+ Fixed Module shop error
-	+ Fixed error paging
-	+ Auto cut introduction shorter when it shown.
-	+ Trim introduction shorter if too length be allows to avoid undefined error.
-	+ Fixed comment product error.
+    CODE: http://code.google.com/p/nuke-viet/source/list (r2)
+    + Organize shop presentation by criteria: Product type, product group, new update product…
+    + The feature to see and select product: Categorise product type, the same product, sample product, product most viewed..
+    + Shop cart: Add  allows order product to shop cart.
+    + Pay online by ATM card throught payment system of Nganluong.vn
+    + Send order: Member website submit order.
+    + Deal history: Show deal historys of members.
+    + The system administrator functions include:
+    + Currency management: Allows add, edit, delete currency.
+    + Manage payment gateways mecharnismed: Config payment gateways  if use 1 or more onlien payment gateways.
+    + Configuration: Set parameters for the sales system.
+    + Management product units: Add, edit, delete product unit.
+    + Manage product categorise: Add, edit, delete
+    + Managet product group (by criteria): add, edit, delete.
+    + Manage blocks (product group).
+    + Manage list of manufacturers.
+    + Manage list products: add, edit, delete, search..
+    + Manage of orders and print invoices.
+    + Fixed Module shop error
+    + Fixed error paging
+    + Auto cut introduction shorter when it shown.
+    + Trim introduction shorter if too length be allows to avoid undefined error.
+    + Fixed comment product error.
 
 NUKEVIET 3.1 Official version (3.1.03.r930)
 CODE: http://code.google.com/p/nuke-viet/source/list (r784 to r930)
@@ -782,27 +794,27 @@ CODE: http://code.google.com/p/nuke-viet/source/list (r469 to r783)
 
 - Fixed bugs and optimize old features
 - Module News:
-	+ Allows display illustration outside of the site.
-	+ Add feature post/edit/delete article for members.
-	+ Additional configure represented as a grid, by list article.
-	+ Increase system cache, compress CSS, JavaScript.. to speed up loading page.
-	+ Add feature “Delete all temp file” for God Admin.
-	+ Add Google Analytics tracking code at http://code.google.com/p/nuke-viet/source/detail?r=556
+    + Allows display illustration outside of the site.
+    + Add feature post/edit/delete article for members.
+    + Additional configure represented as a grid, by list article.
+    + Increase system cache, compress CSS, JavaScript.. to speed up loading page.
+    + Add feature “Delete all temp file” for God Admin.
+    + Add Google Analytics tracking code at http://code.google.com/p/nuke-viet/source/detail?r=556
 
 - Add feature for SEO
-	+ Add feature meta-tags management.
-	+ Auto creat sitemap file for search engine.
-	+ Add sitemap Ping Services (Send sitemap files to search engine by PING).
-	+ Rating according to the index site.
-	+ Check SEO by keywords.
+    + Add feature meta-tags management.
+    + Auto creat sitemap file for search engine.
+    + Add sitemap Ping Services (Send sitemap files to search engine by PING).
+    + Rating according to the index site.
+    + Check SEO by keywords.
 
 - The feature of upgrade, check version.
-	+ Add  upgrade information from Nukeviet project.
-	+ Auto report new version in Admin control panel.
-	+ Add feature check module version
-	+ Add feature system upgrade by upgrade package.
-	+ Add feature upgrade via revision.
-	+ Increase ability auto install for block, module even when be overwriting or non-standard.
+    + Add  upgrade information from Nukeviet project.
+    + Auto report new version in Admin control panel.
+    + Add feature check module version
+    + Add feature system upgrade by upgrade package.
+    + Add feature upgrade via revision.
+    + Increase ability auto install for block, module even when be overwriting or non-standard.
 - Restructuring block, allows global block located block of module, allows add more parameters for the block.
 - Add Admin full theme and use this theme for admin control panel.
 - Fixed upload feature, add  the feature allows each admin upload to each folder of module news.
