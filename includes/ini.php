@@ -266,5 +266,5 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
 
     $content_config .= "\n";
     $content_config .= "\$iniSaveTime = " . NV_CURRENTTIME . ";";
-    @file_put_contents($config_ini_file, $content_config. "\n", LOCK_EX);
+    @file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX);
 }
