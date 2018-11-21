@@ -27,19 +27,19 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
 
     //disable_classes
-    $sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
-    $content_config .= "\$sys_info['disable_classes']=array(" . ((!empty($sys_info['disable_classes'])) ? "'" . implode("','", $sys_info['disable_classes']) . "'" : "") . ");\n";
+    $sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : [];
+    $content_config .= "\$sys_info['disable_classes'] = [" . ((!empty($sys_info['disable_classes'])) ? "'" . implode("', '", $sys_info['disable_classes']) . "'" : "") . "];\n";
 
     //disable_functions
-    $sys_info['disable_functions'] = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
+    $sys_info['disable_functions'] = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
     if (extension_loaded('suhosin')) {
         $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
     }
-    $content_config .= "\$sys_info['disable_functions']=array(" . ((!empty($sys_info['disable_functions'])) ? "'" . implode("','", $sys_info['disable_functions']) . "'" : "") . ");\n";
+    $content_config .= "\$sys_info['disable_functions'] = [" . ((!empty($sys_info['disable_functions'])) ? "'" . implode("', '", $sys_info['disable_functions']) . "'" : "") . "];\n";
 
     //ini_set_support
     $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
-    $content_config .= "\$sys_info['ini_set_support']= " . ($sys_info['ini_set_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['ini_set_support'] = " . ($sys_info['ini_set_support'] ? "true" : "false") . ";\n";
 
     //Kiem tra ho tro rewrite
     $_server_software = explode('/', $_SERVER['SERVER_SOFTWARE']);
@@ -66,46 +66,46 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
         }
     }
-    $content_config .= "\$sys_info['supports_rewrite']= " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : "false") . ";\n";
+    $content_config .= "\$sys_info['supports_rewrite'] = " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : "false") . ";\n";
 
     //zlib_support
     $sys_info['zlib_support'] = (extension_loaded('zlib')) ? true : false;
-    $content_config .= "\$sys_info['zlib_support']= " . ($sys_info['zlib_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['zlib_support'] = " . ($sys_info['zlib_support'] ? "true" : "false") . ";\n";
 
     //mb_support
     $sys_info['mb_support'] = (extension_loaded('mbstring')) ? true : false;
-    $content_config .= "\$sys_info['mb_support']= " . ($sys_info['mb_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['mb_support'] = " . ($sys_info['mb_support'] ? "true" : "false") . ";\n";
 
     //iconv_support
     $sys_info['iconv_support'] = (extension_loaded('iconv')) ? true : false;
-    $content_config .= "\$sys_info['iconv_support']= " . ($sys_info['iconv_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['iconv_support'] = " . ($sys_info['iconv_support'] ? "true" : "false") . ";\n";
 
     //allowed_set_time_limit
     $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'])) ? true : false;
-    $content_config .= "\$sys_info['allowed_set_time_limit']= " . ($sys_info['allowed_set_time_limit'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['allowed_set_time_limit'] = " . ($sys_info['allowed_set_time_limit'] ? "true" : "false") . ";\n";
 
     //os
     $sys_info['os'] = strtoupper((function_exists('php_uname') and !in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
-    $content_config .= "\$sys_info['os']= '" . $sys_info['os'] . "';\n";
+    $content_config .= "\$sys_info['os'] = '" . $sys_info['os'] . "';\n";
 
     //fileuploads_support
     $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? true : false;
-    $content_config .= "\$sys_info['fileuploads_support']= " . ($sys_info['fileuploads_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['fileuploads_support'] = " . ($sys_info['fileuploads_support'] ? "true" : "false") . ";\n";
 
     //curl_support
     $sys_info['curl_support'] = (extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions'])))) ? true : false;
-    $content_config .= "\$sys_info['curl_support']= " . ($sys_info['curl_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['curl_support'] = " . ($sys_info['curl_support'] ? "true" : "false") . ";\n";
 
     //ftp_support
     $sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'])) ? true : false;
-    $content_config .= "\$sys_info['ftp_support']= " . ($sys_info['ftp_support'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['ftp_support'] = " . ($sys_info['ftp_support'] ? "true" : "false") . ";\n";
 
     //Xac dinh tien ich mo rong lam viec voi string
     $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
-    $content_config .= "\$sys_info['string_handler']= '" . $sys_info['string_handler'] . "';\n";
+    $content_config .= "\$sys_info['string_handler'] = '" . $sys_info['string_handler'] . "';\n";
 
     //support_cache
-    $sys_info['support_cache'] = array();
+    $sys_info['support_cache'] = [];
     if (class_exists('Memcached')) {
         $sys_info['support_cache'][] = 'memcached';
     }
@@ -115,10 +115,10 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     if (class_exists('Redis')) {
         $sys_info['support_cache'][] = 'redis';
     }
-    $content_config .= "\$sys_info['support_cache'] = array(" . ($sys_info['support_cache'] ? "'" . implode("', '", $sys_info['support_cache']) . "'" : "") . ");\n";
+    $content_config .= "\$sys_info['support_cache'] = [" . ($sys_info['support_cache'] ? "'" . implode("', '", $sys_info['support_cache']) . "'" : "") . "];\n";
 
     //php_compress_methods
-    $sys_info['php_compress_methods'] = array();
+    $sys_info['php_compress_methods'] = [];
     if (function_exists('brotli_compress') and !in_array('brotli_compress', $sys_info['disable_functions'])) {
         $sys_info['php_compress_methods']['br'] = 'brotli_compress';
     }
@@ -135,13 +135,13 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     }
     $_compress_method = '';
     if (!empty($sys_info['php_compress_methods'])) {
-        $_compress_method = array();
+        $_compress_method = [];
         foreach ($sys_info['php_compress_methods'] as $k => $f) {
             $_compress_method[] = "'" . $k . "' => '" . $f . "'";
         }
-        $_compress_method = implode(",", $_compress_method);
+        $_compress_method = implode(", ", $_compress_method);
     }
-    $content_config .= "\$sys_info['php_compress_methods'] = array(" . $_compress_method . ");\n";
+    $content_config .= "\$sys_info['php_compress_methods'] = [" . $_compress_method . "];\n";
 
     //server_headers
     stream_context_set_default(array(
@@ -152,15 +152,15 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     ));
     $server_headers = get_headers(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
     unset($server_headers[0], $server_headers['Date'], $server_headers['Expires'], $server_headers['Last-Modified'], $server_headers['Connection'], $server_headers['Set-Cookie'], $server_headers['X-Page-Speed']);
-    $sys_info['server_headers'] = array();
-    $_temp = array();
+    $sys_info['server_headers'] = [];
+    $_temp = [];
     foreach ($server_headers as $k => $v) {
         $k = strtolower($k);
         $sys_info['server_headers'][$k] = $v;
-        $_temp[] = "'" . $k . "'=>'" . $v . "'";
+        $_temp[] = "'" . addslashes($k) . "' => '" . addslashes($v) . "'";
     }
     $_temp = implode(",", $_temp);
-    $content_config .= "\$sys_info['server_headers'] = array(" . $_temp . ");\n";
+    $content_config .= "\$sys_info['server_headers'] = [" . $_temp . "];\n";
 
     if ($sys_info['ini_set_support']) {
         ini_set('display_startup_errors', 0);
@@ -266,5 +266,5 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
 
     $content_config .= "\n";
     $content_config .= "\$iniSaveTime = " . NV_CURRENTTIME . ";";
-    @file_put_contents($config_ini_file, $content_config, LOCK_EX);
+    @file_put_contents($config_ini_file, $content_config. "\n", LOCK_EX);
 }
