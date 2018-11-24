@@ -204,6 +204,7 @@ $lang_module['add_user'] = 'Thêm tài khoản %1$s vào nhóm %2$s';
 $lang_module['exclude_user'] = 'Loại tài khoản %1$s khỏi nhóm %2$s';
 $lang_module['siteinfo_user'] = 'Số tài khoản';
 $lang_module['siteinfo_waiting'] = 'Số tài khoản đợi kích hoạt';
+$lang_module['siteinfo_editcensor'] = 'Số tài khoản chờ kiểm duyệt thông tin cá nhân';
 $lang_module['pagetitle'] = 'Lấy ID tài khoản';
 $lang_module['pagetitle1'] = 'Tìm kiếm ID tài khoản';
 $lang_module['search'] = 'Tìm tài khoản';
@@ -436,9 +437,9 @@ $lang_module['update_LDAP_config_lname'] = "Họ";
 $lang_module['default'] = "Mặc định";
 
 $lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là tuỳ chọn. Bạn có thể chọn điền trước một số thông tin người dùng NukeViet với thông tin từ <b> các trường LDAP</b> được chỉ ra ở đây.<p>
-		Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
-		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
-		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
+        Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
+        Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
+        <b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
 
 $lang_module['allowuserloginmulti'] = 'Cho phép đăng nhập cùng lúc từ nhiều trình duyệt';
 $lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';
@@ -449,6 +450,9 @@ $lang_module['group_description'] = 'Mô tả';
 $lang_module['auto_login_after_reg'] = 'Tự động đăng nhập sau khi đăng ký thành công';
 $lang_module['active_group_newusers'] = 'Kích hoạt chức năng xác thực thành viên';
 $lang_module['active_group_newusers_note'] = 'Nếu chức năng này được kích hoạt, những thành viên mới đăng ký sẽ được tự động xếp vào nhóm &quot;Thành Viên mới &quot; cho đến khi được người quản lý loại khỏi nhóm, lúc này thành viên mới được xem là &quot;Thành Viên chính thức&quot;';
+$lang_module['active_editinfo_censor'] = 'Bật kiểm duyệt chỉnh sửa tài khoản';
+$lang_module['active_editinfo_censor_note'] = 'Nếu chức năng này kích hoạt, tất cả các tài khoản tự chỉnh sửa thông tin sẽ được kiểm duyệt trước khi hiển thị, không áp dụng đối với việc chỉnh sửa tên đăng nhập, email, ảnh đại diện, trưởng nhóm, quản trị sửa thông tin thành viên. Khi tắt tính năng này menu kiểm duyệt trong quản trị sẽ bị ẩn để tiết kiệm không gian, tuy nhiên bạn vẫn có thể kiểm duyệt';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">tại đây</>';
 $lang_module['active_user_logs'] = 'Ghi nhật ký đăng nhập, đăng xuất của thành viên';
 $lang_module['user_openid_mamager'] = 'Quản lý OpenID &amp; Oauth';
 $lang_module['user_2step_mamager'] = 'Quản lý xác thực hai bước';
@@ -479,3 +483,7 @@ $lang_module['two_step_verification_require_site'] = 'Bắt buộc xác thực h
 $lang_module['two_step_verification_require_admindefault'] = 'Thiết lập an ninh đang yêu cầu bật tại khu vực quản trị, dù không bật ở đây quản trị vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
 $lang_module['two_step_verification_require_sitedefault'] = 'Thiết lập an ninh đang yêu cầu bật ngoài site, dù không bật ở đây thành viên trong nhóm vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
 $lang_module['notification_new_acount'] = 'Tài khoản %s đang đợi kích hoạt';
+$lang_module['editcensor'] = 'Kiểm duyệt thông tin';
+$lang_module['editcensor_lastedit'] = 'Sửa lần cuối';
+$lang_module['editcensor_confirm_approval'] = 'Bạn có chắc chắn xác nhận duyệt? Sau khi duyệt thông tin này sẽ ghi đè thông tin hiện tại của thành viên';
+$lang_module['editcensor_confirm_denied'] = 'Bạn có chắc chắn từ chối? Sau khi từ chối thì thông tin này sẽ bị xóa và không thể khôi phục';

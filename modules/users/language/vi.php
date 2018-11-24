@@ -196,6 +196,7 @@ $lang_module['resend_activelink'] = 'Đã đăng ký nhưng không nhận đư�
 $lang_module['change_question_ok'] = 'câu hỏi bảo mật và câu trả lời đã được thay đổi';
 $lang_module['editinfo_error'] = '. Chú ý %s';
 $lang_module['editinfo_ok'] = 'Các thay đổi đã được lưu';
+$lang_module['editinfo_okcensor'] = 'Thông tin của bạn đã được ghi nhận và sẽ có hiệu lực sau khi được kiểm duyệt. Trong thời gian chờ duyệt bạn vẫn có thể tiếp tục chỉnh sửa thông tin';
 $lang_module['question2'] = 'Câu hỏi bảo mật';
 $lang_module['current_mode'] = 'Đăng nhập lần này';
 $lang_module['current_login'] = 'Đăng nhập vào';

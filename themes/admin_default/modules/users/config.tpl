@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <form  class="form-inline" role="form" action="{FORM_ACTION}" method="post">
     <div class="table-responsive">
-    	<!-- BEGIN: access -->
+        <!-- BEGIN: access -->
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_caption} </caption>
             <thead>
@@ -9,6 +9,7 @@
                     <th>{LANG.access_admin}</th>
                     <th class="text-center">{LANG.access_addus}</th>
                     <th class="text-center">{LANG.access_waiting}</th>
+                    <th class="text-center">{LANG.editcensor}</th>
                     <th class="text-center">{LANG.access_editus}</th>
                     <th class="text-center">{LANG.access_delus}</th>
                     <th class="text-center">{LANG.access_passus}</th>
@@ -21,6 +22,7 @@
                     <td><strong>{ACCESS.title}</strong></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_addus} value="1" name="access_addus[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_waiting} value="1" name="access_waiting[{ACCESS.id}]"></td>
+                    <td class="text-center"><input type="checkbox" {ACCESS.checked_editcensor} value="1" name="access_editcensor[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_editus} value="1" name="access_editus[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_delus} value="1" name="access_delus[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_passus} value="1" name="access_passus[{ACCESS.id}]"></td>
@@ -104,6 +106,12 @@
                     <td><input type="checkbox" value="1" name="active_group_newusers"{DATA.active_group_newusers}/> <small>{LANG.active_group_newusers_note}</small></td>
                 </tr>
                 <!-- END: active_group_newusers -->
+                <!-- BEGIN: active_editinfo_censor -->
+                <tr>
+                    <td>{LANG.active_editinfo_censor}</td>
+                    <td><input type="checkbox" value="1" name="active_editinfo_censor"{DATA.active_editinfo_censor}/> <small>{LANG.active_editinfo_censor_note} {LINK_EDITCENSOR}</small></td>
+                </tr>
+                <!-- END: active_editinfo_censor -->
             </tbody>
         </table>
 
