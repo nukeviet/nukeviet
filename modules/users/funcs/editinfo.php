@@ -465,7 +465,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $array_data['first_name'] = !empty($row['first_name']) ? $row['first_name'] : $row['username'];
     }
 
-    if ($array_data['editcensor'] and !defined('ACCESS_EDITUS')) {
+    if ($array_data['editcensor'] and !defined('ACCESS_EDITUS') and !defined('NV_IS_MODADMIN')) {
         // Lưu thông tin và thông báo kiểm duyệt
         if (empty($array_data['awaitinginfo'])) {
             $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_edit (userid, lastedit, info_basic, info_custom) VALUES (' . $edit_userid . ', ' . NV_CURRENTTIME . ', :info_basic, :info_custom)';
@@ -895,7 +895,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $array_field_config = array_diff_key($array_field_config, array('first_name' => 1, 'last_name' => 1, 'gender' => 1, 'birthday' => 1, 'sig' => 1, 'question' => 1, 'answer' => 1));
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
-    if ($array_data['editcensor'] and !defined('ACCESS_EDITUS')) {
+    if ($array_data['editcensor'] and !defined('ACCESS_EDITUS') and !defined('NV_IS_MODADMIN')) {
         // Lưu thông tin và thông báo kiểm duyệt
         if (empty($array_data['awaitinginfo'])) {
             $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_edit (userid, lastedit, info_basic, info_custom) VALUES (' . $edit_userid . ', ' . NV_CURRENTTIME . ', :info_basic, :info_custom)';

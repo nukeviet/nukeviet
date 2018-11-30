@@ -32,7 +32,28 @@ function user_validForm(a) {
             }
         }
     });
-    return false
+    return false;
+}
+
+function user_editcensor_validForm(a) {
+    $('[type="submit"]', $(a)).prop('disabled', true);
+    $.ajax({
+        type: $(a).prop("method"),
+        cache: !1,
+        url: $(a).prop("action"),
+        data: $(a).serialize(),
+        dataType: "json",
+        success: function(b) {
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
+                alert(b.mess);
+                $("[name=\"" + b.input + "\"]", a).focus();
+            } else {
+                window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor';
+            }
+        }
+    });
+    return false;
 }
 
 function nv_chang_question(qid) {
@@ -162,21 +183,24 @@ function nv_waiting_row_del(uid) {
 
 // Xóa thông tin chỉnh sửa
 function nv_editcensor_row_del(uid, msg) {
- if (confirm(msg)) {
-     $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
-         location.reload();
-     });
- }
+    if (confirm(msg)) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
+            location.reload();
+        });
+    }
 }
 
 // Xác nhận thông tin chỉnh sửa
 function nv_editcensor_row_accept(uid, msg) {
- if (confirm(msg)) {
-     $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
-         console.log(res);
-         //location.reload();
-     });
- }
+    if (confirm(msg)) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
+            if (res.status != 'SUCCESS') {
+                 alert(res.mess);
+            } else {
+                location.reload();
+            }
+        });
+    }
 }
 
 function nv_chang_status(vid) {

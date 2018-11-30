@@ -33,13 +33,22 @@
             <!-- BEGIN: xusers -->
             <tr>
                 <td> {CONTENT_TD.userid} </td>
-                <td> <a href="{VIEW_LINK}"><strong>{CONTENT_TD.username}</strong></a> </td>
+                <td>
+                    <!-- BEGIN: user_link -->
+                    <a href="{VIEW_LINK}"><strong>{CONTENT_TD.username}</strong></a>
+                    <!-- END: user_link -->
+                    <!-- BEGIN: user_text -->
+                    <strong>{CONTENT_TD.username}</strong>
+                    <!-- END: user_text -->
+                </td>
                 <td> {CONTENT_TD.full_name} </td>
                 <td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
                 <td> {CONTENT_TD.lastedit} </td>
                 <td class="text-center">
+                    <!-- BEGIN: allowed -->
                     <a href="javascript:void(0);" class="btn btn-xs btn-success" onclick="nv_editcensor_row_accept({CONTENT_TD.userid}, '{LANG.editcensor_confirm_approval}');"><i class="fa fa-check"></i> {LANG.approved}</a>
                     <a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_editcensor_row_del({CONTENT_TD.userid}, '{LANG.editcensor_confirm_denied}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
+                    <!-- END: allowed -->
                 </td>
             </tr>
             <!-- END: xusers -->
