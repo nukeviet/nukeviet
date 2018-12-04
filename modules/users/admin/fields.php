@@ -45,7 +45,12 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     die('OK');
 }
 
-// lay du lieu sql
+$array_sqlchoice_order = [
+    'ASC' => $lang_module['field_options_choicesql_sort_asc'],
+    'DESC' => $lang_module['field_options_choicesql_sort_desc']
+];
+
+// Xử lý lấy dữ liệu từ CSDL
 if ($nv_Request->isset_request('choicesql', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -104,7 +109,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $contents = $xtpl->text('choicesql');
     } elseif ($choice == 'column') {
         $table = $nv_Request->get_string('table', 'post', '');
-        if ($table == '') {
+        if (!preg_match('/^[a-z0-9\_]+$/', $table)) {
             exit();
         }
 
@@ -114,19 +119,31 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $array_table_module = array();
         $xtpl->assign('choicesql_name', 'choicesql_' . $choice);
         $xtpl->assign('choicesql_next', $array_choicesql[$choice]);
+        $choice_seltected = explode('|', $choice_seltected);
         if ($num_table > 0) {
-            $choice_seltected = explode('|', $choice_seltected);
             foreach ($_items as $item) {
                 $_temp_choice['sl_key'] = (!empty($choice_seltected[0]) and $choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
                 $_temp_choice['sl_val'] = (!empty($choice_seltected[1]) and $choice_seltected[1] == $item['field']) ? ' selected="selected"' : '';
+                $_temp_choice['sl_order'] = (!empty($choice_seltected[2]) and $choice_seltected[2] == $item['field']) ? ' selected="selected"' : '';
                 $_temp_choice['key'] = $item['field'];
                 $_temp_choice['val'] = $item['field'];
                 $xtpl->assign('SQL', $_temp_choice);
                 $xtpl->parse('column.loop1');
                 $xtpl->parse('column.loop2');
+                $xtpl->parse('column.loop3');
                 unset($_temp_choice);
             }
         }
+
+        foreach ($array_sqlchoice_order as $sort_key => $sort_name) {
+            $xtpl->assign('SORT', [
+                'key' => $sort_key,
+                'title' => $sort_name,
+                'selected' => (!empty($choice_seltected[3]) and $choice_seltected[3] == $sort_key) ? ' selected="selected"' : ''
+            ]);
+            $xtpl->parse('column.sort');
+        }
+
         $xtpl->parse('column');
         $contents = $xtpl->text('column');
     }
@@ -318,17 +335,24 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $error = $lang_module['field_choices_empty'];
             }
         } else {
+            // Module data
             $choicesql_module = $nv_Request->get_string('choicesql_module', 'post', '');
-            //module data
+            // Bảng dữ liệu
             $choicesql_table = $nv_Request->get_string('choicesql_table', 'post', '');
-            //table trong module
+            // Cột làm key
             $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', '');
-            //cot value cho fields
+            // Cột làm tên hiển thị
             $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', '');
-            //cot key cho fields
+            // Cột sắp xếp
+            $choicesql_column_order = $nv_Request->get_string('choicesql_column_order', 'post', '');
+            // Kiểu sắp xếp
+            $choicesql_sort_type = $nv_Request->get_string('choicesql_sort_type', 'post', '');
+            if (!isset($choicesql_sort_type)) {
+                $choicesql_sort_type = current(array_keys($array_sqlchoice_order));
+            }
 
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
-                $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
+                $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val . '|' . $choicesql_column_order . '|' . $choicesql_sort_type;
             } else {
                 $error = $lang_module['field_sql_choices_empty'];
             }
