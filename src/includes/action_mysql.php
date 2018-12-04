@@ -94,8 +94,7 @@ function nv_create_table_sys($lang)
          sitemap tinyint(4) NOT NULL DEFAULT '1',
          gid smallint(5) NOT NULL DEFAULT '0',
          icon varchar(100) NOT NULL DEFAULT '',
-         PRIMARY KEY (title),
-         UNIQUE KEY icon (icon)
+         PRIMARY KEY (title)
     ) ENGINE=InnoDB";
 
     $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_groups (

@@ -29,7 +29,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
             'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\Inflector\\' => 28,
-            'Symfony\\Component\\Finder\\' => 25,
         ),
         'P' => 
         array (
@@ -65,10 +64,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
             'Http\\Promise\\' => 13,
             'Http\\Message\\' => 13,
             'Http\\Client\\' => 12,
-        ),
-        'G' => 
-        array (
-            'Gregwar\\' => 8,
         ),
         'E' => 
         array (
@@ -109,10 +104,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'Symfony\\Component\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/inflector',
-        ),
-        'Symfony\\Component\\Finder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/finder',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -169,10 +160,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'Http\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-http/httplug/src',
-        ),
-        'Gregwar\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
         'Endroid\\QrCode\\' => 
         array (
