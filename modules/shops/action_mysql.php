@@ -368,7 +368,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block_cat (
  bid mediumint(8) unsigned NOT NULL auto_increment,
- adddefault tinyint(4) NOT NULL default '0',
+ adddefault tinyint(1) NOT NULL default '0',
  image varchar(250) NOT NULL,
  weight smallint(4) NOT NULL default '0',
  add_time int(11) NOT NULL default '0',
@@ -740,7 +740,7 @@ $data['use_shipping'] = 0;
 $data['use_coupons'] = 0;
 $data['active_wishlist'] = 1;
 $data['active_gift'] = 1;
-$data['active_warehouse'] = 1;
+$data['active_warehouse'] = 0;
 $data['tags_alias'] = 0;
 $data['auto_tags'] = 1;
 $data['tags_remind'] = 0;

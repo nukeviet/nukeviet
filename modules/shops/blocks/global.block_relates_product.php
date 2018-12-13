@@ -154,6 +154,10 @@ if (!nv_function_exists('nv_relates_product')) {
             }
 
             $pro_config = $module_config[$module];
+            if (! empty($pro_config)) {
+                $temp = explode('x', $pro_config['image_size']);
+                $pro_config['homewidth'] = $temp[0];
+            }
 
             // Lay ty gia ngoai te
             $sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
