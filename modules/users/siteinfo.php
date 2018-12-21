@@ -14,6 +14,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 
 $lang_siteinfo = nv_get_lang_module($mod);
 $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+$level = $admin_info['level'];
 
 $_arr_siteinfo = array();
 $cacheFile = 'siteinfo_' . NV_CACHE_PREFIX . '.cache';
@@ -25,6 +26,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
 } else {
     $_arr_siteinfo['number_user'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table)->fetchColumn();
     $_arr_siteinfo['number_user_reg'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_reg')->fetchColumn();
+    $_arr_siteinfo['number_user_edit'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_edit')->fetchColumn();
     $access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
     $access_admin = unserialize($access_admin);
     $_arr_siteinfo['access_admin'] = $access_admin;
@@ -47,8 +49,16 @@ if ($_arr_siteinfo['number_user_reg'] > 0) {
     );
 }
 
+// Số thành viên chờ kiểm duyệt thông tin cá nhân
+if (!empty($_arr_siteinfo['number_user_edit']) and isset($access_admin['access_editcensor'][$level]) and $access_admin['access_editcensor'][$level] == 1) {
+    $pendinginfo[] = array(
+        'key' => $lang_siteinfo['siteinfo_editcensor'],
+        'value' => number_format($_arr_siteinfo['number_user_edit']),
+        'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=editcensor'
+    );
+}
+
 // So thanh vien dang ky vao nhom
-$level = $admin_info['level'];
 if (isset($access_admin['access_groups'][$level]) and $access_admin['access_groups'][$level] == 1) {
     $pending_lists = $group_ids = array();
 

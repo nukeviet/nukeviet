@@ -766,28 +766,6 @@ class Request
     }
 
     /**
-     * Request::base64Encode()
-     *
-     * @param mixed $input
-     * @return
-     */
-    private function base64Encode($input)
-    {
-        return strtr(base64_encode($input), '+/=', '-_,');
-    }
-
-    /**
-     * Request::base64Decode()
-     *
-     * @param mixed $input
-     * @return
-     */
-    private function base64Decode($input)
-    {
-        return base64_decode(strtr($input, '-_,', '+/='));
-    }
-
-    /**
      * Request::encodeCookie()
      *
      * @param mixed $string
@@ -795,14 +773,9 @@ class Request
      */
     private function encodeCookie($string)
     {
-        $result = '';
-        $strlen = strlen($string);
-        for ($i = 0; $i < $strlen; ++$i) {
-            $char = substr($string, $i, 1);
-            $keychar = substr($this->cookie_key, ($i % 32) - 1, 1);
-            $result .= chr(ord($char) + ord($keychar));
-        }
-        return $this->base64Encode($result);
+        $iv = substr($this->cookie_key, 0, 16);
+        $string = openssl_encrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
+        return strtr($string, '+/=', '-_,');
     }
 
     /**
@@ -813,15 +786,9 @@ class Request
      */
     private function decodeCookie($string)
     {
-        $result = '';
-        $string = $this->base64Decode($string);
-        $strlen = strlen($string);
-        for ($i = 0; $i < $strlen; ++$i) {
-            $char = substr($string, $i, 1);
-            $keychar = substr($this->cookie_key, ($i % 32) - 1, 1);
-            $result .= chr(ord($char) - ord($keychar));
-        }
-        return $result;
+        $string = strtr($string, '-_,', '+/=');
+        $iv = substr($this->cookie_key, 0, 16);
+        return openssl_decrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
     }
 
     /**

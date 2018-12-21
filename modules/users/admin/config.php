@@ -21,7 +21,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
  */
 function valid_name_config($array_name)
 {
-    $array_retutn = array();
+    $array_retutn = [];
     foreach ($array_name as $v) {
         $v = trim($v);
         if (!empty($v) and preg_match('/^[a-z0-9\-\.\_]+$/', $v)) {
@@ -32,7 +32,7 @@ function valid_name_config($array_name)
 }
 
 $groups_list = nv_groups_list();
-$array_config = array();
+$array_config = [];
 
 $oauth_config = $nv_Request->get_title('oauth_config', 'post,get');
 if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php')) {
@@ -79,7 +79,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
 
-        $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', array());
+        $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', []);
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
 
         if ($array_config['user_check_pass_time'] < 120) {
@@ -125,6 +125,12 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt->bindParam(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
             $stmt->execute();
 
+            // Chức năng kiểm duyệt chỉnh sửa
+            $array_config['active_editinfo_censor'] = ($nv_Request->get_int('active_editinfo_censor', 'post', 0) ? 1 : 0);
+            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_editinfo_censor'");
+            $stmt->bindParam(':content', $array_config['active_editinfo_censor'], PDO::PARAM_STR);
+            $stmt->execute();
+
             $array_config['active_user_logs'] = ($nv_Request->get_int('active_user_logs', 'post', 0) ? 1 : 0);
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_user_logs'");
             $stmt->bindParam(':content', $array_config['active_user_logs'], PDO::PARAM_STR);
@@ -161,9 +167,10 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen($array_config['password_simple']));
             $stmt->execute();
 
-            $access_admin = array();
+            $access_admin = [];
             $access_admin['access_addus'] = $nv_Request->get_typed_array('access_addus', 'post', 'bool');
             $access_admin['access_waiting'] = $nv_Request->get_typed_array('access_waiting', 'post', 'bool');
+            $access_admin['access_editcensor'] = $nv_Request->get_typed_array('access_editcensor', 'post', 'bool');
             $access_admin['access_editus'] = $nv_Request->get_typed_array('access_editus', 'post', 'bool');
             $access_admin['access_delus'] = $nv_Request->get_typed_array('access_delus', 'post', 'bool');
             $access_admin['access_passus'] = $nv_Request->get_typed_array('access_passus', 'post', 'bool');
@@ -190,7 +197,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE
         config='deny_email' OR config='deny_name' OR config='password_simple' OR
-        config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR config='active_user_logs' OR config='min_old_user'
+        config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR config='active_editinfo_censor' OR config='active_user_logs' OR config='min_old_user'
     ";
     $result = $db->query($sql);
     while (list ($config, $content) = $result->fetch(3)) {
@@ -200,6 +207,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $result->closeCursor();
 
     $array_config['active_group_newusers'] = !empty($array_config['active_group_newusers']) ? ' checked="checked"' : '';
+    $array_config['active_editinfo_censor'] = !empty($array_config['active_editinfo_censor']) ? ' checked="checked"' : '';
     $array_config['active_user_logs'] = !empty($array_config['active_user_logs']) ? ' checked="checked"' : '';
 
     $array_name_show = array(
@@ -414,13 +422,16 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     );
 
     if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
+        $xtpl->assign('LINK_EDITCENSOR', sprintf($lang_module['active_editinfo_censor_note1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editcensor'));
         $xtpl->parse('main.avatar_size');
         $xtpl->parse('main.active_group_newusers');
+        $xtpl->parse('main.active_editinfo_censor');
         $xtpl->parse('main.active_user_logs');
         foreach ($array_access as $access) {
             $level = $access['id'];
             $access['checked_addus'] = (isset($access_admin['access_addus'][$level]) and $access_admin['access_addus'][$level] == 1) ? ' checked="checked" ' : '';
             $access['checked_waiting'] = (isset($access_admin['access_waiting'][$level]) and $access_admin['access_waiting'][$level] == 1) ? ' checked="checked" ' : '';
+            $access['checked_editcensor'] = (isset($access_admin['access_editcensor'][$level]) and $access_admin['access_editcensor'][$level] == 1) ? ' checked="checked" ' : '';
             $access['checked_editus'] = (isset($access_admin['access_editus'][$level]) and $access_admin['access_editus'][$level] == 1) ? ' checked="checked" ' : '';
             $access['checked_delus'] = (isset($access_admin['access_delus'][$level]) and $access_admin['access_delus'][$level] == 1) ? ' checked="checked" ' : '';
             $access['checked_passus'] = (isset($access_admin['access_passus'][$level]) and $access_admin['access_passus'][$level] == 1) ? ' checked="checked" ' : '';
