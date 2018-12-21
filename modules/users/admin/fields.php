@@ -353,6 +353,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val . '|' . $choicesql_column_order . '|' . $choicesql_sort_type;
+                $dataform['field_choices'] = '';
             } else {
                 $error = $lang_module['field_sql_choices_empty'];
             }
