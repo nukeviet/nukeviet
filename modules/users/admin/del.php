@@ -53,9 +53,17 @@ foreach ($userids as $userid) {
 
         $in_groups = explode(',', $in_groups);
 
-        $_number = $db->exec('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
-        if ($_number) {
+        try {
+            // Giảm thống kê số thành viên trong nhóm
+            $db->exec('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
+        } catch (PDOException $e) {
+            trigger_error($e->getMessage());
+        }
+        try {
+            // Giảm thống kê số thành viên chính thức và số thành viên mới xuống
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups)) ? 7 : 4));
+        } catch (PDOException $e) {
+            trigger_error($e->getMessage());
         }
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
@@ -66,7 +74,7 @@ foreach ($userids as $userid) {
         if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
             @nv_deletefile(NV_ROOTDIR . '/' . $photo);
         }
-        
+
         if (sizeof($userids) < 5) {
             $subject = $lang_module['delconfirm_email_title'];
             $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
