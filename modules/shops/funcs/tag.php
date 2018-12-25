@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
@@ -28,6 +27,10 @@ $nv_Request->get_string('viewtype', 'session', '');
 $viewtype = $nv_Request->get_string('viewtype', 'post', '');
 $viewtype_old = $nv_Request->get_string('viewtype', 'session', '');
 $viewtype = $nv_Request->get_string('viewtype', 'post', $viewtype_old);
+
+if (empty($viewtype)) {
+    $viewtype = 'viewgrid';
+}
 
 if (isset($array_op[1])) {
     if (sizeof($array_op) == 2 and preg_match('/^page\-([0-9]+)$/', $array_op[1], $m)) {
