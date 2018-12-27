@@ -26,6 +26,7 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_clip (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  userid mediumint(8) unsigned NOT NULL DEFAULT '0',
   title varchar(250) NOT NULL DEFAULT '',
   alias varchar(250) NOT NULL DEFAULT '',
   hometext mediumtext NOT NULL,
@@ -39,7 +40,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   addtime int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   UNIQUE KEY alias (alias),
-  KEY tid (tid)
+  KEY tid (tid),
+  KEY userid (userid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_hit (

@@ -179,7 +179,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['editClip'], "Id: " . $post['id'], $admin_info['userid']);
             } else {
                 $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_clip VALUES
-                (NULL, " . $post['tid'] . ", " . $db->quote($post['title']) . ", " . $db->quote($post['alias']) . ",
+                (NULL, " . $post['tid'] . ", " . $admin_info['userid'] . ", " . $db->quote($post['title']) . ", " . $db->quote($post['alias']) . ",
                 " . $db->quote($post['hometext']) . ", " . $db->quote($post['bodytext']) . ",
                 " . $db->quote($post['keywords']) . ", " . $db->quote($post['img']) . ",
                 " . $db->quote($post['internalpath']) . ", " . $db->quote($post['externalpath']) . ",
