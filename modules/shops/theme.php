@@ -705,7 +705,7 @@ function cart_product($data_content, $coupons_code, $order_info, $array_error_nu
  * @param mixed $error
  * @return
  */
-function uers_order($data_content, $data_order, $total_coupons, $order_info, $error)
+function uers_order($data_content, $data_order, $total_coupons, $order_info)
 {
     global $module_info, $lang_module, $lang_global, $module_config, $module_data, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $shipping_data;
 
@@ -786,7 +786,6 @@ function uers_order($data_content, $data_order, $total_coupons, $order_info, $er
     $xtpl->assign('unit_config', $money_config[$pro_config['money_unit']]['symbol']);
     $xtpl->assign('weight_unit', $pro_config['weight_unit']);
     $xtpl->assign('DATA', $data_order);
-    $xtpl->assign('ERROR', $error);
     $xtpl->assign('LINK_CART', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart');
     if (isset($_SESSION[$module_data . '_coupons']['code'])) {
         $xtpl->assign('COUPONS_CODE', $_SESSION[$module_data . '_coupons']['code']);
