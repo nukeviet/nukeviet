@@ -161,7 +161,10 @@ if (!empty($savecat)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_catalog', 'id ' . $newcatid, $admin_info['userid']);
             nv_fix_cat_order();
             $nv_Cache->delMod($module_name);
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
+            nv_jsonOutput(array(
+                'error' => 0,
+                'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']
+            ));
         } else {
             nv_jsonOutput(array(
                 'error' => 1,
