@@ -7,7 +7,7 @@
 	<!-- BEGIN: error -->
 	<div class="alert alert-warning">{error}</div>
 	<!-- END: error -->
-	<form class="form-inline" action="{FORM_ACTION}" method="post">
+	<form class="form-inline" action="{FORM_ACTION}" method="post" id="frm-cat-content">
 		<input type="hidden" name="catid" value="{DATA.catid}" />
 		<input type="hidden" name="parentid_old" value="{DATA.parentid}" />
 		<input name="savecat" type="hidden" value="1" />
@@ -173,6 +173,22 @@
 				$('input[name="cat_number_point"]').attr('readonly','readonly');
 				$('input[name="cat_number_product"]').attr('readonly','readonly');
 			}
+		});
+		
+		$('#frm-cat-content').submit(function(e){
+		    e.preventDefault();
+		    $.ajax({
+		    	type : 'POST',
+		    	url : script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat&nocache=' + new Date().getTime(),
+		    	data : $(this).serialize(),
+		    	success : function(json) {
+		    		if(json.error){
+		    		    alert(json.msg);
+		    		}else{
+		    		    window.location.href = json.redirect;
+		    		}
+		    	}
+		    });
 		});
 	});
 
