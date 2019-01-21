@@ -146,7 +146,9 @@
         <!-- END: textarea -->
 
         <!-- BEGIN: editor -->
-        {EDITOR}
+        <div class="form-group">
+            {EDITOR}
+        </div>
         <!-- END: editor -->
 
         <!-- BEGIN: select -->
