@@ -52,43 +52,10 @@ $(function() {
 });
 </script>
 <!-- END: video_youtube -->
-<!-- BEGIN: topicList -->
-			<div class="topic_List m_b10">
-                            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="/"><span itemprop="title">{OTHETP}</span></a> » </li>
-                             <!-- BEGIN: row1 -->
-                            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="{OTHERTOPIC.href}" alt="{OTHERTOPIC.title}"><span itemprop="title" class="m-l5"> {OTHERTOPIC.title} </span></a></li>
-                         <!-- END: row1 -->
-                        </div>			
-<!-- END: topicList -->
 [HEADER]
 <!-- BEGIN: otherClips -->
-<div class="news_column">
-     <!-- BEGIN: otherClipsContent -->
-    <div class="panel panel-default">
-        <div class="panel-body featured">
-            <a href="{OTHERCLIPSCONTENT.href}" title="{OTHERCLIPSCONTENT.title}"><img id="imghome" alt="{OTHERCLIPSCONTENT.title}" src="{OTHERCLIPSCONTENT.img}" class="img-thumbnail pull-left imghome" width="100" /></a>
-            <h2 class="other_title">
-                <a href="{OTHERCLIPSCONTENT.href}" title="{OTHERCLIPSCONTENT.title}">{OTHERCLIPSCONTENT.sortTitle}</a>
-                <!-- BEGIN: newday -->
-                <span class="icon_new"></span>
-                <!-- END: newday -->
-            </h2>
-            <div class="text-muted">
-                <ul class="list-unstyled list-inline">
-                    <li><em class="fa fa-eye">&nbsp;</em> {LANG.viewHits} :{OTHERCLIPSCONTENT.view}</li>
-                </ul>
-            </div>
-            <!-- BEGIN: clearfix --><div class="clearfix"></div><!-- END: clearfix -->
-        </div>
-    </div>
-     <!-- END: otherClipsContent -->
-</div>
+{OTHERCLIPSCONTENT}
 <hr />
-<!-- BEGIN: nv_generate_page -->
-<div class="text-center">
-    {GENERATE_PAGE}
-</div>
-<!-- END: nv_generate_page -->
 <!-- END: otherClips -->
 <script type="text/javascript">
 $('.otherClips .otherClipsContent .ctn1 .ctn2').matchHeight({ property: 'min-height' });
