@@ -86,7 +86,9 @@ if ($all_page) {
 
     $generate_page = nv_generate_page($base_url, $all_page, $configMods['otherClipsNum'], $pgnum);
 
-    $xtpl->assign('OTHERCLIPSCONTENT', nv_template_viewlist($array_data, $generate_page));
+    if($configMods['viewtype'] == 'viewgrid'){
+        $xtpl->assign('OTHERCLIPSCONTENT', nv_template_viewlist($array_data, $generate_page));
+    }
 
     if ($pgnum > 1 and $numClips < 1) {
         nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
