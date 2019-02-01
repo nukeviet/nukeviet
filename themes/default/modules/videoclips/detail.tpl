@@ -54,10 +54,62 @@
     <div class="videoInfo marginbottom15 clearfix">
         <div class="cont">
             <div class="cont2">
+                <!-- BEGIN: liketool1 -->
                 <div class="fl">
                     <div class="shareFeelings">{LANG.shareFeelings}</div>
                     <a class="likeButton" href="{DETAILCONTENT.url}"><img class="like" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" alt="" width="15" height="14" /><span>{LANG.like}</span></a> <a class="likeButton" href="{DETAILCONTENT.url}"><img class="unlike" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" alt="" width="15" height="14" /><span>{LANG.unlike}</span></a> <a class="likeButton" href="{DETAILCONTENT.url}"><img class="broken" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" alt="" width="15" height="14" /><span>{LANG.broken}</span></a>
                 </div>
+                <style>
+.videoInfo .cont .cont2 {
+    height: 56px
+}
+</style>
+                <script>
+                function addLikeImage() {
+                    var b = intval($("#ilike").text()), c = intval($("#iunlike").text()), d = $(".image").width();
+                    if (0 == b && 0 == c)
+                        $(".image").removeClass("imageunlike").addClass("image0"), $("#imglike").removeClass("like").width(1), $("#plike,#punlike").text("");
+                    else if ($(".image").removeClass("image0").addClass("imageunlike"), 0 == b)
+                        $("#imglike").removeClass("like").width(1), $("#plike").text("0%"), $("#punlike").text("100%");
+                    else {
+                        var a = intval(100 * b / (b + c)), b = intval(a * (d / 100)), e = 100 - a;
+                        $("#imglike").addClass("like").animate({
+                            width : b
+                        }, 1500, function() {
+                            $("#plike").text(a + "%");
+                            $("#punlike").text(e + "%")
+                        })
+                    }
+                }$(function() {
+                    addLikeImage()
+                });
+                $("a.likeButton").click(function(){
+                    var b = $(this).attr("href"), c = $("img", this).attr("class"), d = $(this).offset();
+                    $.ajax({
+                        type: "POST",
+                        url: b,
+                        data: "aj=" + c,
+                        success: function(a) {
+                            if ("access forbidden" == a)
+                                return alert("{LANG.accessForbidden}"), !1;
+                            var a = a.split("_"), b = "liked" == a[0] || "unlike" == a[0] ? "{LANG.thank}" : "{LANG.thankBroken}";
+                            $("#i" + a[0]).text(a[1]);
+                            addLikeImage();
+                            $("#mesHide").text(b).css({
+                                "z-index" : 1E4
+                            }).show("slow");
+                            setTimeout(function() {
+                                $("div#mesHide").css({
+                                    "z-index" : "-1"
+                                }).hide("slow")
+                            }, 3E3)
+                        }
+                    });
+
+                    return !1
+                });
+                </script>
+                <!-- END: liketool1 -->
                 <div class="fr">
                     <div class="viewcount">
                         <!-- BEGIN: isAdmin -->
@@ -65,6 +117,7 @@
                         <!-- END: isAdmin -->
                         {LANG.viewHits}: <span>{DETAILCONTENT.view}</span>
                     </div>
+                    <!-- BEGIN: liketool -->
                     <div style="float: right;">
                         <div class="image image0">
                             <img id="imglike" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" alt="" width="1" />
@@ -78,6 +131,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- END: liketool -->
                 </div>
             </div>
             <div class="socialicon pull-left">
@@ -115,50 +169,6 @@
         </div>
     </div>
     <script type="text/javascript">
-        function addLikeImage() {
-            var b = intval($("#ilike").text()), c = intval($("#iunlike").text()), d = $(".image").width();
-            if (0 == b && 0 == c)
-                $(".image").removeClass("imageunlike").addClass("image0"), $("#imglike").removeClass("like").width(1), $("#plike,#punlike").text("");
-            else if ($(".image").removeClass("image0").addClass("imageunlike"), 0 == b)
-                $("#imglike").removeClass("like").width(1), $("#plike").text("0%"), $("#punlike").text("100%");
-            else {
-                var a = intval(100 * b / (b + c)), b = intval(a * (d / 100)), e = 100 - a;
-                $("#imglike").addClass("like").animate({
-                    width : b
-                }, 1500, function() {
-                    $("#plike").text(a + "%");
-                    $("#punlike").text(e + "%")
-                })
-            }
-        }$(function() {
-            addLikeImage()
-        });
-        $("a.likeButton").click(function(){
-            var b = $(this).attr("href"), c = $("img", this).attr("class"), d = $(this).offset();
-            $.ajax({
-                type: "POST",
-                url: b,
-                data: "aj=" + c,
-                success: function(a) {
-                    if ("access forbidden" == a)
-                        return alert("{LANG.accessForbidden}"), !1;
-                    var a = a.split("_"), b = "liked" == a[0] || "unlike" == a[0] ? "{LANG.thank}" : "{LANG.thankBroken}";
-                    $("#i" + a[0]).text(a[1]);
-                    addLikeImage();
-                    $("#mesHide").text(b).css({
-                        "z-index" : 1E4
-                    }).show("slow");
-                    setTimeout(function() {
-                        $("div#mesHide").css({
-                            "z-index" : "-1"
-                        }).hide("slow")
-                    }, 3E3)
-                }
-            });
-
-            return !1
-        });
-
         $("a.bodybutton").click(function() {
             "open" == $(this).attr("href") ? ($(".bodytext").removeClass('hide').slideDown("slow"), $(this).attr("href", "close").text("{LANG.collapseContent}"), $("html,body").animate({
                 scrollTop : $(".hometext").offset().top

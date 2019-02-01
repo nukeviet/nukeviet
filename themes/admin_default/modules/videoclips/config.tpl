@@ -52,6 +52,10 @@
                     <td><input class="form-control w200" type="text" name="playerMaxWidth" id="playerMaxWidth" value="{CONFIGMODULE.playerMaxWidth}" /></td>
                 </tr>
                 <!-- END: hidden -->
+                <tr>
+                    <td><strong>{LANG.liketool}</strong></td>
+                    <td><input type="checkbox" name="liketool" value="1" {CONFIGMODULE.ck_liketool} /></td>
+                </tr>
             </tbody>
         </table>
     </div>

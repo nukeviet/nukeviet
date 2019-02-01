@@ -15,6 +15,7 @@ $skins = nv_scandir(NV_ROOTDIR . "/images/jwplayer/skin/", "/^[a-zA-Z0-9\_\-\.]+
 
 $array_config = array();
 if ($nv_Request->isset_request('submit', 'post')) {
+    $array_config['liketool'] = $nv_Request->get_int('liketool', 'post', 0);
     $array_config['viewtype'] = $nv_Request->get_title('viewtype', 'post', 'viewlist');
     $array_config['otherClipsNum'] = $nv_Request->get_int('otherClipsNum', 'post', 0);
     $array_config['playerAutostart'] = $nv_Request->get_int('playerAutostart', 'post', 0);
@@ -41,6 +42,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 $configMods = array();
 $configMods = $module_config[$module_name];
 $configMods['playerAutostart_checked'] = ($configMods['playerAutostart'] == 1) ? ' checked="checked"' : '';
+$configMods['ck_liketool'] = ($configMods['liketool'] == 1) ? ' checked="checked"' : '';
 
 $xtpl = new XTemplate($op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);

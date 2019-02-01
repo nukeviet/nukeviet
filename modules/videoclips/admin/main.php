@@ -344,7 +344,14 @@ while ($row = $result->fetch()) {
     $row['liked'] = number_format($row['liked'], 0, ',', '.');
     $row['unlike'] = number_format($row['unlike'], 0, ',', '.');
     $xtpl->assign('DATA', $row);
+    if ($module_config[$module_name]['liketool']) {
+        $xtpl->parse('main.loop.liketool');
+    }
     $xtpl->parse('main.loop');
+}
+
+if ($module_config[$module_name]['liketool']) {
+    $xtpl->parse('main.liketool1');
 }
 
 $generate_page = nv_generate_page($base_url, $all_page, $per_page, $page);

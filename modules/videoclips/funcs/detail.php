@@ -177,6 +177,11 @@ if ($all_page) {
     $xtpl->parse('main.otherClips');
 }
 
+if ($module_config[$module_name]['liketool']) {
+    $xtpl->parse('main.liketool');
+    $xtpl->parse('main.liketool1');
+}
+
 if (!empty($content_comment)) {
     $xtpl->assign('CONTENT_COMMENT', $content_comment);
     $xtpl->parse('main.comment');

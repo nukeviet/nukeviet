@@ -25,8 +25,10 @@
                 <th>{LANG.title}</th>
                 <th>{LANG.topic_parent}</th>
                 <th class="text-center w20"><i class="fa fa-eye" title="{LANG.viewhits}"></i></th>
+                <!-- BEGIN: liketool1 -->
                 <th class="text-center w20"><i class="fa fa-thumbs-up" title="{LANG.like}"></i></th>
                 <th class="text-center w20"><i class="fa fa-thumbs-down" title="{LANG.dislike}"></i></th>
+                <!-- END: liketool1 -->
                 <th class="w150">{LANG.status}</th>
                 <th class="text-center">{LANG.feature}</th>
             </tr>
@@ -38,8 +40,10 @@
                 <td><a href="{DATA.link_view}">{DATA.title}</a></td>
                 <td><a href="{MODULE_URL}&amp;tid={DATA.tid}">{DATA.topicname}</a></td>
                 <td class="text-center">{DATA.view}</td>
+                <!-- BEGIN: liketool -->
                 <td class="text-center">{DATA.liked}</td>
                 <td class="text-center">{DATA.unlike}</td>
+                <!-- END: liketool -->
                 <td><a href="{DATA.id}" title="{DATA.alt}" class="changeStatus">{DATA.icon} {DATA.status}</a></td>
                 <td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{MODULE_URL}&edit&id={DATA.id}">{GLANG.edit}</a> - <em class="fa fa-trash-o">&nbsp;</em><a class="del" href="{DATA.id}">{GLANG.delete}</a></td>
             </tr>

@@ -157,10 +157,6 @@
     padding: 2px
 }
 
-.videoInfo .cont .cont2 {
-    height: 56px
-}
-
 .videoInfo .cont .fCont {
     position: relative
 }
@@ -228,7 +224,8 @@
     font: normal 11px Tahoma;
     color: #5B5B5B;
     text-align: right;
-    margin-bottom: 8px
+    margin-bottom: 8px;
+    font-size: 14px
 }
 
 .videoInfo div.viewcount span {
