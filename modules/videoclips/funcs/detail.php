@@ -110,18 +110,21 @@ $cpgnum = 0;
 
 $xtpl = new XTemplate("detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
 $xtpl->assign('LANG', $lang_module);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('TEMPLATE', $module_info['template']);
 $xtpl->assign('MODULE_THEME', $module_info['module_theme']);
 $xtpl->assign('MODULE_FILE', $module_file);
 $xtpl->assign('MODULECONFIG', $configMods);
 $xtpl->assign('MODULEURL', nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $clip['alias'], 1));
 $xtpl->assign('SELFURL', $client_info['selfurl']);
+
 $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
 $xtpl->assign('FACEBOOK_LANG', $lang);
 $meta_property['og:type'] = "website";
 $meta_property['og:url'] = $client_info['selfurl'];
-$meta_property['og:image'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
+
+if (!empty($clip['img']) && file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $clip['img'])) {
+    $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $clip['img'];
+}
 
 // kiểm tra có phải youtube
 if (preg_match("/^(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/watch\?v\=([^\&]+)\&?(.*?)$/is", $clip['externalpath'], $m)) {
