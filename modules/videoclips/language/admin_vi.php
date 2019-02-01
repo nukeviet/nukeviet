@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
-
 if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -77,6 +76,10 @@ $lang_module['videoClip'] = 'Video-clip';
 $lang_module['saveAndChecked'] = 'Thông qua và lưu';
 $lang_module['Remove'] = 'Loại khỏi danh sách';
 $lang_module['homeclips'] = 'Video hiển thị tại trang chủ module';
+$lang_module['viewtype'] = 'Hiển thị trang chủ';
+$lang_module['viewtype_viewlist'] = 'Danh sách';
+$lang_module['viewtype_viewgrid'] = 'Lưới';
+$lang_module['liketool'] = 'Sử dụng tính năng Like video';
 
 $lang_module['error1'] = 'Lỗi! Vui lòng điền nội dung vào ô Tiêu đề';
 $lang_module['error2'] = 'Lỗi! Thể loại mà bạn chọn không tồn tại!';

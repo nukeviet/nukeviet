@@ -34,3 +34,4 @@ $lang_module['edit'] = 'Sửa video';
 $lang_module['moreContent'] = 'Hiển thị nhiều nội dung hơn';
 $lang_module['collapseContent'] = 'Thu gọn nội dung';
 $lang_module['accessForbidden'] = 'Truy cập bị cấm. Video clip có thể chỉ cho các thành viên hoặc quản trị viên. Hãy đăng nhập thành viên trước khi bạn xem video-clip này. Nếu đã đăng nhập nhưng vẫn không xem được, vui lòng thông báo đến quản trị website';
+$lang_module['incat'] = 'Video cùng thể loại';
