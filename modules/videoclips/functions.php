@@ -118,7 +118,8 @@ if (isset($array_op[0]) and !empty($array_op[0]) and !preg_match("/^page\-(\d+)$
 /**
  * nv_template_viewlist()
  *
- * @param mixed $keywords
+ * @param mixed $array_data
+ * @param mixed $page
  * @return
  */
 function nv_template_viewlist($array_data, $page = '')
@@ -126,6 +127,42 @@ function nv_template_viewlist($array_data, $page = '')
     global $module_info, $lang_module, $configMods;
 
     $xtpl = new XTemplate("viewlist.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+
+    if (!empty($array_data)) {
+        $i = 1;
+        foreach ($array_data as $data) {
+            $xtpl->assign('OTHERCLIPSCONTENT', $data);
+            if ($i == 4) {
+                $i = 0;
+                $xtpl->parse('main.otherClipsContent.clearfix');
+            }
+            $xtpl->parse('main.otherClipsContent');
+            ++$i;
+        }
+    }
+
+    if (!empty($page)) {
+        $xtpl->assign('NV_GENERATE_PAGE', $page);
+        $xtpl->parse('main.nv_generate_page');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text("main");
+}
+
+/**
+ * nv_template_viewgrid()
+ *
+ * @param mixed $array_data
+ * @param mixed $page
+ * @return
+ */
+function nv_template_viewgrid($array_data, $page = '')
+{
+    global $module_info, $lang_module, $configMods;
+
+    $xtpl = new XTemplate("viewgrid.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     if (!empty($array_data)) {

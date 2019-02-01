@@ -76,7 +76,8 @@ foreach ($skins as $skin) {
 }
 
 $array_viewtype = array(
-    'viewlist' => $lang_module['viewtype_viewlist']
+    'viewlist' => $lang_module['viewtype_viewlist'],
+    'viewgrid' => $lang_module['viewtype_viewgrid']
 );
 foreach ($array_viewtype as $index => $value) {
     $sl = $index == $configMods['viewtype'] ? 'selected="selected"' : '';

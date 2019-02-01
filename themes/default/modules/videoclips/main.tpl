@@ -55,7 +55,6 @@ $(function() {
 [HEADER]
 <!-- BEGIN: otherClips -->
 {OTHERCLIPSCONTENT}
-<hr />
 <!-- END: otherClips -->
 <script type="text/javascript">
 $('.otherClips .otherClipsContent .ctn1 .ctn2').matchHeight({ property: 'min-height' });

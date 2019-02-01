@@ -87,8 +87,8 @@ if ($all_page) {
 
     $generate_page = nv_generate_page($base_url, $all_page, $configMods['otherClipsNum'], $pgnum);
 
-    if ($configMods['viewtype'] == 'viewlist') {
-        $xtpl->assign('OTHERCLIPSCONTENT', nv_template_viewlist($array_data, $generate_page));
+    if (function_exists('nv_template_' . $configMods['viewtype'])) {
+        $xtpl->assign('OTHERCLIPSCONTENT', call_user_func('nv_template_' . $configMods['viewtype'], $array_data, $generate_page));
     }
 
     if ($pgnum > 1 and $numClips < 1) {
