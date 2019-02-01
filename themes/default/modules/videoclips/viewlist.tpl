@@ -12,7 +12,7 @@
             </h2>
             <div class="text-muted">
                 <ul class="list-unstyled list-inline">
-                    <li><em class="fa fa-eye">&nbsp;</em> {LANG.viewHits} :{OTHERCLIPSCONTENT.view}</li>
+                    <li><em class="fa fa-eye">&nbsp;</em> {LANG.viewHits}: {OTHERCLIPSCONTENT.view}</li>
                 </ul>
             </div>
             <p>{OTHERCLIPSCONTENT.hometext}</p>
