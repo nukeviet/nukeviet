@@ -2,7 +2,7 @@
 <div class="clearfix">
     <div class="owls-carousel">
         <!-- BEGIN: loop -->
-        <div class="item otherClips">
+        <div class="item otherClips m-bottom">
             <div class="dual-border-box">
                 <div class="gallery-image clearfix margin-bottom-sm">
                     <a href="{ROW.link}"><img src="{ROW.image}" alt="{ROW.title}" class="pull-left img-thumbnail"></a>

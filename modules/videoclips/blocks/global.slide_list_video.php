@@ -7,11 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 19 Jun 2014 02:27:09 GMT
  */
-
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!nv_function_exists('nv4_block_slide_list_video')) {
+
     /**
      * nv_block_config_slide_list_video()
      *
@@ -58,7 +57,12 @@ if (!nv_function_exists('nv4_block_slide_list_video')) {
         global $global_config, $db, $site_mods, $module_name, $module_info, $module_file;
 
         $mod_name = $block_config['module'];
-        $db->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $site_mods[$mod_name]['module_data'] . '_clip')->where('status = 1')->order('id DESC')->limit($block_config['numrow']);
+        $db->sqlreset()
+            ->select('*')
+            ->from(NV_PREFIXLANG . '_' . $site_mods[$mod_name]['module_data'] . '_clip')
+            ->where('status = 1')
+            ->order('id DESC')
+            ->limit($block_config['numrow']);
 
         $sth = $db->prepare($db->sql());
         $sth->execute();
@@ -85,9 +89,10 @@ if (!nv_function_exists('nv4_block_slide_list_video')) {
         $xtpl->assign('BID', $block_config['bid']);
 
         foreach ($list as $row) {
-            if (!empty($row['img'])) {
-                $imageinfo = nv_ImageInfo(NV_ROOTDIR . '/' . $row['img'], 120, true, NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $mod_upload);
-                $row['image'] = $imageinfo['src'];
+            if (!empty($row['img'] && file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $mod_upload . '/' . $row['img']))) {
+                $row['image'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $mod_upload . '/' . $row['img'];
+            } elseif (!empty($row['img'] && file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_upload . '/' . $row['img']))) {
+                $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $mod_upload . '/' . $row['img'];
             } else {
                 $row['image'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/" . $mod_file . "/video.png";
             }
@@ -114,7 +119,6 @@ if (!nv_function_exists('nv4_block_slide_list_video')) {
         $xtpl->parse('main');
         return $xtpl->text('main');
     }
-
 }
 
 if (defined('NV_SYSTEM')) {

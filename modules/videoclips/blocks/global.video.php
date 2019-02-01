@@ -7,11 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 17, 2014 11:34:27 AM
  */
-
-if (!defined('NV_MAINFILE'))
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) die('Stop!!!');
 
 if (!nv_function_exists('nv_block_video')) {
+
     /**
      * nv_block_config_video()
      *
@@ -29,7 +28,11 @@ if (!nv_function_exists('nv_block_video')) {
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['topicvideo'] . ':</label>';
         $html .= '	<div class="col-sm-18"><select name="config_idtopic" class="form-control"><option value="0">' . $lang_block['topicvideo_all'] . '</option>';
 
-        $db->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $site_mods[$mod_name]['module_data'] . '_topic')->where('status= 1')->order('weight ASC');
+        $db->sqlreset()
+            ->select('*')
+            ->from(NV_PREFIXLANG . '_' . $site_mods[$mod_name]['module_data'] . '_topic')
+            ->where('status= 1')
+            ->order('weight ASC');
         $result = $db->query($db->sql());
         while ($row = $result->fetch()) {
             $sl = ($data_block['idtopic'] == $row['id']) ? ' selected="selected"' : '';
@@ -92,6 +95,7 @@ if (!nv_function_exists('nv_block_video')) {
         $mod_name = $block_config['module'];
         $mod_file = $site_mods[$mod_name]['module_file'];
         $mod_data = $site_mods[$mod_name]['module_data'];
+        $mod_upload = $site_mods[$mod_name]['module_upload'];
 
         $mod_template = $global_config['module_theme'];
 
@@ -112,7 +116,11 @@ if (!nv_function_exists('nv_block_video')) {
 
         $array_block_video = array();
         $limit = $block_config['numrow'] + $block_config['other'];
-        $db->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $mod_data . '_clip')->order('id DESC')->limit($limit);
+        $db->sqlreset()
+            ->select('*')
+            ->from(NV_PREFIXLANG . '_' . $mod_data . '_clip')
+            ->order('id DESC')
+            ->limit($limit);
         if (empty($block_config['idtopic'])) {
             $db->where('status= 1');
         } else {
@@ -124,11 +132,12 @@ if (!nv_function_exists('nv_block_video')) {
             $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=video-' . $row['alias'] . $global_config['rewrite_exturl'];
             $row['titlevideo'] = nv_clean60($row['title'], $block_config['length']);
 
-            if (!empty($row['img'])) {
-                $imageinfo = nv_ImageInfo(NV_ROOTDIR . '/' . $row['img'], 120, true, NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name);
-                $row['img'] = $imageinfo['src'];
+            if (!empty($row['img'] && file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $mod_upload . '/' . $row['img']))) {
+                $row['img'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $mod_upload . '/' . $row['img'];
+            } elseif (!empty($row['img'] && file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_upload . '/' . $row['img']))) {
+                $row['img'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $mod_upload . '/' . $row['img'];
             } else {
-                $row['img'] = NV_BASE_SITEURL . "themes/" . $mod_template . "/images/" . $mod_file . "/video.png";
+                $row['img'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/" . $mod_file . "/video.png";
             }
             $row['hometext60'] = nv_clean60($row['hometext'], 60);
 
