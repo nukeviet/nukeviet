@@ -4,6 +4,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/{MODULE_THEME}/jwplayer/jwplayer.js"></script>
 <script type="text/javascript">jwplayer.key="KzcW0VrDegOG/Vl8Wb9X3JLUql+72MdP1coaag==";</script>
 <div class="detailContent clearfix">
+    <h1>{DETAILCONTENT.title}</h1>
     <div class="message" id="mesHide"></div>
     <!-- BEGIN: video_flash -->
     <div class="videoTitle" id="videoTitle">{DETAILCONTENT.title}</div>
@@ -159,9 +160,9 @@
         });
 
         $("a.bodybutton").click(function() {
-            "open" == $(this).attr("href") ? ($(".bodytext").slideDown("slow"), $(this).attr("href", "close").text("{LANG.collapseContent}"), $("html,body").animate({
+            "open" == $(this).attr("href") ? ($(".bodytext").removeClass('hide').slideDown("slow"), $(this).attr("href", "close").text("{LANG.collapseContent}"), $("html,body").animate({
                 scrollTop : $(".hometext").offset().top
-            }, 500)) : ($(".bodytext").slideUp("slow"), $(this).attr("href", "open").text("{LANG.moreContent}"), $("html,body").animate({
+            }, 500)) : ($(".bodytext").addClass('hide').slideUp("slow"), $(this).attr("href", "open").text("{LANG.moreContent}"), $("html,body").animate({
                 scrollTop : $(".detailContent").offset().top
             }, 500));
             return !1
@@ -171,7 +172,7 @@
     {CONTENT_COMMENT}
     <!-- END: comment -->
     <!-- BEGIN: otherClips -->
-    <div class="panel panel-default">
+    <div class="panel panel-default otherClips">
         <div class="panel-heading">{LANG.incat}</div>
         <div class="panel-body">{OTHERCLIPSCONTENT}</div>
     </div>

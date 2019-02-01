@@ -468,3 +468,13 @@
     font-family: inherit;
     color: inherit;
 }
+
+.otherClips h2 {
+    font-size: 14px;
+    line-height: 20px;
+    height: 45px;
+}
+
+#videoDetail h1{
+    margin-top: 0
+}
