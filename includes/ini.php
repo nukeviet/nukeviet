@@ -220,8 +220,8 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     }
 
     //Neu he thong khong ho tro php se bao loi
-    if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-        die('You are running an unsupported PHP version. Please upgrade to PHP 5.5 or higher before trying to install Nukeviet Portal');
+    if (version_compare(PHP_VERSION, '5.6.0') < 0) {
+        die('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal');
     }
 
     //Neu he thong khong ho tro opendir se bao loi
