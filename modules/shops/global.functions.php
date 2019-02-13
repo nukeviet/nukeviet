@@ -608,3 +608,8 @@ function isAllowedUpdateOrder($status)
     }
     return false;
 }
+
+function shopsActiveOrder()
+{
+    // FIXME
+}
