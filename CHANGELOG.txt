@@ -11,7 +11,7 @@ NUKEVIET 4.3.04
 - Fix upload file from ckeditor
 - Fix function nv_redirect_location
 - Fix upload and auto resize image
-- Fix security bug. Thanks hungnguyenmz and Zepto Team
+- Fix security bug (CVE-2019-7725, CVE-2019-7726). Thanks hungnguyenmz and Zepto Team
 
 NUKEVIET 4.3.03
 
