@@ -177,6 +177,10 @@ if (!empty($reviewuid)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 
+    if (defined('NV_EDITOR')) {
+        require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+    }
+
     $array_field_config = nv_get_users_field_config();
     $info_basic = $info_custom = [];
     if (!empty($row_basic['info_basic'])) {
