@@ -1,6 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.05
+- Remove googleplus
+
 NUKEVIET 4.3.04
 
 - Fix admin can not login

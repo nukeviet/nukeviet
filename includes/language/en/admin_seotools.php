@@ -58,15 +58,6 @@ $lang_module['description_length'] = 'Number of characters of meta description t
 $lang_module['description_note'] = ' = 0 unlimited number of characters';
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Outside site name';
-$lang_module['googleplus'] = 'Authentication Google+';
-$lang_module['googleplus_page_title'] = 'Configuring authentication Google+ (copyright)';
-$lang_module['googleplus_list'] = 'List of account Google+';
-$lang_module['googleplus_module'] = 'Configuring authentication Google+ default for module';
-$lang_module['googleplus_title'] = 'Title profile Google+';
-$lang_module['googleplus_idprofile'] = 'ID profile Google+';
-$lang_module['googleplus_add'] = 'Add new';
-$lang_module['googleplusNote1'] = 'The establishment will verify copyright protects original article, copy all TOP avoid higher original post. The settings will be set for the entire module. <br /> If the function module configuration authentication Google+, the function that takes precedence over';
-$lang_module['googleplusNote2'] = 'If the link is Google+ https://plus.google.com/105065032561530186108 then ID profile enter 105065032561530186108';
 $lang_module['rpc'] = 'PING service';
 $lang_module['rpc_setting'] = 'Configuration PING service';
 $lang_module['rpc_error_timeout'] = 'Please wait %s again to continue Ping';

@@ -646,17 +646,6 @@ $(window).on('load', function() {
         a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
 
-    0 < $(".g-plusone").length && (window.___gcfg = {
-        lang: nv_lang_data
-    }, function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.async = !0;
-        a.src = "//apis.google.com/js/plusone.js";
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }());
-
     0 < $(".twitter-share-button").length && function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
