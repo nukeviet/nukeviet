@@ -7,9 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
-
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
 if ($nv_Request->isset_request('get_alias_title', 'post')) {
     $title = $nv_Request->get_title('get_alias_title', 'post', '');
@@ -57,10 +55,8 @@ if (empty($count['count']) and !$nv_Request->isset_request('add', 'get')) {
 $xtpl = new XTemplate($op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+$xtpl->assign('MODULE_UPLOAD', $module_upload);
 $xtpl->assign('MODULE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('NV_ADMIN_THEME', $global_config['module_theme']);
 $xtpl->assign('module', $module_data);
 
@@ -104,15 +100,12 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
         if (!empty($post['internalpath'])) {
             $post['internalpath'] = preg_replace("/^" . nv_preg_quote(NV_BASE_SITEURL) . "(.+)$/", "$1", $post['internalpath']);
-            if (!preg_match("/^([a-z0-9\/\.\-\_]+)\.([a-z0-9]+)$/i", $post['internalpath']) or !file_exists(NV_ROOTDIR . "/" . $post['internalpath']))
-                $post['internalpath'] = "";
+            if (!preg_match("/^([a-z0-9\/\.\-\_]+)\.([a-z0-9]+)$/i", $post['internalpath']) or !file_exists(NV_ROOTDIR . "/" . $post['internalpath'])) $post['internalpath'] = "";
         }
 
-        if (!empty($post['externalpath']) and !nv_is_url($post['externalpath']))
-            $post['externalpath'] = "";
+        if (!empty($post['externalpath']) and !nv_is_url($post['externalpath'])) $post['externalpath'] = "";
 
-        if (!isset($topicList[$post['tid']]))
-            $post['tid'] = 0;
+        if (!isset($topicList[$post['tid']])) $post['tid'] = 0;
         $post['hometext'] = nv_nl2br($post['hometext']);
 
         $where = isset($post['id']) ? " id!=" . $post['id'] . " AND" : "";
@@ -128,21 +121,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $is_error = true;
         }
 
-        $post['img'] = "";
-        $homeimg = $nv_Request->get_title('img', 'post');
-        if (!empty($homeimg)) {
-            $homeimg = preg_replace("/^" . nv_preg_quote(NV_BASE_SITEURL) . "(.+)$/", "$1", $homeimg);
-            if (preg_match("/^([a-z0-9\/\.\-\_]+)\.(jpg|png|gif)$/i", $homeimg)) {
-                $image = NV_ROOTDIR . "/" . $homeimg;
-                $image = nv_is_image($image);
-                if (!empty($image))
-                    $post['img'] = $homeimg;
-            }
-
-            if (empty($post['img'])) {
-                $info = $lang_module['error6'];
-                $is_error = true;
-            }
+        $post['img'] = $nv_Request->get_title('img', 'post', '');
+        if (is_file(NV_DOCUMENT_ROOT . $post['img'])) {
+            $post['img'] = substr($post['img'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
+        } else {
+            $post['img'] = '';
         }
 
         if (!$is_error) {
@@ -179,7 +162,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['editClip'], "Id: " . $post['id'], $admin_info['userid']);
             } else {
                 $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_clip VALUES
-                (NULL, " . $post['tid'] . ", " . $db->quote($post['title']) . ", " . $db->quote($post['alias']) . ",
+                (NULL, " . $post['tid'] . ", " . $admin_info['userid'] . ", " . $db->quote($post['title']) . ", " . $db->quote($post['alias']) . ",
                 " . $db->quote($post['hometext']) . ", " . $db->quote($post['bodytext']) . ",
                 " . $db->quote($post['keywords']) . ", " . $db->quote($post['img']) . ",
                 " . $db->quote($post['internalpath']) . ", " . $db->quote($post['externalpath']) . ",
@@ -213,12 +196,13 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         $post['redirect'] = 0;
     }
 
-    if (!empty($post['bodytext']))
-        $post['bodytext'] = nv_htmlspecialchars($post['bodytext']);
-    if (!empty($post['img']))
-        $post['img'] = NV_BASE_SITEURL . $post['img'];
-    if (!empty($post['internalpath']))
-        $post['internalpath'] = NV_BASE_SITEURL . $post['internalpath'];
+    if (!empty($post['bodytext'])) $post['bodytext'] = nv_htmlspecialchars($post['bodytext']);
+
+    if (!empty($post['img']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['img'])) {
+        $post['img'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['img'];
+    }
+
+    if (!empty($post['internalpath'])) $post['internalpath'] = NV_BASE_SITEURL . $post['internalpath'];
     $post['comm'] = $post['comm'] ? "  checked=\"checked\"" : "";
 
     if (!empty($info)) {
@@ -242,7 +226,8 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         $option = array(
             'value' => $_tid,
             'name' => $_value['name'],
-            'selected' => $_tid == $post['tid'] ? " selected=\"selected\"" : "");
+            'selected' => $_tid == $post['tid'] ? " selected=\"selected\"" : ""
+        );
         $xtpl->assign('OPTION3', $option);
         $xtpl->parse('add.option3');
     }
@@ -279,7 +264,6 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     $tit = $newStatus ? $lang_module['tit1'] : $lang_module['tit0'];
     $icon = $newStatus ? '<i style="color: red; font-size: 16px" class="fa fa-check-square-o"></i>' : '<i style="color: #333; font-size: 16px" class="fa fa-square-o"></i>';
 
-
     die($icon . ' ' . $tit);
 }
 if ($nv_Request->isset_request('del', 'post')) {
@@ -294,7 +278,10 @@ if ($nv_Request->isset_request('del', 'post')) {
 }
 
 foreach ($topicList as $id => $name) {
-    $option = array('id' => $id, 'name' => $name['name']);
+    $option = array(
+        'id' => $id,
+        'name' => $name['name']
+    );
     $xtpl->assign('OPTION4', $option);
     $xtpl->parse('main.psopt4');
 }
@@ -303,7 +290,9 @@ $where = "";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 $ptitle = $lang_module['main'];
 
-$_where = array('tb1.id=tb2.cid');
+$_where = array(
+    'tb1.id=tb2.cid'
+);
 $q = $nv_Request->get_title('q', 'get', '');
 
 if (!empty($q)) {
@@ -355,7 +344,14 @@ while ($row = $result->fetch()) {
     $row['liked'] = number_format($row['liked'], 0, ',', '.');
     $row['unlike'] = number_format($row['unlike'], 0, ',', '.');
     $xtpl->assign('DATA', $row);
+    if ($module_config[$module_name]['liketool']) {
+        $xtpl->parse('main.loop.liketool');
+    }
     $xtpl->parse('main.loop');
+}
+
+if ($module_config[$module_name]['liketool']) {
+    $xtpl->parse('main.liketool1');
 }
 
 $generate_page = nv_generate_page($base_url, $all_page, $per_page, $page);

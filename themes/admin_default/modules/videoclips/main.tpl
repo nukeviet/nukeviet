@@ -7,53 +7,50 @@
         <input class="form-control" type="text" value="{Q}" name="q" maxlength="255" />
     </div>
     <select class="form-control" name="tList">
-        <option value="0"> {LANG.topicselect} </option>
+        <option value="0">{LANG.topicselect}</option>
         <!-- BEGIN: psopt4 -->
-        <option value="{OPTION4.id}"> {OPTION4.name} </option>
+        <option value="{OPTION4.id}">{OPTION4.name}</option>
         <!-- END: psopt4 -->
-    </select>
-    <input class="btn btn-primary" name="ok2" type="button" value="{LANG.search}" />
+    </select> <input class="btn btn-primary" name="ok2" type="button" value="{LANG.search}" />
 </div>
 <div class="form-inline">
     <input class="btn btn-primary" name="addNew" type="button" value="{LANG.addClip}" />
 </div>
-<div class="myh3">
-    {PTITLE}
-</div>
+<div class="myh3">{PTITLE}</div>
 <div id="pageContent">
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th class="w150"> {LANG.adddate} </th>
-                <th> {LANG.title} </th>
-                <th> {LANG.topic_parent} </th>
+                <th class="w150">{LANG.adddate}</th>
+                <th>{LANG.title}</th>
+                <th>{LANG.topic_parent}</th>
                 <th class="text-center w20"><i class="fa fa-eye" title="{LANG.viewhits}"></i></th>
+                <!-- BEGIN: liketool1 -->
                 <th class="text-center w20"><i class="fa fa-thumbs-up" title="{LANG.like}"></i></th>
                 <th class="text-center w20"><i class="fa fa-thumbs-down" title="{LANG.dislike}"></i></th>
-                <th class="w150"> {LANG.status} </th>
-                <th class="text-center"> {LANG.feature} </th>
+                <!-- END: liketool1 -->
+                <th class="w150">{LANG.status}</th>
+                <th class="text-center">{LANG.feature}</th>
             </tr>
         </thead>
         <tbody>
             <!-- BEGIN: loop -->
             <tr>
-                <td> {DATA.adddate} </td>
-                <td> <a href="{DATA.link_view}">{DATA.title}</a> </td>
+                <td>{DATA.adddate}</td>
+                <td><a href="{DATA.link_view}">{DATA.title}</a></td>
                 <td><a href="{MODULE_URL}&amp;tid={DATA.tid}">{DATA.topicname}</a></td>
                 <td class="text-center">{DATA.view}</td>
+                <!-- BEGIN: liketool -->
                 <td class="text-center">{DATA.liked}</td>
                 <td class="text-center">{DATA.unlike}</td>
-                <td><a  href="{DATA.id}" title="{DATA.alt}" class="changeStatus">{DATA.icon} {DATA.status}</a></td>
-                <td class="text-center">
-                    <em class="fa fa-edit">&nbsp;</em><a href="{MODULE_URL}&edit&id={DATA.id}">{GLANG.edit}</a> - <em class="fa fa-trash-o">&nbsp;</em><a class="del" href="{DATA.id}">{GLANG.delete}</a>
-                </td>
+                <!-- END: liketool -->
+                <td><a href="{DATA.id}" title="{DATA.alt}" class="changeStatus">{DATA.icon} {DATA.status}</a></td>
+                <td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{MODULE_URL}&edit&id={DATA.id}">{GLANG.edit}</a> - <em class="fa fa-trash-o">&nbsp;</em><a class="del" href="{DATA.id}">{GLANG.delete}</a></td>
             </tr>
             <!-- END: loop -->
         </tbody>
     </table>
-    <div id="nv_generate_page" class="text-center">
-        {NV_GENERATE_PAGE}
-    </div>
+    <div id="nv_generate_page" class="text-center">{NV_GENERATE_PAGE}</div>
 </div>
 <script type="text/javascript">
     //<![CDATA[
@@ -87,80 +84,61 @@
     $("input[name=ok2]").click(function() {
         var a = $("select[name=tList]").val();
         var q = $("input[name=q]").val();
-        window.location.href = ( a !='' || q !='') ? "{MODULE_URL}&tid=" + a[0] + "&q=" + q : "{MODULE_URL}";
+        window.location.href = (a != '' || q != '') ? "{MODULE_URL}&tid=" + a[0] + "&q=" + q : "{MODULE_URL}";
         return !1
     });
     //]]>
 </script>
 <!-- END: main -->
 <!-- BEGIN: add -->
-<h3 class="myh3"> {INFO_TITLE} </h3>
-
+<h3 class="myh3">{INFO_TITLE}</h3>
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR_INFO}</div>
 <!-- END: error -->
-
 <form class="form-inline" id="addInformation" method="post" action="{POST.action}">
     <table class="table table-striped table-bordered table-hover">
-        <col style="width:220px" />
+        <col style="width: 220px" />
         <tbody>
             <tr>
-                <td> {LANG.title} <span style="color:red"> * </span></td>
-                <td>
-                <input class="form-control" title="{LANG.title}" type="text" name="title" value="{POST.title}" style="width:400px" maxlength="250" />
-                </td>
+                <td>{LANG.title} <span style="color: red"> * </span></td>
+                <td><input class="form-control" title="{LANG.title}" type="text" name="title" value="{POST.title}" style="width: 400px" maxlength="250" /></td>
             </tr>
             <tr>
-                <td> {LANG.alias} <span style="color:red"> * </span></td>
-                <td>
-                <input class="form-control" title="{LANG.alias}" type="text" name="alias" value="{POST.alias}" style="width:400px" maxlength="250" id="id_alias" required="required" oninvalid="setCustomValidity(nv_required)" oninput="setCustomValidity('')"/>
-                &nbsp;<i class="fa fa-refresh fa-lg icon-pointer" onclick="nv_get_alias('id_alias');">&nbsp;</i>
-                </td>
+                <td>{LANG.alias} <span style="color: red"> * </span></td>
+                <td><input class="form-control" title="{LANG.alias}" type="text" name="alias" value="{POST.alias}" style="width: 400px" maxlength="250" id="id_alias" required="required" oninvalid="setCustomValidity(nv_required)" oninput="setCustomValidity('')" /> &nbsp;<i class="fa fa-refresh fa-lg icon-pointer" onclick="nv_get_alias('id_alias');">&nbsp;</i></td>
             </tr>
             <tr>
-                <td> {LANG.topic_parent}<span style="color:red"> * </span> </td>
-                <td>
-                <select class="form-control" name="tid">
-                    <!-- BEGIN: option3 -->
-                    <option value="{OPTION3.value}"{OPTION3.selected}> {OPTION3.name} </option>
-                    <!-- END: option3 -->
+                <td>{LANG.topic_parent}<span style="color: red"> * </span>
+                </td>
+                <td><select class="form-control" name="tid">
+                        <!-- BEGIN: option3 -->
+                        <option value="{OPTION3.value}"{OPTION3.selected}>{OPTION3.name}</option>
+                        <!-- END: option3 -->
                 </select></td>
             </tr>
             <tr>
-                <td> {LANG.internalpath} </td>
-                <td>
-                <input class="form-control" title="{LANG.internalpath}" type="text" name="internalpath" id="internalpath" value="{POST.internalpath}" style="width:280px" maxlength="255" />
-                <input type="button" value="Browse server" name="selectfile" class="btn btn-info" />
-                </td>
+                <td>{LANG.internalpath}</td>
+                <td><input class="form-control" title="{LANG.internalpath}" type="text" name="internalpath" id="internalpath" value="{POST.internalpath}" style="width: 280px" maxlength="255" /> <input type="button" value="Browse server" name="selectfile" class="btn btn-info" /></td>
             </tr>
             <tr>
-                <td> {LANG.externalpath} </td>
-                <td>
-                <input class="form-control" title="{LANG.externalpath}" type="text" name="externalpath" value="{POST.externalpath}" style="width:400px" maxlength="255" />
-                </td>
+                <td>{LANG.externalpath}</td>
+                <td><input class="form-control" title="{LANG.externalpath}" type="text" name="externalpath" value="{POST.externalpath}" style="width: 400px" maxlength="255" /></td>
             </tr>
             <tr>
-                <td> {LANG.commAllow} </td>
-                <td>
-                <input name="comm" type="checkbox"{POST.comm} value="1" />
-                </td>
+                <td>{LANG.commAllow}</td>
+                <td><input name="comm" type="checkbox" {POST.comm} value="1" /></td>
             </tr>
             <tr>
-                <td> {LANG.homeImg} </td>
-                <td>
-                <input class="form-control" title="{LANG.homeImg}" type="text" name="img" id="img" value="{POST.img}" style="width:280px" maxlength="255" />
-                <input type="button" value="Browse server" name="selectimg" class="btn btn-info" />
-                </td>
+                <td>{LANG.homeImg}</td>
+                <td><input class="form-control" title="{LANG.homeImg}" type="text" name="img" id="img" value="{POST.img}" style="width: 280px" maxlength="255" /> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
             </tr>
             <tr>
-                <td> {LANG.hometext} <span style="color:red"> * </span></td>
-                <td><textarea title="{LANG.hometext}" name="hometext" class="form-control" style="width:400px;height:100px">{POST.hometext}</textarea></td>
+                <td>{LANG.hometext} <span style="color: red"> * </span></td>
+                <td><textarea title="{LANG.hometext}" name="hometext" class="form-control" style="width: 400px; height: 100px">{POST.hometext}</textarea></td>
             </tr>
             <tr>
-                <td> {LANG.keywords} </td>
-                <td>
-                <input class="form-control" title="{LANG.keywords}" type="text" name="keywords" value="{POST.keywords}" style="width:400px" maxlength="255" />
-                </td>
+                <td>{LANG.keywords}</td>
+                <td><input class="form-control" title="{LANG.keywords}" type="text" name="keywords" value="{POST.keywords}" style="width: 400px" maxlength="255" /></td>
             </tr>
             <tr>
                 <td colspan="2">{LANG.bodytext}</td>
@@ -169,14 +147,10 @@
                 <td colspan="2">{CONTENT}</td>
             </tr>
             <tr>
-                <td colspan="2" class="text-center">
-                    <input name="redirect" type="hidden" value="{POST.redirect}" />
-                    <input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" />
-                </td>
+                <td colspan="2" class="text-center"><input name="redirect" type="hidden" value="{POST.redirect}" /> <input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" /></td>
             </tr>
         </tbody>
     </table>
-
 </form>
 <script type="text/javascript">
     //<![CDATA[
@@ -192,13 +166,13 @@
     $("input[name=selectimg]").click(function() {
         var area = "img";
         var alt = "homeimgalt";
-        var path = "{UPLOAD_CURRENT}/images";
-        var currentpath = "{UPLOAD_CURRENT}/images";
+        var path = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/images";
+        var currentpath = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/images";
         var type = "image";
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
-
+    
     $("form#addInformation").submit(function() {
         var a = trim($("input[name=title]").val());
         $("input[name=title]").val(a);
@@ -217,7 +191,7 @@
         $("form#addInformation").submit();
         return !1
     });
-
+    
     function nv_get_alias(id) {
         var title = strip_tags($("[name='title']").val());
         if (title != '') {
