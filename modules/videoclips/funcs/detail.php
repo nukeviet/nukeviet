@@ -165,11 +165,7 @@ if ($all_page) {
         } elseif (!empty($row['img'] && file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['img']))) {
             $row['img'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['img'];
         } else {
-            $template = $module_info['template'];
-            if (!file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/images/videoclips/video.png')) {
-                $template = 'default';
-            }
-            $row['img'] = NV_BASE_SITEURL . "themes/" . $template . "/images/videoclips/video.png";
+            $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
         }
         $row['href'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'], 1);
         $row['sortTitle'] = nv_clean60($row['title'], $module_config[$module_name]['clean_title_video']);
