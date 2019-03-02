@@ -245,6 +245,12 @@ function login_validForm(a) {
 }
 
 function reg_validForm(a) {
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $(".has-error", a).removeClass("has-error");
     var d = 0,
         c = [];
