@@ -451,8 +451,7 @@ function GetGroupidInParentGroup($groupid, $check_inhome = 0, $only_children = 0
     $subgroupid = explode(',', $global_array_group[$groupid]['subgroupid']);
     if (!empty($subgroupid)) {
         foreach ($subgroupid as $id) {
-            $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE groupid=' . $id . ' AND cateid =' . $cid)->fetch();
-            if ($id > 0 and $result['count(*)'] <= 1) {
+            if ($id > 0 and $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE groupid=' . $id . ' AND cateid=' . $cid)->fetchColumn() <= 1) {
                 if ($global_array_group[$id]['numsubgroup'] == 0) {
                     if (!$check_inhome or ($check_inhome and $global_array_group[$id]['inhome'] == 1)) {
                         $array_group[$id] = $id;
@@ -607,9 +606,4 @@ function isAllowedUpdateOrder($status)
         return true;
     }
     return false;
-}
-
-function shopsActiveOrder()
-{
-    // FIXME
 }
