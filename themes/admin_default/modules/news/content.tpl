@@ -230,20 +230,6 @@
 								<input class="form-control" type="text" maxlength="255" value="{rowcontent.author}" name="author" style="width:100%" />
 							</div>
 						</li>
-						<!-- BEGIN: googleplus -->
-						<li>
-							<p class="message_head">
-								<cite>{LANG.googleplus}:</cite>
-							</p>
-							<div class="message_body">
-								<select class="form-control" name="gid">
-									<!-- BEGIN: gid -->
-									<option value="{GOOGLEPLUS.gid}"{GOOGLEPLUS.selected}>{GOOGLEPLUS.title}</option>
-									<!-- END: gid -->
-								</select>
-							</div>
-						</li>
-						<!-- END: googleplus -->
 					</ul>
 				</div>
 			</div>

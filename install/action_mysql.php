@@ -276,17 +276,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
   KEY type (type)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
-  gid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  title varchar(255) NOT NULL DEFAULT '',
-  idprofile varchar(25) NOT NULL DEFAULT '',
-  weight mediumint(8) unsigned NOT NULL DEFAULT '0',
-  add_time int(11) unsigned NOT NULL DEFAULT '0',
-  edit_time int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (gid),
-  UNIQUE KEY idprofile (idprofile)
-) ENGINE=MyISAM";
-
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   pid tinyint(4) NOT NULL AUTO_INCREMENT,
   plugin_file varchar(50) NOT NULL,

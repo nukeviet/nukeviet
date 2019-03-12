@@ -191,7 +191,6 @@
 	<div class="panel-body">
         <div class="socialicon clearfix margin-bottom-lg">
         	<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
-	        <div class="g-plusone" data-size="medium"></div>
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	    </div>
      </div>

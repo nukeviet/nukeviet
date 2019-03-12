@@ -14,9 +14,6 @@
     				<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
     			</li>
     			<li>
-    				<div class="g-plusone" data-size="medium"></div>
-    			</li>
-    			<li>
     				<a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
     			</li>
     		</ul>
