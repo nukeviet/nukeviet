@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="hot-news">
-	<div class="panel panel-default news_column">
+    <div class="panel panel-default news_column">
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-14 margin-bottom-lg">
@@ -12,14 +12,14 @@
                 <div class="col-md-10 margin-bottom-lg">
                     <ul class="column-margin-left">
                         <!-- BEGIN: othernews -->
-                        <li class="icon_list clearfix">
-                            <a class="show black h4" href="{othernews.link}" {othernews.target_blank} <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{othernews.hometext_clean}" data-img="{othernews.imgsource}" data-rel="tooltip"<!-- END: tooltip --> title="{othernews.title}" ><img src="{othernews.imgsource}" alt="{othernews.title}" class="img-thumbnail pull-right margin-left-sm" style="width:65px;"/>{othernews.titleclean60}</a>
+                        <li class="icon_list">
+                            <a class="show black h4 clearfix" href="{othernews.link}" {othernews.target_blank} <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{othernews.hometext_clean}" data-img="{othernews.imgsource}" data-rel="tooltip"<!-- END: tooltip --> title="{othernews.title}" ><img src="{othernews.imgsource}" alt="{othernews.title}" class="img-thumbnail pull-right margin-left-sm" style="width:65px;"/>{othernews.titleclean60}</a>
                         </li>
                         <!-- END: othernews -->
                     </ul>
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 </div>
 <!-- END: main -->
