@@ -441,7 +441,6 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'admins' => $row['admins'],
                     'rss' => $row['rss'],
                     'sitemap' => $row['sitemap'],
-                    'gid' => $row['gid'],
                     'funcs' => array()
                 );
             }

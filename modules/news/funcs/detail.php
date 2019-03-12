@@ -20,7 +20,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $news_contents = $query->fetch();
 
     if ($news_contents['id'] > 0) {
-        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
 
@@ -389,7 +389,6 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $module_info['layout_funcs'][$op_file] = !empty($news_contents['layout_func']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
 
     $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
-    $id_profile_googleplus = $news_contents['gid'];
 
     $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $news_contents['titlesite'];
     $key_words = ($module_config[$module_name]['keywords_tag'] and empty($news_contents['keywords'])) ? implode(',', $key_words) : $news_contents['keywords'];

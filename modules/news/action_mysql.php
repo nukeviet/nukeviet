@@ -189,7 +189,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	 allowed_send tinyint(1) NOT NULL default '0',
 	 allowed_print tinyint(1) NOT NULL default '0',
 	 allowed_save tinyint(1) NOT NULL default '0',
-	 gid mediumint(8) NOT NULL default '0',
 	 PRIMARY KEY (id)
 	) ENGINE=MyISAM";
 

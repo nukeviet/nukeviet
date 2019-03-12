@@ -88,19 +88,6 @@
 							<!-- END: layout_func -->
 						</select></td>
 					</tr>
-					<!-- BEGIN: googleplus -->
-					<tr>
-						<td>{LANG.googleplus}</td>
-					</tr>
-					<tr>
-						<td>
-						<select name="gid" class="form-control w200">
-							<!-- BEGIN: gid -->
-							<option value="{GOOGLEPLUS.gid}"{GOOGLEPLUS.selected}>{GOOGLEPLUS.title}</option>
-							<!-- END: gid -->
-						</select></td>
-					</tr>
-					<!-- END: googleplus -->
 					<tr>
 						<td>{LANG.activecomm}</td>
 					</tr>
