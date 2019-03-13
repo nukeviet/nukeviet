@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate May 30, 2010, 05:07:00 PM
@@ -202,6 +202,7 @@ $lang_module['add_user'] = 'Member %1$s group %2$s';
 $lang_module['exclude_user'] = 'Delete member %1$s in group %2$s';
 $lang_module['siteinfo_user'] = 'Members';
 $lang_module['siteinfo_waiting'] = 'Unactive members';
+$lang_module['siteinfo_editcensor'] = 'Users waiting for moderation of personal information';
 $lang_module['pagetitle'] = 'Get Member ID';
 $lang_module['pagetitle1'] = 'Search Member ID';
 $lang_module['search'] = 'Find Member';
@@ -433,6 +434,9 @@ $lang_module['group_description'] = 'Description';
 $lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
 $lang_module['active_group_newusers'] = 'Enable new member';
 $lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';
+$lang_module['active_editinfo_censor'] = 'Turn on edit censor';
+$lang_module['active_editinfo_censor_note'] = 'If this function is enabled, all accounts that edit the information themselves will be moderated before being displayed, not applicable to editing the username, email, avatar, team leader, administrator edit. member information. When this feature is turned off, the administrative moderation menu will be hidden to save space, but you can still censor';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">here</a>';
 $lang_module['active_user_logs'] = 'Log the log, log out of the member';
 $lang_module['user_openid_mamager'] = 'Manage OpenID & Oauth';
 $lang_module['user_2step_mamager'] = 'Manage two-step authentication';
@@ -463,3 +467,12 @@ $lang_module['two_step_verification_require_site'] = 'Two-step authentication is
 $lang_module['two_step_verification_require_admindefault'] = 'Security settings are required to be enabled in the admin area, though not enabled here. Administrators still have to enable two-step authentication to log in.';
 $lang_module['two_step_verification_require_sitedefault'] = 'The security setting is asking to be enabled outside the site, even if not enabled. The team member must still enable two-step authentication to log in.';
 $lang_module['notification_new_acount'] = 'Acount %s is wating for active';
+$lang_module['editcensor'] = 'Moderate information';
+$lang_module['editcensor_lastedit'] = 'Last modified';
+$lang_module['editcensor_confirm_approval'] = 'Are you sure to confirm approved? After browsing this information will override current member information';
+$lang_module['editcensor_confirm_denied'] = 'Are you sure to refuse? After denial, this information will be deleted and cannot be restored';
+$lang_module['editcensor_field'] = 'Data fields';
+$lang_module['editcensor_current'] = 'Current value';
+$lang_module['editcensor_new'] = 'New value';
+$lang_module['editcensor_info_basic'] = 'Basic info';
+$lang_module['editcensor_info_custom'] = 'Other info';
