@@ -2,6 +2,7 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.3.05
+- Fix user registration error on mobile theme
 - Chart.js v2.7.3
 - Clipboard v2.0.4
 - PHPMailer v6.0.7
