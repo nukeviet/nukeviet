@@ -33,8 +33,7 @@ if (! empty($savecat)) {
     $array['alias'] = $nv_Request->get_title('alias', 'post', '');
     $array['description'] = $nv_Request->get_string('description', 'post', '');
 
-    $array['description'] = strip_tags($array['description']);
-    $array['description'] = nv_nl2br(nv_htmlspecialchars($array['description']), '<br />');
+    $array['description'] = nv_nl2br(nv_substr(nv_htmlspecialchars(strip_tags($array['description'])), 0, 250), '<br />');
 
     // Xu ly anh minh hoa
     $array['image'] = $nv_Request->get_title('homeimg', 'post', '');
