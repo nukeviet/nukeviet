@@ -531,6 +531,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   alias varchar(250) NOT NULL DEFAULT '',
   image varchar(250) DEFAULT '',
   description text,
+  bodytext text NOT NULL,
   keywords varchar(250) DEFAULT '',
   PRIMARY KEY (tid),
   UNIQUE KEY alias (alias)

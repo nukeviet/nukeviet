@@ -17,6 +17,9 @@
     <!-- END: displays -->
     <div class="clearfix"></div>
     <hr>
+    <!-- BEGIN: bodytext -->
+    <div class="m-bottom">{BODYTEXT}</div>
+    <!-- END: bodytext -->
     <div id="shops-content">{CONTENT}</div>
 </div>
 <!-- END: main -->

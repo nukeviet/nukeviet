@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
@@ -1965,7 +1964,7 @@ function nv_template_wishlist($array_data, $pages, $viewtype = 'viewgrid')
  * @param mixed $viewtype
  * @return
  */
-function nv_template_tag($array_data, $pages = '', $sort = 0, $viewtype = 'viewgrid')
+function nv_template_tag($array_data, $bodytext, $pages = '', $sort = 0, $viewtype = 'viewgrid')
 {
     global $module_info, $lang_module, $module_file, $op, $page_title, $pro_config, $array_displays;
 
@@ -1975,6 +1974,11 @@ function nv_template_tag($array_data, $pages = '', $sort = 0, $viewtype = 'viewg
 
     if (function_exists('nv_template_' . $viewtype)) {
         $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $array_data, $pages));
+    }
+
+    if (!empty($bodytext)) {
+        $xtpl->assign('BODYTEXT', $bodytext);
+        $xtpl->parse('main.bodytext');
     }
 
     if ($pro_config['show_displays'] == 1) {
