@@ -379,6 +379,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_block_cat ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_description VARCHAR( 250 ) NOT NULL DEFAULT '',
+ ADD " . $lang . "_bodytext TEXT NOT NULL,
  ADD " . $lang . "_keywords text NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block (

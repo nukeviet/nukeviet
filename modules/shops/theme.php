@@ -123,7 +123,7 @@ function nv_template_view_home($array_data, $compare_id, $pages = '', $sort = 0,
  * @param string $html_pages
  * @return
  */
-function nv_template_view_blockcat($data_content, $compare_id, $html_pages = '', $data_title, $description, $image_group, $viewtype = 'viewgrid')
+function nv_template_view_blockcat($data_content, $bodytext, $compare_id, $html_pages = '', $data_title, $description, $image_group, $viewtype = 'viewgrid')
 {
     global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_blockcat, $my_head;
 
@@ -134,6 +134,11 @@ function nv_template_view_blockcat($data_content, $compare_id, $html_pages = '',
     $xtpl->assign('TITLE', $data_title);
     $xtpl->assign('DESCRIPTION', $description);
     $xtpl->assign('IMAGE', $image_group);
+
+    if(!empty($bodytext)){
+        $xtpl->assign('BODYTEXT', $bodytext);
+        $xtpl->parse('main.bodytext');
+    }
 
     if (function_exists('nv_template_' . $viewtype)) {
         $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $data_content, $html_pages));

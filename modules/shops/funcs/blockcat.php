@@ -17,11 +17,11 @@ if (isset($array_op[1])) {
 
     $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? intval(substr($array_op[2], 5)) : 1;
 
-    $stmt = $db->prepare('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, image, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight DESC');
+    $stmt = $db->prepare('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, image, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_bodytext, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight DESC');
 
     $stmt->execute();
 
-    list ($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
+    list ($bid, $page_title, $alias, $image_group, $description, $bodytext, $key_words) = $stmt->fetch(3);
 
     if ($bid > 0) {
         $base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['blockcat'] . '/' . $alias;
@@ -88,7 +88,7 @@ if (isset($array_op[1])) {
 
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
-        $contents = nv_template_view_blockcat($item_array, $num_items, $generate_page, $page_title, $description, $image_group);
+        $contents = nv_template_view_blockcat($item_array, $bodytext, $num_items, $generate_page, $page_title, $description, $image_group);
     }
 }
 

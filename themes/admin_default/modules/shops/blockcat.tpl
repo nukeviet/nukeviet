@@ -38,6 +38,12 @@
 					<td><textarea class="form-control" style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 				</tr>
 				<tr>
+					<th class="text-right">
+					<br>
+					{LANG.bodytext}</th>
+					<td>{DATA.bodytext}</td>
+				</tr>
+				<tr>
 					<th class="text-right">{LANG.content_homeimg}</th>
 					<td>
 						<input class="form-control" style="width: 500px" type="text" name="image" id="image" value="{DATA.image}"/>

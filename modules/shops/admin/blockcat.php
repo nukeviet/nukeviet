@@ -7,8 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -21,6 +20,7 @@ $data = array(
     'title' => '',
     'alias' => '',
     'description' => '',
+    'bodytext' => '',
     'keywords' => '',
     'image' => ''
 );
@@ -33,7 +33,7 @@ if (!file_exists($currentpath)) {
     nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, date('Y_m'), true);
 }
 
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $field_lang = nv_file_table($table_name);
 
     $data['bid'] = $nv_Request->get_int('bid', 'post', 0);
@@ -42,6 +42,7 @@ if (! empty($savecat)) {
     $data['alias'] = nv_substr($nv_Request->get_title('alias', 'post', '', 1), 0, 255);
     $data['description'] = $nv_Request->get_string('description', 'post', '');
     $data['description'] = nv_nl2br(nv_htmlspecialchars(strip_tags($data['description'])), '<br />');
+    $data['bodytext'] = $nv_Request->get_editor('bodytext', 'post', NV_ALLOWED_HTML_TAGS);
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (is_file(NV_DOCUMENT_ROOT . $image)) {
@@ -50,7 +51,7 @@ if (! empty($savecat)) {
     } else {
         $data['image'] = '';
     }
-    
+
     // Cat mo ta cho chinh xac
     if (strlen($data['description']) > 255) {
         $data['description'] = nv_clean60($data['description'], 250);
@@ -75,7 +76,7 @@ if (! empty($savecat)) {
                 $listvalue = '';
 
                 foreach ($field_lang as $field_lang_i) {
-                    list($flang, $fname) = $field_lang_i;
+                    list ($flang, $fname) = $field_lang_i;
                     $listfield .= ', ' . $flang . '_' . $fname;
                     $listvalue .= ', :' . $flang . '_' . $fname;
                 }
@@ -85,7 +86,7 @@ if (! empty($savecat)) {
                 $data_insert = array();
                 $data_insert['image'] = $data['image'];
                 foreach ($field_lang as $field_lang_i) {
-                    list($flang, $fname) = $field_lang_i;
+                    list ($flang, $fname) = $field_lang_i;
                     $data_insert[$flang . '_' . $fname] = $data[$fname];
                 }
 
@@ -103,10 +104,11 @@ if (! empty($savecat)) {
             if ($stmt->rowCount()) {
                 $error = $lang_module['block_error_alias'];
             } else {
-                $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_keywords= :keywords, image = :image, edit_time=' . NV_CURRENTTIME . ' WHERE bid =' . $data['bid']);
+                $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_bodytext = :bodytext, ' . NV_LANG_DATA . '_keywords= :keywords, image = :image, edit_time=' . NV_CURRENTTIME . ' WHERE bid =' . $data['bid']);
                 $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
                 $stmt->bindParam(':alias', $data['alias'], PDO::PARAM_STR);
                 $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
+                $stmt->bindParam(':bodytext', $data['bodytext'], PDO::PARAM_STR);
                 $stmt->bindParam(':keywords', $data['keywords'], PDO::PARAM_STR);
                 $stmt->bindParam(':image', $data['image'], PDO::PARAM_STR);
                 if ($stmt->execute()) {
@@ -123,13 +125,21 @@ if (! empty($savecat)) {
 
 $data['bid'] = $nv_Request->get_int('bid', 'get', 0);
 if ($data['bid'] > 0) {
-    list($data['bid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['image']) = $db->query('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat where bid=' . $data['bid'])->fetch(3);
+    list ($data['bid'], $data['title'], $data['alias'], $data['description'], $data['bodytext'], $data['keywords'], $data['image']) = $db->query('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_bodytext, ' . NV_LANG_DATA . '_keywords, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat where bid=' . $data['bid'])->fetch(3);
     $lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 
-if (! empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'])) {
+if (!empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'])) {
     $data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
     $currentpath = dirname($data['image']);
+}
+
+if (defined('NV_EDITOR')) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+$data['bodytext'] = htmlspecialchars(nv_editor_br2nl($data['bodytext']));
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $data['bodytext'] = nv_aleditor('bodytext', '100%', '300px', $data['bodytext']);
+} else {
+    $data['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $data['bodytext'] . '</textarea>';
 }
 
 $xtpl = new XTemplate('blockcat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
