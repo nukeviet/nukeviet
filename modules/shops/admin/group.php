@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -47,7 +47,7 @@ if ($data['groupid'] > 0) {
 }
 
 $savegroup = $nv_Request->get_int('savegroup', 'post', 0);
-if (! empty($savegroup)) {
+if (!empty($savegroup)) {
     $field_lang = nv_file_table($table_name);
 
     $data['groupid'] = $nv_Request->get_int('groupid', 'post', 0);
@@ -106,7 +106,7 @@ if (! empty($savegroup)) {
         $subgroupid = '';
 
         $sql = "INSERT INTO " . $table_name . " (parentid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order, is_require " . $listfield . " )
- 			VALUES (" . $data['parentid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '0',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1, " . $data['require'] . " " . $listvalue . " )";
+             VALUES (" . $data['parentid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '0',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1, " . $data['require'] . " " . $listvalue . " )";
 
         $data_insert = array();
         $data_insert['viewgroup'] = $viewgroup;
@@ -188,7 +188,7 @@ while (list($groupid_i, $title_i, $lev_i) = $result->fetch(3)) {
 $lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
 $lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
 
-if (! empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'])) {
+if (!empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'])) {
     $data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
     $currentpath = dirname($data['image']);
 }
