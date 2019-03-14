@@ -456,7 +456,7 @@ $lang_module['active_group_newusers'] = 'Kích hoạt chức năng xác thực t
 $lang_module['active_group_newusers_note'] = 'Nếu chức năng này được kích hoạt, những thành viên mới đăng ký sẽ được tự động xếp vào nhóm &quot;Thành Viên mới &quot; cho đến khi được người quản lý loại khỏi nhóm, lúc này thành viên mới được xem là &quot;Thành Viên chính thức&quot;';
 $lang_module['active_editinfo_censor'] = 'Bật kiểm duyệt chỉnh sửa tài khoản';
 $lang_module['active_editinfo_censor_note'] = 'Nếu chức năng này kích hoạt, tất cả các tài khoản tự chỉnh sửa thông tin sẽ được kiểm duyệt trước khi hiển thị, không áp dụng đối với việc chỉnh sửa tên đăng nhập, email, ảnh đại diện, trưởng nhóm, quản trị sửa thông tin thành viên. Khi tắt tính năng này menu kiểm duyệt trong quản trị sẽ bị ẩn để tiết kiệm không gian, tuy nhiên bạn vẫn có thể kiểm duyệt';
-$lang_module['active_editinfo_censor_note1'] = '<a href="%s">tại đây</>';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">tại đây</a>';
 $lang_module['active_user_logs'] = 'Ghi nhật ký đăng nhập, đăng xuất của thành viên';
 $lang_module['user_openid_mamager'] = 'Quản lý OpenID &amp; Oauth';
 $lang_module['user_2step_mamager'] = 'Quản lý xác thực hai bước';

@@ -130,10 +130,10 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    $xtpl->assign('SITE_NAME', empty($global_config['site_name']) ? '' : $global_config['site_name']);
 
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
-    if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
+    if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
     }
     $xtpl->assign('SITE_FAVICON', $site_favicon);
