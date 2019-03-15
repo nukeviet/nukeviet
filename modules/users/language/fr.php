@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -196,6 +196,7 @@ $lang_module['resend_activelink'] = 'Ré-envoyer le lien d\'activation.';
 $lang_module['change_question_ok'] = 'Changement réussi de question/ réponse secrète';
 $lang_module['editinfo_error'] = '. Remarque %s';
 $lang_module['editinfo_ok'] = 'Changement réussi';
+$lang_module['editinfo_okcensor'] = 'Vos informations ont été enregistrées et prendront effet après avoir été modérées. En attendant l\'approbation, vous pouvez continuer à modifier les informations.';
 $lang_module['question2'] = 'Question secrète';
 $lang_module['current_mode'] = 'Cette connexion';
 $lang_module['current_login'] = 'À';

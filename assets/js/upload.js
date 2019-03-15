@@ -1850,8 +1850,11 @@ var NVUPLOAD = {
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
                 multipart: true,
+                multipart_params: {
+                    "filealt": "--"
+                },
                 filters : {
-                       max_file_size : nv_max_size_bytes,
+                    max_file_size : nv_max_size_bytes,
                     mime_types: []
                 },
                 chunk_size: nv_chunk_size,
@@ -1954,6 +1957,7 @@ var NVUPLOAD = {
                     // Event on start upload or finish upload
                     StateChanged: function() {
                         (isDebugMode && console.log("Plupload: Event state changed " + NVUPLOAD.uploader.state));
+
                         // Start upload
                         if (NVUPLOAD.uploader.state === plupload.STARTED) {
                             if (!NVUPLOAD.started) {
@@ -2054,6 +2058,7 @@ var NVUPLOAD = {
                         NVUPLOAD.uploader.settings.multipart_params = {
                             "filealt": filealt
                         };
+
                         // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
                         /*
                         if (nv_resize != false) {

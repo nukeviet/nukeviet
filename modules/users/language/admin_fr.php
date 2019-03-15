@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -202,6 +202,7 @@ $lang_module['add_user'] = 'Ajouter l\'utilisateur %1$s au groupe %2$s';
 $lang_module['exclude_user'] = 'Retirer l\'utilisateur %1$s du groupe %2$s';
 $lang_module['siteinfo_user'] = 'Utilisateurs';
 $lang_module['siteinfo_waiting'] = 'utilisateurs suspens';
+$lang_module['siteinfo_editcensor'] = 'Numéro de compte en attente de modération des informations personnelles';
 $lang_module['pagetitle'] = 'Obtenir ID d\'utilisateur';
 $lang_module['pagetitle1'] = 'Rechercher ID d\'utilisateur';
 $lang_module['search'] = 'Chercher utilisateur';
@@ -433,6 +434,9 @@ $lang_module['group_description'] = 'Description';
 $lang_module['auto_login_after_reg'] = 'Se connecter automatiquement après une inscription réussie';
 $lang_module['active_group_newusers'] = 'Activer membre d\'authentification';
 $lang_module['active_group_newusers_note'] = 'Si cette fonction est activée, le nouvel enregistrement de membre sera automatiquement classé comme "activé" jusqu\'à ce qu\'il ait été retiré du chef d\'équipe, au cours de laquelle les nouveaux membres sont considérés comme des «membres officiels "';
+$lang_module['active_editinfo_censor'] = 'Activer la modération de compte';
+$lang_module['active_editinfo_censor_note'] = 'Si cette fonction est activée, tous les comptes qui modifient eux-mêmes les informations seront modérés avant d\'être affichés. Cette modification ne s\'applique pas à la modification du nom d\'utilisateur, de l\'e-mail, de l\'avatar, du chef d\'équipe ou de l\'administrateur. informations sur les membres. Lorsque cette fonctionnalité est désactivée, le menu de modération administrative sera masqué pour économiser de l\'espace, mais vous pouvez toujours censurer';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">ici</a>';
 $lang_module['active_user_logs'] = 'Connexion Enregistrement, déconnexion des membres';
 $lang_module['user_openid_mamager'] = 'Gérer et OAuth OpenID';
 $lang_module['user_2step_mamager'] = 'Gérer l\'authentification en deux étapes';
@@ -463,3 +467,12 @@ $lang_module['two_step_verification_require_site'] = 'Obligatoire site en dehors
 $lang_module['two_step_verification_require_admindefault'] = 'Les paramètres de sécurité sont invités à tourner dans le domaine de la gestion, mais pas ici encore la gouvernance pour activer la nouvelle connexion d\'authentification en deux étapes';
 $lang_module['two_step_verification_require_sitedefault'] = 'Les paramètres de sécurité sont nécessaires pour permettre un site externe, mais n\'a pas ici encore membres pour activer la nouvelle connexion d\'authentification en deux étapes';
 $lang_module['notification_new_acount'] = 'Le compte %d en attente d\'actif';
+$lang_module['editcensor'] = 'Information modérée';
+$lang_module['editcensor_lastedit'] = 'Dernière modification';
+$lang_module['editcensor_confirm_approval'] = 'Etes-vous sûr de confirmer la navigation? Après avoir parcouru ces informations, les informations sur le membre actuel seront écrasées.';
+$lang_module['editcensor_confirm_denied'] = 'Êtes-vous sûr de refuser? Après refus, ces informations seront supprimées et ne pourront plus être restaurées.';
+$lang_module['editcensor_field'] = 'Champ de données';
+$lang_module['editcensor_current'] = 'Valeur actuelle';
+$lang_module['editcensor_new'] = 'Nouvelle valeur';
+$lang_module['editcensor_info_basic'] = 'Informations de base';
+$lang_module['editcensor_info_custom'] = 'Autres informations';

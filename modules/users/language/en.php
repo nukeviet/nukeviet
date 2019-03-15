@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
@@ -139,6 +139,7 @@ $lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to 
 $lang_module['lostpass_content_mess'] = 'An email is sent to %1$s, please follow istruction to activate';
 $lang_module['lostpass_active_error'] = 'The Verification code does not match!';
 $lang_module['lostpass_newpass_mess'] = 'Let declare a new password in this box';
+$lang_module['lostpass_sendmail_error'] = 'Currently the system can not send email so you can temporarily not get your password, please contact the site administrator for assistance. Honestly apologize for this inconvenience!';
 $lang_module['logout_title'] = 'Logout';
 $lang_module['edit_info_title'] = 'Edit';
 $lang_module['img_size_title'] = 'Your avatar';
@@ -195,6 +196,7 @@ $lang_module['resend_activelink'] = 'Not receive activate link after registered'
 $lang_module['change_question_ok'] = 'Reserve question was changed';
 $lang_module['editinfo_error'] = '. Notice %s';
 $lang_module['editinfo_ok'] = 'Updated';
+$lang_module['editinfo_okcensor'] = 'Your information has been saved and will take effect after being moderated. While waiting for approval, you can continue to edit the information';
 $lang_module['question2'] = 'Reserve question';
 $lang_module['current_mode'] = 'Current login';
 $lang_module['current_login'] = 'Current login at';
@@ -230,6 +232,7 @@ $lang_module['field_min_max_error'] = '%1$s enter from %2$s to %3$s letters';
 $lang_module['field_match_type_required'] = '%s require press';
 $lang_module['errorMessage'] = 'Notifications from website';
 $lang_module['login_info'] = 'Please complete this form';
+$lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
 $lang_module['edit_basic'] = 'Basic';
 $lang_module['edit_others'] = 'Other';
 $lang_module['edit_avatar'] = 'Avatar';
@@ -354,5 +357,3 @@ $lang_module['2step_require_directgo'] = 'Click here if the system did not redir
 $lang_module['2step_error_opt_backup'] = 'Please enter confirmation code from the Google Authenticator app or redundant code saved';
 $lang_module['2step_status'] = 'Two-step authentication';
 $lang_module['2step_link'] = 'Settings';
-$lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
-$lang_module['lostpass_sendmail_error'] = 'Currently the system can not send email so you can temporarily not get your password, please contact the site administrator for assistance. Honestly apologize for this inconvenience!';

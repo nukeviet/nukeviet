@@ -2,6 +2,16 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.3.05
+- Fix user registration error on mobile theme
+- Chart.js v2.7.3
+- Clipboard v2.0.4
+- PHPMailer v6.0.7
+- Module voting: Fix error showing the results of the poll does not activate
+- Fix captcha not show
+- Remove googleplus
+- CKEditor 4.11.2
+- Add Support PHP 7.3
+- Module users: Add user edit censor, allowed to select a field to sort at the user custom fields, fix custom field with editor, fix group counter errors when deleting user
 - Remove googleplus
 
 NUKEVIET 4.3.04
@@ -14,7 +24,7 @@ NUKEVIET 4.3.04
 - Fix upload file from ckeditor
 - Fix function nv_redirect_location
 - Fix upload and auto resize image
-- Fix security bug. Thanks hungnguyenmz and Zepto Team
+- Fix security bug (CVE-2019-7725, CVE-2019-7726). Thanks hungnguyenmz and Zepto Team
 
 NUKEVIET 4.3.03
 
