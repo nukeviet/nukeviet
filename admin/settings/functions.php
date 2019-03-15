@@ -57,9 +57,10 @@ $array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:
  */
 function nv_admin_add_theme($contents)
 {
-    global $global_config, $module_file, $my_head, $my_footer;
+    global $global_config, $module_file, $my_head, $my_footer, $lang_module;
 
     $xtpl = new XTemplate('cronjobs_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
 
     $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
 
@@ -85,6 +86,15 @@ function nv_admin_add_theme($contents)
     for ($i = 0; $i < 60; ++$i) {
         $xtpl->assign('MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected="selected"' : '' ));
         $xtpl->parse('main.min');
+    }
+
+    for ($i = 0; $i < 2; ++$i) {
+        $xtpl->assign('INTER_VAL_TYPE', [
+            'key' => $i,
+            'title' => $lang_module['cron_interval_type' . $i],
+            'selected' => $i == $contents['inter_val_type'] ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.inter_val_type');
     }
 
     $xtpl->assign('DELETE', ! empty($contents['del'][1]) ? ' checked="checked"' : '');
@@ -141,4 +151,43 @@ function main_theme($contents)
     }
 
     return $xtpl->text('main');
+}
+
+/**
+ * Cập nhật lại thời điểm thực hiện tiếp theo của Cronjob
+ * @return boolean
+ */
+function update_cronjob_next_time()
+{
+    global $nv_Cache, $db;
+
+    // Kiểm tra xem cron đang chạy không, nếu đang chạy thì không cập nhật
+    $files = nv_scandir(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/', '/^cronjobs\_(.*)\.txt/i');
+    $timeout = NV_CURRENTTIME - 300;
+    foreach ($files as $file) {
+        if (@filemtime(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file) > $timeout) {
+            return true;
+        }
+    }
+
+    // Xác định thời điểm chạy tiếp theo
+    $cronjobs_next_time = 0;
+    $sql = "SELECT start_time, inter_val, inter_val_type, last_time FROM " . NV_CRONJOBS_GLOBALTABLE . " WHERE act=1";
+    $result = $db->query($sql);
+    while ($row = $result->fetch()) {
+        if (empty($row['last_time'])) {
+            $next_time = $row['start_time'];
+        } else {
+            $next_time = $row['last_time'] + ($row['inter_val'] * 60);
+        }
+        if (empty($cronjobs_next_time) or $cronjobs_next_time > $next_time) {
+            $cronjobs_next_time = $next_time;
+        }
+    }
+
+    if ($cronjobs_next_time > 0 and $db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= " . NV_CURRENTTIME . " OR CAST(config_value AS UNSIGNED) >= " . $cronjobs_next_time . ")")) {
+        $nv_Cache->delMod('settings');
+    }
+
+    $nv_Cache->delMod('settings');
 }

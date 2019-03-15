@@ -256,3 +256,6 @@ $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:
 $lang_module['noflood_ip_add'] = 'Add IP to ignore flood check';
 $lang_module['noflood_ip_edit'] = 'Edit IP bypass flood check';
 $lang_module['noflood_ip_list'] = 'The IP bypasses the flood check';
+$lang_module['cron_interval_type'] = 'Repeat type (if available)';
+$lang_module['cron_interval_type0'] = 'After the launch time in the database';
+$lang_module['cron_interval_type1'] = 'After the actual launch time';
