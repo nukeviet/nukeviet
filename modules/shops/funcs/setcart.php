@@ -16,7 +16,7 @@ if (!defined('NV_IS_AJAX')) {
 }
 
 if (!isset($_SESSION[$module_data . '_cart'])) {
-    $_SESSION[$module_data . '_cart'] = array();
+    $_SESSION[$module_data . '_cart'] = [];
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 1);
