@@ -1,3 +1,17 @@
+/* Util Classes */
+.d-inline-block {
+    display: inline-block!important;
+}
+
+/* Cat Filter */
+.s-cat-fillter .form-control {
+    width: auto;
+}
+
+.s-cat-fillter [name="sort"] {
+    margin-right: 20px;
+}
+
 table.table tr.bg {
     background: #FBF9F9;
 }
