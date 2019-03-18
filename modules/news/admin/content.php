@@ -169,7 +169,6 @@ $rowcontent = array(
     'description' => '',
     'bodyhtml' => '',
     'copyright' => 0,
-    'gid' => 0,
     'inhome' => 1,
     'allowed_comm' => $module_config[$module_name]['setcomm'],
     'allowed_rating' => 1,
@@ -577,7 +576,6 @@ if ($is_submit_form) {
     $rowcontent['allowed_send'] = (int) $nv_Request->get_bool('allowed_send', 'post');
     $rowcontent['allowed_print'] = (int) $nv_Request->get_bool('allowed_print', 'post');
     $rowcontent['allowed_save'] = (int) $nv_Request->get_bool('allowed_save', 'post');
-    $rowcontent['gid'] = $nv_Request->get_int('gid', 'post', 0);
 
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords']);
@@ -808,7 +806,7 @@ if ($is_submit_form) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
                 $ct_query = array();
 
-                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, keywords, sourcetext, files, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, keywords, sourcetext, files, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
                     :description,
@@ -821,8 +819,7 @@ if ($is_submit_form) {
                     ' . $rowcontent['copyright'] . ',
                     ' . $rowcontent['allowed_send'] . ',
                     ' . $rowcontent['allowed_print'] . ',
-                    ' . $rowcontent['allowed_save'] . ',
-                    ' . $rowcontent['gid'] . '
+                    ' . $rowcontent['allowed_save'] . '
                 )');
                 $stmt->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $stmt->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
@@ -843,7 +840,7 @@ if ($is_submit_form) {
                 unset($ct_query);
                 if ($module_config[$module_name]['elas_use'] == 1) {
                     /*connect to elasticsearch */
-                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
                     $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
@@ -937,8 +934,7 @@ if ($is_submit_form) {
                     copyright=' . intval($rowcontent['copyright']) . ',
                     allowed_send=' . intval($rowcontent['allowed_send']) . ',
                     allowed_print=' . intval($rowcontent['allowed_print']) . ',
-                    allowed_save=' . intval($rowcontent['allowed_save']) . ',
-                    gid=' . intval($rowcontent['gid']) . '
+                    allowed_save=' . intval($rowcontent['allowed_save']) . '
                 WHERE id =' . $rowcontent['id']);
 
                 $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
@@ -973,7 +969,7 @@ if ($is_submit_form) {
                     $error[] = $lang_module['errorsave'];
                 }
                 if ($module_config[$module_name]['elas_use'] == 1) {
-                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
                     $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
@@ -1434,29 +1430,6 @@ if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
 
 if (empty($rowcontent['alias'])) {
     $xtpl->parse('main.getalias');
-}
-
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_googleplus ORDER BY weight ASC';
-$_array = $db->query($sql)->fetchAll();
-if (sizeof($_array)) {
-    $array_googleplus = array();
-    $array_googleplus[] = array(
-        'gid' => -1,
-        'title' => $lang_module['googleplus_1']
-    );
-    $array_googleplus[] = array(
-        'gid' => 0,
-        'title' => $lang_module['googleplus_0']
-    );
-    foreach ($_array as $row) {
-        $array_googleplus[] = $row;
-    }
-    foreach ($array_googleplus as $grow) {
-        $grow['selected'] = ($rowcontent['gid'] == $grow['gid']) ? ' selected="selected"' : '';
-        $xtpl->assign('GOOGLEPLUS', $grow);
-        $xtpl->parse('main.googleplus.gid');
-    }
-    $xtpl->parse('main.googleplus');
 }
 
 if ($module_config[$module_name]['auto_tags']) {

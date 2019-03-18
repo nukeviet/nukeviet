@@ -55,7 +55,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
     $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
-    $row['gid'] = $nv_Request->get_int('gid', 'post', 0);
     $row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
 
     $_groups_post = $nv_Request->get_array('activecomm', 'post', array());
@@ -80,7 +79,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         if ($id and !$copy) {
-            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post WHERE id =' . $id;
+            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post WHERE id =' . $id;
             $publtime = $row['add_time'];
         } else {
             if ($copy)
@@ -93,8 +92,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
 
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '
-				(title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status,hot_post) VALUES
-				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1,:hot_post)';
+				(title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm, layout_func, weight,admin_id, add_time, edit_time, status,hot_post) VALUES
+				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, ' . $weight . ', ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1,:hot_post)';
 
             $publtime = NV_CURRENTTIME;
         }
@@ -113,7 +112,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':socialbutton', $row['socialbutton'], PDO::PARAM_INT);
             $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
             $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
-            $sth->bindParam(':gid', $row['gid'], PDO::PARAM_INT);
             $sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
             $sth->execute();
 
@@ -151,7 +149,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['bodytext'] = '';
     $row['activecomm'] = $module_config[$module_name]['setcomm'];
     $row['socialbutton'] = 1;
-    $row['gid'] = 0;
     $row['hot_post'] = 0;
 }
 
@@ -191,28 +188,6 @@ foreach ($layout_array as $value) {
         'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.layout_func');
-}
-$sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
-$_grows = $db->query($sql)->fetchAll();
-if (sizeof($_grows)) {
-    $array_googleplus = array();
-    $array_googleplus[] = array(
-        'gid' => -1,
-        'title' => $lang_module['googleplus_1']
-    );
-    $array_googleplus[] = array(
-        'gid' => 0,
-        'title' => $lang_module['googleplus_0']
-    );
-    foreach ($_grows as $grow) {
-        $array_googleplus[] = $grow;
-    }
-    foreach ($array_googleplus as $grow) {
-        $grow['selected'] = ($row['gid'] == $grow['gid']) ? ' selected="selected"' : '';
-        $xtpl->assign('GOOGLEPLUS', $grow);
-        $xtpl->parse('main.googleplus.gid');
-    }
-    $xtpl->parse('main.googleplus');
 }
 
 $activecomm = explode(',', $row['activecomm']);

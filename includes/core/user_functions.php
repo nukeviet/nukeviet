@@ -22,9 +22,6 @@ $meta_property = array(
     'og:url' => ''
 );
 
-// Tai khoan Google+
-$id_profile_googleplus = 0;
-
 /**
  * nv_create_submenu()
  *
@@ -462,22 +459,11 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $id_profile_googleplus, $canonicalUrl, $module_info, $db_config, $nv_Cache;
+    global $canonicalUrl, $module_info, $db_config, $nv_Cache;
 
     $return = array();
     if (! empty($canonicalUrl)) {
         $return[] = array( 'rel' => 'canonical', 'href' => $canonicalUrl );
-    }
-
-    if (empty($id_profile_googleplus)) {
-        $id_profile_googleplus = $module_info['gid'];
-    }
-
-    if (! empty($id_profile_googleplus)) {
-        $dbgoogleplus = $nv_Cache->db('SELECT gid, idprofile FROM ' . $db_config['prefix'] . '_googleplus', 'gid', 'seotools');
-        if (isset($dbgoogleplus[$id_profile_googleplus]['idprofile'])) {
-            $return[] = array( 'rel' => 'author', 'href' => 'https://plus.google.com/' . $dbgoogleplus[$id_profile_googleplus]['idprofile'] );
-        }
     }
 
     $nv_html_site_rss = nv_html_site_rss(false);
