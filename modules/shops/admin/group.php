@@ -22,9 +22,11 @@ if (!file_exists($currentpath)) {
 $table_name = $db_config['prefix'] . '_' . $module_data . '_group';
 $error = $admins = '';
 $savegroup = 0;
-$data = array();
+$data = [];
 $data['cateid_old'] = 0;
-list($data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'], $data['image']) = array( 0, 0, '', '', '', '', array(), 0, '' );
+list($data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'], $data['image']) = [
+    0, 0, '', '', '', '', [], 0, ''
+];
 
 $data['parentid'] = $nv_Request->get_int('parentid', 'get,post', 0);
 $data['groupid'] = $nv_Request->get_int('groupid', 'get', 0);
@@ -53,11 +55,11 @@ if (!empty($savegroup)) {
     $data['groupid'] = $nv_Request->get_int('groupid', 'post', 0);
     $data['parentid_old'] = $nv_Request->get_int('parentid_old', 'post', 0);
     $data['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
-    $data['cateid'] = $nv_Request->get_array('cateid', 'post', array());
-    $data['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 255);
+    $data['cateid'] = $nv_Request->get_array('cateid', 'post', []);
+    $data['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 250);
     $data['require'] = $nv_Request->get_int('require', 'post');
     $data['keywords'] = $nv_Request->get_title('keywords', 'post', '', 1);
-    $data['alias'] = nv_substr($nv_Request->get_title('alias', 'post', '', 1), 0, 255);
+    $data['alias'] = nv_substr($nv_Request->get_title('alias', 'post', '', 1), 0, 250);
     $data['description'] = $nv_Request->get_string('description', 'post', '');
     $data['description'] = nv_nl2br(nv_htmlspecialchars(strip_tags($data['description'])), '<br />');
     $data['alias'] = ($data['alias'] == '') ? change_alias($data['title']) : change_alias($data['alias']);
@@ -108,7 +110,7 @@ if (!empty($savegroup)) {
         $sql = "INSERT INTO " . $table_name . " (parentid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order, is_require " . $listfield . " )
              VALUES (" . $data['parentid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '0',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1, " . $data['require'] . " " . $listvalue . " )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['viewgroup'] = $viewgroup;
         $data_insert['subgroupid'] = $subgroupid;
         $data_insert['image'] = $data['image'];
@@ -176,7 +178,7 @@ if (!empty($savegroup)) {
 
 $sql = "SELECT groupid, " . NV_LANG_DATA . "_title, lev FROM " . $table_name . " WHERE groupid !='" . $data['groupid'] . "' ORDER BY sort ASC";
 $result = $db->query($sql);
-$array_group_list = array();
+$array_group_list = [];
 $array_group_list[0] = array( '0', $lang_module['group_sub_sl'] );
 
 while (list($groupid_i, $title_i, $lev_i) = $result->fetch(3)) {

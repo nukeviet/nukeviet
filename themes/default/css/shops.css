@@ -1278,6 +1278,7 @@ img.calendar {
     margin: 8px 0;
 }
 
+/* Filter Product by Group */
 .filter_product label {
     margin-right: 10px
 }
@@ -1301,12 +1302,13 @@ img.calendar {
     white-space: nowrap;
 }
 
-.filter_product .label_group:hover {
-    border-color: red
+.filter_product .active,
+.filter_product .label_group.active {
+    border-color: #357ebd;
 }
 
-.filter_product .active {
-    border-color: blue
+.filter_product .label_group:hover {
+    border-color: #d43f3a;
 }
 
 .filter_product .label_group input, .filter_product .image_group input {
@@ -1331,6 +1333,24 @@ img.calendar {
     display: none;
 }
 
+.panel-filter-product .panel-body .sub-break {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.panel-filter-product .panel-body > .row:last-child .sub-break {
+    display: none;
+}
+
+.panel-filter-product .sub-groups label {
+    font-weight: 300;
+}
+
+.panel-filter-product .sub-groups label input {
+    margin-top: -3px;
+}
+
+/* Detail Product */
 .thumbnail .caption h3 {
     font-size: 14px
 }

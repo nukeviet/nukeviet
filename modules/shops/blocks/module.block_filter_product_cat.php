@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!function_exists('nv_filter_product_cat')) {
-
     /**
      * nv_block_config_filter_product_cat()
      *
@@ -72,10 +71,10 @@ if (!function_exists('nv_filter_product_cat')) {
     function nv_block_config_filter_product_cat_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
-        $return['config']['group_style'] = $nv_Request->get_array('config_group_style', 'post', array());
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
+        $return['config']['group_style'] = $nv_Request->get_array('config_group_style', 'post', []);
         return $return;
     }
 
@@ -92,6 +91,8 @@ if (!function_exists('nv_filter_product_cat')) {
             return '';
         }
 
+        // Lưu ý: $array_id_group được xác định tại viewcat.php
+
         $module = $block_config['module'];
         $array_cat = GetCatidInParent($catid);
         $group_style = $block_config['group_style'];
@@ -99,8 +100,9 @@ if (!function_exists('nv_filter_product_cat')) {
         $xtpl = new XTemplate('block.filter_product_cat.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('CATID', $catid);
-        $xtpl->assign('MODULE_URL', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true));
-        $xtpl->assign('CAT_ALIAS', $global_array_shops_cat[$catid]['alias']);
+        $xtpl->assign('REWRITE_ENABLE', $global_config['rewrite_enable'] ? 'true' : 'false');
+        $xtpl->assign('AJAX_URL', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'], true));
+        $xtpl->assign('LINK_URL', rtrim(nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'], true), '/'));
 
         $catid = GetParentCatFilter($catid);
         $result = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $site_mods[$module]['module_data'] . '_group_cateid WHERE cateid = ' . $catid);
@@ -120,25 +122,19 @@ if (!function_exists('nv_filter_product_cat')) {
                     }
 
                     $global_array_group[$subgroup_id]['checked'] = '';
-                    if ($group_style[$groupid] == 'label') {
-                        if (in_array($subgroup_id, $array_id_group)) {
-                            $global_array_group[$subgroup_id]['checked'] = 'checked="checked"';
-                        }
-                    } elseif ($group_style[$groupid] == 'image') {
-                        if (in_array($subgroup_id, $array_id_group)) {
-                            $global_array_group[$subgroup_id]['checked'] = 'checked="checked"';
-                        }
+                    if (in_array($subgroup_id, $array_id_group)) {
+                        $global_array_group[$subgroup_id]['checked'] = ' checked="checked"';
                     }
 
                     $xtpl->assign('SUB_GROUP', $global_array_group[$subgroup_id]);
 
                     if ($group_style[$groupid] == 'label') {
-                        if (in_array($subgroup_id, $array_id_group)) {
+                        if (!empty($global_array_group[$subgroup_id]['checked'])) {
                             $xtpl->parse('main.group.sub_group.loop.label.active');
                         }
                         $xtpl->parse('main.group.sub_group.loop.label');
                     } elseif ($group_style[$groupid] == 'image') {
-                        if (in_array($subgroup_id, $array_id_group)) {
+                        if (!empty($global_array_group[$subgroup_id]['checked'])) {
                             $xtpl->parse('main.group.sub_group.loop.image.active');
                         }
                         $xtpl->parse('main.group.sub_group.loop.image');

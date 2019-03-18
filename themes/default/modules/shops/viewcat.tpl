@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="viewcat">
+<div class="viewcat" id="category">
     <div class="page-header">
         <h1>{CAT_NAME} ({COUNT} {LANG.title_products})</h1>
         <!-- BEGIN: viewdescriptionhtml -->
