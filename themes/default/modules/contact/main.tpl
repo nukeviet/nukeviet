@@ -58,8 +58,14 @@
     				<!-- END: whatsapp -->
                     <!-- BEGIN: other -->
     				<p>
-    					<span>{OTHER.name}: </span>
+                        <!-- BEGIN: text -->
+                        <span>{OTHER.name}: </span>
     					<span>{OTHER.value}</span>
+                        <!-- END: text -->
+                        <!-- BEGIN: url -->
+                        <em class="fa fa-globe fa-horizon margin-right"></em>{OTHER.name}:
+    					<span><a href="{OTHER.value}" title="">{OTHER.value}</a></span>
+                        <!-- END: url -->
     				</p>
     				<!-- END: other -->
                 </div>
