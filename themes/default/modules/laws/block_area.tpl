@@ -1,20 +1,19 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
-	var imageslist	= {down:['downarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/{MODULE_FILE}/down.gif', 23], right:['rightarrowclass', '{NV_BASE_SITEURL}themes/{TEMPLATE}/images/{MODULE_FILE}/right.gif']};
-</script>
-<script type="text/javascript"	src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/promenu.js"></script>
-<script type="text/javascript">
-	ddsmoothmenu.init({
-		mainmenuid: "smoothmenu2",
-		orientation: 'v',
-		classname: 'ddsmoothmenu-v',
-		contentsource: "markup"
-	})
-</script>
-<div id="smoothmenu2" class="ddsmoothmenu-v">
-	<ul>
-      {CONTENT}
-	</ul>
-	<br style="clear: left"/>
+<div id="smoothmenu2-{CONFIG.bid}" class="ddsmoothmenu-v smoothmenu2">
+    <ul>
+        {CONTENT}
+    </ul>
 </div>
+<script>
+$(document).ready(function() {
+    $('#smoothmenu2-{CONFIG.bid} .toggle-subs').on("click", function() {
+        var submenu = $(this).parent().children('ul');
+        if (submenu.is(":visible")) {
+            submenu.slideUp(200);
+        } else {
+            submenu.slideDown(200);
+        }
+    });
+});
+</script>
 <!-- END: main -->

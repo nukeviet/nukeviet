@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<ul style="padding: 0">
-  {CONTENT}
+<ul class="list-unstyled">
+    {CONTENT}
 </ul>
 <!-- END: main -->

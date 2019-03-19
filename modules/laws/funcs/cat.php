@@ -8,7 +8,9 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) {
+    die('Stop!!!');
+}
 
 if (empty($catid)) {
     nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true);

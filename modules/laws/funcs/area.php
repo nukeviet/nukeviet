@@ -8,7 +8,9 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) {
+    die('Stop!!!');
+}
 
 $alias = isset($array_op[1]) ? $array_op[1] : "";
 

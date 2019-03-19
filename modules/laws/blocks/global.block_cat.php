@@ -8,7 +8,9 @@
  * @Createdate Jul 06, 2011, 06:31:13 AM
  */
 
-if (!defined('NV_MAINFILE')) die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 if (!function_exists('nv_laws_block_cat')) {
     /**

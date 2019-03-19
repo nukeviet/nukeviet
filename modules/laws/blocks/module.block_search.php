@@ -115,12 +115,12 @@ if (!function_exists('nv_law_block_search')) {
         $scat = $nv_Request->get_int('cat', 'get', 0);
         $ssubject = $nv_Request->get_int('subject', 'get', 0);
         $sstatus = $nv_Request->get_int('status', 'get', 0);
-		$approval = $nv_Request->get_int('approval', 'get', 2);
-		$examineid = $nv_Request->get_int('examine', 'get', 0);
+        $approval = $nv_Request->get_int('approval', 'get', 2);
+        $examineid = $nv_Request->get_int('examine', 'get', 0);
         $ssigner = $nv_Request->get_int('signer', 'get', 0);
         $is_advance = $nv_Request->get_int('is_advance', 'get', 0);
 
-        $nv_laws_listarea = array(
+        $_nv_laws_listarea = array(
             0 => array(
                 "id" => 0,
                 "name" => $lang_module['search_area'],
@@ -128,10 +128,10 @@ if (!function_exists('nv_law_block_search')) {
             )
         ) + $nv_laws_listarea;
 
-		if($module_config[$module_name]['activecomm']==0){
-			$xtpl->parse('main.pubtime');
-		}
-        foreach ($nv_laws_listarea as $area) {
+        if($module_config[$module_name]['activecomm']==0){
+            $xtpl->parse('main.pubtime');
+        }
+        foreach ($_nv_laws_listarea as $area) {
             $xtpl->assign('KEY', $area['id']);
             $xtpl->assign('TITLE', $area['name']);
 
@@ -174,11 +174,11 @@ if (!function_exists('nv_law_block_search')) {
         }
 
         $nv_list_status = array();
-		$arr_approval = array(
-			2 => $lang_module['s_app_status_all'],
-			0 => $lang_module['e0'],
-			1 => $lang_module['e1']
-		);
+        $arr_approval = array(
+            2 => $lang_module['s_app_status_all'],
+            0 => $lang_module['e0'],
+            1 => $lang_module['e1']
+        );
 
         $nv_list_status[] = array(
             "id" => 0,

@@ -5,14 +5,13 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-/* block menu */
-#smoothmenu2 {
+/* Block Menu */
+.smoothmenu2 {
     z-index: 1000
 }
 
-#smoothmenu2 ul li a {
+.smoothmenu2 ul li a {
     padding: 5px;
-    margin: 0px 10px;
 }
 
 .ddsmoothmenu-v {
@@ -27,6 +26,7 @@
 
 .ddsmoothmenu-v ul li {
     position: relative;
+    margin-bottom: 0!important;
 }
 
 .ddsmoothmenu-v ul li a {
@@ -34,7 +34,35 @@
     color: #000000;
     padding: 5px;
     white-space: nowrap;
-    border-bottom: 1px dashed #f5f5f5;
+    border-bottom: 1px dashed #ddd;
+}
+
+.ddsmoothmenu-v > ul > li:last-child a {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.ddsmoothmenu-v > ul > li:first-child a {
+    padding-top: 0;
+}
+
+.ddsmoothmenu-v > ul > li.hsub > a {
+    padding-right: 20px;
+}
+
+.ddsmoothmenu-v > ul > li.hsub .toggle-subs {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    width: 20px;
+    cursor: pointer;
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+}
+
+.ddsmoothmenu-v > ul > li:first-child.hsub .toggle-subs {
+    top: 0;
 }
 
 .ddsmoothmenu-v ul li img {
@@ -42,7 +70,9 @@
     right: 10px;
 }
 
-.ddsmoothmenu-v ul li a:link, .ddsmoothmenu-v ul li a:visited, .ddsmoothmenu-v ul li a:active {
+.ddsmoothmenu-v ul li a:link,
+.ddsmoothmenu-v ul li a:visited,
+.ddsmoothmenu-v ul li a:active {
     color: #000000;
     background: #fff;
 }
@@ -53,58 +83,32 @@
 }
 
 .ddsmoothmenu-v ul li a:hover {
-    background: #F5F5F5;
     color: #007da9;
 }
 
-.ddsmoothmenu-v ul li ul {
-    position: absolute;
-    top: 0;
-    font-weight: normal;
-    visibility: hidden;
-    width: 200px;
-    border: 1px solid #D8D8D8;
+.ddsmoothmenu-v > ul > li ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    display: none;
 }
 
-* html .ddsmoothmenu-v ul li {
-    float: left;
-    height: 1%;
+.ddsmoothmenu-v > ul > li ul li {
+    padding-bottom: 5px;
 }
 
-* html .ddsmoothmenu-v ul li a {
-    height: 1%;
+.ddsmoothmenu-v > ul > li ul li:last-child {
+    padding-bottom: 0;
 }
 
-/* TABLE LAWS */
-.lawitem {
-    background-color: #f2f2f2;
-    width: 100%;
-    margin: 0
+.ddsmoothmenu-v > ul > li ul li a {
+    border: 0;
+    padding: 0;
 }
 
-.lawitem td {
-    border: 1px #fff solid
-}
+/* Flex Responsive Table Laws */
 
-.lawitem a {
-    color: #3333FF
-}
 
-.lawitem thead {
-    background-color: #e5e5e5;
-    font-weight: bold;
-    border-bottom: 2px #FFFFFF solid
-}
-
-.lawitem tbody {
-
-}
-
-.lawitem tbody.bg {
-    background-color: #FBFBFB;
-    background-image: none
-}
-
+/* Other */
 h3.pagetitle {
     line-height: 30px;
     padding: 0px;
@@ -408,27 +412,27 @@ a#btn-search {
 }
 
 .comm_time{
-	width: 100%;
+    width: 100%;
 }
 .start_comm{
-	display: inline-block;
-	float: left;
-	color: #f7a41e;
+    display: inline-block;
+    float: left;
+    color: #f7a41e;
 }
 .end_comm{
-	display: inline-block;
-	float: right;
-	color: #f7a41e;
+    display: inline-block;
+    float: right;
+    color: #f7a41e;
 }
 .send_comm{
-	width: 100%;
-	height: 25px;
-	background: url(../images/laws/comment.png) no-repeat center;
-	background-size: 25px 25px;
+    width: 100%;
+    height: 25px;
+    background: url(../images/laws/comment.png) no-repeat center;
+    background-size: 25px 25px;
 }
 .comm_close{
-	width: 100%;
-	height: 25px;
-	background: url(../images/laws/comment_close.png) no-repeat center;
-	background-size: 20px 20px;
+    width: 100%;
+    height: 25px;
+    background: url(../images/laws/comment_close.png) no-repeat center;
+    background-size: 20px 20px;
 }
