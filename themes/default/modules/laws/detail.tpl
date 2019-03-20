@@ -163,15 +163,15 @@
 
 <!-- BEGIN: admin_link -->
 <div class="text-right list-group clearfix">
-	<a class="btn btn-primary btn-xs btn_edit" href="{DATA.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
-	<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{DATA.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
+    <a class="btn btn-primary btn-xs" href="{DATA.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
+    <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{DATA.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
 </div>
 <!-- END: admin_link -->
 
 <!-- BEGIN: comment -->
 <div class="news_column panel panel-default">
-	<div class="panel-body">
-	{CONTENT_COMMENT}
+    <div class="panel-body">
+    {CONTENT_COMMENT}
     </div>
 </div>
 <!-- END: comment -->

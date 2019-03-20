@@ -1,88 +1,58 @@
 <!-- BEGIN: main -->
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <colgroup>
-            <col width="50" />
-            <col width="100" />
-            <!-- BEGIN: send_comm_col -->
-            <col />
-            <col width="125" />
-            <!-- END: send_comm_col -->
-            <!-- BEGIN: publtime_col -->
-            <col width="125" />
-            <col />
-            <!-- END: publtime_col -->
-            <!-- BEGIN: down_in_home_col --><col width="130" /><!-- END: down_in_home_col -->
-            <!-- BEGIN: admin_link_col --><col width="80" /><!-- END: admin_link_col -->
-        </colgroup>
-        <thead>
-            <tr>
-                <th class="text-center">{LANG.stt}</th>
-                <th class="text-center">{LANG.code}</th>
-                <!-- BEGIN: publtime_title -->
-                <th class="text-center">{LANG.publtime}</th>
-                <!-- END: publtime_title -->
-                <th class="text-center">{LANG.trichyeu}</th>
-                <!-- BEGIN: down_in_home -->
-                <th class="text-center">{LANG.files}</th>
-                <!-- END: down_in_home -->
-                <!-- BEGIN: send_comm_title -->
-                <th class="text-center">{LANG.comm_time}</th>
-                <!-- END: send_comm_title -->
-                <!-- BEGIN: admin_link_title --><th class="text-center">{LANG.edit}</th><!-- END: admin_link_title -->
-            </tr>
-        </thead>
-        <tbody>
-            <!-- BEGIN: loop -->
-            <tr>
-                <td class="text-center">{ROW.stt}</td>
-                <td><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></td>
-                <!-- BEGIN: publtime -->
-                <td class="text-center">{ROW.publtime}</td>
-                <!-- END: publtime -->
-                <td>
-                    <a href="{ROW.url}" title="{ROW.introtext}">{ROW.introtext}</a>
-                    <!-- BEGIN: comm -->
-                    <!-- BEGIN: shownumbers -->
-                    <a href="{ROW.url}">({ROW.number_comm})</a>
-                    <!-- END: shownumbers -->
-                    <div class="comm_time">
-                        <p class="start_comm">{ROW.start_comm_time}</p>
-                        <p class="end_comm">{ROW.end_comm_time}</p>
-                    </div>
-                    <!-- END: comm -->
-                </td>
-                <!-- BEGIN: down_in_home -->
-                <td>
-                    <!-- BEGIN: files -->
-                    <ul style="padding: 0">
-                        <!-- BEGIN: loopfile -->
-                        <li style="display: inline-block"><em class="fa fa-download">&nbsp;</em><a href="{FILE.url}" title="{FILE.title}">{FILE.titledown}</a></li>
-                        <!-- END: loopfile -->
-                        </ul>
-                    <!-- END: files -->
-                </td>
-                <!-- END: down_in_home -->
-                <!-- BEGIN: send_comm -->
-                    <td>
-                        <a href="{ROW.url}#comment" title="{ROW.send_comm_title}"><div class="send_comm"></div></a>
-                    </td>
-                <!-- END: send_comm -->
-                <!-- BEGIN: comm_close -->
-                    <td>
-                        <a href="{ROW.url}#comment" title="{ROW.send_comm_title}"><div class="comm_close"></div></a>
-                    </td>
-                <!-- END: comm_close -->
-                <!-- BEGIN: admin_link -->
-                <td>
-                    <a class="btn btn-primary btn-xs btn_edit margin-bottom" href="{ROW.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
-                    <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{ROW.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
-                </td>
-                <!-- END: admin_link -->
-            </tr>
-            <!-- END: loop -->
-        </tbody>
-    </table>
+<div class="flex-table-laws">
+    <div class="table-rows table-head">
+        <div class="c-stt a-center">{LANG.stt}</div>
+        <div class="c-code">{LANG.code}</div>
+        <!-- BEGIN: publtime_title -->
+        <div class="c-time">{LANG.publtime}</div>
+        <!-- END: publtime_title -->
+        <div class="c-intro">{LANG.trichyeu}</div>
+        <!-- BEGIN: down_in_home -->
+        <div class="c-file">{LANG.files}</div>
+        <!-- END: down_in_home -->
+        <!-- BEGIN: send_comm_title -->
+        <div class="c-comment a-center">{LANG.comm_time}</div>
+        <!-- END: send_comm_title -->
+    </div>
+    <!-- BEGIN: loop -->
+    <div class="table-rows">
+        <div class="c-stt a-center">{ROW.stt}</div>
+        <div class="c-code"><span class="label-name">{LANG.code}:</span><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></div>
+        <!-- BEGIN: publtime -->
+        <div class="c-time"><span class="label-name">{LANG.publtime}:</span>{ROW.publtime}</div>
+        <!-- END: publtime -->
+        <div class="c-intro">
+            <a href="{ROW.url}">{ROW.introtext}<!-- BEGIN: shownumbers --> ({ROW.number_comm})<!-- END: shownumbers --></a>
+            <!-- BEGIN: comment_time -->
+            <div class="margin-top-sm clearfix text-warning">{COMMENT_TIME}</div>
+            <!-- END: comment_time -->
+            <!-- BEGIN: admin_link -->
+            <div class="margin-top-sm clearfix">
+                <a class="btn btn-primary btn-xs" href="{ROW.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
+                <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{ROW.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
+            </div>
+            <!-- END: admin_link -->
+        </div>
+        <!-- BEGIN: down_in_home -->
+        <div class="c-file">
+            <span class="label-name">{LANG.files}:</span>
+            <!-- BEGIN: files -->
+            <ul class="laws-download list-unstyled">
+                <!-- BEGIN: loopfile -->
+                <li><a href="{FILE.url}" title="{FILE.title}"><i class="fa fa-download"></i> {FILE.titledown}</a></li>
+                <!-- END: loopfile -->
+            </ul>
+            <!-- END: files -->
+        </div>
+        <!-- END: down_in_home -->
+        <!-- BEGIN: send_comm -->
+        <div class="c-comment a-center"><span class="label-name">{LANG.comm_time}:</span><a href="{ROW.url}#comment" title="{LANG.comm_time}"><span class="send_comm"></span></a></div>
+        <!-- END: send_comm -->
+        <!-- BEGIN: comm_close -->
+        <div class="c-comment a-center"><span class="label-name">{LANG.comm_time}:</span><a href="{ROW.url}#comment" title="{LANG.uncomm_time}"><span class="comm_close"></span></a></div>
+        <!-- END: comm_close -->
+    </div>
+    <!-- END: loop -->
 </div>
 <!-- BEGIN: generate_page -->
 <div class="generate_page">

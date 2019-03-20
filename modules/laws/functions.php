@@ -152,8 +152,6 @@ function raw_law_list_by_result($result, $page = 1, $per_page = 1)
             $row['allow_comm'] = 1;
         }
 
-        $row['start_comm_time'] = ($row['start_comm_time'] > 0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
-        $row['end_comm_time'] = ($row['end_comm_time'] > 0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
         $row['number_comm'] = 0;
         $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
         $row['stt'] = $stt ++;
