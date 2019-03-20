@@ -31,6 +31,7 @@ function nv_theme_laws_list($array_data, $generate_page = '')
         $row['url_subject'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=subject/' . $row['alias'];
         $row['publtime'] = $row['publtime'] ? nv_date('d/m/Y', $row['publtime']) : 'N/A';
         $row['exptime'] = $row['exptime'] ? nv_date('d/m/Y', $row['exptime']) : 'N/A';
+        $row['number_comm'] = $row['number_comm'] ? sprintf($lang_module['number_comm'], number_format($row['number_comm'], 0, ',', '.')) : '';
 
         $xtpl->assign('ROW', $row);
 
@@ -55,7 +56,12 @@ function nv_theme_laws_list($array_data, $generate_page = '')
 
         // Lấy ý kiến dự thảo
         if ($module_config[$module_name]['activecomm']) {
+            if ($row['number_comm']) {
+                $xtpl->parse('main.loop.comm.shownumbers');
+            }
+
             $xtpl->parse('main.loop.comm');
+
             if ($row['allow_comm']) {
                 $xtpl->parse('main.loop.send_comm');
             } else {
@@ -100,7 +106,7 @@ function nv_theme_laws_list($array_data, $generate_page = '')
 }
 
 /**
- * nv_theme_laws_main()
+ * Trang chủ của module ở dạng xem theo danh sách
  *
  * @param mixed $array_data
  * @param mixed $generate_page
@@ -119,7 +125,7 @@ function nv_theme_laws_main($array_data, $generate_page)
 }
 
 /**
- * nv_theme_laws_maincat()
+ * Trang chủ của module ở dạng xem theo cơ quan ban hành
  *
  * @param mixed $mod
  * @param mixed $array_data
@@ -203,7 +209,7 @@ function nv_theme_laws_maincat($mod, $array_data)
 }
 
 /**
- * nv_theme_laws_detail()
+ * Xem chi tiết văn bản
  *
  * @param mixed $array_data
  * @param mixed $other_cat
@@ -401,7 +407,7 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
 }
 
 /**
- * nv_theme_laws_search()
+ * Trang tìm kiếm văn bản
  *
  * @param mixed $array_data
  * @param mixed $generate_page
@@ -414,30 +420,21 @@ function nv_theme_laws_search($array_data, $generate_page, $all_page)
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
-
-    $xtpl->assign('generate_page', $generate_page);
     $xtpl->assign('NUMRESULT', sprintf($lang_module['s_result_num'], $all_page));
-
-    $i = 1;
-    foreach ($array_data as $row) {
-        $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-        $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.loop');
-        $i ++;
-    }
 
     if (empty($array_data)) {
         $xtpl->parse('empty');
         return $xtpl->text('empty');
     }
 
+    $xtpl->assign('HTML', nv_theme_laws_list($array_data, $generate_page));
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
- * nv_theme_laws_area()
+ * Trang xem văn bản theo lĩnh vực
  *
  * @param mixed $array_data
  * @param mixed $generate_page
@@ -451,41 +448,14 @@ function nv_theme_laws_area($array_data, $generate_page, $cat)
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
-
-    $xtpl->assign('generate_page', $generate_page);
-
-    $i = 1;
-    foreach ($array_data as $row) {
-        $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-        $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
-        $xtpl->assign('ROW', $row);
-
-        if ($nv_laws_setting['down_in_home']) {
-            if (nv_user_in_groups($row['groups_download'])) {
-                if (!empty($row['files'])) {
-                    foreach ($row['files'] as $file) {
-                        $xtpl->assign('FILE', $file);
-                        $xtpl->parse('main.loop.down_in_home.files.loopfile');
-                    }
-                    $xtpl->parse('main.loop.down_in_home.files');
-                }
-            }
-            $xtpl->parse('main.loop.down_in_home');
-        }
-        $xtpl->parse('main.loop');
-        $i ++;
-    }
-
-    if ($nv_laws_setting['down_in_home']) {
-        $xtpl->parse('main.down_in_home');
-    }
+    $xtpl->assign('HTML', nv_theme_laws_list($array_data, $generate_page));
 
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
- * nv_theme_laws_cat()
+ * Trang xem văn bản theo thể loại
  *
  * @param mixed $array_data
  * @param mixed $generate_page
@@ -499,24 +469,14 @@ function nv_theme_laws_cat($array_data, $generate_page, $cat)
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
-
-    $xtpl->assign('generate_page', $generate_page);
-
-    $i = 1;
-    foreach ($array_data as $row) {
-        $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-        $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.loop');
-        $i ++;
-    }
+    $xtpl->assign('HTML', nv_theme_laws_list($array_data, $generate_page));
 
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
- * nv_theme_laws_subject()
+ * Trang xem văn bản theo cơ quan ban hành
  *
  * @param mixed $array_data
  * @param mixed $generate_page
@@ -530,42 +490,14 @@ function nv_theme_laws_subject($array_data, $generate_page, $cat)
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
-
-    $xtpl->assign('generate_page', $generate_page);
-
-    $i = 1;
-    foreach ($array_data as $row) {
-        $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-        $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
-        $xtpl->assign('ROW', $row);
-
-        if ($nv_laws_setting['down_in_home']) {
-            if (nv_user_in_groups($row['groups_download'])) {
-                if (!empty($row['files'])) {
-                    foreach ($row['files'] as $file) {
-                        $xtpl->assign('FILE', $file);
-                        $xtpl->parse('main.loop.down_in_home.files.loopfile');
-                    }
-                    $xtpl->parse('main.loop.down_in_home.files');
-                }
-            }
-            $xtpl->parse('main.loop.down_in_home');
-        }
-
-        $xtpl->parse('main.loop');
-        $i ++;
-    }
-
-    if ($nv_laws_setting['down_in_home']) {
-        $xtpl->parse('main.down_in_home');
-    }
+    $xtpl->assign('HTML', nv_theme_laws_list($array_data, $generate_page));
 
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
- * nv_theme_laws_signer()
+ * Trang xem văn bản theo người ký
  *
  * @param mixed $array_data
  * @param mixed $generate_page
@@ -579,42 +511,14 @@ function nv_theme_laws_signer($array_data, $generate_page, $cat)
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
-
-    $xtpl->assign('generate_page', $generate_page);
-
-    $i = 1;
-    foreach ($array_data as $row) {
-        $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-        $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
-
-        if ($nv_laws_setting['down_in_home']) {
-            if (nv_user_in_groups($row['groups_download'])) {
-                if (!empty($row['files'])) {
-                    foreach ($row['files'] as $file) {
-                        $xtpl->assign('FILE', $file);
-                        $xtpl->parse('main.loop.down_in_home.files.loopfile');
-                    }
-                    $xtpl->parse('main.loop.down_in_home.files');
-                }
-            }
-            $xtpl->parse('main.loop.down_in_home');
-        }
-
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.loop');
-        $i ++;
-    }
-
-    if ($nv_laws_setting['down_in_home']) {
-        $xtpl->parse('main.down_in_home');
-    }
+    $xtpl->assign('HTML', nv_theme_laws_list($array_data, $generate_page));
 
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
- * nv_theme_laws_list_other()
+ * Danh sách các văn bản khác tại phần xem chi tiết văn bản
  *
  * @param mixed $array_data
  * @return
@@ -652,7 +556,7 @@ function nv_theme_laws_list_other($array_data)
 }
 
 /**
- * nv_theme_viewpdf()
+ * Xem trước văn bản khi file đính kèm là PDF
  *
  * @param mixed $file_url
  * @return

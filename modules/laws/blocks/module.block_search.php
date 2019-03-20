@@ -155,8 +155,9 @@ if (!function_exists('nv_law_block_search')) {
             $xtpl->parse('main.cat');
         }
 
+        $_nv_laws_listsubject = [];
         if (!empty($nv_laws_listsubject)) {
-            $nv_laws_listsubject = array(
+            $_nv_laws_listsubject = array(
                 0 => array(
                     "id" => 0,
                     "title" => $lang_module['search_subject'],
@@ -165,7 +166,7 @@ if (!function_exists('nv_law_block_search')) {
             ) + $nv_laws_listsubject;
         }
 
-        foreach ($nv_laws_listsubject as $area) {
+        foreach ($_nv_laws_listsubject as $area) {
             $xtpl->assign('KEY', $area['id']);
             $xtpl->assign('TITLE', $area['title']);
 

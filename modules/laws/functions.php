@@ -132,7 +132,7 @@ function nv_get_start_id($page, $per_page)
  * @param number $per_page
  * @return array
  */
-function row_law_list_by_result($result, $page = 1, $per_page = 1)
+function raw_law_list_by_result($result, $page = 1, $per_page = 1)
 {
     global $db_slave, $module_data, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $module_info, $site_mods, $module_config, $nv_laws_setting, $lang_module;
 
@@ -140,17 +140,7 @@ function row_law_list_by_result($result, $page = 1, $per_page = 1)
     $stt = nv_get_start_id($page, $per_page);
 
     while ($row = $result->fetch()) {
-
-        // FIXME cần tối ưu lại chỗ này
-        $row['areatitle'] = [];
-        $_result = $db_slave->query('SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id']);
-        while (list ($area_id) = $_result->fetch(3)) {
-            $row['areatitle'][] = $nv_laws_listarea[$area_id]['title'];
-        }
-        $row['areatitle'] = !empty($row['areatitle']) ? implode(', ', $row['areatitle']) : '';
-
-
-
+        $row['areatitle'] = '';
         $row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
         $row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
         $row['url'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['detail'] . "/" . $row['alias'], true);
@@ -162,30 +152,9 @@ function row_law_list_by_result($result, $page = 1, $per_page = 1)
             $row['allow_comm'] = 1;
         }
 
-        // Đếm số comment
-        // FIXME chỗ này cũng cần tối ưu
-        if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
-            $area = $module_info['funcs']['detail']['func_id'];
-            $_where = 'a.module=' . $db_slave->quote($module_name);
-            if ($area) {
-                $_where .= ' AND a.area= ' . $area;
-            }
-            $_where .= ' AND a.id= ' . $row['id'] . ' AND a.status=1 AND a.pid=0';
-
-            $db_slave->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_PREFIXLANG . '_comment a')
-            ->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')
-            ->where($_where);
-
-            $num_comm = $db_slave->query($db_slave->sql())->fetchColumn();
-        } else {
-            $num_comm = '';
-        }
-
         $row['start_comm_time'] = ($row['start_comm_time'] > 0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
         $row['end_comm_time'] = ($row['end_comm_time'] > 0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
-        $row['number_comm'] = sprintf($lang_module['number_comm'], $num_comm);
+        $row['number_comm'] = 0;
         $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
         $row['stt'] = $stt ++;
         $row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main&amp;edit=1&amp;id=" . $row['id'];
@@ -213,12 +182,32 @@ function row_law_list_by_result($result, $page = 1, $per_page = 1)
         $array_ids[] = $row['id'];
     }
 
-    // Xác định lĩnh vực (area của các văn bản đã lấy được)
     if (!empty($array_ids)) {
+        // Xác định lĩnh vực (area của các văn bản đã lấy được)
         $array_areas = [];
         $_result = $db_slave->query('SELECT row_id, area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id IN(' . implode(',', $array_ids) . ')');
         while ($row = $_result->fetch()) {
-            $array_areas[$row['row_id']][] = $row['area_id'];
+            if (isset($nv_laws_listarea[$row['area_id']])) {
+                $array_areas[$row['row_id']][] = $nv_laws_listarea[$row['area_id']]['title'];
+            }
+        }
+        foreach ($array_areas as $_id => $_title) {
+            $array[$_id]['areatitle'] = implode(', ', $_title);
+        }
+
+        // Đếm số comment (ý kiến) của các văn bản lấy được
+        if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
+            $area = $module_info['funcs']['detail']['func_id'];
+            $_where = 'module=' . $db_slave->quote($module_name);
+            if ($area) {
+                $_where .= ' AND area= ' . $area;
+            }
+            $_where .= ' AND id IN(' . implode(',', $array_ids) . ') AND status=1 AND pid=0 GROUP BY id';
+            $db_slave->sqlreset()->select('COUNT(cid) countcomment, id')->from(NV_PREFIXLANG . '_comment')->where($_where);
+            $_result = $db_slave->query($db_slave->sql());
+            while ($row = $_result->fetch()) {
+                $array[$row['id']]['number_comm'] = $row['countcomment'];
+            }
         }
     }
 

@@ -43,12 +43,14 @@
                 <td>
                     <a href="{ROW.url}" title="{ROW.introtext}">{ROW.introtext}</a>
                     <!-- BEGIN: comm -->
+                    <!-- BEGIN: shownumbers -->
                     <a href="{ROW.url}">({ROW.number_comm})</a>
+                    <!-- END: shownumbers -->
                     <div class="comm_time">
                         <p class="start_comm">{ROW.start_comm_time}</p>
                         <p class="end_comm">{ROW.end_comm_time}</p>
                     </div>
-                     <!-- END: comm -->
+                    <!-- END: comm -->
                 </td>
                 <!-- BEGIN: down_in_home -->
                 <td>

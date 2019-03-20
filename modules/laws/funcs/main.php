@@ -54,7 +54,7 @@ if (empty($contents)) {
         $all_page = $query->fetchColumn();
 
         $generate_page = nv_alias_page($page_title, $base_url, $all_page, $per_page, $page);
-        $array_data = row_law_list_by_result($result, $page, $per_page);
+        $array_data = raw_law_list_by_result($result, $page, $per_page);
 
         if ($page > 1 and empty($array_data)) {
             nv_redirect_location(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name);
