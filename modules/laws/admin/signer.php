@@ -8,35 +8,37 @@
  * @Createdate 24-06-2011 10:35
  */
 
-if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
+}
 
 // Delete
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) die('Wrong URL');
-    
+
     $id = $nv_Request->get_int('id', 'post', 0);
-    
+
     if (empty($id)) {
         die('NO');
     }
-    
+
     $sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
     $result = $db->query($sql);
     $title = $result->fetchColumn();
-    
+
     if (empty($title)) {
         die('NO');
     }
-    
+
     $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
     $db->query($sql);
-    
+
     $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE sgid=" . $id;
     $db->query($sql);
-    
+
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['scontent_delete'], $title, $admin_info['userid']);
-    
+
     nv_htmlOutput('OK');
 }
 
@@ -44,7 +46,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 $page_title = $lang_module['signer_list'];
 $page = $nv_Request->get_int('page', 'get', 0);
 $per_page = 30;
-$array = array();
+$array = [];
 
 // Base data
 $sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id!=0";
@@ -88,6 +90,7 @@ $xtpl = new XTemplate("signer_list.tpl", NV_ROOTDIR . "/themes/" . $global_confi
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL);
+$xtpl->assign('LINK_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=scontent');
 
 foreach ($array as $row) {
     $xtpl->assign('ROW', $row);

@@ -68,7 +68,7 @@ function nv_theme_laws_list($array_data, $generate_page = '', $show_header = tru
          * Quản trị module bỏ qua vì còn phân quyền theo cơ quan ban hành
          */
         if (defined('NV_IS_SPADMIN')) {
-            $xtpl->assign('LINK_DELETE', $row['title']);
+            $xtpl->assign('LINK_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
             $xtpl->parse('main.loop.admin_link');
         }
 
@@ -369,8 +369,8 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
      * Quản trị module cần thao tác trong admin vì còn phân quyền
      */
     if (defined('NV_IS_SPADMIN')) {
+        $xtpl->assign('LINK_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         $xtpl->parse('main.admin_link');
-        $xtpl->parse('main.admin_link_title');
     }
 
     if (!empty($other_cat)) {

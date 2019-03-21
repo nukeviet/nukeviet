@@ -8,7 +8,9 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) {
+    die('Stop!!!');
+}
 
 $lawalias = $alias = isset($array_op[1]) ? $array_op[1] : '';
 
@@ -29,10 +31,9 @@ if (isset($array_op[2])) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail/' . $array_op[1], true);
 }
 
-$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main&amp;edit=1&amp;id=" . $row['id'];
-$row['delete_link'] = 'nv_delete_law(' . $row['id'] . ', \'' . md5($row['id'] . session_id()) . '\')';
+$row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $row['id'];
 
-$row['aid'] = array();
+$row['aid'] = [];
 $result = $db->query('SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id']);
 while (list ($area_id) = $result->fetch(3)) {
     $row['aid'][] = $area_id;
@@ -57,7 +58,7 @@ if ($nv_Request->isset_request('download', 'get')) {
 
     // Update download
     $lawsdownloaded = $nv_Request->get_string('lawsdownloaded', 'session', '');
-    $lawsdownloaded = !empty($lawsdownloaded) ? unserialize($lawsdownloaded) : array();
+    $lawsdownloaded = !empty($lawsdownloaded) ? unserialize($lawsdownloaded) : [];
     if (!in_array($row['id'], $lawsdownloaded)) {
         $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_row SET download_hits=download_hits+1 WHERE id=' . $row['id'];
         $db->query($sql);
@@ -98,7 +99,7 @@ $description = $row['introtext'];
 if (!empty($row['replacement'])) {
     $sql = 'SELECT title, alias, code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id IN(' . $row['replacement'] . ')';
     $result = $db->query($sql);
-    $row['replacement'] = array();
+    $row['replacement'] = [];
     while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
         $row['replacement'][] = array(
             'title' => $_title,
@@ -109,7 +110,7 @@ if (!empty($row['replacement'])) {
 }
 
 // Lay van ban ma no thay the
-$row['unreplacement'] = array();
+$row['unreplacement'] = [];
 $sql = 'SELECT b.title, b.alias, b.code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_set_replace AS a INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_row AS b ON a.oid=b.id WHERE a.nid=' . $row['id'];
 $result = $db->query($sql);
 while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
@@ -124,7 +125,7 @@ while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
 if (!empty($row['relatement'])) {
     $sql = 'SELECT title, alias, code FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id IN(' . $row['relatement'] . ')';
     $result = $db->query($sql);
-    $row['relatement'] = array();
+    $row['relatement'] = [];
     while (list ($_title, $_alias, $_code) = $result->fetch(3)) {
         $row['relatement'][] = array(
             'title' => $_title,
@@ -153,7 +154,7 @@ if (!empty($row['eid'])) {
 if (!empty($row['files'])) {
     $row['files'] = explode(',', $row['files']);
     $files = $row['files'];
-    $row['files'] = array();
+    $row['files'] = [];
 
     foreach ($files as $id => $file) {
         $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $lang_module['click_to_download'];
@@ -170,7 +171,7 @@ if (!empty($row['files'])) {
 
 // Update view hit
 $lawsviewed = $nv_Request->get_string('lawsviewed', 'session', '');
-$lawsviewed = !empty($lawsviewed) ? unserialize($lawsviewed) : array();
+$lawsviewed = !empty($lawsviewed) ? unserialize($lawsviewed) : [];
 if (!in_array($row['id'], $lawsviewed)) {
     $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_row SET view_hits=view_hits+1 WHERE id=' . $row['id'];
     $db->query($sql);
@@ -181,10 +182,10 @@ if (!in_array($row['id'], $lawsviewed)) {
 
 $order = ($nv_laws_setting['typeview'] == 1) ? 'ASC' : 'DESC';
 $nv_laws_setting['detail_other'] = unserialize($nv_laws_setting['detail_other']);
-$other_cat = array();
-$other_area = array();
-$other_subject = array();
-$other_signer = array();
+$other_cat = [];
+$other_area = [];
+$other_subject = [];
+$other_signer = [];
 
 if ($nv_laws_setting['detail_other']) {
     if (in_array('cat', $nv_laws_setting['detail_other'])) {

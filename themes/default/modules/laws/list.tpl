@@ -30,7 +30,7 @@
             <!-- BEGIN: admin_link -->
             <div class="margin-top-sm clearfix">
                 <a class="btn btn-primary btn-xs" href="{ROW.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
-                <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{ROW.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
+                <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="nv_delete_law('{LINK_DELETE}', {ROW.id});"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
             </div>
             <!-- END: admin_link -->
         </div>

@@ -163,8 +163,8 @@
 
 <!-- BEGIN: admin_link -->
 <div class="text-right list-group clearfix">
-    <a class="btn btn-primary btn-xs" href="{DATA.edit_link}"><em class="fa fa-edit margin-right"></em>{LANG.edit}</a>
-    <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="{DATA.delete_link}"><em class="fa fa-trash-o margin-right"></em>{LANG.delete}</a>
+    <a class="btn btn-primary btn-xs" href="{DATA.edit_link}"><i class="fa fa-edit"></i> {LANG.edit}</a>
+    <a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="nv_delete_law('{LINK_DELETE}', {DATA.id});"><i class="fa fa-trash-o"></i> {LANG.delete}</a>
 </div>
 <!-- END: admin_link -->
 

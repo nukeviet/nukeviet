@@ -5,6 +5,18 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
+function nv_delete_law(url, id) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(url + '&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
+            if (res == 'OK') {
+                location.reload();
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+}
+
 $(function() {
     $('.laws-download-file [data-toggle="tooltip"]').tooltip({
        container: "body"
@@ -15,19 +27,3 @@ $(function() {
         });
     });
 });
-function nv_delete_law(id, checkss) {
-    if (confirm(nv_is_del_confirm[0])) {
-        $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
-            var r_split = res.split('_');
-            if (r_split[0] == 'OK') {
-
-                window.location.href = window.location.href;
-            } else if (r_split[0] == 'NO') {
-                alert(r_split[1]);
-            } else {
-                alert(nv_is_del_confirm[2]);
-            }
-        });
-    }
-    return false;
-}
