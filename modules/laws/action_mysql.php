@@ -160,7 +160,8 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('detail_show_link_subject', '1'),
 ('detail_show_link_signer', '1'),
 ('detail_pdf_quick_view', '1'),
-('other_numlinks', '5')
+('other_numlinks', '5'),
+('title_show_type', '0')
 ";
 
 // Comments

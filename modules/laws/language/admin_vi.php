@@ -159,6 +159,10 @@ $lang_module['config_show_link_detailpage3'] = 'Cơ quan ban hành';
 $lang_module['config_show_link_detailpage4'] = 'Người ký';
 $lang_module['config_detail_hide_empty_field'] = 'Ẩn các mục không có thông tin khi xem chi tiết văn bản';
 $lang_module['config_detail_pdf_quick_view'] = 'Hiển thị nút xem nhanh các file PDF tại trang chi tiết văn bản';
+$lang_module['config_tshow'] = 'Hình thức hiển thị tiêu đề/trích yếu khi xem danh sách văn bản';
+$lang_module['config_tshow0'] = 'Hiển thị trích yếu';
+$lang_module['config_tshow1'] = 'Hiển thị tiêu đề';
+$lang_module['config_tshow2'] = 'Tiêu đề + Trích yếu';
 
 $lang_module['type_view_0'] = 'Ngày ban hành, mới lên trên';
 $lang_module['type_view_1'] = 'Ngày ban hành, cũ lên trên';

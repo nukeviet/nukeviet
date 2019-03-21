@@ -1,38 +1,33 @@
 <!-- BEGIN: main -->
-
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<colgroup>
-			<col width="150" />
-			<col width="125" />
-			<col />
-		</colgroup>
-		<thead>
-            <tr>
-                <th class="text-center">{LANG.code}</th>
-                <!-- BEGIN: publtime_title -->
-                <th class="text-center">{LANG.publtime}</th>
-                <!-- END: publtime_title -->
-                <!-- BEGIN: comm_time -->
-                <th class="text-center">{LANG.comm_time_title}</th>
-                <!-- END: comm_time -->
-                <th class="text-center">{LANG.trichyeu}</th>
-            </tr>
-        </thead>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td><a href="{ROW.url}" title="{ROW.code}">{ROW.code}</a></td>
-				<!-- BEGIN: publtime -->
-				<td>{ROW.publtime}</td>
-				<!-- END: publtime -->
-				<!-- BEGIN: comm_time -->
-				<td class="text-center">{ROW.comm_time}</td>
-				<!-- END: comm_time -->
-				<td><a href="{ROW.url}" title="{ROW.introtext}">{ROW.introtext}</a></td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+<div class="flex-table-laws">
+    <div class="table-rows table-head">
+        <div class="c-code">{LANG.code}</div>
+        <!-- BEGIN: publtime_title -->
+        <div class="c-time">{LANG.publtime}</div>
+        <!-- END: publtime_title -->
+        <!-- BEGIN: comm_time -->
+        <div class="c-comtime">{LANG.comm_time_title}</div>
+        <!-- END: comm_time -->
+        <div class="c-intro">{LANG.trichyeu}</div>
+    </div>
+    <!-- BEGIN: loop -->
+    <div class="table-rows">
+        <div class="c-code"><span class="label-name">{LANG.code}:</span><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></div>
+        <!-- BEGIN: publtime -->
+        <div class="c-time"><span class="label-name">{LANG.publtime}:</span>{ROW.publtime}</div>
+        <!-- END: publtime -->
+        <!-- BEGIN: comm_time -->
+        <div class="c-comtime"><span class="label-name">{LANG.comm_time_title}:</span>{ROW.comm_time}</div>
+        <!-- END: comm_time -->
+        <div class="c-intro">
+            <a href="{ROW.url}">{LAW_TITLE}</a>
+            <!-- BEGIN: introtext -->
+            <div class="l-intro margin-top-sm">
+                {ROW.introtext}
+            </div>
+            <!-- END: introtext -->
+        </div>
+    </div>
+    <!-- END: loop -->
 </div>
-
 <!-- END: main -->

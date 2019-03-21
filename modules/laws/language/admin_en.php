@@ -135,3 +135,7 @@ $lang_module['search_error'] = 'Choose at least one search terms';
 $lang_module['admin_add'] = "Admin add";
 
 $lang_module['admins'] = 'Decentralization of management';
+$lang_module['config_tshow'] = 'Show title/abstract when when viewing list form';
+$lang_module['config_tshow0'] = 'Show abstract';
+$lang_module['config_tshow1'] = 'Show title';
+$lang_module['config_tshow2'] = 'Title + Abstract';

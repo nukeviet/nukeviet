@@ -8,7 +8,9 @@
  * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
  */
 
-if (!defined('NV_IS_MOD_LAWS')) die('Stop!!!');
+if (!defined('NV_IS_MOD_LAWS')) {
+    die('Stop!!!');
+}
 
 $url = array();
 $cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_Sitemap.cache";
@@ -25,7 +27,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
             'publtime' => $addtime //
         );
     }
-    
+
     $cache = serialize($url);
     $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
 }

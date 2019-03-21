@@ -17,9 +17,11 @@ if (!defined('NV_IS_MOD_LAWS')) {
  *
  * @param array $array_data
  * @param string $generate_page
+ * @param boolean $show_header
+ * @param boolean $show_stt
  * @return string
  */
-function nv_theme_laws_list($array_data, $generate_page = '')
+function nv_theme_laws_list($array_data, $generate_page = '', $show_header = true, $show_stt = true)
 {
     global $lang_module, $lang_global, $module_info, $nv_laws_setting, $module_name, $module_config;
 
@@ -35,6 +37,18 @@ function nv_theme_laws_list($array_data, $generate_page = '')
 
         $xtpl->assign('ROW', $row);
 
+        if (empty($nv_laws_setting['title_show_type'])) {
+            // Hiển thị trích yếu
+            $xtpl->assign('LAW_TITLE', $row['introtext']);
+        } elseif ($nv_laws_setting['title_show_type'] == 1) {
+            // Hiển thị tiêu đề
+            $xtpl->assign('LAW_TITLE', $row['title']);
+        } else {
+            // Hiển thị tiêu đề + trích yếu
+            $xtpl->assign('LAW_TITLE', $row['title']);
+            $xtpl->parse('main.loop.introtext');
+        }
+
         // Tải file trực tiếp
         if ($nv_laws_setting['down_in_home']) {
             if (nv_user_in_groups($row['groups_download'])) {
@@ -49,8 +63,12 @@ function nv_theme_laws_list($array_data, $generate_page = '')
             $xtpl->parse('main.loop.down_in_home');
         }
 
-        // Công cụ của admin
-        if (defined('NV_IS_MODADMIN')) {
+        /*
+         * Công cụ của admin (chỉ điều hành chung và admin tối cao)
+         * Quản trị module bỏ qua vì còn phân quyền theo cơ quan ban hành
+         */
+        if (defined('NV_IS_SPADMIN')) {
+            $xtpl->assign('LINK_DELETE', $row['title']);
             $xtpl->parse('main.loop.admin_link');
         }
 
@@ -81,19 +99,34 @@ function nv_theme_laws_list($array_data, $generate_page = '')
             $xtpl->parse('main.loop.publtime');
         }
 
+        // Hiển thị cột số thứ tự
+        if ($show_stt) {
+            $xtpl->parse('main.loop.stt');
+        }
+
         $xtpl->parse('main.loop');
     }
 
-    // Tiêu đề khi lấy ý kiến dự thảo
-    if ($module_config[$module_name]['activecomm']) {
-        $xtpl->parse('main.send_comm_title');
-    } else {
-        $xtpl->parse('main.publtime_title');
-    }
+    // Hiển thị tiêu đề
+    if ($show_header) {
+        // Tiêu đề khi lấy ý kiến dự thảo
+        if ($module_config[$module_name]['activecomm']) {
+            $xtpl->parse('main.header.send_comm_title');
+        } else {
+            $xtpl->parse('main.header.publtime_title');
+        }
 
-    // Tiêu đề khi tải file
-    if ($nv_laws_setting['down_in_home']) {
-        $xtpl->parse('main.down_in_home');
+        // Tiêu đề khi tải file
+        if ($nv_laws_setting['down_in_home']) {
+            $xtpl->parse('main.header.down_in_home');
+        }
+
+        // Hiển thị cột số thứ tự
+        if ($show_stt) {
+            $xtpl->parse('main.header.stt');
+        }
+
+        $xtpl->parse('main.header');
     }
 
     // Phân trang
@@ -142,56 +175,18 @@ function nv_theme_laws_maincat($mod, $array_data)
     foreach ($array_data as $data) {
         $data['url_subject'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=subject/' . $data['alias'];
         $data['numcount'] = sprintf($lang_module['s_result_num'], $data['numcount']);
+
         $xtpl->assign('DATA', $data);
 
         if (!empty($data['rows'])) {
-            foreach ($data['rows'] as $rows) {
-                $rows['publtime'] = !empty($rows['publtime']) ? nv_date('d/m/Y', $rows['publtime']) : '';
-                $xtpl->assign('ROW', $rows);
-
-                if ($nv_laws_setting['down_in_home']) {
-                    if (nv_user_in_groups($rows['groups_download'])) {
-                        if (!empty($rows['files'])) {
-                            foreach ($rows['files'] as $file) {
-                                $xtpl->assign('FILE', $file);
-                                $xtpl->parse('main.loop.row.down_in_home.files.loopfile');
-                            }
-                            $xtpl->parse('main.loop.row.down_in_home.files');
-                        }
-                    }
-                    $xtpl->parse('main.loop.row.down_in_home');
-                }
-
-                if (defined('NV_IS_MODADMIN')) {
-                    $xtpl->parse('main.loop.row.admin_link');
-                }
-                if ($module_config[$module_name]['activecomm']) {
-                    $xtpl->parse('main.loop.row.comm');
-                    if ($rows['allow_comm']) {
-                        $xtpl->parse('main.loop.row.send_comm');
-                    } else {
-                        $xtpl->parse('main.loop.row.comm_close');
-                    }
-                } else {
-                    $xtpl->parse('main.loop.row.publtime');
-                }
-
-                $xtpl->parse('main.loop.row');
-            }
+            $xtpl->assign('HTML', nv_theme_laws_list($data['rows'], '', false, false));
+            $xtpl->parse('main.loop.rows');
         }
 
-        if ($nv_laws_setting['down_in_home']) {
-            $colspan = 4;
-            if ($module_config[$module_name]['activecomm']) {
-                $colspan = 5;
-            }
-            $xtpl->assign('COL', $colspan);
-            $xtpl->parse('main.loop.down_in_home');
-        }
         $xtpl->parse('main.loop');
     }
 
-    if ($module_config[$module_name]['activecomm']) {
+    if (!empty($module_config[$module_name]['activecomm'])) {
         $xtpl->parse('main.send_comm_title');
     } else {
         $xtpl->parse('main.publtime_title');
@@ -199,10 +194,6 @@ function nv_theme_laws_maincat($mod, $array_data)
 
     if ($nv_laws_setting['down_in_home']) {
         $xtpl->parse('main.down_in_home');
-    }
-    if (defined('NV_IS_MODADMIN')) {
-        $xtpl->parse('main.admin_link_col');
-        $xtpl->parse('main.admin_link_title');
     }
 
     $xtpl->parse('main');
@@ -373,7 +364,11 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
         $xtpl->parse('main.nodownload');
     }
 
-    if (defined('NV_IS_MODADMIN')) {
+    /*
+     * Sửa và xóa văn bản dành cho admin tối cao và điều hành chung
+     * Quản trị module cần thao tác trong admin vì còn phân quyền
+     */
+    if (defined('NV_IS_SPADMIN')) {
         $xtpl->parse('main.admin_link');
         $xtpl->parse('main.admin_link_title');
     }
@@ -531,27 +526,48 @@ function nv_theme_laws_list_other($array_data)
     $xtpl = new XTemplate('list_other.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
-    $i = 1;
     foreach ($array_data as $row) {
-        $row['publtime'] = nv_date('d/m/Y', $row['publtime']);
-        $row['exptime'] = nv_date('d/m/Y', $row['exptime']);
-        $row['start_comm_time'] = ($row['start_comm_time'] > 0) ? sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time'])) : '';
-        $row['end_comm_time'] = ($row['end_comm_time'] > 0) ? sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time'])) : '';
-        $row['comm_time'] = $row['start_comm_time'] . '-' . $row['end_comm_time'];
+        $row['publtime'] = $row['publtime'] ? nv_date('d/m/Y', $row['publtime']) : 'N/A';
+        $row['exptime'] = $row['exptime'] ? nv_date('d/m/Y', $row['exptime']) : 'N/A';
+
+        $row['comm_time'] = [];
+        if (!empty($row['start_comm_time'])) {
+            $row['comm_time'][] = sprintf($lang_module['start_comm_time'], nv_date('d/m/Y', $row['start_comm_time']));
+        }
+        if (!empty($row['end_comm_time'])) {
+            $row['comm_time'][] = sprintf($lang_module['end_comm_time'], nv_date('d/m/Y', $row['end_comm_time']));
+        }
+        $row['comm_time'] = implode(' - ', $row['comm_time']);
+
         $xtpl->assign('ROW', $row);
+
+        if (empty($nv_laws_setting['title_show_type'])) {
+            // Hiển thị trích yếu
+            $xtpl->assign('LAW_TITLE', $row['introtext']);
+        } elseif ($nv_laws_setting['title_show_type'] == 1) {
+            // Hiển thị tiêu đề
+            $xtpl->assign('LAW_TITLE', $row['title']);
+        } else {
+            // Hiển thị tiêu đề + trích yếu
+            $xtpl->assign('LAW_TITLE', $row['title']);
+            $xtpl->parse('main.loop.introtext');
+        }
+
         if (isset($site_mods['comment']) and !empty($module_config[$module_name]['activecomm'])) {
             $xtpl->parse('main.loop.comm_time');
         } else {
             $xtpl->parse('main.loop.publtime');
         }
+
         $xtpl->parse('main.loop');
-        $i ++;
     }
-    if (isset($site_mods['comment']) and $module_config[$module_name]['activecomm'] == 1) {
+
+    if (isset($site_mods['comment']) and !empty($module_config[$module_name]['activecomm'])) {
         $xtpl->parse('main.comm_time');
     } else {
         $xtpl->parse('main.publtime_title');
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

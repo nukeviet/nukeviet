@@ -1,28 +1,29 @@
 <!-- BEGIN: main -->
 <div class="flex-table-laws">
+    <!-- BEGIN: header -->
     <div class="table-rows table-head">
-        <div class="c-stt a-center">{LANG.stt}</div>
+        <!-- BEGIN: stt --><div class="c-stt a-center">{LANG.stt}</div><!-- END: stt -->
         <div class="c-code">{LANG.code}</div>
-        <!-- BEGIN: publtime_title -->
-        <div class="c-time">{LANG.publtime}</div>
-        <!-- END: publtime_title -->
+        <!-- BEGIN: publtime_title --><div class="c-time">{LANG.publtime}</div><!-- END: publtime_title -->
         <div class="c-intro">{LANG.trichyeu}</div>
-        <!-- BEGIN: down_in_home -->
-        <div class="c-file">{LANG.files}</div>
-        <!-- END: down_in_home -->
-        <!-- BEGIN: send_comm_title -->
-        <div class="c-comment a-center">{LANG.comm_time}</div>
-        <!-- END: send_comm_title -->
+        <!-- BEGIN: down_in_home --><div class="c-file">{LANG.files}</div><!-- END: down_in_home -->
+        <!-- BEGIN: send_comm_title --><div class="c-comment a-center">{LANG.comm_time}</div><!-- END: send_comm_title -->
     </div>
+    <!-- END: header -->
     <!-- BEGIN: loop -->
     <div class="table-rows">
-        <div class="c-stt a-center">{ROW.stt}</div>
+        <!-- BEGIN: stt --><div class="c-stt a-center">{ROW.stt}</div><!-- END: stt -->
         <div class="c-code"><span class="label-name">{LANG.code}:</span><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></div>
         <!-- BEGIN: publtime -->
         <div class="c-time"><span class="label-name">{LANG.publtime}:</span>{ROW.publtime}</div>
         <!-- END: publtime -->
         <div class="c-intro">
-            <a href="{ROW.url}">{ROW.introtext}<!-- BEGIN: shownumbers --> ({ROW.number_comm})<!-- END: shownumbers --></a>
+            <a href="{ROW.url}">{LAW_TITLE}<!-- BEGIN: shownumbers --> ({ROW.number_comm})<!-- END: shownumbers --></a>
+            <!-- BEGIN: introtext -->
+            <div class="l-intro margin-top-sm">
+                {ROW.introtext}
+            </div>
+            <!-- END: introtext -->
             <!-- BEGIN: comment_time -->
             <div class="margin-top-sm clearfix text-warning">{COMMENT_TIME}</div>
             <!-- END: comment_time -->

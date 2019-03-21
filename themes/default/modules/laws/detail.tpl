@@ -7,7 +7,7 @@
     <table class="table table-striped table-bordered table-hover">
         <tbody>
             <tr class="hoatim">
-                <td style="width:200px" class="text-right">{LANG.code}</td>
+                <td style="width:160px" class="text-right">{LANG.code}</td>
                 <td>{DATA.code}</td>
             </tr>
             <!-- BEGIN: publtime -->
@@ -90,7 +90,7 @@
             <!-- END: signer -->
             <!-- BEGIN: replacement -->
             <tr>
-                <td>{LANG.replacement}</td>
+                <td class="text-right">{LANG.replacement}</td>
                 <td>
                     <ul class="list-item">
                         <!-- BEGIN: loop -->
@@ -102,7 +102,7 @@
             <!-- END: replacement -->
             <!-- BEGIN: unreplacement -->
             <tr>
-                <td>{LANG.unreplacement}</td>
+                <td class="text-right">{LANG.unreplacement}</td>
                 <td>
                     <ul class="list-item">
                         <!-- BEGIN: loop -->
@@ -114,7 +114,7 @@
             <!-- END: unreplacement -->
             <!-- BEGIN: relatement -->
             <tr>
-                <td>{LANG.relatement}</td>
+                <td class="text-right">{LANG.relatement}</td>
                 <td>
                     <ul class="list-item">
                         <!-- BEGIN: loop -->
@@ -195,7 +195,5 @@
 <h3 class="subtitle">{LANG.other_signer} <a href="{DATA.signer_url}" title="{DATA.signer}">"{DATA.signer}"</a></h3>
 {OTHER_SIGNER}
 <!-- END: other_signer -->
-
-
 
 <!-- END: main -->

@@ -111,6 +111,25 @@
     margin-bottom: 15px;
 }
 
+.flex-table-laws-inline {
+    margin-bottom: 15px;
+}
+
+.flex-table-laws-inline .flex-table-laws {
+    margin-bottom: 0;
+}
+
+.flex-table-laws-inline .flex-table-laws:not(:first-child) {
+    border-bottom: 0;
+    border-top: 0;
+}
+
+.flex-table-heading {
+    border: 1px #ddd solid;
+    padding: 8px;
+    background-color: #d9edf7;
+}
+
 .flex-table-laws > .table-rows {
     -ms-display: flex;
     display: flex;
@@ -185,6 +204,12 @@
     max-width: 120px;
 }
 
+.flex-table-laws > .table-rows > .c-comtime {
+    -ms-flex: 0 0 160px;
+    flex: 0 0 160px;
+    max-width: 160px;
+}
+
 .flex-table-laws > .table-rows > .c-file {
     -ms-flex: 0 0 120px;
     flex: 0 0 120px;
@@ -202,6 +227,12 @@
 }
 
 @media (max-width: 676.98px), (max-width: 940px) and (min-width: 768px) {
+    .flex-table-heading {
+        padding-left: 0;
+        background-color: transparent;
+        border: 0;
+    }
+
     .flex-table-laws {
         border: 0;
         margin-bottom: 0;
@@ -234,6 +265,7 @@
     .flex-table-laws > .table-rows > .c-stt,
     .flex-table-laws > .table-rows > .c-code,
     .flex-table-laws > .table-rows > .c-time,
+    .flex-table-laws > .table-rows > .c-comtime,
     .flex-table-laws > .table-rows > .c-file,
     .flex-table-laws > .table-rows > .c-comment {
         -ms-flex-basis: inherit;
