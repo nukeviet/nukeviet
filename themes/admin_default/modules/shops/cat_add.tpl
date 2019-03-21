@@ -177,6 +177,9 @@
 		
 		$('#frm-cat-content').submit(function(e){
 		    e.preventDefault();
+            for (instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
 		    $.ajax({
 		    	type : 'POST',
 		    	url : script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat&nocache=' + new Date().getTime(),
