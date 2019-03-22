@@ -22,7 +22,9 @@ $data = array(
     'description' => '',
     'bodytext' => '',
     'keywords' => '',
-    'image' => ''
+    'image' => '',
+    'tag_title' => '',
+    'tag_description' => ''
 );
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_block_cat';
@@ -43,6 +45,8 @@ if (!empty($savecat)) {
     $data['description'] = $nv_Request->get_string('description', 'post', '');
     $data['description'] = nv_nl2br(nv_htmlspecialchars(strip_tags($data['description'])), '<br />');
     $data['bodytext'] = $nv_Request->get_editor('bodytext', 'post', NV_ALLOWED_HTML_TAGS);
+    $data['tag_title'] = $nv_Request->get_title('tag_title', 'post', '');
+    $data['tag_description'] = $nv_Request->get_textarea('tag_description', '', NV_ALLOWED_HTML_TAGS);
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (is_file(NV_DOCUMENT_ROOT . $image)) {
@@ -104,12 +108,14 @@ if (!empty($savecat)) {
             if ($stmt->rowCount()) {
                 $error = $lang_module['block_error_alias'];
             } else {
-                $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_bodytext = :bodytext, ' . NV_LANG_DATA . '_keywords= :keywords, image = :image, edit_time=' . NV_CURRENTTIME . ' WHERE bid =' . $data['bid']);
+                $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_bodytext = :bodytext, ' . NV_LANG_DATA . '_keywords= :keywords, ' . NV_LANG_DATA . '_tag_title= :tag_title, ' . NV_LANG_DATA . '_tag_description= :tag_description, image = :image, edit_time=' . NV_CURRENTTIME . ' WHERE bid =' . $data['bid']);
                 $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
                 $stmt->bindParam(':alias', $data['alias'], PDO::PARAM_STR);
                 $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
                 $stmt->bindParam(':bodytext', $data['bodytext'], PDO::PARAM_STR);
                 $stmt->bindParam(':keywords', $data['keywords'], PDO::PARAM_STR);
+                $stmt->bindParam(':tag_title', $data['tag_title'], PDO::PARAM_STR);
+                $stmt->bindParam(':tag_description', $data['tag_description'], PDO::PARAM_STR);
                 $stmt->bindParam(':image', $data['image'], PDO::PARAM_STR);
                 if ($stmt->execute()) {
                     $error = $lang_module['saveok'];
@@ -125,7 +131,7 @@ if (!empty($savecat)) {
 
 $data['bid'] = $nv_Request->get_int('bid', 'get', 0);
 if ($data['bid'] > 0) {
-    list ($data['bid'], $data['title'], $data['alias'], $data['description'], $data['bodytext'], $data['keywords'], $data['image']) = $db->query('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_bodytext, ' . NV_LANG_DATA . '_keywords, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat where bid=' . $data['bid'])->fetch(3);
+    list ($data['bid'], $data['title'], $data['alias'], $data['description'], $data['bodytext'], $data['keywords'], $data['tag_title'], $data['tag_description'], $data['image']) = $db->query('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_bodytext, ' . NV_LANG_DATA . '_keywords, ' . NV_LANG_DATA . '_tag_title, ' . NV_LANG_DATA . '_tag_description, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat where bid=' . $data['bid'])->fetch(3);
     $lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 
@@ -145,9 +151,6 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 $xtpl = new XTemplate('blockcat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);

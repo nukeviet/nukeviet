@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
@@ -17,14 +16,28 @@ if (isset($array_op[1])) {
 
     $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? intval(substr($array_op[2], 5)) : 1;
 
-    $stmt = $db->prepare('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, image, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_bodytext, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight DESC');
-
+    $array_data = array();
+    $stmt = $db->prepare('SELECT bid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, image, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_bodytext, ' . NV_LANG_DATA . '_keywords, ' . NV_LANG_DATA . '_tag_title, ' . NV_LANG_DATA . '_tag_description FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight DESC');
     $stmt->execute();
 
-    list ($bid, $page_title, $alias, $image_group, $description, $bodytext, $key_words) = $stmt->fetch(3);
-
+    list ($bid, $page_title, $alias, $image_group, $description, $bodytext, $key_words, $tag_title, $tag_description) = $stmt->fetch(3);
     if ($bid > 0) {
         $base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['blockcat'] . '/' . $alias;
+
+        if (!empty($image_group) && file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image_group)) {
+            $image_group = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image_group;
+            $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $image_group)) ? $image_group : NV_MY_DOMAIN . $image_group;
+        } else {
+            $image_group = '';
+        }
+
+        $array_data['title'] = $page_title;
+        $array_data['description'] = $description;
+        $array_data['bodytext'] = $bodytext;
+        $array_data['image'] = $image_group;
+
+        $page_title = !empty($tag_title) ? $tag_title : $page_title;
+        $description = !empty($tag_description) ? $tag_description : $description;
 
         if ($page > 1) {
             $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
@@ -88,7 +101,7 @@ if (isset($array_op[1])) {
 
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
-        $contents = nv_template_view_blockcat($item_array, $bodytext, $num_items, $generate_page, $page_title, $description, $image_group);
+        $contents = nv_template_view_blockcat($array_data, $item_array, $generate_page);
     }
 }
 

@@ -123,7 +123,7 @@ function nv_template_view_home($array_data, $compare_id, $pages = '', $sort = 0,
  * @param string $html_pages
  * @return
  */
-function nv_template_view_blockcat($data_content, $bodytext, $compare_id, $html_pages = '', $data_title, $description, $image_group, $viewtype = 'viewgrid')
+function nv_template_view_blockcat($array_data, $data_content, $html_pages = '', $viewtype = 'viewgrid')
 {
     global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_blockcat, $my_head;
 
@@ -131,13 +131,17 @@ function nv_template_view_blockcat($data_content, $bodytext, $compare_id, $html_
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TEMPLATE', $module_info['template']);
     $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('TITLE', $data_title);
-    $xtpl->assign('DESCRIPTION', $description);
-    $xtpl->assign('IMAGE', $image_group);
+    $xtpl->assign('TITLE', $array_data['title']);
+    $xtpl->assign('DESCRIPTION', $array_data['description']);
 
-    if(!empty($bodytext)){
-        $xtpl->assign('BODYTEXT', $bodytext);
+    if (!empty($array_data['bodytext'])) {
+        $xtpl->assign('BODYTEXT', $array_data['bodytext']);
         $xtpl->parse('main.bodytext');
+    }
+
+    if (!empty($array_data['image'])) {
+        $xtpl->assign('IMAGE', $array_data['image']);
+        $xtpl->parse('main.image');
     }
 
     if (function_exists('nv_template_' . $viewtype)) {
