@@ -71,12 +71,13 @@ if (in_array($lang, $array_lang_module_setup) and $num_table > 1) {
      DROP ' . $lang . '_keywords';
 
     $sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat
-	 DROP ' . $lang . '_title,
-	 DROP ' . $lang . '_alias,
-	 DROP ' . $lang . '_description,
-	 DROP ' . $lang . '_keywords
+     DROP ' . $lang . '_title,
+     DROP ' . $lang . '_alias,
+     DROP ' . $lang . '_description,
+     DROP ' . $lang . '_bodytext,
+     DROP ' . $lang . '_keywords,
      DROP ' . $lang . '_tag_title,
-	 DROP ' . $lang . '_tag_description';
+     DROP ' . $lang . '_tag_description';
 
     $sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_units
      DROP ' . $lang . '_title,
@@ -385,11 +386,12 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  PRIMARY KEY (bid)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_block_cat ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT '',
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_block_cat
+ ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_description VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_bodytext TEXT NOT NULL,
- ADD " . $lang . "_keywords text NOT NULL
+ ADD " . $lang . "_keywords text NOT NULL,
  ADD " . $lang . "_tag_title VARCHAR(255) NOT NULL DEFAULT '',
  ADD " . $lang . "_tag_description mediumtext NOT NULL";
 
@@ -809,7 +811,10 @@ if (!empty($set_lang_data)) {
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_title = " . $set_lang_data . "_title";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_alias = " . $set_lang_data . "_alias";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_description = " . $set_lang_data . "_description";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_bodytext = " . $set_lang_data . "_bodytext";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_tag_title = " . $set_lang_data . "_tag_title";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . $lang . "_tag_description = " . $set_lang_data . "_tag_description";
     }
 
     $numrow = $db->query("SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_group")->fetchColumn();
