@@ -367,6 +367,7 @@ $lang_module['detail_info'] = 'Chi tiết';
 $lang_module['tag'] = 'Tùy biến SEO';
 $lang_module['tag_title'] = 'Thẻ tiêu đề';
 $lang_module['tag_description'] = 'Thẻ mô tả';
+$lang_module['bodytext'] = 'Nội dung chi tiết';
 
 $lang_module['group'] = 'Nhóm sản phẩm';
 $lang_module['group_sub_sl'] = 'Nhóm chính';

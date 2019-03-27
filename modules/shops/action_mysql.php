@@ -71,10 +71,12 @@ if (in_array($lang, $array_lang_module_setup) and $num_table > 1) {
      DROP ' . $lang . '_keywords';
 
     $sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat
-     DROP ' . $lang . '_title,
-     DROP ' . $lang . '_alias,
-     DROP ' . $lang . '_description,
-     DROP ' . $lang . '_keywords';
+	 DROP ' . $lang . '_title,
+	 DROP ' . $lang . '_alias,
+	 DROP ' . $lang . '_description,
+	 DROP ' . $lang . '_keywords
+     DROP ' . $lang . '_tag_title,
+	 DROP ' . $lang . '_tag_description';
 
     $sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_units
      DROP ' . $lang . '_title,
@@ -386,7 +388,10 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_block_cat ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_description VARCHAR( 250 ) NOT NULL DEFAULT '',
- ADD " . $lang . "_keywords text NOT NULL";
+ ADD " . $lang . "_bodytext TEXT NOT NULL,
+ ADD " . $lang . "_keywords text NOT NULL
+ ADD " . $lang . "_tag_title VARCHAR(255) NOT NULL DEFAULT '',
+ ADD " . $lang . "_tag_description mediumtext NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block (
  bid int(11) unsigned NOT NULL,
@@ -538,6 +543,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   alias varchar(250) NOT NULL DEFAULT '',
   image varchar(250) DEFAULT '',
   description text,
+  bodytext text NOT NULL,
   keywords varchar(250) DEFAULT '',
   PRIMARY KEY (tid),
   UNIQUE KEY alias (alias)

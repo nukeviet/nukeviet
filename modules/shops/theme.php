@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
@@ -124,7 +123,7 @@ function nv_template_view_home($array_data, $compare_id, $pages = '', $sort = 0,
  * @param string $html_pages
  * @return
  */
-function nv_template_view_blockcat($data_content, $compare_id, $html_pages = '', $data_title, $description, $image_group, $viewtype = 'viewgrid')
+function nv_template_view_blockcat($array_data, $data_content, $html_pages = '', $viewtype = 'viewgrid')
 {
     global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_blockcat, $my_head;
 
@@ -132,9 +131,18 @@ function nv_template_view_blockcat($data_content, $compare_id, $html_pages = '',
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TEMPLATE', $module_info['template']);
     $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('TITLE', $data_title);
-    $xtpl->assign('DESCRIPTION', $description);
-    $xtpl->assign('IMAGE', $image_group);
+    $xtpl->assign('TITLE', $array_data['title']);
+    $xtpl->assign('DESCRIPTION', $array_data['description']);
+
+    if (!empty($array_data['bodytext'])) {
+        $xtpl->assign('BODYTEXT', $array_data['bodytext']);
+        $xtpl->parse('main.bodytext');
+    }
+
+    if (!empty($array_data['image'])) {
+        $xtpl->assign('IMAGE', $array_data['image']);
+        $xtpl->parse('main.image');
+    }
 
     if (function_exists('nv_template_' . $viewtype)) {
         $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $data_content, $html_pages));
@@ -705,7 +713,7 @@ function cart_product($data_content, $coupons_code, $order_info, $array_error_nu
  * @param mixed $error
  * @return
  */
-function uers_order($data_content, $data_order, $total_coupons, $order_info, $error)
+function uers_order($data_content, $data_order, $total_coupons, $order_info)
 {
     global $module_info, $lang_module, $lang_global, $module_config, $module_data, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $shipping_data;
 
@@ -786,7 +794,6 @@ function uers_order($data_content, $data_order, $total_coupons, $order_info, $er
     $xtpl->assign('unit_config', $money_config[$pro_config['money_unit']]['symbol']);
     $xtpl->assign('weight_unit', $pro_config['weight_unit']);
     $xtpl->assign('DATA', $data_order);
-    $xtpl->assign('ERROR', $error);
     $xtpl->assign('LINK_CART', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart');
     if (isset($_SESSION[$module_data . '_coupons']['code'])) {
         $xtpl->assign('COUPONS_CODE', $_SESSION[$module_data . '_coupons']['code']);
@@ -1966,7 +1973,7 @@ function nv_template_wishlist($array_data, $pages, $viewtype = 'viewgrid')
  * @param mixed $viewtype
  * @return
  */
-function nv_template_tag($array_data, $pages = '', $sort = 0, $viewtype = 'viewgrid')
+function nv_template_tag($array_data, $bodytext, $pages = '', $sort = 0, $viewtype = 'viewgrid')
 {
     global $module_info, $lang_module, $module_file, $op, $page_title, $pro_config, $array_displays;
 
@@ -1976,6 +1983,11 @@ function nv_template_tag($array_data, $pages = '', $sort = 0, $viewtype = 'viewg
 
     if (function_exists('nv_template_' . $viewtype)) {
         $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $array_data, $pages));
+    }
+
+    if (!empty($bodytext)) {
+        $xtpl->assign('BODYTEXT', $bodytext);
+        $xtpl->parse('main.bodytext');
     }
 
     if ($pro_config['show_displays'] == 1) {

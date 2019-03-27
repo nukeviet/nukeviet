@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
@@ -29,6 +28,10 @@ $viewtype = $nv_Request->get_string('viewtype', 'post', '');
 $viewtype_old = $nv_Request->get_string('viewtype', 'session', '');
 $viewtype = $nv_Request->get_string('viewtype', 'post', $viewtype_old);
 
+if (empty($viewtype)) {
+    $viewtype = 'viewgrid';
+}
+
 if (isset($array_op[1])) {
     if (sizeof($array_op) == 2 and preg_match('/^page\-([0-9]+)$/', $array_op[1], $m)) {
         $page = intval($m[1]);
@@ -39,10 +42,10 @@ if (isset($array_op[1])) {
 $page_title = trim(str_replace('-', ' ', $alias));
 
 if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
-    $stmt = $db->prepare('SELECT tid, image, description, keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' WHERE alias= :alias');
+    $stmt = $db->prepare('SELECT tid, image, description, bodytext, keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
-    list ($tid, $image_tag, $description, $key_words) = $stmt->fetch(3);
+    list ($tid, $image_tag, $description, $bodytext, $key_words) = $stmt->fetch(3);
 
     if ($tid > 0) {
         // Fetch Limit
@@ -114,7 +117,7 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=wishlist';
         $html_pages = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
-        $contents = nv_template_tag($data_content, $html_pages, $sorts, $viewtype);
+        $contents = nv_template_tag($data_content, $bodytext, $html_pages, $sorts, $viewtype);
         $array_mod_title[] = array(
             'title' => $page_title
         );
