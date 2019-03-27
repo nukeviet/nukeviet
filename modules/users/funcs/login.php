@@ -79,7 +79,7 @@ function opidr($openid_info)
  */
 function set_reg_attribs($attribs)
 {
-    global $crypt, $db, $global_config, $module_upload;
+    global $crypt, $db, $global_config, $module_upload, $lang_global;
 
     $reg_attribs = array();
     $reg_attribs['server'] = $attribs['server'];
