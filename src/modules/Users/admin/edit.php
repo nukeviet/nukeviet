@@ -56,35 +56,15 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit();
 }
 
 $groups_list = nv_groups_list($module_data);
 
-$array_old_groups = array();
+$array_field_config = nv_get_users_field_config();
+$array_old_groups = [];
 $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
 while ($row_gru = $result_gru->fetch()) {
     $array_old_groups[] = $row_gru['group_id'];
-}
-
-$array_field_config = array();
-$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
-while ($row_field = $result_field->fetch()) {
-    $language = unserialize($row_field['language']);
-    $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row_field['field'];
-    $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
-    if (!empty($row_field['field_choices'])) {
-        $row_field['field_choices'] = unserialize($row_field['field_choices']);
-    } elseif (!empty($row_field['sql_choices'])) {
-        $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
-        $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-        $result = $db->query($query);
-        $weight = 0;
-        while (list($key, $val) = $result->fetch(3)) {
-            $row_field['field_choices'][$key] = $val;
-        }
-    }
-    $array_field_config[$row_field['field']] = $row_field;
 }
 
 if (defined('NV_EDITOR')) {
@@ -92,7 +72,7 @@ if (defined('NV_EDITOR')) {
 }
 
 $access_passus = (isset($access_admin['access_passus'][$admin_info['level']]) and $access_admin['access_passus'][$admin_info['level']] == 1) ? true : false;
-$_user = $custom_fields = array();
+$_user = $custom_fields = [];
 
 if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
@@ -200,14 +180,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
-    $query_field = array();
+    $query_field = [];
     if (!empty($array_field_config)) {
         require NV_ROOTDIR . '/modules/Users/fields.check.php';
     }
 
     $password = !empty($_user['password1']) ? $crypt->hash_password($_user['password1'], $global_config['hashprefix']) : $row['password'];
 
-    $in_groups = array();
+    $in_groups = [];
     foreach (array_keys($groups_list) as $_group_id) {
         if (!empty($rowlev) and $_group_id < 4 and in_array($_group_id, $array_old_groups)) {
             $in_groups[] = $_group_id;
@@ -372,7 +352,7 @@ $custom_fields['answer'] = $_user['answer'];
 
 $_user['view_mail'] = $_user['view_mail'] ? ' checked="checked"' : '';
 
-$groups = array();
+$groups = [];
 if (!empty($groups_list)) {
     foreach ($groups_list as $group_id => $grtl) {
         $groups[] = array(
@@ -521,7 +501,7 @@ if (defined('NV_IS_USER_FORUM')) {
                 }
             } elseif ($row['field_type'] == 'checkbox') {
                 $number = 0;
-                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                 foreach ($row['field_choices'] as $key => $value) {
                     $xtpl->assign('FIELD_CHOICES', array(
                         'id' => $row['fid'] . '_' . $number++,
@@ -532,7 +512,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->parse('main.edit_user.field.loop.checkbox');
                 }
             } elseif ($row['field_type'] == 'multiselect') {
-                $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                 foreach ($row['field_choices'] as $key => $value) {
                     $xtpl->assign('FIELD_CHOICES', array(
                         'key' => $key,

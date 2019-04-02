@@ -14,39 +14,18 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 if ($nv_Request->isset_request('nv_genpass', 'post')) {
     $_len = round(($global_config['nv_upassmin'] + $global_config['nv_upassmax']) / 2);
-    echo nv_genpass($_len, $global_config['nv_upass_type']);
-    exit();
+    nv_htmlOutput(nv_genpass($_len, $global_config['nv_upass_type']));
 }
 
 $page_title = $nv_Lang->getModule('user_add');
-
 $groups_list = nv_groups_list($module_data);
-
-$array_field_config = array();
-$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
-while ($row_field = $result_field->fetch()) {
-    $language = unserialize($row_field['language']);
-    $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
-    $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
-    if (!empty($row_field['field_choices'])) {
-        $row_field['field_choices'] = unserialize($row_field['field_choices']);
-    } elseif (!empty($row_field['sql_choices'])) {
-        $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
-        $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-        $result = $db->query($query);
-        $weight = 0;
-        while (list ($key, $val) = $result->fetch(3)) {
-            $row_field['field_choices'][$key] = $val;
-        }
-    }
-    $array_field_config[$row_field['field']] = $row_field;
-}
+$array_field_config = nv_get_users_field_config();
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$_user = $custom_fields = array();
+$_user = $custom_fields = [];
 $userid = 0;
 if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
@@ -171,10 +150,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
-    $query_field = array();
+    $query_field = [];
     require NV_ROOTDIR . '/modules/Users/fields.check.php';
 
-    $in_groups = array();
+    $in_groups = [];
     foreach ($_user['in_groups'] as $_group_id) {
         if ($_group_id > 9) {
             $in_groups[] = $_group_id;
@@ -221,7 +200,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
          '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", 0
     )";
 
-    $data_insert = array();
+    $data_insert = [];
     $data_insert['username'] = $_user['username'];
     $data_insert['md5_username'] = $md5username;
     $data_insert['password'] = $crypt->hash_password($_user['password1'], $global_config['hashprefix']);
@@ -322,12 +301,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 $_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
 $_user['first_name'] = $_user['last_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
 $_user['view_mail'] = 0;
-$_user['in_groups'] = array();
+$_user['in_groups'] = [];
 $_user['is_official'] = ' checked="checked"';
 $_user['adduser_email'] = '';
 $_user['view_mail'] = '';
 
-$groups = array();
+$groups = [];
 if (!empty($groups_list)) {
     foreach ($groups_list as $group_id => $grtl) {
         $groups[] = array(
@@ -467,7 +446,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     }
                 } elseif ($row['field_type'] == 'checkbox') {
                     $number = 0;
-                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', array(
                             'id' => $row['fid'] . '_' . $number++,

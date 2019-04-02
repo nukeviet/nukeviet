@@ -43,9 +43,25 @@ function list_all_file($dir = '', $base_dir = '')
     return $file_list;
 }
 
-define('NV_ROOTDIR', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../src')));
+// Chuyển đổi toàn bộ hoặc một thư mục hoặc một file chỉ định
+$set_file = '';
+if (!empty($argv) and isset($argv[1])) {
+    $argv[1] = str_replace('\\', '/', $argv[1]);
+    if (is_file($argv[1])) {
+        $set_file = basename($argv[1]);
+        define('NV_ROOTDIR', str_replace('\\', '/', realpath(dirname($argv[1]))));
+    } else {
+        define('NV_ROOTDIR', str_replace('\\', '/', realpath($argv[1])));
+    }
+} else {
+    define('NV_ROOTDIR', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../src')));
+}
 
-$allfiles = list_all_file(NV_ROOTDIR);
+if (empty($set_file)) {
+    $allfiles = list_all_file(NV_ROOTDIR);
+} else {
+    $allfiles = [$set_file];
+}
 
 foreach ($allfiles as $filepath) {
     $filecontents = $filecontentsNew = file_get_contents(NV_ROOTDIR . '/' . $filepath);

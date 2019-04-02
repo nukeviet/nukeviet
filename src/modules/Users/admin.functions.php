@@ -8,13 +8,13 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 define('NV_IS_FILE_ADMIN', true);
 
-//Document
+// Tài liệu
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users';
 $array_url_instruction['user_add'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#them_tai_khoản_mới';
 $array_url_instruction['user_waiting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#thanh_vien_dợi_kich_hoạt';
@@ -27,7 +27,7 @@ $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:use
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
 
 // Xác định cấu hình module
-$global_users_config = array();
+$global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 3600;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
@@ -44,10 +44,38 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
-$array_systemfield_cfg = array(
-    'first_name' => array(0, 100),
-    'last_name' => array(0, 100),
-    'question' => array(3, 255),
-    'answer' => array(3, 255),
-    'sig' => array(0, 1000)
-);
+$array_systemfield_cfg = [
+    'first_name' => [0, 100],
+    'last_name' => [0, 100],
+    'question' => [3, 255],
+    'answer' => [3, 255],
+    'sig' => [0, 1000]
+];
+
+/**
+ * @return mixed[]
+ */
+function nv_get_users_field_config()
+{
+    global $db;
+    $array_field_config = [];
+    $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
+    while ($row_field = $result_field->fetch()) {
+        $language = unserialize($row_field['language']);
+        $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
+        $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
+        if (!empty($row_field['field_choices'])) {
+            $row_field['field_choices'] = unserialize($row_field['field_choices']);
+        } elseif (!empty($row_field['sql_choices'])) {
+            $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
+            $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+            $result = $db->query($query);
+            $weight = 0;
+            while (list ($key, $val) = $result->fetch(3)) {
+                $row_field['field_choices'][$key] = $val;
+            }
+        }
+        $array_field_config[$row_field['field']] = $row_field;
+    }
+    return $array_field_config;
+}
