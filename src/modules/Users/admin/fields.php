@@ -77,8 +77,9 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $xtpl->parse('choicesql');
         $contents = $xtpl->text('choicesql');
     } elseif ($choice == 'table') {
+        // Đây là tên bảng dữ liệu không phải tên module do đó chỉ chấp nhận ký tự thường, số và dấu gạch dưới
         $module = $nv_Request->get_string('module', 'post', '');
-        if ($module == '' or !preg_match($global_config['check_module'], $module)) {
+        if (!preg_match('/^[a-z0-9\_]+$/', $module)) {
             exit();
         }
         $_items = $db->query("SHOW TABLE STATUS LIKE '%\_" . $module . "%'")->fetchAll();
