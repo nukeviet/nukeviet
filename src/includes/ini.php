@@ -144,12 +144,12 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config .= "\$sys_info['php_compress_methods'] = [" . $_compress_method . "];\n";
 
     //server_headers
-    stream_context_set_default(array(
-        'http' => array(
+    stream_context_set_default([
+        'http' => [
             'method' => "GET",
             'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
-        )
-    ));
+        ]
+    ]);
     $server_headers = get_headers(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
     unset($server_headers[0], $server_headers['Date'], $server_headers['Expires'], $server_headers['Last-Modified'], $server_headers['Connection'], $server_headers['Set-Cookie'], $server_headers['X-Page-Speed']);
     $sys_info['server_headers'] = [];
