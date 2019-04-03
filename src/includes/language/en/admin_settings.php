@@ -51,7 +51,6 @@ $lang_module['nv_debug'] = 'Debug mode';
 $lang_module['nv_debug_help'] = 'If this option is enabled, the system will display errors to help developers easily check in the programming process. If your website is operating in a real environment, <strong>disable</strong> this option';
 $lang_module['captcha_type'] = 'Captcha type';
 $lang_module['captcha_type_0'] = 'Default captcha';
-$lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Captcha display method';
 $lang_module['captcha_0'] = 'Hide';
