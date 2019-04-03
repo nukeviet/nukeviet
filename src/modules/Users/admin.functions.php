@@ -63,7 +63,7 @@ function nv_get_users_field_config()
     $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
     while ($row_field = $result_field->fetch()) {
         $language = unserialize($row_field['language']);
-        $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
+        $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row_field['field'];
         $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
         if (!empty($row_field['field_choices'])) {
             $row_field['field_choices'] = unserialize($row_field['field_choices']);
