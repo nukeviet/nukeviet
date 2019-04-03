@@ -9,6 +9,12 @@
 function user_validForm(a) {
     $('[type="submit"] .fa', $(a)).toggleClass('hidden');
     $('[type="submit"]', $(a)).prop('disabled', true);
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -37,6 +43,12 @@ function user_validForm(a) {
 
 function user_editcensor_validForm(a) {
     $('[type="submit"]', $(a)).prop('disabled', true);
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,

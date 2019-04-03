@@ -8,13 +8,13 @@
 
 function addpass() {
     $("a[href*=edit_password]").click();
-    return !1
+    return !1;
 }
 
 function safe_deactivate_show(a, b) {
     $(b).hide(0);
     $(a).fadeIn();
-    return !1
+    return !1;
 }
 
 function safekeySend(a) {
@@ -245,6 +245,12 @@ function login_validForm(a) {
 }
 
 function reg_validForm(a) {
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $(".has-error", a).removeClass("has-error");
     var d = 0,
         c = [];
