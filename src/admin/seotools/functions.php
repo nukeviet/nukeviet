@@ -13,8 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 $allow_func = [
-    'main',
-    'googleplus'
+    'main'
 ];
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'pagetitle';
@@ -34,9 +33,8 @@ $menu_top = [
 
 define('NV_IS_FILE_SEOTOOLS', true);
 
-//Document
+// Document
 $array_url_instruction['pagetitle'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:pagetitle';
-$array_url_instruction['googleplus'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:googleplus';
 $array_url_instruction['sitemapPing'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:sitemapPing';
 $array_url_instruction['metatags'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools';
 $array_url_instruction['robots'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:robots';

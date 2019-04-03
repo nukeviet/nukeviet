@@ -20,7 +20,7 @@ if (defined('NV_TESTS_INSTALL')) {
 
 $dirs = nv_scandir(NV_ROOTDIR . '/includes/language', '/^([a-z]{2})/');
 
-$languageslist = array();
+$languageslist = [];
 
 foreach ($dirs as $file) {
     if (is_file(NV_ROOTDIR . '/includes/language/' . $file . '/install.php')) {
@@ -244,7 +244,7 @@ if ($step == 1) {
 
     // Kiem tra quyen ghi doi voi nhung file tren
     $nextstep = 1;
-    $array_dir_check = array();
+    $array_dir_check = [];
     foreach ($array_dir as $dir) {
         if ($ftp_check_login == 1) {
             if (!is_dir(NV_ROOTDIR . '/' . $dir) and $dir != $file_config_temp) {
@@ -315,7 +315,7 @@ if ($step == 1) {
     $nextstep = 0;
     $title = $nv_Lang->getModule('check_server');
 
-    $array_resquest = array();
+    $array_resquest = [];
     $array_resquest['pdo_support'] = $nv_Lang->getModule('not_compatible');
     $array_resquest['class_pdo_support'] = 'highlight_red';
     if (class_exists('PDO', false)) {
@@ -347,7 +347,7 @@ if ($step == 1) {
         $nv_Request->set_Session('maxstep', 5);
     }
 
-    $array_suport = array();
+    $array_suport = [];
     $array_support['supports_rewrite'] = (empty($sys_info['supports_rewrite'])) ? 0 : 1;
     $array_support['output_buffering'] = (ini_get('output_buffering') == '1' or strtolower(ini_get('output_buffering')) == 'on') ? 0 : 1;
     $array_support['session_auto_start'] = (ini_get('session.auto_start') == '1' or strtolower(ini_get('session.auto_start')) == 'on') ? 0 : 1;
@@ -390,7 +390,7 @@ if ($step == 1) {
             'dbtype' => $dbtype,
             'message' => '',
             'link' => '',
-            'files' => array()
+            'files' => []
         );
 
         if ($dbtype == 'mysql') {
@@ -561,15 +561,15 @@ if ($step == 1) {
                 }
             }
 
-            $tables = array();
+            $tables = [];
             if ($sys_info['allowed_set_time_limit']) {
                 set_time_limit(0);
             }
 
             // Cai dat du lieu cho he thong
             $db_config['error'] = '';
-            $sql_create_table = array();
-            $sql_drop_table = array();
+            $sql_create_table = [];
+            $sql_drop_table = [];
 
             // FIXME xóa sau khi tối ưu CSDL
             file_put_contents(NV_ROOTDIR . '/log.log', 'Bắt đầu tạo bảng dữ liệu tốn ' . round(((microtime(true) - $step5startTime) * 1000), 2) . 'ms' . PHP_EOL, FILE_APPEND);
@@ -669,7 +669,7 @@ if ($step == 1) {
                         } catch (PDOException $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
-                            trigger_error($e->getMessage());
+                            trigger_error(print_r($e, true));
                             break;
                         }
                     }
@@ -691,9 +691,9 @@ if ($step == 1) {
                         $filesavedata = 'en';
                     }
 
-                    $install_lang = array(); //DO NOT DELETE THIS LINE
-                    $menu_rows_lev0 = array(); //DO NOT DELETE THIS LINE
-                    $menu_rows_lev1 = array(); //DO NOT DELETE THIS LINE
+                    $install_lang = []; //DO NOT DELETE THIS LINE
+                    $menu_rows_lev0 = []; //DO NOT DELETE THIS LINE
+                    $menu_rows_lev1 = []; //DO NOT DELETE THIS LINE
                     include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
                     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC';
@@ -987,7 +987,7 @@ if ($step == 1) {
 
                             //$db->beginTransaction();
 
-                            $real_dirlist = array();
+                            $real_dirlist = [];
                             foreach ($allow_upload_dir as $dir) {
                                 $real_dirlist = nv_listUploadDir($dir, $real_dirlist);
                             }
@@ -1000,7 +1000,7 @@ if ($step == 1) {
                             }
 
                             // Data Counter
-                            $_array_insert = array();
+                            $_array_insert = [];
                             $_array_insert[] = "('c_time', 'start', 0, 0, 0)";
                             $_array_insert[] = "('c_time', 'last', 0, 0, 0)";
                             $_array_insert[] = "('total', 'hits', 0, 0, 0)";
@@ -1207,7 +1207,7 @@ if ($step == 1) {
     }
 
     $title = $nv_Lang->getModule('sample_data');
-    $array_data = array();
+    $array_data = [];
     $nextstep = 0;
     $contents = nv_step_7($array_data, $nextstep);
 } elseif ($step == 8) {
@@ -1218,8 +1218,8 @@ if ($step == 1) {
 
         // Write file robots
         if ($global_config['rewrite_enable']) {
-            $robots_data = array();
-            $robots_other = array();
+            $robots_data = [];
+            $robots_other = [];
             $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
             if (file_exists($cache_file)) {
                 include $cache_file;

@@ -32,7 +32,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  socialbutton tinyint(4) NOT NULL DEFAULT '0',
  activecomm varchar(255) DEFAULT '',
  layout_func varchar(100) DEFAULT '',
- gid mediumint(9) NOT NULL DEFAULT '0',
  weight smallint(4) NOT NULL DEFAULT '0',
  admin_id mediumint(8) unsigned NOT NULL DEFAULT '0',
  add_time int(11) NOT NULL DEFAULT '0',

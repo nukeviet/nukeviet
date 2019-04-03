@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -20,7 +20,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $news_contents = $query->fetch();
 
     if ($news_contents['id'] > 0) {
-        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
 
@@ -93,7 +93,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 }
             }
             $news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
-            if (! empty($news_contents['homeimgfile'])) {
+            if (!empty($news_contents['homeimgfile'])) {
                 $src = $alt = $note = '';
                 $width = $height = 0;
                 if ($news_contents['homeimgthumb'] == 1 and $news_contents['imgposition'] == 1) {
@@ -118,7 +118,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                     $news_contents['homeimgfile'] = $src;
                 }
 
-                if (! empty($src)) {
+                if (!empty($src)) {
                     $meta_property['og:image'] = (preg_match('/^(http|https|ftp|gopher)\:\/\//', $news_contents['homeimgfile'])) ? $news_contents['homeimgfile'] : NV_MY_DOMAIN . $news_contents['homeimgfile'];
                     if ($news_contents['imgposition'] > 0) {
                         $news_contents['image'] = array(
@@ -132,7 +132,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 } elseif (!empty($show_no_image)) {
                     $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
                 }
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
             }
 
@@ -197,7 +197,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $news_contents['source'] = '<a title="' . $sourcetext . '" rel="nofollow" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
         } elseif ($module_config[$module_name]['config_source'] == 3) {
             $news_contents['source'] = '<a title="' . $sourcetext . '" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
-        } elseif ($module_config[$module_name]['config_source'] == 2 and ! empty($source_logo)) {
+        } elseif ($module_config[$module_name]['config_source'] == 2 and !empty($source_logo)) {
             $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
         }
     }
@@ -226,7 +226,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
                 $row['imghome'] = $row['homeimgfile'];
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 //no image
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
@@ -266,7 +266,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
                 $row['imghome'] = $row['homeimgfile'];
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 //no image
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
@@ -312,7 +312,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
                 $row['imghome'] = $row['homeimgfile'];
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 //no image
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
@@ -320,7 +320,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             }
 
             $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
-            $topic_array[] = array(
+            $topic_array[] = [
                 'title' => $row['title'],
                 'link' => $link,
                 'time' => $row['publtime'],
@@ -330,7 +330,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'hometext' => $row['hometext'],
                 'imghome' => $row['imghome'],
                 'external_link' => $row['external_link']
-            );
+            ];
         }
         $topic->closeCursor();
         unset($topic, $rows);
@@ -389,7 +389,6 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $module_info['layout_funcs'][$op_file] = !empty($news_contents['layout_func']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
 
     $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
-    $id_profile_googleplus = $news_contents['gid'];
 
     $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $news_contents['titlesite'];
     $key_words = ($module_config[$module_name]['keywords_tag'] and empty($news_contents['keywords'])) ? implode(',', $key_words) : $news_contents['keywords'];

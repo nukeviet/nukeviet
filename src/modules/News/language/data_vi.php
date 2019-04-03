@@ -65,7 +65,7 @@ $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data 
 $db->query($sql);
 
 // News: bodyhtml, bodytext
-$sth_detail = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (:id, '', '', :bodyhtml, :sourcetext, 2, 0, 1, 1, 1, 0)");
+$sth_detail = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save) VALUES (:id, '', '', :bodyhtml, :sourcetext, 2, 0, 1, 1, 1)");
 
 $id = 1;
 list ($homeimgfile, $homeimgthumb) = nv_news_check_image_exit('nangly.jpg', $module_upload);
