@@ -56,7 +56,7 @@
 
         <div class="form-group">
             <div>
-                <input type="password" autocomplete="off" class="re-password required form-control" placeholder="{LANG.re_password}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.re_password_empty}">
+                <input type="password" autocomplete="off" class="re-password required form-control" placeholder="{LANG.re_password}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){1,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.re_password_empty}">
             </div>
         </div>
 

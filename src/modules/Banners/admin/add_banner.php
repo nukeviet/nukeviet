@@ -14,9 +14,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $nv_Lang->getModule('add_banner_admin');
 
-$contents = array();
+$contents = [];
 $contents['upload_blocked'] = '';
-$contents['file_allowed_ext'] = array();
+$contents['file_allowed_ext'] = [];
 
 if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
     $contents['file_allowed_ext'][] = 'images';
@@ -34,7 +34,7 @@ if (empty($contents['file_allowed_ext'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$plans = $require_image = $plans_form = $plans_exp = array();
+$plans = $require_image = $plans_form = $plans_exp = [];
 $sql = 'SELECT id, title, blang, form, require_image, exp_time FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
@@ -168,7 +168,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 0, " . $act . ", " . $_weight . "
             )";
 
-            $data_insert = array();
+            $data_insert = [];
             $data_insert['title'] = $title;
             $data_insert['file_name'] = $file_name;
             $data_insert['file_ext'] = $file_ext;
@@ -203,7 +203,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     0, " . $act . ", " . $_weight . "
                 )";
 
-                $data_insert = array();
+                $data_insert = [];
                 $data_insert['title'] = $title;
                 $data_insert['file_name'] = $file_name;
                 $data_insert['file_ext'] = $file_ext;
