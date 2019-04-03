@@ -735,3 +735,7 @@ $lang_module['editcensor_new'] = 'Nouvelle valeur';
 $lang_module['editcensor_info_basic'] = 'Informations de base';
 $lang_module['editcensor_info_custom'] = 'Autres informations';
 $lang_module['editinfo_okcensor'] = 'Vos informations ont été enregistrées et prendront effet après avoir été modérées. En attendant l\'approbation, vous pouvez continuer à modifier les informations.';
+$lang_module['field_options_choicesql_order'] = 'Sélectionnez la colonne de tri';
+$lang_module['field_options_choicesql_sort'] = 'Sélectionnez le style de tri';
+$lang_module['field_options_choicesql_sort_asc'] = 'Ascendant';
+$lang_module['field_options_choicesql_sort_desc'] = 'Descendant';

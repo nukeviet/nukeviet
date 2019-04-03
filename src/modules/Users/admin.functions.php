@@ -68,7 +68,11 @@ function nv_get_users_field_config()
             $row_field['field_choices'] = unserialize($row_field['field_choices']);
         } elseif (!empty($row_field['sql_choices'])) {
             $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
+            $row_field['field_choices'] = [];
             $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+            if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
+                $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
+            }
             $result = $db->query($query);
             $weight = 0;
             while (list ($key, $val) = $result->fetch(3)) {

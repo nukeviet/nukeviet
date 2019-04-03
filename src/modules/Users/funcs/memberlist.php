@@ -65,7 +65,11 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
                     $row_field['field_choices'] = unserialize($row_field['field_choices']);
                 } elseif (! empty($row_field['sql_choices'])) {
                     $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
+                    $row_field['field_choices'] = [];
                     $sql = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+                    if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
+                        $sql .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
+                    }
                     $result = $db->query($sql);
 
                     $weight = 0;

@@ -737,3 +737,7 @@ $lang_module['editcensor_info_custom'] = 'Other info';
 $lang_module['lostpass_sendmail_error'] = 'Currently the system can not send email so you can temporarily not get your password, please contact the site administrator for assistance. Honestly apologize for this inconvenience!';
 $lang_module['editinfo_okcensor'] = 'Your information has been saved and will take effect after being moderated. While waiting for approval, you can continue to edit the information';
 $lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
+$lang_module['field_options_choicesql_order'] = 'Select the sort column';
+$lang_module['field_options_choicesql_sort'] = 'Select sorting style';
+$lang_module['field_options_choicesql_sort_asc'] = 'Ascending';
+$lang_module['field_options_choicesql_sort_desc'] = 'Descending';
