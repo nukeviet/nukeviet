@@ -106,7 +106,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                     }
 
                     $upload = new NukeViet\Files\Upload($global_config['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-                    $upload->setLanguage($lang_global);
+                    $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
                     $upload_info = $upload->save_file($_FILES['fileattach'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir, false);
                     @unlink($_FILES['fileattach']['tmp_name']);
 

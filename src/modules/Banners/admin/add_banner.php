@@ -180,7 +180,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $id = $db->insert_id($_sql, 'id', $data_insert);
         } else {
             $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            $upload->setLanguage($lang_global);
+            $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
             $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
             @unlink($_FILES['banner']['tmp_name']);
 
