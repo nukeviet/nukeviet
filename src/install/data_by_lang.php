@@ -13,25 +13,25 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules');
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid, icon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-$sth->execute(array( 'about', 'Page', 'about', 'about', 'Page', $install_lang['modules']['about'], $install_lang['modules']['about_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0, 'fas fa-book-reader'));
-$sth->execute(array( 'news', 'News', 'news', 'news', 'News', $install_lang['modules']['news'], $install_lang['modules']['news_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0, 'far fa-newspaper'));
-$sth->execute(array( 'users', 'Users', 'users', 'users', 'Users', $install_lang['modules']['users'], $install_lang['modules']['users_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0, 'fas fa-users'));
-$sth->execute(array( 'contact', 'Contact', 'contact', 'contact', 'Contact', $install_lang['modules']['contact'], $install_lang['modules']['contact_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0, 'fas fa-phone'));
-$sth->execute(array( 'statistics', 'Statistics', 'statistics', 'statistics', 'Statistics', $install_lang['modules']['statistics'], $install_lang['modules']['statistics_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0, 'fas fa-filter'));
-$sth->execute(array( 'voting', 'Voting', 'voting', 'voting', 'Voting', $install_lang['modules']['voting'], $install_lang['modules']['voting_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0, 'fas fa-lightbulb'));
-$sth->execute(array( 'banners', 'Banners', 'banners', 'banners', 'Banners',$install_lang['modules']['banners'], $install_lang['modules']['banners_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0, 'far fa-image'));
-$sth->execute(array( 'seek', 'Seek', 'seek', 'seek', 'Seek', $install_lang['modules']['seek'], $install_lang['modules']['seek_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0, 'fas fa-search'));
-$sth->execute(array( 'menu', 'Menu', 'menu', 'menu', 'Menu', $install_lang['modules']['menu'], $install_lang['modules']['menu_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0, 'fas fa-th-large'));
-$sth->execute(array( 'feeds', 'Feeds', 'feeds', 'feeds', 'Feeds', $install_lang['modules']['feeds'], $install_lang['modules']['feeds'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0, 'fas fa-rss'));
-$sth->execute(array( 'page', 'Page', 'page', 'page', 'Page', $install_lang['modules']['Page'], $install_lang['modules']['Page_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0, 'fas fa-book'));
-$sth->execute(array( 'comment', 'Comment', 'comment', 'comment', 'Comment', $install_lang['modules']['comment'], $install_lang['modules']['comment_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 12, 1, '', 0, 0, 'fas fa-comments'));
-$sth->execute(array( 'siteterms', 'Page', 'siteterms', 'siteterms', 'Page', $install_lang['modules']['siteterms'], $install_lang['modules']['siteterms_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0, 'fas fa-asterisk'));
-$sth->execute(array( 'freecontent', 'FreeContent', 'freecontent', 'freecontent', 'FreeContent', $install_lang['modules']['freecontent'], $install_lang['modules']['freecontent_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 14, 1, '', 0, 0, 'far fa-square'));
-$sth->execute(array( 'two-step-verification', 'TwoStepVerification', 'twostepverification', 'twostepverification', 'TwoStepVerification', $install_lang['modules']['two_step_verification'], $install_lang['modules']['two_step_verification_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 15, 1, '', 0, 0, 'fas fa-key'));
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, icon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+$sth->execute(['about', 'Page', 'about', 'about', 'Page', $install_lang['modules']['about'], $install_lang['modules']['about_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 'fas fa-book-reader']);
+$sth->execute(['news', 'News', 'news', 'news', 'News', $install_lang['modules']['news'], $install_lang['modules']['news_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 'far fa-newspaper']);
+$sth->execute(['users', 'Users', 'users', 'users', 'Users', $install_lang['modules']['users'], $install_lang['modules']['users_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 'fas fa-users']);
+$sth->execute(['contact', 'Contact', 'contact', 'contact', 'Contact', $install_lang['modules']['contact'], $install_lang['modules']['contact_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 'fas fa-phone']);
+$sth->execute(['statistics', 'Statistics', 'statistics', 'statistics', 'Statistics', $install_lang['modules']['statistics'], $install_lang['modules']['statistics_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 'fas fa-filter']);
+$sth->execute(['voting', 'Voting', 'voting', 'voting', 'Voting', $install_lang['modules']['voting'], $install_lang['modules']['voting_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 'fas fa-lightbulb']);
+$sth->execute(['banners', 'Banners', 'banners', 'banners', 'Banners',$install_lang['modules']['banners'], $install_lang['modules']['banners_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 'far fa-image']);
+$sth->execute(['seek', 'Seek', 'seek', 'seek', 'Seek', $install_lang['modules']['seek'], $install_lang['modules']['seek_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 'fas fa-search']);
+$sth->execute(['menu', 'Menu', 'menu', 'menu', 'Menu', $install_lang['modules']['menu'], $install_lang['modules']['menu_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 'fas fa-th-large']);
+$sth->execute(['feeds', 'Feeds', 'feeds', 'feeds', 'Feeds', $install_lang['modules']['feeds'], $install_lang['modules']['feeds'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 'fas fa-rss']);
+$sth->execute(['page', 'Page', 'page', 'page', 'Page', $install_lang['modules']['Page'], $install_lang['modules']['Page_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 'fas fa-book']);
+$sth->execute(['comment', 'Comment', 'comment', 'comment', 'Comment', $install_lang['modules']['comment'], $install_lang['modules']['comment_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 12, 1, '', 0, 'fas fa-comments']);
+$sth->execute(['siteterms', 'Page', 'siteterms', 'siteterms', 'Page', $install_lang['modules']['siteterms'], $install_lang['modules']['siteterms_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 'fas fa-asterisk']);
+$sth->execute(['freecontent', 'FreeContent', 'freecontent', 'freecontent', 'FreeContent', $install_lang['modules']['freecontent'], $install_lang['modules']['freecontent_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 14, 1, '', 0, 'far fa-square']);
+$sth->execute(['two-step-verification', 'TwoStepVerification', 'twostepverification', 'twostepverification', 'TwoStepVerification', $install_lang['modules']['two_step_verification'], $install_lang['modules']['two_step_verification_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 15, 1, '', 0, 'fas fa-key']);
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs');
-$_array_insert = array();
+$_array_insert = [];
 //About
 $_array_insert[] = "( 'main', 'main', 'Main', 'about', 1, 0, 1, '')";
 $_array_insert[] = "( 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, '')";
@@ -110,19 +110,19 @@ $_array_insert[] = "( 'main', 'main', 'Main', 'feeds', 1, 0, 1, '')";
 
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES '.implode(',', $_array_insert));
 
-$array_funcid = array();
-$array_funcid_mod = array();
+$array_funcid = [];
+$array_funcid_mod = [];
 
 $func_result = $db->query('SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
 while (list($func_id_i, $func_name, $in_module) = $func_result->fetch(3)) {
     $array_funcid[] = $func_id_i;
     if (!isset($array_funcid_mod[$in_module])) {
-        $array_funcid_mod[$in_module] = array();
+        $array_funcid_mod[$in_module] = [];
     }
     $array_funcid_mod[$in_module][$func_name] = $func_id_i;
 }
 
-$themes_default = array();
+$themes_default = [];
 $themes_default['left-main-right'] = array(
     $array_funcid_mod['about']['main'],
     $array_funcid_mod['news']['content'],
@@ -174,7 +174,7 @@ $themes_default['left-main'] = array(
     $array_funcid_mod['voting']['main'],
     $array_funcid_mod['page']['main'] );
 
-$themes_mobile = array();
+$themes_mobile = [];
 $themes_mobile['main'] = array(
     $array_funcid_mod['about']['main'],
     $array_funcid_mod['news']['content'],
@@ -223,7 +223,7 @@ $themes_mobile['main'] = array(
 );
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
-$_array_insert = array();
+$_array_insert = [];
 $_array_insert[] = "(0, 'left-main-right', 'default')";
 $_array_insert[] = "(0, 'main', 'mobile_default')";
 
@@ -242,7 +242,7 @@ foreach ($array_funcid as $funcid) {
 }
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES ' . implode(', ', $_array_insert));
 
-$company = array();
+$company = [];
 $company['company_name'] = $install_lang['vinades_fullname'];
 $company['company_address'] = $install_lang['vinades_address'];
 $company['company_sortname'] = "VINADES.,JSC";
@@ -312,21 +312,21 @@ $sth->execute(array('mobile_default', 'theme', 'global.company_info.php', $insta
 
 // Thiet lap Block
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight');
-$_array_insert = array();
+$_array_insert = [];
 $func_result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC');
-$array_weight_block = array();
+$array_weight_block = [];
 while ($row = $func_result->fetch()) {
     if ($row['all_func'] == 1) {
         $array_funcid_i = $array_funcid;
     } else {
-        $array_funcid_i = isset($array_funcid_mod[$row['module']]) ? $array_funcid_mod[$row['module']] : array();
+        $array_funcid_i = isset($array_funcid_mod[$row['module']]) ? $array_funcid_mod[$row['module']] : [];
 
         $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $row['theme'] . '/config.ini');
         $blocks = $xml->xpath('setblocks/block');
         for ($i = 0, $count = sizeof($blocks); $i < $count; ++$i) {
             $rowini = ( array )$blocks[$i];
             if (isset($rowini['funcs']) and $rowini['module'] == $row['module'] and $rowini['file_name'] == $row['file_name']) {
-                $array_funcid_i = array();
+                $array_funcid_i = [];
                 if (!is_array($rowini['funcs'])) {
                     $rowini['funcs'] = array( $rowini['funcs'] );
                 }
@@ -374,11 +374,11 @@ if ($result->fetchColumn()) {
 if (!empty($menu_rows_lev0)) {
     $result = $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 
-    $is_yes_sub = !empty($menu_rows_lev1) ? array_unique(array_keys($menu_rows_lev1)) : array();
-    $menu_y_sub = array();
+    $is_yes_sub = !empty($menu_rows_lev1) ? array_unique(array_keys($menu_rows_lev1)) : [];
+    $menu_y_sub = [];
     if (!empty($is_yes_sub)) {
         foreach ($is_yes_sub as $mys) {
-            $menu_y_sub[$mys] = array();
+            $menu_y_sub[$mys] = [];
             $menu_y_sub[$mys]['subsize'] = sizeof($menu_rows_lev1[$mys]);
         }
     }
@@ -388,8 +388,8 @@ if (!empty($menu_rows_lev0)) {
     $a = 1;
     $b = 1;
     $d = sizeof($menu_rows_lev0);
-    $executes = array();
-    $subitem = array();
+    $executes = [];
+    $subitem = [];
     foreach ($menu_rows_lev0 as $m => $item) {
         $executes[$a] = array(
             $a,
@@ -403,7 +403,7 @@ if (!empty($menu_rows_lev0)) {
             $item['groups_view'],
             $m,
             $item['op']);
-        $subitem[$a] = array();
+        $subitem[$a] = [];
         if (isset($menu_y_sub[$m])) {
             for ($c = 1; $c <= $menu_y_sub[$m]['subsize']; ++$c) {
                 ++$b;

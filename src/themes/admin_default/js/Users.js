@@ -9,6 +9,12 @@
 function user_validForm(a) {
     $('[type="submit"] .fa', $(a)).toggleClass('hidden');
     $('[type="submit"]', $(a)).prop('disabled', true);
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -33,6 +39,33 @@ function user_validForm(a) {
         }
     });
     return false
+}
+
+function user_editcensor_validForm(a) {
+    $('[type="submit"]', $(a)).prop('disabled', true);
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
+    $.ajax({
+        type: $(a).prop("method"),
+        cache: !1,
+        url: $(a).prop("action"),
+        data: $(a).serialize(),
+        dataType: "json",
+        success: function(b) {
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
+                alert(b.mess);
+                $("[name=\"" + b.input + "\"]", a).focus();
+            } else {
+                window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor';
+            }
+        }
+    });
+    return false;
 }
 
 function nv_chang_question(qid) {
@@ -120,7 +153,7 @@ function nv_row_del(vid) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
             if (res == 'OK') {
-                window.location.href = window.location.href;
+                location.reload();
             } else {
                 var r_split = res.split("_");
                 if (r_split[0] == 'ERROR') {
@@ -138,7 +171,7 @@ function nv_row_del(vid) {
 function nv_set_official(vid) {
     $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
         if (res == 'OK') {
-            window.location.href = window.location.href;
+            location.reload();
         } else {
             alert(res);
         }
@@ -151,7 +184,7 @@ function nv_waiting_row_del(uid) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
             if (res == 'OK') {
-                window.location.href = window.location.href;
+                location.reload();
             } else {
                 alert(nv_is_del_confirm[2]);
             }
@@ -160,12 +193,34 @@ function nv_waiting_row_del(uid) {
     return false;
 }
 
+//Xóa thông tin chỉnh sửa
+function nv_editcensor_row_del(uid, msg) {
+    if (confirm(msg)) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
+            location.reload();
+        });
+    }
+}
+
+// Xác nhận thông tin chỉnh sửa
+function nv_editcensor_row_accept(uid, msg) {
+    if (confirm(msg)) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
+            if (res.status != 'SUCCESS') {
+                 alert(res.mess);
+            } else {
+                location.reload();
+            }
+        });
+    }
+}
+
 function nv_chang_status(vid) {
     var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
     $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            window.location.href = window.location.href;
+            location.reload();
         }
     });
     return;
@@ -178,10 +233,11 @@ function nv_group_change_status(group_id) {
         var sl = document.getElementById('select_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true)
+            if (sl.checked == true) {
                 sl.checked = false;
-            else
-                sl.checked = true;
+            } else {
+                sl.checked = true
+            };
             clearTimeout(nv_timer);
             sl.disabled = true;
             return;
@@ -453,7 +509,7 @@ function nv_del_oauthall(userid) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
             if (res == 'OK') {
-                window.location.href = window.location.href;
+                location.reload();
             } else {
                 alert(nv_is_del_confirm[2]);
             }
@@ -466,7 +522,7 @@ function nv_del_oauthone(opid, userid) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
             if (res == 'OK') {
-                window.location.href = window.location.href;
+                location.reload();
             } else {
                 alert(nv_is_del_confirm[2]);
             }
@@ -493,7 +549,7 @@ function nv_main_action(btn) {
             if (confirm(nv_is_del_confirm[0])) {
                 $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid, function(res) {
                     if (res == 'OK') {
-                        window.location.href = window.location.href;
+                        location.reload();
                     } else {
                         var r_split = res.split("_");
                         if (r_split[0] == 'ERROR') {
@@ -517,7 +573,7 @@ function nv_main_action(btn) {
                     alert(nv_is_change_act_confirm[2]);
                     btn.prop('disabled', false);
                 } else {
-                    window.location.href = window.location.href;
+                    location.reload();
                 }
             });
         }

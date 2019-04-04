@@ -92,7 +92,6 @@ function nv_create_table_sys($lang)
          admins varchar(255) DEFAULT '',
          rss tinyint(4) NOT NULL DEFAULT '1',
          sitemap tinyint(4) NOT NULL DEFAULT '1',
-         gid smallint(5) NOT NULL DEFAULT '0',
          icon varchar(100) NOT NULL DEFAULT '',
          PRIMARY KEY (title)
     ) ENGINE=InnoDB";
@@ -182,23 +181,23 @@ function nv_create_table_sys($lang)
 
     $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (
         title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file,
-        theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid, icon
+        theme, mobile, description, keywords, groups_view, weight, act, admins, rss, icon
     ) VALUES
-        ('about', 'Page', 'about', 'about', 'Page', 'About', '', 1525251600, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 0, 'fas fa-book-reader'),
-        ('news', 'News', 'news', 'news', 'News', 'News', '', 1525251600, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 0, 'far fa-newspaper'),
-        ('users', 'Users', 'users', 'users', 'users', 'Users', 'Users', 1525251600, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 0, 'fas fa-users'),
-        ('contact', 'Contact', 'contact', 'contact', 'Contact', 'Contact', '', 1525251600, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 0, 'fas fa-phone'),
-        ('statistics', 'Statistics', 'statistics', 'statistics', 'Statistics', 'Statistics', '', 1525251600, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 0, 'fas fa-filter'),
-        ('voting', 'Voting', 'voting', 'voting', 'Voting', 'Voting', '', 1525251600, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 0, 'fas fa-lightbulb'),
-        ('banners', 'Banners', 'banners', 'banners', 'Banners', 'Banners', '', 1525251600, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 0, 'far fa-image'),
-        ('seek', 'Seek', 'seek', 'seek', 'Seek', 'Search', '', 1525251600, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 0, 'fas fa-search'),
-        ('menu', 'Menu', 'menu', 'menu', 'Menu', 'Menu Site', '', 1525251600, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 0, 'fas fa-th-large'),
-        ('feeds', 'Feeds', 'feeds', 'feeds', 'Feeds', 'Rss Feeds', '', 1525251600, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 0, 'fas fa-rss'),
-        ('page', 'Page', 'page', 'page', 'Page', 'Page', '', 1525251600, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0, 'fas fa-book'),
-        ('comment', 'Comment', 'comment', 'comment', 'Comment', 'Comment', '', 1525251600, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0, 'fas fa-comments'),
-        ('siteterms', 'Page', 'siteterms', 'siteterms', 'Page', 'Siteterms', '', 1525251600, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 0, 'fas fa-asterisk'),
-        ('freecontent', 'FreeContent', 'freecontent', 'freecontent', 'FreeContent', 'Free Content', '', 1525251600, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 0, 'far fa-square'),
-        ('two-step-verification', 'TwoStepVerification', 'twostepverification', 'twostepverification', 'TwoStepVerification', 'Two-Step Verification', '', 1525251600, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 0, 'fas fa-key')";
+        ('about', 'Page', 'about', 'about', 'Page', 'About', '', 1525251600, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 'fas fa-book-reader'),
+        ('news', 'News', 'news', 'news', 'News', 'News', '', 1525251600, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 'far fa-newspaper'),
+        ('users', 'Users', 'users', 'users', 'users', 'Users', 'Users', 1525251600, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 'fas fa-users'),
+        ('contact', 'Contact', 'contact', 'contact', 'Contact', 'Contact', '', 1525251600, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 'fas fa-phone'),
+        ('statistics', 'Statistics', 'statistics', 'statistics', 'Statistics', 'Statistics', '', 1525251600, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 'fas fa-filter'),
+        ('voting', 'Voting', 'voting', 'voting', 'Voting', 'Voting', '', 1525251600, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 'fas fa-lightbulb'),
+        ('banners', 'Banners', 'banners', 'banners', 'Banners', 'Banners', '', 1525251600, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 'far fa-image'),
+        ('seek', 'Seek', 'seek', 'seek', 'Seek', 'Search', '', 1525251600, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 'fas fa-search'),
+        ('menu', 'Menu', 'menu', 'menu', 'Menu', 'Menu Site', '', 1525251600, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 'fas fa-th-large'),
+        ('feeds', 'Feeds', 'feeds', 'feeds', 'Feeds', 'Rss Feeds', '', 1525251600, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 'fas fa-rss'),
+        ('page', 'Page', 'page', 'page', 'Page', 'Page', '', 1525251600, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 'fas fa-book'),
+        ('comment', 'Comment', 'comment', 'comment', 'Comment', 'Comment', '', 1525251600, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 'fas fa-comments'),
+        ('siteterms', 'Page', 'siteterms', 'siteterms', 'Page', 'Siteterms', '', 1525251600, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 'fas fa-asterisk'),
+        ('freecontent', 'FreeContent', 'freecontent', 'freecontent', 'FreeContent', 'Free Content', '', 1525251600, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 'far fa-square'),
+        ('two-step-verification', 'TwoStepVerification', 'twostepverification', 'twostepverification', 'TwoStepVerification', 'Two-Step Verification', '', 1525251600, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 'fas fa-key')";
 
     $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
         ('" . $lang . "', 'global', 'site_domain', ''),

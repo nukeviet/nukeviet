@@ -660,6 +660,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $xtpl->assign(strtoupper($data['type']) . '_ACTIVE', 'active');
     $xtpl->assign(strtoupper('TAB_' . $data['type']) . '_ACTIVE', 'in active');
 
+    // Tab đổi tên đăng nhập
     if (in_array('username', $types)) {
         if ($pass_empty) {
             $xtpl->parse('main.tab_edit_username.username_empty_pass');
@@ -668,6 +669,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_username');
     }
 
+    // Tab đổi mật khẩu
     if (in_array('password', $types)) {
         if (!$pass_empty and !defined('ACCESS_PASSUS')) {
             $xtpl->parse('main.tab_edit_password.is_old_pass');
@@ -676,11 +678,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_password');
     }
 
+    // Tab quản lý xác thực hai bước
     if (in_array('2step', $types)) {
         $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
         $xtpl->parse('main.2step');
     }
 
+    // Tab đổi email
     if (in_array('email', $types)) {
         if ($pass_empty) {
             $xtpl->parse('main.tab_edit_email.email_empty_pass');
@@ -689,6 +693,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_email');
     }
 
+    // Tab quản lý openid
     if (in_array('openid', $types)) {
         if (!empty($data_openid)) {
             $openid_del_al = 0;
@@ -728,6 +733,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_openid');
     }
 
+    // Tab nhóm thành viên
     if (in_array('group', $types)) {
         $group_check_all_checked = 1;
         $count = 0;
@@ -758,6 +764,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_group');
     }
 
+    // Tab sửa các thông tin khác (các trường dữ liệu tùy chỉnh)
     if (in_array('others', $types) and sizeof($array_field_config) > 7) {
         // Parse custom fields
         foreach ($array_field_config as $row) {
@@ -852,11 +859,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_others');
     }
 
+    // Tab đổi ảnh đại diện
     if (in_array('avatar', $types)) {
         $xtpl->parse('main.edit_avatar');
         $xtpl->parse('main.tab_edit_avatar');
     }
 
+    // Tab đổi câu hỏi bảo mật
     if (in_array('question', $types)) {
         if ($pass_empty) {
             $xtpl->parse('main.question_empty_pass');
@@ -889,6 +898,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_question');
     }
 
+    // Tab chế độ an toàn
     if (in_array('safemode', $types)) {
         if ($pass_empty) {
             $xtpl->parse('main.safemode_empty_pass');
@@ -897,6 +907,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_safemode');
     }
 
+    // Xuất menu cuối form
     $_lis = $module_info['funcs'];
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
@@ -917,6 +928,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->parse('main.navbar');
         }
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

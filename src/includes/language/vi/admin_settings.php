@@ -54,7 +54,6 @@ $lang_module['nv_debug_help'] = 'Nếu bật tùy chọn này, hệ thống sẽ
 
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
-$lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Cấu hình hiển thị captcha';
 $lang_module['captcha_0'] = 'Không hiển thị';

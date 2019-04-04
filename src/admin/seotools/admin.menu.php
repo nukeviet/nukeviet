@@ -12,7 +12,6 @@ if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['googleplus'] = $nv_Lang->getModule('googleplus');
 if (defined('NV_IS_GODADMIN')) {
     $submenu['sitemapPing'] = $nv_Lang->getModule('sitemapPing');
     $submenu['pagetitle'] = $nv_Lang->getModule('pagetitle');

@@ -12,11 +12,11 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_modules')
-);
+];
 
 define('NV_IS_FILE_MODULES', true);
 
@@ -190,12 +190,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     try {
                         $db->query($sql);
                     } catch (PDOException $e) {
-                        /*
-                        echo '<pre>';
-                        print_r($e);
-                        echo '</pre>';
-                        */
-                        trigger_error($e->getMessage());
+                        trigger_error(print_r($e, true));
                         return $return;
                     }
                 }

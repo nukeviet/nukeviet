@@ -53,10 +53,9 @@ if ($page_config['viewtype'] == 2) {
 
     $page_title = $mod_title = $rowdetail['title'];
     $description = $rowdetail['description'];
-    $id_profile_googleplus = $rowdetail['gid'];
 
     // Hiển thị các bài liên quan mới nhất.
-    $other_links = array();
+    $other_links = [];
 
     $related_articles = intval($page_config['related_articles']);
     if ($related_articles) {
@@ -104,7 +103,7 @@ if ($page_config['viewtype'] == 2) {
     $mod_title = $module_info['custom_title'];
     $per_page = $page_config['per_page'];
 
-    $array_data = array();
+    $array_data = [];
     $db_slave->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_PREFIXLANG . '_' . $module_data)

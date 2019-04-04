@@ -388,19 +388,22 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id']);
                     }
 
-                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
-                            " . $rowcontent['id'] . ",
-                            " . $db->quote($rowcontent['titlesite']) . ",
-                            " . $db->quote($rowcontent['description']) . ",
-                            " . $db->quote($rowcontent['bodyhtml']) . ",
-                            " . $db->quote($rowcontent['sourcetext']) . ",
-                            " . intval($rowcontent['imgposition']) . ",
-                            " . $db->quote($rowcontent['layout_func']) . ",
-                            " . intval($rowcontent['copyright']) . ",
-                            " . intval($rowcontent['allowed_send']) . ",
-                            " . intval($rowcontent['allowed_print']) . ",
-                            " . intval($rowcontent['allowed_save']) . ", 0
-                        )");
+                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_detail (
+                        id, titlesite, description, bodyhtml, sourcetext, imgposition, layout_func,
+                        copyright, allowed_send, allowed_print, allowed_save
+                    ) VALUES (
+                        " . $rowcontent['id'] . ",
+                        " . $db->quote($rowcontent['titlesite']) . ",
+                        " . $db->quote($rowcontent['description']) . ",
+                        " . $db->quote($rowcontent['bodyhtml']) . ",
+                        " . $db->quote($rowcontent['sourcetext']) . ",
+                        " . intval($rowcontent['imgposition']) . ",
+                        " . $db->quote($rowcontent['layout_func']) . ",
+                        " . intval($rowcontent['copyright']) . ",
+                        " . intval($rowcontent['allowed_send']) . ",
+                        " . intval($rowcontent['allowed_print']) . ",
+                        " . intval($rowcontent['allowed_save']) . "
+                    )");
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 

@@ -85,3 +85,5 @@ $lang_module['setup_option_0'] = 'Just setup module';
 $lang_module['setup_option_1'] = 'Setup module and install the sample data';
 $lang_module['error_no_hook_module'] = 'To install this module you need to install the following module or virtual module respectively: <strong>%s</strong>';
 $lang_module['select_hook_module'] = 'Choose hook module %s';
+$lang_module['vmodule_no_title'] = 'Error: You have not entered a new module name.';
+$lang_module['vmodule_no_file'] = 'Error: You have not selected the original module.';

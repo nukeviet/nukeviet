@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
-$array_site_cat_module = array();
+$array_site_cat_module = [];
 if ($global_config['idsite']) {
     $_module = $db->query('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
     if (!empty($_module)) {
@@ -33,7 +33,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
         $hook_files = array_filter(explode('|', $hook_files));
         $hook_mods = array_filter(explode('|', $hook_mods));
 
-        $hook_data = array();
+        $hook_data = [];
         foreach ($hook_files as $fkey => $file) {
             if (empty($hook_mods[$fkey]) or !isset($sys_mods[$hook_mods[$fkey]])) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
@@ -52,7 +52,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             }
 
             // Kiểm tra các module liên quan nếu module này có hook
-            $array_hooks = array();
+            $array_hooks = [];
             if (is_dir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks')) {
                 $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks', '/^[a-zA-Z0-9]+\.php$/');
                 if (!empty($hooks)) {
@@ -63,22 +63,22 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                             if (!empty($require_module) and !isset($hook_data[$hook]) or $sys_mods[$hook_data[$hook]]['module_file'] != $require_module) {
                                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                             }
-                            $array_hooks[] = array(
+                            $array_hooks[] = [
                                 'plugin_file' => $hook,
                                 'plugin_area' => $plugin_area[0],
                                 'hook_module' => $hook_data[$hook]
-                            );
+                            ];
                         }
                     }
                 }
             } else {
-                $array_hooks = array();
+                $array_hooks = [];
             }
 
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MODULES_TABLE)->fetchColumn();
             $weight = intval($weight) + 1;
 
-            $module_version = array();
+            $module_version = [];
             $custom_title = preg_replace('/(\W+)/i', ' ', $setmodule);
             $version_file = NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/version.php';
 
@@ -89,17 +89,21 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                 }
             }
 
-            $admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin.functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin/main.php')) ? 1 : 0;
-            $main_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/funcs/main.php')) ? 1 : 0;
+            $_admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin.functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin/main.php')) ? 1 : 0;
+            $_main_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/funcs/main.php')) ? 1 : 0;
+            $_module_data = (strlen($modrow['table_prefix']) > 30) ? trim(substr($modrow['table_prefix'], 0, 20), '_') . '_' . NV_CURRENTTIME : $modrow['table_prefix'];
 
             try {
-                $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . "
-                    (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES
-                    (:title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1)
-                ");
+                $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . " (
+                    title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file,
+                    admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap
+                ) VALUES (
+                    :title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '',
+                    " . NV_CURRENTTIME . ", " . $_main_file . ", " . $_admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1
+                )");
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
-                $sth->bindParam(':module_data', $modrow['table_prefix'], PDO::PARAM_STR);
+                $sth->bindParam(':module_data', $_module_data, PDO::PARAM_STR);
                 $sth->bindParam(':module_upload', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_theme', $modrow['basename'], PDO::PARAM_STR);
                 $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
@@ -199,7 +203,7 @@ foreach ($arr_module_news as $module_file_i => $arr) {
     if ((file_exists($check_file_main) and filesize($check_file_main) != 0 and file_exists($check_file_functions) and filesize($check_file_functions) != 0) or (file_exists($check_admin_main) and filesize($check_admin_main) != 0 and file_exists($check_admin_functions) and filesize($check_admin_functions) != 0)) {
         $check_addnews_modules = true;
 
-        $module_version = array();
+        $module_version = [];
         $version_file = NV_ROOTDIR . '/modules/' . $module_file_i . '/version.php';
 
         if (file_exists($version_file)) {
@@ -208,7 +212,7 @@ foreach ($arr_module_news as $module_file_i => $arr) {
 
         if (empty($module_version)) {
             $timestamp = NV_CURRENTTIME - date('Z', NV_CURRENTTIME);
-            $module_version = array(
+            $module_version = [
                 'name' => $module_file_i,
                 'modfuncs' => 'main',
                 'is_sysmod' => 0,
@@ -217,7 +221,7 @@ foreach ($arr_module_news as $module_file_i => $arr) {
                 'date' => date('D, j M Y H:i:s', $timestamp) . ' GMT',
                 'author' => '',
                 'note' => ''
-            );
+            ];
         }
 
         $date_ver = intval(strtotime($module_version['date']));
@@ -260,8 +264,8 @@ if ($check_addnews_modules) {
 }
 
 // Các module đã có trong CSDL theo ngôn ngữ
-$modules_for_title = array();
-$modules_for_file = array();
+$modules_for_title = [];
+$modules_for_file = [];
 
 $result = $db->query('SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC');
 while ($row = $result->fetch()) {
@@ -274,7 +278,7 @@ while ($row = $result->fetch()) {
 // Kiểm tra module mới
 $news_modules_for_file = array_diff_key($modules_data, $modules_for_file);
 
-$array_modules = $array_virtual_modules = $mod_virtual = array();
+$array_modules = $array_virtual_modules = $mod_virtual = [];
 
 foreach ($modules_data as $row) {
     if (in_array($row['basename'], $modules_exit)) {

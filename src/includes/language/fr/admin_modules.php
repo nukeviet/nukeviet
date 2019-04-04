@@ -85,3 +85,5 @@ $lang_module['setup_option_0'] = 'Ne configurer que le module';
 $lang_module['setup_option_1'] = 'Configurer le module et installer le modèle de données';
 $lang_module['error_no_hook_module'] = 'Pour installer ce module, vous devez installer le module ou le module virtuel suivant: <strong>%s</strong>';
 $lang_module['select_hook_module'] = 'Choisissez le module de connexion %s';
+$lang_module['vmodule_no_title'] = 'Erreur: vous n\'avez pas entré de nouveau nom de module.';
+$lang_module['vmodule_no_file'] = 'Erreur: vous n\'avez pas sélectionné le module d\'origine.';

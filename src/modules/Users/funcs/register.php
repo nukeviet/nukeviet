@@ -217,13 +217,21 @@ while ($row_field = $result_field->fetch()) {
         $row_field['field_choices'] = unserialize($row_field['field_choices']);
     } elseif (!empty($row_field['sql_choices'])) {
         $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
+        $row_field['field_choices'] = [];
         $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+        if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
+            $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
+        }
         $result = $db->query($query);
         while (list($key, $val) = $result->fetch(3)) {
             $row_field['field_choices'][$key] = $val;
         }
     }
     $array_field_config[$row_field['field']] = $row_field;
+}
+
+if (!defined('NV_EDITOR')) {
+    define('NV_EDITOR', 'ckeditor');
 }
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

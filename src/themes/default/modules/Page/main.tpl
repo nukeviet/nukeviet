@@ -7,21 +7,18 @@
 <div class="page panel panel-default">
     <div class="panel-body">
         <h1 class="title margin-bottom-lg">{CONTENT.title}</h1>
-    	<!-- BEGIN: socialbutton -->
-    	<div class="well well-sm">
-    		<ul class="nv-social-share">
-    			<li class="facebook">
-    				<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
-    			</li>
-    			<li>
-    				<div class="g-plusone" data-size="medium"></div>
-    			</li>
-    			<li>
-    				<a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-    			</li>
-    		</ul>
-    	</div>
-    	<!-- END: socialbutton -->
+        <!-- BEGIN: socialbutton -->
+        <div class="well well-sm">
+            <ul class="nv-social-share">
+                <li class="facebook">
+                    <div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
+                </li>
+                <li>
+                    <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
+                </li>
+            </ul>
+        </div>
+        <!-- END: socialbutton -->
 
         <!-- BEGIN: imageleft -->
         <figure class="article left noncaption pointer" style="width:100px" onclick="modalShow('', '<img src={CONTENT.image} />');">
@@ -34,18 +31,18 @@
         <div class="hometext margin-bottom-lg">{CONTENT.description}</div>
         <!-- END: description -->
 
-    	<!-- BEGIN: imagecenter -->
+        <!-- BEGIN: imagecenter -->
         <figure class="article center pointer" onclick="modalShowByObj(this);">
-    			<p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
-    			<!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
-   		</figure>
-    	<!-- END: imagecenter -->
+                <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
+                <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+           </figure>
+        <!-- END: imagecenter -->
 
-    	<div class="clear"></div>
+        <div class="clear"></div>
 
-    	<div id="page-bodyhtml" class="bodytext margin-bottom-lg">
-    		{CONTENT.bodytext}
-    	</div>
+        <div id="page-bodyhtml" class="bodytext margin-bottom-lg">
+            {CONTENT.bodytext}
+        </div>
     </div>
 </div>
 <!-- BEGIN: adminlink -->
@@ -65,10 +62,10 @@
 <div class="page panel panel-default">
     <div class="panel-body">
         <ul class="nv-list-item">
-    		<!-- BEGIN: loop -->
-    		<li><em class="fa fa-angle-double-right">&nbsp;</em><h3><a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a></h3></li>
-    		<!-- END: loop -->
-	   </ul>
+            <!-- BEGIN: loop -->
+            <li><em class="fa fa-angle-double-right">&nbsp;</em><h3><a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a></h3></li>
+            <!-- END: loop -->
+       </ul>
     </div>
 </div>
 <!-- END: other -->

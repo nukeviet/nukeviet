@@ -45,7 +45,12 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     die('OK');
 }
 
-// lay du lieu sql
+$array_sqlchoice_order = [
+    'ASC' => $nv_Lang->getModule('field_options_choicesql_sort_asc'),
+    'DESC' => $nv_Lang->getModule('field_options_choicesql_sort_desc')
+];
+
+// Xử lý lấy dữ liệu từ CSDL
 if ($nv_Request->isset_request('choicesql', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -77,14 +82,15 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $xtpl->parse('choicesql');
         $contents = $xtpl->text('choicesql');
     } elseif ($choice == 'table') {
+        // Đây là tên bảng dữ liệu không phải tên module do đó chỉ chấp nhận ký tự thường, số và dấu gạch dưới
         $module = $nv_Request->get_string('module', 'post', '');
-        if ($module == '' or !preg_match($global_config['check_module'], $module)) {
+        if (!preg_match('/^[a-z0-9\_]+$/', $module)) {
             exit();
         }
         $_items = $db->query("SHOW TABLE STATUS LIKE '%\_" . $module . "%'")->fetchAll();
         $num_table = sizeof($_items);
 
-        $array_table_module = array();
+        $array_table_module = [];
         $xtpl->assign('choicesql_name', 'choicesql_' . $choice);
         $xtpl->assign('choicesql_next', $array_choicesql[$choice]);
 
@@ -103,29 +109,41 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $contents = $xtpl->text('choicesql');
     } elseif ($choice == 'column') {
         $table = $nv_Request->get_string('table', 'post', '');
-        if ($table == '') {
+        if (!preg_match('/^[a-z0-9\_]+$/', $table)) {
             exit();
         }
 
         $_items = $db->columns_array($table);
         $num_table = sizeof($_items);
 
-        $array_table_module = array();
+        $array_table_module = [];
         $xtpl->assign('choicesql_name', 'choicesql_' . $choice);
         $xtpl->assign('choicesql_next', $array_choicesql[$choice]);
+        $choice_seltected = explode('|', $choice_seltected);
         if ($num_table > 0) {
-            $choice_seltected = explode('|', $choice_seltected);
             foreach ($_items as $item) {
                 $_temp_choice['sl_key'] = (!empty($choice_seltected[0]) and $choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
                 $_temp_choice['sl_val'] = (!empty($choice_seltected[1]) and $choice_seltected[1] == $item['field']) ? ' selected="selected"' : '';
+                $_temp_choice['sl_order'] = (!empty($choice_seltected[2]) and $choice_seltected[2] == $item['field']) ? ' selected="selected"' : '';
                 $_temp_choice['key'] = $item['field'];
                 $_temp_choice['val'] = $item['field'];
                 $xtpl->assign('SQL', $_temp_choice);
                 $xtpl->parse('column.loop1');
                 $xtpl->parse('column.loop2');
+                $xtpl->parse('column.loop3');
                 unset($_temp_choice);
             }
         }
+
+        foreach ($array_sqlchoice_order as $sort_key => $sort_name) {
+            $xtpl->assign('SORT', [
+                'key' => $sort_key,
+                'title' => $sort_name,
+                'selected' => (!empty($choice_seltected[3]) and $choice_seltected[3] == $sort_key) ? ' selected="selected"' : ''
+            ]);
+            $xtpl->parse('column.sort');
+        }
+
         $xtpl->parse('column');
         $contents = $xtpl->text('column');
     }
@@ -138,7 +156,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 //Add, Edit
 $text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 $error = '';
-$field_choices = array();
+$field_choices = [];
 if ($nv_Request->isset_request('submit', 'post')) {
     $validatefield = array(
         'pattern' => '/[^a-zA-Z\_]/',
@@ -153,7 +171,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         'replacement' => ''
     );
 
-    $dataform = array();
+    $dataform = [];
     $dataform['sql_choices'] = '';
 
     $dataform['fid'] = $nv_Request->get_int('fid', 'post', 0);
@@ -171,7 +189,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $dataform['field_type'] = nv_substr($nv_Request->get_title('field_type', 'post', '', 0, $preg_replace), 0, 50);
 
     $save = 0;
-    $language = array();
+    $language = [];
     if ($dataform['fid']) {
         $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
         if (empty($dataform_old)) {
@@ -317,17 +335,25 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $error = $nv_Lang->getModule('field_choices_empty');
             }
         } else {
+            // Module data
             $choicesql_module = $nv_Request->get_string('choicesql_module', 'post', '');
-            //module data
+            // Bảng dữ liệu
             $choicesql_table = $nv_Request->get_string('choicesql_table', 'post', '');
-            //table trong module
+            // Cột làm key
             $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', '');
-            //cot value cho fields
+            // Cột làm tên hiển thị
             $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', '');
-            //cot key cho fields
+            // Cột sắp xếp
+            $choicesql_column_order = $nv_Request->get_string('choicesql_column_order', 'post', '');
+            // Kiểu sắp xếp
+            $choicesql_sort_type = $nv_Request->get_string('choicesql_sort_type', 'post', '');
+            if (!isset($choicesql_sort_type)) {
+                $choicesql_sort_type = current(array_keys($array_sqlchoice_order));
+            }
 
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
-                $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
+                $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val . '|' . $choicesql_column_order . '|' . $choicesql_sort_type;
+                $dataform['field_choices'] = '';
             } else {
                 $error = $nv_Lang->getModule('field_sql_choices_empty');
             }
@@ -352,7 +378,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     " . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
                     " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
 
-                $data_insert = array();
+                $data_insert = [];
                 $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
                 $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
                 $data_insert['class'] = $dataform['class'];
@@ -570,7 +596,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['fieldid'] = $dataform['field'];
             $dataform['default_value_number'] = $dataform['default_value'];
         } else {
-            $dataform = array();
+            $dataform = [];
             $dataform['show_register'] = 1;
             $dataform['required'] = 0;
             $dataform['show_profile'] = 1;
@@ -698,7 +724,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         }
         $xtpl->parse('main.load.choicetypes_add_hidden');
     }
-    $array_match_type = array();
+    $array_match_type = [];
     $array_match_type['none'] = $nv_Lang->getModule('field_match_type_none');
     if ($dataform['field_type'] != 'editor' and $dataform['field_type'] != 'textarea') {
         $array_match_type['alphanumeric'] = $nv_Lang->getModule('field_match_type_alphanumeric');

@@ -25,7 +25,7 @@ $serviceFactory = new \OAuth\ServiceFactory();
 $credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=facebook');
 
 // Instantiate the Facebook service using the credentials, http client and storage mechanism for the token
-$facebookService = $serviceFactory->createService('facebook', $credentials, $storage, array( 'email', 'user_photos' ));
+$facebookService = $serviceFactory->createService('facebook', $credentials, $storage, ['email', 'user_photos']);
 
 if (!empty($_GET['code'])) {
     // This was a callback request from facebook, get the token
@@ -34,22 +34,22 @@ if (!empty($_GET['code'])) {
     // Send a request with it: /me?fields=id,name,email
     $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true);
     if (isset($result['id'])) {
-        $attribs = array(
-            'identity' => $result['link'],
+        $attribs = [
+            'identity' => empty($result['link']) ? $result['id'] : $result['link'],
             'result' => 'is_res',
             'id' => $result['id'],
             'contact/email' => isset($result['email']) ? $result['email'] : '',
             'namePerson/first' => $result['first_name'],
             'namePerson/last' => $result['last_name'],
             'namePerson' => $result['name'],
-            'person/gender' => $result['gender'],
+            'person/gender' => empty($result['gender']) ? '' : $result['gender'],
             'server' => $server,
             'picture_url' => 'https://graph.facebook.com/' . $result['id'] . '/picture?width=' . $global_config['avatar_width'] . '&height=' . $global_config['avatar_height'] . '&access_token=' . $token,
             'picture_mode' => 0, // 0: Remote picture
             'current_mode' => 3
-        );
+        ];
     } else {
-        $attribs = array( 'result' => 'notlogin' );
+        $attribs = ['result' => 'notlogin'];
     }
     $nv_Request->set_Session('openid_attribs', serialize($attribs));
 

@@ -12,14 +12,14 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$proxy_blocker_array = array(
+$proxy_blocker_array = [
     0 => $nv_Lang->getModule('proxy_blocker_0'),
     1 => $nv_Lang->getModule('proxy_blocker_1'),
     2 => $nv_Lang->getModule('proxy_blocker_2'),
     3 => $nv_Lang->getModule('proxy_blocker_3')
-);
+];
 
-$captcha_array = array(
+$captcha_array = [
     0 => $nv_Lang->getModule('captcha_0'),
     1 => $nv_Lang->getModule('captcha_1'),
     2 => $nv_Lang->getModule('captcha_2'),
@@ -28,10 +28,16 @@ $captcha_array = array(
     5 => $nv_Lang->getModule('captcha_5'),
     6 => $nv_Lang->getModule('captcha_6'),
     7 => $nv_Lang->getModule('captcha_7')
-);
+];
 
-$captcha_type_array = array(0 => $nv_Lang->getModule('captcha_type_0'), 1 => $nv_Lang->getModule('captcha_type_1'), 2 => $nv_Lang->getModule('captcha_type_2'));
-$recaptcha_type_array = array('image' => $nv_Lang->getModule('recaptcha_type_image'), 'audio' => $nv_Lang->getModule('recaptcha_type_audio'));
+$captcha_type_array = [
+    0 => $nv_Lang->getModule('captcha_type_0'),
+    2 => $nv_Lang->getModule('captcha_type_2')
+];
+$recaptcha_type_array = [
+    'image' => $nv_Lang->getModule('recaptcha_type_image'),
+    'audio' => $nv_Lang->getModule('recaptcha_type_audio')
+];
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
@@ -39,8 +45,8 @@ if ($selectedtab < 0 or $selectedtab > 3) {
     $selectedtab = 0;
 }
 
-$array_config_global = array();
-$array_config_define = array();
+$array_config_global = [];
+$array_config_define = [];
 
 // Xử lý các thiết lập cơ bản
 if ($nv_Request->isset_request('submitbasic', 'post')) {
@@ -78,7 +84,7 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     $variable = $nv_Request->get_string('nv_allowed_html_tags', 'post');
     $variable = str_replace(';', ',', strtolower($variable));
     $variable = explode(',', $variable);
-    $nv_allowed_html_tags = array();
+    $nv_allowed_html_tags = [];
     foreach ($variable as $value) {
         $value = trim($value);
         if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags)) {
@@ -106,13 +112,13 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     }
 } else {
     $array_config_global = $global_config;
-    $array_config_define = array();
+    $array_config_define = [];
     $array_config_define['nv_anti_agent'] = NV_ANTI_AGENT;
     $array_config_define['nv_anti_iframe'] = NV_ANTI_IFRAME;
     $array_config_define['nv_allowed_html_tags'] = NV_ALLOWED_HTML_TAGS;
 }
 
-$array_config_flood = array();
+$array_config_flood = [];
 
 // Xử lý phần chống Flood
 if ($nv_Request->isset_request('submitflood', 'post')) {
@@ -141,8 +147,8 @@ if ($nv_Request->isset_request('submitflood', 'post')) {
     $array_config_flood['max_requests_300'] = $global_config['max_requests_300'];
 }
 
-$array_config_captcha = array();
-$array_define_captcha = array();
+$array_config_captcha = [];
+$array_define_captcha = [];
 
 // Xử lý phần captcha
 if ($nv_Request->isset_request('submitcaptcha', 'post')) {
@@ -213,7 +219,7 @@ $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE .
 $tpl->assign('SELECTEDTAB', $selectedtab);
 
 // Xử lý các IP bị cấm
-$error = array();
+$error = [];
 $cid = $nv_Request->get_int('id', 'get');
 $del = $nv_Request->get_int('del', 'get');
 
@@ -287,10 +293,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
 }
 
 // Xử lý các IP bỏ qua kiểm tra flood
-$error = array();
+$error = [];
 $flid = $nv_Request->get_int('flid', 'get,post', 0);
 $fldel = $nv_Request->get_int('fldel', 'get,post', 0);
-$array_flip = array();
+$array_flip = [];
 
 if (!empty($fldel) and !empty($flid)) {
     $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=1 AND id=' . $flid);
@@ -400,13 +406,13 @@ $tpl->assign('CONFIG_CAPTCHA', $array_config_captcha);
 $tpl->assign('RECAPTCHA_TYPE', $recaptcha_type_array);
 $tpl->assign('DEFINE_CAPTCHA', $array_define_captcha);
 
-$mask_text_array = array();
+$mask_text_array = [];
 $mask_text_array[0] = '255.255.255.255';
 $mask_text_array[3] = '255.255.255.xxx';
 $mask_text_array[2] = '255.255.xxx.xxx';
 $mask_text_array[1] = '255.xxx.xxx.xxx';
 
-$banip_area_array = array();
+$banip_area_array = [];
 $banip_area_array[0] = $nv_Lang->getModule('banip_area_select');
 $banip_area_array[1] = $nv_Lang->getModule('banip_area_front');
 $banip_area_array[2] = $nv_Lang->getModule('banip_area_admin');

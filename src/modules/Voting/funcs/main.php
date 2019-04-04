@@ -21,8 +21,8 @@ if (empty($vid)) {
     $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
-    $allowed = array();
-    $is_update = array();
+    $allowed = [];
+    $is_update = [];
 
     $a = 0;
     foreach ($list as $row) {
@@ -48,7 +48,7 @@ if (empty($vid)) {
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
         foreach ($allowed as $current_voting) {
-            $voting_array = array(
+            $voting_array = [
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
                 'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
@@ -59,7 +59,7 @@ if (empty($vid)) {
                 'langresult' => $nv_Lang->getModule('voting_result'),
                 'langsubmit' => $nv_Lang->getModule('voting_hits'),
                 'publtime' => nv_date('l - d/m/Y H:i', $current_voting['publ_time'])
-            );
+            ];
             $xtpl->assign('VOTING', $voting_array);
 
             $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
@@ -114,7 +114,10 @@ if (empty($vid)) {
         exit();
     }
 
-    $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1';
+    $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data;
+    if (!defined('NV_IS_MODADMIN')) {
+        $sql .= ' WHERE act=1';
+    }
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     if (empty($list) or !isset($list[$vid])) {
@@ -123,7 +126,7 @@ if (empty($vid)) {
     }
 
     $row = $list[$vid];
-    if ((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) {
+    if (((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) and !defined('NV_IS_MODADMIN')) {
         header('location:' . $global_config['site_url']);
         exit();
     }
@@ -151,9 +154,7 @@ if (empty($vid)) {
 
     $array_id = explode(',', $lid);
     $array_id = array_map('intval', $array_id);
-    $array_id = array_diff($array_id, array(
-        0
-    ));
+    $array_id = array_diff($array_id, [0]);
     $count = sizeof($array_id);
 
     $note = '';
@@ -185,7 +186,7 @@ if (empty($vid)) {
     $result = $db->query($sql);
 
     $totalvote = 0;
-    $vrow = array();
+    $vrow = [];
 
     while ($row2 = $result->fetch()) {
         $totalvote += (int) $row2['hitstotal'];
@@ -193,19 +194,19 @@ if (empty($vid)) {
     }
 
     $pubtime = nv_date('l - d/m/Y H:i', $row['publ_time']);
-    $lang = array(
+    $lang = [
         'total' => $nv_Lang->getModule('voting_total'),
         'counter' => $nv_Lang->getModule('voting_counter'),
         'publtime' => $nv_Lang->getModule('voting_pubtime')
-    );
-    $voting = array(
+    ];
+    $voting = [
         'question' => $row['question'],
         'total' => $totalvote,
         'pubtime' => $pubtime,
         'row' => $vrow,
         'lang' => $lang,
         'note' => $note
-    );
+    ];
 
     $contents = voting_result($voting);
 

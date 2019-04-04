@@ -51,7 +51,6 @@ $lang_module['nv_debug'] = 'Mode développeur';
 $lang_module['nv_debug_help'] = 'Si cette option est activée, le système affichera des erreurs pour aider les développeurs à vérifier facilement le processus de programmation. Si votre site Web fonctionne dans un environnement réel, <strong>désactivez</strong> cette option.';
 $lang_module['captcha_type'] = 'Type de captcha';
 $lang_module['captcha_type_0'] = 'Défaut captcha';
-$lang_module['captcha_type_1'] = 'Bon php captcha';
 $lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Configuration de captcha';
 $lang_module['captcha_0'] = 'Masqué';

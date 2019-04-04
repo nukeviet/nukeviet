@@ -41,31 +41,31 @@ function fix_banner_center() {
 }
 
 function timeoutsesscancel() {
-	$("#timeoutsess").slideUp("slow", function() {
-		clearInterval(myTimersecField);
-		myTimerPage = setTimeout(function() {
-			timeoutsessrun()
-		}, nv_check_pass_mstime)
-	})
+    $("#timeoutsess").slideUp("slow", function() {
+        clearInterval(myTimersecField);
+        myTimerPage = setTimeout(function() {
+            timeoutsessrun()
+        }, nv_check_pass_mstime)
+    })
 }
 
 function timeoutsessrun() {
-	clearInterval(myTimerPage);
-	$("#secField").text("60");
-	jQuery("#timeoutsess").show();
-	var b = (new Date).getTime();
-	myTimersecField = setInterval(function() {
-		var a = (new Date).getTime();
-		a = 60 - Math.round((a - b) / 1E3);
-		0 <= a ? $("#secField").text(a) : -3 > a && (clearInterval(myTimersecField), $(window).unbind(), $.ajax({
-			type: "POST",
-			cache: !1,
-			url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
-			data: "nv_ajax_login=1"
-		}).done(function(a) {
-			location.reload();
-		}));
-	}, 1E3)
+    clearInterval(myTimerPage);
+    $("#secField").text("60");
+    jQuery("#timeoutsess").show();
+    var b = (new Date).getTime();
+    myTimersecField = setInterval(function() {
+        var a = (new Date).getTime();
+        a = 60 - Math.round((a - b) / 1E3);
+        0 <= a ? $("#secField").text(a) : -3 > a && (clearInterval(myTimersecField), $(window).unbind(), $.ajax({
+            type: "POST",
+            cache: !1,
+            url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
+            data: "nv_ajax_login=1"
+        }).done(function(a) {
+            location.reload();
+        }));
+    }, 1E3)
 }
 
 function locationReplace(url) {
@@ -445,11 +445,11 @@ function showSubBreadcrumbs(a, b) {
 }
 
 function add_hint(type, url) {
-	if (!type || !url) return;
-	var el = document.createElement("link");
-	el.setAttribute("rel", type);
-	el.setAttribute("href", url);
-	document.getElementsByTagName("head")[0].appendChild(el)
+    if (!type || !url) return;
+    var el = document.createElement("link");
+    el.setAttribute("rel", type);
+    el.setAttribute("href", url);
+    document.getElementsByTagName("head")[0].appendChild(el)
 }
 
 var reCaptchaLoadCallback = function() {
@@ -619,10 +619,10 @@ $(function() {
     //Add preload: link rel="prefetch", link rel="prerender"
     /*
     $(document).bind("mousemove", function(e) {
-    	if (!e.target.href || e.target.href.indexOf(location.host) == -1 || e.target.hintAdded) return;
+        if (!e.target.href || e.target.href.indexOf(location.host) == -1 || e.target.hintAdded) return;
         add_hint("prefetch", e.target.href);
-    	add_hint("prerender", e.target.href);
-    	e.target.hintAdded = true
+        add_hint("prerender", e.target.href);
+        e.target.hintAdded = true
     });
     */
 });
@@ -658,16 +658,6 @@ $(window).on('load', function() {
         var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
         a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
-    0 < $(".g-plusone").length && (window.___gcfg = {
-        lang: nv_lang_data
-    }, function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.async = !0;
-        a.src = "//apis.google.com/js/plusone.js";
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }());
     0 < $(".twitter-share-button").length &&
         function() {
             var a = document.createElement("script");

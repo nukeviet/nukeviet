@@ -22,7 +22,7 @@ define('NV_START_TIME', microtime(true));
 define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $nv_hooks = $nv_plugins = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $nv_hooks = $nv_plugins = [];
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -226,7 +226,7 @@ if (NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
 
 // Xac dinh borwser cua client
 $browser = new NukeViet\Client\Browser(NV_USER_AGENT);
-$client_info['browser'] = array();
+$client_info['browser'] = [];
 $client_info['browser']['key'] = $browser->getBrowserKey();
 $client_info['browser']['name'] = $browser->getBrowser();
 if (preg_match('/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches)) {
@@ -406,7 +406,7 @@ $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     $sys_mods = unserialize($cache);
 } else {
-    $sys_mods = array();
+    $sys_mods = [];
     try {
         $result = $db->query('SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight');
         while ($row = $result->fetch()) {
@@ -433,9 +433,8 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'admins' => $row['admins'],
                     'rss' => $row['rss'],
                     'sitemap' => $row['sitemap'],
-                    'gid' => $row['gid'],
                     'icon' => $row['icon'],
-                    'funcs' => array()
+                    'funcs' => []
                 );
             }
             $sys_mods[$m_title]['funcs'][$f_alias] = array(

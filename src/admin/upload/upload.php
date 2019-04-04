@@ -17,7 +17,7 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 $newfilename = change_alias($nv_Request->get_title('newfilename', 'post', ''));
 $responseType = $nv_Request->get_title('responseType', 'get', '');
 
-$chunk_upload = array();
+$chunk_upload = [];
 $chunk_upload['name'] = $nv_Request->get_title('name', 'post', '');
 $chunk_upload['chunk'] = $nv_Request->get_int('chunk', 'post', 0);
 $chunk_upload['chunks'] = $nv_Request->get_int('chunks', 'post', 0);
@@ -25,7 +25,7 @@ $chunk_upload['tmpdir'] = NV_ROOTDIR . '/' . NV_TEMP_DIR;
 $chunk_upload['chunk_prefix'] = NV_TEMPNAM_PREFIX . 'chunk' . md5($global_config['sitekey'] . NV_CLIENT_IP) . '_';
 
 $error = '';
-$upload_info = array();
+$upload_info = [];
 
 if (!isset($check_allow_upload_dir['upload_file'])) {
     $error = $nv_Lang->getModule('notlevel');
@@ -49,7 +49,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
     } elseif (empty($type)) {
         $allow_files_type = $admin_info['allow_files_type'];
     } else {
-        $allow_files_type = array();
+        $allow_files_type = [];
     }
 
     $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
@@ -133,7 +133,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                         $x = $file_size[0] - $w - 5;
                         $y = $file_size[1] - $h - 5;
 
-                        $config_logo = array();
+                        $config_logo = [];
                         $config_logo['w'] = $w;
                         $config_logo['h'] = $h;
 
@@ -187,7 +187,7 @@ if (!preg_match("/^([a-zA-Z0-9\-\_]+)$/", $editor)) {
 if (!empty($error)) {
     // Lỗi upload
     if ($responseType == 'json') {
-        $array_data = array();
+        $array_data = [];
         $array_data['uploaded'] = 0;
         $array_data['error'] = array(
             'message' => $error
@@ -230,7 +230,7 @@ if (!empty($error)) {
 
     if ($editor == 'ckeditor') {
         if ($responseType == 'json') {
-            $array_data = array();
+            $array_data = [];
             $array_data['uploaded'] = 1;
             $array_data['fileName'] = $upload_info['basename'];
             $array_data['url'] = NV_BASE_SITEURL . $path . '/' . $upload_info['basename'];

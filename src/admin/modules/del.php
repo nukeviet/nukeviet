@@ -16,10 +16,10 @@ $modname = $nv_Request->get_title('mod', 'post');
 $contents = 'NO_' . $modname;
 
 if (! empty($modname) and preg_match($global_config['check_module'], $modname)) {
-    $sth = $db->prepare('SELECT is_sys, basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
+    $sth = $db->prepare('SELECT is_sys, basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
     $sth->bindParam(':title', $modname, PDO::PARAM_STR);
     $sth->execute();
-    list($is_sys, $module_file, $module_data) = $sth->fetch(3);
+    list($is_sys, $module_file) = $sth->fetch(3);
 
     if (intval($is_sys) != 1) {
         $contents = 'OK_' . $modname;
@@ -29,8 +29,14 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
             $module_name_action = $module_name;
             $module_name = $modname;
 
+            // Xác định tên bảng dữ liệu của module từ CSDL bảng modules
+            $sth = $db->prepare('SELECT module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
+            $sth->bindParam(':title', $modname, PDO::PARAM_STR);
+            $sth->execute();
+            $module_data = $sth->fetchColumn();
+
             $lang = NV_LANG_DATA;
-            $sql_drop_module = array();
+            $sql_drop_module = [];
 
             require_once NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php';
 
@@ -147,7 +153,7 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
             }
         }
 
-        nv_apply_hook('', 'after_module_deleted', array($modname, $admin_info));
+        nv_apply_hook('', 'after_module_deleted', [$modname, $admin_info]);
         $nv_Cache->delAll();
     }
 }
