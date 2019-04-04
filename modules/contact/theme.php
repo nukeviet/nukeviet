@@ -147,7 +147,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                                 $xtpl->assign('OTHER', array( 'name' => $key, 'value' => $value ));
                                 if (nv_is_url($value)) {
                                     $xtpl->parse('main.dep.other.url');
-                                }else{
+                                } else {
                                     $xtpl->parse('main.dep.other.text');
                                 }
                                 $xtpl->parse('main.dep.other');
