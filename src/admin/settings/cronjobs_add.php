@@ -20,6 +20,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $run_func = $nv_Request->get_title('run_func_iavim', 'post', '');
     $params = $nv_Request->get_title('params_iavim', 'post', '');
     $interval = $nv_Request->get_int('interval_iavim', 'post', 0);
+    $inter_val_type = $nv_Request->get_int('inter_val_type', 'post', 0);
     $del = $nv_Request->get_int('del', 'post', 0);
 
     $min = $nv_Request->get_int('min', 'post', 0);
@@ -29,6 +30,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $start_time = mktime($hour, $min, 0, $m[2], $m[1], $m[3]);
     } else {
         $start_time = NV_CURRENTTIME;
+    }
+    if ($inter_val_type < 0 or $inter_val_type > 1) {
+        $inter_val_type = 1;
     }
 
     if (empty($cron_name)) {
@@ -54,10 +58,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $params = implode(',', $params);
             }
 
-            $_sql = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . '
-                (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name) VALUES
-                (' . $start_time . ', ' . $interval . ', :run_file, :run_func, :params, ' . $del . ', 0, 1, 0, 0, :cron_name)';
-            $data = array();
+            $_sql = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (
+                start_time, inter_val, inter_val_type, run_file, run_func, params, del, is_sys, act,
+                last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name
+            ) VALUES (
+                ' . $start_time . ', ' . $interval . ', ' . $inter_val_type . ', :run_file, :run_func,
+                :params, ' . $del . ', 0, 1, 0, 0, :cron_name
+            )';
+
+            $data = [];
             $data['run_file'] = $run_file;
             $data['run_func'] = $run_func;
             $data['params'] = $params;
@@ -75,6 +84,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     $sth->execute();
                 }
 
+                update_cronjob_next_time();
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs');
             }
         }
@@ -85,7 +95,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $start_time = NV_CURRENTTIME;
     $interval = 60;
     $cron_name = $run_file = $run_func = $params = '';
-    $del = 0;
+    $del = $inter_val_type = 0;
 }
 
 $tpl = new \NukeViet\Template\Smarty();
@@ -104,6 +114,7 @@ $tpl->assign('DATA', [
     'min' => $min,
     'hour' => $hour,
     'interval' => $interval,
+    'inter_val_type' => $inter_val_type,
     'del' => $del
 ]);
 $tpl->assign('IS_ADD', true);

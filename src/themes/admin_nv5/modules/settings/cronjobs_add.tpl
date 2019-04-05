@@ -84,6 +84,16 @@
                     <span class="form-text text-muted">{$LANG->get('interval_info')}</span>
                 </div>
             </div>
+            <div class="form-group row">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inter_val_type">{$LANG->get('cron_interval_type')}</label>
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <select class="form-control form-control-sm" id="inter_val_type" name="inter_val_type">
+                        {for $key=0 to 1}
+                        <option value="{$key}"{if $key eq $DATA['inter_val_type']} selected="selected"{/if}>{$LANG->get("cron_interval_type`$key`")}</option>
+                        {/for}
+                    </select>
+                </div>
+            </div>
             <div class="form-group row pt-0 pb-0">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cron_del">{$LANG->get('is_del')}</label>
                 <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">

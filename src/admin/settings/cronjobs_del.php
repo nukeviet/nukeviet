@@ -23,6 +23,7 @@ if (!empty($id)) {
         $res = $db->exec('DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $id);
 
         $db->query('OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE);
+        update_cronjob_next_time();
     }
 }
 

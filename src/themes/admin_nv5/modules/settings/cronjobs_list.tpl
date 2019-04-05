@@ -40,7 +40,7 @@
                     </tr>
                     <tr>
                         <td>{$LANG->get('start_time')}</td>
-                        <td>{"l, d/m/Y H:i"|date:$row['start_time']}</td>
+                        <td>{"l, d/m/Y H:i:s"|date:$row['start_time']}</td>
                     </tr>
                     <tr>
                         <td>{$LANG->get('interval')}</td>
@@ -60,7 +60,7 @@
                     </tr>
                     <tr>
                         <td>{$LANG->get('last_time')}</td>
-                        <td>{if empty($row['last_time'])}{$LANG->get('last_time0')}{else}{"l, d/m/Y H:i"|date:$row['last_time']}{/if}</td>
+                        <td>{if empty($row['last_time'])}{$LANG->get('last_time0')}{else}{"l, d/m/Y H:i:s"|date:$row['last_time']}{/if}</td>
                     </tr>
                     <tr>
                         <td>{$LANG->get('last_result')}</td>
@@ -73,9 +73,9 @@
                             n/a
                             {elseif empty($row['inter_val']) or empty($row['last_time'])}
                             {assign var="maxtime" value=$row['start_time']|max:$CRONJOBS_NEXT_TIME:$NV_CURRENTTIME nocache}
-                            {"l, d/m/Y H:i"|date:$maxtime}
+                            {"l, d/m/Y H:i:s"|date:$maxtime}
                             {else}
-                            {"l, d/m/Y H:i"|date:($row['last_time'] + ($row['inter_val'] * 60))}
+                            {"l, d/m/Y H:i:s"|date:($row['last_time'] + ($row['inter_val'] * 60))}
                             {/if}
                         </td>
                     </tr>
