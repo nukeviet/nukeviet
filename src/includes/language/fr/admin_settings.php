@@ -265,3 +265,6 @@ $lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:
 $lang_module['noflood_ip_add'] = 'Ajouter une adresse IP pour ignorer le contrôle d\'inondation';
 $lang_module['noflood_ip_edit'] = 'Correction du contournement de l\'inondation IP';
 $lang_module['noflood_ip_list'] = 'L\'IP contourne le contrôle d\'inondation';
+$lang_module['cron_interval_type'] = 'Répéter le type (si disponible)';
+$lang_module['cron_interval_type0'] = 'Après l\'heure de lancement dans la base de données';
+$lang_module['cron_interval_type1'] = 'Après l\'heure de lancement réelle';

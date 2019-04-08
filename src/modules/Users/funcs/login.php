@@ -141,7 +141,7 @@ function set_reg_attribs($attribs)
             $upload = new NukeViet\Files\Upload(array(
                 'images'
             ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            $upload->setLanguage($lang_global);
+            $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
 
             $upload_info = $upload->save_urlfile($attribs['picture_url'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
 
@@ -218,9 +218,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Neu da co trong CSDL
      */
     $stmt = $db->prepare('SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive, b.safemode AS safemode FROM ' . NV_MOD_TABLE . '_openid a, ' . NV_MOD_TABLE . ' b
-		WHERE a.opid= :opid
-		AND a.email= :email
-		AND a.userid=b.userid');
+        WHERE a.opid= :opid
+        AND a.email= :email
+        AND a.userid=b.userid');
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
@@ -476,22 +476,22 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
-    		question, answer, passlostkey, view_mail, remember, in_groups,
-    		active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+            question, answer, passlostkey, view_mail, remember, in_groups,
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
         ) VALUES (
-    		" . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
+            " . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
             :username,
-    		:md5username,
-    		'',
-    		:email,
-    		:first_name,
-    		:last_name,
-    		:gender,
-    		'', 0,
-    		" . NV_CURRENTTIME . ",
-    		'', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . ",
+            :md5username,
+            '',
+            :email,
+            :first_name,
+            :last_name,
+            :gender,
+            '', 0,
+            " . NV_CURRENTTIME . ",
+            '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . ",
             -1
-		)";
+        )";
 
         $data_insert = array();
         $data_insert['username'] = $reg_attribs['username'];
@@ -578,19 +578,19 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
             username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info
         ) VALUES (
-			:username,
-			:md5username,
-			'',
-			:email,
-			:first_name,
-			:last_name,
-			" . NV_CURRENTTIME . ",
-			'',
-			'',
-			'',
-			:users_info,
+            :username,
+            :md5username,
+            '',
+            :email,
+            :first_name,
+            :last_name,
+            " . NV_CURRENTTIME . ",
+            '',
+            '',
+            '',
+            :users_info,
             :openid_info
-		)";
+        )";
 
         $data_insert = array();
         $data_insert['username'] = $reg_attribs['username'];

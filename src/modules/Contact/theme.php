@@ -8,7 +8,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_IS_MOD_CONTACT')) {
+if (!defined('NV_IS_MOD_CONTACT')) {
     die('Stop!!!');
 }
 
@@ -31,11 +31,11 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
     $xtpl->assign('CHECKSS', $checkss);
     $xtpl->assign('CONTENT', $array_content);
 
-    if (! empty($array_content['bodytext'])) {
+    if (!empty($array_content['bodytext'])) {
         $xtpl->parse('main.bodytext');
     }
 
-    if (! empty($array_department)) {
+    if (!empty($array_department)) {
         foreach ($array_department as $dep) {
             if (empty($alias_url) and $dep['act'] == 2)
             {
@@ -45,11 +45,11 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
             $xtpl->assign('DEP', $dep);
 
-            if (! empty($dep['note'])) {
+            if (!empty($dep['note'])) {
                 $xtpl->parse('main.dep.note');
             }
 
-            if (! empty($dep['phone'])) {
+            if (!empty($dep['phone'])) {
                 $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($dep['phone'])));
                 foreach ($nums as $k => $num) {
                     unset($m);
@@ -71,10 +71,10 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
                 $xtpl->parse('main.dep.phone');
             }
-            if (! empty($dep['fax'])) {
+            if (!empty($dep['fax'])) {
                 $xtpl->parse('main.dep.fax');
             }
-            if (! empty($dep['email'])) {
+            if (!empty($dep['email'])) {
                 $emails = array_map('trim', explode(',', $dep['email']));
                 foreach ($emails as $k => $email) {
                     $xtpl->assign('EMAIL', $email);
@@ -87,12 +87,12 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                 $xtpl->parse('main.dep.email');
             }
 
-            if (! empty($dep['others'])) {
+            if (!empty($dep['others'])) {
                 $others = json_decode($dep['others'], true);
 
-                if (! empty($others)) {
+                if (!empty($others)) {
                     foreach ($others as $key => $value) {
-                        if (! empty($value)) {
+                        if (!empty($value)) {
                             if (strtolower($key) == 'yahoo') {
                                 $ys = array_map('trim', explode(',', $value));
                                 foreach ($ys as $k => $y) {
@@ -145,6 +145,13 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                                 $xtpl->parse('main.dep.whatsapp');
                             } else {
                                 $xtpl->assign('OTHER', array( 'name' => $key, 'value' => $value ));
+
+                                if (nv_is_url($value)) {
+                                    $xtpl->parse('main.dep.other.url');
+                                } else {
+                                    $xtpl->parse('main.dep.other.text');
+                                }
+
                                 $xtpl->parse('main.dep.other');
                             }
                         }
@@ -206,7 +213,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
         $xtpl->parse('main.iguest');
     }
 
-    if (! empty($catsName)) {
+    if (!empty($catsName)) {
         foreach ($catsName as $key => $cat) {
             $xtpl->assign('SELECTVALUE', $key);
             $xtpl->assign('SELECTNAME', $cat);
@@ -243,23 +250,23 @@ function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, 
     $xtpl->assign('SITE_URL', $global_config['site_url']);
     $xtpl->assign('FULLNAME', $fname);
     $xtpl->assign('EMAIL', $femail);
-	$xtpl->assign('PART', $array_department[$fpart]['full_name']);
+    $xtpl->assign('PART', $array_department[$fpart]['full_name']);
     $xtpl->assign('IP', $client_info['ip']);
     $xtpl->assign('TITLE', $ftitle);
     $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
 
-	if ($sendinfo) {
-		if (!empty($fcat)) {
-			$xtpl->assign('CAT', $fcat);
-			$xtpl->parse('main.sendinfo.cat');
-		}
+    if ($sendinfo) {
+        if (!empty($fcat)) {
+            $xtpl->assign('CAT', $fcat);
+            $xtpl->parse('main.sendinfo.cat');
+        }
 
-		if (!empty($fphone)) {
-			$xtpl->assign('PHONE', $fphone);
-			$xtpl->parse('main.sendinfo.phone');
-		}
-		$xtpl->parse('main.sendinfo');
-	}
+        if (!empty($fphone)) {
+            $xtpl->assign('PHONE', $fphone);
+            $xtpl->parse('main.sendinfo.phone');
+        }
+        $xtpl->parse('main.sendinfo');
+    }
 
     $xtpl->parse('main');
     return $xtpl->text('main');

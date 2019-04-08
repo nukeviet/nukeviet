@@ -119,7 +119,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
         $upload = new NukeViet\Files\Upload(array(
             'images'
         ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-        $upload->setLanguage($lang_global);
+        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
 
         // Storage in temp dir
         $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);

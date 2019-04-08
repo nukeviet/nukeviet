@@ -29,6 +29,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $run_func = $nv_Request->get_title('run_func_iavim', 'post', '');
     $params = $nv_Request->get_title('params_iavim', 'post', '');
     $interval = $nv_Request->get_int('interval_iavim', 'post', 0);
+    $inter_val_type = $nv_Request->get_int('inter_val_type', 'post', 0);
     $del = $nv_Request->get_int('del', 'post', 0);
 
     $min = $nv_Request->get_int('min', 'post', 0);
@@ -38,6 +39,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $start_time = mktime($hour, $min, 0, $m[2], $m[1], $m[3]);
     } else {
         $start_time = NV_CURRENTTIME;
+    }
+    if ($inter_val_type < 0 or $inter_val_type > 1) {
+        $inter_val_type = 1;
     }
 
     if (empty($cron_name)) {
@@ -64,7 +68,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
 
             $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET
-                start_time=' . $start_time . ', inter_val=' . $interval . ', run_file= :run_file,
+                start_time=' . $start_time . ', inter_val=' . $interval . ', inter_val_type=' . $inter_val_type . ', run_file= :run_file,
                 run_func= :run_func, params= :params, del=' . $del . ',
                 ' . NV_LANG_INTERFACE . '_cron_name= :cron_name
                 WHERE id=' . $id);
@@ -75,6 +79,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':cron_name', $cron_name, PDO::PARAM_STR);
             $sth->execute();
 
+            update_cronjob_next_time();
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs');
         }
     }
@@ -85,6 +90,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $params = !empty($row['params']) ? implode(', ', explode(',', $row['params'])) : '';
     $interval = intval($row['inter_val']);
     $del = intval($row['del']);
+    $inter_val_type = intval($row['inter_val_type']);
     $start_time = $row['start_time'];
     list($min, $hour) = array_map('trim', explode(',', date('i,G', $row['start_time'])));
 }
@@ -105,6 +111,7 @@ $tpl->assign('DATA', [
     'min' => $min,
     'hour' => $hour,
     'interval' => $interval,
+    'inter_val_type' => $inter_val_type,
     'del' => $del
 ]);
 $tpl->assign('IS_ADD', false);
