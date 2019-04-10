@@ -1,43 +1,52 @@
-<!-- BEGIN: main -->
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<col style="width:80px;white-space:nowrap" />
-		<thead>
-			<tr>
-				<th>{LANG.funcs_subweight}</th>
-				<th>{LANG.funcs_in_submenu}</th>
-				<th>{LANG.funcs_title}</th>
-				<!-- BEGIN: change_alias_head -->
-				<th>{LANG.funcs_alias}</th>
-				<!-- END: change_alias_head -->
-				<th>{LANG.custom_title}</th>
-				<th>{LANG.site_title}</th>
-				<th>{LANG.funcs_layout}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td>
-				<select name="change_weight_{ROW.func_id}" id="change_weight_{ROW.func_id}" onchange="nv_chang_func_weight({ROW.func_id});" class="form-control">
-					<!-- BEGIN: weight -->
-					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
-					<!-- END: weight -->
-				</select></td>
-				<td><input name="chang_func_in_submenu_{ROW.func_id}" id="chang_func_in_submenu_{ROW.func_id}" type="checkbox" value="1" onclick="nv_chang_func_in_submenu({ROW.func_id})"{ROW.in_submenu_checked} {ROW.disabled} /></td>
-				<td>{ROW.func_name}</td>
-				<!-- BEGIN: change_alias -->
-				<td><a href="#action" onclick="nv_change_alias({ROW.func_id},'action');">{ROW.alias}</a></td>
-				<!-- END: change_alias -->
-				<!-- BEGIN: show_alias -->
-				<td>{ROW.alias}</td>
-				<!-- END: show_alias -->
-				<td><a href="#action" onclick="nv_change_custom_name({ROW.func_id}, 'action');">{ROW.func_custom_name}</a></td>
-				<td><a href="#action" onclick="nv_change_site_title({ROW.func_id}, 'action');">{ROW.func_site_title}</a></td>
-				<td>{ROW.layout}</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+<div class="card card-table">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">{$LANG->get('funcs_subweight')}</th>
+                        <th style="width: 5%;" class="text-nowrap text-center">{$LANG->get('funcs_in_submenu')}</th>
+                        <th style="width: 25%;" class="text-nowrap">{$LANG->get('funcs_title')}</th>
+                        {if $MODULE_VERSION.virtual}
+                        <th style="width: 25%;" class="text-nowrap">{$LANG->get('funcs_alias')}</th>
+                        {/if}
+                        <th style="width: 25%;" class="text-nowrap">{$LANG->get('custom_title')}</th>
+                        <th style="width: 25%;" class="text-nowrap">{$LANG->get('site_title')}</th>
+                        <th style="width: 25%;" class="text-right text-nowrap">{$LANG->get('funcs_layout')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$ACT_FUNCS key=funcs item=values}
+                    {if $values.show_func}
+                    <tr>
+                        <td>
+                            <select class="form-control form-control-xs w70" name="change_weight_{$values.func_id}" id="change_weight_{$values.func_id}" onchange="nv_chang_func_weight('{$values.func_id}');">
+                                {foreach from=$WEIGHT_LIST item=weight}
+                                <option value="{$weight}"{if $weight eq $values.subweight} selected="selected"{/if}>{$weight}</option>
+                                {/foreach}
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input class="custom-control-input" type="checkbox" value="1" name="chang_func_in_submenu_{$values.func_id}" id="chang_func_in_submenu_{$values.func_id}" onclick="nv_chang_func_in_submenu({$values.func_id});"{if $values.in_submenu} checked="checked"{/if}{if not in_array($funcs, $ARR_IN_SUBMENU)} disabled="disabled"{/if}><span class="custom-control-label"></span>
+                            </label>
+                        </td>
+                        <td class="text-nowrap">{$funcs}</td>
+                        {if $MODULE_VERSION.virtual}
+                        {if $funcs neq 'main' and in_array($funcs, $FUN_CHANGE_ALIAS)}
+                        <td><a href="#" onclick="return nv_change_alias({$values.func_id}, 'show_funcs_action');">{$values.alias}</a></td>
+                        {else}
+                        <td>{$values.alias}</td>
+                        {/if}
+                        {/if}
+                        <td><a href="#" onclick="return nv_change_custom_name({$values.func_id}, 'show_funcs_action');">{$values.func_custom_name}</a></td>
+                        <td><a href="#" onclick="return nv_change_site_title({$values.func_id}, 'show_funcs_action');">{$values.func_site_title}</a></td>
+                        <td>{$values.layout}</td>
+                    </tr>
+                    {/if}
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<!-- END: main -->
