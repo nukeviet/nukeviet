@@ -134,6 +134,8 @@ $lang_module['extType_cronjob'] = 'Tiến trình tự động';
 $lang_module['extType_other'] = 'Khác';
 $lang_module['extType_sys'] = 'Hệ thống';
 $lang_module['extType_admin'] = 'Phần quản trị';
+$lang_module['extType_all'] = 'Tất cả';
+$lang_module['extType_filter'] = 'Lọc theo loại';
 
 $lang_module['install_package'] = 'Cài đặt gói ứng dụng';
 $lang_module['install_submit'] = 'Tải lên';
