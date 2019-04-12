@@ -8,26 +8,11 @@
 
 var LANG = [];
 
-if( typeof( CFG ) == 'undefined' ){
+if (typeof(CFG) == 'undefined') {
     var CFG = [];
     CFG.id = 0;
     CFG.string_data = '';
 }
-
-var player_width = $(window).width();
-var player_height = $(window).height();
-if( player_width > 1060 ){
-    player_width = 1000;
-}else{
-    player_width = player_width - 60;
-}
-if( player_height > 660 ){
-    player_height = 600;
-}else{
-    player_height = player_height - 60;
-}
-
-var nv_loading = '<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>';
 
 var EXT = {
     tid: CFG.id,
@@ -174,5 +159,15 @@ $(document).ready(function(){
                 }
             });
         }
+    });
+
+    // Xử lý khi xem chi tiết ứng dụng trong modal
+    $('#md-ext-detail').on('shown.bs.modal', function(e) {
+        $(this).find('.ext-detail-content').load($(this).data("urlext"), function() {
+            $('.ext-detail-bodyhtml a').on("click", function() {
+                $(this).attr("target", "_blank");
+            });
+            $('[data-toggle="tooltip"]', $('#md-ext-detail')).tooltip();
+        });
     });
 });

@@ -1,145 +1,154 @@
-<!-- BEGIN: main -->
-<div class="panel-body">
-	<!-- BEGIN: error -->
-	<div class="alert alert-danger">{ERROR}</div>
-	<!-- END: error -->
-	<!-- BEGIN: data -->
-	<ul class="nav nav-tabs" id="tabs">
-		<li class="active"><a href="#info" data-toggle="tab">{LANG.tab_info}</a></li>
-		<li><a href="#guide" data-toggle="tab">{LANG.tab_guide}</a></li>
-		<li><a href="#images" data-toggle="tab">{LANG.tab_images}</a></li>
-		<li><a href="#files" data-toggle="tab">{LANG.tab_files}</a></li>
-	</ul>
-	<div class="tab-content">
-		<div class="panel-body tab-pane active" id="info">
-			<div class="pull-right ext-dinfo">
-				<!-- BEGIN: install -->
-				<div class="m-bottom">
-					<a href="{DATA.install_link}" class="btn btn-primary btn-lg btn-block ext-install" role="button">{LANG.install}</a>
-				</div>
-				<!-- END: install -->
-				<div class="table table-responsive">
-					<table class="table table-striped table-bordered">
-						<colgroup>
-							<col class="w150"/>
-						</colgroup>
-						<tbody>
-							<tr>
-								<th colspan="2" class="{DATA.compatible_class}">
-									{DATA.compatible_title}
-								</th>
-							</tr>
-							<tr>
-								<th>{LANG.newest_version}</th>
-								<td>{DATA.newest_version}</td>
-							</tr>
-							<tr>
-								<th>{LANG.updatetime}</th>
-								<td>{DATA.updatetime}</td>
-							</tr>
-							<tr>
-								<th>{LANG.view_hits}</th>
-								<td>{DATA.view_hits}</td>
-							</tr>
-							<tr>
-								<th>{LANG.download_hits}</th>
-								<td>{DATA.download_hits}</td>
-							</tr>
-							<tr>
-								<th>{LANG.rating_text}</th>
-								<td>{DATA.rating_text}</td>
-							</tr>
-							<tr>
-								<th>{LANG.license}</th>
-								<td>{DATA.license}</td>
-							</tr>
-							<tr>
-								<th>{LANG.author}</th>
-								<td>{DATA.username}</td>
-							</tr>
-							<tr>
-								<th>{LANG.ext_type}</th>
-								<td>{DATA.types}</td>
-							</tr>
-							<tr>
-								<th>{LANG.price}</th>
-								<td>{DATA.price}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="ext-detail">
-				{DATA.description}
-			</div>
-		</div>
-		<div class="panel-body tab-pane" id="guide">
-			<!-- BEGIN: empty_documentation -->
-			<div class="alert alert-danger">{LANG.detail_empty_documentation}</div>
-			<!-- END: empty_documentation -->
-			{DATA.documentation}
-		</div>
-		<div id="images" class="panel-body tab-pane">
-			<!-- BEGIN: empty_images -->
-			<div class="alert alert-danger">{LANG.detail_empty_images}</div>
-			<!-- END: empty_images -->
-			<!-- BEGIN: demo_images -->
-			<div class="rows">
-				<!-- BEGIN: loop -->
-				<div class="col-sm-6">
-					<a href="{IMAGE}" target="_blank" class="thumbnail">
-						<img src="{IMAGE}" alt="{DATA.title}" style="width:100%"/>
-					</a>
-				</div>
-				<!-- END: loop -->
-			</div>
-			<!-- END: demo_images -->
-		</div>
-		<div class="panel-body tab-pane" id="files">
-			<div class="table table-responsive">
-				<table class="table table-striped table-bordered">
-					<thead>
-						<td>{LANG.file_name}</td>
-						<td class="w100">{LANG.file_version}</td>
-						<td class="w100">{LANG.price}</td>
-						<td class="w150">{LANG.compatible}</td>
-						<td class="w100"></td>
-					</thead>
-					<tbody>
-						<!-- BEGIN: file -->
-						<tr>
-							<td>{FILE.title}</td>
-							<td>{FILE.ver}</td>
-							<td>{FILE.price}</td>
-							<td class="{FILE.compatible_class}">{FILE.compatible_title}</td>
-							<td>
-								<!-- BEGIN: install -->
-								<a href="{FILE.install_link}" class="btn btn-primary btn-xs btn-block ext-tip ext-install" role="button" title="{LANG.install_note}" data-toggle="tooltip" data-placement="top">{LANG.install}</a>
-								<!-- END: install -->
-								<!-- BEGIN: download -->
-								<a href="{FILE.origin_link}" class="btn btn-primary btn-xs btn-block ext-tip" role="button" target="_blank" title="{LANG.download_note}" data-toggle="tooltip" data-placement="top">{LANG.download}</a>
-								<!-- END: download -->
-							</td>
-						</tr>
-						<!-- END: file -->
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript">
-	$('#tabs a').click(function(e){
-		e.preventDefault();
-		$(this).tab('show');
-	});
-	$(document).ready(function(){
-		$('.ext-tip').tooltip();
-		$('.ext-install').click(function(e){
-			e.preventDefault();
-			parent.location = $(this).attr('href');
-		});
-	});
-	</script>
-	<!-- END: data -->
+{if not empty($ERROR)}
+<div class="card-body pt-4">
+    <div role="alert" class="alert alert-danger alert-dismissible">
+        <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+        <div class="icon"><i class="far fa-times-circle"></i></div>
+        <div class="message">{$ERROR}</div>
+    </div>
 </div>
-<!-- END: main -->
+{else}
+<div class="tab-container">
+    <ul role="tablist" class="nav nav-tabs">
+        <li class="nav-item"><a href="#extDetailInfo" data-toggle="tab" role="tab" class="nav-link active show" aria-selected="true">{$LANG->get('tab_info')}</a></li>
+        <li class="nav-item"><a href="#extDetailGuide" data-toggle="tab" role="tab" class="nav-link" aria-selected="false">{$LANG->get('tab_guide')}</a></li>
+        <li class="nav-item"><a href="#extDetailImages" data-toggle="tab" role="tab" class="nav-link" aria-selected="false">{$LANG->get('tab_images')}</a></li>
+        <li class="nav-item"><a href="#extDetailFiles" data-toggle="tab" role="tab" class="nav-link" aria-selected="false">{$LANG->get('tab_files')}</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="extDetailInfo" role="tabpanel" class="tab-pane active show">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 order-sm-2 order-md-1">
+                    <div class="ext-detail-bodyhtml mt-3 mt-md-0">
+                        {$DATA.description}
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 order-sm-1 order-md-2">
+                    {if not empty($DATA.compatible) and $ALLOW_INSTALL}
+                    <a href="{$DATA.install_link}" class="w-100 btn btn-success btn-lg mb-3" role="button">{$LANG->get('install')}</a>
+                    {/if}
+                    <ul class="list-group">
+                        <li class="list-group-item p-2">
+                            <strong class="{$DATA.compatible_class}">{$DATA.compatible_title}</strong>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('newest_version')}</div>
+                                <div class="col-7"><strong>{$DATA.newest_version}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('updatetime')}</div>
+                                <div class="col-7"><strong>{$DATA.updatetime}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('view_hits')}</div>
+                                <div class="col-7"><strong>{$DATA.view_hits}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('download_hits')}</div>
+                                <div class="col-7"><strong>{$DATA.download_hits}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('rating_text')}</div>
+                                <div class="col-7"><strong>{$DATA.rating_text}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('license')}</div>
+                                <div class="col-7"><strong>{$DATA.license}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('author')}</div>
+                                <div class="col-7"><strong>{$DATA.username}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('ext_type')}</div>
+                                <div class="col-7"><strong>{$DATA.types}</strong></div>
+                            </div>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <div class="row">
+                                <div class="col-5">{$LANG->get('price')}</div>
+                                <div class="col-7"><strong>{$DATA.price}</strong></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="extDetailGuide" role="tabpanel" class="tab-pane">
+            {if empty($DATA.documentation)}
+            <div role="alert" class="alert alert-primary alert-dismissible">
+                <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+                <div class="icon"><i class="fas fa-info-circle"></i></div>
+                <div class="message">{$LANG->get('detail_empty_documentation')}</div>
+            </div>
+            {/if}
+            <div class="ext-detail-bodyhtml">
+                {$DATA.documentation}
+            </div>
+        </div>
+        <div id="extDetailImages" role="tabpanel" class="tab-pane">
+            {if empty($ARRAY_IMAGES)}
+            <div role="alert" class="alert alert-primary alert-dismissible">
+                <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+                <div class="icon"><i class="fas fa-info-circle"></i></div>
+                <div class="message">{$LANG->get('detail_empty_images')}</div>
+            </div>
+            {else}
+            <div class="row">
+                {foreach from=$ARRAY_IMAGES item=image}
+                <div class="col-6 col-md-3">
+                    <a href="{$image}" target="_blank"><img src="{$image}" class="img-fluid mb-3" alt=""></a>
+                </div>
+                {/foreach}
+            </div>
+            {/if}
+        </div>
+        <div id="extDetailFiles" role="tabpanel" class="tab-pane">
+            {foreach from=$ARRAY_FILES item=file}
+            <div class="ext-file mb-3">
+                <div class="mb-2 clearfix">
+                    <h4 class="my-0 mr-2 float-left">{$file.title}</h4>
+                    {if $file.type eq 1 and not empty($file.compatible) and $ALLOW_INSTALL}
+                    <a href="{$file.install_link}" class="btn btn-primary btn-sm ext-install float-right" title="{$LANG->get('install_note')}" data-toggle="tooltip" data-placement="top" data-boundary="window">{$LANG->get('install')}</a>
+                    {else}
+                    <a href="{$file.origin_link}" class="btn btn-primary btn-sm float-right" target="_blank" title="{$LANG->get('download_note')}" data-toggle="tooltip" data-placement="top" data-boundary="window">{$LANG->get('download')}</a>
+                    {/if}
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item p-2">
+                        <div class="ext-file-item clearfix">
+                            <span class="mr-2">{$LANG->get('file_version')}:</span>
+                            <strong class="float-right">{$file.ver}</strong>
+                        </div>
+                        <hr class="mt-2 mb-2">
+                        <div class="ext-file-item clearfix">
+                            <span class="mr-2">{$LANG->get('compatible')}:</span>
+                            <strong class="float-right {$file.compatible_class}">{$file.compatible_title}</strong>
+                        </div>
+                        <hr class="mt-2 mb-2">
+                        <div class="ext-file-item clearfix">
+                            <span class="mr-2">{$LANG->get('price')}:</span>
+                            <strong class="float-right">{$file.price}</strong>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
+{/if}

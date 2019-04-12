@@ -8,13 +8,13 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
 $page_title = $nv_Lang->getGlobal('mod_extensions');
 
-$request = array();
+$request = [];
 $request['id'] = $nv_Request->get_int('id', 'get', 0);
 $request['fid'] = $nv_Request->get_int('fid', 'get', 0);
 
@@ -48,35 +48,35 @@ else {
 }
 
 if (empty($error) and empty($message)) {
-    $args = array(
-        'headers' => array(
+    $args = [
+        'headers' => [
             'Referer' => NUKEVIET_STORE_APIURL,
-        ),
+        ],
         'cookies' => $stored_cookies,
         'body' => $request
-    );
+    ];
 
     $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
     $cookies = $array['cookies'];
-    $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+    $array = !empty($array['body']) ? @unserialize($array['body']) : [];
 
     // Next step
-    if (! empty($array['data']['compatible']['id']) and $request['mode'] == 'getfile') {
+    if (!empty($array['data']['compatible']['id']) and $request['mode'] == 'getfile') {
         header('location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=install&id=' . $array['data']['id'] . '&fid=' . $array['data']['compatible']['id'] . '&getfile=1');
         die();
     }
 
-    if (! empty(NukeViet\Http\Http::$error)) {
+    if (!empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-    } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
+    } elseif (empty($array['status']) or !isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
         $error = $nv_Lang->getGlobal('error_valid_response');
-    } elseif (! empty($array['error']['message'])) {
+    } elseif (!empty($array['error']['message'])) {
         $error = $array['error']['message'];
     }
 }
 
 // Show error
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 } else {
@@ -109,7 +109,7 @@ if (! empty($error)) {
 
             // Check require plugin
             $allow_continue = true;
-            if (! empty($array['require'])) {
+            if (!empty($array['require'])) {
                 $require_installed = nv_extensions_is_installed($array['require']['tid'], $array['require']['name'], '');
 
                 if ($require_installed === 0) {
@@ -126,7 +126,7 @@ if (! empty($error)) {
 
             if ($allow_continue === true) {
                 // Check auto install
-                if ($array['compatible']['type'] != 1 or ! in_array($array['tid'], array( 1, 2, 3, 4 ))) {
+                if ($array['compatible']['type'] != 1 or !in_array($array['tid'], [1, 2, 3, 4])) {
                     $xtpl->assign('MANUAL_MESSAGE', $array['documentation'] ? $nv_Lang->getModule('install_manual_install') : $nv_Lang->getModule('install_manual_install_danger'));
                     $xtpl->parse('main.install.manual');
                 } else {

@@ -9,3 +9,55 @@
 .mxw210 {
     max-width: 210px;
 }
+
+.ext-thumb > div {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.ext-thumb > div img {
+    display: none;
+}
+
+/*
+ * Star rating
+ */
+.ext-rating {
+    font-size: 1.23rem;
+}
+
+.ext-rating span.star {
+    font-family: "Font Awesome 5 Free";
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+}
+
+.ext-rating span.star:before {
+    content: "\f005";
+    color: #999999;
+}
+
+.ext-rating span.star.active {
+    font-weight: 900;
+}
+
+.ext-rating span.star.active:before,
+.ext-rating span.star.active ~ span.star:before {
+    content: "\f005";
+    color: #f7b904;
+}
+
+.ext-detail-bodyhtml {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.ext-detail-bodyhtml img {
+    max-width: 100%!important;
+    height: auto!important;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}

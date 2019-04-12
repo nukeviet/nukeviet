@@ -26,16 +26,6 @@ $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('REQUEST', $request);
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('REQUEST', $request);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-$xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-
 if (!empty($request['username']) and !empty($request['password'])) {
     // Fixed request
     $request['lang'] = NV_LANG_INTERFACE;
@@ -90,9 +80,6 @@ if (!empty($request['username']) and !empty($request['password'])) {
     $respon['url'] = $redirect;
     nv_jsonOutput($respon);
 }
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
 
 $contents = $tpl->fetch($op . '.tpl');
 
