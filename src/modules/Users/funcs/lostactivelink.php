@@ -28,7 +28,7 @@ if ($global_config['allowuserreg'] != 2) {
 $page_title = $mod_title = $nv_Lang->getModule('lostpass_page_title');
 $key_words = $module_info['keywords'];
 
-$data = array();
+$data = [];
 $data['checkss'] = NV_CHECK_SESSION;
 $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
 $data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
@@ -56,6 +56,7 @@ if ($checkss == $data['checkss']) {
                 $nv_Request->unset_request('lostactivelink_seccode', 'session');
                 $error = $nv_Lang->getModule('lostactivelink_no_info2');
             } else {
+                // Xác định thành viên đăng ký chờ kích hoạt trong vòng 1 ngày
                 $exp = NV_CURRENTTIME - 86400;
                 if (empty($check_email)) {
                     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE email= :userField AND regdate>' . $exp;
@@ -72,27 +73,37 @@ if ($checkss == $data['checkss']) {
                     if (empty($seccode)) {
                         $nv_Request->set_Session('lostactivelink_seccode', md5($data['nv_seccode']));
                     }
-
                     $question = $row['question'];
 
-                    $info = '';
-                    if (empty($row['question']) or empty($row['answer'])) {
-                        $info = $nv_Lang->getModule('lostactivelink_question_empty');
+                    // Kiểm tra xem hệ thống có yêu cầu nhập câu hỏi bảo mật và câu trả lời không
+                    $array_field_config = nv_get_users_field_config();
+                    $is_question_require = true;
+                    if (isset($array_field_config['question']) and isset($array_field_config['answer']) and
+                        empty($array_field_config['question']['required']) and empty($array_field_config['answer']['required'])
+                    ) {
+                        $is_question_require = false;
                     }
 
-                    if (!empty($info)) {
-                        $nv_Request->unset_request('lostactivelink_seccode', 'session');
+                    if ($is_question_require) {
+                        $info = '';
+                        if (empty($row['question']) or empty($row['answer'])) {
+                            $info = $nv_Lang->getModule('lostactivelink_question_empty');
+                        }
 
-                        $contents = user_info_exit($info);
-                        $contents .= '<meta http-equiv="refresh" content="15;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+                        if (!empty($info)) {
+                            $nv_Request->unset_request('lostactivelink_seccode', 'session');
 
-                        include NV_ROOTDIR . '/includes/header.php';
-                        echo nv_site_theme($contents);
-                        include NV_ROOTDIR . '/includes/footer.php';
+                            $contents = user_info_exit($info);
+                            $contents .= '<meta http-equiv="refresh" content="15;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+                            include NV_ROOTDIR . '/includes/header.php';
+                            echo nv_site_theme($contents);
+                            include NV_ROOTDIR . '/includes/footer.php';
+                        }
                     }
 
-                    if ($data['send']) {
-                        if ($data['answer'] == $row['answer']) {
+                    if ($data['send'] or !$is_question_require) {
+                        if ($data['answer'] == $row['answer'] or !$is_question_require) {
                             $nv_Request->unset_request('lostactivelink_seccode', 'session');
 
                             $rand = rand($global_config['nv_upassmin'], $global_config['nv_upassmax']);
