@@ -18,10 +18,10 @@ var EXT = {
     tid: CFG.id,
     isDownloaded: false,
     startDownload: function(){
-        if( ! EXT.isDownloaded ){
+        if (!EXT.isDownloaded) {
             EXT.isDownloaded = true;
 
-            $('#warnning').hide();
+            $('#extInstallWarning').hide();
             $('#file-download').show();
             $('#file-download .waiting').show();
 
@@ -29,7 +29,7 @@ var EXT = {
                 type: 'POST',
                 url: script_name,
                 data: nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&data=' + CFG.string_data,
-                success: function(e){
+                success: function(e) {
                     $('#file-download .waiting').hide();
                     e = e.split('|');
                     if( e[0] == 'OK' ){
@@ -46,17 +46,17 @@ var EXT = {
     },
     handleOk: function(f){
         $('#file-download').addClass('text-success');
-        $('#file-download .status').removeClass('fa-meh-o').addClass('fa-smile-o');
+        $('#file-download .status').removeClass('fa-meh').addClass('fa-smile');
         $('#file-download .complete').show();
 
-        $('#file-download-response').html('<div class="alert alert-success">' + LANG.download_ok + '</div>');
+        $('#file-download-response').html('<div class="alert alert-success"><div class="message pl-3">' + LANG.download_ok + '</div></div>');
 
-        setTimeout( "EXT.redirect()", 3000 );
+        setTimeout("EXT.redirect()", 3000);
     },
     handleError: function(m){
         $('#file-download').addClass('text-danger');
-        $('#file-download .status').removeClass('fa-meh-o').addClass('fa-frown-o');
-        $('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
+        $('#file-download .status').removeClass('fa-meh').addClass('fa-frown');
+        $('#file-download-response').html('<div class="alert alert-danger"><div class="message pl-3">' + m + '</div></div>');
     },
     redirect: function(){
         var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
