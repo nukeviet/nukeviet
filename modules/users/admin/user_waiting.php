@@ -119,7 +119,7 @@ if ($nv_Request->isset_request('act', 'get')) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
             $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
-            @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
+            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         } else {
             $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
         }
