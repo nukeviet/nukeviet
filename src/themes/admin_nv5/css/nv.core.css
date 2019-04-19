@@ -15363,7 +15363,7 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
 
 /* File Manager */
 .filemanager-wraper {
-  height: calc(100vh - 222px);
+  height: calc(100vh - 225px);
 }
 
 .card-filemanager {
