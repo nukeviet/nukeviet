@@ -60,18 +60,24 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
 
 $groups_list = nv_groups_list($module_data);
 $array_field_config = nv_get_users_field_config();
+
+// Xác định nhóm thành viên, từ bảng groups_users và từ cả trường group_id, in_groups cho chuẩn xác
 $array_old_groups = [];
 $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
 while ($row_gru = $result_gru->fetch()) {
     $array_old_groups[] = $row_gru['group_id'];
 }
+$row['in_groups'] = empty($row['in_groups']) ? [] : explode(',', $row['in_groups']);
+$array_old_groups[] = $row['group_id'];
+$array_old_groups_all = array_unique(array_filter(array_map('trim', array_merge_recursive($array_old_groups, $row['in_groups']))));
+$array_old_groups = array_diff($array_old_groups_all, [4, 7]);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 $access_passus = (isset($access_admin['access_passus'][$admin_info['level']]) and $access_admin['access_passus'][$admin_info['level']] == 1) ? true : false;
-$_user = $custom_fields = array();
+$_user = $custom_fields = [];
 
 if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
@@ -107,94 +113,100 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $custom_fields['answer'] = $_user['answer'];
 
     if ($_user['username'] != $row['username'] and ($error_username = nv_check_valid_login($_user['username'], $global_config['nv_unickmax'], $global_config['nv_unickmin'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
             'mess' => $error_username
-        ));
+        ]);
     }
 
     if ("'" . $_user['username'] . "'" != $db->quote($_user['username'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
             'mess' => sprintf($lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>')
-        ));
+        ]);
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
             'mess' => $lang_module['edit_error_username_exist']
-        ));
+        ]);
     }
 
     if (($error_xemail = nv_check_valid_email($_user['email'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $error_xemail
-        ));
+        ]);
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        ));
+        ]);
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email=' . $db->quote($_user['email']))->fetchColumn()) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        ));
+        ]);
     }
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['edit_error_email_exist']
-        ));
+        ]);
     }
 
     if (!empty($_user['password1']) and ($check_pass = nv_check_valid_pass($_user['password1'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'password1',
             'mess' => $check_pass
-        ));
+        ]);
     }
 
     if (!empty($_user['password1']) and $_user['password1'] != $_user['password2']) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'password2',
             'mess' => $lang_module['edit_error_password']
-        ));
+        ]);
     }
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
-    $query_field = array();
+    $query_field = [];
     if (!empty($array_field_config)) {
         require NV_ROOTDIR . '/modules/users/fields.check.php';
     }
 
     $password = !empty($_user['password1']) ? $crypt->hash_password($_user['password1'], $global_config['hashprefix']) : $row['password'];
 
-    $in_groups = array();
-    foreach (array_keys($groups_list) as $_group_id) {
-        if (!empty($rowlev) and $_group_id < 4 and in_array($_group_id, $array_old_groups)) {
-            $in_groups[] = $_group_id;
-        } elseif ($_group_id > 9 and in_array($_group_id, $_user['in_groups'])) {
-            $in_groups[] = $_group_id;
+    $in_groups = [];
+    // Khi là thành viên mới thì không thể chọn thuộc các nhóm khác
+    if (!in_array(7, $array_old_groups_all) or $_user['is_official']) {
+        foreach (array_keys($groups_list) as $_group_id) {
+            if (!empty($rowlev) and $_group_id < 4 and in_array($_group_id, $array_old_groups)) {
+                // Thêm vào các nhóm quản trị khi tài khoản này là quản trị
+                $in_groups[] = $_group_id;
+            } elseif ($_group_id > 9 and in_array($_group_id, $_user['in_groups'])) {
+                // Các nhóm tài khoản trong phần quản lý nhóm thành viên
+                $in_groups[] = $_group_id;
+            }
         }
     }
 
+    // Xóa khỏi bảng groups_users
     $in_groups_del = array_diff($array_old_groups, $in_groups);
     if (!empty($in_groups_del)) {
         foreach ($in_groups_del as $gid) {
@@ -202,6 +214,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
 
+    // Thêm vào bảng groups_users
     $in_groups_add = array_diff($in_groups, $array_old_groups);
     if (!empty($in_groups_add)) {
         foreach ($in_groups_add as $gid) {
@@ -209,21 +222,41 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
 
+    // Kiểm tra nhóm thành viên mặc định phải thuộc các nhóm đã chọn
     if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $in_groups)) {
         $_user['in_groups_default'] = 0;
     }
 
-    if (!$_user['in_groups_default'] and sizeof($in_groups) == 1) {
-        $_user['in_groups_default'] = array_values($in_groups);
-        $_user['in_groups_default'] = $_user['in_groups_default'][0];
+    // Khi không chọn nhóm mặc định thì tự xác định nhóm mặc định theo từng bước
+    if (empty($_user['in_groups_default'])) {
+        if (in_array(7, $array_old_groups_all) and !$_user['is_official']) {
+            // Tài khoản đang là tài khoản mới và không cho làm tài khoản chính thức => Mặc định là tài khoản mới
+            $_user['in_groups_default'] = 7;
+        } else {
+            // Mặc định khi không có nhóm nào sẽ là tài khoản chính thức
+            $_user['in_groups_default'] = 4;
+        }
     }
 
-    if (empty($_user['in_groups_default']) and sizeof($in_groups)) {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'group_default',
-            'mess' => $lang_module['edit_error_group_default']
-        ));
+    if (in_array(7, $array_old_groups_all)) {
+        if (!$_user['is_official']) {
+            $_user['in_groups_default'] = 7;
+            $in_groups[] = 7;
+        } else {
+            $in_groups[] = 4;
+            try {
+                $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+            } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
+            }
+            try {
+                $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
+            } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
+            }
+        }
+    } else {
+        $in_groups[] = 4;
     }
 
     // Check photo
@@ -264,20 +297,6 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     if (empty($_user['photo'])) {
         $_user['photo'] = $row['photo'];
-    }
-
-    if ($row['group_id'] == 7) {
-        if (!$_user['is_official']) {
-            $_user['in_groups_default'] = 7;
-            $in_groups[] = 7;
-        } else {
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
-
-            if ($_user['in_groups_default'] == 7) {
-                $_user['in_groups_default'] = 4;
-            }
-        }
     }
 
     if ($row['email'] != $_user['email']) {
@@ -325,12 +344,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);
     $nv_Cache->delMod($module_name);
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'input' => '',
         'admin_add' => 'no',
         'mess' => ''
-    ));
+    ]);
 }
 
 $_user = $row;
@@ -351,15 +370,16 @@ $custom_fields['answer'] = $_user['answer'];
 
 $_user['view_mail'] = $_user['view_mail'] ? ' checked="checked"' : '';
 
-$groups = array();
+$groups = [];
 if (!empty($groups_list)) {
     foreach ($groups_list as $group_id => $grtl) {
-        $groups[] = array(
+        $groups[] = [
             'id' => $group_id,
             'title' => $grtl,
             'checked' => (in_array($group_id, $_user['in_groups'])) ? ' checked="checked"' : '',
-            'default' => (in_array($group_id, $_user['in_groups']) and $_user['group_id'] == $group_id) ? ' checked="checked"' : ''
-        );
+            'default' => (in_array($group_id, $_user['in_groups']) and $_user['group_id'] == $group_id) ? ' checked="checked"' : '',
+            'default_show' => in_array($group_id, $_user['in_groups']) ? '' : ' style="display: none;"'
+        ];
     }
 }
 
@@ -375,18 +395,18 @@ if (defined('NV_IS_USER_FORUM')) {
 } else {
     if (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) {
         $size = @getimagesize(NV_ROOTDIR . '/' . $row['photo']);
-        $img = array(
+        $img = [
             'src' => NV_BASE_SITEURL . $row['photo'],
             'height' => $size[1],
             'width' => $size[0]
-        );
+        ];
         $xtpl->assign('IMG', $img);
         $xtpl->parse('main.edit_user.photo');
     } else {
         $xtpl->parse('main.edit_user.add_photo');
     }
 
-    $xtpl->assign('GROUP_DEFAULT_STYLE', (sizeof($_user['in_groups']) > 1) ? '' : ' style="display:none"');
+    $xtpl->assign('SHOW_BTN_CLEAR', (sizeof($array_old_groups) > 0 and !in_array(7, $array_old_groups_all)) ? '' : ' style="display: none;"');
 
     $a = 0;
     foreach ($groups as $group) {
@@ -401,6 +421,9 @@ if (defined('NV_IS_USER_FORUM')) {
         }
     }
     if ($a > 0) {
+        if (in_array(7, $array_old_groups_all)) {
+            $xtpl->parse('main.edit_user.group.hide');
+        }
         $xtpl->parse('main.edit_user.group');
     }
 
@@ -408,7 +431,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $xtpl->parse('main.edit_user.changepass');
     }
 
-    if ($_user['group_id'] == 7) {
+    if (in_array(7, $array_old_groups_all)) {
         $xtpl->parse('main.edit_user.is_official');
     }
 
@@ -479,45 +502,45 @@ if (defined('NV_IS_USER_FORUM')) {
                 }
             } elseif ($row['field_type'] == 'select') {
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
                         'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.edit_user.field.loop.select.loop');
                 }
                 $xtpl->parse('main.edit_user.field.loop.select');
             } elseif ($row['field_type'] == 'radio') {
                 $number = 0;
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
                         'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.edit_user.field.loop.radio');
                 }
             } elseif ($row['field_type'] == 'checkbox') {
                 $number = 0;
-                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
                         'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.edit_user.field.loop.checkbox');
                 }
             } elseif ($row['field_type'] == 'multiselect') {
-                $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
                         'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
                 }
                 $xtpl->parse('main.edit_user.field.loop.multiselect');
