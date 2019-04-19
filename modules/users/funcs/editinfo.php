@@ -274,7 +274,7 @@ if ((int)$row['safemode'] > 0) {
                 $name = implode(' ', $name);
                 $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
                 $message = sprintf($lang_module['safe_send_content'], $name, $sitename, $row['safekey']);
-                @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message);
+                @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['safe_send_subject'], $message);
 
                 $ss_safesend = NV_CURRENTTIME + 600;
                 $nv_Request->set_Session('safesend', $ss_safesend);
@@ -565,7 +565,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['username'], $nv_username);
-    @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message);
+    @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['edit_mail_subject'], $message);
 
     nv_jsonOutput(array(
         'status' => 'ok',
@@ -648,7 +648,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['email_active_info'], $name, $sitename, $verikey, $p);
-        @nv_sendmail($global_config['site_email'], $nv_email, $lang_module['email_active'], $message);
+        @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $nv_email, $lang_module['email_active'], $message);
 
         nv_jsonOutput(array(
             'status' => 'error',
@@ -704,7 +704,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email);
-        @nv_sendmail($global_config['site_email'], $nv_email, $lang_module['edit_mail_subject'], $message);
+        @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $nv_email, $lang_module['edit_mail_subject'], $message);
 
         nv_jsonOutput(array(
             'status' => 'ok',
@@ -768,7 +768,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
-    @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message);
+    @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['edit_mail_subject'], $message);
 
     nv_jsonOutput(array(
         'status' => 'ok',
@@ -973,7 +973,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             $name = implode(' ', $name);
             $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
             $message = sprintf($lang_module['safe_send_content'], $name, $sitename, $row['safekey']);
-            @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message);
+            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['safe_send_subject'], $message);
 
             $ss_safesend = NV_CURRENTTIME + 600;
             $nv_Request->set_Session('safesend', $ss_safesend);

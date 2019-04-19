@@ -33,7 +33,7 @@ if ($nv_Request->get_int('result', 'get', 0)) {
     exit();
 }
 
-$adminThemes = array( '' );
+$adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
 
@@ -41,15 +41,15 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $userid = $nv_Request->get_title('userid', 'post', 0);
     $lev = $nv_Request->get_int('lev', 'post', 0);
     $editor = $nv_Request->get_title('editor', 'post');
-    $allow_files_type = $nv_Request->get_array('allow_files_type', 'post', array());
+    $allow_files_type = $nv_Request->get_array('allow_files_type', 'post', []);
     $allow_create_subdirectories = $nv_Request->get_int('allow_create_subdirectories', 'post', 0);
     $allow_modify_files = $nv_Request->get_int('allow_modify_files', 'post', 0);
     $allow_modify_subdirectories = $nv_Request->get_int('allow_modify_subdirectories', 'post', 0);
-    $modules = $nv_Request->get_array('modules', 'post', array());
+    $modules = $nv_Request->get_array('modules', 'post', []);
     $position = $nv_Request->get_title('position', 'post', '', 1);
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    $admin_theme =  (! empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
+    $admin_theme =  (!empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
 
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
@@ -79,10 +79,10 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
 
     $lev = ($lev != 2 or !defined('NV_IS_GODADMIN')) ? 3 : 2;
-    $mds = array();
+    $mds = [];
     if ($lev == 3 and !empty($modules)) {
         $update = 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= CASE ';
-        $titles = array();
+        $titles = [];
         $array_keys = array_keys($site_mods);
         foreach ($array_keys as $i => $mod) {
             if (!empty($mod) and in_array($mod, $modules)) {
@@ -108,8 +108,8 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
     $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "
-		(admin_id, editor, lev, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
-		( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
+        (admin_id, editor, lev, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
+        ( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
     $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
     $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
@@ -118,21 +118,36 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     if ($sth->execute()) {
         nv_groups_add_user($lev, $userid);
 
-        //Nếu là thành viên mới, thì xóa khỏi nhóm thành viên mới
+        // Nếu là thành viên mới, thì xóa khỏi nhóm thành viên mới
         if ($_group_id == 7 or in_array(7, explode(',', $_in_groups))) {
-            if ($_group_id == 7) {
-                $_group_id = $lev;
-            }
-            $_in_groups = array_diff($_in_groups, array(
+            $_group_id = $lev;
+            $_in_groups = array_diff($_in_groups, [
                 7
-            ));
+            ]);
+            $_in_groups[] = 4;
+            $_in_groups[] = $lev;
+            $_in_groups = array_filter(array_unique(array_map('trim', $_in_groups)));
+            $_in_groups = empty($_in_groups) ? '' : implode(',', $_in_groups);
 
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id = ' . $_group_id . ", in_groups='" . implode(',', $_in_groups) . "' WHERE userid = " . $userid);
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
+            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id = ' . $_group_id . ", in_groups='" . $_in_groups . "' WHERE userid = " . $userid);
+            try {
+                $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
+            } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
+            }
             $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+        } else {
+            // Thêm vào nhóm và set nhóm mặc định là quản trị
+            $_in_groups = explode(',', $_in_groups);
+            $_in_groups[] = $lev;
+            $_in_groups = array_filter(array_unique(array_map('trim', $_in_groups)));
+            $_in_groups = empty($_in_groups) ? '' : implode(',', $_in_groups);
+
+            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $lev . ", in_groups=" . $db->quote($_in_groups) . " WHERE userid=" . $userid;
+            $db->query($sql);
         }
 
-        $result = array(
+        $result = [
             'admin_id' => $userid,
             'editor' => $editor,
             'lev' => $lev,
@@ -142,7 +157,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
             'allow_modify_subdirectories' => $allow_modify_subdirectories,
             'position' => $position,
             'modules' => (!empty($mds)) ? implode(', ', $mds) : ''
-        );
+        ];
 
         $session_files = serialize($result);
         $nv_Request->set_Session('nv_admin_profile', $session_files);
@@ -158,7 +173,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $userid = $nv_Request->get_title('userid', 'get');
     $editor = 'ckeditor';
     $lev = 3;
-    $modules = array();
+    $modules = [];
     $allow_files_type = explode(',', 'adobe,application,archives,audio,documents,flash,images,real,video');
     $allow_modify_files = $allow_modify_subdirectories = 0;
     $allow_create_subdirectories = 1;
@@ -166,24 +181,24 @@ if ($nv_Request->get_int('save', 'post', 0)) {
 
 $page_title = $lang_module['nv_admin_add'];
 
-$mods = array();
+$mods = [];
 $array_keys = array_keys($site_mods);
 foreach ($array_keys as $mod) {
     $mods[$mod]['checked'] = in_array($mod, $modules) ? 1 : 0;
     $mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
 }
 
-$contents = array();
+$contents = [];
 
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add';
-$contents['lev'] = array(
+$contents['lev'] = [
     $lang_module['lev'],
     $lev,
     $lang_global['level2'],
     $lang_global['level3']
-);
+];
 
-$editors = array();
+$editors = [];
 
 $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_]+$/');
 if (!empty($dirs)) {
@@ -195,44 +210,44 @@ if (!empty($dirs)) {
 }
 
 if (!empty($editors)) {
-    $contents['editor'] = array(
+    $contents['editor'] = [
         $lang_module['editor'],
         $editors,
         $editor,
         $lang_module['not_use']
-    );
+    ];
 }
 
 if (!empty($global_config['file_allowed_ext'])) {
-    $contents['allow_files_type'] = array(
+    $contents['allow_files_type'] = [
         $lang_module['allow_files_type'],
         $global_config['file_allowed_ext'],
         $allow_files_type
-    );
+    ];
 }
 
-$contents['allow_modify_files'] = array(
+$contents['allow_modify_files'] = [
     $lang_module['allow_modify_files'],
     $allow_modify_files
-);
-$contents['allow_create_subdirectories'] = array(
+];
+$contents['allow_create_subdirectories'] = [
     $lang_module['allow_create_subdirectories'],
     $allow_create_subdirectories
-);
-$contents['allow_modify_subdirectories'] = array(
+];
+$contents['allow_modify_subdirectories'] = [
     $lang_module['allow_modify_subdirectories'],
     $allow_modify_subdirectories
-);
+];
 
-$contents['mods'] = array(
+$contents['mods'] = [
     $lang_module['if_level3_selected'],
     $mods
-);
-$contents['position'] = array(
+];
+$contents['position'] = [
     $lang_module['position'],
     $position,
     $lang_module['position_info']
-);
+];
 $contents['info'] = $lang_module['nv_admin_add_info'];
 $contents['submit'] = $lang_module['nv_admin_add'];
 

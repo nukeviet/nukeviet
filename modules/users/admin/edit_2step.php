@@ -104,7 +104,7 @@ if (empty($row['active2step'])) {
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $subject = $lang_module['user_2step_newcodes'];
             $message = sprintf($lang_module['user_2step_bodymail'], $full_name, $global_config['site_name'], implode('<br />', $new_code));
-            @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
+            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_reset_user2step_codes', 'userid ' . $row['userid'], $admin_info['userid']);
