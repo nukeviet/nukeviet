@@ -28,12 +28,12 @@
                 <tr>
                     <td> {LANG.password} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="form-control required password w300" type="password" autocomplete="off" id="pass_iavim" name="password1" value="{DATA.password1}" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+                    <td><input class="form-control required password w300" type="password" autocomplete="new-password" id="pass_iavim" name="password1" value="{DATA.password1}" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
                 </tr>
                 <tr>
                     <td> {LANG.repassword} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="form-control required password w300" type="password" autocomplete="off" name="password2" value="{DATA.password2}" id="password2" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
+                    <td><input class="form-control required password w300" type="password" autocomplete="new-password" name="password2" value="{DATA.password2}" id="password2" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
                 </tr>
                 <!-- BEGIN: name_show_0 -->
                 <!-- BEGIN: show_last_name-->
@@ -123,8 +123,13 @@
                     <td></td>
                     <td><input type="checkbox" name="view_mail" value="1"{DATA.view_mail} /></td>
                 </tr>
-                <!-- BEGIN: group -->
                 <tr>
+                    <td> {LANG.is_official} </td>
+                    <td></td>
+                    <td><label><input type="checkbox" name="is_official" value="1"{DATA.is_official}/> <small>{LANG.is_official_note}</small></label></td>
+                </tr>
+                <!-- BEGIN: group -->
+                <tr id="ctn-list-groups">
                     <td style="vertical-align:top"> {LANG.in_group} </td>
                     <td></td>
                     <td>
@@ -138,14 +143,15 @@
                             </label>
                         </div>
                         <!-- END: list -->
+                        <div class="clearfix" id="cleargroupdefault" style="display: none;">
+                            <label class="pull-left w200">&nbsp;</label>
+                            <label class="pull-left">
+                                <a href="#" data-toggle="cleargdefault" class="btn btn-default"><i class="fa fa-times-circle-o" aria-hidden="true"></i> {LANG.clear_group_default}</a>
+                            </label>
+                        </div>
                     </td>
                 </tr>
                 <!-- END: group -->
-                <tr>
-                    <td> {LANG.is_official} </td>
-                    <td></td>
-                    <td><label><input type="checkbox" name="is_official" value="1"{DATA.is_official}/> <small>{LANG.is_official_note}</small></label></td>
-                </tr>
                 <tr>
                     <td> {LANG.adduser_email1} </td>
                     <td></td>
@@ -221,14 +227,31 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
 $(function() {
     $.toggleShowPassword({
         field: '#password2',
         control: '#methods'
     });
+
+    $('[name="is_official"]').on('change', function() {
+        var ctngroups = $('#ctn-list-groups');
+        if (!ctngroups.length) {
+            return;
+        }
+        if ($(this).is(":checked")) {
+            ctngroups.removeClass('hidden');
+        } else {
+            ctngroups.addClass('hidden');
+            $('[name="group[]"]').prop('checked', false);
+            $('[name="group_default"]').prop('checked', false);
+        }
+    });
+
+    $('[data-toggle="cleargdefault"]').on('click', function(e) {
+        e.preventDefault();
+        $('[name="group_default"]').prop('checked', false);
+    });
 });
-//]]>
 </script>
 <!-- END: edit_user -->
 <!-- END: main -->
