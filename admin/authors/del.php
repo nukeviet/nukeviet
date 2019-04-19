@@ -8,11 +8,11 @@
  * @Createdate 2-1-2010 21:23
  */
 
-if (! defined('NV_IS_FILE_AUTHORS')) {
+if (!defined('NV_IS_FILE_AUTHORS')) {
     die('Stop!!!');
 }
 
-if (! defined('NV_IS_SPADMIN')) {
+if (!defined('NV_IS_SPADMIN')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
@@ -29,10 +29,14 @@ if (empty($row)) {
 }
 
 
-if ($row['lev'] == 1 or (! defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
+if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+/**
+ * @param string $adminpass
+ * @return boolean
+ */
 function nv_checkAdmpass($adminpass)
 {
     global $db, $admin_info, $crypt;
@@ -46,7 +50,7 @@ $access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_con
 $access_admin = unserialize($access_admin);
 $level = $admin_info['level'];
 
-$array_action_account = array();
+$array_action_account = [];
 $array_action_account[0] = $lang_module['action_account_nochange'];
 if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_waiting'][$level] == 1) {
     $array_action_account[1] = $lang_module['action_account_suspend'];
@@ -69,7 +73,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
 
     if (empty($adminpass)) {
         $error = $lang_global['admin_password_empty'];
-    } elseif (! nv_checkAdmpass($adminpass)) {
+    } elseif (!nv_checkAdmpass($adminpass)) {
         $error = sprintf($lang_global['adminpassincorrect'], $adminpass);
         $adminpass = '';
     } else {
@@ -77,11 +81,11 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
             $is_delCache = false;
             $array_keys = array_keys($site_mods);
             foreach ($array_keys as $mod) {
-                if (! empty($mod)) {
-                    if (! empty($site_mods[$mod]['admins'])) {
+                if (!empty($mod)) {
+                    if (!empty($site_mods[$mod]['admins'])) {
                         $admins = explode(',', $site_mods[$mod]['admins']);
                         if (in_array($admin_id, $admins)) {
-                            $admins = array_diff($admins, array( $admin_id ));
+                            $admins = array_diff($admins, [$admin_id]);
                             $admins = implode(',', $admins);
 
                             $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
@@ -102,18 +106,35 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
         if ($action_account == 1) {
             $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id);
         } elseif ($action_account == 2) {
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ' AND approved = 1)');
+            try {
+                $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ' AND approved = 1)');
+            } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
+            }
             $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id);
-            if (! empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
+            if (!empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
                 @nv_deletefile(NV_ROOTDIR . '/' . $row_user['photo']);
             }
         }
 
         if ($action_account != 2) {
             nv_groups_del_user($row['lev'], $admin_id);
+
+            // Cập nhật lại nhóm nếu không xóa tài khoản
+            if ($row_user['group_id'] == $row['lev']) {
+                // Nếu nhóm mặc định là quản trị này thì chuyển về thành viên chính thức
+                $row_user['group_id'] = 4;
+            }
+            $row_user['in_groups'] = explode(',', $row_user['in_groups']);
+            $row_user['in_groups'] = array_diff($row_user['in_groups'], [$row['lev']]);
+            $row_user['in_groups'] = array_filter(array_unique(array_map('trim', $row_user['in_groups'])));
+            $row_user['in_groups'] = empty($row_user['in_groups']) ? '' : implode(',', $row_user['in_groups']);
+
+            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $row_user['group_id'] . ", in_groups=" . $db->quote($row_user['in_groups']) . " WHERE userid=" . $admin_id;
+            $db->query($sql);
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'], 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);
 
@@ -121,7 +142,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
 
         if ($sendmail) {
             $title = sprintf($lang_module['delete_sendmail_title'], $global_config['site_name']);
-            $my_sig = (! empty($admin_info['sig'])) ? $admin_info['sig'] : 'All the best';
+            $my_sig = (!empty($admin_info['sig'])) ? $admin_info['sig'] : 'All the best';
             $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
             if (empty($reason)) {
                 $message = sprintf($lang_module['delete_sendmail_mess0'], $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $my_mail);
@@ -151,10 +172,10 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
             $xtpl->parse('main');
             $content = $xtpl->text('main');
 
-            $from = array( $admin_info['username'], $my_mail );
+            $from = [$admin_info['username'], $my_mail];
             $to = $row_user['email'];
             $send = nv_sendmail($from, $to, $title, $content);
-            if (! $send) {
+            if (!$send) {
                 $page_title = $lang_global['error_info_caption'];
                 $contents = $lang_global['error_sendmail_admin'] . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
 
@@ -170,15 +191,13 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
     $reason = $adminpass = '';
 }
 
-$contents = array();
-$contents['is_error'] = (! empty($error)) ? 1 : 0;
-$contents['title'] = (! empty($error)) ? $error : sprintf($lang_module['delete_sendmail_info'], $row_user['username']);
+$contents = [];
+$contents['is_error'] = (!empty($error)) ? 1 : 0;
+$contents['title'] = (!empty($error)) ? $error : sprintf($lang_module['delete_sendmail_info'], $row_user['username']);
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
 $contents['sendmail'] = $sendmail;
-
-$contents['reason'] = array( $reason, 255 );
-
-$contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, $global_config['nv_upassmax'] );
+$contents['reason'] = [$reason, 255];
+$contents['admin_password'] = [$lang_global['admin_password'], $adminpass, $global_config['nv_upassmax']];
 
 $page_title = $lang_module['nv_admin_del'];
 
