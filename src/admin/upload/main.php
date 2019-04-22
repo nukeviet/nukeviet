@@ -45,9 +45,10 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('POPUP', $popup);
 $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('MODULE_NAME', $module_name);
 
 // Xuất javascript các cấu hình
-if ($nv_Request->isset_request('getLang', 'get')) {
+if ($nv_Request->isset_request('js', 'get')) {
     $sys_max_size = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
 
     $tpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
@@ -58,17 +59,24 @@ if ($nv_Request->isset_request('getLang', 'get')) {
     $tpl->assign('NV_MIN_WIDTH', 10);
     $tpl->assign('NV_MIN_HEIGHT', 10);
     $tpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
-    $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('NV_AUTO_RESIZE', $global_config['nv_auto_resize']);
-
     $tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');
     $tpl->assign('UPLOAD_AUTO_ALT', !empty($global_config['upload_auto_alt']) ? 'true' : 'false');
 
+    // Tìm ra file js
+    $js_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/nv.upload.js';
+    if (!file_exists($js_file)) {
+        $js_file = NV_ROOTDIR . '/themes/admin_default/js/nv.upload.js';
+    }
+
     $contents = $tpl->fetch('lang.tpl');
+    $contents .= "\n" . file_get_contents($js_file);
+
+    unset($sys_info['server_headers']['content-type'], $sys_info['server_headers']['content-length']);
 
     $headers['Content-Type'] = 'application/javascript';
-    $headers['Cache-Control'] = 'max-age=2592000, public';
-    $headers['Accept-Ranges'] = 'bytes';
+    $headers['Last-Modified'] = gmdate('D, d M Y H:i:s', filemtime($js_file)) . " GMT";
+    $headers['Cache-Control'] = 'max-age=2592000, public'; // Cache js 1 tháng kể từ lần sửa cuối của file
     $headers['Pragma'] = 'cache';
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -76,35 +84,29 @@ if ($nv_Request->isset_request('getLang', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+$tpl->assign('CURRENTPATH', $currentpath);
+$tpl->assign('PATH', $path);
+$tpl->assign('TYPE', $type);
+$tpl->assign('AREA', $area);
+$tpl->assign('ALT', $alt);
+$tpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
+
+$tpl->assign('SELFILE', $selectfile);
+
+$sfile = ($type == 'file') ? ' selected="selected"' : '';
+$simage = ($type == 'image') ? ' selected="selected"' : '';
+$sflash = ($type == 'flash') ? ' selected="selected"' : '';
+
+$tpl->assign('SFLASH', $sflash);
+$tpl->assign('SIMAGE', $simage);
+$tpl->assign('SFILE', $sfile);
+
+
+
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
+
 if ($popup) {
-    $nv_Lang->setModule('browse_file', $nv_Lang->getGlobal('browse_file'));
-
-    $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-
-    $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('CURRENTPATH', $currentpath);
-    $xtpl->assign('PATH', $path);
-    $xtpl->assign('TYPE', $type);
-    $xtpl->assign('AREA', $area);
-    $xtpl->assign('ALT', $alt);
-    $xtpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
-
-    $xtpl->assign('SELFILE', $selectfile);
-
-    $sfile = ($type == 'file') ? ' selected="selected"' : '';
-    $simage = ($type == 'image') ? ' selected="selected"' : '';
-    $sflash = ($type == 'flash') ? ' selected="selected"' : '';
-
-    $xtpl->assign('SFLASH', $sflash);
-    $xtpl->assign('SIMAGE', $simage);
-    $xtpl->assign('SFILE', $sfile);
 
     // Find logo config
     $upload_logo = $upload_logo_config = '';
@@ -114,8 +116,8 @@ if ($popup) {
         $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
     }
 
-    $xtpl->assign('UPLOAD_LOGO', $upload_logo);
-    $xtpl->assign('UPLOAD_LOGO_CONFIG', $upload_logo_config);
+    $tpl->assign('UPLOAD_LOGO', $upload_logo);
+    $tpl->assign('UPLOAD_LOGO_CONFIG', $upload_logo_config);
 
     // Check upload allow file types
     if ($type == 'image' and in_array('images', $admin_info['allow_files_type'])) {

@@ -1,3 +1,18 @@
+<ul>
+    {foreach from=$ARRAY_FILES item=file}
+    <li>
+        <div class="file">
+            <div class="img">
+                <div class="bg" style="background-image: url('{$file.src}');"><img src="{$file.src}" alt="{$file.alt}"></div>
+            </div>
+            <div class="name" title="{$file.title}"><i class="icon fas fa-file-image"></i>{$file.title}</div>
+            <div class="info">{$file.size}</div>
+        </div>
+    </li>
+    {/foreach}
+</ul>
+
+{*
 <!-- BEGIN: main -->
 <!-- BEGIN: loopimg -->
 <div class="imgcontent{IMG.sel}" title="{IMG.title}" data-img="{IMG.is_img}">
@@ -67,3 +82,4 @@ window.location.href = "#nv_imgsel_{NV_CURRENTTIME}";
 </script>
 <!-- END: imgsel -->
 <!-- END: main -->
+*}

@@ -1,11 +1,15 @@
 {if not $POPUP}
 <div class="filemanager-wraper filemanager-inline" id="upload-container"></div>
-<script type="text/javascript" src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/nv.upload.js"></script>
+<script type="text/javascript" src="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;js"></script>
 <script>
 $(document).on("nv.upload.ready", function() {
     $("#upload-container").nvstaticupload({
         modal: false,
-        adminBaseUrl: '{$NV_BASE_ADMINURL}'
+        adminBaseUrl: '{$NV_BASE_ADMINURL}',
+        path: '{$PATH}',
+        currentpath: '{$CURRENTPATH}',
+        type: '{$TYPE}',
+        imgfile: '{$SELFILE}'
     });
 });
 </script>
@@ -20,41 +24,8 @@ $(document).on("nv.upload.ready", function() {
                     </div>
                     <div class="fm-folders-body nv-scroller">
                         <div class="fm-folders-tree">
-                            <span class="fm-folders-toggle" id="nv-filemanager-folder-btn-toggle"><i class="icon fas fa-folder-open"></i><span>news/2018_03</span></span>
-                            <ul id="nv-filemanager-folder">
-                                <li class="open">
-                                    <a href="#"><i class="icon fas fa-folder-open"></i>uploads<span class="toggle"><i class="fas"></i></span></a>
-                                    <ul>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>abouts</a></li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>banners</a></li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>comments</a></li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>contact</a></li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>freecontent</a></li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>menu</a></li>
-                                        <li class="open">
-                                            <a href="#"><i class="icon fas fa-folder-open"></i>news<span class="toggle"><i class="fas"></i></span></a>
-                                            <ul>
-                                                <li class="active"><a href="#"><i class="icon fas fa-folder-open"></i>2018_03</a></li>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>2018_04</a></li>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>source</a></li>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>temp_pic</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>page</a></li>
-                                        <li>
-                                            <a href="#"><i class="icon fas fa-folder-open"></i>shops<span class="toggle"><i class="fas"></i></span></a>
-                                            <ul>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>2018_03</a></li>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>2018_04</a></li>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>source</a></li>
-                                                <li><a href="#"><i class="icon fas fa-folder-open"></i>temp_pic</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>siteterms</a></li>
-                                        <li><a href="#"><i class="icon fas fa-folder-open"></i>users</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
+                            <span class="fm-folders-toggle" id="nv-filemanager-folder-btn-toggle"><i class="icon fas fa-folder-open"></i><span></span></span>
+                            <ul id="nv-filemanager-folder"></ul>
                         </div>
                     </div>
                 </div>
@@ -108,28 +79,7 @@ $(document).on("nv.upload.ready", function() {
                         </div>
                     </div>
                     <div class="fm-files nv-scroller">
-                        <div class="files-container" id="nv-filemanager-files-container">
-                            <ul>
-                                <li>
-                                    <div class="file">
-                                        <div class="img">
-                                            <div class="bg" style="background-image: url('{$NV_BASE_SITEURL}assets/news/hoptac.jpg');"><img src="{$NV_BASE_SITEURL}assets/news/hoptac.jpg" alt="Image"></div>
-                                        </div>
-                                        <div class="name"><i class="icon fas fa-file-image"></i>943 s asd asd asd.jpg</div>
-                                        <div class="info">1430 x 586 pixels</div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="file">
-                                        <div class="img">
-                                            <div class="bg" style="background-image: url('{$NV_BASE_SITEURL}assets/news/hoptac.jpg');"><img src="{$NV_BASE_SITEURL}assets/news/hoptac.jpg" alt="Image"></div>
-                                        </div>
-                                        <div class="name"><i class="icon fas fa-file-image"></i>943 s asd asd asd.jpg</div>
-                                        <div class="info">1430 x 586 pixels</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                        <div class="files-container" id="nv-filemanager-files-container"></div>
                     </div>
                     <nav class="fm-pagination">
                         <ul class="pagination justify-content-center">
@@ -514,90 +464,6 @@ $(document).on("nv.upload.ready", function() {
     <div id="addlogoButtons" class="text-center form-inline dynamic"></div>
 </div>
 
-<script type="text/javascript">
-//<![CDATA[
-var LANG = [];
-LANG.upload_size = "{LANG.upload_size}";
-LANG.pubdate = "{LANG.pubdate}";
-LANG.download = "{LANG.download}";
-LANG.preview = "{LANG.preview}";
-LANG.addlogo = "{LANG.addlogo}";
-LANG.select = "{LANG.select}";
-LANG.upload_createimage = "{LANG.upload_createimage}";
-LANG.move = "{LANG.move}";
-LANG.move_multiple = "{LANG.move_multiple}";
-LANG.rename = "{LANG.rename}";
-LANG.upload_delfile = "{LANG.upload_delfile}";
-LANG.createfolder = "{LANG.createfolder}";
-LANG.recreatethumb = "{LANG.recreatethumb}";
-LANG.recreatethumb_note = "{LANG.recreatethumb_note}";
-LANG.recreatethumb_result = "{LANG.recreatethumb_result}";
-LANG.renamefolder = "{LANG.renamefolder}";
-LANG.deletefolder = "{LANG.deletefolder}";
-LANG.delete_folder = "{LANG.delete_folder}";
-LANG.rename_nonamefolder = "{LANG.rename_nonamefolder}";
-LANG.folder_exists = "{LANG.folder_exists}";
-LANG.name_folder_error = "{LANG.name_folder_error}";
-LANG.rename_noname = "{LANG.rename_noname}";
-LANG.upload_delimg_confirm = "{LANG.upload_delimg_confirm}";
-LANG.upload_delimgs_confirm = "{LANG.upload_delimgs_confirm}";
-LANG.origSize = "{LANG.origSize}";
-LANG.errorMinX = "{LANG.errorMinX}";
-LANG.errorMaxX = "{LANG.errorMaxX}";
-LANG.errorMinY = "{LANG.errorMinY}";
-LANG.errorMaxY = "{LANG.errorMaxY}";
-LANG.errorEmptyX = "{LANG.errorEmptyX}";
-LANG.errorEmptyY = "{LANG.errorEmptyY}";
-LANG.crop = "{LANG.crop}";
-LANG.rotate = "{LANG.rotate}";
-LANG.notupload = "{LANG.notupload}";
-LANG.upload_file = "{LANG.upload_file}";
-LANG.upload_mode = "{LANG.upload_mode}";
-LANG.upload_mode_remote = "{LANG.upload_mode_remote}";
-LANG.upload_mode_local = "{LANG.upload_mode_local}";
-LANG.upload_cancel = "{LANG.upload_cancel}";
-LANG.upload_add_files = "{LANG.upload_add_files}";
-LANG.file_name = "{LANG.file_name}";
-LANG.upload_status = "{LANG.upload_status}";
-LANG.upload_info = "{LANG.upload_info}";
-LANG.upload_stop = "{LANG.upload_stop}";
-LANG.upload_continue = "{LANG.upload_continue}";
-LANG.upload_finish = "{LANG.upload_finish}";
-LANG.crop_error_small = "{LANG.crop_error_small}";
-LANG.crop_keep_original = "{LANG.crop_keep_original}";
-LANG.save = "{LANG.addlogosave}";
-LANG.notlogo = "{LANG.notlogo}";
-LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
-LANG.altimage = "{LANG.altimage}";
-LANG.upload_alt_note = "{LANG.upload_alt_note}";
-
-var nv_my_domain = '{NV_MY_DOMAIN}';
-var nv_max_size_bytes = '{NV_MAX_SIZE_BYTES}';
-var nv_max_width = '{NV_MAX_WIDTH}';
-var nv_max_height = '{NV_MAX_HEIGHT}';
-var nv_min_width = '{NV_MIN_WIDTH}';
-var nv_min_height = '{NV_MIN_HEIGHT}';
-var nv_chunk_size = '{NV_CHUNK_SIZE}';
-var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=";
-var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
-var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
-var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom"></em><br />{LANG.waiting}...</p>';
-
-// Resize images on clientside if we can
-var nv_resize = {
-    width : {NV_MAX_WIDTH},
-    height : {NV_MAX_HEIGHT},
-    quality : 99,
-    crop: false // crop to exact dimensions
-};
-<!-- BEGIN: no_auto_resize -->
-var nv_resize = false;
-<!-- END: no_auto_resize -->
-
-var nv_alt_require = {UPLOAD_ALT_REQUIRE};
-var nv_auto_alt = {UPLOAD_AUTO_ALT};
-//]]>
-</script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/upload.js"></script>
 <script type="text/javascript">
 $(function(){

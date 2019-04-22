@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -93,6 +93,10 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
     }
 
     if ($num_items) {
+        $tpl = new \NukeViet\Template\Smarty();
+        $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+        $tpl->assign('LANG', $nv_Lang);
+
         $xtpl = new XTemplate('listimg.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
@@ -105,6 +109,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             $sth->bindParam(':keyword2', $keyword, PDO::PARAM_STR);
         }
         $sth->execute();
+        $array_files = [];
         while ($file = $sth->fetch()) {
             $file['data'] = $file['sizes'];
             if ($file['type'] == 'image' or $file['ext'] == 'swf') {
@@ -127,11 +132,15 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             }
             $file['nameLong'] = $file['nameLong'] . '.' . $file['ext'];
 
+            $array_files[] = $file;
+
             $xtpl->assign('IMG', $file);
             $xtpl->parse('main.loopimg');
         }
 
-        if (! empty($selectfile)) {
+        $tpl->assign('ARRAY_FILES', $array_files);
+
+        if (!empty($selectfile)) {
             $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
             $xtpl->parse('main.imgsel');
         }
@@ -145,10 +154,12 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
 
+        $contents = $tpl->fetch('listimg.tpl');
+
         include NV_ROOTDIR . '/includes/header.php';
         echo $contents;
         include NV_ROOTDIR . '/includes/footer.php';
     }
 }
 
-exit();
+nv_htmlOutput('');
