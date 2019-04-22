@@ -48,6 +48,15 @@ var NVCoreFileBrowser = function() {
         allowedRorateFile: '#fmFCAllowedRorateFile'
     };
 
+    this.cfgMain = {
+        filrURL: '#fmMainCurrentFileURL',
+        file: '#fmMainCurrentFile',
+        area: '#fmMainArea',
+        currentFileURL: '#fmMainAlt',
+        logo: '#fmMainLogo',
+        logoConfig: '#fmMainLogoConfig'
+    };
+
     // Các thiết lập Icon cố định
     var ICON = [];
     ICON.select = 'icon far fa-check-square';
@@ -83,6 +92,8 @@ NVCoreFileBrowser.prototype.init = function(data) {
     var cfg = self.cfg;
     var ICON = self.ICON;
 
+    self.firstData = data;
+
     KEYPR.init(cfg);
     RRT.init();
     NVCMENU.init();
@@ -106,11 +117,14 @@ NVCoreFileBrowser.prototype.init = function(data) {
     // Load lại file
     $(cfg.btnReload).on('click', function(e) {
         e.preventDefault();
+        self.perload = 0;
         self.showLoader();
-        setTimeout(function() {
-            self.hideLoader();
-            updatePerfectScrollbar();
-        }, 1000);
+
+        // Load cây thư mục
+        self.getListFolders(true, true);
+
+        // Load các file của thư mục
+        self.getListFiles(true, true);
     });
 
     // Xem theo ngày tháng
@@ -209,29 +223,8 @@ NVCoreFileBrowser.prototype.init = function(data) {
 
     self.showLoader();
 
-    // Load cây thư mục
-    var urlFolder = data.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=folderlist&path=' + data.path + '&currentpath=' + data.currentpath + '&random=' + self.strRand(10);
-    $(cfg.folderElement).load(urlFolder, function() {
-        self.perload++;
-        self.folderHandler();
-        self.checkInitCompleted();
-
-        // Xác định tên thư mục hiện tại cho di động khi load xong cây thư mục
-        var activeFolder = $(cfg.folderElement).find('li.active:last');
-        if (activeFolder.length) {
-            self.setCurrentMobileFolderName(activeFolder.find('a:first')[0]);
-        }
-    });
-
-    self.firstData = data;
-
-    // Load các file của thư mục
-    var urlFiles = data.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=imglist&path=' + data.currentpath + '&type=' + data.type + '&imgfile=' + data.imgfile + '&random=' + self.strRand(10);
-    $(cfg.filesContainer).load(urlFiles, function() {
-        self.perload++;
-        self.listFilesHandler();
-        self.checkInitCompleted();
-    });
+    // Load cây thư mục, callback = true thì sau đó sẽ load luôn các file
+    self.getListFolders(true, false, data);
 }
 
 /*
@@ -533,37 +526,79 @@ NVCoreFileBrowser.prototype.folderHandler = function() {
             updatePerfectScrollbar();
         }
     });
+
+    // Mở menu của thư mục khi ấn chuột phải
+    $(cfg.folderOpenFileBtn).on('contextmenu', function(e) {
+        e.preventDefault();
+        self.folderMenu(this, e);
+    });
+}
+
+/*
+ * Load cây thư mục
+ */
+NVCoreFileBrowser.prototype.getListFolders = function(callback, reload, data) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgf = self.cfgFolderData;
+
+    var path, currentPath = '';
+    if (typeof data == 'undefined') {
+        path = $(cfgf.path).data('value');
+        currentPath = $(cfgf.folder).data('value');
+    } else {
+        path = data.path;
+        currentPath = data.currentpath;
+    }
+
+    var urlFolder = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=folderlist&path=' + path + '&currentpath=' + currentPath + (reload ? '&dirListRefresh' : '') + '&random=' + self.strRand(10);
+    $(cfg.folderElement).load(urlFolder, function() {
+        self.perload++;
+        if (callback) {
+            self.checkInitCompleted();
+            self.getListFiles(callback, reload);
+        } else {
+            self.hideLoader();
+            updatePerfectScrollbar();
+        }
+
+        self.folderHandler();
+
+        // Xác định tên thư mục hiện tại cho di động khi load xong cây thư mục
+        var activeFolder = $(cfg.folderElement).find('li.active:last');
+        if (activeFolder.length) {
+            self.setCurrentMobileFolderName(activeFolder.find('a:first')[0]);
+        }
+    });
 }
 
 /*
  * Load danh sách các file
  */
-NVCoreFileBrowser.prototype.getListFiles = function(callback) {
+NVCoreFileBrowser.prototype.getListFiles = function(callback, reload) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
-
-    // FIXME xử lý thêm chỗ này
-    //var imgtype = $("select[name=imgtype]").val();
-    //var selFile = $("input[name=selFile]").val();
-    //var author = $("select[name=author]").val() == 1 ? "&author" : "";
+    var cfgm = self.cfgMain;
 
     var imgtype = $(cfg.ctnFilterType).data('value');
-    var selFile = '';
+    var selFile = $(cfgm.file).data('value');
     var author = $(cfg.ctnFilterUser).data('value');
     var order = $(cfg.ctnFilterSort).data('value');
     var path = $(cfgf.folder).data('value');
-    var urlFiles = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=imglist&path=' + path + '&type=' + imgtype + '&imgfile=' + selFile + '&author=' + author + '&order=' + order + '&random=' + self.strRand(10);
+    var urlFiles = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=imglist&path=' + path + '&type=' + imgtype + '&imgfile=' + selFile + '&author=' + author + '&order=' + order + (reload ? '&refresh' : '') + '&random=' + self.strRand(10);
 
     $(cfg.filesContainer).load(urlFiles, function() {
-        self.hideLoader();
-        self.listFilesHandler();
-        updatePerfectScrollbar();
-    });
+        self.perload++;
+        if (callback) {
+            self.checkInitCompleted();
+        } else {
+            self.hideLoader();
+            updatePerfectScrollbar();
+        }
 
-    if (callback) {
-        self.checkInitCompleted();
-    }
+        self.listFilesHandler();
+    });
 }
 
 /*
@@ -602,15 +637,45 @@ NVCoreFileBrowser.prototype.listFilesHandler = function() {
     });
 
     // Xử lý khi ấn chuột trái, chuột giữa và chuột phải vào file
-    $('.file', $(cfg.filesContainer)).bind("mouseup", function(e) {
+    $('.file', $(cfg.filesContainer)).on("mouseup", function(e) {
         e.preventDefault();
         self.fileMouseup(this, e);
     });
 
     // Khi mở menu chuột phải thì không xử lý gì.
-    $('.file', $(cfg.filesContainer)).bind("contextmenu", function(e) {
+    $('.file', $(cfg.filesContainer)).on("contextmenu", function(e) {
         e.preventDefault();
     });
+}
+
+/*
+ * Hiển thị menu chuột phải của thư mục
+ */
+NVCoreFileBrowser.prototype.folderMenu = function(folder, event) {
+    var self = this;
+    var ICON = self.ICON;
+
+    if (!$(folder).is('.menu')) {
+        return false;
+    }
+    var html = "";
+
+    if ($(folder).is(".create_dir")) {
+        html += '<a href="#" class="dropdown-item" id="createfolder"><i class="' + ICON.create + '"></i>' + LANG.createfolder + '</a>'
+    }
+    if ($(folder).is(".recreatethumb")) {
+        html += '<a href="#" class="dropdown-item" id="recreatethumb"><i class="' + ICON.recreatethumb + '"></i>' + LANG.recreatethumb + '</a>'
+    }
+    if ($(folder).is(".rename_dir")) {
+        html += '<a href="#" class="dropdown-item" id="renamefolder"><i class="' + ICON.rename + '"></i>' + LANG.renamefolder + '</a>'
+    }
+
+    if ($(folder).is(".delete_dir")) {
+        html += '<a href="#" class="dropdown-item" id="deletefolder"><i class="' + ICON.filedelete + '"></i>' + LANG.deletefolder + '</a>'
+    }
+
+    $("div#contextMenu").html(html);
+    NVCMENU.show(event);
 }
 
 // Tạo chuỗi ngẫu nhiên
@@ -625,6 +690,7 @@ NVCoreFileBrowser.prototype.strRand = function (a) {
 NVCoreFileBrowser.prototype.checkInitCompleted = function () {
     if (this.perload > 1) {
         this.hideLoader();
+        updatePerfectScrollbar();
     }
 }
 
@@ -856,7 +922,7 @@ var RRT = {
             RRT.timer = setInterval("RRT.decrease()", RRT.timeOut);
         });
 
-        $('#rorateLeft').bind("mouseup mouseleave", function() {
+        $('#rorateLeft').on("mouseup mouseleave", function() {
             clearInterval(RRT.timer);
         });
 
@@ -864,7 +930,7 @@ var RRT = {
             RRT.timer = setInterval("RRT.increase()", RRT.timeOut);
         });
 
-        $('#rorateRight').bind("mouseup mouseleave", function() {
+        $('#rorateRight').on("mouseup mouseleave", function() {
             clearInterval(RRT.timer);
         });
 
@@ -966,10 +1032,10 @@ var NVCMENU = {
         }
     },
     init: function() {
-        NVCMENU.menu = $('<div id="nvContextMenu" class="dropdown-menu"></div>').appendTo('body').bind('click', function(e) {
+        NVCMENU.menu = $('<div id="nvContextMenu" class="dropdown-menu"></div>').appendTo('body').on('click', function(e) {
             e.stopPropagation();
         });
-        NVCMENU.menu.bind('contextmenu', function(e) {
+        NVCMENU.menu.on('contextmenu', function(e) {
             e.preventDefault();
         });
         $(document).delegate('*', 'click', function(e) {
@@ -986,7 +1052,7 @@ var NVCMENU = {
             NVCMENU.menu.html(content);
 
             $.each(NVCMENU.bindings, function(id, func) {
-                $('#' + id, NVCMENU.menu).bind('click', function(e) {
+                $('#' + id, NVCMENU.menu).on('click', function(e) {
                     NVCMENU.hide();
                     func();
                 });

@@ -20,11 +20,12 @@ $(document).on("nv.upload.ready", function() {
             <div class="fm-folders">
                 <div class="fm-folders-wrap">
                     <div class="fm-folders-head">
-                        <i class="icon fas fa-th-large"></i>Quản lý files
+                        <i class="icon fas fa-th-large"></i>{$LANG->get('mod_upload')}
                     </div>
                     <div class="fm-folders-body nv-scroller">
                         <div class="fm-folders-tree">
                             <span class="fm-folders-toggle" id="nv-filemanager-folder-btn-toggle"><i class="icon fas fa-folder-open"></i><span></span></span>
+                            {* Danh sách thư mục sẽ ở đây *}
                             <ul id="nv-filemanager-folder"></ul>
                         </div>
                     </div>
@@ -36,45 +37,44 @@ $(document).on("nv.upload.ready", function() {
                         <div class="fm-tools-wrap">
                             <div class="btn-icon">
                                 <div class="btn-group btn-space btn-upload">
-                                    <button type="button" class="btn btn-primary">Tải file lên</button>
+                                    <button type="button" class="btn btn-primary">{$LANG->get('upload_file')}</button>
                                     <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu  dropdown-menu-right">
-                                        <a href="#" class="dropdown-item">Upload từ internet</a>
+                                        <a href="#" class="dropdown-item">{$LANG->get('upload_mode_remote')}</a>
                                     </div>
                                 </div>
                             </div>
                             <ul class="tools">
                                 <li class="iconp-search"><a href="#nv-filemanager-form-search" data-toggle="modal" data-backdrop="static" class="icon-search nv-filemanager-btn-search"><i class="fas fa-search"></i></a></li>
                                 <li class="iconp-cview"><a href="#" class="icon-cview" id="nv-filemanager-btn-change-viewmode"><i class="fas"></i></a></li>
-                                <li class="iconp-reload"><a href="#" class="icon-reload" id="nv-filemanager-btn-reload"><i class="fas fa-sync-alt"></i></a></li>
+                                <li class="iconp-reload"><a href="#" class="icon-reload" id="nv-filemanager-btn-reload" title="{$LANG->get('refresh')}"><i class="fas fa-sync-alt"></i></a></li>
                                 <li class="iconp-collapse"><a href="#" class="icon-collapse" id="nv-filemanager-btn-toggle-form-filter"><i class="fas fa-cog"></i></i></a></li>
                             </ul>
                             <div class="form" id="nv-filemanager-form-filter">
                                 <div class="btn-group btn-space">
-                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="all" id="nv-filemanager-ctn-filter-type"><span class="text">Tất cả</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="all" id="nv-filemanager-ctn-filter-type"><span class="text">{$LANG->get('type_file')}</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu">
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="all">Tất cả</a>
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="image">Hình ảnh</a>
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="flash">Flash</a>
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="video">Video</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="all">{$LANG->get('type_file')}</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="image">{$LANG->get('type_image')}</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="flash">{$LANG->get('type_flash')}</a>
                                     </div>
                                 </div>
                                 <div class="btn-group btn-space">
-                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="all" id="nv-filemanager-ctn-filter-user"><span class="text">Của tất cả</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="all" id="nv-filemanager-ctn-filter-user"><span class="text">{$LANG->get('author0')}</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu">
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-user" data-value="all">Của tất cả</a>
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-user" data-value="me">Của tôi</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-user" data-value="all">{$LANG->get('author0')}</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-user" data-value="me">{$LANG->get('author1')}</a>
                                     </div>
                                 </div>
                                 <div class="btn-group btn-space">
-                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="newest" id="nv-filemanager-ctn-filter-sort"><span class="text">Sắp xếp theo ngày mới</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="newest" id="nv-filemanager-ctn-filter-sort"><span class="text">{$LANG->get('order0')}</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu">
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-sort" data-value="newest">Sắp xếp theo ngày mới</a>
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-sort" data-value="oldest">Sắp xếp theo ngày cũ</a>
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-sort" data-value="size">Sắp xếp theo dung lượng</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-sort" data-value="newest">{$LANG->get('order0')}</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-sort" data-value="oldest">{$LANG->get('order1')}</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-sort" data-value="name">{$LANG->get('order2')}</a>
                                     </div>
                                 </div>
-                                <a href="#nv-filemanager-form-search" class="icon-search nv-filemanager-btn-search" data-toggle="modal" data-backdrop="static"><i class="fas fa-search"></i></a>
+                                <a href="#nv-filemanager-form-search" class="icon-search nv-filemanager-btn-search" data-toggle="modal" data-backdrop="static" title="{$LANG->get('search')}"><i class="fas fa-search"></i></a>
                             </div>
                         </div>
                     </div>
@@ -114,15 +114,14 @@ $(document).on("nv.upload.ready", function() {
         <div><i class="fas fa-spinner fa-pulse"></i></div>
     </div>
 </div>
-<!-- Các input ẩn để lưu các giá trị -->
-<input type="hidden" name="currentFileUrl" value="">
-<input type="hidden" name="selFile" value="">
-<input type="hidden" name="CKEditorFuncNum" value="">
-<input type="hidden" name="area" value="">
-<input type="hidden" name="alt" value="">
-<input type="hidden" name="upload_logo" value="">
-<input type="hidden" name="upload_logo_config" value="">
-<!-- Tìm kiếm -->
+{* Các input ẩn để lưu các giá trị *}
+<div class="d-none" id="fmMainCurrentFileURL" data-value=""></div>
+<div class="d-none" id="fmMainCurrentFile" data-value=""></div>
+<div class="d-none" id="fmMainArea" data-value=""></div>
+<div class="d-none" id="fmMainAlt" data-value=""></div>
+<div class="d-none" id="fmMainLogo" data-value=""></div>
+<div class="d-none" id="fmMainLogoConfig" data-value=""></div>
+{* Tìm kiếm *}
 <div id="nv-filemanager-form-search" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-primary">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -163,20 +162,6 @@ $(document).on("nv.upload.ready", function() {
 <iframe src="{IFRAME_SRC}" id="uploadframe"></iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.css" rel="stylesheet" />
-<link  type="text/css"href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
-
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.flash.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.lazyload.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jQueryRotate.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/plupload-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
-
 <div class="content">
     <div class="row upload-wrap">
         <div class="col-lg-4 col-md-4 col-sm-6 imgfolder" id="imgfolder">

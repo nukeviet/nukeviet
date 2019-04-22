@@ -26,18 +26,18 @@
 <li class="open{if $PATH eq $CURRENTPATH} active{/if}">
     <a href="#" data-folder="{$DATA.title}" title="{$DATA.title}" class="{$DATA.class}"><i class="icon fas fa-folder-open"></i>{$DATA.titlepath}
     {call name=printListFolder dir=$PATH}
-    <span class="hidden" id="fmFCPath" data-value="{$PATH}"></span>
-    <span class="hidden" id="fmFCFolder" data-value="{$CURRENTPATH}"></span>
-    <span class="hidden" id="fmFCAllowedViewFiles" data-value="{$VIEW_DIR}"></span>
-    <span class="hidden" id="fmFCAllowedCreatDir" data-value="{$CREATE_DIR}"></span>
-    <span class="hidden" id="fmFCAllowedReThumb" data-value="0"></span>
-    <span class="hidden" id="fmFCAllowedRenameDir" data-value="{$RENAME_DIR}"></span>
-    <span class="hidden" id="fmFCAllowedDeleteDir" data-value="{$DELETE_DIR}"></span>
-    <span class="hidden" id="fmFCAllowedUpload" data-value="{$UPLOAD_FILE}"></span>
-    <span class="hidden" id="fmFCAllowedCreatFile" data-value="{$CREATE_FILE}"></span>
-    <span class="hidden" id="fmFCAllowedRenameFile" data-value="{$RENAME_FILE}"></span>
-    <span class="hidden" id="fmFCAllowedDeleteFile" data-value="{$DELETE_FILE}"></span>
-    <span class="hidden" id="fmFCAllowedMoveFile" data-value="{$MOVE_FILE}"></span>
-    <span class="hidden" id="fmFCAllowedCropFile" data-value="{$CROP_FILE}"></span>
-    <span class="hidden" id="fmFCAllowedRorateFile" data-value="{$ROTATE_FILE}"></span>
+    <span class="d-none" id="fmFCPath" data-value="{$PATH}"></span>
+    <span class="d-none" id="fmFCFolder" data-value="{$CURRENTPATH}"></span>
+    <span class="d-none" id="fmFCAllowedViewFiles" data-value="{$VIEW_DIR}"></span>
+    <span class="d-none" id="fmFCAllowedCreatDir" data-value="{$CREATE_DIR}"></span>
+    <span class="d-none" id="fmFCAllowedReThumb" data-value="0"></span>
+    <span class="d-none" id="fmFCAllowedRenameDir" data-value="{$RENAME_DIR}"></span>
+    <span class="d-none" id="fmFCAllowedDeleteDir" data-value="{$DELETE_DIR}"></span>
+    <span class="d-none" id="fmFCAllowedUpload" data-value="{$UPLOAD_FILE}"></span>
+    <span class="d-none" id="fmFCAllowedCreatFile" data-value="{$CREATE_FILE}"></span>
+    <span class="d-none" id="fmFCAllowedRenameFile" data-value="{$RENAME_FILE}"></span>
+    <span class="d-none" id="fmFCAllowedDeleteFile" data-value="{$DELETE_FILE}"></span>
+    <span class="d-none" id="fmFCAllowedMoveFile" data-value="{$MOVE_FILE}"></span>
+    <span class="d-none" id="fmFCAllowedCropFile" data-value="{$CROP_FILE}"></span>
+    <span class="d-none" id="fmFCAllowedRorateFile" data-value="{$ROTATE_FILE}"></span>
 </li>

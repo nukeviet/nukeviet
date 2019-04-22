@@ -13,6 +13,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $per_page = 50;
+$array_allowed_type = ['all', 'file', 'image', 'flash', 'video'];
+$array_allowed_author = ['all', 'me'];
+$array_allowed_order = ['newest', 'oldest', 'name'];
 
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
@@ -25,35 +28,48 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
     }
 
     $page = $nv_Request->get_int('page', 'get', 1);
-    $type = $nv_Request->get_title('type', 'get', 'file');
-    $order = $nv_Request->get_int('order', 'get', 0);
-
+    $type = $nv_Request->get_title('type', 'get', '');
+    if (!in_array($type, $array_allowed_type)) {
+        reset($array_allowed_type);
+        $type = current($array_allowed_type);
+    }
+    $order = $nv_Request->get_title('order', 'get', '');
+    if (!in_array($order, $array_allowed_order)) {
+        reset($array_allowed_order);
+        $order = current($array_allowed_order);
+    }
+    $author = $nv_Request->get_title('author', 'get', '');
+    if (!in_array($author, $array_allowed_author)) {
+        reset($array_allowed_author);
+        $author = current($array_allowed_author);
+    }
     $q = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('q', 'get')), ENT_QUOTES));
-
     $selectfile = array_filter(array_unique(array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('imgfile', 'get', '')), ENT_QUOTES)))));
 
-    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order;
-
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;author=' . $author;
     $check_like = false;
 
     $db->sqlreset();
     if (empty($q)) {
         $_where = 'did = ' . $array_dirname[$path];
-        if ($type == 'image' or $type == 'flash') {
+
+        // Tìm theo kiểu
+        if ($type != 'all' and $type != 'file') {
             $_where .= " AND type='" . $type . "'";
         }
-        if ($nv_Request->isset_request('author', 'get')) {
+
+        // Tìm theo người upload
+        if ($author == 'me') {
             $_where .= ' AND userid=' . $admin_info['userid'];
-            $base_url .= '&amp;author';
         }
         $db->select('COUNT(*)')->from(NV_UPLOAD_GLOBALTABLE . '_file')->where($_where);
 
         $num_items = $db->query($db->sql())->fetchColumn();
 
         $db->select('*');
-        if ($order == 1) {
+        if ($order == 'oldest') {
             $db->order('mtime ASC');
-        } elseif ($order == 2) {
+        } elseif ($order == 'name') {
             $db->order('title ASC');
         } else {
             $db->order('mtime DESC');
@@ -64,13 +80,16 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         $_where = "(t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
         $_where .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
 
-        if ($type == "image" or $type == "flash") {
+        // Tìm theo kiểu
+        if ($type != 'all' and $type != 'file') {
             $_where .= " AND t1.type='" . $type . "'";
         }
-        if ($nv_Request->isset_request('author', 'get')) {
+
+        // Tìm theo người upload
+        if ($author == 'me') {
             $sql .= ' AND t1.userid=' . $admin_info['userid'];
-            $base_url .= '&amp;author';
         }
+
         $db->select('COUNT(*)')->from(NV_UPLOAD_GLOBALTABLE . '_file t1')->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir t2 ON t1.did = t2.did')->where($_where);
 
         $sth = $db->prepare($db->sql());
@@ -82,14 +101,14 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         $num_items = $sth->fetchColumn();
 
         $db->select('t1.*, t2.dirname');
-        if ($order == 1) {
+        if ($order == 'oldest') {
             $db->order('t1.mtime ASC');
-        } elseif ($order == 2) {
+        } elseif ($order == 'name') {
             $db->order('t1.title ASC');
         } else {
             $db->order('t1.mtime DESC');
         }
-        $base_url .= '&amp;q=' . $q;
+        $base_url .= '&amp;q=' . urlencode($q);
     }
 
     if ($num_items) {
