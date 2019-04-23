@@ -739,3 +739,12 @@ $lang_module['field_options_choicesql_order'] = 'Sélectionnez la colonne de tri
 $lang_module['field_options_choicesql_sort'] = 'Sélectionnez le style de tri';
 $lang_module['field_options_choicesql_sort_asc'] = 'Ascendant';
 $lang_module['field_options_choicesql_sort_desc'] = 'Descendant';
+$lang_module['emailverify_sys1'] = 'Compte par système';
+$lang_module['emailverify_sys2'] = 'Compte activé par l\'administrateur';
+$lang_module['emailverify_sys3'] = 'Compte sans activation requise';
+$lang_module['emailverify_sys4'] = 'Email n\'a pas été vérifié';
+$lang_module['emailverify_sys5'] = 'Vérifier l\'email à %s';
+$lang_module['active_obj_1'] = 'Activer par le système';
+$lang_module['active_obj_2'] = 'Activer par email';
+$lang_module['active_obj_3'] = 'Activer via Oauth %s';
+$lang_module['active_obj_4'] = ' <strong title="%s">%s</strong> activé';

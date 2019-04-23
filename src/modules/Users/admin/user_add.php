@@ -183,7 +183,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
         group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
         question, answer, passlostkey, view_mail,
-        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time,
+        active_obj
     ) VALUES (
         " . $_user['in_groups_default'] . ",
         :username,
@@ -199,9 +200,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         :question,
         :answer,
         '',
-         " . $_user['view_mail'] . ",
-         1,
-         '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", 0
+        " . $_user['view_mail'] . ",
+        1,
+        '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", 0,
+        'SYSTEM'
     )";
 
     $data_insert = [];
