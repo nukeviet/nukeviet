@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
         regdate, question,
         answer, passlostkey, view_mail, remember, in_groups, active, checknum,
-        last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+        last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
     ) VALUES (
         :group_id,
         :username,
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         " . $row['regdate'] . ",
         :question,
         :answer,
-        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", -2
+        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", -2, '" . $admin_info['userid'] . "'
     )";
 
     $data_insert = array();
