@@ -578,7 +578,7 @@ if ($is_submit_form) {
     $rowcontent['allowed_save'] = (int) $nv_Request->get_bool('allowed_save', 'post');
 
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
-    $rowcontent['keywords'] = implode(', ', $rowcontent['keywords']);
+    $rowcontent['keywords'] = trim(nv_substr(implode(', ', $rowcontent['keywords']), 0, 255), ", \t\n\r\0\x0B");
     $rowcontent['tags'] = $nv_Request->get_typed_array('tags', 'post', 'title', []);
     $rowcontent['tags'] = implode(', ', $rowcontent['tags']);
 
