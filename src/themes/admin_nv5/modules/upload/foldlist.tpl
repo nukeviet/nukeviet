@@ -13,7 +13,7 @@
     {assign var="dataAllowed" value=$_dir|isAllowed nocache}
     {if not empty($dataAllowed)}
     <li class="{if $_dir eq $CURRENTPATH} active{/if}{if $_dir eq $CURRENTPATH or $CURRENTPATH|strpos:"`$_dir`/" === 0} open{/if}">
-        <a href="#" data-folder="{$_dir}" title="{$_dir}" class="{$dataAllowed|getClassOfDir} pos{$_dir|getClassDisplayDirName}"><i class="icon fas fa-folder-open"></i>{$_dir|getDirName}
+        <a href="#" data-folder="{$_dir}" title="{$_dir}" class="{$dataAllowed|getClassOfDir} pos{$dir|getClassDisplayDirName}"><i class="icon fas fa-folder-open"></i>{$_dir|getDirName}
         {call name=printListFolder dir=$_dir}
     </li>
     {/if}

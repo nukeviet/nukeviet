@@ -164,21 +164,16 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             $xtpl->parse('main.imgsel');
         }
 
-        if ($num_items > $per_page) {
-            $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'imglist');
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.generate_page');
-        }
-
-        $xtpl->parse('main');
-        $contents = $xtpl->text('main');
-
         $contents = $tpl->fetch('listimg.tpl');
 
-        include NV_ROOTDIR . '/includes/header.php';
-        echo $contents;
-        include NV_ROOTDIR . '/includes/footer.php';
+        nv_jsonOutput([
+            'body' => $contents,
+            'nav' => nv_generate_page($base_url, $num_items, $per_page, $page)
+        ]);
     }
 }
 
-nv_htmlOutput('');
+nv_jsonOutput([
+    'body' => '',
+    'nav' => ''
+]);

@@ -70,6 +70,7 @@ $lang_module['origSize'] = 'Kích thước gốc';
 $lang_module['sizenotchanged'] = 'Hình mà bạn muốn tạo mới có kích thước giống hình gốc';
 $lang_module['name_folder_error'] = 'Bạn chưa đặt tên cho thư mục hoặc tên không đúng quy chuẩn';
 $lang_module['foldername'] = 'Tên thư mục';
+$lang_module['foldernamerule'] = 'Tên thư mục bao gồm chữ cái từ a-z, số, dấu gạch ngang - và dấu gạch dưới _';
 $lang_module['folder_exists'] = 'Lỗi! Đã có thư mục cùng tên tồn tại';
 $lang_module['notlevel'] = 'Bạn không được cấp quyền thực hiện thao tác này';
 $lang_module['notupload'] = 'Thư mục không được phép upload';
@@ -105,6 +106,7 @@ $lang_module['nopreview'] = 'Không hỗ trợ xem trước loại tệp tin nà
 $lang_module['errorNewSize'] = 'Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px';
 $lang_module['maxSizeSize'] = 'Kích cỡ tối đa: %dx%dpx';
 $lang_module['enter_url'] = 'Nhập URL file';
+$lang_module['gotofolder'] = 'Truy cập thư mục';
 
 $lang_module['configlogo'] = 'Cấu hình chèn logo';
 $lang_module['addlogo'] = 'Thêm Logo';

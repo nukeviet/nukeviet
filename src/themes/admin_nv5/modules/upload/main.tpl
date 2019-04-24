@@ -81,19 +81,7 @@ $(document).on("nv.upload.ready", function() {
                     <div class="fm-files nv-scroller">
                         <div class="files-container" id="nv-filemanager-files-container"></div>
                     </div>
-                    <nav class="fm-pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item"><a href="#" aria-label="Previous" class="page-link"><span aria-hidden="true" class="fas fa-chevron-left"></span></a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link">6</a></li>
-                            <li class="page-item"><a href="#" class="page-link">7</a></li>
-                            <li class="page-item"><a href="#" aria-label="Next" class="page-link"><span aria-hidden="true" class="fas fa-chevron-right"></span></a></li>
-                        </ul>
-                    </nav>
+                    <nav class="fm-pagination d-none" id="nv-filemanager-files-nav"></nav>
                 </div>
             </div>
         </div>
@@ -114,7 +102,7 @@ $(document).on("nv.upload.ready", function() {
         <div><i class="fas fa-spinner fa-pulse"></i></div>
     </div>
 </div>
-{* Các input ẩn để lưu các giá trị *}
+{* Các thành phần ẩn ẩn để lưu các giá trị *}
 <div class="d-none" id="fmMainCurrentFileURL" data-value=""></div>
 <div class="d-none" id="fmMainCurrentFile" data-value=""></div>
 <div class="d-none" id="fmMainArea" data-value=""></div>
@@ -122,38 +110,81 @@ $(document).on("nv.upload.ready", function() {
 <div class="d-none" id="fmMainLogo" data-value=""></div>
 <div class="d-none" id="fmMainLogoConfig" data-value=""></div>
 {* Tìm kiếm *}
-<div id="nv-filemanager-form-search" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-primary">
+<div id="nv-filemanager-form-search" tabindex="-1" role="dialog" class="modal colored-header colored-header-primary inFileManagerModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header modal-header-colored">
-                <h3 class="modal-title">Tìm kiếm file</h3>
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Tìm kiếm trong thư mục.</label>
-                    <select class="form-control">
-                        <option value="">uploads</option>
-                        <option value="">uploads/news</option>
-                        <option value="">uploads/news/2018_05</option>
-                        <option value="">uploads/uses</option>
-                        <option value="">uploads/voting</option>
-                        <option value="">uploads/weblinks</option>
-                    </select>
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('search')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
                 </div>
-                <div class="form-group mb-0">
-                    <label>Từ khóa tìm kiếm.</label>
-                    <input type="text" class="form-control">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>{$LANG->get('searchdir')}:</label>
+                        <select class="form-control" name="searchPath"></select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label>{$LANG->get('searchkey')}.</label>
+                        <input type="text" class="form-control" name="q" value="">
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">Hủy bỏ</button>
-                <button type="button" data-dismiss="modal" class="btn btn-primary md-close">Tìm kiếm</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" name="search" value="search" class="btn btn-primary md-close">{$LANG->get('search')}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-<!-- Lưu nội dung menu khi ấn chuột phải -->
+{* Form tạo thư mục mới *}
+<div id="nv-filemanager-form-newfolder" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('createfolder')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <label>{$LANG->get('foldername')} <i class="text-danger">(*)</i></label>
+                        <input type="text" placeholder="{$LANG->get('foldername')}" class="form-control" name="foldername" value="">
+                        <i class="form-text text-muted">{$LANG->get('foldernamerule')}.</i>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Form đổi tên thư mục *}
+<div id="nv-filemanager-form-renamefolder" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('renamefolder')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <label>{$LANG->get('rename_newname')} <i class="text-danger">(*)</i></label>
+                        <input type="text" placeholder="{$LANG->get('foldername')}" class="form-control" name="foldername" value="">
+                        <i class="form-text text-muted">{$LANG->get('foldernamerule')}.</i>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Lưu nội dung menu khi ấn chuột phải *}
 <div class="d-none" id="contextMenu"></div>
 {/if}
 
@@ -162,27 +193,6 @@ $(document).on("nv.upload.ready", function() {
 <iframe src="{IFRAME_SRC}" id="uploadframe"></iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
-<div class="content">
-    <div class="row upload-wrap">
-        <div class="col-lg-4 col-md-4 col-sm-6 imgfolder" id="imgfolder">
-            <p class="upload-loading">
-                <em class="fa fa-spin fa-spinner fa-2x m-bottom"></em>
-                <br />
-                {LANG.waiting}...
-            </p>
-        </div>
-        <div id="upload-content" class="col-lg-20 col-md-20 col-sm-18 filebrowse">
-            <div id="imglist" class="clearfix">
-                <p class="upload-loading">
-                    <em class="fa fa-spin fa-spinner fa-2x m-bottom"></em>
-                    <br />
-                    {LANG.waiting}...
-                </p>
-            </div>
-            <div id="upload-queue"></div>
-        </div>
-    </div>
-</div>
 <div class="footer">
     <div class="row">
         <div class="col-sm-12">
@@ -251,17 +261,6 @@ $(document).on("nv.upload.ready", function() {
             <label class="control-label col-xs-6">{LANG.rename_newname}:</label>
             <div class="col-xs-18">
                 <input type="text" name="foldername" class="form-control dynamic"/>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="createfolder" class="upload-hide" title="{LANG.createfolder}">
-    <div class="form-horizontal" role="form">
-        <div class="form-group">
-            <label class="control-label col-xs-10">{LANG.foldername}:</label>
-            <div class="col-xs-14">
-                <input type="text" name="createfoldername" class="form-control dynamic"/>
             </div>
         </div>
     </div>

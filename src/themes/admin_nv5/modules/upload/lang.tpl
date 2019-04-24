@@ -60,6 +60,7 @@ LANG.notlogo = "{$LANG->get('notlogo')}";
 LANG.addlogo_error_small = "{$LANG->get('addlogo_error_small')}";
 LANG.altimage = "{$LANG->get('altimage')}";
 LANG.upload_alt_note = "{$LANG->get('upload_alt_note')}";
+LANG.gotofolder = "{$LANG->get('gotofolder')}";
 
 var nv_my_domain = '{$NV_MY_DOMAIN}';
 var nv_max_size_bytes = '{$NV_MAX_SIZE_BYTES}';

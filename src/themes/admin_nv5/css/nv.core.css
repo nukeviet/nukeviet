@@ -13184,6 +13184,8 @@ pre code {
 .modal-dialog.full-width {
   width: 90%;
   max-width: none;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .full-width .modal-content {
