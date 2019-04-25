@@ -30,7 +30,7 @@
     <span class="d-none" id="fmFCFolder" data-value="{$CURRENTPATH}"></span>
     <span class="d-none" id="fmFCAllowedViewFiles" data-value="{$VIEW_DIR}"></span>
     <span class="d-none" id="fmFCAllowedCreatDir" data-value="{$CREATE_DIR}"></span>
-    <span class="d-none" id="fmFCAllowedReThumb" data-value="0"></span>
+    <span class="d-none" id="fmFCAllowedReThumb" data-value="{$RECREATE_THUMB}"></span>
     <span class="d-none" id="fmFCAllowedRenameDir" data-value="{$RENAME_DIR}"></span>
     <span class="d-none" id="fmFCAllowedDeleteDir" data-value="{$DELETE_DIR}"></span>
     <span class="d-none" id="fmFCAllowedUpload" data-value="{$UPLOAD_FILE}"></span>

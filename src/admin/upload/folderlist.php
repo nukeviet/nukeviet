@@ -90,6 +90,7 @@ $tpl->assign('CROP_FILE', (isset($check_allow_upload_dir['crop_file']) and $chec
 $tpl->assign('ROTATE_FILE', (isset($check_allow_upload_dir['rotate_file']) and $check_allow_upload_dir['rotate_file'] === true) ? 1 : 0);
 $tpl->assign('DELETE_FILE', (isset($check_allow_upload_dir['delete_file']) and $check_allow_upload_dir['delete_file'] === true) ? 1 : 0);
 $tpl->assign('MOVE_FILE', (isset($check_allow_upload_dir['move_file']) and $check_allow_upload_dir['move_file'] === true) ? 1 : 0);
+$tpl->assign('RECREATE_THUMB', (isset($check_allow_upload_dir['recreatethumb']) and $check_allow_upload_dir['recreatethumb'] === true) ? 1 : 0);
 
 $contents = $tpl->fetch('foldlist.tpl');
 

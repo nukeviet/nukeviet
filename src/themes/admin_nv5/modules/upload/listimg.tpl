@@ -1,7 +1,7 @@
 <ul>
     {foreach from=$ARRAY_FILES item=file}
     <li>
-        <div class="file">
+        <div class="file" data-file="{$file.title}" data-fdata="{$file.data}" data-alt="{$file.alt}">
             <div class="img">
                 <div class="bg" style="background-image: url('{$file.src}');"><img src="{$file.src}" alt="{$file.alt}"></div>
             </div>

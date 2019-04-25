@@ -105,10 +105,11 @@ $(document).on("nv.upload.ready", function() {
 {* Các thành phần ẩn ẩn để lưu các giá trị *}
 <div class="d-none" id="fmMainCurrentFileURL" data-value=""></div>
 <div class="d-none" id="fmMainCurrentFile" data-value=""></div>
-<div class="d-none" id="fmMainArea" data-value=""></div>
-<div class="d-none" id="fmMainAlt" data-value=""></div>
-<div class="d-none" id="fmMainLogo" data-value=""></div>
-<div class="d-none" id="fmMainLogoConfig" data-value=""></div>
+<div class="d-none" id="fmMainArea" data-value="{$AREA}"></div>
+<div class="d-none" id="fmMainAlt" data-value="{$ALT}"></div>
+<div class="d-none" id="fmMainLogo" data-value="{$UPLOAD_LOGO}"></div>
+<div class="d-none" id="fmMainLogoConfig" data-value="{$UPLOAD_LOGO_CONFIG}"></div>
+<div class="d-none" id="fmCKEditorFuncNum" data-value="{$FUNNUM}"></div>
 {* Tìm kiếm *}
 <div id="nv-filemanager-form-search" tabindex="-1" role="dialog" class="modal colored-header colored-header-primary inFileManagerModal">
     <div class="modal-dialog">
@@ -184,14 +185,92 @@ $(document).on("nv.upload.ready", function() {
         </div>
     </div>
 </div>
+{* Form tạo lại ảnh thumb *}
+<div id="nv-filemanager-form-recreatthumb" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('recreatethumb')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div data-toggle="welcome" class="d-none">{$LANG->get('recreatethumb_note')}</div>
+                    <div data-toggle="load" class="text-center d-none">
+                        <div class="mb-1"><i class="fas fa-2x fa-spinner fa-pulse"></i></div>
+                        {$LANG->get('waiting')}
+                    </div>
+                    <div data-toggle="resultwrap" class="d-none">
+                        <div class="progress mb-2">
+                            <div role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-success progress-bar-striped progress-bar-animated">70%</div>
+                        </div>
+                        <div class="text-center">
+                            {$LANG->get('recreatethumb')} <strong data-toggle="creatcurrent"></strong> / <strong data-toggle="creattotal"></strong> file.
+                        </div>
+                    </div>
+                    <div data-toggle="resultall" class="text-center text-success d-none">
+                        {$LANG->get('recreatethumb_result')} <strong data-toggle="resultnum"></strong> file.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Form xem chi tiết file *}
+<div id="nv-filemanager-form-previewfile" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('preview')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body pt-4 pb-0">
+                    <div class="text-center">
+                        <h3 class="mt-0" data-toggle="alt"></h3>
+                        <div class="mb-2" data-toggle="thumb"></div>
+                        <p class="mb-1" data-toggle="name"></p>
+                        <p class="mb-1" data-toggle="size"></p>
+                        <p class="mb-1" data-toggle="mtime"></p>
+                        <hr>
+                    </div>
+                    <div class="form-group">
+                        <label for="FileRelativePath">{$LANG->get('filerelativepath')}.</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="FileRelativePath" value="">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" data-clipboard-target="#FileRelativePath" id="FileRelativePathBtn" data-title="{$LANG->get('filepathcopied')}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"> <i class="fas fa-copy"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="FileAbsolutePath">{$LANG->get('fileabsolutepath')}.</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="FileAbsolutePath" value="">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" data-clipboard-target="#FileAbsolutePath" id="FileAbsolutePathBtn" data-title="{$LANG->get('filepathcopied')}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"> <i class="fas fa-copy"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('close')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {* Lưu nội dung menu khi ấn chuột phải *}
 <div class="d-none" id="contextMenu"></div>
+{* Iframe để tải file về *}
+<a class="d-none" id="nv-filemanager-download-link" href="" download>&nbsp;</a>
 {/if}
 
 {*
-<!-- BEGIN: uploadPage -->
-<iframe src="{IFRAME_SRC}" id="uploadframe"></iframe>
-<!-- END: uploadPage -->
 <!-- BEGIN: main -->
 <div class="footer">
     <div class="row">
@@ -250,29 +329,6 @@ $(document).on("nv.upload.ready", function() {
 <input type="hidden" name="upload_logo_config" value="{UPLOAD_LOGO_CONFIG}"/>
 
 <div class="upload-hide" id="contextMenu"></div>
-
-<div class="upload-hide">
-    <iframe id="Fdownload" src="" width="0" height="0" frameborder="0"></iframe>
-</div>
-
-<div id="renamefolder" class="upload-hide" title="{LANG.renamefolder}">
-    <div class="form-horizontal" role="form">
-        <div class="form-group">
-            <label class="control-label col-xs-6">{LANG.rename_newname}:</label>
-            <div class="col-xs-18">
-                <input type="text" name="foldername" class="form-control dynamic"/>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="recreatethumb" class="upload-hide" title="{LANG.recreatethumb}">
-    <div class="form-horizontal" role="form">
-        <div class="form-group" id="recreatethumb_loading">
-            {LANG.recreatethumb_note}
-        </div>
-    </div>
-</div>
 
 <div id="errorInfo" class="upload-hide" title="{LANG.errorInfo}"></div>
 

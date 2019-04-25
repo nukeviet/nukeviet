@@ -47,6 +47,34 @@ $tpl->assign('POPUP', $popup);
 $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('MODULE_NAME', $module_name);
 
+$tpl->assign('CURRENTPATH', $currentpath);
+$tpl->assign('PATH', $path);
+$tpl->assign('TYPE', $type);
+$tpl->assign('AREA', $area);
+$tpl->assign('ALT', $alt);
+$tpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
+
+$tpl->assign('SELFILE', $selectfile);
+
+$sfile = ($type == 'file') ? ' selected="selected"' : '';
+$simage = ($type == 'image') ? ' selected="selected"' : '';
+$sflash = ($type == 'flash') ? ' selected="selected"' : '';
+
+$tpl->assign('SFLASH', $sflash);
+$tpl->assign('SIMAGE', $simage);
+$tpl->assign('SFILE', $sfile);
+
+// Find logo config
+$upload_logo = $upload_logo_config = '';
+if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
+    $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
+    $logo_size = getimagesize(NV_ROOTDIR . '/' . $global_config['upload_logo']);
+    $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
+}
+
+$tpl->assign('UPLOAD_LOGO', $upload_logo);
+$tpl->assign('UPLOAD_LOGO_CONFIG', $upload_logo_config);
+
 // Xuất javascript các cấu hình
 if ($nv_Request->isset_request('js', 'get')) {
     $sys_max_size = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
@@ -84,41 +112,10 @@ if ($nv_Request->isset_request('js', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$tpl->assign('CURRENTPATH', $currentpath);
-$tpl->assign('PATH', $path);
-$tpl->assign('TYPE', $type);
-$tpl->assign('AREA', $area);
-$tpl->assign('ALT', $alt);
-$tpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
-
-$tpl->assign('SELFILE', $selectfile);
-
-$sfile = ($type == 'file') ? ' selected="selected"' : '';
-$simage = ($type == 'image') ? ' selected="selected"' : '';
-$sflash = ($type == 'flash') ? ' selected="selected"' : '';
-
-$tpl->assign('SFLASH', $sflash);
-$tpl->assign('SIMAGE', $simage);
-$tpl->assign('SFILE', $sfile);
-
-
-
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 
 if ($popup) {
-
-    // Find logo config
-    $upload_logo = $upload_logo_config = '';
-    if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
-        $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
-        $logo_size = getimagesize(NV_ROOTDIR . '/' . $global_config['upload_logo']);
-        $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
-    }
-
-    $tpl->assign('UPLOAD_LOGO', $upload_logo);
-    $tpl->assign('UPLOAD_LOGO_CONFIG', $upload_logo_config);
-
     // Check upload allow file types
     if ($type == 'image' and in_array('images', $admin_info['allow_files_type'])) {
         $allow_files_type = ['images'];
