@@ -17,8 +17,8 @@ define('NV_IS_MOD_SHOPS', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
 
-$array_wishlist_id = array();
-$arr_cat_title = array();
+$array_wishlist_id = [];
+$arr_cat_title = [];
 $catid = 0;
 $parentid = 0;
 $set_viewcat = '';
@@ -26,11 +26,11 @@ $alias_cat_url = isset($array_op[0]) ? $array_op[0] : '';
 $alias_group_url = isset($array_op[1]) ? $array_op[1] : '';
 $groupid = 0;
 
-$array_displays = array(
+$array_displays = [
     '0' => $lang_module['displays_new'],
     '1' => $lang_module['displays_price_asc'],
     '2' => $lang_module['displays_price_desc']
-);
+];
 
 // Categories
 foreach ($global_array_shops_cat as $row) {
@@ -42,9 +42,17 @@ foreach ($global_array_shops_cat as $row) {
     }
 }
 
-// Groups
+/*
+ * Nhóm sản phẩm lưu theo alias
+ * Mục đích để lấy nhanh các groupid thay vì phải loop để xác định
+ */
+$global_array_group_alias = [];
 foreach ($global_array_group as $row) {
+    $global_array_group_alias[strtolower($row['alias'])] = $row['groupid'];
+    $global_array_group_alias[$row['alias']] = $row['groupid'];
+
     $global_array_group[$row['groupid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $row['alias'];
+
     if ($alias_group_url == $row['alias']) {
         $groupid = $row['groupid'];
     }
@@ -60,7 +68,7 @@ if ($op == 'main') {
             $page = (int) $m[1];
         }
     } else {
-        if (sizeof($array_op) == 2 and preg_match('/^([a-z0-9\-]+)$/i', $array_op[1]) and !preg_match('/^page\-([0-9]+)$/', $array_op[1], $m2)) {
+        if (sizeof($array_op) == 2 and preg_match('/^([a-z0-9\-]+)$/i', $array_op[1]) and !preg_match('/\-\-/', $array_op[1]) and !preg_match('/^page\-([0-9]+)$/', $array_op[1], $m2)) {
             $op = 'detail';
             $alias_url = $array_op[1];
         } else {
@@ -70,11 +78,11 @@ if ($op == 'main') {
         $parentid = $catid;
         while ($parentid > 0) {
             $array_cat_i = $global_array_shops_cat[$parentid];
-            $array_mod_title[] = array(
+            $array_mod_title[] = [
                 'catid' => $parentid,
                 'title' => $array_cat_i['title'],
                 'link' => $array_cat_i['link']
-            );
+            ];
             $parentid = $array_cat_i['parentid'];
         }
         krsort($array_mod_title, SORT_NUMERIC);
@@ -83,7 +91,7 @@ if ($op == 'main') {
 
 // Wishlist
 if (defined('NV_IS_USER') and $pro_config['active_wishlist']) {
-    $listid = $db->query('SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '')->fetchColumn();
+    $listid = $db->query('SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'])->fetchColumn();
     if ($listid) {
         $array_wishlist_id = explode(',', $listid);
     }
@@ -101,8 +109,8 @@ function GetDataIn($result, $catid)
 {
     global $global_array_shops_cat, $module_name, $module_file, $module_upload, $db, $link, $module_info, $global_config;
 
-    $data_content = array();
-    $data = array();
+    $data_content = [];
+    $data = [];
     while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_from, $gift_to, $newday) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
             // image thumb
@@ -122,7 +130,7 @@ function GetDataIn($result, $catid)
             $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
         }
 
-        $data[] = array(
+        $data[] = [
             'id' => $id,
             'listcatid' => $listcatid,
             'publtime' => $publtime,
@@ -143,7 +151,7 @@ function GetDataIn($result, $catid)
             'gift_to' => $gift_to,
             'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
             'link_order' => $link . 'setcart&amp;id=' . $id
-        );
+        ];
     }
 
     $data_content['id'] = $catid;
@@ -167,8 +175,8 @@ function GetDataInGroups($result, $array_g)
 {
     global $global_array_group, $module_name, $module_file, $module_upload, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
-    $data_content = array();
-    $data = array();
+    $data_content = [];
+    $data = [];
 
     while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $newday) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
@@ -189,7 +197,7 @@ function GetDataInGroups($result, $array_g)
             $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
         }
 
-        $data[] = array(
+        $data[] = [
             'id' => $id,
             'listcatid' => $listcatid,
             'publtime' => $publtime,
@@ -208,7 +216,7 @@ function GetDataInGroups($result, $array_g)
             'gift_content' => $gift_content,
             'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
             'link_order' => $link . 'setcart&amp;id=' . $id
-        );
+        ];
     }
 
     $data_content['id'] = $array_g[0];
@@ -231,8 +239,8 @@ function GetDataInGroup($result, $groupid)
 {
     global $global_array_group, $module_name, $module_file, $module_upload, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
-    $data_content = array();
-    $data = array();
+    $data_content = [];
+    $data = [];
 
     while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_to, $gift_from) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
@@ -253,7 +261,7 @@ function GetDataInGroup($result, $groupid)
             $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
         }
 
-        $data[] = array(
+        $data[] = [
             'id' => $id,
             'listcatid' => $listcatid,
             'publtime' => $publtime,
@@ -274,7 +282,7 @@ function GetDataInGroup($result, $groupid)
             'newday' => $global_array_shops_cat[$listcatid]['newday'],
             'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
             'link_order' => $link . 'setcart&amp;id=' . $id
-        );
+        ];
     }
 
     $data_content['id'] = $groupid;
@@ -303,16 +311,16 @@ function SetSessionProView($id, $title, $alias, $addtime, $link, $homeimgthumb)
 {
     global $module_data;
     if (!isset($_SESSION[$module_data . '_proview'])) {
-        $_SESSION[$module_data . '_proview'] = array();
+        $_SESSION[$module_data . '_proview'] = [];
     }
     if (!isset($_SESSION[$module_data . '_proview'][$id])) {
-        $_SESSION[$module_data . '_proview'][$id] = array(
+        $_SESSION[$module_data . '_proview'][$id] = [
             'title' => $title,
             'alias' => $alias,
             'addtime' => $addtime,
             'link' => $link,
             'homeimgthumb' => $homeimgthumb
-        );
+        ];
     }
 }
 

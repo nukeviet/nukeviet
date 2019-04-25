@@ -32,7 +32,6 @@
                         <div class="panel-body">
                             <div class="socialicon">
                                 <div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
-                                <div class="g-plusone" data-size="medium"></div>
                                 <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
                             </div>
                         </div>
@@ -241,49 +240,49 @@
 </div>
 <!-- BEGIN: allowed_print_js -->
 <script type="text/javascript" data-show="after">
-	$(function() {
-		$('#click_print').click(function(event) {
-			var href = $(this).attr("href");
-			event.preventDefault();
-			nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
-			return false;
-		});
-	});
+    $(function() {
+        $('#click_print').click(function(event) {
+            var href = $(this).attr("href");
+            event.preventDefault();
+            nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
+            return false;
+        });
+    });
 </script>
 <!-- END: allowed_print_js -->
 <!-- BEGIN: imagemodal -->
 <script type="text/javascript" data-show="after">
-	$('.open_modal').click(function(e){
-		e.preventDefault();
- 		$('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" class="img-responsive" />' );
- 		$('#idmodals').modal('show');
-	});
+    $('.open_modal').click(function(e){
+        e.preventDefault();
+         $('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" class="img-responsive" />' );
+         $('#idmodals').modal('show');
+    });
 </script>
 <!-- END: imagemodal -->
 <!-- BEGIN: order_number_limit -->
 <script type="text/javascript" data-show="after">
-	$('#pnum').attr( 'max', '{PRODUCT_NUMBER}' );
-	$('#pnum').change(function(){
-		if( intval($(this).val()) > intval($(this).attr('max')) ){
-			alert('{LANG.detail_error_number} ' + $(this).attr('max') );
-			$(this).val( $(this).attr('max') );
-		}
-	});
+    $('#pnum').attr( 'max', '{PRODUCT_NUMBER}' );
+    $('#pnum').change(function(){
+        if( intval($(this).val()) > intval($(this).attr('max')) ){
+            alert('{LANG.detail_error_number} ' + $(this).attr('max') );
+            $(this).val( $(this).attr('max') );
+        }
+    });
 </script>
 <!-- END: order_number_limit -->
 <script type="text/javascript">
-	var detail_error_group = '{LANG.detail_error_group}';
-	function check_quantity( _this ){
-		$('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
-		if( _this.is(':checked') ) {
-		    _this.parent().css('border-color', 'blue');
-		}
-		$('#group_error').css( 'display', 'none' );
-		<!-- BEGIN: check_price -->
-		check_price( '{proid}', '{pro_unit}' );
-		<!-- END: check_price -->
+    var detail_error_group = '{LANG.detail_error_group}';
+    function check_quantity( _this ){
+        $('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
+        if( _this.is(':checked') ) {
+            _this.parent().css('border-color', 'blue');
+        }
+        $('#group_error').css( 'display', 'none' );
+        <!-- BEGIN: check_price -->
+        check_price( '{proid}', '{pro_unit}' );
+        <!-- END: check_price -->
         resize_popup();
-	}
+    }
 </script>
 <script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/js/lightslider.min.js"></script>
 <script type="text/javascript">
