@@ -8,20 +8,20 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
-if (! isset($check_allow_upload_dir['move_file'])) {
+if (!isset($check_allow_upload_dir['move_file'])) {
     die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $newfolder = nv_check_path_upload($nv_Request->get_string('newpath', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($newfolder);
-if (! isset($check_allow_upload_dir['create_file'])) {
+if (!isset($check_allow_upload_dir['create_file'])) {
     die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
@@ -34,14 +34,14 @@ if (empty($images)) {
 
 // Check file exists
 foreach ($images as  $file) {
-    if (! nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
+    if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
         die('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
     }
 }
 
 $mirror = $nv_Request->get_int('mirror', 'post', 0);
 
-$moved_images = array();
+$moved_images = [];
 
 foreach ($images as $image) {
     $i = 1;
@@ -55,7 +55,7 @@ foreach ($images as $image) {
 
     $moved_images[] = $file;
 
-    if (! nv_copyfile(NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file)) {
+    if (!nv_copyfile(NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file)) {
         die('ERROR#' . $nv_Lang->getModule('errorNotCopyFile'));
     }
 
@@ -67,7 +67,7 @@ foreach ($images as $image) {
         $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')");
     }
 
-    if (! $mirror) {
+    if (!$mirror) {
         @nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $image);
 
         // Delete old thumb

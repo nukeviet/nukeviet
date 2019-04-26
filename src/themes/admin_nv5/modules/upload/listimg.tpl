@@ -1,7 +1,7 @@
 <ul>
     {foreach from=$ARRAY_FILES item=file}
     <li>
-        <div class="file" data-file="{$file.title}" data-fdata="{$file.data}" data-alt="{$file.alt}">
+        <div class="file{if in_array($file.title, $SELECTFILE)} file-selected{/if}" data-file="{$file.title}" data-fdata="{$file.data}" data-alt="{$file.alt}">
             <div class="img">
                 <div class="bg" style="background-image: url('{$file.src}');"><img src="{$file.src}" alt="{$file.alt}"></div>
             </div>
@@ -49,29 +49,6 @@ $('.imgcontent').dblclick(function() {
     insertvaluetofield();
 });
 
-$( "#imglist" ).selectable({
-    filter: '.imgcontent',
-    delay: 90,
-    start: function( e, ui ){
-        NVCMENU.hide();
-        KEYPR.isSelectable = true;
-        KEYPR.isFileSelectable = true;
-    },
-    selecting: function( e, ui ){
-        fileSelecting(e, ui);
-    },
-    stop: function( e, ui ){
-        fileSelectStop(e, ui);
-
-        setTimeout(function(){
-            KEYPR.isSelectable = false;
-            KEYPR.isFileSelectable = false;
-        }, 50);
-    },
-    unselecting: function( e, ui ){
-        fileUnselect(e, ui);
-    },
-});
 //]]>
 </script>
 

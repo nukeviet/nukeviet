@@ -37,6 +37,10 @@ var NVCoreFileBrowser = function() {
         formRenameFolder: '#nv-filemanager-form-renamefolder',
         formRecreatThumb: '#nv-filemanager-form-recreatthumb',
         formPreview: '#nv-filemanager-form-previewfile',
+        formRenameFile: '#nv-filemanager-form-renamefile',
+        formMoveFile: '#nv-filemanager-form-movefile',
+        formRotateFile: '#nv-filemanager-form-rotatefile',
+        formCrop: '#nv-filemanager-form-cropfile',
     };
 
     this.cfgFolderData = {
@@ -102,6 +106,7 @@ NVCoreFileBrowser.prototype.init = function(data) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
+    var cfgm = self.cfgMain;
     var ICON = self.ICON;
 
     self.firstData = data;
@@ -236,7 +241,7 @@ NVCoreFileBrowser.prototype.init = function(data) {
         $('[name="q"]', modalEle).val('');
 
         // Build cây thư mục
-        $('[name="searchPath"]', modalEle).html();
+        $('[name="searchPath"]', modalEle).html('');
         $('a.view_dir', $(cfg.folderElement)).each(function() {
             var folder = $(this).data('folder');
             $('[name="searchPath"]', modalEle).append('<option value="' + folder + '"' + ($(cfgf.folder).data('value') == folder ? ' selected="selected"' : '') + '>' + folder + '</option>');
@@ -287,6 +292,89 @@ NVCoreFileBrowser.prototype.init = function(data) {
     });
 
     /*
+     * Xử lý khi mở form xoay ảnh lên
+     */
+    $(cfg.formRotateFile).on('shown.bs.modal', function(e) {
+        var modalEle = $(e.currentTarget);
+        var selFile = $(cfgm.file).data('value');
+        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+        var ctnWidth = $('[data-toggle="name"]', modalEle).width();
+        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth, true);
+        var contentMargin = parseInt((Math.sqrt(size[0] * size[0] + size[1] * size[1]) - size[1]) / 2);
+
+        $('[data-toggle="img"]', modalEle).css({
+            'width': size[0],
+            'height': size[1],
+            'margin-top': contentMargin,
+            'margin-bottom': contentMargin + 10,
+            'margin-left': 'auto',
+            'margin-right': 'auto'
+        }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
+    });
+
+    /*
+     * Xử lý khi mở form cắt ảnh lên
+     */
+    $(cfg.formCrop).on('shown.bs.modal', function(e) {
+        var modalEle = $(e.currentTarget);
+        var selFile = $(cfgm.file).data('value');
+        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+        fdata[0] = parseInt(fdata[0]);
+        fdata[1] = parseInt(fdata[1]);
+
+        var ctnWidth = $('[data-toggle="getw"]', modalEle).width();
+        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
+
+        $('[data-toggle="img"]', modalEle).css({
+            'width': size[0],
+            'height': size[1],
+            'margin-bottom': 10,
+            'margin-left': 'auto',
+            'margin-right': 'auto'
+        }).html('<img class="crop-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
+
+        // Hiển thị thông báo khi ảnh quá nhỏ
+        if (fdata[0] < 10 || fdata[1] < 10 || (fdata[0] < 16 && fdata[1] < 16)) {
+            $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.crop_error_small);
+        } else {
+            $('[data-toggle="note"]', modalEle).addClass('d-none').html('');
+        }
+
+        // Init cropper
+        $('img.crop-image', modalEle).cropper({
+            viewMode: 3,
+            dragMode: 'crop',
+            aspectRatio: NaN,
+            responsive: true,
+            modal: true,
+            guides: false,
+            highlight: true,
+            autoCrop: true,
+            autoCropArea: 0.5,
+            movable: false,
+            rotatable: false,
+            scalable: false,
+            zoomable: false,
+            zoomOnTouch: false,
+            zoomOnWheel: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
+            crop: function(e) {
+                $('[name="x"]', modalEle).val(parseInt(Math.floor(e.x)));
+                $('[name="y"]', modalEle).val(parseInt(Math.floor(e.y)));
+                $('[name="w"]', modalEle).val(parseInt(Math.floor(e.width)));
+                $('[name="h"]', modalEle).val(parseInt(Math.floor(e.height)));
+            }
+        });
+    });
+
+    /*
      * Xử lý khi submit các form
      */
     $('form', $(cfg.formSearch)).on('submit', function(e) {
@@ -304,6 +392,22 @@ NVCoreFileBrowser.prototype.init = function(data) {
     $('form', $(cfg.formRecreatThumb)).on('submit', function(e) {
         e.preventDefault();
         self.submitRecreatThumb(this);
+    });
+    $('form', $(cfg.formRenameFile)).on('submit', function(e) {
+        e.preventDefault();
+        self.submitRenameFile(this);
+    });
+    $('form', $(cfg.formMoveFile)).on('submit', function(e) {
+        e.preventDefault();
+        self.submitMoveFile(this);
+    });
+    $('form', $(cfg.formRotateFile)).on('submit', function(e) {
+        e.preventDefault();
+        self.submitRotateFile(this);
+    });
+    $('form', $(cfg.formCrop)).on('submit', function(e) {
+        e.preventDefault();
+        self.submitCrop(this);
     });
 
     // Xử lý tại form xem chi tiết file
@@ -993,6 +1097,133 @@ NVCoreFileBrowser.prototype.handleMenuPreview = function (element) {
     }
 }
 
+/*
+ * Xử lý khi chuột phải file, chọn xem đổi tên file
+ */
+NVCoreFileBrowser.prototype.handleMenuRenameFile = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+
+    $('[name="name"]', $(cfg.formRenameFile)).val(file.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$1"));
+    $('[data-toggle="ext"]', $(cfg.formRenameFile)).html('.' + file.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$2"));
+    $('[name="alt"]', $(cfg.formRenameFile)).val(fileItem.data('alt'));
+    $('[data-toggle="orgfile"]', $(cfg.formRenameFile)).html(file);
+    $('[type="submit"]', $(cfg.formRenameFile)).prop('disabled', false);
+
+    $(cfg.formRenameFile).modal('show');
+}
+
+/*
+ * Xử lý khi chuột phải file, chọn di chuyển
+ */
+NVCoreFileBrowser.prototype.handleMenuMove = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    $('[name="mirrorFile"]', $(cfg.formMoveFile)).prop('checked', false);
+    $('[name="goNewPath"]', $(cfg.formMoveFile)).prop('checked', false);
+
+    // Build cây thư mục
+    $('[name="newPath"]', $(cfg.formMoveFile)).html('');
+    $('a.create_file', $(cfg.folderElement)).each(function() {
+        var folder = $(this).data('folder');
+        $('[name="newPath"]', $(cfg.formMoveFile)).append('<option value="' + folder + '"' + ($(cfgf.folder).data('value') == folder ? ' selected="selected"' : '') + '>' + folder + '</option>');
+    });
+
+    $('[type="submit"]', $(cfg.formMoveFile)).prop('disabled', false);
+
+    $(cfg.formMoveFile).modal('show');
+}
+
+/*
+ * Xử lý khi chuột phải file, chọn xóa file
+ */
+NVCoreFileBrowser.prototype.handleMenuDeleteFile = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    var selFile = $(cfgm.file).data('value'), path, confirmMessage;
+
+    // Kiem tra xoa nhieu file hay xoa 1 file
+    if (selFile.indexOf('|') == -1) {
+        var selFileData = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+        path = (selFileData[7] == "") ? $(cfgf.folder).data('value') : selFileData[7];
+        confirmMessage = LANG.upload_delimg_confirm + " " + selFile + " ?";
+    } else {
+        selFile = selFile.split('|');
+        var selFileData = $('[data-file="' + selFile[0] + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+        path = (selFileData[7] == "") ? $(cfgf.folder).data('value') : selFileData[7];
+        confirmMessage = LANG.upload_delimgs_confirm.replace('%s', selFile.length) + "?";
+        selFile = selFile.join('|');
+    }
+
+    if (confirm(confirmMessage)) {
+        self.showLoader();
+        $.ajax({
+            type: 'POST',
+            url: nv_module_url + 'delimg&num=' + self.strRand(10),
+            data: {
+                path: path,
+                file: selFile
+            },
+            success: function(e) {
+                e = e.split('#');
+                if (e[0] != 'OK') {
+                    self.hideLoader();
+                    alert(e[1]);
+                    return false;
+                }
+                self.getListFiles();
+            }
+        });
+    }
+}
+
+/*
+ * Xử lý khi chuột phải file, chọn xoay ảnh
+ */
+NVCoreFileBrowser.prototype.handleMenuRotate = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    var selFile = $(cfgm.file).data('value');
+
+    $('[name="rorateDirection"]', $(cfg.formRotateFile)).val('0');
+    $('[data-toggle="name"]', $(cfg.formRotateFile)).html(selFile);
+    $('[type="submit"]', $(cfg.formRotateFile)).prop('disabled', false);
+
+    // Reset lại giá trị xoay ảnh
+    RRT.direction = 0;
+    RRT.currentDirection = 0;
+
+    $(cfg.formRotateFile).modal('show');
+}
+
+/*
+ * Xử lý khi chuột phải file, chọn cắt ảnh
+ */
+NVCoreFileBrowser.prototype.handleMenuCrop = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    $('[type="submit"]', $(cfg.formCrop)).prop('disabled', false);
+
+    $(cfg.formCrop).modal('show');
+}
+
 NVCoreFileBrowser.prototype.handleMenuXXXX = function (element) {
 
 }
@@ -1155,6 +1386,204 @@ NVCoreFileBrowser.prototype.submitRecreatThumb = function (e) {
 }
 
 /*
+ * Submit form đổi tên file
+ */
+NVCoreFileBrowser.prototype.submitRenameFile = function (e) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+    var form = $(e);
+    if (form.data('busy') || $('[type="submit"]', form).is(':disabled')) {
+        return false;
+    }
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+
+    var newname = $.trim($('[name="name"]', form).val());
+    var newalt = $.trim($('[name="alt"]', form).val());
+    var checkname = file.match(/^(.+)\.([a-zA-Z0-9]+)$/);
+
+    // Báo lỗi không nhập tên file
+    if (newname == '') {
+        alert(LANG.rename_noname);
+        $('[name="name"]', form).focus();
+        return false;
+    }
+    // Không thay đổi gì thì kết thúc
+    if (newname == checkname[1] && fileItem.data('alt') == newalt) {
+        $(cfg.formRenameFile).modal('hide');
+        return true;
+    }
+
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+
+    $('[type="submit"]', form).prop('disabled', true);
+
+    $.ajax({
+        type: 'POST',
+        url: nv_module_url + 'renameimg&num=' + self.strRand(10),
+        data: {
+            path: filepath,
+            file: file,
+            newname: newname,
+            newalt: newalt
+        },
+        success: function(g) {
+            var h = g.split("_");
+
+            $('[type="submit"]', form).prop('disabled', false);
+
+            if (h[0] == "ERROR") {
+                alert(h[1]);
+                return false;
+            }
+
+            self.showLoader();
+            self.getListFiles();
+            $(cfg.formRenameFile).modal('hide');
+        }
+    });
+}
+
+/*
+ * Submit form di chuyển file
+ */
+NVCoreFileBrowser.prototype.submitMoveFile = function (e) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+    var form = $(e);
+    if (form.data('busy') || $('[type="submit"]', form).is(':disabled')) {
+        return false;
+    }
+
+    var selfile = $(cfgm.file).data('value');
+    var currentPath = $(cfgf.folder).data('value');
+    var newPath = $('[name="newPath"]', form).val();
+    var mirrorFile = ($('[name="mirrorFile"]', form).is(':checked') ? 1 : 0);
+    var goNewPath = ($('[name="goNewPath"]', form).is(':checked') ? 1 : 0);
+
+    if (currentPath == newPath) {
+        $(cfg.formMoveFile).modal('hide');
+        return true;
+    }
+
+    $('[type="submit"]', form).prop('disabled', true);
+
+    $.ajax({
+        type: "POST",
+        url: nv_module_url + 'moveimg&num=' + self.strRand(10),
+        data: {
+            path: currentPath,
+            newpath: newPath,
+            file: selfile,
+            mirror: mirrorFile
+        },
+        success: function(e) {
+            $('[type="submit"]', form).prop('disabled', false);
+
+            var e = e.split("#");
+            if (e[0] == "ERROR") {
+                alert(e[1]);
+                return false;
+            }
+
+            var imgfile = e[1];
+
+            $(cfg.formMoveFile).modal('hide');
+            $(cfgm.file).data('value', imgfile);
+
+            self.showLoader();
+            if (goNewPath) {
+                $('[data-folder="' + newPath + '"]', $(cfg.folderElement)).trigger('click');
+            } else {
+                self.getListFiles();
+            }
+        }
+    });
+}
+
+/*
+ * Submit form xoay ảnh
+ */
+NVCoreFileBrowser.prototype.submitRotateFile = function (e) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+    var form = $(e);
+    if (form.data('busy') || $('[type="submit"]', form).is(':disabled')) {
+        return false;
+    }
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+    var rorateDirection = $('[name="rorateDirection"]', form).val();
+
+    $('[type="submit"]', form).prop('disabled', true);
+
+    $.ajax({
+        type: 'POST',
+        url: nv_module_url + 'rotateimg&num=' + self.strRand(10),
+        data: {
+            path: filepath,
+            file: file,
+            direction: rorateDirection
+        },
+        success: function(g) {
+            $('[type="submit"]', form).prop('disabled', false);
+            var h = g.split("#");
+
+            if (h[0] == "ERROR") {
+                alert(h[1]);
+                return false;
+            }
+
+            self.showLoader();
+            self.getListFiles();
+            $(cfg.formRotateFile).modal('hide');
+        }
+    });
+}
+
+/*
+ * Submit form cắt ảnh
+ */
+NVCoreFileBrowser.prototype.submitCrop = function (e) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+    var form = $(e);
+    if (form.data('busy') || $('[type="submit"]', form).is(':disabled')) {
+        return false;
+    }
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+}
+
+/*
  * Tiến trình chạy tạo lại ảnh thumb
  */
 NVCoreFileBrowser.prototype.runRecreatThumb = function (path, idfile) {
@@ -1219,6 +1648,38 @@ NVCoreFileBrowser.prototype.checkInitCompleted = function () {
         this.hideLoader();
         updatePerfectScrollbar();
     }
+}
+
+/*
+ * Lấy chiều rộng và chiều cao của ảnh
+ * hiển thị phù hợp với vùng chứa.
+ * Thông số pitago cho phép chỉnh ảnh nhỏ lại
+ * đảo bảo đường chéo lớn nhất bằng chiều rộng vùng chứa
+ */
+NVCoreFileBrowser.prototype.getImageDisplaySize = function (imgW, imgH, ctnW, ctnH, pitago) {
+    var ratioImg = imgW / imgH;
+    var ratioCtn = ctnW / ctnH;
+    if (ratioImg > ratioCtn) {
+        // Trường hợp ảnh có khả năng vượt quá chiều rộng vùng chứa
+        if (imgW > ctnW) {
+            imgW = ctnW;
+            imgH = imgW / ratioImg;
+        }
+    } else {
+        // Trường hợp ảnh có khả năng vượt quá chiều cao vùng chứa
+        if (imgH > ctnH) {
+            imgH = ctnH;
+            imgW = imgH * ratioImg;
+        }
+    }
+    var size = [imgW, imgH], sizePi = [0, 0], ratio;
+    if (pitago && Math.sqrt((imgW * imgW) + (imgH * imgH)) > ctnW) {
+        ratio = size[0] / size[1];
+        sizePi[1] = Math.sqrt((ctnW * ctnW) / ((ratio * ratio) + 1));
+        sizePi[0] = sizePi[1] * ratio;
+        return [parseInt(sizePi[0]), parseInt(sizePi[1])];
+    }
+    return [parseInt(size[0]), parseInt(size[1])];
 }
 
 var NVLDATA = {
@@ -1299,7 +1760,7 @@ var LFILE = {
 };
 
 /*
- * Xử lý thao tác bàn phím trong khu vực danh sách các file
+ * Xử lý thao tác bàn phím đối với trang khi có quản lý file
  */
 var KEYPR = {
     isCtrl: false,
@@ -1310,7 +1771,7 @@ var KEYPR = {
     isFileSelectable: false,
     init: function(cfg) {
         $('body').keyup(function(e) {
-            if (!$(e.target).parents('.inFileManagerModal').length && $.inArray(e.keyCode, KEYPR.allowKey) == -1) {
+            if (!$(e.target).parents('.inFileManagerModal').length && $.inArray(e.keyCode, KEYPR.allowKey) == -1 && !$(e.target).is('.inFileManagerModal')) {
                 e.preventDefault();
             } else {
                 return;
@@ -1325,7 +1786,7 @@ var KEYPR = {
         });
 
         $('body').keydown(function(e) {
-            if (!$(e.target).parents('.inFileManagerModal').length && $.inArray(e.keyCode, KEYPR.allowKey) == -1) {
+            if (!$(e.target).parents('.inFileManagerModal').length && $.inArray(e.keyCode, KEYPR.allowKey) == -1 && !$(e.target).is('.inFileManagerModal')) {
                 e.preventDefault();
             } else {
                 return;
@@ -1335,14 +1796,14 @@ var KEYPR = {
             if (e.keyCode == 17 /* Ctrl */ ) {
                 KEYPR.isCtrl = true;
             } else if (e.keyCode == 27 /* ESC */ ) {
-                // Unselect all file
+                // Bỏ chọn các file
                 $(".file-selected").removeClass("file-selected");
                 LFILE.setSelFile();
 
-                // Hide contextmenu
+                // Ẩn menu chuột phải
                 NVCMENU.hide();
 
-                // Reset shift offset
+                // Thiết lập lại vị trí bắt đầu chọn SHIFT
                 KEYPR.shiftOffset = 0;
             } else if (e.keyCode == 65 /* A */ && e.ctrlKey === true) {
                 // Select all file
@@ -1366,11 +1827,16 @@ var KEYPR = {
             }
         });
 
-        // Unselect file when click on wrap area
+        /*
+         * Hủy chọn các file khi ấn vào các phần khác ngoại trừ:
+         * - Chính các file
+         * - Click vào modal mở lên
+         */
         $(document).on('click', function(e) {
             if (KEYPR.isSelectable == false) {
-                if (!$(e.target).closest('.file').length) {
+                if (!$(e.target).closest('.file').length && !$(e.target).parents('.inFileManagerModal').length && !$(e.target).is('.inFileManagerModal')) {
                     $(".file-selected").removeClass("file-selected");
+                    LFILE.setSelFile();
                 }
             }
 
@@ -1379,7 +1845,7 @@ var KEYPR = {
     }
 };
 
-/* Rorate Handle */
+/* Xử lý chức năng xoay ảnh */
 var RRT = {
     direction: 0,
     currentDirection: 0,
@@ -1387,10 +1853,12 @@ var RRT = {
     timer: null,
     timeOut: 20,
     trigger: function() {
-        $('#rorateContent img').rotate(RRT.direction);
+        var cfg = window.fileManager.cfg;
+        $('[data-toggle="img"] img', $(cfg.formRotateFile)).rotate(RRT.direction);
     },
     setVal: function() {
-        $('[name="rorateDirection"]').val(RRT.direction);
+        var cfg = window.fileManager.cfg;
+        $('[name="rorateDirection"]', $(cfg.formRotateFile)).val(RRT.direction);
     },
     setDirection: function(direction) {
         if (direction == '') {
@@ -1432,7 +1900,9 @@ var RRT = {
         RRT.trigger();
     },
     init: function() {
-        $('[name="rorateDirection"]').keyup(function() {
+        var cfg = window.fileManager.cfg;
+
+        $('[name="rorateDirection"]', $(cfg.formRotateFile)).keyup(function() {
             var direction = $(this).val();
 
             if (isNaN(direction)) {
@@ -1444,23 +1914,27 @@ var RRT = {
             RRT.trigger();
         });
 
-        $('#rorateLeft').mousedown(function() {
-            RRT.timer = setInterval("RRT.decrease()", RRT.timeOut);
+        $('[data-toggle="rleft"]', $(cfg.formRotateFile)).on('mousedown', function() {
+            RRT.timer = setInterval(function() {
+                RRT.decrease();
+            }, RRT.timeOut);
         });
 
-        $('#rorateLeft').on("mouseup mouseleave", function() {
+        $('[data-toggle="rleft"]', $(cfg.formRotateFile)).on("mouseup mouseleave", function() {
             clearInterval(RRT.timer);
         });
 
-        $('#rorateRight').mousedown(function() {
-            RRT.timer = setInterval("RRT.increase()", RRT.timeOut);
+        $('[data-toggle="rright"]', $(cfg.formRotateFile)).on('mousedown', function() {
+            RRT.timer = setInterval(function() {
+                RRT.increase();
+            }, RRT.timeOut);
         });
 
-        $('#rorateRight').on("mouseup mouseleave", function() {
+        $('[data-toggle="rright"]', $(cfg.formRotateFile)).on("mouseup mouseleave", function() {
             clearInterval(RRT.timer);
         });
 
-        $('#rorate90Anticlockwise').click(function() {
+        $('[data-toggle="rleft90"]', $(cfg.formRotateFile)).click(function() {
             RRT.currentDirection--;
 
             if (RRT.currentDirection < 0) {
@@ -1472,7 +1946,7 @@ var RRT = {
             RRT.trigger();
         });
 
-        $('#rorate90Clockwise').click(function() {
+        $('[data-toggle="rright90"]', $(cfg.formRotateFile)).click(function() {
             RRT.currentDirection++;
 
             if (RRT.currentDirection > 3) {
@@ -1482,31 +1956,6 @@ var RRT = {
             RRT.setDirection(RRT.arrayDirection[RRT.currentDirection]);
             RRT.setVal();
             RRT.trigger();
-        });
-
-        $('#rorateimageOK').click(function() {
-            var roratePath = $('[name="roratePath"]').val();
-            var rorateFile = $('[name="rorateFile"]').val();
-            var rorateDirection = $('[name="rorateDirection"]').val();
-
-            $(this).attr("disabled", "disabled");
-
-            $.ajax({
-                type: "POST",
-                url: nv_module_url + "rotateimg&num=" + nv_randomNum(10),
-                data: "path=" + roratePath + "&file=" + rorateFile + "&direction=" + rorateDirection,
-                success: function(g) {
-                    $('#rorateimageOK').removeAttr("disabled");
-                    var h = g.split("#");
-
-                    if (h[0] == "ERROR") {
-                        alert(h[1]);
-                    } else {
-                        $("div#rorateimage").dialog("close");
-                        LFILE.reload(roratePath, rorateFile);
-                    }
-                }
-            });
         });
     }
 };

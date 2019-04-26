@@ -142,7 +142,6 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             $file['data'] .= '|' . $file['mtime'];
 
             $file['is_img'] = $file['type'] == 'image' ? 'true' : 'false';
-            $file['sel'] = in_array($file['title'], $selectfile) ? ' imgsel' : '';
             $file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
 
             $file['nameLong'] = substr($file['title'], 0, 0 - strlen($file['ext']) - 1);
@@ -158,11 +157,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         }
 
         $tpl->assign('ARRAY_FILES', $array_files);
-
-        if (!empty($selectfile)) {
-            $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
-            $xtpl->parse('main.imgsel');
-        }
+        $tpl->assign('SELECTFILE', $selectfile);
 
         $contents = $tpl->fetch('listimg.tpl');
 

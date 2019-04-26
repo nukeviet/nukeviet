@@ -264,6 +264,142 @@ $(document).on("nv.upload.ready", function() {
         </div>
     </div>
 </div>
+{* Form đổi tên file *}
+<div id="nv-filemanager-form-renamefile" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('rename')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body">
+                    <h3 data-toggle="orgfile" class="mt-0 text-center"></h3>
+                    <div class="form-group">
+                        <label>{$LANG->get('rename_newname')} <i class="text-danger">(*)</i></label>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1"><input type="text" class="form-control" name="name" value=""></div>
+                            <div class="pl-2 flex-shrink-0" data-toggle="ext"></div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label>{$LANG->get('altimage')}</label>
+                        <input type="text" class="form-control" name="alt" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Form di chuyển file *}
+<div id="nv-filemanager-form-movefile" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('move')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body">
+                    <h3 data-toggle="orgpath" class="mt-0 text-center"></h3>
+                    <div class="form-group">
+                        <label>{$LANG->get('movefolder')} <i class="text-danger">(*)</i></label>
+                        <select name="newPath" class="form-control"></select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" value="1" name="mirrorFile"><span class="custom-control-label">{$LANG->get('mirrorFile')}</span>
+                        </label>
+                        <label class="custom-control custom-checkbox mb-0">
+                            <input class="custom-control-input" type="checkbox" value="1" name="goNewPath"><span class="custom-control-label">{$LANG->get('goNewPath')}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Form xoay ảnh *}
+<div id="nv-filemanager-form-rotatefile" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('rotate')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body pb-0">
+                    <h3 data-toggle="name" class="mt-0 text-center"></h3>
+                    <div data-toggle="img"></div>
+                    <div class="d-flex justify-content-center">
+                        <div class="form-inline">
+                            <input type="text" class="form-control form-control-xs ml-1 btn-space" name="rorateDirection" value="0"/>
+                            <button data-toggle="rleft90" type="button" class="btn btn-secondary btn-space">
+                                <i class="fas fa-undo"></i> 90
+                            </button>
+                            <button data-toggle="rleft" type="button" class="btn btn-secondary btn-space">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button data-toggle="rright" type="button" class="btn btn-secondary btn-space">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button data-toggle="rright90" type="button" class="btn btn-secondary btn-space">
+                                <i class="fas fa-redo"></i> 90
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Form cắt ảnh *}
+<div id="nv-filemanager-form-cropfile" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('crop')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body pb-0 pt-4">
+                    <p class="text-danger d-none" data-toggle="note"></p>
+                    <div data-toggle="img" class="mb-2">{* Ảnh sẽ điền vào đây *}</div>
+                    <div data-toggle="getw" class="d-flex justify-content-center">
+                        <div>
+                            <div class="form-inline">
+                                X: <input type="text" name="x" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                                Y: <input type="text" name="y" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                                W: <input type="text" name="w" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                                H: <input type="text" name="h" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                            </div>
+                            <hr class="my-2">
+                            <label class="nv-checkbox custom-control custom-checkbox mb-0">
+                                <input class="custom-control-input" type="checkbox" name="keeporg" value="1"><span class="custom-control-label">{$LANG->get('crop_keep_original')}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {* Lưu nội dung menu khi ấn chuột phải *}
 <div class="d-none" id="contextMenu"></div>
 {* Iframe để tải file về *}
@@ -332,29 +468,6 @@ $(document).on("nv.upload.ready", function() {
 
 <div id="errorInfo" class="upload-hide" title="{LANG.errorInfo}"></div>
 
-<div id="imgpreview" title="{LANG.preview}">
-    <div id="fileInfoAlt" class="dynamic file-title"></div>
-    <div id="fileView" class="dynamic file-content"></div>
-    <div id="fileInfoName" class="dynamic file-title"></div>
-    <div id="fileInfoDetail" class="dynamic file-detail m-bottom"></div>
-    <div class="clearfix" id="fileInfoLink">
-        <label for="FileRelativePath" class="text-left display-block">{LANG.filerelativepath}:</label>
-        <div class="input-group input-group-sm m-bottom">
-            <input type="text" class="form-control" id="FileRelativePath"/>
-            <span class="input-group-btn">
-                <button class="btn btn-default" data-clipboard-target="#FileRelativePath" id="FileRelativePathBtn" data-title="{LANG.filepathcopied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="0"><i class="fa fa-copy"></i></button>
-            </span>
-        </div>
-        <label for="FileAbsolutePath" class="text-left">{LANG.fileabsolutepath}:</label>
-        <div class="input-group input-group-sm">
-            <input type="text" class="form-control" id="FileAbsolutePath"/>
-            <span class="input-group-btn">
-                <button class="btn btn-default" data-clipboard-target="#FileAbsolutePath" id="FileAbsolutePathBtn" data-title="{LANG.filepathcopied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="0"><i class="fa fa-copy"></i></button>
-            </span>
-        </div>
-    </div>
-</div>
-
 <div id="imgcreate" title="{LANG.upload_createimage}">
     <div class="row">
         <div class="col-xs-10">
@@ -387,92 +500,6 @@ $(document).on("nv.upload.ready", function() {
     </div>
 </div>
 
-<div id="filemove" title="{LANG.move}">
-    <div title="pathFileName" class="dynamic filename"></div>
-    <div class="form-group">
-        <label>{LANG.movefolder}:</label>
-        <select name="newPath" class="form-control"></select>
-    </div>
-    <div class="checkbox">
-        <label>
-            <input name="mirrorFile" type="checkbox" class="dynamic" /> {LANG.mirrorFile}.
-        </label>
-    </div>
-    <div class="checkbox">
-        <label>
-            <input name="goNewPath" type="checkbox" class="dynamic" /> {LANG.goNewPath}.
-        </label>
-    </div>
-    <div class="text-center">
-        <input type="button" value="{LANG.addlogosave}" name="newPathOK" class="btn btn-primary"/>
-    </div>
-</div>
-
-<div id="filesearch" title="{LANG.search}">
-    <form method="get" onsubmit="return searchfile();" role="form">
-        <div class="form-group">
-            <label>{LANG.searchdir}:</label>
-            <select name="searchPath" class="form-control"></select>
-        </div>
-        <div class="form-group">
-            <label>{LANG.searchkey}:</label>
-            <input name="q" type="text" class="form-control dynamic" />
-        </div>
-        <div class="text-center">
-            <button type="submit" name="search" class="btn btn-primary">{LANG.search}</button>
-        </div>
-    </form>
-</div>
-
-<div id="filerename" title="{LANG.rename}">
-    <div id="filerenameOrigName" class="dynamic origname text-center"></div>
-    <div class="form-horizontal" role="form">
-        <div class="form-group">
-            <label class="col-xs-8 control-label">{LANG.rename_newname}:</label>
-            <div class="col-xs-14">
-                <input type="text" name="filerenameNewName" maxlength="255" class="dynamic form-control" />
-            </div>
-            <div class="col-xs-2">
-                <span title="Ext">Ext</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-8 control-label">{LANG.altimage}:</label>
-            <div class="col-xs-16">
-                <input type="text" name="filerenameAlt" maxlength="255" class="dynamic form-control" />
-            </div>
-        </div>
-        <div class="text-center">
-            <input class="btn btn-primary" type="button" value="{LANG.addlogosave}" name="filerenameOK" />
-        </div>
-    </div>
-</div>
-
-<div id="rorateimage" title="{LANG.rotate}">
-    <input type="hidden" class="dynamic" name="roratePath" value=""/>
-    <input type="hidden" class="dynamic" name="rorateFile" value=""/>
-    <h4 class="text-center"><strong id="rorateimageName" class="dynamic">&nbsp;</strong></h4>
-    <div id="rorateContent" class="rorate-content">
-
-    </div>
-    <div class="text-center form-inline">
-        <input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
-        <button id="rorate90Anticlockwise" type="button" class="btn btn-default">
-            <em class="fa fa-lg fa-undo"></em> 90
-        </button>
-        <button id="rorateLeft" type="button" class="btn btn-default btn-reset">
-            <em class="fa fa-lg fa-undo"></em>
-        </button>
-        <button id="rorateRight" type="button" class="btn btn-default btn-reset">
-            <em class="fa fa-lg fa-repeat"></em>
-        </button>
-        <button id="rorate90Clockwise" type="button" class="btn btn-default">
-            <em class="fa fa-lg fa-repeat"></em> 90
-        </button>
-        <input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
-    </div>
-</div>
-
 <div id="uploadremote" title="{LANG.upload_mode_remote}">
     <div class="row">
         <label for="uploadremoteFile">{LANG.enter_url}</label>
@@ -492,11 +519,6 @@ $(document).on("nv.upload.ready", function() {
     <div class="row text-center">
         <input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
     </div>
-</div>
-
-<div id="cropimage" title="{LANG.crop}">
-    <div id="cropContent" class="crop-content"></div>
-    <div id="cropButtons" class="text-center form-inline dynamic"></div>
 </div>
 
 <div id="addlogo" title="{LANG.addlogo}">
