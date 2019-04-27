@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -19,7 +19,7 @@ $image = basename($image);
 
 $path_filename = NV_BASE_SITEURL . $path . '/' . $image;
 
-if (! empty($image) and nv_is_file($path_filename, $path) and nv_check_allow_upload_dir($path)) {
+if (!empty($image) and nv_is_file($path_filename, $path) and nv_check_allow_upload_dir($path)) {
     //Download file
     $download = new NukeViet\Files\Download(NV_DOCUMENT_ROOT . $path_filename, NV_ROOTDIR . '/' . $path, $image);
     $download->download_file();

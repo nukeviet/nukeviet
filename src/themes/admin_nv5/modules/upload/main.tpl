@@ -400,6 +400,85 @@ $(document).on("nv.upload.ready", function() {
         </div>
     </div>
 </div>
+{* Form tạo ảnh mới *}
+<div id="nv-filemanager-form-createimage" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('upload_createimage')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body pb-0 pt-4">
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            <h4 class="mt-0 text-center">{$LANG->get('newSize')}</h4>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div>
+                                    <div class="form-inline">
+                                        X:
+                                        <input type="text" name="newWidth" maxlength="4" class="mx-1 form-control form-control-xs" style="width: 50px;" autocomplete="off">
+                                        Y:
+                                        <input type="text" name="newHeight" maxlength="4" class="mx-1 form-control form-control-xs" style="width: 50px;" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div>
+                                    <button class="btn btn-secondary" type="button" name="prView"><i class="fas fa-search"></i> {$LANG->get('prView')}</button>
+                                </div>
+                            </div>
+                            <div class="text-center" data-toggle="limit"></div>
+                            <div class="text-center text-danger d-none" data-toggle="error">{* Thông tin lỗi *}</div>
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <h4 class="mt-0 text-center" data-toggle="imgname">{* Tên ảnh *}</h4>
+                            <p class="text-center" data-toggle="orgsize">{* Kích thước gốc *}</p>
+                            <div class="text-center">
+                                <img data-toggle="img" src="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{* Form chèn logo vào ảnh *}
+<div id="nv-filemanager-form-addlogo" tabindex="-1" role="dialog" data-backdrop="static" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('addlogo')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body pb-0 pt-4">
+                    <p class="text-danger d-none" data-toggle="note"></p>
+                    <div class="mb-2" data-toggle="img"></div>
+                    <div data-toggle="btns" class="d-flex justify-content-center">
+                        <div>
+                            <div class="form-inline">
+                                X: <input type="text" name="x" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                                Y: <input type="text" name="y" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                                W: <input type="text" name="w" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                                H: <input type="text" name="h" value="" class="mx-1 form-control form-control-xs" readonly="readonly" style="width: 50px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" class="btn btn-primary md-close">{$LANG->get('submit')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {* Lưu nội dung menu khi ấn chuột phải *}
 <div class="d-none" id="contextMenu"></div>
 {* Iframe để tải file về *}
@@ -468,38 +547,6 @@ $(document).on("nv.upload.ready", function() {
 
 <div id="errorInfo" class="upload-hide" title="{LANG.errorInfo}"></div>
 
-<div id="imgcreate" title="{LANG.upload_createimage}">
-    <div class="row">
-        <div class="col-xs-10">
-            <input type="hidden" name="origWidth" value="" class="dynamic" />
-            <input type="hidden" name="origHeight" value="" class="dynamic" />
-            <div class="title">{LANG.newSize}</div>
-            <div class="form-horizontal" role="form">
-                <div class="form-group">
-                    <label class="col-xs-4 control-label">X:</label>
-                    <div class="col-xs-8"><input type="text" name="newWidth" maxlength="4" class="dynamic form-control" /></div>
-                    <label class="col-xs-4 control-label">Y:</label>
-                    <div class="col-xs-8"><input type="text" name="newHeight" maxlength="4" class="dynamic form-control" /></div>
-                </div>
-            </div>
-            <div class="text-center form-group">
-                <button class="btn btn-default" type="button" name="prView"><em class="fa fa-search fa-lg"></em> {LANG.prView}</button>
-                <button class="btn btn-primary" type="button" name="newSizeOK">{LANG.addlogosave}</button>
-            </div>
-            <div title="createInfo" class="dynamic text-center text-muted"></div>
-        </div>
-        <div class="col-xs-14 text-center">
-            <div class="image-preview-wrap clearfix">
-                <div id="fileInfoName2" class="dynamic title"></div>
-                <div id="fileInfoDetail2" class="dynamic"></div>
-                <div class="image-preview">
-                    <img name="myFile2" alt="{LANG.clickSize}" width="0" height="0" src="" />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="uploadremote" title="{LANG.upload_mode_remote}">
     <div class="row">
         <label for="uploadremoteFile">{LANG.enter_url}</label>
@@ -519,11 +566,6 @@ $(document).on("nv.upload.ready", function() {
     <div class="row text-center">
         <input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
     </div>
-</div>
-
-<div id="addlogo" title="{LANG.addlogo}">
-    <div id="addlogoContent" class="addlogo-content"></div>
-    <div id="addlogoButtons" class="text-center form-inline dynamic"></div>
 </div>
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/upload.js"></script>

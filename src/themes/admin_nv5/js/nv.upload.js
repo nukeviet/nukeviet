@@ -41,6 +41,8 @@ var NVCoreFileBrowser = function() {
         formMoveFile: '#nv-filemanager-form-movefile',
         formRotateFile: '#nv-filemanager-form-rotatefile',
         formCrop: '#nv-filemanager-form-cropfile',
+        formCreatImage: '#nv-filemanager-form-createimage',
+        formAddLogo: '#nv-filemanager-form-addlogo',
     };
 
     this.cfgFolderData = {
@@ -75,7 +77,7 @@ var NVCoreFileBrowser = function() {
     ICON.select = 'icon far fa-check-square';
     ICON.download = 'icon fas fa-download';
     ICON.preview = 'icon far fa-eye';
-    ICON.create = 'icon far fa-file';
+    ICON.create = 'icon far fa-copy';
     ICON.recreatethumb = 'icon fas fa-retweet';
     ICON.move = 'icon fas fa-arrows-alt';
     ICON.rename = 'icon fas fa-pencil-alt';
@@ -234,6 +236,39 @@ NVCoreFileBrowser.prototype.init = function(data) {
     });
 
     /*
+     * Xử lý khi thao tác tại form công cụ ảnh
+     */
+    $('[name="newWidth"],[name="newHeight"]', $(cfg.formCreatImage)).on('keyup', function() {
+        var type = $(this).attr("name"),
+            value = $(this).val(),
+            orgW = $('[name="newWidth"]', $(cfg.formCreatImage)).data('orgw'),
+            orgH = $('[name="newHeight"]', $(cfg.formCreatImage)).data('orgh'),
+            maxSize = self.getImageDisplaySize(orgW, orgH, nv_max_width, nv_max_height);
+
+        if (!is_numeric(value) || value < 0) {
+            $('[name="newWidth"]', $(cfg.formCreatImage)).val("");
+            $('[name="newHeight"]', $(cfg.formCreatImage)).val("");
+            return false;
+        }
+        if (type == "newWidth") {
+            if (value > maxSize[0]) {
+                value = maxSize[0];
+            }
+            $('[name="newWidth"]', $(cfg.formCreatImage)).val(value);
+            $('[name="newHeight"]', $(cfg.formCreatImage)).val(parseInt(orgH * value / orgW));
+        } else {
+            if (value > maxSize[1]) {
+                value = maxSize[1];
+            }
+            $('[name="newWidth"]', $(cfg.formCreatImage)).val(parseInt(value * orgW / orgH));
+            $('[name="newHeight"]', $(cfg.formCreatImage)).val(value);
+        }
+    });
+    $('[name="prView"]', $(cfg.formCreatImage)).on('click', function() {
+        self.checkNewImageSize();
+    });
+
+    /*
      * Xử lý khi mở form tìm kiếm lên
      */
     $(cfg.formSearch).on('show.bs.modal', function(e) {
@@ -375,6 +410,135 @@ NVCoreFileBrowser.prototype.init = function(data) {
     });
 
     /*
+     * Xử lý khi mở tạo ảnh mới lên
+     */
+    $(cfg.formCreatImage).on('shown.bs.modal', function(e) {
+        var modalEle = $(e.currentTarget);
+        var selFile = $(cfgm.file).data('value');
+        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+        fdata[0] = parseInt(fdata[0]);
+        fdata[1] = parseInt(fdata[1]);
+
+        var ctnWidth = $('[data-toggle="imgname"]', modalEle).width();
+        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
+        $('[data-toggle="img"]', $(cfg.formCreatImage)).css({
+            'width': (size[0] + 'px'),
+            'height': size[1] + 'px'
+        });
+    });
+
+    /*
+     * Xử lý khi mở form thêm logo lên
+     */
+    $(cfg.formAddLogo).on('shown.bs.modal', function(e) {
+        var modalEle = $(e.currentTarget);
+        var selFile = $(cfgm.file).data('value');
+        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+        fdata[0] = parseInt(fdata[0]);
+        fdata[1] = parseInt(fdata[1]);
+
+        var ctnWidth = $('[data-toggle="btns"]', modalEle).width();
+        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
+        var logo = $(cfgm.logo).data('value');
+        var logoConfig = $(cfgm.logoConfig).data('value').split('|');
+
+        $('[data-toggle="img"]', modalEle).css({
+            'width': size[0],
+            'height': size[1],
+            'margin-left': 'auto',
+            'margin-right': 'auto'
+        }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
+
+        // Hiển thị thông báo khi ảnh quá nhỏ
+        if (fdata[0] < 10 || fdata[1] < 10 || (fdata[0] < 16 && fdata[1] < 16)) {
+            $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.addlogo_error_small);
+        } else if (logo == '') {
+            $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.notlogo);
+        } else {
+            $('[data-toggle="note"]', modalEle).addClass('d-none').html('');
+
+            // Set logo size
+            var markW, markH;
+
+            if (fdata[0] <= 150) {
+                markW = Math.ceil(fdata[0] * parseFloat(logoConfig[2]) / 100);
+            } else if (fdata[0] < 350) {
+                markW = Math.ceil(fdata[0] * parseFloat(logoConfig[3]) / 100);
+            } else {
+                if (Math.ceil(fdata[0] * parseFloat(logoConfig[4]) / 100) > logoConfig[0]) {
+                    markW = logoConfig[0];
+                } else {
+                    markW = Math.ceil(fdata[0] * parseFloat(logoConfig[4]) / 100);
+                }
+            }
+
+            markH = Math.ceil(markW * logoConfig[1] / logoConfig[0]);
+
+            if (markH > fdata[1]) {
+                markH = fdata[1];
+                markW = Math.ceil(markH * logoConfig[0] / logoConfig[1]);
+            }
+
+            // Init cropper
+            $('[data-toggle="img"] img', modalEle).cropper({
+                viewMode: 3,
+                dragMode: 'none',
+                aspectRatio: markW / markH,
+                responsive: true,
+                modal: true,
+                guides: false,
+                highlight: true,
+                autoCrop: false,
+                autoCropArea: .01,
+                movable: false,
+                rotatable: false,
+                scalable: false,
+                zoomable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                minContainerWidth: 10,
+                minContainerHeight: 10,
+                crop: function(e) {
+                    $('[name="x"]', modalEle).val(parseInt(Math.floor(e.x)));
+                    $('[name="y"]', modalEle).val(parseInt(Math.floor(e.y)));
+                    $('[name="w"]', modalEle).val(parseInt(Math.floor(e.width)));
+                    $('[name="h"]', modalEle).val(parseInt(Math.floor(e.height)));
+                },
+                built: function(e) {
+                    var imageData = $(this).cropper('getImageData');
+                    var cropBoxScale = imageData.naturalWidth / imageData.width;
+                    var cropBoxSize = {
+                        width: markW / cropBoxScale,
+                        height: markH / cropBoxScale
+                    };
+                    cropBoxSize.left = imageData.width - cropBoxSize.width - 10;
+                    cropBoxSize.top = imageData.height - cropBoxSize.height - 10;
+                    $(this).cropper('crop');
+                    $(this).cropper('setCropBoxData', {
+                        left: cropBoxSize.left,
+                        top: cropBoxSize.top,
+                        width: cropBoxSize.width,
+                        height: cropBoxSize.height
+                    });
+                    var wrapCropper = $(this).parent();
+                    $('.cropper-face', wrapCropper).css({
+                        'opacity' : 1,
+                        'background-image' : 'url(' + logo + ')',
+                        'background-size' : '100%',
+                        'background-color' : 'transparent'
+                    });
+                }
+            });
+        }
+    });
+
+    /*
      * Xử lý khi submit các form
      */
     $('form', $(cfg.formSearch)).on('submit', function(e) {
@@ -408,6 +572,14 @@ NVCoreFileBrowser.prototype.init = function(data) {
     $('form', $(cfg.formCrop)).on('submit', function(e) {
         e.preventDefault();
         self.submitCrop(this);
+    });
+    $('form', $(cfg.formCreatImage)).on('submit', function(e) {
+        e.preventDefault();
+        self.submitCreatImage(this);
+    });
+    $('form', $(cfg.formAddLogo)).on('submit', function(e) {
+        e.preventDefault();
+        self.submitAddLogo(this);
     });
 
     // Xử lý tại form xem chi tiết file
@@ -1219,9 +1391,69 @@ NVCoreFileBrowser.prototype.handleMenuCrop = function (element) {
     var cfgm = self.cfgMain;
     var cfgf = self.cfgFolderData;
 
+    $('[name="keeporg"]', $(cfg.formCrop)).prop('checked', false);
     $('[type="submit"]', $(cfg.formCrop)).prop('disabled', false);
 
     $(cfg.formCrop).modal('show');
+}
+
+/*
+ * Xử lý khi chuột phải file, chọn công cụ ảnh (tạo ảnh mới)
+ */
+NVCoreFileBrowser.prototype.handleMenuCreatImage = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+    var SizeMax = self.getImageDisplaySize(fdata[0], fdata[1], nv_max_width, nv_max_height);
+    var SizeMin = self.getImageDisplaySize(fdata[0], fdata[1], nv_min_width, nv_min_height);
+
+    $('[data-toggle="limit"]', $(cfg.formCreatImage)).html("Max: " + SizeMax[0] + " x " + SizeMax[1] + ", Min: " + SizeMin[0] + " x " + SizeMin[1] + " (pixels)");
+    $('[data-toggle="img"]', $(cfg.formCreatImage)).attr('src', nv_base_siteurl + filepath + "/" + file + "?" + fdata[8]);
+    $('[data-toggle="orgsize"]', $(cfg.formCreatImage)).html(LANG.origSize + ": " + fdata[0] + " x " + fdata[1] + " pixels");
+    $('[data-toggle="imgname"]', $(cfg.formCreatImage)).html(file);
+    $('[data-toggle="error"]', $(cfg.formCreatImage)).html('').addClass('d-none');
+    $('[name="newWidth"]', $(cfg.formCreatImage)).val('').data('orgw', fdata[0]);
+    $('[name="newHeight"]', $(cfg.formCreatImage)).val('').data('orgh', fdata[1]);
+    $('[type="submit"]', $(cfg.formCreatImage)).prop('disabled', false);
+
+    $(cfg.formCreatImage).modal('show');
+}
+
+/*
+ * Xử lý khi chuột phải file, chọn thêm logo
+ */
+NVCoreFileBrowser.prototype.handleMenuAddLogo = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+
+    var logo = $(cfgm.logo).data('value');
+    var logoConfig = $(cfgm.logoConfig).data('value').split('|');
+
+    console.log(logo);
+    console.log(logoConfig);
+
+    $(cfg.formAddLogo).modal('show');
 }
 
 NVCoreFileBrowser.prototype.handleMenuXXXX = function (element) {
@@ -1581,6 +1813,140 @@ NVCoreFileBrowser.prototype.submitCrop = function (e) {
     } else {
         filepath = fdata[7];
     }
+
+    $('[type="submit"]', form).prop('disabled', true);
+
+    $.ajax({
+        type: 'POST',
+        url: nv_module_url + 'cropimg&random=' + self.strRand(10),
+        data: {
+            path: filepath,
+            file: file,
+            x: $('[name="x"]', form).val(),
+            y: $('[name="y"]', form).val(),
+            w: $('[name="w"]', form).val(),
+            h: $('[name="h"]', form).val(),
+            k: ($('[name="keeporg"]', form).is(':checked') ? 1 : 0)
+        },
+        success: function(e) {
+            $('[type="submit"]', form).prop('disabled', false);
+            e = e.split('#');
+
+            if (e[0] == 'ERROR') {
+                alert(e[1]);
+                return false;
+            }
+
+            $(cfgm.file).data('value', e[1]);
+            self.showLoader();
+            self.getListFiles();
+            $(cfg.formCrop).modal('hide');
+        }
+    });
+}
+
+/*
+ * Submit form tạo ảnh mới
+ */
+NVCoreFileBrowser.prototype.submitCreatImage = function (e) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+    var form = $(e);
+    if (form.data('busy') || $('[type="submit"]', form).is(':disabled')) {
+        return false;
+    }
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+
+    if (self.checkNewImageSize() !== true) {
+        return false;
+    }
+
+    $('[type="submit"]', form).prop('disabled', true);
+
+    $.ajax({
+        type: 'POST',
+        url: nv_module_url + 'createimg&random=' + self.strRand(10),
+        data: {
+            path: filepath,
+            img: file,
+            width: $('[name="newWidth"]', form).val(),
+            height: $('[name="newHeight"]', form).val()
+        },
+        success: function(h) {
+            $('[type="submit"]', form).prop('disabled', false);
+            var j = h.split("_");
+            if (j[0] == "ERROR") {
+                alert(j[1]);
+                return false;
+            }
+
+            $(cfgm.file).data('value', h);
+            self.showLoader();
+            self.getListFiles();
+            $(cfg.formCreatImage).modal('hide');
+        }
+    });
+}
+
+/*
+ * Submit form thêm logo
+ */
+NVCoreFileBrowser.prototype.submitAddLogo = function (e) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+    var form = $(e);
+    if (form.data('busy') || $('[type="submit"]', form).is(':disabled')) {
+        return false;
+    }
+
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+
+    $('[type="submit"]', form).prop('disabled', true);
+
+    $.ajax({
+        type: 'POST',
+        url: nv_module_url + 'addlogo&random=' + self.strRand(10),
+        data: {
+            path: filepath,
+            file: file,
+            x: $('[name="x"]', form).val(),
+            y: $('[name="y"]', form).val(),
+            w: $('[name="w"]', form).val(),
+            h: $('[name="h"]', form).val()
+        },
+        success: function(e) {
+            $('[type="submit"]', form).prop('disabled', false);
+            e = e.split('#');
+
+            if (e[0] == 'ERROR') {
+                alert(e[1]);
+                return false;
+            }
+
+            self.showLoader();
+            self.getListFiles();
+            $(cfg.formAddLogo).modal('hide');
+        }
+    });
 }
 
 /*
@@ -1680,6 +2046,52 @@ NVCoreFileBrowser.prototype.getImageDisplaySize = function (imgW, imgH, ctnW, ct
         return [parseInt(sizePi[0]), parseInt(sizePi[1])];
     }
     return [parseInt(size[0]), parseInt(size[1])];
+}
+
+/*
+ * Kiểm tra kích thước ảnh mới hợp lệ
+ */
+NVCoreFileBrowser.prototype.checkNewImageSize = function () {
+    var self = this;
+    var cfg = self.cfg;
+
+    var orgW = $('[name="newWidth"]', $(cfg.formCreatImage)).data('orgw');
+    var orgH = $('[name="newHeight"]', $(cfg.formCreatImage)).data('orgh');
+    var w = $('[name="newWidth"]', $(cfg.formCreatImage)).val();
+    var h = $('[name="newHeight"]', $(cfg.formCreatImage)).val();
+    var maxSize = self.getImageDisplaySize(orgW, orgH, nv_max_width, nv_max_height);
+    var minSize = self.getImageDisplaySize(orgW, orgH, nv_min_width, nv_min_height);
+    var errorInfo = [];
+
+    if (w == "" || !is_numeric(w)) {
+        errorInfo = [LANG.errorEmptyX, "newWidth"];
+    } else if (w > maxSize[0]) {
+        errorInfo = [LANG.errorMaxX, "newWidth"];
+    } else if (w < minSize[0]) {
+        errorInfo = [LANG.errorMinX, "newWidth"];
+    } else if (h == "" || !is_numeric(h)) {
+        errorInfo = [LANG.errorEmptyY, "newHeight"];
+    } else if (h > maxSize[1]) {
+        errorInfo = [LANG.errorMaxY, "newHeight"];
+    } else if (h < minSize[1]) {
+        errorInfo = [LANG.errorMinY, "newHeight"];
+    }
+
+    if (typeof errorInfo[0] != "undefined") {
+        $('[data-toggle="error"]', $(cfg.formCreatImage)).html(errorInfo[0]).removeClass('d-none');
+        $('[name="' + errorInfo[1] + '"]', $(cfg.formCreatImage)).select();
+        return false;
+    }
+
+    $('[data-toggle="error"]', $(cfg.formCreatImage)).html('').addClass('d-none');
+    var ctnWidth = $('[data-toggle="imgname"]', $(cfg.formCreatImage)).width();
+    var size = self.getImageDisplaySize(w, h, ctnWidth, ctnWidth);
+    $('[data-toggle="img"]', $(cfg.formCreatImage)).css({
+        'width': (size[0] + 'px'),
+        'height': size[1] + 'px'
+    });
+
+    return true;
 }
 
 var NVLDATA = {

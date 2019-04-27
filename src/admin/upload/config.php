@@ -8,11 +8,11 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$array_logo_position = array(
+$array_logo_position = [
     'bottomRight' => $nv_Lang->getModule('logoposbottomright'),
     'bottomLeft' => $nv_Lang->getModule('logoposbottomleft'),
     'bottomCenter' => $nv_Lang->getModule('logoposbottomcenter'),
@@ -22,12 +22,12 @@ $array_logo_position = array(
     'topRight' => $nv_Lang->getModule('logopostopright'),
     'topLeft' => $nv_Lang->getModule('logopostopleft'),
     'topCenter' => $nv_Lang->getModule('logopostopcenter')
-);
+];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $upload_logo = $nv_Request->get_title('upload_logo', 'post', '');
 
-    if (! empty($upload_logo) and ! nv_is_url($upload_logo) and nv_is_file($upload_logo)) {
+    if (!empty($upload_logo) and !nv_is_url($upload_logo) and nv_is_file($upload_logo)) {
         $lu = strlen(NV_BASE_SITEURL);
         $upload_logo = substr($upload_logo, $lu);
     } else {
@@ -35,7 +35,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $upload_logo_pos = $nv_Request->get_title('upload_logo_pos', 'post', '');
-    if (! isset($array_logo_position[$upload_logo_pos])) {
+    if (!isset($array_logo_position[$upload_logo_pos])) {
         $upload_logo_pos = 'bottomRight';
     }
 
@@ -69,18 +69,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 $page_title = $nv_Lang->getModule('configlogo');
 
-if (! empty($global_config['upload_logo']) and ! nv_is_url($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
+if (!empty($global_config['upload_logo']) and !nv_is_url($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
     $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
 } else {
     $upload_logo = '';
 }
 
-$array_autologosize = array(
+$array_autologosize = [
     'upload_logo' => $upload_logo,
     'autologosize1' => $global_config['autologosize1'],
     'autologosize2' => $global_config['autologosize2'],
     'autologosize3' => $global_config['autologosize3']
-);
+];
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -96,7 +96,7 @@ $a = 0;
 $xtpl->assign('CLASS', '');
 
 if ($global_config['autologomod'] == 'all') {
-    $autologomod = array();
+    $autologomod = [];
 } else {
     $autologomod = explode(',', $global_config['autologomod']);
 }
@@ -124,11 +124,11 @@ $xtpl->parse('main.loop1.loop2');
 $xtpl->parse('main.loop1');
 
 foreach ($array_logo_position as $pos => $posName) {
-    $upload_logo_pos = array(
+    $upload_logo_pos = [
         'key' => $pos,
         'title' => $posName,
         'selected' => $pos == $global_config['upload_logo_pos'] ? ' selected="selected"' : ''
-    );
+    ];
 
     $xtpl->assign('UPLOAD_LOGO_POS', $upload_logo_pos);
     $xtpl->parse('main.upload_logo_pos');
