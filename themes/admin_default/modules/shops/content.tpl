@@ -449,7 +449,7 @@
         <input class="btn btn-primary submit" data-status="1" type="submit" value="{LANG.save}" />
         <!-- END:status -->
         <!-- BEGIN:status0 -->
-        <input class="btn btn-primary submit" data-status="0" type="submit" value="{LANG.save_temp}" /> 
+        <input class="btn btn-primary submit" data-status="0" type="submit" value="{LANG.save_temp}" />
         <input class="btn btn-primary submit" data-status="1" type="submit" value="{LANG.publtime}" />
         <!-- END:status0 -->
     </div>
@@ -460,85 +460,86 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/content.js"></script>
 <script type="text/javascript">
-	var file_items = '{FILE_ITEMS}';
-	var file_selectfile = '{LANG.file_selectfile}';
-	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
-	var inputnumber = '{LANG.error_inputnumber}';
-	var file_dir = '{NV_UPLOADS_DIR}/{MODULE_UPLOAD}';
-	var currentpath = "{CURRENT}";
+    var file_items = '{FILE_ITEMS}';
+    var file_selectfile = '{LANG.file_selectfile}';
+    var nv_base_adminurl = '{NV_BASE_ADMINURL}';
+    var inputnumber = '{LANG.error_inputnumber}';
+    var file_dir = '{NV_UPLOADS_DIR}/{MODULE_UPLOAD}';
+    var currentpath = "{CURRENT}";
 
-	$(document).ready(function() {
-		$("#catid").select2();
-		
-		$('.submit').click(function(e){
-		    e.preventDefault();
-		    
-		    for(var instanceName in CKEDITOR.instances){
-		        CKEDITOR.instances[instanceName].updateElement();
-		    }
-		    
-		    $.ajax({
-		    	type : 'POST',
-		    	url : script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(),
-		    	data : $('#frm-submit').serialize() + '&status=' + $(this).data('status'),
-		    	success : function(json) {
-		    		if(json.error){
-		    		    alert(json.msg);
-		    		    $('#' + json.input).focus();
-		    		}else{
-		    		    window.location.href = json.redirect;
-		    		}
-		    	}
-		    });
-		});
-	});
+    $(document).ready(function() {
+        $("#catid").select2();
+        $("#catid").trigger("change");
 
-	$("#selectimg").click(function() {
-		var area = "homeimg";
-		var path = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}";
-		var currentpath = "{CURRENT}";
-		var type = "image";
-		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
+        $('.submit').click(function(e){
+            e.preventDefault();
 
-	$('[type="submit"]').hover(function() {
-		if ($('[name="keywords[]"]').length == 0) {
-			if ($('#message-tags').length == 0) {
-				$('#message').html('<div style="margin-top: 10px" id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
-			}
-		} else {
-			$('#message-tags').remove();
-		}
-	});
+            for(var instanceName in CKEDITOR.instances){
+                CKEDITOR.instances[instanceName].updateElement();
+            }
 
-	$.get( '{url_load}', function( data ) {
-		if( data != '' ){
-			$('#list_group').show();
-			$("#listgroupid").html( data );
-		}
-	});
+            $.ajax({
+                type : 'POST',
+                url : script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(),
+                data : $('#frm-submit').serialize() + '&status=' + $(this).data('status'),
+                success : function(json) {
+                    if(json.error){
+                        alert(json.msg);
+                        $('#' + json.input).focus();
+                    }else{
+                        window.location.href = json.redirect;
+                    }
+                }
+            });
+        });
+    });
+
+    $("#selectimg").click(function() {
+        var area = "homeimg";
+        var path = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}";
+        var currentpath = "{CURRENT}";
+        var type = "image";
+        nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+        return false;
+    });
+
+    $('[type="submit"]').hover(function() {
+        if ($('[name="keywords[]"]').length == 0) {
+            if ($('#message-tags').length == 0) {
+                $('#message').html('<div style="margin-top: 10px" id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
+            }
+        } else {
+            $('#message-tags').remove();
+        }
+    });
+
+    $.get( '{url_load}', function( data ) {
+        if( data != '' ){
+            $('#list_group').show();
+            $("#listgroupid").html( data );
+        }
+    });
 </script>
 <!-- BEGIN: files_js -->
 <script type="text/javascript">
-	$("#files").select2({
-		placeholder: "{LANG.download_file_chose_h}"
-	});
+    $("#files").select2({
+        placeholder: "{LANG.download_file_chose_h}"
+    });
 
-	$('#add_file').click(function(){
+    $('#add_file').click(function(){
         $('#idmodals').removeData('bs.modal');
-     	$('#idmodals').on('show.bs.modal', function () {
+         $('#idmodals').on('show.bs.modal', function () {
              $('#idmodals .modal-body').load( script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&popup=1' );
         }).modal();
-		return false;
-	});
+        return false;
+    });
 </script>
 <!-- END: files_js -->
 <!-- BEGIN:getalias -->
 <script type="text/javascript">
-	$("#idtitle").change(function() {
-		get_alias('content', {ALIAS});
-	});
+    $("#idtitle").change(function() {
+        get_alias('content', {ALIAS});
+    });
 </script>
 <!-- END:getalias -->
 <!-- END:main -->

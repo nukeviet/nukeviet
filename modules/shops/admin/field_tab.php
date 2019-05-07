@@ -7,8 +7,8 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
- 
-if (! defined('NV_IS_FILE_ADMIN')) {
+
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 $table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
@@ -56,7 +56,7 @@ $template = $nv_Request->get_int('template', 'post,get', 0);
 
 // Fetch Limit
 $show_view = false;
-if (! $nv_Request->isset_request('id', 'post,get')) {
+if (!$nv_Request->isset_request('id', 'post,get')) {
     $show_view = true;
     $per_page = 20;
     $page = $nv_Request->get_int('page', 'post,get', 1);
@@ -66,7 +66,7 @@ if (! $nv_Request->isset_request('id', 'post,get')) {
     $sth = $db->prepare($db->sql());
     $sth->execute();
     $num_items = $sth->fetchColumn();
-    
+
     $db->select('*')
         ->where(' FIND_IN_SET (' . $template . ',listtemplate)')
         ->order('weight ASC')
@@ -96,7 +96,7 @@ if ($show_view) {
         $xtpl->parse('main.view.title_tab');
     }
     unset($arr_tab_tmp);
-    
+
     while ($view = $sth->fetch()) {
         $arr_display_tab = unserialize($view['tab']);
         for ($i = 1; $i <= $num_items; ++ $i) {
@@ -112,10 +112,10 @@ if ($show_view) {
         $xtpl->assign('VIEW', $view);
         foreach ($arr_tab as $key => $value) {
             $xtpl->assign('tab', $key);
-            if (! empty($arr_display_tab[$template])) {
+            if (!empty($arr_display_tab[$template])) {
                 $xtpl->assign('CHECK', in_array($key, $arr_display_tab[$template]) ? ' checked="checked"' : '');
             }
-            
+
             $xtpl->parse('main.view.loop.tab');
         }
         $xtpl->parse('main.view.loop');
@@ -128,12 +128,13 @@ $contents = $xtpl->text('main');
 
 $page_title = $lang_module['field_tab_page'];
 
-if ($nv_Request->isset_request('submit', 'post')) { // luu lai
+// Lưu dữ liệu
+if ($nv_Request->isset_request('submit', 'post')) {
     $check = $nv_Request->get_array('check', 'post');
     $template = $nv_Request->get_int('template', 'post');
     $arr_tab_ser = array();
-    
-    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field where FIND_IN_SET (' . $template . ',listtemplate)';
+
+    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE FIND_IN_SET (' . $template . ',listtemplate)';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $row['tab'] = unserialize($row['tab']);
@@ -143,14 +144,14 @@ if ($nv_Request->isset_request('submit', 'post')) { // luu lai
         $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET tab=' . $db->quote($tab) . ' WHERE fid=' . $row['fid'];
         $db->query($sql);
     }
-    
+
     foreach ($check as $key => $value) {
         $tab = '';
         $arr_tab_ser = array();
         foreach ($value as $val) {
             $arr_tab_ser[$template][] = $val;
         }
-        
+
         foreach ($tab_old[$key][0] as $key_old => $value_old) {
             if ($key_old != $template and $value_old != null) {
                 $arr_tab_ser[$key_old] = $value_old;
@@ -160,8 +161,9 @@ if ($nv_Request->isset_request('submit', 'post')) { // luu lai
         $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET tab=' . $db->quote($tab) . ' WHERE fid=' . $key;
         $db->query($sql);
     }
-    
-    // Tao file tpl
+
+    // Tạo file TPL
+    $arr = [];
     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
@@ -172,34 +174,34 @@ if ($nv_Request->isset_request('submit', 'post')) { // luu lai
             }
         }
     }
-    
+
+    $arr_tab_tpl = [];
     foreach ($arr as $key => $value) {
-        // loai bo phan tu trung nhau
-        
+        // Loai bo phan tu trung nhau
         $arr_tab_tpl[$key] = array_unique($value);
     }
-    
-    if (! file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl')) {
+
+    if (!file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl')) {
         nv_mkdir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload, 'files_tpl');
     }
-    
+
     foreach ($arr_tab_tpl as $key => $value) {
         $name_file = 'tab-' . strtolower(change_alias($arr_tab[$key])) . '.tpl';
         $html_tpl = "<!-- BEGIN: main -->\n";
-        $html_tpl .= "\t<ul>\n";
-        
+        $html_tpl .= "<ul>\n";
+
         foreach ($value as $key => $val) {
-            $html_tpl .= "\t\t<!-- BEGIN: " . $val . " -->\n";
-            $html_tpl .= "\t\t\t<li>\n";
-            $html_tpl .= "\t\t\t\t<p> <strong>{CUSTOM_LANG." . $val . "}:</strong> {CUSTOM_DATA." . $val . "}</p>\n";
-            $html_tpl .= "\t\t\t</li>\n";
-            $html_tpl .= "\t\t<!-- END: " . $val . " -->\n";
+            $html_tpl .= "\t<!-- BEGIN: " . $val . " -->\n";
+            $html_tpl .= "\t<li>\n";
+            $html_tpl .= "\t\t<p> <strong>{CUSTOM_LANG." . $val . "}:</strong> {CUSTOM_DATA." . $val . "}</p>\n";
+            $html_tpl .= "\t</li>\n";
+            $html_tpl .= "\t<!-- END: " . $val . " -->\n";
         }
-        
-        $html_tpl .= "\t</ul>\n";
+
+        $html_tpl .= "</ul>\n";
         $html_tpl .= "<!-- END: main -->";
-        
-        file_put_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl/' . $name_file, $html_tpl, LOCK_EX);
+
+        file_put_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl/' . $name_file, str_replace("\t", '    ', $html_tpl), LOCK_EX);
     }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=template');
 }

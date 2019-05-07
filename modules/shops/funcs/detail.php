@@ -72,41 +72,60 @@ if (empty($data_content)) {
 }
 $id = $data_content['id'];
 
-$data_content['array_custom'] = array();
-$data_content['array_custom_lang'] = array();
-$data_content['template'] = '';
-$idtemplate = 0;
+$data_content['array_custom'] = [];
+$data_content['array_custom_template'] = [];
+$data_content['array_custom_lang'] = [];
+$data_content['template'] = [];
+$idtemplates = [];
 
+// Dữ liệu tùy biến
 if ($global_array_shops_cat[$data_content['listcatid']]['form'] != '') {
-    $idtemplate = $db->query('SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace("/[\_]/", "-", $global_array_shops_cat[$data_content['listcatid']]['form']) . '"')->fetchColumn();
-    if ($idtemplate) {
-        $listfield = array();
-        $array_tmp = array();
-        $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY weight');
-        while ($row = $result->fetch()) {
-            $listtemplate = explode('|', $row['listtemplate']);
-            if (in_array($idtemplate, $listtemplate)) {
-                $listfield[] = $row['fid'];
-                $array_tmp[$row['field']] = unserialize($row['language']);
-            }
-        }
-
-        if (!empty($listfield)) {
-            $result = $db->query('SELECT t1.field_value, t2.field FROM ' . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . ' t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_field t2 WHERE t1.field_id=t2.fid AND t1.rows_id=' . $id);
-            $data_content['template'] = $global_array_shops_cat[$data_content['listcatid']]['form'];
+    $array_forms = explode(',', $global_array_shops_cat[$data_content['listcatid']]['form']);
+    $where = [];
+    foreach ($array_forms as $cat_form) {
+        $where[] = "alias=" . $db->quote(preg_replace("/[\_]/", "-", $cat_form));
+    }
+    $cat_templates = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE ' . implode(' OR ', $where) . ' ORDER BY weight ASC')->fetchAll();
+    if (!empty($cat_templates)) {
+        foreach ($cat_templates as $cat_form) {
+            $idtemplate = $cat_form['id'];
+            $listfield = [];
+            $array_tmp = [];
+            $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY weight');
             while ($row = $result->fetch()) {
-                $data_content['array_custom'][$row['field']] = $row['field_value'];
+                $listtemplate = explode('|', $row['listtemplate']);
+                if (in_array($idtemplate, $listtemplate)) {
+                    $idtemplates[] = $idtemplate;
+                    $listfield[] = $row['fid'];
+                    $array_tmp[$row['field']] = unserialize($row['language']);
+                }
             }
 
-            if (!empty($array_tmp)) {
-                foreach ($array_tmp as $f_key => $field) {
-                    foreach ($field as $key_lang => $lang_data) {
-                        if ($key_lang == NV_LANG_DATA) {
-                            $data_content['array_custom_lang'][$f_key] = $lang_data[0];
-                        }
+            if (!empty($listfield)) {
+                $result = $db->query('SELECT t1.field_value, t2.field, t2.listtemplate FROM ' . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . ' t1
+                INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_field t2 WHERE t1.field_id=t2.fid AND t1.rows_id=' . $id);
+                $data_content['template'][] = $cat_form;
+                while ($row = $result->fetch()) {
+                    // Xếp theo danh sách
+                    $data_content['array_custom'][$row['field']] = $row['field_value'];
+
+                    // Xếp theo nhóm
+                    $row['listtemplate'] = explode(',', $row['listtemplate']);
+                    foreach ($row['listtemplate'] as $_tid) {
+                        $data_content['array_custom_template'][$_tid][$row['field']] = $row['field_value'];
                     }
                 }
-                unset($array_tmp);
+
+                if (!empty($array_tmp)) {
+                    foreach ($array_tmp as $f_key => $field) {
+                        foreach ($field as $key_lang => $lang_data) {
+                            if ($key_lang == NV_LANG_DATA) {
+                                $data_content['array_custom_lang'][$f_key] = $lang_data[0];
+                            }
+                        }
+                    }
+                    unset($array_tmp);
+                }
             }
         }
     }
@@ -114,7 +133,7 @@ if ($global_array_shops_cat[$data_content['listcatid']]['form'] != '') {
 
 $page_title = !empty($data_content[NV_LANG_DATA . '_tag_title']) ? $data_content[NV_LANG_DATA . '_tag_title'] : $data_content[NV_LANG_DATA . '_title'];
 $description = !empty($data_content[NV_LANG_DATA . '_tag_description']) ? $data_content[NV_LANG_DATA . '_tag_description'] : $data_content[NV_LANG_DATA . '_hometext'];
-$array_images = array();
+$array_images = [];
 
 if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $popup = $nv_Request->get_int('popup', 'post,get', 0);
@@ -142,7 +161,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where active=1 ORDER BY weight ASC';
     $data_content['tabs'] = $nv_Cache->db($sql, 'id', $module_name);
 
-    $data_content['files'] = array();
+    $data_content['files'] = [];
     if (!empty($data_content['tabs'])) {
         // Download tai lieu san pham
         if ($pro_config['download_active']) {
@@ -190,8 +209,8 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     ));
 
     // Tu khoa
-    $array_keyword = array();
-    $key_words = array();
+    $array_keyword = [];
+    $key_words = [];
     $_query = $db->query('SELECT a1.keyword keyword, a2.alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id']);
     while ($row = $_query->fetch()) {
         $array_keyword[] = $row;
@@ -211,7 +230,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
         ->limit($pro_config['per_row'] * 2);
     $result = $db->query($db->sql());
 
-    $data_others = array();
+    $data_others = [];
     while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $price_config, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
             // image thumb
@@ -252,9 +271,9 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
         );
     }
 
-    $array_other_view = array();
+    $array_other_view = [];
     if (!empty($_SESSION[$module_data . '_proview'])) {
-        $arrid = array();
+        $arrid = [];
         foreach ($_SESSION[$module_data . '_proview'] as $id_i => $data_i) {
             if ($id_i != $id) {
                 $arrid[] = $id_i;
@@ -357,7 +376,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $data_content['image'] = $array_images;
     unset($array_images, $data_content['homeimgfile'], $data_content['otherimage']);
 
-    $contents = nv_template_detail($data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $array_keyword);
+    $contents = nv_template_detail($data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplates, $array_keyword);
 } else {
     $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
     redict_link($lang_module['detail_no_permission'], $lang_module['redirect_to_back_shops'], $nv_redirect);

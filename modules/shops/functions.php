@@ -330,11 +330,11 @@ function SetSessionProView($id, $title, $alias, $addtime, $link, $homeimgthumb)
  * @param mixed $name_file
  * @param mixed $array_custom
  * @param mixed $array_custom_lang
- * @param mixed $idtemplate
+ * @param mixed $idtemplates
  * @return
  *
  */
-function nv_custom_tpl($name_file, $array_custom, $array_custom_lang, $idtemplate)
+function nv_custom_tpl($name_file, $array_custom, $array_custom_lang, $idtemplates)
 {
     global $module_data, $module_info, $module_upload, $module_file, $lang_module, $db_config, $db, $global_config;
 
@@ -344,7 +344,7 @@ function nv_custom_tpl($name_file, $array_custom, $array_custom_lang, $idtemplat
         $row['tab'] = unserialize($row['tab']);
         if (!empty($row['tab'])) {
             foreach ($row['tab'] as $key => $value) {
-                if ($key == $idtemplate) {
+                if (in_array($key, $idtemplates)) {
                     $arr[$row['field']] = 1;
                 }
             }

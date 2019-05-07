@@ -8,11 +8,11 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-if (! defined('NV_IS_SPADMIN')) {
+if (!defined('NV_IS_SPADMIN')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
@@ -44,7 +44,7 @@ while ($row = $result->fetch()) {
 
 // Chinh thu tu
 if ($nv_Request->isset_request('changeweight', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -75,7 +75,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
 // lay du lieu sql
 if ($nv_Request->isset_request('choicesql', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -183,7 +183,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $templateids = array_unique($nv_Request->get_typed_array('templateid', 'post', 'int', array()));
 
-    if (! empty($templateids)) {
+    if (!empty($templateids)) {
         $dataform['listtemplate'] = implode(",", $templateids);
     } else {
         $dataform['listtemplate'] = '';
@@ -203,7 +203,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if ($dataform['fid']) {
         $dataform_old = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $dataform['fid'])->fetch();
         $dataform['field_type'] = $dataform_old['field_type'];
-        if (! empty($dataform['language'])) {
+        if (!empty($dataform['language'])) {
             $language = unserialize($dataform['language']);
         }
         $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('fieldid', 'post', '', 0, $preg_replace), 0, 50);
@@ -238,17 +238,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['match_type'] = nv_substr($nv_Request->get_title('match_type', 'post', '', 0, $preg_replace), 0, 50);
         $dataform['match_regex'] = ($dataform['match_type'] == 'regex') ? $nv_Request->get_string('match_regex', 'post', '', false) : '';
         $dataform['func_callback'] = ($dataform['match_type'] == 'callback') ? $nv_Request->get_string('match_callback', 'post', '', false) : '';
-        if ($dataform['func_callback'] != '' and ! function_exists($dataform['func_callback'])) {
+        if ($dataform['func_callback'] != '' and !function_exists($dataform['func_callback'])) {
             $dataform['func_callback'] = '';
         }
 
         if ($dataform['field_type'] == 'editor') {
             $dataform['editor_width'] = $nv_Request->get_string('editor_width', 'post', '100%', 0);
             $dataform['editor_height'] = $nv_Request->get_string('editor_height', 'post', '300px', 0);
-            if (! preg_match('/^([0-9]+)(\%|px)+$/', $dataform['editor_width'])) {
+            if (!preg_match('/^([0-9]+)(\%|px)+$/', $dataform['editor_width'])) {
                 $dataform['editor_width'] = '100%';
             }
-            if (! preg_match('/^([0-9]+)(\%|px)+$/', $dataform['editor_height'])) {
+            if (!preg_match('/^([0-9]+)(\%|px)+$/', $dataform['editor_height'])) {
                 $dataform['editor_height'] = '300px';
             }
             $dataform['class'] = $dataform['editor_width'] . '@' . $dataform['editor_height'];
@@ -302,7 +302,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
 
         $dataform['current_date'] = $nv_Request->get_int('current_date', 'post', 0);
-        if (! $dataform['current_date'] and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('default_date', 'post'), $m)) {
+        if (!$dataform['current_date'] and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('default_date', 'post'), $m)) {
             $dataform['default_value'] = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         } else {
             $dataform['default_value'] = 0;
@@ -359,18 +359,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if (empty($dataform['fid'])) {
             // Them truong du lieu moi
 
-            if ($dataform['max_length'] <= 4294967296 and ! empty($dataform['field']) and ! empty($dataform['title'])) {
+            if ($dataform['max_length'] <= 4294967296 and !empty($dataform['field']) and !empty($dataform['title'])) {
                 $weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_field')->fetchColumn();
                 $weight = intval($weight) + 1;
 
                 $sql = "INSERT INTO " . $db_config['prefix'] . '_' . $module_data . "_field
-					(field,listtemplate, weight, field_type, field_choices, sql_choices, match_type,
-					match_regex, func_callback, min_length, max_length,
-					 class, language, default_value) VALUES
-					('" . $dataform['field'] . "', '" . $dataform['listtemplate'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "',
-					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
-					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
-					'" . $dataform['class'] . "', '" . serialize($language) . "', :default_value)";
+                    (field,listtemplate, weight, field_type, field_choices, sql_choices, match_type,
+                    match_regex, func_callback, min_length, max_length,
+                     class, language, default_value) VALUES
+                    ('" . $dataform['field'] . "', '" . $dataform['listtemplate'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "',
+                    '" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
+                    " . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
+                    '" . $dataform['class'] . "', '" . serialize($language) . "', :default_value)";
 
                 $data_insert = array();
                 $data_insert['default_value'] = $dataform['default_value'];
@@ -389,17 +389,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
                 if ($text_fields == 1) {
                     $query .= " match_type='" . $dataform['match_type'] . "',
-				match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
+                match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
                 }
 
                 $query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
-				listtemplate = '" . $dataform['listtemplate'] . "',
-				field_choices='" . $dataform['field_choices'] . "',
-				sql_choices = '" . $dataform['sql_choices'] . "',
-				class = '" . $dataform['class'] . "',
-				language='" . serialize($language) . "',
-				default_value= :default_value
-				WHERE fid = " . $dataform['fid'];
+                listtemplate = '" . $dataform['listtemplate'] . "',
+                field_choices='" . $dataform['field_choices'] . "',
+                sql_choices = '" . $dataform['sql_choices'] . "',
+                class = '" . $dataform['class'] . "',
+                language='" . serialize($language) . "',
+                default_value= :default_value
+                WHERE fid = " . $dataform['fid'];
 
                 $stmt = $db->prepare($query);
                 $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
@@ -418,14 +418,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 // DEL
 if ($nv_Request->isset_request('del', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
     $fid = $nv_Request->get_int('fid', 'post,get', 0);
 
     list ($fid, $listtemplate, $field, $weight) = $db->query('SELECT fid,listtemplate, field, weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid)->fetch(3);
-    if ($fid and ! empty($field)) {
+    if ($fid and !empty($field)) {
         $query1 = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid;
         if ($db->query($query1)) {
             $query = 'SELECT fid FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
@@ -434,9 +434,9 @@ if ($nv_Request->isset_request('del', 'post')) {
                 $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid']);
                 ++ $weight;
             }
-			$del_array = array(
-				$listtemplate
-			);
+            $del_array = array(
+                $listtemplate
+            );
             nv_create_form_file($del_array);
             nv_htmlOutput('OK');
         }
@@ -476,7 +476,7 @@ $xtpl->assign('FIELD_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . 
 
 // Danh sach
 $show_view = false;
-if (! $nv_Request->isset_request('id', 'post,get')) {
+if (!$nv_Request->isset_request('id', 'post,get')) {
     $show_view = true;
 
     $per_page = 60;
@@ -529,14 +529,14 @@ if ($show_view) {
 }
 
 $fid = $nv_Request->get_int('fid', 'get,post', 0);
-if (! isset($dataform)) {
+if (!isset($dataform)) {
     if ($fid) {
         $dataform = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid)->fetch();
 
-        if (! empty($dataform['field_choices'])) {
+        if (!empty($dataform['field_choices'])) {
             $field_choices = unserialize($dataform['field_choices']);
         }
-        if (! empty($dataform['language'])) {
+        if (!empty($dataform['language'])) {
             $language = unserialize($dataform['language']);
             if (isset($language[NV_LANG_DATA])) {
                 $dataform['title'] = $language[NV_LANG_DATA][0];
@@ -582,7 +582,7 @@ if ($dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea
     $dataform['max_date'] = empty($dataform['max_length']) ? '' : date('d/m/Y', $dataform['max_length']);
 } else {
     $choice_fields = 1;
-    if (! empty($dataform['sql_choices'])) {
+    if (!empty($dataform['sql_choices'])) {
         $choice_type_sql = 1;
         $sql_data_choice = explode(',', $dataform['sql_choices']);
         $xtpl->assign('SQL_DATA_CHOICE', $sql_data_choice);
@@ -593,7 +593,7 @@ if ($dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea
 }
 if ($fid == 0 or $text_fields == 0) {
     $number = 1;
-    if (! empty($field_choices)) {
+    if (!empty($field_choices)) {
         foreach ($field_choices as $key => $value) {
             $xtpl->assign('FIELD_CHOICES', array(
                 'checked' => ($number == $dataform['default_value']) ? ' checked="checked"' : '',
@@ -659,7 +659,7 @@ if (empty($fid)) {
     }
 
     $xtpl->assign('FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']]);
-    if ((! empty($dataform['sql_choices']))) {
+    if ((!empty($dataform['sql_choices']))) {
         $xtpl->assign('choicetypes_add_hidden', 'field_choicetypes_sql');
         $xtpl->assign('FIELD_TYPE_SQL', $array_choice_type['field_choicetypes_sql']);
     } else {
@@ -692,7 +692,7 @@ foreach ($array_match_type as $key => $value) {
     $xtpl->parse('main.load.match_type');
 }
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.load.error');
 }

@@ -1004,7 +1004,7 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
     }
 
     $array_custom_lang = array();
-    $idtemplate = $db->query('SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace("/[\_]/", "-", $form) . '"')->fetchColumn();
+    list($idtemplate, $titletemplate) = $db->query('SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace("/[\_]/", "-", $form) . '"')->fetch(3);
     if ($idtemplate) {
         $array_tmp = array();
         $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field');
@@ -1100,6 +1100,8 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
             }
         }
     }
+
+    $xtpl->assign('TEMPLATE_NAME', $titletemplate);
     $xtpl->assign('ROW', $array_custom);
     $xtpl->assign('CUSTOM_LANG', $array_custom_lang);
 
@@ -1173,7 +1175,7 @@ function nv_create_form_file($array_template_id)
 
         $array_field_js = array();
         $content_2 = "<!-- BEGIN: main -->\n";
-        $content_2 .= "\t<div class=\"panel panel-default\">\n\t\t<div class=\"panel-heading\">{LANG.tabs_content_customdata}</div>\n";
+        $content_2 .= "\t<div class=\"panel panel-default\">\n\t\t<div class=\"panel-heading\">{LANG.tabs_content_customdata}: {TEMPLATE_NAME}</div>\n";
         $content_2 .= "\t\t<div class=\"panel-body\">\n";
 
         foreach ($array_views as $key => $column) {
