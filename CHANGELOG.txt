@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Remove Google MAP API and fix block global.company_info.php
 - Module users: Save the information of the object that has activated user account
 - Fix the issue of adding news with very long keywords
 - Fix add, detete admin

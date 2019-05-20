@@ -137,10 +137,6 @@
                     <td><strong>{LANG.searchEngineUniqueID}</strong></td>
                     <td><input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" style="width: 450px" maxlength="50" /></td>
                 </tr>
-                <tr>
-                    <td><strong>{LANG.googleMapsAPI}</strong><br />({LANG.googleMapsAPI_guide})</td>
-                    <td><input type="text" name="googleMapsAPI" value="{DATA.googleMapsAPI}" class="form-control" style="width: 450px" maxlength="50" /></td>
-                </tr>
             </tbody>
         </table>
     </div>
