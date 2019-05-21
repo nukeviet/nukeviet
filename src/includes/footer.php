@@ -45,7 +45,7 @@ if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
 }
 
 if (!empty($headers)) {
-    $html_headers += $headers;
+    $html_headers = array_merge($html_headers, $headers);
 }
 
 if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {

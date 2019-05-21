@@ -1,4 +1,3 @@
-<!-- BEGIN: main -->
 <div id="show_funcs">
     <div class="text-center">
         <i class="fas fa-spinner fa-pulse fa-2x"></i>

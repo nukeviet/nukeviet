@@ -8,21 +8,21 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
-if (! isset($check_allow_upload_dir['delete_file'])) {
+if (!isset($check_allow_upload_dir['delete_file'])) {
     die('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_QUOTES);
 $file = basename($file);
 
-if (empty($file) or ! nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
+if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
     die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $file);
 }
 

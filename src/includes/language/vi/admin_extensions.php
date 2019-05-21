@@ -67,7 +67,6 @@ $lang_module['file_type_2'] = 'File hướng dẫn';
 $lang_module['file_type_3'] = 'Loại file khác';
 
 $lang_module['search_key'] = 'Nhập từ khóa';
-$lang_module['search_go'] = 'Tìm';
 
 $lang_module['detail_title'] = 'Chi tiết ứng dụng &quot;%s&quot;';
 $lang_module['detail_empty_documentation'] = 'Ứng dụng này không có hướng dẫn';
@@ -134,6 +133,8 @@ $lang_module['extType_cronjob'] = 'Tiến trình tự động';
 $lang_module['extType_other'] = 'Khác';
 $lang_module['extType_sys'] = 'Hệ thống';
 $lang_module['extType_admin'] = 'Phần quản trị';
+$lang_module['extType_all'] = 'Tất cả';
+$lang_module['extType_filter'] = 'Lọc theo loại';
 
 $lang_module['install_package'] = 'Cài đặt gói ứng dụng';
 $lang_module['install_submit'] = 'Tải lên';

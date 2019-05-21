@@ -125,20 +125,6 @@
                     <td></td>
                     <td><input type="checkbox" name="view_mail" value="1"{DATA.view_mail} /></td>
                 </tr>
-                <!-- BEGIN: group -->
-                <tr>
-                    <td style="vertical-align:top"> {LANG.in_group} </td>
-                    <td></td>
-                    <td>
-                        <!-- BEGIN: list -->
-                        <div class="clearfix">
-                            <label class="pull-left w200"> <input type="checkbox" value="{GROUP.id}" name="group[]" {GROUP.checked} {GROUP.disabled}/> {GROUP.title} </label>
-                            <label class="pull-left group_default"{GROUP_DEFAULT_STYLE}> <input type="radio" value="{GROUP.id}" name="group_default"{GROUP.default}/> {LANG.in_group_default} </label>
-                        </div>
-                        <!-- END: list -->
-                    </td>
-                </tr>
-                <!-- END: group -->
                 <!-- BEGIN: is_official -->
                 <tr>
                     <td> {LANG.set_official_note} </td>
@@ -146,6 +132,26 @@
                     <td><input type="checkbox" name="is_official" value="1" /></td>
                 </tr>
                 <!-- END: is_official -->
+                <!-- BEGIN: group -->
+                <tr<!-- BEGIN: hide --> class="hidden"<!-- END: hide --> id="ctn-list-groups">
+                    <td style="vertical-align:top"> {LANG.in_group} </td>
+                    <td></td>
+                    <td>
+                        <!-- BEGIN: list -->
+                        <div class="clearfix">
+                            <label class="pull-left w200"> <input type="checkbox" value="{GROUP.id}" name="group[]" {GROUP.checked} {GROUP.disabled}/> {GROUP.title} </label>
+                            <label class="pull-left group_default"{GROUP.default_show}> <input type="radio" value="{GROUP.id}" name="group_default"{GROUP.default}/> {LANG.in_group_default} </label>
+                        </div>
+                        <!-- END: list -->
+                        <div class="clearfix" id="cleargroupdefault"{SHOW_BTN_CLEAR}>
+                            <label class="pull-left w200">&nbsp;</label>
+                            <label class="pull-left">
+                                <a href="#" data-toggle="cleargdefault" class="btn btn-default"><i class="fa fa-times-circle-o" aria-hidden="true"></i> {LANG.clear_group_default}</a>
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <!-- END: group -->
                 <tr>
                     <td> {LANG.adduser_email1} </td>
                     <td></td>
@@ -226,11 +232,11 @@
             <tbody>
                 <tr>
                     <td> {LANG.password} </td>
-                    <td><input class="form-control" type="password" name="password1" autocomplete="off" value="{DATA.password1}" style="width: 300px" /><a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+                    <td><input class="form-control" type="password" name="password1" autocomplete="new-password" value="{DATA.password1}" style="width: 300px" /><a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
                 </tr>
                 <tr>
                     <td> {LANG.repassword} </td>
-                    <td><input class="form-control" type="password" name="password2" autocomplete="off" value="{DATA.password2}" style="width: 300px" id="password2" /><input id="methods" type="checkbox">{LANG.show_password}</td>
+                    <td><input class="form-control" type="password" name="password2" autocomplete="new-password" value="{DATA.password2}" style="width: 300px" id="password2" /><input id="methods" type="checkbox">{LANG.show_password}</td>
                 </tr>
             </tbody>
         </table>
@@ -246,21 +252,37 @@
 </form>
 <br />
 <script type="text/javascript">
-    //<![CDATA[
-    $(function() {
-        $.toggleShowPassword({
-            field : '#password2',
-            control : '#methods'
-        });
-        control_theme_groups();
+$(function() {
+    $.toggleShowPassword({
+        field : '#password2',
+        control : '#methods'
     });
-    //]]>
+
+    $('[name="is_official"]').on('change', function() {
+        var ctngroups = $('#ctn-list-groups');
+        if (!ctngroups.length) {
+            return;
+        }
+        if ($(this).is(":checked")) {
+            ctngroups.removeClass('hidden');
+        } else {
+            ctngroups.addClass('hidden');
+            $('[name="group[]"]').prop('checked', false);
+            $('[name="group_default"]').prop('checked', false);
+        }
+    });
+
+    $('[data-toggle="cleargdefault"]').on('click', function(e) {
+        e.preventDefault();
+        $('[name="group_default"]').prop('checked', false);
+    });
+});
 </script>
 <!-- BEGIN: add_photo -->
 <script type="text/javascript">
-    //<![CDATA[
+$(function() {
     $('#change-photo').show();
-    //]]>
+});
 </script>
 <!-- END: add_photo -->
 <!-- END: edit_user -->

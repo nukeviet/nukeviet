@@ -29,7 +29,7 @@
                         <td class="align-top">{$row.name}</td>
                         <td class="align-top">{$row.type}</td>
                         <td class="align-top">
-                            <div class="ext-info-title cursor-pointer">{$row.info}</div>
+                            <div class="ext-info-title cursor-pointer text-primary">{$row.info}</div>
                             <div class="ext-info-content d-none mt-2">
                                 <ul class="pl-4">
                                     {foreach from=$row.tip item=tip}

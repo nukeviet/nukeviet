@@ -8,51 +8,52 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
 $page_title = $nv_Lang->getGlobal('mod_extensions');
 
-$request = array();
+$request = [];
 
 // Fixed request
 $request['lang'] = NV_LANG_DATA;
 $request['basever'] = $global_config['version'];
 $request['mode'] = 'detail';
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
 $request['id'] = $nv_Request->get_int('id', 'get', 0);
 
 $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
 // Debug
-$args = array(
-    'headers' => array(
+$args = [
+    'headers' => [
         'Referer' => NUKEVIET_STORE_APIURL,
-    ),
+    ],
     'body' => $request
-);
+];
 
 $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-$array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+$array = !empty($array['body']) ? @unserialize($array['body']) : [];
 
 $error = '';
-if (! empty(NukeViet\Http\Http::$error)) {
+if (!empty(NukeViet\Http\Http::$error)) {
     $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-} elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
+} elseif (empty($array['status']) or !isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
     $error = $nv_Lang->getGlobal('error_valid_response');
-} elseif (! empty($array['error']['message'])) {
+} elseif (!empty($array['error']['message'])) {
     $error = $array['error']['message'];
 }
 
+$tpl->assign('ERROR', $error);
+$tpl->assign('ALLOW_INSTALL', ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3));
+
 // Show error
-if (! empty($error)) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
-} else {
+if (empty($error)) {
     $array = $array['data'];
     $array_files = $array['files'];
     $array_images = $array['image_demo'];
@@ -68,50 +69,24 @@ if (! empty($error)) {
     $array['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $array['id'];
     $array['price'] = $array['price'] ? (preg_replace("/\,0$/", '', number_format($array['price'], 1, ',', '.')) . ' ' . $array['currency']) : $nv_Lang->getModule('free');
 
-    $xtpl->assign('DATA', $array);
+    $tpl->assign('DATA', $array);
+    $tpl->assign('ARRAY_IMAGES', $array_images);
 
-    if (empty($array['documentation'])) {
-        $xtpl->parse('main.data.empty_documentation');
-    }
-
-    if (! empty($array_images)) {
-        foreach ($array_images as $image) {
-            $xtpl->assign('IMAGE', $image);
-            $xtpl->parse('main.data.demo_images.loop');
-        }
-
-        $xtpl->parse('main.data.demo_images');
-    } else {
-        $xtpl->parse('main.data.empty_images');
-    }
-
-    if (! empty($array['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
-        $xtpl->parse('main.data.install');
-    }
-
+    $array_files_show = [];
     foreach ($array_files as $file) {
         $file['compatible_class'] = empty($file['compatible']) ? 'text-danger' : 'text-success';
         $file['compatible_title'] = empty($file['compatible']) ? $nv_Lang->getModule('incompatible') : $nv_Lang->getModule('compatible');
         $file['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $array['id'] . '&amp;fid=' . $file['id'];
         $file['price'] = $file['price'] ? (preg_replace("/\,0$/", '', number_format($file['price'], 1, ',', '.')) . ' ' . $file['currency']) : $nv_Lang->getModule('free');
 
-        $xtpl->assign('FILE', $file);
-
-        if ($file['type'] == 1 and ! empty($file['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
-            $xtpl->parse('main.data.file.install');
-        } else {
-            $xtpl->parse('main.data.file.download');
-        }
-
-        $xtpl->parse('main.data.file');
+        $array_files_show[] = $file;
     }
 
-    $xtpl->parse('main.data');
+    $tpl->assign('ARRAY_FILES', $array_files_show);
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch($op . '.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme($contents, 0);
+echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';

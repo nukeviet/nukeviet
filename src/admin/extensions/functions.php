@@ -8,22 +8,25 @@
  * @Createdate 12/31/2009 5:50
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 define('NV_IS_FILE_EXTENSIONS', true);
 
-//Document
+// Document
 $array_url_instruction['manage'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:manage';
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_extensions')
-);
+];
 
-$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage' );
+$allow_func = [
+    'main', 'newest', 'popular', 'featured', 'downloaded',
+    'favorites', 'detail', 'login', 'update', 'manage'
+];
 
 // Cho phep upload ung dung
 if (!empty($global_config['extension_setup'])) {
@@ -49,33 +52,28 @@ if ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] 
  */
 function nv_extensions_is_installed($type, $name, $version)
 {
-    // Module
     if ($type == 1) {
-        if (! is_dir(NV_ROOTDIR . '/modules/' . $name)) {
+        // Module
+        if (!is_dir(NV_ROOTDIR . '/modules/' . $name)) {
             return 0;
         }
         return 1;
-    }
-    // Theme
-    elseif ($type == 2) {
-        if (! is_dir(NV_ROOTDIR . '/themes/' . $name)) {
+    } elseif ($type == 2) {
+        // Theme
+        if (!is_dir(NV_ROOTDIR . '/themes/' . $name)) {
             return 0;
         }
         return 1;
-    }
-    // Block
-    elseif ($type == 3) {
+    } elseif ($type == 3) {
+        // Block
         return 2;
-    }
-    // Crons
-    elseif ($type == 4) {
-        if (! is_file(NV_ROOTDIR . '/includes/cronjobs/' . $name)) {
+    } elseif ($type == 4) {
+        // Crons
+        if (!is_file(NV_ROOTDIR . '/includes/cronjobs/' . $name)) {
             return 0;
         }
-
         return 1;
     }
-
     return 2;
 }
 
@@ -87,7 +85,7 @@ function nv_extensions_is_installed($type, $name, $version)
  */
 function is_serialized_string($data)
 {
-    if (! is_string($data)) {
+    if (!is_string($data)) {
         return false;
     }
 
@@ -115,7 +113,7 @@ function nv_get_cookies($full = false)
 {
     global $db;
 
-    $data = array();
+    $data = [];
     $arrURL = parse_url(NUKEVIET_STORE_APIURL);
 
     $data['domain'] = '.' . $arrURL['host'];
@@ -124,8 +122,8 @@ function nv_get_cookies($full = false)
     $sql = 'SELECT * FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE domain=' . $db->quote($data['domain']) . ' AND path=' . $db->quote($data['path']);
     $result = $db->query($sql);
 
-    $array = array();
-    $array_expires = array();
+    $array = [];
+    $array_expires = [];
 
     while ($row = $result->fetch()) {
         $row['expires'] = floatval($row['expires']);
@@ -136,16 +134,16 @@ function nv_get_cookies($full = false)
             if ($full === false) {
                 $array[$row['name']] = $row['value'];
             } else {
-                $array[$row['name']] = array(
+                $array[$row['name']] = [
                     'value' => $row['value'],
                     'secure' => $row['secure'] ? true : false,
-                );
+                ];
             }
         }
     }
 
     // Delete expired cookies
-    if (! empty($array_expires)) {
+    if (!empty($array_expires)) {
         $sql = 'DELETE FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE name IN(' . implode($array_expires) . ') AND domain=' . $db->quote($data['domain']) . ' AND path=' . $db->quote($data['path']);
         $db->query($sql);
     }
@@ -160,14 +158,14 @@ function nv_get_cookies($full = false)
  * @param mixed $currCookies
  * @return void
  */
-function nv_store_cookies($cookies = array(), $currCookies = array())
+function nv_store_cookies($cookies = [], $currCookies = [])
 {
     global $db;
 
-    if (! empty($cookies)) {
+    if (!empty($cookies)) {
         foreach ($cookies as $cookie) {
-            if (! empty($cookie['expires'])) {
-                if (! preg_match("/^([0-9]+)$/", $cookie['expires'])) {
+            if (!empty($cookie['expires'])) {
+                if (!preg_match("/^([0-9]+)$/", $cookie['expires'])) {
                     $cookie['expires'] = strtotime($cookie['expires']);
                 } else {
                     $cookie['expires'] = intval($cookie['expires']);
@@ -207,7 +205,7 @@ function nv_store_cookies($cookies = array(), $currCookies = array())
  */
 function nv_check_ext_config_filecontent($extConfig)
 {
-    if (! isset($extConfig['extension']) or ! isset($extConfig['author']) or ! isset($extConfig['note']) or ! isset($extConfig['extension']['id']) or ! isset($extConfig['extension']['type']) or ! isset($extConfig['extension']['name']) or ! isset($extConfig['extension']['version']) or ! isset($extConfig['author']['name']) or ! isset($extConfig['author']['email']) or ! isset($extConfig['note']['text'])) {
+    if (!isset($extConfig['extension']) or !isset($extConfig['author']) or !isset($extConfig['note']) or !isset($extConfig['extension']['id']) or !isset($extConfig['extension']['type']) or !isset($extConfig['extension']['name']) or !isset($extConfig['extension']['version']) or !isset($extConfig['author']['name']) or !isset($extConfig['author']['email']) or !isset($extConfig['note']['text'])) {
         return false;
     }
 

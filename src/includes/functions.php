@@ -2262,7 +2262,7 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
 }
 
 /**
- * @param integer $emailid
+ * @param integer|mixed $emailid
  * @return boolean|mixed
  */
 function nv_get_email_template($emailid)
@@ -2305,7 +2305,7 @@ function nv_get_email_template($emailid)
 }
 
 /**
- * @param int $emailid
+ * @param integer|mixed $emailid
  * @param array $data
  * @param string $attachments
  * @return boolean

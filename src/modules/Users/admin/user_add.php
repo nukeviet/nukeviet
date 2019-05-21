@@ -58,19 +58,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $md5username = nv_md5safe($_user['username']);
 
     if (($error_username = nv_check_valid_login($_user['username'], $global_config['nv_unickmax'], $global_config['nv_unickmin'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
             'mess' => $error_username
-        ));
+        ]);
     }
 
     if ("'" . $_user['username'] . "'" != $db->quote($_user['username'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
             'mess' => sprintf($nv_Lang->getModule('account_deny_name'), $_user['username'])
-        ));
+        ]);
     }
 
     // Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
@@ -79,19 +79,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
     if ($query_error_username) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
             'mess' => $nv_Lang->getModule('edit_error_username_exist')
-        ));
+        ]);
     }
 
     if (($error_xemail = nv_check_valid_email($_user['email'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $error_xemail
-        ));
+        ]);
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
@@ -100,11 +100,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_email = $stmt->fetchColumn();
     if ($query_error_email) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $nv_Lang->getModule('edit_error_email_exist')
-        ));
+        ]);
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong nv4_users_reg  chưa.
@@ -113,11 +113,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_email_reg = $stmt->fetchColumn();
     if ($query_error_email_reg) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $nv_Lang->getModule('edit_error_email_exist')
-        ));
+        ]);
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong nv3_users_openid chưa.
@@ -126,60 +126,65 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->execute();
     $query_error_email_openid = $stmt->fetchColumn();
     if ($query_error_email_openid) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
             'mess' => $nv_Lang->getModule('edit_error_email_exist')
-        ));
+        ]);
     }
 
     if (($check_pass = nv_check_valid_pass($_user['password1'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'password1',
             'mess' => $check_pass
-        ));
+        ]);
     }
 
     if ($_user['password1'] != $_user['password2']) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'password1',
             'mess' => $nv_Lang->getModule('edit_error_password')
-        ));
+        ]);
     }
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
     $query_field = [];
     require NV_ROOTDIR . '/modules/Users/fields.check.php';
 
-    $in_groups = [];
-    foreach ($_user['in_groups'] as $_group_id) {
-        if ($_group_id > 9) {
-            $in_groups[] = $_group_id;
-        }
-    }
-    $_user['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
-
     if (empty($_user['is_official'])) {
-        $_user['in_groups'][] = 7;
+        // Khi là thành viên mới thì chỉ có nhóm = 7, không có các nhóm khác
+        $_user['in_groups'] = [7];
         $_user['in_groups_default'] = 7;
-    } elseif (empty($_user['in_groups_default']) or !in_array($_user['in_groups_default'], $_user['in_groups'])) {
-        $_user['in_groups_default'] = 4;
-    }
+    } else {
+        // Khi là thành viên chính thức thì cho phép chọn nhóm + nhóm = 4
+        $in_groups = [];
+        foreach ($_user['in_groups'] as $_group_id) {
+            if ($_group_id > 9) {
+                $in_groups[] = $_group_id;
+            }
+        }
+        $_user['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
 
-    if (empty($_user['in_groups_default']) and sizeof($_user['in_groups'])) {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'group_default',
-            'mess' => $nv_Lang->getModule('edit_error_group_default')
-        ));
+        // Kiểm tra nhóm thành viên mặc định phải thuộc các nhóm đã chọn
+        if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $_user['in_groups'])) {
+            $_user['in_groups_default'] = 0;
+        }
+
+        // Khi không chọn nhóm mặc định thì là thành viên chính thức
+        if (empty($_user['in_groups_default'])) {
+            $_user['in_groups_default'] = 4;
+        }
+
+        $_user['in_groups'][] = 4;
     }
 
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
         group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
         question, answer, passlostkey, view_mail,
-        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time,
+        active_obj
     ) VALUES (
         " . $_user['in_groups_default'] . ",
         :username,
@@ -195,9 +200,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         :question,
         :answer,
         '',
-         " . $_user['view_mail'] . ",
-         1,
-         '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", 0
+        " . $_user['view_mail'] . ",
+        1,
+        '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", 0,
+        'SYSTEM'
     )";
 
     $data_insert = [];
@@ -215,11 +221,11 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $userid = $db->insert_id($sql, 'userid', $data_insert);
 
     if (!$userid) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => '',
             'mess' => $nv_Lang->getModule('edit_add_error')
-        ));
+        ]);
     }
 
     $query_field['userid'] = $userid;
@@ -263,7 +269,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     if (!empty($_user['in_groups'])) {
         foreach ($_user['in_groups'] as $group_id) {
-            if ($group_id != 7) {
+            if ($group_id != 7 and $group_id != 4) {
                 nv_groups_add_user($group_id, $userid, 1, $module_data);
             }
         }
@@ -286,16 +292,16 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     $user_data = $_user;
-    nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
-    nv_apply_hook($module_name, 'user_add_in_admin', array($userid, $user_data));
+    nv_apply_hook($module_name, 'user_add', [$userid, $user_data]);
+    nv_apply_hook($module_name, 'user_add_in_admin', [$userid, $user_data]);
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'input' => '',
         'username' => $_user['username'],
         'admin_add' => (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) ? 'yes' : 'no',
         'mess' => sprintf($nv_Lang->getModule('admin_add'), $_user['username'])
-    ));
+    ]);
 }
 
 $_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
@@ -309,11 +315,11 @@ $_user['view_mail'] = '';
 $groups = [];
 if (!empty($groups_list)) {
     foreach ($groups_list as $group_id => $grtl) {
-        $groups[] = array(
+        $groups[] = [
             'id' => $group_id,
             'title' => $grtl,
             'checked' => ''
-        );
+        ];
     }
 }
 
@@ -425,44 +431,44 @@ if (defined('NV_IS_USER_FORUM')) {
                     }
                 } elseif ($row['field_type'] == 'select') {
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
+                        $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
                             'value' => $value
-                        ));
+                        ]);
                         $xtpl->parse('main.edit_user.field.loop.select.loop');
                     }
                     $xtpl->parse('main.edit_user.field.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
                     $number = 0;
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
+                        $xtpl->assign('FIELD_CHOICES', [
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
                             'value' => $value
-                        ));
+                        ]);
                         $xtpl->parse('main.edit_user.field.loop.radio');
                     }
                 } elseif ($row['field_type'] == 'checkbox') {
                     $number = 0;
                     $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
+                        $xtpl->assign('FIELD_CHOICES', [
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
                             'value' => $value
-                        ));
+                        ]);
                         $xtpl->parse('main.edit_user.field.loop.checkbox');
                     }
                 } elseif ($row['field_type'] == 'multiselect') {
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', array(
+                        $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
                             'value' => $value
-                        ));
+                        ]);
                         $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
                     }
                     $xtpl->parse('main.edit_user.field.loop.multiselect');

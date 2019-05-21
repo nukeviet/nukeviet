@@ -33,6 +33,10 @@ if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+/**
+ * @param string $adminpass
+ * @return boolean
+ */
 function nv_checkAdmpass($adminpass)
 {
     global $db, $admin_info, $crypt;
@@ -46,7 +50,7 @@ $access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_con
 $access_admin = unserialize($access_admin);
 $level = $admin_info['level'];
 
-$array_action_account = array();
+$array_action_account = [];
 $array_action_account[0] = $nv_Lang->getModule('action_account_nochange');
 if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_waiting'][$level] == 1) {
     $array_action_account[1] = $nv_Lang->getModule('action_account_suspend');
@@ -81,7 +85,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
                     if (!empty($site_mods[$mod]['admins'])) {
                         $admins = explode(',', $site_mods[$mod]['admins']);
                         if (in_array($admin_id, $admins)) {
-                            $admins = array_diff($admins, array( $admin_id ));
+                            $admins = array_diff($admins, [$admin_id]);
                             $admins = implode(',', $admins);
 
                             $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
@@ -102,7 +106,11 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
         if ($action_account == 1) {
             $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id);
         } elseif ($action_account == 2) {
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ' AND approved = 1)');
+            try {
+                $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ' AND approved = 1)');
+            } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
+            }
             $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id);
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id);
@@ -114,6 +122,19 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
 
         if ($action_account != 2) {
             nv_groups_del_user($row['lev'], $admin_id);
+
+            // Cập nhật lại nhóm nếu không xóa tài khoản
+            if ($row_user['group_id'] == $row['lev']) {
+                // Nếu nhóm mặc định là quản trị này thì chuyển về thành viên chính thức
+                $row_user['group_id'] = 4;
+            }
+            $row_user['in_groups'] = explode(',', $row_user['in_groups']);
+            $row_user['in_groups'] = array_diff($row_user['in_groups'], [$row['lev']]);
+            $row_user['in_groups'] = array_filter(array_unique(array_map('trim', $row_user['in_groups'])));
+            $row_user['in_groups'] = empty($row_user['in_groups']) ? '' : implode(',', $row_user['in_groups']);
+
+            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $row_user['group_id'] . ", in_groups=" . $db->quote($row_user['in_groups']) . " WHERE userid=" . $admin_id;
+            $db->query($sql);
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_del'), 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);
 
@@ -145,15 +166,13 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
     $reason = $adminpass = '';
 }
 
-$contents = array();
+$contents = [];
 $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['title'] = (!empty($error)) ? $error : sprintf($nv_Lang->getModule('delete_sendmail_info'), $row_user['username']);
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
 $contents['sendmail'] = $sendmail;
-
-$contents['reason'] = array( $reason, 255 );
-
-$contents['admin_password'] = array( $nv_Lang->getGlobal('admin_password'), $adminpass, $global_config['nv_upassmax'] );
+$contents['reason'] = [$reason, 255];
+$contents['admin_password'] = [$nv_Lang->getGlobal('admin_password'), $adminpass, $global_config['nv_upassmax']];
 
 $page_title = $nv_Lang->getModule('nv_admin_del');
 

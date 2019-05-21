@@ -61,7 +61,6 @@ $lang_module['file_type_1'] = 'Fichier d\'installation';
 $lang_module['file_type_2'] = 'Fichier de guide';
 $lang_module['file_type_3'] = 'Autre type de fichier';
 $lang_module['search_key'] = 'Saisir votre mot clé';
-$lang_module['search_go'] = 'Rechercher';
 $lang_module['detail_title'] = 'Détail de l\'application "%s"';
 $lang_module['detail_empty_documentation'] = 'Cette application n\'a pas de guide';
 $lang_module['detail_empty_images'] = 'Cette application n\'a pas d\'images d\'illustration';

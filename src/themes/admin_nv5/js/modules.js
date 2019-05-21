@@ -115,8 +115,13 @@ function nv_chang_func_in_submenu(func_id) {
 }
 
 function nv_change_custom_name(func_id, containerid) {
-    $("#" + containerid).load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_custom_name&id=' + func_id + '&nocache=' + new Date().getTime());
-    return;
+    var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_custom_name&id=' + func_id + '&nocache=' + new Date().getTime();
+    $("#" + containerid).load(url, function() {
+        $("html, body").animate({
+            scrollTop: $('#' + containerid).offset().top
+        }, 200);
+    });
+    return false;
 }
 
 function nv_change_custom_name_submit(func_id, custom_name_id) {
@@ -134,8 +139,13 @@ function nv_change_custom_name_submit(func_id, custom_name_id) {
 }
 
 function nv_change_site_title(func_id, containerid) {
-    $("#" + containerid).load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_site_title&id=' + func_id + '&nocache=' + new Date().getTime());
-    return;
+    var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_site_title&id=' + func_id + '&nocache=' + new Date().getTime();
+    $("#" + containerid).load(url, function() {
+        $("html, body").animate({
+            scrollTop: $('#' + containerid).offset().top
+        }, 200);
+    });
+    return false;
 }
 
 function nv_change_site_title_submit(func_id, site_title_id) {
@@ -153,8 +163,13 @@ function nv_change_site_title_submit(func_id, site_title_id) {
 }
 
 function nv_change_alias(func_id, containerid) {
-    $("#" + containerid).load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_alias&id=' + func_id + '&nocache=' + new Date().getTime());
-    return;
+    var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_alias&id=' + func_id + '&nocache=' + new Date().getTime();
+    $("#" + containerid).load(url, function() {
+        $("html, body").animate({
+            scrollTop: $('#' + containerid).offset().top
+        }, 200);
+    });
+    return false;
 }
 
 function nv_change_alias_submit(func_id, custom_name_id) {

@@ -10,6 +10,10 @@
     width: 70px!important;
 }
 
+.mw300 {
+    min-width: 300px!important;
+}
+
 .mw200 {
     min-width: 200px!important;
 }

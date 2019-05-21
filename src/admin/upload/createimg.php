@@ -8,14 +8,14 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
-if (! isset($check_allow_upload_dir['create_file'])) {
+if (!isset($check_allow_upload_dir['create_file'])) {
     die('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
@@ -57,8 +57,8 @@ if (isset($array_dirname[$path])) {
     $info = nv_getFileInfo($path, $file);
     $info['userid'] = $admin_info['userid'];
     $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
-							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')");
+                            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
+                            ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')");
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_createimage'), $path . '/' . $file, $admin_info['userid']);

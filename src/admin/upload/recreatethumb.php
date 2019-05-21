@@ -24,7 +24,7 @@ if (empty($path)) {
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('recreatethumb'), $path, $admin_info['userid']);
-$_array_filename = array();
+$_array_filename = [];
 $idf = $nv_Request->get_int('idf', 'post', -1);
 if ($idf < 0) {
     //Đọc tất cả các thư mục, thư mục con của thư mục.
@@ -32,7 +32,7 @@ if ($idf < 0) {
         set_time_limit(0);
     }
 
-    $_dirlist = array();
+    $_dirlist = [];
     $_dirlist = nv_listUploadDir($path, $_dirlist);
 
     // Tìm tất cả các file ảnh có thể tạp ảnh thum để tạo lại

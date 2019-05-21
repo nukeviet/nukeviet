@@ -15,37 +15,32 @@ if (!defined('NV_IS_FILE_EXTENSIONS')) {
 $page_title = $nv_Lang->getModule('autoinstall_install');
 $set_active_op = 'manage';
 
-$xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' . NV_CHECK_SESSION . '.zip';
 
-// Giai nen goi ung dung
+// Giải nén gói ứng dụng
 if ($nv_Request->isset_request('extract', 'get')) {
     $extract = $nv_Request->get_title('extract', 'get', '');
 
     if ($extract == md5($filename . NV_CHECK_SESSION)) {
+        $is_error = false;
+        $no_extract = [];
+        $error_create_folder = [];
+        $error_move_folder = [];
+        $extConfig = [];
+        $fileConfig = [];
+        $array_error_mine = [];
+
         if (!file_exists($filename)) {
-            $xtpl->assign('ERROR', $nv_Lang->getModule('autoinstall_error_downloaded'));
-            $xtpl->parse('extract.error');
+            $is_error = true;
         } else {
             $zip = new PclZip($filename);
             $ziplistContent = $zip->listContent();
 
             $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
-
-            $no_extract = array();
-            $error_create_folder = array();
-            $error_move_folder = array();
-            $extConfig = array();
-            $fileConfig = array();
 
             if (NV_ROOTDIR . '/' . $temp_extract_dir) {
                 nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
@@ -112,7 +107,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                 // Xac dinh ung dung he thong hoac module
                 if (preg_match("/^modules\/[a-zA-Z0-9\-]+\/version\.php$/", $extract_i['stored_filename'])) {
-                    $module_version = array();
+                    $module_version = [];
                     include $extract_i['filename'];
 
                     if (isset($module_version['is_sysmod'])) {
@@ -146,18 +141,16 @@ if ($nv_Request->isset_request('extract', 'get')) {
             }
 
             if (nv_check_ext_config_filecontent($extConfig) !== true) {
-                $xtpl->assign('ERROR', $nv_Lang->getModule('autoinstall_error_downloaded'));
-                $xtpl->parse('extract.error');
+                $is_error = true;
             } elseif (empty($no_extract)) {
-                $array_error_mine = array();
                 $error_create_folder = array_unique($error_create_folder);
-                $array_cute_files = array();
-                $array_exists_files = array();
+                $array_cute_files = [];
+                $array_exists_files = [];
                 $dimiss_mime = $nv_Request->get_title('dismiss', 'get', '') == md5('dismiss' . $filename . NV_CHECK_SESSION) ? true : false;
 
                 // Kiem tra mime
                 if (!$dimiss_mime) {
-                    $all_ini = array();
+                    $all_ini = [];
 
                     $data = file(NV_ROOTDIR . '/includes/ini/mime.ini');
                     $section = '';
@@ -188,7 +181,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                         }
                     }
 
-                    $ini = array();
+                    $ini = [];
                     foreach ($all_ini as $section => $line) {
                         $ini = array_merge($ini, $line);
                     }
@@ -351,78 +344,47 @@ if ($nv_Request->isset_request('extract', 'get')) {
                 if ($ftp_check_login > 0) {
                     ftp_close($conn_id);
                 }
-
-                if (!empty($no_extract)) {
-                    $i = 0;
-                    foreach ($no_extract as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp);
-                        $xtpl->parse('extract.complete.no_extract.loop');
-                        ++$i;
-                    }
-                    $xtpl->parse('extract.complete.no_extract');
-                } elseif (!empty($error_create_folder)) {
-                    $i = 0;
-                    asort($error_create_folder);
-                    foreach ($error_create_folder as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp);
-                        $xtpl->parse('extract.complete.error_create_folder.loop');
-                        ++$i;
-                    }
-                    $xtpl->parse('extract.complete.error_create_folder');
-                } elseif (!empty($error_move_folder)) {
-                    $i = 0;
-                    asort($error_move_folder);
-                    foreach ($error_move_folder as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp);
-                        $xtpl->parse('extract.complete.error_move_folder.loop');
-                        ++$i;
-                    }
-                    $xtpl->parse('extract.complete.error_move_folder');
-                } elseif (!empty($array_error_mine)) {
-                    $xtpl->assign('DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION) . '&dismiss=' . md5('dismiss' . $filename . NV_CHECK_SESSION));
-
-                    $i = 0;
-                    asort($array_error_mine);
-                    foreach ($array_error_mine as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp['filename']);
-                        $xtpl->assign('MIME', $tmp['mime']);
-                        $xtpl->parse('extract.complete.error_mine.loop');
-                        ++$i;
-                    }
-                    $xtpl->parse('extract.complete.error_mine');
-                } else {
-                    if ($extConfig['extension']['type'] == 'module') {
-                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=modules&' . NV_OP_VARIABLE . '=setup');
-                    } elseif ($extConfig['extension']['type'] == 'theme') {
-                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes');
-                    } elseif ($extConfig['extension']['type'] == 'block') {
-                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks');
-                    } elseif ($extConfig['extension']['type'] == 'cronjob') {
-                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=cronjobs_add&file=' . $extConfig['extension']['name']);
-                    } else {
-                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' + $module_name + '&' . NV_OP_VARIABLE . '=' . $op);
-                    }
-
-                    $xtpl->parse('extract.complete.ok');
-                }
-
-                $xtpl->parse('extract.complete');
             }
         }
 
-        $xtpl->parse('extract');
-        $contents = $xtpl->text('extract');
+        asort($error_create_folder);
+        asort($error_move_folder);
+        asort($array_error_mine);
+
+        $tpl->assign('IS_ERROR', $is_error);
+        $tpl->assign('NO_EXTRACT', $no_extract);
+        $tpl->assign('ERROR_CREATE_FOLDER', $error_create_folder);
+        $tpl->assign('ERROR_MOVE_FOLDER', $error_move_folder);
+        $tpl->assign('ARRAY_ERROR_MINE', $array_error_mine);
+        $tpl->assign('EXTCONFIG', $extConfig);
+        $tpl->assign('DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION) . '&dismiss=' . md5('dismiss' . $filename . NV_CHECK_SESSION));
+
+        if (!empty($extConfig['extension']['type'])) {
+            if ($extConfig['extension']['type'] == 'module') {
+                $tpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=modules&' . NV_OP_VARIABLE . '=setup');
+            } elseif ($extConfig['extension']['type'] == 'theme') {
+                $tpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes');
+            } elseif ($extConfig['extension']['type'] == 'block') {
+                $tpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks');
+            } elseif ($extConfig['extension']['type'] == 'cronjob') {
+                $tpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=cronjobs_add&file=' . $extConfig['extension']['name']);
+            } else {
+                $tpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' + $module_name + '&' . NV_OP_VARIABLE . '=' . $op);
+            }
+        }
+
+        $contents = $tpl->fetch('upload_extract.tpl');
 
         include NV_ROOTDIR . '/includes/header.php';
         echo $contents;
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
-    die('Error Access!!!');
+    nv_htmlOutput('Error Access!!!');
 }
 
 $error = "";
-$info = array();
+$info = [];
 
 if ($nv_Request->isset_request('uploaded', 'get')) {
     if (!file_exists($filename)) {
@@ -454,38 +416,38 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
     }
 }
 
-// Lay thong tin file tai len
+// Lấy thông tin file tải lên
 if (empty($error)) {
-    $arraySysOption = array(
-        'allowfolder' => array(
+    $arraySysOption = [
+        'allowfolder' => [
             'assets',
             'themes',
             'modules',
             'uploads',
             'includes/plugin',
             'vendor'
-        ),
-        'forbidExt' => array(
+        ],
+        'forbidExt' => [
             'php',
             'php3',
             'php4',
             'php5',
             'phtml',
             'inc'
-        ),
-        'allowExtType' => array(
+        ],
+        'allowExtType' => [
             'module',
             'block',
             'theme',
             'cron'
-        ),
-        'checkName' => array(
+        ],
+        'checkName' => [
             'module' => $global_config['check_module'],
-            'block' => array($global_config['check_block_module'], $global_config['check_block_theme']),
+            'block' => [$global_config['check_block_module'], $global_config['check_block_theme']],
             'theme' => $global_config['check_theme'],
             'cron' => $global_config['check_cron'],
-        ),
-    );
+        ],
+    ];
 
     $zip = new PclZip($filename);
     $status = $zip->properties();
@@ -548,7 +510,10 @@ if (empty($error)) {
 
         // Duyet danh sach file lay thong tin va kiem tra
         if (empty($error)) {
-            $info['classcfg'] = array('invaild' => 'fa-exclamation-triangle', 'exists' => 'fa-info');
+            $info['classcfg'] = [
+                'invaild' => 'fa-exclamation-triangle',
+                'exists' => 'fa-info'
+            ];
             $info['extname'] = $extConfig['extension']['name'];
             $info['exttype'] = $extConfig['extension']['type'];
             $info['extversion'] = $extConfig['extension']['version'];
@@ -557,7 +522,7 @@ if (empty($error)) {
             $info['filenum'] = $status['nb'];
             $info['existsnum'] = 0; // So file trung lap
             $info['invaildnum'] = 0; // So file khong hop chuan
-            $info['filelist'] = array(); // Danh sach cac file
+            $info['filelist'] = []; // Danh sach cac file
             $info['checkresult'] = 'success'; // success - warning - fail
 
             for ($i = 0, $j = 1; $i < $sizeLists; ++$i, ++$j) {
@@ -570,7 +535,7 @@ if (empty($error)) {
 
                 $info['filelist'][$j] = array(
                     'title' => '[' . $j . '] ' . ($info['exttype'] == 'theme' ? 'themes/' : '') . $listFiles[$i]['filename'] . ' ' . $bytes,
-                    'class' => array(),
+                    'class' => [],
                 );
 
                 // Kiem tra file ton tai tren he thong
@@ -601,52 +566,11 @@ if (empty($error)) {
     }
 }
 
-if (!empty($error)) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('info.error');
-}
+$tpl->assign('ERROR', $error);
+$tpl->assign('FILEINFO', $info);
+$tpl->assign('EXTRACTLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION));
 
-if (!empty($info)) {
-    $info['exttype'] = $nv_Lang->getModule('extType_' . $info['exttype']);
-
-    $xtpl->assign('INFO', $info);
-    $xtpl->assign('EXTRACTLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION));
-
-    // Thong bao trong thai ung dung
-    if ($info['checkresult'] == 'success') {
-        $xtpl->parse('info.fileinfo.success');
-    } elseif ($info['checkresult'] == 'warning') {
-        $xtpl->parse('info.fileinfo.warning');
-    } else {
-        $xtpl->parse('info.fileinfo.fail');
-    }
-
-    if (!empty($info['filelist'])) {
-        $i = 0;
-        foreach ($info['filelist'] as $file) {
-            $xtpl->assign('FILE', $file['title']);
-
-            if (!empty($file['class'])) {
-                foreach ($file['class'] as $icon) {
-                    $xtpl->assign('ICON', $icon);
-                    $xtpl->parse('info.fileinfo.file.loop.icons.icon');
-                }
-
-                $xtpl->parse('info.fileinfo.file.loop.icons');
-            }
-
-            $xtpl->parse('info.fileinfo.file.loop');
-            ++$i;
-        }
-
-        $xtpl->parse('info.fileinfo.file');
-    }
-
-    $xtpl->parse('info.fileinfo');
-}
-
-$xtpl->parse('info');
-$contents = $xtpl->text('info');
+$contents = $tpl->fetch('upload_info.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

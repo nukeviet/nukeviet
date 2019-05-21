@@ -66,7 +66,7 @@ function nv_show_funcs()
 
     if (empty($module_version)) {
         $timestamp = NV_CURRENTTIME - date('Z', NV_CURRENTTIME);
-        $module_version = array(
+        $module_version = [
             'name' => $mod,
             'modfuncs' => 'main',
             'is_sysmod' => 0,
@@ -75,7 +75,7 @@ function nv_show_funcs()
             'date' => date('D, j M Y H:i:s', $timestamp) . ' GMT',
             'author' => '',
             'note' => ''
-        );
+        ];
     }
 
     $module_version['submenu'] = isset($module_version['submenu']) ? trim($module_version['submenu']) : '';
@@ -209,47 +209,25 @@ function nv_show_funcs()
         $module_version['virtual'] = 0;
     }
 
-    $xtpl = new XTemplate('aj_show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    foreach ($act_funcs as $funcs => $values) {
-        if ($values['show_func']) {
-            $values['func_name'] = $funcs;
-            $values['in_submenu_checked'] = ($values['in_submenu']) ? 'checked="checked" ' : '';
-            $values['disabled'] = (in_array($funcs, $arr_in_submenu)) ? '' : ' disabled';
-            $xtpl->assign('ROW', $values);
+    $tpl = new \NukeViet\Template\Smarty();
+    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_VERSION', $module_version);
+    $tpl->assign('ACT_FUNCS', $act_funcs);
+    $tpl->assign('WEIGHT_LIST', $weight_list);
+    $tpl->assign('ARR_IN_SUBMENU', $arr_in_submenu);
+    $tpl->assign('FUN_CHANGE_ALIAS', $fun_change_alias);
 
-            foreach ($weight_list as $new_weight) {
-                $xtpl->assign('WEIGHT', array(
-                    'key' => $new_weight,
-                    'selected' => $new_weight == $values['subweight'] ? ' selected="selected"' : ''
-                ));
-                $xtpl->parse('main.loop.weight');
-            }
-
-            if ($module_version['virtual']) {
-                if ($funcs != 'main' and in_array($funcs, $fun_change_alias)) {
-                    $xtpl->parse('main.loop.change_alias');
-                } else {
-                    $xtpl->parse('main.loop.show_alias');
-                }
-            }
-            $xtpl->parse('main.loop');
-        }
-    }
-    if ($module_version['virtual']) {
-        $xtpl->parse('main.change_alias_head');
-    }
-    $xtpl->parse('main');
+    $contents = $tpl->fetch('aj_show_funcs_theme.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
-    echo $xtpl->text('main');
+    echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
 if ($nv_Request->isset_request('aj', 'get')) {
     if ($nv_Request->get_title('aj', 'get') == 'show_funcs') {
         nv_show_funcs();
-        die();
     }
 }
 

@@ -61,7 +61,6 @@ $lang_module['file_type_1'] = 'Install file';
 $lang_module['file_type_2'] = 'Docs file';
 $lang_module['file_type_3'] = 'Others';
 $lang_module['search_key'] = 'Enter keywords';
-$lang_module['search_go'] = 'Search';
 $lang_module['detail_title'] = 'Detail "%s"';
 $lang_module['detail_empty_documentation'] = 'No documentation';
 $lang_module['detail_empty_images'] = 'No images';
