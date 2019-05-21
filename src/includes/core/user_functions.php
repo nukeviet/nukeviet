@@ -287,7 +287,7 @@ function nv_html_meta_tags($html = true)
         $site_description = preg_replace(array( '/<[^>]*>/', '/[\r\n\t]+/' ), ' ', $site_description);
         $site_description = trim(preg_replace('/[ ]+/', ' ', $site_description));
         if ($global_config['description_length']) {
-            $site_description = nv_clean60($site_description, $global_config['description_length'], true);
+            $site_description = nv_clean60($site_description, $global_config['description_length']);
         }
 
         $return[] = array(

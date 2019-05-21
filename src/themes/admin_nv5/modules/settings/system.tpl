@@ -222,13 +222,6 @@
                     <span class="form-text text-muted">{$LANG->get('searchEngineUniqueID_help')}</span>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="googleMapsAPI">{$LANG->get('googleMapsAPI')}</label>
-                <div class="col-12 col-sm-8 col-lg-6">
-                    <input type="text" class="form-control form-control-sm" id="googleMapsAPI" name="googleMapsAPI" value="{$DATA['googleMapsAPI']}">
-                    <span class="form-text text-muted">{$LANG->get('googleMapsAPI_guide')}</span>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-12 col-sm-8 col-lg-6 offset-sm-3">
                     <h4 class="mb-0">{$LANG->get('notification_config')}</h4>
