@@ -94,12 +94,12 @@ function nv_blocks_content($sitecontent)
         }
 
         $_result = $db->query("SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
-			 INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
-			 ON t1.bid = t2.bid
-			 WHERE t2.func_id IN (" . implode(',', $in) . ")
-			 AND t1.theme ='" . $global_config['module_theme'] . "'
-			 AND t1.active!=''
-			 ORDER BY t2.weight ASC");
+             INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
+             ON t1.bid = t2.bid
+             WHERE t2.func_id IN (" . implode(',', $in) . ")
+             AND t1.theme ='" . $global_config['module_theme'] . "'
+             AND t1.active!=''
+             ORDER BY t2.weight ASC");
 
         while ($_row = $_result->fetch()) {
             // Cau hinh block
@@ -220,12 +220,12 @@ function nv_blocks_content($sitecontent)
                         $act_title = $_row['act'] ? $lang_global['act_block'] : $lang_global['deact_block'];
                         $act_icon = $_row['act'] ? 'fa fa-check-square-o' : 'fa fa-square-o';
                         $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
-							 <div class="tool">
-							     <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a>
+                             <div class="tool">
+                                 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a>
                                  <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="fa fa-trash"></em></a>
                                  <a href="javascript:void(0)" class="actblock" name="' . $_row['bid'] . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $lang_global['act_block'] . '" data-deact="' . $lang_global['deact_block'] . '"><em class="' . $act_icon . '" data-act="fa fa-check-square-o" data-deact="fa fa-square-o"></em></a>
                                  <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="fa fa-share-square-o"></em></a>
-							 </div>
+                             </div>
                              <div class="blockct' . $act_class . '">' . $content . '</div>
                              </div>';
                     }
@@ -287,7 +287,7 @@ function nv_html_meta_tags($html = true)
         $site_description = preg_replace(array( '/<[^>]*>/', '/[\r\n\t]+/' ), ' ', $site_description);
         $site_description = trim(preg_replace('/[ ]+/', ' ', $site_description));
         if ($global_config['description_length']) {
-            $site_description = nv_clean60($site_description, $global_config['description_length'], true);
+            $site_description = nv_clean60($site_description, $global_config['description_length']);
         }
 
         $return[] = array(

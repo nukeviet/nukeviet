@@ -281,7 +281,7 @@ function change_alias_tags($alias)
  * @param integer $num
  * @return
  */
-function nv_clean60($string, $num = 60, $specialchars = false)
+function nv_clean60($string, $num = 60, $specialchars = true)
 {
     $string = nv_unhtmlspecialchars($string);
 

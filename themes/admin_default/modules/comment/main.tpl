@@ -130,7 +130,7 @@
             <tr>
                 <td class="text-center"><input name="commentid" id="checkboxid" type="checkbox" value="{ROW.cid}"/></td>
                 <td>{ROW.module}</td>
-                <td><a target="_blank" href="{ROW.link}" title="{ROW.content}">{ROW.title}</a></td>
+                <td><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
                 <td>{ROW.email}</td>
                 <td class="text-center">
                     <input type="checkbox" name="activecheckbox" id="change_active_{ROW.cid}" onclick="nv_change_active('{ROW.cid}')" {ROW.active}>

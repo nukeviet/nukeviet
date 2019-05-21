@@ -49,7 +49,9 @@ function winResize() {
 }
 
 function winHelpShow() {
-    if (0 != winHelp) return !1;
+    if (0 != winHelp) {
+        return !1;
+    }
     tip_active && tipHide();
     ftip_active && ftipHide();
     winHelp = !0;
@@ -58,7 +60,9 @@ function winHelpShow() {
 }
 
 function winHelpHide() {
-    if (1 != winHelp) return !1;
+    if (1 != winHelp) {
+        return !1;
+    }
     winHelp = !1;
     $("#winHelp").hide();
 }
@@ -70,13 +74,14 @@ function contentScrt() {
 
     0 >= scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-refresh", !0) : $(".bttop").find("em").removeClass("fa-refresh").toggleClass("fa-chevron-up", !0)
 
-    if(Math.abs(scrtRangeY) <= scrtRangeOffset)
+    if (Math.abs(scrtRangeY) <= scrtRangeOffset) {
         return;
+    }
 
-    if (scrt > oldScrt && scrt > headerH){
+    if (scrt > oldScrt && scrt > headerH) {
         $('header.first-child').removeClass('header-down').addClass('header-up');
     } else {
-        if(scrt + winY < docY) {
+        if (scrt + winY < docY) {
             $('header.first-child').removeClass('header-up').addClass('header-down');
         }
     }
@@ -205,8 +210,12 @@ function tipShow(a, b, callback) {
 }
 
 function ftipShow(a, b, callback) {
-    if ($(a).is(".qrcode") && "yes" != $(a).attr("data-load")) return qrcodeLoad(a), !1;
-    if ($(a).is("#contactButton") && "yes" != $(a).attr("data-load")) return ctbtLoad($(a)), !1;
+    if ($(a).is(".qrcode") && "yes" != $(a).attr("data-load")) {
+        return qrcodeLoad(a), !1;
+    }
+    if ($(a).is("#contactButton") && "yes" != $(a).attr("data-load")) {
+        return ctbtLoad($(a)), !1;
+    }
     winHelp && winHelpHide();
     tip_active && tipHide();
     ftip_active && ftipHide();
@@ -300,19 +309,24 @@ function qrcodeLoad(a) {
 
 // Switch tab
 function switchTab(a) {
-    if ($(a).is(".current")) return !1;
+    if ($(a).is(".current")) {
+        return !1;
+    }
     var b = $(a).data("switch").split(/\s*,\s*/),
         c = $(a).data("obj");
     $(c + " [data-switch]").removeClass("current");
     $(a).addClass("current");
     $(c + " " + b[0]).removeClass("hidden");
-    for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
+    for (i = 1; i < b.length; i++) {
+        $(c + " " + b[i]).addClass("hidden")
+    }
 }
 
 //Form Ajax-login
-function loginForm()
-{
-    if(nv_is_user == 1) return!1;
+function loginForm() {
+    if (nv_is_user == 1) {
+        return!1;
+    }
     $.ajax({
         type: 'POST',
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
@@ -396,40 +410,10 @@ function modalShowByObj(a, callback) {
     modalShow(b, c, callback)
 }
 
-// Build google map for block Company Info
-function initializeMap() {
-    var ele = false
-    $('.company-map-modal').each(function() {
-        if ($(this).data('trigger')) {
-            ele = $('.company-map', $(this)).attr('id')
-            return
-        }
-    })
-    if (ele) {
-        var map, marker, ca, cf, a, f, z;
-        ca = parseFloat($('#' + ele).data('clat'));
-        cf = parseFloat($('#' + ele).data('clng'));
-        a = parseFloat($('#' + ele).data('lat'));
-        f = parseFloat($('#' + ele).data('lng'));
-        z = parseInt($('#' + ele).data('zoom'));
-        map = new google.maps.Map(document.getElementById(ele), {
-            zoom: z,
-            center: {
-                lat: ca,
-                lng: cf
-            }
-        });
-        marker = new google.maps.Marker({
-            map: map,
-            position: new google.maps.LatLng(a, f),
-            draggable: false,
-            animation: google.maps.Animation.DROP
-        });
-    }
-}
-
 function headerSearchSubmit(a) {
-    if ("n" == $(a).attr("data-click")) return !1;
+    if ("n" == $(a).attr("data-click")) {
+        return !1;
+    }
     $(a).attr("data-click", "n");
     var b = $(".headerSearch input"),
         c = b.attr("maxlength"),
@@ -526,10 +510,12 @@ $(function() {
     $("#tip, #ftip, #winHelp .winHelp").bind("click touchstart", function(a) {
         a.stopPropagation();
     });
-    $(document).bind("click touchstart", function() {
+    $(document).bind("click touchstart", function(e) {
         tip_active && tip_autoclose && tipHide();
         ftip_active && ftip_autoclose && ftipHide();
-        winHelp && winHelpHide();
+        if (!$(e.target).is('.modal') && $(e.target).closest('.modal').length <= 0) {
+            winHelp && winHelpHide();
+        }
     });
     $("[data-toggle=tip], [data-toggle=ftip]").click(function() {
         var a = $(this).attr("data-target"),
@@ -548,7 +534,9 @@ $(function() {
     });
     //Search form
     $(".headerSearch button").on("click", function() {
-        if ("n" == $(this).attr("data-click")) return !1;
+        if ("n" == $(this).attr("data-click")) {
+            return !1;
+        }
         $(this).attr("data-click", "n");
         var a = $(".headerSearch input"),
             c = a.attr("maxlength"),
@@ -579,19 +567,13 @@ $(function() {
     // Google map
     if ($('.company-address').length) {
         $('.company-map-modal').on('shown.bs.modal', function() {
-            $('.company-map-modal').data('trigger', false)
-            $(this).data('trigger', true)
-            if (!$('#googleMapAPI').length) {
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.id = 'googleMapAPI';
-                script.src = 'https://maps.googleapis.com/maps/api/js?' + ($(this).data('apikey') != '' ? 'key=' + $(this).data('apikey') + '&' : '') + 'callback=initializeMap';
-                document.body.appendChild(script);
-            } else {
-                initializeMap();
+            var iframe = $(this).find('iframe');
+            if (!iframe.data('loaded')) {
+                iframe.attr('src', iframe.data('src'));
+                iframe.data('loaded', true);
             }
-        })
-    };
+        });
+    }
     // maxLength for textarea
     $("textarea").on("input propertychange", function() {
         var a = $(this).prop("maxLength");
