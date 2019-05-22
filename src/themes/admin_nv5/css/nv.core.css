@@ -3304,7 +3304,7 @@ input[type=button].btn-block {
   position: relative;
   display: block;
   min-height: 1.428571rem;
-  padding-left: 3.8377rem;
+  padding-left: 2.469rem;
 }
 
 .custom-control-inline {
@@ -3348,7 +3348,7 @@ input[type=button].btn-block {
 .custom-control-label::before {
   position: absolute;
   top: -0.1357145rem;
-  left: -3.8377rem;
+  left: -2.469rem;
   display: block;
   width: 1.7rem;
   height: 1.7rem;
@@ -3360,7 +3360,7 @@ input[type=button].btn-block {
 .custom-control-label::after {
   position: absolute;
   top: -0.1357145rem;
-  left: -3.8377rem;
+  left: -2.469rem;
   display: block;
   width: 1.7rem;
   height: 1.7rem;
@@ -3399,17 +3399,17 @@ input[type=button].btn-block {
 }
 
 .custom-switch {
-  padding-left: 5.1127rem;
+  padding-left: 3.744rem;
 }
 .custom-switch .custom-control-label::before {
-  left: -5.1127rem;
+  left: -3.744rem;
   width: 2.975rem;
   pointer-events: all;
   border-radius: 0.85rem;
 }
 .custom-switch .custom-control-label::after {
   top: calc(-0.1357145rem + 2px);
-  left: calc(-5.1127rem + 2px);
+  left: calc(-3.744rem + 2px);
   width: calc(1.7rem - 4px);
   height: calc(1.7rem - 4px);
   background-color: #adb5bd;
@@ -15366,6 +15366,24 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
 /* File Manager */
 .filemanager-wraper {
   height: calc(100vh - 225px);
+}
+
+.modal-dialog.modal-filemanager {
+  margin: 0 auto;
+  padding: 30px 0;
+  height: calc(100vh);
+}
+
+.modal-filemanager .modal-content {
+  margin: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: hidden;
+}
+.modal-filemanager .modal-content .modal-body {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: hidden;
 }
 
 .card-filemanager {

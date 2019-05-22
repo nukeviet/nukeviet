@@ -5,3 +5,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
+
+.width-50 {
+    width: 50px!important;
+}

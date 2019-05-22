@@ -8,15 +8,15 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
-    $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', array());
-    $thumb_width = $nv_Request->get_typed_array('thumb_width', 'post', 'int', array());
-    $thumb_height = $nv_Request->get_typed_array('thumb_height', 'post', 'int', array());
-    $thumb_quality = $nv_Request->get_typed_array('thumb_quality', 'post', 'int', array());
+    $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', []);
+    $thumb_width = $nv_Request->get_typed_array('thumb_width', 'post', 'int', []);
+    $thumb_height = $nv_Request->get_typed_array('thumb_height', 'post', 'int', []);
+    $thumb_quality = $nv_Request->get_typed_array('thumb_quality', 'post', 'int', []);
 
     $did = $nv_Request->get_int('other_dir', 'post', 0);
     $other_type = $nv_Request->get_int('other_type', 'post', 0);
@@ -46,14 +46,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $quality = 90;
         }
         $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
-			thumb_type = ' . $type . ', thumb_width = ' . $width . ',
-			thumb_height = ' . $height . ', thumb_quality = ' . $quality . '
-			WHERE did = ' . $did);
+            thumb_type = ' . $type . ', thumb_width = ' . $width . ',
+            thumb_height = ' . $height . ', thumb_quality = ' . $quality . '
+        WHERE did = ' . $did);
     }
 }
 
 if ($nv_Request->isset_request('getexample', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -64,16 +64,19 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     $thumb_quality = $nv_Request->get_int('q', 'post', 0);
 
     if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
-        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($nv_Lang->getModule('prViewExampleError1'), $nv_Lang->getModule('prViewExampleError'))));
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => nv_theme_alert($nv_Lang->getModule('prViewExampleError1'), $nv_Lang->getModule('prViewExampleError'))
+        ]);
     }
 
-    $return = array('status' => 'error');
+    $return = ['status' => 'error'];
 
-    // T?m ra c�i ?nh demo
-    $image_demo = array();
+    // Tìm ảnh demo
+    $image_demo = [];
 
     if ($thumb_dir) {
-        $select_dir = array_intersect($array_dirname, array($thumb_dir));
+        $select_dir = array_intersect($array_dirname, [$thumb_dir]);
         $select_dir = key($select_dir);
 
         foreach ($array_dirname as $dirname => $did) {
@@ -91,11 +94,14 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     }
 
     if (empty($image_demo)) {
-        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($nv_Lang->getModule('file_no_exists'), $nv_Lang->getModule('prViewExampleError2'))));
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => nv_theme_alert($nv_Lang->getModule('file_no_exists'), $nv_Lang->getModule('prViewExampleError2'))
+        ]);
     }
 
     $image_demo['sizes'] = explode('|', $image_demo['sizes']);
-    $result = array();
+    $result = [];
     $result['status'] = 'success';
     $result['src'] = NV_BASE_SITEURL . $image_demo['dirname'] . '/' . $image_demo['title'];
     $result['width'] = $image_demo['sizes'][0];
@@ -141,20 +147,22 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     nv_jsonOutput($result);
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$page_title = $nv_Lang->getModule('thumbconfig');
 
-$thumb_type = array();
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+
+$thumb_type = [];
 $i = 0;
 $nv_Lang->setModule('thumb_type_0', '');
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query($sql);
+
+$array_dirs = $array_other_dirs = [];
+
 while ($data = $result->fetch()) {
     if ($data['did'] == 0) {
         $data['dirname'] = $nv_Lang->getModule('thumb_dir_default');
@@ -163,33 +171,18 @@ while ($data = $result->fetch()) {
         $forid = 0;
     }
     if ($data['thumb_type']) {
-        for ($id = $forid; $id < 6; $id++) {
-            $type = array(
-                'id' => $id,
-                'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',
-                'name' => $nv_Lang->getModule('thumb_type_' . $id)
-            );
-            $xtpl->assign('TYPE', $type);
-            $xtpl->parse('main.loop.thumb_type');
-        }
-        $xtpl->assign('DATA', $data);
-        $xtpl->parse('main.loop');
+        $data['forid'] = $forid;
+        $array_dirs[] = $data;
     } else {
-        $xtpl->assign('OTHER_DIR', $data);
-        $xtpl->parse('main.other_dir');
+        $array_other_dirs[] = $data;
     }
 }
 
-for ($id = 0; $id < 5; $id++) {
-    $type = array( 'id' => $id, 'name' => $nv_Lang->getModule('thumb_type_' . $id) );
-    $xtpl->assign('TYPE', $type);
-    $xtpl->parse('main.other_type');
-}
+$tpl->assign('ARRAY_DIRS', $array_dirs);
+$tpl->assign('ARRAY_OTHER_DIRS', $array_other_dirs);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('thumbconfig.tpl');
 
-$page_title = $nv_Lang->getModule('thumbconfig');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

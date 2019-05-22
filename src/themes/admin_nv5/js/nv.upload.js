@@ -1450,9 +1450,6 @@ NVCoreFileBrowser.prototype.handleMenuAddLogo = function (element) {
     var logo = $(cfgm.logo).data('value');
     var logoConfig = $(cfgm.logoConfig).data('value').split('|');
 
-    console.log(logo);
-    console.log(logoConfig);
-
     $(cfg.formAddLogo).modal('show');
 }
 
@@ -2443,7 +2440,8 @@ var NVCMENU = {
                 'will-change' : 'transform',
                 'position': 'absolute',
                 'transform': 'translate3d(' + menuLeft + 'px, ' + menuTop + 'px, 0px)',
-                'width': menuWidth + 'px'
+                'width': menuWidth + 'px',
+                'z-index': 1000001
             }).show();
         }
         return false;
@@ -2547,6 +2545,8 @@ $(document).ready(function() {
         this.options = options;
 
         self.loadMainContainer();
+
+        console.log($(element));
     }
 
     NVStaticUpload.VERSION  = '5.0.00';
@@ -2628,6 +2628,119 @@ $(document).ready(function() {
     // =================
     $.fn.nvstaticupload.noConflict = function() {
         $.fn.nvstaticupload = old;
+        return this;
+    }
+}(jQuery);
+
+/*
+ * Xử lý trình quản lý file ở các nút duyệt
+ */
++function($) {
+    'use strict';
+
+    var NVBrowseFile = function(element, options) {
+        var self = this;
+
+        this.$elements = $(element);
+        this.options = options;
+
+        /*
+         * Build modal để dùng chung
+         */
+        if (!$(self.options.templateContainerID).length) {
+            $('body:first').append(self.options.templateContainer);
+        }
+
+        $(element).each(function() {
+            $(this).on('click', function() {
+                $(self.options.templateContainerID).modal('show');
+            });
+        });
+
+        $(self.options.templateContainerID).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&popup=1';
+
+            $('.modal-body', modalEle).html(self.options.templateLoader);
+            $('.modal-body', modalEle).load(url, function() {
+                self.init();
+            });
+        });
+
+        $(self.options.templateContainerID).on('hidden.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            $('.modal-body', modalEle).html('');
+        });
+    }
+
+    NVBrowseFile.VERSION  = '5.0.00';
+
+    NVBrowseFile.DEFAULTS = {
+        modal 			: false,
+        adminBaseUrl	: "",
+        templateLoader	: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
+        path: '',
+        currentpath: '',
+        type: '',
+        imgfile: '',
+        templateContainer: '<div id="mdNVFileManagerPopup" tabindex="-1" role="dialog" class="modal" data-backdrop="static"><div class="modal-dialog full-width modal-filemanager"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button></div><div class="modal-body"></div></div></div></div>',
+        templateContainerID: '#mdNVFileManagerPopup',
+    };
+
+    /*
+     * Thiết lập Upload lên mẫu đã tải
+     */
+    NVBrowseFile.prototype.init = function() {
+        var self = this;
+        var data = {
+            baseurl: self.options.adminBaseUrl,
+            path: self.options.path,
+            currentpath: self.options.currentpath,
+            type: self.options.type,
+            imgfile: self.options.imgfile
+        };
+
+        // Xử lý các thành phần
+        window.fileManager = new NVCoreFileBrowser();
+        window.fileManager.init(data);
+
+        /*
+         * Build thêm thanh cuộn
+         */
+        $('.nv-scroller', self.$element).each(function(k, v) {
+            nvScrollbar.push(new PerfectScrollbar(v, {
+                wheelPropagation: $(this).data('wheel') ? true : false
+            }));
+        });
+    }
+
+    function Plugin(option) {
+        return this.each(function() {
+            var $this   = $(this);
+            var options = $.extend({}, NVBrowseFile.DEFAULTS, $this.data(), typeof option == 'object' && option);
+            var data    = $this.data('nv.upload');
+
+            if (!data && option == 'destroy') {
+                return true;
+            }
+            if (!data) {
+                $this.data('nv.upload', (data = new NVBrowseFile(this, options)));
+            }
+            if (typeof option == 'string') {
+                data[option]();
+            }
+        });
+    }
+
+    var old = $.fn.nvBrowseFile;
+
+    $.fn.nvBrowseFile = Plugin;
+    $.fn.nvBrowseFile.Constructor = NVBrowseFile;
+
+    // nvBrowseFile NO CONFLICT
+    // =================
+    $.fn.nvBrowseFile.noConflict = function() {
+        $.fn.nvBrowseFile = old;
         return this;
     }
 }(jQuery);

@@ -82,18 +82,13 @@ $array_autologosize = [
     'autologosize3' => $global_config['autologosize3']
 ];
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-$xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('OP', $op);
-$xtpl->assign('AUTOLOGOSIZE', $array_autologosize);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
-$a = 0;
-$xtpl->assign('CLASS', '');
+$tpl->assign('DATA', $array_autologosize);
 
 if ($global_config['autologomod'] == 'all') {
     $autologomod = [];
@@ -101,42 +96,23 @@ if ($global_config['autologomod'] == 'all') {
     $autologomod = explode(',', $global_config['autologomod']);
 }
 
+$array_autolog_mods = [];
 foreach ($site_mods as $mod => $value) {
     if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $mod)) {
-        ++$a;
-        $xtpl->assign('MOD_VALUE', $mod);
-        $xtpl->assign('LEV_CHECKED', (in_array($mod, $autologomod)) ? 'checked="checked"' : '');
-        $xtpl->assign('CUSTOM_TITLE', $value['custom_title']);
-        $xtpl->parse('main.loop1.loop2');
-
-        if ($a % 3 == 0) {
-            $xtpl->parse('main.loop1');
-        }
+        $array_autolog_mods[] = [
+            'key' => $mod,
+            'title' => $value['custom_title']
+        ];
     }
 }
 
-$a++;
-$xtpl->assign('MOD_VALUE', 'all');
-$xtpl->assign('LEV_CHECKED', ($global_config['autologomod'] == 'all') ? 'checked="checked"' : '');
-$xtpl->assign('CUSTOM_TITLE', '<strong>' . $nv_Lang->getModule('autologomodall') . '</strong>');
+$tpl->assign('AUTOLOG_MOD_TEXT', $global_config['autologomod']);
+$tpl->assign('AUTOLOG_MOD', $autologomod);
+$tpl->assign('AUTOLOG_MODS', $array_autolog_mods);
+$tpl->assign('UPLOAD_LOGO_POS', $global_config['upload_logo_pos']);
+$tpl->assign('ARRAY_LOGO_POSITION', $array_logo_position);
 
-$xtpl->parse('main.loop1.loop2');
-$xtpl->parse('main.loop1');
-
-foreach ($array_logo_position as $pos => $posName) {
-    $upload_logo_pos = [
-        'key' => $pos,
-        'title' => $posName,
-        'selected' => $pos == $global_config['upload_logo_pos'] ? ' selected="selected"' : ''
-    ];
-
-    $xtpl->assign('UPLOAD_LOGO_POS', $upload_logo_pos);
-    $xtpl->parse('main.upload_logo_pos');
-}
-
-$xtpl->parse('main');
-
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('config.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
