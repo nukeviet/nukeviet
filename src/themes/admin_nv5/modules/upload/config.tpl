@@ -40,10 +40,7 @@
                             <input type="text" class="form-control form-control-sm" id="upload_logo" name="upload_logo" value="{$DATA.upload_logo}">
                         </div>
                         <div class="flex-grow-0 flex-shrink-0 pl-2">
-                            <button class="btn btn-secondary btn-input-sm" type="button" id="SelectLogo1"><i class="icon fas fa-folder-open"></i> {$LANG->get('browse_image')}</button>
-                        </div>
-                        <div class="flex-grow-0 flex-shrink-0 pl-2">
-                            <button class="btn btn-secondary btn-input-sm" type="button" id="SelectLogo2"><i class="icon fas fa-folder-open"></i> {$LANG->get('browse_image')}</button>
+                            <button class="btn btn-secondary btn-input-sm" type="button" id="upload_logo_select"><i class="icon fas fa-folder-open"></i> {$LANG->get('browse_image')}</button>
                         </div>
                     </div>
                 </div>
@@ -94,12 +91,13 @@
 <script type="text/javascript" src="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}=upload&amp;js"></script>
 <script>
 $(document).on("nv.upload.ready", function() {
-    $("#SelectLogo1,#SelectLogo2").nvBrowseFile({
+    $("#upload_logo_select").nvBrowseFile({
         adminBaseUrl: '{$NV_BASE_ADMINURL}',
-        path: '',
-        currentpath: '',
-        type: '',
-        imgfile: ''
+        path: '/uploads',
+        currentpath: '/uploads',
+        type: 'file',
+        area: '#upload_logo', // Đối tượng trả về đường dẫn => Build ra currentfile
+        alt: '#autologosize1', // Đối tượng trả về ALT image
     });
 });
 </script>

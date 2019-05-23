@@ -95,8 +95,11 @@ var NVCoreFileBrowser = function() {
     this.firstData = {};
     this.dataFilesDefault = {
         path: '',
+        currentpath: '',
         type: 'file',
-        imgfile: 'order',
+        area: '',
+        alt: '',
+        imgfile: '',
         author: '',
     };
 }
@@ -113,7 +116,7 @@ NVCoreFileBrowser.prototype.init = function(data) {
 
     self.firstData = data;
 
-    KEYPR.init(cfg);
+    KEYPR.init();
     RRT.init();
     NVCMENU.init();
     NVLDATA.init();
@@ -180,320 +183,225 @@ NVCoreFileBrowser.prototype.init = function(data) {
         $(cfg.container).toggleClass('open-form-filter');
     });
 
-    // Xử lý khi kéo thả file vào
-    var isFireFox = navigator.userAgent.indexOf('Firefox') > -1;
-    var dragInCurrentTarget = null;
-    /*
-     * FifeFox lỗi không thể đếm kết thúc drag kiểu target
-     * Dùng phương thức couter
-     */
-    var couterDragIn = 0;
+    // Thiết lập các event này duy nhất một lần
+    if (typeof window.fileManagerLoaded == "undefined") {
+        // Xử lý khi kéo thả file vào
+        var isFireFox = navigator.userAgent.indexOf('Firefox') > -1;
+        var dragInCurrentTarget = null;
+        /*
+         * FifeFox lỗi không thể đếm kết thúc drag kiểu target
+         * Dùng phương thức couter
+         */
+        var couterDragIn = 0;
 
-    $(document).on('dragend', function(e) {
-        dragInCurrentTarget = null;
-        couterDragIn = 0;
-    });
+        $(document).on('dragend', function(e) {
+            dragInCurrentTarget = null;
+            couterDragIn = 0;
+        });
 
-    $(document).on('dragleave', function(e) {
-        couterDragIn--;
-        if ((dragInCurrentTarget == e.target && !isFireFox) || (isFireFox && couterDragIn <= 0)) {
+        $(document).on('dragleave', function(e) {
+            couterDragIn--;
+            if ((dragInCurrentTarget == e.target && !isFireFox) || (isFireFox && couterDragIn <= 0)) {
+                e.stopPropagation();
+                e.preventDefault();
+                couterDragIn = 0;
+                $(cfg.dropzoneCtn).hide();
+                $(cfg.dropzoneCtn).removeClass('drag-hover');
+            }
+        });
+
+        $(document).on('dragenter', function(e) {
+            dragInCurrentTarget = e.target;
             e.stopPropagation();
             e.preventDefault();
-            couterDragIn = 0;
-            $(cfg.dropzoneCtn).hide();
+            couterDragIn++;
+            $(cfg.dropzoneCtn).show();
+        });
+
+        $(cfg.dropzoneArea).on('dragleave', function(e) {
+            e.preventDefault();
             $(cfg.dropzoneCtn).removeClass('drag-hover');
-        }
-    });
-
-    $(document).on('dragenter', function(e) {
-        dragInCurrentTarget = e.target;
-        e.stopPropagation();
-        e.preventDefault();
-        couterDragIn++;
-        $(cfg.dropzoneCtn).show();
-    });
-
-    $(cfg.dropzoneArea).on('dragleave', function(e) {
-        e.preventDefault();
-        $(cfg.dropzoneCtn).removeClass('drag-hover');
-    });
-
-    $(cfg.dropzoneArea).on('dragenter', function(e) {
-        e.preventDefault();
-        $(cfg.dropzoneCtn).addClass('drag-hover');
-    });
-
-    $(document).on('drop', function(e) {
-        dragInCurrentTarget = null;
-        couterDragIn = 0;
-    });
-
-    /*
-     * Xử lý khi thay đổi màn hình
-     */
-    $(window).on('resize', function() {
-        $(cfg.folderElement).removeAttr('style');
-    });
-
-    /*
-     * Xử lý khi thao tác tại form công cụ ảnh
-     */
-    $('[name="newWidth"],[name="newHeight"]', $(cfg.formCreatImage)).on('keyup', function() {
-        var type = $(this).attr("name"),
-            value = $(this).val(),
-            orgW = $('[name="newWidth"]', $(cfg.formCreatImage)).data('orgw'),
-            orgH = $('[name="newHeight"]', $(cfg.formCreatImage)).data('orgh'),
-            maxSize = self.getImageDisplaySize(orgW, orgH, nv_max_width, nv_max_height);
-
-        if (!is_numeric(value) || value < 0) {
-            $('[name="newWidth"]', $(cfg.formCreatImage)).val("");
-            $('[name="newHeight"]', $(cfg.formCreatImage)).val("");
-            return false;
-        }
-        if (type == "newWidth") {
-            if (value > maxSize[0]) {
-                value = maxSize[0];
-            }
-            $('[name="newWidth"]', $(cfg.formCreatImage)).val(value);
-            $('[name="newHeight"]', $(cfg.formCreatImage)).val(parseInt(orgH * value / orgW));
-        } else {
-            if (value > maxSize[1]) {
-                value = maxSize[1];
-            }
-            $('[name="newWidth"]', $(cfg.formCreatImage)).val(parseInt(value * orgW / orgH));
-            $('[name="newHeight"]', $(cfg.formCreatImage)).val(value);
-        }
-    });
-    $('[name="prView"]', $(cfg.formCreatImage)).on('click', function() {
-        self.checkNewImageSize();
-    });
-
-    /*
-     * Xử lý khi mở form tìm kiếm lên
-     */
-    $(cfg.formSearch).on('show.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        $('[name="q"]', modalEle).val('');
-
-        // Build cây thư mục
-        $('[name="searchPath"]', modalEle).html('');
-        $('a.view_dir', $(cfg.folderElement)).each(function() {
-            var folder = $(this).data('folder');
-            $('[name="searchPath"]', modalEle).append('<option value="' + folder + '"' + ($(cfgf.folder).data('value') == folder ? ' selected="selected"' : '') + '>' + folder + '</option>');
         });
-    });
-    $(cfg.formSearch).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        $('[name="q"]', modalEle).focus();
-    });
 
-    /*
-     * Xử lý khi mở form tạo thư mục mới lên
-     */
-    $(cfg.formCreatFolder).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        $('[name="foldername"]', modalEle).val('').focus();
-    });
+        $(cfg.dropzoneArea).on('dragenter', function(e) {
+            e.preventDefault();
+            $(cfg.dropzoneCtn).addClass('drag-hover');
+        });
 
-    /*
-     * Xử lý khi mở form đổi tên thư mục lên
-     */
-    $(cfg.formRenameFolder).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        $('[name="foldername"]', modalEle).focus();
-    });
+        $(document).on('drop', function(e) {
+            dragInCurrentTarget = null;
+            couterDragIn = 0;
+        });
 
-    /*
-     * Xử lý khi mở, đóng form tạo lại ảnh thumb lên
-     */
-    $(cfg.formRecreatThumb).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        //
-    });
-    $(cfg.formRecreatThumb).on('hide.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        // Huỷ tiến trình tạo lại nếu đang chạy
-        if (self.timerRecreatThumb) {
-            clearTimeout(self.timerRecreatThumb);
-        }
-    });
+        /*
+         * Xử lý khi thay đổi màn hình
+         */
+        $(window).on('resize', function() {
+            $(cfg.folderElement).removeAttr('style');
+        });
 
-    /*
-     * Xử lý khi đóng form xem chi tiết
-     */
-    $(cfg.formPreview).on('hide.bs.modal', function(e) {
-        $('#FileRelativePathBtn').tooltip('dispose');
-        $('#FileAbsolutePathBtn').tooltip('dispose');
-    });
+        /*
+         * Xử lý khi thao tác tại form công cụ ảnh
+         */
+        $('[name="newWidth"],[name="newHeight"]', $(cfg.formCreatImage)).on('keyup', function() {
+            var type = $(this).attr("name"),
+                value = $(this).val(),
+                orgW = $('[name="newWidth"]', $(cfg.formCreatImage)).data('orgw'),
+                orgH = $('[name="newHeight"]', $(cfg.formCreatImage)).data('orgh'),
+                maxSize = self.getImageDisplaySize(orgW, orgH, nv_max_width, nv_max_height);
 
-    /*
-     * Xử lý khi mở form xoay ảnh lên
-     */
-    $(cfg.formRotateFile).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        var selFile = $(cfgm.file).data('value');
-        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
-        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
-
-        var ctnWidth = $('[data-toggle="name"]', modalEle).width();
-        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth, true);
-        var contentMargin = parseInt((Math.sqrt(size[0] * size[0] + size[1] * size[1]) - size[1]) / 2);
-
-        $('[data-toggle="img"]', modalEle).css({
-            'width': size[0],
-            'height': size[1],
-            'margin-top': contentMargin,
-            'margin-bottom': contentMargin + 10,
-            'margin-left': 'auto',
-            'margin-right': 'auto'
-        }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
-    });
-
-    /*
-     * Xử lý khi mở form cắt ảnh lên
-     */
-    $(cfg.formCrop).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        var selFile = $(cfgm.file).data('value');
-        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
-        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
-
-        fdata[0] = parseInt(fdata[0]);
-        fdata[1] = parseInt(fdata[1]);
-
-        var ctnWidth = $('[data-toggle="getw"]', modalEle).width();
-        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
-
-        $('[data-toggle="img"]', modalEle).css({
-            'width': size[0],
-            'height': size[1],
-            'margin-bottom': 10,
-            'margin-left': 'auto',
-            'margin-right': 'auto'
-        }).html('<img class="crop-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
-
-        // Hiển thị thông báo khi ảnh quá nhỏ
-        if (fdata[0] < 10 || fdata[1] < 10 || (fdata[0] < 16 && fdata[1] < 16)) {
-            $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.crop_error_small);
-        } else {
-            $('[data-toggle="note"]', modalEle).addClass('d-none').html('');
-        }
-
-        // Init cropper
-        $('img.crop-image', modalEle).cropper({
-            viewMode: 3,
-            dragMode: 'crop',
-            aspectRatio: NaN,
-            responsive: true,
-            modal: true,
-            guides: false,
-            highlight: true,
-            autoCrop: true,
-            autoCropArea: 0.5,
-            movable: false,
-            rotatable: false,
-            scalable: false,
-            zoomable: false,
-            zoomOnTouch: false,
-            zoomOnWheel: false,
-            cropBoxMovable: true,
-            cropBoxResizable: true,
-            minContainerWidth: 10,
-            minContainerHeight: 10,
-            crop: function(e) {
-                $('[name="x"]', modalEle).val(parseInt(Math.floor(e.x)));
-                $('[name="y"]', modalEle).val(parseInt(Math.floor(e.y)));
-                $('[name="w"]', modalEle).val(parseInt(Math.floor(e.width)));
-                $('[name="h"]', modalEle).val(parseInt(Math.floor(e.height)));
+            if (!is_numeric(value) || value < 0) {
+                $('[name="newWidth"]', $(cfg.formCreatImage)).val("");
+                $('[name="newHeight"]', $(cfg.formCreatImage)).val("");
+                return false;
             }
-        });
-    });
-
-    /*
-     * Xử lý khi mở tạo ảnh mới lên
-     */
-    $(cfg.formCreatImage).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        var selFile = $(cfgm.file).data('value');
-        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
-        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
-
-        fdata[0] = parseInt(fdata[0]);
-        fdata[1] = parseInt(fdata[1]);
-
-        var ctnWidth = $('[data-toggle="imgname"]', modalEle).width();
-        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
-        $('[data-toggle="img"]', $(cfg.formCreatImage)).css({
-            'width': (size[0] + 'px'),
-            'height': size[1] + 'px'
-        });
-    });
-
-    /*
-     * Xử lý khi mở form thêm logo lên
-     */
-    $(cfg.formAddLogo).on('shown.bs.modal', function(e) {
-        var modalEle = $(e.currentTarget);
-        var selFile = $(cfgm.file).data('value');
-        var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
-        var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
-
-        fdata[0] = parseInt(fdata[0]);
-        fdata[1] = parseInt(fdata[1]);
-
-        var ctnWidth = $('[data-toggle="btns"]', modalEle).width();
-        var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
-        var logo = $(cfgm.logo).data('value');
-        var logoConfig = $(cfgm.logoConfig).data('value').split('|');
-
-        $('[data-toggle="img"]', modalEle).css({
-            'width': size[0],
-            'height': size[1],
-            'margin-left': 'auto',
-            'margin-right': 'auto'
-        }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
-
-        // Hiển thị thông báo khi ảnh quá nhỏ
-        if (fdata[0] < 10 || fdata[1] < 10 || (fdata[0] < 16 && fdata[1] < 16)) {
-            $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.addlogo_error_small);
-        } else if (logo == '') {
-            $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.notlogo);
-        } else {
-            $('[data-toggle="note"]', modalEle).addClass('d-none').html('');
-
-            // Set logo size
-            var markW, markH;
-
-            if (fdata[0] <= 150) {
-                markW = Math.ceil(fdata[0] * parseFloat(logoConfig[2]) / 100);
-            } else if (fdata[0] < 350) {
-                markW = Math.ceil(fdata[0] * parseFloat(logoConfig[3]) / 100);
-            } else {
-                if (Math.ceil(fdata[0] * parseFloat(logoConfig[4]) / 100) > logoConfig[0]) {
-                    markW = logoConfig[0];
-                } else {
-                    markW = Math.ceil(fdata[0] * parseFloat(logoConfig[4]) / 100);
+            if (type == "newWidth") {
+                if (value > maxSize[0]) {
+                    value = maxSize[0];
                 }
+                $('[name="newWidth"]', $(cfg.formCreatImage)).val(value);
+                $('[name="newHeight"]', $(cfg.formCreatImage)).val(parseInt(orgH * value / orgW));
+            } else {
+                if (value > maxSize[1]) {
+                    value = maxSize[1];
+                }
+                $('[name="newWidth"]', $(cfg.formCreatImage)).val(parseInt(value * orgW / orgH));
+                $('[name="newHeight"]', $(cfg.formCreatImage)).val(value);
             }
+        });
+        $('[name="prView"]', $(cfg.formCreatImage)).on('click', function() {
+            self.checkNewImageSize();
+        });
 
-            markH = Math.ceil(markW * logoConfig[1] / logoConfig[0]);
+        /*
+         * Xử lý khi mở form tìm kiếm lên
+         */
+        $(cfg.formSearch).on('show.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            $('[name="q"]', modalEle).val('');
 
-            if (markH > fdata[1]) {
-                markH = fdata[1];
-                markW = Math.ceil(markH * logoConfig[0] / logoConfig[1]);
+            // Build cây thư mục
+            $('[name="searchPath"]', modalEle).html('');
+            $('a.view_dir', $(cfg.folderElement)).each(function() {
+                var folder = $(this).data('folder');
+                $('[name="searchPath"]', modalEle).append('<option value="' + folder + '"' + ($(cfgf.folder).data('value') == folder ? ' selected="selected"' : '') + '>' + folder + '</option>');
+            });
+        });
+        $(cfg.formSearch).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            $('[name="q"]', modalEle).focus();
+            self.fix2Modal(modalEle);
+        });
+
+        /*
+         * Xử lý khi mở form tạo thư mục mới lên
+         */
+        $(cfg.formCreatFolder).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            $('[name="foldername"]', modalEle).val('').focus();
+            self.fix2Modal(modalEle);
+        });
+
+        /*
+         * Xử lý khi mở form đổi tên thư mục lên
+         */
+        $(cfg.formRenameFolder).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            $('[name="foldername"]', modalEle).focus();
+            self.fix2Modal(modalEle);
+        });
+
+        /*
+         * Xử lý khi mở, đóng form tạo lại ảnh thumb lên
+         */
+        $(cfg.formRecreatThumb).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            self.fix2Modal(modalEle);
+        });
+        $(cfg.formRecreatThumb).on('hide.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            // Huỷ tiến trình tạo lại nếu đang chạy
+            if (self.timerRecreatThumb) {
+                clearTimeout(self.timerRecreatThumb);
+            }
+        });
+
+        /*
+         * Xử lý khi đóng form xem chi tiết
+         */
+        $(cfg.formPreview).on('hide.bs.modal', function(e) {
+            $('#FileRelativePathBtn').tooltip('dispose');
+            $('#FileAbsolutePathBtn').tooltip('dispose');
+        });
+
+        /*
+         * Xử lý khi mở form xoay ảnh lên
+         */
+        $(cfg.formRotateFile).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            var selFile = $(cfgm.file).data('value');
+            var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+            var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+            self.fix2Modal(modalEle);
+
+            var ctnWidth = $('[data-toggle="name"]', modalEle).width();
+            var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth, true);
+            var contentMargin = parseInt((Math.sqrt(size[0] * size[0] + size[1] * size[1]) - size[1]) / 2);
+
+            $('[data-toggle="img"]', modalEle).css({
+                'width': size[0],
+                'height': size[1],
+                'margin-top': contentMargin,
+                'margin-bottom': contentMargin + 10,
+                'margin-left': 'auto',
+                'margin-right': 'auto'
+            }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
+        });
+
+        /*
+         * Xử lý khi mở form cắt ảnh lên
+         */
+        $(cfg.formCrop).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            var selFile = $(cfgm.file).data('value');
+            var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+            var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+            self.fix2Modal(modalEle);
+
+            fdata[0] = parseInt(fdata[0]);
+            fdata[1] = parseInt(fdata[1]);
+
+            var ctnWidth = $('[data-toggle="getw"]', modalEle).width();
+            var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
+
+            $('[data-toggle="img"]', modalEle).css({
+                'width': size[0],
+                'height': size[1],
+                'margin-bottom': 10,
+                'margin-left': 'auto',
+                'margin-right': 'auto'
+            }).html('<img class="crop-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
+
+            // Hiển thị thông báo khi ảnh quá nhỏ
+            if (fdata[0] < 10 || fdata[1] < 10 || (fdata[0] < 16 && fdata[1] < 16)) {
+                $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.crop_error_small);
+            } else {
+                $('[data-toggle="note"]', modalEle).addClass('d-none').html('');
             }
 
             // Init cropper
-            $('[data-toggle="img"] img', modalEle).cropper({
+            $('img.crop-image', modalEle).cropper({
                 viewMode: 3,
-                dragMode: 'none',
-                aspectRatio: markW / markH,
+                dragMode: 'crop',
+                aspectRatio: NaN,
                 responsive: true,
                 modal: true,
                 guides: false,
                 highlight: true,
-                autoCrop: false,
-                autoCropArea: .01,
+                autoCrop: true,
+                autoCropArea: 0.5,
                 movable: false,
                 rotatable: false,
                 scalable: false,
@@ -509,101 +417,210 @@ NVCoreFileBrowser.prototype.init = function(data) {
                     $('[name="y"]', modalEle).val(parseInt(Math.floor(e.y)));
                     $('[name="w"]', modalEle).val(parseInt(Math.floor(e.width)));
                     $('[name="h"]', modalEle).val(parseInt(Math.floor(e.height)));
-                },
-                built: function(e) {
-                    var imageData = $(this).cropper('getImageData');
-                    var cropBoxScale = imageData.naturalWidth / imageData.width;
-                    var cropBoxSize = {
-                        width: markW / cropBoxScale,
-                        height: markH / cropBoxScale
-                    };
-                    cropBoxSize.left = imageData.width - cropBoxSize.width - 10;
-                    cropBoxSize.top = imageData.height - cropBoxSize.height - 10;
-                    $(this).cropper('crop');
-                    $(this).cropper('setCropBoxData', {
-                        left: cropBoxSize.left,
-                        top: cropBoxSize.top,
-                        width: cropBoxSize.width,
-                        height: cropBoxSize.height
-                    });
-                    var wrapCropper = $(this).parent();
-                    $('.cropper-face', wrapCropper).css({
-                        'opacity' : 1,
-                        'background-image' : 'url(' + logo + ')',
-                        'background-size' : '100%',
-                        'background-color' : 'transparent'
-                    });
                 }
             });
-        }
-    });
+        });
 
-    /*
-     * Xử lý khi submit các form
-     */
-    $('form', $(cfg.formSearch)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitSearch(this);
-    });
-    $('form', $(cfg.formCreatFolder)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitCreatFolder(this);
-    });
-    $('form', $(cfg.formRenameFolder)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitRenameFolder(this);
-    });
-    $('form', $(cfg.formRecreatThumb)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitRecreatThumb(this);
-    });
-    $('form', $(cfg.formRenameFile)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitRenameFile(this);
-    });
-    $('form', $(cfg.formMoveFile)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitMoveFile(this);
-    });
-    $('form', $(cfg.formRotateFile)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitRotateFile(this);
-    });
-    $('form', $(cfg.formCrop)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitCrop(this);
-    });
-    $('form', $(cfg.formCreatImage)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitCreatImage(this);
-    });
-    $('form', $(cfg.formAddLogo)).on('submit', function(e) {
-        e.preventDefault();
-        self.submitAddLogo(this);
-    });
+        /*
+         * Xử lý khi mở tạo ảnh mới lên
+         */
+        $(cfg.formCreatImage).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            var selFile = $(cfgm.file).data('value');
+            var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+            var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
 
-    // Xử lý tại form xem chi tiết file
-    $.widget.bridge('uitooltip', $.ui.tooltip);
-    var clipboard1 = new ClipboardJS('#FileRelativePathBtn');
-    var clipboard2 = new ClipboardJS('#FileAbsolutePathBtn');
-    clipboard1.on('success', function(e) {
-        $(e.trigger).tooltip('show');
-    });
-    clipboard2.on('success', function(e) {
-        $(e.trigger).tooltip('show');
-    });
-    $("#FileRelativePathBtn").on('mouseout', function() {
-        $(this).tooltip('dispose');
-    });
-    $("#FileAbsolutePathBtn").on('mouseout', function() {
-        $(this).tooltip('dispose');
-    });
-    $("#FileRelativePath").on('focus', function() {
-        $(this).select();
-    });
-    $("#FileAbsolutePath").on('focus', function() {
-        $(this).select();
-    });
+            self.fix2Modal(modalEle);
+
+            fdata[0] = parseInt(fdata[0]);
+            fdata[1] = parseInt(fdata[1]);
+
+            var ctnWidth = $('[data-toggle="imgname"]', modalEle).width();
+            var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
+            $('[data-toggle="img"]', $(cfg.formCreatImage)).css({
+                'width': (size[0] + 'px'),
+                'height': size[1] + 'px'
+            });
+        });
+
+        /*
+         * Xử lý khi mở form thêm logo lên
+         */
+        $(cfg.formAddLogo).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            var selFile = $(cfgm.file).data('value');
+            var fdata = $('[data-file="' + selFile + '"]', $(cfg.filesContainer)).data('fdata').split("|");
+            var path = (fdata[7] == "") ? $(cfgf.folder).data('value') : fdata[7];
+
+            self.fix2Modal(modalEle);
+
+            fdata[0] = parseInt(fdata[0]);
+            fdata[1] = parseInt(fdata[1]);
+
+            var ctnWidth = $('[data-toggle="btns"]', modalEle).width();
+            var size = self.getImageDisplaySize(fdata[0], fdata[1], ctnWidth, ctnWidth);
+            var logo = $(cfgm.logo).data('value');
+            var logoConfig = $(cfgm.logoConfig).data('value').split('|');
+
+            $('[data-toggle="img"]', modalEle).css({
+                'width': size[0],
+                'height': size[1],
+                'margin-left': 'auto',
+                'margin-right': 'auto'
+            }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + fdata[8] + '"  width="' + size[0] + '" height="' + size[1] + '">');
+
+            // Hiển thị thông báo khi ảnh quá nhỏ
+            if (fdata[0] < 10 || fdata[1] < 10 || (fdata[0] < 16 && fdata[1] < 16)) {
+                $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.addlogo_error_small);
+            } else if (logo == '') {
+                $('[data-toggle="note"]', modalEle).removeClass('d-none').html(LANG.notlogo);
+            } else {
+                $('[data-toggle="note"]', modalEle).addClass('d-none').html('');
+
+                // Set logo size
+                var markW, markH;
+
+                if (fdata[0] <= 150) {
+                    markW = Math.ceil(fdata[0] * parseFloat(logoConfig[2]) / 100);
+                } else if (fdata[0] < 350) {
+                    markW = Math.ceil(fdata[0] * parseFloat(logoConfig[3]) / 100);
+                } else {
+                    if (Math.ceil(fdata[0] * parseFloat(logoConfig[4]) / 100) > logoConfig[0]) {
+                        markW = logoConfig[0];
+                    } else {
+                        markW = Math.ceil(fdata[0] * parseFloat(logoConfig[4]) / 100);
+                    }
+                }
+
+                markH = Math.ceil(markW * logoConfig[1] / logoConfig[0]);
+
+                if (markH > fdata[1]) {
+                    markH = fdata[1];
+                    markW = Math.ceil(markH * logoConfig[0] / logoConfig[1]);
+                }
+
+                // Init cropper
+                $('[data-toggle="img"] img', modalEle).cropper({
+                    viewMode: 3,
+                    dragMode: 'none',
+                    aspectRatio: markW / markH,
+                    responsive: true,
+                    modal: true,
+                    guides: false,
+                    highlight: true,
+                    autoCrop: false,
+                    autoCropArea: .01,
+                    movable: false,
+                    rotatable: false,
+                    scalable: false,
+                    zoomable: false,
+                    zoomOnTouch: false,
+                    zoomOnWheel: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    minContainerWidth: 10,
+                    minContainerHeight: 10,
+                    crop: function(e) {
+                        $('[name="x"]', modalEle).val(parseInt(Math.floor(e.x)));
+                        $('[name="y"]', modalEle).val(parseInt(Math.floor(e.y)));
+                        $('[name="w"]', modalEle).val(parseInt(Math.floor(e.width)));
+                        $('[name="h"]', modalEle).val(parseInt(Math.floor(e.height)));
+                    },
+                    built: function(e) {
+                        var imageData = $(this).cropper('getImageData');
+                        var cropBoxScale = imageData.naturalWidth / imageData.width;
+                        var cropBoxSize = {
+                            width: markW / cropBoxScale,
+                            height: markH / cropBoxScale
+                        };
+                        cropBoxSize.left = imageData.width - cropBoxSize.width - 10;
+                        cropBoxSize.top = imageData.height - cropBoxSize.height - 10;
+                        $(this).cropper('crop');
+                        $(this).cropper('setCropBoxData', {
+                            left: cropBoxSize.left,
+                            top: cropBoxSize.top,
+                            width: cropBoxSize.width,
+                            height: cropBoxSize.height
+                        });
+                        var wrapCropper = $(this).parent();
+                        $('.cropper-face', wrapCropper).css({
+                            'opacity' : 1,
+                            'background-image' : 'url(' + logo + ')',
+                            'background-size' : '100%',
+                            'background-color' : 'transparent'
+                        });
+                    }
+                });
+            }
+        });
+
+        /*
+         * Xử lý khi submit các form
+         */
+        $('form', $(cfg.formSearch)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitSearch(this);
+        });
+        $('form', $(cfg.formCreatFolder)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitCreatFolder(this);
+        });
+        $('form', $(cfg.formRenameFolder)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitRenameFolder(this);
+        });
+        $('form', $(cfg.formRecreatThumb)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitRecreatThumb(this);
+        });
+        $('form', $(cfg.formRenameFile)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitRenameFile(this);
+        });
+        $('form', $(cfg.formMoveFile)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitMoveFile(this);
+        });
+        $('form', $(cfg.formRotateFile)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitRotateFile(this);
+        });
+        $('form', $(cfg.formCrop)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitCrop(this);
+        });
+        $('form', $(cfg.formCreatImage)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitCreatImage(this);
+        });
+        $('form', $(cfg.formAddLogo)).on('submit', function(e) {
+            e.preventDefault();
+            self.submitAddLogo(this);
+        });
+
+        // Xử lý tại form xem chi tiết file
+        $.widget.bridge('uitooltip', $.ui.tooltip);
+        var clipboard1 = new ClipboardJS('#FileRelativePathBtn');
+        var clipboard2 = new ClipboardJS('#FileAbsolutePathBtn');
+        clipboard1.on('success', function(e) {
+            $(e.trigger).tooltip('show');
+        });
+        clipboard2.on('success', function(e) {
+            $(e.trigger).tooltip('show');
+        });
+        $("#FileRelativePathBtn").on('mouseout', function() {
+            $(this).tooltip('dispose');
+        });
+        $("#FileAbsolutePathBtn").on('mouseout', function() {
+            $(this).tooltip('dispose');
+        });
+        $("#FileRelativePath").on('focus', function() {
+            $(this).select();
+        });
+        $("#FileAbsolutePath").on('focus', function() {
+            $(this).select();
+        });
+    }
 
     // Load cây thư mục, callback = true thì sau đó sẽ load luôn các file
     self.showLoader();
@@ -1060,6 +1077,12 @@ NVCoreFileBrowser.prototype.listFilesHandler = function() {
         self.fileMouseup(this, e);
     });
 
+    // Xử lý khi click đôi vào file
+    $('.file', $(cfg.filesContainer)).on("dblclick", function(e) {
+        e.preventDefault();
+        self.handleMenuSelect();
+    });
+
     // Khi mở menu chuột phải thì không xử lý gì.
     $('.file', $(cfg.filesContainer)).on("contextmenu", function(e) {
         e.preventDefault();
@@ -1453,8 +1476,34 @@ NVCoreFileBrowser.prototype.handleMenuAddLogo = function (element) {
     $(cfg.formAddLogo).modal('show');
 }
 
-NVCoreFileBrowser.prototype.handleMenuXXXX = function (element) {
+/*
+ * Xử lý khi chuột phải file, chọn chọn file
+ */
+NVCoreFileBrowser.prototype.handleMenuSelect = function (element) {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
 
+    var file = $(cfgm.file).data('value');
+    var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
+    var fdata = fileItem.data('fdata').split("|"), filepath;
+    if (fdata[7] == "") {
+        filepath = $(cfgf.folder).data('value');
+    } else {
+        filepath = fdata[7];
+    }
+    var fullPath = nv_base_siteurl + filepath + '/' + file;
+
+    if (self.firstData.area != '') {
+        if ($(self.firstData.area).length) {
+            $(self.firstData.area).val(fullPath);
+        }
+    } else {
+        //
+    }
+
+    $('#mdNVFileManagerPopup').modal('hide');
 }
 
 /*
@@ -2091,6 +2140,22 @@ NVCoreFileBrowser.prototype.checkNewImageSize = function () {
     return true;
 }
 
+/*
+ * Xử lý khi có nhiều modal mở lên
+ */
+NVCoreFileBrowser.prototype.fix2Modal = function (modalEle) {
+    var numBackFrop = $('.modal-backdrop').length;
+    if (numBackFrop != 2) {
+        return true;
+    }
+    modalEle.css({
+        "z-index": 1070
+    });
+    $('.modal-backdrop:last').css({
+        "z-index": 1060
+    });
+}
+
 var NVLDATA = {
     support: false,
     init: function() {
@@ -2178,8 +2243,17 @@ var KEYPR = {
     allowKey: [112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123],
     isSelectable: false,
     isFileSelectable: false,
-    init: function(cfg) {
+    initYet: false,
+    init: function() {
+        if (KEYPR.initYet) {
+            return;
+        }
+        KEYPR.initYet = true;
         $('body').keyup(function(e) {
+            if (!$(window.fileManager.cfg.container).is(':visible')) {
+                // Khi container không hiển thị thì không xử lý
+                return;
+            }
             if (!$(e.target).parents('.inFileManagerModal').length && $.inArray(e.keyCode, KEYPR.allowKey) == -1 && !$(e.target).is('.inFileManagerModal')) {
                 e.preventDefault();
             } else {
@@ -2195,6 +2269,10 @@ var KEYPR = {
         });
 
         $('body').keydown(function(e) {
+            if (!$(window.fileManager.cfg.container).is(':visible')) {
+                // Khi container không hiển thị thì không xử lý
+                return;
+            }
             if (!$(e.target).parents('.inFileManagerModal').length && $.inArray(e.keyCode, KEYPR.allowKey) == -1 && !$(e.target).is('.inFileManagerModal')) {
                 e.preventDefault();
             } else {
@@ -2216,7 +2294,7 @@ var KEYPR = {
                 KEYPR.shiftOffset = 0;
             } else if (e.keyCode == 65 /* A */ && e.ctrlKey === true) {
                 // Select all file
-                $(".file", $(cfg.filesContainer)).addClass("file-selected");
+                $(".file", $(window.fileManager.cfg.filesContainer)).addClass("file-selected");
                 LFILE.setSelFile();
 
                 // Hide contextmenu
@@ -2308,7 +2386,12 @@ var RRT = {
         RRT.setVal();
         RRT.trigger();
     },
+    initYet: false,
     init: function() {
+        if (RRT.initYet) {
+            return;
+        }
+        RRT.initYet = true;
         var cfg = window.fileManager.cfg;
 
         $('[name="rorateDirection"]', $(cfg.formRotateFile)).keyup(function() {
@@ -2388,7 +2471,12 @@ var NVCMENU = {
         newfolder: 'handleMenuNewFolder',
         recreatethumb: 'handleMenuReThumb'
     },
+    initYet: false,
     init: function() {
+        if (NVCMENU.initYet) {
+            return;
+        }
+        NVCMENU.initYet = true;
         NVCMENU.menu = $('<div id="nvContextMenu" class="dropdown-menu"></div>').appendTo('body').on('click', function(e) {
             e.stopPropagation();
         });
@@ -2545,8 +2633,6 @@ $(document).ready(function() {
         this.options = options;
 
         self.loadMainContainer();
-
-        console.log($(element));
     }
 
     NVStaticUpload.VERSION  = '5.0.00';
@@ -2566,11 +2652,21 @@ $(document).ready(function() {
      */
     NVStaticUpload.prototype.loadMainContainer = function() {
         var self = this;
-        var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&popup=1';
+        var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + self.strRand(10);
 
-        this.$element.html(self.options.templateLoader);
-        this.$element.load(url, function() {
+        self.$element.html(self.options.templateLoader);
+        $.ajax({
+            method: "GET",
+            url: url,
+            data: {popup: 1},
+            dataType: "json",
+            cache: false
+        }).done(function(data) {
+            self.$element.html(data.container);
+            $('body:first').append(data.modals);
             self.init();
+        }).fail(function() {
+            alert("Ajax request Error, please reload your browser!!!");
         });
     }
 
@@ -2583,13 +2679,13 @@ $(document).ready(function() {
             baseurl: self.options.adminBaseUrl,
             path: self.options.path,
             currentpath: self.options.currentpath,
-            type: self.options.type,
-            imgfile: self.options.imgfile
+            type: self.options.type
         };
 
         // Xử lý các thành phần
         window.fileManager = new NVCoreFileBrowser();
         window.fileManager.init(data);
+        window.fileManagerLoaded = true;
 
         /*
          * Build thêm thanh cuộn
@@ -2599,6 +2695,13 @@ $(document).ready(function() {
                 wheelPropagation: $(this).data('wheel') ? true : false
             }));
         });
+    }
+
+    NVStaticUpload.prototype.strRand = function (a) {
+        for (var b = "", d = 0; d < a; d++) {
+            b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
+        }
+        return b;
     }
 
     function Plugin(option) {
@@ -2645,44 +2748,24 @@ $(document).ready(function() {
         this.options = options;
 
         /*
-         * Build modal để dùng chung
+         * Thiết lập mở modal khi ấn vào nút nhấn
          */
-        if (!$(self.options.templateContainerID).length) {
-            $('body:first').append(self.options.templateContainer);
-        }
-
-        $(element).each(function() {
-            $(this).on('click', function() {
-                $(self.options.templateContainerID).modal('show');
-            });
-        });
-
-        $(self.options.templateContainerID).on('shown.bs.modal', function(e) {
-            var modalEle = $(e.currentTarget);
-            var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&popup=1';
-
-            $('.modal-body', modalEle).html(self.options.templateLoader);
-            $('.modal-body', modalEle).load(url, function() {
-                self.init();
-            });
-        });
-
-        $(self.options.templateContainerID).on('hidden.bs.modal', function(e) {
-            var modalEle = $(e.currentTarget);
-            $('.modal-body', modalEle).html('');
+        $(element).on('click', function() {
+            $(self.options.templateContainerID).data('btn', this);
+            $(self.options.templateContainerID).modal('show');
         });
     }
 
     NVBrowseFile.VERSION  = '5.0.00';
 
     NVBrowseFile.DEFAULTS = {
-        modal 			: false,
         adminBaseUrl	: "",
         templateLoader	: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
-        path: '',
-        currentpath: '',
-        type: '',
-        imgfile: '',
+        path: '/uploads', // Thư mục upload gốc
+        currentpath: '/uploads', // Thư mục upload hiện tại (thư mục con hoặc là thư mục gốc)
+        type: 'file', // file|image|flash
+        area: '', // Đối tượng trả về đường dẫn => Build ra currentfile
+        alt: '', // Đối tượng trả về ALT image
         templateContainer: '<div id="mdNVFileManagerPopup" tabindex="-1" role="dialog" class="modal" data-backdrop="static"><div class="modal-dialog full-width modal-filemanager"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button></div><div class="modal-body"></div></div></div></div>',
         templateContainerID: '#mdNVFileManagerPopup',
     };
@@ -2697,12 +2780,19 @@ $(document).ready(function() {
             path: self.options.path,
             currentpath: self.options.currentpath,
             type: self.options.type,
-            imgfile: self.options.imgfile
+            area: self.options.area,
+            alt: self.options.alt,
+            imgfile: '' // File đang chọn
         };
+
+        if (data.area != '' && $(data.area).length == 1) {
+            data.imgfile = $(data.area).val();
+        }
 
         // Xử lý các thành phần
         window.fileManager = new NVCoreFileBrowser();
         window.fileManager.init(data);
+        window.fileManagerLoaded = true;
 
         /*
          * Build thêm thanh cuộn
@@ -2714,7 +2804,61 @@ $(document).ready(function() {
         });
     }
 
+    NVBrowseFile.prototype.strRand = function (a) {
+        for (var b = "", d = 0; d < a; d++) {
+            b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
+        }
+        return b;
+    }
+
     function Plugin(option) {
+        /*
+         * Build modal để dùng chung
+         */
+        if (!$(NVBrowseFile.DEFAULTS.templateContainerID).length) {
+            $('body:first').append(NVBrowseFile.DEFAULTS.templateContainer);
+        }
+
+        /*
+         * Thiết lập trình quản lý file lên khi mở xong modal
+         */
+        $(NVBrowseFile.DEFAULTS.templateContainerID).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            var btn = $(modalEle.data('btn'));
+            var uploadApi = btn.data('nv.upload');
+            var url = uploadApi.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + uploadApi.strRand(10);
+
+            $('.modal-body', modalEle).html(uploadApi.options.templateLoader);
+            $.ajax({
+                method: "GET",
+                url: url,
+                data: {
+                    popup: 1,
+                    alt: uploadApi.options.alt,
+                    area: uploadApi.options.area,
+                    imgfile: uploadApi.options.imgfile,
+                },
+                dataType: "json",
+                cache: false
+            }).done(function(data) {
+                $('.modal-body', modalEle).html(data.container);
+                if (typeof window.fileManager == "undefined") {
+                    $('body:first').append(data.modals);
+                }
+                uploadApi.init();
+            }).fail(function() {
+                alert("Ajax request Error, please reload your browser!!!");
+            });
+        });
+
+        /*
+         * Hủy dữ liệu quản lý file khi đóng modal
+         */
+        $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            $('.modal-body', modalEle).html('');
+        });
+
         return this.each(function() {
             var $this   = $(this);
             var options = $.extend({}, NVBrowseFile.DEFAULTS, $this.data(), typeof option == 'object' && option);
