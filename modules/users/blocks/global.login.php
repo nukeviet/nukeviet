@@ -92,7 +92,7 @@ if (!nv_function_exists('nv_block_login')) {
             } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/users.css')) {
                 $block_css = $global_config['site_theme'];
             } else {
-                $block_css = '';
+                $block_css = 'default';
             }
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/users.js')) {
                 $block_js = $global_config['module_theme'];
