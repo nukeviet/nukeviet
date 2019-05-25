@@ -49,13 +49,13 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
     );
 
     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
-		checknum = :checknum,
-		last_login = " . NV_CURRENTTIME . ",
-		last_ip = :last_ip,
-		last_agent = :last_agent,
-		last_openid = :opid,
-		remember = " . $remember . "
-		WHERE userid=" . $array_user['userid']);
+        checknum = :checknum,
+        last_login = " . NV_CURRENTTIME . ",
+        last_ip = :last_ip,
+        last_agent = :last_agent,
+        last_openid = :opid,
+        remember = " . $remember . "
+        WHERE userid=" . $array_user['userid']);
 
     $stmt->bindValue(':checknum', $checknum, PDO::PARAM_STR);
     $stmt->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
@@ -122,7 +122,7 @@ function nv_del_user($userid)
         $subject = $lang_module['delconfirm_email_title'];
         $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
         $message = nl2br($message);
-        nv_sendmail($global_config['site_email'], $email, $subject, $message);
+        nv_sendmail([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
         return $userid;
     }
 }
@@ -171,7 +171,7 @@ if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($
                     $group_id = $row['group_id'];
 
                     $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
-						WHERE group_id = ' . $group_id . ' and userid = ' . $array_op[2] . ' and is_leader = 0');
+                        WHERE group_id = ' . $group_id . ' and userid = ' . $array_op[2] . ' and is_leader = 0');
 
                     if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
                         $userid = $array_op[2];

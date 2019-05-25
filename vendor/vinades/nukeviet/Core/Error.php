@@ -112,9 +112,23 @@ class Error
             $this->error_log_fileext = Error::LOG_FILE_EXT_DEFAULT;
         }
 
-        $this->day = date('d-m-Y', NV_CURRENTTIME);
+        /*
+         * Prefix của file log
+         * Lấy cố định GMT, không theo múi giờ
+         */
+        $this->day = gmdate('d-m-Y', NV_CURRENTTIME);
+
+        /*
+         * Thời gian xảy ra lỗi
+         * Lấy theo múi giờ của client (tùy cấu hình)
+         */
         $this->error_date = date('r', NV_CURRENTTIME);
-        $this->month = date('m-Y', NV_CURRENTTIME);
+
+        /*
+         * Prefix theo tháng log 256
+         * Lấy cố định GMT, không theo múi giờ
+         */
+        $this->month = gmdate('m-Y', NV_CURRENTTIME);
 
         $ip = $this->get_Env('REMOTE_ADDR');
         $this->ip = $ip;

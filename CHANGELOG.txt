@@ -1,6 +1,18 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.06
+
+- Fix bug comment XSS. Thanks dalatsubnet at WhiteHub#640
+- Remove Google MAP API and fix block global.company_info.php
+- Module users: Save the information of the object that has activated user account
+- Fix the issue of adding news with very long keywords
+- Fix add, detete admin
+- Fix user add, user edit in admin.
+- Fix send mail
+- User lostactivelink: Skip step two if security question and answer not required
+- Module contact: Automatically detects links of other information
+
 NUKEVIET 4.3.05
 - Add repeat type configuration of cronjobs
 - Fix user registration error on mobile theme

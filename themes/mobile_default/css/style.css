@@ -76,10 +76,10 @@
 }
 
 .icon-icq:before {
-	content: "\e605";
+    content: "\e605";
 }
 .icon-viber:before {
-	content: "\e60a";
+    content: "\e60a";
 }
 
 /* Fix bootstrap */
@@ -554,7 +554,7 @@ div.radio-box,div.check-box{
 
 table caption {
     color:#0066CC;
-	text-align:left;
+    text-align:left;
     font-size:13px;
     font-weight:bold;
     line-height:22px;
@@ -1006,14 +1006,14 @@ header.header-up {
 }
 
 .breadcrumbs {
-	position: relative;
+    position: relative;
     height: 35px;
     line-height: 1;
     padding: 0 10px 0 50px;
     margin: 0;
     background: transparent;
     overflow: hidden;
-	background: rgba(0,0,0,0.05);
+    background: rgba(0,0,0,0.05);
 }
 
 .breadcrumbs .home-icon {
@@ -1024,7 +1024,7 @@ header.header-up {
 }
 
 .breadcrumbs .home-icon a{
-	width: 40px;
+    width: 40px;
     height: 35px;
     line-height: 35px;
     text-align: center;
@@ -1034,18 +1034,18 @@ header.header-up {
 }
 
 .breadcrumbs .toggle{
-	width: 15px;
-	display: inline-block;
-	text-align: center;
-	cursor: pointer;
-	display: none;
+    width: 15px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    display: none;
 }
 
 .breadcrumb{
-	padding: 0;
-	margin: 0;
-	line-height: 35px;
-	display: inline-block;
+    padding: 0;
+    margin: 0;
+    line-height: 35px;
+    display: inline-block;
 }
 
 .sub-breadcrumbs {
@@ -1062,7 +1062,7 @@ header.header-up {
 }
 
 .sub-breadcrumbs.open{
-	display: block;
+    display: block;
 }
 
 .sub-breadcrumbs li:last-child,
@@ -1093,9 +1093,9 @@ header.header-up {
 }
 
 .sub-breadcrumbs a em{
-	display: inline-block;
-	margin-right: 5px;
-	color: #666;
+    display: inline-block;
+    margin-right: 5px;
+    color: #666;
 }
 
 /* Footer */
@@ -1225,7 +1225,8 @@ header.header-up {
 
 /* Block Company info */
 .company_info{
-    font-size:12px
+    font-size: 12px;
+    margin: 10px!important;
 }
 
 .company_info .company_name {
@@ -1254,7 +1255,7 @@ header.header-up {
     padding-right:10px;
 }
 
-#company-map {
+.company-map {
     width:100%;
     height:300px;
 }

@@ -379,7 +379,7 @@ if ($checkss == $array_register['checkss']) {
 
                 $subject = $lang_module['account_active'];
                 $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
-                $send = nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
+                $send = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
 
                 if ($send) {
                     $info = $lang_module['account_active_mess'];
@@ -402,7 +402,7 @@ if ($checkss == $array_register['checkss']) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig, regdate,
             question, answer, passlostkey, view_mail, remember, in_groups,
-            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
         ) VALUES (
             " . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
             :username,
@@ -420,7 +420,7 @@ if ($checkss == $array_register['checkss']) {
             :answer,
             '', 0, 1,
             '" . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . "',
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ", -1
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ", -1, 'SYSTEM'
         )";
 
         $data_insert = array();
@@ -459,7 +459,7 @@ if ($checkss == $array_register['checkss']) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
-            nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
+            nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
 
             if (defined('ACCESS_ADDUS')) {
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/' . $group_id;
