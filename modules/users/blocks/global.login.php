@@ -110,9 +110,7 @@ if (!nv_function_exists('nv_block_login')) {
                 } else {
                     include NV_ROOTDIR . '/modules/users/language/vi.php';
                 }
-                if (!empty($block_css)) {
-                    $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
-                }
+                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
             } else {
                 global $lang_module;
             }
