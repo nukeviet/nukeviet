@@ -93,11 +93,10 @@
 $(document).on("nv.upload.ready", function() {
     $("#upload_logo_select").nvBrowseFile({
         adminBaseUrl: '{$NV_BASE_ADMINURL}',
-        path: '/uploads',
-        currentpath: '/uploads',
-        type: 'file',
-        area: '#upload_logo', // Đối tượng trả về đường dẫn => Build ra currentfile
-        alt: '#autologosize1', // Đối tượng trả về ALT image
+        path: '{$NV_UPLOADS_DIR}',
+        currentpath: '{$NV_UPLOADS_DIR}',
+        type: 'image',
+        area: '#upload_logo'
     });
 });
 </script>

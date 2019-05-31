@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -26,7 +26,7 @@ $array_url_instruction['thumbconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admi
 $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:config';
 $array_url_instruction['uploadconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:uploadconfig';
 
-$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo', 'cropimg', 'rotateimg', 'download' );
+$allow_func = ['main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo', 'cropimg', 'rotateimg', 'download'];
 
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'thumbconfig';
@@ -88,7 +88,7 @@ function nv_check_allow_upload_dir($dir)
         }
 
         // Cho phep doi ten, xoa thu muc
-        if ($admin_info['allow_modify_subdirectories'] and ! in_array($dir, $allow_upload_dir)) {
+        if ($admin_info['allow_modify_subdirectories'] and !in_array($dir, $allow_upload_dir)) {
             $level['rename_dir'] = true;
             $level['delete_dir'] = true;
 
@@ -99,7 +99,7 @@ function nv_check_allow_upload_dir($dir)
         }
 
         // Cho phep upload file
-        if (! empty($admin_info['allow_files_type'])) {
+        if (!empty($admin_info['allow_files_type'])) {
             $level['upload_file'] = true;
         }
 
@@ -120,16 +120,16 @@ function nv_check_allow_upload_dir($dir)
             $level['create_dir'] = true;
         }
 
-        if (! empty($_dir_mod_sub) and $admin_info['allow_modify_subdirectories']) {
+        if (!empty($_dir_mod_sub) and $admin_info['allow_modify_subdirectories']) {
             $level['rename_dir'] = true;
             $level['delete_dir'] = true;
             // Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
-            if (isset($site_mods[$mod_name]) and ! empty($_dir_mod_sub)) {
+            if (isset($site_mods[$mod_name]) and !empty($_dir_mod_sub)) {
                 unset($level['rename_dir'], $level['delete_dir']);
             }
         }
 
-        if (! empty($admin_info['allow_files_type'])) {
+        if (!empty($admin_info['allow_files_type'])) {
             $level['upload_file'] = true;
         }
 
@@ -417,7 +417,7 @@ function nv_filesListRefresh($pathimg)
                     if (isset($results[$title])) {
                         $info['userid'] = $results[$title]['userid'];
                         $dif = array_diff_assoc($info, $results[$title]);
-                        if (! empty($dif)) {
+                        if (!empty($dif)) {
                             // Cập nhật CSDL file thay đổi
                             $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . intval($info['filesize']) . ", src='" . $info['src'] . "', srcwidth=" . intval($info['srcwidth']) . ", srcheight=" . intval($info['srcheight']) . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = " . $db->quote($title));
                         }
@@ -428,19 +428,27 @@ function nv_filesListRefresh($pathimg)
                         $newalt = str_replace('-', ' ', change_alias($newalt));
 
                         // Thêm file mới
-                        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-                            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-                            VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
-                        $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
-                        $sth->bindParam(':title', $title, PDO::PARAM_STR);
-                        $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
-                        $sth->execute();
+                        try {
+                            $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (
+                                name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
+                            ) VALUES (
+                                :name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "',
+                                " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "',
+                                " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt
+                            )");
+                            $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
+                            $sth->bindParam(':title', $title, PDO::PARAM_STR);
+                            $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
+                            $sth->execute();
+                        } catch (PDOException $e) {
+                            trigger_error(print_r($e, true));
+                        }
                     }
                 }
             }
             closedir($dh);
 
-            if (! empty($results)) {
+            if (!empty($results)) {
                 // Xóa CSDL file không còn tồn tại
                 foreach ($results as $_row) {
                     $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title=" . $db->quote($_row['title']));

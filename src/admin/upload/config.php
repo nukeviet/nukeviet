@@ -87,6 +87,7 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('NV_UPLOADS_DIR', NV_UPLOADS_DIR);
 
 $tpl->assign('DATA', $array_autologosize);
 

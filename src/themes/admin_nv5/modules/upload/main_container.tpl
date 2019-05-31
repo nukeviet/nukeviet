@@ -24,21 +24,21 @@
                                     <button type="button" class="btn btn-primary">{$LANG->get('upload_file')}</button>
                                     <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu  dropdown-menu-right">
-                                        <a href="#" class="dropdown-item">{$LANG->get('upload_mode_remote')}</a>
+                                        <a href="#nv-filemanager-form-remoteupload" class="dropdown-item" data-toggle="modal" data-backdrop="static">{$LANG->get('upload_mode_remote')}</a>
                                     </div>
                                 </div>
                             </div>
                             <ul class="tools">
                                 <li class="iconp-search"><a href="#nv-filemanager-form-search" data-toggle="modal" data-backdrop="static" class="icon-search nv-filemanager-btn-search"><i class="fas fa-search"></i></a></li>
-                                <li class="iconp-cview"><a href="#" class="icon-cview" id="nv-filemanager-btn-change-viewmode"><i class="fas"></i></a></li>
+                                <li class="iconp-cview"><a href="#" class="icon-cview" id="nv-filemanager-btn-change-viewmode" data-auto="true"><i class="fas"></i></a></li>
                                 <li class="iconp-reload"><a href="#" class="icon-reload" id="nv-filemanager-btn-reload" title="{$LANG->get('refresh')}"><i class="fas fa-sync-alt"></i></a></li>
                                 <li class="iconp-collapse"><a href="#" class="icon-collapse" id="nv-filemanager-btn-toggle-form-filter"><i class="fas fa-cog"></i></i></a></li>
                             </ul>
                             <div class="form" id="nv-filemanager-form-filter">
                                 <div class="btn-group btn-space">
-                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="all" id="nv-filemanager-ctn-filter-type"><span class="text">{$LANG->get('type_file')}</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle" data-value="{$TYPE}" id="nv-filemanager-ctn-filter-type"><span class="text">{$LANG->get("type_`$TYPE`")}</span> <span class="icon-dropdown fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu">
-                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="all">{$LANG->get('type_file')}</a>
+                                        <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="file">{$LANG->get('type_file')}</a>
                                         <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="image">{$LANG->get('type_image')}</a>
                                         <a href="#" class="dropdown-item nv-filemanager-btn-filter-type" data-value="flash">{$LANG->get('type_flash')}</a>
                                     </div>
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fm-files nv-scroller">
+                    <div class="fm-files nv-scroller" id="nv-filemanager-files-scroller">
                         <div class="files-container" id="nv-filemanager-files-container"></div>
                     </div>
                     <nav class="fm-pagination d-none" id="nv-filemanager-files-nav"></nav>

@@ -367,6 +367,36 @@
         </div>
     </div>
 </div>
+{* Form upload file từ internet *}
+<div id="nv-filemanager-form-remoteupload" tabindex="-1" role="dialog" class="modal colored-header colored-header-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header modal-header-colored">
+                    <h3 class="modal-title">{$LANG->get('upload_mode_remote')}</h3>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="fas fa-times"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>{$LANG->get('enter_url')} <i class="text-danger">(*)</i>:</label>
+                        <input type="text" class="form-control" name="uploadremoteFile" value="">
+                    </div>
+                    <div class="form-group mb-0">
+                        <label>{$LANG->get('altimage')}{if $UPLOAD_ALT_REQUIRE eq 'true'} <i class="text-danger">(*)</i>{/if}:</label>
+                        <input type="text" class="form-control" name="uploadremoteFileAlt" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span class="d-none" data-toggle="loader">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                    </span>
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary md-close">{$LANG->get('cancel')}</button>
+                    <button type="submit" name="uploadremoteFileOK" value="submit" class="btn btn-primary md-close">{$LANG->get('upload_file')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {* Lưu nội dung menu khi ấn chuột phải *}
 <div class="d-none" id="contextMenu"></div>
 {* Iframe để tải file về *}
