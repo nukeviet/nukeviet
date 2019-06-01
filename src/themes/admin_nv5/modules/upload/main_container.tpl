@@ -21,8 +21,8 @@
                         <div class="fm-tools-wrap">
                             <div class="btn-icon">
                                 <div class="btn-group btn-space btn-upload">
-                                    <button type="button" class="btn btn-primary">{$LANG->get('upload_file')}</button>
-                                    <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="fas fa-chevron-down"></span></button>
+                                    <button id="nv-filemanager-btn-upload-local" disabled="disabled" type="button" class="btn btn-primary">{$LANG->get('upload_file')}</button>
+                                    <button id="nv-filemanager-btn-upload-dropdown" disabled="disabled" type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="fas fa-chevron-down"></span></button>
                                     <div role="menu" class="dropdown-menu  dropdown-menu-right">
                                         <a href="#nv-filemanager-form-remoteupload" class="dropdown-item" data-toggle="modal" data-backdrop="static">{$LANG->get('upload_mode_remote')}</a>
                                     </div>

@@ -20,6 +20,8 @@ var NVCoreFileBrowser = function() {
         btnFilterSort: ".nv-filemanager-btn-filter-sort",
         btnFilterUser: ".nv-filemanager-btn-filter-user",
         btnFilterType: ".nv-filemanager-btn-filter-type",
+        btnUpload: "#nv-filemanager-btn-upload-local",
+        btnUploadDropdown: "#nv-filemanager-btn-upload-dropdown",
         ctnFilterSort: "#nv-filemanager-ctn-filter-sort",
         ctnFilterUser: "#nv-filemanager-ctn-filter-user",
         ctnFilterType: "#nv-filemanager-ctn-filter-type",
@@ -104,6 +106,10 @@ var NVCoreFileBrowser = function() {
         imgfile: '',
         author: '',
     };
+
+    this.uploader = null;
+    this.uploadRendered = false;
+    this.uploadStarted = false;
 }
 
 /*
@@ -242,6 +248,17 @@ NVCoreFileBrowser.prototype.init = function(data) {
         $(window).on('resize', function() {
             $(cfg.folderElement).removeAttr('style');
         });
+
+        /*
+         * Tự động lấy file Alt khi điền URL remote upload
+         */
+        if (nv_auto_alt) {
+            $('[name="uploadremoteFile"]', $(cfg.formRemoteUpload)).on('keyup', function() {
+                var imageUrl = $(this).val();
+                fileAlt = self.getImgAlt(imageUrl);
+                $('[name="uploadremoteFileAlt"]', $(cfg.formRemoteUpload)).val(fileAlt);
+            });
+        }
 
         /*
          * Xử lý khi thao tác tại form công cụ ảnh
@@ -1034,6 +1051,8 @@ NVCoreFileBrowser.prototype.getListFiles = function(callback, reload, geturl) {
     var urlFiles;
 
     $(cfg.filesNav).html('').addClass('d-none');
+    $(cfg.btnUpload).prop('disabled', true);
+    $(cfg.btnUploadDropdown).prop('disabled', true);
 
     if (geturl) {
         urlFiles = geturl + '&random=' + self.strRand(10);
@@ -1161,6 +1180,9 @@ NVCoreFileBrowser.prototype.listFilesHandler = function() {
     if (fileSelected.length) {
         $(cfg.filesScroller)[0].scrollTop = $(cfg.filesScroller).scrollTop() - $(cfg.filesScroller).offset().top + fileSelected.offset().top;
     }
+
+    // Thiết lập các nút upload
+    console.log('Init Upload');
 }
 
 /*
@@ -2085,17 +2107,40 @@ NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
     $(cfgm.fileURL).data('value', fileUrl);
 
     if (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(fileUrl) && currUrl != check && ((nv_alt_require && fileAlt != '') || !nv_alt_require)) {
+        $('[type="submit"]', form).prop('disabled', true);
+        $('[data-toggle="loader"]', form).removeClass('d-none');
 
+        $.ajax({
+            type: "POST",
+            url: nv_module_url + "upload&random=" + self.strRand(10),
+            data: {
+                path: folderPath,
+                fileurl: fileUrl,
+                filealt: fileAlt
+            },
+            success: function(k) {
+                $('[type="submit"]', form).prop('disabled', false);
+                $('[data-toggle="loader"]', form).addClass('d-none');
+
+                var l = k.split("_");
+                if (l[0] == "ERROR") {
+                    alert(l[1]);
+                    return false;
+                }
+
+                $(cfgm.fileURL).data('value', check);
+                $(cfgm.file).data('value', k);
+
+                self.showLoader();
+                self.getListFiles();
+                $(cfg.formRemoteUpload).modal('hide');
+            }
+        });
     } else if (nv_alt_require && fileAlt == '' && fileUrl != '') {
-
+        alert(LANG.upload_alt_note);
     } else {
         alert(nv_url);
     }
-
-
-    $('[type="submit"]', form).prop('disabled', true);
-
-    console.log('SUBMIT');
 }
 
 /*
@@ -2163,6 +2208,43 @@ NVCoreFileBrowser.prototype.checkInitCompleted = function () {
         this.hideLoader();
         updatePerfectScrollbar();
     }
+}
+
+/*
+ * Thiết lập nút Upload
+ */
+NVCoreFileBrowser.prototype.uploadInit = function() {
+    var self = this;
+    var cfg = self.cfg;
+
+    if (self.uploader) {
+        self.uploadReset();
+    }
+
+
+    $(cfg.btnUpload).prop('disabled', true);
+    $(cfg.btnUploadDropdown).prop('disabled', true);
+
+}
+
+/*
+ * Reset lại dữ liệu PLUpload
+ */
+NVCoreFileBrowser.prototype.uploadReset = function() {
+    var self = this;
+
+    // Destroy current uploader
+    self.uploader.destroy();
+    self.uploadStarted = false;
+
+    // Clear uploader variable
+    self.uploader = null;
+
+    // Reset upload button
+    self.buildBtns();
+
+    // Clear upload container
+    $('#upload-queue-files').html('');
 }
 
 /*
@@ -2257,6 +2339,101 @@ NVCoreFileBrowser.prototype.fix2Modal = function (modalEle) {
     $('.modal-backdrop:last').css({
         "z-index": 1060
     });
+}
+
+/*
+ * Lấy Image Alt từ url
+ */
+NVCoreFileBrowser.prototype.getImgAlt = function (fileAlt) {
+    var lastChar = fileAlt.charAt(fileAlt.length - 1);
+
+    if (lastChar === '/' || lastChar === '\\') {
+        fileAlt = fileAlt.slice(0, -1);
+    }
+
+    fileAlt = decodeURIComponent(this.decode(fileAlt.replace(/^.*[\/\\]/g, '')));
+    fileAlt = fileAlt.split('.');
+
+    if (fileAlt.length > 1) {
+        fileAlt[fileAlt.length - 1] = '';
+    }
+
+    fileAlt = fileAlt.join(' ');
+    fileAlt = fileAlt.split('_');
+    fileAlt = fileAlt.join(' ');
+    fileAlt = fileAlt.split('-');
+    fileAlt = fileAlt.join(' ');
+    return trim(fileAlt);
+}
+
+/*
+ * htmlspecialchars_decode
+ */
+NVCoreFileBrowser.prototype.decode = function (string, quote_style) {
+    //       discuss at: http://phpjs.org/functions/htmlspecialchars_decode/
+    //      original by: Mirek Slugen
+    //      improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    //      bugfixed by: Mateusz "loonquawl" Zalega
+    //      bugfixed by: Onno Marsman
+    //      bugfixed by: Brett Zamir (http://brett-zamir.me)
+    //      bugfixed by: Brett Zamir (http://brett-zamir.me)
+    //         input by: ReverseSyntax
+    //         input by: Slawomir Kaniecki
+    //         input by: Scott Cariss
+    //         input by: Francois
+    //         input by: Ratheous
+    //         input by: Mailfaker (http://www.weedem.fr/)
+    //       revised by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // reimplemented by: Brett Zamir (http://brett-zamir.me)
+    //        example 1: htmlspecialchars_decode("<p>this -&gt; &quot;</p>", 'ENT_NOQUOTES');
+    //        returns 1: '<p>this -> &quot;</p>'
+    //        example 2: htmlspecialchars_decode("&amp;quot;");
+    //        returns 2: '&quot;'
+
+    var optTemp = 0,
+        i = 0,
+        noquotes = false;
+    if (typeof quote_style === 'undefined') {
+        quote_style = 2;
+    }
+    string = string.toString()
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+    var OPTS = {
+        'ENT_NOQUOTES': 0,
+        'ENT_HTML_QUOTE_SINGLE': 1,
+        'ENT_HTML_QUOTE_DOUBLE': 2,
+        'ENT_COMPAT': 2,
+        'ENT_QUOTES': 3,
+        'ENT_IGNORE': 4
+    };
+    if (quote_style === 0) {
+        noquotes = true;
+    }
+    if (typeof quote_style !== 'number') {
+        // Allow for a single string or an array of string flags
+        quote_style = [].concat(quote_style);
+        for (i = 0; i < quote_style.length; i++) {
+            // Resolve string input to bitwise e.g. 'PATHINFO_EXTENSION' becomes 4
+            if (OPTS[quote_style[i]] === 0) {
+                noquotes = true;
+            } else if (OPTS[quote_style[i]]) {
+                optTemp = optTemp | OPTS[quote_style[i]];
+            }
+        }
+        quote_style = optTemp;
+    }
+    if (quote_style & OPTS.ENT_HTML_QUOTE_SINGLE) {
+        string = string.replace(/&#0*39;/g, "'"); // PHP doesn't currently escape if more than one 0, but it should
+        // string = string.replace(/&apos;|&#x0*27;/g, "'"); // This would also be useful here, but not a part of PHP
+    }
+    if (!noquotes) {
+        string = string.replace(/&quot;/g, '"');
+    }
+    // Put this in last place to avoid escape being double-decoded
+    string = string.replace(/&amp;/g, '&');
+
+    return string;
 }
 
 var NVLDATA = {
@@ -2601,6 +2778,7 @@ var NVCMENU = {
 
             $.each(NVCMENU.bindings, function(id, func) {
                 $('[data-toggle="' + id + '"]', NVCMENU.menu).on('click', function(e) {
+                    e.preventDefault();
                     NVCMENU.hide();
                     window.fileManager[func](this);
                 });

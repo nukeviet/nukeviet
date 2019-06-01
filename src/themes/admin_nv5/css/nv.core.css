@@ -15405,6 +15405,7 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
 }
 .card-filemanager .fm-container .fm-contents {
   flex: 1;
+  overflow: hidden;
 }
 .card-filemanager .fm-folders {
   position: relative;
@@ -15852,6 +15853,96 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
   opacity: 0.5;
 }
 
+.fm-upload-queue {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+}
+.fm-upload-queue .queue-tools,
+.fm-upload-queue .queue-head,
+.fm-upload-queue .queue-files-item {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.fm-upload-queue .queue-files {
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+}
+.fm-upload-queue .queue-files-items {
+  max-height: 100%;
+}
+.fm-upload-queue .queue-head {
+  border-bottom: 2px solid #dedede;
+  font-weight: bold;
+}
+.fm-upload-queue .queue-head > div,
+.fm-upload-queue .queue-files-item > div {
+  padding: 0.75rem;
+}
+.fm-upload-queue .queue-head .queue-col-name,
+.fm-upload-queue .queue-head .queue-col-alt,
+.fm-upload-queue .queue-files-item .queue-col-name,
+.fm-upload-queue .queue-files-item .queue-col-alt {
+  flex: 1;
+}
+.fm-upload-queue .queue-head .queue-col-name,
+.fm-upload-queue .queue-files-item .queue-col-name {
+  padding-left: 0;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.fm-upload-queue .queue-head .queue-col-size,
+.fm-upload-queue .queue-head .queue-col-status,
+.fm-upload-queue .queue-head .queue-col-tool,
+.fm-upload-queue .queue-files-item .queue-col-size,
+.fm-upload-queue .queue-files-item .queue-col-status,
+.fm-upload-queue .queue-files-item .queue-col-tool {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+.fm-upload-queue .queue-head .queue-col-alt,
+.fm-upload-queue .queue-files-item .queue-col-alt {
+  width: 20.5rem;
+}
+.fm-upload-queue .queue-head .queue-col-size,
+.fm-upload-queue .queue-files-item .queue-col-size {
+  width: 6.884rem;
+}
+.fm-upload-queue .queue-head .queue-col-status,
+.fm-upload-queue .queue-files-item .queue-col-status {
+  width: 6.884rem;
+}
+.fm-upload-queue .queue-head .queue-col-tool,
+.fm-upload-queue .queue-files-item .queue-col-tool {
+  width: 3.057rem;
+  padding-right: 0;
+}
+.fm-upload-queue .queue-files-item {
+  border-bottom: 1px solid #dedede;
+}
+.fm-upload-queue .queue-files-item:last-child {
+  border-bottom: 0;
+}
+.fm-upload-queue .queue-tools .tool-sizes {
+  flex: 0 0 110px;
+  padding-left: 10px;
+}
+.fm-upload-queue .queue-tools .tool-progress {
+  flex: 1 0 0;
+}
+
 @media (min-width: 1367px) {
   .fm-files .files-container > ul > li {
     flex: 0 0 14.28571429%;
@@ -15951,6 +16042,48 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
 
   .filemanager-loader > div {
     top: 45px;
+  }
+}
+@media (max-width: 575.98px), (min-width: 768px) and (max-width: 999.98px) {
+  .fm-upload-queue .queue-tools {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  .fm-upload-queue .queue-tools .tool-progress {
+    flex: 1 0 100%;
+    max-width: 100%;
+  }
+  .fm-upload-queue .queue-head {
+    display: none;
+  }
+  .fm-upload-queue .queue-files-items {
+    max-height: inherit;
+  }
+  .fm-upload-queue .queue-files-item {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    border: 1px solid #dedede;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 0.2rem;
+  }
+  .fm-upload-queue .queue-files-item .queue-col-name,
+.fm-upload-queue .queue-files-item .queue-col-alt {
+    flex: 1 0 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+  .fm-upload-queue .queue-files-item .queue-col-name {
+    font-weight: bold;
+  }
+  .fm-upload-queue .queue-files-item .queue-col-size {
+    padding-left: 0;
+    flex: 1 0 0;
+  }
+  .fm-upload-queue .queue-files-item:last-child {
+    border-bottom: 1px solid #dedede;
   }
 }
 @media (max-width: 420px) {
