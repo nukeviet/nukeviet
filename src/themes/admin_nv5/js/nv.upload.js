@@ -33,6 +33,7 @@ var NVCoreFileBrowser = function() {
         filesContainer: "#nv-filemanager-files-container",
         filesScroller: "#nv-filemanager-files-scroller",
         filesNav: "#nv-filemanager-files-nav",
+        filesToolBar: "#nv-filemanager-tool-bar",
         linkDownload: "#nv-filemanager-download-link",
 
         formSearch: '#nv-filemanager-form-search',
@@ -47,6 +48,12 @@ var NVCoreFileBrowser = function() {
         formCreatImage: '#nv-filemanager-form-createimage',
         formAddLogo: '#nv-filemanager-form-addlogo',
         formRemoteUpload: '#nv-filemanager-form-remoteupload',
+
+        ctnUploadParent: '#nv-filemanager-upload-parent',
+        ctnUploadQueue: '#nv-filemanager-upload-queue',
+        ctnUploadScroller: '#nv-filemanager-upload-queue-scroller',
+
+        modalAlert: '#nv-filemanager-alert-modal',
     };
 
     this.cfgFolderData = {
@@ -94,6 +101,7 @@ var NVCoreFileBrowser = function() {
 
     this.ICON = ICON;
 
+    this.debug = 0;
     this.perload = 0;
     this.timerRecreatThumb = 0;
     this.firstData = {};
@@ -211,6 +219,7 @@ NVCoreFileBrowser.prototype.init = function(data) {
         $(document).on('dragleave', function(e) {
             couterDragIn--;
             if ((dragInCurrentTarget == e.target && !isFireFox) || (isFireFox && couterDragIn <= 0)) {
+                (self.debug && console.log('dragleave'));
                 e.stopPropagation();
                 e.preventDefault();
                 couterDragIn = 0;
@@ -220,6 +229,7 @@ NVCoreFileBrowser.prototype.init = function(data) {
         });
 
         $(document).on('dragenter', function(e) {
+            (self.debug && console.log('dragenter'));
             dragInCurrentTarget = e.target;
             e.stopPropagation();
             e.preventDefault();
@@ -604,6 +614,14 @@ NVCoreFileBrowser.prototype.init = function(data) {
             $('[name="uploadremoteFile"]', modalEle).val('').focus();
             $('[name="uploadremoteFileAlt"]', modalEle).val('');
             $('[name="uploadremoteFileOK"]', modalEle).prop('disabled', false);
+        });
+
+        /*
+         * Xử lý khi mở thông báo lên
+         */
+        $(cfg.modalAlert).on('shown.bs.modal', function(e) {
+            var modalEle = $(e.currentTarget);
+            self.fix2Modal(modalEle);
         });
 
         /*
@@ -1181,8 +1199,8 @@ NVCoreFileBrowser.prototype.listFilesHandler = function() {
         $(cfg.filesScroller)[0].scrollTop = $(cfg.filesScroller).scrollTop() - $(cfg.filesScroller).offset().top + fileSelected.offset().top;
     }
 
-    // Thiết lập các nút upload
-    console.log('Init Upload');
+    // Thiết lập chức năng upload
+    self.uploadReset();
 }
 
 /*
@@ -2216,22 +2234,226 @@ NVCoreFileBrowser.prototype.checkInitCompleted = function () {
 NVCoreFileBrowser.prototype.uploadInit = function() {
     var self = this;
     var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
 
     if (self.uploader) {
-        self.uploadReset();
+        return true;
     }
 
-
+    // Cấm các nút upload
     $(cfg.btnUpload).prop('disabled', true);
     $(cfg.btnUploadDropdown).prop('disabled', true);
 
+    // Kiểm tra quyền upload vào thư mục hiện tại
+    var isUploadAllow = $(cfgf.allowedUpload).data('value');
+    if (!isUploadAllow) {
+        $(cfg.btnUpload).prop('title', LANG.notupload);
+        $(cfg.btnUploadDropdown).prop('title', LANG.notupload);
+        return true;
+    }
+
+    // Cho phép nút upload
+    $(cfg.btnUpload).prop('disabled', false);
+    $(cfg.btnUploadDropdown).prop('disabled', false);
+
+    var folderPath = $(cfgf.folder).data('value');
+
+    // Thiết lập trình Upload
+    self.uploader = new plupload.Uploader({
+        runtimes: 'html5,flash,silverlight,html4',
+        browse_button: $(cfg.btnUpload)[0],
+        url: nv_module_url + "upload&path=" + folderPath + "&random=" + self.strRand(10),
+        flash_swf_url: nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
+        silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
+        drop_element: $(cfg.container)[0],
+        file_data_name: 'upload',
+        multipart: true,
+        filters : {
+           max_file_size : nv_max_size_bytes,
+           mime_types: []
+        },
+        chunk_size: nv_chunk_size,
+        resize: false,
+        init: {
+            // Event on init uploader
+            PostInit: function() {
+                // Không làm gì
+                (self.debug && console.log("Plupload: Event init"));
+            },
+
+            // Event on add file (Add to queue or first add)
+            FilesAdded: function(up, files) {
+                (self.debug && console.log("Plupload: Event fileadded"));
+
+                // Thiết lập container của trình upload
+                if (!self.uploadRendered) {
+                    self.uploadRenderUI();
+                }
+
+                self.uploadRefreshList();
+                $(cfg.dropzoneCtn).removeClass('drag-hover').hide();
+            },
+
+            // Event on trigger a file upload status
+            UploadProgress: function(up, file) {
+                (self.debug && console.log("Plupload: Event Upload Progress"));
+                $('#' + file.id + ' [data-toggle="filestatus"]').html(file.percent + '%');
+                self.handleStatus(file, false);
+                self.updateTotalProgress();
+            },
+
+            // Event on one file finish uploaded (Maybe success or error)
+            FileUploaded: function(up, file, response) {
+                (self.debug && console.log("Plupload: Event file uploaded"));
+                (self.debug && console.log(response));
+                response = response.response;
+                self.handleStatus(file, response);
+            },
+
+            // Event on start upload or finish upload
+            StateChanged: function() {
+                (self.debug && console.log("Plupload: Event state changed " + self.uploader.state));
+
+                if (self.uploader.state === plupload.STARTED) {
+                    // Bắt đầu upload
+                    if (!self.uploadStarted) {
+                        self.uploadStarted = true;
+
+                        // Ẩn các nút
+                        $('[data-toggle="addfile"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+                        $('[data-toggle="start"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+                        $('[data-toggle="cancel"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+
+                        // Hiển thị nút tạm dừng, tiếp tục
+                        if (parseFloat(nv_chunk_size) <= 0) {
+                            $('[data-toggle="stop"]', $(cfg.ctnUploadQueue)).removeClass('d-none');
+                        }
+
+                        self.updateTotalProgress();
+                    }
+                } else if (self.uploader.state != 8) {
+                    // 8 is Queueable.DESTROYED state
+                    self.uploadRefreshList();
+                }
+            },
+
+            // Event on a file is uploading
+            UploadFile: function(up, file) {
+                // Not thing to do
+            },
+
+            // Event on remove a file
+            FilesRemoved: function() {
+                (self.debug && console.log("Plupload: Event file removed"));
+                var scrollTop = $(cfg.ctnUploadScroller).scrollTop();
+                self.uploadRefreshList();
+                $(cfg.ctnUploadScroller).scrollTop(scrollTop);
+            },
+
+            // Event on all files are uploaded
+            UploadComplete: function(up, files) {
+                (self.debug && console.log("Plupload: Event upload completed"));
+
+                // Ẩn nút tiếp tục, tạm dừng
+                $('[data-toggle="stop"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+                $('[data-toggle="continue"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+
+                if (self.uploader.total.failed > 0) {
+                    // Nếu có file nào đó bị thất bại thì hiển thị nút kết thúc
+                    $('[data-toggle="finish"]', $(cfg.ctnUploadQueue)).removeClass('d-none');
+                } else {
+                    // Trực tiếp kết thúc
+                    $('[data-toggle="finishloader"]', $(cfg.ctnUploadQueue)).removeClass('d-none');
+                    setTimeout(function() {
+                        self.uploadFinish();
+                    }, 1000);
+                }
+            },
+
+            // Event on error
+            Error: function(up, err) {
+                (self.debug && console.log("Plupload: Event error"));
+                self.showMsgError("Error #" + err.message + ": <br>" + err.file.name);
+
+                if (err.code === plupload.INIT_ERROR) {
+                    setTimeout(function() {
+                        self.uploadDestroy();
+                    }, 1000);
+                }
+            },
+
+            // Get image alt before upload
+            BeforeUpload: function(up, file) {
+                (self.debug && console.log("Plupload: Event before upload"));
+                var filealt = '';
+
+                if ($('#' + file.id + ' [data-toggle="fileAltInput"]').length) {
+                    filealt = $('#' + file.id + ' [data-toggle="fileAltInput"]').val();
+                }
+
+                self.uploader.settings.multipart_params = {
+                    "filealt": filealt
+                };
+                // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
+                /*
+                if (nv_resize != false) {
+                    if (typeof file.clientResize != "undefined" && file.clientResize) {
+                        self.uploader.settings.resize = nv_resize;
+                    } else {
+                        self.uploader.settings.resize = {};
+                    }
+                }
+                */
+            },
+
+            // Upload xong một BLOB
+            ChunkUploaded: function(up, file, res) {
+                (self.debug && console.log("Plupload: Event chunk uploaded"));
+                /**
+                 * Hiện tại Plupload không có chức năng dừng upload chunk và chuyển sang file khác
+                 * Do đó tạm thời khi lỗi một BLOG phải chờ upload xong cả file để kiểm tra lỗi
+                 */
+                if (res.response != null && res.response != '') {
+                    //self.handleStatus(file, res.response);
+                }
+            }
+        }
+    });
+
+    self.uploader.init();
 }
 
 /*
  * Reset lại dữ liệu PLUpload
+ * - Destroy
+ * - Tạo lại
  */
 NVCoreFileBrowser.prototype.uploadReset = function() {
     var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    // Destroy current uploader
+    if (self.uploader) {
+        self.uploadDestroy();
+    }
+
+    // Tạo lại nút upload
+    setTimeout(function() {
+        self.uploadInit();
+    }, 50);
+}
+
+/*
+ * Hủy dữ liệu upload
+ */
+NVCoreFileBrowser.prototype.uploadDestroy = function() {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
 
     // Destroy current uploader
     self.uploader.destroy();
@@ -2239,12 +2461,333 @@ NVCoreFileBrowser.prototype.uploadReset = function() {
 
     // Clear uploader variable
     self.uploader = null;
-
-    // Reset upload button
-    self.buildBtns();
+    self.uploadRendered = false;
 
     // Clear upload container
-    $('#upload-queue-files').html('');
+    $(cfg.ctnUploadQueue).remove();
+
+    // Hiển thị lại danh sách file và công cụ
+    $(cfg.filesToolBar).removeClass('d-none');
+    $(cfg.filesScroller).removeClass('d-none');
+    $(cfg.filesNav).removeClass('d-none');
+}
+
+/*
+ * Thiết lập container của trình upload
+ */
+NVCoreFileBrowser.prototype.uploadRenderUI = function() {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    // Ẩn các thành phần hiển thị danh sách file và nút công cụ
+    $(cfg.filesToolBar).addClass('d-none');
+    $(cfg.filesScroller).addClass('d-none');
+    $(cfg.filesNav).addClass('d-none');
+
+    var html = '\
+    <div class="fm-upload-queue" id="nv-filemanager-upload-queue">\
+        <div class="queue-tools">\
+            <div class="tool-btns">\
+                <button data-toggle="addfile" type="button" class="btn mr-1 btn-primary mb-2">' + LANG.upload_add_files + '</button>\
+                <button data-toggle="start" type="button" class="btn mr-1 btn-primary mb-2">' + LANG.upload_file + '</button>\
+                <button data-toggle="cancel" type="button" class="btn mr-1 btn-secondary mb-2">' + LANG.upload_cancel + '</button>\
+                <button data-toggle="stop" type="button" class="btn mr-1 btn-secondary mb-2 d-none">' + LANG.upload_stop + '</button>\
+                <button data-toggle="continue" type="button" class="btn mr-1 btn-secondary mb-2 d-none">' + LANG.upload_continue + '</button>\
+                <button data-toggle="finishloader" type="button" class="btn mr-1 btn-success mb-2 d-none"><i class="fas fa-spinner fa-pulse"></i></button>\
+                <button data-toggle="finish" type="button" class="btn mr-1 btn-secondary mb-2 d-none">' + LANG.upload_finish + '</button>\
+            </div>\
+            <div class="tool-sizes">\
+                <div data-toggle="totalSize" class="mb-2"></div>\
+            </div>\
+            <div class="tool-progress">\
+                <div class="progress mb-2">\
+                    <div data-toggle="progress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-primary progress-bar-striped progress-bar-animated">0%</div>\
+                </div>\
+            </div>\
+        </div>\
+        <div class="queue-head">\
+            <div class="queue-col-name">' + LANG.file_name + '</div>\
+            <div class="queue-col-alt">' + LANG.altimage + '</div>\
+            <div class="queue-col-size">' + LANG.upload_size + '</div>\
+            <div class="queue-col-status">' + LANG.upload_status + '</div>\
+            <div class="queue-col-tool"></div>\
+        </div>\
+        <div class="queue-files nv-scroller" id="nv-filemanager-upload-queue-scroller">\
+            <div class="queue-files-items" data-toggle="ctnitems">\
+            </div>\
+        </div>\
+    </div>';
+
+    $(cfg.ctnUploadParent).append(html);
+
+    self.uploadRendered = true;
+
+    // Ấn vào nút hủy upload
+    $('[data-toggle="cancel"]', $(cfg.ctnUploadQueue)).on('click', function(e) {
+        e.preventDefault();
+        self.uploadReset();
+    });
+
+    // Ấn vào nút bắt đầu upload
+    $('[data-toggle="start"]', $(cfg.ctnUploadQueue)).on('click', function(e) {
+        e.preventDefault();
+        var allow_start = true;
+        if (nv_alt_require) {
+            $('[data-toggle="fileAltInput"]', $(cfg.ctnUploadQueue)).each(function() {
+                if ($(this).val() == '') {
+                    allow_start = false;
+                    return false;
+                }
+            });
+
+            if (allow_start == false) {
+                self.showMsgError(LANG.upload_alt_note);
+            }
+        }
+
+        if (allow_start) {
+            self.uploader.start();
+        }
+    });
+
+    // Ấn vào nút thêm file
+    $('[data-toggle="addfile"]', $(cfg.ctnUploadQueue)).on('click', function(e) {
+        e.preventDefault();
+        $('.moxie-shim.moxie-shim-' + self.uploader.runtime, $(cfg.container)).find('input').trigger('click');
+    });
+
+    // Ấn vào nút dừng
+    $('[data-toggle="stop"]', $(cfg.ctnUploadQueue)).on('click', function(e) {
+        e.preventDefault();
+        $('[data-toggle="stop"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+        $('[data-toggle="continue"]', $(cfg.ctnUploadQueue)).removeClass('d-none');
+        self.uploader.stop();
+    });
+
+    // Ấn vào nút tiếp tục
+    $('[data-toggle="continue"]', $(cfg.ctnUploadQueue)).on('click', function(e) {
+        e.preventDefault();
+        $('[data-toggle="stop"]', $(cfg.ctnUploadQueue)).removeClass('d-none');
+        $('[data-toggle="continue"]', $(cfg.ctnUploadQueue)).addClass('d-none');
+        self.uploader.start();
+    });
+
+    // Ấn vào nút kết thúc (nút hày hiển thị khi có file tải lên lỗi)
+    $('[data-toggle="finish"]', $(cfg.ctnUploadQueue)).on('click', function(e) {
+        e.preventDefault();
+        self.uploadFinish();
+    });
+}
+
+/*
+ * Build lại danh sách các file upload
+ */
+NVCoreFileBrowser.prototype.uploadRefreshList = function () {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    $('[data-toggle="ctnitems"]', $(cfg.ctnUploadQueue)).html('');
+
+    $.each(self.uploader.files, function(i, file) {
+        var fileAlt = NVLDATA.getValue(file.id);
+        if (nv_auto_alt && fileAlt == '') {
+            fileAlt = self.getImgAlt(file.name);
+            NVLDATA.setValue(file.id, fileAlt);
+        }
+        var html = '\
+        <div class="queue-files-item inFileManagerModal" id="' + file.id + '">\
+            <div class="queue-col-name">' + file.name + '</div>\
+            <div class="queue-col-alt">\
+                <input data-toggle="fileAltInput" class="form-control form-control-xs" type="text" value="' + fileAlt + '" onkeyup="NVLDATA.setValue(\'' + file.id + '\', this.value);">\
+            </div>\
+            <div class="queue-col-size">' + plupload.formatSize(file.size) + '</div>\
+            <div class="queue-col-status" data-toggle="filestatus">' + file.percent + '%</div>\
+            <div class="queue-col-tool" data-toggle="fileaction"></div>\
+        </div>';
+        $('[data-toggle="ctnitems"]', $(cfg.ctnUploadQueue)).append(html);
+
+        self.handleStatus(file, false);
+
+        // Xử lý xóa file
+        $('#' + file.id + ' .file-delete').click(function(e) {
+            e.preventDefault();
+            $('#' + file.id).remove();
+            self.uploader.removeFile(file);
+        });
+    });
+
+    $('[data-toggle="totalSize"]', $(cfg.ctnUploadQueue)).html(plupload.formatSize(self.uploader.total.size));
+
+    // Tạo thanh cuộn
+    var scroller = $(cfg.ctnUploadScroller).data('scroller');
+    if (!scroller) {
+        scroller = new PerfectScrollbar($(cfg.ctnUploadScroller)[0], {
+            wheelPropagation: false
+        });
+        $(cfg.ctnUploadScroller).data('scroller', scroller);
+    } else {
+        scroller.update();
+    }
+
+    // Cuộn đến cuối list file
+    $(cfg.ctnUploadScroller)[0].scrollTop = $(cfg.ctnUploadScroller)[0].scrollHeight;
+
+    // Cập nhật tình trạng upload tổng
+    self.updateTotalProgress();
+
+    // Cấm/cho phép nút upload
+    if (self.uploader.files.length) {
+        $('[data-toggle="start"]', $(cfg.ctnUploadQueue)).prop('disabled', false);
+    } else {
+        $('[data-toggle="start"]', $(cfg.ctnUploadQueue)).prop('disabled', true);
+    }
+}
+
+/*
+ * Xử lý hiển thị trạng thái file upload
+ */
+NVCoreFileBrowser.prototype.handleStatus = function (file, response) {
+    var self = this;
+    var actionClass;
+
+    if (response != false) {
+        check = response.split('_');
+
+        if (check[0] == 'ERROR') {
+            file.status = plupload.FAILED;
+            file.hint = check[1];
+            self.uploader.total.uploaded--;
+            self.uploader.total.failed++;
+        } else {
+            file.name = response;
+        }
+
+        $.each(self.uploader.files, function(i, f) {
+            if (f.id == file.id) {
+                self.uploader.files[i].status = file.status;
+                self.uploader.files[i].hint = file.hint;
+                self.uploader.files[i].name = file.name;
+            }
+        });
+    }
+
+    if (file.status == plupload.DONE) {
+        actionClass = 'text-success fas fa-check-circle';
+    } else if (file.status == plupload.FAILED) {
+        actionClass = 'text-danger fas fa-exclamation-triangle';
+    } else if (file.status == plupload.QUEUED) {
+        actionClass = 'cursor-pointer text-primary far fa-times-circle file-delete';
+    } else if (file.status == plupload.UPLOADING) {
+        actionClass = 'text-info fas fa-spinner fa-pulse';
+    } else {
+        // Nothing to do
+    }
+
+    var actionHTML = '<i class="' + actionClass + '"></i>';
+    if ($('#' + file.id + ' [data-toggle="fileaction"]').html() != actionHTML) {
+        $('#' + file.id + ' [data-toggle="fileaction"]').html(actionHTML);
+    }
+
+    if (file.hint) {
+        $('#' + file.id).attr('title', file.hint);
+    }
+}
+
+/*
+ * Cập nhật tổng tiến trình upload
+ */
+NVCoreFileBrowser.prototype.updateTotalProgress = function () {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgm = self.cfgMain;
+    var cfgf = self.cfgFolderData;
+
+    var progress = $('[data-toggle="progress"]', $(cfg.ctnUploadQueue));
+
+    progress.attr('aria-valuenow', self.uploader.total.percent);
+    progress.css({
+        width: self.uploader.total.percent + '%',
+    }).html(self.uploader.total.percent + '%');
+}
+
+/*
+ * Hiển thị thông báo lỗi
+ */
+NVCoreFileBrowser.prototype.showMsgError = function (message) {
+    var self = this;
+    var cfg = self.cfg;
+
+    $('[data-toggle="content"]', $(cfg.modalAlert)).html(message);
+    $('[data-toggle="icon"]', $(cfg.modalAlert)).removeClass('fas far fa-info-circle fa-check');
+    $('[data-toggle="icon"]', $(cfg.modalAlert)).addClass('far fa-times-circle');
+    $(cfg.modalAlert).removeClass('modal-full-color-primary modal-full-color-success');
+    $(cfg.modalAlert).addClass('modal-full-color-danger');
+    $(cfg.modalAlert).modal('show');
+}
+
+/*
+ * Hiển thị thông báo thành công
+ */
+NVCoreFileBrowser.prototype.showMsgSuccess = function (message) {
+    var self = this;
+    var cfg = self.cfg;
+
+    $('[data-toggle="content"]', $(cfg.modalAlert)).html(message);
+    $('[data-toggle="icon"]', $(cfg.modalAlert)).removeClass('fas far fa-times-circle fa-info-circle');
+    $('[data-toggle="icon"]', $(cfg.modalAlert)).addClass('fas fa-check');
+    $(cfg.modalAlert).removeClass('modal-full-color-danger modal-full-color-primary');
+    $(cfg.modalAlert).addClass('modal-full-color-success');
+    $(cfg.modalAlert).modal('show');
+}
+
+/*
+ * Hiển thị thông báo thường
+ */
+NVCoreFileBrowser.prototype.showMsgInfo = function (message) {
+    var self = this;
+    var cfg = self.cfg;
+
+    $('[data-toggle="content"]', $(cfg.modalAlert)).html(message);
+    $('[data-toggle="icon"]', $(cfg.modalAlert)).removeClass('fas far fa-times-circle fa-check');
+    $('[data-toggle="icon"]', $(cfg.modalAlert)).addClass('fas fa-info-circle');
+    $(cfg.modalAlert).removeClass('modal-full-color-danger modal-full-color-success');
+    $(cfg.modalAlert).addClass('modal-full-color-primary');
+    $(cfg.modalAlert).modal('show');
+}
+
+/*
+ * Xử lý kết thúc một lượt upload
+ * - Xóa các thành phần upload
+ * - Hiển thị lại các thành phần file
+ * - Tải lại folder
+ * - Thiết lập lại upload
+ */
+NVCoreFileBrowser.prototype.uploadFinish = function () {
+    var self = this;
+    var cfg = self.cfg;
+    var cfgf = self.cfgFolderData;
+    var cfgm = self.cfgMain;
+    var selFile;
+
+    if (self.uploader.total.uploaded > 0) {
+        selFile = new Array();
+        $.each(self.uploader.files, function(k, v) {
+            if (v.status == plupload.DONE) {
+                selFile.push(v.name);
+            }
+        });
+        selFile = selFile.join('|');
+    } else {
+        selFile = '';
+    }
+
+    $(cfgm.file).data('value', selFile);
+    self.uploadDestroy();
+    $('[data-folder="' + $(cfgf.folder).data('value') + '"]', $(cfg.folderElement)).trigger('click');
 }
 
 /*

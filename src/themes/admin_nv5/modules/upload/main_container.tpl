@@ -16,8 +16,8 @@
                 </div>
             </div>
             <div class="fm-contents">
-                <div class="fm-contents-wrap">
-                    <div class="fm-tools">
+                <div class="fm-contents-wrap" id="nv-filemanager-upload-parent">
+                    <div class="fm-tools" id="nv-filemanager-tool-bar">
                         <div class="fm-tools-wrap">
                             <div class="btn-icon">
                                 <div class="btn-group btn-space btn-upload">
@@ -76,7 +76,7 @@
             <div class="spacer"></div>
             <div class="body">
                 <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                <h2>Kéo và thả file vào đây để tải lên</h2>
+                <h2>{$LANG->get('drag_and_drop_upload')}</h2>
             </div>
             <div class="spacer"></div>
         </div>

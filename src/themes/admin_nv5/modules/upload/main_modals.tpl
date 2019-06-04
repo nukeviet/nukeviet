@@ -368,7 +368,7 @@
     </div>
 </div>
 {* Form upload file từ internet *}
-<div id="nv-filemanager-form-remoteupload" tabindex="-1" role="dialog" class="modal colored-header colored-header-primary inFileManagerModal">
+<div id="nv-filemanager-form-remoteupload" tabindex="-1" data-backdrop="static" role="dialog" class="modal colored-header colored-header-primary inFileManagerModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <form>
@@ -394,6 +394,26 @@
                     <button type="submit" name="uploadremoteFileOK" value="submit" class="btn btn-primary md-close">{$LANG->get('upload_file')}</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+{* Modal thông báo lỗi, thành công, ... *}
+<div id="nv-filemanager-alert-modal" tabindex="-1" role="dialog" data-backdrop="static" class="modal modal-full-color modal-full-color-primary inFileManagerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <span data-toggle="icon" class="modal-main-icon fas fa-info-circle"></span>
+                    <div data-toggle="content" class="mt-4"></div>
+                    <div class="mt-4">
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary btn-space">OK</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
