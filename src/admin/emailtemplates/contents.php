@@ -296,6 +296,7 @@ if (empty($array['attachments'])) {
     $array['attachments'][] = '';
 }
 
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('FORM_ACTION', $form_action);
 $tpl->assign('DATA', $array);
 $tpl->assign('ERROR', $error);

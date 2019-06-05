@@ -47,7 +47,7 @@
                             <input type="text" class="form-control form-control-sm" id="site_logo" name="site_logo" value="{$DATA['site_logo']}">
                         </div>
                         <div class="flex-grow-0 flex-shrink-0 pl-2">
-                            <button class="btn btn-secondary btn-input-sm" type="button" data-toggle="browsefile" data-path="{$NV_UPLOADS_DIR}" data-cpath="{$NV_UPLOADS_DIR}" data-area="site_logo" data-type="image"><i class="icon icon-left far fa-folder-open"></i> {$LANG->get('browse_image')}</button>
+                            <button class="btn btn-secondary btn-input-sm" type="button" id="site_logo_btn"><i class="icon icon-left far fa-folder-open"></i> {$LANG->get('browse_image')}</button>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                             <input type="text" class="form-control form-control-sm" id="site_banner" name="site_banner" value="{$DATA['site_banner']}">
                         </div>
                         <div class="flex-grow-0 flex-shrink-0 pl-2">
-                            <button class="btn btn-secondary btn-input-sm" type="button" data-toggle="browsefile" data-path="{$NV_UPLOADS_DIR}" data-cpath="{$NV_UPLOADS_DIR}" data-area="site_banner" data-type="image"><i class="icon icon-left far fa-folder-open"></i> {$LANG->get('browse_image')}</button>
+                            <button class="btn btn-secondary btn-input-sm" type="button" id="site_banner_btn"><i class="icon icon-left far fa-folder-open"></i> {$LANG->get('browse_image')}</button>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                             <input type="text" class="form-control form-control-sm" id="site_favicon" name="site_favicon" value="{$DATA['site_favicon']}">
                         </div>
                         <div class="flex-grow-0 flex-shrink-0 pl-2">
-                            <button class="btn btn-secondary btn-input-sm" type="button" data-toggle="browsefile" data-path="{$NV_UPLOADS_DIR}" data-cpath="{$NV_UPLOADS_DIR}" data-area="site_favicon" data-type="image"><i class="icon icon-left far fa-folder-open"></i> {$LANG->get('browse_image')}</button>
+                            <button class="btn btn-secondary btn-input-sm" type="button" id="site_favicon_btn"><i class="icon icon-left far fa-folder-open"></i> {$LANG->get('browse_image')}</button>
                         </div>
                     </div>
                 </div>
@@ -152,11 +152,35 @@
 
 <script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/i18n/{$NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}=upload&amp;js"></script>
 <script>
 $(document).ready(function() {
     $(".select2").select2({
         width: "100%",
         containerCssClass: "select2-sm"
+    });
+});
+$(document).on("nv.upload.ready", function() {
+    $("#site_logo_btn").nvBrowseFile({
+        adminBaseUrl: '{$NV_BASE_ADMINURL}',
+        path: '{$NV_UPLOADS_DIR}',
+        currentpath: '{$NV_UPLOADS_DIR}',
+        type: 'image',
+        area: '#site_logo'
+    });
+    $("#site_banner_btn").nvBrowseFile({
+        adminBaseUrl: '{$NV_BASE_ADMINURL}',
+        path: '{$NV_UPLOADS_DIR}',
+        currentpath: '{$NV_UPLOADS_DIR}',
+        type: 'image',
+        area: '#site_banner'
+    });
+    $("#site_favicon_btn").nvBrowseFile({
+        adminBaseUrl: '{$NV_BASE_ADMINURL}',
+        path: '{$NV_UPLOADS_DIR}',
+        currentpath: '{$NV_UPLOADS_DIR}',
+        type: 'image',
+        area: '#site_favicon'
     });
 });
 </script>

@@ -33,6 +33,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         $return .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
         $return .= '<script type="text/javascript">CKEDITOR.timestamp=CKEDITOR.timestamp+' . $global_config['timestamp'] . ';</script>';
         if (defined('NV_IS_ADMIN')) {
+            $return .= '<script type="text/javascript" src="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=upload&amp;js"></script>';
             $return .= "<script type=\"text/javascript\">
             CKEDITOR.on('dialogDefinition', function(e) {
                 if (e.data.name == 'image2' || e.data.name == 'video' || e.data.name == 'flash' || e.data.name == 'googledocs' || e.data.name == 'link') {
@@ -89,7 +90,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
                                 }
                                 //orgclickevent.call(this, type, element);
 
-                                console.log(type, this);
+                                console.log(type, this, orgclickevent);
                             };
                         }
                     });

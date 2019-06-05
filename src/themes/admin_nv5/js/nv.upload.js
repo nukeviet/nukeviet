@@ -1037,7 +1037,7 @@ NVCoreFileBrowser.prototype.getListFolders = function(callback, reload, data) {
         $(cfgm.file).data("value", data.imgfile);
     }
 
-    var urlFolder = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=folderlist&path=' + path + '&currentpath=' + currentPath + (reload ? '&dirListRefresh' : '') + '&random=' + self.strRand(10);
+    var urlFolder = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=folderlist&path=' + path + '&currentpath=' + currentPath + (reload ? '&dirListRefresh' : '') + '&random=' + self.strRand(10);
     $(cfg.folderElement).load(urlFolder, function() {
         self.perload++;
         if (callback) {
@@ -1090,7 +1090,7 @@ NVCoreFileBrowser.prototype.getListFiles = function(callback, reload, geturl) {
             folder.data('q', '');
         }
 
-        urlFiles = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=imglist&path=' + path + '&q=' + rawurlencode(q) + '&type=' + imgtype + '&imgfile=' + selFile + '&author=' + author + '&order=' + order + (reload ? '&refresh' : '') + '&random=' + self.strRand(10);
+        urlFiles = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=imglist&path=' + path + '&q=' + rawurlencode(q) + '&type=' + imgtype + '&imgfile=' + selFile + '&author=' + author + '&order=' + order + (reload ? '&refresh' : '') + '&random=' + self.strRand(10);
     }
 
     $.ajax({
@@ -3476,7 +3476,7 @@ $(document).ready(function() {
      */
     NVStaticUpload.prototype.loadMainContainer = function() {
         var self = this;
-        var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + self.strRand(10);
+        var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&nocache=' + self.strRand(10);
 
         self.$element.html(self.options.templateLoader);
         $.ajax({
@@ -3641,48 +3641,48 @@ $(document).ready(function() {
          */
         if (!$(NVBrowseFile.DEFAULTS.templateContainerID).length) {
             $('body:first').append(NVBrowseFile.DEFAULTS.templateContainer);
-        }
 
-        /*
-         * Thiết lập trình quản lý file lên khi mở xong modal
-         */
-        $(NVBrowseFile.DEFAULTS.templateContainerID).on('shown.bs.modal', function(e) {
-            var modalEle = $(e.currentTarget);
-            var btn = $(modalEle.data('btn'));
-            var uploadApi = btn.data('nv.upload');
-            var url = uploadApi.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + uploadApi.strRand(10);
+            /*
+             * Thiết lập trình quản lý file lên khi mở xong modal
+             */
+            $(NVBrowseFile.DEFAULTS.templateContainerID).on('shown.bs.modal', function(e) {
+                var modalEle = $(e.currentTarget);
+                var btn = $(modalEle.data('btn'));
+                var uploadApi = btn.data('nv.upload');
+                var url = uploadApi.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&nocache=' + uploadApi.strRand(10);
 
-            $('.modal-body', modalEle).html(uploadApi.options.templateLoader);
-            $.ajax({
-                method: "GET",
-                url: url,
-                data: {
-                    popup: 1,
-                    alt: uploadApi.options.alt,
-                    area: uploadApi.options.area,
-                    type: uploadApi.options.type,
-                    imgfile: uploadApi.options.imgfile,
-                },
-                dataType: "json",
-                cache: false
-            }).done(function(data) {
-                $('.modal-body', modalEle).html(data.container);
-                if (typeof window.fileManager == "undefined") {
-                    $('body:first').append(data.modals);
-                }
-                uploadApi.init();
-            }).fail(function() {
-                alert("Ajax request Error, please reload your browser!!!");
+                $('.modal-body', modalEle).html(uploadApi.options.templateLoader);
+                $.ajax({
+                    method: "GET",
+                    url: url,
+                    data: {
+                        popup: 1,
+                        alt: uploadApi.options.alt,
+                        area: uploadApi.options.area,
+                        type: uploadApi.options.type,
+                        imgfile: uploadApi.options.imgfile,
+                    },
+                    dataType: "json",
+                    cache: false
+                }).done(function(data) {
+                    $('.modal-body', modalEle).html(data.container);
+                    if (typeof window.fileManager == "undefined") {
+                        $('body:first').append(data.modals);
+                    }
+                    uploadApi.init();
+                }).fail(function() {
+                    alert("Ajax request Error, please reload your browser!!!");
+                });
             });
-        });
 
-        /*
-         * Hủy dữ liệu quản lý file khi đóng modal
-         */
-        $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
-            var modalEle = $(e.currentTarget);
-            $('.modal-body', modalEle).html('');
-        });
+            /*
+             * Hủy dữ liệu quản lý file khi đóng modal
+             */
+            $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
+                var modalEle = $(e.currentTarget);
+                $('.modal-body', modalEle).html('');
+            });
+        }
 
         return this.each(function() {
             var $this   = $(this);
