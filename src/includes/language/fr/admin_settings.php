@@ -260,8 +260,6 @@ $lang_module['two_step_verification2'] = 'Espace extérieur du site';
 $lang_module['two_step_verification3'] = 'Toutes les zones';
 $lang_module['two_step_verification_note'] = 'Remarque: Cette configuration applique à l\'ensemble du compte du groupe, le cas échéant être configuré individuellement pour chaque groupe de choisir cette valeur est <strong />%s puis modifiez le <a href="%" /> puis sélectionnez l\'authentification obligatoire en deux étapes du groupe de la zone activée à volonté';
 $lang_module['site_phone'] = 'Nom du fichier Téléphone';
-$lang_module['googleMapsAPI'] = 'Google Maps API key';
-$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guides obtiennent clé API</a>';
 $lang_module['noflood_ip_add'] = 'Ajouter une adresse IP pour ignorer le contrôle d\'inondation';
 $lang_module['noflood_ip_edit'] = 'Correction du contournement de l\'inondation IP';
 $lang_module['noflood_ip_list'] = 'L\'IP contourne le contrôle d\'inondation';

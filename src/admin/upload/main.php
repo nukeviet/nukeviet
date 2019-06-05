@@ -56,14 +56,6 @@ $tpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
 
 $tpl->assign('SELFILE', $selectfile);
 
-$sfile = ($type == 'file') ? ' selected="selected"' : '';
-$simage = ($type == 'image') ? ' selected="selected"' : '';
-$sflash = ($type == 'flash') ? ' selected="selected"' : '';
-
-$tpl->assign('SFLASH', $sflash);
-$tpl->assign('SIMAGE', $simage);
-$tpl->assign('SFILE', $sfile);
-
 // Find logo config
 $upload_logo = $upload_logo_config = '';
 if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
@@ -74,6 +66,8 @@ if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $gl
 
 $tpl->assign('UPLOAD_LOGO', $upload_logo);
 $tpl->assign('UPLOAD_LOGO_CONFIG', $upload_logo_config);
+$tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');
+$tpl->assign('UPLOAD_AUTO_ALT', !empty($global_config['upload_auto_alt']) ? 'true' : 'false');
 
 // Xuất javascript các cấu hình
 if ($nv_Request->isset_request('js', 'get')) {
@@ -88,8 +82,6 @@ if ($nv_Request->isset_request('js', 'get')) {
     $tpl->assign('NV_MIN_HEIGHT', 10);
     $tpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
     $tpl->assign('NV_AUTO_RESIZE', $global_config['nv_auto_resize']);
-    $tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');
-    $tpl->assign('UPLOAD_AUTO_ALT', !empty($global_config['upload_auto_alt']) ? 'true' : 'false');
 
     // Tìm ra file js
     $js_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/nv.upload.js';
@@ -112,9 +104,6 @@ if ($nv_Request->isset_request('js', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
-
 if ($popup) {
     // Check upload allow file types
     if ($type == 'image' and in_array('images', $admin_info['allow_files_type'])) {
@@ -125,7 +114,7 @@ if ($popup) {
         $allow_files_type = $admin_info['allow_files_type'];
     }
 
-
+    /*
     if (!empty($global_config['upload_alt_require'])) {
         $xtpl->parse('main.alt_remote');
     }
@@ -140,10 +129,17 @@ if ($popup) {
 
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
+    */
+
+    $array_data = [];
+    $array_data['container'] = $tpl->fetch('main_container.tpl');
+    $array_data['modals'] = $tpl->fetch('main_modals.tpl');
+
+    nv_jsonOutput($array_data);
 }
 
-$contents = $tpl->fetch($op . '.tpl');
+$contents = $tpl->fetch('main_perload.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
-echo $popup ? $contents : nv_admin_theme($contents);
+echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

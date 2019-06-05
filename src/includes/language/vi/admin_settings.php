@@ -275,8 +275,6 @@ $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
 $lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụng cho toàn bộ tài khoản của các nhóm, nếu cần cấu hình riêng cho từng nhóm hãy chọn giá trị này là <strong>%s</strong> sau đó sửa <a href="%s">nhóm</a> rồi chọn khu vực bắt buộc kích hoạt xác thực hai bước theo ý muốn';
 
 $lang_module['site_phone'] = 'Số điện thoại của site';
-$lang_module['googleMapsAPI'] = 'Google Maps API key';
-$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
 
 $lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
 $lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';

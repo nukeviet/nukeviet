@@ -275,13 +275,12 @@ function change_alias_tags($alias)
 }
 
 /**
- * nv_clean60()
- *
- * @param mixed $string
+ * @param string $string
  * @param integer $num
- * @return
+ * @param boolean $specialchars
+ * @return string
  */
-function nv_clean60($string, $num = 60, $specialchars = false)
+function nv_clean60($string, $num = 60, $specialchars = true)
 {
     $string = nv_unhtmlspecialchars($string);
 

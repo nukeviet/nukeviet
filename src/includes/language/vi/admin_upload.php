@@ -194,3 +194,4 @@ $lang_module['upload_view_thumbnail'] = 'Chuyển sang xem theo dạng lưới';
 $lang_module['upload_view_detail'] = 'Chuyển sang xem theo dạng danh sách';
 $lang_module['upload_chunk'] = 'Chunk Upload';
 $lang_module['upload_chunk_help'] = 'Chức năng này hỗ trợ chia nhỏ tập tin upload thành nhiều gói nhỏ, hỗ trợ upload tập tin lớn đến rất lớn lên máy chủ. Nếu bạn không có ý định cho phép upload các tập tin lớn hãy để trống giá bị bên trên';
+$lang_module['drag_and_drop_upload'] = 'Kéo và thả file vào đây để tải lên';

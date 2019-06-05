@@ -260,8 +260,6 @@ $lang_module['two_step_verification2'] = 'Site area';
 $lang_module['two_step_verification3'] = 'All areas';
 $lang_module['two_step_verification_note'] = 'Note: This configuration applies to all accounts of groups, if you need to configure each group individually, select this value as <strong />%s then edit the <a href="%s"> group </a>, then select the required two-step authentication trigger field as desired';
 $lang_module['site_phone'] = 'Site\'s phone';
-$lang_module['googleMapsAPI'] = 'Google Maps API key';
-$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guide to get Google Maps API key</a>';
 $lang_module['noflood_ip_add'] = 'Add IP to ignore flood check';
 $lang_module['noflood_ip_edit'] = 'Edit IP bypass flood check';
 $lang_module['noflood_ip_list'] = 'The IP bypasses the flood check';

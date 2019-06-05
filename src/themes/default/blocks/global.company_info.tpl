@@ -14,14 +14,16 @@
     <!-- BEGIN: company_website --><li><em class="fa fa-globe"></em><span>{LANG.company_website}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{WEBSITE}" target="_blank"><span itemprop="url">{WEBSITE}</span></a><!-- END: item --></span></li><!-- END: company_website -->
 </ul>
 <!-- BEGIN: company_map_modal -->
+<!-- START FORFOOTER -->
 <div class="modal fade company-map-modal" id="company-map-modal-{DATA.bid}" data-trigger="false" data-apikey="{DATA.company_mapapikey}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="company-map" id="company-map-{DATA.bid}" data-clat="{DATA.company_mapcenterlat}" data-clng="{DATA.company_mapcenterlng}" data-lat="{DATA.company_maplat}" data-lng="{DATA.company_maplng}" data-zoom="{DATA.company_mapzoom}"></div>
+                <iframe frameborder="0" style="border: 0;" allowfullscreen class="company-map" id="company-map-{DATA.bid}" data-src="{DATA.company_mapurl}" src="" data-loaded="false"></iframe>
             </div>
         </div>
     </div>
 </div>
+<!-- END FORFOOTER -->
 <!-- END: company_map_modal -->
 <!-- END: main -->

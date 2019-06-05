@@ -186,3 +186,4 @@ $lang_module['upload_view_thumbnail'] = 'Switch to grid view';
 $lang_module['upload_view_detail'] = 'Switch to a list view';
 $lang_module['upload_chunk'] = 'Chunk Upload';
 $lang_module['upload_chunk_help'] = 'This function supports splitting the upload file into several small packages, support to upload large files to the server. If you do not intend to allow large files to upload, please leave blank above';
+$lang_module['drag_and_drop_upload'] = 'Drag and drop files here to upload';

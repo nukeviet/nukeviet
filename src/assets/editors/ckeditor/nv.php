@@ -87,7 +87,9 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
                                     btn.filebrowser.url = btn.filebrowser.url.replace(/\&currentfile\=.*?$/g, '');
                                     btn.filebrowser.url = btn.filebrowser.url + '&currentfile=' + encodeURIComponent(input.val());
                                 }
-                                orgclickevent.call(this, type, element);
+                                //orgclickevent.call(this, type, element);
+
+                                console.log(type, this);
                             };
                         }
                     });
@@ -96,6 +98,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
             </script>";
         }
     }
+    // FIXME sửa phần trên để mở trình quản lý file
     $return .= "<script type=\"text/javascript\">CKEDITOR.replace( '" . $module_data . "_" . $textareaid . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',";
     $return .= "contentsCss: '" . NV_BASE_SITEURL . NV_EDITORSDIR . "/ckeditor/nv.css?t=" . $global_config['timestamp'] . "',";
 

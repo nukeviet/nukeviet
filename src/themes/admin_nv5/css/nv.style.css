@@ -64,3 +64,8 @@
 .nv-row-recaptcha>div {
     flex: 0;
 }
+
+/* Jquery UI Selectable Fix */
+.ui-selectable-helper {
+    z-index: 100001!important;
+}

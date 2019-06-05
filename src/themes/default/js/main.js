@@ -127,7 +127,9 @@ function ftipAutoClose(a) {
 }
 
 function tipShow(a, b, callback) {
-    if ($(a).is(".pa")) switchTab(".guest-sign", a);
+    if ($(a).is(".pa")) {
+        switchTab(".guest-sign", a);
+    }
     tip_active && tipHide();
     ftip_active && ftipHide();
     $("[data-toggle=tip]").removeClass("active");
@@ -177,7 +179,9 @@ function tipShow(a, b, callback) {
 }
 
 function ftipShow(a, b, callback) {
-    if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) return qrcodeLoad(a), !1;
+    if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) {
+        return qrcodeLoad(a), !1;
+    }
     tip_active && tipHide();
     ftip_active && ftipHide();
     $("[data-toggle=ftip]").removeClass("active");
@@ -253,13 +257,17 @@ function qrcodeLoad(a) {
 
 // Switch tab
 function switchTab(a) {
-    if ($(a).is(".current")) return !1;
+    if ($(a).is(".current")) {
+        return !1;
+    }
     var b = $(a).data("switch").split(/\s*,\s*/),
         c = $(a).data("obj");
     $(c + " [data-switch]").removeClass("current");
     $(a).addClass("current");
     $(c + " " + b[0]).removeClass("hidden");
-    for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
+    for (i = 1; i < b.length; i++) {
+        $(c + " " + b[i]).addClass("hidden");
+    }
 };
 
 // Change Captcha
@@ -285,8 +293,12 @@ function change_captcha(a) {
 
 //Form Ajax-login
 function loginForm(redirect) {
-    if (nv_is_user == 1) return !1;
-    if (redirect != '') redirect = '&nv_redirect=' + redirect;
+    if (nv_is_user == 1) {
+        return !1;
+    }
+    if (redirect != '') {
+        redirect = '&nv_redirect=' + redirect;
+    }
     $.ajax({
         type: 'POST',
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login' + redirect,
@@ -371,38 +383,6 @@ function modalShowByObj(a, callback) {
     modalShow(b, c, callback)
 }
 
-// Build google map for block Company Info
-function initializeMap() {
-    var ele = false
-    $('.company-map-modal').each(function() {
-        if ($(this).data('trigger')) {
-            ele = $('.company-map', $(this)).attr('id')
-            return
-        }
-    })
-    if (ele) {
-        var map, marker, ca, cf, a, f, z;
-        ca = parseFloat($('#' + ele).data('clat'));
-        cf = parseFloat($('#' + ele).data('clng'));
-        a = parseFloat($('#' + ele).data('lat'));
-        f = parseFloat($('#' + ele).data('lng'));
-        z = parseInt($('#' + ele).data('zoom'));
-        map = new google.maps.Map(document.getElementById(ele), {
-            zoom: z,
-            center: {
-                lat: ca,
-                lng: cf
-            }
-        });
-        marker = new google.maps.Marker({
-            map: map,
-            position: new google.maps.LatLng(a, f),
-            draggable: false,
-            animation: google.maps.Animation.DROP
-        });
-    }
-}
-
 // Breadcrumbs
 function nvbreadcrumbs() {
     if (brcb.length) {
@@ -445,7 +425,9 @@ function showSubBreadcrumbs(a, b) {
 }
 
 function add_hint(type, url) {
-    if (!type || !url) return;
+    if (!type || !url) {
+        return;
+    }
     var el = document.createElement("link");
     el.setAttribute("rel", type);
     el.setAttribute("href", url);
@@ -504,7 +486,9 @@ $(function() {
     });
     //Search form
     $(".headerSearch button").on("click", function() {
-        if ("n" == $(this).attr("data-click")) return !1;
+        if ("n" == $(this).attr("data-click")) {
+            return !1;
+        }
         $(this).attr("data-click", "n");
         var a = $(".headerSearch input"),
             c = a.attr("maxlength"),
@@ -581,18 +565,12 @@ $(function() {
     // Google map
     if ($('.company-address').length) {
         $('.company-map-modal').on('shown.bs.modal', function() {
-            $('.company-map-modal').data('trigger', false)
-            $(this).data('trigger', true)
-            if (!$('#googleMapAPI').length) {
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.id = 'googleMapAPI';
-                script.src = 'https://maps.googleapis.com/maps/api/js?' + ($(this).data('apikey') != '' ? 'key=' + $(this).data('apikey') + '&' : '') + 'callback=initializeMap';
-                document.body.appendChild(script);
-            } else {
-                initializeMap();
+            var iframe = $(this).find('iframe');
+            if (!iframe.data('loaded')) {
+                iframe.attr('src', iframe.data('src'));
+                iframe.data('loaded', true);
             }
-        })
+        });
     };
     // maxLength for textarea
     $("textarea").on("input propertychange", function() {

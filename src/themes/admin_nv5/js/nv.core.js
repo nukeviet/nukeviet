@@ -171,7 +171,9 @@ $(document).ready(function() {
         $(window).resize(function() {
             nvTimerHandler(function() {
                 if ($.isSm()) {
-                    nvLBarScroller.destroy();
+                    if (nvLBarScroller)  {
+                        nvLBarScroller.destroy();
+                    }
                 } else {
                     if (nvLBarScroll.hasClass('ps')) {
                         nvLBarScroller.update();
