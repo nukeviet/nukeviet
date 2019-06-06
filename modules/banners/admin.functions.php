@@ -196,7 +196,7 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('FORM', array(
             'key' => $form,
             'title' => isset($lang_module['form_' . $form]) ? $lang_module['form_' . $form] : $form,
-            'selected' => $form == $contents['form'][3] ? ' selected="selected"' : '')
+            'checked' => $form == $contents['form'][3] ? ' checked="checked"' : '')
         );
         $xtpl->parse('main.form');
     }
@@ -285,7 +285,7 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->assign('FORM', array(
             'key' => $form,
             'title' => isset($lang_module['form_' . $form]) ? $lang_module['form_' . $form] : $form,
-            'selected' => $form == $contents['form'][3] ? ' selected="selected"' : '')
+            'checked' => $form == $contents['form'][3] ? ' checked="checked"' : '')
         );
         $xtpl->parse('main.form');
     }
