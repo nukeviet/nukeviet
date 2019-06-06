@@ -133,3 +133,6 @@ $lang_module['exp_date_nochoose'] = 'Quảng cáo sẽ luôn hiển thị nếu 
 $lang_module['publ_time_info'] = 'Hệ thống tự lấy thời gian bắt đầu ngay lúc thêm quảng cáo nếu không chọn ngày ở đây';
 $lang_module['enter_keyword'] = 'Nhập từ khóa';
 $lang_module['all_plan'] = 'Tất cả các khối';
+$lang_module['form_random'] = 'Ngẫu nhiên tất cả quảng cáo';
+$lang_module['form_random_one'] = 'Ngẫu nhiên một quảng cáo';
+$lang_module['form_sequential'] = 'Tuần tự';
