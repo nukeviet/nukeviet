@@ -33,11 +33,15 @@
                     <td>{CONTENTS.form.0}:</td>
                     <td>&nbsp;</td>
                     <td>
-                    <select name="{CONTENTS.form.1}" id="{CONTENTS.form.1}" class="form-control w250">
                         <!-- BEGIN: form -->
-                        <option value="{FORM.key}"{FORM.selected}>{FORM.title}</option>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="{CONTENTS.form.1}" value="{FORM.key}"{FORM.checked}>
+                                {FORM.title}
+                            </label>
+                        </div>
                         <!-- END: form -->
-                    </select></td>
+                    </td>
                 </tr>
                 <tr>
                     <td>{LANG.require_image}:</td>
