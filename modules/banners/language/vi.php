@@ -64,3 +64,6 @@ $lang_module['no_permission'] = 'Bạn không có quyền đăng quảng cáo. H
 $lang_module['plan_allowed'] = 'Quyền đăng';
 $lang_module['plan_allowed_yes'] = 'Có';
 $lang_module['plan_allowed_no'] = 'Không';
+$lang_module['form_random'] = 'Ngẫu nhiên tất cả quảng cáo';
+$lang_module['form_random_one'] = 'Ngẫu nhiên một quảng cáo';
+$lang_module['form_sequential'] = 'Tuần tự';

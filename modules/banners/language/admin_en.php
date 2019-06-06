@@ -133,3 +133,6 @@ $lang_module['exp_date_nochoose'] = 'Ads will always show if the date is not her
 $lang_module['publ_time_info'] = 'The self-time system starts at the time of adding the ad if no date is selected here';
 $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
+$lang_module['form_random'] = 'Random all ads';
+$lang_module['form_random_one'] = 'Random one ads';
+$lang_module['form_sequential'] = 'Sequentially';
