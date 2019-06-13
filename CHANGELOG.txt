@@ -6,7 +6,7 @@ NUKEVIET 4.3.06
 - Module banners: Add display type "Random One"
 - Fix bug comment XSS. Thanks dalatsubnet at WhiteHub#640
 - Remove Google MAP API and fix block global.company_info.php
-- Module users: Save the information of the object that has activated user account
+- Module users: Save the information of the object that has activated user account. Add the function to resend the account activation email.
 - Fix the issue of adding news with very long keywords
 - Fix add, detete admin
 - Fix user add, user edit in admin.
