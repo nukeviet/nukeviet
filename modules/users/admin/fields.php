@@ -201,7 +201,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
         $dataform['field'] = $dataform['fieldid'] = $dataform_old['field'];
     } else {
-        $dataform['field'] = $dataform['fieldid'] = nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50);
+        $dataform['field'] = $dataform['fieldid'] = nv_strtolower(nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50));
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
