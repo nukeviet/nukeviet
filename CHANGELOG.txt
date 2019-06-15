@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Use ReCaptcha to confirm if Flood blocked
 - Block external requests into the admin area
 - Support CORS setting
 - Change timestamp to UNIX timestamp
