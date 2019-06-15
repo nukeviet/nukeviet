@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Block external requests into the admin area
 - Support CORS setting
 - Change timestamp to UNIX timestamp
 - Module news: Support redirect to new article url when changing categories
