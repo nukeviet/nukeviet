@@ -270,3 +270,9 @@ $lang_module['site_phone'] = 'Số điện thoại của site';
 $lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
 $lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';
 $lang_module['noflood_ip_list'] = 'Các IP bỏ qua kiểm tra flood';
+
+$lang_module['cors'] = 'Thiết lập CORS';
+$lang_module['cors_help'] = 'Bật tính năng này để hạn chế các truy vấn CORS từ các tên miền khác đến website';
+$lang_module['cors_restrict_domains'] = 'Giới hạn tên miền';
+$lang_module['cors_valid_domains'] = 'Tên miền hợp lệ';
+$lang_module['cors_valid_domains_help'] = 'Nhập mỗi tên miền một dòng (vui lòng nhập đầy đủ dạng http://yourdomain.com). Các truy vấn CORS từ các tên miền này được phép thực hiện';

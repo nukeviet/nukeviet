@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Support CORS setting
 - Change timestamp to UNIX timestamp
 - Module news: Support redirect to new article url when changing categories
 - Module banners: Add display type "Random One"

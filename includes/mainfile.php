@@ -348,6 +348,14 @@ if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
 
+// CORS handler
+if (!empty($global_config['cors_valid_domains'])) {
+    $global_config['cors_valid_domains'] = json_decode($global_config['cors_valid_domains'], true);
+} else {
+    $global_config['cors_valid_domains'] = [];
+}
+$nv_Request->CORSHandle($global_config);
+
 if (defined('NV_ADMIN')) {
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php')) {
         if ($global_config['lang_multi']) {
