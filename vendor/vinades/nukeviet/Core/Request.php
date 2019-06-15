@@ -1360,10 +1360,16 @@ class Request
             die('');
         }
 
-        if (strtoupper($this->get_Env(['HTTP_X_REQUESTED_WITH', 'X-Requested-With'])) === 'XMLHTTPREQUEST') {
+        $isXmlRequest = (strtoupper($this->get_Env(['HTTP_X_REQUESTED_WITH', 'X-Requested-With'])) === 'XMLHTTPREQUEST');
+        if ($isXmlRequest) {
             foreach ($this->corsHeaders as $header => $value) {
                 header($header . ': ' . $value);
             }
+        }
+
+        // Chặn các request bên ngoài vào khu vực quản trị
+        if (defined('NV_ADMIN') and $this->referer_key == 0 and !$this->requestOriginIsValid) {
+            exit(0);
         }
     }
 
