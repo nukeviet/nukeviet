@@ -228,6 +228,7 @@ $lang_global['show_picture'] = 'Xem hình';
 $lang_global['flood_page_title'] = 'Hãy đợi...';
 $lang_global['flood_info1'] = 'Hệ thống đang từ chối truy cập của bạn';
 $lang_global['flood_info2'] = 'Hãy đợi';
+$lang_global['flood_captcha_pass'] = 'Bạn không phải là Robot? Xác nhận để tiếp tục truy cập';
 $lang_global['error_info_caption'] = 'Thông báo từ Hệ thống';
 $lang_global['error_error'] = 'Lỗi nghiêm trọng';
 $lang_global['error_warning'] = 'Lỗi cảnh báo';

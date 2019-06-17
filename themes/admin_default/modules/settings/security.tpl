@@ -18,34 +18,35 @@
         <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab">{LANG.flood_blocker}</a></li>
         <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
         <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
+        <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab">{LANG.cors}</a></li>
     </ul>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
-                	<div class="table-responsive">
-                    	<table class="table table-striped table-bordered table-hover table-first">
-                    		<colgroup>
-                    			<col style="width: 40%" />
-                    			<col style="width: 60%" />
-                    		</colgroup>
-                    		<tbody>
-                    			<tr>
-                    				<td><strong>{LANG.is_login_blocker}</strong></td>
-                    				<td><input type="checkbox" value="1" name="is_login_blocker" {IS_LOGIN_BLOCKER} /></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.login_number_tracking}</strong></td>
-                    				<td><input type="text" value="{LOGIN_NUMBER_TRACKING}" name="login_number_tracking" class="required form-control w100"/></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.login_time_tracking}</strong> ({GLANG.min})</td>
-                    				<td><input type="text" value="{LOGIN_TIME_TRACKING}" name="login_time_tracking" class="required form-control w100"/></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.login_time_ban}</strong> ({GLANG.min})</td>
-                    				<td><input type="text" value="{LOGIN_TIME_BAN}" name="login_time_ban" class="required form-control w100"/></td>
-                    			</tr>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-first">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td><strong>{LANG.is_login_blocker}</strong></td>
+                                    <td><input type="checkbox" value="1" name="is_login_blocker" {IS_LOGIN_BLOCKER} /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.login_number_tracking}</strong></td>
+                                    <td><input type="text" value="{LOGIN_NUMBER_TRACKING}" name="login_number_tracking" class="required form-control w100"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.login_time_tracking}</strong> ({GLANG.min})</td>
+                                    <td><input type="text" value="{LOGIN_TIME_TRACKING}" name="login_time_tracking" class="required form-control w100"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.login_time_ban}</strong> ({GLANG.min})</td>
+                                    <td><input type="text" value="{LOGIN_TIME_BAN}" name="login_time_ban" class="required form-control w100"/></td>
+                                </tr>
                                 <tr>
                                     <td><strong>{LANG.two_step_verification}</strong></td>
                                     <td>
@@ -55,33 +56,33 @@
                                         </select>
                                     </td>
                                 </tr>
-                    			<tr>
-                    				<td><strong>{LANG.nv_anti_agent}</strong></td>
-                    				<td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.proxy_blocker}</strong></td>
-                    				<td>
-                        				<select name="proxy_blocker" class="form-control w200">
-                        					<!-- BEGIN: proxy_blocker -->
-                        					<option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE} </option>
-                        					<!-- END: proxy_blocker -->
-                        				</select>
+                                <tr>
+                                    <td><strong>{LANG.nv_anti_agent}</strong></td>
+                                    <td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.proxy_blocker}</strong></td>
+                                    <td>
+                                        <select name="proxy_blocker" class="form-control w200">
+                                            <!-- BEGIN: proxy_blocker -->
+                                            <option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE} </option>
+                                            <!-- END: proxy_blocker -->
+                                        </select>
                                     </td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.str_referer_blocker}</strong></td>
-                    				<td><input type="checkbox" value="1" name="str_referer_blocker" {REFERER_BLOCKER} /></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.nv_anti_iframe}</strong></td>
-                    				<td><input type="checkbox" value="1" name="nv_anti_iframe" {ANTI_IFRAME} /></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.nv_allowed_html_tags}</strong></td>
-                    				<td><textarea name="nv_allowed_html_tags" class="form-control" style="height: 100px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
-                    			</tr>
-                    		</tbody>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.str_referer_blocker}</strong></td>
+                                    <td><input type="checkbox" value="1" name="str_referer_blocker" {REFERER_BLOCKER} /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.nv_anti_iframe}</strong></td>
+                                    <td><input type="checkbox" value="1" name="nv_anti_iframe" {ANTI_IFRAME} /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.nv_allowed_html_tags}</strong></td>
+                                    <td><textarea name="nv_allowed_html_tags" class="form-control" style="height: 100px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
+                                </tr>
+                            </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="2">
@@ -91,7 +92,7 @@
                                     </td>
                                 </tr>
                             </tfoot>
-                    	</table>
+                        </table>
                     </div>
                     <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
                 </form>
@@ -100,26 +101,26 @@
         <div role="tabpanel" class="tab-pane{TAB1_ACTIVE}" id="settingFlood">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
-                	<div class="table-responsive">
-                    	<table class="table table-striped table-bordered table-hover table-first">
-                    		<colgroup>
-                    			<col style="width: 40%" />
-                    			<col style="width: 60%" />
-                    		</colgroup>
-                    		<tbody>
-                    			<tr>
-                    				<td><strong>{LANG.is_flood_blocker}</strong></td>
-                    				<td><input type="checkbox" value="1" name="is_flood_blocker" {IS_FLOOD_BLOCKER} /></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.max_requests_60}</strong></td>
-                    				<td><input type="text" value="{MAX_REQUESTS_60}" name="max_requests_60" class="required form-control w100"/></td>
-                    			</tr>
-                    			<tr>
-                    				<td><strong>{LANG.max_requests_300}</strong></td>
-                    				<td><input type="text" value="{MAX_REQUESTS_300}" name="max_requests_300" class="required form-control w100"/></td>
-                    			</tr>
-                    		</tbody>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-first">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td><strong>{LANG.is_flood_blocker}</strong></td>
+                                    <td><input type="checkbox" value="1" name="is_flood_blocker" {IS_FLOOD_BLOCKER} /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.max_requests_60}</strong></td>
+                                    <td><input type="text" value="{MAX_REQUESTS_60}" name="max_requests_60" class="required form-control w100"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.max_requests_300}</strong></td>
+                                    <td><input type="text" value="{MAX_REQUESTS_300}" name="max_requests_300" class="required form-control w100"/></td>
+                                </tr>
+                            </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="2">
@@ -129,7 +130,7 @@
                                     </td>
                                 </tr>
                             </tfoot>
-                    	</table>
+                        </table>
                     </div>
                     <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
                 </form>
@@ -220,33 +221,33 @@
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
                     <div class="table-responsive">
-                		<table class="table table-striped table-bordered table-hover table-first">
-                			<colgroup>
-                				<col style="width: 40%" />
-                				<col style="width: 60%" />
-                			</colgroup>
-                			<tbody>
-                				<tr>
-                					<td><strong>{LANG.captcha}</strong></td>
-                					<td>
-                    					<select name="gfx_chk" class="form-control w200">
-                    						<!-- BEGIN: opcaptcha -->
-                    						<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
-                    						<!-- END: opcaptcha -->
-                    					</select>
+                        <table class="table table-striped table-bordered table-hover table-first">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td><strong>{LANG.captcha}</strong></td>
+                                    <td>
+                                        <select name="gfx_chk" class="form-control w200">
+                                            <!-- BEGIN: opcaptcha -->
+                                            <option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
+                                            <!-- END: opcaptcha -->
+                                        </select>
                                     </td>
-                				</tr>
-                				<tr>
-                					<td><strong>{LANG.captcha_type}</strong></td>
-                					<td>
-                    					<select name="captcha_type" class="form-control w200" data-toggle="ctcaptcha">
-                    						<!-- BEGIN: captcha_type -->
-                    						<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
-                    						<!-- END: captcha_type -->
-                    					</select>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.captcha_type}</strong></td>
+                                    <td>
+                                        <select name="captcha_type" class="form-control w200" data-toggle="ctcaptcha">
+                                            <!-- BEGIN: captcha_type -->
+                                            <option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
+                                            <!-- END: captcha_type -->
+                                        </select>
                                     </td>
-                				</tr>
-                			    <tr data-captcha="typebasic"{DISPLAY_CAPTCHA_BASIC}>
+                                </tr>
+                                <tr data-captcha="typebasic"{DISPLAY_CAPTCHA_BASIC}>
                                     <td><strong>{LANG.captcha_num}</strong></td>
                                     <td>
                                         <select name="nv_gfx_num" class="form-control w200">
@@ -390,6 +391,44 @@
                                 <tr>
                                     <td class="top">{LANG.banip_notice}</td>
                                     <td><textarea cols="70" rows="5" class="form-control" name="notice" style="width:550px;height:100px">{DATA.notice}</textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane{TAB4_ACTIVE}" id="settingCORS">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-first">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center"><input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/></td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr>
+                                    <td><strong>{LANG.cors_restrict_domains}</strong></td>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="1" name="cors_restrict_domains" {CONFIG_SITE.cors_restrict_domains}>
+                                            {LANG.cors_help}
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.cors_valid_domains}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="cors_valid_domains">{CONFIG_SITE.cors_valid_domains}</textarea>
+                                        <div class="form-text text-muted">{LANG.cors_valid_domains_help}</div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

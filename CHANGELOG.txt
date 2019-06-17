@@ -3,6 +3,11 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Use ReCaptcha to confirm if Flood blocked
+- Block external requests into the admin area
+- Support CORS setting
+- Change timestamp to UNIX timestamp
+- Module news: Support redirect to new article url when changing categories
 - Module banners: Add display type "Random One"
 - Fix bug comment XSS. Thanks dalatsubnet at WhiteHub#640
 - Remove Google MAP API and fix block global.company_info.php

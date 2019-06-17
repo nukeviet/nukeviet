@@ -32,9 +32,31 @@ if (!$ip_exclusion) {
     $flb->trackFlood($rules);
 
     if ($flb->is_flooded) {
+        // Nếu recaptcha được kích hoạt, dùng nó để xác nhận khi bị chặn
+        $captchaPass = (!empty($global_config['captcha_type']) and $global_config['captcha_type'] == 2);
+        if ($captchaPass) {
+            if ($nv_Request->isset_request('captcha_pass_flood', 'post')) {
+                $tokend = $nv_Request->get_title('tokend', 'post', '');
+                $captcha_txt = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+                $redirect = $nv_Request->get_title('redirect', 'post', '');
+
+                if ($tokend === NV_CHECK_SESSION and nv_capcha_txt($captcha_txt)) {
+                    $flb->resetTrackFlood();
+
+                    $redirect = nv_redirect_decrypt($redirect);
+                    if (empty($redirect)) {
+                        nv_redirect_location(NV_BASE_SITEURL);
+                    }
+                    nv_redirect_location($redirect);
+                }
+            }
+        }
+
         include NV_ROOTDIR . '/includes/header.php';
+
         if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
             $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
+            $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
             $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
             $xtpl->assign('IMG_WIDTH', 33);
@@ -43,6 +65,16 @@ if (!$ip_exclusion) {
             $xtpl->assign('FLOOD_BLOCKER_INFO2', $lang_global['flood_info2']);
             $xtpl->assign('FLOOD_BLOCKER_INFO3', $lang_global['sec']);
             $xtpl->assign('FLOOD_BLOCKER_TIME', $flb->flood_block_time);
+
+            if ($captchaPass) {
+                $xtpl->assign('TOKEND', NV_CHECK_SESSION);
+                $xtpl->assign('SITE_KEY', $global_config['recaptcha_sitekey']);
+                $xtpl->assign('CATPCHA_TYPE', $global_config['recaptcha_type']);
+                $xtpl->assign('CATPCHA_LANG', NV_LANG_INTERFACE);
+                $xtpl->assign('REDIRECT', nv_redirect_encrypt($client_info['selfurl']));
+                $xtpl->parse('main.captchapass');
+            }
+
             $xtpl->parse('main');
             echo $xtpl->text('main');
             exit();
