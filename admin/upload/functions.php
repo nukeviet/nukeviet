@@ -45,7 +45,7 @@ if (defined('NV_IS_SPADMIN')) {
  */
 function nv_check_allow_upload_dir($dir)
 {
-    global $site_mods, $allow_upload_dir, $admin_info;
+    global $site_mods, $allow_upload_dir, $admin_info, $global_config;
 
     $dir = trim($dir);
     if (empty($dir)) {
@@ -56,6 +56,8 @@ function nv_check_allow_upload_dir($dir)
     $dir = rtrim($dir, '/');
     $arr_dir = explode('/', $dir);
     $level = array();
+    $autologomod = explode(',', $global_config['autologomod']);
+
     if (defined('NV_CONFIG_DIR')) {
         if (NV_UPLOADS_DIR == $arr_dir[0]. '/' . $arr_dir[1]) {
             $_dir_mod = isset($arr_dir[2]) ? $arr_dir[2] : '';
@@ -142,6 +144,12 @@ function nv_check_allow_upload_dir($dir)
             $level['crop_file'] = true;
             $level['rotate_file'] = true;
         }
+    }
+
+    // Tự động chèn logo
+    $level['auto_logo'] = false;
+    if ($global_config['autologomod'] == 'all' or ($arr_dir[0] == NV_UPLOADS_DIR and isset($arr_dir[1]) and in_array($arr_dir[1], $autologomod))) {
+        $level['auto_logo'] = true;
     }
 
     return $level;
@@ -254,7 +262,7 @@ function nv_get_viewImage($fileName, $refresh = 0)
             if ($thumb_config['thumb_type'] == 4) {
                 $image->cropFromCenter($thumb_config['thumb_width'], $thumb_config['thumb_height']);
             } elseif ($thumb_config['thumb_type'] == 5) {
-            	$image->cropFromTop($thumb_config['thumb_width'], $thumb_config['thumb_height']);
+                $image->cropFromTop($thumb_config['thumb_width'], $thumb_config['thumb_height']);
             }
             $image->save(NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality']);
             $create_Image_info = $image->create_Image_info;
@@ -429,8 +437,8 @@ function nv_filesListRefresh($pathimg)
 
                         // Thêm file mới
                         $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-							VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
+                            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
+                            VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
                         $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
                         $sth->bindParam(':title', $title, PDO::PARAM_STR);
                         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);

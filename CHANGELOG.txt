@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Add an optional configuration to insert a logo with each post
 - Use ReCaptcha to confirm if Flood blocked
 - Block external requests into the admin area
 - Support CORS setting

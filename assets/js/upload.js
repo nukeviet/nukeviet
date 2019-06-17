@@ -1477,7 +1477,7 @@ function remoteUpload() {
     $("div#uploadremote").dialog({
         autoOpen: false,
         width: 400,
-        height: nv_alt_require ? 200 : 120,
+        height: 320,
         modal: true,
         position: {
             my: "center",
@@ -1494,6 +1494,22 @@ function remoteUpload() {
         });
     }
 
+    var current_folder = $('span.folder[title="' + $("span#foldervalue").attr("title") + '"]');
+    var auto_logo = current_folder.is('.auto_logo');
+    var logo = $("input[name=upload_logo]").val();
+    var panel = $('#uploadremote');
+    if (logo == '') {
+        $('[data-toggle="autoLogoArea"]', panel).addClass('hidden');
+        $('[name="auto_logo"]', panel).prop('checked', false);
+    } else {
+        $('[data-toggle="autoLogoArea"]', panel).removeClass('hidden');
+        if (auto_logo) {
+            $('[name="auto_logo"]', panel).prop('checked', true);
+        } else {
+            $('[name="auto_logo"]', panel).prop('checked', false);
+        }
+    }
+
     return false;
 }
 
@@ -1504,6 +1520,8 @@ $('[name="uploadremoteFileOK"]').click(function() {
     var folderPath = $("span#foldervalue").attr("title");
     var check = fileUrl + " " + folderPath;
     var fileAlt = $('#uploadremoteFileAlt').val();
+    var panel = $('#uploadremote');
+    var auto_logo = ($('[name="auto_logo"]', panel).is(':checked') ? 1 : 0);
 
     if (/^(https?|ftp):\/\//i.test(fileUrl) === false) fileUrl = 'http://' + fileUrl;
     $("input[name=uploadremoteFile]").val(fileUrl);
@@ -1515,7 +1533,7 @@ $('[name="uploadremoteFileOK"]').click(function() {
         $.ajax({
             type: "POST",
             url: nv_module_url + "upload&random=" + nv_randomNum(10),
-            data: "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt,
+            data: "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt + '&autologo=' + auto_logo,
             success: function(k) {
                 $('[name="uploadremoteFileOK"]').removeAttr('disabled');
 
@@ -2050,13 +2068,15 @@ var NVUPLOAD = {
                     BeforeUpload: function(up, file) {
                         (isDebugMode && console.log("Plupload: Event before upload"));
                         var filealt = '';
+                        var autologo = ($('[name="auto_logo"]', $('#upload-queue')).is(':checked') ? 1 : 0);
 
                         if ($('#' + file.id + ' .file-alt').length) {
                             filealt = $('#' + file.id + ' .file-alt input').val();
                         }
 
                         NVUPLOAD.uploader.settings.multipart_params = {
-                            "filealt": filealt
+                            "filealt": filealt,
+                            "autologo": autologo
                         };
 
                         // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
@@ -2089,6 +2109,10 @@ var NVUPLOAD = {
         }
     },
     renderUI: function() {
+        var current_folder = $('span.folder[title="' + $("span#foldervalue").attr("title") + '"]');
+        var auto_logo = current_folder.is('.auto_logo');
+        var logo = $("input[name=upload_logo]").val();
+
         // Hide files list and show upload container
         $('#imglist').css({
             'display': 'none'
@@ -2096,6 +2120,12 @@ var NVUPLOAD = {
         $('#upload-queue').css({
             'display': 'block'
         });
+
+        if (logo == '') {
+            $('#upload-queue').removeClass('auto-logo');
+        } else {
+            $('#upload-queue').addClass('auto-logo');
+        }
 
         // Add some button
         $('#upload-button-area .buttons').append(
@@ -2121,7 +2151,13 @@ var NVUPLOAD = {
             '</div>' +
             '</div>' +
             '</div>' +
-            '<div id="upload-queue-files" class="container-fluid"></div>');
+            '<div id="upload-queue-files" class="container-fluid"></div>\
+            <div class="queue-opts">\
+            <div class="checkbox">\
+            <label><input type="checkbox" name="auto_logo" value="1"' + ((logo != '' && auto_logo) ? ' checked="checked"' : '') + '> ' + LANG.autologo_for_upload + '</label>\
+            </div>\
+            </div>\
+        ');
 
         // Rendered is true
         NVUPLOAD.rendered = true;

@@ -114,6 +114,7 @@ $lang_module['upload_logo'] = 'Logo khi thêm vào hình ảnh ';
 $lang_module['upload_logo_pos'] = 'Vị trí của logo';
 $lang_module['selectimg'] = 'Chọn hình ảnh';
 $lang_module['autologo'] = 'Tự động chèn Logo vào ảnh của các module';
+$lang_module['autologo_for_upload'] = 'Chèn logo vào tập tin tải lên (nếu là ảnh)';
 $lang_module['autologomodall'] = 'Tất cả các module';
 $lang_module['logosizecaption'] = 'Kích thước của logo';
 $lang_module['imagewith'] = 'Nếu chiều rộng ảnh';
