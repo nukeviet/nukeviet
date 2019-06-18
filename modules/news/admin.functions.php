@@ -572,7 +572,7 @@ function nv_show_sources_list()
                 'sourceid' => $row['sourceid'],
                 'title' => $row['title'],
                 'link' => $row['link'],
-                'url_edit' => $base_url . '&amp;sourceid=' . $row['sourceid'] . '#edit'
+                'url_edit' => $base_url . '&amp;sourceid=' . $row['sourceid']
             ));
 
             for ($i = 1; $i <= $num; ++$i) {
