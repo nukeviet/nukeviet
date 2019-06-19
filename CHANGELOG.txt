@@ -3,6 +3,10 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Chart.js v2.8.0
+- Select2 v4.0.7
+- Jquery v3.4.1
+- Ckeditor v4.11.4
 - Display the child sitemap at the "sitemapindex"
 - Add the function to debug SQL statements
 - Add an optional configuration to insert a logo with each post
