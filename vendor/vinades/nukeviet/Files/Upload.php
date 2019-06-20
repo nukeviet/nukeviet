@@ -20,15 +20,15 @@ if (!defined('NV_MIME_INI_FILE')) {
 
 class Upload
 {
-    private $config = array(
-        'allowed_files' => array(),
+    private $config = [
+        'allowed_files' => [],
         'upload_checking_mode' => 'strong',
         'maxsize' => 0,
         'maxwidth' => 0,
         'maxheight' => 0,
         'magic_path' => ''
-    );
-    private $lang = array(
+    ];
+    private $lang = [
         'error_uploadNameEmpty' => 'Upload failed: UserFile Name is empty',
         'error_uploadSizeEmpty' => 'Upload failed: UserFile Size is empty',
         'error_upload_ini_size' => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
@@ -50,7 +50,7 @@ class Upload
         'error_upload_writable' => 'Directory %s is not writable',
         'error_upload_urlfile' => 'The URL is not valid and cannot be loaded',
         'error_upload_url_notfound' => 'The url was not found'
-    );
+    ];
 
     private $file_extension = '';
     private $urlfile_extension = '';
@@ -58,15 +58,24 @@ class Upload
     private $file_size = 0;
     private $urlfile_mime = '';
     private $temp_file = '';
-    private $url_info = array();
+    private $url_info = [];
     private $is_img = false;
-    private $img_info = array();
-    private $disable_functions = array();
-    private $disable_classes = array();
+    private $is_svg = false;
+    private $img_info = [];
+    private $disable_functions = [];
+    private $disable_classes = [];
     private $user_agent;
 
     private $chunk_filename = '';
+
+    /*
+     * Chunk hiện tại, bắt đầu từ 0 đến tổng số chunk - 1
+     */
     private $chunk_current = 0;
+
+    /*
+     * Tổng số chunk của file tải lên
+     */
     private $chunk_total = 0;
     private $chunk_tmpdir = '';
     private $chunk_prefix = '';
@@ -84,27 +93,27 @@ class Upload
      * @param string $magic_path
      * @return
      */
-    public function __construct($allowed_filetypes = array('any'), $forbid_extensions = array('php'), $forbid_mimes = array(), $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
+    public function __construct($allowed_filetypes = ['any'], $forbid_extensions = ['php'], $forbid_mimes = [], $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
     {
         if (!is_array($allowed_filetypes)) {
-            $allowed_filetypes = array(
+            $allowed_filetypes = [
                 $allowed_filetypes
-            );
+            ];
         }
         if (!empty($allowed_filetypes) and in_array('any', $allowed_filetypes)) {
-            $allowed_filetypes = array(
+            $allowed_filetypes = [
                 'any'
-            );
+            ];
         }
         if (!is_array($forbid_extensions)) {
-            $forbid_extensions = array(
+            $forbid_extensions = [
                 $forbid_extensions
-            );
+            ];
         }
         if (!is_array($forbid_mimes)) {
-            $forbid_mimes = array(
+            $forbid_mimes = [
                 $forbid_mimes
-            );
+            ];
         }
 
         $this->config['allowed_files'] = $this->get_ini($allowed_filetypes, $forbid_extensions, $forbid_mimes);
@@ -114,21 +123,21 @@ class Upload
         $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
         $this->config['magic_path'] = $magic_path;
 
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split('/[\s,]+/', ini_get('disable_functions'))) : array();
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split('/[\s,]+/', ini_get('disable_functions'))) : [];
         if (extension_loaded('suhosin')) {
             $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
         $this->disable_functions = $disable_functions;
 
-        $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : array();
+        $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : [];
 
-        $userAgents = array(
+        $userAgents = [
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
             'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
             'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
             'Mozilla/4.8 [en] (Windows NT 6.0; U)',
             'Opera/9.25 (Windows NT 6.0; U; en)'
-        );
+        ];
         srand((float) microtime() * 10000000);
         $rand = array_rand($userAgents);
         $this->user_agent = $userAgents[$rand];
@@ -258,7 +267,7 @@ class Upload
      */
     private function get_ini($allowed_filetypes, $forbid_extensions, $forbid_mimes)
     {
-        $ini = $all_ini = array();
+        $ini = $all_ini = [];
 
         if (file_exists(NV_MIME_INI_FILE)) {
             $data = file(NV_MIME_INI_FILE);
@@ -281,13 +290,13 @@ class Upload
                 list ($key, $value) = explode('=', $line);
                 $key = trim($key);
                 $value = trim($value);
-                $value = str_replace(array(
+                $value = str_replace([
                     '"',
                     "'"
-                ), array(
+                ], [
                     '',
                     ''
-                ), $value);
+                ], $value);
 
                 if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
                     $all_ini[$section][$match[1]][] = $value;
@@ -297,9 +306,9 @@ class Upload
             }
 
             foreach ($all_ini as $section => $line) {
-                if ($allowed_filetypes == array(
+                if ($allowed_filetypes == [
                     'any'
-                ) or in_array($section, $allowed_filetypes)) {
+                ] or in_array($section, $allowed_filetypes)) {
                     $ini = array_merge($ini, $line);
                 }
             }
@@ -311,10 +320,10 @@ class Upload
             }
 
             if (!empty($forbid_mimes)) {
-                $new_ini = array();
+                $new_ini = [];
                 foreach ($ini as $key => $i) {
-                    $new = array();
-                    $new[$key] = array();
+                    $new = [];
+                    $new[$key] = [];
                     foreach ($i as $i2) {
                         if (!in_array($i2, $forbid_mimes)) {
                             $new[$key][] = $i2;
@@ -457,7 +466,7 @@ class Upload
     private function get_mime_image($userfile)
     {
         $mime = '';
-        $img_exts = array(
+        $img_exts = [
             IMAGETYPE_GIF => 'gif',
             IMAGETYPE_JPEG => 'jpg',
             IMAGETYPE_PNG => 'png',
@@ -466,7 +475,7 @@ class Upload
             IMAGETYPE_BMP => 'bmp',
             IMAGETYPE_TIFF_II => 'tiff',
             IMAGETYPE_TIFF_MM => 'tiff'
-        );
+        ];
         if (in_array($this->file_extension, $img_exts)) {
             if (($img_info = @getimagesize($userfile['tmp_name'])) !== false) {
                 $this->img_info = $img_info;
@@ -644,12 +653,11 @@ class Upload
     }
 
     /**
-     * upload::verify_image()
-     *
-     * @param mixed $file
-     * @return
+     * @param string $file
+     * @param boolean $svg
+     * @return boolean
      */
-    private function verify_image($file)
+    private function verify_image($file, $svg = false)
     {
         $file = preg_replace('/\0/uis', '', $file);
         $txt = file_get_contents($file);
@@ -670,7 +678,9 @@ class Upload
             return false;
         } elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $txt)) {
             return false;
-        } elseif (preg_match("#</*(applet|link|style|script|iframe|frame|frameset)[^>]*>#i", $txt)) {
+        } elseif (!$svg and preg_match("#</*(applet|link|style|script|iframe|frame|frameset)[^>]*>#i", $txt)) {
+            return false;
+        } elseif ($svg and preg_match("#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i", $txt)) {
             return false;
         } elseif (preg_match("#<\?php(.*)\?>#ms", $txt)) {
             return false;
@@ -679,13 +689,11 @@ class Upload
     }
 
     /**
-     * Upload::check_tmpfile()
-     *
-     * @param mixed $userfile
-     * @param mixed $no_check_size
-     * @return
+     * Kiểm tra cơ bản phần $_FILES
+     * @param array $userfile
+     * @return string
      */
-    private function check_tmpfile($userfile, $no_check_size)
+    private function checkUploadBlob($userfile)
     {
         if (empty($userfile)) {
             return $this->lang['error_upload_no_file'];
@@ -735,39 +743,55 @@ class Upload
         }
 
         $this->file_extension = $extension;
+
+        return '';
+    }
+
+    /**
+     * Upload::check_tmpfile()
+     *
+     * @param mixed $userfile
+     * @param mixed $no_check_size
+     * @return
+     */
+    private function check_tmpfile($userfile, $no_check_size)
+    {
         $this->file_mime = $this->get_mime_type($userfile);
         $this->file_size = $userfile['size'];
 
-        /**
-         * Chú ý:
-         * - Nếu upload chunk sau khi hoàn thành tất cả các chunk cần kiểm tra lại mime của file trước khi rename, move, copy file qua đích đến
-         * - Khi upload chunk sẽ chỉ kiểm tra BLOB đầu tiên mang thông tin của file đó
+        /*
+         * Không xác định được Mime
          */
-        if (empty($this->file_mime) and ($this->chunk_total <= 1 or $this->chunk_current <= 0)) {
+        if (empty($this->file_mime)) {
             return $this->lang['error_upload_mime_not_recognize'];
         }
 
-        /**
-         * Nếu upload nhiều phần không kiểm tra dung lượng BLOB hoặc tất cả các BLOB
-         * Nguyên nhân tổng số BLOB cộng lại có thể lớn hơn dung lượng cho phép
-         * tuy nhiên BLOB cuối cùng lại có thể có dung lượng rất nhỏ và chưa vượt mức cho phép
-         * Sau khi upload tất cả BLOB lên sẽ check sau, tuy nhiên tốt nhất là nên sử dụng các công cụ
-         * để kiểm tra trực tiếp từ trình duyệt.
+        /*
+         * Dung lượng quá giới hạn
+         * Không áp dụng khi tự resize ảnh
          */
-        if (!empty($this->config['maxsize']) and $this->file_size > $this->config['maxsize'] and $this->chunk_total <= 1) {
-            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
+        if (!empty($this->config['maxsize']) and $this->file_size > $this->config['maxsize']) {
+            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) and $this->file_extension != 'svg')) {
                 return sprintf($this->lang['error_upload_max_user_size'], nv_convertfromBytes($this->config['maxsize']));
             }
         }
 
         if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) or preg_match('#application\/[x\-]*(shockwave\-flash)#', $this->file_mime)) {
             $this->is_img = true;
+
+            // Kiểm tra file ảnh SVG
+            if ($this->file_extension == 'svg') {
+                $this->is_svg = true;
+                return $this->check_svg_tmpfile($userfile['tmp_name']);
+            }
+
+            // Kiểm tra ảnh thường
             if (empty($this->img_info)) {
                 $this->img_info = @getimagesize($userfile['tmp_name']);
             }
 
             if (empty($this->img_info) or !isset($this->img_info[0]) or empty($this->img_info[0]) or !isset($this->img_info[1]) or empty($this->img_info[1])) {
-                return $this->lnag['error_upload_not_image'];
+                return $this->lang['error_upload_not_image'];
             }
 
             if (!$this->verify_image($userfile['tmp_name'])) {
@@ -788,53 +812,46 @@ class Upload
         return '';
     }
 
-    private function check_chunktmp($file_tmp, $no_check_size)
+    /**
+     * @param array $userfile
+     * @return string
+     */
+    private function check_svg_tmpfile($tmp_name)
     {
-        if (!file_exists($file_tmp)) {
-            return $this->lang['error_upload_cant_write'];
+        $this->img_info = [];
+
+        if (($xml = @simplexml_load_file($tmp_name)) === false) {
+            return $this->lang['error_upload_not_image'];
         }
 
-        $userfile = array();
-        $userfile['tmp_name'] = $file_tmp;
-        $userfile['type'] = 'type';
-
-        $this->file_mime = $this->get_mime_type($userfile);
-
-        if (empty($this->file_mime)) {
-            return $this->lang['error_upload_mime_not_recognize'];
+        $attr = $xml->attributes();
+        if (!isset($attr['width']) and !isset($attr['height']) and !isset($attr['viewBox'])) {
+            return $this->lang['error_upload_not_image'];
         }
 
-        $this->file_size = $this->filesize($userfile['tmp_name']);
-
-        if (!empty($this->config['maxsize']) and $this->file_size > $this->config['maxsize']) {
-            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
-                return sprintf($this->lang['error_upload_max_user_size'], nv_convertfromBytes($this->config['maxsize']));
+        $this->img_info['maxWidth'] = $this->img_info['maxHeight'] = 0;
+        if (isset($attr['viewBox'])) {
+            $viewBox = explode(' ', (string)$attr['viewBox']);
+            if (!isset($viewBox[3]))  {
+                return $this->lang['error_upload_not_image'];
             }
+            $this->img_info['maxWidth'] = intval($viewBox[2]);
+            $this->img_info['maxHeight'] = intval($viewBox[3]);
+        }
+        if (isset($attr['width']) and isset($attr['height'])) {
+            $this->img_info[0] = intval($attr['width']);
+            $this->img_info[1] = intval($attr['height']);
+        } else {
+            $this->img_info[0] = $this->img_info['maxWidth'];
+            $this->img_info[1] = $this->img_info['maxHeight'];
         }
 
-        if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) or preg_match('#application\/[x\-]*(shockwave\-flash)#', $this->file_mime)) {
-            $this->is_img = true;
-            if (empty($this->img_info)) {
-                $this->img_info = @getimagesize($userfile['tmp_name']);
-            }
+        if (empty($this->img_info[0]) or empty($this->img_info[1])) {
+            return $this->lang['error_upload_not_image'];
+        }
 
-            if (empty($this->img_info) or !isset($this->img_info[0]) or empty($this->img_info[0]) or !isset($this->img_info[1]) or empty($this->img_info[1])) {
-                return $this->lnag['error_upload_not_image'];
-            }
-
-            if (!$this->verify_image($userfile['tmp_name'])) {
-                return $this->lang['error_upload_image_failed'];
-            }
-
-            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
-                if (!empty($this->config['maxwidth']) and $this->img_info[0] > $this->config['maxwidth']) {
-                    return sprintf($this->lang['error_upload_image_width'], $this->config['maxwidth']);
-                }
-
-                if (!empty($this->config['maxheight']) and $this->img_info[1] > $this->config['maxheight']) {
-                    return sprintf($this->lang['error_upload_image_height'], $this->config['maxheight']);
-                }
-            }
+        if (!$this->verify_image($tmp_name, true)) {
+            return $this->lang['error_upload_image_failed'];
         }
 
         return '';
@@ -903,24 +920,27 @@ class Upload
         $this->file_mime = '';
         $this->file_size = 0;
         $this->is_img = false;
-        $this->img_info = array();
+        $this->is_svg = false;
+        $this->img_info = [];
 
         if ($this->chunk_total > 0) {
             $userfile['name'] = $this->chunk_filename;
         }
 
-        $return = array();
-        $return['error'] = $this->check_tmpfile($userfile, $no_check_size);
+        $return = [];
+        $return['error'] = $this->checkUploadBlob($userfile);
         if (!empty($return['error'])) {
             return $return;
         }
 
+        // Kiểm tra quyền ghi vào thư mục upload
         $savepath = str_replace("\\", "/", realpath($savepath));
         $return['error'] = $this->check_save_path($savepath);
         if (!empty($return['error'])) {
             return $return;
         }
 
+        // Kiểm tra quyền ghi vào thư mục tạm khi upload từng phần
         if ($this->chunk_total > 0) {
             $return['error'] = $this->check_save_path($this->chunk_tmpdir);
             if (!empty($return['error'])) {
@@ -928,6 +948,7 @@ class Upload
             }
         }
 
+        // Xác định tên file tải lên
         unset($f);
         preg_match('/^(.*)\.[a-zA-Z0-9]+$/', $userfile['name'], $f);
         $fn = $this->string_to_filename($f[1]);
@@ -947,6 +968,7 @@ class Upload
         }
 
         if ($this->chunk_total > 0) {
+            // Upload từng phần
             $chunkComplete = false;
             if (!preg_match('/\/$/', $this->chunk_tmpdir)) {
                 $this->chunk_tmpdir = $this->chunk_tmpdir . '/';
@@ -954,6 +976,7 @@ class Upload
 
             $file_tmp = $this->chunk_tmpdir . $this->chunk_prefix . md5($userfile['name'] . $this->chunk_total);
 
+            // Tại chunk đầu tiên, xóa file hiện tại nếu tồn tại
             if ($this->chunk_current == 0 and file_exists($file_tmp)) {
                 @unlink($file_tmp);
             }
@@ -976,7 +999,13 @@ class Upload
                 @fclose($out);
 
                 if ($this->chunk_total <= ($this->chunk_current + 1)) {
-                    $error = $this->check_chunktmp($file_tmp, $no_check_size);
+                    // Chunk cuối cùng => Upload xong
+                    $checkfile = [
+                        'tmp_name' => $file_tmp,
+                        'size' => $this->filesize($file_tmp),
+                        'type' => '',
+                    ];
+                    $error = $this->check_tmpfile($checkfile, $no_check_size);
                     if ($error != '') {
                         throw new Exception($error);
                     }
@@ -1004,6 +1033,13 @@ class Upload
                 return $return;
             }
         } else {
+            // Upload một lần
+            // Kiểu upload một lần thì kiểm tra trực tiếp file tạm (đã được upload lên server)
+            $return['error'] = $this->check_tmpfile($userfile, $no_check_size);
+            if (!empty($return['error'])) {
+                return $return;
+            }
+
             $chunkComplete = true;
             if (!@copy($userfile['tmp_name'], $savepath . $filename)) {
                 @move_uploaded_file($userfile['tmp_name'], $savepath . $filename);
@@ -1030,6 +1066,7 @@ class Upload
             $return['mime'] = $this->file_mime;
             $return['size'] = $this->file_size;
             $return['is_img'] = $this->is_img;
+            $return['is_svg'] = $this->is_svg;
             if ($this->is_img) {
                 $return['img_info'] = $this->img_info;
             }
@@ -1124,13 +1161,13 @@ class Upload
             $url_info = @parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
 
-            $userAgents = array(
+            $userAgents = [
                 'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
                 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
                 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
-            );
+            ];
             $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
             srand((float) microtime() * 10000000);
@@ -1162,7 +1199,7 @@ class Upload
                 $res = explode("\n", $response);
             }
         } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions) and function_exists('fgets') and !in_array('fgets', $this->disable_functions)) {
-            $res = array();
+            $res = [];
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
             $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
@@ -1198,9 +1235,9 @@ class Upload
             }
             if (!empty($ContentType)) {
                 if (!is_array($ContentType)) {
-                    $ContentType = array(
+                    $ContentType = [
                         $ContentType
-                    );
+                    ];
                 }
                 foreach ($ContentType as $Ctype) {
                     $Ctype = trim($Ctype);
@@ -1241,7 +1278,7 @@ class Upload
      */
     private function check_allow_methods()
     {
-        $allow_methods = array();
+        $allow_methods = [];
         if (extension_loaded('curl') and !preg_grep('/^curl\_/', $this->disable_functions)) {
             $allow_methods[] = 'curl';
         }
@@ -1291,12 +1328,12 @@ class Upload
      */
     private function curl_Download()
     {
-        $options = array(
+        $options = [
             CURLOPT_USERAGENT => $this->user_agent,
             CURLOPT_AUTOREFERER => true,
             CURLOPT_COOKIEFILE => '',
             CURLOPT_FOLLOWLOCATION => true
-        );
+        ];
 
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $this->url_info['uri']);
@@ -1403,9 +1440,10 @@ class Upload
         $this->urlfile_mime = '';
         $this->urlfile_extension = '';
         $this->is_img = false;
-        $this->img_info = array();
+        $this->is_svg = false;
+        $this->img_info = [];
 
-        $return = array();
+        $return = [];
         $return['error'] = '';
 
         $this->url_info = $this->url_get_info($urlfile);
@@ -1440,19 +1478,19 @@ class Upload
 
         $allow_methods = $this->check_allow_methods();
         if (!$this->func_exists('fopen')) {
-            $allow_methods = array(
+            $allow_methods = [
                 'file_get_contents'
-            );
+            ];
         }
 
         $this->temp_file = str_replace("\\", "/", tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX));
 
         $result = false;
         foreach ($allow_methods as $method) {
-            $result = call_user_func(array(
+            $result = call_user_func([
                 &$this,
                 $method . '_Download'
-            ));
+            ]);
             if ($result === true) {
                 break;
             }
@@ -1467,10 +1505,10 @@ class Upload
         $return['size'] = $this->filesize($this->temp_file);
 
         $this->file_extension = $this->urlfile_extension;
-        $this->file_mime = $this->get_mime_type(array(
+        $this->file_mime = $this->get_mime_type([
             'type' => $this->urlfile_mime,
             'tmp_name' => $this->temp_file
-        ));
+        ]);
         if (empty($this->file_mime)) {
             @unlink($this->temp_file);
             $return['error'] = $this->lang['error_upload_mime_not_recognize'];
@@ -1487,33 +1525,45 @@ class Upload
 
         if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) or preg_match('#application\/[x\-]*(shockwave\-flash)#', $this->file_mime)) {
             $this->is_img = true;
-            if (empty($this->img_info)) {
-                $this->img_info = @getimagesize($this->temp_file);
-            }
 
-            if (empty($this->img_info) or !isset($this->img_info[0]) or empty($this->img_info[0]) or !isset($this->img_info[1]) or empty($this->img_info[1])) {
-                @unlink($this->temp_file);
-                $return['error'] = $this->lang['error_upload_not_image'];
-                return $return;
-            }
-
-            if (!$this->verify_image($this->temp_file)) {
-                @unlink($this->temp_file);
-                $return['error'] = $this->lang['error_upload_image_failed'];
-                return $return;
-            }
-
-            if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
-                if (!empty($this->config['maxwidth']) and $this->img_info[0] > $this->config['maxwidth']) {
+            // Kiểm tra file ảnh SVG
+            if ($this->file_extension == 'svg') {
+                $this->is_svg = true;
+                $error = $this->check_svg_tmpfile($this->temp_file);
+                if (!empty($error)) {
                     @unlink($this->temp_file);
-                    $return['error'] = sprintf($this->lang['error_upload_image_width'], $this->config['maxwidth']);
+                    $return['error'] = $error;
+                    return $return;
+                }
+            } else {
+                if (empty($this->img_info)) {
+                    $this->img_info = @getimagesize($this->temp_file);
+                }
+
+                if (empty($this->img_info) or !isset($this->img_info[0]) or empty($this->img_info[0]) or !isset($this->img_info[1]) or empty($this->img_info[1])) {
+                    @unlink($this->temp_file);
+                    $return['error'] = $this->lang['error_upload_not_image'];
                     return $return;
                 }
 
-                if (!empty($this->config['maxheight']) and $this->img_info[1] > $this->config['maxheight']) {
+                if (!$this->verify_image($this->temp_file)) {
                     @unlink($this->temp_file);
-                    $return['error'] = sprintf($this->lang['error_upload_image_height'], $this->config['maxheight']);
+                    $return['error'] = $this->lang['error_upload_image_failed'];
                     return $return;
+                }
+
+                if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
+                    if (!empty($this->config['maxwidth']) and $this->img_info[0] > $this->config['maxwidth']) {
+                        @unlink($this->temp_file);
+                        $return['error'] = sprintf($this->lang['error_upload_image_width'], $this->config['maxwidth']);
+                        return $return;
+                    }
+
+                    if (!empty($this->config['maxheight']) and $this->img_info[1] > $this->config['maxheight']) {
+                        @unlink($this->temp_file);
+                        $return['error'] = sprintf($this->lang['error_upload_image_height'], $this->config['maxheight']);
+                        return $return;
+                    }
                 }
             }
         }
@@ -1570,6 +1620,7 @@ class Upload
         $return['ext'] = $this->file_extension;
         $return['mime'] = $this->file_mime;
         $return['is_img'] = $this->is_img;
+        $return['is_svg'] = $this->is_svg;
         if ($this->is_img) {
             $return['img_info'] = $this->img_info;
         }

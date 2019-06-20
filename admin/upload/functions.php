@@ -383,6 +383,45 @@ function nv_getFileInfo($pathimg, $file)
         } else {
             $info['src'] = NV_ASSETS_DIR . '/images/doc.gif';
         }
+    } elseif ($ext == 'svg') {
+        $info['type'] = 'image';
+        if (($xml = @simplexml_load_file(NV_ROOTDIR . '/' . $pathimg . '/' . $file)) !== false) {
+            $attr = $xml->attributes();
+            $maxWidth = $maxHeight = $width = $height = 0;
+
+            if (isset($attr['viewBox'])) {
+                $viewBox = explode(' ', (string)$attr['viewBox']);
+                if (isset($viewBox[3]))  {
+                    $maxWidth = intval($viewBox[2]);
+                    $maxHeight = intval($viewBox[3]);
+                }
+            }
+
+            if (isset($attr['width']) and isset($attr['height'])) {
+                $width = intval($attr['width']);
+                $height = intval($attr['height']);
+            } else {
+                $width = $maxWidth;
+                $height = $maxHeight;
+            }
+
+            if ($width > 0 and $height > 0) {
+                $info['src'] = $pathimg . '/' . $file;
+                $info['srcwidth'] = $width;
+                $info['srcheight'] = $height;
+                $info['size'] = intval($width) . '|' . intval($height);
+
+                if ($info['srcwidth'] > 80) {
+                    $info['srcheight'] = round(80 / $info['srcwidth'] * $info['srcheight']);
+                    $info['srcwidth'] = 80;
+                }
+
+                if ($info['srcheight'] > 80) {
+                    $info['srcwidth'] = round(80 / $info['srcheight'] * $info['srcwidth']);
+                    $info['srcheight'] = 80;
+                }
+            }
+        }
     }
 
     $info['userid'] = 0;

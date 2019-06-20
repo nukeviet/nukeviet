@@ -69,7 +69,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 
     if (!empty($upload_info['error'])) {
         $error = $upload_info['error'];
-    } elseif ($upload_info['complete'] and preg_match('#image\/[x\-]*([a-z]+)#', $upload_info['mime'])) {
+    } elseif ($upload_info['complete'] and preg_match('#image\/[x\-]*([a-z]+)#', $upload_info['mime']) and !$upload_info['is_svg']) {
         if (isset($array_thumb_config[$path])) {
             $thumb_config = $array_thumb_config[$path];
         } else {
@@ -217,9 +217,13 @@ if (!empty($error)) {
             $newalt = str_replace('-', ' ', change_alias($newalt));
         }
 
-        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt) VALUES
-            ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)");
+        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (
+            name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
+        ) VALUES (
+            '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
+            '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "',
+            " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt
+        )");
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
         $sth->execute();

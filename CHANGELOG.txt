@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.06
 
+- Support upload SVG files
 - Chart.js v2.8.0
 - Select2 v4.0.7
 - Jquery v3.4.1
