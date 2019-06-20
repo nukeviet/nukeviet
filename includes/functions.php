@@ -1055,16 +1055,16 @@ function nv_get_keywords($content, $keyword_limit = 20)
 }
 
 /**
- * nv_sendmail()
- *
- * @param mixed $from
- * @param mixed $to
+ * @param array|string $from
+ * @param string $to
  * @param string $subject
  * @param string $message
  * @param string $files
- * @return
+ * @param boolean $AddEmbeddedImage
+ * @param boolean $testmode
+ * @return boolean
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false)
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false)
 {
     global $global_config, $sys_info;
 
@@ -1130,7 +1130,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                 $mail->From = $global_config['site_email'];
             }
         } else {
-            return false;
+            return ($testmode ? 'No mail mode' : false);
         }
 
         $AltBody = strip_tags($message);
@@ -1152,7 +1152,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         if (empty($to)) {
-            return false;
+            return ($testmode ? 'No receiver' : false);
         }
 
         if (! is_array($to)) {
@@ -1183,15 +1183,13 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
         if (! $mail->Send()) {
             trigger_error($mail->ErrorInfo, E_USER_WARNING);
-
-            return false;
+            return ($testmode ? $mail->ErrorInfo : false);
         }
 
-        return true;
+        return ($testmode ? '' : true);
     } catch (PHPMailer\PHPMailer\Exception $e) {
         trigger_error($e->errorMessage(), E_USER_WARNING);
-
-        return false;
+        return ($testmode ? $e->errorMessage() : false);
     }
 }
 
