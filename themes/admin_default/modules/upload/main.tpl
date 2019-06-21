@@ -124,7 +124,7 @@
 <div id="recreatethumb" class="upload-hide" title="{LANG.recreatethumb}">
     <div class="form-horizontal" role="form">
         <div class="form-group" id="recreatethumb_loading">
-        	{LANG.recreatethumb_note}
+            {LANG.recreatethumb_note}
         </div>
     </div>
 </div>
@@ -273,22 +273,23 @@
 </div>
 
 <div id="uploadremote" title="{LANG.upload_mode_remote}">
-    <div class="row">
-        <label for="uploadremoteFile">{LANG.enter_url}</label>
-    </div>
-    <div class="row">
+    <div class="form-group">
+        <label for="uploadremoteFile">{LANG.enter_url}:</label>
         <input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
     </div>
-    <div class="dynamic text-center" id="upload-remote-info"></div>
+    <div class="dynamic text-center form-group" id="upload-remote-info"></div>
     <!-- BEGIN: alt_remote -->
-    <div class="row">
-        <label for="uploadremoteFileAlt">{LANG.altimage}</label>
-    </div>
-    <div class="row">
+    <div class="form-group">
+        <label for="uploadremoteFileAlt">{LANG.altimage}:</label>
         <input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
     </div>
     <!-- END: alt_remote -->
-    <div class="row text-center">
+    <div class="form-group" data-toggle="autoLogoArea">
+        <div class="checkbox">
+            <label><input type="checkbox" name="auto_logo" value="1"> {LANG.autologo_for_upload}</label>
+        </div>
+    </div>
+    <div class="text-center">
         <input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
     </div>
 </div>
@@ -359,6 +360,7 @@ LANG.notlogo = "{LANG.notlogo}";
 LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
 LANG.altimage = "{LANG.altimage}";
 LANG.upload_alt_note = "{LANG.upload_alt_note}";
+LANG.autologo_for_upload = "{LANG.autologo_for_upload}";
 
 var nv_my_domain = '{NV_MY_DOMAIN}';
 var nv_max_size_bytes = '{NV_MAX_SIZE_BYTES}';
