@@ -248,18 +248,19 @@ if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session'))
     $nv_Request->unset_request('nv' . NV_LANG_DATA . 'themever', 'cookie');
 }
 
-// Ket noi voi class chong flood
-if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
-(!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
-    require NV_ROOTDIR . '/includes/core/flood_blocker.php';
-}
-
 // Captcha
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }
 // Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
+
+// Ket noi voi class chong flood
+if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
+(!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
+    require NV_ROOTDIR . '/includes/core/flood_blocker.php';
+}
+
 $global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
 if (isset($nv_plugin_area[1])) {

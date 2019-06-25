@@ -12,7 +12,7 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$array_except_flood_site = $array_except_flood_admin = array();
+$array_except_flood_site = $array_except_flood_admin = [];
 $ip_exclusion = false;
 if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php')) {
     include NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php' ;
@@ -26,15 +26,38 @@ foreach ($array_except_flood_site as $e => $f) {
 }
 
 if (!$ip_exclusion) {
-    $rules = array('60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300']);
+    $rules = [
+        '60' => $global_config['max_requests_60'],
+        '300' => $global_config['max_requests_300']
+    ];
 
     $flb = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
     $flb->trackFlood($rules);
 
     if ($flb->is_flooded) {
+        // Nếu recaptcha được kích hoạt, dùng nó để xác nhận khi bị chặn
+        $captchaPass = (!empty($global_config['captcha_type']) and $global_config['captcha_type'] == 2);
+        if ($captchaPass) {
+            if ($nv_Request->isset_request('captcha_pass_flood', 'post')) {
+                $tokend = $nv_Request->get_title('tokend', 'post', '');
+                $captcha_txt = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+                $redirect = $nv_Request->get_title('redirect', 'post', '');
+                if ($tokend === NV_CHECK_SESSION and nv_capcha_txt($captcha_txt)) {
+                    $flb->resetTrackFlood();
+                    $redirect = nv_redirect_decrypt($redirect);
+                    if (empty($redirect)) {
+                        nv_redirect_location(NV_BASE_SITEURL);
+                    }
+                    nv_redirect_location($redirect);
+                }
+            }
+        }
+
         include NV_ROOTDIR . '/includes/header.php';
+
         if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
             $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
+            $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
             $xtpl->assign('PAGE_TITLE', $nv_Lang->getGlobal('flood_page_title'));
             $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
             $xtpl->assign('IMG_WIDTH', 33);
@@ -43,6 +66,16 @@ if (!$ip_exclusion) {
             $xtpl->assign('FLOOD_BLOCKER_INFO2', $nv_Lang->getGlobal('flood_info2'));
             $xtpl->assign('FLOOD_BLOCKER_INFO3', $nv_Lang->getGlobal('sec'));
             $xtpl->assign('FLOOD_BLOCKER_TIME', $flb->flood_block_time);
+
+            if ($captchaPass) {
+                $xtpl->assign('TOKEND', NV_CHECK_SESSION);
+                $xtpl->assign('SITE_KEY', $global_config['recaptcha_sitekey']);
+                $xtpl->assign('CATPCHA_TYPE', $global_config['recaptcha_type']);
+                $xtpl->assign('CATPCHA_LANG', NV_LANG_INTERFACE);
+                $xtpl->assign('REDIRECT', nv_redirect_encrypt($client_info['selfurl']));
+                $xtpl->parse('main.captchapass');
+            }
+
             $xtpl->parse('main');
             echo $xtpl->text('main');
             exit();
