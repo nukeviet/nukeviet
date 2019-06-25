@@ -80,11 +80,11 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_email') . ':</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_website') . ':</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
         $html .= '</div>';
         $html .= '<tr class="hide">';
         $html .= '<div class="col-sm-18" colspan="2"><script type="text/javascript">

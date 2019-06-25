@@ -39,6 +39,7 @@ if (isset($access_admin['access_addus'][$level]) and $access_admin['access_addus
 if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_waiting'][$level] == 1) {
     $submenu['user_waiting'] = $nv_Lang->getModule('member_wating');
     $allow_func[] = 'user_waiting';
+    $allow_func[] = 'user_waiting_remail';
     $allow_func[] = 'setactive';
     $allow_func[] = 'setofficial';
 }
