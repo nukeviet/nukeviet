@@ -77,6 +77,8 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
     ('sys', 'site', 'facebook_client_secret', ''),
     ('sys', 'site', 'google_client_id', ''),
     ('sys', 'site', 'google_client_secret', ''),
+    ('sys', 'site', 'cors_restrict_domains', '1'),
+    ('sys', 'site', 'cors_valid_domains', ''),
 
     ('sys', 'define', 'nv_gfx_num', '6'),
     ('sys', 'global', 'notification_active', '1'),

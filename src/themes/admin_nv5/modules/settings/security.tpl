@@ -23,6 +23,7 @@
             <li class="nav-item"><a aria-offsets="1" href="#settingFlood" data-toggle="tab" role="tab" class="nav-link{if $SELECTEDTAB eq 1} active{/if}">{$LANG->get('flood_blocker')}</a></li>
             <li class="nav-item"><a aria-offsets="2" href="#settingCaptcha" data-toggle="tab" role="tab" class="nav-link{if $SELECTEDTAB eq 2} active{/if}">{$LANG->get('captcha')}</a></li>
             <li class="nav-item"><a aria-offsets="3" href="#settingIp" data-toggle="tab" role="tab" class="nav-link{if $SELECTEDTAB eq 3} active{/if}">{$LANG->get('banip')}</a></li>
+            <li class="nav-item"><a aria-offsets="4" href="#settingCORS" data-toggle="tab" role="tab" class="nav-link{if $SELECTEDTAB eq 4} active{/if}">{$LANG->get('cors')}</a></li>
         </ul>
         <div class="tab-content">
             <div id="settingBasic" role="tabpanel" class="tab-pane{if $SELECTEDTAB eq 0} active{/if}">
@@ -445,6 +446,32 @@
                         <label class="col-12 col-sm-3 col-form-label text-sm-right"></label>
                         <div class="col-12 col-sm-8 col-lg-6">
                             <button class="btn btn-space btn-primary" type="submit" name="submit">{$LANG->get('banip_confirm')}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="settingCORS" role="tabpanel" class="tab-pane{if $SELECTEDTAB eq 4} active{/if}">
+                <form method="post" action="{$FORM_ACTION}" autocomplete="off">
+                    <input type="hidden" name="selectedtab" value="{$SELECTEDTAB}"/>
+                    <div class="form-group row pt-1 pb-0">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cors_restrict_domains">{$LANG->get('cors_restrict_domains')}</label>
+                        <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input class="custom-control-input" type="checkbox" id="cors_restrict_domains" name="cors_restrict_domains" value="1"{if $CONFIG_SITE['cors_restrict_domains']} checked="checked"{/if}><span class="custom-control-label">{$LANG->get('cors_help')}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="cors_valid_domains">{$LANG->get('cors_valid_domains')}</label>
+                        <div class="col-12 col-sm-8 col-lg-6">
+                            <textarea rows="5" class="form-control" id="cors_valid_domains" name="cors_valid_domains">{$CONFIG_SITE['cors_valid_domains']}</textarea>
+                            <span class="form-text text-muted">{$LANG->get('cors_valid_domains_help')}</span>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0 pb-0">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right"></label>
+                        <div class="col-12 col-sm-8 col-lg-6">
+                            <button class="btn btn-space btn-primary" type="submit" name="submitcors">{$LANG->get('submit')}</button>
                         </div>
                     </div>
                 </form>

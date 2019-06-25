@@ -41,12 +41,13 @@ $recaptcha_type_array = [
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
-if ($selectedtab < 0 or $selectedtab > 3) {
+if ($selectedtab < 0 or $selectedtab > 4) {
     $selectedtab = 0;
 }
 
 $array_config_global = [];
 $array_config_define = [];
+$array_config_site = [];
 
 // Xử lý các thiết lập cơ bản
 if ($nv_Request->isset_request('submitbasic', 'post')) {
@@ -211,6 +212,41 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
 
 $nv_Lang->setModule('two_step_verification_note', sprintf($nv_Lang->getModule('two_step_verification_note'), $nv_Lang->getModule('two_step_verification0'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups'));
 
+// Xử lý thiết lập CORS
+if ($nv_Request->isset_request('submitcors', 'post')) {
+    $array_config_site['cors_restrict_domains'] = (int)$nv_Request->get_bool('cors_restrict_domains', 'post', false);
+    $cors_valid_domains = $nv_Request->get_textarea('cors_valid_domains', '', NV_ALLOWED_HTML_TAGS, true);
+    $cors_valid_domains = explode('<br />', strip_tags($cors_valid_domains, '<br>'));
+    $array_config_site['cors_valid_domains'] = [];
+    foreach ($cors_valid_domains as $domain) {
+        if (!empty($domain)) {
+            $domain = parse_url($domain);
+            if (is_array($domain)) {
+                if (sizeof($domain) == 1 and !empty($domain['path'])) {
+                    $domain['host'] = $domain['path'];
+                }
+                if (!isset($domain['scheme'])) {
+                    $domain['scheme'] = 'http';
+                }
+                $array_config_site['cors_valid_domains'][] = $domain['scheme'] . '://' . $domain['host'] . ((isset($domain['port']) and $domain['port'] != '80') ? (':' . $domain['port']) : '');
+            }
+        }
+    }
+    $array_config_site['cors_valid_domains'] = empty($array_config_site['cors_valid_domains']) ? '' : json_encode($array_config_site['cors_valid_domains']);
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_site as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_CORS_SETTING', $global_config['cors_restrict_domains'] . ': ' . $array_config_site['cors_valid_domains'], $admin_info['userid']);
+    $nv_Cache->delMod($module_name);
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+} else {
+    $array_config_site['cors_restrict_domains'] = $global_config['cors_restrict_domains'];
+    $array_config_site['cors_valid_domains'] = empty($global_config['cors_valid_domains']) ? '' : implode("\n", $global_config['cors_valid_domains']);
+}
+
 $tpl = new \NukeViet\Template\Smarty();
 $tpl->registerPlugin('modifier', 'date', 'date');
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -281,7 +317,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         if ($save !== true) {
             $tpl->assign('MANUAL_WRITE_MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
-            $tpl->assign('MANUAL_WRITE_CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
+            $tpl->assign('MANUAL_WRITE_CODE', str_replace(["\n", "\t"], ["<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"], nv_htmlspecialchars($save)));
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
         }
@@ -359,7 +395,7 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
 
         if ($save !== true) {
             $tpl->assign('MANUAL_WRITE_MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
-            $tpl->assign('MANUAL_WRITE_CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
+            $tpl->assign('MANUAL_WRITE_CODE', str_replace(["\n", "\t"], ["<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"], nv_htmlspecialchars($save)));
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
         }
@@ -405,6 +441,7 @@ $tpl->assign('CAPTCHA_TYPE', $captcha_type_array);
 $tpl->assign('CONFIG_CAPTCHA', $array_config_captcha);
 $tpl->assign('RECAPTCHA_TYPE', $recaptcha_type_array);
 $tpl->assign('DEFINE_CAPTCHA', $array_define_captcha);
+$tpl->assign('CONFIG_SITE', $array_config_site);
 
 $mask_text_array = [];
 $mask_text_array[0] = '255.255.255.255';
