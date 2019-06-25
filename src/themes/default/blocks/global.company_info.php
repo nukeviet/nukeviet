@@ -43,10 +43,10 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_responsibility') . ':</label>';
         $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_responsibility" value="' . $data_block['company_responsibility'] . '"></div>';
         $html .= '</div>';
-        $html .= '<div class="form-group">';
+        $html .= '<div class="row">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_address') . ':</label>';
         $html .= '<div class="col-sm-18">';
-        $html .= '<div class="row">';
+        $html .= '<div class="form-group">';
         $html .= '<div class="col-xs-16">';
         $html .= '<input type="text" class="form-control" name="config_company_address" id="config_company_address" value="' . $data_block['company_address'] . '">';
         $html .= '</div>';
@@ -80,11 +80,11 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_email') . ':</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getGlobal('company_website') . ':</label>';
-        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
+        $html .= '<div class="col-sm-18"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span>' . $lang_global['multi_note'] . '</span></div>';
         $html .= '</div>';
         $html .= '<tr class="hide">';
         $html .= '<div class="col-sm-18" colspan="2"><script type="text/javascript">
@@ -143,8 +143,6 @@ if (! nv_function_exists('nv_company_info')) {
         } else {
             $block_theme = 'default';
         }
-
-        $block_config['company_mapapikey'] = $global_config['googleMapsAPI'];
 
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
