@@ -168,3 +168,6 @@ $lang_module['publ_time_info'] = 'Les systèmes automatiques prennent le temps c
 $lang_module['enter_keyword'] = 'Entrez des mots clés';
 $lang_module['all_plan'] = 'Tous les plans';
 $lang_module['idplanbanner'] = 'Sélectionnez le fichier';
+$lang_module['form_random'] = 'Aléatoire toutes les annonces';
+$lang_module['form_random_one'] = 'Une annonce au hasard';
+$lang_module['form_sequential'] = 'Séquentiellement';
