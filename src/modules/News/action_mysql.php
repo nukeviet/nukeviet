@@ -283,6 +283,7 @@ $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module,
     ('" . $lang . "', '" . $module_name . "', 'imgposition', '2'),
     ('" . $lang . "', '" . $module_name . "', 'htmlhometext', '0'),
     ('" . $lang . "', '" . $module_name . "', 'order_articles', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'identify_cat_change', '0'),
 
     ('" . $lang . "', '" . $module_name . "', 'elas_use', '0'),
     ('" . $lang . "', '" . $module_name . "', 'elas_host', ''),
