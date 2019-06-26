@@ -95,7 +95,7 @@ if ($nv_Request->isset_request('js', 'get')) {
     unset($sys_info['server_headers']['content-type'], $sys_info['server_headers']['content-length']);
 
     $headers['Content-Type'] = 'application/javascript';
-    $headers['Last-Modified'] = gmdate('D, d M Y H:i:s', filemtime($js_file)) . " GMT";
+    $headers['Last-Modified'] = gmdate('D, d M Y H:i:s', $global_config['timestamp']) . " GMT";
     $headers['Cache-Control'] = 'max-age=2592000, public'; // Cache js 1 tháng kể từ lần sửa cuối của file
     $headers['Pragma'] = 'cache';
 

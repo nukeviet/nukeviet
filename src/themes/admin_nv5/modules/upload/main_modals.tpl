@@ -381,9 +381,14 @@
                         <label>{$LANG->get('enter_url')} <i class="text-danger">(*)</i>:</label>
                         <input type="text" class="form-control" name="uploadremoteFile" value="">
                     </div>
-                    <div class="form-group mb-0">
+                    <div class="form-group">
                         <label>{$LANG->get('altimage')}{if $UPLOAD_ALT_REQUIRE eq 'true'} <i class="text-danger">(*)</i>{/if}:</label>
                         <input type="text" class="form-control" name="uploadremoteFileAlt" value="">
+                    </div>
+                    <div class="form-group mt-1" data-toggle="autoLogoArea">
+                        <label class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" name="auto_logo" value="1"><span class="custom-control-label custom-control-color">{$LANG->get('autologo_for_upload')}</span>
+                        </label>
                     </div>
                 </div>
                 <div class="modal-footer">

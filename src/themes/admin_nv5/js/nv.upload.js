@@ -614,6 +614,22 @@ NVCoreFileBrowser.prototype.init = function(data) {
             $('[name="uploadremoteFile"]', modalEle).val('').focus();
             $('[name="uploadremoteFileAlt"]', modalEle).val('');
             $('[name="uploadremoteFileOK"]', modalEle).prop('disabled', false);
+
+            var logo = $(cfgm.logo).data('value');
+            var path = $(cfgf.folder).data('value');
+            var folder = $('[data-folder="' + path + '"]', $(cfg.folderElement));
+
+            if (logo == '' || folder.length < 1) {
+                $('[data-toggle="autoLogoArea"]', modalEle).addClass('d-none');
+                $('[name="auto_logo"]', modalEle).prop('checked', false);
+            } else {
+                $('[data-toggle="autoLogoArea"]', modalEle).removeClass('d-none');
+                if (folder.is('.auto_logo')) {
+                    $('[name="auto_logo"]', modalEle).prop('checked', true);
+                } else {
+                    $('[name="auto_logo"]', modalEle).prop('checked', false);
+                }
+            }
         });
 
         /*
@@ -2118,6 +2134,7 @@ NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
     var folderPath = $(cfgf.folder).data('value');
     var check = fileUrl + " " + folderPath;
     var fileAlt = $('[name="uploadremoteFileAlt"]', form).val();
+    var auto_logo = ($('[name="auto_logo"]', form).is(':checked') ? 1 : 0);
 
     if (/^(https?|ftp):\/\//i.test(fileUrl) === false) {
         fileUrl = 'http://' + fileUrl;
@@ -2134,7 +2151,8 @@ NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
             data: {
                 path: folderPath,
                 fileurl: fileUrl,
-                filealt: fileAlt
+                filealt: fileAlt,
+                autologo: auto_logo
             },
             success: function(k) {
                 $('[type="submit"]', form).prop('disabled', false);
@@ -2387,13 +2405,15 @@ NVCoreFileBrowser.prototype.uploadInit = function() {
             BeforeUpload: function(up, file) {
                 (self.debug && console.log("Plupload: Event before upload"));
                 var filealt = '';
+                var autologo = ($('[name="auto_logo"]', $(cfg.ctnUploadQueue)).is(':checked') ? 1 : 0);
 
                 if ($('#' + file.id + ' [data-toggle="fileAltInput"]').length) {
                     filealt = $('#' + file.id + ' [data-toggle="fileAltInput"]').val();
                 }
 
                 self.uploader.settings.multipart_params = {
-                    "filealt": filealt
+                    "filealt": filealt,
+                    "autologo": autologo
                 };
                 // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
                 /*
@@ -2481,6 +2501,10 @@ NVCoreFileBrowser.prototype.uploadRenderUI = function() {
     var cfgm = self.cfgMain;
     var cfgf = self.cfgFolderData;
 
+    var logo = $(cfgm.logo).data('value');
+    var path = $(cfgf.folder).data('value');
+    var folder = $('[data-folder="' + path + '"]', $(cfg.folderElement));
+
     // Ẩn các thành phần hiển thị danh sách file và nút công cụ
     $(cfg.filesToolBar).addClass('d-none');
     $(cfg.filesScroller).addClass('d-none');
@@ -2506,6 +2530,11 @@ NVCoreFileBrowser.prototype.uploadRenderUI = function() {
                     <div data-toggle="progress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-primary progress-bar-striped progress-bar-animated">0%</div>\
                 </div>\
             </div>\
+        </div>\
+        <div class="queue-opts' + ((logo == '' || folder.length < 1) ? ' d-none' : '') + '">\
+            <label class="custom-control custom-checkbox custom-control-inline mb-2">\
+                <input class="custom-control-input" type="checkbox" name="auto_logo" value="1"' + ((logo != '' && folder.length && folder.is('.auto_logo'))  ? ' checked="checked"' : '') + '><span class="custom-control-label custom-control-color text-truncate">Chèn logo vào tập tin tải lên (nếu là ảnh)</span>\
+            </label>\
         </div>\
         <div class="queue-head">\
             <div class="queue-col-name">' + LANG.file_name + '</div>\
