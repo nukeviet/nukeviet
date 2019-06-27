@@ -13,12 +13,12 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 $page_title = $nv_Lang->getModule('smtp_config');
-$smtp_encrypted_array = array();
+$smtp_encrypted_array = [];
 $smtp_encrypted_array[0] = 'None';
 $smtp_encrypted_array[1] = 'SSL';
 $smtp_encrypted_array[2] = 'TLS';
 
-$array_config = array();
+$array_config = [];
 $errormess = '';
 $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', $global_config['mailer_mode'], 1), 0, 255);
 $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', $global_config['smtp_host'], 1), 0, 255);
@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
 $array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', $global_config['verify_peer_ssl']);
 $array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', $global_config['verify_peer_name_ssl']);
 
-if ($nv_Request->isset_request('mailer_mode', 'post')) {
+if ($nv_Request->isset_request('submitsave', 'post')) {
     $smtp_password = $array_config['smtp_password'];
     $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
 
@@ -68,6 +68,20 @@ $tpl->assign('DATA', $array_config);
 $tpl->assign('SMTP_ENCRYPTED', $smtp_encrypted_array);
 $tpl->assign('GLOBAL_CONFIG', $global_config);
 $tpl->assign('ERROR', $errormess);
+
+$testMailMessage = '';
+$testMailSubmit = false;
+
+if (!empty($global_config['smtp_host']) and !empty($global_config['smtp_username'])) {
+    // Gửi thử email để kiểm tra
+    if ($nv_Request->isset_request('submittest', 'post')) {
+        $testMailSubmit = true;
+        $testMailMessage = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $admin_info['email'], $nv_Lang->getModule('smtp_test_subject'), $nv_Lang->getModule('smtp_test_message'), '', false, '', '', true);
+    }
+}
+
+$tpl->assign('TESTMAILMESSAGE', $testMailMessage);
+$tpl->assign('TESTMAILSUBMIT', $testMailSubmit);
 
 $contents = $tpl->fetch('smtp.tpl');
 
