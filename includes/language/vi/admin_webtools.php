@@ -88,3 +88,4 @@ $lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';
 $lang_module['statistics_timezone'] = 'Múi giờ dùng khi thống kê truy cập';
 $lang_module['online_upd'] = 'Kích hoạt tiện ích đếm số người online';
 $lang_module['googleAnalyticsID'] = 'ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">xem chi tiết</a>)';
+$lang_module['referer_blocker'] = 'Kích hoạt tiện ích kiểm tra, thống kê đường dẫn đến site';

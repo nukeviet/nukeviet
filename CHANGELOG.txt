@@ -1,6 +1,10 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.07
+
+- Add configuration for turn on/off refer checker utility
+
 NUKEVIET 4.3.06
 
 - Add SMTP configuration check function
