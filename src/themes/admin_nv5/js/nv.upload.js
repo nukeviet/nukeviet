@@ -3370,7 +3370,7 @@ var NVCMENU = {
             var menuHeight = (NVCMENU.menu.find('>a').length * itemHeight) + 7 + 7 + 1 + 1;
 
             var maxLeft = $('body').width() - menuWidth - 5;
-            var maxTop = $('body').height() - menuHeight - 5;
+            var maxTop = ($(window).scrollTop() + $('body').height()) - menuHeight - 5;
 
             if (menuLeft > maxLeft) {
                 menuLeft = maxLeft;
