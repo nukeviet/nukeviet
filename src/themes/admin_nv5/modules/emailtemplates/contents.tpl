@@ -199,7 +199,7 @@
 <script type="text/javascript" src="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}=upload&amp;js"></script>
 
 <script>
-$(document).ready(function() {
+$(document).on("nv.upload.ready", function() {
     $(".select2").select2({
         width: "100%",
         containerCssClass: "select2-sm"
@@ -264,8 +264,6 @@ $(document).ready(function() {
         }
     });
     {/literal}
-});
-$(document).on("nv.upload.ready", function() {
     $('[data-toggle="attadd"]').prop('disabled', false);
 
     {foreach from=$DATA['attachments'] key=key item=row}

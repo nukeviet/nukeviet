@@ -1618,7 +1618,11 @@ NVCoreFileBrowser.prototype.handleMenuSelect = function (element) {
 
     if (self.firstData.area != '') {
         if ($(self.firstData.area).length) {
-            $(self.firstData.area).val(fullPath);
+            if (self.firstData.restype == 'folderpath') {
+                $(self.firstData.area).val(nv_base_siteurl + filepath);
+            } else {
+                $(self.firstData.area).val(fullPath);
+            }
         }
     } else {
         //
@@ -3621,6 +3625,7 @@ $(document).ready(function() {
         alt: '', // Đối tượng trả về ALT image
         templateContainer: '<div id="mdNVFileManagerPopup" tabindex="-1" role="dialog" class="modal" data-backdrop="static"><div class="modal-dialog full-width modal-filemanager"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button></div><div class="modal-body"></div></div></div></div>',
         templateContainerID: '#mdNVFileManagerPopup',
+        restype: 'filepath' // filepath|folderpath
     };
 
     /*
@@ -3633,6 +3638,7 @@ $(document).ready(function() {
             path: self.options.path,
             currentpath: self.options.currentpath,
             type: self.options.type,
+            restype: self.options.restype,
             area: self.options.area,
             alt: self.options.alt,
             imgfile: '' // File đang chọn
