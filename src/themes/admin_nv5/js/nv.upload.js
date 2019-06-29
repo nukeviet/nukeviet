@@ -3159,13 +3159,13 @@ var KEYPR = {
                 KEYPR.isShift = true;
             } else if (e.keyCode == 46 /* Del */ ) {
                 // Delete file
-                if ($('.file-selected').length && $("span#delete_file").attr("title") == '1') {
-                    filedelete();
+                if ($('.file-selected').length && $(window.fileManager.cfgFolderData.allowedDeleteFile).data('value') == "1") {
+                    window.fileManager.handleMenuDeleteFile();
                 }
             } else if (e.keyCode == 88 /* X */ ) {
                 // Move file
-                if ($('.file-selected').length && $("span#move_file").attr("title") == '1') {
-                    move();
+                if ($('.file-selected').length && $(window.fileManager.cfgFolderData.allowedMoveFile).data('value') == "1") {
+                    window.fileManager.handleMenuMove();
                 }
             }
         });
@@ -3308,6 +3308,9 @@ var RRT = {
     }
 };
 
+/*
+ * Xử lý mở menu khi ấn chuột phải vào file, thư mục
+ */
 var NVCMENU = {
     menu: null,
     bindings: {
