@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -18,8 +18,8 @@ $mod = $nv_Request->get_title('mod', 'get', '');
 
 $path_filename = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $filename;
 
-if (! empty($mod) and nv_is_file($path_filename, NV_TEMP_DIR) and $checkss == md5($filename . NV_CHECK_SESSION)) {
-    //Download file
+if (!empty($mod) and nv_is_file($path_filename, NV_TEMP_DIR) and $checkss == md5($filename . NV_CHECK_SESSION)) {
+    // Download file
     $download = new NukeViet\Files\Download(NV_DOCUMENT_ROOT . $path_filename, NV_ROOTDIR . '/' . NV_TEMP_DIR, $mod);
     $download->download_file();
     exit();

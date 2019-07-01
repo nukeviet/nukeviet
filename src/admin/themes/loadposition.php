@@ -8,14 +8,14 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $theme1 = $nv_Request->get_title('theme1', 'get');
 $theme2 = $nv_Request->get_title('theme2', 'get');
 
-$position1 = $position2 = array();
+$position1 = $position2 = [];
 
 if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini')) {
     // theme 1
@@ -45,21 +45,21 @@ if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_co
     $diffarray = array_diff($position1, $position2);
     $diffarray = array_diff($position1, $diffarray);
 
-    $xtpl = new XTemplate('loadposition.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $tpl = new \NukeViet\Template\Smarty();
+    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $tpl->assign('LANG', $nv_Lang);
 
+    $array_position = [];
     for ($i = 0, $count = sizeof($diffarray); $i < $count; ++$i) {
-        $position1[] = $positions[$i]->tag;
-
-        $xtpl->assign('NAME', ( string )$positions[$i]->tag);
-        $xtpl->assign('VALUE', ( string )$positions[$i]->name);
-
-        $xtpl->parse('main.loop');
+        $array_position[] = [
+            'name' => (string)$positions[$i]->tag,
+            'value' => (string)$positions[$i]->name,
+        ];
     }
 
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $tpl->assign('ARRAY_POSITION', $array_position);
+
+    $contents = $tpl->fetch('loadposition.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo $contents;

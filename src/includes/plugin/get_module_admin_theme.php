@@ -22,7 +22,7 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function($vars) {
     if (defined('NV_ADMIN') and in_array($module_name, [
         'emailtemplates', 'siteinfo', 'settings',
         'database', 'webtools', 'seotools', 'language',
-        'modules', 'extensions', 'upload'
+        'modules', 'extensions', 'upload', 'themes'
     ]) and !($module_name == 'siteinfo' and $op == 'main' and !isset($_POST['nv_change_theme_config']))) {
         $module_theme = 'admin_nv5';
     }

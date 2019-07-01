@@ -8,7 +8,7 @@
  * @Createdate 08-19-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -17,33 +17,27 @@ $page_title = $nv_Lang->getModule('xcopyblock');
 $selectthemes = $nv_Request->get_string('selectthemes', 'cookie', '');
 $op = $nv_Request->get_string(NV_OP_VARIABLE, 'get', '');
 
-$xtpl = new XTemplate('xcopyblock.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
 $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme']);
 
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
+$theme_dbs = [];
 while (list($theme) = $result->fetch(3)) {
     if (in_array($theme, $theme_list)) {
-        $xtpl->assign('THEME_FROM', $theme);
-        $xtpl->parse('main.theme_from');
-
-        $xtpl->assign('THEME_TO', array( 'key' => $theme, 'selected' => ($selectthemes == $theme and $selectthemes != 'default') ? ' selected="selected"' : '' ));
-        $xtpl->parse('main.theme_to');
+        $theme_dbs[] = $theme;
     }
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('THEME_LIST', $theme_list);
+$tpl->assign('THEME_DBS', $theme_dbs);
+$tpl->assign('SELECTTHEME', $selectthemes);
+
+$contents = $tpl->fetch('xcopyblock.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

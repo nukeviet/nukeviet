@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -27,10 +27,10 @@ if ($func_id > 0 and isset($row['bid'])) {
 
     try {
         $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-			(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-			( :theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, 0, ' . $row['weight'] . ', :config )';
+            (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
+            ( :theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, 0, ' . $row['weight'] . ', :config )';
 
-        $data = array();
+        $data = [];
         $data['theme'] = $row['theme'];
         $data['module'] = $row['module'];
         $data['file_name'] = $row['file_name'];
@@ -46,7 +46,7 @@ if ($func_id > 0 and isset($row['bid'])) {
 
         $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid=' . $new_bid . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id);
 
-        if (! empty($row['all_func'])) {
+        if (!empty($row['all_func'])) {
             $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid=' . $bid);
         }
 

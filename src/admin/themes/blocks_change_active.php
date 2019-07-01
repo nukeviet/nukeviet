@@ -8,13 +8,13 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $list = $nv_Request->get_string('list', 'post,get');
 $array_bid = explode(',', $list);
-if (! empty($array_bid)) {
+if (!empty($array_bid)) {
     $array_bid = array_map('intval', $array_bid);
 
     $list = $nv_Request->get_string('active_device', 'post,get');
