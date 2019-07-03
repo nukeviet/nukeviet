@@ -50,17 +50,8 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
     $tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
-
-    $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-
     $tpl->assign('SELECTTHEMES', $selectthemes);
 
     $new_drag_block = $nv_Request->get_int('drag_block', 'session', 0) ? 0 : 1;
@@ -114,7 +105,8 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
             'position' => $row['position'],
             'positions' => $positions,
             'positionnum' => sizeof($positions) - 1,
-            'all_func' => $row['all_func']
+            'all_func' => $row['all_func'],
+            'activedevice' => $row['active']
         ];
 
         if ($row['all_func'] != 1) {
@@ -133,19 +125,6 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $tpl->assign('ARRAY_BLOCK_FUNCS', $array_block_funcs);
     $tpl->assign('BLOCKREDIRECT', '');
     $tpl->assign('CHECKSS', md5($selectthemes . NV_CHECK_SESSION));
-
-    $active_device = [1];
-    for ($i = 1; $i <= 4; ++$i) {
-        $xtpl->assign('ACTIVE_DEVICE', [
-            'key' => $i,
-            'checked' => (in_array($i, $active_device)) ? ' checked="checked"' : '',
-            'title' => $nv_Lang->getModule('show_device_' . $i)
-        ]);
-        $xtpl->parse('main.active_device');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
 
     $contents = $tpl->fetch('blocks.tpl');
 }

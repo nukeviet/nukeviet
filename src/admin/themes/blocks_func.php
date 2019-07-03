@@ -12,11 +12,11 @@ if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
-$select_options = array();
-$theme_array = nv_scandir(NV_ROOTDIR . '/themes', array(
+$select_options = [];
+$theme_array = nv_scandir(NV_ROOTDIR . '/themes', [
     $global_config['check_theme'],
     $global_config['check_theme_mobile']
-));
+]);
 
 foreach ($theme_array as $themes_i) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks_func&amp;selectthemes=' . $themes_i] = $themes_i;
@@ -52,56 +52,43 @@ if (empty($func_id) or empty($selectedmodule)) {
 
 $page_title = $nv_Lang->getModule('blocks_by_funcs') . ': ' . $selectthemes;
 
-$xtpl = new XTemplate('blocks_func.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
-
+$array_modules = [];
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query($sql);
 while (list ($m_title, $m_custom_title) = $result->fetch(3)) {
-    $xtpl->assign('MODULE', array(
+    $array_modules[] = [
         'key' => $m_title,
-        'selected' => ($selectedmodule == $m_title) ? ' selected="selected"' : '',
         'title' => $m_custom_title
-    ));
-    $xtpl->parse('main.module');
+    ];
 }
+$tpl->assign('ARRAY_MODULES', $array_modules);
 
-$array_func_id = array();
 $sth = $db->prepare('SELECT func_id, func_custom_name
-	FROM ' . NV_MODFUNCS_TABLE . '
-	WHERE in_module=:module AND show_func=1
-	ORDER BY subweight ASC');
+    FROM ' . NV_MODFUNCS_TABLE . '
+    WHERE in_module=:module AND show_func=1
+    ORDER BY subweight ASC');
 $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
 $sth->execute();
 
+$array_functions = [];
 while (list ($f_id, $f_custom_title) = $sth->fetch(3)) {
-    $array_func_id[$f_id] = $f_custom_title;
-
-    $xtpl->assign('FUNCTION', array(
+    $array_functions[] = [
         'key' => $f_id,
-        'selected' => ($func_id == $f_id) ? ' selected="selected"' : '',
         'title' => $f_custom_title
-    ));
-    $xtpl->parse('main.function');
+    ];
 }
+$tpl->assign('ARRAY_FUNCTIONS', $array_functions);
 
-$a = 0;
-
-$blocks_positions = array();
+$blocks_positions = [];
 $sth = $db->prepare('SELECT t1.position, COUNT(*)
-	FROM ' . NV_BLOCKS_TABLE . '_groups t1
-	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
-	WHERE t2.func_id=' . $func_id . ' AND t1.theme = :theme
-	GROUP BY t1.position');
+    FROM ' . NV_BLOCKS_TABLE . '_groups t1
+    INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
+    WHERE t2.func_id=' . $func_id . ' AND t1.theme = :theme
+    GROUP BY t1.position');
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 
@@ -109,60 +96,43 @@ while (list ($position, $numposition) = $sth->fetch(3)) {
     $blocks_positions[$position] = $numposition;
 }
 
-// load position file
+// Load position file
 $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini');
 $content = $xml->xpath('positions');
-//array
 $positions = $content[0]->position;
-//object
 
 $sth = $db->prepare('SELECT t1.*, t2.func_id, t2.weight as bweight
-	FROM ' . NV_BLOCKS_TABLE . '_groups t1
-	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
-	WHERE t2.func_id = ' . $func_id . ' AND t1.theme = :theme
-	ORDER BY t1.position ASC, t2.weight ASC');
+    FROM ' . NV_BLOCKS_TABLE . '_groups t1
+    INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
+    WHERE t2.func_id = ' . $func_id . ' AND t1.theme = :theme
+    ORDER BY t1.position ASC, t2.weight ASC');
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 
+$array_blocks = [];
 while ($row = $sth->fetch()) {
-    $xtpl->assign('ROW', array(
+    $array_blocks[$row['bid']] = [
         'bid' => $row['bid'],
         'title' => $row['title'],
         'module' => $row['module'],
         'file_name' => $row['file_name'],
-        'active' => $row['active'] ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no')
-    ));
-
-    $numposition = $blocks_positions[$row['position']];
-
-    for ($i = 1; $i <= $numposition; ++$i) {
-        $xtpl->assign('ORDER', array(
-            'key' => $i,
-            'selected' => ($row['bweight'] == $i) ? ' selected="selected"' : ''
-        ));
-        $xtpl->parse('main.loop.order');
-    }
-
-    for ($i = 0, $count = sizeof($positions); $i < $count; ++$i) {
-        $xtpl->assign('POSITION', array(
-            'key' => (string) $positions[$i]->tag,
-            'selected' => ($row['position'] == $positions[$i]->tag) ? ' selected="selected"' : '',
-            'title' => (string) $positions[$i]->name
-        ));
-        $xtpl->parse('main.loop.position');
-    }
-
-    $xtpl->parse('main.loop');
+        'act' => $row['act'],
+        'numposition' => $blocks_positions[$row['position']],
+        'bweight' => $row['bweight'],
+        'positionnum' => sizeof($positions) - 1,
+        'positions' => $positions,
+        'position' => $row['position']
+    ];
 }
 
-$xtpl->assign('BLOCKREDIRECT', '');
-$xtpl->assign('FUNC_ID', $func_id);
-$xtpl->assign('SELECTEDMODULE', $selectedmodule);
+$tpl->assign('ARRAY_BLOCKS', $array_blocks);
+$tpl->assign('BLOCKREDIRECT', '');
+$tpl->assign('FUNC_ID', $func_id);
+$tpl->assign('SELECTEDMODULE', $selectedmodule);
 
 $set_active_op = 'blocks';
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('blocks_func.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

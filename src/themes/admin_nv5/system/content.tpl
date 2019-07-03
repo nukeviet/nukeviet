@@ -1,6 +1,8 @@
 <!-- BEGIN: main -->
 {include file='header.tpl'}
-{$THEME_ERROR_INFO}
-{$MODULE_CONTENT}
+<body>
+    {$THEME_ERROR_INFO}
+    {$MODULE_CONTENT}
+</body>
 {include file='footer.tpl'}
 <!-- END: main -->

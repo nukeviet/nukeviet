@@ -13,7 +13,7 @@ if (typeof(LANG) == 'undefined') {
 var MODULE_URL = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
 
 $(document).ready(function() {
-    // Copy blocks
+    // Sao chép block
     function copyLoadThemePos() {
         var theme1 = $("select[name=theme1]").val();
         var theme2 = $("select[name=theme2]").val();
@@ -77,7 +77,7 @@ $(document).ready(function() {
         $(target).prop("checked", checked);
     });
 
-    // Package theme module
+    // Đóng gói giao diện theo module
     $("[name=continue_ptm]").click(function() {
         var btn = $(this);
         var themename = $("select[name=themename]").val();
@@ -111,9 +111,13 @@ $(document).ready(function() {
         }
     });
 
-    // Main theme
-    $("a.activate").click(function() {
-        var theme = $(this).attr("title");
+    /*
+     * Quản lý giao diện trang chính
+     * Kích hoạt
+     */
+    $("a.activate-theme").click(function(e) {
+        e.preventDefault();
+        var theme = $(this).data("theme");
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=activatetheme",
@@ -122,12 +126,18 @@ $(document).ready(function() {
                 if (data != "OK_" + theme) {
                     alert(data);
                 }
-                window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name;
+                location.reload();
             }
         });
     });
-    $("a.delete").click(function() {
-        var theme = $(this).attr("title");
+
+    /*
+     * Quản lý giao diện trang chính
+     * Xóa thiết lập
+     */
+    $("a.delete-theme-setting").click(function(e) {
+        e.preventDefault();
+        var theme = $(this).data("theme");
         if (confirm(LANG.theme_delete_confirm + theme + " ?")) {
             $.ajax({
                 type: "POST",
@@ -135,32 +145,32 @@ $(document).ready(function() {
                 data: "theme=" + theme,
                 success: function(data) {
                     alert(data);
-                    window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name;
+                    location.reload();
                 }
             });
         }
     });
-    $('[data-toggle="viewthemedetail"]').click(function(e) {
-        e.preventDefault();
-        var target = $(this).data('target');
-        modalShow($(target).attr('title'), $(target).html(), function(e) {
-            var btn = $(e).find('.preview-link-btn');
-            if (btn.is(':visible')) {
-                var btnid = 'btnpreviewtheme-' + (new Date().getTime());
-                btn.attr('id', btnid);
-                var clipboard = new Clipboard('#' + btnid);
-                clipboard.on('success', function(e) {
-                    $(e.trigger).tooltip('show');
-                });
-            }
-            btn.mouseleave(function() {
-                $(this).tooltip('destroy');
-            });
-        });
-    });
+
     $(document).delegate('.selectedfocus', 'focus', function(e) {
         $(this).select();
     });
+
+    $('.modal-theme-detail').on('shown.bs.modal', function(e) {
+        var $this = $(this);
+        var btn = $this.find('.preview-link-btn');
+        if (btn.is(':visible')) {
+            var btnid = 'btnpreviewtheme-' + (new Date().getTime());
+            btn.attr('id', btnid);
+            var clipboard = new ClipboardJS('#' + btnid);
+            clipboard.on('success', function(e) {
+                $(e.trigger).tooltip('show');
+            });
+        }
+        btn.mouseleave(function() {
+            $(this).tooltip('dispose');
+        });
+    });
+
     $(document).delegate('[data-toggle="previewtheme"]', 'click', function(e) {
         e.preventDefault();
         var $this = $(this);
@@ -168,7 +178,7 @@ $(document).ready(function() {
         if ($this.find('i').is(':visible')) {
             return false;
         }
-        $this.find('i').removeClass('hidden');
+        $this.find('i').removeClass('d-none');
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=main",
@@ -179,72 +189,82 @@ $(document).ready(function() {
                     $this.find('span').html(data.spantext);
                     if (data.mode == 'enable') {
                         $('.preview-label', $ctn).show();
-                        $('.preview-link', $ctn).removeClass('hidden');
+                        $('.preview-link', $ctn).removeClass('d-none');
                         $('.preview-link', $ctn).find('[type="text"]').val(data.link);
                         var btn = $('.preview-link', $ctn).find('.btn');
-                        btn.attr('data-clipboard-text', data.link);
                         var btnid = 'btnpreviewtheme-' + (new Date().getTime());
                         btn.attr('id', btnid);
-                        var clipboard = new Clipboard('#' + btnid);
+                        var clipboard = new ClipboardJS('#' + btnid);
                         clipboard.on('success', function(e) {
                             $(e.trigger).tooltip('show');
                         });
                     } else {
                         $('.preview-label', $ctn).hide();
-                        $('.preview-link', $ctn).addClass('hidden');
+                        $('.preview-link', $ctn).addClass('d-none');
                     }
                 }
-                $this.find('i').addClass('hidden');
+                $this.find('i').addClass('d-none');
             }
         });
-        $('#sitemodal').on('hidden.bs.modal', function (e) {
-            window.location.href = window.location.href.replace(/#(.*)/, "");
-        });
 
+        $('.modal-theme-detail').on('hidden.bs.modal', function(e) {
+            location.reload();
+        });
     });
 
-    // Manager block
-    $("a.block_content").click(function() {
-        var bid = parseInt($(this).attr("title"));
+    // Quản lý block
+    $("a.block_content,button.block_content").click(function(e) {
+        e.preventDefault();
+        var bid = parseInt($(this).data("bid"));
         nv_open_browse(MODULE_URL + "=block_content&selectthemes=" + selectthemes + "&bid=" + bid + "&blockredirect=" + blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
     });
-    $("select.order").change(function() {
-        $("select.order").attr({
-            "disabled": ""
-        });
+
+    $("select.blockChangeOrder").change(function() {
         var order = $(this).val();
-        var bid = $(this).attr("title");
+        var bid = $(this).data("bid");
+        $("select.blockChangeOrder").prop('disabled', true);
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_order_group",
             data: "order=" + order + "&bid=" + bid,
             success: function(data) {
-                window.location = MODULE_URL + "=blocks";
+                location.reload();
             }
         });
     });
-    $("select[name=module]").change(function() {
+
+    $("select[name=BlockFilterModule]").change(function() {
         var module = $(this).val();
         window.location = MODULE_URL + "=blocks_func&module=" + module;
     });
-    $("a.delete_block").click(function() {
-        var bid = parseInt($(this).attr("title"));
+
+    $("a.delete_block").click(function(e) {
+        e.preventDefault();
+        var bid = parseInt($(this).data("bid"));
         if (bid > 0 && confirm(LANG.block_delete_per_confirm)) {
             $.post(MODULE_URL + "=blocks_del", "bid=" + bid, function(theResponse) {
                 alert(theResponse);
-                window.location = MODULE_URL + "=blocks";
+                location.reload();
             });
         }
     });
-    $("a.block_weight").click(function() {
+
+    /*
+     * Quản lý block
+     * Cập nhật lại vị trí các block
+     */
+    $("button.block_weight").click(function(e) {
+        e.preventDefault();
         if (confirm(LANG.block_weight_confirm)) {
             $.post(MODULE_URL + "=blocks_reset_order", "checkss=" + blockcheckss, function(theResponse) {
                 alert(theResponse);
-                window.location = MODULE_URL + "=blocks";
+                location.reload();
             });
         }
     });
-    $("a.delete_group").click(function() {
+
+    $("button.delete_group").click(function(e) {
+        e.preventDefault();
         var list = [];
         $("input[name=idlist]:checked").each(function() {
             list.push($(this).val());
@@ -260,52 +280,59 @@ $(document).ready(function() {
                 data: "list=" + list,
                 success: function(data) {
                     alert(data);
-                    window.location = MODULE_URL + "=blocks";
+                    location.reload();
                 }
             });
         }
         return false;
     });
+
     $("#checkall").click(function() {
         $("input[name=idlist]:checkbox").each(function() {
             $(this).prop("checked", true);
         });
     });
+
     $("#uncheckall").click(function() {
         $("input[name=idlist]:checkbox").each(function() {
             $(this).prop("checked", false);
         });
     });
-    $("select[name=listpos]").change(function() {
+
+    $("[name=blockListPos]").change(function() {
         var pos = $(this).val();
-        var bid = $(this).attr("title");
+        var bid = $(this).data("bid");
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_pos",
             data: "bid=" + bid + "&pos=" + pos,
             success: function(data) {
                 alert(data);
-                window.location = MODULE_URL + "=blocks";
+                location.reload();
             }
         });
     });
 
-    // Block funcs
-    $("a.block_content_fucs").click(function() {
-        var bid = parseInt($(this).attr("title"));
+    /*
+     * Block theo func
+     * Sửa block
+     */
+    $("a.block_content_fucs,button.block_content_fucs").click(function(e) {
+        e.preventDefault();
+        var bid = parseInt($(this).data("bid"));
         nv_open_browse(MODULE_URL + "=block_content&bid=" + bid + "&blockredirect=" + blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
     });
-    $("select[name=function]").change(function() {
-        var module = $("select[name=module]").val();
+
+    $("select[name=BlockFuncFilterFunction]").change(function() {
+        var module = $("select[name=BlockFilterModule]").val();
         var func = $(this).val();
         window.location = MODULE_URL + "=blocks_func&module=" + module + "&func=" + func;
     });
-    $("select.order").change(function() {
-        $("select.order").attr({
-            "disabled": ""
-        });
+
+    $('select.blockFuncChangeOrder').change(function() {
         var order = $(this).val();
-        var bid = $(this).attr("title");
+        var bid = $(this).data("bid");
+        $('select.blockFuncChangeOrder').prop('disabled', true);
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_order",
@@ -315,8 +342,14 @@ $(document).ready(function() {
             }
         });
     });
-    $("a.delete_block_fucs").click(function() {
-        var bid = parseInt($(this).attr("title"));
+
+    /*
+     * Block theo func
+     * Xóa block
+     */
+    $("a.delete_block_fucs").click(function(e) {
+        e.preventDefault();
+        var bid = parseInt($(this).data("bid"));
         if (bid > 0 && confirm(LANG.block_delete_per_confirm)) {
             $.post(MODULE_URL + "=blocks_del", "bid=" + bid, function(theResponse) {
                 alert(theResponse);
@@ -324,7 +357,13 @@ $(document).ready(function() {
             });
         }
     });
-    $("a.delete_group_fucs").click(function() {
+
+    /*
+     * Block theo func
+     * Xóa nhiều block
+     */
+    $("button.delete_group_fucs").click(function(e) {
+        e.preventDefault();
         var list = [];
         $("input[name=idlist]:checked").each(function() {
             list.push($(this).val());
@@ -346,9 +385,14 @@ $(document).ready(function() {
         }
         return false;
     });
+
+    /*
+     * Block theo func:
+     * Đổi vị trí
+     */
     $("select[name=listpos_funcs]").change(function() {
         var pos = $(this).val();
-        var bid = $(this).attr("title");
+        var bid = $(this).data("bid");
         if (confirm(LANG.block_change_pos_warning + " " + bid + " " + LANG.block_change_pos_warning2)) {
             $.ajax({
                 type: "POST",
@@ -376,6 +420,31 @@ $(document).ready(function() {
         $('#modal_show_device').data('title', $(this).data('title')).modal('toggle');
     });
 
+    $('#modal_show_device').on('show.bs.modal', function(e) {
+        var list = [];
+        $("input[name=idlist]:checked").each(function() {
+            list.push($(this).val());
+        });
+
+        $("input[name=active_device]").prop('checked', false);
+
+        if (list.length > 1) {
+            $("input[name=active_device]:first").prop('checked', true);
+        } else {
+            var bid = list[0];
+            var bl = $("input[name=idlist][value='" + bid + "']");
+            if (bl.length) {
+                var activedevice = bl.data('activedevice').toString().split(',');
+                for (var i = 0, j = activedevice.length; i < j; i++) {
+                    var device = parseInt(activedevice[i]);
+                    if (device >= 1 && device <= 4) {
+                        $("#active_device_" + device).prop('checked', true);
+                    }
+                }
+            }
+        }
+    });
+
     $('#modal_show_device .submit').click(function() {
         var $this = $(this);
         $this.prop('disabled', true);
@@ -397,10 +466,7 @@ $(document).ready(function() {
             success: function(data) {
                 alert(data);
                 $('#modal_show_device').modal('hide');
-                $this.prop('disabled', false);
-                $("input[name=idlist]:checkbox").each(function() {
-                    $(this).prop("checked", false);
-                });
+                location.reload();
             }
         });
     });
