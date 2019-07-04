@@ -27,7 +27,7 @@ function nv_admin_write_lang($dirlang, $idfile)
 
     if (!empty($dirlang) and !empty($module)) {
         if (empty($author_lang)) {
-            $array_translator = array();
+            $array_translator = [];
             $array_translator['author'] = '';
             $array_translator['createdate'] = '';
             $array_translator['copyright'] = '';
@@ -131,48 +131,42 @@ function nv_admin_write_lang($dirlang, $idfile)
     }
 }
 
-$xtpl = new XTemplate('write.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
 $include_lang = '';
 $page_title = $language_array[$dirlang]['name'];
 
 if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5($nv_Request->get_int('idfile', 'get') . NV_CHECK_SESSION)) {
+    // Xuất ngôn ngữ giao diện ra file (1 file ngôn ngữ)
     $idfile = $nv_Request->get_int('idfile', 'get');
     nv_mkdir(NV_ROOTDIR . '/includes/language/', $dirlang);
     $content = nv_admin_write_lang($dirlang, $idfile);
 
-    //Resets the contents of the opcode cache
     if (function_exists('opcache_reset')) {
         opcache_reset();
     }
 
-    if (empty($content)) {
-        $xtpl->assign('INCLUDE_LANG', str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang)));
-        $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=interface');
+    $tpl->assign('CONTENT', $content);
+    $tpl->assign('INCLUDE_LANG', str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang)));
+    $tpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=interface');
 
-        $xtpl->parse('main.complete');
-    } else {
-        $xtpl->assign('CONTENT', $content);
-
-        $xtpl->parse('main.error');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $contents = $tpl->fetch('write_one.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } elseif ($nv_Request->isset_request('checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5('writeallfile' . NV_CHECK_SESSION)) {
+    // Xuất ngôn ngữ giao diện ra file (toàn bộ các file)
     $dirlang = $nv_Request->get_string('dirlang', 'get', '');
+    $is_error = false;
 
     if ($dirlang != '' and preg_match("/^([a-z]{2})$/", $dirlang)) {
         nv_mkdir(NV_ROOTDIR . '/includes/language/', $dirlang);
 
         $content = '';
-        $array_filename = array();
+        $array_filename = [];
 
         $result = $db->query('SELECT idfile, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
         while (list ($idfile, $author_lang) = $result->fetch(3)) {
@@ -186,24 +180,18 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
         }
 
         if (empty($content)) {
-            $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting');
-
-            $i = 0;
-            foreach ($array_filename as $name) {
-                $xtpl->assign('NAME', $name);
-                $xtpl->parse('main.write_allfile_complete.loop');
-            }
-
-            $xtpl->parse('main.write_allfile_complete');
+            $tpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting');
+            $tpl->assign('ARRAY_FILENAME', $array_filename);
         } else {
-            $xtpl->parse('main.error_write_allfile');
+            $is_error = true;
         }
     } else {
-        $xtpl->parse('main.error_write_allfile');
+        $is_error = true;
     }
 
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $tpl->assign('IS_ERROR', $is_error);
+
+    $contents = $tpl->fetch('write_all.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
