@@ -1,3 +1,5 @@
+<link data-offset="0" rel="stylesheet" href="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+
 <div class="container-fluid py-3">
     {if not empty($ROW.bid)}
     <div role="alert" class="alert alert-danger alert-dismissible">
@@ -104,7 +106,7 @@
                 <div class="form-group row pb-0">
                     <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('groups_view')}:</label>
                     <div class="col-12 col-sm-9 mt-1">
-                        <div class="list-group-users nv-scroller">
+                        <div class="list-group-users nv-scroller" data-wheel="true">
                             <div>
                                 {foreach from=$GROUPS_LIST key=group_id item=group_name}
                                 <label class="custom-control custom-checkbox">
@@ -143,13 +145,24 @@
             </div>
             <div class="list-group list-group-flush">
                 {foreach from=$ARRAY_FUNCS item=func_i}
-                <div class="list-group-item funclist">
+                <div class="list-group-item funclist" id="idmodule_{$func_i.key}">
                     <dl class="row mb-0">
                         <dt class="col-12 col-sm-3">
-                            <div class="text-truncate text-left">
-                                <label><input type="checkbox" value="{$func_i.key}" class="checkmodule"> <strong>{{$func_i.title}}</strong></label>
-                            </div>
+                            <label class="custom-control custom-checkbox my-1 text-truncate">
+                                <input class="custom-control-input checkmodule" type="checkbox"{if $func_i.checked} checked="checked"{/if} value="{$func_i.key}"><span class="custom-control-label"><strong>{$func_i.title}</strong></span>
+                            </label>
                         </dt>
+                        <dd class="col-12 col-sm-9">
+                            <div class="row">
+                                {foreach from=$ARRAY_MOD_FUNC[$func_i.key] item=mod_func_i}
+                                <div class="col-6 col-sm-3">
+                                    <label class="custom-control custom-checkbox my-1 text-truncate" title="{$mod_func_i.func_custom_name}">
+                                        <input class="custom-control-input" type="checkbox"{if in_array($mod_func_i.id, $FUNC_LIST) or $mod_func_i.id eq $FUNCTIONID} checked="checked"{/if} name="func_id[]" value="{$mod_func_i.id}" data-module="{$func_i.key}"><span class="custom-control-label">{$mod_func_i.func_custom_name}</span>
+                                    </label>
+                                </div>
+                                {/foreach}
+                            </div>
+                        </dd>
                     </dl>
                 </div>
                 {/foreach}
@@ -171,54 +184,6 @@ var selectthemes = '{$SELECTTHEMES}';
 var lang_block_no_func = '{$LANG->get('block_no_func')}';
 var lang_block_error_nogroup = '{$LANG->get('block_error_nogroup')}';
 </script>
-<script type="text/javascript" src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{$NV_LANG_INTERFACE}.js"></script>
+<script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/bootstrap-datepicker/locales/bootstrap-datepicker.{$NV_LANG_INTERFACE}.min.js"></script>
 <script type="text/javascript" src="{$NV_BASE_SITEURL}themes/{$MODULE_THEME}/js/nv.block_content.js"></script>
-
-{*
-<!-- BEGIN: main -->
-<div class="container block-content-wrap">
-        <div class="panel panel-default panel-block-content">
-            <div class="panel-heading">
-            </div>
-            <div class="list-group">
-                <!-- BEGIN: loopfuncs -->
-                <div class="list-group-item funclist" id="idmodule_{M_TITLE}">
-                    <dl class="dl-horizontal">
-                        <dd>
-                            <div class="row">
-                                <!-- BEGIN: fuc -->
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="ellipsis">
-                                        <label title="{FUNCNAME}"><input type="checkbox"{SELECTED} name="func_id[]" value="{FUNCID}" /> {FUNCNAME}</label>
-                                    </div>
-                                </div>
-                                <!-- END: fuc -->
-                            </div>
-                        </dd>
-                    </dl>
-                </div>
-                <!-- END: loopfuncs -->
-            </div>
-        </div>
-    </form>
-</div>
-</div>
-<!-- END: main -->
-
-<!-- BEGIN: blockredirect -->
-<script type="text/javascript">
-    alert('{BLOCKMESS}');
-    <!-- BEGIN: redirect -->
-    window.opener.location.href = '{BLOCKREDIRECT}';
-    <!-- END: redirect -->
-    <!-- BEGIN: refresh -->
-    window.opener.location.href = window.opener.location.href
-    <!-- END: refresh -->
-    window.opener.focus();
-    window.close();
-</script>
-<!-- END: blockredirect -->
-
-
-*}

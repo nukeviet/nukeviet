@@ -24,7 +24,7 @@
                         <td>{$DATA[$filetime]['filesize']|byte2text}</td>
                         <td>{"l d/m/Y h:i:s A"|date:$filetime}</td>
                         <td class="text-right text-nowrap">
-                            <a href="{$BASE_URL}=getfile&amp;filename={$DATA[$filetime]['file']}&amp;checkss={"`$DATA[$filetime]['file']``$NV_CHECK_SESSION`"|md5}" class="btn btn-sm btn-hspace btn-secondary"><i class="icon icon-left fas fa-download"></i> {$LANG->get('download')}</a>
+                            <a download href="{$BASE_URL}=getfile&amp;filename={$DATA[$filetime]['file']}&amp;checkss={"`$DATA[$filetime]['file']``$NV_CHECK_SESSION`"|md5}" class="btn btn-sm btn-hspace btn-secondary"><i class="icon icon-left fas fa-download"></i> {$LANG->get('download')}</a>
                             <a href="{$BASE_URL}=delfile&amp;filename={$DATA[$filetime]['file']}&amp;checkss={"`$DATA[$filetime]['file']``$NV_CHECK_SESSION`"|md5}" class="btn btn-sm btn-danger" onclick="return confirm(nv_is_del_confirm[0]);"><i class="icon icon-left fas fa-trash-alt"></i> {$LANG->get('delete')}</a>
                         </td>
                     </tr>

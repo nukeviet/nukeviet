@@ -70,7 +70,7 @@ function file_name_change() {
 
     if (blok_file_name != "") {
         $("#block_config").show();
-        $("#block_config").html(htmlload);
+        $("#block_config").html('<div class="text-center"><i class="fas fa-spinner fa-pulse"></i></div>');
         $.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + module_type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
             if (theResponse.length > 10) {
                 theResponse = theResponse.replace("<head/><tr><td", "<tr><td"); //fix for Centmin Mod 1.2.3-eva2000.07
@@ -90,14 +90,15 @@ $(function() {
     });
 
     $("#exp_time").datepicker({
-        showOn: "both",
-        dateFormat: "dd/mm/yy",
-        changeMonth: true,
-        changeYear: true,
-        showOtherMonths: true,
-        buttonImage: "",
-        buttonImageOnly: true,
-        buttonText: ""
+        autoclose: 1,
+        templates: {
+            rightArrow: '<i class="fas fa-chevron-right"></i>',
+            leftArrow: '<i class="fas fa-chevron-left"></i>'
+        },
+        language: nv_lang_interface,
+        orientation: 'auto bottom',
+        todayHighlight: true,
+        format: 'dd/mm/yyyy'
     });
 
     $("#exp_time_btn").click(function() {
@@ -142,12 +143,14 @@ $(function() {
     $('[name="checkallmod"]').one("click", checkallmodfirst);
 
     $("input[name='func_id[]']:checkbox").change(function() {
-        var numfuc = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox").length;
-        var fuccheck = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox:checked").length;
-        if (fuccheck != numfuc) {
-            $("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").prop("checked", false);
-        } else if (numfuc == fuccheck) {
-            $("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").prop("checked", true);
+        var rowMod = $('#idmodule_' + $(this).data('module'));
+        var numfuc = $("input[name='func_id[]']:checkbox", rowMod).length;
+        var fuccheck = $("input[name='func_id[]']:checkbox:checked", rowMod).length;
+
+        if (fuccheck < numfuc) {
+            $(".checkmodule", rowMod).prop("checked", false);
+        } else {
+            $(".checkmodule", rowMod).prop("checked", true);
         }
     });
 

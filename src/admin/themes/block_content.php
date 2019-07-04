@@ -63,10 +63,6 @@ $tpl->assign('MODULE_THEME', $global_config['module_theme']);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
-$xtpl = new XTemplate('block_content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
 use NukeViet\Ultis;
 
 $error = [];
@@ -340,20 +336,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $nv_Cache->delMod('themes');
 
                 // Chuyen huong
-                $xtpl->assign('BLOCKMESS', $is_add ? $nv_Lang->getModule('block_add_success') : $nv_Lang->getModule('block_update_success'));
-                if (empty($blockredirect)) {
-                    $xtpl->parse('blockredirect.refresh');
-                } else {
-                    $xtpl->assign('BLOCKREDIRECT', nv_redirect_decrypt($blockredirect));
-                    $xtpl->parse('blockredirect.redirect');
-                }
-                $xtpl->parse('blockredirect');
-                $contents = $xtpl->text('blockredirect');
+                $tpl->assign('BLOCKMESS', $is_add ? $nv_Lang->getModule('block_add_success') : $nv_Lang->getModule('block_update_success'));
+                $tpl->assign('BLOCKREDIRECT', empty($blockredirect) ? '' : nv_redirect_decrypt($blockredirect));
+
+                $contents = $tpl->fetch('block_content_res.tpl');
 
                 include NV_ROOTDIR . '/includes/header.php';
                 echo $contents;
                 include NV_ROOTDIR . '/includes/footer.php';
-                die();
             }
         } elseif (!empty($row['bid'])) {
             $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid']);
@@ -391,15 +381,6 @@ while ($row_i = $result->fetch()) {
     ];
 }
 $tpl->assign('ARRAY_MODULES', $array_modules);
-
-$xtpl->assign('ROW', [
-    'title' => $row['title'],
-    'exp_time' => ($row['exp_time'] > 0) ? date('d/m/Y', $row['exp_time']) : '',
-    'link' => nv_htmlspecialchars($row['link']),
-    'bid' => $row['bid'],
-    'module' => $row['module'],
-    'file_name' => $row['file_name']
-]);
 
 $templ_list = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', '/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/');
 $templ_list = preg_replace('/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/', '\\1', $templ_list);
@@ -451,34 +432,21 @@ while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     if (isset($array_mod_func[$m_title]) and sizeof($array_mod_func[$m_title]) > 0) {
         $i = 0;
         foreach ($array_mod_func[$m_title] as $array_mod_func_i) {
-            $sel = '';
-
             if (in_array($array_mod_func_i['id'], $func_list) or $functionid == $array_mod_func_i['id']) {
                 ++$i;
-                $sel = ' checked="checked"';
             }
-
-            $xtpl->assign('SELECTED', $sel);
-            $xtpl->assign('FUNCID', $array_mod_func_i['id']);
-            $xtpl->assign('FUNCNAME', $array_mod_func_i['func_custom_name']);
-
-            $xtpl->parse('main.loopfuncs.fuc');
         }
-
-        $xtpl->assign('M_TITLE', $m_title);
-        $xtpl->assign('M_CUSTOM_TITLE', $m_custom_title);
-        $xtpl->assign('M_CHECKED', (sizeof($array_mod_func[$m_title]) == $i) ? ' checked="checked"' : '');
 
         $array_funcs[] = [
             'key' => $m_title,
-            'title' => $m_custom_title
+            'title' => $m_custom_title,
+            'checked' => (sizeof($array_mod_func[$m_title]) == $i) ? true : false
         ];
-
-        $xtpl->parse('main.loopfuncs');
     }
 }
 
 $row['active_device'] = !empty($row['active']) ? explode(',', $row['active']) : [];
+$row['link'] = nv_htmlspecialchars($row['link']);
 
 $tpl->assign('ERROR', $error);
 $tpl->assign('SELECTTHEMES', $selectthemes);
@@ -486,11 +454,12 @@ $tpl->assign('BLOCKREDIRECT', $blockredirect);
 $tpl->assign('ROW', $row);
 $tpl->assign('ARRAY_FUNCS', $array_funcs);
 $tpl->assign('ARRAY_MOD_FUNC', $array_mod_func);
+$tpl->assign('FUNCTIONID', $functionid);
+$tpl->assign('FUNC_LIST', $func_list);
 
 $page_title = '&nbsp;&nbsp;' . $nv_Lang->getModule('blocks') . ': Theme ' . $selectthemes;
 
 $contents = $tpl->fetch('block_content.tpl');
-$my_head = $tpl->fetch('block_content_head.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents, 0);

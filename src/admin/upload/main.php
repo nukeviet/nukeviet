@@ -114,23 +114,6 @@ if ($popup) {
         $allow_files_type = $admin_info['allow_files_type'];
     }
 
-    /*
-    if (!empty($global_config['upload_alt_require'])) {
-        $xtpl->parse('main.alt_remote');
-    }
-
-    if (!empty($global_config['upload_auto_alt'])) {
-        $xtpl->parse('main.auto_alt');
-    }
-
-    if (!$global_config['nv_auto_resize']) {
-        $xtpl->parse('main.no_auto_resize');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
-    */
-
     $array_data = [];
     $array_data['container'] = $tpl->fetch('main_container.tpl');
     $array_data['modals'] = $tpl->fetch('main_modals.tpl');
