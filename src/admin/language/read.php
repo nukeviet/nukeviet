@@ -223,22 +223,13 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
 
     $nv_Request->set_Cookie('dirlang', $dirlang, NV_LIVE_COOKIE_TIME);
 
-    $xtpl = new XTemplate('read.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
+    $tpl = new \NukeViet\Template\Smarty();
+    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
+    $tpl->assign('ARRAY_FILENAME', $array_filename);
 
-    foreach ($array_filename as $name) {
-        if (!$name) {
-            continue;
-        }
-
-        $xtpl->assign('NAME', $name);
-        $xtpl->parse('main.loop');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $contents = $tpl->fetch('read.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
