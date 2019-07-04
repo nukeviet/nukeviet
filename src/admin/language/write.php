@@ -118,7 +118,7 @@ function nv_admin_write_lang($dirlang, $idfile)
             }
 
             if ($numrows) {
-                $number_bytes = file_put_contents($include_lang, trim($content_lang), LOCK_EX);
+                $number_bytes = file_put_contents($include_lang, trim($content_lang) . "\n", LOCK_EX);
                 if (empty($number_bytes)) {
                     $errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
                     return $nv_Lang->getModule('nv_error_write_file') . ' : ' . $errfile;
