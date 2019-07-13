@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
@@ -838,16 +837,17 @@ function nv_show_block_list($bid)
     $xtpl->assign('OP', $op);
     $xtpl->assign('BID', $bid);
 
-    $sql = 'SELECT t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t2.weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows as t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_block AS t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.inhome=1 ORDER BY t2.weight ASC';
+    $sql = 'SELECT t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t2.weight, status FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows as t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_block AS t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' ORDER BY t2.weight ASC';
 
     $result = $db->query($sql);
     $num = $result->rowCount();
     $a = 0;
 
-    while (list ($id, $listcatid, $title, $alias, $weight) = $result->fetch(3)) {
+    while (list ($id, $listcatid, $title, $alias, $weight, $status) = $result->fetch(3)) {
         $xtpl->assign('ROW', array(
             'id' => $id,
             'title' => $title,
+            'status' => $lang_module['status_' . $status],
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl']
         ));
 
@@ -1156,7 +1156,6 @@ function Insertabl_catfields($table, $array, $idshop)
  * @param mixed $array_template_id
  * @return
  */
-
 function nv_create_form_file($array_template_id)
 {
     global $db, $db_config, $module_upload, $module_data, $module_file, $array_template, $lang_module;
@@ -1315,7 +1314,6 @@ function nv_create_form_file($array_template_id)
  * @param mixed $dataform
  * @return
  */
-
 function nv_get_data_type($dataform)
 {
     $type_date = '';
