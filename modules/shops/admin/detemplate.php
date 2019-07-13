@@ -91,6 +91,16 @@ if ($id > 0) {
     }
 }
 
+// Cập nhật lại thứ tự các nhóm tùy biến dữ liệu
+$sql = 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template ORDER BY weight ASC';
+$result = $db->query($sql);
+$weight = 0;
+while ($row = $result->fetch()) {
+    ++$weight;
+    $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_template SET weight=' . $weight . ' WHERE id=' . $row['id'];
+    $db->query($sql);
+}
+
 $nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';

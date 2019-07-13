@@ -240,9 +240,9 @@ if ($nv_Request->isset_request('postorder', 'post')) {
         if (!empty($order_info)) {
             // Sua don hang
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET
-			order_name = :order_name, order_email = :order_email,
-			order_phone = :order_phone, order_address = :order_address, order_note = :order_note, order_total = ' . doubleval($data_order['order_total']) . ',
-			unit_total = :unit_total, edit_time = ' . NV_CURRENTTIME . ' WHERE order_id=' . $order_info['order_id']);
+            order_name = :order_name, order_email = :order_email,
+            order_phone = :order_phone, order_address = :order_address, order_note = :order_note, order_total = ' . doubleval($data_order['order_total']) . ',
+            unit_total = :unit_total, edit_time = ' . NV_CURRENTTIME . ' WHERE order_id=' . $order_info['order_id']);
 
             $sth->bindParam(':order_name', $data_order['order_name'], PDO::PARAM_STR);
             $sth->bindParam(':order_email', $data_order['order_email'], PDO::PARAM_STR);
@@ -262,15 +262,15 @@ if ($nv_Request->isset_request('postorder', 'post')) {
             $transaction_status = (empty($pro_config['auto_check_order'])) ? -1 : 0;
 
             $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_orders (
-				lang, order_code, order_name, order_email, order_phone, order_address, order_note,
-				user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
-				transaction_status, transaction_id, transaction_count
-			) VALUES (
-				'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email, :order_phone, :order_address, :order_note,
-				" . intval($data_order['user_id']) . ", " . intval($data_order['admin_id']) . ", " . intval($data_order['shop_id']) . ",
-				" . intval($data_order['who_is']) . ", :unit_total, " . doubleval($data_order['order_total']) . ",
-				" . intval($data_order['order_time']) . ", :ip, 0, " . $transaction_status . ", 0, 0
-			)";
+                lang, order_code, order_name, order_email, order_phone, order_address, order_note,
+                user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
+                transaction_status, transaction_id, transaction_count
+            ) VALUES (
+                '" . NV_LANG_DATA . "', :order_code, :order_name, :order_email, :order_phone, :order_address, :order_note,
+                " . intval($data_order['user_id']) . ", " . intval($data_order['admin_id']) . ", " . intval($data_order['shop_id']) . ",
+                " . intval($data_order['who_is']) . ", :unit_total, " . doubleval($data_order['order_total']) . ",
+                " . intval($data_order['order_time']) . ", :ip, 0, " . $transaction_status . ", 0, 0
+            )";
             $data_insert = array();
             $data_insert['order_code'] = $order_code;
             $data_insert['order_name'] = $data_order['order_name'];
@@ -562,6 +562,9 @@ if ($nv_Request->isset_request('postorder', 'post')) {
             unset($_SESSION[$module_data . '_coupons']);
             unset($_SESSION[$module_data . '_point_payment_discount']);
             unset($_SESSION[$module_data . '_point_payment_uses']);
+
+            // Xóa cache module
+            $nv_Cache->delMod($module_name);
 
             nv_jsonOutput(array(
                 'error' => 0,

@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -135,7 +136,10 @@ if ($rowcontent['id'] > 0) {
         $rowcontent['files_old'] = $rowcontent['files'];
     }
 
-    // Custom fields
+    /*
+     * Custom fields
+     * Dungpt: Chưa rõ tác giả viết đoạn này để làm gì?
+     */
     $idtemplate = $db->query('SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace("/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form']) . '"')->fetchColumn();
     if ($idtemplate) {
         $result = $db->query("SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . " WHERE rows_id=" . $rowcontent['id']);
@@ -489,43 +493,43 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         }
 
         $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, price_config, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
-				 VALUES ( NULL ,
-				 :listcatid,
-				 " . intval($rowcontent['user_id']) . ",
-				 " . intval($rowcontent['addtime']) . ",
-				 " . intval($rowcontent['edittime']) . ",
-				 " . intval($rowcontent['status']) . ",
-				 " . intval($rowcontent['publtime']) . ",
-				 " . intval($rowcontent['exptime']) . ",
-				 " . intval($rowcontent['archive']) . ",
-				 :product_code,
-				 " . intval($rowcontent['product_number']) . ",
-				 :product_price,
-				 :price_config,
-				 :money_unit,
-				 " . intval($rowcontent['product_unit']) . ",
-				 :product_weight,
-				 :weight_unit,
-				 " . intval($rowcontent['discount_id']) . ",
-				 :homeimgfile,
-				 :homeimgthumb,
-				 :homeimgalt,
-				 :otherimage,
-				 " . intval($rowcontent['imgposition']) . ",
-				 " . intval($rowcontent['copyright']) . ",
-				 " . intval($rowcontent['inhome']) . ",
-				 :allowed_comm,
-				 " . intval($rowcontent['allowed_rating']) . ",
-				 :ratingdetail,
-				 " . intval($rowcontent['allowed_send']) . ",
-				 " . intval($rowcontent['allowed_print']) . ",
-				 " . intval($rowcontent['allowed_save']) . ",
-				 " . intval($rowcontent['hitstotal']) . ",
-				 " . intval($rowcontent['hitscm']) . ",
-				 " . intval($rowcontent['hitslm']) . ",
-				 " . intval($rowcontent['showprice']) . "
-				" . $listvalue . "
-			)";
+                 VALUES ( NULL ,
+                 :listcatid,
+                 " . intval($rowcontent['user_id']) . ",
+                 " . intval($rowcontent['addtime']) . ",
+                 " . intval($rowcontent['edittime']) . ",
+                 " . intval($rowcontent['status']) . ",
+                 " . intval($rowcontent['publtime']) . ",
+                 " . intval($rowcontent['exptime']) . ",
+                 " . intval($rowcontent['archive']) . ",
+                 :product_code,
+                 " . intval($rowcontent['product_number']) . ",
+                 :product_price,
+                 :price_config,
+                 :money_unit,
+                 " . intval($rowcontent['product_unit']) . ",
+                 :product_weight,
+                 :weight_unit,
+                 " . intval($rowcontent['discount_id']) . ",
+                 :homeimgfile,
+                 :homeimgthumb,
+                 :homeimgalt,
+                 :otherimage,
+                 " . intval($rowcontent['imgposition']) . ",
+                 " . intval($rowcontent['copyright']) . ",
+                 " . intval($rowcontent['inhome']) . ",
+                 :allowed_comm,
+                 " . intval($rowcontent['allowed_rating']) . ",
+                 :ratingdetail,
+                 " . intval($rowcontent['allowed_send']) . ",
+                 " . intval($rowcontent['allowed_print']) . ",
+                 " . intval($rowcontent['allowed_save']) . ",
+                 " . intval($rowcontent['hitstotal']) . ",
+                 " . intval($rowcontent['hitscm']) . ",
+                 " . intval($rowcontent['hitslm']) . ",
+                 " . intval($rowcontent['showprice']) . "
+                " . $listvalue . "
+            )";
 
         $data_insert = array();
         $data_insert['listcatid'] = $rowcontent['listcatid'];
@@ -656,46 +660,46 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         }
 
         $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET
-			 listcatid= :listcatid,
-			 user_id=" . intval($rowcontent['user_id']) . ",
-			 status=" . intval($rowcontent['status']) . ",
-			 publtime=" . intval($rowcontent['publtime']) . ",
-			 exptime=" . intval($rowcontent['exptime']) . ",
-			 edittime= " . NV_CURRENTTIME . " ,
-			 archive=" . intval($rowcontent['archive']) . ",
-			 product_code = :product_code,
-			 product_number = product_number + " . intval($rowcontent['product_number']) . ",
-			 product_price = :product_price,
-			 price_config = :price_config,
-			 money_unit = :money_unit,
-			 product_unit = " . intval($rowcontent['product_unit']) . ",
-			 product_weight = :product_weight,
-			 weight_unit = :weight_unit,
-			 discount_id = " . intval($rowcontent['discount_id']) . ",
-			 homeimgfile= :homeimgfile,
-			 homeimgalt= :homeimgalt,
-			 otherimage= :otherimage,
-			 homeimgthumb= :homeimgthumb,
-			 imgposition=" . intval($rowcontent['imgposition']) . ",
-			 copyright=" . intval($rowcontent['copyright']) . ",
-			 gift_from=" . intval($rowcontent['gift_from']) . ",
-			 gift_to=" . intval($rowcontent['gift_to']) . ",
-			 inhome=" . intval($rowcontent['inhome']) . ",
-			 allowed_comm= :allowed_comm,
-			 allowed_rating=" . intval($rowcontent['allowed_rating']) . ",
-			 allowed_send=" . intval($rowcontent['allowed_send']) . ",
-			 allowed_print=" . intval($rowcontent['allowed_print']) . ",
-			 allowed_save=" . intval($rowcontent['allowed_save']) . ",
-			 showprice = " . intval($rowcontent['showprice']) . ",
-			 " . NV_LANG_DATA . "_title= :title,
-			  " . NV_LANG_DATA . "_address= :address,
-			 " . NV_LANG_DATA . "_alias= :alias,
-			 " . NV_LANG_DATA . "_hometext= :hometext,
-			 " . NV_LANG_DATA . "_bodytext= :bodytext,
-			 " . NV_LANG_DATA . "_gift_content= :gift_content,
-			 " . NV_LANG_DATA . "_tag_title= :tag_title,
-			 " . NV_LANG_DATA . "_tag_description= :tag_description
-			 WHERE id =" . $rowcontent['id']);
+             listcatid= :listcatid,
+             user_id=" . intval($rowcontent['user_id']) . ",
+             status=" . intval($rowcontent['status']) . ",
+             publtime=" . intval($rowcontent['publtime']) . ",
+             exptime=" . intval($rowcontent['exptime']) . ",
+             edittime= " . NV_CURRENTTIME . " ,
+             archive=" . intval($rowcontent['archive']) . ",
+             product_code = :product_code,
+             product_number = product_number + " . intval($rowcontent['product_number']) . ",
+             product_price = :product_price,
+             price_config = :price_config,
+             money_unit = :money_unit,
+             product_unit = " . intval($rowcontent['product_unit']) . ",
+             product_weight = :product_weight,
+             weight_unit = :weight_unit,
+             discount_id = " . intval($rowcontent['discount_id']) . ",
+             homeimgfile= :homeimgfile,
+             homeimgalt= :homeimgalt,
+             otherimage= :otherimage,
+             homeimgthumb= :homeimgthumb,
+             imgposition=" . intval($rowcontent['imgposition']) . ",
+             copyright=" . intval($rowcontent['copyright']) . ",
+             gift_from=" . intval($rowcontent['gift_from']) . ",
+             gift_to=" . intval($rowcontent['gift_to']) . ",
+             inhome=" . intval($rowcontent['inhome']) . ",
+             allowed_comm= :allowed_comm,
+             allowed_rating=" . intval($rowcontent['allowed_rating']) . ",
+             allowed_send=" . intval($rowcontent['allowed_send']) . ",
+             allowed_print=" . intval($rowcontent['allowed_print']) . ",
+             allowed_save=" . intval($rowcontent['allowed_save']) . ",
+             showprice = " . intval($rowcontent['showprice']) . ",
+             " . NV_LANG_DATA . "_title= :title,
+              " . NV_LANG_DATA . "_address= :address,
+             " . NV_LANG_DATA . "_alias= :alias,
+             " . NV_LANG_DATA . "_hometext= :hometext,
+             " . NV_LANG_DATA . "_bodytext= :bodytext,
+             " . NV_LANG_DATA . "_gift_content= :gift_content,
+             " . NV_LANG_DATA . "_tag_title= :tag_title,
+             " . NV_LANG_DATA . "_tag_description= :tag_description
+             WHERE id =" . $rowcontent['id']);
 
         $stmt->bindParam(':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR);
         $stmt->bindParam(':product_code', $rowcontent['product_code'], PDO::PARAM_STR);

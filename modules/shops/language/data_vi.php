@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -51,8 +51,8 @@ if ($num_table == 1) {
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES('2', '2', '2');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES('2', '1', '1');");
 
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault, image, weight, add_time, edit_time, vi_title, vi_alias, vi_description, vi_keywords) VALUES('1', '0', '', '1', '1433298294', '1433298294', 'Sản phẩm bán chạy', 'San-pham-ban-chay', '', '');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault, image, weight, add_time, edit_time, vi_title, vi_alias, vi_description, vi_keywords) VALUES('2', '0', '', '2', '1433298325', '1433298325', 'Sản phẩm hot', 'San-pham-hot', '', '');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault, image, weight, add_time, edit_time, vi_title, vi_alias, vi_description, vi_bodytext, vi_keywords, vi_tag_description) VALUES('1', '0', '', '1', '1433298294', '1433298294', 'Sản phẩm bán chạy', 'San-pham-ban-chay', '', '', '', '');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault, image, weight, add_time, edit_time, vi_title, vi_alias, vi_description, vi_bodytext, vi_keywords, vi_tag_description) VALUES('2', '0', '', '2', '1433298325', '1433298325', 'Sản phẩm hot', 'San-pham-hot', '', '', '', '');");
 
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_catalogs (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product, vi_title, vi_title_custom, vi_alias, vi_description, vi_descriptionhtml, vi_keywords) VALUES('2', '0', '', '1', '1', '0', 'viewlist', '4', '6,7,8,9', '1', '4', '7', '1', '', '', '0', '', '1432362728', '1432362803', '6', '0', '0', '0', 'Váy', 'Váy', 'Vay-nu', '', '', 'váy, vay');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_catalogs (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product, vi_title, vi_title_custom, vi_alias, vi_description, vi_descriptionhtml, vi_keywords) VALUES('3', '0', '', '2', '6', '0', 'viewlist', '4', '13,14,15,16', '1', '4', '7', '1', '', '', '0', '', '1432362789', '1432362789', '6', '0', '0', '0', 'Giày dép', 'Giày dép', 'Giay-dep', '', '', 'giay, dep, giày, dép');");
@@ -94,13 +94,13 @@ if ($num_table == 1) {
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tabs (id, icon, content, weight, active, vi_title) VALUES('2', '', 'content_comments', '2', '1', 'Bình luận');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tabs (id, icon, content, weight, active, vi_title) VALUES('3', '', 'content_rate', '3', '1', 'Đánh giá');");
 
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('1', '1', 'thời-trang', '', '', 'thời trang');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('2', '1', 'sang-trọng', '', '', 'sang trọng');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('3', '1', 'phù-hợp', '', '', 'phù hợp');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('4', '1', 'đi-chơi', '', '', 'đi chơi');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('5', '1', 'áo-sơ-mi', '', '', 'áo sơ mi');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('6', '1', 'mũi-nhọn', '', '', 'mũi nhọn');");
-    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, keywords) VALUES('7', '1', 'búp-bê', '', '', 'búp bê');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('1', '1', 'thời-trang', '', '', '', 'thời trang');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('2', '1', 'sang-trọng', '', '', '', 'sang trọng');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('3', '1', 'phù-hợp', '', '', '', 'phù hợp');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('4', '1', 'đi-chơi', '', '', '', 'đi chơi');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('5', '1', 'áo-sơ-mi', '', '', '', 'áo sơ mi');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('6', '1', 'mũi-nhọn', '', '', '', 'mũi nhọn');");
+    $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_vi (tid, numpro, alias, image, description, bodytext, keywords) VALUES('7', '1', 'búp-bê', '', '', '', 'búp bê');");
 
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_id_vi (id, tid, keyword) VALUES('1', '1', 'thời trang');");
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_id_vi (id, tid, keyword) VALUES('1', '2', 'sang trọng');");

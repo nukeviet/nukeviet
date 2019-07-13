@@ -176,16 +176,18 @@ function view_search_all($data_content, $compare_id, $html_pages = '', $viewtype
 }
 
 /**
- * nv_template_detail()
- *
- * @param mixed $data_content
- * @param mixed $data_unit
- * @param mixed $data_others
- * @param mixed $array_other_view
- * @param mixed $content_comment
- * @return
+ * @param array $data_content
+ * @param array $data_unit
+ * @param array $data_others
+ * @param array $array_other_view
+ * @param string $content_comment
+ * @param integer $compare_id
+ * @param boolean $popup
+ * @param array $idtemplates
+ * @param array $array_keyword
+ * @return string
  */
-function nv_template_detail($data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $array_keyword)
+function nv_template_detail($data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplates, $array_keyword)
 {
     global $module_info, $lang_module, $module_file, $module_name, $module_upload, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_shops_cat, $meta_property, $pro_config, $user_info, $discounts_config, $my_head, $my_footer;
 
@@ -242,7 +244,7 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
 
         // Hien thi du lieu tuy bien o phan gioi thieu
         if (!empty($data_content['array_custom']) and !empty($data_content['array_custom_lang'])) {
-            $custom_data = nv_custom_tpl('tab-introduce' . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate);
+            $custom_data = nv_custom_tpl('tab-introduce' . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplates);
             $xtpl->assign('CUSTOM_DATA', $custom_data);
             $xtpl->parse('main.custom_data');
         }
@@ -293,7 +295,13 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
                     } elseif ($tabs_key == 'content_customdata') {
                         // Dữ liệu tùy biến
                         if (!empty($data_content['array_custom']) and !empty($data_content['array_custom_lang'])) {
-                            $tabs_content = nv_custom_tpl('tab-' . strtolower(change_alias($data_content['tabs'][$tabs_id][NV_LANG_DATA . '_title'])) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate);
+                            if (sizeof($data_content['template']) > 1) {
+                                // Tab tùy biến theo nhóm (dạng mới)
+                                $tabs_content = nv_custom_tab_fields($data_content);
+                            } else {
+                                // Tab tùy biến theo danh sách chỉ có một nhóm (dạng cũ)
+                                $tabs_content = nv_custom_tpl('tab-' . strtolower(change_alias($data_content['tabs'][$tabs_id][NV_LANG_DATA . '_title'])) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplates);
+                            }
                         }
                     }
 
@@ -2076,6 +2084,36 @@ function nv_template_loadcart($array_data, $array_products = array())
         $xtpl->parse('main.enable');
     } else {
         $xtpl->parse('main.disable');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ * @param array $data_content
+ * @return string
+ */
+function nv_custom_tab_fields($data_content)
+{
+    global $module_file, $module_info, $lang_global, $lang_module;
+
+    $xtpl = new XTemplate('custom_tab_fields.tpl', NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', $lang_global);
+
+    foreach ($data_content['template'] as $template) {
+        if (!empty($data_content['array_custom_template'][$template['id']])) {
+            $xtpl->assign('TEMPLATE_NAME', $template[NV_LANG_DATA . '_title']);
+
+            foreach ($data_content['array_custom_template'][$template['id']] as $key => $val) {
+                $xtpl->assign('ROW_NAME', isset($data_content['array_custom_lang'][$key]) ? $data_content['array_custom_lang'][$key] : $key);
+                $xtpl->assign('ROW_VAL', $val);
+                $xtpl->parse('main.template.loop');
+            }
+
+            $xtpl->parse('main.template');
+        }
     }
 
     $xtpl->parse('main');

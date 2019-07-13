@@ -29,6 +29,7 @@ $table_name = $db_config['prefix'] . '_' . $module_data . '_template';
 $data['id'] = $nv_Request->get_int('id', 'post,get', 0);
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
+// Thay đổi hoạt động
 if ($nv_Request->isset_request('change_active', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
@@ -44,6 +45,43 @@ if ($nv_Request->isset_request('change_active', 'post')) {
     $db->query($sql);
 
     $nv_Cache->delMod($module_name);
+    nv_htmlOutput('OK_' . $pid);
+}
+
+// Thay đổi thứ tự
+if ($nv_Request->isset_request('changeweight', 'post')) {
+    $id = $nv_Request->get_int('id', 'post', 0);
+
+    $id = $db->query('SELECT id FROM ' . $table_name . ' WHERE id=' . $id)->fetchColumn();
+    if (empty($id)) {
+        die('NO_' . $id);
+    }
+
+    $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
+    if (empty($new_weight)) {
+        die('NO_' . $mod);
+    }
+
+    $sql = 'SELECT id FROM ' . $table_name . ' WHERE id!=' . $id . ' ORDER BY weight ASC';
+    $result = $db->query($sql);
+
+    $weight = 0;
+    while ($row = $result->fetch()) {
+        ++$weight;
+        if ($weight == $new_weight) {
+            ++$weight;
+        }
+
+        $sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE id=' . $row['id'];
+        $db->query($sql);
+    }
+
+    $sql = 'UPDATE ' . $table_name . ' SET weight=' . $new_weight . ' WHERE id=' . $id;
+    $db->query($sql);
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Change template weight', 'ID: ' . $id, $admin_info['userid']);
+    $nv_Cache->delMod($module_name);
+
     nv_htmlOutput('OK_' . $pid);
 }
 
@@ -69,7 +107,14 @@ if (!empty($savecat)) {
             $listfield = "";
             $listvalue = "";
 
-            $sql = "INSERT INTO " . $table_name . " (status, " . NV_LANG_DATA . "_title, alias) VALUES (1, " . $db->quote($data['title']) . ", " . $db->quote($data['alias']) . ")";
+            $weight = $db->query("SELECT MAX(weight) FROM " . $table_name)->fetchColumn();
+            $weight = intval($weight) + 1;
+
+            $sql = "INSERT INTO " . $table_name . " (
+                status, " . NV_LANG_DATA . "_title, alias, weight
+            ) VALUES (
+                1, " . $db->quote($data['title']) . ", " . $db->quote($data['alias']) . ", " . $weight . "
+            )";
             $templaid = $db->insert_id($sql);
             if ($templaid != 0) {
                 $nv_Cache->delMod($module_name);
@@ -107,10 +152,10 @@ $xtpl->assign('DATA', $data);
 $xtpl->assign('caption', empty($data['id']) ? $lang_module['template_add'] : $lang_module['template_edit']);
 $xtpl->assign('TEM_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=template#add");
 
-$count = 0;
-$result = $db->query("SELECT id, " . NV_LANG_DATA . "_title, alias, status FROM " . $table_name . " ORDER BY id DESC");
+$result = $db->query("SELECT id, " . NV_LANG_DATA . "_title, alias, status, weight FROM " . $table_name . " ORDER BY weight ASC");
+$num = $result->rowCount();
 
-while (list($id, $title, $alias, $status) = $result->fetch(3)) {
+while (list($id, $title, $alias, $status, $weight) = $result->fetch(3)) {
     $xtpl->assign('title', $title);
     $xtpl->assign('alias', $alias);
     $xtpl->assign('active', $status ? 'checked="checked"' : '');
@@ -118,15 +163,24 @@ while (list($id, $title, $alias, $status) = $result->fetch(3)) {
     $xtpl->assign('link_edit', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id);
     $xtpl->assign('link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=detemplate&id=" . $id);
     $xtpl->assign('id', $id);
+
+    for ($i = 1; $i <= $num; ++$i) {
+        $xtpl->assign('WEIGHT', [
+            'w' => $i,
+            'selected' => ($i == $weight) ? ' selected="selected"' : ''
+        ]);
+
+        $xtpl->parse('main.data.row.weight');
+    }
+
     $xtpl->parse('main.data.row');
-    ++$count;
 }
 
 $xtpl->assign('FIELD_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields#ffields");
 $xtpl->assign('URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=detemplate");
 $xtpl->assign('URL_DEL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
 
-if ($count > 0) {
+if ($num > 0) {
     $xtpl->parse('main.data');
 }
 
