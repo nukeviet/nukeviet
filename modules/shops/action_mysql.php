@@ -161,7 +161,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  numlinks tinyint(2) unsigned NOT NULL default '3',
  newday tinyint(4) NOT NULL DEFAULT '3',
  typeprice tinyint(4) NOT NULL DEFAULT '2',
- form varchar(50) NOT NULL DEFAULT '',
+ form varchar(250) NOT NULL DEFAULT '',
  group_price text NOT NULL,
  viewdescriptionhtml tinyint(1) unsigned NOT NULL default '0',
  admins mediumtext NOT NULL,
@@ -187,6 +187,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   id mediumint(8) NOT NULL AUTO_INCREMENT,
   status tinyint(1) NOT NULL DEFAULT '1',
   alias VARCHAR( 250 ) NOT NULL DEFAULT '',
+  weight mediumint(8) unsigned NOT NULL DEFAULT '1',
   UNIQUE alias (alias),
   PRIMARY KEY (id)
 ) ENGINE=MyISAM ";

@@ -443,7 +443,7 @@ function nv_review_action(oForm, msgnocheck) {
             if (confirm(nv_is_del_confirm[0])) {
                 $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'del=1&dellist=1&listid=' + listid, function(res) {
                     if (res == 'OK') {
-                        window.location.href = window.location.href;
+                        location.reload();
                     } else {
                         alert(nv_is_del_confirm[2]);
                     }
@@ -454,7 +454,7 @@ function nv_review_action(oForm, msgnocheck) {
                 var status = action.split('_');
                 $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'change_status=1&status=' + status[2] + '&listid=' + listid, function(res) {
                     if (res == 'OK') {
-                        window.location.href = window.location.href;
+                        location.reload();
                     } else {
                         alert(nv_is_change_act_confirm[2]);
                     }
@@ -489,7 +489,6 @@ function nv_del_files(id) {
             } else {
                 alert(nv_is_del_confirm[2]);
             }
-
         });
     }
 }
@@ -505,6 +504,21 @@ function nv_change_active_files( id )
     } else {
         $('#change_active_' + id).prop('checked', new_status ? false : true);
     }
+}
+
+// Sắp xếp thứ tự các nhóm tùy biến dữ liệu
+function nv_chang_weight(vid) {
+    var nv_timer = nv_settimeout_disable('change_weight_' + vid, 5000);
+    var new_weight = $('#change_weight_' + vid).val();
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=template&nocache=' + new Date().getTime(), 'changeweight=1&id=' + vid + '&new_weight=' + new_weight, function(res) {
+        var r_split = res.split("_");
+        if (r_split[0] != 'OK') {
+            alert(nv_is_change_act_confirm[2]);
+            clearTimeout(nv_timer);
+        } else {
+            location.reload();
+        }
+    });
 }
 
 function FormatNumber(str) {
@@ -611,7 +625,7 @@ $(document).ready(function() {
             function(res) {
                 alert(res.message);
                 if (res.status == 'CHANGED') {
-                    window.location.href = window.location.href.replace(/#(.*)/, "");
+                    location.reload();
                 } else {
                     $icon.addClass('hidden');
                 }
