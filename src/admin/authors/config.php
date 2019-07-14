@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -28,7 +28,7 @@ function nv_save_file_admin_config()
         $dbendtime = intval($dbendtime);
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
             if ($dbmask == - 1) {
-                $content_config_user .= "\$adv_admins['" . md5($keyname) . "'] = array( 'password' => \"" . trim($dbnotice) . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . " );\n";
+                $content_config_user .= "\$adv_admins['" . md5($keyname) . "'] = ['password' => \"" . trim($dbnotice) . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
             } else {
                 switch ($dbmask) {
                     case 3:
@@ -43,23 +43,23 @@ function nv_save_file_admin_config()
                     default:
                         $ip_mask = '//';
                 }
-                $content_config_ip .= "\$array_adminip['" . $keyname . "'] = array( 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . " );\n";
+                $content_config_ip .= "\$array_adminip['" . $keyname . "'] = ['mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
             }
         }
     }
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
-    $content_config .= "\$array_adminip = array();\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
+    $content_config .= "\$array_adminip = [];\n";
     $content_config .= $content_config_ip . "\n";
-    $content_config .= "\$adv_admins = array();\n";
+    $content_config .= "\$adv_admins = [];\n";
     $content_config .= $content_config_user;
 
     return file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php', $content_config, LOCK_EX);
 }
 
 $delid = $nv_Request->get_int('delid', 'get');
-if (! empty($delid)) {
+if (!empty($delid)) {
     $sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
     $keyname = $db->query($sql)->fetchColumn();
 
@@ -69,11 +69,11 @@ if (! empty($delid)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-$error = array();
+$error = [];
 $contents = '';
 
 if ($nv_Request->isset_request('savesetting', 'post')) {
-    $array_config_global = array();
+    $array_config_global = [];
     $array_config_global['admfirewall'] = $nv_Request->get_int('admfirewall', 'post');
     $array_config_global['block_admin_ip'] = $nv_Request->get_int('block_admin_ip', 'post');
 
@@ -101,18 +101,18 @@ if ($nv_Request->isset_request('submituser', 'post')) {
     $username = $nv_Request->get_title('username', 'post', '', 1);
     $password = $nv_Request->get_title('password', 'post', '', 1);
     $password2 = $nv_Request->get_title('password2', 'post', '', 1);
-    $begintime1 = $nv_Request->get_title('begintime1', 'post', 0, 1);
-    $endtime1 = $nv_Request->get_title('endtime1', 'post', 0, 1);
+    $begintime1 = $nv_Request->get_string('begintime1', 'post', '');
+    $endtime1 = $nv_Request->get_string('endtime1', 'post', '');
 
     $errorlogin = nv_check_valid_login($username, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
-    if (! empty($errorlogin)) {
+    if (!empty($errorlogin)) {
         $error[] = $errorlogin;
     } elseif (preg_match('/[^a-zA-Z0-9_-]/', $username)) {
         $error[] = $nv_Lang->getModule('rule_user');
     }
-    if (! empty($password) or empty($uid)) {
+    if (!empty($password) or empty($uid)) {
         $errorpassword = nv_check_valid_pass($password, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
-        if (! empty($errorpassword)) {
+        if (!empty($errorpassword)) {
             $error[] = $errorpassword;
         }
         if ($password != $password2) {
@@ -122,12 +122,12 @@ if ($nv_Request->isset_request('submituser', 'post')) {
         }
     }
 
-    if (! empty($begintime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\.([0-9]{4})$/', $begintime1, $m)) {
+    if (!empty($begintime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime1, $m)) {
         $begintime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $begintime1 = NV_CURRENTTIME;
     }
-    if (! empty($endtime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime1, $m)) {
+    if (!empty($endtime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime1, $m)) {
         $endtime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $endtime1 = 0;
@@ -162,18 +162,18 @@ if ($nv_Request->isset_request('submitip', 'post')) {
     $cid = $nv_Request->get_int('cid', 'post', 0);
     $keyname = $nv_Request->get_title('keyname', 'post', '', 1);
     $mask = $nv_Request->get_int('mask', 'post', 0);
-    $begintime = $nv_Request->get_title('begintime', 'post', 0, 1);
-    $endtime = $nv_Request->get_title('endtime', 'post', 0, 1);
+    $begintime = $nv_Request->get_string('begintime', 'post', '');
+    $endtime = $nv_Request->get_string('endtime', 'post', '');
 
-    if (empty($keyname) or ! $ips->nv_validip($keyname)) {
+    if (empty($keyname) or !$ips->nv_validip($keyname)) {
         $error[] = $nv_Lang->getModule('adminip_error_validip');
     }
-    if (! empty($begintime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m)) {
+    if (!empty($begintime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m)) {
         $begintime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $begintime = NV_CURRENTTIME;
     }
-    if (! empty($endtime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m)) {
+    if (!empty($endtime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m)) {
         $endtime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $endtime = 0;
@@ -189,16 +189,16 @@ if ($nv_Request->isset_request('submitip', 'post')) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('adminip'), $nv_Lang->getModule('adminip_edit') . ' ID ' . $cid . ' -> ' . $keyname, $admin_info['userid']);
         } else {
-        	$result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
-			if ($result) {
-	            $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
-	            $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
-	            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
-	            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
-	            $sth->execute();
+            $result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
+            if ($result) {
+                $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
+                $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
+                $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+                $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
+                $sth->execute();
 
-	            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('adminip'), $nv_Lang->getModule('adminip_add') . ' ' . $keyname, $admin_info['userid']);
-			}
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('adminip'), $nv_Lang->getModule('adminip_add') . ' ' . $keyname, $admin_info['userid']);
+            }
         }
         nv_save_file_admin_config();
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
@@ -210,71 +210,49 @@ if ($nv_Request->isset_request('submitip', 'post')) {
 $cid = $nv_Request->get_int('id', 'get,post');
 $uid = $nv_Request->get_int('uid', 'get,post');
 
-$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-$xtpl->assign('ADMIN_CHECK_PASS_TIME', round($global_config['admin_check_pass_time'] / 60));
-$xtpl->assign('OP', $op);
-
-$xtpl->assign('DATA', array(
-    'admfirewall' => $global_config['admfirewall'] ? ' checked="checked"' : '',
-    'block_admin_ip' => $global_config['block_admin_ip'] ? ' checked="checked"' : '',
-    'authors_detail_main' => $global_config['authors_detail_main'] ? ' checked="checked"' : '',
-    'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? ' checked="checked"' : ''
-));
-
-if (! empty($error)) {
-    $xtpl->assign('ERROR', implode('<br/>', $error));
-    $xtpl->parse('main.error');
-}
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CONFIG', $global_config);
+$tpl->assign('ADMIN_CHECK_PASS_TIME', round($global_config['admin_check_pass_time'] / 60));
+$tpl->assign('UID', $uid);
+$tpl->assign('CID', $cid);
+$tpl->assign('ERROR', empty($error) ? '' : implode('<br />', $error));
 
 $sql = "SELECT id, keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
 $result = $db->query($sql);
-$i = 0;
+
+$array_firewall_users = [];
 while (list($dbid, $keyname, $dbbegintime, $dbendtime) = $result->fetch(3)) {
-    ++$i;
-    $xtpl->assign('ROW', array(
+    $array_firewall_users[] = [
         'keyname' => $keyname,
-        'dbbegintime' => ! empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
-        'dbendtime' => ! empty($dbendtime) ? date('d/m/Y', $dbendtime) : $nv_Lang->getModule('adminip_nolimit'),
+        'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
+        'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $nv_Lang->getModule('adminip_nolimit'),
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;uid=' . $dbid . '#iduser',
         'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
-    ));
-
-    $xtpl->parse('main.list_firewall.loop');
+    ];
 }
-if ($i) {
-    $xtpl->parse('main.list_firewall');
-}
+$tpl->assign('ARRAY_FIREWALL_USERS', $array_firewall_users);
 
-if (! empty($uid)) {
+if (!empty($uid)) {
     list($username, $begintime1, $endtime1) = $db->query("SELECT keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3);
 
     $nv_Lang->setModule('username_add', $nv_Lang->getModule('username_edit'));
     $password2 = $password = '';
 }
 
-$xtpl->assign('FIREWALLDATA', array(
-    'uid' => $uid,
+$tpl->assign('FIREWALLDATA', [
     'username' => $username,
     'password' => $password,
     'password2' => $password2,
-    'begintime1' => ! empty($begintime1) ? date('d/m/Y', $begintime1) : '',
-    'endtime1' => ! empty($endtime1) ? date('d/m/Y', $endtime1) : ''
-));
+    'begintime1' => !empty($begintime1) ? date('d/m/Y', $begintime1) : '',
+    'endtime1' => !empty($endtime1) ? date('d/m/Y', $endtime1) : ''
+]);
 
-if (! empty($uid)) {
-    $xtpl->parse('main.nochangepass');
-}
-
-$mask_text_array = array();
+$mask_text_array = [];
 $mask_text_array[0] = '255.255.255.255';
 $mask_text_array[3] = '255.255.255.xxx';
 $mask_text_array[2] = '255.255.xxx.xxx';
@@ -283,46 +261,37 @@ $mask_text_array[1] = '255.xxx.xxx.xxx';
 $sql = "SELECT id, keyname, mask, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask!='-1' ORDER BY keyname DESC";
 $result = $db->query($sql);
 
-$i = 0;
+$array_ipaccess = [];
 while (list($dbid, $keyname, $dbmask, $dbbegintime, $dbendtime) = $result->fetch(3)) {
-    ++$i;
-    $xtpl->assign('ROW', array(
+    $array_ipaccess[] = [
         'keyname' => $keyname,
         'mask_text_array' => $mask_text_array[$dbmask],
-        'dbbegintime' => ! empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
-        'dbendtime' => ! empty($dbendtime) ? date('d/m/Y', $dbendtime) : '',
+        'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
+        'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : '',
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid . '#idip',
         'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
-    ));
-
-    $xtpl->parse('main.ipaccess.loop');
+    ];
 }
-if ($i) {
-    $xtpl->parse('main.ipaccess');
-}
+$tpl->assign('ARRAY_IPACCESS', $array_ipaccess);
 
-if (! empty($cid)) {
+if (!empty($cid)) {
     list($id, $keyname, $mask, $begintime, $endtime, $notice) = $db->query("SELECT id, keyname, mask, begintime, endtime, notice FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3);
     $nv_Lang->setModule('adminip_add', $nv_Lang->getModule('adminip_edit'));
 }
 
-$xtpl->assign('IPDATA', array(
+$tpl->assign('IPDATA', [
     'cid' => $cid,
     'keyname' => $keyname,
-    'selected3' => ($mask == 3) ? ' selected="selected"' : '',
-    'selected2' => ($mask == 2) ? ' selected="selected"' : '',
-    'selected1' => ($mask == 1) ? ' selected="selected"' : '',
-    'begintime' => ! empty($begintime) ? date('d/m/Y', $begintime) : '',
-    'endtime' => ! empty($endtime) ? date('d/m/Y', $endtime) : '',
+    'mask' => $mask,
+    'begintime' => !empty($begintime) ? date('d/m/Y', $begintime) : '',
+    'endtime' => !empty($endtime) ? date('d/m/Y', $endtime) : '',
     'notice' => $notice
-));
-
-$xtpl->assign('MASK_TEXT_ARRAY', $mask_text_array);
+]);
+$tpl->assign('MASK_TEXT_ARRAY', $mask_text_array);
 
 $page_title = $nv_Lang->getModule('config');
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('config.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

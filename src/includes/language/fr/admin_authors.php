@@ -20,11 +20,10 @@ $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['is_suspend0'] = 'Actif';
-$lang_module['is_suspend1'] = 'Suspendu au &ldquo;%1$s&rdquo; par &ldquo;%2$s&rdquo; en raison &ldquo;%3$s&rdquo;';
+$lang_module['is_suspend1'] = 'Suspendu au &ldquo;%1$s&rdquo; par &ldquo;<a href="%4$s">%2$s</a>&rdquo; en raison &ldquo;%3$s&rdquo;';
 $lang_module['is_suspend2'] = 'Est suspendu';
 $lang_module['last_login0'] = 'Jamais';
 $lang_module['login'] = 'Identifiant';
-$lang_module['email'] = 'E-mail';
 $lang_module['full_name'] = 'Nom complet';
 $lang_module['name'] = 'Nom du site Web';
 $lang_module['sig'] = 'Signature';
@@ -189,3 +188,4 @@ $lang_module['api_cr_back'] = 'Fait copié';
 $lang_module['api_cr_notice'] = 'Note: Gardez votre code secret secret et vos clés d\'accès spéciales secrètes. Si le code secret et la clé d\'accès sont exposés, les saboteurs peuvent effectuer des opérations indésirables';
 $lang_module['api_System'] = 'Fonctions du système';
 $lang_module['api_System_SendMail'] = 'Envoyer un email';
+$lang_module['other_info'] = 'Autres informations';

@@ -1,35 +1,56 @@
-<!-- BEGIN: main -->
-<div id="main_module">
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<thead>
-			<tr class="text-center">
-				<th width="80">{LANG.number}</th>
-				<th>{LANG.module}</th>
-				<th>{LANG.custom_title}</th>
-				<th>{GLANG.level1}</th>
-				<th>{GLANG.level2}</th>
-				<th>{GLANG.level3}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td>
-				<select name="id_weight_{ROW.mid}" id="id_weight_{ROW.mid}" onchange="nv_chang_weight('{ROW.mid}');" class="form-control">
-					<!-- BEGIN: weight -->
-					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
-					<!-- END: weight -->
-				</select></td>
-				<td>{ROW.module}</td>
-				<td>{ROW.custom_title}</td>
-				<td class="text-center"><input id="change_act_1_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 1);" type="checkbox" value="1" {CHANG_ACT.1} /></td>
-				<td class="text-center"><input id="change_act_2_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 2);" type="checkbox" value="1" {CHANG_ACT.2} /></td>
-				<td class="text-center"><input id="change_act_3_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 3);" type="checkbox" value="1" {CHANG_ACT.3} /></td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+<div class="card card-table">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;" class="text-center">{$LANG->get('number')}</th>
+                        <th style="width: 25%;">{$LANG->get('module')}</th>
+                        <th style="width: 25%;">{$LANG->get('custom_title')}</th>
+                        <th style="width: 14%;" class="text-center">{$LANG->get('level1')}</th>
+                        <th style="width: 14%;" class="text-center">{$LANG->get('level2')}</th>
+                        <th style="width: 14%;" class="text-center">{$LANG->get('level3')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$ARRAY item=row}
+                    <tr>
+                        <td>
+                            <select name="id_weight_{$row.mid}" id="id_weight_{$row.mid}" onchange="nv_chang_weight('{$row.mid}');" class="form-control form-control-xs">
+                                {for $weight=1 to $NUM_MODULES}
+                                <option value="{$weight}"{if $weight eq $row.weight} selected="selected"{/if}>{$weight}</option>
+                                {/for}
+                            </select>
+                        </td>
+                        <td>{$row.module}</td>
+                        <td>{$row.custom_title}</td>
+                        <td class="text-center">
+                            {if $row.module eq 'authors'}
+                            {if $row.act_1}{$LANG->get('on')}{else}{$LANG->get('off')}{/if}
+                            {else}
+                            <div class="switch-button switch-button-sm text-left">
+                                <input type="checkbox" id="change_act_1_{$row.mid}" value="1" onclick="nv_chang_act('{$row.mid}', 1);"{if $row.act_1} checked="checked"{/if}><span><label for="change_act_1_{$row.mid}"></label></span>
+                            </div>
+                            {/if}
+                        </td>
+                        <td class="text-center">
+                            <div class="switch-button switch-button-sm text-left">
+                                <input type="checkbox" id="change_act_2_{$row.mid}" value="1" onclick="nv_chang_act('{$row.mid}', 2);"{if $row.act_2} checked="checked"{/if}><span><label for="change_act_2_{$row.mid}"></label></span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            {if $row.module eq 'database' or $row.module eq 'settings' or $row.module eq 'site'}
+                            {if $row.act_3}{$LANG->get('on')}{else}{$LANG->get('off')}{/if}
+                            {else}
+                            <div class="switch-button switch-button-sm text-left">
+                                <input type="checkbox" id="change_act_3_{$row.mid}" value="1" onclick="nv_chang_act('{$row.mid}', 3);"{if $row.act_3} checked="checked"{/if}><span><label for="change_act_3_{$row.mid}"></label></span>
+                            </div>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-</div>
-<!-- END: main -->
