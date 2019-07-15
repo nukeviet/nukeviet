@@ -23,7 +23,7 @@
         <!-- END: otherClipsContent -->
     </div>
     <!-- BEGIN: nv_generate_page -->
-    <div class="text-center">{GENERATE_PAGE}</div>
+    <div class="text-center">{NV_GENERATE_PAGE}</div>
     <!-- END: nv_generate_page -->
 </div>
 <!-- END: main -->
