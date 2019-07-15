@@ -475,3 +475,29 @@
 #videoDetail h1{
     margin-top: 0
 }
+
+/* Video clip dạng lưới mới */
+.panel-item-clip  .clip-thumb {
+    display: block;
+    height: 0;
+    padding-bottom: 62%;
+    background-position: center center;
+    background-size: cover;
+    margin-bottom: 10px;
+    background-color: #eee;
+}
+
+.panel-item-clip  .clip-thumb img {
+    display: none;
+}
+
+.panel-item-clip h3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    -webkit-line-clamp: 2;
+
+    height: 42px;
+}
