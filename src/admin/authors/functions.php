@@ -85,57 +85,6 @@ function nv_admin_add_result($result)
 }
 
 /**
- * nv_admin_edit_result()
- *
- * @param mixed $result
- * @return
- */
-function nv_admin_edit_result($result)
-{
-    global $page_title, $module_name, $global_config, $nv_Lang;
-    $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors');
-    $contents = array();
-    $contents['title'] = sprintf($nv_Lang->getModule('nv_admin_edit_result_title'), $result['login']);
-
-    $contents['thead'] = array( $nv_Lang->getModule('field'), $nv_Lang->getModule('old_value'), $nv_Lang->getModule('new_value') );
-
-    $contents['change'] = $result['change'];
-    $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'];
-    $contents['download'] = $nv_Lang->getModule('nv_admin_add_download');
-    $contents['sendmail'] = $nv_Lang->getModule('nv_admin_add_sendmail');
-    $contents['go_home'] = array( $nv_Lang->getModule('main'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-    $contents['go_edit'] = array( $nv_Lang->getGlobal('edit'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
-
-    $page_title = sprintf($nv_Lang->getModule('nv_admin_edit_result'), $result['login']);
-
-    $xtpl->assign('TITLE', $contents['title']);
-    $xtpl->assign('THEAD0', $contents['thead'][0]);
-    $xtpl->assign('THEAD1', $contents['thead'][1]);
-    $xtpl->assign('THEAD2', $contents['thead'][2]);
-
-    foreach ($contents['change'] as $value) {
-        $xtpl->assign('VALUE0', $value[0]);
-        $xtpl->assign('VALUE1', $value[1]);
-        $xtpl->assign('VALUE2', $value[2]);
-        $xtpl->parse('edit_resuilt.loop');
-    }
-
-    $xtpl->assign('DOWNLOAD', $contents['download']);
-    $xtpl->assign('SENDMAIL', $contents['sendmail']);
-    $xtpl->assign('EDIT_NAME', $contents['go_edit'][0]);
-    $xtpl->assign('EDIT_HREF', $contents['go_edit'][1]);
-    $xtpl->assign('HOME_NAME', $contents['go_home'][0]);
-    $xtpl->assign('HOME_HREF', $contents['go_home'][1]);
-
-    $xtpl->parse('edit_resuilt');
-    $contents = $xtpl->text('edit_resuilt');
-
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_admin_theme($contents);
-    include NV_ROOTDIR . '/includes/footer.php';
-}
-
-/**
  * @return array[]
  */
 function nv_get_api_actions()

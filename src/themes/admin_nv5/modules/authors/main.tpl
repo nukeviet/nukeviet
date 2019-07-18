@@ -2,9 +2,15 @@
 <div class="card card-border-color card-border-color-primary" id="aid{$adminid}">
     <div class="card-header card-header-divider">
         <div class="tools">
-            <a href="#"><i class="fas fa-pencil-alt"></i></a>
-            <a href="#"><i class="fas fa-pencil-alt"></i></a>
-            <a href="#"><i class="fas fa-pencil-alt"></i></a>
+            {if $adminrow.t_is_edit}
+            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}=edit&amp;admin_id={$adminid}"><i class="fas fa-pencil-alt" data-toggle="tooltip" title="{$LANG->get('edit')}"></i></a>
+            {/if}
+            {if $adminrow.t_is_suspend}
+            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}=suspend&amp;admin_id={$adminid}">{if $adminrow.is_suspend}<i class="fas fa-user-check" data-toggle="tooltip" title="{$LANG->get('suspend0')}"></i>{else}<i class="fas fa-user-slash" data-toggle="tooltip" title="{$LANG->get('suspend1')}"></i>{/if}</a>
+            {/if}
+            {if $adminrow.t_is_del}
+            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}=del&amp;admin_id={$adminid}"><i class="fas fa-trash-alt" data-toggle="tooltip" title="{$LANG->get('delete')}"></i></a>
+            {/if}
         </div>
         {if $adminid eq $ADMIN_INFO.admin_id}
         {$LANG->get('admin_info_title2', $adminrow.full_name)}
@@ -37,7 +43,7 @@
                 </dl>
             </div>
             <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-2">
-                <div class="author-ribon">
+                <div class="author-ribon{if $adminrow.is_suspend or empty($adminrow.active)} danger{/if}">
                     <div class="ribon-status">
                         {$LANG->get('is_suspend')}
                     </div>
@@ -108,39 +114,3 @@
     </div>
 </div>
 {/foreach}
-
-{*
-<!-- BEGIN: main -->
-<!-- BEGIN: loop -->
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <col span="2" style="width: 50%"/>
-        <thead>
-            <tr>
-                <th colspan="2">
-                <div class="pull-right">
-                    <!-- BEGIN: edit -->
-                    <a class="btn btn-primary btn-xs" href="{EDIT_HREF}">{EDIT_NAME}</a>
-                    <!-- END: edit -->
-                    <!-- BEGIN: suspend -->
-                    <a class="btn btn-primary btn-xs" href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
-                    <!-- END: suspend -->
-                    <!-- BEGIN: del -->
-                    <a class="btn btn-primary btn-xs" href="{DEL_HREF}">{DEL_NAME}</a>
-                    <!-- END: del -->
-                </div><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION} </th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- BEGIN: option_loop -->
-            <tr>
-                <td>{VALUE0}</td>
-                <td>{VALUE1}</td>
-            </tr>
-            <!-- END: option_loop -->
-        </tbody>
-    </table>
-</div>
-<!-- END: loop -->
-<!-- END: main -->
-*}

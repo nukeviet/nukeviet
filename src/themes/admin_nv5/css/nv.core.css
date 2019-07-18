@@ -16203,6 +16203,54 @@ body.open-right-sidebar a.nv-toggle-right-sidebar {
   font-weight: 700;
   text-transform: uppercase;
 }
+.author-ribon.primary {
+  border-left-color: #4285f4;
+}
+.author-ribon.primary .ribon-active {
+  background-color: #4285f4;
+}
+.author-ribon.secondary {
+  border-left-color: #6c757d;
+}
+.author-ribon.secondary .ribon-active {
+  background-color: #6c757d;
+}
+.author-ribon.success {
+  border-left-color: #34a853;
+}
+.author-ribon.success .ribon-active {
+  background-color: #34a853;
+}
+.author-ribon.info {
+  border-left-color: #17a2b8;
+}
+.author-ribon.info .ribon-active {
+  background-color: #17a2b8;
+}
+.author-ribon.warning {
+  border-left-color: #fbbc05;
+}
+.author-ribon.warning .ribon-active {
+  background-color: #fbbc05;
+}
+.author-ribon.danger {
+  border-left-color: #ea4335;
+}
+.author-ribon.danger .ribon-active {
+  background-color: #ea4335;
+}
+.author-ribon.light {
+  border-left-color: #f8f9fa;
+}
+.author-ribon.light .ribon-active {
+  background-color: #f8f9fa;
+}
+.author-ribon.dark {
+  border-left-color: #343a40;
+}
+.author-ribon.dark .ribon-active {
+  background-color: #343a40;
+}
 
 .author-detail .detail-head {
   font-size: 18px;
