@@ -5,7 +5,87 @@
     <div class="message">{$LANG->get('api_roles_empty')}.</div>
 </div>
 {else}
-
+<div role="alert" class="alert alert-primary alert-dismissible">
+    <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+    <div class="icon"><i class="fas fa-info-circle"></i></div>
+    <div class="message">{$LANG->get('api_role_notice')}.</div>
+</div>
+<div class="card card-table">
+    <div class="card-header">
+        {$LANG->get('api_roles_list')}
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">{$LANG->get('api_roles_title')}</th>
+                        <th style="width: 30%;">{$LANG->get('api_roles_description')}</th>
+                        <th style="width: 15%;">{$LANG->get('api_addtime')}</th>
+                        <th style="width: 15%;">{$LANG->get('api_edittime')}</th>
+                        <th style="width: 15%;" class="text-center">{$LANG->get('funcs')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$ARRAY item=row}
+                    <tr>
+                        <td>
+                            <a href="#apiroledetail{$row.role_id}" data-toggle="modal">{$row.role_title}</a> <strong class="text-danger">({$row.apitotal})</strong>
+                        </td>
+                        <td>{$row.role_description}</td>
+                        <td>{"H:i d/m/Y"|date:$row.addtime}</td>
+                        <td>{if $row.edittime}{"H:i d/m/Y"|date:$row.edittime}{/if}</td>
+                        <td class="text-center">
+                            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}={$OP}&amp;role_id={$row.role_id}" class="btn btn-sm btn-hspace btn-secondary"><i class="icon icon-left fas fa-pencil-alt"></i> {$LANG->get('edit')}</a>
+                            <a href="#" class="btn btn-sm btn-danger" data-id="{$row.role_id}" data-toggle="apiroledel"><i class="icon icon-left fas fa-trash-alt"></i> {$LANG->get('delete')}</a>
+                        </td>
+                    </tr>
+                    <!-- START FORFOOTER -->
+                    <div id="apiroledetail{$row.role_id}" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-primary">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header modal-header-colored">
+                                    <h3 class="modal-title">{$LANG->get('api_roles_detail')}: {$row.role_title}</h3>
+                                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    {if not empty($row.apis[''])}
+                                    {foreach from=$row.apis[''] key=cat_key item=cat_data}
+                                    <h4>{$LANG->get('api_of_system')}: {$cat_data.title}</h4>
+                                    <div class="row">
+                                        {foreach from=$cat_data.apis item=api_data}
+                                        <div class="col-12 col-sm-6">
+                                            <div class="text-truncate"><i class="fas fa-genderless"></i> {$api_data}</div>
+                                        </div>
+                                        {/foreach}
+                                    </div>
+                                    {/foreach}
+                                    {/if}
+                                    {if not empty($row.apis[$NV_LANG_DATA])}
+                                    {foreach from=$row.apis[$NV_LANG_DATA] key=mod_title item=mod_data}
+                                    {foreach from=$mod_data key=cat_key item=cat_data}
+                                    <h4>{$SITE_MODS[$mod_title].custom_title}{if not empty($cat_data.title)}: {$cat_data.title}{/if}</h4>
+                                    <div class="row">
+                                        {foreach from=$cat_data.apis item=api_data}
+                                        <div class="col-12 col-sm-6">
+                                            <div class="text-truncate" title="{$api_data}"><i class="fas fa-genderless"></i> {$api_data}</div>
+                                        </div>
+                                        {/foreach}
+                                    </div>
+                                    {/foreach}
+                                    {/foreach}
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END FORFOOTER -->
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {/if}
 <div id="addeditarea">
     {if not $IS_SUBMIT_FORM}
@@ -78,8 +158,8 @@
                                     <div class="child-apis-item-tool">
                                         <hr />
                                         <ul class="list-inline list-unstyled">
-                                            <li><i class="fa fa-fw fa-check-circle-o" aria-hidden="true"></i><a href="#api-child-{$apicontent.key}" data-toggle="apicheck">{$LANG->get('api_roles_checkall')}</a></li>
-                                            <li><i class="fa fa-fw fa-circle-o" aria-hidden="true"></i><a href="#api-child-{$apicontent.key}" data-toggle="apiuncheck">{$LANG->get('api_roles_uncheckall')}</a></li>
+                                            <li class="list-inline-item"><a href="#api-child-{$apicontent.key}" data-toggle="apicheck"><i class="fas fa-check-circle text-muted"></i> {$LANG->get('api_roles_checkall')}</a></li>
+                                            <li class="list-inline-item"><a href="#api-child-{$apicontent.key}" data-toggle="apiuncheck"><i class="fas fa-circle text-muted"></i> {$LANG->get('api_roles_uncheckall')}</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -108,62 +188,3 @@ $(document).ready(function() {
 </script>
 {/literal}
 {/if}
-
-{*
-<!-- BEGIN: main -->
-
-<!-- BEGIN: data -->
-<div class="alert alert-info">{LANG.api_role_notice}.</div>
-<form>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <caption>
-                <i class="fa fa-fw fa-file-o"></i>{LANG.api_roles_list}
-            </caption>
-            <thead>
-                <tr>
-                    <th style="width: 25%;">{LANG.api_roles_title}</th>
-                    <th style="width: 30%;">{LANG.api_roles_description}</th>
-                    <th style="width: 15%;">{LANG.api_addtime}</th>
-                    <th style="width: 15%;">{LANG.api_edittime}</th>
-                    <th style="width: 15%;" class="text-center">{LANG.funcs}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- BEGIN: loop -->
-                <tr>
-                    <td>
-                        <a href="#apiroledetail{ROW.role_id}" data-toggle="apiroledetail" data-title="{LANG.api_roles_detail}: {ROW.role_title}">{ROW.role_title}</a> <strong class="text-danger">({ROW.apitotal})</strong>
-                    </td>
-                    <td>{ROW.role_description}</td>
-                    <td>{ROW.addtime}</td>
-                    <td>{ROW.edittime}</td>
-                    <td class="text-center">
-                        <a href="{ROW.link_edit}" class="btn btn-xs btn-default"><i class="fa fa-fw fa-edit"></i>{GLANG.edit}</a> <a href="#" data-id="{ROW.role_id}" data-toggle="apiroledel" class="btn btn-xs btn-danger"><i class="fa fa-fw fa-trash"></i>{GLANG.delete}</a>
-                    </td>
-                </tr>
-                <!-- END: loop -->
-            </tbody>
-        </table>
-    </div>
-</form>
-<!-- BEGIN: loop_detail -->
-<div id="apiroledetail{ROW.role_id}" class="hidden">
-    <!-- BEGIN: cat -->
-    <div class="form-group">
-        <h2>
-            <strong>{CAT_NAME}</strong>:
-        </h2>
-        <div class="row">
-            <!-- BEGIN: loop -->
-            <div class="col-xs-12">{API_NAME}</div>
-            <!-- END: loop -->
-        </div>
-    </div>
-    <!-- END: cat -->
-</div>
-<!-- END: loop_detail -->
-<!-- END: data -->
-
-
-*}

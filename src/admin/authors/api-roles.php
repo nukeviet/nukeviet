@@ -22,9 +22,7 @@ $tpl = new \NukeViet\Template\Smarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $tpl->assign('LANG', $nv_Lang);
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$tpl->registerPlugin('modifier', 'date', 'nv_date');
 
 // Danh sách
 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_role ORDER BY role_id DESC';
@@ -91,49 +89,11 @@ if ($nv_Request->isset_request('del', 'post')) {
     nv_htmlOutput('OK');
 }
 
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
 $tpl->assign('ARRAY', $array);
-
-if (empty($array)) {
-    $xtpl->parse('main.empty');
-} else {
-    foreach ($array as $row) {
-        $row['link_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;role_id=' . $row['role_id'];
-        $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
-        $row['edittime'] = $row['edittime'] ? nv_date('H:i d/m/Y', $row['edittime']) : '';
-
-        $xtpl->assign('ROW', $row);
-
-        $xtpl->parse('main.data.loop');
-
-        // Xuất modal các API
-        if (!empty($row['apis'][''])) {
-            foreach ($row['apis'][''] as $cat_key => $cat_data) {
-                $xtpl->assign('CAT_NAME', $nv_Lang->getModule('api_of_system') . '<i class="fa fa-angle-double-right fa-fw" aria-hidden="true"></i>' . $cat_data['title']);
-                foreach ($cat_data['apis'] as $api_data) {
-                    $xtpl->assign('API_NAME', $api_data);
-                    $xtpl->parse('main.data.loop_detail.cat.loop');
-                }
-                $xtpl->parse('main.data.loop_detail.cat');
-            }
-        }
-        if (!empty($row['apis'][NV_LANG_DATA])) {
-            foreach ($row['apis'][NV_LANG_DATA] as $mod_title => $mod_data) {
-                foreach ($mod_data as $cat_key => $cat_data) {
-                    $xtpl->assign('CAT_NAME', empty($cat_data['title']) ? $site_mods[$mod_title]['custom_title'] : ($site_mods[$mod_title]['custom_title'] . '<i class="fa fa-angle-double-right fa-fw" aria-hidden="true"></i>' . $cat_data['title']));
-                    foreach ($cat_data['apis'] as $api_data) {
-                        $xtpl->assign('API_NAME', $api_data);
-                        $xtpl->parse('main.data.loop_detail.cat.loop');
-                    }
-                    $xtpl->parse('main.data.loop_detail.cat');
-                }
-            }
-        }
-
-        $xtpl->parse('main.data.loop_detail');
-    }
-
-    $xtpl->parse('main.data');
-}
+$tpl->assign('SITE_MODS', $site_mods);
 
 $current_cat = '';
 $error = '';

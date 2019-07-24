@@ -103,10 +103,6 @@ $(document).ready(function() {
         $($(this).attr('href')).find('[type="checkbox"]').prop('checked', false);
         apiRoleChanged();
     });
-    $('[data-toggle="apiroledetail"]').click(function(e) {
-        e.preventDefault();
-        modalShow($(this).data('title'), $($(this).attr('href')).html());
-    });
     $('[data-toggle="apiroledel"]').click(function(e) {
         e.preventDefault();
         if (confirm(nv_is_del_confirm[0])) {

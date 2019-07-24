@@ -18,7 +18,7 @@ $page_title = $nv_Lang->getModule('api_cr');
 $sql = 'SELECT role_id, role_title FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_role ORDER BY role_id DESC';
 $result = $db->query($sql);
 
-$global_array_roles = array();
+$global_array_roles = [];
 while ($row = $result->fetch()) {
     $global_array_roles[$row['role_id']] = $row;
 }
@@ -39,10 +39,19 @@ $db->order('tb1.addtime DESC');
 
 $result = $db->query($db->sql());
 
-$array = array();
+$array = [];
 while ($row = $result->fetch()) {
     $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name']);
     $row['api_roles'] = array_filter(explode(',', $row['api_roles']));
+
+    $api_roles = [];
+    foreach ($row['api_roles'] as $role_id) {
+        if (isset($global_array_roles[$role_id])) {
+            $api_roles[] = $global_array_roles[$role_id]['role_title'];
+        }
+    }
+    $row['api_roles_show'] = $api_roles;
+
     $array[$row['credential_ident']] = $row;
 }
 
@@ -69,11 +78,10 @@ if (!empty($credential_ident) and !isset($array[$credential_ident])) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
-$xtpl->assign('LINK_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;add=1');
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('LINK_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;add=1');
 
 if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
     // Lấy tất cả các Admin
@@ -81,7 +89,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
     $db->join('INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2 ON tb1.admin_id=tb2.userid');
     $db->select('tb1.admin_id, tb1.lev, tb2.username, tb2.first_name, tb2.last_name');
     $result = $db->query($db->sql());
-    $array_admins = array();
+    $array_admins = [];
     while ($row = $result->fetch()) {
         $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name']);
         $array_admins[$row['admin_id']] = $row;
@@ -90,20 +98,18 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
     $error = '';
     if ($credential_ident) {
         $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;credential_ident=' . $credential_ident;
-        $table_caption = $nv_Lang->getModule('api_cr_edit');
-        $array_post = array(
+        $array_post = [
             'admin_id' => $array[$credential_ident]['admin_id'],
             'credential_title' => $array[$credential_ident]['credential_title'],
             'api_roles' => $array[$credential_ident]['api_roles']
-        );
+        ];
     } else {
         $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;add=1';
-        $table_caption = $nv_Lang->getModule('api_cr_add');
-        $array_post = array(
+        $array_post = [
             'admin_id' => 0,
             'credential_title' => '',
-            'api_roles' => array()
-        );
+            'api_roles' => []
+        ];
     }
 
     if ($nv_Request->isset_request('submit', 'post')) {
@@ -111,7 +117,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
         if (empty($credential_ident)) {
             $array_post['admin_id'] = $nv_Request->get_int('admin_id', 'post', 0);
         }
-        $array_post['api_roles'] = $nv_Request->get_typed_array('api_roles', 'post', 'int', array());
+        $array_post['api_roles'] = $nv_Request->get_typed_array('api_roles', 'post', 'int', []);
         $array_post['api_roles'] = array_intersect($array_post['api_roles'], array_keys($global_array_roles));
         if (empty($array_post['credential_title'])) {
             $error = $nv_Lang->getModule('api_cr_error_title');
@@ -149,12 +155,11 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 if ($sth->execute()) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Add API Credential', $new_credential_ident, $admin_info['userid']);
 
-                    $xtpl->assign('CREDENTIAL_IDENT', $new_credential_ident);
-                    $xtpl->assign('CREDENTIAL_SECRET', $new_credential_secret);
-                    $xtpl->assign('URL_BACK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+                    $tpl->assign('CREDENTIAL_IDENT', $new_credential_ident);
+                    $tpl->assign('CREDENTIAL_SECRET', $new_credential_secret);
+                    $tpl->assign('URL_BACK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
-                    $xtpl->parse('result');
-                    $contents = $xtpl->text('result');
+                    $contents = $tpl->fetch('api-credentials-result.tpl');
 
                     include NV_ROOTDIR . '/includes/header.php';
                     echo nv_admin_theme($contents);
@@ -183,35 +188,14 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
         }
     }
 
-    $xtpl->assign('DATA', $array_post);
-    $xtpl->assign('FORM_ACTION', $form_action);
-    $xtpl->assign('TABLE_CAPTION', $table_caption);
+    $tpl->assign('CREDENTIAL_IDENT', $credential_ident);
+    $tpl->assign('DATA', $array_post);
+    $tpl->assign('FORM_ACTION', $form_action);
+    $tpl->assign('ERROR', $error);
+    $tpl->assign('ARRAY_ADMINS', $array_admins);
+    $tpl->assign('ARRAY_ROLES', $global_array_roles);
 
-    if (empty($credential_ident)) {
-        foreach ($array_admins as $admin) {
-            if (!empty($admin['full_name'])) {
-                $admin['username'] .= ' (' . $admin['full_name'] . ')';
-            }
-            $admin['selected'] = $admin['admin_id'] == $array_post['admin_id'] ? ' selected="selected"' : '';
-            $xtpl->assign('ADMIN', $admin);
-            $xtpl->parse('contents.admin.loop');
-        }
-        $xtpl->parse('contents.admin');
-    }
-
-    foreach ($global_array_roles as $api_role) {
-        $api_role['checked'] = in_array($api_role['role_id'], $array_post['api_roles']) ? ' checked="checked"' : '';
-        $xtpl->assign('API_ROLE', $api_role);
-        $xtpl->parse('contents.api_role');
-    }
-
-    if (!empty($error)) {
-        $xtpl->assign('ERROR', $error);
-        $xtpl->parse('contents.error');
-    }
-
-    $xtpl->parse('contents');
-    $contents = $xtpl->text('contents');
+    $contents = $tpl->fetch('api-credentials.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
@@ -222,33 +206,18 @@ if (empty($array)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add=1');
 }
 
+$tpl->registerPlugin('modifier', 'implode', 'implode');
+$tpl->registerPlugin('modifier', 'date', 'nv_date');
+
 // Thông báo nếu Remote API đang tắt.
-if (empty($global_config['remote_api_access'])) {
-    $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system';
-    $xtpl->assign('MESSAGE', $nv_Lang->getModule('api_remote_off', $url));
-    $xtpl->parse('main.remote_api_off');
-}
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('REMOTE_API_ACCESS', $global_config['remote_api_access']);
+$tpl->assign('URL_CONFIG', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system');
+$tpl->assign('ARRAY', $array);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
 
-foreach ($array as $row) {
-    $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
-    $row['edittime'] = $row['edittime'] ? nv_date('H:i d/m/Y', $row['edittime']) : '';
-    $row['last_access'] = $row['last_access'] ? nv_date('H:i d/m/Y', $row['last_access']) : $nv_Lang->getModule('api_cr_last_access_none');
-    $row['link_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;credential_ident=' . $row['credential_ident'];
-
-    $api_roles = array();
-    foreach ($row['api_roles'] as $role_id) {
-        if (isset($global_array_roles[$role_id])) {
-            $api_roles[] = $global_array_roles[$role_id]['role_title'];
-        }
-    }
-
-    $xtpl->assign('API_ROLES', implode(', ', $api_roles));
-    $xtpl->assign('ROW', $row);
-    $xtpl->parse('main.loop');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('api-credentials-list.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
