@@ -8,26 +8,25 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $checkss = $nv_Request->get_string('checkss', 'post');
 $theme = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 
-if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
-
+if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     // load position file
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $theme . '/config.ini');
     $position = $xml->xpath('positions');
     $positions = $position[0]->position;
-    $array_pos = array();
+    $array_pos = [];
     for ($j = 0, $count = sizeof($positions); $j < $count; ++$j) {
         $array_pos[] = trim($positions[$j]->tag);
     }
 
     // Cap nhat block hien thi toan site cho cac function moi phat sinh - Danh cho lap trinh vien
-    $array_bid = array();
+    $array_bid = [];
     // Danh sac tat ca cac block se kiem tra
 
     $sth = $db->prepare('SELECT bid, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND all_func=1');
@@ -44,7 +43,7 @@ if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         }
     }
 
-    $array_funcid = array();
+    $array_funcid = [];
     // Danh sach ID tat ca cac function co block trong he thong
     $result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
     while (list($func_id_i) = $result->fetch(3)) {
@@ -52,7 +51,7 @@ if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     }
 
     foreach ($array_bid as $bid => $position) {
-        $func_list = array();
+        $func_list = [];
         // Cac fuction da them block
         $result = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid);
         while (list($func_inlist) = $result->fetch(3)) {
@@ -60,13 +59,13 @@ if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         }
 
         foreach ($array_funcid as $func_id) {
-            if (! in_array($func_id, $func_list)) {
+            if (!in_array($func_id, $func_list)) {
                 // Cac function chua duoc them
 
                 $sth = $db->prepare('SELECT MAX(t1.weight)
-					FROM ' . NV_BLOCKS_TABLE . '_weight t1
-					INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
-					WHERE t1.func_id = :func_id AND t2.theme = :theme AND t2.position = :position');
+                    FROM ' . NV_BLOCKS_TABLE . '_weight t1
+                    INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+                    WHERE t1.func_id = :func_id AND t2.theme = :theme AND t2.position = :position');
                 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
                 $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
                 $sth->bindParam(':position', $position, PDO::PARAM_STR);
@@ -81,7 +80,7 @@ if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     }
 
     // Cap nhat lai weight theo danh sach cac block
-    $array_position = array();
+    $array_position = [];
 
     $sth = $db->prepare('SELECT bid, position, weight FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme ORDER BY position ASC, weight ASC');
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
@@ -99,10 +98,10 @@ if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         $func_id_old = $weight = 0;
 
         $sth = $db->prepare('SELECT t1.bid, t1.func_id
-			FROM ' . NV_BLOCKS_TABLE . '_weight t1
-			INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
-			WHERE t2.theme= :theme AND t2.position = :position
-			ORDER BY t1.func_id ASC, t1.weight ASC');
+            FROM ' . NV_BLOCKS_TABLE . '_weight t1
+            INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+            WHERE t2.theme= :theme AND t2.position = :position
+            ORDER BY t1.func_id ASC, t1.weight ASC');
         $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
         $sth->bindParam(':position', $position, PDO::PARAM_STR);
         $sth->execute();

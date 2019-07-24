@@ -275,6 +275,11 @@ if (!empty($generate_page)) {
     $xtpl->parse('main.generate_page');
 }
 
+if ($num_items > 0) {
+    $xtpl->assign('RESEND_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting_remail');
+    $xtpl->parse('main.resend_email');
+}
+
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 

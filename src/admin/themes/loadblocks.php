@@ -8,14 +8,17 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $module = $nv_Request->get_string('module', 'get', '');
 $bid = $nv_Request->get_int('bid', 'get,post', 0);
 
-$row = array( 'theme' => '', 'file_name' => '' );
+$row = [
+    'theme' => '',
+    'file_name' => ''
+];
 if ($bid > 0) {
     $row = $db->query('SELECT theme, file_name FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
 }
@@ -32,7 +35,7 @@ if ($module == 'theme') {
         if (preg_match($global_config['check_block_theme'], $file_name, $matches)) {
             $sel = ($file_name == $row['file_name']) ? ' selected="selected"' : '';
             $load_config = (file_exists(NV_ROOTDIR . '/themes/' . $row['theme'] . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) ? 1 : 0;
-            $load_mod_array = array();
+            $load_mod_array = [];
             if ($matches[1] != 'global') {
                 foreach ($site_mods as $mod => $row_i) {
                     if ($row_i['module_file'] == $matches[1]) {

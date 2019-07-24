@@ -20,11 +20,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['is_suspend0'] = 'Hoạt động';
-$lang_module['is_suspend1'] = 'Bị đình chỉ vào &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; với lý do &ldquo;%3$s&rdquo;';
+$lang_module['is_suspend1'] = 'Bị đình chỉ vào &ldquo;%1$s&rdquo; bởi &ldquo;<a href="%4$s">%2$s</a>&rdquo; với lý do &ldquo;%3$s&rdquo;';
 $lang_module['is_suspend2'] = 'Bị đình chỉ';
 $lang_module['last_login0'] = 'Chưa bao giờ';
 $lang_module['login'] = 'Tên tài khoản';
-$lang_module['email'] = 'Email';
 $lang_module['full_name'] = 'Tên gọi trên site';
 $lang_module['name'] = 'Tên gọi trên site';
 $lang_module['sig'] = 'Chữ ký';
@@ -150,7 +149,7 @@ $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';
 $lang_module['custom_title'] = 'Tiêu đề';
 $lang_module['main_module'] = 'Module trang chính';
-$lang_module['themeadmin'] = 'Giao diện người quản trị';
+$lang_module['themeadmin'] = 'Giao diện quản trị';
 $lang_module['theme_default'] = 'Mặc định theo cấu hình site';
 
 $lang_module['api_addtime'] = 'Tạo lúc';
@@ -197,3 +196,4 @@ $lang_module['api_cr_notice'] = 'Chú ý: Giữ an toàn cho mã bí mật và k
 $lang_module['api_System'] = 'Các chức năng hệ thống';
 $lang_module['api_System_SendMail'] = 'Gửi email';
 
+$lang_module['other_info'] = 'Thông tin khác';

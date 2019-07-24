@@ -12,18 +12,18 @@ if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
-$contents = array();
+$contents = [];
 $contents['info'] = $nv_Lang->getModule('main_page_info');
 $contents['detail'] = $nv_Lang->getGlobal('detail');
 
-$contents['rows'] = array();
+$contents['rows'] = [];
 
 foreach ($global_array_plans as $row) {
-    $contents['rows'][$row['id']]['title'] = array($row['title']);
-    $contents['rows'][$row['id']]['blang'] = array($nv_Lang->getModule('blang'), ((!empty($row['blang'])) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all')));
-    $contents['rows'][$row['id']]['size'] = array($nv_Lang->getModule('size'), $row['width'] . ' x ' . $row['height'] . 'px');
-    $contents['rows'][$row['id']]['form'] = array($nv_Lang->getModule('form'), $row['form']);
-    $contents['rows'][$row['id']]['description'] = array($nv_Lang->getModule('description'), $row['description']);
+    $contents['rows'][$row['id']]['title'] = [$row['title']];
+    $contents['rows'][$row['id']]['blang'] = [$nv_Lang->getModule('blang'), ((!empty($row['blang'])) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all'))];
+    $contents['rows'][$row['id']]['size'] = [$nv_Lang->getModule('size'), $row['width'] . ' x ' . $row['height'] . 'px'];
+    $contents['rows'][$row['id']]['form'] = [$nv_Lang->getModule('form'), $nv_Lang->getModule('form_' . $row['form'])];
+    $contents['rows'][$row['id']]['description'] = [$nv_Lang->getModule('description'), $row['description']];
     $contents['rows'][$row['id']]['allowed'] = isset($global_array_uplans[$row['id']]) ? true : false;
 }
 

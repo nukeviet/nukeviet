@@ -168,3 +168,6 @@ $lang_module['publ_time_info'] = 'The self-time system starts at the time of add
 $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
 $lang_module['idplanbanner'] = 'Select banner';
+$lang_module['form_random'] = 'Random all ads';
+$lang_module['form_random_one'] = 'Random one ads';
+$lang_module['form_sequential'] = 'Sequentially';

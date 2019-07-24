@@ -1,0 +1,82 @@
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 2-9-2010 14:43
+ */
+
+.card-border-theme:hover {
+    box-shadow: 0 0 4px rgba(66, 133, 244, 0.79);;
+    border-color: #4285f4;
+}
+
+.theme-item .theme-item-thumb {
+    height: 0;
+    padding-bottom: 65.25%;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+.theme-item .theme-item-thumb img {
+    display: none;
+}
+
+.theme-item .theme-item-title {
+    border-top: 1px #d4d4d4 solid;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.theme-item .theme-item-title h3 {
+    line-height: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.theme-item.active .theme-item-title {
+    background-color: #4285f4;
+}
+
+.theme-item.active .theme-item-title h3 {
+    color: #fff;
+}
+
+.theme-item .themedetail {
+    display: none;
+}
+
+.theme-item .actions {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding: 0 20px;
+    display: none;
+    transition: opacity .1s ease-in-out;
+    z-index: 1;
+}
+
+.theme-item:hover .themedetail,
+.theme-item:hover .actions {
+    display: block;
+}
+
+.theme-item:hover .theme-item-thumb:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.list-group-users {
+    max-height: 250px;
+    overflow: auto;
+}

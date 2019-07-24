@@ -8,7 +8,7 @@
  * @Createdate 3/7/2010 2:23
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 

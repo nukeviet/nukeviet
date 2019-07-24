@@ -109,7 +109,7 @@
             <div class="d-flex align-items-center">
                 <div class="flex-grow-1 flex-shrink-1">{$LANG->get('tpl_attachments')}</div>
                 <div class="flex-grow-0 flex-shrink-0 pl-2">
-                    <button class="btn btn-sm btn-success" type="button" data-toggle="attadd" data-size="{sizeof($DATA['attachments'])}"><i class="icon icon-left fas fa-plus"></i> {$LANG->get('add')}</button>
+                    <button class="btn btn-sm btn-success" type="button" data-toggle="attadd" data-size="{sizeof($DATA['attachments'])}" disabled="disabled"><i class="icon icon-left fas fa-plus"></i> {$LANG->get('add')}</button>
                 </div>
             </div>
         </div>
@@ -120,7 +120,7 @@
                     <input type="text" class="form-control form-control-sm" name="attachments[]" value="{if not empty($row)}{$NV_BASE_SITEURL}{$UPLOAD_PATH}/{$row}{/if}" id="tpl_att{$key}">
                 </div>
                 <div class="flex-grow-0 flex-shrink-0 pl-2">
-                    <button class="btn btn-secondary btn-input-sm" type="button" data-toggle="browsefile" data-path="{$UPLOAD_PATH}" data-cpath="{$UPLOAD_PATH}" data-area="tpl_att{$key}"><i class="icon icon-left fas fa-folder-open"></i> {$LANG->get('browse_file')}</button>
+                    <button class="btn btn-secondary btn-input-sm" type="button" id="tpl_att{$key}_btn"><i class="icon icon-left fas fa-folder-open"></i> {$LANG->get('browse_file')}</button>
                 </div>
                 <div class="flex-grow-0 flex-shrink-0 pl-2">
                     <button class="btn btn-danger btn-input-sm" type="button" data-toggle="attdel"><i class="icon icon-left fas fa-times"></i> {$LANG->get('delete')}</button>
@@ -196,9 +196,10 @@
 
 <script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/js/select2/i18n/{$NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}=upload&amp;js"></script>
 
 <script>
-$(document).ready(function() {
+$(document).on("nv.upload.ready", function() {
     $(".select2").select2({
         width: "100%",
         containerCssClass: "select2-sm"
@@ -263,6 +264,36 @@ $(document).ready(function() {
         }
     });
     {/literal}
+    $('[data-toggle="attadd"]').prop('disabled', false);
+
+    {foreach from=$DATA['attachments'] key=key item=row}
+    $("#tpl_att{$key}_btn").nvBrowseFile({
+        adminBaseUrl: '{$NV_BASE_ADMINURL}',
+        path: '{$UPLOAD_PATH}',
+        currentpath: '{$UPLOAD_PATH}',
+        type: 'image',
+        area: '#tpl_att{$key}'
+    });
+    {/foreach}
+
+    // Thêm đính kèm
+    $('[data-toggle="attadd"]').on('click', function(e) {
+        e.preventDefault();
+        var size = $(this).data('size');
+        size++;
+        $(this).data('size', size);
+        var area_new = 'tpl_att' + size;
+        $('#tpl-attach-temp').find('[name="attachments[]"]').attr('id', area_new);
+        $('#tpl-attach-temp').find('[data-toggle="browsebtn"]').attr('id', area_new + '_btn');
+        $('#tpl-attachments').append($('#tpl-attach-temp').html());
+        $("#" + area_new + '_btn').nvBrowseFile({
+            adminBaseUrl: '{$NV_BASE_ADMINURL}',
+            path: '{$UPLOAD_PATH}',
+            currentpath: '{$UPLOAD_PATH}',
+            type: 'image',
+            area: "#" + area_new
+        });
+    });
 });
 </script>
 
@@ -272,7 +303,7 @@ $(document).ready(function() {
             <input type="text" class="form-control form-control-sm" name="attachments[]" value="">
         </div>
         <div class="flex-grow-0 flex-shrink-0 pl-2">
-            <button class="btn btn-secondary btn-input-sm" type="button" data-toggle="browsefile" data-path="{$UPLOAD_PATH}" data-cpath="{$UPLOAD_PATH}"><i class="icon icon-left fas fa-folder-open"></i> {$LANG->get('browse_file')}</button>
+            <button class="btn btn-secondary btn-input-sm" type="button" data-toggle="browsebtn"><i class="icon icon-left fas fa-folder-open"></i> {$LANG->get('browse_file')}</button>
         </div>
         <div class="flex-grow-0 flex-shrink-0 pl-2">
             <button class="btn btn-danger btn-input-sm" type="button" data-toggle="attdel"><i class="icon icon-left fas fa-times"></i> {$LANG->get('delete')}</button>

@@ -89,16 +89,4 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).parent().parent().remove();
     });
-
-    // Thêm đính kèm
-    $('[data-toggle="attadd"]').on('click', function(e) {
-        e.preventDefault();
-        var size = $(this).data('size');
-        size++;
-        $(this).data('size', size);
-        var area_new = 'tpl_att' + size;
-        $('#tpl-attach-temp').find('[name="attachments[]"]').attr('id', area_new);
-        $('#tpl-attach-temp').find('[data-toggle="browsefile"]').attr('data-area', area_new);
-        $('#tpl-attachments').append($('#tpl-attach-temp').html());
-    });
 });

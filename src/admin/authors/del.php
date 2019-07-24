@@ -152,7 +152,8 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
             $send = nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_AUTHOR_DELETE, $send_data);
             if (!$send) {
                 $page_title = $nv_Lang->getGlobal('error_info_caption');
-                $contents = $nv_Lang->getGlobal('error_sendmail_admin') . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
+                $url_back = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+                $contents = nv_theme_alert($page_title, $nv_Lang->getGlobal('error_sendmail_admin'), 'danger', $url_back, '', 10);
 
                 include NV_ROOTDIR . '/includes/header.php';
                 echo nv_admin_theme($contents);
@@ -166,44 +167,26 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
     $reason = $adminpass = '';
 }
 
-$contents = [];
-$contents['is_error'] = (!empty($error)) ? 1 : 0;
-$contents['title'] = (!empty($error)) ? $error : sprintf($nv_Lang->getModule('delete_sendmail_info'), $row_user['username']);
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
-$contents['sendmail'] = $sendmail;
-$contents['reason'] = [$reason, 255];
-$contents['admin_password'] = [$nv_Lang->getGlobal('admin_password'), $adminpass, $global_config['nv_upassmax']];
+$array = [
+    'sendmail' => $sendmail,
+    'reason' => $reason,
+    'adminpass' => $adminpass,
+    'action_account' => $action_account,
+];
 
 $page_title = $nv_Lang->getModule('nv_admin_del');
 
-// Parse content
-$xtpl = new XTemplate('del.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id);
+$tpl->assign('ERROR', $error);
+$tpl->assign('ROW_USER', $row_user);
+$tpl->assign('DATA', $array);
+$tpl->assign('ARRAY_ACTION_ACCOUNT', $array_action_account);
 
-$class = $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"';
-
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('CHECKSS', $checkss);
-
-$xtpl->assign('CLASS', $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"');
-$xtpl->assign('TITLE', $contents['title']);
-$xtpl->assign('ACTION', $contents['action']);
-$xtpl->assign('CHECKED', $contents['sendmail'] ? ' checked="checked"' : '');
-
-$xtpl->assign('REASON1', $contents['reason'][0]);
-$xtpl->assign('REASON2', $contents['reason'][1]);
-
-$xtpl->assign('ADMIN_PASSWORD0', $contents['admin_password'][0]);
-$xtpl->assign('ADMIN_PASSWORD1', $contents['admin_password'][1]);
-$xtpl->assign('ADMIN_PASSWORD2', $contents['admin_password'][2]);
-foreach ($array_action_account as $key => $value) {
-    $xtpl->assign('ACTION_ACCOUNT_KEY', $key);
-    $xtpl->assign('ACTION_ACCOUNT_CHECK', ($key == $action_account) ? ' checked="checked"' : '');
-    $xtpl->assign('ACTION_ACCOUNT_TITLE', $value);
-    $xtpl->parse('del.action_account');
-}
-
-$xtpl->parse('del');
-$contents = $xtpl->text('del');
+$contents = $tpl->fetch('del.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

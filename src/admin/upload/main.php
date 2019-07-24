@@ -95,7 +95,7 @@ if ($nv_Request->isset_request('js', 'get')) {
     unset($sys_info['server_headers']['content-type'], $sys_info['server_headers']['content-length']);
 
     $headers['Content-Type'] = 'application/javascript';
-    $headers['Last-Modified'] = gmdate('D, d M Y H:i:s', filemtime($js_file)) . " GMT";
+    $headers['Last-Modified'] = gmdate('D, d M Y H:i:s', $global_config['timestamp']) . " GMT";
     $headers['Cache-Control'] = 'max-age=2592000, public'; // Cache js 1 tháng kể từ lần sửa cuối của file
     $headers['Pragma'] = 'cache';
 
@@ -113,23 +113,6 @@ if ($popup) {
     } else {
         $allow_files_type = $admin_info['allow_files_type'];
     }
-
-    /*
-    if (!empty($global_config['upload_alt_require'])) {
-        $xtpl->parse('main.alt_remote');
-    }
-
-    if (!empty($global_config['upload_auto_alt'])) {
-        $xtpl->parse('main.auto_alt');
-    }
-
-    if (!$global_config['nv_auto_resize']) {
-        $xtpl->parse('main.no_auto_resize');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
-    */
 
     $array_data = [];
     $array_data['container'] = $tpl->fetch('main_container.tpl');

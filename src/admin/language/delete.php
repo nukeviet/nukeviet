@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -84,36 +84,18 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
                     trigger_error($e->getMessage());
                 }
             }
-            $contents = $nv_Lang->getModule('nv_lang_deleteok');
-        } else {
-            $contents = $nv_Lang->getModule('nv_lang_delete_error');
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_lang_delete'), $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid']);
 
-        $xtpl = new XTemplate('delete.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+        $tpl = new \NukeViet\Template\Smarty();
+        $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting');
+        $tpl->assign('IS_ERROR', $err);
+        $tpl->assign('ARRAY_FILENAME', $array_filename);
 
-        $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting');
-        $xtpl->assign('INFO', $contents);
-
-        if (! empty($array_filename)) {
-            $i = 0;
-            foreach ($array_filename as $name) {
-                if (empty($name)) {
-                    continue;
-                }
-
-                $xtpl->assign('NAME', $name);
-                $xtpl->parse('main.info.loop');
-            }
-
-            $xtpl->parse('main.info');
-        }
-
-        $xtpl->parse('main');
-        $contents = $xtpl->text('main');
+        $contents = $tpl->fetch('delete.tpl');
 
         $page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 

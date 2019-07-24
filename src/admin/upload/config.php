@@ -99,7 +99,7 @@ if ($global_config['autologomod'] == 'all') {
 
 $array_autolog_mods = [];
 foreach ($site_mods as $mod => $value) {
-    if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $mod)) {
+    if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $value['module_upload'])) {
         $array_autolog_mods[] = [
             'key' => $mod,
             'title' => $value['custom_title']

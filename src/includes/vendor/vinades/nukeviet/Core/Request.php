@@ -47,12 +47,35 @@ class Request
     private $ip_addr;
     private $is_filter = false;
     private $str_referer_blocker = false;
-    private $engine_allowed = array();
+    private $engine_allowed = [];
 
     // Cac tags bi cam dung mac dinh, co the go bo bang cach thay doi cac tags cho phep cua NV_ALLOWED_HTML_TAGS
-    private $disabletags = array( 'applet', 'body', 'basefont', 'head', 'html', 'id', 'meta', 'xml', 'blink', 'link', 'style', 'script', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base' );
-    private $disabledattributes = array( 'action', 'background', 'codebase', 'dynsrc', 'lowsrc' );
-    private $disablecomannds = array( 'base64_decode', 'cmd', 'passthru', 'eval', 'exec', 'system', 'fopen', 'fsockopen', 'file', 'file_get_contents', 'readfile', 'unlink' );
+    private $disabletags = ['applet', 'body', 'basefont', 'head', 'html', 'id', 'meta', 'xml', 'blink', 'link', 'style', 'script', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base'];
+    private $disabledattributes = ['action', 'background', 'codebase', 'dynsrc', 'lowsrc'];
+    private $disablecomannds = ['base64_decode', 'cmd', 'passthru', 'eval', 'exec', 'system', 'fopen', 'fsockopen', 'file', 'file_get_contents', 'readfile', 'unlink'];
+
+    /**
+     * @var array
+     */
+    protected $corsHeaders = [
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type',
+        'Access-Control-Allow-Methods' => 'PUT, GET, POST, DELETE, OPTIONS',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Max-Age' => 10 * 60 * 60, // 10 min, max age for Chrome. Thời gian cache preflight request (request OPTIONS kiểm tra)
+    ];
+    /**
+     * @var bool
+     */
+    protected $requestOriginIsValid = false;
+    /**
+     * @var bool
+     */
+    protected $restrictCORSDomains = true;
+    /**
+     * @var array
+     */
+    protected $validCORSDomains = [];
 
     /**
      * Request::__construct()
@@ -68,7 +91,7 @@ class Request
         }
         if (isset($config['allow_request_mods']) and !empty($config['allow_request_mods'])) {
             if (!is_array($config['allow_request_mods'])) {
-                $config['allow_request_mods'] = array( $config['allow_request_mods'] );
+                $config['allow_request_mods'] = [$config['allow_request_mods']];
             }
             $this->allow_request_mods = array_intersect($this->allow_request_mods, $config['allow_request_mods']);
         }
@@ -187,7 +210,7 @@ class Request
     private function get_Env($key)
     {
         if (!is_array($key)) {
-            $key = array( $key );
+            $key = [$key];
         }
         foreach ($key as $k) {
             if (isset($_SERVER[$k])) {
@@ -328,10 +351,10 @@ class Request
 
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
-        $this->referer = $this->get_Env(array( 'HTTP_REFERER', 'Referer' ));
+        $this->referer = $this->get_Env(['HTTP_REFERER', 'Referer']);
         if (!empty($this->referer)) {
             $ref = @parse_url($this->referer);
-            if (isset($ref['scheme']) and in_array($ref['scheme'], array( 'http', 'https', 'ftp', 'gopher' )) and isset($ref['host'])) {
+            if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher']) and isset($ref['host'])) {
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
                     $ref['host'] = substr($ref['host'], 1, -1);
                 }
@@ -349,7 +372,7 @@ class Request
                     }
                 }
                 $this->referer_host = $ref['host'];
-                $tmp = array();
+                $tmp = [];
                 $base = $this->referer;
                 if (isset($ref['query']) and !empty($ref['query'])) {
                     list($base, $query_string) = explode('?', $this->referer);
@@ -421,7 +444,7 @@ class Request
         session_start();
         $session_id = session_id();
 
-        $_SESSION = (isset($_SESSION) and is_array($_SESSION)) ? $_SESSION : array();
+        $_SESSION = (isset($_SESSION) and is_array($_SESSION)) ? $_SESSION : [];
         if (sizeof($_SESSION)) {
             $array_keys = array_keys($_SESSION);
             foreach ($array_keys as $k) {
@@ -488,12 +511,12 @@ class Request
         $value = preg_replace('/([\x00-\x08][\x0b-\x0c][\x0e-\x20])/', '', $value);
         $value = preg_replace("/%u0([a-z0-9]{3})/i", "&#x\\1;", $value);
         $value = preg_replace("/%([a-z0-9]{2})/i", "&#x\\1;", $value);
-        $value = str_ireplace(array( '&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', '' ), '', $value);
+        $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
         $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
-        $value = preg_replace_callback($search, array( $this, 'chr_hexdec_callback' ), $value);
+        $value = preg_replace_callback($search, [$this, 'chr_hexdec_callback'], $value);
         $search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
-        $value = preg_replace_callback($search, array( $this, 'chr_callback' ), $value);
-        $search = array( '&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C' );
+        $value = preg_replace_callback($search, [$this, 'chr_callback'], $value);
+        $search = ['&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C'];
         $value = str_ireplace($search, '<', $value);
         return $value;
     }
@@ -506,7 +529,7 @@ class Request
      */
     private function filterAttr($attrSet)
     {
-        $newSet = array();
+        $newSet = [];
 
         for ($i = 0, $count = sizeof($attrSet); $i < $count; ++$i) {
             if (!$attrSet[$i]) {
@@ -523,7 +546,7 @@ class Request
                 $attrSubSet[1] = preg_replace('/[ ]+/', ' ', $attrSubSet[1]);
                 $attrSubSet[1] = preg_replace("/^\"(.*)\"$/", "\\1", $attrSubSet[1]);
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", "\\1", $attrSubSet[1]);
-                $attrSubSet[1] = str_replace(array( '"', '&quot;' ), "'", $attrSubSet[1]);
+                $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
                 if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
                     continue;
@@ -534,7 +557,7 @@ class Request
                 }
 
                 $value = $this->unhtmlentities($attrSubSet[1]);
-                $search = array(
+                $search = [
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'script' => '/s\s*c\s*r\s*i\s*p\s*t/si',
@@ -544,7 +567,7 @@ class Request
                     'write' => '/w\s*r\s*i\s*t\s*e/si',
                     'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
                     'window' => '/w\s*i\s*n\s*d\s*o\s*w/si'
-                );
+                ];
                 $value = preg_replace(array_values($search), array_keys($search), $value);
 
                 if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $value)) {
@@ -555,7 +578,7 @@ class Request
                     continue;
                 }
 
-                $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', array( $this, 'color_hex2rgb_callback' ), $attrSubSet[1]);
+                $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', [$this, 'color_hex2rgb_callback'], $attrSubSet[1]);
             } elseif ($attrSubSet[1] !== '0') {
                 $attrSubSet[1] = $attrSubSet[0];
             }
@@ -622,7 +645,7 @@ class Request
             }
 
             $tagLeft = $currentTag;
-            $attrSet = array();
+            $attrSet = [];
             $currentSpace = strpos($tagLeft, ' ');
 
             if (substr($currentTag, 0, 1) == '/') {
@@ -684,8 +707,8 @@ class Request
         }
 
         $preTag .= $postTag;
-        $preTag = str_replace(array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $preTag);
-        return trim(str_replace(array( "[@{", "}@]", "{@[", "]@}" ), array( '"', '"', "<", '>' ), $preTag));
+        $preTag = str_replace(["'", '"', '<', '>'], ["&#039;", "&quot;", "&lt;", "&gt;"], $preTag);
+        return trim(str_replace(["[@{", "}@]", "{@[", "]@}"], ['"', '"', "<", '>'], $preTag));
     }
 
     /**
@@ -707,14 +730,14 @@ class Request
                     $value = urldecode($value);
                 }
 
-                $value = str_replace(array( "\t", "\r", "\n", "../" ), "", $value);
+                $value = str_replace(["\t", "\r", "\n", "../"], "", $value);
                 $value = $this->unhtmlentities($value);
                 unset($matches);
                 preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches);
                 $value = str_replace($matches[0], $matches[1], $value);
                 $value = strip_tags($value);
                 $value = preg_replace('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', "", $value);
-                $value = str_replace(array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value);
+                $value = str_replace(["'", '"', '<', '>'], ["&#039;", "&quot;", "&lt;", "&gt;"], $value);
                 $value = trim($value);
             }
         }
@@ -736,7 +759,7 @@ class Request
             }
         } else {
             // Fix block tag
-            $value = str_replace(array( '[', ']' ), array( '&#91;', '&#93;' ), $value);
+            $value = str_replace(['[', ']'], ['&#91;', '&#93;'], $value);
 
             if (preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches)) {
                 $value = str_replace($matches[0], $matches[1], $value);
@@ -777,14 +800,14 @@ class Request
     private function parse_mode($mode)
     {
         if (empty($mode)) {
-            return array( $this->request_default_mode );
+            return [$this->request_default_mode];
         }
         $mode = explode(',', $mode);
         $mode = array_map('trim', $mode);
         $mode = array_map('strtolower', $mode);
         $mode = array_intersect($this->allow_request_mods, $mode);
         if (empty($mode)) {
-            return array( $this->request_default_mode );
+            return [$this->request_default_mode];
         }
         return array_values($mode);
     }
@@ -957,7 +980,7 @@ class Request
     public function unset_request($names, $mode)
     {
         if (empty($names)) {
-            return array();
+            return [];
         }
         $names = ',' . $names;
         unset($matches);
@@ -1044,7 +1067,7 @@ class Request
     public function isset_request($names, $mode, $all = true)
     {
         if (empty($names)) {
-            return array();
+            return [];
         }
         $names = ',' . $names;
         unset($matches);
@@ -1170,8 +1193,8 @@ class Request
     {
         $value = strip_tags($value);
         if (( bool )$specialchars == true) {
-            $search = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~' );
-            $replace = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
+            $search = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~'];
+            $replace = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
 
             $value = str_replace($replace, $search, $value);
             $value = str_replace("&#x23;", "#", $value);
@@ -1197,7 +1220,7 @@ class Request
      * @param mixed $preg_replace
      * @return
      */
-    public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = array())
+    public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = [])
     {
         $value = ( string )$this->get_value($name, $mode, $default);
         return $this->_get_title($value, $specialchars, $preg_replace);
@@ -1251,11 +1274,11 @@ class Request
             $value = strip_tags($value, $allowed_html_tags);
         }
         if (( bool )$save) {
-            $value = strtr($value, array(
+            $value = strtr($value, [
                 "\r\n" => '<br />',
                 "\r" => '<br />',
                 "\n" => '<br />'
-            ));
+            ]);
         }
         return trim($value);
     }
@@ -1290,7 +1313,6 @@ class Request
     }
 
     /**
-     * Request::get_typed_array()
      *
      * @param mixed $name
      * @param mixed $mode
@@ -1298,7 +1320,7 @@ class Request
      * @param mixed $default
      * @return
      */
-    public function get_typed_array($name, $mode = null, $type = null, $default = null, $specialchars = false, $preg_replace = array(), $allowed_html_tags = '', $save = false)
+    public function get_typed_array($name, $mode = null, $type = null, $default = null, $specialchars = false, $preg_replace = [], $allowed_html_tags = '', $save = false)
     {
         $arr = $this->get_array($name, $mode, $default);
         $array_keys = array_keys($arr);
@@ -1330,5 +1352,60 @@ class Request
             }
         }
         return $arr;
+    }
+
+    /**
+     * @param array $config
+     */
+    public function CORSHandle($config)
+    {
+        $this->restrictCORSDomains = isset($config['cors_restrict_domains']) ? (bool)$config['cors_restrict_domains']  : true;
+        $this->validCORSDomains = isset($config['cors_valid_domains']) ? (array)$config['cors_valid_domains']  : [];
+        $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
+        $method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
+        if ($method === 'OPTIONS') {
+            $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
+            $hasOrigin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
+            if ($this->requestOriginIsValid and !empty($hasControlRequestHeader) and !empty($hasOrigin)) {
+                foreach ($this->corsHeaders as $header => $value) {
+                    header($header . ': ' . $value);
+                }
+            }
+            die('');
+        }
+        $isXmlRequest = (strtoupper($this->get_Env(['HTTP_X_REQUESTED_WITH', 'X-Requested-With'])) === 'XMLHTTPREQUEST');
+        if ($isXmlRequest) {
+            foreach ($this->corsHeaders as $header => $value) {
+                header($header . ': ' . $value);
+            }
+        }
+
+        // Chặn các request bên ngoài vào khu vực quản trị
+        if (defined('NV_ADMIN') and $this->referer_key == 0 and !$this->requestOriginIsValid) {
+            exit(0);
+        }
+    }
+    /**
+     * @return boolean|null
+     */
+    private function getAllowOriginHeaderValue()
+    {
+        $origin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
+        // Không block hoặc domain hợp lệ
+        if (!$this->restrictCORSDomains or in_array($origin, $this->validCORSDomains)) {
+            $this->requestOriginIsValid = true;
+            return $origin;
+        }
+        // Kiểm tra tên miền hợp lệ
+        $validCorsDomainFilter = function ($validCorsDomain) use ($origin) {
+            return fnmatch($validCorsDomain, $origin, FNM_CASEFOLD);
+        };
+        if (array_filter($this->validCORSDomains, $validCorsDomainFilter)) {
+            $this->requestOriginIsValid = true;
+            $this->corsHeaders['Vary']  = 'Origin';
+            return $origin;
+        }
+        $this->requestOriginIsValid = false;
+        return null;
     }
 }

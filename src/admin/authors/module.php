@@ -8,9 +8,11 @@
  * @Createdate 16-12-2012 15:48
  */
 
-if (! defined('NV_IS_FILE_AUTHORS')) {
+if (!defined('NV_IS_FILE_AUTHORS')) {
     die('Stop!!!');
 }
+
+$page_title = $nv_Lang->getModule('module_admin');
 
 if (defined('NV_IS_AJAX')) {
     if ($nv_Request->isset_request('changeweight', 'post')) {
@@ -47,54 +49,31 @@ if (defined('NV_IS_AJAX')) {
                 $db->query("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_module SET act_" . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid);
             }
         }
-        die('OK');
+        nv_htmlOutput('OK');
     }
+
+    nv_htmlOutput('');
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
 
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-
-$a = 0;
 $rows = $db->query('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC')->fetchAll();
-$numrows = sizeof($rows);
+$array = [];
 foreach ($rows as $row) {
-	if ($row['module'] == 'siteinfo') continue;
-    for ($i = 1; $i <= $numrows; $i++) {
-        $xtpl->assign('WEIGHT', array( 'key' => $i, 'selected' => ($i == $row['weight']) ? ' selected="selected"' : '' ));
-        $xtpl->parse('main.loop.weight');
+    if ($row['module'] == 'siteinfo') {
+        continue;
     }
     $row['custom_title'] = $nv_Lang->existsGlobal($row['lang_key']) ? $nv_Lang->get($row['lang_key']) : $row['module'];
-    $chang_act = array();
-    for ($i = 1; $i <= 3; $i++) {
-        $chang_act[$i] = ($row['act_' . $i]) ? ' checked="checked"' : '';
-        if ($i == 3 and ($row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site')) {
-            $chang_act[$i] .= ' disabled="disabled"';
-        } elseif ($i == 1  and $row['module'] == 'authors') {
-            $chang_act[$i] .= ' disabled="disabled"';
-        }
-    }
-    $xtpl->assign('ROW', $row);
-    $xtpl->assign('CHANG_ACT', $chang_act);
-
-    $xtpl->parse('main.loop');
+    $array[] = $row;
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('NUM_MODULES', sizeof($rows));
+$tpl->assign('ARRAY', $array);
 
-if (! defined('NV_IS_AJAX')) {
-    $page_title = $nv_Lang->getModule('module_admin');
-    $contents = nv_admin_theme($contents);
-}
+$contents = $tpl->fetch('module.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
+echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

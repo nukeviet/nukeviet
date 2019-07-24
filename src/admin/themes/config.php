@@ -8,15 +8,15 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
-$select_options = array();
-$theme_array = nv_scandir(NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ));
+$select_options = [];
+$theme_array = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
 if ($global_config['idsite']) {
     $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
-    if (! empty($theme)) {
+    if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
         while (list($theme) = $result->fetch(3)) {
@@ -35,21 +35,27 @@ foreach ($theme_array as $themes_i) {
 $selectthemes_old = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 $selectthemes = $nv_Request->get_string('selectthemes', 'get', $selectthemes_old);
 
-if (! in_array($selectthemes, $theme_array)) {
+if (!in_array($selectthemes, $theme_array)) {
     $selectthemes = $global_config['site_theme'];
 }
 if ($selectthemes_old != $selectthemes) {
     $nv_Request->set_Cookie('selectthemes', $selectthemes, NV_LIVE_COOKIE_TIME);
 }
 
-if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php')) {
-    // Connect with file language interface configuration
+if (!file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php')) {
+    // Load ngôn ngữ giao diện
     $nv_Lang->loadTheme($selectthemes);
 
-    // Connect with file theme configuration
+    // Gọi file cấu hình giao diện
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php';
 } else {
-    $contents = '<h2 class="center vcenter" style="margin: 50px;">' . sprintf($nv_Lang->getModule('config_not_exit'), $selectthemes) . '</h2>';
+    // Giao diện này không cấu hình được
+    $tpl = new \NukeViet\Template\Smarty();
+    $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('SELECTTHEMES', $selectthemes);
+
+    $contents = $tpl->fetch('config.tpl');
 }
 
 $page_title = $nv_Lang->getModule('config') . ':' . $selectthemes;

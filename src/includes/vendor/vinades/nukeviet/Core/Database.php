@@ -11,6 +11,7 @@
 namespace NukeViet\Core;
 
 use PDO;
+use PDOStatement;
 use PDOException;
 
 /**
@@ -33,6 +34,9 @@ class Database extends PDO
     private $_order = '';
     private $_limit = 0;
     private $_offset = 0;
+
+    private $sqls = [];
+    private $debug = false;
 
     /**
      * @param array $config
@@ -70,6 +74,7 @@ class Database extends PDO
         try {
             parent::__construct($dsn, $config['dbuname'], $config['dbpass'], $driver_options);
             parent::exec("SET SESSION time_zone='" . NV_SITE_TIMEZONE_GMT_NAME . "'");
+            $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, ['\NukeViet\Core\NukeVietPDOStatement', [$this]]);
             $this->connect = 1;
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
@@ -131,8 +136,7 @@ class Database extends PDO
             }
             $stmt->execute();
             return $stmt->rowCount();
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
         return false;
@@ -470,5 +474,136 @@ class Database extends PDO
         }
 
         return $return;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDO::query()
+     */
+    public function query($statement)
+    {
+        if ($this->debug) {
+            $this->sqls[] = $statement;
+        }
+        return parent::query($statement);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDO::exec()
+     */
+    public function exec($statement)
+    {
+        if ($this->debug) {
+            $this->sqls[] = $statement;
+        }
+        return parent::exec($statement);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDO::prepare()
+     */
+    public function prepare($statement, $driver_options = [])
+    {
+        //if ($this->debug) {
+        //    $this->sqls[] = $statement;
+        //}
+        return parent::prepare($statement, $driver_options);
+    }
+
+    /**
+     *
+     */
+    public function enableDebug()
+    {
+        $this->debug = true;
+        $this->sqls = [];
+    }
+
+    /**
+     *
+     */
+    public function disableDebug()
+    {
+        $this->debug = false;
+        $this->sqls = [];
+    }
+
+    /**
+     * @return array
+     */
+    public function debugListSQL()
+    {
+        return $this->sqls;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getNumQueries()
+    {
+        return sizeof($this->sqls);
+    }
+
+    /**
+     * @param string $sql
+     */
+    public function addDebugListSql($sql)
+    {
+        $this->sqls[] = $sql;
+    }
+
+    /**
+     * @param string $sql
+     */
+    public function appendLastDebugSql($sql) {
+        end($this->sqls);
+        $key = key($this->sqls);
+        if (isset($this->sqls[$key])) {
+            $this->sqls[$key] .= "\n\n" . $sql;
+        } else {
+            $this->sqls[] = $sql;
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+}
+
+/**
+ * @author VINADES.,JSC
+ *
+ */
+class NukeVietPDOStatement extends PDOStatement {
+    protected $pdo;
+
+    /**
+     * @param PDO $pdo
+     */
+    protected function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDOStatement::execute()
+     */
+    public function execute($args = null)
+    {
+        $result = parent::execute($args);
+        if ($this->pdo->isDebug())  {
+            ob_start();
+            $this->debugDumpParams();
+            $this->pdo->addDebugListSql(ob_get_contents());
+            ob_end_clean();
+        }
+        return $result;
     }
 }

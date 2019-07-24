@@ -258,7 +258,8 @@ $page_title = sprintf($nv_Lang->getModule('edit'), $mod);
 if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/rss.php')) {
     $data['rss'] = $rss;
 }
-if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/sitemap.php')) {
+$sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
+if (sizeof($sitemaps)) {
     $data['sitemap'] = $sitemap;
 }
 

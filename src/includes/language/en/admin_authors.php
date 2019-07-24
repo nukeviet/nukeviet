@@ -20,11 +20,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['is_suspend0'] = 'Active';
-$lang_module['is_suspend1'] = 'Suspend &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; reason &ldquo;%3$s&rdquo;';
+$lang_module['is_suspend1'] = 'Suspend &ldquo;%1$s&rdquo; by &ldquo;<a href="%4$s">%2$s</a>&rdquo; reason &ldquo;%3$s&rdquo;';
 $lang_module['is_suspend2'] = 'Suspended';
 $lang_module['last_login0'] = 'Never';
 $lang_module['login'] = 'Username';
-$lang_module['email'] = 'Email';
 $lang_module['full_name'] = 'Display name';
 $lang_module['name'] = 'Site name on the website';
 $lang_module['sig'] = 'Signature';
@@ -189,3 +188,4 @@ $lang_module['api_cr_back'] = 'Done copied';
 $lang_module['api_cr_notice'] = 'Note: Keep your secret code secret and special access keys secret. If the secret code and the access key are exposed, the saboteurs can perform undesirable operations';
 $lang_module['api_System'] = 'System functions';
 $lang_module['api_System_SendMail'] = 'Send email';
+$lang_module['other_info'] = 'Other information';

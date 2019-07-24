@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ $theme2 = $nv_Request->get_title('theme2', 'post');
 $position = $nv_Request->get_title('position', 'post');
 $position = explode(',', $position);
 
-if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini') and ! empty($position)) {
+if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini') and !empty($position)) {
     foreach ($position as $pos) {
         $pos = nv_unhtmlspecialchars($pos);
         // Begin drop all exist blocks behavior with theme 2 and position relative
@@ -39,10 +39,10 @@ if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_co
         $sth->execute();
         while ($row = $sth->fetch()) {
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, :all_func, :weight, :config )';
+                (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
+                (:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, :all_func, :weight, :config )';
 
-            $data = array();
+            $data = [];
             $data['theme'] = $theme2;
             $data['module'] = $row['module'];
             $data['file_name'] = $row['file_name'];

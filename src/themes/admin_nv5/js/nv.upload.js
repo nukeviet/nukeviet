@@ -614,6 +614,22 @@ NVCoreFileBrowser.prototype.init = function(data) {
             $('[name="uploadremoteFile"]', modalEle).val('').focus();
             $('[name="uploadremoteFileAlt"]', modalEle).val('');
             $('[name="uploadremoteFileOK"]', modalEle).prop('disabled', false);
+
+            var logo = $(cfgm.logo).data('value');
+            var path = $(cfgf.folder).data('value');
+            var folder = $('[data-folder="' + path + '"]', $(cfg.folderElement));
+
+            if (logo == '' || folder.length < 1) {
+                $('[data-toggle="autoLogoArea"]', modalEle).addClass('d-none');
+                $('[name="auto_logo"]', modalEle).prop('checked', false);
+            } else {
+                $('[data-toggle="autoLogoArea"]', modalEle).removeClass('d-none');
+                if (folder.is('.auto_logo')) {
+                    $('[name="auto_logo"]', modalEle).prop('checked', true);
+                } else {
+                    $('[name="auto_logo"]', modalEle).prop('checked', false);
+                }
+            }
         });
 
         /*
@@ -1037,7 +1053,7 @@ NVCoreFileBrowser.prototype.getListFolders = function(callback, reload, data) {
         $(cfgm.file).data("value", data.imgfile);
     }
 
-    var urlFolder = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=folderlist&path=' + path + '&currentpath=' + currentPath + (reload ? '&dirListRefresh' : '') + '&random=' + self.strRand(10);
+    var urlFolder = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=folderlist&path=' + path + '&currentpath=' + currentPath + (reload ? '&dirListRefresh' : '') + '&random=' + self.strRand(10);
     $(cfg.folderElement).load(urlFolder, function() {
         self.perload++;
         if (callback) {
@@ -1090,7 +1106,7 @@ NVCoreFileBrowser.prototype.getListFiles = function(callback, reload, geturl) {
             folder.data('q', '');
         }
 
-        urlFiles = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=imglist&path=' + path + '&q=' + rawurlencode(q) + '&type=' + imgtype + '&imgfile=' + selFile + '&author=' + author + '&order=' + order + (reload ? '&refresh' : '') + '&random=' + self.strRand(10);
+        urlFiles = self.firstData.baseurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=imglist&path=' + path + '&q=' + rawurlencode(q) + '&type=' + imgtype + '&imgfile=' + selFile + '&author=' + author + '&order=' + order + (reload ? '&refresh' : '') + '&random=' + self.strRand(10);
     }
 
     $.ajax({
@@ -1602,7 +1618,11 @@ NVCoreFileBrowser.prototype.handleMenuSelect = function (element) {
 
     if (self.firstData.area != '') {
         if ($(self.firstData.area).length) {
-            $(self.firstData.area).val(fullPath);
+            if (self.firstData.restype == 'folderpath') {
+                $(self.firstData.area).val(nv_base_siteurl + filepath);
+            } else {
+                $(self.firstData.area).val(fullPath);
+            }
         }
     } else {
         //
@@ -2118,6 +2138,7 @@ NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
     var folderPath = $(cfgf.folder).data('value');
     var check = fileUrl + " " + folderPath;
     var fileAlt = $('[name="uploadremoteFileAlt"]', form).val();
+    var auto_logo = ($('[name="auto_logo"]', form).is(':checked') ? 1 : 0);
 
     if (/^(https?|ftp):\/\//i.test(fileUrl) === false) {
         fileUrl = 'http://' + fileUrl;
@@ -2134,7 +2155,8 @@ NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
             data: {
                 path: folderPath,
                 fileurl: fileUrl,
-                filealt: fileAlt
+                filealt: fileAlt,
+                autologo: auto_logo
             },
             success: function(k) {
                 $('[type="submit"]', form).prop('disabled', false);
@@ -2387,13 +2409,15 @@ NVCoreFileBrowser.prototype.uploadInit = function() {
             BeforeUpload: function(up, file) {
                 (self.debug && console.log("Plupload: Event before upload"));
                 var filealt = '';
+                var autologo = ($('[name="auto_logo"]', $(cfg.ctnUploadQueue)).is(':checked') ? 1 : 0);
 
                 if ($('#' + file.id + ' [data-toggle="fileAltInput"]').length) {
                     filealt = $('#' + file.id + ' [data-toggle="fileAltInput"]').val();
                 }
 
                 self.uploader.settings.multipart_params = {
-                    "filealt": filealt
+                    "filealt": filealt,
+                    "autologo": autologo
                 };
                 // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
                 /*
@@ -2481,6 +2505,10 @@ NVCoreFileBrowser.prototype.uploadRenderUI = function() {
     var cfgm = self.cfgMain;
     var cfgf = self.cfgFolderData;
 
+    var logo = $(cfgm.logo).data('value');
+    var path = $(cfgf.folder).data('value');
+    var folder = $('[data-folder="' + path + '"]', $(cfg.folderElement));
+
     // Ẩn các thành phần hiển thị danh sách file và nút công cụ
     $(cfg.filesToolBar).addClass('d-none');
     $(cfg.filesScroller).addClass('d-none');
@@ -2506,6 +2534,11 @@ NVCoreFileBrowser.prototype.uploadRenderUI = function() {
                     <div data-toggle="progress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-primary progress-bar-striped progress-bar-animated">0%</div>\
                 </div>\
             </div>\
+        </div>\
+        <div class="queue-opts' + ((logo == '' || folder.length < 1) ? ' d-none' : '') + '">\
+            <label class="custom-control custom-checkbox custom-control-inline mb-2">\
+                <input class="custom-control-input" type="checkbox" name="auto_logo" value="1"' + ((logo != '' && folder.length && folder.is('.auto_logo'))  ? ' checked="checked"' : '') + '><span class="custom-control-label custom-control-color text-truncate">Chèn logo vào tập tin tải lên (nếu là ảnh)</span>\
+            </label>\
         </div>\
         <div class="queue-head">\
             <div class="queue-col-name">' + LANG.file_name + '</div>\
@@ -3126,13 +3159,13 @@ var KEYPR = {
                 KEYPR.isShift = true;
             } else if (e.keyCode == 46 /* Del */ ) {
                 // Delete file
-                if ($('.file-selected').length && $("span#delete_file").attr("title") == '1') {
-                    filedelete();
+                if ($('.file-selected').length && $(window.fileManager.cfgFolderData.allowedDeleteFile).data('value') == "1") {
+                    window.fileManager.handleMenuDeleteFile();
                 }
             } else if (e.keyCode == 88 /* X */ ) {
                 // Move file
-                if ($('.file-selected').length && $("span#move_file").attr("title") == '1') {
-                    move();
+                if ($('.file-selected').length && $(window.fileManager.cfgFolderData.allowedMoveFile).data('value') == "1") {
+                    window.fileManager.handleMenuMove();
                 }
             }
         });
@@ -3275,6 +3308,9 @@ var RRT = {
     }
 };
 
+/*
+ * Xử lý mở menu khi ấn chuột phải vào file, thư mục
+ */
 var NVCMENU = {
     menu: null,
     bindings: {
@@ -3337,7 +3373,7 @@ var NVCMENU = {
             var menuHeight = (NVCMENU.menu.find('>a').length * itemHeight) + 7 + 7 + 1 + 1;
 
             var maxLeft = $('body').width() - menuWidth - 5;
-            var maxTop = $('body').height() - menuHeight - 5;
+            var maxTop = ($(window).scrollTop() + $('body').height()) - menuHeight - 5;
 
             if (menuLeft > maxLeft) {
                 menuLeft = maxLeft;
@@ -3476,7 +3512,7 @@ $(document).ready(function() {
      */
     NVStaticUpload.prototype.loadMainContainer = function() {
         var self = this;
-        var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + self.strRand(10);
+        var url = self.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&nocache=' + self.strRand(10);
 
         self.$element.html(self.options.templateLoader);
         $.ajax({
@@ -3592,6 +3628,7 @@ $(document).ready(function() {
         alt: '', // Đối tượng trả về ALT image
         templateContainer: '<div id="mdNVFileManagerPopup" tabindex="-1" role="dialog" class="modal" data-backdrop="static"><div class="modal-dialog full-width modal-filemanager"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button></div><div class="modal-body"></div></div></div></div>',
         templateContainerID: '#mdNVFileManagerPopup',
+        restype: 'filepath' // filepath|folderpath
     };
 
     /*
@@ -3604,6 +3641,7 @@ $(document).ready(function() {
             path: self.options.path,
             currentpath: self.options.currentpath,
             type: self.options.type,
+            restype: self.options.restype,
             area: self.options.area,
             alt: self.options.alt,
             imgfile: '' // File đang chọn
@@ -3641,48 +3679,48 @@ $(document).ready(function() {
          */
         if (!$(NVBrowseFile.DEFAULTS.templateContainerID).length) {
             $('body:first').append(NVBrowseFile.DEFAULTS.templateContainer);
-        }
 
-        /*
-         * Thiết lập trình quản lý file lên khi mở xong modal
-         */
-        $(NVBrowseFile.DEFAULTS.templateContainerID).on('shown.bs.modal', function(e) {
-            var modalEle = $(e.currentTarget);
-            var btn = $(modalEle.data('btn'));
-            var uploadApi = btn.data('nv.upload');
-            var url = uploadApi.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + uploadApi.strRand(10);
+            /*
+             * Thiết lập trình quản lý file lên khi mở xong modal
+             */
+            $(NVBrowseFile.DEFAULTS.templateContainerID).on('shown.bs.modal', function(e) {
+                var modalEle = $(e.currentTarget);
+                var btn = $(modalEle.data('btn'));
+                var uploadApi = btn.data('nv.upload');
+                var url = uploadApi.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&nocache=' + uploadApi.strRand(10);
 
-            $('.modal-body', modalEle).html(uploadApi.options.templateLoader);
-            $.ajax({
-                method: "GET",
-                url: url,
-                data: {
-                    popup: 1,
-                    alt: uploadApi.options.alt,
-                    area: uploadApi.options.area,
-                    type: uploadApi.options.type,
-                    imgfile: uploadApi.options.imgfile,
-                },
-                dataType: "json",
-                cache: false
-            }).done(function(data) {
-                $('.modal-body', modalEle).html(data.container);
-                if (typeof window.fileManager == "undefined") {
-                    $('body:first').append(data.modals);
-                }
-                uploadApi.init();
-            }).fail(function() {
-                alert("Ajax request Error, please reload your browser!!!");
+                $('.modal-body', modalEle).html(uploadApi.options.templateLoader);
+                $.ajax({
+                    method: "GET",
+                    url: url,
+                    data: {
+                        popup: 1,
+                        alt: uploadApi.options.alt,
+                        area: uploadApi.options.area,
+                        type: uploadApi.options.type,
+                        imgfile: uploadApi.options.imgfile,
+                    },
+                    dataType: "json",
+                    cache: false
+                }).done(function(data) {
+                    $('.modal-body', modalEle).html(data.container);
+                    if (typeof window.fileManager == "undefined") {
+                        $('body:first').append(data.modals);
+                    }
+                    uploadApi.init();
+                }).fail(function() {
+                    alert("Ajax request Error, please reload your browser!!!");
+                });
             });
-        });
 
-        /*
-         * Hủy dữ liệu quản lý file khi đóng modal
-         */
-        $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
-            var modalEle = $(e.currentTarget);
-            $('.modal-body', modalEle).html('');
-        });
+            /*
+             * Hủy dữ liệu quản lý file khi đóng modal
+             */
+            $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
+                var modalEle = $(e.currentTarget);
+                $('.modal-body', modalEle).html('');
+            });
+        }
 
         return this.each(function() {
             var $this   = $(this);

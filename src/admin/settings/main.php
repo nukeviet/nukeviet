@@ -181,6 +181,7 @@ $nv_Lang->setModule('browse_image', $nv_Lang->getGlobal('browse_image'));
 $tpl = new \NukeViet\Template\Smarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $tpl->assign('LANG', $nv_Lang);
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('GLOBAL_CONFIG', $global_config);
 $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $tpl->assign('DATA', $value_setting);

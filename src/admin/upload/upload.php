@@ -16,6 +16,7 @@ $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get', NV_UPLO
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 $newfilename = change_alias($nv_Request->get_title('newfilename', 'post', ''));
 $responseType = $nv_Request->get_title('responseType', 'get', '');
+$autologo = $nv_Request->get_int('autologo', 'post', 0);
 
 $chunk_upload = [];
 $chunk_upload['name'] = $nv_Request->get_title('name', 'post', '');
@@ -68,7 +69,8 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 
     if (!empty($upload_info['error'])) {
         $error = $upload_info['error'];
-    } elseif ($upload_info['complete'] and preg_match('#image\/[x\-]*([a-z]+)#', $upload_info['mime'])) {
+    } elseif ($upload_info['complete'] and preg_match('#image\/[x\-]*([a-z]+)#', $upload_info['mime']) and !$upload_info['is_svg']) {
+        // Resize ảnh nếu kích thước vượt quá cho phép
         if (isset($array_thumb_config[$path])) {
             $thumb_config = $array_thumb_config[$path];
         } else {
@@ -112,52 +114,50 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                 $dir = rtrim($dir, '/');
                 $arr_dir = explode('/', $dir);
 
-                if ($global_config['autologomod'] == 'all' or ($arr_dir[0] == NV_UPLOADS_DIR and isset($arr_dir[1]) and in_array($arr_dir[1], $autologomod))) {
-                    if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
-                        $logo_size = getimagesize(NV_ROOTDIR . '/' . $global_config['upload_logo']);
-                        $file_size = $upload_info['img_info'];
+                if ($autologo and !empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
+                    $logo_size = getimagesize(NV_ROOTDIR . '/' . $global_config['upload_logo']);
+                    $file_size = $upload_info['img_info'];
 
-                        if ($file_size[0] <= 150) {
-                            $w = ceil($logo_size[0] * $global_config['autologosize1'] / 100);
-                        } elseif ($file_size[0] < 350) {
-                            $w = ceil($logo_size[0] * $global_config['autologosize2'] / 100);
+                    if ($file_size[0] <= 150) {
+                        $w = ceil($logo_size[0] * $global_config['autologosize1'] / 100);
+                    } elseif ($file_size[0] < 350) {
+                        $w = ceil($logo_size[0] * $global_config['autologosize2'] / 100);
+                    } else {
+                        if (ceil($file_size[0] * $global_config['autologosize3'] / 100) > $logo_size[0]) {
+                            $w = $logo_size[0];
                         } else {
-                            if (ceil($file_size[0] * $global_config['autologosize3'] / 100) > $logo_size[0]) {
-                                $w = $logo_size[0];
-                            } else {
-                                $w = ceil($file_size[0] * $global_config['autologosize3'] / 100);
-                            }
+                            $w = ceil($file_size[0] * $global_config['autologosize3'] / 100);
                         }
-
-                        $h = ceil($w * $logo_size[1] / $logo_size[0]);
-                        $x = $file_size[0] - $w - 5;
-                        $y = $file_size[1] - $h - 5;
-
-                        $config_logo = [];
-                        $config_logo['w'] = $w;
-                        $config_logo['h'] = $h;
-
-                        $config_logo['x'] = $file_size[0] - $w - 5; // Horizontal: Right
-                        $config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
-
-                        // Logo vertical
-                        if (preg_match("/^top/", $global_config['upload_logo_pos'])) {
-                            $config_logo['y'] = 5;
-                        } elseif (preg_match("/^center/", $global_config['upload_logo_pos'])) {
-                            $config_logo['y'] = round(($file_size[1] / 2) - ($h / 2));
-                        }
-
-                        // Logo horizontal
-                        if (preg_match("/Left$/", $global_config['upload_logo_pos'])) {
-                            $config_logo['x'] = 5;
-                        } elseif (preg_match("/Center$/", $global_config['upload_logo_pos'])) {
-                            $config_logo['x'] = round(($file_size[0] / 2) - ($w / 2));
-                        }
-
-                        $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
-                        $createImage->addlogo(NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo);
-                        $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
                     }
+
+                    $h = ceil($w * $logo_size[1] / $logo_size[0]);
+                    $x = $file_size[0] - $w - 5;
+                    $y = $file_size[1] - $h - 5;
+
+                    $config_logo = [];
+                    $config_logo['w'] = $w;
+                    $config_logo['h'] = $h;
+
+                    $config_logo['x'] = $file_size[0] - $w - 5; // Horizontal: Right
+                    $config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
+
+                    // Logo vertical
+                    if (preg_match("/^top/", $global_config['upload_logo_pos'])) {
+                        $config_logo['y'] = 5;
+                    } elseif (preg_match("/^center/", $global_config['upload_logo_pos'])) {
+                        $config_logo['y'] = round(($file_size[1] / 2) - ($h / 2));
+                    }
+
+                    // Logo horizontal
+                    if (preg_match("/Left$/", $global_config['upload_logo_pos'])) {
+                        $config_logo['x'] = 5;
+                    } elseif (preg_match("/Center$/", $global_config['upload_logo_pos'])) {
+                        $config_logo['x'] = round(($file_size[0] / 2) - ($w / 2));
+                    }
+
+                    $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                    $createImage->addlogo(NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo);
+                    $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
                 }
                 //remame with option new filename
                 if (!empty($newfilename)) {
@@ -218,9 +218,13 @@ if (!empty($error)) {
             $newalt = str_replace('-', ' ', change_alias($newalt));
         }
 
-        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-            (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt) VALUES
-            ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)");
+        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (
+            name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
+        ) VALUES (
+            '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
+            '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "',
+            " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt
+        )");
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
         $sth->execute();

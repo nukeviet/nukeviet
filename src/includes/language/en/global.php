@@ -227,6 +227,7 @@ $lang_global['show_picture'] = 'View picture';
 $lang_global['flood_page_title'] = 'please wait...';
 $lang_global['flood_info1'] = 'Access denied';
 $lang_global['flood_info2'] = 'please wait';
+$lang_global['flood_captcha_pass'] = 'You are not a robot? Confirm to continue access';
 $lang_global['error_info_caption'] = 'Notifications from the system';
 $lang_global['error_error'] = 'Serious error';
 $lang_global['error_warning'] = 'Warning';

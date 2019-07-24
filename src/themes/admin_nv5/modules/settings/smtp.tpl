@@ -5,6 +5,21 @@
     <div class="message">{$ERROR}</div>
 </div>
 {/if}
+{if $TESTMAILSUBMIT}
+{if empty($TESTMAILMESSAGE)}
+<div role="alert" class="alert alert-success alert-dismissible">
+    <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+    <div class="icon"><i class="fas fa-check"></i></div>
+    <div class="message">{$LANG->get('smtp_test_success')}.</div>
+</div>
+{else}
+<div role="alert" class="alert alert-danger alert-dismissible">
+    <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
+    <div class="icon"><i class="far fa-times-circle"></i></div>
+    <div class="message"><strong>{$LANG->get('smtp_test_fail')}:</strong> {$TESTMAILMESSAGE}</div>
+</div>
+{/if}
+{/if}
 <div class="card card-border-color card-border-color-primary">
     <div class="card-body">
         <form method="post" action="{$FORM_ACTION}" autocomplete="off">
@@ -95,9 +110,15 @@
             <div class="form-group row mb-0 pb-0">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right"></label>
                 <div class="col-12 col-sm-8 col-lg-6">
-                    <button class="btn btn-space btn-primary" type="submit">{$LANG->get('submit')}</button>
+                    <button class="btn btn-space btn-primary" type="submit" name="submitsave">{$LANG->get('submit')}</button>
+                    {if not empty($GLOBAL_CONFIG.smtp_host) and not empty($GLOBAL_CONFIG.smtp_username)}
+                    <button class="btn btn-space btn-secondary" type="submit" name="submittest">{$LANG->get('smtp_test')}</button>
+                    {/if}
                 </div>
             </div>
         </form>
+        {if not empty($GLOBAL_CONFIG.smtp_host) and not empty($GLOBAL_CONFIG.smtp_username)}
+        <p class="mt-4"><i>{$LANG->get('smtp_test_note')}</i></p>
+        {/if}
     </div>
 </div>

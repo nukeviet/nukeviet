@@ -228,6 +228,7 @@ $lang_global['show_picture'] = 'Afficher l\'image';
 $lang_global['flood_page_title'] = 'Veuillez patienter...';
 $lang_global['flood_info1'] = 'Le système a refusé votre accès';
 $lang_global['flood_info2'] = 'Veuillez patienter';
+$lang_global['flood_captcha_pass'] = 'Vous n\'êtes pas un robot? Confirmer pour continuer l\'accès';
 $lang_global['error_info_caption'] = 'Notification du Système';
 $lang_global['error_error'] = 'Erreur grave';
 $lang_global['error_warning'] = 'Avertissement';

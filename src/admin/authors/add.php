@@ -16,6 +16,10 @@ if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config[
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+
 if ($nv_Request->get_int('result', 'get', 0)) {
     $checksess = $nv_Request->get_title('checksess', 'get', '');
     if ($checksess != NV_CHECK_SESSION) {
@@ -29,8 +33,20 @@ if ($nv_Request->get_int('result', 'get', 0)) {
 
     $session_files = unserialize($session_files);
     $nv_Request->unset_request('nv_admin_profile', 'session');
-    nv_admin_add_result($session_files);
-    exit();
+
+    $page_title = $nv_Lang->getModule('nv_admin_add_result');
+
+    $tpl->registerPlugin('modifier', 'implode', 'implode');
+
+    $tpl->assign('RESULT', $session_files);
+    $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+    $tpl->assign('MODULE_NAME', $module_name);
+
+    $contents = $tpl->fetch('add_result.tpl');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 $adminThemes = [''];
@@ -188,18 +204,7 @@ foreach ($array_keys as $mod) {
     $mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
 }
 
-$contents = [];
-
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add';
-$contents['lev'] = [
-    $nv_Lang->getModule('lev'),
-    $lev,
-    $nv_Lang->getGlobal('level2'),
-    $nv_Lang->getGlobal('level3')
-];
-
 $editors = [];
-
 $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_]+$/');
 if (!empty($dirs)) {
     foreach ($dirs as $dir) {
@@ -209,124 +214,27 @@ if (!empty($dirs)) {
     }
 }
 
-if (!empty($editors)) {
-    $contents['editor'] = [
-        $nv_Lang->getModule('editor'),
-        $editors,
-        $editor,
-        $nv_Lang->getModule('not_use')
-    ];
-}
-
-if (!empty($global_config['file_allowed_ext'])) {
-    $contents['allow_files_type'] = [
-        $nv_Lang->getModule('allow_files_type'),
-        $global_config['file_allowed_ext'],
-        $allow_files_type
-    ];
-}
-
-$contents['allow_modify_files'] = [
-    $nv_Lang->getModule('allow_modify_files'),
-    $allow_modify_files
-];
-$contents['allow_create_subdirectories'] = [
-    $nv_Lang->getModule('allow_create_subdirectories'),
-    $allow_create_subdirectories
-];
-$contents['allow_modify_subdirectories'] = [
-    $nv_Lang->getModule('allow_modify_subdirectories'),
-    $allow_modify_subdirectories
-];
-
-$contents['mods'] = [
-    $nv_Lang->getModule('if_level3_selected'),
-    $mods
-];
-$contents['position'] = [
-    $nv_Lang->getModule('position'),
-    $position,
-    $nv_Lang->getModule('position_info')
-];
-$contents['info'] = $nv_Lang->getModule('nv_admin_add_info');
-$contents['submit'] = $nv_Lang->getModule('nv_admin_add');
-
-//filtersql
 $filtersql = ' userid NOT IN (SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ')';
 
-// Parse content
-$xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('INFO', $contents['info']);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
-$xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
-$xtpl->assign('ACTION', $contents['action']);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add');
+$tpl->assign('USERID', $userid ? $userid : '');
+$tpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
+$tpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
+$tpl->assign('POSITION', $position);
+$tpl->assign('ADMINTHEMES', $adminThemes);
+$tpl->assign('ADMIN_THEME', $admin_theme);
+$tpl->assign('EDITORS', $editors);
+$tpl->assign('EDITOR', $editor);
+$tpl->assign('FILE_ALLOWED_EXT', $global_config['file_allowed_ext']);
+$tpl->assign('ALLOW_FILES_TYPE', $allow_files_type);
+$tpl->assign('ALLOW_MODIFY_FILES', $allow_modify_files);
+$tpl->assign('ALLOW_CREATE_SUBDIRECTORIES', $allow_create_subdirectories);
+$tpl->assign('ALLOW_MODIFY_SUBDIRECTORIES', $allow_modify_subdirectories);
+$tpl->assign('SHOW_LEV2', defined('NV_IS_GODADMIN') ? true : false);
+$tpl->assign('LEV', $lev);
+$tpl->assign('MODS', $mods);
 
-foreach ($adminThemes as $_admin_theme) {
-    $xtpl->assign('THEME_NAME', $_admin_theme);
-    $xtpl->assign('THEME_SELECTED', ($_admin_theme == $admin_theme ? ' selected="selected"' : ''));
-    $xtpl->parse('add.admin_theme');
-}
-
-if (isset($contents['editor'])) {
-    $xtpl->assign('EDITOR0', $contents['editor'][0]);
-    $xtpl->assign('EDITOR3', $contents['editor'][3]);
-    foreach ($contents['editor'][1] as $edt) {
-        $xtpl->assign('SELECTED', $edt == $contents['editor'][2] ? ' selected="selected"' : '');
-        $xtpl->assign('EDITOR', $edt);
-        $xtpl->parse('add.editor.loop');
-    }
-    $xtpl->parse('add.editor');
-}
-
-if (isset($contents['allow_files_type'])) {
-    $xtpl->assign('ALLOW_FILES_TYPE0', $contents['allow_files_type'][0]);
-    foreach ($contents['allow_files_type'][1] as $tp) {
-        $xtpl->assign('CHECKED', in_array($tp, $contents['allow_files_type'][2]) ? ' checked="checked"' : '');
-        $xtpl->assign('TP', $tp);
-        $xtpl->parse('add.allow_files_type.loop');
-    }
-    $xtpl->parse('add.allow_files_type');
-}
-
-$xtpl->assign('ALLOW_MODIFY_FILES0', $contents['allow_modify_files'][0]);
-$xtpl->assign('MODIFY_CHECKED', $contents['allow_modify_files'][1] ? ' checked="checked"' : '');
-
-$xtpl->assign('ALLOW_CREATE_SUBDIRECTORIES0', $contents['allow_create_subdirectories'][0]);
-$xtpl->assign('CREATE_CHECKED', $contents['allow_create_subdirectories'][1] ? ' checked="checked"' : '');
-
-$xtpl->assign('ALLOW_MODIFY_SUBDIRECTORIES', $contents['allow_modify_subdirectories'][0]);
-$xtpl->assign('ALLOW_MODIFY_SUBDIRECTORIES_CHECKED', $contents['allow_modify_subdirectories'][1] ? ' checked="checked"' : '');
-
-$xtpl->assign('LEV0', $contents['lev'][0]);
-$xtpl->assign('LEV2', $contents['lev'][2]);
-$xtpl->assign('LEV3', $contents['lev'][3]);
-$xtpl->assign('LEV2_CHECKED', $contents['lev'][1] == 2 ? ' checked="checked"' : '');
-$xtpl->assign('LEV3_CHECKED', $contents['lev'][1] == 3 ? ' checked="checked"' : '');
-$xtpl->assign('MODS0', $contents['mods'][0]);
-$xtpl->assign('STYLE_MODS', $contents['lev'][1] == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;');
-
-$xtpl->assign('USERID', $userid ? $userid : '');
-
-if (defined("NV_IS_GODADMIN")) {
-    $xtpl->parse('add.show_lev_2');
-}
-
-foreach ($contents['mods'][1] as $mod => $value) {
-    $xtpl->assign('MOD_VALUE', $mod);
-    $xtpl->assign('LEV_CHECKED', (!empty($value['checked'])) ? 'checked="checked"' : '');
-    $xtpl->assign('CUSTOM_TITLE', $value['custom_title']);
-    $xtpl->parse('add.lev_loop');
-}
-
-$xtpl->assign('POSITION0', $contents['position'][0]);
-$xtpl->assign('POSITION1', $contents['position'][1]);
-$xtpl->assign('POSITION2', $contents['position'][2]);
-$xtpl->assign('SUBMIT', $contents['submit']);
-
-$xtpl->parse('add');
-$contents = $xtpl->text('add');
+$contents = $tpl->fetch('add.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
