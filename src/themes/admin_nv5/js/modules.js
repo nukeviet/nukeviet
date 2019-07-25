@@ -314,8 +314,6 @@ $(document).ready(function(){
             data: 'module=' + $this.data('title') + '&setup=1',
             dataType: 'json',
             success: function(e) {
-                console.log(e);
-
                 $this.find('i').removeClass('fa-spin');
 
                 if (e.status == 'success') {
@@ -361,7 +359,7 @@ $(document).ready(function(){
     });
 
     // Submit setup option
-    $('#modal-setup-module .submit').click(function(){
+    $('#modal-setup-module .submit').click(function() {
         var $this = $('#modal-setup-module');
         $this.modal('hide');
         var link = $this.data('link') + '&sample=' + $this.find('.option').val();

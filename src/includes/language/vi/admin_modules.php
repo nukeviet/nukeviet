@@ -87,3 +87,4 @@ $lang_module['setup_option_0'] = 'Chỉ thiết lập module';
 $lang_module['setup_option_1'] = 'Thiết lập module và cài đặt dữ liệu mẫu';
 $lang_module['error_no_hook_module'] = 'Để cài đặt module này bạn cần cài đặt trước module hoặc module ảo tương ứng sau: <strong>%s</strong>';
 $lang_module['select_hook_module'] = 'Chọn module kết nối %s';
+$lang_module['select_hook_sys'] = 'Kết nối %s với';

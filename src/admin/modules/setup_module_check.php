@@ -64,22 +64,34 @@ if ($nv_Request->isset_request('module', 'post')) {
                 $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/hooks', '/^[a-zA-Z0-9\_]+\.php$/');
                 if (!empty($hooks)) {
                     $missing_modules = [];
-                    $stt = 0;
+                    $contents['ishook'] = true;
 
                     foreach ($hooks as $hook) {
+                        /*
+                         * Xác định module xảy ra sự kiện (event).
+                         * Có thể rỗng (hệ thống) hoặc là module_file
+                         */
                         $require_module = nv_get_hook_require(NV_ROOTDIR . '/modules/' . $module_file . '/hooks/' . $hook);
-                        if (!empty($require_module)) {
-                            $contents['ishook'] = true;
-                            $contents['hookfiles'][$hook] = [];
+
+                        $contents['hookfiles'][$hook] = [];
+
+                        if (empty($require_module)) {
+                            $contents['hookmgs'][$hook] = $nv_Lang->getModule('select_hook_sys', $hook);
+                            $contents['hookfiles'][$hook][] = [
+                                'title' => '',
+                                'custom_title' => $nv_Lang->get('system')
+                            ];
+                        } else {
                             $contents['hookmgs'][$hook] = $nv_Lang->getModule('select_hook_module', $hook);
                             foreach ($sys_mods as $module => $mod) {
                                 if ($mod['module_file'] == $require_module) {
-                                    $contents['hookfiles'][$hook][] = array(
+                                    $contents['hookfiles'][$hook][] = [
                                         'title' => $module,
                                         'custom_title' => $mod['custom_title']
-                                    );
+                                    ];
                                 }
                             }
+
                             if (empty($contents['hookfiles'][$hook])) {
                                 $missing_modules[] = $require_module;
                             }

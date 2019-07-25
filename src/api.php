@@ -8,10 +8,6 @@
  * @Createdate Jul 2, 2017 2:06:56 PM
  */
 
-if (isset($_GET['response_headers_detect'])) {
-    exit(0);
-}
-
 define('NV_SYSTEM', true);
 
 // Xac dinh thu muc goc cua site
