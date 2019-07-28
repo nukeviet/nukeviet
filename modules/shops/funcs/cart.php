@@ -91,7 +91,6 @@ if (isset($_SESSION[$module_data . '_order_info']) and !empty($_SESSION[$module_
                 'order' => 1,
                 'price' => $row['price'],
                 'money_unit' => $order_info['money_unit'],
-                'discount_id' => $row['discount_id'],
                 'group' => $array_group,
                 'store' => $data_content['product_number'],
                 'weight' => $data_content['product_weight'],
@@ -147,13 +146,13 @@ if (!empty($_SESSION[$module_data . '_cart'])) {
             if (empty($array[1])) {
                 // Sản phẩm không có nhóm
                 $sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext,
-                t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t2." . NV_LANG_DATA . "_title, t1.money_unit
+                t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t2." . NV_LANG_DATA . "_title, t1.money_unit
                 FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2
                 WHERE t1.product_unit = t2.id AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
             } else {
                 // Sản phẩm có theo nhóm
                 $sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext,
-                t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t2." . NV_LANG_DATA . "_title, t1.money_unit
+                t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t2." . NV_LANG_DATA . "_title, t1.money_unit
                 FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1,
                 " . $db_config['prefix'] . "_" . $module_data . "_units AS t2,
                 " . $db_config['prefix'] . "_" . $module_data . "_group_quantity t3
@@ -166,7 +165,7 @@ if (!empty($_SESSION[$module_data . '_cart'])) {
                 unset($_SESSION[$module_data . '_cart'][$pro_id]);
             }
 
-            while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $discount_id, $unit, $money_unit) = $result->fetch(3)) {
+            while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $unit, $money_unit) = $result->fetch(3)) {
                 if ($homeimgthumb == 1) {
                     //image thumb
                     $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -205,7 +204,7 @@ if (!empty($_SESSION[$module_data . '_cart'])) {
                 }
 
                 if ($pro_config['active_price'] == '0') {
-                    $discount_id = $product_price = 0;
+                    $product_price = 0;
                 }
 
                 $data_content[] = array(
@@ -218,7 +217,6 @@ if (!empty($_SESSION[$module_data . '_cart'])) {
                     'homeimgalt' => $homeimgalt,
                     'homeimgthumb' => $thumb,
                     'product_price' => $product_price,
-                    'discount_id' => $discount_id,
                     'product_unit' => $unit,
                     'money_unit' => $money_unit,
                     'group' => $group,

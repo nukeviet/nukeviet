@@ -223,7 +223,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
 
     // Fetch Limit
     $db->sqlreset()
-        ->select(' id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, price_config, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
+        ->select(' id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, price_config, money_unit, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
         ->from($db_config['prefix'] . '_' . $module_data . '_rows')
         ->where('id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1')
         ->order('ID DESC')
@@ -231,7 +231,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
     $result = $db->query($db->sql());
 
     $data_others = [];
-    while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $price_config, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
+    while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $price_config, $money_unit, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
             // image thumb
             $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -259,7 +259,6 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
             'product_number' => $product_number,
             'product_price' => $product_price,
             'price_config' => $price_config,
-            'discount_id' => $discount_id,
             'money_unit' => $money_unit,
             'showprice' => $showprice,
             'newday' => $global_array_shops_cat[$data_content['listcatid']]['newday'],
@@ -283,13 +282,13 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
         if (!empty($arrtempid)) {
             // Fetch Limit
             $db->sqlreset()
-                ->select('id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
+                ->select('id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, money_unit, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
                 ->from($db_config['prefix'] . '_' . $module_data . '_rows')
                 ->where('id IN ( ' . $arrtempid . ') AND status=1')
                 ->order('id DESC')
                 ->limit($pro_config['per_row'] * 2);
             $result = $db->query($db->sql());
-            while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
+            while (list ($_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $showprice, $hometext, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
                 if ($homeimgthumb == 1) {
                     // image thumb
                     $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -316,7 +315,6 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
                     'product_code' => $product_code,
                     'product_number' => $product_number,
                     'product_price' => $product_price,
-                    'discount_id' => $discount_id,
                     'money_unit' => $money_unit,
                     'showprice' => $showprice,
                     'newday' => $global_array_shops_cat[$data_content['listcatid']]['newday'],

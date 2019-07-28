@@ -279,7 +279,7 @@ if (!nv_function_exists('nv_global_bxproduct_center')) {
         }
 
         $db->sqlreset()
-            ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id')
+            ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice')
             ->from($db_config['prefix'] . '_' . $mod_data . '_rows t1')
             ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id')
             ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status =1')
@@ -313,7 +313,7 @@ if (!nv_function_exists('nv_global_bxproduct_center')) {
                 if ($row['showprice'] == '1') {
                     $price = nv_get_price_tmp($module, $mod_data, $mod_file, $row['id']);
                     $xtpl->assign('PRICE', $price);
-                    if ($row['discount_id'] and $price['discount_percent'] > 0) {
+                    if ($price['discount_percent'] > 0) {
                         $xtpl->parse('main.items.price.discounts');
                     } else {
                         $xtpl->parse('main.items.price.no_discounts');

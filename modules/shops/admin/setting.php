@@ -97,6 +97,7 @@ if ($savesetting == 1) {
     $data['group_price'] = $nv_Request->get_textarea('group_price', '', 'br');
     $data['template_active'] = $nv_Request->get_int('template_active', 'post', 0);
     $data['download_active'] = $nv_Request->get_int('download_active', 'post', 0);
+    $data['saleprice_active'] = $nv_Request->get_int('saleprice_active', 'post', 0);
     $_dowload_groups = $nv_Request->get_array('download_groups', 'post', array());
     $data['download_groups'] = !empty($_dowload_groups) ? implode(',', nv_groups_post(array_intersect($_dowload_groups, array_keys($groups_list_default)))) : '';
 
@@ -255,6 +256,9 @@ $xtpl->assign('ck_template_active', $check);
 
 $check = ($data['download_active'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_download_active', $check);
+
+$check = ($data['saleprice_active'] == '1') ? 'checked="checked"' : '';
+$xtpl->assign('ck_saleprice_active', $check);
 
 $groups_notify = explode(',', $data['groups_notify']);
 foreach ($groups_list as $_group_id => $_title) {

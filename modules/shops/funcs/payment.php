@@ -121,9 +121,9 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
             $product_group = array();
             if (!empty($list))
                 $product_group = explode(',', $list);
-            $sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1, ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3  WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id IN (' . $templistid . ') AND listgroupid=' . $db->quote($list) . ' AND t3.order_id=' . $order_id . ' AND t1.status =1';
+            $sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1, ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3  WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id IN (' . $templistid . ') AND listgroupid=' . $db->quote($list) . ' AND t3.order_id=' . $order_id . ' AND t1.status =1';
             $result = $db->query($sql);
-            while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit, $discount_id) = $result->fetch(3)) {
+            while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit) = $result->fetch(3)) {
                 $price = nv_get_price($id, $pro_config['money_unit'], $temppro[$id]['num'], true);
                 $data_pro[] = array(
                     'id' => $id,
@@ -134,7 +134,6 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
                     'product_price' => $price['sale'],
                     'product_unit' => $unit,
                     'money_unit' => $money_unit,
-                    'discount_id' => $discount_id,
                     'product_group' => $product_group,
                     'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
                     'product_number' => $temppro[$id]['num']

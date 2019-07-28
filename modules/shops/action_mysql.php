@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
@@ -772,6 +771,7 @@ $data['groups_notify'] = '3';
 $data['template_active'] = '0';
 $data['download_active'] = '0';
 $data['download_groups'] = '6';
+$data['saleprice_active'] = 0;
 $data['sortdefault'] = 0;
 
 foreach ($data as $config_name => $config_value) {

@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -67,6 +66,7 @@ $rowcontent = array(
     'product_code' => '',
     'product_number' => 1,
     'product_price' => 1,
+    'saleprice' => 0,
     'discount_id' => 0,
     'money_unit' => $pro_config['money_unit'],
     'product_unit' => '',
@@ -247,6 +247,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $rowcontent['product_number'] = $nv_Request->get_int('product_number', 'post', 0);
     $rowcontent['product_price'] = $nv_Request->get_string('product_price', 'post', '');
     $rowcontent['product_price'] = floatval(preg_replace('/[^0-9\.]/', '', $rowcontent['product_price']));
+    $rowcontent['saleprice'] = $nv_Request->get_string('saleprice', 'post', '');
+    $rowcontent['saleprice'] = floatval(preg_replace('/[^0-9\.]/', '', $rowcontent['saleprice']));
 
     $rowcontent['discount_id'] = $nv_Request->get_int('discount_id', 'post', 0);
     $rowcontent['money_unit'] = $nv_Request->get_string('money_unit', 'post', '');
@@ -492,7 +494,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $rowcontent['status'] = 2;
         }
 
-        $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, price_config, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
+        $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, price_config, saleprice, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
                  VALUES ( NULL ,
                  :listcatid,
                  " . intval($rowcontent['user_id']) . ",
@@ -506,6 +508,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  " . intval($rowcontent['product_number']) . ",
                  :product_price,
                  :price_config,
+                 :saleprice,
                  :money_unit,
                  " . intval($rowcontent['product_unit']) . ",
                  :product_weight,
@@ -536,6 +539,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $data_insert['product_code'] = $rowcontent['product_code'];
         $data_insert['product_price'] = $rowcontent['product_price'];
         $data_insert['price_config'] = $rowcontent['price_config'];
+        $data_insert['saleprice'] = $rowcontent['saleprice'];
         $data_insert['product_weight'] = $rowcontent['product_weight'];
         $data_insert['weight_unit'] = $rowcontent['weight_unit'];
         $data_insert['money_unit'] = $rowcontent['money_unit'];
@@ -671,6 +675,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
              product_number = product_number + " . intval($rowcontent['product_number']) . ",
              product_price = :product_price,
              price_config = :price_config,
+             saleprice = :saleprice,
              money_unit = :money_unit,
              product_unit = " . intval($rowcontent['product_unit']) . ",
              product_weight = :product_weight,
@@ -706,6 +711,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $stmt->bindParam(':money_unit', $rowcontent['money_unit'], PDO::PARAM_STR);
         $stmt->bindParam(':product_price', $rowcontent['product_price'], PDO::PARAM_STR);
         $stmt->bindParam(':price_config', $rowcontent['price_config'], PDO::PARAM_INT);
+        $stmt->bindParam(':saleprice', $rowcontent['saleprice'], PDO::PARAM_STR);
         $stmt->bindParam(':product_weight', $rowcontent['product_weight'], PDO::PARAM_STR);
         $stmt->bindParam(':weight_unit', $rowcontent['weight_unit'], PDO::PARAM_STR);
         $stmt->bindParam(':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR);
@@ -869,7 +875,6 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         'error' => 0,
         'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items'
     ));
-
 } elseif ($rowcontent['id'] > 0) {
     $files = $rowcontent['files'];
     $keyword = $rowcontent['keywords'];
@@ -936,6 +941,7 @@ if (!empty($rowcontent['otherimage'])) {
 
 $rowcontent['product_weight'] = empty($rowcontent['product_weight']) ? '' : $rowcontent['product_weight'];
 $rowcontent['product_price'] = number_format($rowcontent['product_price']);
+$rowcontent['saleprice'] = !empty($rowcontent['saleprice']) ? number_format($rowcontent['saleprice']) : '';
 $array_files = array();
 if ($pro_config['download_active']) {
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';

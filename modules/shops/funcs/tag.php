@@ -57,14 +57,14 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $num_items = $db->query($db->sql())
             ->fetchColumn();
 
-        $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday, ' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
+        $db->select('t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.showprice, t2.newday, ' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
             ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
         $result = $db->query($db->sql());
 
-        while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
+        while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $showprice, $newday, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 //image thumb
 
@@ -94,7 +94,6 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
                 'product_price' => $product_price,
                 'product_code' => $product_code,
                 'product_number' => $product_number,
-                'discount_id' => $discount_id,
                 'money_unit' => $money_unit,
                 'showprice' => $showprice,
                 'newday' => $newday,

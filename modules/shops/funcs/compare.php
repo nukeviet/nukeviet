@@ -82,9 +82,9 @@ $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA .
 
 if (! empty($array_id)) {
     foreach ($array_id as $array_id_i) {
-        $sql = 'SELECT id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile, homeimgalt, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_gift_content, ' . NV_LANG_DATA . '_bodytext FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $array_id_i;
+        $sql = 'SELECT id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile, homeimgalt, homeimgthumb, product_code, product_number, product_price, money_unit, showprice, ' . NV_LANG_DATA . '_gift_content, ' . NV_LANG_DATA . '_bodytext FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $array_id_i;
         $result = $db->query($sql);
-        while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $bodytext) = $result->fetch(3)) {
+        while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $showprice, $gift_content, $bodytext) = $result->fetch(3)) {
             // Xac dinh anh lon
             $homeimgfiles1 = $homeimgfile;
             if ($homeimgthumb == 1) {
@@ -117,7 +117,6 @@ if (! empty($array_id)) {
                 'product_code' => $product_code,
                 'product_number' => $product_number,
                 'product_price' => $product_price,
-                'discount_id' => $discount_id,
                 'money_unit' => $money_unit,
                 'showprice' => $showprice,
                 'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],

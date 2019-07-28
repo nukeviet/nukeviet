@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -18,6 +17,7 @@ $cid = $nv_Request->get_title('cid', 'get', 0);
 if ($id > 0) {
     $rowcontent = $db->query("SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $id)->fetch();
     $rowcontent['product_price'] = ($rowcontent['product_price'] > 0) ? number_format($rowcontent['product_price'], nv_get_decimals($pro_config['money_unit'])) : '';
+    $rowcontent['saleprice'] = !empty($rowcontent['saleprice']) ? number_format($rowcontent['saleprice']) : '';
 } else {
     $rowcontent = array(
         'money_unit' => $pro_config['money_unit'],
@@ -50,13 +50,13 @@ if ($typeprice == 1) {
     $xtpl->parse('main.typeprice1');
     $xtpl->parse('main.product_price');
 } elseif ($typeprice == 2) {
-    $_arr_price_config = (empty($rowcontent['price_config'])) ? array( ) : unserialize($rowcontent['price_config']);
+    $_arr_price_config = (empty($rowcontent['price_config'])) ? array() : unserialize($rowcontent['price_config']);
     $i = sizeof($_arr_price_config);
     ++$i;
     $_arr_price_config[$i] = array(
         'id' => $i,
         'number_to' => ($i == 1) ? 1 : '',
-        'price' => ($i == 1) ? $rowcontent['product_price'] : '',
+        'price' => ($i == 1) ? $rowcontent['product_price'] : ''
     );
 
     foreach ($_arr_price_config as $price_config) {
@@ -67,6 +67,9 @@ if ($typeprice == 1) {
     $xtpl->parse('main.typeprice2');
 } else {
     $xtpl->parse('main.product_price');
+    if ($pro_config['saleprice_active']) {
+        $xtpl->parse('main.saleprice');
+    }
 }
 
 $xtpl->parse('main');

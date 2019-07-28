@@ -64,7 +64,7 @@ $db->sqlreset()
 $num_items = $db->query($db->sql())
     ->fetchColumn();
 
-$db->select('id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgalt, homeimgfile, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
+$db->select('id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgalt, homeimgfile, homeimgthumb, product_code, product_number, product_price, money_unit, showprice, ' . NV_LANG_DATA . '_gift_content, gift_from, gift_to')
     ->order('id DESC')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
