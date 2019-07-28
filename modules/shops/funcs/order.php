@@ -609,21 +609,21 @@ if ($action == 0) {
         if ($array[1] == '') {
             $sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias,
             t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_number,
-            t1.money_unit, t1.discount_id, t1.product_weight, t1.weight_unit, t2." . NV_LANG_DATA . "_title, t1.discount_id
+            t1.money_unit, t1.product_weight, t1.weight_unit, t2." . NV_LANG_DATA . "_title
             FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1,
                 " . $db_config['prefix'] . "_" . $module_data . "_units AS t2
             WHERE t1.product_unit = t2.id AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
         } else {
             $sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias,
             t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_number,
-            t1.money_unit, t1.discount_id, t1.product_weight, t1.weight_unit, t2." . NV_LANG_DATA . "_title, t1.discount_id
+            t1.money_unit, t1.product_weight, t1.weight_unit, t2." . NV_LANG_DATA . "_title
             FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2,
                 " . $db_config['prefix'] . "_" . $module_data . "_group_quantity t3
             WHERE t1.product_unit = t2.id AND t1.id = t3.pro_id AND  t3.listgroup ='" . $array[1] . "' AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
         }
         $result = $db->query($sql);
         $weight_total = 0;
-        while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $discount_id, $product_weight, $weight_unit) = $result->fetch(3)) {
+        while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $product_weight, $weight_unit) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 //image thumb
                 $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -639,7 +639,7 @@ if ($action == 0) {
             }
 
             if ($pro_config['active_price'] == '0') {
-                $discount_id = $product_price = 0;
+                $product_price = 0;
             }
 
             $num = $_SESSION[$module_data . '_cart'][$id . '_' . $array[1]]['num'];
@@ -656,7 +656,6 @@ if ($action == 0) {
                 'homeimgalt' => $homeimgalt,
                 'homeimgthumb' => $thumb,
                 'product_price' => $product_price,
-                'discount_id' => $discount_id,
                 'product_unit' => $unit,
                 'money_unit' => $money_unit,
                 'group' => $group,

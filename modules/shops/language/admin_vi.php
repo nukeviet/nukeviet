@@ -226,6 +226,7 @@ $lang_module['content_product_code'] = 'Mã sản phẩm';
 $lang_module['content_product_number'] = 'Số lượng trong kho';
 $lang_module['content_product_number1'] = 'SL trong kho';
 $lang_module['content_product_product_price'] = 'Giá sản phẩm';
+$lang_module['content_product_product_saleprice'] = 'Giá bán ra';
 $lang_module['content_product_money_unit'] = 'Đơn vị tiền tệ';
 $lang_module['content_product_discounts'] = 'Giảm giá';
 $lang_module['price_config_add'] = 'Thêm phương án tính giá';
@@ -696,6 +697,7 @@ $lang_module['download_files_error_path_valid'] = 'Đường dẫn tập tin kh�
 $lang_module['download_setting_active'] = 'Sử dụng chức Quản lý file tài liệu';
 $lang_module['download_setting_groups'] = 'Ai được phép tải tập tin';
 $lang_module['download_setting_groups_module'] = 'Theo cấu hình module';
+$lang_module['saleprice_setting_active'] = 'Sử dụng giá niêm yết - giá bán';
 
 //Lang for function tabs
 $lang_module['tabs'] = 'Quản lý tab';

@@ -200,7 +200,7 @@ $sth->execute();
 
 $num_items = $sth->fetchColumn();
 
-$db->select("DISTINCT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t1.money_unit, t1.showprice, t1." . NV_LANG_DATA . "_gift_content, t1.gift_from, t1.gift_to, t3.newday, t2.exchange " . $sql_i)
+$db->select("DISTINCT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.money_unit, t1.showprice, t1." . NV_LANG_DATA . "_gift_content, t1.gift_from, t1.gift_to, t3.newday, t2.exchange " . $sql_i)
     ->order($order_by)
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
@@ -211,7 +211,7 @@ $html_pages = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
-while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $discount_id, $money_unit, $showprice, $gift_content, $gift_from, $gift_to, $newday) = $result->fetch(3)) {
+while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $money_unit, $showprice, $gift_content, $gift_from, $gift_to, $newday) = $result->fetch(3)) {
     if ($homeimgthumb == 1) {
         //image thumb
 
@@ -241,7 +241,6 @@ while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, 
         'homeimgthumb' => $thumb,
         'product_number' => $product_number,
         'product_price' => $product_price,
-        'discount_id' => $discount_id,
         'money_unit' => $money_unit,
         'showprice' => $showprice,
         'gift_content' => $gift_content,

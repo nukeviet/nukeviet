@@ -51,6 +51,10 @@
                     <td><strong>{LANG.download_setting_active}</strong></td>
                     <td><input type="checkbox" value="1" name="download_active" id="download_active" {ck_download_active}/></td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.saleprice_setting_active}</strong></td>
+                    <td><input type="checkbox" value="1" name="saleprice_active" {ck_saleprice_active}/></td>
+                </tr>
                 <tr id="download_groups"
                     <!-- BEGIN: download_groups_none -->
                     style="display: none"

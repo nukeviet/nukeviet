@@ -461,7 +461,7 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
 
     if ($pro_config['active_price'] == '1') {
         if ($data_content['showprice'] == '1' && !empty($data_content['product_price'])) {
-            if ($data_content['discount_id'] and $price['discount_percent'] > 0) {
+            if ($price['discount_percent'] > 0) {
                 $xtpl->parse('main.price.discounts');
             } else {
                 $xtpl->parse('main.price.no_discounts');
@@ -1446,7 +1446,7 @@ function compare($data_pro)
         if ($pro_config['active_price'] == '1') {
             if ($data_row['showprice'] == '1' && !empty($data_row['product_price'])) {
                 $xtpl->assign('PRICE', $price);
-                if ($data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice']) {
+                if ($price['discount_percent'] > 0 and $data_row['showprice']) {
                     $xtpl->parse('main.price.discounts');
                 } else {
                     $xtpl->parse('main.price.no_discounts');
@@ -1650,7 +1650,7 @@ function nv_template_viewgrid($array_data, $page = '')
             if ($pro_config['active_price'] == '1') {
                 if ($data_row['showprice'] == '1' && !empty($data_row['product_price'])) {
                     $xtpl->assign('PRICE', $price);
-                    if ($data_row['discount_id'] and $price['discount_percent'] > 0) {
+                    if ($price['discount_percent'] > 0) {
                         $xtpl->parse('main.loop.price.discounts');
                         $xtpl->parse('main.loop.price.discounts.standard');
                     } else {
@@ -1722,7 +1722,7 @@ function nv_template_viewgrid($array_data, $page = '')
                 $xtpl->parse('main.loop.wishlist');
             }
 
-            if ($data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice']) {
+            if ($price['discount_percent'] > 0 and $data_row['showprice']) {
                 $xtpl->parse('main.loop.discounts');
             }
 
@@ -1780,7 +1780,7 @@ function nv_template_viewlist($array_data, $page)
             if ($pro_config['active_price'] == '1') {
                 if ($data_row['showprice'] == '1' && !empty($data_row['product_price'])) {
                     $xtpl->assign('PRICE', $price);
-                    if ($data_row['discount_id'] and $price['discount_percent'] > 0) {
+                    if ($price['discount_percent'] > 0) {
                         $xtpl->parse('main.loop.price.discounts');
                         $xtpl->parse('main.loop.price.discounts.standard');
                     } else {
@@ -1849,7 +1849,7 @@ function nv_template_viewlist($array_data, $page)
                 $xtpl->parse('main.loop.wishlist');
             }
 
-            if ($data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice']) {
+            if ($price['discount_percent'] > 0 and $data_row['showprice']) {
                 $xtpl->parse('main.loop.discounts');
             }
 

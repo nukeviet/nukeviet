@@ -33,7 +33,7 @@ if (! function_exists('nv_others_product')) {
             $xtpl->assign('WIDTH', $pro_config['blockwidth']);
 
             $db->sqlreset()
-                ->select('id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias ,addtime, homeimgfile, homeimgthumb, product_price, money_unit, discount_id, showprice')
+                ->select('id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias ,addtime, homeimgfile, homeimgthumb, product_price, money_unit, showprice')
                 ->from($db_config['prefix'] . '_' . $module_data . '_rows')
                 ->where('status =1 AND listcatid = ' . $catid . ' AND id < ' . $id)
                 ->order('id DESC')
@@ -42,7 +42,7 @@ if (! function_exists('nv_others_product')) {
             $result = $db->query($db->sql());
 
             $i = 1;
-            while (list($id_i, $listcatid_i, $title_i, $alias_i, $addtime_i, $homeimgfile_i, $homeimgthumb_i, $product_price_i, $money_unit_i, $discount_id_i, $showprice_i) = $result->fetch(3)) {
+            while (list($id_i, $listcatid_i, $title_i, $alias_i, $addtime_i, $homeimgfile_i, $homeimgthumb_i, $product_price_i, $money_unit_i, $showprice_i) = $result->fetch(3)) {
                 if ($homeimgthumb_i == 1) {
                     //image thumb
 
@@ -70,7 +70,7 @@ if (! function_exists('nv_others_product')) {
                     if ($showprice_i == '1') {
                         $price = nv_get_price($id_i, $money_unit_i);
                         $xtpl->assign('PRICE', $price);
-                        if ($discount_id_i and $price['discount_percent'] > 0) {
+                        if ($price['discount_percent'] > 0) {
                             $xtpl->parse('main.loop.price.discounts');
                         } else {
                             $xtpl->parse('main.loop.price.no_discounts');
