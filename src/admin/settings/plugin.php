@@ -147,7 +147,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
     }
 
     // Thiết lập plugin module
-    if (!empty($available_plugins[$_key]['receive_module'])) {
+    if (!empty($available_plugins[$_key]['receive_module']) or !empty($available_plugins[$_key]['hook_module'])) {
         $page_title .= ': ' . $plugin_file;
         $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;plugin_file=' . $plugin_file . '&amp;rand=' . nv_genpass());
 
@@ -183,9 +183,9 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
             $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_file=' . $db->quote($plugin_file) . ' AND plugin_module_file=\'\' AND plugin_module_name=' . $db->quote($plugin_module_name) . ' AND hook_module=' . $db->quote($plugin_hook_module);
             $is_exists = $db->query($sql)->fetchColumn();
 
-            if (!isset($array_hook_mods[$plugin_hook_module])) {
+            if (!empty($plugin_hook_module) and !isset($array_hook_mods[$plugin_hook_module])) {
                 $error = $nv_Lang->getModule('plugin_error_exists_module', $plugin_hook_module);
-            } elseif (!isset($array_receive_mods[$plugin_module_name])) {
+            } elseif (!empty($plugin_module_name) and !isset($array_receive_mods[$plugin_module_name])) {
                 $error = $nv_Lang->getModule('plugin_error_exists_module', $plugin_module_name);
             } elseif ($is_exists) {
                 $error = $nv_Lang->getModule('plugin_error_exists');
@@ -197,15 +197,22 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
 
             $submit_allowed = true;
             $is_hook_module = false;
-            // Xuất module hook
+            $is_receive_module = false;
+
+            // Xuất module tạo sự kiện
             if (!empty($available_plugins[$_key]['hook_module'])) {
                 $is_hook_module = true;
                 if (empty($array_hook_mods)) {
                     $submit_allowed = false;
                 }
             }
-            if (empty($array_receive_mods)) {
-                $submit_allowed = false;
+
+            // Xuất module nhận sự kiện
+            if (!empty($available_plugins[$_key]['receive_module'])) {
+                $is_receive_module = true;
+                if (empty($array_receive_mods)) {
+                    $submit_allowed = false;
+                }
             }
 
             $tpl->assign('NO_HOOK_MODULE', $nv_Lang->getModule('plugin_error_no_hook', $available_plugins[$_key]['hook_module'], $available_plugins[$_key]['hook_module']));
@@ -216,6 +223,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
             $tpl->assign('PLUGIN_HOOK_MODULE', $plugin_hook_module);
             $tpl->assign('PLUGIN_MODULE_NAME', $plugin_module_name);
             $tpl->assign('IS_HOOK_MODULE', $is_hook_module);
+            $tpl->assign('IS_RECEIVE_MODULE', $is_receive_module);
 
             $contents = $tpl->fetch('plugin_content.tpl');
 

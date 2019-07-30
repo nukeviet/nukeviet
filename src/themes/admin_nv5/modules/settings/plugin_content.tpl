@@ -15,7 +15,7 @@
                 <div class="message">{$NO_HOOK_MODULE}</div>
             </div>
             {/if}
-            {if empty($RECEIVE_MODS)}
+            {if $IS_RECEIVE_MODULE and empty($RECEIVE_MODS)}
             <div role="alert" class="alert alert-primary alert-dismissible">
                 <button type="button" data-dismiss="alert" aria-label="{$LANG->get('close')}" class="close"><i class="fas fa-times"></i></button>
                 <div class="icon"><i class="fas fa-info-circle"></i></div>
@@ -34,7 +34,7 @@
                 </div>
             </div>
             {/if}
-            {if not empty($RECEIVE_MODS)}
+            {if $IS_RECEIVE_MODULE and not empty($RECEIVE_MODS)}
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="receive_module">{$LANG->get('plugin_choose_receive_module')}</label>
                 <div class="col-12 col-sm-8 col-lg-6">
