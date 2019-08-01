@@ -26,18 +26,29 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
 
     $idfile = $nv_Request->get_int('idfile', 'post', 0);
 
+    $authorSubmit = isset($_POST['pozauthor']['author']) ? $_POST['pozauthor']['author'] : '';
+    if (preg_match('/^([^\<]+)\<([^\>]+)\>$/', $authorSubmit, $m) and nv_check_valid_email(trim($m[2])) == '') {
+        $authorSubmit = trim(strip_tags($m[1])) . ' <' . trim($m[2]) . '>';
+    } else {
+        $authorSubmit = false;
+    }
+
     $lang_translator = $nv_Request->get_array('pozauthor', 'post', array());
     $lang_translator_save = array();
 
     $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
 
-    $lang_translator_save['author'] = isset($lang_translator['author']) ? nv_htmlspecialchars(strip_tags($lang_translator['author'])) : 'VINADES.,JSC <contact@vinades.vn>';
+    if ($authorSubmit === false) {
+        $lang_translator_save['author'] = isset($lang_translator['author']) ? nv_htmlspecialchars(strip_tags($lang_translator['author'])) : 'VINADES.,JSC <contact@vinades.vn>';
+    } else {
+        $lang_translator_save['author'] = $authorSubmit;
+    }
     $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? nv_unhtmlspecialchars(strip_tags($lang_translator['createdate'])) : date('d/m/Y, H:i');
     $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? nv_htmlspecialchars(strip_tags($lang_translator['copyright'])) : '@Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
     $lang_translator_save['info'] = isset($lang_translator['info']) ? nv_htmlspecialchars(strip_tags($lang_translator['info'])) : '';
     $lang_translator_save['langtype'] = $langtype;
 
-    $author = var_export($lang_translator_save, true);
+    $author = serialize($lang_translator_save);
 
     $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= :idfile');
     $sth->bindParam(':idfile', $idfile, PDO::PARAM_INT);

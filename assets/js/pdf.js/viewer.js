@@ -892,12 +892,6 @@ var _view_history = __webpack_require__(32);
 
 var DEFAULT_SCALE_DELTA = 1.1;
 var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
-function configure(PDFJS) {
-  PDFJS.imageResourcesPath = './images/';
-  PDFJS.workerSrc = '../build/pdf.worker.js';
-  PDFJS.cMapUrl = '../web/cmaps/';
-  PDFJS.cMapPacked = true;
-}
 var DefaultExternalServices = {
   updateFindControlState: function updateFindControlState(data) {},
   initPassiveLoading: function initPassiveLoading(callbacks) {},
@@ -10051,8 +10045,6 @@ exports.ViewHistory = ViewHistory;
 "use strict";
 
 
-var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
-;
 var pdfjsWebApp = void 0;
 {
   pdfjsWebApp = __webpack_require__(4);

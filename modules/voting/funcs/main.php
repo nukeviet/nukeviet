@@ -46,7 +46,7 @@ if (empty($vid)) {
     if (!empty($allowed)) {
         $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
         $xtpl->assign('LANG', $lang_module);
-        
+
         foreach ($allowed as $current_voting) {
             $voting_array = array(
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
@@ -93,10 +93,10 @@ if (empty($vid)) {
                 }
                 $xtpl->parse('main.loop.has_captcha');
             }
-            
+
             $xtpl->parse('main.loop');
         }
-        
+
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
     }
@@ -114,7 +114,10 @@ if (empty($vid)) {
         exit();
     }
 
-    $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1';
+    $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data;
+    if (!defined('NV_IS_MODADMIN')) {
+        $sql .= ' WHERE act=1';
+    }
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     if (empty($list) or !isset($list[$vid])) {
@@ -123,7 +126,7 @@ if (empty($vid)) {
     }
 
     $row = $list[$vid];
-    if ((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) {
+    if (((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) and !defined('NV_IS_MODADMIN')) {
         header('location:' . $global_config['site_url']);
         exit();
     }

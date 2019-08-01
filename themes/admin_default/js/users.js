@@ -9,6 +9,12 @@
 function user_validForm(a) {
     $('[type="submit"] .fa', $(a)).toggleClass('hidden');
     $('[type="submit"]', $(a)).prop('disabled', true);
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -32,7 +38,34 @@ function user_validForm(a) {
             }
         }
     });
-    return false
+    return false;
+}
+
+function user_editcensor_validForm(a) {
+    $('[type="submit"]', $(a)).prop('disabled', true);
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
+    $.ajax({
+        type: $(a).prop("method"),
+        cache: !1,
+        url: $(a).prop("action"),
+        data: $(a).serialize(),
+        dataType: "json",
+        success: function(b) {
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
+                alert(b.mess);
+                $("[name=\"" + b.input + "\"]", a).focus();
+            } else {
+                window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor';
+            }
+        }
+    });
+    return false;
 }
 
 function nv_chang_question(qid) {
@@ -160,6 +193,28 @@ function nv_waiting_row_del(uid) {
     return false;
 }
 
+// Xóa thông tin chỉnh sửa
+function nv_editcensor_row_del(uid, msg) {
+    if (confirm(msg)) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
+            location.reload();
+        });
+    }
+}
+
+// Xác nhận thông tin chỉnh sửa
+function nv_editcensor_row_accept(uid, msg) {
+    if (confirm(msg)) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
+            if (res.status != 'SUCCESS') {
+                 alert(res.mess);
+            } else {
+                location.reload();
+            }
+        });
+    }
+}
+
 function nv_chang_status(vid) {
     var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
     $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
@@ -178,10 +233,7 @@ function nv_group_change_status(group_id) {
         var sl = document.getElementById('select_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true)
-                sl.checked = false;
-            else
-                sl.checked = true;
+            if (sl.checked == true){sl.checked = false;} else {sl.checked = true;}
             clearTimeout(nv_timer);
             sl.disabled = true;
             return;
@@ -423,29 +475,19 @@ function nv_users_check_choicetypes(elemnet) {
 }
 
 function control_theme_groups() {
-    var ingroup = $('[name="group[]"]:checked').length,
-        gdefault = $('[name="group_default"]:checked').val(),
-        groups = []
-
-    $('[name="group[]"]').each(function(){
-        if ($(this).is(':checked') && ingroup > 1) {
-            $('.group_default', $(this).parent().parent()).show()
-
-            if (typeof gdefault == 'undefined') {
-                gdefault = $(this).val()
-                $('[name="group_default"]', $(this).parent().parent()).prop('checked', true)
-            }
-        } else {
-            $('.group_default', $(this).parent().parent()).hide()
-        }
+    $('[name="group[]"]').each(function() {
         if ($(this).is(':checked')) {
-            groups.push($(this).val())
+            $('.group_default', $(this).parent().parent()).show();
+        } else {
+            var ctn = $('.group_default', $(this).parent().parent());
+            $('[name="group_default"]', ctn).prop('checked', false);
+            ctn.hide();
         }
-    })
-
-    if (typeof gdefault != 'undefined' && $.inArray(gdefault, groups) == -1 && ingroup > 1) {
-        $('[name="group_default"]').prop('checked', false)
-        $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
+    });
+    if ($('[name="group[]"]:checked').length > 0) {
+        $('#cleargroupdefault').show();
+    } else {
+        $('#cleargroupdefault').hide();
     }
 }
 
@@ -588,11 +630,11 @@ $(document).ready(function() {
     }
 
     $('[name="group[]"]').change(function(){
-        control_theme_groups()
-    })
+        control_theme_groups();
+    });
     $('[name="is_official"]').change(function(){
-        control_theme_groups()
-    })
+        control_theme_groups();
+    });
 
     // Export user
     $("input[name=data_export]").click(function() {
@@ -703,12 +745,17 @@ $(document).ready(function() {
 
     // Group
      $("[name='browse-image']").click(function(e) {
-        e.preventDefault()
+        e.preventDefault();
         var area = $(this).data('area'),
             path = $(this).data('path'),
             currentpath = $(this).data('currentpath'),
             type = "image"
 
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+    });
+    $('[data-toggle="opendatepicker"]').click(function(e) {
+        e.preventDefault();
+        var wrp = $(this).parent().parent();
+        wrp.find('[type="text"]').focus();
     });
 });

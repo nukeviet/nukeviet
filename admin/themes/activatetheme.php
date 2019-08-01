@@ -2,19 +2,19 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $selectthemes = $nv_Request->get_title('theme', 'post', '');
 
-if (empty($selectthemes) or ! (preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
+if (empty($selectthemes) or !(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
     die();
 }
 
@@ -22,6 +22,7 @@ $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE 
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColumn()) {
+    // Kích hoạt sử dụng nếu đã có thiết lập
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'");
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
@@ -31,7 +32,8 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_active'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
     echo 'OK_' . $selectthemes;
-} elseif (! empty($selectthemes) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
+} elseif (!empty($selectthemes) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
+    // Thiết lập giao diện theo cấu hình mặc định
     $sth = $db->prepare('SELECT count(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = 0 AND theme= :theme');
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
@@ -86,23 +88,23 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         $blocks = $xml->xpath('setblocks/block');
         for ($i = 0, $count = sizeof($blocks); $i < $count; ++$i) {
             $row = (array)$blocks[$i];
-            
+
             if (!isset($row['link'])) {
                 $row['link'] = '';
             }
             if (!isset($row['module'])) {
                 $row['module'] = 'theme';
             }
-            
+
             $file_name = $row['file_name'];
 
             if ($row['module'] == 'theme' and preg_match($global_config['check_block_theme'], $file_name, $matches)) {
-                if (! file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name)) {
+                if (!file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name)) {
                     continue;
                 }
             } elseif (isset($site_mods[$row['module']]) and preg_match($global_config['check_block_module'], $file_name, $matches)) {
                 $mod_file = $site_mods[$row['module']]['module_file'];
-                if (! file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
+                if (!file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
                     continue;
                 }
             } else {
@@ -113,9 +115,9 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
             $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
             $sth->execute();
-            
+
             $row['weight'] = intval($sth->fetchColumn()) + 1;
-            
+
             $row['exp_time'] = 0;
             $row['active'] = 1;
             $row['groups_view'] = '6';
@@ -139,7 +141,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                 $array_funcid = $array_all_funcid;
             } else {
                 $array_funcid = array();
-                if (! is_array($row['funcs'])) {
+                if (!is_array($row['funcs'])) {
                     $row['funcs'] = array( $row['funcs'] );
                 }
                 foreach ($row['funcs'] as $_funcs_list) {

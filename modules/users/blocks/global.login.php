@@ -87,22 +87,40 @@ if (!nv_function_exists('nv_block_login')) {
             } else {
                 $block_theme = 'default';
             }
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/users.css')) {
+                $block_css = $global_config['module_theme'];
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/users.css')) {
+                $block_css = $global_config['site_theme'];
+            } else {
+                $block_css = 'default';
+            }
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/users.js')) {
+                $block_js = $global_config['module_theme'];
+            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/users.js')) {
+                $block_js = $global_config['site_theme'];
+            } else {
+                $block_js = 'default';
+            }
 
             $xtpl = new XTemplate('block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 
             if ($mod_file != $module_file) {
-                if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php')) {
-                    include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+                if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php')) {
+                    include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
                 } else {
                     include NV_ROOTDIR . '/modules/users/language/vi.php';
                 }
-                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/users.css' . '">';
+                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
+            } else {
+                global $lang_module;
             }
 
             $xtpl->assign('LANG', $lang_module);
             $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('BLOCKID', $blockID);
             $xtpl->assign('BLOCK_THEME', $block_theme);
+            $xtpl->assign('BLOCK_CSS', $block_css);
+            $xtpl->assign('BLOCK_JS', $block_js);
 
             if (defined('NV_IS_USER')) {
                 if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
@@ -276,7 +294,11 @@ if (!nv_function_exists('nv_block_login')) {
                                 $row_field['field_choices'] = unserialize($row_field['field_choices']);
                             } elseif (!empty($row_field['sql_choices'])) {
                                 $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
+                                $row_field['field_choices'] = [];
                                 $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+                                if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
+                                    $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
+                                }
                                 $result = $db->query($query);
                                 while (list ($key, $val) = $result->fetch(3)) {
                                     $row_field['field_choices'][$key] = $val;
@@ -287,6 +309,7 @@ if (!nv_function_exists('nv_block_login')) {
 
                         $datepicker = false;
                         $have_custom_fields = false;
+                        $have_name_field = false;
 
                         if (!empty($array_field_config)) {
                             foreach ($array_field_config as $_k => $row) {
@@ -322,6 +345,7 @@ if (!nv_function_exists('nv_block_login')) {
                                         $xtpl->assign('FIELD', $row);
                                         if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
                                             $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
+                                            $have_name_field = true;
                                         } else {
                                             $show_key = 'show_' . $row['field'];
                                         }
@@ -344,9 +368,6 @@ if (!nv_function_exists('nv_block_login')) {
                                             $xtpl->parse('main.allowuserreg.' . $show_key . '.description');
                                         }
                                         $xtpl->parse('main.allowuserreg.' . $show_key);
-                                        if ($row['field'] == 'gender') {
-                                            $xtpl->parse('main.allowuserreg.name_show_' . $global_config['name_show']);
-                                        }
                                     } else {
                                         if ($row['required']) {
                                             $xtpl->parse('main.allowuserreg.field.loop.required');
@@ -426,6 +447,10 @@ if (!nv_function_exists('nv_block_login')) {
                                     }
                                 }
                             }
+                        }
+
+                        if ($have_name_field) {
+                            $xtpl->parse('main.allowuserreg.name_show_' . $global_config['name_show']);
                         }
 
                         if ($have_custom_fields) {

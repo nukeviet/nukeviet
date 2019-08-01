@@ -404,6 +404,11 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
+        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap/{R:4}\" appendQueryString=\"false\" />\n";
+        $rewrite_rule .= " </rule>\n";
+
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
         $rewrite_rule .= " 	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
@@ -446,6 +451,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap [L]\n";
+        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
 
         // Rewrite for other module's rule
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
@@ -472,7 +478,7 @@ function nv_rewrite_change($array_config_global)
     $return = true;
     if (!empty($filename) and !empty($rewrite_rule)) {
         try {
-            $filesize = file_put_contents($filename, $rewrite_rule, LOCK_EX);
+            $filesize = file_put_contents($filename, trim($rewrite_rule) . "\n", LOCK_EX);
             if (empty($filesize)) {
                 $return = false;
             }
@@ -509,6 +515,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "ErrorDocument 408 /error.php?code=408\n";
         $config_contents .= "ErrorDocument 500 /error.php?code=500\n";
         $config_contents .= "ErrorDocument 502 /error.php?code=502\n";
+        $config_contents .= "ErrorDocument 503 /error.php?code=503\n";
         $config_contents .= "ErrorDocument 504 /error.php?code=504\n\n";
         $config_contents .= "<IfModule mod_deflate.c>\n";
         $config_contents .= "  <FilesMatch \"\.(css|js|xml|ttf)$\">\n";
@@ -560,7 +567,7 @@ function nv_server_config_change($array_config)
     $return = true;
     if (!empty($filename) and !empty($config_contents)) {
         try {
-            $filesize = file_put_contents($filename, $config_contents, LOCK_EX);
+            $filesize = file_put_contents($filename, $config_contents . "\n", LOCK_EX);
             if (empty($filesize)) {
                 $return = false;
             }
@@ -818,4 +825,80 @@ function nv_http_get_lang($input)
     }
 
     return 'Error' . ($input['code'] ? ': ' . $input['code'] . '.' : '.');
+}
+
+/**
+ * nv_save_file_ips()
+ *
+ * @param integer $type
+ * @return
+ */
+function nv_save_file_ips($type = 0)
+{
+    global $db, $db_config;
+
+    $content_config_site = '';
+    $content_config_admin = '';
+
+    if ($type == 0) {
+        $variable_name = 'banip';
+        $file_name = 'banip';
+    } elseif ($type == 1) {
+        $variable_name = 'except_flood';
+        $file_name = 'efloodip';
+    } else {
+        return true;
+    }
+
+    $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
+    while (list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+        $dbendtime = intval($dbendtime);
+        $dbarea = intval($dbarea);
+
+        if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
+            switch ($dbmask) {
+                case 3:
+                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/';
+                    break;
+                case 2:
+                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}$/';
+                    break;
+                case 1:
+                    $ip_mask = '/\.[0-9]{1,3}$/';
+                    break;
+                default:
+                    $ip_mask = '//';
+            }
+
+            if ($dbarea == 1 or $dbarea == 3) {
+                $content_config_site .= "\$array_" . $variable_name . "_site['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
+            }
+
+            if ($dbarea == 2 or $dbarea == 3) {
+                $content_config_admin .= "\$array_" . $variable_name . "_admin['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
+            }
+        }
+    }
+
+    if (!$content_config_site and !$content_config_admin) {
+        nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php');
+        return true;
+    }
+
+    $content_config = "<?php\n\n";
+    $content_config .= NV_FILEHEAD . "\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "\$array_" . $variable_name . "_site = array();\n";
+    $content_config .= $content_config_site;
+    $content_config .= "\n";
+    $content_config .= "\$array_" . $variable_name . "_admin = array();\n";
+    $content_config .= $content_config_admin;
+
+    $write = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php', $content_config, LOCK_EX);
+
+    if ($write === false) {
+        return $content_config;
+    }
+
+    return true;
 }

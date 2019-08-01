@@ -12,31 +12,6 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-//Ket noi ngon ngu cua module
-if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-} elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_DATA . '.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_DATA . '.php';
-} elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-}
-
-$allow_func = array(
-    'main',
-    'allbots',
-    'allbrowsers',
-    'allcountries',
-    'allos',
-    'allreferers',
-    'referer'
-);
-
-$submenu['allbots'] = $lang_module['bot'];
-$submenu['allbrowsers'] = $lang_module['browser'];
-$submenu['allcountries'] = $lang_module['country'];
-$submenu['allos'] = $lang_module['os'];
-$submenu['allreferers'] = $lang_module['referer'];
-
 $module_info['alias'] = array();
 $module_info['alias']['allbots'] = 'allbots';
 $module_info['alias']['allbrowsers'] = 'allbrowsers';
@@ -63,6 +38,12 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
 
+/**
+ * nv_site_theme()
+ *
+ * @param mixed $contents
+ * @return
+ */
 function nv_site_theme($contents)
 {
     return nv_admin_theme($contents);

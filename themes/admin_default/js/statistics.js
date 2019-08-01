@@ -34,3 +34,11 @@ function number_format(number, decimals, dec_point, thousands_point) {
 
     return number;
 }
+
+$(document).ready(function() {
+    $('#formClearStatistics').submit(function(e) {
+        if (!confirm($(this).data('msg'))) {
+            e.preventDefault();
+        }
+    });
+});

@@ -95,7 +95,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 {
     global $lang_global, $global_config;
 
-	http_response_code($error_code);
+    http_response_code($error_code);
 
     if (empty($page_title)) {
         $page_title = $global_config['site_description'];
@@ -130,10 +130,10 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    $xtpl->assign('SITE_NAME', empty($global_config['site_name']) ? '' : $global_config['site_name']);
 
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
-    if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
+    if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
     }
     $xtpl->assign('SITE_FAVICON', $site_favicon);
@@ -462,17 +462,16 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 }
 
 /**
- * nv_xmlSitemap_generate()
- *
- * @param mixed $url
- * @return void
+ * @param array $url
+ * @param string $changefreq
+ * @param string $priority
  */
-function nv_xmlSitemap_generate($url)
+function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
 {
     $lastModified = time() - 86400;
     $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement($sitemapHeader);
-    if (! empty($url)) {
+    if (!empty($url)) {
         foreach ($url as $key => $values) {
             $values['link'] = nv_url_rewrite($values['link'], true);
             if (strpos($values['link'], NV_MY_DOMAIN) !== 0) {
@@ -481,8 +480,8 @@ function nv_xmlSitemap_generate($url)
             $row = $xml->addChild('url');
             $row->addChild('loc', $values['link']);
             $row->addChild('lastmod', date('c', $values['publtime']));
-            $row->addChild('changefreq', 'daily');
-            $row->addChild('priority', '0.8');
+            $row->addChild('changefreq', !empty($values['changefreq']) ? $values['changefreq'] : $changefreq);
+            $row->addChild('priority', !empty($values['priority']) ? $values['priority'] : $priority);
 
             if ($key == 0) {
                 $lastModified = $values['publtime'];
@@ -492,6 +491,40 @@ function nv_xmlSitemap_generate($url)
 
     $contents = $xml->asXML();
     $contents = nv_url_rewrite($contents);
+
+    nv_xmlOutput($contents, $lastModified);
+}
+
+/**
+ * @param array $url
+ */
+function nv_xmlSitemapCat_generate($url)
+{
+    global $global_config;
+
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $xml = new SimpleXMLElement($sitemapHeader);
+    $lastModified = NV_CURRENTTIME - 86400;
+
+    foreach ($url as $link) {
+        if (strpos($link, NV_MY_DOMAIN) !== 0) {
+            $link = NV_MY_DOMAIN . $link;
+        }
+        $row = $xml->addChild('sitemap');
+        $row->addChild('loc', $link);
+    }
+
+    $contents = $xml->asXML();
+
+    if ($global_config['rewrite_enable']) {
+        if ($global_config['check_rewrite_file']) {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "sitemap-\\1.\\2.\\3.xml", $contents);
+        } elseif ($global_config['rewrite_optional']) {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
+        } else {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\1/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
+        }
+    }
 
     nv_xmlOutput($contents, $lastModified);
 }
@@ -512,12 +545,21 @@ function nv_xmlSitemapIndex_generate()
 
     if ($global_config['lang_multi']) {
         foreach ($global_config['allow_sitelangs'] as $lang) {
-            $sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
+            $sql = "SELECT m.title, m.module_file FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while (list($modname) = $result->fetch(3)) {
-                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
-                $row = $xml->addChild('sitemap');
-                $row->addChild('loc', $link);
+            while (list($modname, $modfile) = $result->fetch(3)) {
+                $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
+                foreach ($sitemaps as $filename) {
+                    if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
+                        if ($m[0] == 'sitemap.php') {
+                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
+                        } elseif ($m[1] == '.' and $m[2] != '') {
+                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap/' . $m[2];
+                        }
+                        $row = $xml->addChild('sitemap');
+                        $row->addChild('loc', $link);
+                    }
+                }
             }
         }
     } else {
@@ -525,9 +567,18 @@ function nv_xmlSitemapIndex_generate()
 
         foreach ($site_mods as $modname => $values) {
             if (isset($values['funcs']) and isset($values['funcs']['sitemap']) and !empty($values['sitemap'])) {
-                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
-                $row = $xml->addChild('sitemap');
-                $row->addChild('loc', $link);
+                $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $values['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
+                foreach ($sitemaps as $filename) {
+                    if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
+                        if ($m[0] == 'sitemap.php') {
+                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
+                        } elseif ($m[1] == '.' and $m[2] != '') {
+                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap/' . $m[2];
+                        }
+                        $row = $xml->addChild('sitemap');
+                        $row->addChild('loc', $link);
+                    }
+                }
             }
         }
     }
@@ -538,10 +589,13 @@ function nv_xmlSitemapIndex_generate()
     if ($global_config['rewrite_enable']) {
         if ($global_config['check_rewrite_file']) {
             $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "sitemap-\\1.xml", $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "sitemap-\\1.\\2.\\3.xml", $contents);
             $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "sitemap-\\1.\\2.xml", $contents);
         } elseif ($global_config['rewrite_optional']) {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
             $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
         } else {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\1/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
             $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\1/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
         }
     }

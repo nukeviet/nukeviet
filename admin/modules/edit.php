@@ -157,7 +157,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
             $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET
                 module_theme=:module_theme, custom_title=:custom_title, site_title=:site_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description,
-                keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ', sitemap=' . $sitemap . ' 
+                keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ', sitemap=' . $sitemap . '
             WHERE title= :title');
             $sth->bindParam(':module_theme', $module_theme, PDO::PARAM_STR);
             $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
@@ -257,7 +257,8 @@ $page_title = sprintf($lang_module['edit'], $mod);
 if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/rss.php')) {
     $data['rss'] = array($lang_module['activate_rss'], $rss);
 }
-if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/sitemap.php')) {
+$sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
+if (sizeof($sitemaps)) {
     $data['sitemap'] = array($lang_module['activate_sitemap'], $sitemap);
 }
 

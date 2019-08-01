@@ -155,3 +155,5 @@ $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';
 $lang_module['custom_title'] = 'Tiêu đề';
 $lang_module['main_module'] = 'Module trang chính';
+$lang_module['themeadmin'] = 'Giao diện người quản trị';
+$lang_module['theme_default'] = 'Mặc định theo cấu hình site';

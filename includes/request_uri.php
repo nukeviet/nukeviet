@@ -39,13 +39,13 @@ if (!empty($base_siteurl)) {
 $base_siteurl .= '/';
 $base_siteurl_quote = nv_preg_quote($base_siteurl);
 
-$request_uri = preg_replace('/(' . $base_siteurl_quote . ')index\.php\//', '\\1', urldecode($_SERVER['REQUEST_URI']));
+$request_uri = preg_replace('/(' . $base_siteurl_quote . ')index\.php\//', '\\1', $_SERVER['REQUEST_URI']);
 $request_uri = parse_url($request_uri);
 if (!isset($request_uri['path'])) {
     nv_redirect_location($base_siteurl);
 }
-$request_uri_query = isset($request_uri['query']) ? $request_uri['query'] : '';
-$request_uri = $request_uri['path'];
+$request_uri_query = isset($request_uri['query']) ? urldecode($request_uri['query']) : '';
+$request_uri = urldecode($request_uri['path']);
 
 if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and preg_match('/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote($global_config['rewrite_exturl']) . '$/i', $request_uri, $matches)) {
     // Rewrite khi không có bất kỳ request lang hay nv

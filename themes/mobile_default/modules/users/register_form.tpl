@@ -95,7 +95,7 @@
         <!-- BEGIN: show_question -->
         <div class="form-group rel">
             <div class="input-group">
-                <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="your_question" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
+                <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="question" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
                 <span class="input-group-addon pointer" title="{LANG.select_question}" onclick="showQlist(this);"><em class="fa fa-caret-down fa-lg"></em></span>
             </div>
             <div class="qlist" data-show="no">
@@ -146,7 +146,9 @@
         <!-- END: textarea -->
 
         <!-- BEGIN: editor -->
-        {EDITOR}
+        <div class="form-group">
+            {EDITOR}
+        </div>
         <!-- END: editor -->
 
         <!-- BEGIN: select -->

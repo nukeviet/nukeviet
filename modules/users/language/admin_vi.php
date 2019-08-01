@@ -67,6 +67,7 @@ $lang_module['show_email'] = 'Hiển thị email';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['in_group'] = 'Là tài khoản của nhóm';
 $lang_module['in_group_default'] = 'Là nhóm mặc định';
+$lang_module['clear_group_default'] = 'Xóa nhóm mặc định';
 $lang_module['is_official'] = 'Là thành viên chính thức';
 $lang_module['is_official_note'] = 'Nếu không chọn, tài khoản này sẽ được đưa vào nhóm thành viên mới đăng ký';
 $lang_module['set_official_note'] = 'Cho làm thành viên chính thức';
@@ -127,7 +128,6 @@ $lang_module['edit_add_error'] = 'Lỗi: Không cập nhật được thông tin
 $lang_module['edit_error_question'] = 'Câu hỏi bảo mật không được để trống';
 $lang_module['edit_error_answer'] = 'Câu trả lời cho câu hỏi bảo mật không được để trống';
 $lang_module['edit_error_group'] = 'Hãy chọn group cho tài khoản';
-$lang_module['edit_error_group_default'] = 'Hãy chọn nhóm mặc định cho tài khoản';
 $lang_module['account_deny_name'] = 'Rất tiếc, tài khoản %s đã bị cấm sử dụng để đăng ký tài khoản mới';
 $lang_module['awaiting_active'] = 'Kích hoạt';
 $lang_module['delconfirm_message'] = 'Bạn có chắc muốn xóa tài khoản đã chọn không?';
@@ -204,6 +204,7 @@ $lang_module['add_user'] = 'Thêm tài khoản %1$s vào nhóm %2$s';
 $lang_module['exclude_user'] = 'Loại tài khoản %1$s khỏi nhóm %2$s';
 $lang_module['siteinfo_user'] = 'Số tài khoản';
 $lang_module['siteinfo_waiting'] = 'Số tài khoản đợi kích hoạt';
+$lang_module['siteinfo_editcensor'] = 'Số tài khoản chờ kiểm duyệt thông tin cá nhân';
 $lang_module['pagetitle'] = 'Lấy ID tài khoản';
 $lang_module['pagetitle1'] = 'Tìm kiếm ID tài khoản';
 $lang_module['search'] = 'Tìm tài khoản';
@@ -341,6 +342,10 @@ $lang_module['field_options_choicesql_table'] = 'Chọn bảng dữ liệu';
 $lang_module['field_options_choicesql_column'] = 'Chọn cột dữ liệu';
 $lang_module['field_options_choicesql_key'] = 'Chọn cột làm key';
 $lang_module['field_options_choicesql_val'] = 'Chọn cột làm value';
+$lang_module['field_options_choicesql_order'] = 'Chọn cột sắp xếp';
+$lang_module['field_options_choicesql_sort'] = 'Chọn kiểu sắp xếp';
+$lang_module['field_options_choicesql_sort_asc'] = 'Tăng dần';
+$lang_module['field_options_choicesql_sort_desc'] = 'Giảm dần';
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
 $lang_module['oauth_config'] = 'Cấu hình đăng nhập, đăng kí bằng %s';
@@ -436,9 +441,9 @@ $lang_module['update_LDAP_config_lname'] = "Họ";
 $lang_module['default'] = "Mặc định";
 
 $lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là tuỳ chọn. Bạn có thể chọn điền trước một số thông tin người dùng NukeViet với thông tin từ <b> các trường LDAP</b> được chỉ ra ở đây.<p>
-		Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
-		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
-		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
+        Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
+        Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
+        <b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
 
 $lang_module['allowuserloginmulti'] = 'Cho phép đăng nhập cùng lúc từ nhiều trình duyệt';
 $lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';
@@ -446,10 +451,12 @@ $lang_module['safe_mode'] = 'Chế độ an toàn';
 $lang_module['safe_active_info'] = 'Tài khoản của bạn đang ở chế độ an toàn nên tất cả các tính năng chỉnh sửa thông tin tài khoản đã bị khóa.';
 $lang_module['safe_deactivate'] = 'Tắt chế độ an toàn';
 $lang_module['group_description'] = 'Mô tả';
-$lang_module['group_description_empty'] = 'Hãy mô tả ngắn gọn về nhóm';
 $lang_module['auto_login_after_reg'] = 'Tự động đăng nhập sau khi đăng ký thành công';
 $lang_module['active_group_newusers'] = 'Kích hoạt chức năng xác thực thành viên';
 $lang_module['active_group_newusers_note'] = 'Nếu chức năng này được kích hoạt, những thành viên mới đăng ký sẽ được tự động xếp vào nhóm &quot;Thành Viên mới &quot; cho đến khi được người quản lý loại khỏi nhóm, lúc này thành viên mới được xem là &quot;Thành Viên chính thức&quot;';
+$lang_module['active_editinfo_censor'] = 'Bật kiểm duyệt chỉnh sửa tài khoản';
+$lang_module['active_editinfo_censor_note'] = 'Nếu chức năng này kích hoạt, tất cả các tài khoản tự chỉnh sửa thông tin sẽ được kiểm duyệt trước khi hiển thị, không áp dụng đối với việc chỉnh sửa tên đăng nhập, email, ảnh đại diện, trưởng nhóm, quản trị sửa thông tin thành viên. Khi tắt tính năng này menu kiểm duyệt trong quản trị sẽ bị ẩn để tiết kiệm không gian, tuy nhiên bạn vẫn có thể kiểm duyệt';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">tại đây</a>';
 $lang_module['active_user_logs'] = 'Ghi nhật ký đăng nhập, đăng xuất của thành viên';
 $lang_module['user_openid_mamager'] = 'Quản lý OpenID &amp; Oauth';
 $lang_module['user_2step_mamager'] = 'Quản lý xác thực hai bước';
@@ -479,3 +486,38 @@ $lang_module['two_step_verification_require_admin'] = 'Bắt buộc xác thực 
 $lang_module['two_step_verification_require_site'] = 'Bắt buộc xác thực hai bước ngoài site';
 $lang_module['two_step_verification_require_admindefault'] = 'Thiết lập an ninh đang yêu cầu bật tại khu vực quản trị, dù không bật ở đây quản trị vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
 $lang_module['two_step_verification_require_sitedefault'] = 'Thiết lập an ninh đang yêu cầu bật ngoài site, dù không bật ở đây thành viên trong nhóm vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
+$lang_module['notification_new_acount'] = 'Tài khoản %s đang đợi kích hoạt';
+$lang_module['editcensor'] = 'Kiểm duyệt thông tin';
+$lang_module['editcensor_lastedit'] = 'Sửa lần cuối';
+$lang_module['editcensor_confirm_approval'] = 'Bạn có chắc chắn xác nhận duyệt? Sau khi duyệt thông tin này sẽ ghi đè thông tin hiện tại của thành viên';
+$lang_module['editcensor_confirm_denied'] = 'Bạn có chắc chắn từ chối? Sau khi từ chối thì thông tin này sẽ bị xóa và không thể khôi phục';
+$lang_module['editcensor_field'] = 'Trường dữ liệu';
+$lang_module['editcensor_current'] = 'Giá trị hiện tại';
+$lang_module['editcensor_new'] = 'Giá trị mới';
+$lang_module['editcensor_info_basic'] = 'Thông tin cơ bản';
+$lang_module['editcensor_info_custom'] = 'Thông tin khác';
+$lang_module['emailverify_sys1'] = 'Tài khoản hệ thống tạo';
+$lang_module['emailverify_sys2'] = 'Tài khoản admin kích hoạt';
+$lang_module['emailverify_sys3'] = 'Tài khoản không cần kích hoạt';
+$lang_module['emailverify_sys4'] = 'Chưa xác minh email';
+$lang_module['emailverify_sys5'] = 'Xác minh email lúc %s';
+$lang_module['active_obj_1'] = 'Hệ thống tự kích hoạt';
+$lang_module['active_obj_2'] = 'Kích hoạt qua email';
+$lang_module['active_obj_3'] = 'Kích hoạt qua Oauth %s';
+$lang_module['active_obj_4'] = 'Quản trị <strong title="%s">%s</strong> kích hoạt';
+
+$lang_module['account_active'] = 'Thông tin kích hoạt tài khoản';
+$lang_module['account_active_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4$s<br />Email: %5$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site';
+
+$lang_module['userwait_resend_email'] = 'Gửi lại email kích hoạt';
+$lang_module['userwait_resend_per_email'] = 'Số email một lần gửi';
+$lang_module['userwait_resend_pause_time'] = 'Dừng giữa hai lần gửi';
+$lang_module['userwait_resend_counter'] = 'Cách lần gửi tiếp theo còn';
+$lang_module['userwait_resend_run'] = 'Đang gửi email';
+$lang_module['userwait_resend_note'] = 'Vui lòng không tắt trình duyệt';
+$lang_module['userwait_resend_complete'] = 'Tiến trình đã hoàn tất. Thông tin chi tiết xem bên dưới';
+$lang_module['userwait_resend_start'] = 'Bắt đầu lúc';
+$lang_module['userwait_resend_end'] = 'Kết thúc lúc';
+$lang_module['userwait_resend_delete'] = 'Email đã tồn tại (đã được kích hoạt theo cách nào đó), xóa thông tin chờ kích hoạt';
+$lang_module['userwait_resend_ok'] = 'Đã gửi lại email kích hoạt';
+$lang_module['userwait_resend_error'] = 'Không thể gửi email, vui lòng kiểm tra lại cấu hình gửi mail';

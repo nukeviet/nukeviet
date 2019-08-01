@@ -79,6 +79,14 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 }
 
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
+
+if (empty($global_config['my_domains'])) {
+    $global_config['my_domains'] = [NV_SERVER_NAME];
+} else {
+    $global_config['my_domains'] = array_map('trim', explode(',', $global_config['my_domains']));
+    $global_config['my_domains'] = array_map('strtolower', $global_config['my_domains']);
+}
+
 require NV_ROOTDIR . '/includes/ini.php';
 
 // Vendor autoload
@@ -151,18 +159,14 @@ define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 // vd: /ten_thu_muc_chua_site/admin/
 
-
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // D:/AppServ/www
-
 
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
 
-
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
-
 
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
@@ -171,17 +175,16 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
-$domains = explode(',', $global_config['my_domains']);
-if (!in_array(NV_SERVER_NAME, $domains)) {
+if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
-    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
+    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
-    $nv_Cache = new NukeViet\Cache\Memcacheds(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
+    $nv_Cache = new NukeViet\Cache\Memcached(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
 } elseif ($global_config['cached'] == 'redis') {
-    $nv_Cache = new NukeViet\Cache\CRedis(NV_REDIS_HOST, NV_REDIS_PORT, NV_REDIS_TIMEOUT, NV_REDIS_PASSWORD, NV_REDIS_DBINDEX, NV_LANG_DATA, NV_CACHE_PREFIX);
+    $nv_Cache = new NukeViet\Cache\Redis(NV_REDIS_HOST, NV_REDIS_PORT, NV_REDIS_TIMEOUT, NV_REDIS_PASSWORD, NV_REDIS_DBINDEX, NV_LANG_DATA, NV_CACHE_PREFIX);
 } else {
     $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
 }
@@ -197,9 +200,6 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain;
 
 // vd: http://mydomain1.com/ten_thu_muc_chua_site
 $global_config['site_url'] = $nv_Request->site_url;
-
-// vd: array( 'mydomain1.com', 'mydomain2.com' )
-$global_config['my_domains'] = $nv_Request->my_domains;
 
 // vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
@@ -254,18 +254,19 @@ if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session'))
     $nv_Request->unset_request('nv' . NV_LANG_DATA . 'themever', 'cookie');
 }
 
-// Ket noi voi class chong flood
-if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
-(!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
-    require NV_ROOTDIR . '/includes/core/flood_blocker.php';
-}
-
 // Captcha
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }
 // Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
+
+// Ket noi voi class chong flood
+if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
+(!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
+    require NV_ROOTDIR . '/includes/core/flood_blocker.php';
+}
+
 $global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
 if (isset($nv_plugin_area[1])) {
@@ -335,6 +336,7 @@ if (empty($global_config['site_logo'])) {
 }
 
 $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
+$global_config['array_preview_theme'] = explode(',', $global_config['preview_theme']);
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
@@ -346,6 +348,14 @@ if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
+
+// CORS handler
+if (!empty($global_config['cors_valid_domains'])) {
+    $global_config['cors_valid_domains'] = json_decode($global_config['cors_valid_domains'], true);
+} else {
+    $global_config['cors_valid_domains'] = [];
+}
+$nv_Request->CORSHandle($global_config);
 
 if (defined('NV_ADMIN')) {
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php')) {
@@ -436,7 +446,6 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'admins' => $row['admins'],
                     'rss' => $row['rss'],
                     'sitemap' => $row['sitemap'],
-                    'gid' => $row['gid'],
                     'funcs' => array()
                 );
             }

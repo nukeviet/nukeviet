@@ -422,6 +422,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
 }
 
 $error = "";
+$info = array();
 
 if ($nv_Request->isset_request('uploaded', 'get')) {
     if (!file_exists($filename)) {
@@ -432,6 +433,8 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
         $error = $lang_module['autoinstall_error_downloaded'];
     } elseif (!$sys_info['zlib_support']) {
         $error = $lang_global['error_zlib_support'];
+    } elseif (!empty($_FILES['extfile']['error'])) {
+        $error = sprintf($lang_module['autoinstall_error_uploadfile1'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
     } elseif (is_uploaded_file($_FILES['extfile']['tmp_name'])) {
         if (file_exists($filename)) {
             nv_deletefile($filename);
@@ -450,9 +453,6 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
         $error = $lang_module['autoinstall_error_downloaded'];
     }
 }
-
-$error = '';
-$info = array();
 
 // Lay thong tin file tai len
 if (empty($error)) {

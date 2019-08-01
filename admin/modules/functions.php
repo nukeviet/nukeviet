@@ -190,12 +190,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     try {
                         $db->query($sql);
                     } catch (PDOException $e) {
-                        /*
-                        echo '<pre>';
-                        print_r($e);
-                        echo '</pre>';
-                        */
-                        trigger_error($e->getMessage());
+                        trigger_error(print_r($e, true));
                         return $return;
                     }
                 }
@@ -289,7 +284,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
 					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data);
                     if ($arr_func_id[$func]) {
-                        -                    $layout = $layoutdefault;
+                        $layout = $layoutdefault;
                         if (isset($array_layout_func_default[$module_name][$func])) {
                             if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout/layout.' . $array_layout_func_default[$module_name][$func] . '.tpl')) {
                                 $layout = $array_layout_func_default[$module_name][$func];

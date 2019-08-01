@@ -58,15 +58,6 @@ $lang_module['description_length'] = 'Nombre de caractères dans la balise meta 
 $lang_module['description_note'] = '= 0 ne limite pas le nombre de caractères';
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Titre';
-$lang_module['googleplus'] = 'Certifier Google+';
-$lang_module['googleplus_page_title'] = 'Configuration du certificat de Google+ (Droit d\'auteur)';
-$lang_module['googleplus_list'] = 'Liste de compte Google+';
-$lang_module['googleplus_module'] = 'Configuration par défaut du compte Google+ pour des module';
-$lang_module['googleplus_title'] = 'Nom du compte profile Google+';
-$lang_module['googleplus_idprofile'] = 'ID du profile Google+';
-$lang_module['googleplus_add'] = 'Ajouter un nouveau';
-$lang_module['googleplusNote1'] = 'Le fait de certifier le droit d\'auteur va aider de protéger les articles originals, éviter le fait que l\'article copié est plus haut que celui original. cette configuration va configurer le module entier. Si dans le module, il y a le fonctionnement Configuration certifié Google+,  ce dernier est en priorité';
-$lang_module['googleplusNote2'] = 'Si le lien Google+ qui est https://plus.google.com/105065032561530186108 alors on ne doit fait qu\'ajouter 105065032561530186108 à l\'ID profile Google+';
 $lang_module['rpc'] = 'Service PING';
 $lang_module['rpc_setting'] = 'Configuration du service PING';
 $lang_module['rpc_error_timeout'] = 'Veuillez attendre dans %s pour continuer PING';

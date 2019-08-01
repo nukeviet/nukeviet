@@ -20,7 +20,7 @@ if (!empty($listcid)) {
     $listcid = implode(', ', $cid_array);
 
     // Duyệt các bình luận từ sau ra trước theo thứ tự pid
-    $sql = 'SELECT cid, module, id, pid, attach FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ') ORDER BY pid DESC';
+    $sql = 'SELECT cid, module, area, id, pid, attach FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ') ORDER BY pid DESC';
     $comments = $db->query($sql)->fetchAll();
     $array_row_id = array();
 
@@ -31,6 +31,7 @@ if (!empty($listcid)) {
         }
         $array_row_id[$row['module']][$row['id']] = array(
             'module' => $row['module'],
+            'area' => $row['area'],
             'id' => $row['id']
         );
 

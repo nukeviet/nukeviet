@@ -22,7 +22,7 @@ $method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string
 if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
 }
-$_arr_where = array();
+$_arr_where = [];
 if ($usactive == -3) {
     $_arr_where[] = 'group_id!=7';
 } elseif ($usactive == -2) {
@@ -38,36 +38,36 @@ if ($usactive == -3) {
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
 
-$methods = array(
-    'userid' => array(
+$methods = [
+    'userid' => [
         'key' => 'userid',
         'sql' => 'userid',
         'value' => $lang_module['search_id'],
         'selected' => ''
-    ),
-    'username' => array(
+    ],
+    'username' => [
         'key' => 'username',
         'sql' => 'username',
         'value' => $lang_module['search_account'],
         'selected' => ''
-    ),
-    'fullname' => array(
+    ],
+    'fullname' => [
         'key' => 'fullname',
         'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
         'value' => $lang_module['search_name'],
         'selected' => ''
-    ),
-    'email' => array(
+    ],
+    'email' => [
         'key' => 'email',
         'sql' => 'email',
         'value' => $lang_module['search_mail'],
         'selected' => ''
-    )
-);
+    ]
+];
 
 $methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? urldecode($nv_Request->get_string('value', 'get', '')) : '');
 
-$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
+$orders = ['userid', 'username', 'full_name', 'email', 'regdate'];
 $orderby = $nv_Request->get_string('sortby', 'get', 'userid');
 $ordertype = $nv_Request->get_string('sorttype', 'get', 'DESC');
 if ($ordertype != 'ASC') {
@@ -77,7 +77,7 @@ $method = (!empty($method) and isset($methods[$method])) ? $method : '';
 
 if (!empty($methodvalue)) {
     if (empty($method)) {
-        $array_like = array();
+        $array_like = [];
         foreach ($methods as $method_i) {
             $array_like[] = $method_i['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
         }
@@ -115,16 +115,37 @@ if (!empty($orderby) and in_array($orderby, $orders)) {
 
 $result2 = $db->query($db->sql());
 
-$users_list = array();
-$admin_in = array();
+$users_list = [];
+$admin_in = [];
 $is_edit = (in_array('edit', $allow_func)) ? true : false;
 $is_delete = (in_array('del', $allow_func)) ? true : false;
 $is_setactive = (in_array('setactive', $allow_func)) ? true : false;
+$array_userids = $array_users = [];
 
 while ($row = $result2->fetch()) {
     $row['in_groups'] = explode(',', $row['in_groups']);
 
-    $users_list[$row['userid']] = array(
+    // Thông tin tài khoản, xác thực email
+    if ($row['email_verification_time'] == -3) {
+        $info_verify = $lang_module['emailverify_sys1'];
+    } elseif ($row['email_verification_time'] == -2) {
+        $info_verify = $lang_module['emailverify_sys2'];
+    } elseif ($row['email_verification_time'] == -1) {
+        $info_verify = $lang_module['emailverify_sys3'];
+    } elseif ($row['email_verification_time'] == 0) {
+        $info_verify = $lang_module['emailverify_sys4'];
+    } elseif ($row['email_verification_time'] > 0) {
+        $info_verify = sprintf($lang_module['emailverify_sys5'], nv_date('H:i d/m/Y', $row['email_verification_time']));
+    } else {
+        // Cái này để debug trong trường hợp lỗi CSDL
+        $info_verify = 'Error verification data';
+    }
+
+    if (is_numeric($row['active_obj'])) {
+        $array_userids[$row['active_obj']] = $row['active_obj'];
+    }
+
+    $users_list[$row['userid']] = [
         'userid' =>  $row['userid'],
         'username' =>  $row['username'],
         'full_name' =>  nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
@@ -136,14 +157,28 @@ while ($row = $result2->fetch()) {
         'is_delete' => $is_delete,
         'level' => $lang_module['level0'],
         'is_admin' => false,
+        'info_verify' => $info_verify,
+        'active_obj' => $row['active_obj'],
         'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'])),
         'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username']
-    );
+    ];
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
         $users_list[$row['userid']]['is_edit'] = false;
         $users_list[$row['userid']]['is_delete'] = false;
     }
     $admin_in[] = $row['userid'];
+}
+
+// Lấy tên các thành viên kích hoạt tài khoản
+if (!empty($array_userids)) {
+    $sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_MOD_TABLE . ' WHERE userid IN(' . implode(',', $array_userids) . ')';
+    $result = $db->query($sql);
+    while ($row = $result->fetch()) {
+        $array_users[$row['userid']] = [
+            'username' => $row['username'],
+            'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username'])
+        ];
+    }
 }
 
 if (!empty($admin_in)) {
@@ -185,7 +220,7 @@ if (!empty($admin_in)) {
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-$head_tds = array();
+$head_tds = [];
 $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $lang_module['account'];
@@ -216,6 +251,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
+$xtpl->assign('HEAD', $head_tds);
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
@@ -227,25 +263,36 @@ foreach ($methods as $m) {
 }
 $_bg = (defined('NV_CONFIG_DIR')) ? 3 : 1;
 for ($i = $_bg; $i >= 0; $i--) {
-    $m = array(
+    $m = [
         'key' => $i,
         'selected' => ($i == $usactive) ? ' selected="selected"' : '',
         'value' => $lang_module['usactive_' . $i]
-    );
+    ];
     $xtpl->assign('USACTIVE', $m);
     $xtpl->parse('main.usactive');
 }
 $xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
 
-foreach ($head_tds as $head_td) {
-    $xtpl->assign('HEAD_TD', $head_td);
-    $xtpl->parse('main.head_td');
-}
-
 $view_user_allowed = nv_user_in_groups($global_config['whoviewuser']);
 $has_choose = false;
 
 foreach ($users_list as $u) {
+    if ($u['active_obj'] == 'SYSTEM') {
+        $u['active_obj'] = $lang_module['active_obj_1'];
+    } elseif ($u['active_obj'] == 'EMAIL') {
+        $u['active_obj'] = $lang_module['active_obj_2'];
+    } elseif (preg_match('/^OAUTH\:(.*?)$/', $u['active_obj'], $m)) {
+        $u['active_obj'] = sprintf($lang_module['active_obj_3'], $m[1]);
+    } elseif (is_numeric($u['active_obj'])) {
+        if (isset($array_users[$u['active_obj']])) {
+            $u['active_obj'] = sprintf($lang_module['active_obj_4'], $array_users[$u['active_obj']]['full_name'], $array_users[$u['active_obj']]['username']);
+        } else {
+            $u['active_obj'] = sprintf($lang_module['active_obj_4'], 'N/A', 'N/A');
+        }
+    } else {
+        $u['active_obj'] = 'N/A';
+    }
+
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
@@ -282,11 +329,11 @@ foreach ($users_list as $u) {
 }
 
 $has_footer = false;
-$array_action = array(
+$array_action = [
     'del' => $lang_module['delete'],
     'active' => $lang_module['memberlist_active'],
     'unactive' => $lang_module['memberlist_unactive']
-);
+];
 if ($has_choose) {
     $has_footer = true;
     foreach ($array_action as $action_key => $action_lang) {

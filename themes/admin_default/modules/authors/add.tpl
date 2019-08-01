@@ -30,6 +30,16 @@
 						</div>
 					</td>
 				</tr>
+                <tr>
+                    <td>{LANG.themeadmin}</td>
+                    <td>
+                    <select name="admin_theme" class="form-control w300" >
+                        <option value="">{LANG.theme_default}</option>
+                        <!-- BEGIN: admin_theme -->
+                        <option value="{THEME_NAME}"{THEME_SELECTED}>{THEME_NAME}</option>
+                        <!-- END: admin_theme -->
+                    </select></td>
+                </tr>                
 				<!-- BEGIN: editor -->
 				<tr>
 					<td>{EDITOR0}:</td>

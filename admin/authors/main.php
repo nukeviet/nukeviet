@@ -17,7 +17,7 @@ $page_title = $lang_module['main'];
 $admins = array();
 if ($nv_Request->isset_request('id', 'get')) {
     $admin_id = $nv_Request->get_int('id', 'get', 0);
-    $sql = 'SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
+    $sql = 'SELECT t1.admin_id as admin_id, t1.admin_theme admin_theme, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
 	t2.username as username, t2.email as email, t2.first_name as first_name, t2.last_name as last_name, t2.view_mail as view_mail, t2.regdate as regdate, t2.active as active
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE admin_id=' . $admin_id;
     $adminrows = $db->query($sql)->fetchAll();
@@ -27,7 +27,7 @@ if ($nv_Request->isset_request('id', 'get')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 } else {
-    $sql = 'SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
+    $sql = 'SELECT t1.admin_id as admin_id, t1.admin_theme admin_theme, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
 		t2.username as username, t2.email as email, t2.first_name as first_name, t2.last_name as last_name, t2.view_mail as view_mail, t2.regdate as regdate, t2.active as active
 		FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid ORDER BY t1.lev ASC';
 
@@ -145,6 +145,7 @@ if ($numrows) {
         $admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
         $admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
         $admins[$row['admin_id']]['options']['position'] = array( $lang_module['position'], $row['position'] );
+        $admins[$row['admin_id']]['options']['admin_theme'] = array( $lang_module['themeadmin'], (empty($row['admin_theme'])) ? $lang_module['theme_default']: $row['admin_theme'] );
         $admins[$row['admin_id']]['options']['is_suspend'] = array( $lang_module['is_suspend'], $is_suspend, $row['is_suspend'] );
 
         if (defined('NV_IS_SPADMIN')) {

@@ -121,6 +121,8 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
         if (!empty($array_banners_content)) {
             if ($xml->form == 'random') {
                 shuffle($array_banners_content);
+            } elseif ($xml->form == 'random_one') {
+                $array_banners_content = [$array_banners_content[array_rand($array_banners_content)]];
             }
             unset($xml, $array_banners);
 

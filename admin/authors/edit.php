@@ -66,6 +66,9 @@ if (empty($row['files_level'])) {
 }
 
 $error = '';
+$adminThemes = array( '' );
+$adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
+unset($adminThemes[0]);
 
 if ($nv_Request->get_int('save', 'post', 0)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'], 'Username: ' . $row_user['username'], $admin_info['userid']);
@@ -139,11 +142,15 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
         $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module WHERE admin_id=' . $admin_id);
+        $admin_theme = $nv_Request->get_string('admin_theme', 'post');
+        $admin_theme =  (! empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
+
+        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme WHERE admin_id=' . $admin_id);
         $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
         $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
         $sth->bindParam(':position', $position, PDO::PARAM_STR);
         $sth->bindParam(':main_module', $main_module, PDO::PARAM_STR);
+        $sth->bindParam(':admin_theme', $admin_theme, PDO::PARAM_STR);
         $sth->execute();
 
         if ($lev != $row['lev']) {
@@ -264,6 +271,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $modules = $old_modules;
     $position = $row['position'];
     $editor = $row['editor'];
+    $admin_theme =  $row['admin_theme'];
     $allow_files_type = $old_allow_files_type;
     $allow_modify_files = $old_allow_modify_files;
     $allow_create_subdirectories = $old_allow_create_subdirectories;
@@ -346,15 +354,17 @@ if (defined('NV_IS_SPADMIN')) {
 
 $array_module = array();
 if ($admin_id != $admin_info['userid']) {
-    $admin_mods = array();
+    $edit_admin_mods = array();
     $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
     while ($_row = $result->fetch()) {
         $_row['custom_title'] = isset($lang_global[$_row['lang_key']]) ? $lang_global[$_row['lang_key']] : $_row['module'];
-        $admin_mods[$_row['module']] = $_row;
+        $edit_admin_mods[$_row['module']] = $_row;
     }
+} else {
+    $edit_admin_mods = $admin_mods;
 }
 
-foreach ($admin_mods as $mod) {
+foreach ($edit_admin_mods as $mod) {
     $array_module[$mod['module']] = array(
         'module' => $mod['module'],
         'title' => $mod['custom_title']
@@ -379,6 +389,12 @@ $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
 $xtpl->assign('INFO', $contents['info']);
 $xtpl->assign('ACTION', $contents['action']);
 $xtpl->assign('LANG', $lang_module);
+
+foreach ($adminThemes as $_admin_theme) {
+    $xtpl->assign('THEME_NAME', $_admin_theme);
+    $xtpl->assign('THEME_SELECTED', ($_admin_theme == $admin_theme ? ' selected="selected"' : ''));
+    $xtpl->parse('edit.admin_theme');
+}
 
 if (isset($contents['editor'])) {
     $xtpl->assign('EDITOR0', $contents['editor'][0]);

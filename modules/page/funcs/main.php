@@ -53,7 +53,6 @@ if ($page_config['viewtype'] == 2) {
 
     $page_title = $mod_title = $rowdetail['title'];
     $description = $rowdetail['description'];
-    $id_profile_googleplus = $rowdetail['gid'];
 
     // Hiển thị các bài liên quan mới nhất.
     $other_links = array();

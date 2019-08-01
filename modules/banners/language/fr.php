@@ -64,3 +64,6 @@ $lang_module['no_permission'] = 'Vous ne pouvez pas faire de la publicité. S\'i
 $lang_module['plan_allowed'] = 'Droit de signer';
 $lang_module['plan_allowed_yes'] = 'Avoir';
 $lang_module['plan_allowed_no'] = 'Pas';
+$lang_module['form_random'] = 'Aléatoire toutes les annonces';
+$lang_module['form_random_one'] = 'Une annonce au hasard';
+$lang_module['form_sequential'] = 'Séquentiellement';

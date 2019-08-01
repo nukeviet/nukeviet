@@ -28,8 +28,14 @@ if ($id > 0 and $nv_Request->get_string('s', 'get', 0) == md5($id . NV_CHECK_SES
             $browser = ($client_info['is_mobile']) ? "Mobile" : $client_info['browser']['key'];
 
             $db->query('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET hits_total=hits_total+1 WHERE id=' . $id);
-            $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_click (bid, click_time, click_day, click_ip, click_country, click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref)
- 		         VALUES (" . $id . ", " . NV_CURRENTTIME . ", 0, '" . $client_info['ip'] . "', '" . $client_info['country'] . "', '', '" . $browser . "', '','" . $client_info['client_os']['name'] . "','" . $client_info['referer'] . "');";
+            $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_click (
+                bid, click_time, click_day, click_ip, click_country, click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref
+            ) VALUES (
+                " . $id . ", " . NV_CURRENTTIME . ", 0, " . $db->quote($client_info['ip']) . ",
+                " . $db->quote($client_info['country']) . ", '', " . $db->quote($browser) . ", '',
+                " . $db->quote($client_info['client_os']['name']) . ",
+                " . $db->quote(nv_substr($client_info['referer'], 0, 250)) . "
+            );";
             $db->query($sql);
         }
     }

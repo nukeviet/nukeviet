@@ -41,12 +41,16 @@ $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không h�
 $lang_module['err_save_sysconfig'] = 'Các thay đổi đã được lưu lại tuy nhiên hệ thống không ghi được cấu hình ra file. Hãy cấp quyền ghi cho file %s sau đó thực hiện lại';
 
 $lang_module['security'] = 'Thiết lập an ninh';
+$lang_module['flood_blocker'] = 'Chống flood';
 $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
 $lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
 $lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
+$lang_module['max_requests_error'] = 'Lỗi: Cần nhập số request lớn hơn 0';
 $lang_module['nv_anti_iframe'] = 'Chống IFRAME';
 $lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu agent không có';
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
+$lang_module['nv_debug'] = 'Chế độ nhà phát triển';
+$lang_module['nv_debug_help'] = 'Nếu bật tùy chọn này, hệ thống sẽ hiển thị các lỗi để giúp nhà phát triển dễ dàng kiểm tra trong quá trình lập trình. Nếu website đang hoạt động trên môi trường thật, bạn <strong>nên tắt</strong> tùy chọn này';
 
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
@@ -93,6 +97,12 @@ $lang_module['smtp_username'] = 'Tài khoản gửi mail';
 $lang_module['smtp_login'] = 'Tên Tài khoản';
 $lang_module['smtp_pass'] = 'Mật khẩu';
 $lang_module['smtp_error_openssl'] = 'Lỗi: Máy chủ của bạn không hỗ trợ gửi mail qua ssl';
+$lang_module['smtp_test'] = 'Kiểm tra cấu hình';
+$lang_module['smtp_test_subject'] = 'Email thử nghiệm';
+$lang_module['smtp_test_message'] = 'Đây là email thử nghiệm để kiểm tra cấu hình gửi mail. Đơn giản bạn hãy xóa nó đi!';
+$lang_module['smtp_test_success'] = 'Gửi email thành công';
+$lang_module['smtp_test_fail'] = 'Gửi email thất bại';
+$lang_module['smtp_test_note'] = 'Lưu ý: Nhấp lưu cấu hình nếu có thay đổi ở form trên trước khi kiểm tra cấu hình';
 $lang_module['bot_name'] = 'Tên máy chủ ';
 $lang_module['bot_agent'] = 'UserAgent của máy chủ';
 $lang_module['bot_ips'] = 'IP của máy chủ';
@@ -205,6 +215,9 @@ $lang_module['last_result'] = 'Kết quả của lần thực hiện gần đây
 $lang_module['last_result_empty'] = 'n/a';
 $lang_module['last_result0'] = 'Tồi';
 $lang_module['last_result1'] = 'Đã hoàn thành';
+$lang_module['cron_interval_type'] = 'Kiểu lặp lại (nếu có)';
+$lang_module['cron_interval_type0'] = 'Sau thời gian khởi chạy trong CSDL';
+$lang_module['cron_interval_type1'] = 'Sau thời gian khởi chạy thực tế';
 $lang_module['closed_site'] = 'Chế độ đóng cửa site';
 $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site chỉ có Quản trị tối cao truy cập';
@@ -259,5 +272,13 @@ $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
 $lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụng cho toàn bộ tài khoản của các nhóm, nếu cần cấu hình riêng cho từng nhóm hãy chọn giá trị này là <strong>%s</strong> sau đó sửa <a href="%s">nhóm</a> rồi chọn khu vực bắt buộc kích hoạt xác thực hai bước theo ý muốn';
 
 $lang_module['site_phone'] = 'Số điện thoại của site';
-$lang_module['googleMapsAPI'] = 'Google Maps API key';
-$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+$lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_list'] = 'Các IP bỏ qua kiểm tra flood';
+
+$lang_module['cors'] = 'Thiết lập CORS';
+$lang_module['cors_help'] = 'Bật tính năng này để hạn chế các truy vấn CORS từ các tên miền khác đến website';
+$lang_module['cors_restrict_domains'] = 'Giới hạn tên miền';
+$lang_module['cors_valid_domains'] = 'Tên miền hợp lệ';
+$lang_module['cors_valid_domains_help'] = 'Nhập mỗi tên miền một dòng (vui lòng nhập đầy đủ dạng http://yourdomain.com). Các truy vấn CORS từ các tên miền này được phép thực hiện';

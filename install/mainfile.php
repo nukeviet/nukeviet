@@ -44,7 +44,7 @@ require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
-$global_config['my_domains'] = $_SERVER['SERVER_NAME'];
+$global_config['my_domains'] = [$_SERVER['SERVER_NAME']];
 
 // Xac dinh cac tags cho phep
 $global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
@@ -135,8 +135,6 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain;
 //vd: .mydomain1.com
 $global_config['site_url'] = $nv_Request->site_url;
 //vd: http://mydomain1.com/ten_thu_muc_chua_site
-$global_config['my_domains'] = $nv_Request->my_domains;
-//vd: "mydomain1.com,mydomain2.com"
 
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
 //vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/

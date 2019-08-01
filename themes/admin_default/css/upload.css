@@ -224,11 +224,15 @@
 }
 
 /* Local upload */
-#upload-queue{
+#upload-queue {
     display: none;
     height: 100%;
     padding-top: 30px;
     position: relative;
+}
+
+#upload-queue.auto-logo {
+    padding-bottom: 30px;
 }
 
 #upload-queue .queue-header{
@@ -239,6 +243,24 @@
     border-bottom: 1px solid #e1e1e8;
     line-height: 30px;
     font-weight: bold;
+}
+
+#upload-queue .queue-opts {
+    position: absolute;
+    bottom: 0px;
+    height: 30px;
+    width: 100%;
+    padding-top: 5px;
+    display: none;
+}
+
+#upload-queue.auto-logo .queue-opts {
+    display: block;
+}
+
+#upload-queue .queue-opts .checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #upload-button-area .browse-button ul.fixul{

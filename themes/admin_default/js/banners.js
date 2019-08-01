@@ -169,13 +169,16 @@ function nv_pl_del2(pid) {
     return false;
 }
 
-function nv_show_banners_list(containerid, clid, pid, act) {
+function nv_show_banners_list(containerid, clid, pid, act, keyword) {
     var request_query = nv_fc_variable + '=b_list';
     if (clid != 0) {
         request_query += '&clid=' + clid;
     } else {
         if (pid != 0)
             request_query += '&pid=' + pid;
+    }
+    if (typeof keyword != 'undefined' && keyword != '') {
+        request_query += '&q=' + encodeURIComponent(keyword);
     }
     request_query += '&act=' + act;
     $('#' + containerid).load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());

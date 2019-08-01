@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -67,6 +67,7 @@ $lang_module['show_email'] = 'Afficher l\'e-mail';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'est membre du groupe';
 $lang_module['in_group_default'] = 'Le groupe est par défaut';
+$lang_module['clear_group_default'] = 'Éclaircir le groupe par défaut';
 $lang_module['is_official'] = 'En tant que membre officiel';
 $lang_module['is_official_note'] = 'Si non sélectionné, ce compte sera inclus dans le groupe de la nouvelle immatriculation de membre';
 $lang_module['set_official_note'] = 'Pour un membre officiel';
@@ -125,7 +126,6 @@ $lang_module['edit_add_error'] = 'Erreur: impossible de mettre à jour les coord
 $lang_module['edit_error_question'] = 'Il faut choisir une question secrète';
 $lang_module['edit_error_answer'] = 'Merci de donner une réponse à la question secrète';
 $lang_module['edit_error_group'] = 'Sélectionnez un groupe';
-$lang_module['edit_error_group_default'] = 'Choisissez les groupes de comptes par défaut';
 $lang_module['account_deny_name'] = 'Désolé, le compte %s est interdit';
 $lang_module['awaiting_active'] = 'Activer';
 $lang_module['delconfirm_message'] = 'Êtes-vous sûr de vouloir supprimer?';
@@ -202,6 +202,7 @@ $lang_module['add_user'] = 'Ajouter l\'utilisateur %1$s au groupe %2$s';
 $lang_module['exclude_user'] = 'Retirer l\'utilisateur %1$s du groupe %2$s';
 $lang_module['siteinfo_user'] = 'Utilisateurs';
 $lang_module['siteinfo_waiting'] = 'utilisateurs suspens';
+$lang_module['siteinfo_editcensor'] = 'Numéro de compte en attente de modération des informations personnelles';
 $lang_module['pagetitle'] = 'Obtenir ID d\'utilisateur';
 $lang_module['pagetitle1'] = 'Rechercher ID d\'utilisateur';
 $lang_module['search'] = 'Chercher utilisateur';
@@ -336,6 +337,10 @@ $lang_module['field_options_choicesql_table'] = 'Choisir la table de données';
 $lang_module['field_options_choicesql_column'] = 'Choisir la colonne de données';
 $lang_module['field_options_choicesql_key'] = 'Choisir la colonne comme key';
 $lang_module['field_options_choicesql_val'] = 'Choisir la colonne comme valeur';
+$lang_module['field_options_choicesql_order'] = 'Sélectionnez la colonne de tri';
+$lang_module['field_options_choicesql_sort'] = 'Sélectionnez le style de tri';
+$lang_module['field_options_choicesql_sort_asc'] = 'Ascendant';
+$lang_module['field_options_choicesql_sort_desc'] = 'Descendant';
 $lang_module['field_sql_choices_empty'] = 'Erreur: Le choix des données à partir de CSDL est insuffisant';
 $lang_module['oauth_config'] = 'Configuration de connexion, enregistrer par %s';
 $lang_module['oauth_client_id'] = 'App ID/API Key';
@@ -426,10 +431,12 @@ $lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['safe_active_info'] = 'Votre compte est en mode sans échec donc tous les fonctionnements de modification des infos du compte sont bloqués';
 $lang_module['safe_deactivate'] = 'Désactiver le mode sans échec';
 $lang_module['group_description'] = 'Description';
-$lang_module['group_description_empty'] = 'Prenez une brève description du groupe';
 $lang_module['auto_login_after_reg'] = 'Se connecter automatiquement après une inscription réussie';
 $lang_module['active_group_newusers'] = 'Activer membre d\'authentification';
 $lang_module['active_group_newusers_note'] = 'Si cette fonction est activée, le nouvel enregistrement de membre sera automatiquement classé comme "activé" jusqu\'à ce qu\'il ait été retiré du chef d\'équipe, au cours de laquelle les nouveaux membres sont considérés comme des «membres officiels "';
+$lang_module['active_editinfo_censor'] = 'Activer la modération de compte';
+$lang_module['active_editinfo_censor_note'] = 'Si cette fonction est activée, tous les comptes qui modifient eux-mêmes les informations seront modérés avant d\'être affichés. Cette modification ne s\'applique pas à la modification du nom d\'utilisateur, de l\'e-mail, de l\'avatar, du chef d\'équipe ou de l\'administrateur. informations sur les membres. Lorsque cette fonctionnalité est désactivée, le menu de modération administrative sera masqué pour économiser de l\'espace, mais vous pouvez toujours censurer';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">ici</a>';
 $lang_module['active_user_logs'] = 'Connexion Enregistrement, déconnexion des membres';
 $lang_module['user_openid_mamager'] = 'Gérer et OAuth OpenID';
 $lang_module['user_2step_mamager'] = 'Gérer l\'authentification en deux étapes';
@@ -459,3 +466,38 @@ $lang_module['two_step_verification_require_admin'] = 'Obligatoire zone d\'admin
 $lang_module['two_step_verification_require_site'] = 'Obligatoire site en dehors d\'authentification en deux étapes';
 $lang_module['two_step_verification_require_admindefault'] = 'Les paramètres de sécurité sont invités à tourner dans le domaine de la gestion, mais pas ici encore la gouvernance pour activer la nouvelle connexion d\'authentification en deux étapes';
 $lang_module['two_step_verification_require_sitedefault'] = 'Les paramètres de sécurité sont nécessaires pour permettre un site externe, mais n\'a pas ici encore membres pour activer la nouvelle connexion d\'authentification en deux étapes';
+$lang_module['notification_new_acount'] = 'Le compte %d en attente d\'actif';
+$lang_module['editcensor'] = 'Information modérée';
+$lang_module['editcensor_lastedit'] = 'Dernière modification';
+$lang_module['editcensor_confirm_approval'] = 'Etes-vous sûr de confirmer la navigation? Après avoir parcouru ces informations, les informations sur le membre actuel seront écrasées.';
+$lang_module['editcensor_confirm_denied'] = 'Êtes-vous sûr de refuser? Après refus, ces informations seront supprimées et ne pourront plus être restaurées.';
+$lang_module['editcensor_field'] = 'Champ de données';
+$lang_module['editcensor_current'] = 'Valeur actuelle';
+$lang_module['editcensor_new'] = 'Nouvelle valeur';
+$lang_module['editcensor_info_basic'] = 'Informations de base';
+$lang_module['editcensor_info_custom'] = 'Autres informations';
+$lang_module['emailverify_sys1'] = 'Compte par système';
+$lang_module['emailverify_sys2'] = 'Compte activé par l\'administrateur';
+$lang_module['emailverify_sys3'] = 'Compte sans activation requise';
+$lang_module['emailverify_sys4'] = 'Email n\'a pas été vérifié';
+$lang_module['emailverify_sys5'] = 'Vérifier l\'email à %s';
+$lang_module['active_obj_1'] = 'Activer par le système';
+$lang_module['active_obj_2'] = 'Activer par email';
+$lang_module['active_obj_3'] = 'Activer via Oauth %s';
+$lang_module['active_obj_4'] = ' <strong title="%s">%s</strong> activé';
+
+$lang_module['account_active'] = 'Infos pour l\'activation du compte';
+$lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br />Password: %6$s<br /><br />Activate expired on %7$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
+
+$lang_module['userwait_resend_email'] = 'Renvoyer le courrier activé';
+$lang_module['userwait_resend_per_email'] = 'Nombre d\'emails envoyés une fois';
+$lang_module['userwait_resend_pause_time'] = 'Arrêtez-vous entre deux soumissions';
+$lang_module['userwait_resend_counter'] = 'Comment envoyer la prochaine fois';
+$lang_module['userwait_resend_run'] = 'Emailing';
+$lang_module['userwait_resend_note'] = 'S\'il vous plaît ne pas éteindre le navigateur';
+$lang_module['userwait_resend_complete'] = 'Le processus est terminé. Détails voir ci-dessous';
+$lang_module['userwait_resend_start'] = 'Commencer à';
+$lang_module['userwait_resend_end'] = 'Fin des temps';
+$lang_module['userwait_resend_delete'] = 'Le courrier électronique existe déjà (a été activé d\'une certaine manière), supprimant les informations en attente d\'activation';
+$lang_module['userwait_resend_ok'] = 'Renvoyer l\'e-mail d\'activation';
+$lang_module['userwait_resend_error'] = 'Impossible d\'envoyer un courrier électronique, veuillez vérifier la configuration de votre messagerie';

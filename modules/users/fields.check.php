@@ -13,14 +13,17 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (empty($query_field)) {
-    $query_field = array();
+    $query_field = [];
+}
+if (empty($valid_field)) {
+    $valid_field = [];
 }
 if (defined('NV_ADMIN') and (!isset($_user) or !is_array($_user))) {
-    $_user = array();
+    $_user = [];
 } elseif ($op == 'register' and (!isset($array_register) or !is_array($array_register))) {
-    $array_register = array();
+    $array_register = [];
 } elseif ($op == 'editinfo' and (!isset($array_data) or !is_array($array_data))) {
-    $array_data = array();
+    $array_data = [];
 }
 
 foreach ($array_field_config as $row_f) {
@@ -30,7 +33,7 @@ foreach ($array_field_config as $row_f) {
         if ($row_f['field_type'] == 'number') {
             $number_type = $row_f['field_choices']['number_type'];
             $pattern = ($number_type == 1) ? '/^[0-9]+$/' : '/^[0-9\.]+$/';
-            
+
             if (!preg_match($pattern, $value)) {
                 nv_jsonOutput(array(
                     'status' => 'error',
@@ -39,7 +42,7 @@ foreach ($array_field_config as $row_f) {
                 ));
             } else {
                 $value = ($number_type == 1) ? intval($value) : floatval($value);
-                
+
                 if ($value < $row_f['min_length'] or $value > $row_f['max_length']) {
                     nv_jsonOutput(array(
                         'status' => 'error',
@@ -54,7 +57,7 @@ foreach ($array_field_config as $row_f) {
                 $m[2] = intval($m[2]);
                 $m[3] = intval($m[3]);
                 $value = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-                
+
                 if ($row_f['min_length'] > 0 and ($value < $row_f['min_length'] or $value > $row_f['max_length'])) {
                     nv_jsonOutput(array(
                         'status' => 'error',
@@ -127,9 +130,9 @@ foreach ($array_field_config as $row_f) {
             } else {
                 $value = nv_htmlspecialchars($value);
             }
-            
+
             $strlen = nv_strlen($value);
-            
+
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
                 nv_jsonOutput(array(
                     'status' => 'error',
@@ -166,10 +169,10 @@ foreach ($array_field_config as $row_f) {
                     ));
                 }
             }
-            
+
             $value = ($row_f['field_type'] == 'textarea') ? nv_nl2br($value, '<br />') : $value;
             $strlen = nv_strlen($value);
-            
+
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
                 nv_jsonOutput(array(
                     'status' => 'error',
@@ -178,13 +181,13 @@ foreach ($array_field_config as $row_f) {
                 ));
             }
         } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
-            $temp_value = array();
+            $temp_value = [];
             foreach ($value as $value_i) {
                 if (isset($row_f['field_choices'][$value_i])) {
                     $temp_value[] = $value_i;
                 }
             }
-            
+
             $value = implode(',', $temp_value);
         } elseif ($row_f['field_type'] == 'select' or $row_f['field_type'] == 'radio') {
             if (!isset($row_f['field_choices'][$value])) {
@@ -195,10 +198,10 @@ foreach ($array_field_config as $row_f) {
                 ));
             }
         }
-        
+
         $custom_fields[$row_f['field']] = $value;
     }
-    
+
     if (empty($value) and $row_f['required']) {
         nv_jsonOutput(array(
             'status' => 'error',
@@ -206,12 +209,19 @@ foreach ($array_field_config as $row_f) {
             'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title'])
         ));
     }
-    
+
     if (empty($row_f['system'])) {
-        if (!empty($userid)) {
-            $query_field[] = $row_f['field'] . '=' . $db->quote($value);
+        if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
+            $value = floatval($value);
+            $valid_field[$row_f['field']] = $value;
         } else {
-            $query_field[$row_f['field']] = $db->quote($value);
+            $valid_field[$row_f['field']] = $value;
+            $value = $db->quote($value);
+        }
+        if (!empty($userid)) {
+            $query_field[] = $row_f['field'] . '=' . $value;
+        } else {
+            $query_field[$row_f['field']] = $value;
         }
     } elseif (defined('NV_ADMIN')) {
         $_user[$row_f['field']] = $value;

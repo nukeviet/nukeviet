@@ -117,7 +117,7 @@ if (!empty($array_op) and $op == 'main') {
             if ($catid > 0) {
                 $op = 'detail';
             } else {
-                //muc tieu neu xoa chuyen muc cu hoac doi ten alias chuyen muc thi van rewrite duoc bai viet
+                // Khi mất catID cũ (đổi alias chuyên mục, xóa chuyên mục) thì tìm ra catid mới để chuyển hướng
                 $_row = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id)->fetch();
                 if (!empty($_row) and isset($global_array_cat[$_row['catid']])) {
                     $url_Permanently = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$_row['catid']]['alias'] . '/' . $_row['alias'] . '-' . $_row['id'] . $global_config['rewrite_exturl'], true);

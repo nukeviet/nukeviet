@@ -56,8 +56,6 @@ function validUserLog($array_user)
         'current_openid' => ''
     );
 
-    $user = serialize($user);
-
     $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET
 		checknum = :checknum,
 		last_login = " . NV_CURRENTTIME . ",
@@ -72,7 +70,7 @@ function validUserLog($array_user)
     $stmt->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
     $stmt->execute();
 
-    $nv_Request->set_Cookie('nvloginhash', $user, NV_LIVE_COOKIE_TIME);
+    $nv_Request->set_Cookie('nvloginhash', json_encode($user), NV_LIVE_COOKIE_TIME);
 }
 
 $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);

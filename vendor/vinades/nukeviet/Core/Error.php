@@ -22,6 +22,9 @@ if (!defined('E_DEPRECATED')) {
 if (!defined('E_USER_DEPRECATED')) {
     define('E_USER_DEPRECATED', 16384); //khong sua
 }
+if (!defined('NV_DEBUG')) {
+    define('NV_DEBUG', 0);
+}
 
 class Error
 {
@@ -69,13 +72,13 @@ class Error
     );
     private $track_fatal_error = array(
         array(
-            'file' => 'vendor/vinades/nukeviet/Cache/CRedis.php',
+            'file' => 'vendor/vinades/nukeviet/Cache/Redis.php',
             'pattern' => array(
                 array('/[\'|"]Redis[\'|"] not found/i', 'PHP Redis Extension does not exists!')
             )
         ),
         array(
-            'file' => 'vendor/vinades/nukeviet/Cache/Memcacheds.php',
+            'file' => 'vendor/vinades/nukeviet/Cache/Memcached.php',
             'pattern' => array(
                 array('/[\'|"]Memcached[\'|"] not found/i', 'PHP Memcached Extension does not exists!')
             )
@@ -109,9 +112,23 @@ class Error
             $this->error_log_fileext = Error::LOG_FILE_EXT_DEFAULT;
         }
 
-        $this->day = date('d-m-Y', NV_CURRENTTIME);
+        /*
+         * Prefix của file log
+         * Lấy cố định GMT, không theo múi giờ
+         */
+        $this->day = gmdate('d-m-Y', NV_CURRENTTIME);
+
+        /*
+         * Thời gian xảy ra lỗi
+         * Lấy theo múi giờ của client (tùy cấu hình)
+         */
         $this->error_date = date('r', NV_CURRENTTIME);
-        $this->month = date('m-Y', NV_CURRENTTIME);
+
+        /*
+         * Prefix theo tháng log 256
+         * Lấy cố định GMT, không theo múi giờ
+         */
+        $this->month = gmdate('m-Y', NV_CURRENTTIME);
 
         $ip = $this->get_Env('REMOTE_ADDR');
         $this->ip = $ip;
@@ -515,6 +532,11 @@ class Error
             if ($finded_track) {
                 $this->info_die();
             } else {
+                if (NV_DEBUG) {
+                    echo('Error on file ' . $this->errfile . ' line ' . $this->errline . ':<br /><pre><code>');
+                    echo($error['message']);
+                    die('</code></pre>');
+                }
                 die(chr(0));
             }
         }
@@ -551,8 +573,9 @@ class Error
     {
         $track_errors = $this->day . '_' . md5($this->errno . (string )$this->errfile . (string )$this->errline . $this->ip);
         $track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
+        $log_is_displayed = file_exists($track_errors);
 
-        if ($this->error_set_logs and !file_exists($track_errors)) {
+        if ($this->error_set_logs and !$log_is_displayed) {
             file_put_contents($track_errors, '', FILE_APPEND);
 
             if (!empty($this->log_errors_list) and isset($this->log_errors_list[$this->errno])) {
@@ -563,9 +586,9 @@ class Error
                 $this->_send();
             }
 
-            if (!empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
-                $this->_display();
-            }
+        }
+        if (NV_DEBUG and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
+            $this->_display();
         }
     }
 

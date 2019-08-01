@@ -8,7 +8,7 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -96,15 +96,15 @@ function nv_admin_checkdata($adm_session_value)
 
     $array_admin = unserialize($adm_session_value);
 
-    if (! isset($array_admin['admin_id']) or ! is_numeric($array_admin['admin_id']) or $array_admin['admin_id'] <= 0 or ! isset($array_admin['checknum']) or ! preg_match('/^[a-z0-9]{32}$/', $array_admin['checknum'])) {
+    if (!isset($array_admin['admin_id']) or !is_numeric($array_admin['admin_id']) or $array_admin['admin_id'] <= 0 or !isset($array_admin['checknum']) or !preg_match('/^[a-z0-9]{32}$/', $array_admin['checknum'])) {
         return array();
     }
 
-    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.check_num check_num, a.last_agent current_agent,
+    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme, a.check_num check_num, a.last_agent current_agent,
 		a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
 		b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
 		b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
-		b.password password, b.question question, b.answer answer, b.safemode safemode
+		b.password password, b.question question, b.answer answer, b.safemode safemode, b.email_verification_time email_verification_time
 		FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
 		WHERE a.admin_id = ' . $array_admin['admin_id'] . '
 		AND a.lev!=0
@@ -116,10 +116,10 @@ function nv_admin_checkdata($adm_session_value)
         return array();
     }
 
-    if (strcasecmp($array_admin['checknum'], $admin_info['check_num']) != 0 or    //check_num
-        ! isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or strcasecmp($array_admin['current_agent'], $admin_info['current_agent']) != 0 or    //user_agent
-        ! isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or strcasecmp($array_admin['current_ip'], $admin_info['current_ip']) != 0 or    //IP
-        ! isset($array_admin['current_login']) or empty($array_admin['current_login']) or strcasecmp($array_admin['current_login'], intval($admin_info['current_login'])) != 0) {    //current_login
+    if (($array_admin['checknum'] !== $admin_info['check_num']) or    //check_num
+        !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) or    //user_agent
+        !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) or    //IP
+        !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login']))) {    //current_login
         return array();
     }
 
@@ -128,7 +128,7 @@ function nv_admin_checkdata($adm_session_value)
         $allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
     } else {
         list($allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories) = explode('|', $admin_info['files_level']);
-        $allow_files_type = ! empty($allow_files_type) ? explode(',', $allow_files_type) : array();
+        $allow_files_type = !empty($allow_files_type) ? explode(',', $allow_files_type) : array();
         $allow_files_type2 = array_values(array_intersect($allow_files_type, $global_config['file_allowed_ext']));
         if ($allow_files_type != $allow_files_type2) {
             $update = implode(',', $allow_files_type2);
@@ -142,7 +142,7 @@ function nv_admin_checkdata($adm_session_value)
     }
 
     $admin_info['level'] = $admin_info['lev'];
-    $admin_info['last_login'] = ( int )$array_admin['last_login'];
+    $admin_info['last_login'] = intval($array_admin['last_login']);
     $admin_info['last_agent'] = $array_admin['last_agent'];
     $admin_info['last_ip'] = $array_admin['last_ip'];
     $admin_info['allow_files_type'] = $allow_files_type;
@@ -153,7 +153,7 @@ function nv_admin_checkdata($adm_session_value)
     if (empty($admin_info['first_name'])) {
         $admin_info['first_name'] = $admin_info['username'];
     }
-    
+
     // Thêm tự động nhóm của hệ thống
     $manual_groups = array(3);
     if ($admin_info['level'] == 1 or $admin_info['level'] == 2) {
@@ -167,8 +167,13 @@ function nv_admin_checkdata($adm_session_value)
     $admin_info['in_groups'] = $check_in_groups[0];
     $admin_info['2step_require'] = $check_in_groups[1];
     $admin_info['current_openid'] = '';
-    $admin_info['st_login'] = ! empty($admin_info['password']) ? true : false;
-    $admin_info['valid_question'] = (! empty($admin_info['question']) and ! empty($admin_info['answer'])) ? true : false;
+    $admin_info['st_login'] = !empty($admin_info['password']) ? true : false;
+    if ($global_config['allowquestion']) {
+        $admin_info['valid_question'] = (!empty($admin_info['question']) and !empty($admin_info['answer'])) ? true : false;
+    } else {
+        $admin_info['valid_question'] = true;
+    }
+
     $admin_info['current_mode'] = 5;
 
     unset($admin_info['lev'], $admin_info['files_level'], $admin_info['password'], $admin_info['question'], $admin_info['answer'], $admin_info['check_num']);

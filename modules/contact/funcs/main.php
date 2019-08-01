@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
-
 if (!defined('NV_IS_MOD_CONTACT')) {
     die('Stop!!!');
 }
@@ -20,7 +19,10 @@ $alias_url = isset($array_op[0]) ? $array_op[0] : '';
 $alias_department = '';
 
 $cats = array();
-$cats[] = array(0, '');
+$cats[] = array(
+    0,
+    ''
+);
 $catsName = array();
 $catsName[] = $lang_module['selectCat'];
 $dpDefault = 0;
@@ -29,11 +31,16 @@ if (!empty($array_department)) {
         if ($department['alias'] == $alias_url) {
             $alias_department = $department['alias'];
             $dpDefault = $department['id'];
-            $array_department = array($department['id'] => $department);
+            $array_department = array(
+                $department['id'] => $department
+            );
             $cats = array();
             $catsName = array_map('trim', explode('|', $department['cats']));
             foreach ($catsName as $_cats2) {
-                $cats[] = array($department['id'], $_cats2);
+                $cats[] = array(
+                    $department['id'],
+                    $_cats2
+                );
             }
             break;
         }
@@ -41,7 +48,10 @@ if (!empty($array_department)) {
         if (!empty($department['cats'])) {
             $_cats = array_map('trim', explode('|', $department['cats']));
             foreach ($_cats as $_cats2) {
-                $cats[] = array($department['id'], $_cats2);
+                $cats[] = array(
+                    $department['id'],
+                    $_cats2
+                );
                 $catsName[] = in_array($_cats2, $catsName) ? $_cats2 . ', ' . $department['full_name'] : $_cats2;
             }
         }
@@ -61,6 +71,10 @@ $fname = '';
 $femail = '';
 $fphone = '';
 $faddress = '';
+$sendcopy = true;
+if (!defined('NV_IS_MODADMIN') and empty($module_config[$module_name]['sendcopymode']) and (!defined('NV_IS_USER') or $user_info['email_verification_time'] == 0 or $user_info['email_verification_time'] == -1)) {
+    $sendcopy = false;
+}
 
 if (defined('NV_IS_USER')) {
     $fname = !empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
@@ -84,7 +98,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $array_content = array(
             'fname' => $fname,
             'femail' => $femail,
-            'fphone' => $fphone);
+            'fphone' => $fphone,
+            'sendcopy' => $sendcopy,
+            'bodytext' => ''
+        );
 
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -102,41 +119,46 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fname',
-            'mess' => $lang_module['error_fullname']));
+            'mess' => $lang_module['error_fullname']
+        ));
     }
 
     if (($check_valid_email = nv_check_valid_email($femail)) != '') {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'femail',
-            'mess' => $check_valid_email));
+            'mess' => $check_valid_email
+        ));
     }
 
     if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'ftitle',
-            'mess' => $lang_module['error_title']));
+            'mess' => $lang_module['error_title']
+        ));
     }
     if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'fcon',
-            'mess' => $lang_module['error_content']));
+            'mess' => $lang_module['error_content']
+        ));
     }
     if (!nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])));
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+        ));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
     if (isset($cats[$fcat])) {
-        $fpart = (int)$cats[$fcat][0];
+        $fpart = (int) $cats[$fcat][0];
         $fcat = $cats[$fcat][1];
     } else {
-        $fpart = (int)$cats[0][0];
+        $fpart = (int) $cats[0][0];
         $fcat = $cats[0][1];
     }
 
@@ -148,7 +170,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
     $faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
-    $fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
+    $fsendcopy = ((int) $nv_Request->get_bool('sendcopy', 'post') and $sendcopy);
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
@@ -199,32 +221,41 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         }
 
         if (!empty($email_list)) {
-            $from = array($fname, $femail);
+            $from = array(
+                $fname,
+                $femail
+            );
             $email_list = array_unique($email_list);
             @nv_sendmail($from, $email_list, $ftitle, $fcon_mail);
         }
 
         // Gửi bản sao đến hộp thư người gửi
         if ($fsendcopy) {
-            $from = array($global_config['site_name'], $global_config['site_email']);
+            $from = array(
+                $global_config['site_name'],
+                $global_config['site_email']
+            );
             $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false);
             @nv_sendmail($from, $femail, $ftitle, $fcon_mail);
         }
 
-        nv_insert_notification($module_name, 'contact_new', array('title' => $ftitle), $row_id, 0, $sender_id, 1);
+        nv_insert_notification($module_name, 'contact_new', array(
+            'title' => $ftitle
+        ), $row_id, 0, $sender_id, 1);
 
         nv_jsonOutput(array(
             'status' => 'ok',
             'input' => '',
-            'mess' => $lang_module['sendcontactok']));
+            'mess' => $lang_module['sendcontactok']
+        ));
     }
 
     nv_jsonOutput(array(
         'status' => 'error',
         'input' => '',
-        'mess' => $lang_module['sendcontactfailed']));
+        'mess' => $lang_module['sendcontactfailed']
+    ));
 }
-
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
@@ -253,8 +284,10 @@ if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
 $array_content = array(
     'fname' => $fname,
     'femail' => $femail,
-    'fphone' => $fphone);
-$array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? $module_config[$module_name]['bodytext'] : '';
+    'fphone' => $fphone,
+    'sendcopy' => $sendcopy,
+    'bodytext' => $module_config[$module_name]['bodytext']
+);
 
 $contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
 

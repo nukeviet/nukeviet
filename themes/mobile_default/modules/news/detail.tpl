@@ -103,7 +103,6 @@
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
 			<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
-	        <div class="g-plusone" data-size="medium"></div>
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	    </div>
         <!-- END: socialbutton -->
@@ -117,7 +116,7 @@
 			<div class="col-md-12">
 				<!-- BEGIN: keywords -->
 				<div class="keywords">
-					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
+					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.tags}: </strong>
 					<!-- BEGIN: loop -->
 					<a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}
 					<!-- END: loop -->

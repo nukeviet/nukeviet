@@ -130,7 +130,7 @@
 <div class="news_column panel panel-default">
 	<div class="panel-body">
         <div class="h5">
-            <em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong><!-- BEGIN: loop --><a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}<!-- END: loop -->
+            <em class="fa fa-tags">&nbsp;</em><strong>{LANG.tags}: </strong><!-- BEGIN: loop --><a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}<!-- END: loop -->
         </div>
     </div>
 </div>
@@ -191,7 +191,6 @@
 	<div class="panel-body">
         <div class="socialicon clearfix margin-bottom-lg">
         	<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
-	        <div class="g-plusone" data-size="medium"></div>
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	    </div>
      </div>

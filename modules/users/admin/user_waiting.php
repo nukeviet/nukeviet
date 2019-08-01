@@ -34,27 +34,30 @@ if ($nv_Request->isset_request('act', 'get')) {
     }
 
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-     username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
-     regdate, question,
-     answer, passlostkey, view_mail, remember, in_groups, active, checknum,
-     last_login, last_ip, last_agent, last_openid, idsite
-     ) VALUES (
-     :username,
-     :md5_username,
-     :password,
-     :email,
-     :first_name,
-     :last_name,
-     :gender,
-     '',
-     :birthday,
-     :sig,
-     " . $row['regdate'] . ",
-     :question,
-     :answer,
-     '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+        group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
+        regdate, question,
+        answer, passlostkey, view_mail, remember, in_groups, active, checknum,
+        last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
+    ) VALUES (
+        :group_id,
+        :username,
+        :md5_username,
+        :password,
+        :email,
+        :first_name,
+        :last_name,
+        :gender,
+        '',
+        :birthday,
+        :sig,
+        " . $row['regdate'] . ",
+        :question,
+        :answer,
+        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", -2, '" . $admin_info['userid'] . "'
+    )";
 
     $data_insert = array();
+    $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
     $data_insert['username'] = $row['username'];
     $data_insert['md5_username'] = nv_md5safe($row['username']);
     $data_insert['password'] = $row['password'];
@@ -86,12 +89,26 @@ if ($nv_Request->isset_request('act', 'get')) {
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
             if ($row_f['system'] == 1) continue;
-            $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
+            if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
+                $default_value = floatval($row_f['default_value']);
+            } else {
+                $default_value = $db->quote($row_f['default_value']);
+            }
+            $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
         }
 
         if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+            if (!empty($global_users_config['active_group_newusers'])) {
+                nv_groups_add_user(7, $row['userid'], 1, $module_data);
+            } else {
+                $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+            }
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
+
+            // Callback sau khi đăng ký
+            if (nv_function_exists('nv_user_register_callback')) {
+                nv_user_register_callback($userid);
+            }
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
 
@@ -102,7 +119,7 @@ if ($nv_Request->isset_request('act', 'get')) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
             $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
-            @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
+            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         } else {
             $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
         }
@@ -252,6 +269,11 @@ foreach ($users_list as $u) {
 if (!empty($generate_page)) {
     $xtpl->assign('GENERATE_PAGE', $generate_page);
     $xtpl->parse('main.generate_page');
+}
+
+if ($num_items > 0) {
+    $xtpl->assign('RESEND_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting_remail');
+    $xtpl->parse('main.resend_email');
 }
 
 $xtpl->parse('main');

@@ -1375,7 +1375,7 @@ a.btn {
     border-style: solid;
     border-color: #a6c8e6;
     padding:10px;
-    z-index:1000;
+    z-index:9998;
     display:none;
 }
 
@@ -1780,6 +1780,13 @@ a.btn {
 
 .nv-list-item.lg li {
     padding:10px;
+}
+.page .nv-list-item li{
+    display: flex;
+}
+.page .nv-list-item li em{
+    position: relative;
+    top: 2px;
 }
 
 /* sub-list-icon */

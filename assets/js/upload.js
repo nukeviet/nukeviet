@@ -6,6 +6,8 @@
  * @Createdate 27/01/2011, 9:36
  */
 
+var isDebugMode = false;
+
 function htmlspecialchars_decode(string, quote_style) {
     //       discuss at: http://phpjs.org/functions/htmlspecialchars_decode/
     //      original by: Mirek Slugen
@@ -326,8 +328,8 @@ function preview() {
             $("#FileAbsolutePathBtn").mouseout(function() {
                 $(this).tooltip('destroy');
             });
-            var clipboard1 = new Clipboard('#FileRelativePathBtn');
-            var clipboard2 = new Clipboard('#FileAbsolutePathBtn');
+            var clipboard1 = new ClipboardJS('#FileRelativePathBtn');
+            var clipboard2 = new ClipboardJS('#FileAbsolutePathBtn');
             clipboard1.on('success', function(e) {
                 $(e.trigger).tooltip('show');
             });
@@ -875,7 +877,7 @@ function addlogo() {
         $('#addlogoContent img.addlogo-image').cropper({
             viewMode: 3,
             dragMode: 'none',
-            aspectRatio: NaN,
+            aspectRatio: markW / markH,
             responsive: true,
             modal: true,
             guides: false,
@@ -889,7 +891,7 @@ function addlogo() {
             zoomOnTouch: false,
             zoomOnWheel: false,
             cropBoxMovable: true,
-            cropBoxResizable: false,
+            cropBoxResizable: true,
             minContainerWidth: 10,
             minContainerHeight: 10,
             crop: function(e) {
@@ -1029,8 +1031,8 @@ function fileSelectStop(e, ui) {
 
 function enRefreshBtn(btn, state) {
     if (state >= 2) {
-        btn.removeClass(ICON.spin)
-        btn.data('busy', false)
+        btn.removeClass(ICON.spin);
+        btn.data('busy', false);
     }
 }
 
@@ -1059,12 +1061,12 @@ $(".vchange").change(function() {
 });
 
 $(".refresh em").click(function() {
-    var $this = $(this)
+    var $this = $(this);
     if ($this.data('busy')) {
-        return
+        return;
     }
-    $this.data('busy', true)
-    $this.addClass(ICON.spin)
+    $this.data('busy', true);
+    $this.addClass(ICON.spin);
 
     var a = $("span#foldervalue").attr("title"),
         b = $("select[name=imgtype]").val(),
@@ -1074,16 +1076,18 @@ $(".refresh em").click(function() {
         loaded = 0;
 
     $("#imgfolder").html(nv_loading_data).load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10), function() {
-        loaded++
-        enRefreshBtn($this, loaded)
+        loaded++;
+        (isDebugMode && console.log("Loaded list folder!"));
+        enRefreshBtn($this, loaded);
     });
     $("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function() {
-        loaded++
-        enRefreshBtn($this, loaded)
-        LFILE.setViewMode()
+        loaded++;
+        (isDebugMode && console.log("Loaded list files!"));
+        enRefreshBtn($this, loaded);
+        LFILE.setViewMode();
     });
 
-    return false
+    return false;
 });
 
 $(".viewmode em").click(function() {
@@ -1473,7 +1477,7 @@ function remoteUpload() {
     $("div#uploadremote").dialog({
         autoOpen: false,
         width: 400,
-        height: nv_alt_require ? 200 : 120,
+        height: 320,
         modal: true,
         position: {
             my: "center",
@@ -1490,6 +1494,22 @@ function remoteUpload() {
         });
     }
 
+    var current_folder = $('span.folder[title="' + $("span#foldervalue").attr("title") + '"]');
+    var auto_logo = current_folder.is('.auto_logo');
+    var logo = $("input[name=upload_logo]").val();
+    var panel = $('#uploadremote');
+    if (logo == '') {
+        $('[data-toggle="autoLogoArea"]', panel).addClass('hidden');
+        $('[name="auto_logo"]', panel).prop('checked', false);
+    } else {
+        $('[data-toggle="autoLogoArea"]', panel).removeClass('hidden');
+        if (auto_logo) {
+            $('[name="auto_logo"]', panel).prop('checked', true);
+        } else {
+            $('[name="auto_logo"]', panel).prop('checked', false);
+        }
+    }
+
     return false;
 }
 
@@ -1500,6 +1520,8 @@ $('[name="uploadremoteFileOK"]').click(function() {
     var folderPath = $("span#foldervalue").attr("title");
     var check = fileUrl + " " + folderPath;
     var fileAlt = $('#uploadremoteFileAlt').val();
+    var panel = $('#uploadremote');
+    var auto_logo = ($('[name="auto_logo"]', panel).is(':checked') ? 1 : 0);
 
     if (/^(https?|ftp):\/\//i.test(fileUrl) === false) fileUrl = 'http://' + fileUrl;
     $("input[name=uploadremoteFile]").val(fileUrl);
@@ -1511,7 +1533,7 @@ $('[name="uploadremoteFileOK"]').click(function() {
         $.ajax({
             type: "POST",
             url: nv_module_url + "upload&random=" + nv_randomNum(10),
-            data: "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt,
+            data: "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt + '&autologo=' + auto_logo,
             success: function(k) {
                 $('[name="uploadremoteFileOK"]').removeAttr('disabled');
 
@@ -1846,20 +1868,26 @@ var NVUPLOAD = {
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
                 multipart: true,
+                multipart_params: {
+                    "filealt": "--"
+                },
                 filters : {
-               	    max_file_size : nv_max_size_bytes,
+                    max_file_size : nv_max_size_bytes,
                     mime_types: []
                 },
                 chunk_size: nv_chunk_size,
+                resize: false,
                 init: {
                     // Event on init uploader
                     PostInit: function() {
                         $('#upload-dropdown-btn').removeClass('open');
                         $('#upload-dropdown-btn').removeClass('perload');
+                        (isDebugMode && console.log("Plupload: Event init"));
                     },
 
                     // Event on add file (Add to queue or first add)
                     FilesAdded: function(up, files) {
+                        (isDebugMode && console.log("Plupload: Event fileadded"));
                         // Build upload container
                         if (!NVUPLOAD.rendered) {
                             NVUPLOAD.renderUI();
@@ -1867,7 +1895,8 @@ var NVUPLOAD = {
 
                         NVUPLOAD.updateList();
 
-                        // Xác định resize ảnh (bug plupload 2.3.1)
+                        // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
+                        /*
                         if (nv_resize != false) {
                             var lastKey = NVUPLOAD.uploader.files.length - 1;
                             $.each(NVUPLOAD.uploader.files, function(k, file) {
@@ -1899,6 +1928,7 @@ var NVUPLOAD = {
                                 NVUPLOAD.uploader.files[k] = file;
                             });
                         }
+                        */
 
                         $('#upload-start').click(function() {
                             // Check file before start upload
@@ -1928,6 +1958,7 @@ var NVUPLOAD = {
 
                     // Event on trigger a file upload status
                     UploadProgress: function(up, file) {
+                        (isDebugMode && console.log("Plupload: Event Upload Progress"));
                         $('#' + file.id + ' .file-status').html(file.percent + '%');
                         NVUPLOAD.handleStatus(file, false);
                         NVUPLOAD.updateTotalProgress();
@@ -1935,12 +1966,16 @@ var NVUPLOAD = {
 
                     // Event on one file finish uploaded (Maybe success or error)
                     FileUploaded: function(up, file, response) {
+                        (isDebugMode && console.log("Plupload: Event file uploaded"));
+                        (isDebugMode && console.log(response));
                         response = response.response;
                         NVUPLOAD.handleStatus(file, response);
                     },
 
                     // Event on start upload or finish upload
                     StateChanged: function() {
+                        (isDebugMode && console.log("Plupload: Event state changed " + NVUPLOAD.uploader.state));
+
                         // Start upload
                         if (NVUPLOAD.uploader.state === plupload.STARTED) {
                             if (!NVUPLOAD.started) {
@@ -1981,7 +2016,8 @@ var NVUPLOAD = {
                                     NVUPLOAD.uploader.start();
                                 });
                             }
-                        } else {
+                        } else if (NVUPLOAD.uploader.state != 8) {
+                            // 8 is Queueable.DESTROYED state
                             NVUPLOAD.updateList();
                         }
                     },
@@ -1993,6 +2029,7 @@ var NVUPLOAD = {
 
                     // Event on remove a file
                     FilesRemoved: function() {
+                        (isDebugMode && console.log("Plupload: Event file removed"));
                         var scrollTop = $('#upload-queue-files').scrollTop();
                         NVUPLOAD.updateList();
                         $('#upload-queue-files').scrollTop(scrollTop);
@@ -2000,6 +2037,7 @@ var NVUPLOAD = {
 
                     // Event on all files are uploaded
                     UploadComplete: function(up, files) {
+                        (isDebugMode && console.log("Plupload: Event upload completed"));
                         $('#upload-continue').hide();
                         $('#upload-stop').hide();
 
@@ -2018,6 +2056,7 @@ var NVUPLOAD = {
 
                     // Event on error
                     Error: function(up, err) {
+                        (isDebugMode && console.log("Plupload: Event error"));
                         $("div#errorInfo").html("Error #" + err.message + ": <br>" + err.file.name).dialog("open");
 
                         if (err.code === plupload.INIT_ERROR) {
@@ -2027,16 +2066,21 @@ var NVUPLOAD = {
 
                     // Get image alt before upload
                     BeforeUpload: function(up, file) {
+                        (isDebugMode && console.log("Plupload: Event before upload"));
                         var filealt = '';
+                        var autologo = ($('[name="auto_logo"]', $('#upload-queue')).is(':checked') ? 1 : 0);
 
                         if ($('#' + file.id + ' .file-alt').length) {
                             filealt = $('#' + file.id + ' .file-alt input').val();
                         }
 
                         NVUPLOAD.uploader.settings.multipart_params = {
-                            "filealt": filealt
+                            "filealt": filealt,
+                            "autologo": autologo
                         };
-                        // Xác định resize ảnh (bug plupload 2.3.1)
+
+                        // Xác định resize ảnh (bug plupload 2.3.1) => Tạm thời để lại code phòng khi lỗi, vài phiên bản nũa nếu không lỗi sẽ xóa code này
+                        /*
                         if (nv_resize != false) {
                             if (typeof file.clientResize != "undefined" && file.clientResize) {
                                 NVUPLOAD.uploader.settings.resize = nv_resize;
@@ -2044,10 +2088,12 @@ var NVUPLOAD = {
                                 NVUPLOAD.uploader.settings.resize = {};
                             }
                         }
+                        */
                     },
 
                     // Upload xong một BLOB
                     ChunkUploaded: function(up, file, res) {
+                        (isDebugMode && console.log("Plupload: Event chunk uploaded"));
                         /**
                          * Hiện tại Plupload không có chức năng dừng upload chunk và chuyển sang file khác
                          * Do đó tạm thời khi lỗi một BLOG phải chờ upload xong cả file để kiểm tra lỗi
@@ -2063,6 +2109,10 @@ var NVUPLOAD = {
         }
     },
     renderUI: function() {
+        var current_folder = $('span.folder[title="' + $("span#foldervalue").attr("title") + '"]');
+        var auto_logo = current_folder.is('.auto_logo');
+        var logo = $("input[name=upload_logo]").val();
+
         // Hide files list and show upload container
         $('#imglist').css({
             'display': 'none'
@@ -2070,6 +2120,12 @@ var NVUPLOAD = {
         $('#upload-queue').css({
             'display': 'block'
         });
+
+        if (logo == '') {
+            $('#upload-queue').removeClass('auto-logo');
+        } else {
+            $('#upload-queue').addClass('auto-logo');
+        }
 
         // Add some button
         $('#upload-button-area .buttons').append(
@@ -2095,7 +2151,13 @@ var NVUPLOAD = {
             '</div>' +
             '</div>' +
             '</div>' +
-            '<div id="upload-queue-files" class="container-fluid"></div>');
+            '<div id="upload-queue-files" class="container-fluid"></div>\
+            <div class="queue-opts">\
+            <div class="checkbox">\
+            <label><input type="checkbox" name="auto_logo" value="1"' + ((logo != '' && auto_logo) ? ' checked="checked"' : '') + '> ' + LANG.autologo_for_upload + '</label>\
+            </div>\
+            </div>\
+        ');
 
         // Rendered is true
         NVUPLOAD.rendered = true;

@@ -56,9 +56,6 @@ $lang_module['hot_post'] = 'Nổi bật';
 
 $lang_module['layout_func'] = 'Sử dụng layout';
 $lang_module['layout_default'] = 'Mặc định';
-$lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
-$lang_module['googleplus_1'] = 'Không sử dụng';
-$lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
 
 $lang_module['config'] = 'Cấu hình';
 $lang_module['config_view_type'] = 'Phương án hiển thị bài viết';

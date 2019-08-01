@@ -49,7 +49,7 @@ $(document).ready(function(){
         }
         $('[data-toggle="controlrw1"]').change();
     });
-	
+
 	// Smtp
 	$("input[name=mailer_mode]").click(function() {
 		var type = $(this).val();
@@ -61,7 +61,7 @@ $(document).ready(function(){
 	});
 
 	// Security
-	if( $.fn.datepicker ){
+	if($.fn.datepicker) {
 		$(".datepicker, #start_date").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
@@ -72,30 +72,17 @@ $(document).ready(function(){
 			buttonImageOnly : true
 		});
 	}
-	$('.submit-security').click(function() {
-		var ip = $('input[name=ip]').val();
-		$('input[name=ip]').focus();
-		if (ip == '') {
-			alert(LANG.banip_error_ip);
-			return false;
-		}
-		var area = $('select[name=area]').val();
-		$('select[name=area]').focus();
-		if (area == '0') {
-			alert(LANG.banip_error_area);
-			return false;
-		}
-	});
 	$('a.deleteone-ip').click(function() {
 		if (confirm(LANG.banip_delete_confirm)) {
 			var url = $(this).attr('href');
+            var selectedtab = $('[name="gselectedtab"]').val();
 			$.ajax({
 				type : 'POST',
 				url : url,
 				data : '',
 				success : function(data) {
 					alert(LANG.banip_del_success);
-					window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security";
+					window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security&selectedtab=" + selectedtab;
 				}
 			});
 		}
@@ -110,7 +97,7 @@ $(document).ready(function(){
             $('[data-captcha="typerecaptcha"]').hide();
         }
     });
-	
+
 	// Site setting
 	$(".selectimg").click(function() {
 		var area = $(this).attr('data-name');
@@ -120,7 +107,7 @@ $(document).ready(function(){
 		nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-	
+
 	// FTP setting
 	$('#autodetectftp').click(function() {
 		var ftp_server = $('input[name="ftp_server"]').val();
@@ -153,11 +140,11 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+
 	$('#ssl_https').change(function(){
 		var val = $(this).data('val');
 		var mode = $(this).val();
-		
+
 		if( mode != 0 && val == 0 && ! confirm(LANG.note_ssl) ){
 			$(this).val('0');
 			return;

@@ -9,13 +9,9 @@ return array(
     'TrueBV\\' => array($vendorDir . '/true/punycode/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
-    'Symfony\\Component\\CssSelector\\' => array($vendorDir . '/symfony/css-selector'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'OAuth\\' => array($vendorDir . '/and/oauth/src'),
     'NukeViet\\' => array($vendorDir . '/vinades/nukeviet'),
     'League\\Url\\' => array($vendorDir . '/league/url/src'),
-    'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
-    'Facebook\\InstantArticles\\' => array($vendorDir . '/facebook/facebook-instant-articles-sdk-php/src/Facebook/InstantArticles'),
-    'Facebook\\' => array($vendorDir . '/facebook/graph-sdk/src/Facebook'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
 );

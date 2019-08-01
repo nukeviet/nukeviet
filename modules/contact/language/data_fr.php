@@ -73,6 +73,6 @@ $sth->bindValue(':is_default', $is_default, PDO::PARAM_INT);
 $sth->execute();
 
 $bodytext = 'Si vous avez des questions ou désirez obtenir de plus amples informations à propos de nous, vous pouvez remplir le formulaire de contact ci-dessous et nous présenter, ou de trouver un service approprié comme ci-dessous pour fax ou e-mail nous vos questions , des enquêtes et des commentaires etc. Nous fournirons une assistance rapide et essayer de revenir vers vous dès que nous le pouvons.';
-$sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'bodytext', :bodytext)");
-$sth->bindParam(':bodytext', $bodytext, PDO::PARAM_STR, strlen($bodytext));
+$sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='" . $lang . "' AND module='" . $module_name . "' AND config_name='bodytext'");
+$sth->bindParam(':config_value', $bodytext, PDO::PARAM_STR, strlen($bodytext));
 $sth->execute();

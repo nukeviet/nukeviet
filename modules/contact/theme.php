@@ -145,6 +145,11 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                                 $xtpl->parse('main.dep.whatsapp');
                             } else {
                                 $xtpl->assign('OTHER', array( 'name' => $key, 'value' => $value ));
+                                if (nv_is_url($value)) {
+                                    $xtpl->parse('main.dep.other.url');
+                                } else {
+                                    $xtpl->parse('main.dep.other.text');
+                                }
                                 $xtpl->parse('main.dep.other');
                             }
                         }
@@ -182,6 +187,10 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
+
+    if ($array_content['sendcopy']) {
+        $xtpl->parse('main.sendcopy');
+    }
 
     if ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
