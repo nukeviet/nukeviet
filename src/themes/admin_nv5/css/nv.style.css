@@ -1,0 +1,71 @@
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 2-9-2010 14:43
+ */
+
+.w70 {
+    width: 70px!important;
+}
+
+.mw300 {
+    min-width: 300px!important;
+}
+
+.mw200 {
+    min-width: 200px!important;
+}
+
+.mw100 {
+    min-width: 100px!important;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cursor-pointer {
+    cursor: pointer!important;
+}
+
+/* Row captcha */
+.nv-row-captcha {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.nv-row-captcha>.ipt {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.nv-row-captcha>.img,
+.nv-row-captcha>.rfs {
+    flex: 0;
+}
+
+.nv-row-captcha>.rfs {
+    padding-left: 10px;
+}
+
+.nv-row-recaptcha {
+    display: flex;
+    justify-content: center;
+}
+
+.nv-row-recaptcha>div {
+    flex: 0;
+}
+
+/* Jquery UI Selectable Fix */
+.ui-selectable-helper {
+    z-index: 100001!important;
+}
