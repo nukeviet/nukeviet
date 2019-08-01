@@ -410,7 +410,7 @@ $xtpl->assign('SELECTTHEMES', $selectthemes);
 $xtpl->assign('BLOCKREDIRECT', $blockredirect);
 $xtpl->assign('THEME_SELECTED', ($row['module'] == 'theme') ? ' selected="selected"' : '');
 
-$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' WHERE act = 1 ORDER BY weight ASC';
 $result = $db->query($sql);
 while ($row_i = $result->fetch()) {
     $xtpl->assign('MODULE', array(
