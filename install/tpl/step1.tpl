@@ -96,6 +96,10 @@
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.3.06</h5>
+                    VINADES.,JSC (33 commits),
+                    <a target="_blank" href="https://github.com/tdfoss">TDFOSS.,LTD (5 commits)</a>,
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>
                 <h5>{LANG.thanks_other_version} 4.3.05</h5>
                     VINADES.,JSC (38 commits),
                     <a target="_blank" href="https://github.com/vuthao/">vuthao (2 commits)</a>,

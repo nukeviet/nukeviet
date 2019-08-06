@@ -19,6 +19,7 @@ $array_config_global = array();
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config_global['online_upd'] = $nv_Request->get_int('online_upd', 'post');
     $array_config_global['statistic'] = $nv_Request->get_int('statistic', 'post');
+    $array_config_global['referer_blocker'] = $nv_Request->get_int('referer_blocker', 'post', 0);
 
     $statistics_timezone = nv_substr($nv_Request->get_title('statistics_timezone', 'post', '', 0), 0, 255);
 
@@ -50,6 +51,7 @@ $page_title = $lang_module['global_statistics'];
 
 $array_config_global['online_upd'] = ($global_config['online_upd']) ? ' checked="checked"' : '';
 $array_config_global['statistic'] = ($global_config['statistic']) ? ' checked="checked"' : '';
+$array_config_global['referer_blocker'] = ($global_config['referer_blocker']) ? ' checked="checked"' : '';
 $array_config_global['googleAnalyticsID'] = $global_config['googleAnalyticsID'];
 
 $xtpl = new XTemplate('statistics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

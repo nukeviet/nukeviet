@@ -1,11 +1,30 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.07
+
+- Add configuration for turn on/off refer checker utility
+
 NUKEVIET 4.3.06
 
+- Add SMTP configuration check function
+- Support upload SVG files
+- Chart.js v2.8.0
+- Select2 v4.0.7
+- Jquery v3.4.1
+- Ckeditor v4.11.4
+- Display the child sitemap at the "sitemapindex"
+- Add the function to debug SQL statements
+- Add an optional configuration to insert a logo with each post
+- Use ReCaptcha to confirm if Flood blocked
+- Block external requests into the admin area
+- Support CORS setting
+- Change timestamp to UNIX timestamp
+- Module news: Support redirect to new article url when changing categories
+- Module banners: Add display type "Random One"
 - Fix bug comment XSS. Thanks dalatsubnet at WhiteHub#640
 - Remove Google MAP API and fix block global.company_info.php
-- Module users: Save the information of the object that has activated user account
+- Module users: Save the information of the object that has activated user account. Add the function to resend the account activation email.
 - Fix the issue of adding news with very long keywords
 - Fix add, detete admin
 - Fix user add, user edit in admin.

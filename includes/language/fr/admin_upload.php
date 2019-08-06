@@ -113,6 +113,7 @@ $lang_module['upload_logo'] = 'Logo à ajouter aux images';
 $lang_module['upload_logo_pos'] = 'La position du logo';
 $lang_module['selectimg'] = 'Sélectionner l\'image';
 $lang_module['autologo'] = 'Ajouter automatiquement le logo aux images';
+$lang_module['autologo_for_upload'] = 'Insérer le logo dans le fichier de téléchargement (s\'il s\'agit d\'une image)';
 $lang_module['autologomodall'] = 'Tous les modules';
 $lang_module['logosizecaption'] = 'Taille de logo';
 $lang_module['imagewith'] = 'Si la largeur de l\'image';

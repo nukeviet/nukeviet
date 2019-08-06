@@ -12,7 +12,7 @@ namespace NukeViet\Core;
 
 /**
  * Blocker
- * 
+ *
  * @package NUKEVIET 4 CORE
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2016 VINADES.,JSC. All rights reserved
@@ -23,7 +23,7 @@ class Blocker
 {
     const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
     const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
-    
+
     const LOGIN_RULE_NUMBER = 0;
     const LOGIN_RULE_TIMERANGE = 1;
     const LOGIN_RULE_END = 2;
@@ -85,7 +85,7 @@ class Blocker
 
     /**
      * Blocker::trackFlood()
-     * 
+     *
      * @param mixed $rules
      * @return void
      */
@@ -94,7 +94,7 @@ class Blocker
         if (!empty($rules)) {
             $this->flood_rules = $rules;
         }
-        
+
         $info = $this->_get_info();
         foreach ($this->flood_rules as $interval => $limit) {
             if (!isset($info['access'][$interval])) {
@@ -119,10 +119,10 @@ class Blocker
             $this->_save_info($info);
         }
     }
-    
+
     /**
      * Blocker::trackLogin()
-     * 
+     *
      * @param mixed $rules
      * @return void
      */
@@ -132,21 +132,21 @@ class Blocker
             $this->login_rules = $rules;
         }
     }
-    
+
     /**
      * Blocker::is_blocklogin()
-     * 
+     *
      * @param mixed $loginname
      * @return
      */
     public function is_blocklogin($loginname)
     {
         $blocked = false;
-        
+
         if (!empty($loginname)) {
             $_loginname = md5($loginname);
             $info = $this->_get_info();
-            
+
             if (isset($info['login'][$_loginname]) and $info['login'][$_loginname]['count'] >= $this->login_rules[Blocker::LOGIN_RULE_NUMBER]) {
                 $this->login_block_end = $info['login'][$_loginname]['lasttime'] + ($this->login_rules[Blocker::LOGIN_RULE_END] * 60);
                 if ($this->login_block_end > NV_CURRENTTIME) {
@@ -154,13 +154,13 @@ class Blocker
                 }
             }
         }
-        
+
         return $blocked;
     }
-    
+
     /**
      * Blocker::set_loginFailed()
-     * 
+     *
      * @param mixed $loginname
      * @param integer $time
      * @return void
@@ -170,28 +170,28 @@ class Blocker
         if (empty($time)) {
             $time = time();
         }
-        
+
         if (!empty($loginname)) {
             $loginname = md5($loginname);
             $info = $this->_get_info();
-            
+
             if (!isset($info['login'][$loginname]) or ($time - $info['login'][$loginname]['starttime']) > ($this->login_rules[Blocker::LOGIN_RULE_TIMERANGE] * 60)) {
                 $info['login'][$loginname] = array();
                 $info['login'][$loginname]['count'] = 0;
                 $info['login'][$loginname]['starttime'] = $time;
                 $info['login'][$loginname]['lasttime'] = 0;
             }
-            
+
             $info['login'][$loginname]['count'] ++;
             $info['login'][$loginname]['lasttime'] = $time;
-            
+
             $this->_save_info($info);
         }
     }
-    
+
     /**
      * Blocker::reset_trackLogin()
-     * 
+     *
      * @param mixed $loginname
      * @return void
      */
@@ -204,10 +204,22 @@ class Blocker
             $this->_save_info($info);
         }
     }
-    
+
+    /**
+     *
+     */
+    public function resetTrackFlood()
+    {
+        $info = $this->_get_info();
+        if (isset($info['access'])) {
+            unset($info['access']);
+        }
+        $this->_save_info($info);
+    }
+
     /**
      * Blocker::_get_info()
-     * 
+     *
      * @return
      */
     private function _get_info()
@@ -217,13 +229,13 @@ class Blocker
         if (file_exists($logfile)) {
             $info = unserialize(file_get_contents($logfile));
         }
-        
+
         return $info;
     }
-    
+
     /**
      * Blocker::_save_info()
-     * 
+     *
      * @param mixed $info
      * @return
      */
@@ -232,10 +244,10 @@ class Blocker
         $logfile = $this->_get_logfile();
         return file_put_contents($logfile, serialize($info));
     }
-    
+
     /**
      * Blocker::_get_logfile()
-     * 
+     *
      * @return
      */
     private function _get_logfile()

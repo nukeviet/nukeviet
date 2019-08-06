@@ -8,11 +8,11 @@
  * @Createdate 2-2-2010 1:58
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
-$allow_func = array( 'main', 'language', 'smtp' );
+$allow_func = ['main', 'language', 'smtp'];
 if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0)) {
     $allow_func[] = 'system';
 }
@@ -97,7 +97,7 @@ function nv_admin_add_theme($contents)
         $xtpl->parse('main.inter_val_type');
     }
 
-    $xtpl->assign('DELETE', ! empty($contents['del'][1]) ? ' checked="checked"' : '');
+    $xtpl->assign('DELETE', !empty($contents['del'][1]) ? ' checked="checked"' : '');
 
     $xtpl->parse('main');
     return $xtpl->text('main');
@@ -128,13 +128,13 @@ function main_theme($contents)
             'id' => $id
         ));
 
-        if (! empty($values['edit'][0])) {
+        if (!empty($values['edit'][0])) {
             $xtpl->parse('main.edit');
         }
-        if (! empty($values['disable'][0])) {
+        if (!empty($values['disable'][0])) {
             $xtpl->parse('main.disable');
         }
-        if (! empty($values['delete'][0])) {
+        if (!empty($values['delete'][0])) {
             $xtpl->parse('main.delete');
         }
 

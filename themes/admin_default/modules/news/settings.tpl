@@ -227,7 +227,7 @@
                     <th class="w400">{LANG.setting_instant_articles_password}</th>
                     <td>
                         <div class="input-group">
-                            <input type="password" value="{INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control"/>
+                            <input type="password" value="{INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control" autocomplete="new-password">
                             <span class="input-group-btn">
                                 <a href="#" class="showhidepass btn btn-default" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.show_hide_pass}"><i class="fa fa-key"></i></a>
                                 <a href="#" class="genrandpass btn btn-default" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.gen_rand_pass}"><i class="fa fa-refresh"></i></a>
@@ -251,6 +251,21 @@
                     </td>
                 </tr>
             </tbody>
+        </table>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <caption><i class="fa fa-file-text-o"></i> {LANG.setting_sys}</caption>
+            <tbody>
+                <tr>
+                    <th class="w400">{LANG.setting_identify_cat_change}</th>
+                    <td>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="identify_cat_change" value="1"{IDENTIFY_CAT_CHANGE}> {LANG.setting_identify_cat_change_help}</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
             <tfoot>
                 <tr>
                     <td class="text-center" colspan="2">
@@ -260,7 +275,7 @@
                 </tr>
             </tfoot>
         </table>
-   </div>
+    </div>
 </form>
 <script type="text/javascript">
 //<![CDATA[

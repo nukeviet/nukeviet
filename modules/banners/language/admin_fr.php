@@ -133,3 +133,6 @@ $lang_module['exp_date_nochoose'] = 'Les annonces seront diffusées toujours, si
 $lang_module['publ_time_info'] = 'Les systèmes automatiques prennent le temps commence le moment plus de publicité sinon sélectionner des dates ici';
 $lang_module['enter_keyword'] = 'Entrez des mots clés';
 $lang_module['all_plan'] = 'Tous les plans';
+$lang_module['form_random'] = 'Aléatoire toutes les annonces';
+$lang_module['form_random_one'] = 'Une annonce au hasard';
+$lang_module['form_sequential'] = 'Séquentiellement';
