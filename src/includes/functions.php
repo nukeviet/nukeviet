@@ -2356,6 +2356,9 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
                 $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
             }
 
+            // Dùng để xử lý nội dung email trước khi gửi
+            $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_data, $row], $email_content);
+
             $result = nv_sendmail($email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc']);
         }
     } catch (Exception $e) {
