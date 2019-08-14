@@ -72,15 +72,14 @@ if (!empty($emailid)) {
     $array['default_content'] = nv_editor_br2nl($array['default_content']);
     $array['lang_content'] = nv_editor_br2nl($array[NV_LANG_DATA . '_content']);
 
-    // Hook xử lý nội dung email khi lấy từ CSDL ra
-    $array['default_content'] = nv_apply_hook($module_name, 'email_content_from_db', [$array], $array['default_content']);
-    $array['lang_content'] = nv_apply_hook($module_name, 'email_content_from_db', [$array], $array['lang_content']);
-
     $array['send_cc'] = explode(',', $array['send_cc']);
     $array['send_bcc'] = explode(',', $array['send_bcc']);
     $array['attachments'] = explode(',', $array['attachments']);
     $array['pids'] = explode(',', $array['pids']);
     $array['sys_pids'] = explode(',', $array['sys_pids']);
+
+    // Hook xử lý biến $array khi lấy từ CSDL ra
+    $array = nv_apply_hook($module_name, 'content_from_db', [$array], $array);
 
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;emailid=' . $emailid;
     $page_title = $nv_Lang->getModule('edit_template');
@@ -195,9 +194,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if (!empty($num)) {
             $error = $nv_Lang->getModule('tpl_error_exists');
         } else {
-            // Hook xử lý nội dung email trước khi lưu
-            $array['default_content'] = nv_apply_hook($module_name, 'email_content_before_save', [$array], $array['default_content']);
-            $array['lang_content'] = nv_apply_hook($module_name, 'email_content_before_save', [$array], $array['lang_content']);
+            // Hook xử lý biến $array trước khi lưu vào CSDL
+            $array = nv_apply_hook($module_name, 'content_correct_before_save', [$array], $array);
 
             if (!$array['emailid']) {
                 $field_title = $field_value = '';
