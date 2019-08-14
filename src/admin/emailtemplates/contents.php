@@ -266,6 +266,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                         nv_insert_logs(NV_LANG_DATA, $module_name, 'Add Email Template', ' ', $admin_info['userid']);
                     }
 
+                    nv_apply_hook('', 'emailtemplates_content_after_save', [$array]);
+
                     $nv_Cache->delMod($module_name);
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                 } else {
