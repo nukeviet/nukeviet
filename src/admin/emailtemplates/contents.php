@@ -69,9 +69,13 @@ if (!empty($emailid)) {
     $array['title'] = $array[NV_LANG_DATA . '_title'];
     $array['lang_subject'] = $array[NV_LANG_DATA . '_subject'];
     $array['lang_content'] = $array[NV_LANG_DATA . '_content'];
-
     $array['default_content'] = nv_editor_br2nl($array['default_content']);
     $array['lang_content'] = nv_editor_br2nl($array[NV_LANG_DATA . '_content']);
+
+    // Hook xử lý nội dung email khi lấy từ CSDL ra
+    $array['default_content'] = nv_apply_hook($module_name, 'email_content_from_db', [$array], $array['default_content']);
+    $array['lang_content'] = nv_apply_hook($module_name, 'email_content_from_db', [$array], $array['lang_content']);
+
     $array['send_cc'] = explode(',', $array['send_cc']);
     $array['send_bcc'] = explode(',', $array['send_bcc']);
     $array['attachments'] = explode(',', $array['attachments']);
@@ -191,6 +195,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if (!empty($num)) {
             $error = $nv_Lang->getModule('tpl_error_exists');
         } else {
+            // Hook xử lý nội dung email trước khi lưu
+            $array['default_content'] = nv_apply_hook($module_name, 'email_content_before_save', [$array], $array['default_content']);
+            $array['lang_content'] = nv_apply_hook($module_name, 'email_content_before_save', [$array], $array['lang_content']);
+
             if (!$array['emailid']) {
                 $field_title = $field_value = '';
                 foreach ($global_config['setup_langs'] as $lang) {
@@ -266,6 +274,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $error = $nv_Lang->getModule('errorsave');
                 }
             } catch (PDOException $e) {
+                // Hook khi bị lỗi lưu vào CSDL
+                nv_apply_hook($module_name, 'on_emailtemplate_save_error', [$array, $e]);
                 $error = $nv_Lang->getModule('errorsave');
             }
         }
