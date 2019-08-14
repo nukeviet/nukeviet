@@ -79,7 +79,7 @@ if (!empty($emailid)) {
     $array['sys_pids'] = explode(',', $array['sys_pids']);
 
     // Hook xử lý biến $array khi lấy từ CSDL ra
-    $array = nv_apply_hook($module_name, 'content_from_db', [$array], $array);
+    $array = nv_apply_hook('', 'emailtemplates_content_from_db', [$array], $array);
 
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;emailid=' . $emailid;
     $page_title = $nv_Lang->getModule('edit_template');
@@ -195,7 +195,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $error = $nv_Lang->getModule('tpl_error_exists');
         } else {
             // Hook xử lý biến $array trước khi lưu vào CSDL
-            $array = nv_apply_hook($module_name, 'content_correct_before_save', [$array], $array);
+            $array = nv_apply_hook('', 'emailtemplates_content_correct_before_save', [$array], $array);
 
             if (!$array['emailid']) {
                 $field_title = $field_value = '';
@@ -273,7 +273,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
             } catch (PDOException $e) {
                 // Hook khi bị lỗi lưu vào CSDL
-                nv_apply_hook($module_name, 'on_emailtemplate_save_error', [$array, $e]);
+                nv_apply_hook('', 'emailtemplates_on_emailtemplate_save_error', [$array, $e]);
                 $error = $nv_Lang->getModule('errorsave');
             }
         }
