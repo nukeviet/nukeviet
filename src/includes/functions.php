@@ -2349,7 +2349,7 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
             }
 
             // Dùng để xử lý cả biến $email_data trước khi gọi Smarty thực hiện
-            $_email_data = nv_apply_hook('', 'get_email_data_before_fetch', [$email_data, $merge_fields, $row], $email_data);
+            $_email_data = nv_apply_hook('', 'get_email_data_before_fetch', [$emailid, $email_data, $merge_fields, $row], $email_data);
 
             $email_content = $tpl->fetch('string:' . $_email_data['content']);
             $email_subject = $tpl->fetch('string:' . $_email_data['subject']);
