@@ -83,7 +83,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {foreach from=$AVAILABLE_PLUGINS item=row}
+                    {foreach from=$AVAILABLE_PLUGINS item=rows}
+                    {foreach from=$rows item=row}
                     <tr>
                         <td>{if not empty($row.hook_module)}{$row.hook_module}:{/if}{", "|implode:$row.area}</td>
                         <td>{$row['file']}</td>
@@ -103,6 +104,7 @@
                             {/if}
                         </td>
                     </tr>
+                    {/foreach}
                     {/foreach}
                 </tbody>
             </table>
