@@ -291,7 +291,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   wid int(11) unsigned NOT NULL default '0',
   pro_id int(11) unsigned NOT NULL default '0',
   quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
-  price float NOT NULL DEFAULT '0',
+  price double NOT NULL DEFAULT '0',
   money_unit char(3) NOT NULL,
   PRIMARY KEY (logid),
   KEY wid (wid)
@@ -302,7 +302,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   logid int(11) unsigned NOT NULL default '0',
   listgroup varchar(250)NOT NULL,
   quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
-  price float NOT NULL DEFAULT '0',
+  price double NOT NULL DEFAULT '0',
   money_unit char(3) NOT NULL,
   PRIMARY KEY (id),
   KEY logid (logid)
@@ -320,11 +320,12 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  archive tinyint(1) unsigned NOT NULL DEFAULT '0',
  product_code varchar(250) NOT NULL DEFAULT '',
  product_number int(11) NOT NULL DEFAULT '0',
- product_price float NOT NULL DEFAULT '0',
+ product_price double NOT NULL DEFAULT '0',
  price_config text NOT NULL,
+ saleprice double NOT NULL DEFAULT '0',
  money_unit char(3) NOT NULL,
  product_unit smallint(4) NOT NULL,
- product_weight float NOT NULL DEFAULT '0',
+ product_weight double NOT NULL DEFAULT '0',
  weight_unit char(20) NOT NULL DEFAULT '',
  discount_id smallint(6) NOT NULL DEFAULT '0',
  homeimgfile varchar(250) NOT NULL DEFAULT '',
@@ -444,7 +445,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  listgroupid VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
  proid mediumint(9) NOT NULL,
  num mediumint(9) NOT NULL,
- price float NOT NULL DEFAULT '0',
+ price double NOT NULL DEFAULT '0',
  discount_id smallint(6) NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY orderid (order_id, id)
@@ -465,9 +466,9 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   ship_address_extend varchar(250) NOT NULL,
   ship_shops_id tinyint(3) unsigned NOT NULL,
   ship_carrier_id tinyint(3) unsigned NOT NULL,
-  weight float NOT NULL DEFAULT '0',
+  weight double NOT NULL DEFAULT '0',
   weight_unit char(20) NOT NULL DEFAULT '',
-  ship_price float NOT NULL DEFAULT '0',
+  ship_price double NOT NULL DEFAULT '0',
   ship_price_unit char(3) NOT NULL DEFAULT '',
   add_time int(11) unsigned NOT NULL,
   edit_time int(11) unsigned NOT NULL,
@@ -484,7 +485,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  payment varchar(100) NOT NULL DEFAULT '0',
  payment_id varchar(22) NOT NULL DEFAULT '0',
  payment_time int(11) NOT NULL DEFAULT '0',
- payment_amount float NOT NULL DEFAULT '0',
+ payment_amount double NOT NULL DEFAULT '0',
  payment_data text NOT NULL,
  PRIMARY KEY (transaction_id),
  KEY order_id (order_id),
@@ -496,7 +497,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  code char(3) NOT NULL,
  currency varchar(250) NOT NULL,
  symbol varchar(3) NOT NULL default '',
- exchange float NOT NULL default '0',
+ exchange double NOT NULL default '0',
  round varchar(10) NOT NULL,
  number_format varchar(5) NOT NULL DEFAULT ',||.',
  PRIMARY KEY (id),
@@ -510,7 +511,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
  code char(20) NOT NULL,
  title varchar(50) NOT NULL,
- exchange float NOT NULL default '0',
+ exchange double NOT NULL default '0',
  round varchar(10) NOT NULL,
  PRIMARY KEY (id),
  UNIQUE KEY code (code)
@@ -564,8 +565,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   title varchar(100) NOT NULL DEFAULT '',
   code varchar(50) NOT NULL DEFAULT '',
   type varchar(1) NOT NULL DEFAULT 'p',
-  discount float NOT NULL DEFAULT '0',
-  total_amount float NOT NULL DEFAULT '0',
+  discount double NOT NULL DEFAULT '0',
+  total_amount double NOT NULL DEFAULT '0',
   date_start int(11) unsigned NOT NULL DEFAULT '0',
   date_end int(11) unsigned NOT NULL DEFAULT '0',
   uses_per_coupon int(11) unsigned NOT NULL DEFAULT '0',
@@ -579,7 +580,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   id int(11) NOT NULL AUTO_INCREMENT,
   cid int(11) NOT NULL,
   order_id int(11) NOT NULL,
-  amount float NOT NULL DEFAULT '0',
+  amount double NOT NULL DEFAULT '0',
   date_added int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
@@ -664,9 +665,9 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_weight (
   iid smallint(4) unsigned NOT NULL,
-  weight float unsigned NOT NULL,
+  weight double unsigned NOT NULL,
   weight_unit varchar(20) NOT NULL,
-  carrier_price float NOT NULL,
+  carrier_price double NOT NULL,
   carrier_price_unit char(3) NOT NULL
 ) ENGINE=MyISAM ";
 
