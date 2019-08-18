@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
+
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
@@ -20,9 +21,9 @@ $contents = '';
 $link1 = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 $action = 0;
-$order_info = array();
+$order_info = [];
 
-$data_order = array(
+$data_order = [
     'user_id' => isset($user_info['userid']) ? $user_info['userid'] : 0,
     'order_name' => isset($user_info['full_name']) ? $user_info['full_name'] : '',
     'order_email' => isset($user_info['email']) ? $user_info['email'] : '',
@@ -35,7 +36,7 @@ $data_order = array(
     'order_total' => 0,
     'order_time' => NV_CURRENTTIME,
     'order_shipping' => 0,
-    'shipping' => array(
+    'shipping' => [
         'ship_name' => '',
         'ship_phone' => '',
         'ship_location_id' => 0,
@@ -44,12 +45,13 @@ $data_order = array(
         'ship_carrier_id' => 0,
         'weight' => 0,
         'weight_unit' => 'g'
-    )
-);
+    ]
+];
 
+// Lấy thông tin đặt hàng đã điền ở SESSION trước đó
 if (isset($_SESSION[$module_data . '_order_info']) and !empty($_SESSION[$module_data . '_order_info'])) {
     $order_info = $_SESSION[$module_data . '_order_info'];
-    $data_order = array(
+    $data_order = [
         'order_name' => $order_info['order_name'],
         'order_email' => $order_info['order_email'],
         'order_address' => $order_info['order_address'],
@@ -58,22 +60,22 @@ if (isset($_SESSION[$module_data . '_order_info']) and !empty($_SESSION[$module_
         'unit_total' => $order_info['unit_total'],
         'order_shipping' => $order_info['shipping']['order_shipping'],
         'shipping' => $order_info['shipping']
-    );
+    ];
 }
 
-$shipping_data = array(
-    'list_location' => array(),
-    'list_carrier' => array(),
-    'list_shops' => array()
-);
+$shipping_data = [
+    'list_location' => [],
+    'list_carrier' => [],
+    'list_shops' => []
+];
 
 // Ma giam gia
-$array_counpons = array(
+$array_counpons = [
     'code' => '',
     'discount' => 0,
     'check' => 0
-);
-$counpons = array(
+];
+$counpons = [
     'id' => 0,
     'total_amount' => 0,
     'date_start' => 0,
@@ -81,7 +83,7 @@ $counpons = array(
     'uses_per_coupon' => 0,
     'type' => 0,
     'discount' => 0
-);
+];
 if (isset($_SESSION[$module_data . '_coupons']['check']) and $_SESSION[$module_data . '_coupons']['check'] == 1 and isset($_SESSION[$module_data . '_coupons']['discount']) and $_SESSION[$module_data . '_coupons']['discount'] > 0) {
     $array_counpons = $_SESSION[$module_data . '_coupons'];
 }
@@ -95,13 +97,14 @@ if (!empty($array_counpons['code']) and $array_counpons['check']) {
     }
 }
 
+// Người dùng gửi thông tin đơn hàng
 if ($nv_Request->isset_request('postorder', 'post')) {
     $total = 0;
     $total_point = 0;
     $total_weight = 0;
     $total_weight_price = 0;
     $i = 0;
-    $listid = $listnum = $listprice = $listgroup = $listid_old = $listnum_old = array();
+    $listid = $listnum = $listprice = $listgroup = $listid_old = $listnum_old = [];
 
     foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
         $proid = $pro_id;
@@ -183,57 +186,57 @@ if ($nv_Request->isset_request('postorder', 'post')) {
     $data_order['order_total'] = $total;
 
     if (empty($data_order['order_name'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['order_name_err'],
             'input' => 'order_name'
-        ));
+        ]);
     }
     if (nv_check_valid_email($data_order['order_email']) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['order_email_err'],
             'input' => 'order_email'
-        ));
+        ]);
     }
     if (empty($data_order['order_phone'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['order_phone_err'],
             'input' => 'order_phone'
-        ));
+        ]);
     }
     if ($data_order['order_shipping'] and empty($data_order['shipping']['ship_name'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['order_shipping_name_err']
-        ));
+        ]);
     }
     if ($data_order['order_shipping'] and empty($data_order['shipping']['ship_phone'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['order_shipping_phone_err'],
             'input' => 'ship_phone'
-        ));
+        ]);
     }
     if ($data_order['order_shipping'] and empty($data_order['shipping']['ship_address_extend'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['shipping_address_extend_empty'],
             'input' => 'ship_address_extend'
-        ));
+        ]);
     }
     if ($data_order['order_shipping'] and empty($data_order['shipping']['ship_carrier_id'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['shipping_carrier_chose']
-        ));
+        ]);
     }
     if (!$nv_Request->get_int('check', 'post', 0)) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'error' => 1,
             'msg' => $lang_module['order_check_err']
-        ));
+        ]);
     }
 
     if ($i > 0) {
@@ -271,7 +274,7 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                 " . intval($data_order['who_is']) . ", :unit_total, " . doubleval($data_order['order_total']) . ",
                 " . intval($data_order['order_time']) . ", :ip, 0, " . $transaction_status . ", 0, 0
             )";
-            $data_insert = array();
+            $data_insert = [];
             $data_insert['order_code'] = $order_code;
             $data_insert['order_name'] = $data_order['order_name'];
             $data_insert['order_email'] = $data_order['order_email'];
@@ -314,7 +317,7 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                 product_number_sell($listid_old, $listnum_old, '-');
             }
             $j = 0;
-            //Them chi tiet don hang
+            // Them chi tiet don hang
             foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
                 $j++;
                 $proid = $pro_id;
@@ -327,8 +330,12 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                     $price = nv_get_price($pro_id, $pro_config['money_unit'], $info['num'], true);
                     $info['price'] = $price['sale'];
 
-                    $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id,listgroupid, proid, num, price, discount_id ) VALUES ( :order_id,:listgroupid, :proid, :num, :price, :discount_id )';
-                    $data_insert = array();
+                    $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id (
+                        order_id, listgroupid, proid, num, price, discount_id
+                    ) VALUES (
+                        :order_id, :listgroupid, :proid, :num, :price, :discount_id
+                    )';
+                    $data_insert = [];
                     $data_insert['order_id'] = $order_id;
                     $data_insert['proid'] = $pro_id;
                     $data_insert['num'] = $info['num'];
@@ -438,10 +445,10 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                         $stmt->execute();
                     } catch (PDOException $e) {
                         trigger_error($e->getMessage());
-                        nv_jsonOutput(array(
+                        nv_jsonOutput([
                             'error' => 1,
                             'msg' => $lang_module['error_unknow']
-                        ));
+                        ]);
                     }
                 }
             }
@@ -451,8 +458,8 @@ if ($nv_Request->isset_request('postorder', 'post')) {
             $data_order['order_code'] = $order_code2;
 
             // Thong tin san pham dat hang
-            $data_pro = array();
-            $temppro = array();
+            $data_pro = [];
+            $temppro = [];
             $i = 0;
 
             foreach ($listid as $proid) {
@@ -463,10 +470,10 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                     $listnum[$i] = 0;
                 }
 
-                $temppro[$proid] = array(
+                $temppro[$proid] = [
                     'price' => $listprice[$i],
                     'num' => $listnum[$i]
-                );
+                ];
 
                 $arrayid[] = $proid;
                 ++$i;
@@ -479,7 +486,7 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                 $result = $db->query($sql);
 
                 while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit) = $result->fetch(3)) {
-                    $data_pro[] = array(
+                    $data_pro[] = [
                         'id' => $id,
                         'publtime' => $publtime,
                         'title' => $title,
@@ -489,7 +496,7 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                         'product_unit' => $unit,
                         'money_unit' => $money_unit,
                         'product_number' => $temppro[$id]['num']
-                    );
+                    ];
                 }
             }
 
@@ -500,7 +507,7 @@ if ($nv_Request->isset_request('postorder', 'post')) {
 
             $content = '';
             $email_contents_table = call_user_func('email_new_order', $content, $data_order, $data_pro, true);
-            $replace_data = array(
+            $replace_data = [
                 'order_code' => $data_order['order_code'],
                 'order_name' => $data_order['order_name'],
                 'order_email' => $data_order['order_email'],
@@ -515,7 +522,7 @@ if ($nv_Request->isset_request('postorder', 'post')) {
                 'table_product' => $email_contents_table,
                 'site_url' => $global_config['site_url'],
                 'site_name' => $global_config['site_name']
-            );
+            ];
 
             $content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_order_content.txt';
             if (file_exists($content_file)) {
@@ -532,27 +539,27 @@ if ($nv_Request->isset_request('postorder', 'post')) {
             $email_contents = call_user_func('email_new_order', $content, $data_order, $data_pro);
             $email_title = empty($order_info) ? $lang_module['order_email_title'] : $lang_module['order_email_edit_title'];
 
-            nv_sendmail(array(
+            nv_sendmail([
                 $global_config['site_name'],
                 $global_config['site_email']
-            ), $data_order['order_email'], sprintf($email_title, $module_info['custom_title'], $data_order['order_code']), $email_contents);
+            ], $data_order['order_email'], sprintf($email_title, $module_info['custom_title'], $data_order['order_code']), $email_contents);
 
             // Gui mail thong bao den nguoi quan ly shops
             $listmail_notify = nv_listmail_notify();
             if (!empty($listmail_notify)) {
                 $email_contents_to_admin = call_user_func('email_new_order', $content, $data_order, $data_pro);
-                nv_sendmail(array(
+                nv_sendmail([
                     $global_config['site_name'],
                     $global_config['site_email']
-                ), $listmail_notify, sprintf($email_title, $module_info['custom_title'], $data_order['order_code']), $email_contents_to_admin);
+                ], $listmail_notify, sprintf($email_title, $module_info['custom_title'], $data_order['order_code']), $email_contents_to_admin);
             }
 
             // Them vao notification
-            $content = array(
+            $content = [
                 'order_id' => $data_order['id'],
                 'order_code' => $data_order['order_code'],
                 'order_name' => $data_order['order_name']
-            );
+            ];
             $userid = isset($user_info['userid']) and !empty($user_info['userid']) ? $user_info['userid'] : 0;
             nv_insert_notification($module_name, empty($order_info) ? 'order_new' : 'order_edit', $content, 0, $userid, 1);
 
@@ -566,10 +573,10 @@ if ($nv_Request->isset_request('postorder', 'post')) {
             // Xóa cache module
             $nv_Cache->delMod($module_name);
 
-            nv_jsonOutput(array(
+            nv_jsonOutput([
                 'error' => 0,
                 'redirect' => $review_url
-            ));
+            ]);
 
             $action = 1;
         }
@@ -588,11 +595,11 @@ while (list ($id_i, $parentid_i, $title_i, $lev_i) = $result->fetch(3)) {
         }
     }
     $xtitle_i .= $title_i;
-    $shipping_data['list_location'][$id_i] = array(
+    $shipping_data['list_location'][$id_i] = [
         'id' => $id_i,
         'parentid' => $parentid_i,
         'title' => $xtitle_i
-    );
+    ];
 }
 $shipping_data['list_carrier'] = $array_carrier;
 $shipping_data['list_shops'] = $array_shops;
@@ -601,12 +608,13 @@ if ($action == 0) {
     $page_title = $lang_module['cart_check_cart'];
 
     $i = 0;
-    $arrayid = array();
+    $arrayid = [];
 
     foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $pro_info) {
         $arrayid[] = $pro_id;
         $array = explode('_', $pro_id);
-        if ($array[1] == '') {
+        if (empty($array[1])) {
+            // Sản phẩm không có nhóm
             $sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias,
             t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_number,
             t1.money_unit, t1.product_weight, t1.weight_unit, t2." . NV_LANG_DATA . "_title
@@ -614,6 +622,7 @@ if ($action == 0) {
                 " . $db_config['prefix'] . "_" . $module_data . "_units AS t2
             WHERE t1.product_unit = t2.id AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
         } else {
+            // Sản phẩm theo nhóm
             $sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias,
             t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_number,
             t1.money_unit, t1.product_weight, t1.weight_unit, t2." . NV_LANG_DATA . "_title
@@ -647,7 +656,7 @@ if ($action == 0) {
 
             $group = $_SESSION[$module_data . '_cart'][$id . '_' . $array[1]]['group'];
 
-            $data_content[] = array(
+            $data_content[] = [
                 'id' => $id,
                 'publtime' => $publtime,
                 'title' => $title,
@@ -661,7 +670,7 @@ if ($action == 0) {
                 'group' => $group,
                 'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
                 'num' => $num
-            );
+            ];
             ++$i;
         }
     }

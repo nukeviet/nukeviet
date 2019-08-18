@@ -17,7 +17,7 @@ $page_title = $lang_module['order_view'];
 $order_id = $nv_Request->get_int('order_id', 'get', 0);
 $checkss = $nv_Request->get_string('checkss', 'get', '');
 if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . session_id())) {
-    $data_pro = array();
+    $data_pro = [];
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
     // Thong tin don hang
@@ -42,7 +42,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
     // Sua don hang
     if ($nv_Request->isset_request('edit', 'get')) {
         if ($data['transaction_status'] != 4) {
-            $_SESSION[$module_data . '_order_info'] = array(
+            $_SESSION[$module_data . '_order_info'] = [
                 'order_id' => $data['order_id'],
                 'order_code' => $data['order_code'],
                 'money_unit' => $data['unit_total'],
@@ -55,7 +55,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
                 'order_url' => $link . 'payment&amp;order_id=' . $data['order_id'] . '&amp;checkss=' . $checkss,
                 'order_edit' => $link . 'payment&amp;unedit&amp;order_id=' . $data['order_id'] . '&amp;checkss=' . $checkss,
                 'checked' => 1
-            );
+            ];
         }
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart', true);
     }
@@ -77,7 +77,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
     }
 
     // Thong tin chi tiet mat hang trong don hang
-    $listid = $listnum = $listprice = $listgroup = $slistgroup = array();
+    $listid = $listnum = $listprice = $listgroup = $slistgroup = [];
     $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id);
     while ($row = $result->fetch()) {
         $listid[] = $row['proid'];
@@ -85,47 +85,39 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
         $listprice[] = $row['price'];
 
         $result_group = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id']);
-        $group = array();
+        $group = [];
         while (list($group_id) = $result_group->fetch(3)) {
             $group[] = $group_id;
         }
         $listgroup[] = $group;
         $slistgroup[] = implode(",", $group);
-    }
-    $i = 0;
-    foreach ($listid as $proid) {
-        if (empty($listprice[$i])) {
-            $listprice[$i] = 0;
-        }
-        if (empty($listnum[$i])) {
-            $listnum[$i] = 0;
-        }
-        if (!isset($listgroup[$i])) {
-            $listgroup[$i] = '';
-        }
 
-        $temppro[$proid] = array(
-            'price' => $listprice[$i],
-            'num' => $listnum[$i],
-            'group' => $listgroup[$i]);
-
-        $arrayid[] = $proid;
-        $i++;
+        $temppro[$row['proid']] = [
+            'price' => $row['price'],
+            'num' => $row['num'],
+            'group' => $group
+        ];
     }
 
-
-    if (!empty($arrayid)) {
-        $templistid = implode(',', $arrayid);
-
-        foreach ($slistgroup as $list) {
-            $product_group = array();
-            if (!empty($list))
-                $product_group = explode(',', $list);
-            $sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1, ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3  WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id IN (' . $templistid . ') AND listgroupid=' . $db->quote($list) . ' AND t3.order_id=' . $order_id . ' AND t1.status =1';
+    if (!empty($listid)) {
+        /*
+         * Nguyên tắc mỗi sản phẩm có một nhóm, do đó cần lặp mỗi sản phẩm và nhóm theo sản phẩm đó
+         * Code hiện tại đang cho lặp nhóm rồi lại lấy tất cả sản phẩm? Dẫn tới nếu sản phẩm không có nhóm thì query như nhau cho ra rất nhiều sản phẩm trùng
+         * Không hiểu tại sao ai viết thế
+         * Note and fix by hoaquynhtim99 chỗ này lại lỗi tương tự như trong admin/or_view.php
+         */
+        foreach ($listid as $_dbkey => $_proid) {
+            $sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext,
+            t2.' . NV_LANG_DATA . '_title, t1.money_unit
+            FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1,
+            ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2,
+            ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3
+            WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id=' . $_proid . ' AND
+            listgroupid=' . $db->quote($slistgroup[$_dbkey]) . ' AND t3.order_id=' . $order_id . ' AND t1.status =1';
             $result = $db->query($sql);
             while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit) = $result->fetch(3)) {
                 $price = nv_get_price($id, $pro_config['money_unit'], $temppro[$id]['num'], true);
-                $data_pro[] = array(
+                $data_pro[] = [
                     'id' => $id,
                     'publtime' => $publtime,
                     'title' => $title,
@@ -134,10 +126,10 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
                     'product_price' => $price['sale'],
                     'product_unit' => $unit,
                     'money_unit' => $money_unit,
-                    'product_group' => $product_group,
+                    'product_group' => $listgroup[$_dbkey],
                     'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
                     'product_number' => $temppro[$id]['num']
-                );
+                ];
             }
         }
 
@@ -213,7 +205,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
     }
 
     // Thong tin chi tiet mat hang trong don hang
-    $listid = $listnum = $listprice = $listgroup = array();
+    $listid = $listnum = $listprice = $listgroup = [];
     $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id);
     while ($row = $result->fetch()) {
         $listid[] = $row['proid'];
@@ -221,7 +213,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
         $listprice[] = $row['price'];
 
         $result_group = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id']);
-        $group = array();
+        $group = [];
         while (list($group_id) = $result_group->fetch(3)) {
             $group[] = $group_id;
         }
@@ -324,16 +316,16 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
             transaction_count = 1
         WHERE order_id=' . $order_id);
 
-        $url_back = array(
+        $url_back = [
             'op' => $op,
             'querystr' => 'order_id=' . $order_id . '&payment=1&wpreturn=1&checksum=' . md5($order_id . $global_config['sitekey'])
-        );
-        $url_admin = array(
+        ];
+        $url_admin = [
             'op' => 'order',
             'querystr' => 'order_id=' . $order_id . '&updateorder=1&checksum=' . md5($order_id . $global_config['sitekey'])
-        );
+        ];
 
-        $data = array(
+        $data = [
             'modname' => $module_name, // Module thanh toán
             'id' => $transaction_id, // ID đơn hàng
             'order_object' => $lang_module['cart_title'], // Loại đối tượng được mua ví dụ: Ứng dụng, sản phẩm, giỏ hàng...
@@ -342,8 +334,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
             'money_unit' => $data['unit_total'],
             'url_back' => $url_back,
             'url_admin' => $url_admin
-
-        );
+        ];
         $payment_info = $wallet->getInfoPayment($data);
 
         if ($payment_info['status'] !== 'SUCCESS') {

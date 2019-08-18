@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -50,8 +50,8 @@ if ($save == 1 and intval($data_content['transaction_status']) == - 1) {
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
-// Thong tin chi tiet mat hang trong don hang
-$listid = $listnum = $listprice = $listgroup = $slistgroup = array();
+// Lấy các mặt hàng trong đơn hàng
+$listid = $listnum = $listprice = $listgroup = $slistgroup = [];
 $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id);
 while ($row = $result->fetch()) {
     $listid[] = $row['proid'];
@@ -59,37 +59,49 @@ while ($row = $result->fetch()) {
     $listprice[] = $row['price'];
 
     $result_group = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id']);
-    $group = array();
+    $group = [];
     while (list($group_id) = $result_group->fetch(3)) {
         $group[] = $group_id;
     }
     $listgroup[] = $group;
-	$slistgroup[] = implode( ",", $group );
+    $slistgroup[] = implode(",", $group);
 }
 
-$data_pro = array();
-$i = 0;
-$slistid= implode( ',', $listid );
+$data_pro = [];
 
-foreach ($slistgroup as $list) {
-    $sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1, ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3  WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id IN (' . $slistid . ') AND listgroupid=' . $db->quote( $list ) . ' AND t3.order_id=' . $order_id.' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
+/*
+ * Nguyên tắc mỗi sản phẩm có một nhóm, do đó cần lặp mỗi sản phẩm và nhóm theo sản phẩm đó
+ * Code hiện tại đang cho lặp nhóm rồi lại lấy tất cả sản phẩm? Dẫn tới nếu sản phẩm không có nhóm thì query như nhau cho ra rất nhiều sản phẩm trùng
+ * Không hiểu tại sao ai viết thế
+ * Note and fix by hoaquynhtim99
+ */
+foreach ($listid as $dbkey => $proid) {
+    $sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title,
+    t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title
+    FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2,
+    ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1,
+    ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3
+    WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id=' . $proid . '
+    AND listgroupid=' . $db->quote($slistgroup[$dbkey]) . ' AND t3.order_id=' . $order_id.'
+    AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . '
+    AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
     $result = $db->query($sql);
+
     if ($result->rowCount()) {
         list($id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit) = $result->fetch(3);
-     	 $data_pro[] = array(
+          $data_pro[] = [
             'id' => $id,
             'publtime' => $publtime,
             'title' => $title,
             'alias' => $alias,
-            'product_price' => $listprice[$i],
-            'product_price_total' => $listprice[$i] * $listnum[$i],
+            'product_price' => $listprice[$dbkey],
+            'product_price_total' => $listprice[$dbkey] * $listnum[$dbkey],
             'product_code' => $product_code,
             'product_unit' => $unit,
             'link_pro' => $link . $global_array_shops_cat[$_catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
-            'product_number' => $listnum[$i],
-            'product_group' => isset($listgroup[$i]) ? $listgroup[$i] : ''
-        );
-        ++$i;
+            'product_number' => $listnum[$dbkey],
+            'product_group' => isset($listgroup[$dbkey]) ? $listgroup[$dbkey] : ''
+        ];
     }
 }
 
@@ -151,7 +163,7 @@ foreach ($data_pro as $pdata) {
     }
 
     // Nhóm thuộc tính sản phẩm khách hàng chọn
-    if (! empty($pdata['product_group'])) {
+    if (!empty($pdata['product_group'])) {
         foreach ($pdata['product_group'] as $groupid) {
             $items = $global_array_group[$groupid];
             $items['parent_title'] = $global_array_group[$items['parentid']]['title'];
@@ -183,7 +195,7 @@ if ($pro_config['use_shipping']) {
     $xtpl->parse('main.order_address');
 }
 
-if (! empty($data_content['order_note'])) {
+if (!empty($data_content['order_note'])) {
     $xtpl->parse('main.order_note');
 }
 $xtpl->assign('order_total', nv_number_format($data_content['order_total'], nv_get_decimals($pro_config['money_unit'])));
@@ -233,7 +245,7 @@ $xtpl->assign('LINK_PRINT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . 
 $xtpl->assign('URL_ACTIVE_PAY', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active_pay&order_id=' . $order_id . $action_pay);
 $xtpl->assign('URL_BACK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=or_view&order_id=' . $order_id);
 
-$array_data_payment = array();
+$array_data_payment = [];
 
 // Cập nhật lại trạng thái đơn hàng từ wallet
 if ($nv_Request->isset_request('checkpayment', 'post')) {
@@ -297,19 +309,19 @@ if ($nv_Request->isset_request('checkpayment', 'post')) {
 }
 
 $a = 1;
-$array_transaction = array();
+$array_transaction = [];
 $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE order_id=' . $order_id . ' ORDER BY transaction_id ASC');
 
 if ($result->rowCount()) {
-    $array_payment = array();
+    $array_payment = [];
     while ($row = $result->fetch()) {
         $row['a'] = $a++;
         $row['transaction_time'] = nv_date('H:i:s d/m/y', $row['transaction_time']);
-        $row['order_id'] = (! empty($row['order_id'])) ? $row['order_id'] : '';
-        $row['payment_time'] = (! empty($row['payment_time'])) ? nv_date('H:i:s d/m/y', $row['payment_time']) : '';
-        $row['payment_id'] = (! empty($row['payment_id'])) ? $row['payment_id'] : '';
+        $row['order_id'] = (!empty($row['order_id'])) ? $row['order_id'] : '';
+        $row['payment_time'] = (!empty($row['payment_time'])) ? nv_date('H:i:s d/m/y', $row['payment_time']) : '';
+        $row['payment_id'] = (!empty($row['payment_id'])) ? $row['payment_id'] : '';
 
-        if (! empty($row['payment_id'])) {
+        if (!empty($row['payment_id'])) {
             $array_payment[] = $row['payment_id'];
         }
 
@@ -345,7 +357,7 @@ if ($result->rowCount()) {
         $xtpl->parse('main.transaction.looptrans');
     }
 
-    if (! empty($array_payment) or 1) {
+    if (!empty($array_payment) or 1) {
         $xtpl->parse('main.transaction.checkpayment');
     }
 
