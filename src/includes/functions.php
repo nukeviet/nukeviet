@@ -1436,7 +1436,7 @@ function nv_check_domain($domain)
         return $domain;
     } elseif (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
-            $domain_ascii = idn_to_ascii($domain);
+            $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
             $domain_ascii = $Punycode->encode($domain);
