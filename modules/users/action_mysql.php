@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 if (empty($install_lang['groups'])) {
-    $install_lang = array();
+    $install_lang = [];
     $lang_data = $lang;
     if (file_exists(NV_ROOTDIR . '/install/data_' . $lang . '.php')) {
         include NV_ROOTDIR . '/install/data_' . $lang . '.php';
@@ -22,18 +22,18 @@ if (empty($install_lang['groups'])) {
     }
 }
 
-$sql_drop_module = array();
+$sql_drop_module = [];
 
 global $op, $db, $global_config, $db_config, $lang_module;
 
-$array_lang_module_setup = array(); // Những ngôn ngữ mà module này đã cài đặt vào (Bao gồm cả ngôn ngữ đang thao tác)
+$array_lang_module_setup = []; // Những ngôn ngữ mà module này đã cài đặt vào (Bao gồm cả ngôn ngữ đang thao tác)
 $num_module_exists = 0; // Số ngôn ngữ đã cài (Bao gồm cả ngôn ngữ đang thao tác)
 $set_lang_data = ''; // Ngôn ngữ mặc định sẽ copy các field lang qua
 
 // Xác định các ngôn ngữ đã cài đặt
 $_sql = "SELECT * FROM " . $db_config['prefix'] . "_setup_language WHERE setup=1";
 $_result = $db->query($_sql);
-$array_lang_setup = array();
+$array_lang_setup = [];
 while ($_row = $_result->fetch()) {
     $array_lang_setup[$_row['lang']] = $_row['lang'];
 }
@@ -90,6 +90,7 @@ if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_openid';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_question';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_reg';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_edit';
 }
 
 $sql_create_module = $sql_drop_module;
@@ -332,8 +333,8 @@ if ($lang == 'vi') {
 // Cài lại module users thì không thao tác gì tới CSDL
 if ($module_data != 'users' or $op != 'recreate_mod') {
     $lang_module_save = $lang_module;
-    $lang_module = array();
-    $lang_translator = array();
+    $lang_module = [];
+    $lang_translator = [];
 
     if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
         include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
@@ -351,24 +352,33 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
             $_row['language'] = unserialize($_row['language']);
             if (!isset($_row['language'][$lang])) {
                 if (!empty($_row['system'])) {
-                    $_row['language'][$lang] = array(0 => $lang_module[$_row['field']], 1 => '');
+                    $_row['language'][$lang] = [
+                        0 => $lang_module[$_row['field']],
+                        1 => ''
+                    ];
                 } elseif (isset($_row['language'][$set_lang_data])) {
-                    $_row['language'][$lang] = array(0 => ucfirst(nv_EncString($_row['language'][$set_lang_data][0])), 1 => ucfirst(nv_EncString($_row['language'][$set_lang_data][1])));
+                    $_row['language'][$lang] = [
+                        0 => ucfirst(nv_EncString($_row['language'][$set_lang_data][0])),
+                        1 => ucfirst(nv_EncString($_row['language'][$set_lang_data][1]))
+                    ];
                 } else {
                     $_copy_lang = current($_row['language']);
-                    $_row['language'][$lang] = array(0 => ucfirst(nv_EncString($_copy_lang[0])), 1 => ucfirst(nv_EncString($_copy_lang[1])));
+                    $_row['language'][$lang] = [
+                        0 => ucfirst(nv_EncString($_copy_lang[0])),
+                        1 => ucfirst(nv_EncString($_copy_lang[1]))
+                    ];
                 }
                 $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize($_row['language'])) . ' WHERE fid=' . $_row['fid'];
             }
         }
     } catch (PDOException $e) {
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['first_name'], 1 => '')))) . " WHERE field='first_name'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['last_name'], 1 => '')))) . " WHERE field='last_name'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['gender'], 1 => '')))) . " WHERE field='gender'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['question'], 1 => '')))) . " WHERE field='question'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['answer'], 1 => '')))) . " WHERE field='answer'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['birthday'], 1 => '')))) . " WHERE field='birthday'";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize(array($lang => array(0 => $lang_module['sig'], 1 => '')))) . " WHERE field='sig'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['first_name'], 1 => '']])) . " WHERE field='first_name'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['last_name'], 1 => '']])) . " WHERE field='last_name'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['gender'], 1 => '']])) . " WHERE field='gender'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['question'], 1 => '']])) . " WHERE field='question'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['answer'], 1 => '']])) . " WHERE field='answer'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['birthday'], 1 => '']])) . " WHERE field='birthday'";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET language=" . $db->quote(serialize([$lang => [0 => $lang_module['sig'], 1 => '']])) . " WHERE field='sig'";
     }
 
     $lang_module = $lang_module_save;
