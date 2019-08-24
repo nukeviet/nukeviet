@@ -193,6 +193,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     is_leader tinyint(1) unsigned NOT NULL DEFAULT '0',
     approved tinyint(1) unsigned NOT NULL DEFAULT '0',
     data text NOT NULL,
+    time_requested int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian yêu cầu tham gia',
+    time_approved int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian duyệt yêu cầu tham gia',
     PRIMARY KEY (group_id,userid)
 ) ENGINE=MyISAM";
 

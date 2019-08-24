@@ -822,7 +822,7 @@ if ($step == 1) {
                     if ($ok1 and $ok2) {
                         try {
                             $db->query('INSERT INTO ' . $db_config['prefix'] . '_users_info (userid) VALUES (' . $userid . ')');
-                            $db->query("INSERT INTO " . $db_config['prefix'] . "_users_groups_users (group_id, userid, is_leader, approved, data) VALUES(1, " . $userid . ", 1, 1, '0')");
+                            $db->query("INSERT INTO " . $db_config['prefix'] . "_users_groups_users (group_id, userid, is_leader, approved, data, time_requested, time_approved) VALUES(1, " . $userid . ", 1, 1, '0', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")");
 
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote(NV_SITE_TIMEZONE_NAME) . ")");
                             $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote($global_config['site_email']) . ")");
