@@ -372,7 +372,7 @@ $xmlpositions = $xml->xpath('positions');
 $positions = $xmlpositions[0]->position;
 
 $array_modules = [];
-$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' WHERE act = 1 ORDER BY weight ASC';
 $result = $db->query($sql);
 while ($row_i = $result->fetch()) {
     $array_modules[] = [
@@ -426,7 +426,7 @@ if ($row['bid']) {
 }
 
 $array_funcs = [];
-$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' WHERE act = 1 ORDER BY weight ASC';
 $result = $db->query($sql);
 while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     if (isset($array_mod_func[$m_title]) and sizeof($array_mod_func[$m_title]) > 0) {
