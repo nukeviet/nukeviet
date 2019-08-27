@@ -143,7 +143,9 @@ if (!nv_function_exists('nv_news_block_news')) {
                     'imgurl' => $imgurl,
                     'width' => $blockwidth,
                     'hometext' => $hometext,
-                    'external_link' => $external_link
+                    'external_link' => $external_link,
+                    'publtime' => $publtime,
+                    'newday' => $module_array_cat[$catid]['newday']
                 );
             }
             $cache = serialize($array_block_news);
@@ -160,6 +162,7 @@ if (!nv_function_exists('nv_news_block_news')) {
         $xtpl->assign('TEMPLATE', $block_theme);
 
         foreach ($array_block_news as $array_news) {
+            $newday = $array_news['publtime'] + (86400 * $array_news['newday']);
             $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
             $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
 
@@ -175,6 +178,10 @@ if (!nv_function_exists('nv_news_block_news')) {
 
             if (!$block_config['showtooltip']) {
                 $xtpl->assign('TITLE', 'title="' . $array_news['title'] . '"');
+            }
+
+            if ($newday >= NV_CURRENTTIME) {
+                $xtpl->parse('main.newloop.newday');
             }
 
             $xtpl->parse('main.newloop');
@@ -200,7 +207,7 @@ if (defined('NV_SYSTEM')) {
             unset($module_array_cat[0]);
         } else {
             $module_array_cat = array();
-            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
+            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, newday, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
             if (!empty($list)) {
                 foreach ($list as $l) {

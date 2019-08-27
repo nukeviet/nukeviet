@@ -652,13 +652,18 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . $_mod_table . "_groups_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "')");
+            $db->query("INSERT INTO " . $_mod_table . "_groups_users (
+                group_id, userid, approved, data, time_requested, time_approved
+            ) VALUES (
+                " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
+                " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
+            )");
             $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
                 $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
-                $data = ($data != '') ? explode(',', $data) : array();
+                $data = ($data != '') ? explode(',', $data) : [];
                 $data[] = $global_config['idsite'];
                 $data = implode(',', array_unique(array_map('intval', $data)));
                 $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);

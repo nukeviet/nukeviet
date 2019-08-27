@@ -90,6 +90,7 @@ if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_openid';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_question';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_reg';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_edit';
 }
 
 $sql_create_module = $sql_drop_module;
@@ -192,6 +193,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     is_leader tinyint(1) unsigned NOT NULL DEFAULT '0',
     approved tinyint(1) unsigned NOT NULL DEFAULT '0',
     data text NOT NULL,
+    time_requested int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian yêu cầu tham gia',
+    time_approved int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian duyệt yêu cầu tham gia',
     PRIMARY KEY (group_id,userid)
 ) ENGINE=InnoDB";
 

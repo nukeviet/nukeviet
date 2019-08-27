@@ -72,7 +72,7 @@
                 <tr>
                     <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
                     <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
-                    <td><input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" /></td>
+                    <td><input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off"></td>
                 </tr>
                 <!-- END: show_birthday -->
                 <!-- BEGIN: show_sig -->

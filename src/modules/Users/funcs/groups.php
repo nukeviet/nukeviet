@@ -115,7 +115,11 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
                 $stmt->execute();
             }
 
-            $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users VALUES('.$gid.','.$userid.',0,1,0)');
+            $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (
+                group_id, userid, is_leader, approved, data, time_requested, time_approved
+            ) VALUES(
+                ' . $gid . ', ' . $userid . ', 0, 1, \'\', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . '
+            )');
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4 or group_id='.$gid);
             $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = '.$gid.', in_groups='.$gid.' WHERE userid='.$userid);
             $users_info = unserialize(nv_base64_decode($row['users_info']));
