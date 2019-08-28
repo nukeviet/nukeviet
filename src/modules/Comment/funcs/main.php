@@ -8,14 +8,14 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if (! defined('NV_IS_MOD_COMMENT')) {
+if (!defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }
 
 $module = $nv_Request->get_string('module', 'post,get');
 
 // Kiểm tra module có được Sử dụng chức năng bình luận
-if (! empty($module) and isset($module_config[$module]['activecomm'])) {
+if (!empty($module) and isset($module_config[$module]['activecomm'])) {
     $area = $nv_Request->get_int('area', 'post,get', 0);
     $id = $nv_Request->get_int('id', 'post,get', 0);
     $allowed_comm = $nv_Request->get_title('allowed', 'post,get', 0);
@@ -24,6 +24,14 @@ if (! empty($module) and isset($module_config[$module]['activecomm'])) {
     $status_comment = $nv_Request->get_title('status_comment', 'post,get', '');
     require_once NV_ROOTDIR . '/modules/Comment/comment.php';
     $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
+
+    if (!defined('NV_COMM_ID')) {
+        $content_comment .= '<meta name="robots" content="noindex, nofollow">';
+
+        unset($sys_info['server_headers']['x-robots-tag']);
+        $headers['X-Robots-Tag'] = 'noindex, nofollow';
+    }
+
     include NV_ROOTDIR . '/includes/header.php';
     echo $content_comment;
     include NV_ROOTDIR . '/includes/footer.php';

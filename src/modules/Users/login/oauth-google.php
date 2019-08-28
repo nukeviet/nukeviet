@@ -12,7 +12,6 @@ if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
-use OAuth\OAuth2\Service\Google;
 use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
 
@@ -40,14 +39,14 @@ if (!empty($_GET['code'])) {
 
     if (isset($result['email'])) {
         $attribs = array(
-            'identity' => $result['link'],
+            'identity' => empty($result['link']) ? $result['id'] : $result['link'],
             'result' => 'is_res',
             'id' => $result['id'],
             'contact/email' => $result['email'],
             'namePerson/first' => $result['family_name'],
             'namePerson/last' => $result['given_name'],
             'namePerson' => $result['name'],
-            'person/gender' => $result['gender'],
+            'person/gender' => empty($result['gender']) ? '' : $result['gender'],
             'server' => $server,
             'picture_url' => $result['picture'],
             'picture_mode' => 0, // 0: Remote picture

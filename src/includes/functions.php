@@ -652,13 +652,18 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . $_mod_table . "_groups_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "')");
+            $db->query("INSERT INTO " . $_mod_table . "_groups_users (
+                group_id, userid, approved, data, time_requested, time_approved
+            ) VALUES (
+                " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
+                " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
+            )");
             $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
                 $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
-                $data = ($data != '') ? explode(',', $data) : array();
+                $data = ($data != '') ? explode(',', $data) : [];
                 $data[] = $global_config['idsite'];
                 $data = implode(',', array_unique(array_map('intval', $data)));
                 $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
@@ -1436,7 +1441,7 @@ function nv_check_domain($domain)
         return $domain;
     } elseif (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
-            $domain_ascii = idn_to_ascii($domain);
+            $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
             $domain_ascii = $Punycode->encode($domain);
@@ -2348,15 +2353,21 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
                 $tpl->assign($field_key, $field_value['data']);
             }
 
-            $email_content = $tpl->fetch('string:' . $email_data['content']);
-            $email_subject = $tpl->fetch('string:' . $email_data['subject']);
-            if ($email_data['is_plaintext']) {
+            // Dùng để xử lý cả biến $email_data trước khi gọi Smarty thực hiện
+            $_email_data = nv_apply_hook('', 'get_email_data_before_fetch', [$emailid, $email_data, $merge_fields, $row], $email_data);
+
+            $email_content = $tpl->fetch('string:' . $_email_data['content']);
+            $email_subject = $tpl->fetch('string:' . $_email_data['subject']);
+            if ($_email_data['is_plaintext']) {
                 $email_content = nv_nl2br(strip_tags($email_content));
             } else {
                 $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
             }
 
-            $result = nv_sendmail($email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc']);
+            // Dùng để xử lý nội dung email trước khi gửi
+            $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row], $email_content);
+
+            $result = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $_email_data['cc'], $_email_data['bcc']);
         }
     } catch (Exception $e) {
         return false;

@@ -12,7 +12,6 @@ if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
-use OAuth\OAuth2\Service\Facebook;
 use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
 

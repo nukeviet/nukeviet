@@ -87,3 +87,4 @@ $lang_module['error_no_hook_module'] = 'Pour installer ce module, vous devez ins
 $lang_module['select_hook_module'] = 'Choisissez le module de connexion %s';
 $lang_module['vmodule_no_title'] = 'Erreur: vous n\'avez pas entré de nouveau nom de module.';
 $lang_module['vmodule_no_file'] = 'Erreur: vous n\'avez pas sélectionné le module d\'origine.';
+$lang_module['select_hook_sys'] = 'Connecter %s avec';

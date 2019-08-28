@@ -159,7 +159,18 @@
                                                     <ul>
                                                         <li class="f-link"><a href="{$rowmenu.link}">{$LANG->get('Home')}</a></li>
                                                         {foreach from=$rowmenu['subs'] item=smenutitle key=smenukey}
+                                                        {if is_array($smenutitle)}
+                                                        <li class="parent">
+                                                            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}"><span>{$smenutitle.title}</span><span class="toggle"><i class="fas"></i></span></a>
+                                                            <ul class="sub-menu">
+                                                                {foreach from=$smenutitle.submenu item=sublv2 key=keysublv2}
+                                                                <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$keysublv2}"><span>{$sublv2}</span></a></li>
+                                                                {/foreach}
+                                                            </ul>
+                                                        </li>
+                                                        {else}
                                                         <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}">{$smenutitle}</a></li>
+                                                        {/if}
                                                         {/foreach}
                                                     </ul>
                                                 </div>

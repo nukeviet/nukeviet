@@ -37,6 +37,7 @@ class Database extends PDO
 
     private $sqls = [];
     private $debug = false;
+    private $allowedDebug = false;
 
     /**
      * @param array $config
@@ -74,7 +75,10 @@ class Database extends PDO
         try {
             parent::__construct($dsn, $config['dbuname'], $config['dbpass'], $driver_options);
             parent::exec("SET SESSION time_zone='" . NV_SITE_TIMEZONE_GMT_NAME . "'");
-            $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, ['\NukeViet\Core\NukeVietPDOStatement', [$this]]);
+            if (empty($config['persistent'])) {
+                $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, ['\NukeViet\Core\NukeVietPDOStatement', [$this]]);
+                $this->allowedDebug = true;
+            }
             $this->connect = 1;
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
@@ -517,6 +521,9 @@ class Database extends PDO
      */
     public function enableDebug()
     {
+        if (!$this->allowedDebug) {
+            trigger_error('Could not enable debugger because DB Persistent is on!', 256);
+        }
         $this->debug = true;
         $this->sqls = [];
     }

@@ -30,12 +30,12 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
         $sample = $nv_Request->get_int('sample', 'get', 0);
         $hook_files = $nv_Request->get_title('hook_files', 'get', '');
         $hook_mods = $nv_Request->get_title('hook_mods', 'get', '');
-        $hook_files = array_filter(explode('|', $hook_files));
-        $hook_mods = array_filter(explode('|', $hook_mods));
+        $hook_files = explode('|', $hook_files);
+        $hook_mods = explode('|', $hook_mods);
 
         $hook_data = [];
         foreach ($hook_files as $fkey => $file) {
-            if (empty($hook_mods[$fkey]) or !isset($sys_mods[$hook_mods[$fkey]])) {
+            if (!empty($hook_mods[$fkey]) and !isset($sys_mods[$hook_mods[$fkey]])) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
             $hook_data[$file] = $hook_mods[$fkey];
@@ -54,13 +54,13 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             // Kiểm tra các module liên quan nếu module này có hook
             $array_hooks = [];
             if (is_dir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks')) {
-                $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks', '/^[a-zA-Z0-9]+\.php$/');
+                $hooks = nv_scandir(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks', '/^[a-zA-Z0-9\_]+\.php$/');
                 if (!empty($hooks)) {
                     foreach ($hooks as $hook) {
                         $plugin_area = nv_get_plugin_area(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks/' . $hook);
                         if (sizeof($plugin_area) == 1) {
                             $require_module = nv_get_hook_require(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/hooks/' . $hook);
-                            if (!empty($require_module) and !isset($hook_data[$hook]) or $sys_mods[$hook_data[$hook]]['module_file'] != $require_module) {
+                            if (!isset($hook_data[$hook]) or (!empty($require_module) and (!isset($sys_mods[$hook_data[$hook]]) or $sys_mods[$hook_data[$hook]]['module_file'] != $require_module))) {
                                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                             }
                             $array_hooks[] = [
@@ -142,7 +142,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                                 ' . $weight . '
                             )');
                         } catch (PDOException $e) {
-                            trigger_error('Plugin exists: ' . $e->getMessage());
+                            trigger_error(print_r($e, true));
                         }
                     }
                     nv_save_file_config_global();
