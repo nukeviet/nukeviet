@@ -61,7 +61,7 @@ function timeoutsessrun() {
             type: "POST",
             cache: !1,
             url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=logout",
-            data: "nv_ajax_login=1"
+            data: "nv_ajax_login=1&system=1"
         }).done(function(a) {
             location.reload();
         }));

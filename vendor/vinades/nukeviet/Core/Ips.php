@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
+
 namespace NukeViet\Core;
 
 class Ips
@@ -96,6 +97,7 @@ class Ips
 
     /**
      * ips::nv_get_clientip()
+     * IP có thể gửi qua HTTP Request Header
      *
      * @return
      *
@@ -122,6 +124,7 @@ class Ips
 
     /**
      * ips::nv_get_forwardip()
+     * IP client được chuyển tiếp qua máy chủ Proxy
      *
      * @return
      *
@@ -143,6 +146,7 @@ class Ips
 
     /**
      * ips::nv_get_remote_addr()
+     * Địa chỉ IP người dùng đang truy cập do máy chủ cung cấp
      *
      * @return
      *
@@ -180,7 +184,7 @@ class Ips
     }
 
     /**
-     * ips::nv_chech_proxy()
+     * ips::nv_check_proxy()
      *
      * @return
      *

@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
+
 if (!defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }
@@ -24,7 +25,10 @@ if (!empty($module) and isset($module_config[$module]['activecomm'])) {
     require_once NV_ROOTDIR . '/modules/comment/comment.php';
     $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
     if (!defined('NV_COMM_ID')) {
-        $content_comment .= '<meta name="robots" content="noindex">';
+        $content_comment .= '<meta name="robots" content="noindex, nofollow">';
+
+        unset($sys_info['server_headers']['x-robots-tag']);
+        $headers['X-Robots-Tag'] = 'noindex, nofollow';
     }
     include NV_ROOTDIR . '/includes/header.php';
     echo $content_comment;

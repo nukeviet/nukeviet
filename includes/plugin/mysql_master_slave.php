@@ -30,16 +30,20 @@ if (! defined('NV_MAINFILE')) {
  * $db_config['slave'][3]['dbuname'] = 'dbuname_slave';
  * $db_config['slave'][3]['dbpass'] = 'dbpass_slave';*
  */
-$i = rand(1, sizeof($db_config['slave']));
-$db_config_slave = $db_config['slave'][$i];
-$db_config_slave['dbname'] = $db_config['dbname'];
-$db_config_slave['dbtype'] = $db_config['dbtype'];
-$db_config_slave['collation'] = $db_config['collation'];
-$db_config_slave['charset'] = $db_config['charset'];
-$db_config_slave['persistent'] = $db_config['persistent'];
-
-$db_slave = new NukeViet\Core\Database($db_config_slave);
-if (empty($db_slave->connect)) {
-    trigger_error('Sorry! Could not connect to data server slave ' . $db_config_slave['dbhost']);
+if (empty($db_config['slave'])) {
     $db_slave = $db;
+} else {
+    $i = rand(1, sizeof($db_config['slave']));
+    $db_config_slave = $db_config['slave'][$i];
+    $db_config_slave['dbname'] = $db_config['dbname'];
+    $db_config_slave['dbtype'] = $db_config['dbtype'];
+    $db_config_slave['collation'] = $db_config['collation'];
+    $db_config_slave['charset'] = $db_config['charset'];
+    $db_config_slave['persistent'] = $db_config['persistent'];
+
+    $db_slave = new NukeViet\Core\Database($db_config_slave);
+    if (empty($db_slave->connect)) {
+        trigger_error('Sorry! Could not connect to data server slave ' . $db_config_slave['dbhost']);
+        $db_slave = $db;
+    }
 }

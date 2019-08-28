@@ -28,7 +28,7 @@
                 <tr>
                     <td> {LANG.password} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="form-control required password w300" type="password" autocomplete="off" id="pass_iavim" name="password1" value="{DATA.password1}" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+                    <td><input class="form-control required password w300" type="password" autocomplete="new-password" id="pass_iavim" name="password1" value="{DATA.password1}" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
                 </tr>
                 <tr>
                     <td> {LANG.repassword} </td>
@@ -82,7 +82,7 @@
                 <tr>
                     <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
                     <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
-                    <td><input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" /></td>
+                    <td><input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off"></td>
                 </tr>
                 <!-- END: show_birthday -->
                 <!-- BEGIN: show_sig -->

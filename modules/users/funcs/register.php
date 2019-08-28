@@ -449,7 +449,11 @@ if ($checkss == $array_register['checkss']) {
             $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
 
             if (defined('ACCESS_ADDUS')) {
-                $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (group_id, userid, is_leader, approved, data) VALUES (' . $group_id . ',' . $userid . ', 0, 1, \'0\')');
+                $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (
+                    group_id, userid, is_leader, approved, data, time_requested, time_approved
+                ) VALUES (
+                    ' . $group_id . ',' . $userid . ', 0, 1, \'0\', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . '
+                )');
             }
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
