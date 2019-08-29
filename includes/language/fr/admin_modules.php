@@ -83,3 +83,4 @@ $lang_module['reinstall_note4'] = 'Ce modèle de données n\'est pas compatible 
 $lang_module['setup_option'] = 'Choisir une solution';
 $lang_module['setup_option_0'] = 'Ne configurer que le module';
 $lang_module['setup_option_1'] = 'Configurer le module et installer le modèle de données';
+$lang_module['module_groups_view_note'] = 'La super administration, l\'administration générale, l\'administrateur du module sont toujours autorisés à voir le module';
