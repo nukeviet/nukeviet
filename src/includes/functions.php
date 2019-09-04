@@ -2369,7 +2369,7 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
             }
 
             // Dùng để xử lý nội dung email trước khi gửi
-            $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row], $email_content);
+            $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row, $emailid], $email_content);
 
             $result = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $_email_data['cc'], $_email_data['bcc']);
         }
