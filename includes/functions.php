@@ -652,13 +652,18 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . $_mod_table . "_groups_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "')");
+            $db->query("INSERT INTO " . $_mod_table . "_groups_users (
+                group_id, userid, approved, data, time_requested, time_approved
+            ) VALUES (
+                " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
+                " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
+            )");
             $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
                 $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
-                $data = ($data != '') ? explode(',', $data) : array();
+                $data = ($data != '') ? explode(',', $data) : [];
                 $data[] = $global_config['idsite'];
                 $data = implode(',', array_unique(array_map('intval', $data)));
                 $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
@@ -1413,7 +1418,7 @@ function nv_check_domain($domain)
         return $domain;
     } elseif (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
-            $domain_ascii = idn_to_ascii($domain);
+            $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
             $domain_ascii = $Punycode->encode($domain);
@@ -1770,19 +1775,23 @@ function nv_site_mods()
     $site_mods = $sys_mods;
     if (defined('NV_SYSTEM')) {
         foreach ($site_mods as $m_title => $row) {
-            if (! nv_user_in_groups($row['groups_view'])) {
-                unset($site_mods[$m_title]);
-            } elseif (defined('NV_IS_SPADMIN')) {
+            /*
+             * Điều hành chung và quản trị module được xem module
+             * mà không phụ thuộc vào thiết lập quyền xem
+             */
+            if (defined('NV_IS_SPADMIN')) {
                 $site_mods[$m_title]['is_modadmin'] = true;
             } elseif (defined('NV_IS_ADMIN') and ! empty($row['admins']) and ! empty($admin_info['admin_id']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
                 $site_mods[$m_title]['is_modadmin'] = true;
+            } elseif (!nv_user_in_groups($row['groups_view'])) {
+                unset($site_mods[$m_title]);
             }
         }
         if (isset($site_mods['users'])) {
             if (defined('NV_IS_USER')) {
-                $user_ops = array( 'main', 'logout', 'editinfo', 'avatar', 'groups' );
+                $user_ops = ['main', 'logout', 'editinfo', 'avatar', 'groups'];
             } else {
-                $user_ops = array( 'main', 'login', 'register', 'lostpass' );
+                $user_ops = ['main', 'login', 'register', 'lostpass'];
                 if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1) {
                     $user_ops[] = 'lostactivelink';
                     $user_ops[] = 'active';

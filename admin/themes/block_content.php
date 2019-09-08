@@ -301,18 +301,18 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid']);
             } else {
                 $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET
-					module=:module,
-					file_name=:file_name,
-					title=:title,
-					link=:link,
-					template=:template,
-					position=:position,
-					exp_time=:exp_time,
-					active=:active,
-					groups_view=:groups_view,
-					all_func=:all_func,
-					config=:config
-					WHERE bid = :bid');
+                    module=:module,
+                    file_name=:file_name,
+                    title=:title,
+                    link=:link,
+                    template=:template,
+                    position=:position,
+                    exp_time=:exp_time,
+                    active=:active,
+                    groups_view=:groups_view,
+                    all_func=:all_func,
+                    config=:config
+                    WHERE bid = :bid');
 
                 $sth->bindParam(':module', $row['module'], PDO::PARAM_STR);
                 $sth->bindParam(':file_name', $row['file_name'], PDO::PARAM_STR);
@@ -410,7 +410,7 @@ $xtpl->assign('SELECTTHEMES', $selectthemes);
 $xtpl->assign('BLOCKREDIRECT', $blockredirect);
 $xtpl->assign('THEME_SELECTED', ($row['module'] == 'theme') ? ' selected="selected"' : '');
 
-$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . (!NV_DEBUG ? ' WHERE act = 1' : '') . ' ORDER BY weight ASC';
 $result = $db->query($sql);
 while ($row_i = $result->fetch()) {
     $xtpl->assign('MODULE', array(
@@ -500,7 +500,7 @@ if ($row['bid']) {
     }
 }
 
-$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . (!NV_DEBUG ? ' WHERE act = 1' : '') . ' ORDER BY weight ASC';
 $result = $db->query($sql);
 while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     if (isset($aray_mod_func[$m_title]) and sizeof($aray_mod_func[$m_title]) > 0) {

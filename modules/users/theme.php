@@ -588,7 +588,7 @@ function user_lostactivelink($data, $question)
  */
 function user_info($data, $array_field_config, $custom_fields, $types, $data_questions, $data_openid, $groups, $pass_empty)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field;
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -627,36 +627,39 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         'sig'
     );
     foreach ($array_basic_key as $key) {
-        $row = $array_field_config[$key];
-        $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : '';
-        $row['required'] = ($row['required']) ? 'required' : '';
-        if ($row['field'] == 'birthday') {
-            $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
-        } elseif ($row['field'] == 'sig') {
-            $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
-        }
-        $xtpl->assign('FIELD', $row);
-        if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
-            $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
-        } else {
-            $show_key = 'show_' . $row['field'];
-        }
-        if ($row['required']) {
-            $xtpl->parse('main.' . $show_key . '.required');
-        }
-        if ($row['field'] == 'gender') {
-            foreach ($global_array_genders as $gender) {
-                $gender['checked'] = $row['value'] == $gender['key'] ? ' checked="checked"' : '';
-                $xtpl->assign('GENDER', $gender);
-                $xtpl->parse('main.' . $show_key . '.gender');
+        // Không tồn tại có nghĩa là không cho phép sửa
+        if (isset($array_field_config[$key])) {
+            $row = $array_field_config[$key];
+            $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : '';
+            $row['required'] = ($row['required']) ? 'required' : '';
+            if ($row['field'] == 'birthday') {
+                $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+            } elseif ($row['field'] == 'sig') {
+                $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
             }
-        }
-        if ($row['description']) {
-            $xtpl->parse('main.' . $show_key . '.description');
-        }
-        $xtpl->parse('main.' . $show_key);
-        if ($row['field'] == 'gender') {
-            $xtpl->parse('main.name_show_' . $global_config['name_show']);
+            $xtpl->assign('FIELD', $row);
+            if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
+                $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
+            } else {
+                $show_key = 'show_' . $row['field'];
+            }
+            if ($row['required']) {
+                $xtpl->parse('main.' . $show_key . '.required');
+            }
+            if ($row['field'] == 'gender') {
+                foreach ($global_array_genders as $gender) {
+                    $gender['checked'] = $row['value'] == $gender['key'] ? ' checked="checked"' : '';
+                    $xtpl->assign('GENDER', $gender);
+                    $xtpl->parse('main.' . $show_key . '.gender');
+                }
+            }
+            if ($row['description']) {
+                $xtpl->parse('main.' . $show_key . '.description');
+            }
+            $xtpl->parse('main.' . $show_key);
+            if ($row['field'] == 'gender') {
+                $xtpl->parse('main.name_show_' . $global_config['name_show']);
+            }
         }
     }
 
@@ -768,7 +771,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     }
 
     // Tab sửa các thông tin khác (các trường dữ liệu tùy chỉnh)
-    if (in_array('others', $types) and sizeof($array_field_config) > 7) {
+    if (in_array('others', $types) and !empty($is_custom_field)) {
         // Parse custom fields
         foreach ($array_field_config as $row) {
             if (empty($row['system'])) {
@@ -868,8 +871,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_avatar');
     }
 
-    // Tab đổi câu hỏi bảo mật
-    if (in_array('question', $types)) {
+    // Tab đổi câu hỏi bảo mật (điều kiện trường dữ liệu câu hỏi và câu trả lời đều tồn tại)
+    if (in_array('question', $types) and (isset($array_field_config['question']) or isset($array_field_config['answer']))) {
         if ($pass_empty) {
             $xtpl->parse('main.question_empty_pass');
         }
@@ -879,22 +882,24 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             'answer'
         );
         foreach ($array_question_key as $key) {
-            $row = $array_field_config[$key];
-            $show_key = 'show_' . $row['field'];
-            $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : '';
-            $row['required'] = ($row['required']) ? 'required' : '';
-            $xtpl->assign('FIELD', $row);
-            foreach ($data_questions as $array_question_i) {
-                $xtpl->assign('QUESTION', $array_question_i['title']);
-                $xtpl->parse('main.tab_edit_question.' . $show_key . '.frquestion');
+            if (isset($array_field_config[$key])) {
+                $row = $array_field_config[$key];
+                $show_key = 'show_' . $row['field'];
+                $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : '';
+                $row['required'] = ($row['required']) ? 'required' : '';
+                $xtpl->assign('FIELD', $row);
+                foreach ($data_questions as $array_question_i) {
+                    $xtpl->assign('QUESTION', $array_question_i['title']);
+                    $xtpl->parse('main.tab_edit_question.' . $show_key . '.frquestion');
+                }
+                if ($row['required']) {
+                    $xtpl->parse('main.tab_edit_question.' . $show_key . '.required');
+                }
+                if ($row['description']) {
+                    $xtpl->parse('main.tab_edit_question.' . $show_key . '.description');
+                }
+                $xtpl->parse('main.tab_edit_question.' . $show_key);
             }
-            if ($row['required']) {
-                $xtpl->parse('main.tab_edit_question.' . $show_key . '.required');
-            }
-            if ($row['description']) {
-                $xtpl->parse('main.tab_edit_question.' . $show_key . '.description');
-            }
-            $xtpl->parse('main.tab_edit_question.' . $show_key);
         }
 
         $xtpl->parse('main.edit_question');
