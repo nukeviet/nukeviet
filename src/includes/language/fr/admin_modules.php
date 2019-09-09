@@ -88,3 +88,4 @@ $lang_module['select_hook_module'] = 'Choisissez le module de connexion %s';
 $lang_module['vmodule_no_title'] = 'Erreur: vous n\'avez pas entré de nouveau nom de module.';
 $lang_module['vmodule_no_file'] = 'Erreur: vous n\'avez pas sélectionné le module d\'origine.';
 $lang_module['select_hook_sys'] = 'Connecter %s avec';
+$lang_module['module_groups_view_note'] = 'La super administration, l\'administration générale, l\'administrateur du module sont toujours autorisés à voir le module';
