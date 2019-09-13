@@ -237,6 +237,7 @@ if ($global_config['allowuserlogin']) {
                         $row_field['field_choices'][$key] = $val;
                     }
                 }
+                $row_field['system'] = $row_field['is_system'];
                 $array_field_config[$row_field['field']] = $row_field;
             }
 

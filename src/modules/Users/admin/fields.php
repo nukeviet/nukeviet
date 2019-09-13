@@ -21,10 +21,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $fid = $nv_Request->get_int('fid', 'post', 0);
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid . ' AND system=0';
+    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid . ' AND is_system=0';
     $numrows = $db->query($query)->fetchColumn();
 
-    $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE system=1')->fetchColumn();
+    $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE is_system=1')->fetchColumn();
     if ($numrows != 1 or $new_vid <= $weightsystem) {
         die('NO');
     }
@@ -367,12 +367,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field')->fetchColumn();
                 $weight = intval($weight) + 1;
 
-                $sql = "INSERT INTO " . NV_MOD_TABLE . "_field
-                    (field, weight, field_type, field_choices, sql_choices, match_type,
+                $sql = "INSERT INTO " . NV_MOD_TABLE . "_field (
+                    field, weight, field_type, field_choices, sql_choices, match_type,
                     match_regex, func_callback, min_length, max_length,
                     required, show_register, user_editable,
-                    show_profile, class, language, default_value) VALUES
-                    ('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
+                    show_profile, class, language, default_value
+                ) VALUES (
+                    '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "',
+                    " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
                     :match_regex, :func_callback,
                     " . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
                     " . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
@@ -419,7 +421,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 class = :class,
                 language='" . serialize($language) . "',
                 default_value= :default_value
-                WHERE fid = " . $dataform['fid'];
+            WHERE fid = " . $dataform['fid'];
 
             $stmt = $db->prepare($query);
             if ($text_fields == 1) {
@@ -472,7 +474,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
 
-    list($fid, $field, $weight, $system) = $db->query('SELECT fid, field, weight, system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
+    list($fid, $field, $weight, $system) = $db->query('SELECT fid, field, weight, is_system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
 
     if ($fid and !empty($field) and empty($system)) {
         $query1 = 'DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid;
@@ -521,7 +523,7 @@ $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 $xtpl->assign('MATCH4', '{4}');
 $xtpl->assign('MATCH2', '{2}');
 
-// Danh sach cau hoi
+// Danh sách các trường dữ liệu tùy biến
 if ($nv_Request->isset_request('qlist', 'get')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
@@ -547,7 +549,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 'show_profile' => ($row['show_profile']) ? 'fa-check-square-o' : 'fa fa-square-o'
             ));
 
-            for ($i = ($row['system'] == 1 ? $row['weight'] : $fieldsys_offset + 1); $i <= ($row['system'] == 1 ? $row['weight'] : $num); ++$i) {
+            for ($i = ($row['is_system'] == 1 ? $row['weight'] : $fieldsys_offset + 1); $i <= ($row['is_system'] == 1 ? $row['weight'] : $num); ++$i) {
                 $xtpl->assign('WEIGHT', array(
                     'key' => $i,
                     'title' => $i,
@@ -556,7 +558,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 $xtpl->parse('main.data.loop.weight');
             }
 
-            if ($row['system'] == 1) {
+            if ($row['is_system'] == 1) {
                 $xtpl->assign('DISABLED_WEIGHT', 'disabled');
                 $fieldsys_offset++;
             } else {
@@ -595,6 +597,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             }
             $dataform['fieldid'] = $dataform['field'];
             $dataform['default_value_number'] = $dataform['default_value'];
+            $dataform['system'] = $dataform['is_system'];
         } else {
             $dataform = [];
             $dataform['show_register'] = 1;

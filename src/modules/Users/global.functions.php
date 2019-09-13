@@ -59,5 +59,6 @@ function nv_get_users_field_config()
         }
         $array_field_config[$row_field['field']] = $row_field;
     }
+    $row_field['system'] = $row_field['is_system'];
     return $array_field_config;
 }
