@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -37,10 +38,10 @@ if (!file_exists($currentpath)) {
 }
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_rows';
-$array_block_cat_module = array();
-$id_block_content = array();
-$array_custom = $array_custom_old = array();
-$custom = array();
+$array_block_cat_module = [];
+$id_block_content = [];
+$array_custom = $array_custom_old = [];
+$custom = [];
 
 $sql = 'SELECT bid, adddefault, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
@@ -96,8 +97,8 @@ $rowcontent = array(
     'note' => '',
     'keywords' => '',
     'keywords_old' => '',
-    'files' => array(),
-    'files_old' => array(),
+    'files' => [],
+    'files_old' => [],
     'gift_content' => '',
     'gift_from' => NV_CURRENTTIME,
     'gift_to' => 0,
@@ -107,11 +108,12 @@ $rowcontent = array(
 
 $page_title = $lang_module['content_add'];
 $groups_list = nv_groups_list();
+$array_keywords_old = [];
 
 $is_copy = $nv_Request->isset_request('copy', 'get');
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 
-$group_id_old = array();
+$group_id_old = [];
 if ($rowcontent['id'] > 0) {
     $rowcontent['listcatid'] = $db->query("SELECT listcatid FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'])->fetchColumn();
 
@@ -119,7 +121,6 @@ if ($rowcontent['id'] > 0) {
     $group_id_old = getGroupID($rowcontent['id']);
 
     // Old keywords
-    $array_keywords_old = array();
     $_query = $db->query('SELECT tid, keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE id=' . $rowcontent['id'] . ' ORDER BY keyword ASC');
     while ($row = $_query->fetch()) {
         $array_keywords_old[$row['tid']] = $row['keyword'];
@@ -152,9 +153,9 @@ if ($rowcontent['id'] > 0) {
 
 if ($nv_Request->get_int('save', 'post') == 1) {
     $field_lang = nv_file_table($table_name);
-    $id_block_content = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', array()));
+    $id_block_content = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', []));
     $rowcontent['listcatid'] = $nv_Request->get_int('catid', 'post', 0);
-    $rowcontent['group_id'] = array_unique($nv_Request->get_typed_array('groupids', 'post', 'int', array()));
+    $rowcontent['group_id'] = array_unique($nv_Request->get_typed_array('groupids', 'post', 'int', []));
     $rowcontent['showprice'] = $nv_Request->get_int('showprice', 'post', 0);
     $rowcontent['showorder'] = $nv_Request->get_int('showorder', 'post', 0);
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
@@ -196,7 +197,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $rowcontent['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 255);
     $rowcontent['note'] = $nv_Request->get_title('note', 'post', '', 1);
     $rowcontent['address'] = $nv_Request->get_title('address', 'post', '', 1);
-    $rowcontent['files'] = $nv_Request->get_typed_array('files', 'post', 'int', array());
+    $rowcontent['files'] = $nv_Request->get_typed_array('files', 'post', 'int', []);
 
     $rowcontent['gift_content'] = $nv_Request->get_textarea('gift_content', '', 'br');
     $rowcontent['gift_from'] = $nv_Request->get_title('gift_from', 'post', '');
@@ -264,14 +265,14 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $typeprice = ($rowcontent['listcatid']) ? $global_array_shops_cat[$rowcontent['listcatid']]['typeprice'] : 0;
     if ($typeprice == 2) {
         $price_config = $nv_Request->get_array('price_config', 'post');
-        $sortArray = array();
+        $sortArray = [];
         foreach ($price_config as $price_config_i) {
             $sortArray['number_to'][] = intval($price_config_i['number_to']);
             $sortArray['price'][] = floatval(preg_replace('/[^0-9\.]/', '', $price_config_i['price']));
         }
         array_multisort($sortArray['number_to'], SORT_ASC, $price_config);
 
-        $price_config_save = array();
+        $price_config_save = [];
         $i = 0;
         foreach ($price_config as $key => $price_config_i) {
             $price_config_i['number_to'] = intval($price_config_i['number_to']);
@@ -299,7 +300,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $rowcontent['tag_title'] = $nv_Request->get_title('tag_title', 'post', '');
     $rowcontent['tag_description'] = $nv_Request->get_textarea('tag_description', '', NV_ALLOWED_HTML_TAGS);
 
-    $_groups_post = $nv_Request->get_array('allowed_comm', 'post', array());
+    $_groups_post = $nv_Request->get_array('allowed_comm', 'post', []);
     $rowcontent['allowed_comm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $rowcontent['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post');
@@ -315,7 +316,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     // Xu ly anh minh hoa khac
     $otherimage = $nv_Request->get_typed_array('otherimage', 'post', 'string');
-    $array_otherimage = array();
+    $array_otherimage = [];
     foreach ($otherimage as $otherimage_i) {
         if (!nv_is_url($otherimage_i) and file_exists(NV_DOCUMENT_ROOT . $otherimage_i)) {
             $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
@@ -392,7 +393,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
 
     // Kiem tra nhom bat buoc
-    $group_cat = array();
+    $group_cat = [];
     $result = $db->query('SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $rowcontent['listcatid']);
     if ($result->rowCount() > 0) {
         while (list ($groupid) = $result->fetch(3)) {
@@ -436,7 +437,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $keywords = explode(',', $keywords);
 
         // Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
-        $keywords_return = array();
+        $keywords_return = [];
         $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . "_" . $module_data . '_tags_id_' . NV_LANG_DATA . ' where keyword = :keyword');
         foreach ($keywords as $keyword_i) {
             $sth->bindParam(':keyword', $keyword_i, PDO::PARAM_STR);
@@ -534,7 +535,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 " . $listvalue . "
             )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['listcatid'] = $rowcontent['listcatid'];
         $data_insert['product_code'] = $rowcontent['product_code'];
         $data_insert['product_price'] = $rowcontent['product_price'];
@@ -810,7 +811,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         ));
         $keywords = array_unique($keywords);
         if ($is_copy) {
-            $array_keywords_old = array();
+            $array_keywords_old = [];
         }
 
         foreach ($keywords as $keyword) {
@@ -824,11 +825,15 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
                 list ($tid, $alias, $keywords_i) = $sth->fetch(3);
                 if (empty($tid)) {
-                    $array_insert = array();
+                    $array_insert = [];
                     $array_insert['alias'] = $alias_i;
                     $array_insert['keyword'] = $keyword;
 
-                    $tid = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_" . NV_LANG_DATA . " (numpro, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert);
+                    $tid = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_" . NV_LANG_DATA . " (
+                        numpro, alias, description, bodytext, image, keywords
+                    ) VALUES (
+                        1, :alias, '', '', '', :keyword)", "tid", $array_insert
+                    );
                 } else {
                     if ($alias != $alias_i) {
                         if (!empty($keywords_i)) {
@@ -900,7 +905,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $rowcontent['status'] = 0;
     }
 
-    $id_block_content = array();
+    $id_block_content = [];
     $sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
 
@@ -936,13 +941,13 @@ $rowcontent['gift_to'] = !empty($rowcontent['gift_to']) ? nv_date('d/m/Y', $rowc
 if (!empty($rowcontent['otherimage'])) {
     $otherimage = explode('|', $rowcontent['otherimage']);
 } else {
-    $otherimage = array();
+    $otherimage = [];
 }
 
 $rowcontent['product_weight'] = empty($rowcontent['product_weight']) ? '' : $rowcontent['product_weight'];
 $rowcontent['product_price'] = number_format($rowcontent['product_price']);
 $rowcontent['saleprice'] = !empty($rowcontent['saleprice']) ? number_format($rowcontent['saleprice']) : '';
-$array_files = array();
+$array_files = [];
 if ($pro_config['download_active']) {
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
     $array_files = $nv_Cache->db($sql, 'id', $module_name);
@@ -1006,7 +1011,7 @@ foreach ($global_array_shops_cat as $catid_i => $rowscat) {
 if (!empty($rowcontent['group_id'])) {
     $array_groupid_in_row = $rowcontent['group_id'];
 } else {
-    $array_groupid_in_row = array();
+    $array_groupid_in_row = [];
 }
 
 $inrow = nv_base64_encode(serialize($array_groupid_in_row));
@@ -1112,7 +1117,7 @@ if ($typeprice == 1) {
 
     $xtpl->parse('main.product_price');
 } elseif ($typeprice == 2) {
-    $_arr_price_config = (empty($rowcontent['price_config'])) ? array() : unserialize($rowcontent['price_config']);
+    $_arr_price_config = (empty($rowcontent['price_config'])) ? [] : unserialize($rowcontent['price_config']);
     $i = sizeof($_arr_price_config);
     ++$i;
     $_arr_price_config[$i] = array(
