@@ -5,18 +5,26 @@
 <!-- END: lib -->
 <script type="text/javascript">
 $(document).ready(function(){
-  $('.slider_{BLOCKID}').bxSlider({
-  auto:{AUTO},
-  mode:'{MODE}',
-  speed:{SPEED},
-  slideWidth:{WIDTH},
-  slideMargin:{MARGIN},
-  minSlides:{NUMVIEW},
-  maxSlides:{NUMVIEW},
-  moveSlides:{MOVE},
-  pager:{PAGER},
-  adaptiveHeight: true
-  });
+    $('.slider_{BLOCKID}').bxSlider({
+        auto: {AUTO},
+        mode: '{MODE}',
+        speed: {SPEED},
+        slideWidth: {WIDTH},
+        slideMargin: {MARGIN},
+        minSlides: {NUMVIEW},
+        maxSlides: {NUMVIEW},
+        moveSlides: {MOVE},
+        pager: {PAGER},
+        adaptiveHeight: true,
+        touchEnabled: false
+    });
+    if (window.navigator.userAgent.toLowerCase().indexOf("chrome") > 0) {
+        $("body").on("mousedown", ".slider_{BLOCKID} a", function() {
+            if ($(this).attr("href") && $(this).attr("href") != "#") {
+                window.location = $(this).attr("href");
+            }
+        });
+    }
 });
 </script>
 
