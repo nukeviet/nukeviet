@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('get_product', 'get')) {
     $sth->bindValue(':title', '%' . $q . '%', PDO::PARAM_STR);
     $sth->execute();
 
-    $array_data = array( );
+    $array_data = [];
     while (list($id, $title) = $sth->fetch(3)) {
         $array_data[] = array(
             'key' => $id,
@@ -50,8 +50,8 @@ if ($nv_Request->isset_request('get_product', 'get')) {
     exit();
 }
 
-$row = $product_old = array( );
-$error = array( );
+$row = $product_old = [];
+$error = [];
 $row['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
 if ($row['id'] > 0) {
@@ -66,7 +66,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $row['code'] = $nv_Request->get_title('code', 'post', '');
     $row['type'] = $nv_Request->get_title('type', 'post', 'p');
     $row['discount'] = $nv_Request->get_title('discount', 'post', '');
-    $row['total_amount'] = $nv_Request->get_title('total_amount', 'post', '');
+    $row['total_amount'] = $nv_Request->get_float('total_amount', 'post', 0);
     $row['product'] = $nv_Request->get_array('product', 'post', '');
     $row['product'] = array_diff($row['product'], array(''));
     if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('date_start', 'post'), $m)) {
@@ -98,9 +98,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     if (empty($error)) {
         try {
+            unset($exc, $insert_id);
             if (empty($row['id'])) {
-                $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_coupons (title, code, type, discount, total_amount, date_start, date_end, uses_per_coupon, date_added, status) VALUES (:title, :code, :type, :discount, :total_amount, :date_start, :date_end, :uses_per_coupon, ' . NV_CURRENTTIME . ', 1)';
-                $data_insert = array( );
+                $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_coupons (
+                    title, code, type, discount, total_amount, date_start, date_end, uses_per_coupon, date_added, status
+                ) VALUES (
+                    :title, :code, :type, :discount, :total_amount, :date_start, :date_end, :uses_per_coupon, ' . NV_CURRENTTIME . ', 1
+                )';
+                $data_insert = [];
                 $data_insert['title'] = $row['title'];
                 $data_insert['code'] = $row['code'];
                 $data_insert['type'] = $row['type'];
@@ -111,19 +116,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $data_insert['uses_per_coupon'] = $row['uses_per_coupon'];
                 $insert_id = $db->insert_id($sql, 'id', $data_insert);
             } else {
-                $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET title = :title, code = :code, type = :type, discount = :discount, total_amount = :total_amount, date_start = :date_start, date_end = :date_end, uses_per_coupon = :uses_per_coupon WHERE id=' . $row['id']);
+                $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET
+                    title = :title, code = :code, type = :type, discount = :discount, total_amount = :total_amount,
+                    date_start = :date_start, date_end = :date_end, uses_per_coupon = :uses_per_coupon
+                WHERE id=' . $row['id']);
                 $stmt->bindParam(':title', $row['title'], PDO::PARAM_STR);
                 $stmt->bindParam(':code', $row['code'], PDO::PARAM_STR);
                 $stmt->bindParam(':type', $row['type'], PDO::PARAM_STR);
                 $stmt->bindParam(':discount', $row['discount'], PDO::PARAM_STR);
-                $stmt->bindParam(':total_amount', $row['total_amount'], PDO::PARAM_STR);
+                $stmt->bindParam(':total_amount', $row['total_amount'], PDO::PARAM_INT);
                 $stmt->bindParam(':date_start', $row['date_start'], PDO::PARAM_INT);
                 $stmt->bindParam(':date_end', $row['date_end'], PDO::PARAM_INT);
                 $stmt->bindParam(':uses_per_coupon', $row['uses_per_coupon'], PDO::PARAM_INT);
                 $exc = $stmt->execute();
             }
 
-            if ($exc or $insert_id > 0) {
+            if (!empty($exc) or !empty($insert_id)) {
                 // Them san pham vao bang product
                 if (empty($row['id']) and !empty($row['product'])) {
                     foreach ($row['product'] as $pid) {
@@ -143,8 +151,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
         } catch (PDOException $e) {
-            trigger_error($e->getMessage());
-            die($e->getMessage());
+            trigger_error(print_r($e, true));
         }
     }
 } elseif ($row['id'] > 0) {
@@ -281,7 +288,7 @@ foreach ($array_select_type as $key => $title) {
 }
 
 if (!empty($row['product'])) {
-    $array_pro = array( );
+    $array_pro = [];
     $result = $db->query('SELECT id, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $row['product']) . ')');
     while (list($id, $title) = $result->fetch(3)) {
         $array_pro[$id] = array(

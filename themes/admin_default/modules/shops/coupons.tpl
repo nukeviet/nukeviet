@@ -69,16 +69,16 @@
 			<tbody>
 				<tr>
 					<td> {LANG.title} <span class="red">*</span></td>
-					<td><input class="form-control" type="text" name="title" value="{ROW.title}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /></td>
+					<td><input class="form-control" type="text" name="title" value="{ROW.title}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')"></td>
 				</tr>
 				<tr>
 					<td> {LANG.coupons} <span class="red">*</span> </td>
-					<td><input class="form-control" type="text" name="code" value="{ROW.code}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /></td>
+					<td><input class="form-control" type="text" name="code" value="{ROW.code}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')"></td>
 				</tr>
 				<tr>
 					<td> {LANG.coupons_discount} <span class="red">*</span></td>
 					<td>
-						<input class="form-control" type="number" name="discount" value="{ROW.discount}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" />
+						<input class="form-control" type="number" name="discount" value="{ROW.discount}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" step="0.01">
 						<select class="form-control" name="type">
 							<!-- BEGIN: select_type -->
 							<option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
