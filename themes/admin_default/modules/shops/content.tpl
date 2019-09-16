@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">{LANG.content_cat}</label>
+                            <label class="col-md-4 control-label">{LANG.content_cat} <span class="require">(*)</span></label>
                             <div class="col-md-20">
                                 <select class="form-control" name="catid" id="catid" onchange="nv_change_catid(this, {rowcontent.id})" style="width: 100%">
                                     <option value="0" data-label="1">---{LANG.content_cat_c}---</option>
@@ -483,10 +483,11 @@
                 url : script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(),
                 data : $('#frm-submit').serialize() + '&status=' + $(this).data('status'),
                 success : function(json) {
-                    if(json.error){
+                    if (json.error) {
                         alert(json.msg);
                         $('#' + json.input).focus();
-                    }else{
+                    } else {
+                    	$(window).unbind();
                         window.location.href = json.redirect;
                     }
                 }
