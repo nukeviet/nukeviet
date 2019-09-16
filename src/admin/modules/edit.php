@@ -103,7 +103,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     if ($mod != $global_config['site_home_module']) {
         $groups_view = $nv_Request->get_array('groups_view', 'post', []);
-        $groups_view = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect($groups_view, array_keys($groups_list)))) : '';
+        $groups_view[] = 1;
+        $groups_view[] = 2;
+        $groups_view = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect(array_unique($groups_view), array_keys($groups_list)))) : '';
     } else {
         $act = 1;
         $groups_view = '6';

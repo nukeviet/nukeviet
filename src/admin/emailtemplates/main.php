@@ -19,13 +19,16 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $sql = 'SELECT emailid, is_system FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid=' . $emailid;
     $row = $db->query($sql)->fetch();
 
-    if (empty($row) or $row['is_system'])
+    if (empty($row) or $row['is_system']) {
         die('NO_' . $emailid);
+    }
 
     $sql = 'DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . $emailid;
 
     if ($db->exec($sql)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete tpl', 'ID: ' . $emailid, $admin_info['userid']);
+        $args = [$emailid];
+        nv_apply_hook('', 'emailtemplates_after_delete', $args);
         $nv_Cache->delMod($module_name);
     } else {
         die('NO_' . $emailid);

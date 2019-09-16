@@ -1798,19 +1798,23 @@ function nv_site_mods()
     $site_mods = $sys_mods;
     if (defined('NV_SYSTEM')) {
         foreach ($site_mods as $m_title => $row) {
-            if (!nv_user_in_groups($row['groups_view'])) {
-                unset($site_mods[$m_title]);
-            } elseif (defined('NV_IS_SPADMIN')) {
+            /*
+             * Điều hành chung và quản trị module được xem module
+             * mà không phụ thuộc vào thiết lập quyền xem
+             */
+            if (defined('NV_IS_SPADMIN')) {
                 $site_mods[$m_title]['is_modadmin'] = true;
             } elseif (defined('NV_IS_ADMIN') and !empty($row['admins']) and !empty($admin_info['admin_id']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
                 $site_mods[$m_title]['is_modadmin'] = true;
+            } elseif (!nv_user_in_groups($row['groups_view'])) {
+                unset($site_mods[$m_title]);
             }
         }
         if (isset($site_mods['users'])) {
             if (defined('NV_IS_USER')) {
-                $user_ops = array( 'main', 'logout', 'editinfo', 'avatar', 'groups' );
+                $user_ops = ['main', 'logout', 'editinfo', 'avatar', 'groups'];
             } else {
-                $user_ops = array( 'main', 'login', 'register', 'lostpass' );
+                $user_ops = ['main', 'login', 'register', 'lostpass'];
                 if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1) {
                     $user_ops[] = 'lostactivelink';
                     $user_ops[] = 'active';
@@ -2365,7 +2369,7 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
             }
 
             // Dùng để xử lý nội dung email trước khi gửi
-            $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row], $email_content);
+            $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row, $emailid], $email_content);
 
             $result = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $_email_data['cc'], $_email_data['bcc']);
         }

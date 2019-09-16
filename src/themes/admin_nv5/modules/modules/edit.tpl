@@ -104,10 +104,13 @@
                 <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('groups_view')}</label>
                 <div class="col-12 col-sm-8 col-lg-6 mt-1">
                     {foreach $GROUPS_LIST key=groupid item=groupname}
+                    {if $groupid gt 2}
                     <label class="custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" name="groups_view[]" value="{$groupid}"{if in_array($groupid, $DATA.groups_view)} checked="checked"{/if}><span class="custom-control-label">{$groupname}</span>
                     </label>
+                    {/if}
                     {/foreach}
+                    <div class="form-text text-muted">{$LANG->get('module_groups_view_note')}</div>
                 </div>
             </div>
             {/if}

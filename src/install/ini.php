@@ -64,7 +64,6 @@ $sys_info['os'] = strtoupper((function_exists('php_uname') and !in_array('php_un
 $sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['openssl_support'] = (function_exists('openssl_encrypt')) ? 1 : 0;
 if (!$sys_info['openssl_support']) {
-    phpinfo();
     die('Openssl library not available');
 }
 
