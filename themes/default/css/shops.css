@@ -137,73 +137,6 @@ table.table tr.bg {
     margin-bottom: 10px;
 }
 
-/* Custom controls */
-div[id*="product_center"] {
-    position: relative;
-}
-
-div[id*="product_center"] .crsl-nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-div[id*="product_center"] .crsl-items:after {
-    display: block;
-    clear: both;
-    content: '';
-}
-
-div[id*="product_center"] .crsl-items img {
-    margin: 0 auto 6px auto;
-}
-
-div[id*="product_center"] .previous, div[id*="product_center"] .next {
-    position: absolute;
-    top: 50%;
-    width: 40px;
-    height: 40px;
-    margin-top: -20px;
-    text-indent: -10000px;
-    color: #FFF;
-    background: rgba(0, 0, 0, .80) url(../images/shops/previous-next.png) no-repeat 0 0;
-    z-index: 10;
-    /* border radius */
-    -moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
-    border-radius: 20px;
-    /* transition */
-    -webkit-transition: background .2s ease-out;
-    -moz-transition: background .2s ease-out;
-    -o-transition: background .2s ease-out;
-    transition: background .2s ease-out;
-}
-
-div[id*="product_center"] .previous:hover, div[id*="product_center"] .next:hover {
-    background-color: rgba(0, 0, 0, .95);
-}
-
-div[id*="product_center"] .previous {
-    left: 0;
-    background-position: 0 0;
-}
-
-div[id*="product_center"] .next {
-    right: 0;
-    background-position: 100% 0;
-}
-
-div[id*="product_center"] .crsl-item {
-    margin-bottom: 0;
-}
-
-.caption h3 {
-    line-height: 22px;
-    height: 40px;
-}
-
 /* BLOCK OTHER PRODUCT */
 .others_product ul {
     width: 100%;
@@ -804,93 +737,62 @@ table.rows tr.bgtop {
 }
 
 /* BLOCK PRODUCT CENTER */
-.product_center {
-    z-index: 2;
-    margin-bottom: 2px;
-}
-
-.product_center {
-    overflow: hidden;
-    position: relative;
-    margin-top: 5px;
-}
-
-.product_center .container {
-    width: 960px;
-    height: 130px;
-    overflow: hidden;
+.product_center_wrap {
     position: relative;
 }
 
-.product_center .slides {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.product_center .slides>div {
-    position: absolute;
-    top: 0;
-    width: 960px;
-    display: none;
-}
-
-#block_newtop .slides>div a:hover {
-    text-decoration: underline;
-}
-
-.product_center p {
-    padding: 0px;
-}
-
-.product_center ul.pagination {
-    padding: 5px;
-    float: right;
-}
-
-.product_center ul.pagination li {
-    float: left;
+.product_center_wrap .controls {
     list-style: none;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    opacity: 0.1;
 }
 
-.product_center ul.pagination a {
+.product_center_wrap:hover .controls {
+    opacity: 0.8;
+}
+
+.product_center_wrap .controls li {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    margin-top: -15px;
+    top: 50%;
+}
+
+.product_center_wrap .controls li.prev-button {
+    left: 10px;
+}
+
+.product_center_wrap .controls li.next-button {
+    right: 10px;
+}
+
+.product_center_wrap .controls li span {
     display: block;
-    overflow: hidden;
-    background: #f3f3f3;
-    margin-right: 2px;
-    line-height: 20px;
-    height: 20px;
-    width: 20px;
+    width: 30px;
+    height: 30px;
+    background-color: #ddd;
+    border-radius: 15px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    outline: 0;
+}
+
+.product_center_wrap .items {
     text-align: center;
 }
 
-.product_center ul.pagination li.active a {
-    background: #b5b5b5;
-    color: #ffffff;
-}
-
-.product_center .slides .items {
+.product_center_wrap .img {
     display: block;
-    width: 150px;
-    float: left;
-    height: 120px;
-    margin-right: 10px;
-    text-align: center;
+    margin-bottom: 10px;
 }
 
-.product_center .slides .items img {
-    height: 80px;
-    border: #DFDFDF 1px solid;
-    padding: 2px;
-}
-
-.block-nobg .title_adv {
-    background: url('../images/dot_gray.gif') repeat-x center;
-}
-
-.frame {
-    padding: 20px;
-    text-align: center;
+.product_center_wrap .items .thumbnail {
+    display: inline-block;
+    margin: 0;
 }
 
 /* SEARCH */

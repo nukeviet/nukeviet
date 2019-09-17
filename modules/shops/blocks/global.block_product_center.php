@@ -8,11 +8,11 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_global_product_center')) {
+if (!nv_function_exists('nv_global_product_center')) {
     /**
      * nv_block_config_product_center_blocks()
      *
@@ -183,9 +183,8 @@ if (! nv_function_exists('nv_global_product_center')) {
         $xtpl = new XTemplate('block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme);
-        $xtpl->assign('JS_PATH', NV_BASE_SITEURL . 'themes/default/js');
         $xtpl->assign('NUMVIEW', $num_view);
-        //$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
+        $xtpl->assign('MODULE_FILE', $mod_file);
 
         if ($pro_config['sortdefault'] == 0) {
             $orderby = 't1.id DESC';
@@ -231,7 +230,6 @@ if (! nv_function_exists('nv_global_product_center')) {
             $xtpl->assign('SRC_IMG', $src_img);
             $xtpl->assign('BLOCKID', $blockID);
 
-
             if ($pro_config['active_price'] == '1') {
                 if ($row['showprice'] == '1') {
                     $price = nv_get_price_tmp($module, $mod_data, $mod_file, $row['id']);
@@ -250,10 +248,6 @@ if (! nv_function_exists('nv_global_product_center')) {
             $xtpl->parse('main.items');
         }
 
-        if (! defined('LIB')) {
-            define('LIB', true);
-            $xtpl->parse('main.lib');
-        }
         $xtpl->parse('main');
         return $xtpl->text('main');
     }
