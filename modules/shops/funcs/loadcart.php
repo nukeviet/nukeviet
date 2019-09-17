@@ -17,7 +17,7 @@ $total = 0;
 $total_old = 0;
 $total_coupons = 0;
 
-$array_products = array();
+$array_products = [];
 $get_list_product = $nv_Request->get_int('get_list_product', 'get', 0);
 
 $coupons_check = $nv_Request->get_int('coupons_check', 'get', 0);
@@ -35,9 +35,11 @@ $counpons = array(
 if (!empty($coupons_code)) {
     $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote($coupons_code));
     $counpons = $result->fetch();
-    $result = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product WHERE cid = ' . $counpons['id']);
-    while (list ($pid) = $result->fetch(3)) {
-        $counpons['product'][] = $pid;
+    if (!empty($counpons)) {
+        $result = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product WHERE cid = ' . $counpons['id']);
+        while (list ($pid) = $result->fetch(3)) {
+            $counpons['product'][] = $pid;
+        }
     }
 }
 
@@ -45,7 +47,7 @@ if ($coupons_load) {
     $_SESSION[$module_data . '_coupons']['check'] = $coupons_check;
 }
 
-$array_product_id = array();
+$array_product_id = [];
 if (!empty($_SESSION[$module_data . '_cart'])) {
     foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
         $array = explode('_', $pro_id);
