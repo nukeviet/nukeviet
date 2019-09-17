@@ -57,9 +57,9 @@
                     <span>{DATA.order_code}</span>
                     <br>
                     <span class="payment">{DATA.transaction_name}</span>
-                    <a href="{url_print}" title="" id="click_print" class="btn btn-success hidden-xs" style="margin-top:5px"><em class="fa fa-print fa-fw"></em>{LANG.order_print}</a>
+                    <a href="{url_print}" title="" id="click_print" class="btn btn-success hidden-xs" style="margin-top:5px" rel="nofollow"><em class="fa fa-print fa-fw"></em>{LANG.order_print}</a>
                     <!-- BEGIN: order_action -->
-                    <a href="{url_action}" title="{LANG.order_edit}" class="btn btn-danger hidden-xs" style="margin-top:5px"><em class="fa fa-edit fa-fw"></em>{LANG.order_edit}</a>
+                    <a href="{url_action}" title="{LANG.order_edit}" class="btn btn-danger hidden-xs" style="margin-top:5px" rel="nofollow"><em class="fa fa-edit fa-fw"></em>{LANG.order_edit}</a>
                     <!-- END: order_action -->
                 </div>
             </div>
