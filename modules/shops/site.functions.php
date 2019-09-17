@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
+
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -20,15 +21,15 @@ $sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . 
 $global_array_group = $nv_Cache->db($sql, 'groupid', $module_name);
 
 // Lay ty gia ngoai te
-$sql = 'SELECT code, currency,symbol, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
+$sql = 'SELECT code, currency, symbol, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
 $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
     $money_config = unserialize($cache);
 } else {
-    $money_config = array();
+    $money_config = [];
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
-        $money_config[$row['code']] = array(
+        $money_config[$row['code']] = [
             'code' => $row['code'],
             'currency' => $row['currency'],
             'symbol' => $row['symbol'],
@@ -37,7 +38,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
             'number_format' => $row['number_format'],
             'decimals' => $row['round'] > 1 ? $row['round'] : strlen($row['round']) - 2,
             'is_config' => ($row['code'] == $pro_config['money_unit']) ? 1 : 0
-        );
+        ];
     }
     $result->closeCursor();
 
