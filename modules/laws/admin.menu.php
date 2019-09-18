@@ -70,7 +70,6 @@ if (defined('NV_IS_SPADMIN')) {
 
 if ($NV_IS_ADMIN_MODULE) {
     $submenu['signer'] = $lang_module['signer'];
-    $submenu['scontent'] = $lang_module['scontent_add'];
     $submenu['area'] = $lang_module['area'];
     $submenu['cat'] = $lang_module['cat'];
     $submenu['subject'] = $lang_module['subject'];
