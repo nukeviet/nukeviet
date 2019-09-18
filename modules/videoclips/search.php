@@ -8,7 +8,9 @@
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
 
-if (!defined('NV_IS_MOD_SEARCH')) die('Stop!!!');
+if (!defined('NV_IS_MOD_SEARCH')) {
+    die('Stop!!!');
+}
 
 $sql = 'SELECT SQL_CALC_FOUND_ROWS title,alias,hometext
     FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_clip
@@ -24,10 +26,10 @@ $num_items = $result->fetchColumn();
 
 if ($num_items) {
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
-    
+
     while (list ($tilterow, $alias, $content) = $tmp_re->fetch(3)) {
-        $url = $link . $alias;
-        
+        $url = $link . 'video-' . $alias . $global_config['rewrite_exturl'];
+
         $result_array[] = array(
             'link' => $url,
             'title' => BoldKeywordInStr($tilterow, $key, $logic),

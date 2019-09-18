@@ -7,10 +7,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 17, 2014 11:34:27 AM
  */
-if (!defined('NV_MAINFILE')) die('Stop!!!');
+
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 if (!nv_function_exists('nv_block_video')) {
-
     /**
      * nv_block_config_video()
      *

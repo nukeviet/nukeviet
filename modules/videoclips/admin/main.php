@@ -7,7 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
-if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
+
+if (!defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
+}
 
 if ($nv_Request->isset_request('get_alias_title', 'post')) {
     $title = $nv_Request->get_title('get_alias_title', 'post', '');
@@ -339,7 +342,7 @@ while ($row = $result->fetch()) {
     $row['icon'] = $row['status'] ? '<i class="fa fa-check-square-o" style="color: red; font-size: 16px"></i>' : '<i style="color: #333; font-size: 16px" class="fa fa-square-o"></i>';
     $row['status'] = $row['status'] ? $lang_module['tit1'] : $lang_module['tit0'];
     $row['alt'] = $row['status'] ? $lang_module['status1'] : $lang_module['status0'];
-    $row['link_view'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=video-' . $row['alias'], true);
+    $row['link_view'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=video-' . $row['alias'] . $global_config['rewrite_exturl'], true);
     $row['view'] = number_format($row['view'], 0, ',', '.');
     $row['liked'] = number_format($row['liked'], 0, ',', '.');
     $row['unlike'] = number_format($row['unlike'], 0, ',', '.');

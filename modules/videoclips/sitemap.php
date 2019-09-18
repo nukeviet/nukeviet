@@ -8,19 +8,19 @@
  * @Createdate 14/4/2011, 19:29
  */
 
-if (!defined('NV_IS_MOD_SITEMAP')) die('Stop!!!');
+if (!defined('NV_IS_MOD_SITEMAP')) {
+    die('Stop!!!');
+}
 
-$sublinks = array();
+$sublinks = [];
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $site_mods[$mName]['module_data'] . "_topic` ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $site_mods[$mName]['module_data'] . "_topic ORDER BY weight ASC";
 $result = $db->query($sql);
 
 while ($row = $result->fetch()) {
-    $sublinks[] = array(
+    $sublinks[] = [
         'title' => $row['title'],
         'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mName . "/" . $row['alias'],
-        'subs' => array()
-    );
+        'subs' => []
+    ];
 }
-
-?>

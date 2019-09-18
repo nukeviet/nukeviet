@@ -7,7 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
-if (!defined('NV_IS_MOD_VIDEOCLIPS')) die('Stop!!!');
+
+if (!defined('NV_IS_MOD_VIDEOCLIPS')) {
+    die('Stop!!!');
+}
 
 $topic = $topicList[$topicList2[$array_op[0]]];
 
@@ -80,7 +83,7 @@ if ($all_page) {
         } else {
             $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
         }
-        $row['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'];
+        $row['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'] . $global_config['rewrite_exturl'];
         $row['sortTitle'] = nv_clean60($row['title'], $module_config[$module_name]['clean_title_video']);
         $array_data[$row['id']] = $row;
     }

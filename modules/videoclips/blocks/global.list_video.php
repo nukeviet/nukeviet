@@ -7,10 +7,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 19 Jun 2014 02:27:09 GMT
  */
-if (!defined('NV_MAINFILE')) die('Stop!!!');
+
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 if (!nv_function_exists('nv4_block_list_video')) {
-
     /**
      * nv_block_config_list_video()
      *
@@ -97,7 +99,7 @@ if (!nv_function_exists('nv4_block_list_video')) {
                 $row['image'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/" . $mod_file . "/video.png";
             }
 
-            $row['link'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=video-' . $row['alias'], true);
+            $row['link'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=video-' . $row['alias'] . $global_config['rewrite_exturl'], true);
             $xtpl->assign('ROW', $row);
             $xtpl->parse('main.loop');
         }
