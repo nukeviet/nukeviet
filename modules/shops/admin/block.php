@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
- if (! defined('NV_IS_FILE_ADMIN')) {
+ if (!defined('NV_IS_FILE_ADMIN')) {
      die('Stop!!!');
  }
 
@@ -18,7 +18,7 @@ $set_active_op = 'blockcat';
 $sql = 'SELECT bid, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
 
-$array_block = array();
+$array_block = [];
 while (list($bid_i, $title_i) = $result->fetch(3)) {
     $array_block[$bid_i] = $title_i;
 }
@@ -27,12 +27,12 @@ if (empty($array_block)) {
 }
 
 $cookie_bid = $nv_Request->get_int('int_bid', 'cookie', 0);
-if (empty($cookie_bid) or ! isset($array_block[$cookie_bid])) {
+if (empty($cookie_bid) or !isset($array_block[$cookie_bid])) {
     $cookie_bid = 0;
 }
 
 $bid = $nv_Request->get_int('bid', 'get,post', $cookie_bid);
-if (! in_array($bid, array_keys($array_block))) {
+if (!in_array($bid, array_keys($array_block))) {
     $bid_array_id = array_keys($array_block);
     $bid = $bid_array_id[0];
 }
@@ -64,7 +64,7 @@ $xtpl->assign('CHECKSESS', md5(session_id()));
 
 $xtpl->assign('BLOCK_LIST', nv_show_block_list($bid));
 
-$id_array = array();
+$id_array = [];
 $listid = $nv_Request->get_string('listid', 'get', '');
 
 if ($listid == '') {

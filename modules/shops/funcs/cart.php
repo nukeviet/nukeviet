@@ -59,7 +59,7 @@ if ($nv_Request->isset_request('coupons_clear', 'post')) {
     nv_htmlOutput('');
 }
 
-$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart', true);
+$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart', true);
 if ($_SERVER['REQUEST_URI'] != $base_url_rewrite) {
     nv_redirect_location($base_url_rewrite);
 }

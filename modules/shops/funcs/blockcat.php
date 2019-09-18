@@ -45,6 +45,7 @@ if (isset($array_op[1])) {
         }
 
         $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+        $base_url_rewrite = str_replace('&amp;', '&', $base_url_rewrite);
 
         if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
             nv_redirect_location($base_url_rewrite);
