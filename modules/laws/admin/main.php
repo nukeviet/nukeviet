@@ -117,7 +117,7 @@ if (empty($all_page) and !$nv_Request->isset_request('add', 'get')) {
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
-            $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
+            $post['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 250);
             if (empty($post['title'])) {
                 nv_htmlOutput($lang_module['errorIsEmpty'] . ": " . $lang_module['title']);
             }
