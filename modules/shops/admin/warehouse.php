@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -19,7 +19,7 @@ if (!$pro_config['active_warehouse']) {
 $page_title = sprintf($lang_module['warehouse_day'], nv_date('d/m/Y', NV_CURRENTTIME));
 
 if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == md5($global_config['sitekey'] . session_id())) {
-    $array_data = array();
+    $array_data = [];
     $array_warehouse = array( 'title' => $page_title, 'note' => '' );
     $listid = $nv_Request->get_string('listid', 'get', '');
     if (empty($listid)) {
@@ -31,10 +31,10 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     if ($nv_Request->isset_request('submit', 'post')) {
         $title = $nv_Request->get_title('title', 'post', $page_title);
         $note = $nv_Request->get_textarea('note', '', 'br');
-        $data = $nv_Request->get_array('data', 'post', array());
+        $data = $nv_Request->get_array('data', 'post', []);
 
         $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_warehouse( title, note, user_id, addtime ) VALUES ( :title, :note, ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ' )';
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['title'] = $title;
         $data_insert['note'] = $note;
         $wid = $db->insert_id($sql, 'wid', $data_insert);
@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
                 $total_num = 0;
                 $price_i = 0;
                 $total_price = 0;
-                $array_data_group = array();
+                $array_data_group = [];
 
                 foreach ($data_i as $key => $group_data) {
                     if (!empty($group_data['quantity'])) {
@@ -71,7 +71,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
 
                 // Cap nhat logs nhap kho
                 $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs( wid, pro_id, quantity, price, money_unit ) VALUES ( ' . $wid .  ', ' . $pro_id . ', ' . $total_num . ', ' . $total_price . ', :money_unit )';
-                $data_insert = array();
+                $data_insert = [];
                 $data_insert['money_unit'] = $money_unit_i;
                 $logid = $db->insert_id($sql, 'logid', $data_insert);
                 if (!empty($array_data_group) and $logid > 0) {
@@ -88,11 +88,11 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
                 $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number + ' . $total_num . ' WHERE id=' . $pro_id);
             }
         }
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=warehouse_logs');
     }
 
     // List pro_unit
-    $array_unit = array();
+    $array_unit = [];
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units';
     $result_unit = $db->query($sql);
     if ($result_unit->rowCount() > 0) {
@@ -105,7 +105,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     $_query = $db->query($_sql);
 
     while ($row = $_query->fetch()) {
-        $array_group = array();
+        $array_group = [];
         $result = $db->query('SELECT listgroup FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id=' . $row['id']);
         while (list($listgroup) = $result->fetch(3)) {
             $array_group[] = $listgroup;
@@ -130,7 +130,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
             $listgroup = GetGroupID($data['id']);
             $have_group = 0;
             if (!empty($listgroup)) {
-                $parent_id = array();
+                $parent_id = [];
                 foreach ($listgroup as $group_id) {
                     $parent_id[] = $global_array_group[$group_id]['parentid'];
                 }
