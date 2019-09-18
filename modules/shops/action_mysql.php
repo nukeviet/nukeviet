@@ -7,17 +7,18 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
+
 if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
 global $op, $db;
 
-$sql_drop_module = array();
+$sql_drop_module = [];
 
 $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $module_data . "\_money\_%'");
 $num_table = intval($result->rowCount());
-$array_lang_module_setup = array();
+$array_lang_module_setup = [];
 $set_lang_data = '';
 
 if ($num_table > 0) {
@@ -722,7 +723,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tabs ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT ''";
 
 // Default config
-$data = array();
+$data = [];
 $data['image_size'] = '100x100';
 $data['home_data'] = 'all'; // all, cat, group, none
 $data['home_view'] = 'viewgrid'; // viewgrid, viewlist

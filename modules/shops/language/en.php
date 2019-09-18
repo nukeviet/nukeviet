@@ -3,13 +3,13 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate 04/18/2017 09:47
+* @Createdate Jul 04, 2011, 03:18:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -223,7 +223,6 @@ $lang_module['order_ok'] = 'You order succesfully, we will reply you soonest!';
 $lang_module['order_payment_go'] = 'Payment orders';
 $lang_module['order_payment_notsp'] = 'Sorry, the billing system is temporarily unavailable for this order.';
 $lang_module['order_payment'] = 'Paid';
-$lang_module['order_payment'] = 'Paid';
 $lang_module['order_no_payment'] = 'Unpaid';
 $lang_module['order_payment_email'] = '<p>Thank you for ordering at the website {site_url}<br /> Here is your order information.</p>         Customer name : <strong>{order_name}</strong>   Email : {order_email}   Phone : {order_phone}   Address : {order_address}   Time orders : {dateup} at {moment}      Order code<br /> <span class="text_date"><strong>{order_code}</strong></span>     <br /> {table_product} <p>You can review the information orders at {review_url}</p> <p>This email is sent automatically from website <span style="line-height: 20.7999992370605px;">{site_url}</span>, Please do not reply to this email because we will not get your email. If you do not understand the contents of this email, please simply delete it from your inbox.</p>';
 $lang_module['content_here'] = 'Here';
@@ -255,8 +254,8 @@ $lang_module['order_email_review_to_admin'] = '<a href="%s">View orders</a>';
 $lang_module['order_email_noreply'] = 'This email is automatically sent from the website <a href="%s">%s</a>, please do not reply this email because we will not receive your email. If you do not understand the contents of this email please simply delete it from your inbox.';
 $lang_module['order_email_thanks'] = 'Thank you for ordering on the website %s,<br />Here is your order information.';
 $lang_module['order_email_thanks_to_admin'] = 'Stores received new orders from customers <strong>%s</strong><br /> Here is information orders.';
-$lang_module['payment_notcomplete'] = 'You have paid this order, however the payment process has not been completed. We need to double check the transaction, you will soon receive a notification. Please see order details';
 $lang_module['payment_complete'] = 'You paid succesfully! We will send products to you soon';
+$lang_module['payment_notcomplete'] = 'You have paid this order, however the payment process has not been completed. We need to double check the transaction, you will soon receive a notification. Please see order details';
 $lang_module['payment_erorr'] = 'Payment error by an unknow reason';
 $lang_module['payment_error_update'] = 'The system does not update the transaction status, please contact the site administrator for this problem';
 $lang_module['cart_title'] = 'Your cart';
@@ -359,6 +358,9 @@ $lang_module['view_page_list'] = 'According to list';
 $lang_module['view_page_gird'] = 'According grid form';
 $lang_module['newday'] = 'New';
 $lang_module['payport'] = 'Payment Gateways';
+$lang_module['cart_empty_title'] = 'Cart no products';
+$lang_module['cart_empty_content'] = 'You have not purchased any products, you can continue to purchase by clicking on the link below';
+$lang_module['cart_continue'] = 'Continue shopping';
 $lang_module['filter'] = 'Filter';
 $lang_module['filter_price_from'] = 'Larger % s';
 $lang_module['filter_no_item'] = 'Choose at least one attribute';
@@ -447,15 +449,6 @@ $lang_module['shipping_address_extend'] = 'Address details';
 $lang_module['shipping_address_extend_empty'] = 'Please enter the address details';
 $lang_module['shipping_address_note'] = 'To the system can calculate correct shipping costs, please choose the cadastral unit the area closest to your receipt in the box above.';
 $lang_module['shipping_error'] = 'The system can not provide shipping costs. Please contact the manager or siting of a larger grant (if any) or less (if any) current location.';
-
-$lang_module['new_old'] = 'Status';
-$lang_module['new'] = 'New';
-$lang_module['old'] = 'Old';
-$lang_module['address'] = 'Address sale';
-$lang_module['addressother'] = 'View of other goods';
-$lang_module['adddefaul'] = 'Use the default address';
-$lang_module['addaddress'] = 'Add address';
-$lang_module['note_add'] = 'Separated by slashes |';
 $lang_module['title_config'] = 'Title config';
 $lang_module['content_config'] = 'Product configuration content';
 $lang_module['addconfig'] = 'Add config';
@@ -466,6 +459,13 @@ $lang_module['paper_size'] = 'Paper Size';
 $lang_module['inks'] = 'Type inks';
 $lang_module['common_features'] = 'Common Features';
 $lang_module['specifications'] = 'Specifications';
+$lang_module['yesvat'] = 'Included 10%';
+$lang_module['novat'] = 'Not include 10% VAT';
+$lang_module['genuine'] = 'Genuine';
+$lang_module['notebook'] = 'Hand goods';
+$lang_module['new_old'] = 'Status';
+$lang_module['new'] = 'New';
+$lang_module['old'] = 'Old';
 $lang_module['carrier'] = 'Transporters';
 $lang_module['weights'] = 'Weights';
 $lang_module['carrier_price'] = 'Shipping Costs';

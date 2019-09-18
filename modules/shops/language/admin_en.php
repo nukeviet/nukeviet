@@ -3,13 +3,13 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate 04/18/2017 09:47
+* @Createdate Jul 04, 2011, 03:18:00 AM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -22,6 +22,8 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['group_select_info'] = 'If select "Group member", Please check group to allows';
 $lang_module['categories'] = 'Category';
 $lang_module['save'] = 'Save';
+$lang_module['back'] = 'Back';
+$lang_module['continue'] = 'Continue';
 $lang_module['action'] = 'Perform';
 $lang_module['reset'] = 'Clear';
 $lang_module['move'] = 'Move';
@@ -125,6 +127,10 @@ $lang_module['setting_group_notify'] = 'The group receive notice from the system
 $lang_module['setting_group_notify_note'] = 'Members of the group are selected will be notified by email when new activities (new orders, complete billing, ...).';
 $lang_module['setting_active_tooltip'] = 'Enable tooltip for products';
 $lang_module['setting_show_product_code'] = 'Show product code';
+$lang_module['setting_sortdefault'] = 'Sort by default';
+$lang_module['setting_sortdefault_0'] = 'New products on top';
+$lang_module['setting_sortdefault_1'] = 'Price increasing';
+$lang_module['setting_sortdefault_2'] = 'Price descending';
 $lang_module['setting_active_wishlist'] = 'Use wishlist function';
 $lang_module['setting_active_gift'] = 'Use functional the gift recipient';
 $lang_module['setting_active_warehouse'] = 'Use functional the warehousing';
@@ -134,6 +140,7 @@ $lang_module['setting_facebookAppID'] = 'Facebook App ID';
 $lang_module['setting_facebookAppIDNote'] = '(There format 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
 $lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
 $lang_module['setting_socialbutton'] = 'Show tools Like facebook, G +, Twitter while watching posts';
+$lang_module['template_setting_active'] = 'Use the Custom Data';
 $lang_module['setting_stt'] = 'Order';
 $lang_module['setting_error_connect'] = 'Unable to connect to Ngân Lượng';
 $lang_module['setting_title_email_send'] = 'Using module Shops - Nukeviet';
@@ -151,6 +158,12 @@ $lang_module['cat_have_product_err'] = 'You can not add a sub-category on a cate
 $lang_module['cat_do_not_add'] = 'Adding fail';
 $lang_module['error_cat_name'] = 'Category missing';
 $lang_module['error_weight'] = 'Error: You must enter the product weight';
+$lang_module['error_cat_empty_title'] = 'No product category';
+$lang_module['error_cat_empty_content'] = 'You need to enter some product topics before adding a new product. <br  /> The system will redirect you to the <strong>Manage product types</strong> page in a moment.';
+$lang_module['error_punit_empty_title'] = 'There are no product units';
+$lang_module['error_punit_empty_content'] = 'You need to enter the product unit before adding a new product. <br  /> The system will redirect you to the <strong>Manage product units</strong> page in a moment.';
+$lang_module['error_munit_empty_title'] = 'No currency unit yet';
+$lang_module['error_munit_empty_content'] = 'You need to enter the currency before adding a new product. <br  /> The system will take you to the <strong>Monetary Management</strong> page shortly.';
 $lang_module['search'] = 'Search';
 $lang_module['search_type'] = 'Search by';
 $lang_module['search_id'] = 'ID';
@@ -176,6 +189,7 @@ $lang_module['error_product_price'] = 'Error: price can not be 0 or negative num
 $lang_module['error_product_discounts'] = 'Error: discount rate can not be negative';
 $lang_module['error_inputnumber'] = 'Error: the number entered is not valid';
 $lang_module['content_cat'] = 'Category';
+$lang_module['content_cat_c'] = 'Select product type';
 $lang_module['content_block'] = 'product blocks';
 $lang_module['content_homeimg'] = 'Illustration';
 $lang_module['content_homeimgalt'] = 'Legend of illustration (for product details)';
@@ -210,6 +224,7 @@ $lang_module['content_product_code'] = 'Product code';
 $lang_module['content_product_number'] = 'Quantity in stock';
 $lang_module['content_product_number1'] = 'Stock q\'ty';
 $lang_module['content_product_product_price'] = 'Price';
+$lang_module['content_product_product_saleprice'] = 'Saleprice';
 $lang_module['content_product_money_unit'] = 'Currency';
 $lang_module['content_product_discounts'] = 'Discount';
 $lang_module['price_config_add'] = 'Add plan compute price';
@@ -313,6 +328,8 @@ $lang_module['money_add'] = 'Add currency';
 $lang_module['money_edit'] = 'Edit currency';
 $lang_module['money_compare'] = 'Compared to';
 $lang_module['checkpayment'] = 'Verify the transaction';
+$lang_module['update_order'] = 'Order has been updated';
+$lang_module['no_update_order'] = 'There are no new changes';
 $lang_module['payment'] = 'Payment gate';
 $lang_module['browse_image'] = 'Select image';
 $lang_module['active'] = 'Active';
@@ -346,6 +363,10 @@ $lang_module['product_unit'] = 'product';
 $lang_module['product_comment'] = 'comments';
 $lang_module['product_order'] = 'order';
 $lang_module['detail_info'] = 'Details';
+$lang_module['tag'] = 'SEO customization';
+$lang_module['tag_title'] = 'Title tag';
+$lang_module['tag_description'] = 'Description tag';
+$lang_module['bodytext'] = 'Details';
 $lang_module['group'] = 'Product group';
 $lang_module['group_sub_sl'] = 'Main group';
 $lang_module['edit_group'] = 'Edit Product group';
@@ -467,6 +488,7 @@ $lang_module['setting_point_active'] = 'Point active';
 $lang_module['setting_point_conversion'] = 'Rate of exchange';
 $lang_module['setting_point_value_conversion'] = 'The conversion value';
 $lang_module['setting_point_new_order'] = 'Number of point when creating a new order';
+$lang_module['setting_money_to_point'] = 'Amount to earn 1 reward point for creating new orders';
 $lang_module['setting_point_1'] = '1 point';
 $lang_module['cat_allow_point'] = 'Allow keep point with this category';
 $lang_module['cat_number_point'] = 'Number point when buy product this category';
@@ -527,6 +549,7 @@ $lang_module['template_error_name'] = 'Please enter the data group name';
 $lang_module['template_error_only'] = 'Can not delete, data field "%s" using only data group "%s".';
 $lang_module['listtemplate_error'] = 'Not Selected data group';
 $lang_module['fields'] = 'Custom data';
+$lang_module['field_tab_page'] = 'Show data for tab';
 $lang_module['captionform_add'] = 'Add data field';
 $lang_module['captionform_edit'] = 'Edit data fields';
 $lang_module['field_edit'] = 'Edit';
@@ -578,6 +601,8 @@ $lang_module['field_options_choice'] = 'Options';
 $lang_module['field_number'] = 'Ordinal numbers';
 $lang_module['field_value'] = 'Value';
 $lang_module['field_text'] = 'Description';
+$lang_module['field_info_list'] = 'Product information';
+$lang_module['field_info_list_note'] = 'Display in the product information section';
 $lang_module['field_add_choice'] = 'Add selected';
 $lang_module['field_date_error'] = 'Value of smaller Mindate need Maxdate';
 $lang_module['field_number_error'] = 'Value of smaller minvalue need maxvalue';
@@ -636,7 +661,7 @@ $lang_module['download_files_error_path'] = 'Please select the document path';
 $lang_module['download_files_error_path_valid'] = 'File path is invalid';
 $lang_module['download_setting_groups'] = 'Who is allowed to dowload files';
 $lang_module['download_setting_groups_module'] = 'According to the configuration module';
-$lang_module['template_setting_active'] = 'Use the Custom Data';
+$lang_module['saleprice_setting_active'] = 'Use the list price - the selling price';
 $lang_module['tabs'] = 'Tabs';
 $lang_module['tabs_icon'] = 'Emblem';
 $lang_module['tabs_content'] = 'Content';
@@ -647,10 +672,10 @@ $lang_module['tabs_content_comments'] = 'Comments';
 $lang_module['tabs_content_rate'] = 'Product Review';
 $lang_module['tabs_content_customdata'] = 'Custom data';
 $lang_module['error_required_content'] = 'Error: Required fields enter the Content';
-$lang_module['field_tab_page'] = 'Show data for tab';
-$lang_module['introduce'] = 'Introduce';
 $lang_module['updateprice'] = 'Update prices by type';
 $lang_module['cateid'] = 'Product type';
 $lang_module['newprice'] = 'New Price';
-
+$lang_module['ad_block_show'] = 'Show secondary blocks';
+$lang_module['ad_block_top'] = 'Block above the category';
+$lang_module['ad_block_bot'] = 'Block below the category';
 $lang_module['error_cat_update'] = 'The attribute <strong>%s</strong> of the product type is mandatory when entering, and can not be changed';
