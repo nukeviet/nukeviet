@@ -3,6 +3,26 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.07
 
+- Update Ckeditor 4.12.1, Select2 4.0.10
+- Fix module users on MySQL 8.0.17
+- Module banners: Fix on mysql cluster
+- Fix check admin main module
+- Change module view permissions
+- Fix function nv_site_mods
+- Manager blocks: Only show deactive module when debug mode on
+- Change logging when admin logout
+- Fix user custom fields
+- Fix class Database
+- Module news: show new news icon in block module.block_news.php
+- Module users: Save registration time and time approved to group
+- Fix delete module users
+- Fix Oauth Google
+- Error class: Trade error files
+- Fix function nv_check_domain
+- Fix plugin/mysql_master_slave.php
+- Block bot index on comment link
+- Fix show function if module active for config block
+- Fix sitemap index not displayed
 - Add configuration for turn on/off refer checker utility
 
 NUKEVIET 4.3.06

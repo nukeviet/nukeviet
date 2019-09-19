@@ -136,6 +136,7 @@ function get_field_config()
                 $row_field['field_choices'][$key] = $val;
             }
         }
+        $row_field['system'] = $row_field['is_system'];
         $array_field_config[$row_field['field']] = $row_field;
         if ($row_field['fid'] > 7) {
             $is_custom_field = true;

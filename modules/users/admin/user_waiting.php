@@ -88,7 +88,9 @@ if ($nv_Request->isset_request('act', 'get')) {
         $query_field['userid'] = $userid;
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
-            if ($row_f['system'] == 1) continue;
+            if ($row_f['is_system'] == 1) {
+                continue;
+            }
             if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
                 $default_value = floatval($row_f['default_value']);
             } else {
