@@ -91,31 +91,42 @@
             <a target="_blank" href="https://github.com/duyetdev">duyetdev</a>,
             ledinhhung87 at gmail.com,
             mtmost.com at gmail.com,
-            <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>
+            <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>,
+            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>
         </div>
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.3.07</h5>
+                    VINADES.,JSC (28 commits),
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,
+                    <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB (2 commits)</a>,
+                    <a target="_blank" href="https://github.com/tdfoss">TDFOSS.,LTD (1 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3.06</h5>
                     VINADES.,JSC (33 commits),
                     <a target="_blank" href="https://github.com/tdfoss">TDFOSS.,LTD (5 commits)</a>,
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3.05</h5>
                     VINADES.,JSC (38 commits),
                     <a target="_blank" href="https://github.com/vuthao/">vuthao (2 commits)</a>,
                     <a target="_blank" href="https://github.com/mynukeviet/">mynukeviet (1 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3.03</h5>
                     VINADES.,JSC (24 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3.02</h5>
                     VINADES.,JSC (65 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,
                     <a target="_blank" href="https://github.com/vuthao">vuthao (2 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3.01</h5>
                     VINADES.,JSC (32 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (3 commits)</a>,
                     <a target="_blank" href="https://github.com/vuthao">vuthao (1 commits)</a>
-                    <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3</h5>
                     VINADES.,JSC (132 commits),
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (17 commits)</a>,
@@ -126,7 +137,7 @@
                     <a target="_blank" href="https://github.com/thehung">thehung (3 commits)</a>,
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,
                     <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp (1 commits)</a>
-                    <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.2</h5>
                     VINADES.,JSC (238 commits),
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (64 commits)</a>,
@@ -135,7 +146,7 @@
                     <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet (5 commits)</a>,
                     <a target="_blank" href="https://github.com/mynukeviet">mynukeviet (4 commits)</a>,
                     <a target="_blank" href="https://github.com/thehung">thehung (1 commits)</a>
-                 <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.1</h5>
                     VINADES.,JSC (197 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (131 commits)</a>,
@@ -151,8 +162,7 @@
                     <a target="_blank" href="https://github.com/duyetdev">duyetdev (1 commits)</a>,
                     <a target="_blank" href="https://github.com/phongaz">phongaz (1 commits)</a>,
                     <a target="_blank" href="https://github.com/webvang">webvang (1 commits)</a>
-                 <br><br>
-
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.0</h5>
                     VINADES.,JSC (713 commits)
                     <a target="_blank" href="https://github.com/vuthao">vuthao (1360 commits)</a>,
@@ -171,20 +181,20 @@
                     <a target="_blank" href="https://github.com/thethao">thethao (1 commits)</a>,
                     <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993 (1 commits)</a>,
                     <a target="_blank" href="https://github.com/webvang">webvang (1 commits)</a>
-                 <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 3.4</h5>
                     VINADES.,JSC (74 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (245 commits)</a>,
                     <a target="_blank" href="https://github.com/vuthao">vuthao (60 commits)</a>,
                     <a target="_blank" href="https://github.com/thehung">thehung (23 commits)</a>,
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (5 commits)</a>
-                 <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 3.3</h5>
                     VINADES.,JSC (29 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (24 commits)</a>,
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (20 commits)</a>,
                     <a target="_blank" href="https://github.com/thehung">thehung (5 commits)</a>
-                 <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 3.2</h5>
                     VINADES.,JSC (56 commits)</a>,
                     <a target="_blank" href="https://github.com/vuthao">vuthao (98 commits)</a>,
@@ -192,7 +202,7 @@
                     <a target="_blank" href="https://github.com/thehung">thehung (17 commits)</a>,
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (13 commits)</a>,
                     trankhuyen81 at gmail.com (10 commits)</a>
-                 <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 3.1</h5>
                     <a target="_blank" href="https://github.com/vuthao">vuthao (316 commits)</a>,
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (134 commits)</a>,
@@ -203,7 +213,7 @@
                     tamahari at gmail.com (5 commits)</a>,
                     ledinhhung87 at gmail.com (1 commits)</a>,
                     mtmost.com at gmail.com (1 commits)</a>
-                 <br><br>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 3.0</h5>
                     <a target="_blank" href="https://github.com/vuthao">vuthao (283 commits)</a>,
                     <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (115 commits)</a>,
