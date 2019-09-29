@@ -20,8 +20,8 @@ $module_version = array(
     'layoutdefault' => 'body:main,allreferers,allcountries,allbrowsers,allos,allbots',
     'is_sysmod' => 0,
     'virtual' => 2,
-    'version' => '4.3.06',
-    'date' => 'Friday, June 21, 2019 4:00:00 PM GMT+07:00',
+    'version' => '4.3.07',
+    'date' => 'Saturday, 21 September 2019 09:00:00 GMT',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => ''
 );
