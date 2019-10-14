@@ -490,6 +490,11 @@ if (defined('NV_IS_USER_FORUM')) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme($contents);
-include NV_ROOTDIR . '/includes/footer.php';
+$showheader = $nv_Request->get_int('showheader', 'post,get', 1);
+if ($showheader == 0) {
+    echo nv_admin_theme($contents, false);
+} else {
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
