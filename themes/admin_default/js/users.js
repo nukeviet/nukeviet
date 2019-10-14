@@ -28,7 +28,7 @@ function user_validForm(a) {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
-                location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
+                location_href = b.url_back != '' ? b.url_back : (script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
                 if( b.admin_add == "yes" ) {
                     if (confirm( b.mess )) {
                         location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
