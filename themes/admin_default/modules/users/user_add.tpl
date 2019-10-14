@@ -220,6 +220,7 @@
     </div>
     <div class="text-center">
         <input type="hidden" name="confirm" value="1" />
+        <input type="hidden" name="url_back" value="{URL_BACK}" />
         <button class="btn btn-primary" type="submit">
             <i class="fa fa-spin fa-spinner hidden"></i>
             <span>{LANG.member_add}</span>
