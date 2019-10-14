@@ -297,8 +297,18 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     ]);
 }
 
-$_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
-$_user['first_name'] = $_user['last_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
+$initdata = [];
+if ($nv_Request->isset_request('initdata', 'post')) {
+    $_initdata = $nv_Request->get_title('initdata', 'post');
+    $_initdata = json_decode($crypt->decrypt($_initdata, NV_CHECK_SESSION), true);
+    $initdata = is_array($_initdata) ? $_initdata : [];
+}
+$_user['email'] = isset($initdata['email']) ? $initdata['email'] : '';
+$_user['first_name'] = isset($initdata['first_name']) ? $initdata['first_name'] : '';
+$_user['last_name'] = isset($initdata['last_name']) ? $initdata['last_name'] : '';
+
+$_user['username'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
+$_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
 $_user['view_mail'] = 0;
 $_user['in_groups'] = [];
 $_user['is_official'] = ' checked="checked"';
@@ -359,7 +369,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                 }
             } else {
-                $row['value'] = $row['default_value'];
+                $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : $row['default_value'];
             }
 
             $row['required'] = ($row['required']) ? 'required' : '';
@@ -483,6 +493,7 @@ if (defined('NV_IS_USER_FORUM')) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
+$showheader = $nv_Request->get_int('showheader', 'post,get', 1);
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme($contents);
+echo nv_admin_theme($contents, $showheader);
 include NV_ROOTDIR . '/includes/footer.php';
