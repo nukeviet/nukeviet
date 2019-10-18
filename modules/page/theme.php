@@ -21,12 +21,27 @@ if (!defined('NV_IS_MOD_PAGE')) {
  */
 function nv_page_main($row, $ab_links, $content_comment)
 {
-    global $module_name, $lang_module, $lang_global, $module_info, $meta_property, $client_info, $page_config;
+    global $module_name, $lang_module, $lang_global, $module_info, $meta_property, $client_info, $page_config, $global_config;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CONTENT', $row);
+
+    // Khai báo các tham số dữ liệu có cấu trúc
+    $xtpl->assign('SCHEMA_ORGNAME', $global_config['site_name']);
+    $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $row['number_add_time']));
+    $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $row['number_edit_time']));
+    $xtpl->assign('SCHEMA_URL', $row['link']);
+    $xtpl->assign('SCHEMA_ORGLOGO', NV_MAIN_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
+
+    if (preg_match('/^' . nv_preg_quote(NV_BASE_SITEURL) . '/i', $row['image'])) {
+        $xtpl->assign('SCHEMA_IMAGE', NV_MAIN_DOMAIN . $row['image']);
+    } elseif (nv_is_url($row['image'])) {
+        $xtpl->assign('SCHEMA_IMAGE', $row['image']);
+    } else {
+        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL. 'themes/' . $module_info['template'] . '/images/no_image.gif');
+    }
 
     if (!empty($row['description'])) {
         $xtpl->parse('main.description');

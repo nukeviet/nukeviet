@@ -559,6 +559,24 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
+    // Khai báo dữ liệu có cấu trúc
+    $news_contents['number_edittime'] = (empty($news_contents['edittime']) or $news_contents['edittime'] < $news_contents['number_publtime']) ? $news_contents['number_publtime'] : $news_contents['edittime'];
+
+    $xtpl->assign('SCHEMA_AUTHOR', empty($news_contents['author']) ? $news_contents['post_name'] : $news_contents['author']);
+    $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $news_contents['number_publtime']));
+    $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $news_contents['number_edittime']));
+    $xtpl->assign('SCHEMA_ORGLOGO', NV_MAIN_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
+    $xtpl->assign('SCHEMA_ORGNAME', $global_config['site_name']);
+    $xtpl->assign('SCHEMA_URL', $news_contents['link']);
+
+    if (preg_match('/^' . nv_preg_quote(NV_BASE_SITEURL) . '/i', $news_contents['homeimgfile'])) {
+        $xtpl->assign('SCHEMA_IMAGE', NV_MAIN_DOMAIN . $news_contents['homeimgfile']);
+    } elseif (nv_is_url($news_contents['homeimgfile'])) {
+        $xtpl->assign('SCHEMA_IMAGE', $news_contents['homeimgfile']);
+    } else {
+        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL. 'themes/' . $module_info['template'] . '/images/no_image.gif');
+    }
+
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
 
     $xtpl->assign('NEWSID', $news_contents['id']);
@@ -609,7 +627,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         $xtpl->parse('main.showhometext');
     }
 
-	if (!empty($news_contents['files'])) {
+    if (!empty($news_contents['files'])) {
         foreach ($news_contents['files'] as $file) {
             $xtpl->assign('FILE', $file);
 
@@ -617,10 +635,10 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
                 $xtpl->parse('main.files.loop.show_quick_viewpdf');
                 $xtpl->parse('main.files.loop.content_quick_viewpdf');
             }elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
-            	$xtpl->parse('main.files.loop.show_quick_viewimg');
+                $xtpl->parse('main.files.loop.show_quick_viewimg');
             }else{
-            	$xtpl->parse('main.files.loop.show_quick_viewpdf');
-				$xtpl->parse('main.files.loop.content_quick_viewdoc');
+                $xtpl->parse('main.files.loop.show_quick_viewpdf');
+                $xtpl->parse('main.files.loop.content_quick_viewdoc');
             }
             $xtpl->parse('main.files.loop');
         }
