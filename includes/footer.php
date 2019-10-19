@@ -43,9 +43,7 @@ $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) .
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
-if (preg_match('/(Googlebot)/i', NV_USER_AGENT)) {
-    $html_headers['X-Robots-Tag'] = 'index,archive,follow,noodp';
-}
+
 if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
     $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
 }

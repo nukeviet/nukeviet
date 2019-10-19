@@ -564,6 +564,10 @@ $(function() {
         var script = $('<script type="text/javascript">').attr("src",nv_base_siteurl + "themes/mobile_default/js/contact.js");
         $("body").append(script);
     }
+    // Change site lang
+    $(".nv_change_site_lang").change(function() {
+        document.location = $(this).val();
+    });
     // Google map
     if ($('.company-address').length) {
         $('.company-map-modal').on('shown.bs.modal', function() {

@@ -291,14 +291,12 @@ function nv_xmlOutput($content, $lastModified)
 }
 
 /**
- * nv_rss_generate()
- *
- * @param mixed $channel
- * @param mixed $items
+ * @param array $channel
+ * @param array $items
  * @param string $timemode
- * @return void
+ * @param boolean $noindex
  */
-function nv_rss_generate($channel, $items, $timemode = 'GMT')
+function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 {
     global $global_config, $client_info;
 
@@ -457,6 +455,11 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
 
     $xtpl->parse('main');
     $content = $xtpl->text('main');
+
+    if ($noindex) {
+        global $nv_BotManager;
+        $nv_BotManager->setNoIndex()->setFollow()->printToHeaders();
+    }
 
     nv_xmlOutput($content, $lastModified);
 }

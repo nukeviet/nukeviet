@@ -84,6 +84,7 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('NV_CURRENTTIME', nv_date($global_config['date_pattern'] . ', ' . $global_config['time_pattern'], NV_CURRENTTIME));
     $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
+    $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
     // System variables
     $xtpl->assign('THEME_PAGE_TITLE', nv_html_page_title(false));
 

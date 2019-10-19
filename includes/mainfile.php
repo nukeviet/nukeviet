@@ -415,6 +415,9 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
 }
 unset($nv_check_update);
 
+// Quản lý thẻ meta, header các máy chủ tìm kiếm
+$nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
+
 $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     $sys_mods = unserialize($cache);

@@ -79,6 +79,7 @@ if (!empty($news_contents)) {
         $canonicalUrl = $base_url_rewrite;
     }
     $canonicalUrl = str_replace('&', '&amp;', $canonicalUrl);
+    $news_contents['link'] = NV_MAIN_DOMAIN . $base_url_rewrite;
 
     /*
      * Không có quyền xem bài viết thì dừng
@@ -224,6 +225,7 @@ if ($news_contents['sourceid']) {
     }
 }
 
+$news_contents['number_publtime'] = $news_contents['publtime'];
 $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);
 $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
 

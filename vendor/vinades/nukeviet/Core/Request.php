@@ -1135,6 +1135,20 @@ class Request
     }
 
     /**
+     * @since 4.3.08
+     *
+     * @param string $name
+     * @param string $mode
+     * @param int $default
+     * @param boolean $decode
+     * @return number
+     */
+    public function get_absint($name, $mode = null, $default = null, $decode = true)
+    {
+        return abs(intval($this->get_value($name, $mode, $default, $decode)));
+    }
+
+    /**
      * Request::get_float()
      *
      * @param mixed $name
