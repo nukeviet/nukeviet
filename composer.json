@@ -21,11 +21,15 @@
         "wiki": "http://wiki.nukeviet.vn",
         "source": "https://github.com/nukeviet/nukeviet/releases"
     },
+	"autoload" : {
+		"psr-4" : {
+			"NukeViet\\" : "vendor/vinades/nukeviet"
+		}
+	},
     "require": {
         "php": ">=5.5.0",
         "ext-mbstring": "*",
         "ext-gd": "*",
-        "vinades/nukeviet": "dev-master",
         "and/oauth": "^0.7-dev",
         "pclzip/pclzip": "^2.8",
         "endroid/qrcode": "^1.9.1",
