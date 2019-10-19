@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
@@ -12,8 +12,8 @@ if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
-$channel = array();
-$items = array();
+$channel = [];
+$items = [];
 
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -65,13 +65,13 @@ if ($module_info['rss']) {
         }
         $rimages = (!empty($rimages)) ? '<img src="' . $rimages . '" width="100" align="left" border="0">' : '';
 
-        $items[] = array(
+        $items[] = [
             'title' => $title,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], //
             'guid' => $module_name . '_' . $id,
             'description' => $rimages . $hometext,
             'pubdate' => $publtime
-        );
+        ];
     }
 }
 nv_rss_generate($channel, $items);

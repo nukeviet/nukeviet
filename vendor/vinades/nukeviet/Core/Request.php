@@ -1135,6 +1135,8 @@ class Request
     }
 
     /**
+     * @since 4.3.08
+     *
      * @param string $name
      * @param string $mode
      * @param int $default

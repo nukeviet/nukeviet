@@ -58,9 +58,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
     $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post');
     $description_length = $nv_Request->get_absint('description_length', 'post');
+    $private_site = (int)$nv_Request->get_bool('private_site', 'post', false);
 
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $metaTagsOgp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'metaTagsOgp'");
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $description_length . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'description_length'");
+    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $private_site . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'private_site'");
+
     $nv_Cache->delAll(false);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 } else {
@@ -111,7 +114,8 @@ for ($i = 0; $i < 2; ++$i) {
     $xtpl->assign('DATA', $data);
     $xtpl->parse('main.loop');
 }
-$xtpl->assign('METATAGSOGPCHECKED', ($global_config['metaTagsOgp']) ? ' checked="checked" ' : '');
+$xtpl->assign('METATAGSOGPCHECKED', $global_config['metaTagsOgp'] ? ' checked="checked" ' : '');
+$xtpl->assign('PRIVATE_SITE', $global_config['private_site'] ? ' checked="checked" ' : '');
 $xtpl->assign('DESCRIPTION_LENGTH', $global_config['description_length']);
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
