@@ -126,6 +126,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $tpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
     $tpl->assign('THEME_SITE_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
     $tpl->assign('SITE_CHARSET', $global_config['site_charset']);
+    $tpl->assign('NOTIFICATION_ACTIVE', $global_config['notification_active']);
 
     // JS và CSS của module
     if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css')) {
@@ -272,7 +273,6 @@ function nv_admin_theme($contents, $head_site = 1)
         $tpl->assign('ARRAY_LANGS', $array_lang_admin);
 
         // Thông báo
-        $tpl->assign('NOTIFICATION_ACTIVE', $global_config['notification_active']);
         $tpl->assign('NV_GO_ALL_NOTIFICATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=notification');
 
         // Tài liệu module và xem ngoài site
