@@ -16,6 +16,11 @@ $page_title = $lang_module['edit_title'];
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
 
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+}
+
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
@@ -348,7 +353,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         'status' => 'ok',
         'input' => '',
         'admin_add' => 'no',
-        'mess' => ''
+        'mess' => '',
+        'nv_redirect' => $nv_redirect != '' ? nv_redirect_decrypt($nv_redirect) . '&userid=' . $userid : ''
     ]);
 }
 
@@ -389,6 +395,8 @@ $xtpl->assign('DATA', $_user);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
+
+$xtpl->assign('NV_REDIRECT', $nv_redirect);
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');

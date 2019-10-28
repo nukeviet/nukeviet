@@ -28,7 +28,10 @@ if (defined('NV_EDITOR')) {
 
 $_user = $custom_fields = [];
 $userid = 0;
-$url_back = $nv_Request->get_title('url_back', 'post', '');
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+}
 if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
     $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 1));
@@ -295,7 +298,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         'username' => $_user['username'],
         'admin_add' => (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) ? 'yes' : 'no',
         'mess' => sprintf($lang_module['admin_add'], $_user['username']),
-        'url_back' => $url_back != '' ? $url_back . '&userid=' . $userid : ''
+        'nv_redirect' => $nv_redirect != '' ? nv_redirect_decrypt($nv_redirect) . '&userid=' . $userid : ''
     ]);
 }
 
@@ -346,7 +349,7 @@ $xtpl->assign('NV_UNICKMAX', $global_config['nv_unickmax']);
 $xtpl->assign('NV_UPASSMAX', $global_config['nv_upassmax']);
 $xtpl->assign('NV_UPASSMIN', $global_config['nv_upassmin']);
 
-$xtpl->assign('URL_BACK', $url_back);
+$xtpl->assign('NV_REDIRECT', $nv_redirect);
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
