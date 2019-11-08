@@ -652,13 +652,18 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . $_mod_table . "_groups_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "')");
+            $db->query("INSERT INTO " . $_mod_table . "_groups_users (
+                group_id, userid, approved, data, time_requested, time_approved
+            ) VALUES (
+                " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
+                " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
+            )");
             $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
                 $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
-                $data = ($data != '') ? explode(',', $data) : array();
+                $data = ($data != '') ? explode(',', $data) : [];
                 $data[] = $global_config['idsite'];
                 $data = implode(',', array_unique(array_map('intval', $data)));
                 $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
@@ -1055,16 +1060,16 @@ function nv_get_keywords($content, $keyword_limit = 20)
 }
 
 /**
- * nv_sendmail()
- *
- * @param mixed $from
- * @param mixed $to
+ * @param array|string $from
+ * @param string $to
  * @param string $subject
  * @param string $message
  * @param string $files
- * @return
+ * @param boolean $AddEmbeddedImage
+ * @param boolean $testmode
+ * @return boolean
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false)
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false)
 {
     global $global_config, $sys_info;
 
@@ -1130,7 +1135,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                 $mail->From = $global_config['site_email'];
             }
         } else {
-            return false;
+            return ($testmode ? 'No mail mode' : false);
         }
 
         $AltBody = strip_tags($message);
@@ -1152,7 +1157,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         if (empty($to)) {
-            return false;
+            return ($testmode ? 'No receiver' : false);
         }
 
         if (! is_array($to)) {
@@ -1183,15 +1188,13 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
         if (! $mail->Send()) {
             trigger_error($mail->ErrorInfo, E_USER_WARNING);
-
-            return false;
+            return ($testmode ? $mail->ErrorInfo : false);
         }
 
-        return true;
+        return ($testmode ? '' : true);
     } catch (PHPMailer\PHPMailer\Exception $e) {
         trigger_error($e->errorMessage(), E_USER_WARNING);
-
-        return false;
+        return ($testmode ? $e->errorMessage() : false);
     }
 }
 
@@ -1415,7 +1418,7 @@ function nv_check_domain($domain)
         return $domain;
     } elseif (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
-            $domain_ascii = idn_to_ascii($domain);
+            $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
             $domain_ascii = $Punycode->encode($domain);
@@ -1662,7 +1665,7 @@ function nv_url_rewrite_callback($matches)
         $rewrite_end = $global_config['rewrite_endurl'];
         if (isset($query_array[NV_OP_VARIABLE])) {
             if (preg_match('/^tag\/(.*)$/', $query_array[NV_OP_VARIABLE], $m)) {
-                if (strpos($m[1], '/') !== false) {
+                if (strpos($m[1], '/') !== false and !preg_match('/page\-[0-9]+$/', $m[1])) {
                     return $matches[0];
                 }
                 $rewrite_end = '';
@@ -1772,19 +1775,23 @@ function nv_site_mods()
     $site_mods = $sys_mods;
     if (defined('NV_SYSTEM')) {
         foreach ($site_mods as $m_title => $row) {
-            if (! nv_user_in_groups($row['groups_view'])) {
-                unset($site_mods[$m_title]);
-            } elseif (defined('NV_IS_SPADMIN')) {
+            /*
+             * Điều hành chung và quản trị module được xem module
+             * mà không phụ thuộc vào thiết lập quyền xem
+             */
+            if (defined('NV_IS_SPADMIN')) {
                 $site_mods[$m_title]['is_modadmin'] = true;
             } elseif (defined('NV_IS_ADMIN') and ! empty($row['admins']) and ! empty($admin_info['admin_id']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
                 $site_mods[$m_title]['is_modadmin'] = true;
+            } elseif (!nv_user_in_groups($row['groups_view'])) {
+                unset($site_mods[$m_title]);
             }
         }
         if (isset($site_mods['users'])) {
             if (defined('NV_IS_USER')) {
-                $user_ops = array( 'main', 'logout', 'editinfo', 'avatar', 'groups' );
+                $user_ops = ['main', 'logout', 'editinfo', 'avatar', 'groups'];
             } else {
-                $user_ops = array( 'main', 'login', 'register', 'lostpass' );
+                $user_ops = ['main', 'login', 'register', 'lostpass'];
                 if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1) {
                     $user_ops[] = 'lostactivelink';
                     $user_ops[] = 'active';

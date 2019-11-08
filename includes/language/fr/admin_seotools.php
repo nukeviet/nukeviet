@@ -79,3 +79,4 @@ $lang_module['rpc_message'] = 'Information';
 $lang_module['rpc_ping'] = 'PING en misant à jour des données';
 $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Processus de PING réussit, voulez-vous revenir à la page de gestion des articles?';
+$lang_module['private_site'] = 'Décourager les moteurs de recherche d\'indexer ce site';

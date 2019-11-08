@@ -23,6 +23,7 @@ $array_url_instruction['question'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:u
 $array_url_instruction['siteterms'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#nội_quy_site';
 $array_url_instruction['fields'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#tuy_biến_dữ_liệu';
 $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#cấu_hinh_module_thanh_vien';
+$array_url_instruction['editcensor'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#kiểm_duyệt_thong_tin_chỉnh_sửa_của_thanh_vien';
 
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
 
@@ -51,37 +52,3 @@ $array_systemfield_cfg = array(
     'answer' => array(3, 255),
     'sig' => array(0, 1000)
 );
-
-/**
- * @return mixed[]
- */
-function nv_get_users_field_config()
-{
-    global $db;
-
-    $array_field_config = [];
-    $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
-    while ($row_field = $result_field->fetch()) {
-        $language = unserialize($row_field['language']);
-        $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
-        $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
-        if (!empty($row_field['field_choices'])) {
-            $row_field['field_choices'] = unserialize($row_field['field_choices']);
-        } elseif (!empty($row_field['sql_choices'])) {
-            $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
-            $row_field['field_choices'] = [];
-            $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-            if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
-                $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
-            }
-            $result = $db->query($query);
-            $weight = 0;
-            while (list ($key, $val) = $result->fetch(3)) {
-                $row_field['field_choices'][$key] = $val;
-            }
-        }
-        $array_field_config[$row_field['field']] = $row_field;
-    }
-
-    return $array_field_config;
-}

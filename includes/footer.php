@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if ((! defined('NV_SYSTEM') and ! defined('NV_ADMIN')) or ! defined('NV_MAINFILE')) {
+if ((!defined('NV_SYSTEM') and !defined('NV_ADMIN')) or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -20,7 +20,7 @@ global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global;
 $contents = ob_get_contents();
 ob_end_clean();
 $contents = nv_url_rewrite($contents);
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     $contents = nv_change_buffer($contents);
     if (defined('NV_IS_SPADMIN')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($lang_global['memory_time_usage'], nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
@@ -43,15 +43,14 @@ $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) .
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
-if (preg_match('/(Googlebot)/i', NV_USER_AGENT)) {
-    $html_headers['X-Robots-Tag'] = 'index,archive,follow,noodp';
-}
+
 if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
     $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
 }
 
-if (! empty($headers)) {
-    $html_headers += $headers;
+if (!empty($headers)) {
+    // $headers sẽ ghi đè $html_headers
+    $html_headers = array_merge($html_headers, $headers);
 }
 
 if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
@@ -60,8 +59,8 @@ if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
 
 foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
-    if (! isset($sys_info['server_headers'][$_key])) {
-        if (! is_array($value)) {
+    if (!isset($sys_info['server_headers'][$_key])) {
+        if (!is_array($value)) {
             $value = array($value);
         }
 

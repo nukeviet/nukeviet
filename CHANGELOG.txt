@@ -1,7 +1,59 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.07
+
+- Update Ckeditor 4.12.1, Select2 4.0.10
+- Fix module users on MySQL 8.0.17
+- Module banners: Fix on mysql cluster
+- Fix check admin main module
+- Change module view permissions
+- Fix function nv_site_mods
+- Manager blocks: Only show deactive module when debug mode on
+- Change logging when admin logout
+- Fix user custom fields
+- Fix class Database
+- Module news: show new news icon in block module.block_news.php
+- Module users: Save registration time and time approved to group
+- Fix delete module users
+- Fix Oauth Google
+- Error class: Trade error files
+- Fix function nv_check_domain
+- Fix plugin/mysql_master_slave.php
+- Block bot index on comment link
+- Fix show function if module active for config block
+- Fix sitemap index not displayed
+- Add configuration for turn on/off refer checker utility
+
+NUKEVIET 4.3.06
+
+- Add SMTP configuration check function
+- Support upload SVG files
+- Chart.js v2.8.0
+- Select2 v4.0.7
+- Jquery v3.4.1
+- Ckeditor v4.11.4
+- Display the child sitemap at the "sitemapindex"
+- Add the function to debug SQL statements
+- Add an optional configuration to insert a logo with each post
+- Use ReCaptcha to confirm if Flood blocked
+- Block external requests into the admin area
+- Support CORS setting
+- Change timestamp to UNIX timestamp
+- Module news: Support redirect to new article url when changing categories
+- Module banners: Add display type "Random One"
+- Fix bug comment XSS. Thanks dalatsubnet at WhiteHub#640
+- Remove Google MAP API and fix block global.company_info.php
+- Module users: Save the information of the object that has activated user account. Add the function to resend the account activation email.
+- Fix the issue of adding news with very long keywords
+- Fix add, detete admin
+- Fix user add, user edit in admin.
+- Fix send mail
+- User lostactivelink: Skip step two if security question and answer not required
+- Module contact: Automatically detects links of other information
+
 NUKEVIET 4.3.05
+- Add repeat type configuration of cronjobs
 - Fix user registration error on mobile theme
 - Chart.js v2.7.3
 - Clipboard v2.0.4
@@ -9,7 +61,7 @@ NUKEVIET 4.3.05
 - Module voting: Fix error showing the results of the poll does not activate
 - Fix captcha not show
 - Remove googleplus
-- CKEditor 4.11.2
+- CKEditor 4.11.3
 - Add Support PHP 7.3
 - Module users: Add user edit censor, allowed to select a field to sort at the user custom fields, fix custom field with editor, fix group counter errors when deleting user
 - Remove googleplus

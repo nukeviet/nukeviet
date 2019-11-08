@@ -112,9 +112,23 @@ class Error
             $this->error_log_fileext = Error::LOG_FILE_EXT_DEFAULT;
         }
 
-        $this->day = date('d-m-Y', NV_CURRENTTIME);
+        /*
+         * Prefix của file log
+         * Lấy cố định GMT, không theo múi giờ
+         */
+        $this->day = gmdate('d-m-Y', NV_CURRENTTIME);
+
+        /*
+         * Thời gian xảy ra lỗi
+         * Lấy theo múi giờ của client (tùy cấu hình)
+         */
         $this->error_date = date('r', NV_CURRENTTIME);
-        $this->month = date('m-Y', NV_CURRENTTIME);
+
+        /*
+         * Prefix theo tháng log 256
+         * Lấy cố định GMT, không theo múi giờ
+         */
+        $this->month = gmdate('m-Y', NV_CURRENTTIME);
 
         $ip = $this->get_Env('REMOTE_ADDR');
         $this->ip = $ip;
@@ -311,22 +325,22 @@ class Error
         $error_file = $this->error_log_256 . '/' . $this->month . '__' . $error_code2 . '__' . $error_code . '.' . $this->error_log_fileext;
 
         if ($this->error_set_logs and !file_exists($error_file)) {
-            $content = "TIME: " . $this->error_date . "\r\n";
+            $content = "TIME: " . $this->error_date . "\n";
             if (!empty($this->ip)) {
-                $content .= "IP: " . $this->ip . "\r\n";
+                $content .= "IP: " . $this->ip . "\n";
             }
-            $content .= "INFO: " . $this->errortype[$this->errno] . "(" . $this->errno . "): " . $this->errstr . "\r\n";
+            $content .= "INFO: " . $this->errortype[$this->errno] . "(" . $this->errno . "): " . $this->errstr . "\n";
             if (!empty($this->errfile)) {
-                $content .= "FILE: " . $this->errfile . "\r\n";
+                $content .= "FILE: " . $this->errfile . "\n";
             }
             if (!empty($this->errline)) {
-                $content .= "LINE: " . $this->errline . "\r\n";
+                $content .= "LINE: " . $this->errline . "\n";
             }
             if (!empty($this->request)) {
-                $content .= "REQUEST: " . $this->request . "\r\n";
+                $content .= "REQUEST: " . $this->request . "\n";
             }
             if (!empty($this->useragent)) {
-                $content .= "USER-AGENT: " . $this->useragent . "\r\n";
+                $content .= "USER-AGENT: " . $this->useragent . "\n";
             }
 
             file_put_contents($error_file, $content, FILE_APPEND);
@@ -385,7 +399,21 @@ class Error
         if (!empty($this->request)) {
             $content .= ' [REQUEST: ' . $this->request . ']';
         }
-        $content .= "\r\n";
+
+        if (NV_DEBUG) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            if (isset($backtrace[3])) {
+                $content .= " [TRACE:]\n";
+                $trace_total = sizeof($backtrace);
+                $stt = 0;
+                for ($i = $trace_total - 1; $i >= 3; $i--) {
+                    $stt++;
+                    $content .= '#' . str_pad($stt, 2, ' ', STR_PAD_RIGHT) . ' LINE: ' . str_pad($backtrace[$i]['line'], 5, ' ', STR_PAD_RIGHT) . ' FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . "\n";
+                }
+            }
+        }
+
+        $content .= "\n";
         $error_log_file = $this->error_log_path . '/' . $this->day . '_' . $this->error_log_filename . '.' . $this->error_log_fileext;
         error_log($content, 3, $error_log_file);
     }
@@ -414,7 +442,7 @@ class Error
         if (!empty($this->useragent)) {
             $content .= ' [AGENT: ' . $this->useragent . ']';
         }
-        $content .= "\r\n";
+        $content .= "\n";
         $error_log_file = $this->error_log_path . '/sendmail.' . $this->error_log_fileext;
         error_log($content, 3, $error_log_file);
     }

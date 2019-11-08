@@ -102,7 +102,7 @@ if ($global_config['autologomod'] == 'all') {
 }
 
 foreach ($site_mods as $mod => $value) {
-    if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $mod)) {
+    if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $value['module_upload'])) {
         ++$a;
         $xtpl->assign('MOD_VALUE', $mod);
         $xtpl->assign('LEV_CHECKED', (in_array($mod, $autologomod)) ? 'checked="checked"' : '');

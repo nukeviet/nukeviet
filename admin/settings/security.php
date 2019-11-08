@@ -12,14 +12,14 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$proxy_blocker_array = array(
+$proxy_blocker_array = [
     0 => $lang_module['proxy_blocker_0'],
     1 => $lang_module['proxy_blocker_1'],
     2 => $lang_module['proxy_blocker_2'],
     3 => $lang_module['proxy_blocker_3']
-);
+];
 
-$captcha_array = array(
+$captcha_array = [
     0 => $lang_module['captcha_0'],
     1 => $lang_module['captcha_1'],
     2 => $lang_module['captcha_2'],
@@ -28,19 +28,20 @@ $captcha_array = array(
     5 => $lang_module['captcha_5'],
     6 => $lang_module['captcha_6'],
     7 => $lang_module['captcha_7']
-);
+];
 
-$captcha_type_array = array(0 => $lang_module['captcha_type_0'], 2 => $lang_module['captcha_type_2']);
-$recaptcha_type_array = array('image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']);
+$captcha_type_array = [0 => $lang_module['captcha_type_0'], 2 => $lang_module['captcha_type_2']];
+$recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
-if ($selectedtab < 0 or $selectedtab > 3) {
+if ($selectedtab < 0 or $selectedtab > 4) {
     $selectedtab = 0;
 }
 
-$array_config_global = array();
-$array_config_define = array();
+$array_config_global = [];
+$array_config_define = [];
+$array_config_site = [];
 
 // Xử lý các thiết lập cơ bản
 if ($nv_Request->isset_request('submitbasic', 'post')) {
@@ -78,7 +79,7 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     $variable = $nv_Request->get_string('nv_allowed_html_tags', 'post');
     $variable = str_replace(';', ',', strtolower($variable));
     $variable = explode(',', $variable);
-    $nv_allowed_html_tags = array();
+    $nv_allowed_html_tags = [];
     foreach ($variable as $value) {
         $value = trim($value);
         if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags)) {
@@ -106,13 +107,13 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     }
 } else {
     $array_config_global = $global_config;
-    $array_config_define = array();
+    $array_config_define = [];
     $array_config_define['nv_anti_agent'] = NV_ANTI_AGENT;
     $array_config_define['nv_anti_iframe'] = NV_ANTI_IFRAME;
     $array_config_define['nv_allowed_html_tags'] = NV_ALLOWED_HTML_TAGS;
 }
 
-$array_config_flood = array();
+$array_config_flood = [];
 
 // Xử lý phần chống Flood
 if ($nv_Request->isset_request('submitflood', 'post')) {
@@ -141,8 +142,8 @@ if ($nv_Request->isset_request('submitflood', 'post')) {
     $array_config_flood['max_requests_300'] = $global_config['max_requests_300'];
 }
 
-$array_config_captcha = array();
-$array_define_captcha = array();
+$array_config_captcha = [];
+$array_define_captcha = [];
 
 // Xử lý phần captcha
 if ($nv_Request->isset_request('submitcaptcha', 'post')) {
@@ -205,6 +206,45 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
 
 $lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_verification_note'], $lang_module['two_step_verification0'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
 
+// Xử lý thiết lập CORS
+if ($nv_Request->isset_request('submitcors', 'post')) {
+    $array_config_site['cors_restrict_domains'] = (int)$nv_Request->get_bool('cors_restrict_domains', 'post', false);
+    $cors_valid_domains = $nv_Request->get_textarea('cors_valid_domains', '', NV_ALLOWED_HTML_TAGS, true);
+    $cors_valid_domains = explode('<br />', strip_tags($cors_valid_domains, '<br>'));
+
+    $array_config_site['cors_valid_domains'] = [];
+    foreach ($cors_valid_domains as $domain) {
+        if (!empty($domain)) {
+            $domain = parse_url($domain);
+            if (is_array($domain)) {
+                if (sizeof($domain) == 1 and !empty($domain['path'])) {
+                    $domain['host'] = $domain['path'];
+                }
+                if (!isset($domain['scheme'])) {
+                    $domain['scheme'] = 'http';
+                }
+                $array_config_site['cors_valid_domains'][] = $domain['scheme'] . '://' . $domain['host'] . ((isset($domain['port']) and $domain['port'] != '80') ? (':' . $domain['port']) : '');
+            }
+        }
+    }
+    $array_config_site['cors_valid_domains'] = empty($array_config_site['cors_valid_domains']) ? '' : json_encode($array_config_site['cors_valid_domains']);
+
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_site as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_CORS_SETTING', $global_config['cors_restrict_domains'] . ': ' . $array_config_site['cors_valid_domains'], $admin_info['userid']);
+    $nv_Cache->delMod($module_name);
+
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+} else {
+    $array_config_site['cors_restrict_domains'] = $global_config['cors_restrict_domains'];
+    $array_config_site['cors_valid_domains'] = empty($global_config['cors_valid_domains']) ? '' : implode("\n", $global_config['cors_valid_domains']);
+}
+
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -215,12 +255,12 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('SELECTEDTAB', $selectedtab);
-for ($i = 0; $i <= 3; ++$i) {
+for ($i = 0; $i <= 4; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
 }
 
 // Xử lý các IP bị cấm
-$error = array();
+$error = [];
 $cid = $nv_Request->get_int('id', 'get');
 $del = $nv_Request->get_int('del', 'get');
 
@@ -261,8 +301,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($error)) {
         if ($cid > 0) {
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
-				SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
-				WHERE id=' . $cid);
+                SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
+                WHERE id=' . $cid);
             $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
             $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
@@ -296,10 +336,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
 }
 
 // Xử lý các IP bỏ qua kiểm tra flood
-$error = array();
+$error = [];
 $flid = $nv_Request->get_int('flid', 'get,post', 0);
 $fldel = $nv_Request->get_int('fldel', 'get,post', 0);
-$array_flip = array();
+$array_flip = [];
 
 if (!empty($fldel) and !empty($flid)) {
     $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=1 AND id=' . $flid);
@@ -398,6 +438,10 @@ if (!empty($errormess)) {
     $xtpl->parse('main.error_save');
 }
 
+$array_config_site['cors_restrict_domains'] = empty($array_config_site['cors_restrict_domains']) ? '' : ' checked="checked"';
+
+$xtpl->assign('CONFIG_SITE', $array_config_site);
+
 $xtpl->assign('IS_FLOOD_BLOCKER', ($array_config_flood['is_flood_blocker']) ? ' checked="checked"' : '');
 $xtpl->assign('MAX_REQUESTS_60', $array_config_flood['max_requests_60']);
 $xtpl->assign('MAX_REQUESTS_300', $array_config_flood['max_requests_300']);
@@ -466,13 +510,13 @@ $xtpl->assign('NV_GFX_WIDTH', $array_define_captcha['nv_gfx_width']);
 $xtpl->assign('NV_GFX_HEIGHT', $array_define_captcha['nv_gfx_height']);
 $xtpl->assign('NV_ALLOWED_HTML_TAGS', $array_config_define['nv_allowed_html_tags']);
 
-$mask_text_array = array();
+$mask_text_array = [];
 $mask_text_array[0] = '255.255.255.255';
 $mask_text_array[3] = '255.255.255.xxx';
 $mask_text_array[2] = '255.255.xxx.xxx';
 $mask_text_array[1] = '255.xxx.xxx.xxx';
 
-$banip_area_array = array();
+$banip_area_array = [];
 $banip_area_array[0] = $lang_module['banip_area_select'];
 $banip_area_array[1] = $lang_module['banip_area_front'];
 $banip_area_array[2] = $lang_module['banip_area_admin'];

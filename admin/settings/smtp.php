@@ -33,7 +33,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
 }
 $array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', 0);
 $array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', 0);
-if ($nv_Request->isset_request('mailer_mode', 'post')) {
+if ($nv_Request->isset_request('submitsave', 'post')) {
     $smtp_password = $array_config['smtp_password'];
     $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
 
@@ -87,20 +87,36 @@ foreach ($smtp_encrypted_array as $id => $value) {
     $xtpl->parse('smtp.encrypted_connection');
 }
 if($global_config['verify_peer_ssl'] == 1) {
-	$xtpl->assign('PEER_SSL_YES', 'checked="checked"');
+    $xtpl->assign('PEER_SSL_YES', 'checked="checked"');
 }
 else {
-	$xtpl->assign('PEER_SSL_NO', 'checked="checked"');
+    $xtpl->assign('PEER_SSL_NO', 'checked="checked"');
 }
 if($global_config['verify_peer_name_ssl'] == 1) {
-	$xtpl->assign('PEER_NAME_SSL_YES', 'checked="checked"');
+    $xtpl->assign('PEER_NAME_SSL_YES', 'checked="checked"');
 }
 else {
-	$xtpl->assign('PEER_NAME_SSL_NO', 'checked="checked"');
+    $xtpl->assign('PEER_NAME_SSL_NO', 'checked="checked"');
 }
 if ($errormess != '') {
     $xtpl->assign('ERROR', $errormess);
     $xtpl->parse('smtp.error');
+}
+
+if (!empty($global_config['smtp_host']) and !empty($global_config['smtp_username'])) {
+    // Gửi thử email để kiểm tra
+    if ($nv_Request->isset_request('submittest', 'post')) {
+        $check = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $admin_info['email'], $lang_module['smtp_test_subject'], $lang_module['smtp_test_message'], '', false, true);
+        if (!empty($check)) {
+            $xtpl->assign('TEST_MESSAGE', $check);
+            $xtpl->parse('smtp.testmail_fail');
+        } else {
+            $xtpl->parse('smtp.testmail_success');
+        }
+    }
+
+    $xtpl->parse('smtp.testmail');
+    $xtpl->parse('smtp.testmail1');
 }
 
 $xtpl->parse('smtp');

@@ -97,6 +97,12 @@ $lang_module['smtp_username'] = 'Tài khoản gửi mail';
 $lang_module['smtp_login'] = 'Tên Tài khoản';
 $lang_module['smtp_pass'] = 'Mật khẩu';
 $lang_module['smtp_error_openssl'] = 'Lỗi: Máy chủ của bạn không hỗ trợ gửi mail qua ssl';
+$lang_module['smtp_test'] = 'Kiểm tra cấu hình';
+$lang_module['smtp_test_subject'] = 'Email thử nghiệm';
+$lang_module['smtp_test_message'] = 'Đây là email thử nghiệm để kiểm tra cấu hình gửi mail. Đơn giản bạn hãy xóa nó đi!';
+$lang_module['smtp_test_success'] = 'Gửi email thành công';
+$lang_module['smtp_test_fail'] = 'Gửi email thất bại';
+$lang_module['smtp_test_note'] = 'Lưu ý: Nhấp lưu cấu hình nếu có thay đổi ở form trên trước khi kiểm tra cấu hình';
 $lang_module['bot_name'] = 'Tên máy chủ ';
 $lang_module['bot_agent'] = 'UserAgent của máy chủ';
 $lang_module['bot_ips'] = 'IP của máy chủ';
@@ -209,6 +215,9 @@ $lang_module['last_result'] = 'Kết quả của lần thực hiện gần đây
 $lang_module['last_result_empty'] = 'n/a';
 $lang_module['last_result0'] = 'Tồi';
 $lang_module['last_result1'] = 'Đã hoàn thành';
+$lang_module['cron_interval_type'] = 'Kiểu lặp lại (nếu có)';
+$lang_module['cron_interval_type0'] = 'Sau thời gian khởi chạy trong CSDL';
+$lang_module['cron_interval_type1'] = 'Sau thời gian khởi chạy thực tế';
 $lang_module['closed_site'] = 'Chế độ đóng cửa site';
 $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site chỉ có Quản trị tối cao truy cập';
@@ -263,9 +272,13 @@ $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
 $lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụng cho toàn bộ tài khoản của các nhóm, nếu cần cấu hình riêng cho từng nhóm hãy chọn giá trị này là <strong>%s</strong> sau đó sửa <a href="%s">nhóm</a> rồi chọn khu vực bắt buộc kích hoạt xác thực hai bước theo ý muốn';
 
 $lang_module['site_phone'] = 'Số điện thoại của site';
-$lang_module['googleMapsAPI'] = 'Google Maps API key';
-$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
 
 $lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
 $lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';
 $lang_module['noflood_ip_list'] = 'Các IP bỏ qua kiểm tra flood';
+
+$lang_module['cors'] = 'Thiết lập CORS';
+$lang_module['cors_help'] = 'Bật tính năng này để hạn chế các truy vấn CORS từ các tên miền khác đến website';
+$lang_module['cors_restrict_domains'] = 'Giới hạn tên miền';
+$lang_module['cors_valid_domains'] = 'Tên miền hợp lệ';
+$lang_module['cors_valid_domains_help'] = 'Nhập mỗi tên miền một dòng (vui lòng nhập đầy đủ dạng http://yourdomain.com). Các truy vấn CORS từ các tên miền này được phép thực hiện';

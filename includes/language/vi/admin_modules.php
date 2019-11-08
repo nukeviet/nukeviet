@@ -83,3 +83,4 @@ $lang_module['reinstall_note4'] = 'Dữ liệu mẫu này hiện không khả d�
 $lang_module['setup_option'] = 'Lựa chọn phương án';
 $lang_module['setup_option_0'] = 'Chỉ thiết lập module';
 $lang_module['setup_option_1'] = 'Thiết lập module và cài đặt dữ liệu mẫu';
+$lang_module['module_groups_view_note'] = 'Quản trị tối cao, điều hành chung, người quản trị module luôn được quyền xem module';

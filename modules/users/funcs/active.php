@@ -61,12 +61,14 @@ if ($checknum == $row['checknum']) {
             group_id, username, md5username, password, email, first_name, last_name,
             gender, photo, birthday, regdate, question, answer,
             passlostkey, view_mail, remember, in_groups,
-            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time,
+            active_obj
         ) VALUES (
             :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
             :gender, '', :birthday, :regdate, :question, :answer,
             '', 0, 1, :in_groups,
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ", " . NV_CURRENTTIME . "
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ", " . NV_CURRENTTIME . ",
+            'EMAIL'
         )";
 
         $data_insert = array();
@@ -91,7 +93,9 @@ if ($checknum == $row['checknum']) {
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
-                if ($row_f['system'] == 1) continue;
+                if ($row_f['is_system'] == 1) {
+                    continue;
+                }
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
                     $default_value = floatval($row_f['default_value']);
                 } else {

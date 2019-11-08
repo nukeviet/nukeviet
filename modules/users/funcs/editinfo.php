@@ -115,6 +115,7 @@ function get_field_config()
     global $db;
 
     $array_field_config = [];
+    $is_custom_field = false;
 
     $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC');
     while ($row_field = $result_field->fetch()) {
@@ -135,10 +136,14 @@ function get_field_config()
                 $row_field['field_choices'][$key] = $val;
             }
         }
+        $row_field['system'] = $row_field['is_system'];
         $array_field_config[$row_field['field']] = $row_field;
+        if ($row_field['fid'] > 7) {
+            $is_custom_field = true;
+        }
     }
 
-    return $array_field_config;
+    return [$array_field_config, $is_custom_field];
 }
 
 /**
@@ -187,7 +192,6 @@ function opidr($openid_info)
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit ;
 }
 
 /**
@@ -274,7 +278,7 @@ if ((int)$row['safemode'] > 0) {
                 $name = implode(' ', $name);
                 $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
                 $message = sprintf($lang_module['safe_send_content'], $name, $sitename, $row['safekey']);
-                @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message);
+                @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['safe_send_subject'], $message);
 
                 $ss_safesend = NV_CURRENTTIME + 600;
                 $nv_Request->set_Session('safesend', $ss_safesend);
@@ -323,6 +327,8 @@ $array_data['allowmailchange'] = $global_config['allowmailchange'];
 $array_data['allowloginchange'] = ($global_config['allowloginchange'] or (!empty($row['last_openid']) and empty($user_info['last_login']) and empty($user_info['last_agent']) and empty($user_info['last_ip']) and empty($user_info['last_openid']))) ? 1 : 0;
 
 $array_field_config = get_field_config();
+$is_custom_field = $array_field_config[1];
+$array_field_config = $array_field_config[0];
 $groups_list = [];
 
 $types = array('basic');
@@ -364,7 +370,7 @@ if (!defined('ACCESS_EDITUS')) {
     $types[] = 'safemode';
 }
 // Các trường tùy chỉnh
-if (sizeof($array_field_config) > 7) {
+if ($is_custom_field) {
     $types[] = 'others';
 }
 
@@ -448,12 +454,12 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
 
 // Basic
 if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
-    $array_data['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
-    $array_data['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
-    $array_data['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
-    $array_data['birthday'] = nv_substr($nv_Request->get_title('birthday', 'post', '', 0), 0, 10);
+    $array_data['first_name'] = isset($array_field_config['first_name']) ? nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255) : $row['first_name'];
+    $array_data['last_name'] = isset($array_field_config['last_name']) ? nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255) : $row['last_name'];
+    $array_data['gender'] = isset($array_field_config['gender']) ? nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1) : $row['gender'];
+    $array_data['birthday'] = isset($array_field_config['birthday']) ? nv_substr($nv_Request->get_title('birthday', 'post', '', 0), 0, 10) : $row['birthday'];
     $array_data['view_mail'] = (int)$nv_Request->get_bool('view_mail', 'post', false);
-    $array_data['sig'] = $nv_Request->get_title('sig', 'post', '');
+    $array_data['sig'] = isset($array_field_config['sig']) ? $nv_Request->get_title('sig', 'post', '') : $row['sig'];
 
     $custom_fields = [];
     $custom_fields['first_name'] = $array_data['first_name'];
@@ -565,7 +571,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['username'], $nv_username);
-    @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message);
+    @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['edit_mail_subject'], $message);
 
     nv_jsonOutput(array(
         'status' => 'ok',
@@ -648,7 +654,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['email_active_info'], $name, $sitename, $verikey, $p);
-        @nv_sendmail($global_config['site_email'], $nv_email, $lang_module['email_active'], $message);
+        @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $nv_email, $lang_module['email_active'], $message);
 
         nv_jsonOutput(array(
             'status' => 'error',
@@ -704,7 +710,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email);
-        @nv_sendmail($global_config['site_email'], $nv_email, $lang_module['edit_mail_subject'], $message);
+        @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $nv_email, $lang_module['edit_mail_subject'], $message);
 
         nv_jsonOutput(array(
             'status' => 'ok',
@@ -768,7 +774,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
-    @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message);
+    @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['edit_mail_subject'], $message);
 
     nv_jsonOutput(array(
         'status' => 'ok',
@@ -777,8 +783,8 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
     // Question
-    $array_data['question'] = nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255);
-    $array_data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
+    $array_data['question'] = isset($array_field_config['question']) ? nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255) : $row['question'];
+    $array_data['answer'] = isset($array_field_config['answer']) ? nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255) : $row['answer'];
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
     $custom_fields = [];
@@ -973,7 +979,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             $name = implode(' ', $name);
             $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
             $message = sprintf($lang_module['safe_send_content'], $name, $sitename, $row['safekey']);
-            @nv_sendmail($global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message);
+            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['safe_send_subject'], $message);
 
             $ss_safesend = NV_CURRENTTIME + 600;
             $nv_Request->set_Session('safesend', $ss_safesend);

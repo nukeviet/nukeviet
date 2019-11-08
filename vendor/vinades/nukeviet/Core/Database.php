@@ -11,6 +11,7 @@
 namespace NukeViet\Core;
 
 use PDO;
+use PDOStatement;
 use PDOException;
 
 /**
@@ -33,6 +34,10 @@ class Database extends PDO
     private $_order = '';
     private $_limit = 0;
     private $_offset = 0;
+
+    private $sqls = [];
+    private $debug = false;
+    private $allowedDebug = false;
 
     /**
      * @param array $config
@@ -67,9 +72,14 @@ class Database extends PDO
         $this->dbtype = $config['dbtype'];
         $this->dbname = $config['dbname'];
         $this->user = $config['dbuname'];
+
         try {
             parent::__construct($dsn, $config['dbuname'], $config['dbpass'], $driver_options);
             parent::exec("SET SESSION time_zone='" . NV_SITE_TIMEZONE_GMT_NAME . "'");
+            if (empty($config['persistent'])) {
+                $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, ['\NukeViet\Core\NukeVietPDOStatement', [$this]]);
+                $this->allowedDebug = true;
+            }
             $this->connect = 1;
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
@@ -131,8 +141,7 @@ class Database extends PDO
             }
             $stmt->execute();
             return $stmt->rowCount();
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
         return false;
@@ -148,12 +157,14 @@ class Database extends PDO
         //Array: field 	type 	null 	key 	default 	extra
         $return = array();
         if ($this->dbtype == 'mysql') {
-            $result = $this->query('SHOW COLUMNS FROM ' . $table);
+            $sql = 'SHOW COLUMNS FROM ' . $table;
+            $result = $this->query($sql);
             while ($row = $result->fetch()) {
                 $return[$row['field']] = $row;
             }
         } elseif ($this->dbtype == 'oci') {
-            $result = $this->query("SELECT column_name, data_type, nullable, data_default, char_length FROM all_tab_columns WHERE table_name = '" . strtoupper($table) . "' ORDER BY column_id");
+            $sql = "SELECT column_name, data_type, nullable, data_default, char_length FROM all_tab_columns WHERE table_name = '" . strtoupper($table) . "' ORDER BY column_id";
+            $result = $this->query($sql);
             while ($row = $result->fetch()) {
                 if ($row['char_length']) {
                     $row['data_type'] .= '(' .$row['char_length']. ')';
@@ -470,5 +481,140 @@ class Database extends PDO
         }
 
         return $return;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDO::query()
+     */
+    public function query($statement)
+    {
+        if ($this->debug) {
+            $this->sqls[] = $statement;
+        }
+        return parent::query($statement);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDO::exec()
+     */
+    public function exec($statement)
+    {
+        if ($this->debug) {
+            $this->sqls[] = $statement;
+        }
+        return parent::exec($statement);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDO::prepare()
+     */
+    public function prepare($statement, $driver_options = [])
+    {
+        //if ($this->debug) {
+        //    $this->sqls[] = $statement;
+        //}
+
+        return parent::prepare($statement, $driver_options);
+    }
+
+    /**
+     *
+     */
+    public function enableDebug()
+    {
+        if (!$this->allowedDebug) {
+            trigger_error('Could not enable debugger because DB Persistent is on!', 256);
+        }
+        $this->debug = true;
+        $this->sqls = [];
+    }
+
+    /**
+     *
+     */
+    public function disableDebug()
+    {
+        $this->debug = false;
+        $this->sqls = [];
+    }
+
+    /**
+     * @return array
+     */
+    public function debugListSQL()
+    {
+        return $this->sqls;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getNumQueries()
+    {
+        return sizeof($this->sqls);
+    }
+
+    /**
+     * @param string $sql
+     */
+    public function addDebugListSql($sql)
+    {
+        $this->sqls[] = $sql;
+    }
+
+    /**
+     * @param string $sql
+     */
+    public function appendLastDebugSql($sql) {
+        end($this->sqls);
+        $key = key($this->sqls);
+        if (isset($this->sqls[$key])) {
+            $this->sqls[$key] .= "\n\n" . $sql;
+        } else {
+            $this->sqls[] = $sql;
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+}
+
+/**
+ * @author VINADES.,JSC
+ *
+ */
+class NukeVietPDOStatement extends PDOStatement {
+    protected $pdo;
+
+    /**
+     * @param PDO $pdo
+     */
+    protected function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see PDOStatement::execute()
+     */
+    public function execute($args = null)
+    {
+        $result = parent::execute($args);
+        if ($this->pdo->isDebug())  {
+            ob_start();
+            $this->debugDumpParams();
+            $this->pdo->addDebugListSql(ob_get_contents());
+            ob_end_clean();
+        }
+        return $result;
     }
 }

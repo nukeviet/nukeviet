@@ -73,8 +73,7 @@ if ($nv_Request->isset_request('submit', 'post') and $nv_Request->isset_request(
         }
         $nv_Cache->delAll();
         if (defined('NV_IS_GODADMIN')) {
-            $timestamp = intval($global_config['timestamp']) + 1;
-            $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $timestamp . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
+            $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
             nv_save_file_config_global();
         }
     }

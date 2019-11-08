@@ -64,3 +64,6 @@ $lang_module['no_permission'] = 'You do not have permission to post ads. Please 
 $lang_module['plan_allowed'] = 'Posting rights';
 $lang_module['plan_allowed_yes'] = 'Yes';
 $lang_module['plan_allowed_no'] = 'No';
+$lang_module['form_random'] = 'Random all ads';
+$lang_module['form_random_one'] = 'Random one ads';
+$lang_module['form_sequential'] = 'Sequentially';

@@ -28,7 +28,7 @@ function user_validForm(a) {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
-                location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
+                location_href = typeof(b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
                 if( b.admin_add == "yes" ) {
                     if (confirm( b.mess )) {
                         location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
@@ -475,29 +475,19 @@ function nv_users_check_choicetypes(elemnet) {
 }
 
 function control_theme_groups() {
-    var ingroup = $('[name="group[]"]:checked').length,
-        gdefault = $('[name="group_default"]:checked').val(),
-        groups = []
-
-    $('[name="group[]"]').each(function(){
-        if ($(this).is(':checked') && ingroup > 1) {
-            $('.group_default', $(this).parent().parent()).show()
-
-            if (typeof gdefault == 'undefined') {
-                gdefault = $(this).val()
-                $('[name="group_default"]', $(this).parent().parent()).prop('checked', true)
-            }
-        } else {
-            $('.group_default', $(this).parent().parent()).hide()
-        }
+    $('[name="group[]"]').each(function() {
         if ($(this).is(':checked')) {
-            groups.push($(this).val())
+            $('.group_default', $(this).parent().parent()).show();
+        } else {
+            var ctn = $('.group_default', $(this).parent().parent());
+            $('[name="group_default"]', ctn).prop('checked', false);
+            ctn.hide();
         }
-    })
-
-    if (typeof gdefault != 'undefined' && $.inArray(gdefault, groups) == -1 && ingroup > 1) {
-        $('[name="group_default"]').prop('checked', false)
-        $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
+    });
+    if ($('[name="group[]"]:checked').length > 0) {
+        $('#cleargroupdefault').show();
+    } else {
+        $('#cleargroupdefault').hide();
     }
 }
 
@@ -640,11 +630,11 @@ $(document).ready(function() {
     }
 
     $('[name="group[]"]').change(function(){
-        control_theme_groups()
-    })
+        control_theme_groups();
+    });
     $('[name="is_official"]').change(function(){
-        control_theme_groups()
-    })
+        control_theme_groups();
+    });
 
     // Export user
     $("input[name=data_export]").click(function() {

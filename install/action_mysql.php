@@ -74,6 +74,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   start_time int(11) unsigned NOT NULL DEFAULT '0',
   inter_val int(11) unsigned NOT NULL DEFAULT '0',
+  inter_val_type tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Lặp lại sau thời điểm bắt đầu thực tế, 1:lặp lại sau thời điểm bắt đầu trong CSDL',
   run_file varchar(255) NOT NULL,
   run_func varchar(255) NOT NULL,
   params varchar(255) DEFAULT NULL,
@@ -159,10 +160,11 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
   bid mediumint(8) NOT NULL DEFAULT '0',
   click_time int(11) unsigned NOT NULL DEFAULT '0',
   click_day int(2) NOT NULL,
-  click_ip varchar(15) NOT NULL,
+  click_ip varchar(46) NOT NULL,
   click_country varchar(10) NOT NULL,
   click_browse_key varchar(100) NOT NULL,
   click_browse_name varchar(100) NOT NULL,
@@ -174,7 +176,8 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
   KEY click_ip (click_ip),
   KEY click_country (click_country),
   KEY click_browse_key (click_browse_key),
-  KEY click_os_key (click_os_key)
+  KEY click_os_key (click_os_key),
+  PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
