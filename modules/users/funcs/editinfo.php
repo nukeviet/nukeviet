@@ -303,7 +303,7 @@ if ((int)$row['safemode'] > 0) {
             ));
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET safemode=0, safekey='' WHERE userid=" . $edit_userid);
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET safemode=0, safekey='', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $edit_userid);
         $stmt->execute();
 
         nv_jsonOutput(array(
@@ -512,7 +512,8 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             gender= :gender,
             sig= :sig,
             birthday=' . intval($array_data['birthday']). ',
-            view_mail=' . $array_data['view_mail'] . '
+            view_mail=' . $array_data['view_mail'] . ',
+            last_update=' . NV_CURRENTTIME . '
         WHERE userid=' . $edit_userid);
 
         $stmt->bindParam(':first_name', $array_data['first_name'], PDO::PARAM_STR);
@@ -555,7 +556,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     $md5_username = nv_md5safe($nv_username);
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET username= :username, md5username= :md5username WHERE userid=' . $edit_userid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET username= :username, md5username= :md5username, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     $stmt->bindParam(':username', $nv_username, PDO::PARAM_STR);
     $stmt->bindParam(':md5username', $md5_username, PDO::PARAM_STR);
     $stmt->execute();
@@ -695,7 +696,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         $nv_Request->unset_request('verifykey', 'session');
 
-        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ', last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
         $stmt->bindParam(':email', $nv_email, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -759,7 +760,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET password= :password WHERE userid=' . $edit_userid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET password= :password, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -802,7 +803,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         ));
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET question= :question, answer= :answer WHERE userid=' . $edit_userid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET question= :question, answer= :answer, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     $stmt->bindParam(':question', $array_data['question'], PDO::PARAM_STR);
     $stmt->bindParam(':answer', $array_data['answer'], PDO::PARAM_STR);
     $stmt->execute();
@@ -890,7 +891,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         }
     }
 
-    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $edit_userid);
+    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $edit_userid);
     nv_jsonOutput(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/group', true),
@@ -934,6 +935,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         ]);
     } else {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $edit_userid);
+        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
 
         nv_jsonOutput(array(
             'status' => 'ok',
@@ -1004,7 +1006,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         ));
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safemode=1, safekey= :safekey WHERE userid=' . $edit_userid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safemode=1, safekey= :safekey, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     $stmt->bindParam(':safekey', $row['safekey'], PDO::PARAM_STR);
     $stmt->execute();
 
