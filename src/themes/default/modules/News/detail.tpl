@@ -3,9 +3,23 @@
 <script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
 <link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
-<div class="news_column panel panel-default">
+<div class="news_column panel panel-default" itemtype="http://schema.org/NewsArticle" itemscope>
     <div class="panel-body">
-        <h1 class="title margin-bottom-lg">{DETAIL.title}</h1>
+        <h1 class="title margin-bottom-lg" itemprop="headline">{DETAIL.title}</h1>
+        <div class="hidden hide d-none" itemprop="author" itemtype="http://schema.org/Person" itemscope>
+            <span itemprop="name">{SCHEMA_AUTHOR}</span>
+        </div>
+        <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
+        <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
+        <span class="hidden hide d-none" itemprop="description">{SCHEMA_HEADLINE}</span>
+        <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
+        <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
+        <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>
+            <span itemprop="name">{SCHEMA_ORGNAME}</span>
+            <span itemprop="logo" itemtype="http://schema.org/ImageObject" itemscope>
+                <span itemprop="url">{SCHEMA_ORGLOGO}</span>
+            </span>
+        </div>
         <div class="row margin-bottom-lg">
             <div class="col-md-12">
                 <span class="h5">{DETAIL.publtime}</span>
@@ -42,16 +56,16 @@
             <!-- END: note -->
             <!-- BEGIN: empty -->
             <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj(this);">
-                    <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <!-- END: empty -->
             <!-- END: imgthumb -->
 
-             <div class="hometext m-bottom">{DETAIL.hometext}</div>
+             <div class="hometext m-bottom" itemprop="description">{DETAIL.hometext}</div>
 
             <!-- BEGIN: imgfull -->
             <figure class="article center">
-                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
+                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail"/>
                 <!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
             </figure>
             <!-- END: imgfull -->

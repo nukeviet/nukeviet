@@ -29,35 +29,6 @@ if (!empty($news_contents)) {
     $news_contents = array_merge($news_contents, $body_contents);
     unset($body_contents);
 
-    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-        // Chuyển hướng nếu url bài viết không đúng (do đổi alias bài viết hoặc thay đổi chuyên mục)
-        nv_redirect_location($base_url_rewrite);
-    } else {
-        $canonicalUrl = $base_url_rewrite;
-    }
-    $canonicalUrl = str_replace('&', '&amp;', $canonicalUrl);
-
-    /*
-     * Không có quyền xem bài viết thì dừng
-     * Lưu ý tới đây thì $catid này đã là $catid chính thức vì không chính thức thì
-     * bên trên đã được chuyển hướng
-     */
-    if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
-        $contents = no_permission($global_array_cat[$catid]['groups_view']);
-
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_site_theme($contents);
-        include NV_ROOTDIR . '/includes/footer.php';
-    }
-
-    // Mở bài viết sang nguồn tin chính thức
-    if ($news_contents['external_link']) {
-        nv_redirect_location($news_contents['sourcetext']);
-    }
-
     // Tải về đính kèm
     if ($nv_Request->isset_request('download', 'get')) {
         $fileid = $nv_Request->get_int('id', 'get', 0);
@@ -96,6 +67,36 @@ if (!empty($news_contents)) {
 
         $contents = nv_theme_viewpdf($file_url);
         nv_htmlOutput($contents);
+    }
+
+    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
+    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+        // Chuyển hướng nếu url bài viết không đúng (do đổi alias bài viết hoặc thay đổi chuyên mục)
+        nv_redirect_location($base_url_rewrite);
+    } else {
+        $canonicalUrl = $base_url_rewrite;
+    }
+    $canonicalUrl = str_replace('&', '&amp;', $canonicalUrl);
+    $news_contents['link'] = NV_MAIN_DOMAIN . $base_url_rewrite;
+
+    /*
+     * Không có quyền xem bài viết thì dừng
+     * Lưu ý tới đây thì $catid này đã là $catid chính thức vì không chính thức thì
+     * bên trên đã được chuyển hướng
+     */
+    if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
+        $contents = no_permission($global_array_cat[$catid]['groups_view']);
+
+        include NV_ROOTDIR . '/includes/header.php';
+        echo nv_site_theme($contents);
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
+
+    // Mở bài viết sang nguồn tin chính thức
+    if ($news_contents['external_link']) {
+        nv_redirect_location($news_contents['sourcetext']);
     }
 
     $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $news_contents['titlesite'];
@@ -224,6 +225,7 @@ if ($news_contents['sourceid']) {
     }
 }
 
+$news_contents['number_publtime'] = $news_contents['publtime'];
 $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);
 $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
 

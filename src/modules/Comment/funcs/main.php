@@ -26,10 +26,9 @@ if (!empty($module) and isset($module_config[$module]['activecomm'])) {
     $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
 
     if (!defined('NV_COMM_ID')) {
-        $content_comment .= '<meta name="robots" content="noindex, nofollow">';
-
-        unset($sys_info['server_headers']['x-robots-tag']);
-        $headers['X-Robots-Tag'] = 'noindex, nofollow';
+        $nv_BotManager->setNoIndex()->setFollow();
+        $content_comment .= $nv_BotManager->getMetaTags(true);
+        $nv_BotManager->outputToHeaders($headers, $sys_info);
     }
 
     include NV_ROOTDIR . '/includes/header.php';
