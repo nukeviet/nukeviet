@@ -39,6 +39,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="2" class="text-right">
+                                {$LANG->get('private_site')}
+                            </td>
+                            <td>
+                                <label class="custom-control custom-checkbox custom-control-inline p-0 m-0">
+                                    <input class="custom-control-input" type="checkbox" name="private_site" value="1"{if $CONFIG['private_site']} checked="checked"{/if}><span class="custom-control-label"></span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
                             <td colspan="2" class="text-right align-top">
                                 <div class="pt-2">{$LANG->get('description_length')}</div>
                             </td>

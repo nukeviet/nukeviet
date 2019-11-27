@@ -32,8 +32,11 @@ if ($page_config['viewtype'] == 2) {
         $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];
         $meta_property['og:image'] = NV_MY_DOMAIN . $rowdetail['image'];
     }
+    $rowdetail['number_add_time'] = $rowdetail['add_time'];
+    $rowdetail['number_edit_time'] = $rowdetail['edit_time'] ? $rowdetail['edit_time'] : $rowdetail['add_time'];
     $rowdetail['add_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['add_time']);
     $rowdetail['edit_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['edit_time']);
+    $rowdetail['link'] = NV_MAIN_DOMAIN . $base_url_rewrite;
 
     $module_info['layout_funcs'][$op_file] = !empty($rowdetail['layout_func']) ? $rowdetail['layout_func'] : $module_info['layout_funcs'][$op_file];
 

@@ -97,6 +97,9 @@ if ($id > 0 and $catid > 0) {
             );
         }
 
+        // Chặn lập chỉ mục tìm kiếm
+        $nv_BotManager->setPrivate();
+
         $page_title = $content['title'];
         $contents = call_user_func('news_print', $result);
         include NV_ROOTDIR . '/includes/header.php';

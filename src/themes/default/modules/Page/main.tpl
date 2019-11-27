@@ -4,9 +4,22 @@
 <div class="alert alert-danger">{LANG.warning}</div>
 <!-- END: warning -->
 
-<div class="page panel panel-default">
+<div class="page panel panel-default" itemtype="http://schema.org/Article" itemscope>
     <div class="panel-body">
-        <h1 class="title margin-bottom-lg">{CONTENT.title}</h1>
+        <h1 class="title margin-bottom-lg" itemprop="headline">{CONTENT.title}</h1>
+        <div class="hidden hide d-none" itemprop="author" itemtype="http://schema.org/Organization" itemscope>
+            <span itemprop="name">{SCHEMA_ORGNAME}</span>
+        </div>
+        <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
+        <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
+        <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
+        <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
+        <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>
+            <span itemprop="name">{SCHEMA_ORGNAME}</span>
+            <span itemprop="logo" itemtype="http://schema.org/ImageObject" itemscope>
+                <span itemprop="url">{SCHEMA_ORGLOGO}</span>
+            </span>
+        </div>
         <!-- BEGIN: socialbutton -->
         <div class="well well-sm">
             <ul class="nv-social-share">
@@ -22,20 +35,20 @@
 
         <!-- BEGIN: imageleft -->
         <figure class="article left noncaption pointer" style="width:100px" onclick="modalShow('', '<img src={CONTENT.image} />');">
-                <img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" />
-                <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+            <img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" />
+            <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
         </figure>
         <!-- END: imageleft -->
 
         <!-- BEGIN: description -->
-        <div class="hometext margin-bottom-lg">{CONTENT.description}</div>
+        <div class="hometext margin-bottom-lg" itemprop="description">{CONTENT.description}</div>
         <!-- END: description -->
 
         <!-- BEGIN: imagecenter -->
         <figure class="article center pointer" onclick="modalShowByObj(this);">
-                <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
-                <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
-           </figure>
+            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
+            <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+        </figure>
         <!-- END: imagecenter -->
 
         <div class="clear"></div>

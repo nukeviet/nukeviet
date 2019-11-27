@@ -20,8 +20,13 @@ if ($global_config['idsite']) {
 
 $metatags = [];
 $metatags['meta'] = [];
-$ignore = array( 'content-type', 'generator', 'description', 'keywords' );
-$vas = array( '{CONTENT-LANGUAGE} (' . $nv_Lang->getGlobal('Content_Language') . ')', '{LANGUAGE} (' . $nv_Lang->getGlobal('LanguageName') . ')', '{SITE_NAME} (' . $global_config['site_name'] . ')', '{SITE_EMAIL} (' . $global_config['site_email'] . ')' );
+$ignore = ['content-type', 'generator', 'description', 'keywords'];
+$vas = [
+    '{CONTENT-LANGUAGE} (' . $nv_Lang->getGlobal('Content_Language') . ')',
+    '{LANGUAGE} (' . $nv_Lang->getGlobal('LanguageName') . ')',
+    '{SITE_NAME} (' . $global_config['site_name'] . ')',
+    '{SITE_EMAIL} (' . $global_config['site_email'] . ')'
+];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $metaGroupsName = $nv_Request->get_array('metaGroupsName', 'post');
@@ -30,13 +35,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     foreach ($metaGroupsName as $key => $name) {
         if ($name == 'http-equiv' or $name == 'name' or $name == 'property') {
-            $value = trim(strip_tags($metaGroupsValue[$key]));
-            $content = trim(strip_tags($metaContents[$key]));
-            $newArray = array(
+            $value = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaGroupsValue[$key]))));
+            $content = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaContents[$key]))));
+            $newArray = [
                 'group' => $name,
                 'value' => $value,
                 'content' => $content
-            );
+            ];
             if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'])) {
                 $metatags['meta'][] = $newArray;
             }
@@ -52,10 +57,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array2XML->saveXML($metatags, 'metatags', $file_metatags, $global_config['site_charset']);
     }
     $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post');
-    $description_length = $nv_Request->get_int('description_length', 'post');
+    $description_length = $nv_Request->get_absint('description_length', 'post');
+    $private_site = (int)$nv_Request->get_bool('private_site', 'post', false);
 
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $metaTagsOgp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'metaTagsOgp'");
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $description_length . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'description_length'");
+    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $private_site . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'private_site'");
+
     $nv_Cache->delAll(false);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 } else {

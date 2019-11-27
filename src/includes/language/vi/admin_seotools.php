@@ -59,6 +59,7 @@ $lang_module['metaTagsOgp'] = 'Kích hoạt meta-Tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: là 1 chuẩn dữ liệu để chia sẻ dữ liệu lên facebook, xem chi tiết tại <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Số ký tự của thẻ meta tag description';
 $lang_module['description_note'] = ' = 0 không giới hạn số ký tự';
+$lang_module['private_site'] = 'Chặn các máy chủ tìm kiếm đánh chỉ mục website';
 
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
