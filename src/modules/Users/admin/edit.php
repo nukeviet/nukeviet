@@ -321,7 +321,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         answer=" . $db->quote($_user['answer']) . ",
         view_mail=" . $_user['view_mail'] . ",
         in_groups='" . implode(',', $in_groups) . "',
-        email_verification_time=" . $email_verification_time . "
+        email_verification_time=" . $email_verification_time . ",
+        last_update=" . NV_CURRENTTIME . "
     WHERE userid=" . $userid);
 
     if (!empty($query_field)) {

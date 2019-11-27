@@ -263,7 +263,7 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $nv_Lang;
+    global $global_config, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $nv_Lang, $nv_BotManager;
 
     $return = [];
     $site_description = $home ? $global_config['site_description'] : (!empty($description) ? $description : (empty($module_info['description']) ? '' : $module_info['description']));
