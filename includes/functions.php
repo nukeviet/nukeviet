@@ -415,7 +415,7 @@ function nv_check_valid_pass($pass, $max, $min)
  * Nếu $return = true thì trả về email đã được hợp chuẩn
  *
  * @param string $mail
- * @param boolean $return
+ * @param boolean $return @since 4.3.08
  * @return string
  */
 function nv_check_valid_email($mail, $return = false)
