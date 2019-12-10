@@ -123,11 +123,14 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ));
     }
 
-    if (($check_valid_email = nv_check_valid_email($femail)) != '') {
+    $check_valid_email = nv_check_valid_email($femail, true);
+    $femail = $check_valid_email[1];
+
+    if ($check_valid_email[0] != '') {
         nv_jsonOutput(array(
             'status' => 'error',
             'input' => 'femail',
-            'mess' => $check_valid_email
+            'mess' => $check_valid_email[0]
         ));
     }
 

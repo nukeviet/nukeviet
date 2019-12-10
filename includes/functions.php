@@ -411,34 +411,55 @@ function nv_check_valid_pass($pass, $max, $min)
 }
 
 /**
- * nv_check_valid_email()
+ * Kiểm tra email có hợp lệ hay không
+ * Nếu $return = true thì trả về email đã được hợp chuẩn
  *
  * @param string $mail
- * @return
+ * @param boolean $return
+ * @return string
  */
-function nv_check_valid_email($mail)
+function nv_check_valid_email($mail, $return = false)
 {
     global $lang_global, $global_config;
 
-    $mail = strip_tags(trim($mail));
-
     if (empty($mail)) {
-        return $lang_global['email_empty'];
+        return $return ? [$lang_global['email_empty'], $mail] : $lang_global['email_empty'];
     }
+
+    if ($return) {
+        $mail = nv_strtolower(strip_tags(trim($mail)));
+    }
+
+    // Email quy định ký tự @ xuất hiện 1 lần duy nhất
+    if (substr_count($mail, '@') !== 1) {
+        return $return ? [$lang_global['email_incorrect'], $mail] : $lang_global['email_incorrect'];
+    }
+
+    // Cắt email ra làm hai phần để kiểm tra
+    $_mail = explode('@', $mail);
+    $_mail_user = $_mail[0];
+    $_mail_domain = nv_check_domain($_mail[1]);
+
+    if (empty($_mail_domain)) {
+        return $return ? [$lang_global['email_incorrect'], $mail] : $lang_global['email_incorrect'];
+    }
+
+    // Chuyển lại email từ Unicode domain thành IDNA ASCII
+    $mail = $_mail_user . '@' . $_mail_domain;
 
     if (function_exists('filter_var') and filter_var($mail, FILTER_VALIDATE_EMAIL) === false) {
-        return $lang_global['email_incorrect'];
+        return $return ? [$lang_global['email_incorrect'], $mail] : $lang_global['email_incorrect'];
     }
 
-    if (! preg_match($global_config['check_email'], $mail)) {
-        return $lang_global['email_incorrect'];
+    if (!preg_match($global_config['check_email'], $mail)) {
+        return $return ? [$lang_global['email_incorrect'], $mail] : $lang_global['email_incorrect'];
     }
 
-    if (! preg_match('/\.([a-z0-9\-]+)$/', $mail)) {
-        return $lang_global['email_incorrect'];
+    if (!preg_match('/\.([a-z0-9\-]+)$/', $mail)) {
+        return $return ? [$lang_global['email_incorrect'], $mail] : $lang_global['email_incorrect'];
     }
 
-    return '';
+    return $return ? ['', $mail] : '';
 }
 
 /**

@@ -45,6 +45,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $row['email'] = $nv_Request->get_title('email', 'post', '');
     $row['others'] = $nv_Request->get_array('others', 'post', '');
 
+    $check_email = nv_check_valid_email($row['email'], true);
+    $row['email'] = $check_email[1];
+
     if (!empty($row['others'])) {
         foreach ($row['others'] as $index => $value) {
             if (empty($value['name']) or empty($value['value'])) {
@@ -62,8 +65,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error[] = $lang_module['error_required_full_name'];
     } elseif (empty($row['phone'])) {
         $error[] = $lang_module['error_required_phone'];
-    } elseif (!empty($row['email']) and ($error_email = nv_check_valid_email($row['email'])) != '') {
-        $error[] = $error_email;
+    } elseif (!empty($row['email']) and $check_email[0] != '') {
+        $error[] = $check_email[0];
     }
 
     if (empty($error)) {

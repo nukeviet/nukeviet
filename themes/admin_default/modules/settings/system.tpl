@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.site_email}</strong></td>
-                    <td><input type="text" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
+                    <td><input type="email" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.site_phone}</strong></td>
@@ -130,7 +130,7 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.error_send_email}</strong></td>
-                    <td><input type="text" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
+                    <td><input type="email" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
                 </tr>
                 <!-- END: system -->
                 <tr>

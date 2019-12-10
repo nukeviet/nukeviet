@@ -57,13 +57,13 @@ function validUserLog($array_user)
     );
 
     $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET
-		checknum = :checknum,
-		last_login = " . NV_CURRENTTIME . ",
-		last_ip = :last_ip,
-		last_agent = :last_agent,
-		last_openid = '',
-		remember = 1
-		WHERE userid=" . $array_user['userid']);
+        checknum = :checknum,
+        last_login = " . NV_CURRENTTIME . ",
+        last_ip = :last_ip,
+        last_agent = :last_agent,
+        last_openid = '',
+        remember = 1
+        WHERE userid=" . $array_user['userid']);
 
     $stmt->bindValue(':checknum', $checknum, PDO::PARAM_STR);
     $stmt->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
@@ -124,7 +124,9 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             }
         }
 
-        if (nv_check_valid_email($nv_username) == '') {
+        $check_email = nv_check_valid_email($nv_username, true);
+        if ($check_email[0] == '') {
+            $nv_username = $check_email[1];
             $sql = 't2.email =' . $db->quote($nv_username);
             $login_email = true;
         } else {

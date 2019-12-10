@@ -50,8 +50,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $site_email = nv_substr($nv_Request->get_title('site_email', 'post', '', 1), 0, 255);
-    if (nv_check_valid_email($site_email) == '') {
-        $array_config_site['site_email'] = $site_email;
+    $check = nv_check_valid_email($site_email, true);
+    if ($check[0] == '') {
+        $array_config_site['site_email'] = $check[1];
     }
 
     $array_config_site['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
@@ -139,8 +140,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         $array_config_global['error_set_logs'] = $nv_Request->get_int('error_set_logs', 'post', 0);
         $error_send_email = nv_substr($nv_Request->get_title('error_send_email', 'post', '', 1), 0, 255);
-        if (nv_check_valid_email($error_send_email) == '') {
-            $array_config_global['error_send_email'] = $error_send_email;
+        $check = nv_check_valid_email($error_send_email, true);
+        if ($check[0] == '') {
+            $array_config_global['error_send_email'] = $check[1];
         }
 
         $array_config_global['cdn_url'] = '';
