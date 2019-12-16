@@ -202,14 +202,15 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         ]);
     }
 
-    $email = (isset($attribs['contact/email']) and nv_check_valid_email($attribs['contact/email']) == '') ? $attribs['contact/email'] : '';
-    if (empty($email)) {
+    $email = isset($attribs['contact/email']) ? $attribs['contact/email'] : '';
+    $check_email = nv_check_valid_email($email, true);
+    $email = $check_email[1];
+    if (!empty($check_email[0])) {
         opidr([
             'status' => 'error',
             'mess' => $lang_module['logged_no_email']
         ]);
     }
-    $email = nv_strtolower($email);
     $opid = $crypt->hash($attribs['id']);
     $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
 
@@ -387,9 +388,10 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         } else {
             $error1 = $lang_global['loginincorrect'];
 
-            if (nv_check_valid_email($nv_username) == '') {
+            $check_email = nv_check_valid_email($nv_username, true);
+            if ($check_email[0] == '') {
                 // Email login
-                $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE email =" . $db->quote($nv_username);
+                $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE email =" . $db->quote($check_email[1]);
                 $row = $db->query($sql)->fetch();
                 if (empty($row)) {
                     opidr([
@@ -694,9 +696,10 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
     } else {
         $error1 = $lang_global['loginincorrect'];
 
-        if (nv_check_valid_email($nv_username) == '') {
+        $check_email = nv_check_valid_email($nv_username, true);
+        if ($check_email[0] == '') {
             // Email login
-            $nv_username = nv_strtolower($nv_username);
+            $nv_username = $check_email[1];
             $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE email =" . $db->quote($nv_username);
             $login_email = true;
         } else {

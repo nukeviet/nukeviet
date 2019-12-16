@@ -544,9 +544,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
             if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 or $post['id'] == 4 or $post['id'] == 7) {
                 $post['email'] = $nv_Request->get_title('email', 'post', '', 1);
-                if ( !empty($post['email']) AND ($error_xemail = nv_check_valid_email($post['email'])) != '') {
+                $check_email = nv_check_valid_email($post['email'], true);
+                if (!empty($post['email']) and $check_email[0] != '') {
                     die($error_xemail);
                 }
+                $post['email'] = $check_email[1];
             } else {
                 $post['email'] = '';
             }
