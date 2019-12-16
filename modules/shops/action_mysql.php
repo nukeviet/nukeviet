@@ -359,7 +359,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_rows ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_hometext text NOT NULL,
- ADD " . $lang . "_bodytext mediumtext NOT NULL,
+ ADD " . $lang . "_bodytext mediumtext NULL DEFAULT NULL,
  ADD " . $lang . "_gift_content text NOT NULL,
  ADD " . $lang . "_address text NOT NULL,
  ADD " . $lang . "_tag_title VARCHAR(255) NOT NULL DEFAULT '',
@@ -392,7 +392,7 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
  ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 250 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_description VARCHAR( 250 ) NOT NULL DEFAULT '',
- ADD " . $lang . "_bodytext TEXT NOT NULL,
+ ADD " . $lang . "_bodytext TEXT NULL DEFAULT NULL,
  ADD " . $lang . "_keywords text NOT NULL,
  ADD " . $lang . "_tag_title VARCHAR(255) NOT NULL DEFAULT '',
  ADD " . $lang . "_tag_description mediumtext NOT NULL";
@@ -547,7 +547,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   alias varchar(250) NOT NULL DEFAULT '',
   image varchar(250) DEFAULT '',
   description text,
-  bodytext text NOT NULL,
+  bodytext text NULL DEFAULT NULL,
   keywords varchar(250) DEFAULT '',
   PRIMARY KEY (tid),
   UNIQUE KEY alias (alias)
