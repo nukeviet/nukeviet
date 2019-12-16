@@ -16,7 +16,10 @@ if ($nv_Request->isset_request('check_quantity', 'post')) {
     $id_pro = $nv_Request->get_int('id_pro', 'post', 0);
     $unit = $nv_Request->get_string('pro_unit', 'post', '');
     $listid = $nv_Request->get_string('listid', 'post');
-    $listid = explode(',', $listid);
+    $listid = array_filter(array_unique(array_map('intval', explode(',', $listid))));
+    if (empty($listid)) {
+        nv_htmlOutput('OK_' . $quantity . '_' . $lang_module['detail_pro_number'] . ': ' . $quantity . ' ' . $unit);
+    }
     asort($listid);
 
     $quantity = $db->query('SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id_pro . ' AND listgroup="' . implode(',', $listid) . '"')->fetchColumn();
