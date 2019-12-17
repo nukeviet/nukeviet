@@ -145,3 +145,10 @@ $lang_module['preview_theme_on'] = 'Autoriser l\'aperçu';
 $lang_module['preview_theme_off'] = 'Annuler l\'aperçu';
 $lang_module['preview_theme_link'] = 'Aperçu de l\'interface du lien';
 $lang_module['preview_theme_link_copied'] = 'Le lien a été copié dans le presse-papiers';
+
+$lang_module['settings'] = 'La configuration';
+$lang_module['settings_utheme'] = 'Configurer l\'interface utilisateur';
+$lang_module['settings_utheme_help'] = 'Les utilisateurs peuvent basculer entre les interfaces ci-dessous';
+$lang_module['settings_utheme_note'] = 'Vous devez configurer l\'interface avant qu\'elle puisse apparaître ci-dessous';
+$lang_module['settings_utheme_lnote'] = 'Cette configuration s\'applique aux langue <strong>%s</strong>';
+$lang_module['settings_utheme_choose'] = 'Choisissez l\'interface';

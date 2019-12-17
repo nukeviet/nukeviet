@@ -145,3 +145,10 @@ $lang_module['preview_theme_on'] = 'Enable preview';
 $lang_module['preview_theme_off'] = 'Disable preview';
 $lang_module['preview_theme_link'] = 'Preview link';
 $lang_module['preview_theme_link_copied'] = 'The link has been copied to the clipboard';
+
+$lang_module['settings'] = 'Config';
+$lang_module['settings_utheme'] = 'Config user theme';
+$lang_module['settings_utheme_help'] = 'Users can switch between themes below';
+$lang_module['settings_utheme_note'] = 'You need to set up theme before it can appear below';
+$lang_module['settings_utheme_lnote'] = 'This configuration applies to language <strong>%s</strong>';
+$lang_module['settings_utheme_choose'] = 'Choose theme';
