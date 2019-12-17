@@ -337,6 +337,7 @@ if (empty($global_config['site_logo'])) {
 
 $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 $global_config['array_preview_theme'] = explode(',', $global_config['preview_theme']);
+$global_config['array_user_allowed_theme'] = empty($global_config['user_allowed_theme']) ? [] : json_decode($global_config['user_allowed_theme'], true);
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 

@@ -218,6 +218,7 @@ $lang_global['pagenext'] = 'Page suivante';
 $lang_global['langinterface'] = 'Langue';
 $lang_global['langdata'] = 'Langue de données';
 $lang_global['langsite'] = 'Choisir une langue';
+$lang_global['selecttheme'] = 'Sélectionne un thème';
 $lang_global['detail'] = 'Détail';
 $lang_global['show_picture'] = 'Afficher l\'image';
 $lang_global['flood_page_title'] = 'Veuillez patienter...';

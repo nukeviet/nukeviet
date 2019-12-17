@@ -603,6 +603,22 @@ $(function() {
         e.target.hintAdded = true
     });
     */
+
+    // Chọn giao diện
+    $('[data-toggle="nvchoosetheme"]').on('change', function() {
+        $.ajax({
+            type: 'POST',
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=nv-choose-theme',
+            cache: false,
+            data: {
+                theme: $(this).val(),
+                tokend: $(this).data('tokend')
+            },
+            dataType: "html"
+        }).done(function(res) {
+            location.reload();
+        });
+    });
 });
 // Fix bootstrap multiple modal
 $(document).on({

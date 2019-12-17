@@ -12,15 +12,15 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_themes']
-);
+];
 
 define('NV_IS_FILE_THEMES', true);
 
-//Document
+// Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:themes';
 $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:themes:config';
 $array_url_instruction['setuplayout'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:themes:setuplayout';

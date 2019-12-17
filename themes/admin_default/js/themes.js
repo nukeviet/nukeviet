@@ -127,7 +127,7 @@ $(document).ready(function() {
             if (btn.is(':visible')) {
                 var btnid = 'btnpreviewtheme-' + (new Date().getTime());
                 btn.attr('id', btnid);
-                var clipboard = new Clipboard('#' + btnid);
+                var clipboard = new ClipboardJS('#' + btnid);
                 clipboard.on('success', function(e) {
                     $(e.trigger).tooltip('show');
                 });
@@ -164,7 +164,7 @@ $(document).ready(function() {
                         btn.attr('data-clipboard-text', data.link);
                         var btnid = 'btnpreviewtheme-' + (new Date().getTime());
                         btn.attr('id', btnid);
-                        var clipboard = new Clipboard('#' + btnid);
+                        var clipboard = new ClipboardJS('#' + btnid);
                         clipboard.on('success', function(e) {
                             $(e.trigger).tooltip('show');
                         });
