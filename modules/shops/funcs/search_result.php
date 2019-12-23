@@ -38,7 +38,7 @@ if (! empty($group_price)) {
     if (!empty($group_price)) {
         $search .= " AND";
         foreach ($group_price as $i => $group_price_i) {
-            $group_price_i = explode('-', $group_price_i);
+            $group_price_i = array_map('intval', explode('-', $group_price_i));
             if ($group_price_i[0] <= $group_price_i[1]) {
                 $search .= ($i > 0 ? " OR " : "") . " product_price BETWEEN " . $group_price_i[0] . " AND " . $group_price_i[1] . " ";
             } else {
