@@ -8,7 +8,7 @@
  * @Createdate 04/18/2017 09:47
  */
 
-if (! defined('NV_IS_MOD_SHOPS')) {
+if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
@@ -16,9 +16,8 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
 $bid = 1;
-// block host
 $num = $pro_config['per_page'];
-$data_content = array();
+$data_content = [];
 $search = "";
 $url = '';
 
@@ -31,14 +30,13 @@ $typemoney = $nv_Request->get_string('typemoney', 'get', '');
 $cataid = $nv_Request->get_int('cata', 'get', 0);
 $groupid = $nv_Request->get_string('filter', 'get', '');
 $group_price = $nv_Request->get_string('group_price', 'get', '');
-if (! empty($group_price)) {
+if (!empty($group_price)) {
     $url .= '&group_price=' . $group_price;
-    $group_price = nv_base64_decode($group_price);
-    $group_price = unserialize($group_price);
+    $group_price = json_decode($crypt->decrypt($group_price), true);
     if (!empty($group_price)) {
         $search .= " AND";
         foreach ($group_price as $i => $group_price_i) {
-            $group_price_i = explode('-', $group_price_i);
+            $group_price_i = array_map('intval', explode('-', $group_price_i));
             if ($group_price_i[0] <= $group_price_i[1]) {
                 $search .= ($i > 0 ? " OR " : "") . " product_price BETWEEN " . $group_price_i[0] . " AND " . $group_price_i[1] . " ";
             } else {
@@ -113,15 +111,15 @@ if ($pro_config['active_price']) {
 $xtpl->parse('form');
 $contents = $xtpl->text('form');
 
-if (! empty($groupid)) {
+if (!empty($groupid)) {
     $url .= '&filter=' . $groupid;
-    $groupid = nv_base64_decode($groupid);
-    $groupid = unserialize($groupid);
-
-    $arr_id = array();
+    $groupid = array_map('intval', json_decode($crypt->decrypt($groupid), true));
+    $arr_id = [];
     foreach ($groupid as $id_group) {
-        $group = $global_array_group[$id_group];
-        $arr_id[$group['parentid']][] = $id_group;
+        if (isset($global_array_group[$id_group])) {
+            $group = $global_array_group[$id_group];
+            $arr_id[$group['parentid']][] = $id_group;
+        }
     }
 
     $_sql = 'SELECT DISTINCT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE ';
@@ -129,7 +127,7 @@ if (! empty($groupid)) {
     foreach ($arr_id as $listid) {
         $a = sizeof($listid);
         if ($a > 0) {
-            $arr_sql = array();
+            $arr_sql = [];
             for ($i = 0; $i < $a; $i++) {
                 $arr_sql[]= ' pro_id IN (SELECT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id=' . $listid[$i] . ')';
             }
@@ -157,13 +155,13 @@ if (($price1 >= 0 and $price2 > 0)) {
     $search .= " AND product_price < " . $price2 . " ";
 }
 
-if (! empty($typemoney)) {
+if (!empty($typemoney)) {
     $search .= " AND money_unit = " . $db->quote($typemoney);
 }
 $sql_i = ", if(t1.money_unit ='" . $pro_config['money_unit'] . "', t1.product_price , t1.product_price * t2.exchange ) AS product_saleproduct ";
 $order_by = " product_saleproduct DESC ";
 
-if (! empty($typemoney)) {
+if (!empty($typemoney)) {
     $search .= " AND money_unit = " . $db->quote($typemoney);
 }
 if ($cataid != 0) {
@@ -184,7 +182,7 @@ if (empty($search)) {
 
 $show_price = "";
 if ($pro_config['active_price']) {
-    if (! empty($price1_temp) or ! empty($price2_temp)) {
+    if (!empty($price1_temp) or !empty($price2_temp)) {
         $show_price = "AND showprice=1";
     }
 }
@@ -230,7 +228,7 @@ while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, 
         $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
     }
 
-    $data_content[] = array(
+    $data_content[] = [
         'id' => $id,
         'listcatid' => $listcatid,
         'publtime' => $publtime,
@@ -249,7 +247,7 @@ while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, 
         'newday' => $newday,
         'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
         'link_order' => $link . 'setcart&amp;id=' . $id
-    );
+    ];
 }
 
 if (count($data_content) == 0) {
