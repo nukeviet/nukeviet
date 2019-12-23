@@ -23,7 +23,7 @@ $db_config['prefix'] = 'nv4';
 $db_config['persistent'] = false;
 $db_config['collation'] = '';//utf8_general_ci, utf8mb4_unicode_ci, utf8mb4_vietnamese_ci
 
-$array_data = array();
+$array_data = [];
 $array_data['lang_multi'] = 0;
 $array_data['site_name'] = '';
 $array_data['nv_login'] = '';
@@ -35,7 +35,7 @@ $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
 $global_config['unofficial_mode'] = 0; // Cảnh báo bản thử nghiệm
-$global_config['version'] = '4.3.07'; // NukeViet 4.3
+$global_config['version'] = '4.3.08'; // NukeViet 4.3
 $global_config['site_email'] = '';
 $global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;
@@ -65,7 +65,7 @@ $global_config['str_referer_blocker'] = 0;
 $global_config['lang_multi'] = 1;
 $global_config['lang_geo'] = 0;
 $global_config['site_lang'] = 'en';
-$global_config['engine_allowed'] = array();
+$global_config['engine_allowed'] = [];
 $global_config['site_theme'] = 'default';
 $global_config['gfx_chk'] = 3;
 
