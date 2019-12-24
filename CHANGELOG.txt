@@ -3,6 +3,10 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.08
 
+- Ckeditor v4.13.1, PHPMailer v6.1.4, Select2 v4.0.12, Chart.js v2.9.3
+- Fix delete item in module page #2851
+- Save changes when editing admin information
+- Allowed users to switch site theme
 - Fix bug addtotopics module news from #1517 WhiteHub (thanks for @unfairattaccs Ha Anh Hoang from Viettel)
 - Supported unicode email address (fix #2863)
 - Update jquery Validate v1.19.1 (fix #2877)
