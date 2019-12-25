@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 4.3.08
 
+- Support php 7.4
 - Ckeditor v4.13.1, PHPMailer v6.1.4, Select2 v4.0.12, Chart.js v2.9.3
 - Fix delete item in module page #2851
 - Save changes when editing admin information
