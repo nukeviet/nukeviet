@@ -92,11 +92,18 @@
             ledinhhung87 at gmail.com,
             mtmost.com at gmail.com,
             <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>,
-            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>
+            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>,
+            Hoàng Tuyên at VINADES.,JSC
         </div>
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.3.08</h5>
+                    VINADES.,JSC (28 commits),
+                    Hoàng Tuyên at VINADES.,JSC (5 commits),
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,
+                    <a target="_blank" href="https://github.com/tdfoss">TDFOSS.,LTD (1 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.3.07</h5>
                     VINADES.,JSC (28 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,
