@@ -144,10 +144,10 @@
                     <div class="clearfix">
                         <p id="stringrating">{STRINGRATING}</p>
                         <!-- BEGIN: data_rating -->
-                        <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
+                        <span>
                            {LANG.rating_average}:
-                           <span itemprop="rating" id="numberrating">{DETAIL.numberrating}</span> -
-                           <span itemprop="votes" id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
+                           <span id="numberrating">{DETAIL.numberrating}</span> -
+                           <span id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
                         </span>
                         <!-- END: data_rating -->
                         <div style="padding: 5px;">
