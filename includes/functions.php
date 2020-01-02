@@ -328,10 +328,10 @@ function nv_check_valid_login($login, $max, $min)
     if (empty($login)) {
         return $lang_global['username_empty'];
     }
-    if (isset($login{$max})) {
+    if (isset($login[$max])) {
         return sprintf($lang_global['usernamelong'], $max);
     }
-    if (! isset($login{$min - 1})) {
+    if (! isset($login[$min - 1])) {
         return sprintf($lang_global['usernameadjective'], $min);
     }
 
@@ -376,10 +376,10 @@ function nv_check_valid_pass($pass, $max, $min)
     if (empty($pass)) {
         return $lang_global['password_empty'];
     }
-    if (isset($pass{$max})) {
+    if (isset($pass[$max])) {
         return sprintf($lang_global['passwordlong'], $max);
     }
-    if (! isset($pass{$min - 1})) {
+    if (! isset($pass[$min - 1])) {
         return sprintf($lang_global['passwordadjective'], $min);
     }
 
@@ -1850,18 +1850,19 @@ function nv_site_mods()
 /**
  * nv_insert_notification()
  *
- * @param string $module
- * @param string $type
- * @param array $content
- * @param int $obid
- * @param integer $send_to
- * @param integer $send_from
- * @param integer $area
+ * @param string $module module_name xảy ra thông báo
+ * @param string $type loại thông báo, do module tùy ý đặt để xử lý
+ * @param array $content dữ liệu tùy ý do module đặt
+ * @param int $obid id đối tượng thông báo, tùy ý do module đặt
+ * @param integer|array $send_to ID người nhận, bỏ trống nếu để người nhận là tất cả
+ * @param integer $send_from ID người tạo thông báo, để trống nếu là hệ thống
+ * @param integer $area xem mô tả bên dưới
+ * @param integer $admin_view_allowed 0: Tất cả các admin, 1: Quản trị tối cao, 2: Điều hành chung + Quản trị tối cao
  * @return
  */
-function nv_insert_notification($module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1)
+function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_to = 0, $send_from = 0, $area = 1, $admin_view_allowed = 0)
 {
-    global  $db, $global_config;
+    global $db, $global_config;
 
     /* $area
      * 0: Khu vuc ngoai site
@@ -1873,10 +1874,24 @@ function nv_insert_notification($module, $type, $content = array(), $obid = 0, $
     if ($global_config['notification_active']) {
         !empty($content) and $content = serialize($content);
 
-        $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
-        (send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
-        (:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)';
-        $data_insert = array();
+        $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (
+            admin_view_allowed, send_to, send_from, area, language, module, obid, type, content, add_time, view
+        ) VALUES (
+            :admin_view_allowed, :send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0
+        )';
+        $data_insert = [];
+        if (empty($send_to)) {
+            $send_to = '';
+        } elseif (is_array($send_to)) {
+            $send_to = implode(',', array_map('intval', $send_to));
+        } else {
+            $send_to = (string)intval($send_to);
+        }
+        $admin_view_allowed = intval($admin_view_allowed);
+        if ($admin_view_allowed < 0 or $admin_view_allowed > 2) {
+            $admin_view_allowed = 0;
+        }
+        $data_insert['admin_view_allowed'] = $admin_view_allowed;
         $data_insert['send_to'] = $send_to;
         $data_insert['send_from'] = $send_from;
         $data_insert['area'] = $area;

@@ -62,17 +62,17 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
     if (in_array($request_uri_array[0], array_keys($language_array))) {
         $_GET[NV_LANG_VARIABLE] = $request_uri_array[0];
 
-        if (isset($request_uri_array[1]{0})) {
+        if (isset($request_uri_array[1][0])) {
             $_GET[NV_NAME_VARIABLE] = $request_uri_array[1];
 
-            if (isset($request_uri_array[2]{0})) {
+            if (isset($request_uri_array[2][0])) {
                 $_GET[NV_OP_VARIABLE] = $request_uri_array[2];
             }
         }
-    } elseif (isset($request_uri_array[0]{0})) {
+    } elseif (isset($request_uri_array[0][0])) {
         $_GET[NV_NAME_VARIABLE] = $request_uri_array[0];
 
-        if (isset($request_uri_array[1]{0})) {
+        if (isset($request_uri_array[1][0])) {
             $lop = strlen($request_uri_array[0]) + 1;
             $_GET[NV_OP_VARIABLE] = substr($matches[1], $lop);
         }
