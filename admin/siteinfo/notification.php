@@ -13,64 +13,106 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
-
 $page_title = $lang_module['notification'];
 
-// Reset notification
-if ($nv_Request->isset_request('notification_reset', 'post')) {
-    $db->query('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1 WHERE view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
-    die();
+if ($admin_info['level'] == 1) {
+    /*
+     * Quản trị tối cao xem được:
+     * - Thông báo cấp dưới
+     * - Thông báo set cho cấp quản trị tối cao với điều kiện:
+     * + Không chỉ định người nhận => Toàn bộ quản trị tối cao
+     * + Hoặc chỉ định chính người nhận là mình
+     */
+    $sql_lev_admin = '(admin_view_allowed!=1 OR (
+        admin_view_allowed=1 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
+    ))';
+} elseif ($admin_info['level'] == 2) {
+    /*
+     * Điều hành chung xem được:
+     * - Thông báo cấp dưới:
+     * - Thông báo set cho cấp điều hành chung với điều kiện:
+     * + Không chỉ định người nhận => Toàn bộ điều hành chung
+     * + Hoặc chỉ định chính người nhận là mình
+     */
+    $sql_lev_admin = '(admin_view_allowed!=1 AND (
+        admin_view_allowed!=2 OR (
+            admin_view_allowed=2 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
+        )
+    ))';
+} else {
+    /*
+     * Quản lý module xem được:
+     * - Thông báo set cho toàn bộ
+     * - Hoặc thông báo set cho chính mình
+     */
+    $sql_lev_admin = '(admin_view_allowed=0 AND (
+        send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to)
+    ))';
 }
 
-// Get count notification
-if ($nv_Request->isset_request('notification_get', 'get')) {
+// Đánh dấu đã xem tất cả các thông báo
+if ($nv_Request->isset_request('notification_reset', 'post')) {
+    $sql = 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1
+    WHERE view=0 AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND language=' . $db->quote(NV_LANG_DATA) .
+    ' AND ' . $sql_lev_admin;
+    $db->query($sql);
+    nv_htmlOutput('');
+}
+
+// Lấy tổng số thông báo chưa xem
+if ($nv_Request->isset_request('notification_get', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
-    $last_time_call = $nv_Request->get_int('timestamp', 'get', 0);
+    $last_time_call = $nv_Request->get_int('timestamp', 'post', 0);
     $last_time = 0;
     $count = 0;
-    $return = array();
+    $return = [];
 
-    $result = $db->query('SELECT add_time FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\') ORDER BY id DESC');
+    $sql = 'SELECT add_time FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '"
+    AND (area = 1 OR area = 2) AND view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin . '
+    ORDER BY id DESC';
+    $result = $db->query($sql);
     $count = $result->rowCount();
     if ($result) {
         $last_time = $result->fetchColumn();
     }
 
     if ($last_time > $last_time_call) {
-        $return = array(
+        $return = [
             'data_from_file' => $count,
             'timestamp' => $last_time
-        );
+        ];
     }
 
     nv_jsonOutput($return);
 }
 
-// Hide (delete)
+// Xóa một thông báo
 if ($nv_Request->isset_request('delete', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     if ($id) {
-        $db->query("DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id=" . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
-        die('OK');
+        $sql = "DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . "
+        WHERE id=" . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND (area = 1 OR area = 2) AND language=\'' . NV_LANG_DATA . '\' AND ' . $sql_lev_admin;
+        $db->query($sql);
+        nv_htmlOutput('OK');
     }
 
-    die('ERROR');
+    nv_htmlOutput('ERROR');
 }
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $is_ajax = $nv_Request->isset_request('ajax', 'post,get');
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $per_page = $is_ajax ? 10 : 20;
-$array_data = array();
+$array_data = [];
 
 $db->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_NOTIFICATION_GLOBALTABLE)
-    ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+    ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
 
 $all_pages = $db->query($db->sql())
     ->fetchColumn();

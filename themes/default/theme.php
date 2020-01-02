@@ -278,7 +278,9 @@ function nv_site_theme($contents, $full = true)
                 array_unshift($array_mod_title_copy, $arr_cat_title_i);
             }
             if (!empty($array_mod_title_copy)) {
+                $border = 2;
                 foreach ($array_mod_title_copy as $arr_cat_title_i) {
+                    $arr_cat_title_i['position'] = $border++;
                     $xtpl->assign('BREADCRUMBS', $arr_cat_title_i);
                     $xtpl->parse('main.breadcrumbs.loop');
                 }
