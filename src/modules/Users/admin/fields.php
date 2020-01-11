@@ -361,6 +361,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
     if (empty($error)) {
         if (empty($dataform['fid'])) {
+            // Thêm mới trường dữ liệu
             $_columns_array = $db->columns_array(NV_MOD_TABLE);
 
             if ($dataform['max_length'] <= 4294967296 and !empty($dataform['field']) and !empty($dataform['title']) and !isset($_columns_array[$dataform['field']])) {
@@ -378,7 +379,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     :match_regex, :func_callback,
                     " . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
                     " . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
-                    " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value)";
+                    " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
+                )";
 
                 $data_insert = [];
                 $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
@@ -402,10 +404,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
                         //2^32 LONGTEXT
                         $type_date = 'LONGTEXT NOT NULL';
                     }
-                    $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info ADD " . $dataform['field'] . " " . $type_date);
+                    $save = false;
+                    try {
+                        $save = $db->query("ALTER TABLE " . NV_MOD_TABLE . "_info ADD " . $dataform['field'] . " " . $type_date);
+                    } catch (PDOException $e) {
+                        trigger_error(print_r($e, true));
+                    }
                 }
             }
         } elseif ($dataform['max_length'] <= 4294967296) {
+            // Cập nhật trường dữ liệu
             $query = "UPDATE " . NV_MOD_TABLE . "_field SET";
             if ($text_fields == 1) {
                 $query .= " match_type='" . $dataform['match_type'] . "',
@@ -453,9 +461,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     }
                     $save = false;
                     try {
-                        $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
+                        $save = $db->query("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
                     } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                        trigger_error(print_r($e, true));
                     }
                 }
             }
