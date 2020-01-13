@@ -12,12 +12,17 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$user_info = array();
+$user_info = [];
 
 if (defined('NV_IS_ADMIN')) {
     $user_info = $admin_info;
 
-    if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], array(1, 3)) or !empty($user_info['2step_require']))) {
+    if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], [2, 3]) or !empty($user_info['2step_require']))) {
+        /*
+         * Khi hệ thống yêu cầu xác thực hai bước ở ngoài site hoặc tất cả
+         * mà admin đã login chưa kích hoạt phương thức xác nhận code thì chỉ xem
+         * như là tài khoản user mới xác nhận 1 bước
+         */
         define('NV_IS_1STEP_USER', true);
     } else {
         define('NV_IS_USER', true);
@@ -27,9 +32,9 @@ if (defined('NV_IS_ADMIN')) {
 
     if (isset($user_info['userid']) and $user_info['userid'] > 0) {
         $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
-		view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip,
+        view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip,
         last_openid, password, safemode, email_verification_time
-		FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval($user_info['userid']) . ' AND active=1';
+        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval($user_info['userid']) . ' AND active=1';
 
         $user_info = $db->query($_sql)->fetch();
         if (!empty($user_info)) {
@@ -43,7 +48,7 @@ if (defined('NV_IS_ADMIN')) {
 
             unset($user_info['password']);
         } else {
-            $user_info = array();
+            $user_info = [];
         }
     }
 } else {
@@ -55,17 +60,19 @@ if (defined('NV_IS_ADMIN')) {
                 $user['userid'] = intval($user['userid']);
                 if ($user['checkhash'] === md5($user['userid'] . $user['checknum'] . $global_config['sitekey'] . $client_info['browser']['key'])) {
                     $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
-						view_mail, remember, in_groups, active2step, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
-						last_openid AS current_openid, password, question, answer, safemode, email_verification_time
-						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
+                        view_mail, remember, in_groups, active2step, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
+                        last_openid AS current_openid, password, question, answer, safemode, email_verification_time
+                        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
                     $user_info = $db->query($_sql)->fetch();
                     if (!empty($user_info)) {
                         if (empty($global_config['allowuserloginmulti'])) {
-                            if (($user['checknum'] === $user_info['checknum']) and //checknum
-                                isset($user['current_agent']) and ($user['current_agent'] === $user_info['current_agent']) and //user_agent
-                                isset($user['current_ip']) and ($user['current_ip'] === $user_info['current_ip']) and //current IP
-                                isset($user['current_login']) and ($user['current_login'] === intval($user_info['current_login']))) { //current login
+                            if (
+                                ($user['checknum'] === $user_info['checknum']) // checknum
+                                and isset($user['current_agent']) and ($user['current_agent'] === $user_info['current_agent']) // user_agent
+                                and isset($user['current_ip']) and ($user['current_ip'] === $user_info['current_ip']) // current IP
+                                and isset($user['current_login']) and ($user['current_login'] === intval($user_info['current_login'])) // current login
+                            ) {
                                 $checknum = true;
                             } else {
                                 $checknum = false;
@@ -100,14 +107,14 @@ if (defined('NV_IS_ADMIN')) {
                                 $row = $sth->fetch();
 
                                 if (empty($row)) {
-                                    $user_info = array();
+                                    $user_info = [];
                                 } else {
                                     $user_info['openid_server'] = $row['openid'];
                                     $user_info['openid_email'] = $row['email'];
                                 }
                             }
                         } else {
-                            $user_info = array();
+                            $user_info = [];
                         }
                     }
                 }
@@ -115,14 +122,14 @@ if (defined('NV_IS_ADMIN')) {
         }
 
         if (!empty($user_info) and isset($user_info['userid']) and $user_info['userid'] > 0) {
-            if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], array(2, 3)) or !empty($user_info['2step_require']))) {
+            if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], [2, 3]) or !empty($user_info['2step_require']))) {
                 define('NV_IS_1STEP_USER', true);
             } else {
                 define('NV_IS_USER', true);
             }
         } else {
             $nv_Request->unset_request('nvloginhash', 'cookie');
-            $user_info = array();
+            $user_info = [];
         }
     }
 

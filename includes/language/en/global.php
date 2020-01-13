@@ -38,6 +38,7 @@ $lang_global['admin_logout_ok'] = 'All login information was eraser. You\'ve log
 $lang_global['admin_logout_question'] = 'Are you sure to want to leave the administration?';
 $lang_global['admin_ipincorrect'] = 'You are logged by IP: %s. We are sorry that this IP is not allowed to enter the site administration!';
 $lang_global['ok'] = 'OK';
+$lang_global['confirm'] = 'Confirm';
 $lang_global['cancel'] = 'Cancel';
 $lang_global['reset'] = 'Reset';
 $lang_global['fail'] = 'Fail';

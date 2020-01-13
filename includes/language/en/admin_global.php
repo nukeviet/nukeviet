@@ -74,3 +74,17 @@ $lang_global['multi_email_note'] = 'You can enter more than one value, separated
 $lang_global['view_all'] = 'View all';
 $lang_global['email'] = 'Email';
 $lang_global['phonenumber'] = 'Phone';
+$lang_global['admin_pre_logout'] = 'Not me, log out';
+$lang_global['admin_hello_2step'] = 'Hi <strong class="admin-name">%s</strong>, please verify your account';
+$lang_global['admin_noopts_2step'] = 'No two-step verification method has been granted, temporarily you cannot log in to the administrator';
+$lang_global['admin_mactive_2step'] = 'You cannot verify because no method has been activated yet';
+$lang_global['admin_mactive_2step_choose0'] = 'Please click the button below to activate the verification method';
+$lang_global['admin_mactive_2step_choose1'] = 'Please select one of the verification methods below';
+$lang_global['admin_2step_opt_code'] = '2-Step Verification Code';
+$lang_global['admin_2step_opt_facebook'] = 'Facebook account';
+$lang_global['admin_2step_opt_google'] = 'Google account';
+$lang_global['admin_2step_other'] = 'Other methods';
+$lang_global['admin_oauth_error_getdata'] = 'Error: The system did not recognize the verification data. Verification failed!';
+$lang_global['admin_oauth_error_email'] = 'Error: The return email is not valid, you cannot verification';
+$lang_global['admin_oauth_error_savenew'] = 'Error: Unable to save the verification data';
+$lang_global['admin_oauth_error'] = 'Error: The verification is not valid, this account has not been authorized to verify';

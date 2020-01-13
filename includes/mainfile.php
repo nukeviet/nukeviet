@@ -329,6 +329,8 @@ if ($global_config['is_user_forum']) {
 if (!empty($global_config['openid_servers'])) {
     $global_config['openid_servers'] = explode(',', $global_config['openid_servers']);
     define('NV_OPENID_ALLOWED', true);
+} else {
+    $global_config['openid_servers'] = [];
 }
 
 if (empty($global_config['site_logo'])) {
