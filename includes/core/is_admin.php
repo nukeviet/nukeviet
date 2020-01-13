@@ -8,14 +8,14 @@
  * @Createdate 12/29/2009 2:39
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 $admin_cookie = $nv_Request->get_string('admin', 'session');
 $admin_online = $nv_Request->get_string('online', 'session');
 
-if (! empty($admin_cookie)) {
+if (!empty($admin_cookie)) {
     if (empty($admin_online)) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Hacking attempt';
@@ -23,7 +23,7 @@ if (! empty($admin_cookie)) {
         die($info);
     }
 
-    if (! nv_admin_checkip()) {
+    if (!nv_admin_checkip()) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: You are not signed in as admin!<br />Your IP address is incorrect!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
@@ -31,7 +31,7 @@ if (! empty($admin_cookie)) {
     }
 
     if (defined('NV_ADMIN')) {
-        if (! nv_admin_checkfirewall()) {
+        if (!nv_admin_checkfirewall()) {
             $nv_Request->unset_request('admin,online', 'session');
             $info = 'Note: You are not signed in as admin!<br />This Firewall system does not accept your login information!';
             $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
@@ -41,9 +41,9 @@ if (! empty($admin_cookie)) {
 
     $admin_info = nv_admin_checkdata($admin_cookie);
 
-    if ($admin_info == array()) {
+    if ($admin_info == []) {
         $nv_Request->unset_request('admin,online', 'session');
-        $info = 'Note: You are not signed in as admin!<br />Session Expired! Please Re-Login!';
+        $info = 'Note: You are not signed in as admin!<br />Session Expired!Please Re-Login!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
     }
@@ -70,57 +70,57 @@ if (! empty($admin_cookie)) {
         define('NV_IS_GODADMIN', true);
     }
 
-    if (! defined('ADMIN_LOGIN_MODE')) {
+    if (!defined('ADMIN_LOGIN_MODE')) {
         define('ADMIN_LOGIN_MODE', 3);
     }
-    if (ADMIN_LOGIN_MODE == 2 and ! defined('NV_IS_SPADMIN')) {
+    if (ADMIN_LOGIN_MODE == 2 and !defined('NV_IS_SPADMIN')) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: Access denied in Admin Panel!<br />Only God-Admin and Super-Admin has access in Admin Panel!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
     }
 
-    if (ADMIN_LOGIN_MODE == 1 and ! defined('NV_IS_GODADMIN')) {
+    if (ADMIN_LOGIN_MODE == 1 and !defined('NV_IS_GODADMIN')) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: Access denied in Admin Panel!<br />Only God-Admin has access in Admin Panel!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
     }
 
-    if (! empty($admin_info['editor'])) {
+    if (!empty($admin_info['editor'])) {
         if (file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $admin_info['editor'] . '/nv.php')) {
-            if (! defined('NV_EDITOR')) {
+            if (!defined('NV_EDITOR')) {
                 define('NV_EDITOR', $admin_info['editor']);
             }
-            if (! defined('NV_IS_' . strtoupper($admin_info['editor']))) {
+            if (!defined('NV_IS_' . strtoupper($admin_info['editor']))) {
                 define('NV_IS_' . strtoupper($admin_info['editor']), true);
             }
         }
     }
 
-    if (! empty($admin_info['allow_files_type'])) {
-        if (! defined('NV_ALLOW_FILES_TYPE')) {
+    if (!empty($admin_info['allow_files_type'])) {
+        if (!defined('NV_ALLOW_FILES_TYPE')) {
             define('NV_ALLOW_FILES_TYPE', implode('|', array_intersect($global_config['file_allowed_ext'], $admin_info['allow_files_type'])));
         }
-        if (! defined('NV_ALLOW_UPLOAD_FILES')) {
+        if (!defined('NV_ALLOW_UPLOAD_FILES')) {
             define('NV_ALLOW_UPLOAD_FILES', true);
         }
     }
 
-    if (! empty($admin_info['allow_modify_files'])) {
-        if (! defined('NV_ALLOW_MODIFY_FILES')) {
+    if (!empty($admin_info['allow_modify_files'])) {
+        if (!defined('NV_ALLOW_MODIFY_FILES')) {
             define('NV_ALLOW_MODIFY_FILES', true);
         }
     }
 
-    if (! empty($admin_info['allow_create_subdirectories'])) {
-        if (! defined('NV_ALLOW_CREATE_SUBDIRECTORIES')) {
+    if (!empty($admin_info['allow_create_subdirectories'])) {
+        if (!defined('NV_ALLOW_CREATE_SUBDIRECTORIES')) {
             define('NV_ALLOW_CREATE_SUBDIRECTORIES', true);
         }
     }
 
-    if (! empty($admin_info['allow_modify_subdirectories'])) {
-        if (! defined('NV_ALLOW_MODIFY_SUBDIRECTORIES')) {
+    if (!empty($admin_info['allow_modify_subdirectories'])) {
+        if (!defined('NV_ALLOW_MODIFY_SUBDIRECTORIES')) {
             define('NV_ALLOW_MODIFY_SUBDIRECTORIES', true);
         }
     }
@@ -130,7 +130,7 @@ if (! empty($admin_cookie)) {
     $admin_info['last_online'] = intval($admin_online[2]);
     $admin_info['checkhits'] = intval($admin_online[3]);
     if ($_second == 'time_login') {
-        $time_login = array();
+        $time_login = [];
         $time_login['showtimeoutsess'] = (NV_CURRENTTIME + 63 - $admin_info['last_online'] > $global_config['admin_check_pass_time']) ? 1 : 0;
         $time_login['check_pass_time'] = ($global_config['admin_check_pass_time'] - (NV_CURRENTTIME - $admin_info['last_online']) - 63)*1000;
 

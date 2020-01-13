@@ -8,21 +8,26 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_MOD_2STEP_VERIFICATION')) {
+if (!defined('NV_MOD_2STEP_VERIFICATION')) {
     die('Stop!!!');
 }
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
-if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], array(1, 3))) {
+// Tự động chuyển đến trang thiết lập nếu hệ thống bắt buộc xác thực ở quản trị, hoặc tất cả các khu vực
+if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], [1, 3])) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup');
 }
 
-// Tắt xác thực hai bước
+/*
+ * Tắt xác thực hai bước
+ * Lưu ý quan trọng: Chỉ tài khoản thành viên đã full xác thực mới có thể tắt!
+ * Không cho phép tắt nếu tài khoản này mới chỉ login 1 bước
+ */
 if ($nv_Request->isset_request('turnoff2step', 'post')) {
     $tokend = $nv_Request->get_title('tokend', 'post', '');
-    if (!defined('NV_IS_AJAX') or $tokend != NV_CHECK_SESSION) {
+    if (!defined('NV_IS_AJAX') or $tokend != NV_CHECK_SESSION or !defined('NV_IS_USER')) {
         nv_htmlOutput('Wrong URL');
     }
     $db->query('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step=0, secretkey=\'\' WHERE userid=' . $user_info['userid']);

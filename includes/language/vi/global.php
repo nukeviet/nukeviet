@@ -41,6 +41,7 @@ $lang_global['ok'] = 'OK';
 $lang_global['cancel'] = 'Hủy bỏ';
 $lang_global['reset'] = 'Thiết lập lại';
 $lang_global['fail'] = 'Thất bại';
+$lang_global['confirm'] = 'Xác nhận';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';
 
@@ -82,6 +83,7 @@ $lang_global['2teplogin_other_menthod'] = 'Thử cách khác';
 $lang_global['2teplogin_error_opt'] = 'Mã xác nhận không chính xác, vui lòng nhập lại';
 $lang_global['2teplogin_error_backup'] = 'Mã dự phòng không chính xác, vui lòng nhập lại';
 $lang_global['2teplogin_require'] = 'Hệ thống bắt buộc bạn phải kích hoạt chức năng xác thực hai bước mới có thể đăng nhập được. Nhấp vào đây để kích hoạt chức năng này';
+$lang_global['2teplogin'] = 'Xác thực hai bước';
 
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho admin';
