@@ -148,6 +148,7 @@ if (
     }
 
     // Gọi file xử lý chuyển hướng sang google, facebook để kích hoạt
+    $attribs = [];
     define('NV_ADMIN_ACTIVE_2STEP_OAUTH', true);
     require NV_ROOTDIR . '/includes/core/admin_login_' . $opt . '.php';
 

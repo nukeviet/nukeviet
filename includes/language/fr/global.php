@@ -39,6 +39,7 @@ $lang_global['admin_logout_question'] = 'Êtes vous sûr de vouloir quitter l\'A
 $lang_global['admin_ipincorrect'] = 'Vous êtes connecté par IP: %s. Nous sommes désolé que cet IP n\'est pas autorisé d\'entrer à l\'administration du site!';
 $lang_global['ok'] = 'ok';
 $lang_global['confirm'] = 'Confirmer';
+$lang_global['manage'] = 'Gérer';
 $lang_global['cancel'] = 'Annuler';
 $lang_global['reset'] = 'Réinitialiser';
 $lang_global['fail'] = 'Échoué';
