@@ -501,3 +501,5 @@ $lang_module['userwait_resend_end'] = 'Ended at';
 $lang_module['userwait_resend_delete'] = 'Email already exists (has been activated in some way), deleting information waiting for activation';
 $lang_module['userwait_resend_ok'] = 'Resend the activation email';
 $lang_module['userwait_resend_error'] = 'Unable to send email, please check your mail configuration';
+$lang_module['is_email_verified'] = 'Email verification status';
+$lang_module['is_email_verified1'] = 'If checked here, the email status of the account is verified. Otherwise, the status of the account email is unverified';

@@ -50,6 +50,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
     $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
     $_user['adduser_email'] = $nv_Request->get_int('adduser_email', 'post', 0);
+    $_user['is_email_verified'] = (int)$nv_Request->get_bool('is_email_verified', 'post', false);
 
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     $custom_fields['first_name'] = $_user['first_name'];
@@ -209,7 +210,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         '',
         " . $_user['view_mail'] . ",
         1,
-        '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", 0,
+        '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ",
+        " . ($_user['is_email_verified'] ? '-1' : '0') . ",
         'SYSTEM'
     )";
 
@@ -327,6 +329,7 @@ $_user['in_groups'] = [];
 $_user['is_official'] = ' checked="checked"';
 $_user['adduser_email'] = '';
 $_user['view_mail'] = '';
+$_user['is_email_verified'] = ' checked="checked"';
 
 $groups = [];
 if (!empty($groups_list)) {
