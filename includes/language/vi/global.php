@@ -42,6 +42,7 @@ $lang_global['cancel'] = 'Hủy bỏ';
 $lang_global['reset'] = 'Thiết lập lại';
 $lang_global['fail'] = 'Thất bại';
 $lang_global['confirm'] = 'Xác nhận';
+$lang_global['manage'] = 'Quản lý';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';
 

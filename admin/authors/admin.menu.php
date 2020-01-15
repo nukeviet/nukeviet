@@ -8,11 +8,11 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$allow_func = array( 'main', 'edit' );
+$allow_func = ['main', 'edit', '2step'];
 
 if (empty($global_config['spadmin_add_admin']) and $global_config['idsite'] > 0) {
     // Fix add admin for subsite
