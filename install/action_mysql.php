@@ -316,6 +316,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   admin_view_allowed tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Cấp quản trị được xem: 0,1,2',
+  logic_mode tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Cấp trên xem được cấp dưới, 1: chỉ cấp hoặc người được chỉ định',
   send_to varchar(250) NOT NULL DEFAULT '' COMMENT 'Danh sách id người nhận, phân cách bởi dấu phảy',
   send_from mediumint(8) unsigned NOT NULL DEFAULT '0',
   area tinyint(1) unsigned NOT NULL,
@@ -328,5 +329,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   view tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY send_to (send_to),
-  KEY admin_view_allowed (admin_view_allowed)
+  KEY admin_view_allowed (admin_view_allowed),
+  KEY logic_mode (logic_mode)
 ) ENGINE=MyISAM";
