@@ -8,7 +8,7 @@
  * @Createdate 1/9/2010, 23:48
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -35,7 +35,7 @@ function nv_object2array($a)
  */
 function nv_getenv($a)
 {
-    if (! is_array($a)) {
+    if (!is_array($a)) {
         $a = array( $a );
     }
 
@@ -151,7 +151,7 @@ function nv_checkagent($a)
     $a = htmlspecialchars(substr($a, 0, 255));
     $a = str_replace(array( ', ', '<' ), array( '-', '(' ), $a);
 
-    return ((! empty($a) and $a != '-') ? $a : 'none');
+    return ((!empty($a) and $a != '-') ? $a : 'none');
 }
 
 /**
@@ -283,7 +283,7 @@ function nv_function_exists($funcName)
 {
     global $sys_info;
 
-    return (function_exists($funcName) and ! in_array($funcName, $sys_info['disable_functions']));
+    return (function_exists($funcName) and !in_array($funcName, $sys_info['disable_functions']));
 }
 
 /**
@@ -297,7 +297,7 @@ function nv_class_exists($clName, $autoload = true)
 {
     global $sys_info;
 
-    return (class_exists($clName, $autoload) and ! in_array($clName, $sys_info['disable_classes']));
+    return (class_exists($clName, $autoload) and !in_array($clName, $sys_info['disable_classes']));
 }
 
 /**
@@ -331,7 +331,7 @@ function nv_check_valid_login($login, $max, $min)
     if (isset($login[$max])) {
         return sprintf($lang_global['usernamelong'], $max);
     }
-    if (! isset($login[$min - 1])) {
+    if (!isset($login[$min - 1])) {
         return sprintf($lang_global['usernameadjective'], $min);
     }
 
@@ -353,7 +353,7 @@ function nv_check_valid_login($login, $max, $min)
         default:
             return '';
     }
-    if (! preg_match($pattern, $login)) {
+    if (!preg_match($pattern, $login)) {
         return $lang_global['unick_type_' . $type];
     }
     return '';
@@ -379,25 +379,25 @@ function nv_check_valid_pass($pass, $max, $min)
     if (isset($pass[$max])) {
         return sprintf($lang_global['passwordlong'], $max);
     }
-    if (! isset($pass[$min - 1])) {
+    if (!isset($pass[$min - 1])) {
         return sprintf($lang_global['passwordadjective'], $min);
     }
 
     $type = $global_config['nv_upass_type'];
     if ($type == 1) {
-        if (! (preg_match('#[a-z]#ui', $pass) and preg_match('#[0-9]#u', $pass))) {
+        if (!(preg_match('#[a-z]#ui', $pass) and preg_match('#[0-9]#u', $pass))) {
             return $lang_global['upass_type_' . $type];
         }
     } elseif ($type == 3) {
-        if (! (preg_match('#[A-Z]#u', $pass) and preg_match('#[0-9]#u', $pass))) {
+        if (!(preg_match('#[A-Z]#u', $pass) and preg_match('#[0-9]#u', $pass))) {
             return $lang_global['upass_type_' . $type];
         }
     } elseif ($type == 2) {
-        if (! (preg_match('#[^A-Za-z0-9]#u', $pass) and preg_match('#[a-z]#ui', $pass) and preg_match('#[0-9]#u', $pass))) {
+        if (!(preg_match('#[^A-Za-z0-9]#u', $pass) and preg_match('#[a-z]#ui', $pass) and preg_match('#[0-9]#u', $pass))) {
             return $lang_global['upass_type_' . $type];
         }
     } elseif ($type == 4) {
-        if (! (preg_match('#[^A-Za-z0-9]#u', $pass) and preg_match('#[A-Z]#u', $pass) and preg_match('#[0-9]#u', $pass))) {
+        if (!(preg_match('#[^A-Za-z0-9]#u', $pass) and preg_match('#[A-Z]#u', $pass) and preg_match('#[0-9]#u', $pass))) {
             return $lang_global['upass_type_' . $type];
         }
     }
@@ -563,7 +563,7 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
     }
 
     $strDisplay = trim($strDisplay);
-    $strDisplay = ! empty($strDisplay) ? $strDisplay : $strEncodedEmail;
+    $strDisplay = !empty($strDisplay) ? $strDisplay : $strEncodedEmail;
 
     if ($blnCreateLink) {
         return '<a href="' . $strMailto . $strEncodedEmail . '">' . $strDisplay . '</a>';
@@ -708,7 +708,7 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
     $row = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
-    if (! empty($row)) {
+    if (!empty($row)) {
         $set_number = false;
         if ($group_id > 3) {
             $set_number = true;
@@ -763,7 +763,7 @@ function nv_date($format, $time = 0)
 {
     global $lang_global;
 
-    if (! $time) {
+    if (!$time) {
         $time = NV_CURRENTTIME;
     }
     $format = str_replace("r", "D, d M Y H:i:s O", $format);
@@ -1143,7 +1143,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             } else {
                 $mail->From = $global_config['site_email'];
             }
-        } elseif (! in_array('mail', $sys_info['disable_functions'])) {
+        } elseif (!in_array('mail', $sys_info['disable_functions'])) {
             $mail->IsMail();
 
             if (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
@@ -1181,7 +1181,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             return ($testmode ? 'No receiver' : false);
         }
 
-        if (! is_array($to)) {
+        if (!is_array($to)) {
             $to = array( $to );
         }
 
@@ -1199,7 +1199,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
         }
 
-        if (! empty($files)) {
+        if (!empty($files)) {
             $files = array_map('trim', explode(',', $files));
 
             foreach ($files as $file) {
@@ -1207,7 +1207,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
-        if (! $mail->Send()) {
+        if (!$mail->Send()) {
             trigger_error($mail->ErrorInfo, E_USER_WARNING);
             return ($testmode ? $mail->ErrorInfo : false);
         }
@@ -1244,7 +1244,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         return '';
     }
 
-    if (! is_array($base_url)) {
+    if (!is_array($base_url)) {
         $amp = preg_match('/\?/', $base_url) ? '&amp;' : '?';
         $amp .= 'page=';
     } else {
@@ -1259,7 +1259,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
         for ($i = 1; $i <= $init_page_max; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-            $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
         }
 
@@ -1274,7 +1274,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
                 for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
                     $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-                    $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+                    $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
                     $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
                 }
 
@@ -1287,14 +1287,14 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
             for ($i = $total_pages - 2; $i < $total_pages + 1; ++$i) {
                 $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-                $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+                $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
                 $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
             }
         }
     } else {
         for ($i = 1; $i < $total_pages + 1; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-            $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
         }
     }
@@ -1302,7 +1302,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
     if ($add_prevnext_text) {
         if ($on_page > 1) {
             $href = ($on_page > 2) ? $base_url . $amp . ($on_page - 1) : $base_url;
-            $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
         } else {
             $page_string = '<li class="disabled"><a href="#">&laquo;</a></li>' . $page_string;
@@ -1310,7 +1310,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
         if ($on_page < $total_pages) {
             $href = ($on_page) ? $base_url . $amp . ($on_page + 1) : $base_url;
-            $href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
         } else {
             $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
@@ -1461,13 +1461,13 @@ function nv_check_domain($domain)
  */
 function nv_is_url($url)
 {
-    if (! preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
+    if (!preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
         return false;
     }
 
     $url = nv_strtolower($url);
 
-    if (! ($parts = @parse_url($url))) {
+    if (!($parts = @parse_url($url))) {
         return false;
     }
 
@@ -1476,19 +1476,19 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['user']) and ! preg_match('/^([0-9a-z\-]|[\_])*$/', $parts['user'])) {
+    if (isset($parts['user']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $parts['user'])) {
         return false;
     }
 
-    if (isset($parts['pass']) and ! preg_match('/^([0-9a-z\-]|[\_])*$/', $parts['pass'])) {
+    if (isset($parts['pass']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $parts['pass'])) {
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
+    if (isset($parts['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
         return false;
     }
 
-    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
+    if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
         return false;
     }
 
@@ -1560,19 +1560,19 @@ function nv_check_url($url, $is_200 = 0)
         $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
         $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
 
-        if (! $fp) {
+        if (!$fp) {
             trigger_error($errstr, E_USER_WARNING);
             return false;
         }
 
-        $path = ! empty($url_info['path']) ? $url_info['path'] : '/';
-        $path .= ! empty($url_info['query']) ? '?' . $url_info['query'] : '';
+        $path = !empty($url_info['path']) ? $url_info['path'] : '/';
+        $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
 
         fputs($fp, "HEAD " . $path . " HTTP/1.0\r\n");
         fputs($fp, "Host: " . $url_info['host'] . ":" . $port . "\r\n");
         fputs($fp, "Connection: close\r\n\r\n");
 
-        while (! feof($fp)) {
+        while (!feof($fp)) {
             if ($header = trim(fgets($fp, 1024))) {
                 $res[] = $header;
             }
@@ -1802,7 +1802,7 @@ function nv_site_mods()
              */
             if (defined('NV_IS_SPADMIN')) {
                 $site_mods[$m_title]['is_modadmin'] = true;
-            } elseif (defined('NV_IS_ADMIN') and ! empty($row['admins']) and ! empty($admin_info['admin_id']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
+            } elseif (defined('NV_IS_ADMIN') and !empty($row['admins']) and !empty($admin_info['admin_id']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
                 $site_mods[$m_title]['is_modadmin'] = true;
             } elseif (!nv_user_in_groups($row['groups_view'])) {
                 unset($site_mods[$m_title]);
@@ -1826,7 +1826,7 @@ function nv_site_mods()
             }
             $func_us = $site_mods['users']['funcs'];
             foreach ($func_us as $func => $row) {
-                if (! in_array($func, $user_ops)) {
+                if (!in_array($func, $user_ops)) {
                     unset($site_mods['users']['funcs'][$func]);
                 }
             }
@@ -1835,7 +1835,7 @@ function nv_site_mods()
         foreach ($site_mods as $m_title => $row) {
             if (defined('NV_IS_SPADMIN')) {
                 $allowed = true;
-            } elseif (! empty($row['admins']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
+            } elseif (!empty($row['admins']) and in_array($admin_info['admin_id'], explode(',', $row['admins']))) {
                 $allowed = true;
             } else {
                 unset($site_mods[$m_title]);
@@ -1858,9 +1858,10 @@ function nv_site_mods()
  * @param integer $send_from ID người tạo thông báo, để trống nếu là hệ thống
  * @param integer $area xem mô tả bên dưới
  * @param integer $admin_view_allowed 0: Tất cả các admin, 1: Quản trị tối cao, 2: Điều hành chung + Quản trị tối cao
+ * @param integer $logic_mode 0: 0 admin cấp trên thấy thông báo của cấp dưới, 1: Chỉ cấp đó được xem của cấp đó
  * @return
  */
-function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_to = 0, $send_from = 0, $area = 1, $admin_view_allowed = 0)
+function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_to = 0, $send_from = 0, $area = 1, $admin_view_allowed = 0, $logic_mode = 0)
 {
     global $db, $global_config;
 
@@ -1875,9 +1876,10 @@ function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_
         !empty($content) and $content = serialize($content);
 
         $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (
-            admin_view_allowed, send_to, send_from, area, language, module, obid, type, content, add_time, view
+            admin_view_allowed, logic_mode, send_to, send_from, area, language, module, obid, type, content, add_time, view
         ) VALUES (
-            :admin_view_allowed, :send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0
+            :admin_view_allowed, :logic_mode, :send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ',
+            :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0
         )';
         $data_insert = [];
         if (empty($send_to)) {
@@ -1891,7 +1893,11 @@ function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_
         if ($admin_view_allowed < 0 or $admin_view_allowed > 2) {
             $admin_view_allowed = 0;
         }
+        if ($logic_mode > 1 or $logic_mode < 0) {
+            $logic_mode = 0;
+        }
         $data_insert['admin_view_allowed'] = $admin_view_allowed;
+        $data_insert['logic_mode'] = $logic_mode;
         $data_insert['send_to'] = $send_to;
         $data_insert['send_from'] = $send_from;
         $data_insert['area'] = $area;
@@ -2000,14 +2006,14 @@ function nv_redirect_decrypt($string, $insite = true)
     }
 
     if (preg_match('/^(http|https|ftp|gopher)\:\/\//i', $url)) {
-        if ($insite and ! preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN) . '/', $url)) {
+        if ($insite and !preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN) . '/', $url)) {
             return '';
         }
 
-        if (! nv_is_url($url)) {
+        if (!nv_is_url($url)) {
             return '';
         }
-    } elseif (! nv_is_url(NV_MY_DOMAIN . $url)) {
+    } elseif (!nv_is_url(NV_MY_DOMAIN . $url)) {
         return '';
     }
 
@@ -2077,7 +2083,7 @@ function nv_set_authorization()
 
     if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
         $usr_pass = base64_decode(substr($auth_user, 6));
-        if (! empty($usr_pass) and strpos($usr_pass, ':') !== false) {
+        if (!empty($usr_pass) and strpos($usr_pass, ':') !== false) {
             list($auth_user, $auth_pw) = explode(':', $usr_pass);
         }
         unset($usr_pass);

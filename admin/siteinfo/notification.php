@@ -18,24 +18,24 @@ $page_title = $lang_module['notification'];
 if ($admin_info['level'] == 1) {
     /*
      * Quản trị tối cao xem được:
-     * - Thông báo cấp dưới
+     * - Thông báo cấp dưới với điều kiện logic mode = 0
      * - Thông báo set cho cấp quản trị tối cao với điều kiện:
      * + Không chỉ định người nhận => Toàn bộ quản trị tối cao
      * + Hoặc chỉ định chính người nhận là mình
      */
-    $sql_lev_admin = '(admin_view_allowed!=1 OR (
+    $sql_lev_admin = '((admin_view_allowed!=1 AND logic_mode=0) OR (
         admin_view_allowed=1 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
     ))';
 } elseif ($admin_info['level'] == 2) {
     /*
      * Điều hành chung xem được:
-     * - Thông báo cấp dưới:
+     * - Thông báo cấp dưới với điều kiện logic mode = 0
      * - Thông báo set cho cấp điều hành chung với điều kiện:
      * + Không chỉ định người nhận => Toàn bộ điều hành chung
      * + Hoặc chỉ định chính người nhận là mình
      */
     $sql_lev_admin = '(admin_view_allowed!=1 AND (
-        admin_view_allowed!=2 OR (
+        (admin_view_allowed!=2 AND logic_mode=0) OR (
             admin_view_allowed=2 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
         )
     ))';
