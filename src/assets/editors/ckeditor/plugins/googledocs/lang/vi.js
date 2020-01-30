@@ -1,6 +1,6 @@
 /**
  * @ckeditor-plugin-googledoc language file
- * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License GNU/GPL version 2 or any later version
