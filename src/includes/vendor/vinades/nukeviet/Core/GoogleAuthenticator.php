@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 4/10/2010 19:43
@@ -14,7 +14,7 @@ namespace NukeViet\Core;
  * GoogleAuthenticator
  * 
  * @package NUKEVIET 4 CORE
- * @author VINADES.,JSC (contact@vinades.vn)
+ * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2016 VINADES.,JSC. All rights reserved
  * @version 4.0
  * @access public

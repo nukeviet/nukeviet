@@ -229,6 +229,7 @@ $lang_global['pagenext'] = 'Trang sau';
 $lang_global['langinterface'] = 'Ngôn ngữ giao diện';
 $lang_global['langdata'] = 'Ngôn ngữ xử lý dữ liệu';
 $lang_global['langsite'] = 'Select language';
+$lang_global['selecttheme'] = 'Chọn giao diện';
 $lang_global['detail'] = 'Chi tiết';
 $lang_global['show_picture'] = 'Xem hình';
 $lang_global['flood_page_title'] = 'Hãy đợi...';

@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 2-2-2010 12:55
+ */
+
+if (!defined('NV_IS_FILE_THEMES')) {
+    die('Stop!!!');
+}
+
+$page_title = $nv_Lang->getModule('settings');
+
+// Lấy tất cả các giao diện (không phải mobile) đã được thiết lập
+$array_site_cat_theme = $array_site_theme = [];
+$result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 ORDER BY theme ASC');
+while (list($theme) = $result->fetch(3)) {
+    if (preg_match($global_config['check_theme'], $theme)) {
+        $array_site_theme[] = $theme;
+    }
+}
+if ($global_config['idsite']) {
+    $sql = 'SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1
+    INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'];
+    $theme = $db->query($sql)->fetchColumn();
+    if (!empty($theme)) {
+        $array_site_cat_theme = explode(',', $theme);
+    }
+    $array_site_cat_theme = array_unique(array_merge($array_site_theme, $array_site_cat_theme));
+} else {
+    $array_site_cat_theme = $array_site_theme;
+}
+
+$array_config = [];
+
+// Submit form
+if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
+    $array_config['user_allowed_theme'] = $nv_Request->get_typed_array('user_allowed_theme', 'post', 'title', []);
+    $array_config['user_allowed_theme'] = array_intersect($array_config['user_allowed_theme'], $array_site_cat_theme);
+    $array_config['user_allowed_theme'][] = $global_config['site_theme'];
+    $array_config['user_allowed_theme'] = array_unique($array_config['user_allowed_theme']);
+    asort($array_config['user_allowed_theme']);
+    $array_config['user_allowed_theme'] = empty($array_config['user_allowed_theme']) ? '' : json_encode($array_config['user_allowed_theme']);
+
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+    foreach ($array_config as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
+    $nv_Cache->delAll();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+} else {
+    $array_config['user_allowed_theme'] = $global_config['array_user_allowed_theme'];
+}
+
+$tpl = new \NukeViet\Template\Smarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('LINK_SET_CONFIG', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+$tpl->assign('LANG_MESSAGE', $nv_Lang->getModule('settings_utheme_lnote', $language_array[NV_LANG_DATA]['name']));
+$tpl->assign('TOKEND', NV_CHECK_SESSION);
+$tpl->assign('ARRAY_THEMES', $array_site_cat_theme);
+$tpl->assign('CONFIG', $array_config);
+$tpl->assign('GCONFIG', $global_config);
+
+$contents = $tpl->fetch('settings.tpl');
+
+include NV_ROOTDIR . '/includes/header.php';
+echo nv_admin_theme($contents);
+include NV_ROOTDIR . '/includes/footer.php';

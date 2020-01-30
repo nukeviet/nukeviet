@@ -568,3 +568,4 @@ $lang_global['country_YU'] = 'Serbia And Montenegro (Formally Yugoslavia)';
 $lang_global['country_ZA'] = 'South Africa';
 $lang_global['country_ZM'] = 'Zambia';
 $lang_global['country_ZW'] = 'Zimbabwe';
+$lang_global['selecttheme'] = 'Select theme';
