@@ -76,7 +76,7 @@
                     <!-- BEGIN: email -->
                     <tr>
                         <td>{LANG.email}:</td>
-                        <td><input title="{LANG.email}" class="form-control email required" id="email_iavim" type="text" name="email" value="{DATA.email}" maxlength="240" /></td>
+                        <td><input title="{LANG.email}" class="form-control email required" id="email_iavim" type="email" name="email" value="{DATA.email}" maxlength="240" /></td>
                     </tr>
                     <!-- END: email -->
                     <tr>

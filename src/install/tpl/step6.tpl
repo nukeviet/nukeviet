@@ -43,7 +43,7 @@ $(document).ready(function(){
         <tr>
             <th scope="row" class="spec"> {LANG.admin_email} <span class="highlight_red">*</span></th>
             <td>
-            <input type="text" value="{DATA.nv_email}" name="nv_email" class="required email" id="nv_email_iavim"/>
+            <input type="email" value="{DATA.nv_email}" name="nv_email" class="required email" id="nv_email_iavim"/>
             </td>
             <td>{LANG.admin_email_note}</td>
         </tr>

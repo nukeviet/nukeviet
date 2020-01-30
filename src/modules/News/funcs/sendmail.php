@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -49,7 +49,7 @@ if ($id > 0 and $catid > 0) {
                 if (strpos($link, NV_MY_DOMAIN) !== 0) {
                     $link = NV_MY_DOMAIN . $link;
                 }
-                $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
+                $link = "<a href=\"" . $link . "\" title=\"" . $title . "\">" . $link . "</a>\n";
 
                 if ($global_config['captcha_type'] == 2) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
@@ -59,19 +59,21 @@ if ($id > 0 and $catid > 0) {
 
                 $to_mail = $nv_Request->get_title('email', 'post', '');
                 $content = $nv_Request->get_title('content', 'post', '', 1);
-                $err_email = nv_check_valid_email($to_mail);
-                $err_youremail = nv_check_valid_email($youremail);
+                $err_email = nv_check_valid_email($to_mail, true);
+                $err_youremail = nv_check_valid_email($youremail, true);
+                $to_mail = $err_email[1];
+                $youremail = $err_youremail[1];
                 $err_name = '';
                 $message = '';
                 $success = '';
-                if ($global_config['gfx_chk'] > 0 and ! nv_capcha_txt($nv_seccode)) {
+                if ($global_config['gfx_chk'] > 0 and !nv_capcha_txt($nv_seccode)) {
                     $err_name = $nv_Lang->getGlobal('securitycodeincorrect');
                 } elseif (empty($name)) {
                     $err_name = $nv_Lang->getModule('sendmail_err_name');
-                } elseif (empty($err_email) and empty($err_youremail)) {
+                } elseif (empty($err_email[0]) and empty($err_youremail[0])) {
                     $subject = $nv_Lang->getModule('sendmail_subject') . $name;
                     $message .= $nv_Lang->getModule('sendmail_welcome') . ' <strong>' . $global_config['site_name'] . '</strong> ' . $nv_Lang->getModule('sendmail_welcome1') . '<br /><br />' . $content . '<br /><br />' . $hometext . ' <br/><br /><strong>' . $nv_Lang->getModule('sendmail_welcome2') . '</strong><br />' . $link;
-                    $from = array( $name, $youremail );
+                    $from = [$name, $youremail];
                     $check = nv_sendmail($from, $to_mail, $subject, $message);
                     if ($check) {
                         $success = $nv_Lang->getModule('sendmail_success') . '<strong> ' . $to_mail . '</strong>';
@@ -79,15 +81,15 @@ if ($id > 0 and $catid > 0) {
                         $err_name = $nv_Lang->getModule('sendmail_success_err');
                     }
                 }
-                $result = array(
+                $result = [
                     'err_name' => $err_name,
-                    'err_email' => $err_email,
-                    'err_yourmail' => $err_youremail,
+                    'err_email' => $err_email[0],
+                    'err_yourmail' => $err_youremail[0],
                     'send_success' => $success,
                     'check' => $check
-                );
+                ];
             }
-            $sendmail = array(
+            $sendmail = [
                 'id' => $id,
                 'catid' => $catid,
                 'checkss' => md5($id . NV_CHECK_SESSION),
@@ -97,7 +99,7 @@ if ($id > 0 and $catid > 0) {
                 'content' => $content,
                 'result' => $result,
                 'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'] //
-            );
+            ];
 
             $page_title = $title;
             $contents = sendmail_themme($sendmail);

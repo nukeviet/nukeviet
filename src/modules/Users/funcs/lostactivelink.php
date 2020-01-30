@@ -48,23 +48,25 @@ $error = $question = '';
 if ($checkss == $data['checkss']) {
     if ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'])) {
         if (!empty($data['userField'])) {
-            $check_email = nv_check_valid_email($data['userField']);
+            $check_email = nv_check_valid_email($data['userField'], true);
             $check_login = nv_check_valid_login($data['userField'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
 
-            if (!empty($check_email) and !empty($check_login)) {
+            if (!empty($check_email[0]) and !empty($check_login)) {
                 $step = 1;
                 $nv_Request->unset_request('lostactivelink_seccode', 'session');
                 $error = $nv_Lang->getModule('lostactivelink_no_info2');
             } else {
                 // Xác định thành viên đăng ký chờ kích hoạt trong vòng 1 ngày
                 $exp = NV_CURRENTTIME - 86400;
-                if (empty($check_email)) {
+                if (empty($check_email[0])) {
+                    $userField = $check_email[1];
                     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE email= :userField AND regdate>' . $exp;
                 } else {
+                    $userField = $data['userField'];
                     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE username= :userField AND regdate>' . $exp;
                 }
                 $stmt = $db->prepare($sql) ;
-                $stmt->bindParam(':userField', $data['userField'], PDO::PARAM_STR);
+                $stmt->bindParam(':userField', $userField, PDO::PARAM_STR);
                 $stmt->execute();
                 $row = $stmt->fetch();
 

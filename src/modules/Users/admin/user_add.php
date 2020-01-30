@@ -86,13 +86,15 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         ]);
     }
 
-    if (($error_xemail = nv_check_valid_email($_user['email'])) != '') {
+    $error_xemail = nv_check_valid_email($_user['email'], true);
+    if ($error_xemail[0] != '') {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $error_xemail
+            'mess' => $error_xemail[0]
         ]);
     }
+    $_user['email'] = $error_xemail[1];
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email= :email');

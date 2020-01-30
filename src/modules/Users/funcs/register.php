@@ -89,13 +89,14 @@ function nv_check_username_reg($login)
  * @param mixed $email
  * @return
  */
-function nv_check_email_reg($email)
+function nv_check_email_reg(&$email)
 {
     global $db, $global_users_config, $nv_Lang;
 
-    $error = nv_check_valid_email($email);
-    if ($error != '') {
-        return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
+    $error = nv_check_valid_email($email, true);
+    $email = $error[1];
+    if ($error[0] != '') {
+        return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error[0]));
     }
 
     if (!empty($global_users_config['deny_email']) and preg_match('/' . $global_users_config['deny_email'] . '/i', $email)) {

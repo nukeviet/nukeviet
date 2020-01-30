@@ -125,7 +125,9 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             }
         }
 
-        if (nv_check_valid_email($array['username']) == '') {
+        $check_email = nv_check_valid_email($array['username'], true);
+        if ($check_email[0] == '') {
+            $array['username'] = $check_email[1];
             $sql = 't2.email =' . $db->quote($array['username']);
             $login_email = true;
         } else {

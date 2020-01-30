@@ -11,8 +11,8 @@
 if (!defined('NV_IS_FILE_ADMIN'))
     die('Stop!!!');
 
-$row = array();
-$error = array();
+$row = [];
+$error = [];
 
 $row['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
@@ -45,6 +45,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $row['email'] = $nv_Request->get_title('email', 'post', '');
     $row['others'] = $nv_Request->get_array('others', 'post', '');
 
+    $check_email = nv_check_valid_email($row['email'], true);
+    $row['email'] = $check_email[1];
+
     if (!empty($row['others'])) {
         foreach ($row['others'] as $index => $value) {
             if (empty($value['name']) or empty($value['value'])) {
@@ -62,8 +65,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error[] = $nv_Lang->getModule('error_required_full_name');
     } elseif (empty($row['phone'])) {
         $error[] = $nv_Lang->getModule('error_required_phone');
-    } elseif (!empty($row['email']) and ($error_email = nv_check_valid_email($row['email'])) != '') {
-        $error[] = $error_email;
+    } elseif (!empty($row['email']) and $check_email[0] != '') {
+        $error[] = $check_email[0];
     }
 
     if (empty($error)) {
@@ -119,8 +122,8 @@ if (!empty($array_department)) {
 }
 
 if (empty($row['others'])) {
-    $row['others'] = array();
-    $row['others'][] = array('name' => '', 'value' => '');
+    $row['others'] = [];
+    $row['others'][] = ['name' => '', 'value' => ''];
 } else {
     $row['others'] = unserialize($row['others']);
 }

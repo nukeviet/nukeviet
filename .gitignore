@@ -21,13 +21,14 @@
 /src/data/logs/voting_logs/
 /src/data/tmp/*
 /src/uploads/logo_*
+/src/assets/logo_*
 /src/install/default.php
 /src/composer.lock
 /src/includes/composer.lock
 /src/log.log
 
 composer.lock
-#vendor test ignore 
+#vendor test ignore
 /src/vendor/**/demo/
 /src/vendor/**/example/
 /src/vendor/**/examples/
