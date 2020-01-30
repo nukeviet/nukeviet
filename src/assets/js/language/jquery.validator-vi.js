@@ -1,23 +1,35 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else if (typeof module === "object" && module.exports) {
+		module.exports = factory( require( "jquery" ) );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: VI (Vietnamese; Tiếng Việt)
  */
-jQuery.extend(jQuery.validator.messages, {
-    required: "Trường này là bắt buộc.",
-    remote: "Xin vui lòng sửa chữa trường này.",
-    email: "Xin vui lòng nhập địa chỉ email hợp lệ.",
-    url: "Xin vui lòng nhập URL hợp lệ.",
-    date: "Xin vui lòng nhập ngày hợp lệ.",
-    dateISO: "Xin vui lòng nhập ngày hợp lệ (ISO).",
-    number: "Xin vui lòng nhập số hợp lệ.",
-    digits: "Xin vui lòng nhập chỉ chữ số",
-    creditcard: "Xin vui lòng nhập số thẻ tín dụng hợp lệ.",
-    equalTo: "Xin vui lòng nhập cùng một giá trị một lần nữa.",
-    accept: "Xin vui lòng nhập giá trị có phần mở rộng hợp lệ.",
-    maxlength: $.validator.format("Xin vui lòng nhập không quá {0} ký tự."),
-    minlength: $.validator.format("Xin vui lòng nhập ít nhất {0} ký tự."),
-    rangelength: $.validator.format("Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự."),
-    range: $.validator.format("Xin vui lòng nhập một giá trị giữa {0} và {1}."),
-    max: $.validator.format("Xin vui lòng nhập một giá trị nhỏ hơn hoặc bằng {0}."),
-    min: $.validator.format("Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}.")
-});
+$.extend( $.validator.messages, {
+	required: "Hãy nhập.",
+	remote: "Hãy sửa cho đúng.",
+	email: "Hãy nhập email.",
+	url: "Hãy nhập URL.",
+	date: "Hãy nhập ngày.",
+	dateISO: "Hãy nhập ngày (ISO).",
+	number: "Hãy nhập số.",
+	digits: "Hãy nhập chữ số.",
+	creditcard: "Hãy nhập số thẻ tín dụng.",
+	equalTo: "Hãy nhập thêm lần nữa.",
+	extension: "Phần mở rộng không đúng.",
+	maxlength: $.validator.format( "Hãy nhập từ {0} kí tự trở xuống." ),
+	minlength: $.validator.format( "Hãy nhập từ {0} kí tự trở lên." ),
+	rangelength: $.validator.format( "Hãy nhập từ {0} đến {1} kí tự." ),
+	range: $.validator.format( "Hãy nhập từ {0} đến {1}." ),
+	max: $.validator.format( "Hãy nhập từ {0} trở xuống." ),
+	min: $.validator.format( "Hãy nhập từ {0} trở lên." )
+} );
+return $;
+}));
