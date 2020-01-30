@@ -75,8 +75,6 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 
 if ($nv_Request->get_int('save', 'post', 0)) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_edit'), 'Username: ' . $row_user['username'], $admin_info['userid']);
-
     $editor = $nv_Request->get_title('editor', 'post', '');
     if (defined('NV_IS_SPADMIN')) {
         $allow_files_type = $nv_Request->get_array('allow_files_type', 'post', []);
@@ -263,6 +261,13 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                 $position
             ];
         }
+
+        $log_note = [];
+        $log_note[] = 'Username: ' . $row_user['username'];
+        foreach ($result['change'] as $change) {
+            $log_note[] = $change[0] . ': ' . $change[1] . ' =&gt; ' . $change[2];
+        }
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_edit'), implode('<br />', $log_note), $admin_info['userid']);
 
         if (empty($result['change'])) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '#aid' . $admin_id);
