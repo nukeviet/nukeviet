@@ -13,24 +13,61 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
-
 $page_title = $nv_Lang->getGlobal('notification');
+
+if ($admin_info['level'] == 1) {
+    /*
+     * Quản trị tối cao xem được:
+     * - Thông báo cấp dưới với điều kiện logic mode = 0
+     * - Thông báo set cho cấp quản trị tối cao với điều kiện:
+     * + Không chỉ định người nhận => Toàn bộ quản trị tối cao
+     * + Hoặc chỉ định chính người nhận là mình
+     */
+    $sql_lev_admin = '((admin_view_allowed!=1 AND logic_mode=0) OR (
+        admin_view_allowed=1 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
+    ))';
+} elseif ($admin_info['level'] == 2) {
+    /*
+     * Điều hành chung xem được:
+     * - Thông báo cấp dưới với điều kiện logic mode = 0
+     * - Thông báo set cho cấp điều hành chung với điều kiện:
+     * + Không chỉ định người nhận => Toàn bộ điều hành chung
+     * + Hoặc chỉ định chính người nhận là mình
+     */
+    $sql_lev_admin = '(admin_view_allowed!=1 AND (
+        (admin_view_allowed!=2 AND logic_mode=0) OR (
+            admin_view_allowed=2 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
+        )
+    ))';
+} else {
+    /*
+     * Quản lý module xem được:
+     * - Thông báo set cho toàn bộ
+     * - Hoặc thông báo set cho chính mình
+     */
+    $sql_lev_admin = '(admin_view_allowed=0 AND (
+        send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to)
+    ))';
+}
 
 // Đánh dấu tất cả các thông báo đã đọc
 if ($nv_Request->isset_request('notification_reset', 'post')) {
-    $db->query('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET is_new=0 WHERE is_new=1 AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
-    die();
+    $sql = 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1
+    WHERE view=0 AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND language=' . $db->quote(NV_LANG_DATA) .
+    ' AND ' . $sql_lev_admin;
+    $db->query($sql);
+    nv_htmlOutput('');
 }
 
 // Lấy số thông báo chưa xem
-if ($nv_Request->isset_request('notification_get', 'get')) {
+if ($nv_Request->isset_request('notification_get', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
     $return = [
-        'total' => $db->query('SELECT COUNT(*) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\')')->fetchColumn(),
-        'new' => $db->query('SELECT COUNT(*) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND is_new=1 AND module IN(\'' . implode("', '", $allowed_mods) . '\')')->fetchColumn()
+        'total' => $db->query('SELECT COUNT(*) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin)->fetchColumn(),
+        'new' => $db->query('SELECT COUNT(*) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND is_new=1 AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin)->fetchColumn()
     ];
 
     nv_jsonOutput($return);
@@ -45,7 +82,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $ids = array_filter(array_unique(array_map('intval', $ids)));
 
     if (!empty($ids)) {
-        $db->query("DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id IN(" . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+        $db->query("DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id IN(" . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
         nv_htmlOutput('OK');
     }
 
@@ -61,7 +98,7 @@ if ($nv_Request->isset_request('setviewed', 'post')) {
     $ids = array_filter(array_unique(array_map('intval', $ids)));
 
     if (!empty($ids)) {
-        $db->query("UPDATE " . NV_NOTIFICATION_GLOBALTABLE . " SET view=1 WHERE id IN(" . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+        $db->query("UPDATE " . NV_NOTIFICATION_GLOBALTABLE . " SET view=1 WHERE id IN(" . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
         nv_htmlOutput('OK');
     }
 
@@ -86,7 +123,7 @@ if ($array_search['v']) {
 $db->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_NOTIFICATION_GLOBALTABLE)
-    ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')' . ($array_search['v'] > 0 ? (' AND view=' . ($array_search['v'] - 1)) : ''));
+    ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')' . ($array_search['v'] > 0 ? (' AND view=' . ($array_search['v'] - 1)) : '') . ' AND ' . $sql_lev_admin);
 
 $all_pages = $db->query($db->sql())
     ->fetchColumn();
