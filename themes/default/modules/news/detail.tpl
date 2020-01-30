@@ -163,9 +163,14 @@
             <div class="h5 clearfix">
                 <p id="stringrating">{STRINGRATING}</p>
                 <!-- BEGIN: data_rating -->
-                <span>{LANG.rating_average}:
-                    <span id="numberrating">{DETAIL.numberrating}</span> -
-                    <span id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
+                <span itemscope itemtype="https://schema.org/AggregateRating">
+                    <span class="hidden d-none hide" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries">
+                        <span class="hidden d-none hide" itemprop="name">{DETAIL.title}</span>
+                    </span>
+                    {LANG.rating_average}:
+                    <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> -
+                    <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count}
+                    <span class="hidden d-none hide" itemprop="bestRating">5</span>
                 </span>
                 <!-- END: data_rating -->
                 <div style="padding: 5px;">
