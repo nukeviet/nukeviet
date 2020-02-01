@@ -38,6 +38,7 @@ $recaptcha_type_array = [
     'image' => $nv_Lang->getModule('recaptcha_type_image'),
     'audio' => $nv_Lang->getModule('recaptcha_type_audio')
 ];
+$admin_2step_array = ['code', 'facebook', 'google'];
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
@@ -62,6 +63,8 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     $array_config_global['login_time_tracking'] = $nv_Request->get_int('login_time_tracking', 'post', 0);
     $array_config_global['login_time_ban'] = $nv_Request->get_int('login_time_ban', 'post', 0);
     $array_config_global['two_step_verification'] = $nv_Request->get_int('two_step_verification', 'post', 0);
+    $array_config_global['admin_2step_opt'] = $nv_Request->get_typed_array('admin_2step_opt', 'post', 'title', []);
+    $array_config_global['admin_2step_default'] = $nv_Request->get_title('admin_2step_default', 'post', '');
 
     if ($array_config_global['login_number_tracking'] < 1) {
         $array_config_global['login_number_tracking'] = 5;
@@ -72,6 +75,14 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     if ($array_config_global['two_step_verification'] < 0 or $array_config_global['two_step_verification'] > 3) {
         $array_config_global['two_step_verification'] = 0;
     }
+    $array_config_global['admin_2step_opt'] = array_intersect($array_config_global['admin_2step_opt'], $admin_2step_array);
+    if (!in_array($array_config_global['admin_2step_default'], $admin_2step_array)) {
+        $array_config_global['admin_2step_default'] = '';
+    }
+    if (!in_array($array_config_global['admin_2step_default'], $array_config_global['admin_2step_opt'])) {
+        $array_config_global['admin_2step_default'] = current($array_config_global['admin_2step_opt']);
+    }
+    $array_config_global['admin_2step_opt'] = empty($array_config_global['admin_2step_opt']) ? '' : implode(',', $array_config_global['admin_2step_opt']);
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
@@ -117,6 +128,7 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
     $array_config_define['nv_anti_agent'] = NV_ANTI_AGENT;
     $array_config_define['nv_anti_iframe'] = NV_ANTI_IFRAME;
     $array_config_define['nv_allowed_html_tags'] = NV_ALLOWED_HTML_TAGS;
+    $array_config_global['admin_2step_opt'] = empty($global_config['admin_2step_opt']) ? [] : explode(',', $global_config['admin_2step_opt']);
 }
 
 $array_config_flood = [];
@@ -442,6 +454,8 @@ $tpl->assign('CONFIG_CAPTCHA', $array_config_captcha);
 $tpl->assign('RECAPTCHA_TYPE', $recaptcha_type_array);
 $tpl->assign('DEFINE_CAPTCHA', $array_define_captcha);
 $tpl->assign('CONFIG_SITE', $array_config_site);
+$tpl->assign('TWOSTEP_ARRAY', $admin_2step_array);
+$tpl->assign('LINK_CONFIG_OAUTH', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=config&amp;oauth_config=');
 
 $mask_text_array = [];
 $mask_text_array[0] = '255.255.255.255';

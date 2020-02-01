@@ -1376,10 +1376,13 @@ class Request
         $this->restrictCORSDomains = isset($config['cors_restrict_domains']) ? (bool)$config['cors_restrict_domains']  : true;
         $this->validCORSDomains = isset($config['cors_valid_domains']) ? (array)$config['cors_valid_domains']  : [];
         $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
+
         $method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
+        $hasOrigin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
+
+        // Preflight request
         if ($method === 'OPTIONS') {
             $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
-            $hasOrigin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
             if ($this->requestOriginIsValid and !empty($hasControlRequestHeader) and !empty($hasOrigin)) {
                 foreach ($this->corsHeaders as $header => $value) {
                     header($header . ': ' . $value);
@@ -1395,7 +1398,7 @@ class Request
         }
 
         // Chặn các request bên ngoài vào khu vực quản trị
-        if (defined('NV_ADMIN') and $this->referer_key == 0 and !$this->requestOriginIsValid) {
+        if (defined('NV_ADMIN') and $this->referer_key == 0 and !$this->requestOriginIsValid and !empty($hasOrigin)) {
             exit(0);
         }
     }

@@ -18,8 +18,7 @@ define('NV_MOD_2STEP_VERIFICATION', true);
 define('NV_BRIDGE_USER_MODULE', 'users');
 
 if (!isset($site_mods[NV_BRIDGE_USER_MODULE]) or (!defined('NV_IS_USER') and !defined('NV_IS_1STEP_USER'))) {
-    header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true));
-    die();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 }
 
 $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();

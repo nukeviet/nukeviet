@@ -277,3 +277,6 @@ $lang_module['cors_help'] = 'Activer cette fonctionnalité pour limiter la deman
 $lang_module['cors_restrict_domains'] = 'Limite de domaine';
 $lang_module['cors_valid_domains'] = 'Domaines valides';
 $lang_module['cors_valid_domains_help'] = 'Entrez chaque nom de domaine en une ligne (veuillez saisir le formulaire complet http://votredomaine.com). Les demandes CORS de ces domaines sont autorisées';
+$lang_module['admin_2step_opt'] = 'Les méthodes de vérification en deux étapes sont autorisées dans l\'administration';
+$lang_module['admin_2step_default'] = 'La méthode de vérification en deux étapes par défaut dans l\'administration';
+$lang_module['admin_2step_appconfig'] = 'Configurez l\'application ici';

@@ -41,7 +41,7 @@ if (!empty($admin_cookie)) {
 
     $admin_info = nv_admin_checkdata($admin_cookie);
 
-    if ($admin_info == array()) {
+    if ($admin_info == []) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: You are not signed in as admin!<br />Session Expired!Please Re-Login!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
@@ -130,7 +130,7 @@ if (!empty($admin_cookie)) {
     $admin_info['last_online'] = intval($admin_online[2]);
     $admin_info['checkhits'] = intval($admin_online[3]);
     if ($_second == 'time_login') {
-        $time_login = array();
+        $time_login = [];
         $time_login['showtimeoutsess'] = (NV_CURRENTTIME + 63 - $admin_info['last_online'] > $global_config['admin_check_pass_time']) ? 1 : 0;
         $time_login['check_pass_time'] = ($global_config['admin_check_pass_time'] - (NV_CURRENTTIME - $admin_info['last_online']) - 63)*1000;
 
