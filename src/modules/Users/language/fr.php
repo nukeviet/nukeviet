@@ -762,3 +762,5 @@ $lang_module['userwait_resend_end'] = 'Fin des temps';
 $lang_module['userwait_resend_delete'] = 'Le courrier électronique existe déjà (a été activé d\'une certaine manière), supprimant les informations en attente d\'activation';
 $lang_module['userwait_resend_ok'] = 'Renvoyer l\'e-mail d\'activation';
 $lang_module['userwait_resend_error'] = 'Impossible d\'envoyer un courrier électronique, veuillez vérifier la configuration de votre messagerie';
+$lang_module['is_email_verified'] = 'Statut de vérification des e-mails';
+$lang_module['is_email_verified1'] = 'Si cette case est cochée, le statut de messagerie du compte est vérifié. Sinon, le statut de l\'e-mail du compte n\'est pas vérifié';

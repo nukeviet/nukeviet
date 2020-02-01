@@ -157,6 +157,11 @@
                     <td></td>
                     <td><label><input type="checkbox" name="adduser_email" value="1"{DATA.adduser_email}/> <small>{LANG.adduser_email1_note}</small></label></td>
                 </tr>
+                <tr>
+                    <td> {LANG.is_email_verified} </td>
+                    <td></td>
+                    <td><label><input type="checkbox" name="is_email_verified" value="1"{DATA.is_email_verified}> <small>{LANG.is_email_verified1}</small></label></td>
+                </tr>
             </tbody>
         </table>
         <!-- BEGIN: field -->
