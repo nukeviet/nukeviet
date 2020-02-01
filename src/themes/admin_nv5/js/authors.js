@@ -44,6 +44,32 @@ function nv_chang_act(mid, act) {
     return;
 }
 
+// Xóa hết Oauth của quản trị
+function nv_del_oauthall(userid, tokend) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'delall=' + tokend, function(res) {
+            if (res == 'OK') {
+                location.reload();
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+}
+
+// Xóa một Oauth của quản trị
+function nv_del_oauthone(id, userid, tokend) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'del=' + tokend + '&id=' + id, function(res) {
+            if (res == 'OK') {
+                location.reload();
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+}
+
 function apiRoleChanged() {
     var totalApis = 0;
     $('[data-toggle="apicat"]').each(function() {
