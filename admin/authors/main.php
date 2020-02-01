@@ -196,6 +196,12 @@ if (!empty($admins)) {
                 $xtpl->parse('main.loop.edit');
             }
 
+            if (!empty($values['thead']['2step'])) {
+                $xtpl->assign('2STEP_HREF', $values['thead']['2step'][0]);
+                $xtpl->assign('2STEP_NAME', $values['thead']['2step'][1]);
+                $xtpl->parse('main.loop.2step');
+            }
+
             if (!empty($values['thead']['chg_is_suspend'])) {
                 $xtpl->assign('SUSPEND_HREF', $values['thead']['chg_is_suspend'][0]);
                 $xtpl->assign('SUSPEND_NAME', $values['thead']['chg_is_suspend'][1]);
