@@ -1,29 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz\Util;
 
-use Psr\Http\Message\RequestInterface;
+use Buzz\Message\RequestInterface;
 
 class Cookie
 {
-    const ATTR_DOMAIN = 'domain';
-
-    const ATTR_PATH = 'path';
-
-    const ATTR_SECURE = 'secure';
-
+    const ATTR_DOMAIN  = 'domain';
+    const ATTR_PATH    = 'path';
+    const ATTR_SECURE  = 'secure';
     const ATTR_MAX_AGE = 'max-age';
-
     const ATTR_EXPIRES = 'expires';
 
     protected $name;
-
     protected $value;
-
-    protected $attributes = [];
-
+    protected $attributes = array();
     protected $createdAt;
 
     /**
@@ -37,25 +28,22 @@ class Cookie
     /**
      * Returns true if the current cookie matches the supplied request.
      *
-     * @param RequestInterface $request A request object
-     *
-     * @return bool
+     * @return boolean
      */
-    public function matchesRequest(RequestInterface $request): bool
+    public function matchesRequest(RequestInterface $request)
     {
-        $uri = $request->getUri();
         // domain
-        if (!$this->matchesDomain($uri->getHost())) {
+        if (!$this->matchesDomain(parse_url($request->getHost(), PHP_URL_HOST))) {
             return false;
         }
 
         // path
-        if (!$this->matchesPath($uri->getPath())) {
+        if (!$this->matchesPath($request->getResource())) {
             return false;
         }
 
         // secure
-        if ($this->hasAttribute(static::ATTR_SECURE) && 'https' !== $uri->getScheme()) {
+        if ($this->hasAttribute(static::ATTR_SECURE) && !$request->isSecure()) {
             return false;
         }
 
@@ -67,9 +55,9 @@ class Cookie
      *
      * Checks the max-age and expires attributes.
      *
-     * @return bool Whether the current cookie has expired
+     * @return boolean Whether the current cookie has expired
      */
-    public function isExpired(): bool
+    public function isExpired()
     {
         $maxAge = $this->getAttribute(static::ATTR_MAX_AGE);
         if ($maxAge && time() - $this->getCreatedAt() > $maxAge) {
@@ -89,16 +77,16 @@ class Cookie
      *
      * @param string $domain A domain hostname
      *
-     * @return bool
+     * @return boolean
      */
-    public function matchesDomain(string $domain): bool
+    public function matchesDomain($domain)
     {
         $cookieDomain = $this->getAttribute(static::ATTR_DOMAIN);
 
         if (0 === strpos($cookieDomain, '.')) {
             $pattern = '/\b'.preg_quote(substr($cookieDomain, 1), '/').'$/i';
 
-            return (bool) preg_match($pattern, $domain);
+            return (boolean) preg_match($pattern, $domain);
         } else {
             return 0 == strcasecmp($cookieDomain, $domain);
         }
@@ -109,9 +97,9 @@ class Cookie
      *
      * @param string $path A path
      *
-     * @return bool
+     * @return boolean
      */
-    public function matchesPath(string $path): bool
+    public function matchesPath($path)
     {
         $needle = $this->getAttribute(static::ATTR_PATH);
 
@@ -124,9 +112,9 @@ class Cookie
      * @param string $header        A Set-Cookie header
      * @param string $issuingDomain The domain that issued the header
      */
-    public function fromSetCookieHeader(string $header, string $issuingDomain): void
+    public function fromSetCookieHeader($header, $issuingDomain)
     {
-        list($this->name, $header) = explode('=', $header, 2);
+        list($this->name, $header)  = explode('=', $header, 2);
         if (false === strpos($header, ';')) {
             $this->value = $header;
             $header = null;
@@ -135,17 +123,15 @@ class Cookie
         }
 
         $this->clearAttributes();
-        if (null !== $header) {
-            foreach (array_map('trim', explode(';', trim($header))) as $pair) {
-                if (false === strpos($pair, '=')) {
-                    $name = $pair;
-                    $value = null;
-                } else {
-                    list($name, $value) = explode('=', $pair);
-                }
-
-                $this->setAttribute($name, $value);
+        foreach (array_map('trim', explode(';', trim($header))) as $pair) {
+            if (false === strpos($pair, '=')) {
+                $name = $pair;
+                $value = null;
+            } else {
+                list($name, $value) = explode('=', $pair);
             }
+
+            $this->setAttribute($name, $value);
         }
 
         if (!$this->getAttribute(static::ATTR_DOMAIN)) {
@@ -158,27 +144,27 @@ class Cookie
      *
      * @return string An HTTP request Cookie header
      */
-    public function toCookieHeader(): string
+    public function toCookieHeader()
     {
-        return $this->getName().'='.$this->getValue();
+        return 'Cookie: '.$this->getName().'='.$this->getValue();
     }
 
-    public function setName(string $name): void
+    public function setName($name)
     {
         $this->name = $name;
     }
 
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
 
-    public function setValue(string $value): void
+    public function setValue($value)
     {
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function getValue()
     {
         return $this->value;
     }
@@ -189,43 +175,41 @@ class Cookie
         $this->attributes = array_change_key_case($attributes);
     }
 
-    public function setAttribute(string $name, ?string $value): void
+    public function setAttribute($name, $value)
     {
         $this->attributes[strtolower($name)] = $value;
     }
 
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return $this->attributes;
     }
 
-    public function getAttribute(string $name): ?string
+    public function getAttribute($name)
     {
         $name = strtolower($name);
 
         if (isset($this->attributes[$name])) {
             return $this->attributes[$name];
         }
-
-        return null;
     }
 
-    public function hasAttribute(string $name): bool
+    public function hasAttribute($name)
     {
         return array_key_exists($name, $this->attributes);
     }
 
-    public function clearAttributes(): void
+    public function clearAttributes()
     {
-        $this->setAttributes([]);
+        $this->setAttributes(array());
     }
 
-    public function setCreatedAt(int $createdAt): void
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getCreatedAt(): int
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }

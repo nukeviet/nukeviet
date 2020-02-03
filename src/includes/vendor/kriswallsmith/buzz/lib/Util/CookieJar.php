@@ -1,34 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz\Util;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Buzz\Message\MessageInterface;
+use Buzz\Message\RequestInterface;
 
 class CookieJar
 {
-    /** @var Cookie[] */
-    private $cookies = [];
+    protected $cookies = array();
 
-    public function clear(): void
+    public function setCookies($cookies)
     {
-        $this->cookies = [];
-    }
-
-    public function setCookies(array $cookies): void
-    {
-        $this->cookies = [];
+        $this->cookies = array();
         foreach ($cookies as $cookie) {
             $this->addCookie($cookie);
         }
     }
 
-    /**
-     * @return Cookie[]
-     */
-    public function getCookies(): array
+    public function getCookies()
     {
         return $this->cookies;
     }
@@ -38,7 +27,7 @@ class CookieJar
      *
      * @param Cookie $cookie A cookie object
      */
-    public function addCookie(Cookie $cookie): void
+    public function addCookie(Cookie $cookie)
     {
         $this->cookies[] = $cookie;
     }
@@ -48,29 +37,26 @@ class CookieJar
      *
      * @param RequestInterface $request A request object
      */
-    public function addCookieHeaders(RequestInterface $request): RequestInterface
+    public function addCookieHeaders(RequestInterface $request)
     {
-        foreach ($this->getCookies() as $cookie) {
+        foreach ($this->cookies as $cookie) {
             if ($cookie->matchesRequest($request)) {
-                $request = $request->withHeader('Cookie', $cookie->toCookieHeader());
+                $request->addHeader($cookie->toCookieHeader());
             }
         }
-
-        return $request;
     }
 
     /**
      * Processes Set-Cookie headers from a request/response pair.
      *
-     * @param RequestInterface  $request  A request object
-     * @param ResponseInterface $response A response object
+     * @param RequestInterface $request  A request object
+     * @param MessageInterface $response A response object
      */
-    public function processSetCookieHeaders(RequestInterface $request, ResponseInterface $response): void
+    public function processSetCookieHeaders(RequestInterface $request, MessageInterface $response)
     {
-        $host = $request->getUri()->getHost();
-        foreach ($response->getHeader('Set-Cookie') as $header) {
+        foreach ($response->getHeader('Set-Cookie', false) as $header) {
             $cookie = new Cookie();
-            $cookie->fromSetCookieHeader($header, $host);
+            $cookie->fromSetCookieHeader($header, parse_url($request->getHost(), PHP_URL_HOST));
 
             $this->addCookie($cookie);
         }
@@ -79,16 +65,15 @@ class CookieJar
     /**
      * Removes expired cookies.
      */
-    public function clearExpiredCookies(): void
+    public function clearExpiredCookies()
     {
-        $cookies = $this->getCookies();
-        foreach ($cookies as $i => $cookie) {
-            if ($cookie->isExpired()) {
-                unset($cookies[$i]);
-            }
-        }
+      foreach ($this->cookies as $i => $cookie) {
+          if ($cookie->isExpired()) {
+              unset($this->cookies[$i]);
+          }
+      }
 
-        $this->clear();
-        $this->setCookies(array_values($cookies));
+      // reset array keys
+      $this->cookies = array_values($this->cookies);
     }
 }

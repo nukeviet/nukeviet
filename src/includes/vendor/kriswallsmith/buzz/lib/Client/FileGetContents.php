@@ -1,85 +1,46 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz\Client;
 
-use Buzz\Configuration\ParameterBag;
-use Buzz\Message\HeaderConverter;
-use Buzz\Exception\NetworkException;
-use Buzz\Message\ResponseBuilder;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Buzz\Exception\RequestException;
+use Buzz\Message\MessageInterface;
+use Buzz\Message\RequestInterface;
 
-class FileGetContents extends AbstractClient implements BuzzClientInterface
+use Buzz\Exception\ClientException;
+
+class FileGetContents extends AbstractStream
 {
-    public function sendRequest(RequestInterface $request, array $options = []): ResponseInterface
+    /**
+     * @see ClientInterface
+     *
+     * @throws ClientException If file_get_contents() fires an error
+     */
+    public function send(RequestInterface $request, MessageInterface $response)
     {
-        $options = $this->validateOptions($options);
-        $context = stream_context_create($this->getStreamContextArray($request, $options));
+        $context = stream_context_create($this->getStreamContextArray($request));
+        $url = $request->getHost().$request->getResource();
 
         $level = error_reporting(0);
-        $content = file_get_contents($request->getUri()->__toString(), false, $context);
+        $content = file_get_contents($url, 0, $context);
         error_reporting($level);
         if (false === $content) {
             $error = error_get_last();
+            $e = new RequestException($error['message']);
+            $e->setRequest($request);
 
-            throw new NetworkException($request, $error['message']);
+            throw $e;
         }
 
-        $requestBuilder = new ResponseBuilder($this->responseFactory);
-        $requestBuilder->parseHttpHeaders($this->filterHeaders((array) $http_response_header));
-        $requestBuilder->writeBody($content);
-
-        return $requestBuilder->getResponse();
+        $response->setHeaders($this->filterHeaders((array) $http_response_header));
+        $response->setContent($content);
     }
 
-    /**
-     * Converts a request into an array for stream_context_create().
-     *
-     * @param RequestInterface $request A request object
-     * @param ParameterBag     $options
-     *
-     * @return array An array for stream_context_create()
-     */
-    protected function getStreamContextArray(RequestInterface $request, ParameterBag $options): array
+    private function filterHeaders(array $headers)
     {
-        $headers = $request->getHeaders();
-        unset($headers['Host']);
-        $context = [
-            'http' => [
-                // values from the request
-                'method' => $request->getMethod(),
-                'header' => implode("\r\n", HeaderConverter::toBuzzHeaders($headers)),
-                'content' => $request->getBody()->__toString(),
-                'protocol_version' => $request->getProtocolVersion(),
-
-                // values from the current client
-                'ignore_errors' => true,
-                'follow_location' => $options->get('allow_redirects') && $options->get('max_redirects') > 0,
-                'max_redirects' => $options->get('max_redirects') + 1,
-                'timeout' => $options->get('timeout'),
-            ],
-            'ssl' => [
-                'verify_peer' => $options->get('verify'),
-                'verify_host' => $options->get('verify'),
-            ],
-        ];
-
-        if (null !== $options->get('proxy')) {
-            $context['http']['proxy'] = $options->get('proxy');
-            $context['http']['request_fulluri'] = true;
-        }
-
-        return $context;
-    }
-
-    private function filterHeaders(array $headers): array
-    {
-        $filtered = [];
+        $filtered = array();
         foreach ($headers as $header) {
             if (0 === stripos($header, 'http/')) {
-                $filtered = [];
+                $filtered = array();
             }
 
             $filtered[] = $header;

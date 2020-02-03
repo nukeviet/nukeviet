@@ -1,14 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz\Exception;
 
-use Http\Client\Exception as HTTPlugException;
-
 /**
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * Thrown whenever a client process fails.
  */
-class ClientException extends \RuntimeException implements ExceptionInterface, HTTPlugException
+class ClientException extends RuntimeException
 {
 }

@@ -1,278 +1,195 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz;
 
-use Buzz\Client\BuzzClientInterface;
+use Buzz\Client\ClientInterface;
 use Buzz\Client\FileGetContents;
-use Buzz\Exception\ClientException;
-use Buzz\Exception\InvalidArgumentException;
-use Buzz\Exception\LogicException;
-use Buzz\Middleware\MiddlewareInterface;
-use Http\Message\RequestFactory;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Buzz\Listener\ListenerChain;
+use Buzz\Listener\ListenerInterface;
+use Buzz\Message\Factory\Factory;
+use Buzz\Message\Factory\FactoryInterface;
+use Buzz\Message\MessageInterface;
+use Buzz\Message\RequestInterface;
+use Buzz\Util\Url;
 
-class Browser implements BuzzClientInterface
+class Browser
 {
-    /** @var BuzzClientInterface */
     private $client;
-
-    /** @var RequestFactoryInterface|RequestFactory */
-    private $requestFactory;
-
-    /**
-     * @var MiddlewareInterface[]
-     */
-    private $middlewares = [];
-
-    /** @var RequestInterface */
+    private $factory;
+    private $listener;
     private $lastRequest;
-
-    /** @var ResponseInterface */
     private $lastResponse;
 
-    /**
-     * @param BuzzClientInterface|null                    $client
-     * @param RequestFactoryInterface|RequestFactory|null $requestFactory
-     */
-    public function __construct(BuzzClientInterface $client = null, $requestFactory = null)
+    public function __construct(ClientInterface $client = null, FactoryInterface $factory = null)
     {
-        if (null === $client) {
-            @trigger_error('Not passing a BuzzClientInterface to Browser constructor is deprecated.', E_USER_DEPRECATED);
-            $client = new FileGetContents();
-        }
-
-        if (null === $requestFactory) {
-            @trigger_error('Not passing a RequestFactory to Browser constructor is deprecated.', E_USER_DEPRECATED);
-            $requestFactory = new Psr17Factory();
-        } elseif (!$requestFactory instanceof RequestFactoryInterface && !$requestFactory instanceof RequestFactory) {
-            throw new InvalidArgumentException('$requestFactory not a valid RequestFactory');
-        }
-
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
+        $this->client = $client ?: new FileGetContents();
+        $this->factory = $factory ?: new Factory();
     }
 
-    public function get(string $url, array $headers = []): ResponseInterface
+    public function get($url, $headers = array())
     {
-        return $this->request('GET', $url, $headers);
+        return $this->call($url, RequestInterface::METHOD_GET, $headers);
     }
 
-    public function post(string $url, array $headers = [], string $body = ''): ResponseInterface
+    public function post($url, $headers = array(), $content = '')
     {
-        return $this->request('POST', $url, $headers, $body);
+        return $this->call($url, RequestInterface::METHOD_POST, $headers, $content);
     }
 
-    public function head(string $url, array  $headers = []): ResponseInterface
+    public function head($url, $headers = array())
     {
-        return $this->request('HEAD', $url, $headers);
+        return $this->call($url, RequestInterface::METHOD_HEAD, $headers);
     }
 
-    public function patch(string $url, array  $headers = [], string $body = ''): ResponseInterface
+    public function patch($url, $headers = array(), $content = '')
     {
-        return $this->request('PATCH', $url, $headers, $body);
+        return $this->call($url, RequestInterface::METHOD_PATCH, $headers, $content);
     }
 
-    public function put(string $url, array  $headers = [], string $body = ''): ResponseInterface
+    public function put($url, $headers = array(), $content = '')
     {
-        return $this->request('PUT', $url, $headers, $body);
+        return $this->call($url, RequestInterface::METHOD_PUT, $headers, $content);
     }
 
-    public function delete(string $url, array  $headers = [], string $body = ''): ResponseInterface
+    public function delete($url, $headers = array(), $content = '')
     {
-        return $this->request('DELETE', $url, $headers, $body);
+        return $this->call($url, RequestInterface::METHOD_DELETE, $headers, $content);
     }
 
     /**
      * Sends a request.
      *
-     * @param string $method  The request method to use
      * @param string $url     The URL to call
+     * @param string $method  The request method to use
      * @param array  $headers An array of request headers
-     * @param string $body    The request content
+     * @param string $content The request content
      *
-     * @return ResponseInterface The response object
+     * @return MessageInterface The response object
      */
-    public function request(string $method, string $url, array $headers = [], string $body = ''): ResponseInterface
+    public function call($url, $method, $headers = array(), $content = '')
     {
-        $request = $this->createRequest($method, $url, $headers, $body);
+        $request = $this->factory->createRequest($method);
 
-        return $this->sendRequest($request);
+        if (!$url instanceof Url) {
+            $url = new Url($url);
+        }
+
+        $url->applyToRequest($request);
+
+        $request->addHeaders($headers);
+        $request->setContent($content);
+
+        return $this->send($request);
     }
 
     /**
-     * Submit a form.
+     * Sends a form request.
      *
-     * @throws ClientException
-     * @throws LogicException
-     * @throws InvalidArgumentException
+     * @param string $url     The URL to submit to
+     * @param array  $fields  An array of fields
+     * @param string $method  The request method to use
+     * @param array  $headers An array of request headers
+     *
+     * @return MessageInterface The response object
      */
-    public function submitForm(string $url, array $fields, string $method = 'POST', array $headers = []): ResponseInterface
+    public function submit($url, array $fields, $method = RequestInterface::METHOD_POST, $headers = array())
     {
-        $body = [];
-        $files = '';
-        $boundary = uniqid('', true);
-        foreach ($fields as $name => $field) {
-            if (!isset($field['path'])) {
-                $body[$name] = $field;
-            } else {
-                // This is a file
-                $fileContent = file_get_contents($field['path']);
-                $files .= $this->prepareMultipart($name, $fileContent, $boundary, $field);
-            }
+        $request = $this->factory->createFormRequest();
+
+        if (!$url instanceof Url) {
+            $url = new Url($url);
         }
 
-        if (empty($files)) {
-            $headers['Content-Type'] = 'application/x-www-form-urlencoded';
-            $body = http_build_query($body);
-        } else {
-            $headers['Content-Type'] = 'multipart/form-data; boundary="'.$boundary.'"';
+        $url->applyToRequest($request);
 
-            foreach ($body as $name => $value) {
-                $files .= $this->prepareMultipart($name, $value, $boundary);
-            }
-            $body = "$files--{$boundary}--\r\n";
-        }
+        $request->addHeaders($headers);
+        $request->setMethod($method);
+        $request->setFields($fields);
 
-        $request = $this->createRequest($method, $url, $headers, $body);
-
-        return $this->sendRequest($request);
+        return $this->send($request);
     }
 
     /**
-     * Send a PSR7 request.
+     * Sends a request.
      *
-     * @throws ClientException
-     * @throws LogicException
-     * @throws InvalidArgumentException
-     */
-    public function sendRequest(RequestInterface $request, array $options = []): ResponseInterface
-    {
-        $chain = $this->createMiddlewareChain($this->middlewares, function (RequestInterface $request, callable $responseChain) use ($options) {
-            $response = $this->client->sendRequest($request, $options);
-            $responseChain($request, $response);
-        }, function (RequestInterface $request, ResponseInterface $response) {
-            $this->lastRequest = $request;
-            $this->lastResponse = $response;
-        });
-
-        // Call the chain
-        $chain($request);
-
-        return $this->lastResponse;
-    }
-
-    /**
-     * @param MiddlewareInterface[] $middlewares
-     * @param callable              $requestChainLast
-     * @param callable              $responseChainLast
+     * @param RequestInterface $request  A request object
+     * @param MessageInterface $response A response object
      *
-     * @return callable
+     * @return MessageInterface The response
      */
-    private function createMiddlewareChain(array $middlewares, callable $requestChainLast, callable $responseChainLast): callable
+    public function send(RequestInterface $request, MessageInterface $response = null)
     {
-        $responseChainNext = $responseChainLast;
-
-        // Build response chain
-        /** @var MiddlewareInterface $middleware */
-        foreach ($middlewares as $middleware) {
-            $lastCallable = function (RequestInterface $request, ResponseInterface $response) use ($middleware, $responseChainNext) {
-                return $middleware->handleResponse($request, $response, $responseChainNext);
-            };
-
-            $responseChainNext = $lastCallable;
+        if (null === $response) {
+            $response = $this->factory->createResponse();
         }
 
-        $requestChainLast = function (RequestInterface $request) use ($requestChainLast, $responseChainNext) {
-            // Send the actual request and get the response
-            $requestChainLast($request, $responseChainNext);
-        };
-
-        $middlewares = array_reverse($middlewares);
-
-        // Build request chain
-        $requestChainNext = $requestChainLast;
-        /** @var MiddlewareInterface $middleware */
-        foreach ($middlewares as $middleware) {
-            $lastCallable = function (RequestInterface $request) use ($middleware, $requestChainNext) {
-                return $middleware->handleRequest($request, $requestChainNext);
-            };
-
-            $requestChainNext = $lastCallable;
+        if ($this->listener) {
+            $this->listener->preSend($request);
         }
 
-        return $requestChainNext;
+        $this->client->send($request, $response);
+
+        $this->lastRequest = $request;
+        $this->lastResponse = $response;
+
+        if ($this->listener) {
+            $this->listener->postSend($request, $response);
+        }
+
+        return $response;
     }
 
-    public function getLastRequest(): ?RequestInterface
+    public function getLastRequest()
     {
         return $this->lastRequest;
     }
 
-    public function getLastResponse(): ?ResponseInterface
+    public function getLastResponse()
     {
         return $this->lastResponse;
     }
 
-    public function getClient(): BuzzClientInterface
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
+    public function getClient()
     {
         return $this->client;
     }
 
-    /**
-     * Add a new middleware to the stack.
-     *
-     * @param MiddlewareInterface $middleware
-     */
-    public function addMiddleware(MiddlewareInterface $middleware): void
+    public function setMessageFactory(FactoryInterface $factory)
     {
-        $this->middlewares[] = $middleware;
+        $this->factory = $factory;
     }
 
-    private function prepareMultipart(string $name, string $content, string $boundary, array $data = []): string
+    public function getMessageFactory()
     {
-        $output = '';
-        $fileHeaders = [];
-
-        // Set a default content-disposition header
-        $fileHeaders['Content-Disposition'] = sprintf('form-data; name="%s"', $name);
-        if (isset($data['filename'])) {
-            $fileHeaders['Content-Disposition'] .= sprintf('; filename="%s"', $data['filename']);
-        }
-
-        // Set a default content-length header
-        if ($length = \strlen($content)) {
-            $fileHeaders['Content-Length'] = (string) $length;
-        }
-
-        if (isset($data['contentType'])) {
-            $fileHeaders['Content-Type'] = $data['contentType'];
-        }
-
-        // Add start
-        $output .= "--$boundary\r\n";
-        foreach ($fileHeaders as $key => $value) {
-            $output .= sprintf("%s: %s\r\n", $key, $value);
-        }
-        $output .= "\r\n";
-        $output .= $content;
-        $output .= "\r\n";
-
-        return $output;
+        return $this->factory;
     }
 
-    protected function createRequest(string $method, string $url, array $headers, $body): RequestInterface
+    public function setListener(ListenerInterface $listener)
     {
-        $request = $this->requestFactory->createRequest($method, $url);
-        $request->getBody()->write($body);
-        foreach ($headers as $name => $value) {
-            $request = $request->withAddedHeader($name, $value);
-        }
+        $this->listener = $listener;
+    }
 
-        return $request;
+    public function getListener()
+    {
+        return $this->listener;
+    }
+
+    public function addListener(ListenerInterface $listener)
+    {
+        if (!$this->listener) {
+            $this->listener = $listener;
+        } elseif ($this->listener instanceof ListenerChain) {
+            $this->listener->addListener($listener);
+        } else {
+            $this->listener = new ListenerChain(array(
+                $this->listener,
+                $listener,
+            ));
+        }
     }
 }
