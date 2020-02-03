@@ -21,16 +21,15 @@ use Symfony\Component\PropertyAccess\PropertyPathInterface;
 class UnexpectedTypeException extends RuntimeException
 {
     /**
-     * @param mixed                 $value     The unexpected value found while traversing property path
-     * @param PropertyPathInterface $path      The property path
-     * @param int                   $pathIndex The property path index when the unexpected value was found
+     * @param mixed $value     The unexpected value found while traversing property path
+     * @param int   $pathIndex The property path index when the unexpected value was found
      */
     public function __construct($value, PropertyPathInterface $path, int $pathIndex)
     {
         $message = sprintf(
             'PropertyAccessor requires a graph of objects or arrays to operate on, '.
             'but it found type "%s" while trying to traverse path "%s" at property "%s".',
-            gettype($value),
+            \gettype($value),
             (string) $path,
             $path->getElement($pathIndex)
         );

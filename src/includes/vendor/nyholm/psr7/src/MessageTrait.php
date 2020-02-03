@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nyholm\Psr7;
 
-use Nyholm\Psr7\Factory\StreamFactory;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -12,6 +11,9 @@ use Psr\Http\Message\StreamInterface;
  *
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author Martijn van der Ven <martijn@vanderven.se>
+ *
+ * @internal should not be used outside of Nyholm/Psr7 as it does not fall under our BC promise
  */
 trait MessageTrait
 {
@@ -24,7 +26,7 @@ trait MessageTrait
     /** @var string */
     private $protocol = '1.1';
 
-    /** @var StreamInterface */
+    /** @var StreamInterface|null */
     private $stream;
 
     public function getProtocolVersion(): string
@@ -51,13 +53,12 @@ trait MessageTrait
 
     public function hasHeader($header): bool
     {
-        return isset($this->headerNames[strtolower($header)]);
+        return isset($this->headerNames[\strtolower($header)]);
     }
 
     public function getHeader($header): array
     {
-        $header = strtolower($header);
-
+        $header = \strtolower($header);
         if (!isset($this->headerNames[$header])) {
             return [];
         }
@@ -69,29 +70,13 @@ trait MessageTrait
 
     public function getHeaderLine($header): string
     {
-        return implode(', ', $this->getHeader($header));
+        return \implode(', ', $this->getHeader($header));
     }
 
     public function withHeader($header, $value): self
     {
-        if (!is_array($value)) {
-            $value = [$value];
-        } elseif (empty($value)) {
-            throw new \InvalidArgumentException('Header values must be non-empty strings');
-        }
-
-        if (!is_string($header) || empty($header)) {
-            throw new \InvalidArgumentException('Header name must be non-empty strings');
-        }
-
-        foreach ($value as $v) {
-            if (!is_string($v) || '' === trim($v)) {
-                throw new \InvalidArgumentException('Header values must be non-empty strings');
-            }
-        }
-
-        $value = $this->trimHeaderValues($value);
-        $normalized = strtolower($header);
+        $value = $this->validateAndTrimHeader($header, $value);
+        $normalized = \strtolower($header);
 
         $new = clone $this;
         if (isset($new->headerNames[$normalized])) {
@@ -105,49 +90,24 @@ trait MessageTrait
 
     public function withAddedHeader($header, $value): self
     {
-        if (!is_array($value)) {
-            $value = [$value];
-        } elseif (!empty($value)) {
-            $value = array_values($value);
-        } else {
-            throw new \InvalidArgumentException('Header values must be non-empty strings');
+        if (!\is_string($header) || '' === $header) {
+            throw new \InvalidArgumentException('Header name must be an RFC 7230 compatible string.');
         }
-
-        if (!is_string($header) || empty($header)) {
-            throw new \InvalidArgumentException('Header name must be non-empty strings');
-        }
-
-        foreach ($value as $v) {
-            if (!is_string($v) || '' === trim($v)) {
-                throw new \InvalidArgumentException('Header values must be non-empty strings');
-            }
-        }
-
-        $value = $this->trimHeaderValues($value);
-        $normalized = strtolower($header);
 
         $new = clone $this;
-        if (isset($new->headerNames[$normalized])) {
-            $header = $this->headerNames[$normalized];
-            $new->headers[$header] = array_merge($this->headers[$header], $value);
-        } else {
-            $new->headerNames[$normalized] = $header;
-            $new->headers[$header] = $value;
-        }
+        $new->setHeaders([$header => $value]);
 
         return $new;
     }
 
     public function withoutHeader($header): self
     {
-        $normalized = strtolower($header);
-
+        $normalized = \strtolower($header);
         if (!isset($this->headerNames[$normalized])) {
             return $this;
         }
 
         $header = $this->headerNames[$normalized];
-
         $new = clone $this;
         unset($new->headers[$header], $new->headerNames[$normalized]);
 
@@ -156,8 +116,8 @@ trait MessageTrait
 
     public function getBody(): StreamInterface
     {
-        if (!$this->stream) {
-            $this->stream = (new StreamFactory())->createStream('');
+        if (null === $this->stream) {
+            $this->stream = Stream::create('');
         }
 
         return $this->stream;
@@ -177,17 +137,12 @@ trait MessageTrait
 
     private function setHeaders(array $headers): void
     {
-        $this->headerNames = $this->headers = [];
         foreach ($headers as $header => $value) {
-            if (!is_array($value)) {
-                $value = [$value];
-            }
-
-            $value = $this->trimHeaderValues($value);
-            $normalized = strtolower($header);
+            $value = $this->validateAndTrimHeader($header, $value);
+            $normalized = \strtolower($header);
             if (isset($this->headerNames[$normalized])) {
                 $header = $this->headerNames[$normalized];
-                $this->headers[$header] = array_merge($this->headers[$header], $value);
+                $this->headers[$header] = \array_merge($this->headers[$header], $value);
             } else {
                 $this->headerNames[$normalized] = $header;
                 $this->headers[$header] = $value;
@@ -196,23 +151,52 @@ trait MessageTrait
     }
 
     /**
-     * Trims whitespace from the header values.
+     * Make sure the header complies with RFC 7230.
      *
-     * Spaces and tabs ought to be excluded by parsers when extracting the field value from a header field.
+     * Header names must be a non-empty string consisting of token characters.
+     *
+     * Header values must be strings consisting of visible characters with all optional
+     * leading and trailing whitespace stripped. This method will always strip such
+     * optional whitespace. Note that the method does not allow folding whitespace within
+     * the values as this was deprecated for almost all instances by the RFC.
      *
      * header-field = field-name ":" OWS field-value OWS
+     * field-name   = 1*( "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "." / "^"
+     *              / "_" / "`" / "|" / "~" / %x30-39 / ( %x41-5A / %x61-7A ) )
      * OWS          = *( SP / HTAB )
-     *
-     * @param string[] $values Header values
-     *
-     * @return string[] Trimmed header values
+     * field-value  = *( ( %x21-7E / %x80-FF ) [ 1*( SP / HTAB ) ( %x21-7E / %x80-FF ) ] )
      *
      * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
      */
-    private function trimHeaderValues(array $values): array
+    private function validateAndTrimHeader($header, $values): array
     {
-        return array_map(function ($value) {
-            return trim($value, " \t");
-        }, $values);
+        if (!\is_string($header) || 1 !== \preg_match("@^[!#$%&'*+.^_`|~0-9A-Za-z-]+$@", $header)) {
+            throw new \InvalidArgumentException('Header name must be an RFC 7230 compatible string.');
+        }
+
+        if (!\is_array($values)) {
+            // This is simple, just one value.
+            if ((!\is_numeric($values) && !\is_string($values)) || 1 !== \preg_match("@^[ \t\x21-\x7E\x80-\xFF]*$@", (string) $values)) {
+                throw new \InvalidArgumentException('Header values must be RFC 7230 compatible strings.');
+            }
+
+            return [\trim((string) $values, " \t")];
+        }
+
+        if (empty($values)) {
+            throw new \InvalidArgumentException('Header values must be a string or an array of strings, empty array given.');
+        }
+
+        // Assert Non empty array
+        $returnValues = [];
+        foreach ($values as $v) {
+            if ((!\is_numeric($v) && !\is_string($v)) || 1 !== \preg_match("@^[ \t\x21-\x7E\x80-\xFF]*$@", (string) $v)) {
+                throw new \InvalidArgumentException('Header values must be RFC 7230 compatible strings.');
+            }
+
+            $returnValues[] = \trim((string) $v, " \t");
+        }
+
+        return $returnValues;
     }
 }

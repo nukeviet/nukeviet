@@ -6,7 +6,7 @@ namespace Buzz\Message;
 
 use Buzz\Exception\InvalidArgumentException;
 use Http\Message\ResponseFactory as HTTPlugResponseFactory;
-use Interop\Http\Factory\ResponseFactoryInterface as InteropResponseFactory;
+use Psr\Http\Message\ResponseFactoryInterface as PsrResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -20,11 +20,11 @@ class ResponseBuilder
     private $response;
 
     /**
-     * @param HTTPlugResponseFactory|InteropResponseFactory $responseFactory
+     * @param HTTPlugResponseFactory|PsrResponseFactory $responseFactory
      */
     public function __construct($responseFactory)
     {
-        if (!$responseFactory instanceof HTTPlugResponseFactory && !$responseFactory instanceof InteropResponseFactory) {
+        if (!$responseFactory instanceof HTTPlugResponseFactory && !$responseFactory instanceof PsrResponseFactory) {
             throw new InvalidArgumentException('First parameter to ResponseBuilder must be a response factory');
         }
 
@@ -34,7 +34,7 @@ class ResponseBuilder
     public function setStatus(string $input): void
     {
         $parts = explode(' ', $input, 3);
-        if (count($parts) < 2 || 0 !== strpos(strtolower($parts[0]), 'http/')) {
+        if (\count($parts) < 2 || 0 !== strpos(strtolower($parts[0]), 'http/')) {
             throw new InvalidArgumentException(sprintf('"%s" is not a valid HTTP status line', $input));
         }
 

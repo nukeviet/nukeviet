@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -15,9 +17,8 @@ class BinaryWriter extends AbstractWriter
 {
     public function writeString(QrCodeInterface $qrCode): string
     {
-        $data = $this->getData($qrCode);
-
         $rows = [];
+        $data = $qrCode->getData();
         foreach ($data['matrix'] as $row) {
             $values = '';
             foreach ($row as $value) {

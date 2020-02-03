@@ -6,6 +6,9 @@ namespace Buzz\Client;
 
 use Buzz\Configuration\ParameterBag;
 use Buzz\Exception\InvalidArgumentException;
+use Http\Message\ResponseFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractClient
@@ -20,10 +23,22 @@ abstract class AbstractClient
      */
     private $options;
 
-    public function __construct(array $options = [])
+    /**
+     * @var ResponseFactoryInterface|ResponseFactory
+     */
+    protected $responseFactory;
+
+    public function __construct(array $options = [], $responseFactory = null)
     {
         $this->options = new ParameterBag();
         $this->options = $this->doValidateOptions($options);
+        if (null === $responseFactory) {
+            @trigger_error('Not passing a ResponseFactory to Buzz client constructor is deprecated.', E_USER_DEPRECATED);
+            $responseFactory = new Psr17Factory();
+        } elseif (!$responseFactory instanceof ResponseFactoryInterface && !$responseFactory instanceof ResponseFactory) {
+            throw new InvalidArgumentException('$responseFactory not a valid ResponseFactory');
+        }
+        $this->responseFactory = $responseFactory;
     }
 
     protected function getOptionsResolver(): OptionsResolver

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -9,6 +11,7 @@
 
 namespace Endroid\QrCode;
 
+use BaconQrCode\Encoder\Encoder;
 use Endroid\QrCode\Exception\InvalidPathException;
 use Endroid\QrCode\Exception\UnsupportedExtensionException;
 use Endroid\QrCode\Writer\WriterInterface;
@@ -19,9 +22,13 @@ class QrCode implements QrCodeInterface
 
     private $text;
 
+    /** @var int */
     private $size = 300;
+
+    /** @var int */
     private $margin = 10;
 
+    /** @var array */
     private $foregroundColor = [
         'r' => 0,
         'g' => 0,
@@ -29,6 +36,7 @@ class QrCode implements QrCodeInterface
         'a' => 0,
     ];
 
+    /** @var array */
     private $backgroundColor = [
         'r' => 255,
         'g' => 255,
@@ -36,17 +44,35 @@ class QrCode implements QrCodeInterface
         'a' => 0,
     ];
 
+    /** @var string */
     private $encoding = 'UTF-8';
+
+    /** @var bool */
     private $roundBlockSize = true;
+
     private $errorCorrectionLevel;
 
+    /** @var string */
     private $logoPath;
+
+    /** @var int|null */
     private $logoWidth;
 
+    /** @var int|null */
+    private $logoHeight;
+
+    /** @var string */
     private $label;
+
+    /** @var int */
     private $labelFontSize = 16;
+
+    /** @var string */
     private $labelFontPath = self::LABEL_FONT_PATH_DEFAULT;
+
     private $labelAlignment;
+
+    /** @var array */
     private $labelMargin = [
         't' => 0,
         'r' => 10,
@@ -54,16 +80,26 @@ class QrCode implements QrCodeInterface
         'l' => 10,
     ];
 
+    /** @var WriterRegistryInterface */
     private $writerRegistry;
+
+    /** @var WriterInterface|null */
     private $writer;
+
+    /** @var array */
+    private $writerOptions = [];
+
+    /** @var bool */
     private $validateResult = false;
 
     public function __construct(string $text = '')
     {
         $this->text = $text;
 
-        $this->errorCorrectionLevel = new ErrorCorrectionLevel(ErrorCorrectionLevel::LOW);
-        $this->labelAlignment = new LabelAlignment(LabelAlignment::CENTER);
+        $this->errorCorrectionLevel = ErrorCorrectionLevel::LOW();
+        $this->labelAlignment = LabelAlignment::CENTER();
+
+        $this->createWriterRegistry();
     }
 
     public function setText(string $text): void
@@ -102,6 +138,10 @@ class QrCode implements QrCodeInterface
             $foregroundColor['a'] = 0;
         }
 
+        foreach ($foregroundColor as &$color) {
+            $color = intval($color);
+        }
+
         $this->foregroundColor = $foregroundColor;
     }
 
@@ -114,6 +154,10 @@ class QrCode implements QrCodeInterface
     {
         if (!isset($backgroundColor['a'])) {
             $backgroundColor['a'] = 0;
+        }
+
+        foreach ($backgroundColor as &$color) {
+            $color = intval($color);
         }
 
         $this->backgroundColor = $backgroundColor;
@@ -144,21 +188,21 @@ class QrCode implements QrCodeInterface
         return $this->roundBlockSize;
     }
 
-    public function setErrorCorrectionLevel(string $errorCorrectionLevel): void
+    public function setErrorCorrectionLevel(ErrorCorrectionLevel $errorCorrectionLevel): void
     {
-        $this->errorCorrectionLevel = new ErrorCorrectionLevel($errorCorrectionLevel);
+        $this->errorCorrectionLevel = $errorCorrectionLevel;
     }
 
-    public function getErrorCorrectionLevel(): string
+    public function getErrorCorrectionLevel(): ErrorCorrectionLevel
     {
-        return $this->errorCorrectionLevel->getValue();
+        return $this->errorCorrectionLevel;
     }
 
     public function setLogoPath(string $logoPath): void
     {
         $logoPath = realpath($logoPath);
 
-        if (!is_file($logoPath)) {
+        if (false === $logoPath || !is_file($logoPath)) {
             throw new InvalidPathException('Invalid logo path: '.$logoPath);
         }
 
@@ -170,6 +214,12 @@ class QrCode implements QrCodeInterface
         return $this->logoPath;
     }
 
+    public function setLogoSize(int $logoWidth, int $logoHeight = null): void
+    {
+        $this->logoWidth = $logoWidth;
+        $this->logoHeight = $logoHeight;
+    }
+
     public function setLogoWidth(int $logoWidth): void
     {
         $this->logoWidth = $logoWidth;
@@ -178,6 +228,16 @@ class QrCode implements QrCodeInterface
     public function getLogoWidth(): ?int
     {
         return $this->logoWidth;
+    }
+
+    public function setLogoHeight(int $logoHeight): void
+    {
+        $this->logoHeight = $logoHeight;
+    }
+
+    public function getLogoHeight(): ?int
+    {
+        return $this->logoHeight;
     }
 
     public function setLabel(string $label, int $labelFontSize = null, string $labelFontPath = null, string $labelAlignment = null, array $labelMargin = null): void
@@ -211,23 +271,23 @@ class QrCode implements QrCodeInterface
         $this->labelFontSize = $labelFontSize;
     }
 
-    public function getLabelFontSize(): ?int
+    public function getLabelFontSize(): int
     {
         return $this->labelFontSize;
     }
 
     public function setLabelFontPath(string $labelFontPath): void
     {
-        $labelFontPath = realpath($labelFontPath);
+        $resolvedLabelFontPath = (string) realpath($labelFontPath);
 
-        if (!is_file($labelFontPath)) {
+        if (!is_file($resolvedLabelFontPath)) {
             throw new InvalidPathException('Invalid label font path: '.$labelFontPath);
         }
 
-        $this->labelFontPath = $labelFontPath;
+        $this->labelFontPath = $resolvedLabelFontPath;
     }
 
-    public function getLabelFontPath(): ?string
+    public function getLabelFontPath(): string
     {
         return $this->labelFontPath;
     }
@@ -237,7 +297,7 @@ class QrCode implements QrCodeInterface
         $this->labelAlignment = new LabelAlignment($labelAlignment);
     }
 
-    public function getLabelAlignment(): ?string
+    public function getLabelAlignment(): string
     {
         return $this->labelAlignment->getValue();
     }
@@ -247,7 +307,7 @@ class QrCode implements QrCodeInterface
         $this->labelMargin = array_merge($this->labelMargin, $labelMargin);
     }
 
-    public function getLabelMargin(): ?array
+    public function getLabelMargin(): array
     {
         return $this->labelMargin;
     }
@@ -264,10 +324,6 @@ class QrCode implements QrCodeInterface
 
     public function getWriter(string $name = null): WriterInterface
     {
-        if (!$this->writerRegistry instanceof WriterRegistryInterface) {
-            $this->createWriterRegistry();
-        }
-
         if (!is_null($name)) {
             return $this->writerRegistry->getWriter($name);
         }
@@ -279,13 +335,23 @@ class QrCode implements QrCodeInterface
         return $this->writerRegistry->getDefaultWriter();
     }
 
-    private function createWriterRegistry()
+    public function setWriterOptions(array $writerOptions): void
+    {
+        $this->writerOptions = $writerOptions;
+    }
+
+    public function getWriterOptions(): array
+    {
+        return $this->writerOptions;
+    }
+
+    private function createWriterRegistry(): void
     {
         $this->writerRegistry = new WriterRegistry();
         $this->writerRegistry->loadDefaultWriters();
     }
 
-    public function setWriterByName(string $name)
+    public function setWriterByName(string $name): void
     {
         $this->writer = $this->getWriter($name);
     }
@@ -338,5 +404,42 @@ class QrCode implements QrCodeInterface
     public function getValidateResult(): bool
     {
         return $this->validateResult;
+    }
+
+    public function getData(): array
+    {
+        $baconErrorCorrectionLevel = $this->errorCorrectionLevel->toBaconErrorCorrectionLevel();
+
+        $baconQrCode = Encoder::encode($this->text, $baconErrorCorrectionLevel, $this->encoding);
+
+        $baconMatrix = $baconQrCode->getMatrix();
+
+        $matrix = [];
+        $columnCount = $baconMatrix->getWidth();
+        $rowCount = $baconMatrix->getHeight();
+        for ($rowIndex = 0; $rowIndex < $rowCount; ++$rowIndex) {
+            $matrix[$rowIndex] = [];
+            for ($columnIndex = 0; $columnIndex < $columnCount; ++$columnIndex) {
+                $matrix[$rowIndex][$columnIndex] = $baconMatrix->get($columnIndex, $rowIndex);
+            }
+        }
+
+        $data = ['matrix' => $matrix];
+        $data['block_count'] = count($matrix[0]);
+        $data['block_size'] = $this->size / $data['block_count'];
+        if ($this->roundBlockSize) {
+            $data['block_size'] = intval(floor($data['block_size']));
+        }
+        $data['inner_width'] = $data['block_size'] * $data['block_count'];
+        $data['inner_height'] = $data['block_size'] * $data['block_count'];
+        $data['outer_width'] = $this->size + 2 * $this->margin;
+        $data['outer_height'] = $this->size + 2 * $this->margin;
+        $data['margin_left'] = ($data['outer_width'] - $data['inner_width']) / 2;
+        if ($this->roundBlockSize) {
+            $data['margin_left'] = intval(floor($data['margin_left']));
+        }
+        $data['margin_right'] = $data['outer_width'] - $data['inner_width'] - $data['margin_left'];
+
+        return $data;
     }
 }

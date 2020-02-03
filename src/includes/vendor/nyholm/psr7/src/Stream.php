@@ -9,10 +9,11 @@ use Psr\Http\Message\StreamInterface;
 /**
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author Martijn van der Ven <martijn@vanderven.se>
  */
-class Stream implements StreamInterface
+final class Stream implements StreamInterface
 {
-    /** @var resource A resource reference */
+    /** @var resource|null A resource reference */
     private $stream;
 
     /** @var bool */
@@ -24,14 +25,14 @@ class Stream implements StreamInterface
     /** @var bool */
     private $writable;
 
-    /** @var array|mixed|null|void */
+    /** @var array|mixed|void|null */
     private $uri;
 
-    /** @var int */
+    /** @var int|null */
     private $size;
 
     /** @var array Hash of readable and writable stream types */
-    private static $readWriteHash = [
+    private const READ_WRITE_HASH = [
         'read' => [
             'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
             'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
@@ -51,39 +52,39 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param resource $resource
+     * Creates a new PSR-7 stream.
      *
-     * @return Stream
+     * @param string|resource|StreamInterface $body
+     *
+     * @return StreamInterface
+     *
+     * @throws \InvalidArgumentException
      */
-    public static function createFromResource($resource): self
+    public static function create($body = ''): StreamInterface
     {
-        if (!is_resource($resource)) {
-            throw new \InvalidArgumentException('Stream must be a resource');
+        if ($body instanceof StreamInterface) {
+            return $body;
         }
 
-        $obj = new self();
-        $obj->stream = $resource;
-        $meta = stream_get_meta_data($obj->stream);
-        $obj->seekable = $meta['seekable'];
-        $obj->readable = isset(self::$readWriteHash['read'][$meta['mode']]);
-        $obj->writable = isset(self::$readWriteHash['write'][$meta['mode']]);
-        $obj->uri = $obj->getMetadata('uri');
+        if (\is_string($body)) {
+            $resource = \fopen('php://temp', 'rw+');
+            \fwrite($resource, $body);
+            $body = $resource;
+        }
 
-        return $obj;
-    }
+        if (\is_resource($body)) {
+            $new = new self();
+            $new->stream = $body;
+            $meta = \stream_get_meta_data($new->stream);
+            $new->seekable = $meta['seekable'] && 0 === \fseek($new->stream, 0, \SEEK_CUR);
+            $new->readable = isset(self::READ_WRITE_HASH['read'][$meta['mode']]);
+            $new->writable = isset(self::READ_WRITE_HASH['write'][$meta['mode']]);
+            $new->uri = $new->getMetadata('uri');
 
-    /**
-     * @param string $content
-     *
-     * @return Stream
-     */
-    public static function create(string $content): self
-    {
-        $resource = fopen('php://temp', 'rw+');
-        $stream = self::createFromResource($resource);
-        $stream->write($content);
+            return $new;
+        }
 
-        return $stream;
+        throw new \InvalidArgumentException('First argument to Stream::create() must be a string, resource or StreamInterface.');
     }
 
     /**
@@ -110,8 +111,8 @@ class Stream implements StreamInterface
     public function close(): void
     {
         if (isset($this->stream)) {
-            if (is_resource($this->stream)) {
-                fclose($this->stream);
+            if (\is_resource($this->stream)) {
+                \fclose($this->stream);
             }
             $this->detach();
         }
@@ -143,10 +144,10 @@ class Stream implements StreamInterface
 
         // Clear the stat cache if the stream has a URI
         if ($this->uri) {
-            clearstatcache(true, $this->uri);
+            \clearstatcache(true, $this->uri);
         }
 
-        $stats = fstat($this->stream);
+        $stats = \fstat($this->stream);
         if (isset($stats['size'])) {
             $this->size = $stats['size'];
 
@@ -158,9 +159,7 @@ class Stream implements StreamInterface
 
     public function tell(): int
     {
-        $result = ftell($this->stream);
-
-        if (false === $result) {
+        if (false === $result = \ftell($this->stream)) {
             throw new \RuntimeException('Unable to determine stream position');
         }
 
@@ -169,7 +168,7 @@ class Stream implements StreamInterface
 
     public function eof(): bool
     {
-        return !$this->stream || feof($this->stream);
+        return !$this->stream || \feof($this->stream);
     }
 
     public function isSeekable(): bool
@@ -177,12 +176,14 @@ class Stream implements StreamInterface
         return $this->seekable;
     }
 
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         if (!$this->seekable) {
             throw new \RuntimeException('Stream is not seekable');
-        } elseif (fseek($this->stream, $offset, $whence) === -1) {
-            throw new \RuntimeException('Unable to seek to stream position '.$offset.' with whence '.var_export($whence, true));
+        }
+
+        if (-1 === \fseek($this->stream, $offset, $whence)) {
+            throw new \RuntimeException('Unable to seek to stream position ' . $offset . ' with whence ' . \var_export($whence, true));
         }
     }
 
@@ -204,9 +205,8 @@ class Stream implements StreamInterface
 
         // We can't know the size after writing anything
         $this->size = null;
-        $result = fwrite($this->stream, $string);
 
-        if (false === $result) {
+        if (false === $result = \fwrite($this->stream, $string)) {
             throw new \RuntimeException('Unable to write to stream');
         }
 
@@ -224,7 +224,7 @@ class Stream implements StreamInterface
             throw new \RuntimeException('Cannot read from non-readable stream');
         }
 
-        return fread($this->stream, $length);
+        return \fread($this->stream, $length);
     }
 
     public function getContents(): string
@@ -233,9 +233,7 @@ class Stream implements StreamInterface
             throw new \RuntimeException('Unable to read stream contents');
         }
 
-        $contents = stream_get_contents($this->stream);
-
-        if (false === $contents) {
+        if (false === $contents = \stream_get_contents($this->stream)) {
             throw new \RuntimeException('Unable to read stream contents');
         }
 
@@ -246,12 +244,14 @@ class Stream implements StreamInterface
     {
         if (!isset($this->stream)) {
             return $key ? null : [];
-        } elseif (null === $key) {
-            return stream_get_meta_data($this->stream);
         }
 
-        $meta = stream_get_meta_data($this->stream);
+        $meta = \stream_get_meta_data($this->stream);
 
-        return isset($meta[$key]) ? $meta[$key] : null;
+        if (null === $key) {
+            return $meta;
+        }
+
+        return $meta[$key] ?? null;
     }
 }

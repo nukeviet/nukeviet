@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -9,41 +11,35 @@
 
 namespace Endroid\QrCode\Writer;
 
-use BaconQrCode\Common\ErrorCorrectionLevel;
-use BaconQrCode\Encoder\Encoder;
+use Endroid\QrCode\Exception\GenerateImageException;
+use Endroid\QrCode\Exception\InvalidLogoException;
+use Endroid\QrCode\Exception\MissingExtensionException;
 use Endroid\QrCode\QrCodeInterface;
 
 abstract class AbstractWriter implements WriterInterface
 {
-    protected function getData(QrCodeInterface $qrCode): array
+    protected function getMimeType(string $path): string
     {
-        $name = strtoupper(substr($qrCode->getErrorCorrectionLevel(), 0, 1));
-        $errorCorrectionLevel = constant('BaconQrCode\Common\ErrorCorrectionLevel::'.$name);
-
-        $baconQrCode = Encoder::encode($qrCode->getText(), new ErrorCorrectionLevel($errorCorrectionLevel), $qrCode->getEncoding());
-
-        $matrix = $baconQrCode->getMatrix()->getArray()->toArray();
-        foreach ($matrix as &$row) {
-            $row = $row->toArray();
+        if (!function_exists('mime_content_type')) {
+            throw new MissingExtensionException('You need the ext-fileinfo extension to determine logo mime type');
         }
 
-        $data = ['matrix' => $matrix];
-        $data['block_count'] = count($matrix[0]);
-        $data['block_size'] = $qrCode->getSize() / $data['block_count'];
-        if ($qrCode->getRoundBlockSize()) {
-            $data['block_size'] = intval(floor($data['block_size']));
-        }
-        $data['inner_width'] = $data['block_size'] * $data['block_count'];
-        $data['inner_height'] = $data['block_size'] * $data['block_count'];
-        $data['outer_width'] = $qrCode->getSize() + 2 * $qrCode->getMargin();
-        $data['outer_height'] = $qrCode->getSize() + 2 * $qrCode->getMargin();
-        $data['margin_left'] = ($data['outer_width'] - $data['inner_width']) / 2;
-        if ($qrCode->getRoundBlockSize()) {
-            $data['margin_left'] = intval(floor($data['margin_left']));
-        }
-        $data['margin_right'] = $data['outer_width'] - $data['inner_width'] - $data['margin_left'];
+        $mimeType = mime_content_type($path);
 
-        return $data;
+        if (!is_string($mimeType)) {
+            throw new InvalidLogoException('Could not determine mime type');
+        }
+
+        if (!preg_match('#^image/#', $mimeType)) {
+            throw new GenerateImageException('Logo path is not an image');
+        }
+
+        // Passing mime type image/svg results in invisible images
+        if ('image/svg' === $mimeType) {
+            return 'image/svg+xml';
+        }
+
+        return $mimeType;
     }
 
     public function writeDataUri(QrCodeInterface $qrCode): string

@@ -11,8 +11,8 @@ use Buzz\Exception\InvalidArgumentException;
 use Buzz\Exception\LogicException;
 use Buzz\Middleware\MiddlewareInterface;
 use Http\Message\RequestFactory;
-use Interop\Http\Factory\RequestFactoryInterface;
-use Nyholm\Psr7\Factory\MessageFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -22,7 +22,7 @@ class Browser implements BuzzClientInterface
     private $client;
 
     /** @var RequestFactoryInterface|RequestFactory */
-    private $factory;
+    private $requestFactory;
 
     /**
      * @var MiddlewareInterface[]
@@ -35,10 +35,26 @@ class Browser implements BuzzClientInterface
     /** @var ResponseInterface */
     private $lastResponse;
 
-    public function __construct(BuzzClientInterface $client = null)
+    /**
+     * @param BuzzClientInterface|null                    $client
+     * @param RequestFactoryInterface|RequestFactory|null $requestFactory
+     */
+    public function __construct(BuzzClientInterface $client = null, $requestFactory = null)
     {
-        $this->client = $client ?: new FileGetContents();
-        $this->factory = new MessageFactory();
+        if (null === $client) {
+            @trigger_error('Not passing a BuzzClientInterface to Browser constructor is deprecated.', E_USER_DEPRECATED);
+            $client = new FileGetContents();
+        }
+
+        if (null === $requestFactory) {
+            @trigger_error('Not passing a RequestFactory to Browser constructor is deprecated.', E_USER_DEPRECATED);
+            $requestFactory = new Psr17Factory();
+        } elseif (!$requestFactory instanceof RequestFactoryInterface && !$requestFactory instanceof RequestFactory) {
+            throw new InvalidArgumentException('$requestFactory not a valid RequestFactory');
+        }
+
+        $this->client = $client;
+        $this->requestFactory = $requestFactory;
     }
 
     public function get(string $url, array $headers = []): ResponseInterface
@@ -229,7 +245,7 @@ class Browser implements BuzzClientInterface
         }
 
         // Set a default content-length header
-        if ($length = strlen($content)) {
+        if ($length = \strlen($content)) {
             $fileHeaders['Content-Length'] = (string) $length;
         }
 
@@ -251,7 +267,7 @@ class Browser implements BuzzClientInterface
 
     protected function createRequest(string $method, string $url, array $headers, $body): RequestInterface
     {
-        $request = $this->factory->createRequest($method, $url);
+        $request = $this->requestFactory->createRequest($method, $url);
         $request->getBody()->write($body);
         foreach ($headers as $name => $value) {
             $request = $request->withAddedHeader($name, $value);
