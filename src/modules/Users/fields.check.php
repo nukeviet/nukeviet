@@ -88,13 +88,16 @@ foreach ($array_field_config as $row_f) {
                     ]);
                 }
             } elseif ($row_f['match_type'] == 'email') {
-                if (($error = nv_check_valid_email($value)) != '') {
+                $error = nv_check_valid_email($value, true);
+                if ($error[0] != '') {
                     nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => $error
+                        'mess' => $error[0]
                     ]);
                 }
+                $value = $error[1];
+                $error = '';
             } elseif ($row_f['match_type'] == 'url') {
                 if (!nv_is_url($value)) {
                     nv_jsonOutput([

@@ -20,7 +20,7 @@ $menu_top = [
 
 define('NV_IS_FILE_THEMES', true);
 
-//Document
+// Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:themes';
 $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:themes:config';
 $array_url_instruction['setuplayout'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:themes:setuplayout';

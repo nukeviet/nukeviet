@@ -3,21 +3,18 @@
 <div id="socialList" class="hidden">
 <h3>{LANG.joinnow}</h3>
 <ul class="list-none socialList">
-	<!-- BEGIN: facebook -->
-	<li><a href="{DATA.facebook}" target="_blank"><i class="fa fa-facebook">&nbsp;</i></a></li>
-	<!-- END: facebook -->
-	<!-- BEGIN: google_plus -->
-	<li><a href="{DATA.google_plus}" target="_blank"><i class="fa fa-google-plus">&nbsp;</i></a></li>
-	<!-- END: google_plus -->
-	<!-- BEGIN: youtube -->
-	<li><a href="{DATA.youtube}" target="_blank"><i class="fa fa-youtube">&nbsp;</i></a></li>
-	<!-- END: youtube -->
-	<!-- BEGIN: twitter -->
-	<li><a href="{DATA.twitter}" target="_blank"><i class="fa fa-twitter">&nbsp;</i></a></li>
-	<!-- END: twitter -->
-	<!-- BEGIN: feeds -->
-	<li><a href="{FEEDS_HREF}"><i class="fa fa-rss">&nbsp;</i></a></li>
-	<!-- END: feeds -->
+    <!-- BEGIN: facebook -->
+    <li><a href="{DATA.facebook}" target="_blank"><i class="fa fa-facebook">&nbsp;</i></a></li>
+    <!-- END: facebook -->
+    <!-- BEGIN: youtube -->
+    <li><a href="{DATA.youtube}" target="_blank"><i class="fa fa-youtube">&nbsp;</i></a></li>
+    <!-- END: youtube -->
+    <!-- BEGIN: twitter -->
+    <li><a href="{DATA.twitter}" target="_blank"><i class="fa fa-twitter">&nbsp;</i></a></li>
+    <!-- END: twitter -->
+    <!-- BEGIN: feeds -->
+    <li><a href="{FEEDS_HREF}"><i class="fa fa-rss">&nbsp;</i></a></li>
+    <!-- END: feeds -->
 </ul>
 </div>
 <!-- END: main -->

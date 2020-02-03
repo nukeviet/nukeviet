@@ -136,13 +136,15 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         ]);
     }
 
-    if (($error_xemail = nv_check_valid_email($_user['email'])) != '') {
+    $error_xemail = nv_check_valid_email($_user['email'], true);
+    if ($error_xemail[0] != '') {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $error_xemail
+            'mess' => $error_xemail[0]
         ]);
     }
+    $_user['email'] = $error_xemail[1];
 
     if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))->fetchColumn()) {
         nv_jsonOutput([

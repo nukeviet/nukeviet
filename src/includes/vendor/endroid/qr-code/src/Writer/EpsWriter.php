@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -15,7 +17,7 @@ class EpsWriter extends AbstractWriter
 {
     public function writeString(QrCodeInterface $qrCode): string
     {
-        $data = $this->getData($qrCode);
+        $data = $qrCode->getData();
 
         $epsData = [];
         $epsData[] = '%!PS-Adobe-3.0 EPSF-3.0';

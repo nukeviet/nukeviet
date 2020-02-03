@@ -22,7 +22,7 @@
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="site_email">{$LANG->get('site_email')}</label>
                 <div class="col-12 col-sm-8 col-lg-6">
-                    <input type="text" class="form-control form-control-sm" id="site_email" name="site_email" value="{$DATA['site_email']}">
+                    <input type="email" class="form-control form-control-sm" id="site_email" name="site_email" value="{$DATA['site_email']}">
                 </div>
             </div>
             <div class="form-group row">
@@ -196,7 +196,7 @@
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="error_send_email">{$LANG->get('error_send_email')}</label>
                 <div class="col-12 col-sm-8 col-lg-6">
-                    <input type="text" class="form-control form-control-sm" id="error_send_email" name="error_send_email" value="{$DATA['error_send_email']}">
+                    <input type="email" class="form-control form-control-sm" id="error_send_email" name="error_send_email" value="{$DATA['error_send_email']}">
                 </div>
             </div>
             <div class="form-group row py-0">

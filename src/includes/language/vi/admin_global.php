@@ -100,3 +100,18 @@ $lang_global['merge_field_sys_langdata'] = 'Khóa ngôn ngữ data';
 $lang_global['merge_field_sys_langinterface'] = 'Khóa ngôn ngữ giao diện';
 $lang_global['merge_field_sys_assetsdir'] = 'Thư mục thumb của hệ thống';
 $lang_global['merge_field_sys_filesdir'] = 'Thư mục thumb của các module';
+
+$lang_global['admin_pre_logout'] = 'Không phải tôi, đăng xuất';
+$lang_global['admin_hello_2step'] = 'Chào <strong class="admin-name">%s</strong>, mời bạn xác thực tài khoản';
+$lang_global['admin_noopts_2step'] = 'Chưa có phương thức xác thực hai bước nào được cấp phép, tạm thời bạn không thể đăng nhập quản trị';
+$lang_global['admin_mactive_2step'] = 'Bạn chưa thể xác thực vì chưa kích hoạt phương thức nào';
+$lang_global['admin_mactive_2step_choose0'] = 'Mời bạn nhấp vào nút bên dưới để kích hoạt phương thức xác thực';
+$lang_global['admin_mactive_2step_choose1'] = 'Mời bạn lựa chọn một trong các phương thức xác thực bên dưới';
+$lang_global['admin_2step_opt_code'] = 'Mã xác nhận từ ứng dụng';
+$lang_global['admin_2step_opt_facebook'] = 'Tài khoản Facebook';
+$lang_global['admin_2step_opt_google'] = 'Tài khoản Google';
+$lang_global['admin_2step_other'] = 'Phương thức xác thực khác';
+$lang_global['admin_oauth_error_getdata'] = 'Lỗi: Hệ thống nhận dạng được dữ liệu xác thực. Xác thực thất bại!';
+$lang_global['admin_oauth_error_email'] = 'Lỗi: Email trả về không hợp lệ, bạn không thể xác thực';
+$lang_global['admin_oauth_error_savenew'] = 'Lỗi: Không thể lưu thông tin xác thực';
+$lang_global['admin_oauth_error'] = 'Lỗi: Xác thực không hợp lệ, tài khoản này chưa được cấp phép';

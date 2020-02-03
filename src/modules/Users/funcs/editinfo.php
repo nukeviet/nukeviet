@@ -62,14 +62,15 @@ function nv_check_username_change($login, $edit_userid)
  * @param mixed $email
  * @return
  */
-function nv_check_email_change($email, $edit_userid)
+function nv_check_email_change(&$email, $edit_userid)
 {
     global $db, $user_info, $global_users_config, $nv_Lang;
 
-    $error = nv_check_valid_email($email);
-    if ($error != '') {
-        return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
+    $error = nv_check_valid_email($email, true);
+    if ($error[0] != '') {
+        return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error[0]));
     }
+    $email = $error[1];
 
     if (!empty($global_users_config['deny_email']) and preg_match("/" . $global_users_config['deny_email'] . "/i", $email)) {
         return sprintf($nv_Lang->getModule('email_deny_name'), $email);
@@ -411,12 +412,14 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
     $attribs = $nv_Request->get_string('openid_attribs', 'session', '');
     $attribs = !empty($attribs) ? unserialize($attribs) : [];
 
-    $email = (isset($attribs['contact/email']) and nv_check_valid_email($attribs['contact/email']) == '') ? $attribs['contact/email'] : '';
-    if (empty($email)) {
+    $email = isset($attribs['contact/email']) ? $attribs['contact/email'] : '';
+    $check_email = nv_check_valid_email($email, true);
+    if (!empty($check_email[0])) {
         opidr(3);
         die();
     }
 
+    $email = $check_email[1];
     $opid = $crypt->hash($attribs['id']);
 
     $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid ');
@@ -598,6 +601,15 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $nv_verikeysend = 1;
     }
 
+    $checkemail = nv_check_email_change($nv_email, $edit_userid);
+    if (!empty($checkemail)) {
+        nv_jsonOutput(array(
+            'status' => 'error',
+            'input' => 'email',
+            'mess' => $checkemail
+        ));
+    }
+
     if ($nv_email == $row['email']) {
         nv_jsonOutput(array(
             'status' => 'error',
@@ -611,15 +623,6 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             'status' => 'error',
             'input' => 'password',
             'mess' => $nv_Lang->getGlobal('incorrect_password')
-        ));
-    }
-
-    $checkemail = nv_check_email_change($nv_email, $edit_userid);
-    if (!empty($checkemail)) {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'email',
-            'mess' => $checkemail
         ));
     }
 

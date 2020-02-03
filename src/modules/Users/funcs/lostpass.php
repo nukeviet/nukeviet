@@ -107,10 +107,10 @@ if ($checkss == $data['checkss']) {
         ));
     }
 
-    $check_email = nv_check_valid_email($data['userField']);
-    if (empty($check_email)) {
+    $check_email = nv_check_valid_email($data['userField'], true);
+    if (empty($check_email[0])) {
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE email= :userField AND active=1';
-        $userField = nv_strtolower($data['userField']);
+        $userField = $check_email[1];
     } else {
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username=:userField AND active=1';
         $userField = nv_md5safe($data['userField']);
@@ -129,7 +129,7 @@ if ($checkss == $data['checkss']) {
         ));
     }
 
-    $email_hint = empty($check_email) ? $row['email'] : (substr($row['email'], 0, 3) . '***' . substr($row['email'], -6));
+    $email_hint = empty($check_email[0]) ? $row['email'] : (substr($row['email'], 0, 3) . '***' . substr($row['email'], -6));
 
     if (empty($row['password'])) {
         $nv_Request->set_Session('lostpass_seccode', '');

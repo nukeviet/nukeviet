@@ -87,41 +87,36 @@ if ($numrows) {
             $suspen_adminlink = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id;
         }
 
-        $tool_is_edit = $tool_is_suspend = $tool_is_del = 0;
+        $tool_is_edit = $tool_is_suspend = $tool_is_del = $tool_is_2step = 0;
         if (defined('NV_IS_GODADMIN')) {
-            $tool_is_edit = 1;
-            $tool_is_suspend = ($row['admin_id'] != $admin_info['admin_id']) ? 1 : 0;
-            $tool_is_del = ($row['admin_id'] != $admin_info['admin_id']) ? 1 : 0;
-
-            $tool_is_edit = 1;
-            $tool_is_suspend = ($row['admin_id'] != $admin_info['admin_id']) ? 1 : 0;
-            $tool_is_del = ($row['admin_id'] != $admin_info['admin_id']) ? 1 : 0;
+            // Quản trị tối cao thao tác
+            $tool_is_edit = $tool_is_2step = 1;
+            $tool_is_suspend = $tool_is_del = ($row['admin_id'] != $admin_info['admin_id']) ? 1 : 0;
         } elseif (defined('NV_IS_SPADMIN')) {
+            // Điều hành chung hoặc quản trị tối cao
             if ($row['lev'] == 1) {
-                $tool_is_edit = ($row['admin_id'] == $admin_info['admin_id']) ? 1 : 0;
-                $tool_is_suspend = 0;
-                $tool_is_del = 0;
+                // Đối với tài khoản quản trị tối cao
+                $tool_is_edit = $tool_is_2step = ($row['admin_id'] == $admin_info['admin_id']) ? 1 : 0;
+                $tool_is_suspend = $tool_is_del = 0;
             } elseif ($row['lev'] == 2) {
+                // Đối với tài khoản điều hành chung
                 if ($row['admin_id'] == $admin_info['admin_id'] or $admin_info['level'] == 1) {
-                    $tool_is_edit = 1;
+                    $tool_is_edit = $tool_is_2step = 1;
                 } else {
-                    $tool_is_edit = 0;
+                    $tool_is_edit = $tool_is_2step = 0;
                 }
-                $tool_is_suspend = 0;
-                $tool_is_del = 0;
+                $tool_is_suspend = $tool_is_del = 0;
             } elseif ($global_config['spadmin_add_admin'] == 1) {
-                $tool_is_edit = 1;
-                $tool_is_suspend = 1;
-                $tool_is_del = 1;
+                // Đối với tài khoản quản lý module khi hệ thống cho phép điều hành chung quản lý quản trị module
+                $tool_is_edit = $tool_is_2step = $tool_is_suspend = $tool_is_del = 1;
             } else {
-                $tool_is_edit = 0;
-                $tool_is_suspend = 0;
-                $tool_is_del = 0;
+                // Đối với tài khoản quản lý module khi hệ thống không cho phép điều hành chung quản lý quản trị module
+                $tool_is_edit = $tool_is_2step = $tool_is_suspend = $tool_is_del = 0;
             }
         } else {
-            $tool_is_edit = ($row['admin_id'] == $admin_info['admin_id']) ? 1 : 0;
-            $tool_is_suspend = 0;
-            $tool_is_del = 0;
+            // Quản trị module thao tác
+            $tool_is_edit = $tool_is_2step = ($row['admin_id'] == $admin_info['admin_id']) ? 1 : 0;
+            $tool_is_suspend = $tool_is_del = 0;
         }
 
         if (empty($row['files_level'])) {
@@ -162,6 +157,7 @@ if ($numrows) {
         $admins[$row['admin_id']]['browser'] = $browser['name'];
         $admins[$row['admin_id']]['os'] = $os['name'];
         $admins[$row['admin_id']]['admin_theme'] = $row['admin_theme'];
+        $admins[$row['admin_id']]['t_is_2step'] = $tool_is_2step;
         $admins[$row['admin_id']]['t_is_edit'] = $tool_is_edit;
         $admins[$row['admin_id']]['t_is_suspend'] = $tool_is_suspend;
         $admins[$row['admin_id']]['t_is_del'] = $tool_is_del;

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-6-2010 21:16
@@ -25,11 +25,11 @@ class Encryption
     public function __construct($key)
     {
         $this->_key = sha1($key);
-        if (isset($key{64})) {
+        if (isset($key[64])) {
             $key = pack('H32', $this->_key);
         }
 
-        if (! isset($key{63})) {
+        if (! isset($key[63])) {
             $key = str_pad($key, 64, chr(0));
         }
 

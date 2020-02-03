@@ -1,21 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz\Client;
 
-use Buzz\Configuration\ParameterBag;
-use Buzz\Exception\ExceptionInterface;
+use Buzz\Message\MessageInterface;
+use Buzz\Message\RequestInterface;
 use Buzz\Exception\ClientException;
-use Buzz\Message\ResponseBuilder;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MultiCurl extends AbstractCurl implements BatchClientInterface, BuzzClientInterface
+class MultiCurl extends AbstractCurl implements BatchClientInterface
 {
-    private $queue = [];
-
+    private $queue = array();
     private $curlm;
 
     /**
@@ -26,67 +19,38 @@ class MultiCurl extends AbstractCurl implements BatchClientInterface, BuzzClient
      * If a "callback" option is supplied, its value will be called when the
      * request completes. The callable should have the following signature:
      *
-     *     $callback = function($request, $response, $exception) {
-     *         if (!$exception) {
+     *     $callback = function($client, $request, $response, $options, $error) {
+     *         if (!$error) {
      *             // success
      *         } else {
      *             // error ($error is one of the CURLE_* constants)
      *         }
      *     };
+     *
+     * @param RequestInterface $request  A request object
+     * @param MessageInterface $response A response object
+     * @param array            $options  An array of options
      */
-    public function sendAsyncRequest(RequestInterface $request, array $options = []): void
+    public function send(RequestInterface $request, MessageInterface $response, array $options = array())
     {
-        $options = $this->validateOptions($options);
-
-        $this->queue[] = [$request, $options];
+        $this->queue[] = array($request, $response, $options);
     }
 
-    public function sendRequest(RequestInterface $request, array $options = []): ResponseInterface
-    {
-        $options = $this->validateOptions($options);
-        $originalCallback = $options->get('callback');
-        $responseToReturn = null;
-        $options = $options->add(['callback' => function (RequestInterface $request, ResponseInterface $response = null, ClientException $e = null) use (&$responseToReturn, $originalCallback) {
-            $responseToReturn = $response;
-            $originalCallback($request, $response, $e);
-        }]);
-
-        $this->queue[] = [$request, $options];
-        $this->flush();
-
-        return $responseToReturn;
-    }
-
-    protected function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefault('callback', function (RequestInterface $request, ResponseInterface $response = null, ClientException $e = null) {
-        });
-        $resolver->setAllowedTypes('callback', 'callable');
-    }
-
-    public function count(): int
+    public function count()
     {
         return count($this->queue);
     }
 
-    /**
-     * @throws ClientException
-     */
-    public function flush(): void
+    public function flush()
     {
-        while (!empty($this->queue)) {
+        while ($this->queue) {
             $this->proceed();
         }
     }
 
-    /**
-     * @throws ClientException
-     */
-    public function proceed(): void
+    public function proceed()
     {
-        if (empty($this->queue)) {
+        if (!$this->queue) {
             return;
         }
 
@@ -94,20 +58,19 @@ class MultiCurl extends AbstractCurl implements BatchClientInterface, BuzzClient
             throw new ClientException('Unable to create a new cURL multi handle');
         }
 
-        foreach ($this->queue as $i => $queueItem) {
-            if (2 !== count($queueItem)) {
-                // We have already prepared this curl
-                continue;
+        foreach (array_keys($this->queue) as $i) {
+            if (3 == count($this->queue[$i])) {
+                // prepare curl handle
+                list($request, , $options) = $this->queue[$i];
+                $curl = static::createCurlHandle();
+
+                // remove custom option
+                unset($options['callback']);
+
+                $this->prepare($curl, $request, $options);
+                $this->queue[$i][] = $curl;
+                curl_multi_add_handle($this->curlm, $curl);
             }
-            // prepare curl handle
-            /** @var $request RequestInterface */
-            /** @var $options ParameterBag */
-            list($request, $options) = $queueItem;
-            $curl = $this->createHandle();
-            $responseBuilder = $this->prepare($curl, $request, $options);
-            $this->queue[$i][] = $curl;
-            $this->queue[$i][] = $responseBuilder;
-            curl_multi_add_handle($this->curlm, $curl);
         }
 
         // process outstanding perform
@@ -116,49 +79,36 @@ class MultiCurl extends AbstractCurl implements BatchClientInterface, BuzzClient
             $mrc = curl_multi_exec($this->curlm, $active);
         } while ($active && CURLM_CALL_MULTI_PERFORM == $mrc);
 
-        $exception = null;
         // handle any completed requests
         while ($done = curl_multi_info_read($this->curlm)) {
             foreach (array_keys($this->queue) as $i) {
-                /** @var $request RequestInterface */
-                /** @var $options ParameterBag */
-                /** @var $responseBuilder ResponseBuilder */
-                list($request, $options, $curl, $responseBuilder) = $this->queue[$i];
+                list($request, $response, $options, $curl) = $this->queue[$i];
 
                 if ($curl !== $done['handle']) {
                     continue;
                 }
 
-                try {
-                    $response = null;
-                    $this->parseError($request, $done['result'], $curl);
-                    // populate the response object
-                    curl_multi_getcontent($curl);
-                    $response = $responseBuilder->getResponse();
-                } catch (ExceptionInterface $e) {
-                    if (null === $exception) {
-                        $exception = $e;
-                    }
+                // populate the response object
+                if (CURLE_OK === $done['result']) {
+                    static::populateResponse($curl, curl_multi_getcontent($curl), $response);
                 }
 
                 // remove from queue
                 curl_multi_remove_handle($this->curlm, $curl);
-                $this->releaseHandle($curl);
+                curl_close($curl);
                 unset($this->queue[$i]);
 
                 // callback
-                call_user_func($options->get('callback'), $request, $response, $exception);
+                if (isset($options['callback'])) {
+                    call_user_func($options['callback'], $this, $request, $response, $options, $done['result']);
+                }
             }
         }
 
         // cleanup
-        if (empty($this->queue)) {
+        if (!$this->queue) {
             curl_multi_close($this->curlm);
             $this->curlm = null;
-
-            if (null !== $exception) {
-                throw $exception;
-            }
         }
     }
 }

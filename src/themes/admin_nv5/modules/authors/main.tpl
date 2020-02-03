@@ -2,6 +2,9 @@
 <div class="card card-border-color card-border-color-primary" id="aid{$adminid}">
     <div class="card-header card-header-divider">
         <div class="tools">
+            {if $adminrow.t_is_2step}
+            <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}=2step&amp;admin_id={$adminid}"><i class="fas fa-key" data-toggle="tooltip" title="{$LANG->get('2step_manager')}"></i></a>
+            {/if}
             {if $adminrow.t_is_edit}
             <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$NV_OP_VARIABLE}=edit&amp;admin_id={$adminid}"><i class="fas fa-pencil-alt" data-toggle="tooltip" title="{$LANG->get('edit')}"></i></a>
             {/if}

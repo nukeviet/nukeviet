@@ -1,86 +1,73 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Buzz\Client;
 
-use Buzz\Configuration\ParameterBag;
-use Buzz\Exception\InvalidArgumentException;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-abstract class AbstractClient
+abstract class AbstractClient implements ClientInterface
 {
-    /**
-     * @var OptionsResolver
-     */
-    private $optionsResolver;
+    protected $ignoreErrors = true;
+    protected $maxRedirects = 5;
+    protected $timeout = 5;
+    protected $verifyPeer = true;
+    protected $verifyHost = 2;
+    protected $proxy;
 
-    /**
-     * @var ParameterBag
-     */
-    private $options;
-
-    public function __construct(array $options = [])
+    public function setIgnoreErrors($ignoreErrors)
     {
-        $this->options = new ParameterBag();
-        $this->options = $this->doValidateOptions($options);
+        $this->ignoreErrors = $ignoreErrors;
     }
 
-    protected function getOptionsResolver(): OptionsResolver
+    public function getIgnoreErrors()
     {
-        if (null !== $this->optionsResolver) {
-            return $this->optionsResolver;
-        }
-
-        $this->optionsResolver = new OptionsResolver();
-        $this->configureOptions($this->optionsResolver);
-
-        return $this->optionsResolver;
+        return $this->ignoreErrors;
     }
 
-    /**
-     * Validate a set of options and return a new and shiny ParameterBag.
-     */
-    protected function validateOptions(array $options = []): ParameterBag
+    public function setMaxRedirects($maxRedirects)
     {
-        if (empty($options)) {
-            return $this->options;
-        }
-
-        return $this->doValidateOptions($options);
+        $this->maxRedirects = $maxRedirects;
     }
 
-    /**
-     * Validate a set of options and return a new and shiny ParameterBag.
-     */
-    private function doValidateOptions(array $options = []): ParameterBag
+    public function getMaxRedirects()
     {
-        $parameterBag = $this->options->add($options);
-
-        try {
-            $parameters = $this->getOptionsResolver()->resolve($parameterBag->all());
-        } catch (\Throwable $e) {
-            // Wrap any errors.
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        return new ParameterBag($parameters);
+        return $this->maxRedirects;
     }
 
-    protected function configureOptions(OptionsResolver $resolver): void
+    public function setTimeout($timeout)
     {
-        $resolver->setDefaults([
-            'allow_redirects' => false,
-            'max_redirects' => 5,
-            'timeout' => 30,
-            'verify' => true,
-            'proxy' => null,
-        ]);
+        $this->timeout = $timeout;
+    }
 
-        $resolver->setAllowedTypes('allow_redirects', 'boolean');
-        $resolver->setAllowedTypes('verify', 'boolean');
-        $resolver->setAllowedTypes('max_redirects', 'integer');
-        $resolver->setAllowedTypes('timeout', ['integer', 'float']);
-        $resolver->setAllowedTypes('proxy', ['null', 'string']);
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    public function setVerifyPeer($verifyPeer)
+    {
+        $this->verifyPeer = $verifyPeer;
+    }
+
+    public function getVerifyPeer()
+    {
+        return $this->verifyPeer;
+    }
+
+    public function getVerifyHost()
+    {
+        return $this->verifyHost;
+    }
+
+    public function setVerifyHost($verifyHost)
+    {
+        $this->verifyHost = $verifyHost;
+    }
+
+    public function setProxy($proxy)
+    {
+        $this->proxy = $proxy;
+    }
+
+    public function getProxy()
+    {
+        return $this->proxy;
     }
 }

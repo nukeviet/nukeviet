@@ -277,3 +277,6 @@ $lang_module['cors_help'] = 'Enable this feature to restrict CORS request from o
 $lang_module['cors_restrict_domains'] = 'Domain limit';
 $lang_module['cors_valid_domains'] = 'Valid domains';
 $lang_module['cors_valid_domains_help'] = 'Enter each one-line domain name (please enter the full form http://yourdomain.com). CORS request from these domains are allowed';
+$lang_module['admin_2step_opt'] = 'Two-step verification methods are allowed in administration';
+$lang_module['admin_2step_default'] = 'The default two-step verification method in administration';
+$lang_module['admin_2step_appconfig'] = 'Set up the application here';

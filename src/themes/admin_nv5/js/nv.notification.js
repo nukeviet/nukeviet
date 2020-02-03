@@ -18,7 +18,7 @@ function nv_get_notification() {
         clearTimeout(nvNotificationTimer);
     }
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
         data: {
             'notification_get': 1

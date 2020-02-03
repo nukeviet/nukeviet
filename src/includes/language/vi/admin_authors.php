@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -151,6 +151,19 @@ $lang_module['custom_title'] = 'Tiêu đề';
 $lang_module['main_module'] = 'Module trang chính';
 $lang_module['themeadmin'] = 'Giao diện quản trị';
 $lang_module['theme_default'] = 'Mặc định theo cấu hình site';
+
+$lang_module['2step_manager'] = 'Quản lý xác thực hai bước';
+$lang_module['2step_code_off'] = 'Xác thực hai bước bằng ứng dụng đang tắt';
+$lang_module['2step_code_on'] = 'Xác thực hai bước bằng ứng dụng đang bật';
+$lang_module['2step_oauth'] = 'Xác thực hai bước bằng Oauth';
+$lang_module['2step_oauth_gate'] = 'Cổng Oauth';
+$lang_module['2step_oauth_email'] = 'Email sử dụng';
+$lang_module['2step_oauth_empty'] = 'Chưa có tài khoản xác thực nào';
+$lang_module['2step_add_google'] = 'Thêm tài khoản Google';
+$lang_module['2step_add_facebook'] = 'Thêm tài khoản Facebook';
+$lang_module['2step_delete_all'] = 'Gỡ tất cả';
+$lang_module['2step_error_oauth_exists'] = 'Tài khoản này đã có trong danh sách xác thực';
+$lang_module['2step_addtime'] = 'Thêm lúc';
 
 $lang_module['api_addtime'] = 'Tạo lúc';
 $lang_module['api_edittime'] = 'Cập nhật';

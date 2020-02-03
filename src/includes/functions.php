@@ -328,10 +328,10 @@ function nv_check_valid_login($login, $max, $min)
     if (empty($login)) {
         return $nv_Lang->getGlobal('username_empty');
     }
-    if (isset($login{$max})) {
+    if (isset($login[$max])) {
         return sprintf($nv_Lang->getGlobal('usernamelong'), $max);
     }
-    if (!isset($login{$min - 1})) {
+    if (!isset($login[$min - 1])) {
         return sprintf($nv_Lang->getGlobal('usernameadjective'), $min);
     }
 
@@ -376,10 +376,10 @@ function nv_check_valid_pass($pass, $max, $min)
     if (empty($pass)) {
         return $nv_Lang->getGlobal('password_empty');
     }
-    if (isset($pass{$max})) {
+    if (isset($pass[$max])) {
         return sprintf($nv_Lang->getGlobal('passwordlong'), $max);
     }
-    if (!isset($pass{$min - 1})) {
+    if (!isset($pass[$min - 1])) {
         return sprintf($nv_Lang->getGlobal('passwordadjective'), $min);
     }
 
@@ -411,34 +411,55 @@ function nv_check_valid_pass($pass, $max, $min)
 }
 
 /**
- * nv_check_valid_email()
+ * Kiểm tra email có hợp lệ hay không
+ * Nếu $return = true thì trả về email đã được hợp chuẩn
  *
  * @param string $mail
- * @return
+ * @param boolean $return @since 4.3.08
+ * @return string
  */
-function nv_check_valid_email($mail)
+function nv_check_valid_email($mail, $return = false)
 {
     global $global_config, $nv_Lang;
 
-    $mail = strip_tags(trim($mail));
-
     if (empty($mail)) {
-        return $nv_Lang->getGlobal('email_empty');
+        return $return ? [$nv_Lang->getGlobal('email_empty'), $mail] : $nv_Lang->getGlobal('email_empty');
     }
 
+    if ($return) {
+        $mail = nv_strtolower(strip_tags(trim($mail)));
+    }
+
+    // Email quy định ký tự @ xuất hiện 1 lần duy nhất
+    if (substr_count($mail, '@') !== 1) {
+        return $return ? [$nv_Lang->getGlobal('email_incorrect'), $mail] : $nv_Lang->getGlobal('email_incorrect');
+    }
+
+    // Cắt email ra làm hai phần để kiểm tra
+    $_mail = explode('@', $mail);
+    $_mail_user = $_mail[0];
+    $_mail_domain = nv_check_domain($_mail[1]);
+
+    if (empty($_mail_domain)) {
+        return $return ? [$nv_Lang->getGlobal('email_incorrect'), $mail] : $nv_Lang->getGlobal('email_incorrect');
+    }
+
+    // Chuyển lại email từ Unicode domain thành IDNA ASCII
+    $mail = $_mail_user . '@' . $_mail_domain;
+
     if (function_exists('filter_var') and filter_var($mail, FILTER_VALIDATE_EMAIL) === false) {
-        return $nv_Lang->getGlobal('email_incorrect');
+        return $return ? [$nv_Lang->getGlobal('email_incorrect'), $mail] : $nv_Lang->getGlobal('email_incorrect');
     }
 
     if (!preg_match($global_config['check_email'], $mail)) {
-        return $nv_Lang->getGlobal('email_incorrect');
+        return $return ? [$nv_Lang->getGlobal('email_incorrect'), $mail] : $nv_Lang->getGlobal('email_incorrect');
     }
 
     if (!preg_match('/\.([a-z0-9\-]+)$/', $mail)) {
-        return $nv_Lang->getGlobal('email_incorrect');
+        return $return ? [$nv_Lang->getGlobal('email_incorrect'), $mail] : $nv_Lang->getGlobal('email_incorrect');
     }
 
-    return '';
+    return $return ? ['', $mail] : '';
 }
 
 /**
@@ -1852,16 +1873,18 @@ function nv_site_mods()
 /**
  * nv_insert_notification()
  *
- * @param string $module
- * @param string $type
- * @param array $content
- * @param int $obid
- * @param integer $send_to
- * @param integer $send_from
- * @param integer $area
+ * @param string $module module_name xảy ra thông báo
+ * @param string $type loại thông báo, do module tùy ý đặt để xử lý
+ * @param array $content dữ liệu tùy ý do module đặt
+ * @param int $obid id đối tượng thông báo, tùy ý do module đặt
+ * @param integer|array $send_to ID người nhận, bỏ trống nếu để người nhận là tất cả
+ * @param integer $send_from ID người tạo thông báo, để trống nếu là hệ thống
+ * @param integer $area xem mô tả bên dưới
+ * @param integer $admin_view_allowed 0: Tất cả các admin, 1: Quản trị tối cao, 2: Điều hành chung + Quản trị tối cao
+ * @param integer $logic_mode 0: 0 admin cấp trên thấy thông báo của cấp dưới, 1: Chỉ cấp đó được xem của cấp đó
  * @return
  */
-function nv_insert_notification($module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1)
+function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_to = 0, $send_from = 0, $area = 1, $admin_view_allowed = 0, $logic_mode = 0)
 {
     global $db, $global_config;
 
@@ -1875,10 +1898,29 @@ function nv_insert_notification($module, $type, $content = array(), $obid = 0, $
     if ($global_config['notification_active']) {
         !empty($content) and $content = serialize($content);
 
-        $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
-        (send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
-        (:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)';
-        $data_insert = array();
+        $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (
+            admin_view_allowed, logic_mode, send_to, send_from, area, language, module, obid, type, content, add_time, view
+        ) VALUES (
+            :admin_view_allowed, :logic_mode, :send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ',
+            :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0
+        )';
+        $data_insert = [];
+        if (empty($send_to)) {
+            $send_to = '';
+        } elseif (is_array($send_to)) {
+            $send_to = implode(',', array_map('intval', $send_to));
+        } else {
+            $send_to = (string)intval($send_to);
+        }
+        $admin_view_allowed = intval($admin_view_allowed);
+        if ($admin_view_allowed < 0 or $admin_view_allowed > 2) {
+            $admin_view_allowed = 0;
+        }
+        if ($logic_mode > 1 or $logic_mode < 0) {
+            $logic_mode = 0;
+        }
+        $data_insert['admin_view_allowed'] = $admin_view_allowed;
+        $data_insert['logic_mode'] = $logic_mode;
         $data_insert['send_to'] = $send_to;
         $data_insert['send_from'] = $send_from;
         $data_insert['area'] = $area;

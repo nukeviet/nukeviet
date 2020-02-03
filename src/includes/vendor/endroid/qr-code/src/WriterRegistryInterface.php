@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -18,6 +20,8 @@ interface WriterRegistryInterface
     public function addWriter(WriterInterface $writer): void;
 
     public function getWriter(string $name): WriterInterface;
+
+    public function getDefaultWriter(): WriterInterface;
 
     public function getWriters(): array;
 }

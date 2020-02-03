@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Nyholm\Psr7;
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\{ServerRequestInterface, StreamInterface, UploadedFileInterface, UriInterface};
 
 /**
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author Martijn van der Ven <martijn@vanderven.se>
  */
-class ServerRequest extends Request implements ServerRequestInterface
+final class ServerRequest implements ServerRequestInterface
 {
+    use MessageTrait;
+    use RequestTrait;
+
     /** @var array */
     private $attributes = [];
 
     /** @var array */
     private $cookieParams = [];
 
-    /** @var null|array|object */
+    /** @var array|object|null */
     private $parsedBody;
 
     /** @var array */
@@ -34,24 +35,34 @@ class ServerRequest extends Request implements ServerRequestInterface
     private $uploadedFiles = [];
 
     /**
-     * @param string                               $method       HTTP method
-     * @param string|UriInterface                  $uri          URI
-     * @param array                                $headers      Request headers
-     * @param string|null|resource|StreamInterface $body         Request body
-     * @param string                               $version      Protocol version
-     * @param array                                $serverParams Typically the $_SERVER superglobal
+     * @param string $method HTTP method
+     * @param string|UriInterface $uri URI
+     * @param array $headers Request headers
+     * @param string|resource|StreamInterface|null $body Request body
+     * @param string $version Protocol version
+     * @param array $serverParams Typically the $_SERVER superglobal
      */
-    public function __construct(
-        $method,
-        $uri,
-        array $headers = [],
-        $body = null,
-        $version = '1.1',
-        array $serverParams = []
-    ) {
+    public function __construct(string $method, $uri, array $headers = [], $body = null, string $version = '1.1', array $serverParams = [])
+    {
         $this->serverParams = $serverParams;
 
-        parent::__construct($method, $uri, $headers, $body, $version);
+        if (!($uri instanceof UriInterface)) {
+            $uri = new Uri($uri);
+        }
+
+        $this->method = $method;
+        $this->uri = $uri;
+        $this->setHeaders($headers);
+        $this->protocol = $version;
+
+        if (!$this->hasHeader('Host')) {
+            $this->updateHostFromUri();
+        }
+
+        // If we got no body, defer initialization of the stream until ServerRequest::getBody()
+        if ('' !== $body && null !== $body) {
+            $this->stream = Stream::create($body);
+        }
     }
 
     public function getServerParams(): array
@@ -105,7 +116,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function withParsedBody($data)
     {
-        if (!is_array($data) && !is_object($data) && null !== $data) {
+        if (!\is_array($data) && !\is_object($data) && null !== $data) {
             throw new \InvalidArgumentException('First parameter to withParsedBody MUST be object, array or null');
         }
 
@@ -122,7 +133,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function getAttribute($attribute, $default = null)
     {
-        if (false === array_key_exists($attribute, $this->attributes)) {
+        if (false === \array_key_exists($attribute, $this->attributes)) {
             return $default;
         }
 
@@ -139,7 +150,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     public function withoutAttribute($attribute): self
     {
-        if (false === array_key_exists($attribute, $this->attributes)) {
+        if (false === \array_key_exists($attribute, $this->attributes)) {
             return $this;
         }
 

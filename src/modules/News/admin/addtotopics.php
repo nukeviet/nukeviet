@@ -2,26 +2,26 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('addtotopics');
 
-$id_array = array();
+$id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
 
 if ($nv_Request->isset_request('topicsid', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_topic', 'listid ' . $listid, $admin_info['userid']);
 
     $topicsid = $nv_Request->get_int('topicsid', 'post');
-    $listid = array_filter(array_unique(array_map('trim', explode(',', $listid))));
+    $listid = array_filter(array_unique(array_map('intval', explode(',', $listid))));
 
     foreach ($listid as $_id) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . $_id);
@@ -58,18 +58,18 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 while (list($id, $title) = $result->fetch(3)) {
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'id' => $id,
         'title' => $title,
         'checked' => in_array($id, $id_array) ? ' checked="checked"' : ''
-    ));
+    ]);
 
     $xtpl->parse('main.loop');
 }
 
 $result = $db->query('SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');
 while ($row = $result->fetch()) {
-    $xtpl->assign('TOPICSID', array( 'key' => $row['topicid'], 'title' => $row['title'] ));
+    $xtpl->assign('TOPICSID', ['key' => $row['topicid'], 'title' => $row['title']]);
     $xtpl->parse('main.topicsid');
 }
 

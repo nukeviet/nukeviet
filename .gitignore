@@ -1,6 +1,7 @@
 /vendor
 /phpunit.bat
 /tests-config.php
+/composer.lock
 
 # Base ignore
 /.buildpath
@@ -21,41 +22,61 @@
 /src/data/logs/voting_logs/
 /src/data/tmp/*
 /src/uploads/logo_*
+/src/assets/logo_*
 /src/install/default.php
-/src/composer.lock
 /src/includes/composer.lock
 /src/log.log
 
-composer.lock
-#vendor test ignore 
-/src/vendor/**/demo/
-/src/vendor/**/example/
-/src/vendor/**/examples/
-/src/vendor/**/test/
-/src/vendor/**/tests/
-/src/vendor/**/Tests/
-/src/vendor/**/travis*
-/src/vendor/**/.travis.yml
-/src/vendor/**/.scrutinizer.yml
-/src/vendor/**/phpunit.xml*
-/src/vendor/**/phpunit.php
+#vendor test ignore
+/src/includes/vendor/**/demo/
+/src/includes/vendor/**/example/
+/src/includes/vendor/**/examples/
+/src/includes/vendor/**/test/
+/src/includes/vendor/**/tests/
+/src/includes/vendor/**/Tests/
+/src/includes/vendor/**/travis*
+/src/includes/vendor/**/.travis.yml
+/src/includes/vendor/**/.coveralls.yml
+/src/includes/vendor/**/.scrutinizer.yml
+/src/includes/vendor/**/phpunit.xml*
+/src/includes/vendor/**/phpunit.php
+/src/includes/vendor/**/phpcs.xml
+/src/includes/vendor/**/.editorconfig
+/src/includes/vendor/**/.php_cs
+/src/includes/vendor/**/.styleci.yml
+/src/includes/vendor/**/.pullapprove.yml
+/src/includes/vendor/**/Makefile
 
 #vendor docs ignore
-/src/vendor/**/doc/
-/src/vendor/**/docs/
-/src/vendor/**/readme*
-/src/vendor/**/README*
-/src/vendor/**/changelog*
-/src/vendor/**/CHANGELOG*
-/src/vendor/**/FAQ*
-/src/vendor/**/CONTRIBUTING*
-/src/vendor/**/HISTORY*
-/src/vendor/**/UPGRADING*
-/src/vendor/**/UPGRADE*
-/src/vendor/**/package*
-/src/vendor/**/phpunit.php
-/src/vendor/**/.gitignore
-/src/vendor/**/composer.*
+/src/includes/vendor/**/doc/
+/src/includes/vendor/**/docs/
+/src/includes/vendor/**/readme*
+/src/includes/vendor/**/README*
+/src/includes/vendor/**/changelog*
+/src/includes/vendor/**/CHANGELOG*
+/src/includes/vendor/**/FAQ*
+/src/includes/vendor/**/CONTRIBUTING*
+/src/includes/vendor/**/HISTORY*
+/src/includes/vendor/**/UPGRADING*
+/src/includes/vendor/**/UPGRADE*
+/src/includes/vendor/**/SECURITY.md
+/src/includes/vendor/**/package*
+/src/includes/vendor/**/phpunit.php
+/src/includes/vendor/**/.github
+/src/includes/vendor/**/.gitignore
+/src/includes/vendor/**/.gitattributes
+/src/includes/vendor/**/composer.*
+/src/includes/vendor/**/COMMITMENT
+/src/includes/vendor/**/*NOTES.txt
+/src/includes/vendor/**/*FEATURES.txt
+/src/includes/vendor/**/*log.txt
+/src/includes/vendor/**/*reporting.ini
+
+#vendor phpmailer language
+/src/includes/vendor/phpmailer/phpmailer/language/phpmailer.lang*
+!/src/includes/vendor/phpmailer/phpmailer/language/phpmailer.lang-en.php
+!/src/includes/vendor/phpmailer/phpmailer/language/phpmailer.lang-fr.php
+!/src/includes/vendor/phpmailer/phpmailer/language/phpmailer.lang-vi.php
 
 # Ignore some uploads, assets dir
 /src/assets/download

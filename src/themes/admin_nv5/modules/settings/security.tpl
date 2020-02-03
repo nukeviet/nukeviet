@@ -93,6 +93,26 @@
                             <span class="form-text text-muted">{$LANG->get('two_step_verification_note')}</span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('admin_2step_opt')}</label>
+                        <div class="col-12 col-sm-8 col-lg-6 mt-1">
+                            {foreach from=$TWOSTEP_ARRAY item=$twostep}
+                            <label class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="admin_2step_opt[]" value="{$twostep}"{if in_array($twostep, $CONFIG_GLOBAL.admin_2step_opt)} checked="checked"{/if}><span class="custom-control-label">{$LANG->get("admin_2step_opt_`$twostep`")}{if $twostep eq 'facebook' or $twostep eq 'google'} (<a href="{$LINK_CONFIG_OAUTH}{$twostep}" target="_blank">{$LANG->get('admin_2step_appconfig')}</a>){/if}</span>
+                            </label>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right" for="admin_2step_default">{$LANG->get('admin_2step_default')}</label>
+                        <div class="col-12 col-sm-8 col-lg-6 form-inline">
+                            <select class="form-control form-control-sm" id="admin_2step_default" name="admin_2step_default">
+                                {foreach from=$TWOSTEP_ARRAY item=$twostep}
+                                <option value="{$twostep}"{if $twostep eq $CONFIG_GLOBAL.admin_2step_default} selected="selected"{/if}>{$LANG->get("admin_2step_opt_`$twostep`")}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row pt-1 pb-0">
                         <label class="col-12 col-sm-3 col-form-label text-sm-right d-none d-sm-block"></label>
                         <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">

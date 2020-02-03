@@ -28,8 +28,13 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
     $idfile = $nv_Request->get_int('idfile', 'post', 0);
 
     $authorSubmit = isset($_POST['pozauthor']['author']) ? $_POST['pozauthor']['author'] : '';
-    if (preg_match('/^([^\<]+)\<([^\>]+)\>$/', $authorSubmit, $m) and nv_check_valid_email(trim($m[2])) == '') {
-        $authorSubmit = trim(strip_tags($m[1])) . ' <' . trim($m[2]) . '>';
+    if (preg_match('/^([^\<]+)\<([^\>]+)\>$/', $authorSubmit, $m)) {
+        $check = nv_check_valid_email(trim($m[2]), true);
+        if ($check[0] == '') {
+            $authorSubmit = trim(strip_tags($m[1])) . ' <' . $check[1] . '>';
+        } else {
+            $authorSubmit = false;
+        }
     } else {
         $authorSubmit = false;
     }

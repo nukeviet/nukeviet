@@ -810,6 +810,9 @@ if ($step == 1) {
     $array_data['re_password'] = $nv_Request->get_title('re_password', 'post', $array_data['re_password']);
     $array_data['lang_multi'] = (int) $nv_Request->get_bool('lang_multi', 'post', $array_data['lang_multi']);
 
+    $check_email = nv_check_valid_email($array_data['nv_email'], true);
+    $array_data['nv_email'] = $check_email[1];
+
     try {
         $array_data['question'] = $nv_Request->get_title('question', 'post', $array_data['question'], 1);
         $array_data['answer_question'] = $nv_Request->get_title('answer_question', 'post', $array_data['answer_question'], 1);
@@ -834,7 +837,6 @@ if ($step == 1) {
             } else {
                 $check_login = nv_check_valid_login($array_data['nv_login'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
                 $check_pass = nv_check_valid_pass($array_data['nv_password'], $global_config['nv_upassmax'], $global_config['nv_upassmin']);
-                $check_email = nv_check_valid_email($array_data['nv_email']);
 
                 if (empty($array_data['site_name'])) {
                     $error = $nv_Lang->getModule('err_sitename');
@@ -842,8 +844,8 @@ if ($step == 1) {
                     $error = $check_login;
                 } elseif ("'" . $array_data['nv_login'] . "'" != $db->quote($array_data['nv_login'])) {
                     $error = sprintf($nv_Lang->getModule('account_deny_name'), '<strong>' . $array_data['nv_login'] . '</strong>');
-                } elseif (!empty($check_email)) {
-                    $error = $check_email;
+                } elseif (!empty($check_email[0])) {
+                    $error = $check_email[0];
                 } elseif (!empty($check_pass)) {
                     $error = $check_pass;
                 } elseif ($array_data['nv_password'] != $array_data['re_password']) {
