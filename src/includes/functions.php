@@ -1236,8 +1236,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
         return ($testmode ? '' : true);
     } catch (PHPMailer\PHPMailer\Exception $e) {
-        trigger_error($e->errorMessage(), E_USER_WARNING);
-
+        trigger_error(print_r($e, true));
         return ($testmode ? $e->errorMessage() : false);
     }
 }
@@ -2416,6 +2415,7 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
             $result = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $_email_data['cc'], $_email_data['bcc']);
         }
     } catch (Exception $e) {
+        trigger_error(print_r($e, true));
         return false;
     }
 
