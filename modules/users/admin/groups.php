@@ -546,7 +546,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['email'] = $nv_Request->get_title('email', 'post', '', 1);
                 $check_email = nv_check_valid_email($post['email'], true);
                 if (!empty($post['email']) and $check_email[0] != '') {
-                    die($error_xemail);
+                    die($check_email[0]);
                 }
                 $post['email'] = $check_email[1];
             } else {
