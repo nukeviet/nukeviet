@@ -144,10 +144,14 @@
                     <div class="clearfix">
                         <p id="stringrating">{STRINGRATING}</p>
                         <!-- BEGIN: data_rating -->
-                        <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
+                        <span itemscope itemtype="https://schema.org/AggregateRating">
+                            <span class="hidden d-none hide" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries">
+                                <span class="hidden d-none hide" itemprop="name">{DETAIL.title}</span>
+                            </span>
                            {LANG.rating_average}:
-                           <span itemprop="rating" id="numberrating">{DETAIL.numberrating}</span> -
-                           <span itemprop="votes" id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
+                           <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> -
+                           <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count}
+                            <span class="hidden d-none hide" itemprop="bestRating">5</span>
                         </span>
                         <!-- END: data_rating -->
                         <div style="padding: 5px;">
