@@ -1098,6 +1098,12 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 {
     global $global_config, $sys_info;
 
+    // Dùng hook để gửi mail
+    $override_send = nv_apply_hook('', 'override_sendmail', [$from, $to, $subject, $message, $files, $AddEmbeddedImage, $cc, $bcc, $testmode], 9999);
+    if ($override_send !== 9999) {
+        return $override_send;
+    }
+
     try {
         $mail = new PHPMailer\PHPMailer\PHPMailer();
         $mail->SetLanguage(NV_LANG_INTERFACE);
@@ -2116,11 +2122,11 @@ function nv_set_authorization()
 /**
  * nv_apply_hook()
  *
- * @param string $module => Module khởi chạy
+ * @param string $module => Module khởi chạy, để trống là hệ thống
  * @param mixed $tag => Khóa
  * @param mixed $args => Tham số truyền vào
  * @param mixed $default => Dữ liệu mặc định trả về nếu hook không tồn tại
- * @param mixed $return_type => Để trống thì dữ liệu trả về là giá trị cuối cùng. 1: Gộp các mảng. 2: Gộp không phân biệt key
+ * @param mixed $return_type => Để trống thì dữ liệu trả về là giá trị cuối cùng. 1: Gộp array_merge. 2: Gộp array_merge_recursive
  * @return
  */
 function nv_apply_hook($module = '', $tag, $args = [], $default = null, $return_type = 0)

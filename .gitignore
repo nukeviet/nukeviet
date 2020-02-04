@@ -3,6 +3,10 @@
 /tests-config.php
 /composer.lock
 
+/src/vendor
+/src/composer.json
+/src/composer.lock
+
 # Base ignore
 /.buildpath
 /.project
