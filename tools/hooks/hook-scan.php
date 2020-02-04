@@ -12,7 +12,7 @@ set_time_limit(0);
 
 function list_all_file($dir = '', $base_dir = '')
 {
-    $file_list = array();
+    $file_list = [];
 
     if (is_dir($dir)) {
         $array_filedir = scandir($dir);
@@ -60,14 +60,33 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
 
     if (!empty($return_var)) {
         $linecontents = preg_replace('/\,[\s]*' . preg_quote($return_var, '/') . '[\s]*/', '', $linecontents);
+    } else {
+        // Tính lại line khi không có biến trả về
+        $offset = strlen($linecontents) - 1;
+        $prepared_end = false;
+        while ($offset >= 0) {
+            $char = $linecontents[$offset];
+
+            if ($prepared_end and ($char == ']' or $char == ')')) {
+                $linecontents = substr($linecontents, 0, $offset + 1);
+            }
+
+            if ($char == ',') {
+                $prepared_end = true;
+            } else {
+                $prepared_end = false;
+            }
+
+            $offset--;
+        }
     }
-    
-    $array_para = array();
-    if (preg_match('/^(array[\s]*\(|\[)([\sa-zA-Z0-9\_\$\,\'\"\[\]]+)(\)\)|\]\))\;$/', $linecontents, $m)) {
+
+    $array_para = [];
+    if (preg_match('/^(array[\s]*\(|\[)([\sa-zA-Z0-9\_\$\,\'\"\[\]]+)(\)|\])$/', $linecontents, $m)) {
         $array_para = array_map('trim', explode(',', $m[2]));
     }
 
-    $array_table_rows = array();
+    $array_table_rows = [];
     $i = 0;
     $maxSize = 8;
     foreach ($array_para as $para) {
@@ -97,7 +116,13 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
 
     echo("\n");
     echo("<h3 style=\"margin:0;padding:0;\">==== Dữ liệu trả về ====</h3>\n");
-    echo(($return_var ? 'Biến \'\'' . htmlspecialchars($return_var) . '\'\'' : 'Không có') . "\n\n");
+
+    if (empty($return_var)) {
+        echo "Tùy người lập trình\n\n";
+    } else {
+        echo 'Biến \'\'' . htmlspecialchars($return_var) . '\'\'' . "\n\n";
+    }
+
     echo("<h3 style=\"margin:0;padding:0;\">==== Ví dụ viết plugin ====</h3>\n");
     echo(htmlspecialchars('<code php>') . "\n");
     echo(htmlspecialchars("nv_add_hook(\$module_name, '" . $hook_tag . "', \$priority, function(\$vars) {") . "\n");
@@ -141,8 +166,8 @@ if (isset($_GET['f']) and isset($_GET['c'])) {
 
 $allfiles = list_all_file(NV_ROOTDIR);
 
-$hook_sys = array();
-$hook_modules = array();
+$hook_sys = [];
+$hook_modules = [];
 
 foreach ($allfiles as $filepath) {
     $filecontents = file_get_contents(NV_ROOTDIR . '/' . $filepath);
@@ -152,15 +177,15 @@ foreach ($allfiles as $filepath) {
     if (!empty($m[1])) {
         foreach ($m[1] as $k => $v) {
             $hook_tag = $m[3][$k];
-            $hook_data = array(
+            $hook_data = [
                 'file' => $filepath,
                 'code' => $m[0][$k]
-            );
+            ];
             if ($m[1][$k] == '$module_name') {
                 $hook_module = explode('/', $filepath);
                 $hook_module = $hook_module[1];
                 if (!isset($hook_modules[$hook_module])) {
-                    $hook_modules[$hook_module] = array();
+                    $hook_modules[$hook_module] = [];
                 }
                 $hook_modules[$hook_module][$hook_tag] = $hook_data;
             } else {
