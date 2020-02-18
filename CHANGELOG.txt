@@ -1,6 +1,28 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.08
+
+- Support php 7.4
+- Ckeditor v4.13.1, PHPMailer v6.1.4, Select2 v4.0.12, Chart.js v2.9.3
+- Fix delete item in module page #2851
+- Save changes when editing admin information
+- Allowed users to switch site theme
+- Fix bug addtotopics module news from #1517 WhiteHub (thanks for @unfairattaccs Ha Anh Hoang from Viettel)
+- Supported unicode email address (fix #2863)
+- Update jquery Validate v1.19.1 (fix #2877)
+- Fix check admin main module #2842
+- Module users: Save last edit time
+- Fix generate page tag #2866
+- Turn of sitemap module page by default
+- Add robot meta tag management function
+- Add get_absint function for class Request
+- Fix block language theme mobile
+- Add logo JSON-LD code for theme default, mobile_default
+- Add structured-data for module news, page
+- Module user: function user_add: add param showheader, set initdata, add url_back
+- Fix view and download pdf module news
+
 NUKEVIET 4.3.07
 
 - Update Ckeditor 4.12.1, Select2 4.0.10

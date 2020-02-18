@@ -8,7 +8,7 @@
  * @Createdate Apr 22, 2010 3:00:20 PM
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -37,13 +37,13 @@ $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
 $xtpl->assign('PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 
 $sql = 'SELECT t1.admin_id, t1.lev as level, t1.is_suspend, t2.username, t2.email, t2.first_name, t2.last_name, t2.active
-	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
-	INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
-	ON t1.admin_id = t2.userid
-	WHERE t1.lev!=0';
+    FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
+    INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
+    ON t1.admin_id = t2.userid
+    WHERE t1.lev!=0';
 $result = $db->query($sql);
 
-$adms = array();
+$adms = [];
 while ($row = $result->fetch()) {
     $row['is_suspend'] = ($row['is_suspend'] or empty($row['active'])) ? true : false;
     $adms[$row['admin_id']] = $row;
@@ -75,25 +75,25 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $image = '';
     }
 
-    $view_level = $nv_Request->get_array('view_level', 'post', array());
-    $reply_level = $nv_Request->get_array('reply_level', 'post', array());
-    $obt_level = $nv_Request->get_array('obt_level', 'post', array());
+    $view_level = $nv_Request->get_array('view_level', 'post', []);
+    $reply_level = $nv_Request->get_array('reply_level', 'post', []);
+    $obt_level = $nv_Request->get_array('obt_level', 'post', []);
 
-    if (! empty($email)) {
+    if (!empty($email)) {
         $_email = array_map('trim', explode(',', $email));
-        $email = array();
+        $email = [];
         foreach ($_email as $e) {
-            $check_valid_email = nv_check_valid_email($e);
-            if (empty($check_valid_email)) {
-                $email[] = $e;
+            $check_valid_email = nv_check_valid_email($e, true);
+            if (empty($check_valid_email[0])) {
+                $email[] = $check_valid_email[1];
             }
         }
         $email = implode(', ', $email);
     }
 
-    $admins = array();
+    $admins = [];
 
-    if (! empty($view_level)) {
+    if (!empty($view_level)) {
         foreach ($view_level as $admid) {
             $admins[$admid]['view_level'] = 1;
             $admins[$admid]['reply_level'] = 0;
@@ -101,7 +101,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 
-    if (! empty($reply_level)) {
+    if (!empty($reply_level)) {
         foreach ($reply_level as $admid) {
             $admins[$admid]['view_level'] = 1;
             $admins[$admid]['reply_level'] = 1;
@@ -109,10 +109,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 
-    if (! empty($obt_level)) {
+    if (!empty($obt_level)) {
         foreach ($obt_level as $admid) {
             $admins[$admid]['view_level'] = 1;
-            if (! isset($admins[$admid]['reply_level'])) {
+            if (!isset($admins[$admid]['reply_level'])) {
                 $admins[$admid]['reply_level'] = 0;
             }
             $admins[$admid]['obt_level'] = 1;
@@ -125,7 +125,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $lang_module['error_alias'];
     } else {
         $alias = empty($alias) ? change_alias($full_name) : change_alias($alias);
-        $admins_list = array();
+        $admins_list = [];
         foreach ($adms as $admid => $values) {
             if ($values['level'] === 1) {
                 $obt_level = (isset($admins[$admid])) ? $admins[$admid]['obt_level'] : 0;
@@ -138,10 +138,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
         $admins_list = implode(';', $admins_list);
 
-        $others = array();
-        if (! empty($otherVar)) {
+        $others = [];
+        if (!empty($otherVar)) {
             foreach ($otherVar as $k => $var) {
-                if (! empty($var) and isset($otherVal[$k]) and ! empty($otherVal[$k])) {
+                if (!empty($var) and isset($otherVal[$k]) and !empty($otherVal[$k])) {
                     $others[$var] = $otherVal[$k];
                 }
             }
@@ -149,7 +149,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $others = json_encode($others);
         $_cats = array_filter($cats);
         $_cats = array_unique($_cats);
-        $_cats = ! empty($_cats) ? implode('|', $_cats) : '';
+        $_cats = !empty($_cats) ? implode('|', $_cats) : '';
 
         if ($id) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, image = :image, phone = :phone, fax=:fax, email=:email, address=:address, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
@@ -176,7 +176,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':cats', $_cats, PDO::PARAM_STR);
             $sth->bindParam(':note', $note, PDO::PARAM_STR);
             $sth->bindParam(':admins', $admins_list, PDO::PARAM_STR);
-            if (! $id) {
+            if (!$id) {
                 $sth->bindParam(':weight', $weight, PDO::PARAM_STR);
             }
             $sth->execute();
@@ -200,16 +200,16 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $email = $frow['email'];
         $address = $frow['address'];
         $others = json_decode($frow['others'], true);
-        $cats = ! empty($frow['cats']) ? explode('|', $frow['cats']) : array();
+        $cats = !empty($frow['cats']) ? explode('|', $frow['cats']) : [];
 
         $note = nv_editor_br2nl($frow['note']);
 
         $admins_list = $frow['admins'];
-        $admins_list = ! empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : array();
+        $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : [];
 
-        $view_level = $reply_level = $obt_level = array();
+        $view_level = $reply_level = $obt_level = [];
 
-        if (! empty($admins_list)) {
+        if (!empty($admins_list)) {
             foreach ($admins_list as $l) {
                 if (preg_match('/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $l)) {
                     $l2 = array_map('intval', explode('/', $l));
@@ -242,7 +242,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     } else {
         $full_name = $alias = $image = $phone = $fax = $email = $note = $address = '';
-        $others = $cats = $view_level = $reply_level = $obt_level = array();
+        $others = $cats = $view_level = $reply_level = $obt_level = [];
 
         foreach ($adms as $admid => $values) {
             if ($values['level'] === 1) {
@@ -253,7 +253,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 }
 
-if (! empty($note)) {
+if (!empty($note)) {
     $note = nv_htmlspecialchars($note);
 }
 
@@ -261,7 +261,7 @@ if (empty($id)) {
     $xtpl->parse('main.get_alias');
 }
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }
@@ -272,7 +272,7 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $note = '<textarea style="width:100%;height:150px" name="note" id="note">' . $note . '</textarea>';
 }
 
-if (! empty($image) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
+if (!empty($image) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
 }
 
@@ -287,7 +287,7 @@ $xtpl->assign('DATA', array(
     'note' => $note
 ));
 
-if (! empty($others)) {
+if (!empty($others)) {
     foreach ($others as $var => $val) {
         $xtpl->assign('OTHER', array(
             'var' => $var,
@@ -297,7 +297,7 @@ if (! empty($others)) {
     }
 }
 
-if (! empty($cats)) {
+if (!empty($cats)) {
     foreach ($cats as $val) {
         $xtpl->assign('CATS', $val);
         $xtpl->parse('main.cats');
@@ -315,9 +315,9 @@ foreach ($adms as $admid => $values) {
         'admid' => $admid,
         'img' => 'admin' . $values['level'],
         'level' => $lang_global['level' . $values['level']],
-        'view_level' => ($values['level'] === 1 or (! empty($view_level) and in_array($admid, $view_level))) ? ' checked="checked"' : '',
-        'reply_level' => ($values['level'] === 1 or (! empty($reply_level) and in_array($admid, $reply_level))) ? ' checked="checked"' : '',
-        'obt_level' => (! empty($obt_level) and in_array($admid, $obt_level)) ? ' checked="checked"' : '',
+        'view_level' => ($values['level'] === 1 or (!empty($view_level) and in_array($admid, $view_level))) ? ' checked="checked"' : '',
+        'reply_level' => ($values['level'] === 1 or (!empty($reply_level) and in_array($admid, $reply_level))) ? ' checked="checked"' : '',
+        'obt_level' => (!empty($obt_level) and in_array($admid, $obt_level)) ? ' checked="checked"' : '',
         'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
     ));
 

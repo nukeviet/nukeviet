@@ -23,7 +23,7 @@
                 <tr>
                     <td> {LANG.email} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="email required form-control" value="{DATA.email}" name="email" id="email_iavim" style="width: 300px" /></td>
+                    <td><input type="email" class="email required form-control" value="{DATA.email}" name="email" id="email_iavim" style="width: 300px" /></td>
                 </tr>
                 <!-- BEGIN: name_show_0 -->
                 <!-- BEGIN: show_last_name-->

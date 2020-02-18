@@ -131,7 +131,8 @@ if ($nv_Request->isset_request('approved', 'post')) {
             gender=" . $db->quote($custom_fields['gender']) . ",
             birthday=" . intval($custom_fields['birthday']) . ",
             sig=" . $db->quote($custom_fields['sig']) . ",
-            view_mail=" . $custom_fields['view_mail'] . "
+            view_mail=" . $custom_fields['view_mail'] . ",
+            last_update=" . NV_CURRENTTIME . "
         WHERE userid=" . $userid);
 
         // Cập nhật thông tin tùy biến dữ liệu
@@ -242,7 +243,8 @@ if (!empty($reviewuid)) {
                 gender=" . $db->quote($_user['gender']) . ",
                 birthday=" . intval($_user['birthday']) . ",
                 sig=" . $db->quote($_user['sig']) . ",
-                view_mail=" . $_user['view_mail'] . "
+                view_mail=" . $_user['view_mail'] . ",
+                last_update=" . NV_CURRENTTIME . "
             WHERE userid=" . $reviewuid);
         }
 

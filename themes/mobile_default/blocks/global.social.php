@@ -28,10 +28,6 @@ if (!nv_function_exists('nv_menu_theme_social')) {
         $html .= '	<div class="col-sm-18"><input type="text" name="config_facebook" class="form-control" value="' . $data_block['facebook'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['google_plus'] . ':</label>';
-        $html .= '	<div class="col-sm-18"><input type="text" name="config_google_plus" class="form-control" value="' . $data_block['google_plus'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['youtube'] . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_youtube" class="form-control" value="' . $data_block['youtube'] . '"/></div>';
         $html .= '</div>';
@@ -55,7 +51,6 @@ if (!nv_function_exists('nv_menu_theme_social')) {
         $return = array();
         $return['error'] = array();
         $return['config']['facebook'] = $nv_Request->get_title('config_facebook', 'post');
-        $return['config']['google_plus'] = $nv_Request->get_title('config_google_plus', 'post');
         $return['config']['youtube'] = $nv_Request->get_title('config_youtube', 'post');
         $return['config']['twitter'] = $nv_Request->get_title('config_twitter', 'post');
         return $return;
@@ -86,9 +81,6 @@ if (!nv_function_exists('nv_menu_theme_social')) {
         $xtpl->assign('DATA', $block_config);
         if (!empty($block_config['facebook'])) {
             $xtpl->parse('main.facebook');
-        }
-        if (!empty($block_config['google_plus'])) {
-            $xtpl->parse('main.google_plus');
         }
         if (!empty($block_config['youtube'])) {
             $xtpl->parse('main.youtube');

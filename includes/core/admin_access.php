@@ -23,7 +23,7 @@ function nv_admin_checkip()
 
     if ($global_config['block_admin_ip']) {
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php')) {
-            $array_adminip = array();
+            $array_adminip = [];
             include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
 
             if (empty($array_adminip)) {
@@ -56,7 +56,7 @@ function nv_admin_checkfirewall()
 
     if ($global_config['admfirewall']) {
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php')) {
-            $adv_admins = array();
+            $adv_admins = [];
             include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
 
             if (empty($adv_admins)) {
@@ -94,41 +94,47 @@ function nv_admin_checkdata($adm_session_value)
 {
     global $db, $global_config;
 
-    $array_admin = unserialize($adm_session_value);
+    $array_admin = json_decode($adm_session_value, true);
 
-    if (!isset($array_admin['admin_id']) or !is_numeric($array_admin['admin_id']) or $array_admin['admin_id'] <= 0 or !isset($array_admin['checknum']) or !preg_match('/^[a-z0-9]{32}$/', $array_admin['checknum'])) {
-        return array();
+    if (
+        !is_array($array_admin) or !isset($array_admin['admin_id'])
+        or !is_numeric($array_admin['admin_id']) or $array_admin['admin_id'] <= 0
+        or !isset($array_admin['checknum']) or !preg_match('/^[a-z0-9]{32}$/', $array_admin['checknum'])
+    ) {
+        return [];
     }
 
     $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme, a.check_num check_num, a.last_agent current_agent,
-		a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
-		b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
-		b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
-		b.password password, b.question question, b.answer answer, b.safemode safemode, b.email_verification_time email_verification_time
-		FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
-		WHERE a.admin_id = ' . $array_admin['admin_id'] . '
-		AND a.lev!=0
-		AND a.is_suspend=0
-		AND b.userid=a.admin_id
-		AND b.active=1';
+        a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
+        b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
+        b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
+        b.password password, b.question question, b.answer answer, b.safemode safemode, b.email_verification_time email_verification_time
+        FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
+        WHERE a.admin_id = ' . $array_admin['admin_id'] . '
+        AND a.lev!=0
+        AND a.is_suspend=0
+        AND b.userid=a.admin_id
+        AND b.active=1';
     $admin_info = $db->query($sql)->fetch();
     if (empty($admin_info)) {
-        return array();
+        return [];
     }
 
-    if (($array_admin['checknum'] !== $admin_info['check_num']) or    //check_num
-        !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) or    //user_agent
-        !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) or    //IP
-        !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login']))) {    //current_login
-        return array();
+    if (
+        ($array_admin['checknum'] !== $admin_info['check_num']) // Check_num
+        or !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) // User_agent
+        or !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) // IP
+        or !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login'])) // Current_login
+    ) {
+        return [];
     }
 
     if (empty($admin_info['files_level'])) {
-        $allow_files_type = array();
+        $allow_files_type = [];
         $allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
     } else {
         list($allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories) = explode('|', $admin_info['files_level']);
-        $allow_files_type = !empty($allow_files_type) ? explode(',', $allow_files_type) : array();
+        $allow_files_type = !empty($allow_files_type) ? explode(',', $allow_files_type) : [];
         $allow_files_type2 = array_values(array_intersect($allow_files_type, $global_config['file_allowed_ext']));
         if ($allow_files_type != $allow_files_type2) {
             $update = implode(',', $allow_files_type2);
@@ -177,6 +183,72 @@ function nv_admin_checkdata($adm_session_value)
     $admin_info['current_mode'] = 5;
 
     unset($admin_info['lev'], $admin_info['files_level'], $admin_info['password'], $admin_info['question'], $admin_info['answer'], $admin_info['check_num']);
+
+    return $admin_info;
+}
+
+/**
+ * Hàm kiểm tra và lấy thông tin tài khoản quản trị đã đăng nhập bước thứ 1 (tài khoản + mật khẩu)
+ *
+ * @since 4.3.09
+ * @param string $adm_session_value
+ * @return array
+ */
+function nv_admin_check_predata($adm_session_value)
+{
+    global $db;
+
+    if (empty($adm_session_value)) {
+        return [];
+    }
+    $array_admin = json_decode($adm_session_value, true);
+    if (!is_array($array_admin)) {
+        return [];
+    }
+    // Kiểm tra toàn vẹn session
+    if (
+        !isset($array_admin['admin_id'])
+        or !is_numeric($array_admin['admin_id'])
+        or $array_admin['admin_id'] <= 0
+        or !isset($array_admin['checknum'])
+        or !preg_match('/^[a-z0-9]{32}$/', $array_admin['checknum'])
+    ) {
+        return [];
+    }
+
+    // Lấy thông tin từ CSDL
+    $sql = 'SELECT a.admin_id admin_id, a.pre_check_num check_num, a.pre_last_agent current_agent,
+        a.pre_last_ip current_ip, a.pre_last_login current_login,
+        a.last_agent admin_last_agent, a.last_ip admin_last_ip, a.last_login admin_last_login,
+        b.userid userid, b.group_id group_id,
+        b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.active2step active2step,
+        b.last_agent user_last_agent, b.last_ip user_last_ip, b.last_login user_last_login, b.last_openid user_last_openid,
+        b.secretkey user_2s_secretkey
+        FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
+        WHERE a.admin_id = ' . $array_admin['admin_id'] . '
+        AND a.lev!=0
+        AND a.is_suspend=0
+        AND b.userid=a.admin_id
+        AND b.active=1';
+    $admin_info = $db->query($sql)->fetch();
+    if (empty($admin_info)) {
+        return [];
+    }
+
+    // Đối chiếu dữ liệu từ CSDL và session đảm bảo đúng thông tin
+    if (
+        ($array_admin['checknum'] !== $admin_info['check_num']) // Check_num
+        or !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) // User_agent
+        or !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) // IP
+        or !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login'])) // Current_login
+        or $array_admin['current_login'] < (NV_CURRENTTIME - 300) // Trạng thái chờ xác thực 2 bước duy trì 5 phút
+    ) {
+        return [];
+    }
+
+    $admin_info['full_name'] = nv_show_name_user($admin_info['first_name'], $admin_info['last_name'], $admin_info['username']);
+
+    unset($admin_info['check_num']);
 
     return $admin_info;
 }

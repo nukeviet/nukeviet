@@ -147,3 +147,10 @@ $lang_module['preview_theme_on'] = 'Cho phép xem trước';
 $lang_module['preview_theme_off'] = 'Hủy xem trước';
 $lang_module['preview_theme_link'] = 'Liên kết xem trước giao diện';
 $lang_module['preview_theme_link_copied'] = 'Liên kết đã được sao chép vào bộ nhớ tạm';
+
+$lang_module['settings'] = 'Cấu hình';
+$lang_module['settings_utheme'] = 'Thiết lập giao diện người dùng';
+$lang_module['settings_utheme_help'] = 'Người sử dụng có thể chuyển đổi giữa các giao diện bên dưới';
+$lang_module['settings_utheme_note'] = 'Bạn cần thiết lập giao diện trước khi giao diện có thể xuất hiện bên dưới';
+$lang_module['settings_utheme_lnote'] = 'Cấu hình này áp dụng cho ngôn ngữ <strong>%s</strong>';
+$lang_module['settings_utheme_choose'] = 'Chọn giao diện';

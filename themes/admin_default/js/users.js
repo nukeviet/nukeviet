@@ -650,7 +650,6 @@ $(document).ready(function() {
     });
     if ($.fn.datepicker){
         $("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-            showOn : "both",
             dateFormat : "dd.mm.yy",
             changeMonth : true,
             changeYear : true,

@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -141,6 +141,7 @@ $lang_module['setting_instant_articles_gettime1'] = 'Note: Facebook queries into
 $lang_module['setting_instant_articles_defaulturl'] = 'RSS feed URL to declare if using instant messaging feature';
 $lang_module['setting_instant_articles_defaulturl1'] = 'Note: This URL is the URL that contains the entire article of the module. To get the URL of the feed for each forum, after activating the instant messaging feature, you need to move to the administration section, click the button that displays the URL of the instant message RSS feed. At each respective category.';
 $lang_module['setting_instant_articles_auto'] = 'The default message is posted as an instant message if this function is activated';
+$lang_module['setting_sys'] = 'Configure system';
 $lang_module['setting_identify_cat_change'] = 'Support to change article categories';
 $lang_module['setting_identify_cat_change_help'] = 'Enabling this feature will allow the system to auto redirect the old article to a new address when changing the category of the article, but the performance will decrease a bit. If you do not regularly change article categories, turn off this feature';
 $lang_module['viewcat_page'] = 'Display method';

@@ -74,3 +74,17 @@ $lang_global['multi_email_note'] = 'Pouvez déclarer plus qu\'une valeur. Les va
 $lang_global['view_all'] = 'voir tous les';
 $lang_global['email'] = 'E-mail';
 $lang_global['phonenumber'] = 'Téléphone';
+$lang_global['admin_pre_logout'] = 'Pas moi, déconnectez-vous';
+$lang_global['admin_hello_2step'] = 'Hé! <strong class="admin-name">%s</strong>, veuillez vérifier votre compte';
+$lang_global['admin_noopts_2step'] = 'Aucune méthode de vérification en deux étapes n\'a été accordée, vous ne pouvez pas vous connecter temporairement à l\'administrateur';
+$lang_global['admin_mactive_2step'] = 'Vous ne pouvez pas vérifier car aucune méthode n\'a encore été activée';
+$lang_global['admin_mactive_2step_choose0'] = 'Veuillez cliquer sur le bouton ci-dessous pour activer la méthode de vérification';
+$lang_global['admin_mactive_2step_choose1'] = 'Veuillez sélectionner l\'une des méthodes de vérification ci-dessous';
+$lang_global['admin_2step_opt_code'] = 'Étape 2 - Code de Vérification';
+$lang_global['admin_2step_opt_facebook'] = 'Compte Facebook';
+$lang_global['admin_2step_opt_google'] = 'Compte Google';
+$lang_global['admin_2step_other'] = 'Autres méthodes';
+$lang_global['admin_oauth_error_getdata'] = 'Erreur: Le système n\'a pas reconnu les données de vérification. Échec de la vérification!';
+$lang_global['admin_oauth_error_email'] = 'Erreur: L\'email de retour n\'est pas valide, vous ne pouvez pas vérifier';
+$lang_global['admin_oauth_error_savenew'] = 'Erreur: Impossible d\'enregistrer les données de vérification';
+$lang_global['admin_oauth_error'] = 'Erreur: La vérification n\'est pas valide, ce compte n\'a pas été autorisé à vérifier';

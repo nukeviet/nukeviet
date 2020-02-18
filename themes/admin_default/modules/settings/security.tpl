@@ -57,6 +57,29 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><strong>{LANG.admin_2step_opt}</strong></td>
+                                    <td>
+                                        <!-- BEGIN: admin_2step_opt -->
+                                        <div>
+                                            <label><input type="checkbox" name="admin_2step_opt[]" value="{ADMIN_2STEP_OPT.key}"{ADMIN_2STEP_OPT.checked}> {ADMIN_2STEP_OPT.title}</label>
+                                            <!-- BEGIN: link_config -->
+                                            (<a href="{LINK_CONFIG}" target="_blank">{LANG.admin_2step_appconfig}</a>)
+                                            <!-- END: link_config -->
+                                        </div>
+                                        <!-- END: admin_2step_opt -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.admin_2step_default}</strong></td>
+                                    <td>
+                                        <select name="admin_2step_default" class="form-control w200">
+                                            <!-- BEGIN: admin_2step_default -->
+                                            <option value="{ADMIN_2STEP_DEFAULT.key}"{ADMIN_2STEP_DEFAULT.selected}>{ADMIN_2STEP_DEFAULT.title}</option>
+                                            <!-- END: admin_2step_default -->
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><strong>{LANG.nv_anti_agent}</strong></td>
                                     <td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>
                                 </tr>

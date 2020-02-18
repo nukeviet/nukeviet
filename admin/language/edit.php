@@ -12,8 +12,7 @@ if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
-$select_options = array();
-
+$select_options = [];
 $contents = '';
 
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -27,14 +26,19 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
     $idfile = $nv_Request->get_int('idfile', 'post', 0);
 
     $authorSubmit = isset($_POST['pozauthor']['author']) ? $_POST['pozauthor']['author'] : '';
-    if (preg_match('/^([^\<]+)\<([^\>]+)\>$/', $authorSubmit, $m) and nv_check_valid_email(trim($m[2])) == '') {
-        $authorSubmit = trim(strip_tags($m[1])) . ' <' . trim($m[2]) . '>';
+    if (preg_match('/^([^\<]+)\<([^\>]+)\>$/', $authorSubmit, $m)) {
+        $check = nv_check_valid_email(trim($m[2]), true);
+        if ($check[0] == '') {
+            $authorSubmit = trim(strip_tags($m[1])) . ' <' . $check[1] . '>';
+        } else {
+            $authorSubmit = false;
+        }
     } else {
         $authorSubmit = false;
     }
 
-    $lang_translator = $nv_Request->get_array('pozauthor', 'post', array());
-    $lang_translator_save = array();
+    $lang_translator = $nv_Request->get_array('pozauthor', 'post', []);
+    $lang_translator_save = [];
 
     $langtype = isset($lang_translator['langtype']) ? strip_tags($lang_translator['langtype']) : 'lang_module';
 
@@ -59,7 +63,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'], $module . ' : idfile = ' . $idfile, $admin_info['userid']);
 
-    $pozlang = $nv_Request->get_array('pozlang', 'post', array());
+    $pozlang = $nv_Request->get_array('pozlang', 'post', []);
 
     if (!empty($pozlang)) {
         $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $dirlang . '= :lang_value WHERE id= :id');
@@ -71,8 +75,8 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
         }
     }
 
-    $pozlangkey = $nv_Request->get_array('pozlangkey', 'post', array());
-    $pozlangval = $nv_Request->get_array('pozlangval', 'post', array());
+    $pozlangkey = $nv_Request->get_array('pozlangkey', 'post', []);
+    $pozlangval = $nv_Request->get_array('pozlangval', 'post', []);
 
     $sizeof = sizeof($pozlangkey);
     $sth = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ') VALUES (' . $idfile . ', :lang_key, :lang_value)');
@@ -102,7 +106,7 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
 
     if (!empty($dirlang) and !empty($module)) {
         if (empty($author_lang)) {
-            $array_translator = array();
+            $array_translator = [];
             $array_translator['author'] = '';
             $array_translator['createdate'] = '';
             $array_translator['copyright'] = '';
