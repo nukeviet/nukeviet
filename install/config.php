@@ -321,7 +321,7 @@ $nv_parse_ini_timezone = array(
     'Asia/Bangkok' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Jakarta' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Phnom_Penh' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
-    'Asia/Saigon' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
+    'Asia/Ho_Chi_Minh' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Vientiane' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Krasnoyarsk' => array( 'winter_offset' => 25200, 'summer_offset' => 28800 ),
     'Asia/Brunei' => array( 'winter_offset' => 28800, 'summer_offset' => 28800 ),
