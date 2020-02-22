@@ -8,4 +8,12 @@
 
 `php CheckNewLangError.php` => Kiểm tra lại xem quá trình chuyển đổi có gây ra lỗi cú pháp không ví dụ. `$nv_Lang->getModule('key') = 'xxx'` khi đó cần sửa lại tương ứng `$nv_Lang->setModule('key', 'xxx')`.
 
-LangCompare.php => Chạy trên website, không chạy qua command line mục đích gộp lang admin các module vào một file lang duy nhất
+LangCompare.php => Chạy trên website, không chạy qua command line mục đích gộp lang admin các module vào một file lang duy nhất.
+Chú ý khi chạy file này thì mở nó lên sửa
+
+```
+$currentModule = 'Users';
+$lang = 'fr';
+```
+
+Thành module và ngôn ngữ cần làm

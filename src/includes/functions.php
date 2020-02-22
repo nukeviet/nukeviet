@@ -2153,7 +2153,7 @@ function nv_apply_hook($module = '', $tag, $args = [], $default = null, $return_
             }
             // Đưa tham số ID trong CSDL vào các biến
             $args['pid'] = $func['pid'];
-            $_value = call_user_func($func['callback'], $args, $from_data, $receive_data);
+            $_value = call_user_func_array($func['callback'], [&$args, $from_data, $receive_data]);
             if (!is_null($_value)) {
                 if (empty($return_type)) {
                     $value = $_value;
