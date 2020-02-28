@@ -1,15 +1,26 @@
 <!-- BEGIN: main -->
 <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/css/lightslider.min.css" rel="stylesheet" type="text/css">
-<div itemscope itemtype="http://schema.org/Product" style="display: none">
-    <span itemprop="name">{TITLE}</span> <img itemprop="image" src="{SRC_PRO_FULL}" alt="{TITLE}" /> <span itemprop="description">{hometext}</span> <span itemprop="mpn">{PRODUCT_CODE}</span>
+<div id="detail"<!-- BEGIN: popupid --> class="prodetail-popup"<!-- END: popupid --> itemtype="http://schema.org/Product" itemscope>
+    <span class="d-none hidden hide" itemprop="mpn" content="{PRODUCT_CODE}"></span>
+    <span class="d-none hidden hide" itemprop="sku" content="{PRODUCT_CODE}"></span>
+    <div class="d-none hidden hide" itemprop="brand" itemtype="http://schema.org/Thing" itemscope>
+        <span itemprop="name">N/A</span>
+    </div>
     <!-- BEGIN: allowed_rating_snippets -->
-    <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"> <span itemprop="ratingValue">{RATE_VALUE}</span> {LANG.trong} <span itemprop="reviewCount">{RATE_TOTAL} </span> {LANG.dg}
-    </span>
+    <div class="d-none hidden hide" itemprop="aggregateRating" itemtype="http://schema.org/AggregateRating" itemscope>
+        <span itemprop="reviewCount">{RATE_TOTAL}</span>
+        <span itemprop="ratingValue">{RATE_VALUE}</span>
+    </div>
     <!-- END: allowed_rating_snippets -->
-    <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"> <span itemprop="category">{CAT_TITLE}</span> <!-- BEGIN: price1 --> <span itemprop="price">{PRICE.sale_format}</span> <span itemprop="priceCurrency">{PRICE.unit}</span> <!-- END: price1 --> <span itemprop="availability">{LANG.detail_pro_number}: {PRODUCT_NUMBER} {pro_unit}</span>
-    </span>
-</div>
-<div id="detail"<!-- BEGIN: popupid --> class="prodetail-popup"<!-- END: popupid -->>
+    <div class="d-none hidden hide" itemprop="offers" itemtype="http://schema.org/Offer" itemscope>
+        <!-- BEGIN: price1 -->
+        <span itemprop="price">{PRICE.sale_format}</span>
+        <span itemprop="priceCurrency">{PRICE.unit}</span>
+        <!-- END: price1 -->
+        <a itemprop="url" href="{PRO_FULL_LINK}"></a>
+        <span itemprop="priceValidUntil">{PRICEVALIDUNTIL}</span>
+        <span itemprop="availability">{AVAILABILITY}</span>
+    </div>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -18,7 +29,7 @@
                     <div class="image">
                         <ul id="imageGallery" class="gallery">
                             <!-- BEGIN: loop -->
-                            <li data-thumb="{IMAGE.thumb}" style="height: 200px" data-src="{IMAGE.file}"><img src="{IMAGE.file}" /></li>
+                            <li data-thumb="{IMAGE.thumb}" style="height: 200px" data-src="{IMAGE.file}"><img itemprop="image" src="{IMAGE.file}" /></li>
                             <!-- END: loop -->
                         </ul>
                     </div>
@@ -40,13 +51,10 @@
                 </div>
                 <div class="col-xs-24 col-sm-14 col-md-14">
                     <ul class="product_info">
-                        <li>
-                            <h1>{TITLE}</h1>
-                        </li>
+                        <li><h1 itemprop="name">{TITLE}</h1></li>
                         <li class="text-muted">{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}</li>
                         <!-- BEGIN: product_code -->
-                        <li>{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
-                        </li>
+                        <li>{LANG.product_code}: <strong>{PRODUCT_CODE}</strong></li>
                         <!-- END: product_code -->
                         <!-- BEGIN: price -->
                         <li>
@@ -88,7 +96,7 @@
                         <!-- END: custom_data -->
                         <!-- BEGIN: hometext -->
                         <li>
-                            <p class="text-justify">{hometext}</p>
+                            <p class="text-justify" itemprop="description">{hometext}</p>
                         </li>
                         <!-- END: hometext -->
                         <!-- BEGIN: promotional -->

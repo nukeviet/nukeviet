@@ -376,6 +376,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
 
     $data_content['image'] = $array_images;
     unset($array_images, $data_content['homeimgfile'], $data_content['otherimage']);
+    $data_content['full_link'] = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . $global_config['rewrite_exturl'], true);
 
     $contents = nv_template_detail($data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplates, $array_keyword);
 } else {

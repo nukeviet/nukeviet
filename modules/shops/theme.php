@@ -219,8 +219,10 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
             $xtpl->parse('main.product_weight');
         }
 
+        $xtpl->assign('PRO_FULL_LINK', $data_content['full_link']);
         $xtpl->assign('NUM_VIEW', $data_content['hitstotal']);
         $xtpl->assign('DATE_UP', $lang_module['detail_dateup'] . ' ' . nv_date('d-m-Y h:i:s A', $data_content['publtime']));
+        $xtpl->assign('PRICEVALIDUNTIL', nv_date('Y-m-d', $data_content['publtime']));
         $xtpl->assign('DETAIL', $data_content[NV_LANG_DATA . '_bodytext']);
         $xtpl->assign('LINK_ORDER', $link2 . 'setcart&id=' . $data_content['id']);
         $price = nv_get_price($data_content['id'], $pro_config['money_unit']);
@@ -228,6 +230,12 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
         $xtpl->assign('PRODUCT_CODE', $data_content['product_code']);
         $xtpl->assign('PRODUCT_NUMBER', $data_content['product_number']);
         $xtpl->assign('pro_unit', $data_unit['title']);
+
+        if ($data_content['product_number'] < 1) {
+            $xtpl->assign('AVAILABILITY', 'https://schema.org/OutOfStock');
+        } else {
+            $xtpl->assign('AVAILABILITY', 'https://schema.org/InStock');
+        }
 
         if (!empty($data_content['image'])) {
             foreach ($data_content['image'] as $image) {
