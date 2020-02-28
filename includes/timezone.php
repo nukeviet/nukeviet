@@ -67,7 +67,7 @@ $site_timezone = ($global_config['site_timezone'] == 'byCountry') ? $countries[$
 if ($site_timezone == '') {
     $site_timezone = defined('NV_CLIENT_TIMEZONE_NAME') ? NV_CLIENT_TIMEZONE_NAME : ((isset($global_config['statistics_timezone']) ? $global_config['statistics_timezone'] : ''));
     if ($site_timezone == '') {
-        $site_timezone = 'Asia/Saigon';
+        $site_timezone = 'Asia/Ho_Chi_Minh';
     }
 }
 
