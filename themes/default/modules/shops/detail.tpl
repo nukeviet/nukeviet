@@ -14,7 +14,7 @@
     <!-- END: allowed_rating_snippets -->
     <div class="d-none hidden hide" itemprop="offers" itemtype="http://schema.org/Offer" itemscope>
         <!-- BEGIN: price1 -->
-        <span itemprop="price">{PRICE.sale_format}</span>
+        <span itemprop="price">{PRICE.sale}</span>
         <span itemprop="priceCurrency">{PRICE.unit}</span>
         <!-- END: price1 -->
         <a itemprop="url" href="{PRO_FULL_LINK}"></a>
