@@ -445,9 +445,9 @@ function nvbreadcrumbs() {
     for (b.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
       a.push([$(this).attr("title"), $(this).attr("href")]);
     }), i = a.length - 1;0 <= i;i--) {
-      d || (c = 0, b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>"), b.find("li").each(function() {
+      d || (c = 0, b.prepend('<li id="brcr_' + i + '"><a href="' + a[i][1] + '"><span>' + a[i][0] + "</span></a></li>"), b.find("li").each(function() {
         c += $(this).outerWidth(!0);
-      }), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
+      }), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li><a href="' + a[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
     }
   }
 }
