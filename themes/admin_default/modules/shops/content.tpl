@@ -445,6 +445,7 @@
         </div>
     </div>
     <div class="text-center" style="margin-top: 10px">
+        <input type="hidden" name="copy" value="{IS_COPY}">
         <!-- BEGIN:status -->
         <input class="btn btn-primary submit" data-status="1" type="submit" value="{LANG.save}" />
         <!-- END:status -->
@@ -487,7 +488,7 @@
                         alert(json.msg);
                         $('#' + json.input).focus();
                     } else {
-                    	$(window).unbind();
+                        $(window).unbind();
                         window.location.href = json.redirect;
                     }
                 }
@@ -536,11 +537,20 @@
     });
 </script>
 <!-- END: files_js -->
-<!-- BEGIN:getalias -->
+<!-- BEGIN: getalias -->
 <script type="text/javascript">
+$(document).ready(function() {
     $("#idtitle").change(function() {
         get_alias('content', {ALIAS});
     });
+});
 </script>
-<!-- END:getalias -->
+<!-- END: getalias -->
+<!-- BEGIN: pre_getalias -->
+<script type="text/javascript">
+$(document).ready(function() {
+    get_alias('content', {ALIAS});
+});
+</script>
+<!-- END: pre_getalias -->
 <!-- END:main -->

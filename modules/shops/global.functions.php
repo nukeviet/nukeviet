@@ -230,7 +230,7 @@ function nv_archive_content_module($id)
 function nv_link_edit_page($id)
 {
     global $lang_global, $module_name;
-    $link = "<a class=\"btn btn-default btn-xs\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\" title=\"" . $lang_global['edit'] . "\"><em class=\"fa fa-edit\">&nbsp;</em></a>";
+    $link = "<a class=\"btn btn-default btn-xs\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . "=" . $module_name . '&amp;' . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\" title=\"" . $lang_global['edit'] . "\"><i class=\"fa fa-edit\"></i></a>";
     return $link;
 }
 
@@ -243,7 +243,7 @@ function nv_link_edit_page($id)
 function nv_link_delete_page($id)
 {
     global $lang_global, $module_name;
-    $link = "<a class=\"btn btn-default btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5($id . session_id()) . "','" . NV_BASE_ADMINURL . "')\" title=\"" . $lang_global['delete'] . "\"><em class=\"fa fa-trash-o\">&nbsp;</em></a>";
+    $link = "<a class=\"btn btn-danger btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5($id . session_id()) . "','" . NV_BASE_ADMINURL . "')\" title=\"" . $lang_global['delete'] . "\"><i class=\"fa fa-trash-o\"></i></a>";
     return $link;
 }
 

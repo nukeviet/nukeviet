@@ -110,7 +110,7 @@ $page_title = $lang_module['content_add'];
 $groups_list = nv_groups_list();
 $array_keywords_old = [];
 
-$is_copy = $nv_Request->isset_request('copy', 'get');
+$is_copy = $nv_Request->get_int('copy', 'get,post', 0);
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 
 $group_id_old = [];
@@ -151,7 +151,9 @@ if ($rowcontent['id'] > 0) {
     }
 }
 
+$is_submit = false;
 if ($nv_Request->get_int('save', 'post') == 1) {
+    $is_submit = true;
     $field_lang = nv_file_table($table_name);
     $id_block_content = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', []));
     $rowcontent['listcatid'] = $nv_Request->get_int('catid', 'post', 0);
@@ -898,19 +900,19 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     $page_title = $lang_module['content_edit'];
 
-    if ($is_copy) {
-        $rowcontent['alias'] = '';
-        $rowcontent['product_code'] = '';
-        $rowcontent['publtime'] = NV_CURRENTTIME;
-        $rowcontent['status'] = 0;
-    }
-
     $id_block_content = [];
     $sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
 
     while (list ($bid_i) = $result->fetch(3)) {
         $id_block_content[] = $bid_i;
+    }
+
+    if ($is_copy) {
+        $rowcontent['alias'] = '';
+        $rowcontent['product_code'] = '';
+        $rowcontent['publtime'] = NV_CURRENTTIME;
+        $rowcontent['status'] = 0;
     }
 }
 
@@ -968,6 +970,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_UPLOAD', $module_upload);
 $xtpl->assign('CURRENT', $currentpath);
+$xtpl->assign('IS_COPY', $is_copy);
 
 if ($rowcontent['status'] == 1) {
     $xtpl->parse('main.status');
@@ -1229,9 +1232,12 @@ if ($rowcontent['id'] > 0 and !$is_copy) {
 if (empty($rowcontent['alias'])) {
     $xtpl->parse('main.getalias');
 }
+if (!$is_submit and $is_copy) {
+    $xtpl->parse('main.pre_getalias');
+}
 
 if (!$pro_config['active_warehouse']) {
-    if ($rowcontent['id'] > 0) {
+    if ($rowcontent['id'] > 0 and !$is_copy) {
         $xtpl->parse('main.warehouse.edit');
     } else {
         $xtpl->parse('main.warehouse.add');
