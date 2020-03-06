@@ -119,11 +119,13 @@
             <tfoot>
                 <tr class="text-left">
                     <td colspan="12">
-                    <select class="form-control" name="action" id="action">
-                        <!-- BEGIN: action -->
-                        <option value="{ACTION.value}">{ACTION.title}</option>
-                        <!-- END: action -->
-                    </select><input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
+                        <select class="form-control w150" name="action" id="action">
+                            <!-- BEGIN: action -->
+                            <option value="{ACTION.value}">{ACTION.title}</option>
+                            <!-- END: action -->
+                        </select>
+                        <input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.action}" />
+                    </td>
                 </tr>
             </tfoot>
         </table>

@@ -29,6 +29,7 @@ $lang_module['action'] = 'Effectuer';
 $lang_module['move'] = 'Déplacer';
 $lang_module['save_temp'] = 'Sauvegarde temporairement';
 $lang_module['publtime'] = 'Publier';
+$lang_module['publtime_action'] = 'Publier (ne s\'applique pas aux brouillons et aux messages verrouillés)';
 $lang_module['exptime'] = 'Expirer l\'article';
 $lang_module['status_action_0'] = 'Passer à l\'attente d\'examiner';
 $lang_module['declined'] = 'Refuse l\'article';

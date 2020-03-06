@@ -29,6 +29,7 @@ $lang_module['action'] = 'Thực hiện';
 $lang_module['move'] = 'Di chuyển bài viết';
 $lang_module['save_temp'] = 'Lưu bản nháp';
 $lang_module['publtime'] = 'Đăng bài viết';
+$lang_module['publtime_action'] = 'Đăng (không áp dụng cho bài viết lưu nháp, bị khóa)';
 $lang_module['exptime'] = 'Cho hết hạn bài viết';
 $lang_module['status_action_0'] = 'Chuyển sang chờ duyệt';
 $lang_module['declined'] = 'Từ chối bài viết';
