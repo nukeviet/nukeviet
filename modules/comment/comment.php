@@ -219,7 +219,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             } else {
                 $comment = '';
             }
-            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment, $header);
+            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment, $header, $per_page_comment);
         } else {
             return '';
         }
@@ -240,9 +240,10 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
  * @param mixed $form_login
  * @param string $status_comment
  * @param integer $header
+ * @param integer $per_page_comment
  * @return
  */
-function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '', $header = 1)
+function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '', $header = 1, $per_page_comment = 10)
 {
     global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $lang_module_comment, $module_name;
 
@@ -262,6 +263,9 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('AREA_COMM', $area);
     $xtpl->assign('ID_COMM', $id);
     $xtpl->assign('ALLOWED_COMM', $allowed_comm);
+    $xtpl->assign('PER_PAGE', $per_page_comment);
+
+    // Hiện không dùng, giữ lại để tương thích phiên bản cũ.
     $xtpl->assign('BASE_URL_COMM', $base_url);
 
     if (defined('NV_COMM_ID')) {
