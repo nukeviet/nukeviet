@@ -28,7 +28,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  userid mediumint(8) unsigned NOT NULL DEFAULT '0',
  post_name varchar(100) NOT NULL,
  post_email varchar(100) NOT NULL,
- post_ip varchar(15) NOT NULL,
+ post_ip varchar(39) NOT NULL DEFAULT '',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  likes mediumint(9) NOT NULL DEFAULT '0',
  dislikes mediumint(9) NOT NULL DEFAULT '0',
