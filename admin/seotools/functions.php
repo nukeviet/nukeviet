@@ -23,6 +23,8 @@ if (defined('NV_IS_GODADMIN')) {
     if (empty($global_config['idsite'])) {
         $allow_func[] = 'rpc';
     }
+} elseif (defined('NV_IS_SPADMIN') and $global_config['idsite']) {
+    $allow_func[] = 'metatags';
 }
 
 $menu_top = [
