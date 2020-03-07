@@ -129,6 +129,10 @@ a.link:hover {
     line-height: 32px;
 }
 
+.text-nowrap {
+    white-space: nowrap!important;
+}
+
 .nvwrap {
     position: relative;
     min-height: 100%;
