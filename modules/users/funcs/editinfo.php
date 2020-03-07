@@ -29,7 +29,7 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function nv_check_username_change($login, $edit_userid)
 {
-    global $db, $lang_module, $global_users_config;
+    global $db, $lang_module, $global_users_config, $global_config;
 
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
