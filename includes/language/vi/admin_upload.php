@@ -193,3 +193,5 @@ $lang_module['upload_view_thumbnail'] = 'Chuyển sang xem theo dạng lưới';
 $lang_module['upload_view_detail'] = 'Chuyển sang xem theo dạng danh sách';
 $lang_module['upload_chunk'] = 'Chunk Upload';
 $lang_module['upload_chunk_help'] = 'Chức năng này hỗ trợ chia nhỏ tập tin upload thành nhiều gói nhỏ, hỗ trợ upload tập tin lớn đến rất lớn lên máy chủ. Nếu bạn không có ý định cho phép upload các tập tin lớn hãy để trống giá bị bên trên';
+$lang_module['upload_overflow'] = 'Upload vượt giới hạn';
+$lang_module['upload_overflow_help'] = 'Cho phép tải lên các tập tin có kích thước lớn hơn dung lượng tối đa được tải lên. Lưu ý: Chỉ có tác dụng khi tải lên trực tiếp tập tin từ máy tính tại phần quản lý file, phần Chunk Upload bên trên được thiết lập. Giá trị cấu hình tại đây không được nhỏ hơn dung lượng tối đa của file tải lên được thiết lập bên trên';

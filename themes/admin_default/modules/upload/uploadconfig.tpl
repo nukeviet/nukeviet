@@ -62,6 +62,20 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.upload_overflow}</strong></td>
+                    <td>
+                        <div class="clearfix">
+                            <input type="text" name="nv_overflow_size" value="{UPLOAD_OVERFLOW_SIZE}" class="form-control pull-left w100">
+                            <select class="form-control pull-left m-left w100" name="nv_overflow_size_text">
+                                <!-- BEGIN: overflow_size_lev -->
+                                <option value="{OVERFLOW_SIZE_LEV.key}"{OVERFLOW_SIZE_LEV.selected}>{OVERFLOW_SIZE_LEV.title}</option>
+                                <!-- END: overflow_size_lev -->
+                            </select>
+                        </div>
+                        <span class="help-block m-bottom-none">{LANG.upload_overflow_help}</span>
+                    </td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.uploadconfig_types}</strong></td>
                     <td>
                     <!-- BEGIN: types -->
