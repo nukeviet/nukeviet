@@ -452,12 +452,24 @@ function nv_html_meta_tags($html = true)
         }
     } else {
         foreach ($meta_property as $key => $value) {
-            if (!preg_match('/^og\:/', $key) and !empty($value)) {
-                $return[] = [
-                    'name' => 'property',
-                    'value' => $key,
-                    'content' => $value
-                ];
+            if (!preg_match('/^og\:/', $key)) {
+                if (is_array($value)) {
+                    foreach ($value as $value_i) {
+                        if (!empty($value_i)) {
+                            $return[] = [
+                                'name' => 'property',
+                                'value' => $key,
+                                'content' => $value_i
+                            ];
+                        }
+                    }
+                } elseif (!empty($value)) {
+                    $return[] = [
+                        'name' => 'property',
+                        'value' => $key,
+                        'content' => $value
+                    ];
+                }
             }
         }
     }
