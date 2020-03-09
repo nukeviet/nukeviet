@@ -636,7 +636,7 @@ $rules = [
     $global_config['login_time_tracking'],
     $global_config['login_time_ban']
 ];
-$blocker->trackLogin($rules);
+$blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
 // Dang nhap kieu thong thuong
 if ($nv_Request->isset_request('nv_login', 'post')) {
