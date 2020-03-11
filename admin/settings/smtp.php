@@ -8,32 +8,49 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_module['smtp_config'];
-$smtp_encrypted_array = array();
+$smtp_encrypted_array = [];
 $smtp_encrypted_array[0] = 'None';
 $smtp_encrypted_array[1] = 'SSL';
 $smtp_encrypted_array[2] = 'TLS';
 
-$array_config = array();
+$array_config = [];
 $errormess = '';
-$array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', $global_config['mailer_mode'], 1), 0, 255);
-$array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', $global_config['smtp_host'], 1), 0, 255);
-$array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', $global_config['smtp_port'], 1), 0, 255);
-$array_config['smtp_username'] = nv_substr($nv_Request->get_title('smtp_username', 'post', $global_config['smtp_username']), 0, 255);
-$array_config['smtp_password'] = nv_substr($nv_Request->get_title('smtp_password', 'post', $global_config['smtp_password']), 0, 255);
 
-if ($nv_Request->isset_request('mailer_mode', 'post')) {
-    $array_config['smtp_ssl'] = $nv_Request->get_int('smtp_ssl', 'post', 0);
-} else {
-    $array_config['smtp_ssl'] = intval($global_config['smtp_ssl']);
-}
-$array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', 0);
-$array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', 0);
 if ($nv_Request->isset_request('submitsave', 'post')) {
+    $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', '', 1), 0, 255);
+    $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', '', 1), 0, 255);
+    $array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', '', 1), 0, 255);
+    $array_config['smtp_username'] = nv_substr($nv_Request->get_title('smtp_username', 'post', ''), 0, 255);
+    $array_config['smtp_password'] = nv_substr($nv_Request->get_title('smtp_password', 'post', ''), 0, 255);
+    $array_config['sender_name'] = nv_substr($nv_Request->get_title('sender_name', 'post', ''), 0, 250);
+    $array_config['sender_email'] = nv_substr($nv_Request->get_title('sender_email', 'post', ''), 0, 250);
+    $array_config['reply_name'] = nv_substr($nv_Request->get_title('reply_name', 'post', ''), 0, 250);
+    $array_config['reply_email'] = nv_substr($nv_Request->get_title('reply_email', 'post', ''), 0, 250);
+    $array_config['force_sender'] = intval($nv_Request->get_bool('force_sender', 'post', false));
+    $array_config['force_reply'] = intval($nv_Request->get_bool('force_reply', 'post', false));
+
+    $array_config['sender_email'] = nv_check_valid_email($array_config['sender_email'], true);
+    if ($array_config['sender_email'][0] == '') {
+        $array_config['sender_email'] = $array_config['sender_email'][1];
+    } else {
+        $array_config['sender_email'] = '';
+    }
+    $array_config['reply_email'] = nv_check_valid_email($array_config['reply_email'], true);
+    if ($array_config['reply_email'][0] == '') {
+        $array_config['reply_email'] = $array_config['reply_email'][1];
+    } else {
+        $array_config['reply_email'] = '';
+    }
+
+    $array_config['smtp_ssl'] = $nv_Request->get_int('smtp_ssl', 'post', 0);
+    $array_config['verify_peer_ssl'] = $nv_Request->get_int('verify_peer_ssl', 'post', 0);
+    $array_config['verify_peer_name_ssl'] = $nv_Request->get_int('verify_peer_name_ssl', 'post', 0);
+
     $smtp_password = $array_config['smtp_password'];
     $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
 
@@ -48,7 +65,7 @@ if ($nv_Request->isset_request('submitsave', 'post')) {
     if ($array_config['smtp_ssl'] == 1 and $array_config['mailer_mode'] == 'smtp') {
         require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
         $array_phpmod = phpinfo_array(8, 1);
-        if (! empty($array_phpmod) and ! array_key_exists('openssl', $array_phpmod)) {
+        if (!empty($array_phpmod) and !array_key_exists('openssl', $array_phpmod)) {
             $errormess = $lang_module['smtp_error_openssl'];
         }
     }
@@ -57,9 +74,26 @@ if ($nv_Request->isset_request('submitsave', 'post')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
     $array_config['smtp_password'] = $smtp_password;
+} else {
+    $array_config['mailer_mode'] = $global_config['mailer_mode'];
+    $array_config['smtp_host'] = $global_config['smtp_host'];
+    $array_config['smtp_port'] = $global_config['smtp_port'];
+    $array_config['smtp_username'] = $global_config['smtp_username'];
+    $array_config['smtp_password'] = $global_config['smtp_password'];
+    $array_config['sender_name'] = $global_config['sender_name'];
+    $array_config['sender_email'] = $global_config['sender_email'];
+    $array_config['reply_name'] = $global_config['reply_name'];
+    $array_config['reply_email'] = $global_config['reply_email'];
+    $array_config['force_sender'] = $global_config['force_sender'];
+    $array_config['force_reply'] = $global_config['force_reply'];
+    $array_config['smtp_ssl'] = $global_config['smtp_ssl'];
+    $array_config['verify_peer_ssl'] = $global_config['verify_peer_ssl'];
+    $array_config['verify_peer_name_ssl'] = $global_config['verify_peer_name_ssl'];
 }
 
 $array_config['smtp_ssl_checked'] = ($array_config['smtp_ssl'] == 1) ? ' checked="checked"' : '';
+$array_config['force_sender'] = $array_config['force_sender'] ? ' checked="checked"' : '';
+$array_config['force_reply'] = $array_config['force_reply'] ? ' checked="checked"' : '';
 
 $array_config['mailer_mode_smtpt'] = ($array_config['mailer_mode'] == 'smtp') ? ' checked="checked"' : '';
 $array_config['mailer_mode_sendmail'] = ($array_config['mailer_mode'] == 'sendmail') ? ' checked="checked"' : '';
@@ -77,26 +111,24 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
 foreach ($smtp_encrypted_array as $id => $value) {
-    $encrypted = array(
+    $encrypted = [
         'id' => $id,
         'value' => $value,
-        'sl' => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : '',
-    );
+        'sl' => ($global_config['smtp_ssl'] == $id) ? ' selected="selected"' : ''
+    ];
 
     $xtpl->assign('EMCRYPTED', $encrypted);
     $xtpl->parse('smtp.encrypted_connection');
 }
-if($global_config['verify_peer_ssl'] == 1) {
-    $xtpl->assign('PEER_SSL_YES', 'checked="checked"');
+if ($global_config['verify_peer_ssl'] == 1) {
+    $xtpl->assign('PEER_SSL_YES', ' checked="checked"');
+} else {
+    $xtpl->assign('PEER_SSL_NO', ' checked="checked"');
 }
-else {
-    $xtpl->assign('PEER_SSL_NO', 'checked="checked"');
-}
-if($global_config['verify_peer_name_ssl'] == 1) {
-    $xtpl->assign('PEER_NAME_SSL_YES', 'checked="checked"');
-}
-else {
-    $xtpl->assign('PEER_NAME_SSL_NO', 'checked="checked"');
+if ($global_config['verify_peer_name_ssl'] == 1) {
+    $xtpl->assign('PEER_NAME_SSL_YES', ' checked="checked"');
+} else {
+    $xtpl->assign('PEER_NAME_SSL_NO', ' checked="checked"');
 }
 if ($errormess != '') {
     $xtpl->assign('ERROR', $errormess);
@@ -106,7 +138,10 @@ if ($errormess != '') {
 if (!empty($global_config['smtp_host']) and !empty($global_config['smtp_username'])) {
     // Gửi thử email để kiểm tra
     if ($nv_Request->isset_request('submittest', 'post')) {
-        $check = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $admin_info['email'], $lang_module['smtp_test_subject'], $lang_module['smtp_test_message'], '', false, true);
+        $check = nv_sendmail([
+            $global_config['site_name'],
+            $global_config['site_email']
+        ], $admin_info['email'], $lang_module['smtp_test_subject'], $lang_module['smtp_test_message'], '', false, true);
         if (!empty($check)) {
             $xtpl->assign('TEST_MESSAGE', $check);
             $xtpl->parse('smtp.testmail_fail');
