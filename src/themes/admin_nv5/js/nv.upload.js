@@ -689,7 +689,6 @@ NVCoreFileBrowser.prototype.init = function(data) {
         });
 
         // Xử lý tại form xem chi tiết file
-        $.widget.bridge('uitooltip', $.ui.tooltip);
         var clipboard1 = new ClipboardJS('#FileRelativePathBtn');
         var clipboard2 = new ClipboardJS('#FileAbsolutePathBtn');
         clipboard1.on('success', function(e) {
