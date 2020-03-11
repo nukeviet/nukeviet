@@ -8,15 +8,15 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_SETTINGS')) {
+if (!defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
-$adminThemes = array( '' );
+$adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
 
-$closed_site_Modes = array();
+$closed_site_Modes = [];
 $closed_site_Modes[0] = $lang_module['closed_site_0'];
 if (defined('NV_IS_GODADMIN')) {
     $closed_site_Modes[1] = $lang_module['closed_site_1'];
@@ -24,7 +24,7 @@ if (defined('NV_IS_GODADMIN')) {
 $closed_site_Modes[2] = $lang_module['closed_site_2'];
 $closed_site_Modes[3] = $lang_module['closed_site_3'];
 
-$allow_sitelangs = array();
+$allow_sitelangs = [];
 foreach ($global_config['allow_sitelangs'] as $lang_i) {
     if (file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php')) {
         $allow_sitelangs[] = $lang_i;
@@ -34,14 +34,16 @@ foreach ($global_config['allow_sitelangs'] as $lang_i) {
 $timezone_array = array_keys($nv_parse_ini_timezone);
 
 $errormess = '';
-$array_config_define = array();
+$array_config_define = [];
 
 if ($nv_Request->isset_request('submit', 'post')) {
-    $array_config_site = array();
+    $array_config_site = [];
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    if (! empty($admin_theme) and in_array($admin_theme, $adminThemes)) {
+    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) {
         $array_config_site['admin_theme'] = $admin_theme;
+    } else {
+        $array_config_site['admin_theme'] = '';
     }
 
     $closed_site = $nv_Request->get_int('closed_site', 'post');
@@ -53,11 +55,16 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $check = nv_check_valid_email($site_email, true);
     if ($check[0] == '') {
         $array_config_site['site_email'] = $check[1];
+    } else {
+        $array_config_site['site_email'] = '';
     }
 
     $array_config_site['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
 
-    $preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
+    $preg_replace = [
+        'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i",
+        'replacement' => ''
+    ];
     $array_config_site['date_pattern'] = nv_substr($nv_Request->get_title('date_pattern', 'post', '', 0, $preg_replace), 0, 255);
     $array_config_site['time_pattern'] = nv_substr($nv_Request->get_title('time_pattern', 'post', '', 0, $preg_replace), 0, 255);
 
@@ -79,15 +86,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (defined('NV_IS_GODADMIN')) {
-        $array_config_global = array();
+        $array_config_global = [];
         $site_timezone = $nv_Request->get_title('site_timezone', 'post', '', 0);
-        if (empty($site_timezone) or (! empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == 'byCountry'))) {
+        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == 'byCountry'))) {
             $array_config_global['site_timezone'] = $site_timezone;
         }
         $my_domains = $nv_Request->get_title('my_domains', 'post', '');
-        $array_config_global['my_domains'] = array( NV_SERVER_NAME );
+        $array_config_global['my_domains'] = [NV_SERVER_NAME];
 
-        if (! empty($my_domains)) {
+        if (!empty($my_domains)) {
             $my_domains = array_map('trim', explode(',', $my_domains));
             foreach ($my_domains as $dm) {
                 $dm = preg_replace('/^(http|https)\:\/\//', '', $dm);
@@ -98,7 +105,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $_p  = ':' . $m[2];
                 }
                 $dm = nv_check_domain(nv_strtolower($dm));
-                if (! empty($dm)) {
+                if (!empty($dm)) {
                     $array_config_global['my_domains'][] = $dm . $_p;
                 }
             }
@@ -116,7 +123,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
 
         $site_lang = $nv_Request->get_title('site_lang', 'post', '', 1);
-        if (! empty($site_lang) and in_array($site_lang, $allow_sitelangs)) {
+        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs)) {
             $array_config_global['site_lang'] = $site_lang;
         }
 
@@ -129,7 +136,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
             $array_config_global['lang_geo'] = 0;
             $array_config_global['rewrite_op_mod'] = $nv_Request->get_title('rewrite_op_mod', 'post');
-            if (! isset($site_mods[$array_config_global['rewrite_op_mod']]) or $array_config_global['rewrite_optional'] == 0) {
+            if (!isset($site_mods[$array_config_global['rewrite_op_mod']]) or $array_config_global['rewrite_optional'] == 0) {
                 $array_config_global['rewrite_op_mod'] = '';
             }
         } else {
@@ -143,11 +150,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $check = nv_check_valid_email($error_send_email, true);
         if ($check[0] == '') {
             $array_config_global['error_send_email'] = $check[1];
+        } else {
+            $array_config_global['error_send_email'] = '';
         }
 
         $array_config_global['cdn_url'] = '';
         $cdn_url = rtrim($nv_Request->get_string('cdn_url', 'post'), '/');
-        if (! empty($cdn_url)) {
+        if (!empty($cdn_url)) {
             $cdn_url = preg_replace('/^(http|https)\:\/\//', '', $cdn_url);
             $cdn_url = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $cdn_url);
             $_p  = '';
@@ -156,7 +165,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $_p  = ':' . $m[2];
             }
             $cdn_url = nv_check_domain(nv_strtolower($cdn_url));
-            if (! empty($cdn_url)) {
+            if (!empty($cdn_url)) {
                 $array_config_global['cdn_url'] = $cdn_url . $_p;
             }
         }
@@ -180,13 +189,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         nv_save_file_config_global();
 
-        $array_config_rewrite = array(
+        $array_config_rewrite = [
             'rewrite_enable' => $array_config_global['rewrite_enable'],
             'rewrite_optional' => $array_config_global['rewrite_optional'],
             'rewrite_endurl' => $global_config['rewrite_endurl'],
             'rewrite_exturl' => $global_config['rewrite_exturl'],
             'rewrite_op_mod' => $array_config_global['rewrite_op_mod'],
-        );
+        ];
         $rewrite = nv_rewrite_change($array_config_rewrite);
         if (empty($rewrite[0])) {
             $errormess .= sprintf($lang_module['err_writable'], $rewrite[1]);
@@ -213,11 +222,11 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
 for ($i = 0; $i <= 2; $i ++) {
-    $ssl_https = array(
+    $ssl_https = [
         'key' => $i,
         'title' => $lang_module['ssl_https_' . $i],
         'selected' => $i == $global_config['ssl_https'] ? ' selected="selected"' : ''
-    );
+    ];
 
     $xtpl->assign('SSL_HTTPS', $ssl_https);
     $xtpl->parse('main.ssl_https');
