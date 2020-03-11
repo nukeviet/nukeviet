@@ -109,6 +109,7 @@ $lang_module['smtp_test_message'] = 'Ceci est un courrier électronique de test 
 $lang_module['smtp_test_success'] = 'Envoyer un email avec succès';
 $lang_module['smtp_test_fail'] = 'Email échoué';
 $lang_module['smtp_test_note'] = 'Remarque: Cliquez sur Enregistrer la configuration s\'il y a une modification dans le formulaire ci-dessus avant de vérifier la configuration.';
+$lang_module['notify_email_error'] = 'Créer des notifications système en cas d\'échec de l\'e-mail';
 $lang_module['bot_name'] = 'Moteurs de recherche';
 $lang_module['bot_agent'] = 'Agent du serveur';
 $lang_module['bot_ips'] = 'IP du serveur';

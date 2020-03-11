@@ -113,6 +113,7 @@ $lang_module['smtp_test_message'] = 'Đây là email thử nghiệm để kiểm
 $lang_module['smtp_test_success'] = 'Gửi email thành công';
 $lang_module['smtp_test_fail'] = 'Gửi email thất bại';
 $lang_module['smtp_test_note'] = 'Lưu ý: Nhấp lưu cấu hình nếu có thay đổi ở form trên trước khi kiểm tra cấu hình';
+$lang_module['notify_email_error'] = 'Tạo cảnh báo hệ thống khi gửi email thất bại';
 $lang_module['bot_name'] = 'Tên máy chủ ';
 $lang_module['bot_agent'] = 'UserAgent của máy chủ';
 $lang_module['bot_ips'] = 'IP của máy chủ';

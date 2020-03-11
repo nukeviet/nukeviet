@@ -467,6 +467,7 @@ $lang_module['two_step_verification_require_site'] = 'Obligatoire site en dehors
 $lang_module['two_step_verification_require_admindefault'] = 'Les paramètres de sécurité sont invités à tourner dans le domaine de la gestion, mais pas ici encore la gouvernance pour activer la nouvelle connexion d\'authentification en deux étapes';
 $lang_module['two_step_verification_require_sitedefault'] = 'Les paramètres de sécurité sont nécessaires pour permettre un site externe, mais n\'a pas ici encore membres pour activer la nouvelle connexion d\'authentification en deux étapes';
 $lang_module['notification_new_acount'] = 'Le compte %d en attente d\'actif';
+$lang_module['notification_sendactive_fail'] = 'Le compte %s attend l\'activation car le système n\'a pas pu envoyer d\'e-mail';
 $lang_module['editcensor'] = 'Information modérée';
 $lang_module['editcensor_lastedit'] = 'Dernière modification';
 $lang_module['editcensor_confirm_approval'] = 'Etes-vous sûr de confirmer la navigation? Après avoir parcouru ces informations, les informations sur le membre actuel seront écrasées.';

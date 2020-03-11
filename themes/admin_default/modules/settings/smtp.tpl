@@ -60,6 +60,15 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="notify_email_error" value="1"{DATA.notify_email_error}> {LANG.notify_email_error}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-6 control-label">{LANG.mail_config}:</label>
                 <div class="col-sm-18">
                     <div class="radio">

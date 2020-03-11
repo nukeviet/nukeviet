@@ -109,6 +109,7 @@ $lang_module['smtp_test_message'] = 'This is a test email to check the mail conf
 $lang_module['smtp_test_success'] = 'Send email successfully';
 $lang_module['smtp_test_fail'] = 'Email failed';
 $lang_module['smtp_test_note'] = 'Note: Click Save configuration if there is a change in the above form before checking the configuration';
+$lang_module['notify_email_error'] = 'Create system notifications when email fails';
 $lang_module['bot_name'] = 'Server\'s name';
 $lang_module['bot_agent'] = 'UserAgent';
 $lang_module['bot_ips'] = 'Server\'s IP';

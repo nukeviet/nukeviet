@@ -128,7 +128,7 @@ function nv_del_user($userid)
 }
 
 // Xác định cấu hình module
-$global_users_config = array();
+$global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 3600;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {

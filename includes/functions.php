@@ -1252,6 +1252,9 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         if (!$mail->Send()) {
+            if (!$testmode and !empty($global_config['notify_email_error'])) {
+                nv_insert_notification('settings', 'sendmail_failure', [$subject, implode(', ', $to)], 0, 0, 0, 1, 2);
+            }
             trigger_error($mail->ErrorInfo, E_USER_WARNING);
             return ($testmode ? $mail->ErrorInfo : false);
         }
@@ -1968,12 +1971,16 @@ function nv_delete_notification($language, $module, $type, $obid)
     global $db_config, $db, $global_config;
 
     if ($global_config['notification_active']) {
-        $sth = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type');
-        $sth->bindParam(':language', $language, PDO::PARAM_STR);
-        $sth->bindParam(':module', $module, PDO::PARAM_STR);
-        $sth->bindParam(':obid', $obid, PDO::PARAM_INT);
-        $sth->bindParam(':type', $type, PDO::PARAM_STR);
-        $sth->execute();
+        try {
+            $sth = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type');
+            $sth->bindParam(':language', $language, PDO::PARAM_STR);
+            $sth->bindParam(':module', $module, PDO::PARAM_STR);
+            $sth->bindParam(':obid', $obid, PDO::PARAM_INT);
+            $sth->bindParam(':type', $type, PDO::PARAM_STR);
+            $sth->execute();
+        } catch (PDOException $e) {
+            trigger_error(print_r($e, true));
+        }
     }
     return true;
 }

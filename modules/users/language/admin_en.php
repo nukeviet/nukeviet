@@ -467,6 +467,7 @@ $lang_module['two_step_verification_require_site'] = 'Two-step authentication is
 $lang_module['two_step_verification_require_admindefault'] = 'Security settings are required to be enabled in the admin area, though not enabled here. Administrators still have to enable two-step authentication to log in.';
 $lang_module['two_step_verification_require_sitedefault'] = 'The security setting is asking to be enabled outside the site, even if not enabled. The team member must still enable two-step authentication to log in.';
 $lang_module['notification_new_acount'] = 'Acount %s is wating for active';
+$lang_module['notification_sendactive_fail'] = 'Account %s is awaiting activation because the system could not send email';
 $lang_module['editcensor'] = 'Moderate information';
 $lang_module['editcensor_lastedit'] = 'Last modified';
 $lang_module['editcensor_confirm_approval'] = 'Are you sure to confirm approved? After browsing this information will override current member information';
