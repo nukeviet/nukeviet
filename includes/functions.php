@@ -1392,7 +1392,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         return '';
     }
 
-    $title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'];
+    $title .= NV_TITLEBAR_DEFIS . $lang_global['page'];
     $page_string = ($on_page == 1) ? '<li class="active"><a href="#">1</a></li>' : '<li><a rel="prev" title="' . $title . ' 1" href="' . $base_url . '">1</a></li>';
 
     if ($total_pages > 7) {

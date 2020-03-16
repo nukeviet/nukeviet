@@ -48,7 +48,7 @@ if ($num_items) {
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);
     }
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts);

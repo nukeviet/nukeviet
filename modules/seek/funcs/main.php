@@ -106,10 +106,10 @@ $contents = search_main_theme($is_search, $search, $array_mod);
 $page_title = $module_info['site_title'];
 
 if (! empty($search['key'])) {
-    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];
+    $page_title .= NV_TITLEBAR_DEFIS . $search['key'];
 
     if ($search['page'] > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $search['page'];
+        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $search['page'];
     }
 }
 

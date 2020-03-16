@@ -96,7 +96,7 @@
                         </a>
                     </span>
                     <!-- END: show_quick_viewimg -->
-                    <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
+                    <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}" download>{FILE.titledown}: <strong>{FILE.title}</strong></a>
                     <!-- BEGIN: content_quick_viewpdf -->
                     <div class="clearfix"></div>
                     <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
