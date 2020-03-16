@@ -110,14 +110,8 @@ class Encryption
         } else {
             $validate_hash = $this->hash($password);
         }
-
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-            return hash_equals($hash, $validate_hash);
-        }
-        elseif ($hash == $validate_hash) {
-            return true;
-        }
-        return false;
+        
+        return hash_equals($hash, $validate_hash);
     }
 
     /**
