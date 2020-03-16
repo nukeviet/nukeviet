@@ -145,8 +145,9 @@ ul.other-news {
     border-bottom:none;
 }
 
-#hot-news li a{
-    text-indent:6px
+#hot-news li a span {
+    text-indent: 8px;
+    display: inherit;
 }
 
 #print {
@@ -270,11 +271,11 @@ p {
 }
 
 #print #footer a{
-	color: #fff;
+    color: #fff;
 }
 
 .bodytext figure.image {
-	width: 100%
+    width: 100%
 }
 
 .bodytext figure.image figcaption {

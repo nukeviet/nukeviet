@@ -79,10 +79,10 @@
 }
 
 .icon-icq:before {
-	content: "\e605";
+    content: "\e605";
 }
 .icon-viber:before {
-	content: "\e60a";
+    content: "\e60a";
 }
 
 .icon_new {
@@ -97,7 +97,7 @@
 }
 
 .icon_list {
-    background:url("../images/arrow_left_orange.png") no-repeat 0 8px;
+    background:url("../images/arrow_left_orange.png") no-repeat 0 7px;
 }
 
 /* Fonts Color */
@@ -693,10 +693,10 @@ h6 {
 
 .bodytext {
     word-break:keep-all;
-	max-width: 100%;
-	overflow-x: hidden;
-	overflow-y: visible;
-	line-height: 1.7em;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    line-height: 1.7em;
 }
 
 .bodytext p{
@@ -704,22 +704,22 @@ h6 {
 }
 
 .bodytext ol{
-	list-style-type: decimal!important;
+    list-style-type: decimal!important;
 }
 
 .bodytext ul{
-	list-style-type: disc!important;
-	padding-left: 40px!important;
-	margin-bottom: 10px!important;
+    list-style-type: disc!important;
+    padding-left: 40px!important;
+    margin-bottom: 10px!important;
 }
 
 .bodytext li{
-	margin-bottom: 0!important;
+    margin-bottom: 0!important;
 }
 
 .bodytext div.alert{
-	margin-bottom: 7px;
-	margin-top: 4px;
+    margin-bottom: 7px;
+    margin-top: 4px;
 }
 
 iframe {
@@ -822,12 +822,12 @@ a.btn {
 
 /* breadcrumb */
 .breadcrumbs-wrap{
-	position: relative;
+    position: relative;
 }
 
 .breadcrumbs-wrap .display{
-	height: 35px;
-	overflow: hidden;
+    height: 35px;
+    overflow: hidden;
 }
 
 .breadcrumbs {
@@ -921,7 +921,7 @@ a.btn {
 }
 
 .subs-breadcrumbs.open{
-	display: block;
+    display: block;
 }
 
 .subs-breadcrumbs li:last-child,
@@ -954,16 +954,16 @@ a.btn {
 }
 
 .subs-breadcrumbs a em{
-	display: inline-block;
-	margin-right: 5px;
-	color: #707070;
+    display: inline-block;
+    margin-right: 5px;
+    color: #707070;
 }
 
 .show-subs-breadcrumbs{
-	padding-right: 5px;
-	margin-right: 7px;
-	width: 30px;
-	text-align: center;
+    padding-right: 5px;
+    margin-right: 7px;
+    width: 30px;
+    text-align: center;
 }
 
 .fix_banner_left {
@@ -1735,7 +1735,7 @@ a.btn {
 
 .nv-social-share li.facebook {
     position:relative;
-	top:-4px;
+    top:-4px;
     padding-right:40px;
 }
 
@@ -2286,7 +2286,7 @@ button.close {
 .select2-container--default .select2-selection--single,
 .select2-container--bootstrap .select2-selection--single
 {
-	height: 32px !important;
+    height: 32px !important;
     padding-top: 2px;
 }
 .voting-col-2 {
@@ -2300,5 +2300,5 @@ button.close {
      text-align: justify;
 }
 .sum-voting {
-	margin-top:5px;
+    margin-top:5px;
 }
