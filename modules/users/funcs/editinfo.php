@@ -29,7 +29,7 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function nv_check_username_change($login, $edit_userid)
 {
-    global $db, $lang_module, $global_users_config;
+    global $db, $lang_module, $global_users_config, $global_config;
 
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
@@ -714,7 +714,10 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email);
+
+        // Gửi thư cho cả email mới và email cũ
         @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $nv_email, $lang_module['edit_mail_subject'], $message);
+        @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['edit_mail_subject'], $message);
 
         nv_jsonOutput(array(
             'status' => 'ok',

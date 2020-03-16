@@ -45,7 +45,7 @@ $admin_login_redirect = $nv_Request->get_string('admin_login_redirect', 'session
 
 $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
 $rules = [$global_config['login_number_tracking'], $global_config['login_time_tracking'], $global_config['login_time_ban']];
-$blocker->trackLogin($rules);
+$blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
 $error = '';
 $array_gfx_chk = [1, 5, 6, 7];

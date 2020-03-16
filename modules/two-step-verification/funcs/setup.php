@@ -68,6 +68,12 @@ if ($checkss == NV_CHECK_SESSION) {
 
     try {
         $db->query('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step=1 WHERE userid=' . $user_info['userid']);
+
+        // Gửi email thông báo bảo mật
+        $m_time = nv_date('H:i:s d/m/Y', NV_CURRENTTIME);
+        $m_link = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+        $message = sprintf($lang_module['email_2step_on'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $user_info['username'], $m_link, $global_config['site_name']);
+        nv_sendmail('', $user_info['email'], $lang_module['email_subject'], $message);
     } catch (Exception $e) {
         trigger_error('Error active 2-step Auth!!!', 256);
     }

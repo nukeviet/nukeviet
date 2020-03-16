@@ -187,3 +187,5 @@ $lang_module['upload_view_thumbnail'] = 'Passer à l\'affichage de la grille';
 $lang_module['upload_view_detail'] = 'Passer à un affichage de la liste';
 $lang_module['upload_chunk'] = 'Vérifier le téléchargement';
 $lang_module['upload_chunk_help'] = 'Cette fonction prend en charge le fractionnement du fichier de téléchargement en plusieurs petits paquets, la prise en charge pour télécharger de gros fichiers sur le serveur. Si vous n\'avez pas l\'intention d\'autoriser le téléchargement de fichiers volumineux, laissez ce champ vide';
+$lang_module['upload_overflow'] = 'Taille du fichier de débordement';
+$lang_module['upload_overflow_help'] = 'Permet de télécharger des fichiers plus grands que la taille de fichier maximale. Remarque: ne fonctionne que lors du téléchargement de fichiers directement à partir de votre ordinateur dans le gestionnaire de fichiers, la section Téléchargement de blocs ci-dessus est définie. La valeur configurée ici ne doit pas être inférieure à la taille maximale de l\'ensemble de fichiers téléchargé ci-dessus';

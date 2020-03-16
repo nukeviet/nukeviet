@@ -1356,6 +1356,10 @@ header.header-up {
     padding:10px;
 }
 
+.nv-list-item li > h3 {
+    display: inline-block;
+}
+
 /* List none */
 
 .list-none {

@@ -185,7 +185,7 @@ $_permission_action = array();
 $array_list_action = array(
     'delete' => $lang_global['delete'],
     're-published' => $lang_module['re_published'],
-    'publtime' => $lang_module['publtime'],
+    'publtime' => $lang_module['publtime_action'],
     'stop' => $lang_module['status_0'],
     'waiting' => $lang_module['status_action_0']
 );

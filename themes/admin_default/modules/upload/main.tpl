@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="col-sm-12">
-            <div id="upload-button-area" title="{LANG.nv_max_size}: {NV_MAX_SIZE}">&nbsp;</div>
+            <div id="upload-button-area" data-title="{LANG.nv_max_size}" data-remotesize="{NV_MAX_SIZE_REMOTE}" data-localsize="{NV_MAX_SIZE_LOCAL}">&nbsp;</div>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -391,9 +391,11 @@ var nv_auto_alt = {UPLOAD_AUTO_ALT};
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/upload.js"></script>
 <script type="text/javascript">
-$(function(){
+$(function() {
     $("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
-    $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&imgfile={SELFILE}&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
+    $("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&imgfile={SELFILE}&random=" + nv_randomNum(10), function() {
+        LFILE.setViewMode();
+    });
 });
 </script>
 <!--  END: main  -->

@@ -12,15 +12,15 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-//Meta Property
-$meta_property = array(
+// Meta Property
+$meta_property = [
     'og:title' => '',
     'og:type' => '',
     'og:description' => '',
     'og:site_name' => '',
     'og:image' => '',
     'og:url' => ''
-);
+];
 
 /**
  * nv_create_submenu()
@@ -148,12 +148,12 @@ function nv_blocks_content($sitecontent)
 
         $array_position = array_keys($_posReal);
         foreach ($blocks as $_key => $_row) {
-            if ($_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME) {
-                $unact[] = $_row['bid'];
+            if (!defined('NV_IS_DRAG_BLOCK') and !$_row['act']) {
                 continue;
             }
 
-            if (!defined('NV_IS_DRAG_BLOCK') and !$_row['act']) {
+            if ($_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME) {
+                $unact[] = $_row['bid'];
                 continue;
             }
 
@@ -452,12 +452,24 @@ function nv_html_meta_tags($html = true)
         }
     } else {
         foreach ($meta_property as $key => $value) {
-            if (!preg_match('/^og\:/', $key) and !empty($value)) {
-                $return[] = [
-                    'name' => 'property',
-                    'value' => $key,
-                    'content' => $value
-                ];
+            if (!preg_match('/^og\:/', $key)) {
+                if (is_array($value)) {
+                    foreach ($value as $value_i) {
+                        if (!empty($value_i)) {
+                            $return[] = [
+                                'name' => 'property',
+                                'value' => $key,
+                                'content' => $value_i
+                            ];
+                        }
+                    }
+                } elseif (!empty($value)) {
+                    $return[] = [
+                        'name' => 'property',
+                        'value' => $key,
+                        'content' => $value
+                    ];
+                }
             }
         }
     }

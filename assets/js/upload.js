@@ -9,26 +9,10 @@
 var isDebugMode = false;
 
 function htmlspecialchars_decode(string, quote_style) {
-    //       discuss at: http://phpjs.org/functions/htmlspecialchars_decode/
-    //      original by: Mirek Slugen
-    //      improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    //      bugfixed by: Mateusz "loonquawl" Zalega
-    //      bugfixed by: Onno Marsman
-    //      bugfixed by: Brett Zamir (http://brett-zamir.me)
-    //      bugfixed by: Brett Zamir (http://brett-zamir.me)
-    //         input by: ReverseSyntax
-    //         input by: Slawomir Kaniecki
-    //         input by: Scott Cariss
-    //         input by: Francois
-    //         input by: Ratheous
-    //         input by: Mailfaker (http://www.weedem.fr/)
-    //       revised by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // reimplemented by: Brett Zamir (http://brett-zamir.me)
-    //        example 1: htmlspecialchars_decode("<p>this -&gt; &quot;</p>", 'ENT_NOQUOTES');
-    //        returns 1: '<p>this -> &quot;</p>'
-    //        example 2: htmlspecialchars_decode("&amp;quot;");
-    //        returns 2: '&quot;'
-
+    /*
+     * Source: http://phpjs.org/functions/htmlspecialchars_decode/
+     * Author: Mirek Slugen
+     */
     var optTemp = 0,
         i = 0,
         noquotes = false;
@@ -232,7 +216,9 @@ function insertvaluetofield() {
         }
         window.close();
     } else {
-        if (window.opener === null) return !1;
+        if (window.opener === null) {
+            return !1;
+        }
         var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 
         window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, fullPath, function() {
@@ -1522,11 +1508,16 @@ $('[name="uploadremoteFileOK"]').click(function() {
     var fileAlt = $('#uploadremoteFileAlt').val();
     var panel = $('#uploadremote');
     var auto_logo = ($('[name="auto_logo"]', panel).is(':checked') ? 1 : 0);
+    var regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
 
-    if (/^(https?|ftp):\/\//i.test(fileUrl) === false) fileUrl = 'http://' + fileUrl;
+    if (/^(https?|ftp):\/\//i.test(fileUrl) === false){fileUrl = 'http://' + fileUrl;}
     $("input[name=uploadremoteFile]").val(fileUrl);
 
-    if (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(fileUrl) && currUrl != check && ((nv_alt_require && fileAlt != '') || !nv_alt_require)) {
+    if (
+        regex.test(fileUrl) &&
+        //currUrl != check && -- Cho phép upload lại file cũ, không có lý do gì phải cấm
+        ((nv_alt_require && fileAlt != '') || !nv_alt_require)
+    ) {
         $(this).attr('disabled', 'disabled');
         $('#upload-remote-info').html('<em class="fa fa-2x fa-spinner fa-spin"></em>');
 
@@ -1552,7 +1543,7 @@ $('[name="uploadremoteFileOK"]').click(function() {
         });
     } else if (nv_alt_require && fileAlt == '' && fileUrl != '') {
         $("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
-    } else alert(nv_url)
+    } else {alert(nv_url)}
 });
 
 /* List File Handle */
@@ -2348,7 +2339,10 @@ var NVUPLOAD = {
         LFILE.reload(folderPath, selFile);
     },
     buildBtns: function() {
-        $('#upload-button-area').html(NVUPLOAD.buttons);
+        var btnsArea = $('#upload-button-area');
+        btnsArea.html(NVUPLOAD.buttons);
+        $('#upload-remote').attr('title', btnsArea.data('title') + ' ' + btnsArea.data('remotesize'));
+        $('#upload-local').attr('title', btnsArea.data('title') + ' ' + btnsArea.data('localsize'));
         $('#upload-dropdown-btn').addClass('perload');
         setTimeout(function() {
             $('#upload-dropdown-btn').addClass('open');

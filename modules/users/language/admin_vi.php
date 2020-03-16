@@ -487,6 +487,7 @@ $lang_module['two_step_verification_require_site'] = 'Bắt buộc xác thực h
 $lang_module['two_step_verification_require_admindefault'] = 'Thiết lập an ninh đang yêu cầu bật tại khu vực quản trị, dù không bật ở đây quản trị vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
 $lang_module['two_step_verification_require_sitedefault'] = 'Thiết lập an ninh đang yêu cầu bật ngoài site, dù không bật ở đây thành viên trong nhóm vẫn phải kích hoạt xác thực hai bước mới đăng nhập được';
 $lang_module['notification_new_acount'] = 'Tài khoản %s đang đợi kích hoạt';
+$lang_module['notification_sendactive_fail'] = 'Tài khoản %s đang đợi kích hoạt do hệ thống không thể gửi email';
 $lang_module['editcensor'] = 'Kiểm duyệt thông tin';
 $lang_module['editcensor_lastedit'] = 'Sửa lần cuối';
 $lang_module['editcensor_confirm_approval'] = 'Bạn có chắc chắn xác nhận duyệt? Sau khi duyệt thông tin này sẽ ghi đè thông tin hiện tại của thành viên';

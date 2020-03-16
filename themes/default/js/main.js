@@ -401,13 +401,13 @@ function nvbreadcrumbs() {
         for (i = a.length - 1; 0 <= i; i--) {
             if (!c) {
                 var d = 0;
-                b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>");
+                b.prepend('<li id="brcr_' + i + '"><a href="' + a[i][1] + '"><span>' + a[i][0] + "</span></a></li>");
                 b.find("li").each(function() {
                     d += $(this).outerWidth(!0);
                 });
                 d > g && (c = !0, $("#brcr_" + i, b).remove());
             }
-            c && e.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>");
+            c && e.append('<li><a href="' + a[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>");
         }
         c ? f.removeClass("hidden") : f.addClass("hidden");
     }

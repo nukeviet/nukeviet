@@ -14,11 +14,11 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 
 $ini = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
 
-$myini = array(
-    'types' => array(''),
-    'exts' => array(''),
-    'mimes' => array('')
-);
+$myini = [
+    'types' => [''],
+    'exts' => [''],
+    'mimes' => ['']
+];
 
 foreach ($ini as $type => $extmime) {
     $myini['types'][] = $type;
@@ -30,7 +30,7 @@ foreach ($ini as $type => $extmime) {
     } else {
         foreach ($m as $m2) {
             if (!is_array($m2)) {
-                $m2 = array($m2);
+                $m2 = [$m2];
             }
             $myini['mimes'] = array_merge($myini['mimes'], $m2);
         }
@@ -93,6 +93,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $upload_chunk_size = 0;
     }
 
+    // Upload vượt cấu hình PHP
+    $nv_overflow_size = $nv_Request->get_float('nv_overflow_size', 'post', 0);
+    $nv_overflow_size_text = $nv_Request->get_title('nv_overflow_size_text', 'post', '');
+    if ($nv_overflow_size_text == 'GB') {
+        $pow = 3;
+    } else {
+        $pow = 2;
+    }
+    $nv_overflow_size = round($nv_overflow_size * pow(1024, $pow));
+    if ($nv_overflow_size < $nv_max_size) {
+        $nv_overflow_size = 0;
+    }
+
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     $sth->bindValue(':config_name', 'file_allowed_ext', PDO::PARAM_STR);
     $sth->bindValue(':config_value', $type, PDO::PARAM_STR);
@@ -122,7 +135,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->bindValue(':config_value', $upload_chunk_size, PDO::PARAM_STR);
     $sth->execute();
 
-    $array_config_define = array();
+    $sth->bindValue(':config_name', 'nv_overflow_size', PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $nv_overflow_size, PDO::PARAM_STR);
+    $sth->execute();
+
+    $array_config_define = [];
     $array_config_define['upload_alt_require'] = (int)$nv_Request->get_bool('upload_alt_require', 'post', 0);
     $array_config_define['upload_auto_alt'] = (int)$nv_Request->get_bool('upload_auto_alt', 'post', 0);
 
@@ -134,7 +151,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->bindValue(':config_value', $array_config_define['upload_auto_alt'], PDO::PARAM_STR);
     $sth->execute();
 
-    $array_config_define = array();
+    $array_config_define = [];
     $array_config_define['nv_max_width'] = $nv_Request->get_int('nv_max_width', 'post');
     $array_config_define['nv_max_height'] = $nv_Request->get_int('nv_max_height', 'post');
 
@@ -173,28 +190,28 @@ $xtpl->assign('UPLOAD_AUTO_ALT', ($global_config['upload_auto_alt']) ? ' checked
 for ($index = 100; $index > 0; --$index) {
     $size = floor($index * $p_size);
 
-    $xtpl->assign('SIZE', array(
+    $xtpl->assign('SIZE', [
         'key' => $size,
         'title' => nv_convertfromBytes($size),
         'selected' => ($size == $global_config['nv_max_size']) ? ' selected="selected"' : ''
-    ));
+    ]);
 
     $xtpl->parse('main.size');
 }
 
-$_upload_checking_mode = array(
+$_upload_checking_mode = [
     'strong' => $lang_module['strong_mode'],
     'mild' => $lang_module['mild_mode'],
     'lite' => $lang_module['lite_mode'],
     'none' => $lang_module['none_mode']
-);
+];
 
 foreach ($_upload_checking_mode as $m => $n) {
-    $xtpl->assign('UPLOAD_CHECKING_MODE', array(
+    $xtpl->assign('UPLOAD_CHECKING_MODE', [
         'key' => $m,
         'title' => $n,
         'selected' => ($m == $global_config['upload_checking_mode']) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.upload_checking_mode');
 }
 
@@ -218,41 +235,63 @@ if ($global_config['upload_chunk_size'] > 1048575) {
 }
 
 $xtpl->assign('UPLOAD_CHUNK_SIZE', $upload_chunk_size);
-$array_chunk_size = array('KB', 'MB');
+$array_chunk_size = ['KB', 'MB'];
 foreach ($array_chunk_size as $chunk_size) {
-    $chunk_size_lev = array(
+    $chunk_size_lev = [
         'key' => $chunk_size,
         'title' => $chunk_size,
         'selected' => $chunk_size == $upload_chunk_size_text ? ' selected="selected"' : ''
-    );
+    ];
     $xtpl->assign('CHUNK_SIZE_LEV', $chunk_size_lev);
     $xtpl->parse('main.chunk_size_lev');
 }
 
+$upload_overflow_size = '';
+$upload_overflow_size_text = '';
+if ($global_config['nv_overflow_size'] > 1073741823) {
+    $upload_overflow_size = round($global_config['nv_overflow_size'] / 1073741824, 2, PHP_ROUND_HALF_DOWN);
+    $upload_overflow_size_text = 'GB';
+} elseif ($global_config['nv_overflow_size'] > 1048575) {
+    $upload_overflow_size = round($global_config['nv_overflow_size'] / 1048576, 2, PHP_ROUND_HALF_DOWN);
+    $upload_overflow_size_text = 'MB';
+}
+
+$xtpl->assign('UPLOAD_OVERFLOW_SIZE', $upload_overflow_size);
+$array_overflow_size = ['MB', 'GB'];
+foreach ($array_overflow_size as $overflow_size) {
+    $overflow_size_lev = [
+        'key' => $overflow_size,
+        'title' => $overflow_size,
+        'selected' => $overflow_size == $upload_overflow_size_text ? ' selected="selected"' : ''
+    ];
+    $xtpl->assign('OVERFLOW_SIZE_LEV', $overflow_size_lev);
+    $xtpl->parse('main.overflow_size_lev');
+}
+
 foreach ($myini['types'] as $key => $name) {
-    $xtpl->assign('TYPES', array(
+    $xtpl->assign('TYPES', [
         'key' => $key,
         'title' => $name,
         'checked' => in_array($name, $global_config['file_allowed_ext']) ? ' checked="checked"' : ''
-    ));
+    ]);
     $xtpl->parse('main.types');
 }
 
 foreach ($myini['exts'] as $key => $name) {
-    $xtpl->assign('EXTS', array(
+    $xtpl->assign('EXTS', [
         'key' => $key,
         'title' => $name,
         'checked' => in_array($name, $global_config['forbid_extensions']) ? ' checked="checked"' : ''
-    ));
+    ]);
     $xtpl->parse('main.exts');
 }
 
 foreach ($myini['mimes'] as $key => $name) {
-    $xtpl->assign('MIMES', array(
+    $xtpl->assign('MIMES', [
         'key' => $key,
         'title' => $name,
         'checked' => in_array($name, $global_config['forbid_mimes']) ? ' checked="checked"' : ''
-    ));
+    ]);
     $xtpl->parse('main.mimes');
 }
 

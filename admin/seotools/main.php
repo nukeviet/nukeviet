@@ -16,6 +16,10 @@ if (defined('NV_IS_GODADMIN')) {
     $redirect_op = 'pagetitle';
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $redirect_op);
 }
+if (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0) {
+    $redirect_op = 'metatags';
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $redirect_op);
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

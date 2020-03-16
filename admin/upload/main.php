@@ -44,7 +44,10 @@ $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 
 if ($popup) {
     $lang_module['browse_file'] = $lang_global['browse_file'];
-    $sys_max_size = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
+    $sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
+    if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {
+        $sys_max_size_local = $global_config['nv_overflow_size'];
+    }
 
     $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -54,8 +57,9 @@ if ($popup) {
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('NV_MAX_SIZE', nv_convertfromBytes($sys_max_size));
-    $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size);
+    $xtpl->assign('NV_MAX_SIZE_REMOTE', nv_convertfromBytes($sys_max_size));
+    $xtpl->assign('NV_MAX_SIZE_LOCAL', nv_convertfromBytes($sys_max_size_local));
+    $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size_local);
     $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
     $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
     $xtpl->assign('NV_MIN_WIDTH', 10);

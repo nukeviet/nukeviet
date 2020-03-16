@@ -18,13 +18,13 @@
                 <!-- BEGIN: loop -->
                 <tr>
                     <td>
-                    <select name="metaGroupsName[]" class="form-control">
+                    <select name="metaGroupsName[]" class="form-control"{DATA.disabled}>
                         <option value="name"{DATA.n_selected}>name</option>
                         <option value="property"{DATA.p_selected}>property</option>
                         <option value="http-equiv"{DATA.h_selected}>http-equiv</option>
                     </select></td>
-                    <td><input class="w200 form-control" type="text" value="{DATA.value}" name="metaGroupsValue[]" /></td>
-                    <td><input class="w400 form-control" type="text" value="{DATA.content}" name="metaContents[]" /></td>
+                    <td><input class="w200 form-control" type="text" value="{DATA.value}"{DATA.disabled} name="metaGroupsValue[]" /></td>
+                    <td><input class="w400 form-control" type="text" value="{DATA.content}"{DATA.disabled} name="metaContents[]" /></td>
                 </tr>
                 <!-- END: loop -->
                 <tr>

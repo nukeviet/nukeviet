@@ -12,12 +12,12 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$global_code_defined = array(
-    'cat_visible_status' => array(1, 2),
+$global_code_defined = [
+    'cat_visible_status' => [1, 2],
     'cat_locked_status' => 10,
     'row_locked_status' => 20,
     'edit_timeout' => 180
-);
+];
 
 $order_articles = $module_config[$module_name]['order_articles'];
 $order_articles_by = ($order_articles) ? 'weight' : 'publtime';

@@ -29,6 +29,7 @@ $lang_module['action'] = 'Submit';
 $lang_module['move'] = 'Move';
 $lang_module['save_temp'] = 'Draft save';
 $lang_module['publtime'] = 'Publish';
+$lang_module['publtime_action'] = 'Publish (does not apply to drafts and locked posts)';
 $lang_module['exptime'] = 'Make expired';
 $lang_module['status_action_0'] = 'Switch to wait for approval';
 $lang_module['declined'] = 'Reject posts';

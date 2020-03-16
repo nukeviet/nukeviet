@@ -187,3 +187,5 @@ $lang_module['upload_view_thumbnail'] = 'Switch to grid view';
 $lang_module['upload_view_detail'] = 'Switch to a list view';
 $lang_module['upload_chunk'] = 'Chunk Upload';
 $lang_module['upload_chunk_help'] = 'This function supports splitting the upload file into several small packages, support to upload large files to the server. If you do not intend to allow large files to upload, please leave blank above';
+$lang_module['upload_overflow'] = 'Overflow file size';
+$lang_module['upload_overflow_help'] = 'Allows uploading files larger than the maximum file size. Note: Only works when uploading files directly from your computer in the file manager, the Chunk Upload section above is set. The value configured here must not be less than the maximum size of the uploaded file set above';

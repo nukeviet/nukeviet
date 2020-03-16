@@ -387,10 +387,21 @@ if ($checkss == $array_register['checkss']) {
                     $info = $lang_module['account_active_mess'];
                 } else {
                     $info = $lang_module['account_active_mess_error_mail'];
+
+                    // Thêm thông báo vào hệ thống
+                    $access_admin = unserialize($global_users_config['access_admin']);
+                    if (isset($access_admin['access_waiting'])) {
+                        for ($i = 1; $i <= 3; $i++) {
+                            if (!empty($access_admin['access_waiting'][$i])) {
+                                $admin_view_allowed = $i == 3 ? 0 : $i;
+                                nv_insert_notification($module_name, 'send_active_link_fail', ['title' => $array_register['username']], $userid, 0, 0, 1, $admin_view_allowed, 1);
+                            }
+                        }
+                    }
                 }
             } else {
                 $info = $lang_module['account_register_to_admin'];
-                nv_insert_notification($module_name, 'contact_new', array('title' => $array_register['username']), $userid, 0, 0, 1);
+                nv_insert_notification($module_name, 'contact_new', ['title' => $array_register['username']], $userid, 0, 0, 1);
             }
 
             $nv_redirect = '';

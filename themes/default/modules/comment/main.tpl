@@ -10,7 +10,7 @@
             <p class="comment-title"><em class="fa fa-comments">&nbsp;</em> {LANG.comment}</p>
         </div>
         <div class="col-xs-12 text-right">
-            <select id="sort" class="form-control">
+            <select id="comment-sort-change" class="form-control" data-module="{MODULE_COMM}" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}" data-perpage="{PER_PAGE}">
                 <!-- BEGIN: sortcomm -->
                 <option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
                 <!-- END: sortcomm -->
@@ -123,9 +123,8 @@
     </div>
 </div>
 <script type="text/javascript">
-var nv_url_comm = '{BASE_URL_COMM}';
-$("#sort").change(function() {
-    $.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val() , function(res) {
+$('#comment-sort-change').change(function() {
+    $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + $(this).data('module') + '&area=' + $(this).data('area') + '&id=' + $(this).data('id') + '&allowed=' + $(this).data('allowed') + '&checkss=' + $(this).data('checkss') + '&perpage=' + $(this).data('perpage') + '&nocache=' + new Date().getTime(), 'sortcomm=' + $(this).val() , function(res) {
         $('#idcomment').html(res);
     });
 });
