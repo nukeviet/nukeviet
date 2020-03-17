@@ -16,6 +16,7 @@ if (defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+// Dùng để bật giao diện login box
 $nv_header = '';
 if ($nv_Request->isset_request('nv_header', 'post,get')) {
     $nv_header = $nv_Request->get_title('nv_header', 'post,get', '');
@@ -24,17 +25,13 @@ if ($nv_Request->isset_request('nv_header', 'post,get')) {
     }
 }
 
+// Chuyển hướng sau khi login
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
-$gfx_chk = (in_array($global_config['gfx_chk'], [
-    2,
-    4,
-    5,
-    7
-])) ? 1 : 0;
+$gfx_chk = (in_array($global_config['gfx_chk'], [2, 4, 5, 7])) ? 1 : 0;
 
 /**
  * login_result()

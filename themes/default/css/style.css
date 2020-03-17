@@ -1899,36 +1899,12 @@ a.btn {
     vertical-align:middle;
 }
 
-/* panel-body */
-
-.panel-body p {
-    margin:0;
-}
-
-.panel-body ul {
-    margin:0;
-    padding:0;
-}
-
-.panel-body ul li {
-    margin-bottom:10px;
-}
-
-.panel-body img {
-    margin-right:5px;
-}
-
-.panel-body ul li:last-child {
-    margin-bottom:0;
-}
-
 .nv-infodie .logo {
     max-width:90% !important;
     margin-bottom: 10px
 }
 
 /* Form */
-
 input[type="checkbox"],
 input[type="radio"] {
     border-width:1px;

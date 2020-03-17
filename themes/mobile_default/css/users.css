@@ -211,6 +211,12 @@ fieldset[disabled] .openid-single-sign-on:focus {
     cursor: inherit;
 }
 
+/* LOGIN, REGISTER */
 .user-reg-form .form-detail .form-group > label {
     font-weight: 500;
+}
+
+.login-box img.logo {
+    max-width: 100%;
+    height: auto;
 }
