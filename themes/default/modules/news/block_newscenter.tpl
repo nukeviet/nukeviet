@@ -9,7 +9,7 @@
                     {main.hometext}
                     <p class="text-right"><a href="{main.link}"><em class="fa fa-sign-out"></em>{lang.more}</a></p>
                 </div>
-                <div class="col-md-10 margin-bottom-lg">
+                <div class="hot-news-others col-md-10 margin-bottom-lg">
                     <ul class="column-margin-left">
                         <!-- BEGIN: othernews -->
                         <li class="icon_list">

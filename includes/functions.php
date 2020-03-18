@@ -1239,7 +1239,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->AltBody = $AltBody;
         $mail->IsHTML(true);
 
-        if($AddEmbeddedImage) {
+        if ($AddEmbeddedImage) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
         }
 

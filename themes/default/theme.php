@@ -233,20 +233,7 @@ function nv_site_theme($contents, $full = true)
     // Header variables
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-    $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
-    $logo = preg_replace('/\.[a-z]+$/i', '.svg', $global_config['site_logo']);
-    if (!file_exists(NV_ROOTDIR . '/' . $logo)) {
-        $logo = $global_config['site_logo'];
-    }
-    $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $logo);
-    $xtpl->assign('LOGO_WIDTH', $size[0]);
-    $xtpl->assign('LOGO_HEIGHT', $size[1]);
-
-    if (isset($size['mime']) and $size['mime'] == 'application/x-shockwave-flash') {
-        $xtpl->parse('main.swf');
-    } else {
-        $xtpl->parse('main.image');
-    }
+    $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo']);
 
     if (preg_match("/<h1[^\>]*\>/i", $contents)) {
         $xtpl->parse('main.site_name_span');
