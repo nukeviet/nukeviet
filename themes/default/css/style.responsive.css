@@ -11,6 +11,10 @@
     #tip {
         right: 10px;
     }
+
+    #header .logo {
+        padding-left: 10px;
+    }
 }
 
 @media (max-width: 991.98px) {
@@ -44,6 +48,12 @@
     .box-shadow {
         box-shadow: none;
         -webkit-box-shadow: none;
+    }
+
+    .site-banner {
+        height: 300px;
+        max-height: 100%;
+        padding-bottom: 0;
     }
 
     .header-nav-inner {
@@ -102,6 +112,8 @@
 
     #header .logo {
         text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     #header .right-ads {

@@ -2,7 +2,7 @@
         <div class="alert alert-danger">{LANG.nojs}</div>
     </noscript>
     <header>
-        <div class="site-banner"></div>
+        <div class="site-banner" style="background-image: url('{BANNER_SRC}');"></div>
         <div class="section-header-bar">
             <div class="wraper">
                 <nav class="header-nav">

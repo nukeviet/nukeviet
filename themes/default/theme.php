@@ -85,10 +85,11 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
     $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
+
     // System variables
     $xtpl->assign('THEME_PAGE_TITLE', nv_html_page_title(false));
 
-    //Meta-tags
+    // Meta-tags
     $metatags = nv_html_meta_tags(false);
     if ($global_config['current_theme_type'] == 'r') {
         $metatags[] = array(
@@ -234,6 +235,12 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
     $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo']);
+
+    if (empty($global_config['site_banner'])) {
+        $xtpl->assign('BANNER_SRC', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/header.png');
+    } else {
+        $xtpl->assign('BANNER_SRC', NV_BASE_SITEURL . $global_config['site_banner']);
+    }
 
     if (preg_match("/<h1[^\>]*\>/i", $contents)) {
         $xtpl->parse('main.site_name_span');
