@@ -39,16 +39,16 @@
                 <div class="theme-change">
                 <!-- BEGIN: loop -->
                     <!-- BEGIN: other -->
-                    <a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></a>
+                    <a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}"><i class="fa fa-{STHEME_ICON}"></i></a>
                     <!-- END: other -->
                     <!-- BEGIN: current -->
-                    <span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span>
+                    <span title="{LANG.theme_type_select}: {STHEME_TITLE}"><i class="fa fa-{STHEME_ICON}"></i></span>
                     <!-- END: current -->
                 <!-- END: loop -->
                 </div>
                 <!-- END: theme_type -->
                 <div class="bttop">
-                    <a class="pointer"><em class="fa fa-eject fa-lg"></em></a>
+                    <a class="pointer"><i class="fa fa-eject fa-lg"></i></a>
                 </div>
             </div>
         </div>

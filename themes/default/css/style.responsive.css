@@ -2,6 +2,11 @@
     width:100%;
 }
 
+.site-banner {
+    height: 0;
+    padding-bottom: 22%;
+}
+
 @media (max-width: 1119.98px) {
     .section-header-bar .header-nav {
         padding-left: 10px;

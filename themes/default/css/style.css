@@ -787,11 +787,10 @@ a.btn {
 .site-banner {
     position: absolute;
     width: 100%;
-    height: 0;
     background-size: cover;
     z-index: -10;
-    padding-bottom: 22%;
     background-position: center center;
+    height: 300px;
 }
 
 #header {
@@ -1511,20 +1510,20 @@ a.btn {
 
 .footerNav2 .theme-change a,
 .footerNav2 .theme-change span {
-    display:inline-block;
-    margin-top:5px;
-    margin-right:10px;
-    line-height:30px;
-    width:30px;
-    background-color:#245682;
-    color:#428BCA;
-    text-align:center;
-    border-radius:15px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-right: 10px;
+    background-color: #245682;
+    color: #428BCA;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    position: relative;
 }
 
 .footerNav2 .theme-change span {
-    color:#dcdcdc;
-    background-color:#428BCA;
+    color: #dcdcdc;
+    background-color: #428BCA;
 }
 
 .footerNav2 .theme-change a:hover,
@@ -1533,39 +1532,40 @@ a.btn {
     background-color:#428BCA;
 }
 
-.footerNav2 .theme-change .fa-lg {
-    font-size:14px;
+.footerNav2 .theme-change .fa,
+.footerNav2 .bttop a .fa {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0px);
 }
 
 .footerNav2 .theme-change .fa-mobile {
-    font-size:20px;
-    margin-right:-2px;
+    font-size: 140%;
 }
 
 .footerNav2 .bttop {
-    float:right;
-    width:40px;
-    height:40px;
-    margin-right:10px;
+    float: right;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
 }
 
 .footerNav2 .bttop a {
-    display:block;
-    line-height:40px;
-    background-color:#245682;
-    color:#428BCA;
-    font-size:14px;
-    text-align:center;
-    border-radius:20px;
+    display: block;
+    background-color: #245682;
+    color: #428BCA;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 20px;
+    position: relative;
+    width: 40px;
+    height: 40px;
 }
 
 .footerNav2 .bttop a:hover {
-    color:#fff;
-    background-color:#428BCA;
-}
-
-.footerNav2 .bttop em {
-    margin-right:-2px;
+    color: #fff;
+    background-color: #428BCA;
 }
 
 /* Footer */
@@ -1905,6 +1905,20 @@ a.btn {
 }
 
 /* Form */
+input, input[type="file"], input[type="radio"], input[type="checkbox"],
+button, .btn, .form-control, textarea,
+input:focus, input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus,
+button:focus, .btn:focus, .form-control:focus, textarea:focus,
+input:focus:active, input[type="file"]:focus:active, input[type="radio"]:focus:active, input[type="checkbox"]:focus:active,
+button:focus:active, .btn:focus:active, .form-control:focus:active, textarea:focus:active,
+input.active:focus, input[type="file"].active:focus, input[type="radio"].active:focus, input[type="checkbox"].active:focus,
+button.active:focus, .btn.active:focus, .form-control.active:focus, textarea.active:focus,
+input:active, input[type="file"]:active, input[type="radio"]:active, input[type="checkbox"]:active,
+button:active, .btn:active, .form-control:active, textarea:active {
+    outline-width: 0;
+    outline-style: none;
+}
+
 input[type="checkbox"],
 input[type="radio"] {
     border-width:1px;
