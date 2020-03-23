@@ -173,6 +173,7 @@ $lang_module['group_type_2'] = 'Nhóm tham gia tự do';
 $lang_module['group_color'] = 'Colour group';
 $lang_module['group_avatar'] = 'Avatar group';
 $lang_module['group_is_default'] = 'Default groups when members register';
+$lang_module['group_del_inactive'] = 'Delete inactive groups';
 $lang_module['siteus'] = 'Allow subsite add members to the group';
 $lang_module['users'] = 'User';
 $lang_module['promote'] = 'Promote';
