@@ -61,14 +61,11 @@ if (!empty($row['clid'])) {
     }
 }
 $contents['rows'][] = array($lang_module['of_user'], $cl_full_name);
-
-$contents['rows'][] = array($lang_module['file_name'], '<a href="javascript:void(0)" data-src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] . '" id="' . ($row['file_ext'] == 'swf' ? 'open_modal_flash' : 'open_modal_image') . '" data-width="' . $row['width'] . '">' . $lang_module['click_show_img'] . '</a>');
-
-if (!empty($row['imageforswf'])) {
-    $contents['rows'][] = array($lang_module['imageforswf'], '<a href="javascript:void(0)" data-src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] . '" id="open_modal_image" data-width="' . $row['width'] . '">' . $lang_module['click_show_img'] . '</a>');
-}
-
+$contents['rows'][] = array($lang_module['file_name'], '<a href="javascript:void(0)" data-src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] . '" class="open_modal_image">' . $lang_module['click_show_img'] . '</a>');
 $contents['rows'][] = array($lang_module['img_info1'], $img_info);
+if (!empty($row['imageforswf'])) {
+    $contents['rows'][] = array($lang_module['imageforswf'], '<a href="javascript:void(0)" data-src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] . '" class="open_modal_image">' . $lang_module['click_show_img'] . '</a>');
+}
 $contents['rows'][] = array($lang_module['file_alt'], $row['file_alt']);
 $contents['rows'][] = array($lang_module['click_url'], $click_url);
 $contents['rows'][] = array($lang_module['target'], $targets[$row['target']]);

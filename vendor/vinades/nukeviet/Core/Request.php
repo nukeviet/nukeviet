@@ -577,21 +577,6 @@ class Request
     private function filterTags($source)
     {
         $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source);
-        if (in_array('iframe', $this->disabletags)) {
-            if (preg_match_all("/<iframe[a-z0-9\s\=\"]*src\=\"(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/embed\/([^\?]+)(\?[^\"]+)?\"[^\>]*\><\/iframe>/isU", $source, $match)) {
-                foreach ($match[0] as $key => $_m) {
-                    $vid = $match[4][$key];
-                    $width = intval(preg_replace("/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
-                    $height = intval(preg_replace("/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m));
-
-                    $width = ($width > 0) ? $width : 480;
-                    $height = ($height > 0) ? $height : 360;
-
-                    $ojwplayer = '<object height="' . $height . '" width="' . $width . '"><param name="movie" value="//www.youtube.com/v/' . $vid . '?rel=0&amp;hl=pt_BR&amp;version=3" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed allowfullscreen="true" allowscriptaccess="always" height="' . $height . '" src="//www.youtube.com/v/' . $vid . '?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3" type="application/x-shockwave-flash" width="' . $width . '"></embed></object>';
-                    $source = str_replace($_m, $ojwplayer, $source);
-                }
-            }
-        }
 
         $preTag = null;
         $postTag = $source;

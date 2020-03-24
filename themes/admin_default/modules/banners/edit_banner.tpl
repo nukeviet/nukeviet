@@ -47,29 +47,37 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>{CONTENTS.file_name.0}:</td>
-                    <td><sup class="required" id="require_image" ></sup></td>
+                    <td>{LANG.file_name}:</td>
+                    <td><sup class="required" id="require_image"></sup></td>
                     <td>
-                    <!-- BEGIN: img_info -->
-                    <a href="javascript:void(0)" data-src="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
-                    <!-- END: img_info -->
-                    <!-- BEGIN: imageforswf1 -->
-                    <a href="javascript:void(0)" data-src="{CONTENTS.file_name.5}" class="open_modal_image" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
-                    <!-- END: imageforswf1 -->
+                        <!-- BEGIN: img_info -->
+                        <div id="current_image">
+                            <a href="javascript:void(0)" data-src="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
+                            <a href="#" data-toggle="remove_banner">{GLANG.delete}</a>
+                        </div>
+                        <!-- END: img_info -->
+                        <div id="upload_image"{SHOW_BANNER}>
+                            <input type="hidden" name="remove_banner" value="{CONTENTS.remove_banner}">
+                            <input name="{CONTENTS.upload.1}" type="file">
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td>{CONTENTS.upload.0}:</td>
-                    <td>&nbsp;</td>
-                    <td><input name="{CONTENTS.upload.1}" type="file" /></td>
-                </tr>
-                <!-- BEGIN: imageforswf2 -->
-                <tr>
                     <td>{CONTENTS.upload.2}:</td>
                     <td>&nbsp;</td>
-                    <td><input name="{CONTENTS.upload.3}" type="file" /></td>
+                    <td>
+                        <!-- BEGIN: imageforswf -->
+                        <div id="current_imageforswf">
+                            <a href="javascript:void(0)" data-src="{CONTENTS.imageforswf.0}" class="open_modal_image" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.imageforswf.1}" width="16" height="16" style="cursor: pointer;" /></a>
+                            <a href="#" data-toggle="remove_imageforswf">{GLANG.delete}</a>
+                        </div>
+                        <!-- END: imageforswf -->
+                        <div id="upload_imageforswf"{SHOW_IMAGEFORSWF}>
+                            <input type="hidden" name="remove_imageforswf" value="{CONTENTS.remove_imageforswf}">
+                            <input name="{CONTENTS.upload.3}" type="file">
+                        </div>
+                    </td>
                 </tr>
-                <!-- END: imageforswf2 -->
                 <tr>
                     <td>{CONTENTS.file_alt.0}:</td>
                     <td>&nbsp;</td>
@@ -188,16 +196,25 @@ $(document).ready(function() {
         $("#exp_date").datepicker('show');
     });
 
-    $("#open_modal_image").on("click", function() {
-        $('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
-        $('#imagemodal .modal-body').html('<img src="' + $(this).data('src') + '" />');
+    $(".open_modal_image").on("click", function() {
+        $('#imagemodal .modal-body').html('<div class="text-center"><img class="img-banner-preview" src="' + $(this).data('src') + '"></div>');
         $('#imagemodal').modal('show');
     });
 
-    $("#open_modal_flash").on("click", function() {
-        $('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
-        $('#imagemodal .modal-body').html('<object type="application/x-shockwave-flash" data="' + $(this).data('src') + '" width="' + $(this).data('width') + '"><param name="movie" value="' + $(this).data('src') + '"><param name="wmode" value="transparent"></object>');
-        $('#imagemodal').modal('show');
+    // Xóa banner hiện tại upload lại
+    $('[data-toggle="remove_banner"]').on('click', function(e) {
+        e.preventDefault();
+        $('#current_image').addClass('hidden');
+        $('#upload_image').removeClass('hidden');
+        $('[name="remove_banner"]').val('1');
+    });
+
+    // Xóa ảnh trên mobile upload lại
+    $('[data-toggle="remove_imageforswf"]').on('click', function(e) {
+        e.preventDefault();
+        $('#current_imageforswf').addClass('hidden');
+        $('#upload_imageforswf').removeClass('hidden');
+        $('[name="remove_imageforswf"]').val('1');
     });
 });
 function chancePlan() {
