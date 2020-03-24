@@ -1278,19 +1278,29 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
 
     // Parse custom fields
     if (!empty($array_field_config)) {
-        //var_dump($array_field_config); die();
         foreach ($array_field_config as $row) {
-            if ($row['system'] == 1) continue;
+            if ($row['system'] == 1) {
+                continue;
+            }
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'checkbox') {
                     $result = explode(',', $custom_fields[$row['field']]);
-                    $value = '';
+                    $value = [];
                     foreach ($result as $item) {
-                        $value .= $row['field_choices'][$item] . '<br />';
+                        if (isset($row['field_choices'][$item])) {
+                            $value[] = $row['field_choices'][$item];
+                        } elseif (!empty($item)) {
+                            $value[] = $item;
+                        }
                     }
+                    $value = empty($value) ? '' : implode('<br />', $value);
                 } elseif ($question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio') {
-                    $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    if (isset($row['field_choices'][$custom_fields[$row['field']]])) {
+                        $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    } else {
+                        $value = $custom_fields[$row['field']];
+                    }
                 } else {
                     $value = $custom_fields[$row['field']];
                 }
