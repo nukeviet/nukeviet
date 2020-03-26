@@ -44,11 +44,11 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  keyname varchar(32) DEFAULT NULL,
-  mask tinyint(4) NOT NULL DEFAULT '0',
-  begintime int(11) DEFAULT NULL,
-  endtime int(11) DEFAULT NULL,
-  notice varchar(255) NOT NULL,
+  keyname varchar(39) NOT NULL DEFAULT '',
+  mask tinyint(4) unsigned NOT NULL DEFAULT '0',
+  begintime int(11) unsigned NOT NULL DEFAULT '0',
+  endtime int(11) unsigned NOT NULL DEFAULT '0',
+  notice varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (id),
   UNIQUE KEY keyname (keyname)
 ) ENGINE=MyISAM";
