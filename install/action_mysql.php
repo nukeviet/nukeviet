@@ -243,7 +243,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
   type tinyint(4) unsigned NOT NULL DEFAULT '0',
   ip varchar(32) DEFAULT NULL,
-  mask tinyint(4) NOT NULL DEFAULT '0',
+  mask tinyint(4) unsigned NOT NULL DEFAULT '0',
   area tinyint(3) NOT NULL,
   begintime int(11) DEFAULT NULL,
   endtime int(11) DEFAULT NULL,

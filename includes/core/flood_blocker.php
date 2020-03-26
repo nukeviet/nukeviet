@@ -12,21 +12,29 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$array_except_flood_site = $array_except_flood_admin = array();
+$array_except_flood_site = $array_except_flood_admin = [];
 $ip_exclusion = false;
 if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php')) {
     include NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php' ;
 }
 
 foreach ($array_except_flood_site as $e => $f) {
-    if ($f['begintime'] < NV_CURRENTTIME and ($f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME) and (preg_replace($f['mask'], '', NV_CLIENT_IP) == preg_replace($f['mask'], '', $e))) {
+    if (
+        $f['begintime'] < NV_CURRENTTIME and ($f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME) and (
+            (empty($f['ip6']) and preg_replace($f['mask'], '', NV_CLIENT_IP) == preg_replace($f['mask'], '', $e)) or
+            (!empty($f['ip6']) and $ips->checkIp6(NV_CLIENT_IP, $f['mask']) === true)
+        )
+    ) {
         $ip_exclusion = true;
         break;
     }
 }
 
 if (!$ip_exclusion) {
-    $rules = array('60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300']);
+    $rules = [
+        '60' => $global_config['max_requests_60'],
+        '300' => $global_config['max_requests_300']
+    ];
 
     $flb = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
     $flb->trackFlood($rules);
