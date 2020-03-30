@@ -14,10 +14,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 //Xoa thanh vien
 if ($nv_Request->isset_request('del', 'post')) {
-    $userid = $nv_Request->get_int('userid', 'post', 0);
+    $userid = $nv_Request->get_absint('userid', 'post', 0);
 
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     if ($db->exec($sql)) {
+        nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
         die('OK');
     }
     die('NO');
@@ -25,7 +26,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 //Kich hoat thanh vien
 if ($nv_Request->isset_request('act', 'get')) {
-    $userid = $nv_Request->get_int('userid', 'get', 0);
+    $userid = $userid_reg = $nv_Request->get_int('userid', 'get', 0);
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     $row = $db->query($sql)->fetch();
@@ -111,6 +112,8 @@ if ($nv_Request->isset_request('act', 'get')) {
             if (nv_function_exists('nv_user_register_callback')) {
                 nv_user_register_callback($userid);
             }
+            // Xóa thông báo hệ thống
+            nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid_reg);
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
 

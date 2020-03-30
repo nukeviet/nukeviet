@@ -43,7 +43,7 @@ if ($tokend_confirm_password != $tokend) {
         $global_config['login_time_tracking'],
         $global_config['login_time_ban']
     );
-    $blocker->trackLogin($rules);
+    $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
     if ($checkss == NV_CHECK_SESSION) {
         if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($user_info['username'])) {

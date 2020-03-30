@@ -34,7 +34,7 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
     if ($tid > 0) {
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
         if ($page > 1) {
-            $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+            $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
         }
 
         $array_mod_title[] = array(
@@ -111,7 +111,7 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
         $contents = topic_theme($item_array, $item_array_other, $generate_page, $page_title, $description, $image_tag);
 
         if ($page > 1) {
-            $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+            $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
         }
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_site_theme($contents);

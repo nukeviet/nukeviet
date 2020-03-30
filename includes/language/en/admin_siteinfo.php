@@ -162,3 +162,4 @@ $lang_module['notification_empty'] = '<p align="center">No Notification!</p>';
 $lang_module['notification_module_auto_deactive'] = 'Module <strong />%s  has stopped operation due to error';
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong />%s  has stopped operation due to error';
 $lang_module['notification_hide'] = 'Hide this notification';
+$lang_module['notification_email_failure'] = 'Email failed. Subject <strong>%s</strong>, received email <strong>%s</strong>';

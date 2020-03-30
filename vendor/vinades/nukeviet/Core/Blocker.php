@@ -34,13 +34,14 @@ class Blocker
 
     private $logs_path;
     private $ip_addr;
-    private $flood_rules = array(
+    private $flood_rules = [
         10 => 10, // rule 1 - maximum 10 requests in 10 secs
         60 => 30, // rule 2 - maximum 30 requests in 60 secs
         300 => 50, // rule 3 - maximum 50 requests in 300 secs
         3600 => 200 // rule 4 - maximum 200 requests in 3600 secs
-    );
-    private $login_rules = array(5, 5, 1440);
+    ];
+    private $login_rules = [5, 5, 1440];
+    private $track_login = true;
 
     /**
      * Blocker::__construct()
@@ -121,16 +122,15 @@ class Blocker
     }
 
     /**
-     * Blocker::trackLogin()
-     *
-     * @param mixed $rules
-     * @return void
+     * @param array $rules
+     * @param number $allowed
      */
-    public function trackLogin($rules = array())
+    public function trackLogin($rules = [], $allowed = 1)
     {
         if (!empty($rules)) {
             $this->login_rules = $rules;
         }
+        $this->track_login = $allowed ? true : false;
     }
 
     /**
@@ -141,6 +141,9 @@ class Blocker
      */
     public function is_blocklogin($loginname)
     {
+        if (!$this->track_login) {
+            return false;
+        }
         $blocked = false;
 
         if (!empty($loginname)) {
@@ -167,6 +170,9 @@ class Blocker
      */
     public function set_loginFailed($loginname, $time = 0)
     {
+        if (!$this->track_login) {
+            return true;
+        }
         if (empty($time)) {
             $time = time();
         }

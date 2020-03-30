@@ -306,26 +306,8 @@ function user_login($is_ajax = false)
     }
 
     if (!empty($nv_redirect)) {
-        $xtpl->assign('SITE_NAME', $global_config['site_name']);
-        $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-        $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
-        $logo = preg_replace('/\.[a-z]+$/i', '.svg', $global_config['site_logo']);
-        if (!file_exists(NV_ROOTDIR . '/' . $logo)) {
-            $logo = $global_config['site_logo'];
-        }
-        $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $logo);
-        $xtpl->assign('LOGO_WIDTH', $size[0]);
-        $xtpl->assign('LOGO_HEIGHT', $size[1]);
-
-        if (isset($size['mime']) and $size['mime'] == 'application/x-shockwave-flash') {
-            $xtpl->parse('main.redirect2.swf');
-        } else {
-            $xtpl->parse('main.redirect2.image');
-        }
-
         $xtpl->assign('REDIRECT', $nv_redirect);
         $xtpl->parse('main.redirect');
-        $xtpl->parse('main.redirect2');
     } else {
         $xtpl->parse('main.not_redirect');
     }
@@ -333,6 +315,12 @@ function user_login($is_ajax = false)
     if (!empty($nv_header)) {
         $xtpl->assign('NV_HEADER', $nv_header);
         $xtpl->parse('main.header');
+
+        // Hiển thị logo tại login box
+        $xtpl->assign('SITE_NAME', $global_config['site_name']);
+        $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+        $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo']);
+        $xtpl->parse('main.redirect2');
     }
 
     if (defined('NV_OPENID_ALLOWED')) {
@@ -1290,19 +1278,29 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
 
     // Parse custom fields
     if (!empty($array_field_config)) {
-        //var_dump($array_field_config); die();
         foreach ($array_field_config as $row) {
-            if ($row['system'] == 1) continue;
+            if ($row['system'] == 1) {
+                continue;
+            }
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'checkbox') {
                     $result = explode(',', $custom_fields[$row['field']]);
-                    $value = '';
+                    $value = [];
                     foreach ($result as $item) {
-                        $value .= $row['field_choices'][$item] . '<br />';
+                        if (isset($row['field_choices'][$item])) {
+                            $value[] = $row['field_choices'][$item];
+                        } elseif (!empty($item)) {
+                            $value[] = $item;
+                        }
                     }
+                    $value = empty($value) ? '' : implode('<br />', $value);
                 } elseif ($question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio') {
-                    $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    if (isset($row['field_choices'][$custom_fields[$row['field']]])) {
+                        $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    } else {
+                        $value = $custom_fields[$row['field']];
+                    }
                 } else {
                     $value = $custom_fields[$row['field']];
                 }

@@ -27,6 +27,7 @@ $chunk_upload['chunk_prefix'] = NV_TEMPNAM_PREFIX . 'chunk' . md5($global_config
 
 $error = '';
 $upload_info = [];
+$is_remote_upload = false;
 
 if (!isset($check_allow_upload_dir['upload_file'])) {
     $error = $lang_module['notlevel'];
@@ -53,7 +54,12 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
         $allow_files_type = [];
     }
 
-    $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+    $sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
+    if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {
+        $sys_max_size_local = $global_config['nv_overflow_size'];
+    }
+
+    $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], [$sys_max_size, $sys_max_size_local], NV_MAX_WIDTH, NV_MAX_HEIGHT);
     $upload->setLanguage($lang_global);
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
@@ -65,6 +71,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
     } else {
         $urlfile = rawurldecode(trim($nv_Request->get_string('fileurl', 'post')));
         $upload_info = $upload->save_urlfile($urlfile, NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize']);
+        $is_remote_upload = true;
     }
 
     if (!empty($upload_info['error'])) {
@@ -96,9 +103,12 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
             $upload_info['size'] = filesize(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);
         }
 
-        if ($upload_info['size'] > NV_UPLOAD_MAX_FILESIZE) {
+        if ($is_remote_upload and $upload_info['size'] > $sys_max_size) {
             nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);
-            $error = sprintf($lang_global['error_upload_max_user_size'], NV_UPLOAD_MAX_FILESIZE);
+            $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes($sys_max_size));
+        } elseif ($upload_info['size'] > $sys_max_size_local) {
+            nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);
+            $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes($sys_max_size_local));
         } else {
             if ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][1] > NV_MAX_HEIGHT) {
                 nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);

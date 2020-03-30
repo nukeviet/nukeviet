@@ -23,28 +23,28 @@
 }
 
 .users-avupload .upload-button span{
-	font-size:80px;
+    font-size:80px;
     color:#00a8ff;
 }
 .users-avupload .img-area{
-	text-align:center;
-	margin-bottom:10px;
+    text-align:center;
+    margin-bottom:10px;
 }
 .users-avupload .img-area img{
-	width:100%;
-	display: none;
+    width:100%;
+    display: none;
 }
 .users-avupload .info{
-	display:none;
+    display:none;
 }
 .users-avupload .icon-stack{
-	padding:0 5px;
-	display:inline-block;
+    padding:0 5px;
+    display:inline-block;
 }
 
 /* EDIT INFO */
 #change-photo{
-	display: none;
+    display: none;
 }
 
 .users-menu > li > a{
@@ -209,4 +209,14 @@ fieldset[disabled] .openid-single-sign-on:focus {
     background-color: #5cb85c;
     border-color: #4cae4c;
     cursor: inherit;
+}
+
+/* LOGIN, REGISTER */
+.user-reg-form .form-detail .form-group > label {
+    font-weight: 500;
+}
+
+.login-box img.logo {
+    max-width: 100%;
+    height: auto;
 }

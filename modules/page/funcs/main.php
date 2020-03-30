@@ -13,6 +13,9 @@ if (!defined('NV_IS_MOD_PAGE')) {
 }
 
 if ($page_config['viewtype'] == 2) {
+    $page_title = $module_info['site_title'];
+    $key_words = $module_info['keywords'];
+    $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $contents = '';
 } elseif ($id) {
     // Xem theo bài viết
@@ -128,7 +131,7 @@ if ($page_config['viewtype'] == 2) {
     $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
     }
 
     $contents = nv_page_main_list($array_data, $generate_page);

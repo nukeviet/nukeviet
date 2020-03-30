@@ -24,6 +24,7 @@ class Upload
         'allowed_files' => [],
         'upload_checking_mode' => 'strong',
         'maxsize' => 0,
+        'overflowsize' => 0,
         'maxwidth' => 0,
         'maxheight' => 0,
         'magic_path' => ''
@@ -87,7 +88,7 @@ class Upload
      * @param mixed $allowed_filetypes
      * @param mixed $forbid_extensions
      * @param mixed $forbid_mimes
-     * @param integer $maxsize
+     * @param integer|array~integer $maxsize
      * @param integer $maxwidth
      * @param integer $maxheight
      * @param string $magic_path
@@ -117,7 +118,12 @@ class Upload
         }
 
         $this->config['allowed_files'] = $this->get_ini($allowed_filetypes, $forbid_extensions, $forbid_mimes);
-        $this->config['maxsize'] = floatval($maxsize);
+        if (is_array($maxsize)) {
+            $this->config['maxsize'] = floatval($maxsize[0]);
+            $this->config['overflowsize'] = floatval($maxsize[1]);
+        } else {
+            $this->config['maxsize'] = $this->config['overflowsize'] = floatval($maxsize);
+        }
         $this->config['maxwidth'] = intval($maxwidth);
         $this->config['maxheight'] = intval($maxheight);
         $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
@@ -770,9 +776,9 @@ class Upload
          * Dung lượng quá giới hạn
          * Không áp dụng khi tự resize ảnh
          */
-        if (!empty($this->config['maxsize']) and $this->file_size > $this->config['maxsize']) {
+        if (!empty($this->config['overflowsize']) and $this->file_size > $this->config['overflowsize']) {
             if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) and $this->file_extension != 'svg')) {
-                return sprintf($this->lang['error_upload_max_user_size'], nv_convertfromBytes($this->config['maxsize']));
+                return sprintf($this->lang['error_upload_max_user_size'], nv_convertfromBytes($this->config['overflowsize']));
             }
         }
 

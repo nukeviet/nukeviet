@@ -17,6 +17,26 @@ if ($global_config['idsite']) {
 } else {
     $file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
 }
+$sys_metatags = [];
+$sys_metatags['meta'] = [];
+$mt = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml'));
+if ($mt['meta_item']) {
+    if (isset($mt['meta_item'][0])) {
+        $sys_metatags['meta'] = $mt['meta_item'];
+    } else {
+        $sys_metatags['meta'][] = $mt['meta_item'];
+    }
+}
+$default_metasys = [];
+foreach ($sys_metatags['meta'] as $value) {
+    if ($value['group'] == 'name' and in_array($value['value'], ['author', 'copyright'])) {
+        $default_metasys[] = [
+            'group' => $value['group'],
+            'value' => $value['value'],
+            'content' => $value['content']
+        ];
+    }
+}
 
 $metatags = [];
 $metatags['meta'] = [];
@@ -34,30 +54,37 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $metaContents = $nv_Request->get_array('metaContents', 'post');
 
     foreach ($metaGroupsName as $key => $name) {
-        if ($name == 'http-equiv' or $name == 'name' or $name == 'property') {
-            $value = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaGroupsValue[$key]))));
-            $content = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaContents[$key]))));
-            $newArray = [
-                'group' => $name,
-                'value' => $value,
-                'content' => $content
-            ];
-            if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'])) {
-                $metatags['meta'][] = $newArray;
-            }
+        if ($name != 'http-equiv' and $name != 'name' and $name != 'property') {
+            continue;
         }
+        $value = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaGroupsValue[$key]))));
+        $content = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaContents[$key]))));
+        if ($global_config['idsite'] and $name == 'name' and in_array($value, ['author', 'copyright'])) {
+            continue;
+        }
+        $newArray = [
+            'group' => $name,
+            'value' => $value,
+            'content' => $content
+        ];
+        if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'])) {
+            $metatags['meta'][] = $newArray;
+        }
+    }
+    if ($global_config['idsite'] and !empty($default_metasys)) {
+        $metatags['meta'] = array_merge($default_metasys, $metatags['meta']);
     }
 
     if (file_exists($file_metatags)) {
         nv_deletefile($file_metatags);
     }
-
     if (!empty($metatags['meta'])) {
         $array2XML = new NukeViet\Xml\Array2XML();
         $array2XML->saveXML($metatags, 'metatags', $file_metatags, $global_config['site_charset']);
     }
-    $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post');
-    $description_length = $nv_Request->get_absint('description_length', 'post');
+
+    $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post', false);
+    $description_length = $nv_Request->get_absint('description_length', 'post', 0);
     $private_site = (int)$nv_Request->get_bool('private_site', 'post', false);
 
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $metaTagsOgp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'metaTagsOgp'");
@@ -66,6 +93,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $nv_Cache->delAll(false);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+} elseif (empty($global_config['idsite'])) {
+    $metatags = $sys_metatags;
 } else {
     if (!file_exists($file_metatags)) {
         $file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
@@ -93,17 +122,26 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+
+// Các meta hiện có
 if (!empty($metatags['meta'])) {
-    $number = 0;
     foreach ($metatags['meta'] as $value) {
         $value['h_selected'] = $value['group'] == 'http-equiv' ? ' selected="selected"' : '';
         $value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
         $value['p_selected'] = $value['group'] == 'property' ? ' selected="selected"' : '';
+
+        if ($global_config['idsite'] and $value['group'] == 'name' and in_array($value['value'], ['author', 'copyright'])) {
+            $value['disabled'] = ' disabled="disabled"';
+        } else {
+            $value['disabled'] = '';
+        }
+
         $xtpl->assign('DATA', $value);
         $xtpl->parse('main.loop');
     }
 }
 
+// Tạo mới 2 meta trống
 for ($i = 0; $i < 2; ++$i) {
     $data = [
         'content' => '',
@@ -114,9 +152,11 @@ for ($i = 0; $i < 2; ++$i) {
     $xtpl->assign('DATA', $data);
     $xtpl->parse('main.loop');
 }
+
 $xtpl->assign('METATAGSOGPCHECKED', $global_config['metaTagsOgp'] ? ' checked="checked" ' : '');
 $xtpl->assign('PRIVATE_SITE', $global_config['private_site'] ? ' checked="checked" ' : '');
 $xtpl->assign('DESCRIPTION_LENGTH', $global_config['description_length']);
+
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
