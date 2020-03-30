@@ -182,27 +182,6 @@ class Request
     }
 
     /**
-     * Request::fixQuery()
-     *
-     * @param mixed $var
-     * @param mixed $mode
-     * @return
-     */
-    private function fixQuery(&$var, $mode)
-    {
-        $array_keys = array_keys($var);
-        foreach ($array_keys as $k) {
-            if (is_array($var[$k])) {
-                $this->fixQuery($var[$k], $mode);
-            } elseif (is_string($var[$k])) {
-                if ($mode == 'get') {
-                    $var[$k] = $this->security_get($var[$k]);
-                }
-            }
-        }
-    }
-
-    /**
      *
      */
     private function Initialize()
@@ -214,7 +193,6 @@ class Request
                     unset($_GET[$k]);
                 }
             }
-            $this->fixQuery($_GET, 'get');
         }
         if (sizeof($_POST)) {
             $array_keys = array_keys($_POST);
@@ -223,7 +201,6 @@ class Request
                     unset($_POST[$k]);
                 }
             }
-            $this->fixQuery($_POST, 'post');
         }
         if (sizeof($_COOKIE)) {
             $array_keys = array_keys($_COOKIE);
@@ -233,7 +210,6 @@ class Request
                     unset($_COOKIE[$k]);
                 }
             }
-            $this->fixQuery($_COOKIE, 'cookie');
         }
         if (sizeof($_FILES) and strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
             $array_keys = array_keys($_FILES);
@@ -242,7 +218,6 @@ class Request
                     unset($_FILES[$k]);
                 }
             }
-            $this->fixQuery($_FILES, 'files');
         }
         $query = http_build_query($_GET);
         $_SERVER['QUERY_STRING'] = $query;
@@ -433,7 +408,6 @@ class Request
                     unset($_SESSION[$k]);
                 }
             }
-            $this->fixQuery($_SESSION, 'session');
         }
         $this->session_id = $session_id;
     }
@@ -811,9 +785,10 @@ class Request
      * @param mixed $mode
      * @param mixed $default
      * @param bool $decode
+     * @param bool $filter
      * @return
      */
-    private function get_value($name, $mode = null, $default = null, $decode = true)
+    private function get_value($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
         $modes = $this->parse_mode($mode);
         foreach ($modes as $mode) {
@@ -821,7 +796,10 @@ class Request
                 case 'get':
                     if (array_key_exists($name, $_GET)) {
                         $value = $_GET[$name];
-                        return $value;
+                        if (empty($value) or is_numeric($value)) {
+                            return $value;
+                        }
+                        return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
                 case 'post':
@@ -830,7 +808,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        return $this->security_post($value);
+                        return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     break;
                 case 'cookie':
@@ -839,10 +817,10 @@ class Request
                         if ($decode) {
                             $value = $this->decodeCookie($value);
                         }
-                        if (empty($value)) {
+                        if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        return $this->security_cookie($value);
+                        return ($filter == true) ? $this->security_cookie($value) : $value;
                     }
                     break;
                 case 'session':
@@ -851,10 +829,10 @@ class Request
                         if ($decode) {
                             $value = $this->decodeCookie($value);
                         }
-                        if (empty($value)) {
+                        if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        return $this->security_session($value);
+                        return ($filter == true) ? $this->security_session($value) : $value;
                     }
                     break;
                 case 'request':
@@ -863,10 +841,13 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        return $this->security_post($value);
+                        return ($filter == true) ? $this->security_post($value) : $value;
                     } elseif (array_key_exists($name, $_GET)) {
                         $value = $_GET[$name];
-                        return $value;
+                        if (empty($value) or is_numeric($value)) {
+                            return $value;
+                        }
+                        return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
                 case 'env':
@@ -1098,11 +1079,12 @@ class Request
      * @param mixed $mode
      * @param mixed $default
      * @param bool $decode
+     * @param bool $filter
      * @return
      */
-    public function get_bool($name, $mode = null, $default = null, $decode = true)
+    public function get_bool($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( bool )$this->get_value($name, $mode, $default, $decode);
+        return ( bool )$this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1112,11 +1094,12 @@ class Request
      * @param mixed $mode
      * @param mixed $default
      * @param bool $decode
+     * @param bool $filter
      * @return
      */
-    public function get_int($name, $mode = null, $default = null, $decode = true)
+    public function get_int($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( int )$this->get_value($name, $mode, $default, $decode);
+        return ( int )$this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1126,11 +1109,12 @@ class Request
      * @param string $mode
      * @param int $default
      * @param boolean $decode
+     * @param boolean $filter
      * @return number
      */
-    public function get_absint($name, $mode = null, $default = null, $decode = true)
+    public function get_absint($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return abs(intval($this->get_value($name, $mode, $default, $decode)));
+        return abs(intval($this->get_value($name, $mode, $default, $decode, $filter)));
     }
 
     /**
@@ -1140,11 +1124,12 @@ class Request
      * @param mixed $mode
      * @param mixed $default
      * @param bool $decode
+     * @param bool $filter
      * @return
      */
-    public function get_float($name, $mode = null, $default = null, $decode = true)
+    public function get_float($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( float )$this->get_value($name, $mode, $default, $decode);
+        return ( float )$this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1154,11 +1139,12 @@ class Request
      * @param mixed $mode
      * @param mixed $default
      * @param bool $decode
+     * @param bool $filter
      * @return
      */
-    public function get_string($name, $mode = null, $default = null, $decode = true)
+    public function get_string($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( string )$this->get_value($name, $mode, $default, $decode);
+        return ( string )$this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1198,11 +1184,12 @@ class Request
      * @param mixed $default
      * @param bool $specialchars
      * @param mixed $preg_replace
+     * @param bool $filter
      * @return
      */
-    public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = [])
+    public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = [], $filter = true)
     {
-        $value = ( string )$this->get_value($name, $mode, $default);
+        $value = ( string )$this->get_value($name, $mode, $default, true, $filter);
         return $this->_get_title($value, $specialchars, $preg_replace);
     }
 
@@ -1230,11 +1217,12 @@ class Request
      * @param mixed $default
      * @param bool $allowed_html_tags
      * @param mixed $save
+     * @param bool $filter
      * @return
      */
-    public function get_editor($name, $default = '', $allowed_html_tags = '')
+    public function get_editor($name, $default = '', $allowed_html_tags = '', $filter = true)
     {
-        $value = ( string )$this->get_value($name, 'post', $default);
+        $value = ( string )$this->get_value($name, 'post', $default, true, $filter);
         return $this->_get_editor($value, $allowed_html_tags);
     }
 
@@ -1270,11 +1258,12 @@ class Request
      * @param mixed $default
      * @param bool $allowed_html_tags
      * @param mixed $save
+     * @param bool $filter
      * @return
      */
-    public function get_textarea($name, $default = '', $allowed_html_tags = '', $save = false)
+    public function get_textarea($name, $default = '', $allowed_html_tags = '', $save = false, $filter = true)
     {
-        $value = (string)$this->get_value($name, 'post', $default);
+        $value = (string)$this->get_value($name, 'post', $default, true, $filter);
         return $this->_get_textarea($value, $allowed_html_tags, $save);
     }
 
@@ -1285,11 +1274,12 @@ class Request
      * @param mixed $mode
      * @param mixed $default
      * @param bool $decode
+     * @param bool $filter
      * @return
      */
-    public function get_array($name, $mode = null, $default = null, $decode = true)
+    public function get_array($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return (array)$this->get_value($name, $mode, $default, $decode);
+        return (array)$this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1299,11 +1289,12 @@ class Request
      * @param mixed $mode
      * @param mixed $type
      * @param mixed $default
+     * @param bool $filter
      * @return
      */
-    public function get_typed_array($name, $mode = null, $type = null, $default = null, $specialchars = false, $preg_replace = [], $allowed_html_tags = '', $save = false)
+    public function get_typed_array($name, $mode = null, $type = null, $default = null, $specialchars = false, $preg_replace = [], $allowed_html_tags = '', $save = false, $filter = true)
     {
-        $arr = $this->get_array($name, $mode, $default);
+        $arr = $this->get_array($name, $mode, $default, true, $filter);
         $array_keys = array_keys($arr);
         foreach ($array_keys as $key) {
             switch ($type) {
