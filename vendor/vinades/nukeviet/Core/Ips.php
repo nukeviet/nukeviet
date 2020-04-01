@@ -229,7 +229,7 @@ class Ips
      * @param string $ip
      * @return integer|boolean -1 false true
      */
-    public function checkIp6(?string $requestIp, string $ip) {
+    public function checkIp6($requestIp, $ip) {
         if (!$this->ip6_support) {
             // Không hỗ trợ xử lý IPv6 trả về -1
             return -1;
