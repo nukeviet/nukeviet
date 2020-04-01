@@ -9,8 +9,8 @@
                     {main.hometext}
                     <p class="text-right"><a href="{main.link}"><em class="fa fa-sign-out"></em>{lang.more}</a></p>
                 </div>
-                <div class="hot-news-others col-md-10 margin-bottom-lg">
-                    <ul class="column-margin-left list-none">
+                <div class="col-md-10 margin-bottom-lg">
+                    <ul class="column-margin-left">
                         <!-- BEGIN: othernews -->
                         <li class="icon_list">
                             <a class="show black h4 clearfix" href="{othernews.link}" {othernews.target_blank} <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{othernews.hometext_clean}" data-img="{othernews.imgsource}" data-rel="tooltip"<!-- END: tooltip --> title="{othernews.title}" ><img src="{othernews.imgsource}" alt="{othernews.title}" class="img-thumbnail pull-right margin-left-sm" style="width:65px;"/><span>{othernews.titleclean60}</span></a>

@@ -173,7 +173,6 @@ $lang_module['group_type_2'] = 'Nhóm tham gia tự do';
 $lang_module['group_color'] = 'Groupe de couleur';
 $lang_module['group_avatar'] = 'Groupe Hailie';
 $lang_module['group_is_default'] = 'Groupes par défaut lorsque les membres inscrivent au';
-$lang_module['group_del_inactive'] = 'Supprimer les groupes inactifs';
 $lang_module['siteus'] = 'Permettre au sous-site d\'ajouter les membres dans le groupe';
 $lang_module['users'] = 'Utilisateurs';
 $lang_module['promote'] = 'Promouvoir';

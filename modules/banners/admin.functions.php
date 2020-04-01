@@ -49,7 +49,7 @@ $array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:
 $array_url_instruction['add_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
 $array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_quảng_cao';
 
-$array_uploadtype = ['images'];
+$array_uploadtype = array('images', 'flash');
 $array_exp_time = array(
     array(0, $lang_module['plan_exp_time_nolimit']),
     array(86400, sprintf($lang_module['plan_exp_time_d'], 1)),
@@ -508,11 +508,10 @@ function nv_add_banner_theme($contents)
  */
 function nv_edit_banner_theme($contents)
 {
-    global $global_config, $module_file, $lang_module, $lang_global;
+    global $global_config, $module_file, $lang_module;
 
     $xtpl = new XTemplate('edit_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
@@ -547,17 +546,14 @@ function nv_edit_banner_theme($contents)
 
     if (!empty($contents['file_name'][1])) {
         $xtpl->parse('main.img_info');
-        $xtpl->assign('SHOW_BANNER', ' class="hidden"');
-    } else {
-        $xtpl->assign('SHOW_BANNER', '');
     }
 
-    // Nút xem ảnh trên mobile
-    if (!empty($contents['imageforswf'][0])) {
-        $xtpl->parse('main.imageforswf');
-        $xtpl->assign('SHOW_IMAGEFORSWF', ' class="hidden"');
-    } else {
-        $xtpl->assign('SHOW_IMAGEFORSWF', '');
+    if (!empty($contents['file_name'][5])) {
+        $xtpl->parse('main.imageforswf1');
+    }
+
+    if (substr($contents['file_name'][1], -3) == 'swf') {
+        $xtpl->parse('main.imageforswf2');
     }
 
     for ($i = 0; $i <= 23; $i++) {

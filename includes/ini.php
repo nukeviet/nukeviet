@@ -24,7 +24,7 @@ $config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace
 if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config = "<?php" . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
 
     //disable_classes
     $sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : [];
@@ -161,14 +161,6 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     }
     $_temp = implode(",", $_temp);
     $content_config .= "\$sys_info['server_headers'] = [" . $_temp . "];\n";
-
-    // Kiểm tra PHP hỗ trợ xử lý IPv6
-    if (!((extension_loaded('sockets') and defined('AF_INET6')) or @inet_pton('::1'))) {
-        $sys_info['ip6_support'] = false;
-    } else {
-        $sys_info['ip6_support'] = true;
-    }
-    $content_config .= "\$sys_info['ip6_support'] = " . ($sys_info['ip6_support'] ? 'true' : 'false') . ";\n";
 
     if ($sys_info['ini_set_support']) {
         ini_set('display_startup_errors', 0);

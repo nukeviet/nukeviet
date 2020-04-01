@@ -167,10 +167,21 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('SITE_DESCRIPTION', $global_config['site_description']);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-
     $logo_small = preg_replace('/(\.[a-z]+)$/i', '_small\\1', $global_config['site_logo']);
     $logo = file_exists(NV_ROOTDIR . '/' . $logo_small) ? $logo_small : $global_config['site_logo'];
+    $size = @getimagesize(NV_ROOTDIR . '/' . $logo);
+    $logo_svg = preg_replace('/\.[a-z]+$/i', '.svg', $logo);
+    file_exists(NV_ROOTDIR . '/' . $logo_svg) and $logo = $logo_svg;
+
     $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $logo);
+    $xtpl->assign('LOGO_WIDTH', $size[0]);
+    $xtpl->assign('LOGO_HEIGHT', $size[1]);
+
+    if (isset($size['mime']) and $size['mime'] == 'application/x-shockwave-flash') {
+        $xtpl->parse('main.swf');
+    } else {
+        $xtpl->parse('main.image');
+    }
 
     // Only full theme
     if ($full) {

@@ -140,7 +140,13 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
                 $xtpl->assign('DATA', $banners);
 
                 if ($banners['file_name'] != 'no_image') {
-                    if (!empty($banners['file_click'])) {
+                    if ($banners['file_ext'] == 'swf') {
+                        if (!empty($banners['file_click'])) {
+                            $xtpl->parse('main.loop.type_swf.fix_link');
+                        }
+
+                        $xtpl->parse('main.loop.type_swf');
+                    } elseif (!empty($banners['file_click'])) {
                         $xtpl->parse('main.loop.type_image_link');
                     } else {
                         $xtpl->parse('main.loop.type_image');

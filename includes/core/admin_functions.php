@@ -830,12 +830,12 @@ function nv_http_get_lang($input)
 /**
  * nv_save_file_ips()
  *
- * @param integer $type 0 là IP cấm, 1 là IP bỏ qua flood
+ * @param integer $type
  * @return
  */
 function nv_save_file_ips($type = 0)
 {
-    global $db, $db_config, $ips;
+    global $db, $db_config;
 
     $content_config_site = '';
     $content_config_admin = '';
@@ -856,32 +856,26 @@ function nv_save_file_ips($type = 0)
         $dbarea = intval($dbarea);
 
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
-            if ($ips->isIp6($dbip)) {
-                $ip6 = 1;
-                $ip_mask = $dbip . '/' . $dbmask;
-            } else {
-                $ip6 = 0;
-                switch ($dbmask) {
-                    case 3:
-                        $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/';
-                        break;
-                    case 2:
-                        $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}$/';
-                        break;
-                    case 1:
-                        $ip_mask = '/\.[0-9]{1,3}$/';
-                        break;
-                    default:
-                        $ip_mask = '//';
-                }
+            switch ($dbmask) {
+                case 3:
+                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/';
+                    break;
+                case 2:
+                    $ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}$/';
+                    break;
+                case 1:
+                    $ip_mask = '/\.[0-9]{1,3}$/';
+                    break;
+                default:
+                    $ip_mask = '//';
             }
 
             if ($dbarea == 1 or $dbarea == 3) {
-                $content_config_site .= "\$array_" . $variable_name . "_site['" . $dbip . "'] = ['ip6' => " . $ip6 . ", 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
+                $content_config_site .= "\$array_" . $variable_name . "_site['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
             }
 
             if ($dbarea == 2 or $dbarea == 3) {
-                $content_config_admin .= "\$array_" . $variable_name . "_admin['" . $dbip . "'] = ['ip6' => " . $ip6 . ", 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
+                $content_config_admin .= "\$array_" . $variable_name . "_admin['" . $dbip . "'] = array('mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . ");\n";
             }
         }
     }
@@ -893,11 +887,11 @@ function nv_save_file_ips($type = 0)
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
-    $content_config .= "\$array_" . $variable_name . "_site = [];\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "\$array_" . $variable_name . "_site = array();\n";
     $content_config .= $content_config_site;
     $content_config .= "\n";
-    $content_config .= "\$array_" . $variable_name . "_admin = [];\n";
+    $content_config .= "\$array_" . $variable_name . "_admin = array();\n";
     $content_config .= $content_config_admin;
 
     $write = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php', $content_config, LOCK_EX);

@@ -120,9 +120,7 @@ function nv_is_blocker_proxy($is_proxy, $proxy_blocker)
  */
 function nv_is_banIp($ip)
 {
-    global $ips;
-
-    $array_banip_site = $array_banip_admin = [];
+    $array_banip_site = $array_banip_admin = array();
 
     if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php')) {
         include NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php' ;
@@ -134,12 +132,7 @@ function nv_is_banIp($ip)
     }
 
     foreach ($banIp as $e => $f) {
-        if (
-            $f['begintime'] < NV_CURRENTTIME and ($f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME) and (
-                (empty($f['ip6']) and preg_replace($f['mask'], '', $ip) == preg_replace($f['mask'], '', $e)) or
-                (!empty($f['ip6']) and $ips->checkIp6($ip, $f['mask']) === true)
-            )
-        ) {
+        if ($f['begintime'] < NV_CURRENTTIME and ($f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME) and (preg_replace($f['mask'], '', $ip) == preg_replace($f['mask'], '', $e))) {
             return true;
         }
     }
@@ -156,7 +149,7 @@ function nv_is_banIp($ip)
 function nv_checkagent($a)
 {
     $a = htmlspecialchars(substr($a, 0, 255));
-    $a = str_replace([', ', '<'], ['-', '('], $a);
+    $a = str_replace(array( ', ', '<' ), array( '-', '(' ), $a);
 
     return ((!empty($a) and $a != '-') ? $a : 'none');
 }
@@ -1246,7 +1239,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->AltBody = $AltBody;
         $mail->IsHTML(true);
 
-        if ($AddEmbeddedImage) {
+        if($AddEmbeddedImage) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
         }
 

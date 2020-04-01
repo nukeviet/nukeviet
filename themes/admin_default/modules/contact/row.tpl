@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <td><strong>{GLANG.email}</strong></td>
-                    <td><input class="w300 form-control" type="email" name="email" value="{DATA.email}" multiple/><span>{GLANG.multi_email_note}</span></td>
+                    <td><input class="w300 form-control" type="email" name="email" value="{DATA.email}"/><span>{GLANG.multi_email_note}</span></td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.address}</strong></td>

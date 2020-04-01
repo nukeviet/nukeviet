@@ -120,6 +120,8 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
         $template = 'default';
     }
 
+    $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
+
     $xtpl = new XTemplate('info_die.tpl', $tpl_path);
     $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
     $xtpl->assign('PAGE_TITLE', $page_title);
@@ -136,7 +138,20 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     }
     $xtpl->assign('SITE_FAVICON', $site_favicon);
 
-    $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
+    if (isset($size[1])) {
+        if ($size[0] > 490) {
+            $size[1] = ceil(490 * $size[1] / $size[0]);
+            $size[0] = 490;
+        }
+        $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
+        $xtpl->assign('WIDTH', $size[0]);
+        $xtpl->assign('HEIGHT', $size[1]);
+        if (isset($size['mime']) and $size['mime'] == 'application/x-shockwave-flash') {
+            $xtpl->parse('main.swf');
+        } else {
+            $xtpl->parse('main.image');
+        }
+    }
     $xtpl->assign('INFO_TITLE', $info_title);
     $xtpl->assign('INFO_CONTENT', $info_content);
 

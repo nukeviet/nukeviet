@@ -30,16 +30,11 @@ function nv_admin_checkip()
                 return true;
             }
 
-            global $ips;
-
             foreach ($array_adminip as $ip_i => $array_ip) {
-                if (
-                    $array_ip['begintime'] < NV_CURRENTTIME and ($array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME) and (
-                        (empty($array_ip['ip6']) and preg_replace($array_ip['mask'], '', NV_CLIENT_IP) == preg_replace($array_ip['mask'], '', $ip_i)) or
-                        (!empty($array_ip['ip6']) and $ips->checkIp6(NV_CLIENT_IP, $array_ip['mask']) === true)
-                    )
-                ) {
-                    return true;
+                if ($array_ip['begintime'] < NV_CURRENTTIME and ($array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME)) {
+                    if (preg_replace($array_ip['mask'], '', NV_CLIENT_IP) == preg_replace($array_ip['mask'], '', $ip_i)) {
+                        return true;
+                    }
                 }
             }
 

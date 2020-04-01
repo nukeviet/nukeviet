@@ -175,7 +175,6 @@ $lang_module['group_type_2'] = 'Nhóm tham gia tự do';
 $lang_module['group_color'] = 'Màu nhóm';
 $lang_module['group_avatar'] = 'Ảnh đại diện nhóm';
 $lang_module['group_is_default'] = 'Nhóm mặc định khi đăng ký thành viên vào';
-$lang_module['group_del_inactive'] = 'Xóa các nhóm ngưng hiệu lực';
 $lang_module['siteus'] = 'Cho phép các subsite thêm tài khoản vào nhóm';
 $lang_module['users'] = 'Thành viên';
 $lang_module['promote'] = 'Thăng cấp';

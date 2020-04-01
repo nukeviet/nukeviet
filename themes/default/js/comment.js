@@ -79,7 +79,6 @@ function nv_commment_buildeditor() {
 }
 
 $(document).ready(function() {
-    var commentform = $('#formcomment form');
     $(document).delegate('#formcomment form', 'submit', function(e) {
         var commentname = document.getElementById('commentname');
         var commentemail = document.getElementById('commentemail_iavim');
@@ -88,7 +87,7 @@ $(document).ready(function() {
         if (gfx_count > 0) {
             code = $("#commentseccode_iavim").val();
         } else if (gfx_count == -1) {
-            code = $('[name="g-recaptcha-response"]', commentform).val();
+            code = $('[name="g-recaptcha-response"]', $(btn.form)).val();
         }
         var commentcontent = strip_tags($('textarea[name=content]').val());
         if (commentname.value == "") {
@@ -112,22 +111,4 @@ $(document).ready(function() {
             sd.disabled = true;
         }
     });
-
-    if (commentform.length) {
-        // Gửi comment khi ấn Ctrl + Enter
-        var data = commentform.data();
-        if (data.editor) {
-            CKEDITOR.instances['commentcontent'].on('key', function(event) {
-                if (event.data.keyCode === 1114125) {
-                    $('#buttoncontent').trigger('click');
-                }
-            });
-        } else {
-            $('#commentcontent').on("keydown", function(e) {
-                if (e.ctrlKey && e.keyCode == 13) {
-                    $('#buttoncontent').trigger('click');
-                }
-            });
-        }
-    }
 });

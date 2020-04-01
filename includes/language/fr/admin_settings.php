@@ -23,7 +23,6 @@ $lang_module['global_config'] = 'Configuration générale';
 $lang_module['site_config'] = 'Configuration du site';
 $lang_module['lang_site_config'] = 'Configuration selon langue: %s';
 $lang_module['bots_config'] = 'Moteurs de recherche';
-$lang_module['ip_version'] = 'Version IP';
 $lang_module['site_domain'] = 'Nom du domaine principal du site';
 $lang_module['sitename'] = 'Nom du site';
 $lang_module['theme'] = 'Interface par défaut du PC';

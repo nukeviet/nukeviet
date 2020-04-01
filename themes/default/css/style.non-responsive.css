@@ -1,8 +1,7 @@
-.form-inline > * {
-    display: inline-block;
-    vertical-align: middle;
+.form-inline * {
+    display:inline-block;
+    vertical-align:middle
 }
-
-.form-inline .form-control {
-    width: auto;
+.form-inline .form-control{
+    width:auto
 }

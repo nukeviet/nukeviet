@@ -193,82 +193,50 @@
                     <input type="hidden" name="flid" value="{FLDATA.flid}" />
                     <div class="panel panel-default">
                         <div class="panel-heading"><strong>{NOFLOODIP_TITLE}</strong></div>
-                        <div class="panel-body">
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    <label for="ipt_fip_version" class="col-sm-6 control-label">{LANG.ip_version}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select class="form-control" name="fip_version" id="ipt_fip_version">
-                                                <!-- BEGIN: fip_version -->
-                                                <option value="{IP_VERSION.key}"{IP_VERSION.f_selected}>{IP_VERSION.title}</option>
-                                                <!-- END: fip_version -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_flip" class="col-sm-6 control-label">{LANG.banip_address} <span style="color:red">(*)</span>:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <input class="form-control" type="text" id="ipt_flip" name="flip" value="{FLDATA.flip}">
-                                    </div>
-                                </div>
-                                <div class="form-group{CLASS_FIP_VERSION4}" id="ip4_fmask">
-                                    <label for="ipt_flmask" class="col-sm-6 control-label">{LANG.banip_mask}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select class="form-control" name="flmask" id="ipt_flmask">
-                                                <option value="0">{MASK_TEXT_ARRAY.0}</option>
-                                                <option value="3"{FLDATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
-                                                <option value="2"{FLDATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
-                                                <option value="1"{FLDATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group{CLASS_FIP_VERSION6}" id="ip6_fmask">
-                                    <label for="ipt_flmaskv6" class="col-sm-6 control-label">{LANG.banip_mask}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select class="form-control" name="flmask_v6" id="ipt_flmaskv6">
-                                                <!-- BEGIN: flmask6 -->
-                                                <option value="{IPMASK.key}"{IPMASK.f_selected}>{IPMASK.title}</option>
-                                                <!-- END: flmask6 -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_flbegintime" class="col-sm-6 control-label">{LANG.banip_begintime}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <input type="text" id="ipt_flbegintime" name="flbegintime" class="w150 datepicker form-control pull-left" value="{FLDATA.begintime}" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_flendtime" class="col-sm-6 control-label">{LANG.banip_endtime}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <input type="text" id="ipt_flendtime" name="flendtime" class="w150 datepicker form-control pull-left text" value="{FLDATA.endtime}" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_flnotice" class="col-sm-6 control-label">{LANG.banip_notice}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <textarea rows="5" class="form-control" name="flnotice" id="ipt_flnotice">{FLDATA.notice}</textarea>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
-                                        <input type="submit" value="{LANG.banip_confirm}" name="submitfloodip" class="btn btn-primary">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table class="table table-striped table-bordered table-hover">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {LANG.banip_address} (<span style="color:red">*</span>)
+                                        <br/>(xxx.xxx.xxx.xxx)
+                                    </td>
+                                    <td><input class="w200 form-control" type="text" name="flip" value="{FLDATA.flip}" /></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_mask}</td>
+                                    <td>
+                                    <select name="flmask" class="form-control w200">
+                                        <option value="0">{MASK_TEXT_ARRAY.0}</option>
+                                        <option value="3"{FLDATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
+                                        <option value="2"{FLDATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
+                                        <option value="1"{FLDATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_begintime}</td>
+                                    <td><input type="text" name="flbegintime" class="w150 datepicker form-control pull-left" value="{FLDATA.begintime}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_endtime}</td>
+                                    <td><input type="text" name="flendtime" class="w150 datepicker form-control pull-left text" value="{FLDATA.endtime}" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="top">{LANG.banip_notice}</td>
+                                    <td><textarea cols="70" rows="5" class="form-control" name="flnotice" style="width:550px;height:100px">{FLDATA.notice}</textarea></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submitfloodip" class="btn btn-primary" /></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}">
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
                 </form>
             </div>
         </div>
@@ -395,93 +363,60 @@
                     <input type="hidden" name ="cid" value="{DATA.cid}" />
                     <div class="panel panel-default">
                         <div class="panel-heading"><strong>{BANIP_TITLE}</strong></div>
-                        <div class="panel-body">
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    <label for="ipt_ip_version" class="col-sm-6 control-label">{LANG.ip_version}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select class="form-control" name="ip_version" id="ipt_ip_version">
-                                                <!-- BEGIN: ip_version -->
-                                                <option value="{IP_VERSION.key}"{IP_VERSION.b_selected}>{IP_VERSION.title}</option>
-                                                <!-- END: ip_version -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_ip" class="col-sm-6 control-label">{LANG.banip_address} <span style="color:red">(*)</span>:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <input class="form-control" type="text" id="ipt_ip" name="ip" value="{DATA.ip}">
-                                    </div>
-                                </div>
-                                <div class="form-group{CLASS_IP_VERSION4}" id="ip4_mask">
-                                    <label for="ipt_mask" class="col-sm-6 control-label">{LANG.banip_mask}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select id="ipt_mask" name="mask" class="form-control">
-                                                <option value="0">{MASK_TEXT_ARRAY.0}</option>
-                                                <option value="3"{DATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
-                                                <option value="2"{DATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
-                                                <option value="1"{DATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group{CLASS_IP_VERSION6}" id="ip6_mask">
-                                    <label for="ipt_maskv6" class="col-sm-6 control-label">{LANG.banip_mask}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select class="form-control" name="mask6" id="ipt_maskv6">
-                                                <!-- BEGIN: mask6 -->
-                                                <option value="{IPMASK.key}"{IPMASK.b_selected}>{IPMASK.title}</option>
-                                                <!-- END: mask6 -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_area" class="col-sm-6 control-label">{LANG.banip_area} <span style="color:red">(*)</span>:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <select id="ipt_area" name="area" class="form-control">
-                                                <option value="0">{BANIP_AREA_ARRAY.0}</option>
-                                                <option value="1"{DATA.selected_area_1}>{BANIP_AREA_ARRAY.1}</option>
-                                                <option value="2"{DATA.selected_area_2}>{BANIP_AREA_ARRAY.2}</option>
-                                                <option value="3"{DATA.selected_area_3}>{BANIP_AREA_ARRAY.3}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_begintime" class="col-sm-6 control-label">{LANG.banip_begintime}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <input type="text" id="ipt_begintime" name="begintime" class="w150 datepicker form-control pull-left" value="{DATA.begintime}" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_endtime" class="col-sm-6 control-label">{LANG.banip_endtime}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <div class="form-inline">
-                                            <input type="text" id="ipt_endtime" name="endtime" class="w150 datepicker form-control pull-left text" value="{DATA.endtime}" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ipt_notice" class="col-sm-6 control-label">{LANG.banip_notice}:</label>
-                                    <div class="col-sm-18 col-md-14 col-lg-10">
-                                        <textarea rows="5" class="form-control" name="notice" id="ipt_notice">{DATA.notice}</textarea>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
-                                        <input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table class="table table-striped table-bordered table-hover">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary w100"/></td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {LANG.banip_address} (<span style="color:red">*</span>)
+                                        <br/>(xxx.xxx.xxx.xxx)
+                                    </td>
+                                    <td><input class="w200 form-control" type="text" name="ip" value="{DATA.ip}" /></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_mask}</td>
+                                    <td>
+                                        <select name="mask" class="form-control w200">
+                                            <option value="0">{MASK_TEXT_ARRAY.0}</option>
+                                            <option value="3"{DATA.selected3}>{MASK_TEXT_ARRAY.3}</option>
+                                            <option value="2"{DATA.selected2}>{MASK_TEXT_ARRAY.2}</option>
+                                            <option value="1"{DATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_area} (<span style="color:red">*</span>)</td>
+                                    <td>
+                                        <select name="area" class="form-control w200">
+                                            <option value="0">{BANIP_AREA_ARRAY.0}</option>
+                                            <option value="1"{DATA.selected_area_1}>{BANIP_AREA_ARRAY.1}</option>
+                                            <option value="2"{DATA.selected_area_2}>{BANIP_AREA_ARRAY.2}</option>
+                                            <option value="3"{DATA.selected_area_3}>{BANIP_AREA_ARRAY.3}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_begintime}</td>
+                                    <td><input type="text" name="begintime" class="w150 datepicker form-control pull-left" value="{DATA.begintime}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>{LANG.banip_endtime}</td>
+                                    <td><input type="text" name="endtime" class="w150 datepicker form-control pull-left text" value="{DATA.endtime}" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="top">{LANG.banip_notice}</td>
+                                    <td><textarea cols="70" rows="5" class="form-control" name="notice" style="width:550px;height:100px">{DATA.notice}</textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
                 </form>
@@ -537,28 +472,6 @@ $(document).ready(function() {
     $('#settingTabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         $('[name="selectedtab"]').val($(this).attr('aria-offsets'));
         $('[name="gselectedtab"]').val($(this).attr('aria-offsets'));
-    });
-
-    // Đổi phiên bản IP bỏ qua kiểm tra Flood
-    $('#ipt_fip_version').on('change', function() {
-        if ($(this).val() == '4') {
-            $('#ip4_fmask').removeClass('hidden');
-            $('#ip6_fmask').addClass('hidden');
-        } else {
-            $('#ip4_fmask').addClass('hidden');
-            $('#ip6_fmask').removeClass('hidden');
-        }
-    });
-
-    // Đổi phiên bản IP cấm
-    $('#ipt_ip_version').on('change', function() {
-        if ($(this).val() == '4') {
-            $('#ip4_mask').removeClass('hidden');
-            $('#ip6_mask').addClass('hidden');
-        } else {
-            $('#ip4_mask').addClass('hidden');
-            $('#ip6_mask').removeClass('hidden');
-        }
     });
 });
 //]]>

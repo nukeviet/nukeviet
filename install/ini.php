@@ -85,9 +85,3 @@ if (function_exists('apache_get_modules')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
 }
-
-if (!((extension_loaded('sockets') and defined('AF_INET6')) or @inet_pton('::1'))) {
-    $sys_info['ip6_support'] = false;
-} else {
-    $sys_info['ip6_support'] = true;
-}

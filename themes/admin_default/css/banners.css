@@ -37,11 +37,6 @@
     display: inline-block;
 }
 
-.img-banner-preview {
-    max-width: 100%;
-    height: auto;
-}
-
 /* Auto complete */
 .autosearchpersion {
     position: relative;
