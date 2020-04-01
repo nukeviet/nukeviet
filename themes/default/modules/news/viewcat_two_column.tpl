@@ -43,7 +43,7 @@
             <!-- END: adminlink -->
         </div>
         <!-- END: content -->
-        <ul class="related">
+        <ul class="related list-items">
             <!-- BEGIN: other -->
             <li>
                 <a class="show h4" href="{NEWSTOP.link}" {NEWSTOP.target_blank} <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext_clean}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
@@ -88,7 +88,7 @@
                 </p>
                 <!-- END: adminlink -->
                 <!-- END: content -->
-                <ul class="related">
+                <ul class="related list-items">
                     <!-- BEGIN: other -->
                     <li class="{CLASS}">
                         <a class="show h4" href="{CONTENT.link}" {CONTENT.target_blank} <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a>
