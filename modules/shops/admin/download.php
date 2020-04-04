@@ -12,22 +12,26 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$data = array();
-$error = array();
+$data = [];
+$error = [];
 $table_name = $db_config['prefix'] . "_" . $module_data . "_files";
 $data['id'] = $nv_Request->get_int('id', 'get', 0);
 $popup = $nv_Request->get_bool('popup', 'get', 0);
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $groups_list = nv_groups_list();
 
+// Load danh sách file điền vào select
 if ($nv_Request->isset_request('get_files', 'post,get')) {
-    $option = '';
+    $ids = $nv_Request->get_typed_array('ids', 'post,get', 'int', '');
+    $ids[] = $nv_Request->get_int('id_new', 'post,get', 0);
+
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
     $array_files = $nv_Cache->db($sql, 'id', $module_name);
 
+    $option = '';
     if (!empty($array_files)) {
         foreach ($array_files as $files) {
-            $option .= '<option value="' . $files['id'] . '">' . $files['title'] . '</option>';
+            $option .= '<option value="' . $files['id'] . '"' . (in_array($files['id'], $ids) ? ' selected="selected"' : '') . '>' . $files['title'] . '</option>';
         }
     }
     nv_htmlOutput($option);
@@ -76,7 +80,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['description'] = $nv_Request->get_textarea('description', '', 'br');
     $data['path'] = $nv_Request->get_title('path', 'post', '');
 
-    $_dowload_groups = $nv_Request->get_array('download_groups', 'post', array());
+    $_dowload_groups = $nv_Request->get_array('download_groups', 'post', []);
     if (in_array(-1, $_dowload_groups)) {
         $data['download_groups'] = '-1';
     } else {
@@ -136,14 +140,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         }
 
-        $stmt = $db->prepare("INSERT INTO " . $table_name . " (id, path, filesize, extension, addtime, download_groups, status " . $listfield . ") VALUES (NULL, :path, :filesize, :extension, " . NV_CURRENTTIME . ", :download_groups, 1 " . $listvalue . ")");
-        $stmt->bindParam(':path', $data['path'], PDO::PARAM_STR);
-        $stmt->bindParam(':filesize', $data['filesize'], PDO::PARAM_STR);
-        $stmt->bindParam(':extension', $data['extension'], PDO::PARAM_STR);
-        $stmt->bindParam(':download_groups', $data['download_groups'], PDO::PARAM_STR);
-        if ($stmt->execute()) {
+        $sql = "INSERT INTO " . $table_name . " (
+            path, filesize, extension, addtime, download_groups, status " . $listfield . "
+        ) VALUES (
+            :path, :filesize, :extension, " . NV_CURRENTTIME . ", :download_groups, 1 " . $listvalue . "
+        )";
+        $array_insert = [
+            'path' => $data['path'],
+            'filesize' => $data['filesize'],
+            'extension' => $data['extension'],
+            'download_groups' => $data['download_groups'],
+        ];
+        $new_id = $db->insert_id($sql, 'id', $array_insert);
+        if ($new_id) {
             $nv_Cache->delMod($module_name);
-            nv_htmlOutput('OK');
+            nv_htmlOutput('OK_' . $new_id);
         } else {
             die('NO_' . $lang_module['errorsave']);
         }
@@ -163,7 +174,7 @@ if ($data['id'] > 0) {
     $data[NV_LANG_DATA . '_description'] = '';
 }
 
-$array_search = array();
+$array_search = [];
 $array_search['keywords'] = $nv_Request->get_title('keywords', 'get', '');
 $array_search['status'] = $nv_Request->get_int('status', 'get', -1);
 if (!$popup) {
@@ -223,7 +234,8 @@ $xtpl->assign('DATA', $data);
 $xtpl->assign('SEARCH', $array_search);
 $xtpl->assign('UPLOADS_FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files');
 $xtpl->assign('ACTION', $base_url);
-$xtpl->assign('POPUP', $popup);
+$xtpl->assign('POPUP', $popup ? 'true' : 'false');
+
 if (! empty($data['path']) and file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload .'/files/'. $data['path'])) {
     $data['path'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/files/' . $data['path'];
 }
@@ -257,26 +269,33 @@ if (!$popup) {
         $xtpl->parse('main.non_popup.loop');
     }
 
-    $array_status = array( '1' => $lang_module['review_status_1'], '0' => $lang_module['review_status_0'] );
+    $array_status = [
+        '1' => $lang_module['review_status_1'],
+        '0' => $lang_module['review_status_0']
+    ];
     foreach ($array_status as $key => $value) {
-        $xtpl->assign('STATUS', array( 'key' => $key, 'value' => $value, 'selected' => $array_search['status'] == $key ? 'selected="selected"' : '' ));
+        $xtpl->assign('STATUS', [
+            'key' => $key,
+            'value' => $value,
+            'selected' => $array_search['status'] == $key ? 'selected="selected"' : ''
+        ]);
         $xtpl->parse('main.non_popup.status');
     }
 
     $download_groups = explode(',', $data['download_groups']);
-    $xtpl->assign('DOWNLOAD_GROUPS', array(
+    $xtpl->assign('DOWNLOAD_GROUPS', [
         'value' => -1,
         'checked' => in_array(-1, $download_groups) ? ' checked="checked"' : '',
         'title' => $lang_module['download_setting_groups_module']
-    ));
+    ]);
     $xtpl->parse('main.non_popup.download_groups');
 
     foreach ($groups_list as $_group_id => $_title) {
-        $xtpl->assign('DOWNLOAD_GROUPS', array(
+        $xtpl->assign('DOWNLOAD_GROUPS', [
             'value' => $_group_id,
             'checked' => in_array($_group_id, $download_groups) ? ' checked="checked"' : '',
             'title' => $_title
-        ));
+        ]);
         $xtpl->parse('main.non_popup.download_groups');
     }
 
@@ -289,19 +308,19 @@ if (!$popup) {
     $xtpl->parse('main.non_popup');
 } else {
     $download_groups = explode(',', $data['download_groups']);
-    $xtpl->assign('DOWNLOAD_GROUPS', array(
+    $xtpl->assign('DOWNLOAD_GROUPS', [
         'value' => -1,
         'checked' => in_array(-1, $download_groups) ? ' checked="checked"' : '',
         'title' => $lang_module['download_setting_groups_module']
-    ));
+    ]);
     $xtpl->parse('main.popup.download_groups');
 
     foreach ($groups_list as $_group_id => $_title) {
-        $xtpl->assign('DOWNLOAD_GROUPS', array(
+        $xtpl->assign('DOWNLOAD_GROUPS', [
             'value' => $_group_id,
             'checked' => in_array($_group_id, $download_groups) ? ' checked="checked"' : '',
             'title' => $_title
-        ));
+        ]);
         $xtpl->parse('main.popup.download_groups');
     }
 
@@ -319,5 +338,5 @@ $contents = $xtpl->text('main');
 $page_title = $lang_module['download'];
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme($contents, !$popup);
+echo $popup ? $contents : nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

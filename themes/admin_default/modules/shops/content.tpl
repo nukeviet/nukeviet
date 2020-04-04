@@ -210,22 +210,7 @@
                             <span class="text-middle">{LANG.download_file_or}</span>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary" id="add_file">{LANG.download_file_add}</button>
-                            <div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4>{LANG.download_file_add}</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p class="text-center">
-                                                <em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <button class="btn btn-primary" id="add_file" type="button">{LANG.download_file_add}</button>
                         </div>
                     </div>
                 </div>
@@ -456,6 +441,21 @@
     </div>
 </form>
 <div id="message"></div>
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="{LANG.download_file_add}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>{LANG.download_file_add}</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-3x"></i>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
@@ -524,6 +524,7 @@
 </script>
 <!-- BEGIN: files_js -->
 <script type="text/javascript">
+$(document).ready(function() {
     $("#files").select2({
         placeholder: "{LANG.download_file_chose_h}"
     });
@@ -533,8 +534,8 @@
          $('#idmodals').on('show.bs.modal', function () {
              $('#idmodals .modal-body').load( script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&popup=1' );
         }).modal();
-        return false;
     });
+});
 </script>
 <!-- END: files_js -->
 <!-- BEGIN: getalias -->

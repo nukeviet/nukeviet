@@ -632,4 +632,59 @@ $(document).ready(function() {
             }
         );
     });
+
+    // Xử lý khi submit form thêm tài liệu
+    $(document).delegate('#btn-submit-add-file', 'click', function(e) {
+        // Tác dụng cho thuộc tính required khi không điền đường dẫn bằng tay
+        $('#file-path').trigger('input');
+    });
+
+    $(document).delegate('#frm_add_file', 'submit', function(e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var popup = $this.data('popup');
+
+        if ($this.data('busy')) {
+            return false;
+        }
+        $this.data('busy', true);
+        $('#btn-submit-add-file').prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: $this.attr('action'),
+            data: $this.serialize() + '&submit=1',
+            success: function(res) {
+                $this.data('busy', false);
+                $('#btn-submit-add-file').prop('disabled', false);
+                var r_split = res.split('_');
+                if (r_split[0] == 'OK') {
+                    if (popup) {
+                        $('#divsuccess').slideDown();
+                        $this.clearForm();
+                        $.post(
+                            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&nocache=' + new Date().getTime(), {
+                                'get_files': 1,
+                                'ids': $('#files').val(),
+                                'id_new': parseInt(r_split[1])
+                            }, function(res) {
+                                $('#files').html(res);
+                            }
+                        );
+                    } else {
+                        window.location = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download';
+                    }
+                } else {
+                    alert(r_split[1]);
+                }
+            }
+        });
+    });
+
+    // Duyệt file tài liệu
+    $(document).delegate('#open_files', 'click', function(e) {
+        e.preventDefault();
+        nv_open_browse(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&popup=1&area=file-path&path=' + $(this).data('path') + '&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');
+    });
 });
