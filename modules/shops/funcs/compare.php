@@ -72,7 +72,7 @@ if ($nv_Request->isset_request('compare_del', 'post') and $nv_Request->isset_req
 
 $compare_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=compare';
 $compare_url_rewrite = nv_url_rewrite($compare_url_rewrite, true);
-if ($_SERVER['REQUEST_URI'] != $compare_url_rewrite) {
+if ($_SERVER['REQUEST_URI'] != $compare_url_rewrite and NV_MY_DOMAIN . $_SERVER['REQUEST_URI'] != $compare_url_rewrite) {
     nv_redirect_location($compare_url_rewrite);
 }
 
