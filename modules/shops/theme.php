@@ -71,6 +71,7 @@ function nv_template_view_home($array_data, $compare_id, $pages = '', $sort = 0,
     global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TEMPLATE', $module_info['template']);
 
@@ -1895,6 +1896,7 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
     global $module_info, $lang_module, $module_file, $module_upload, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_shops_cat, $global_array_group, $my_head, $page;
 
     $xtpl = new XTemplate('viewcat.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('ALIAS', $data_content['alias']);
     $xtpl->assign('CATID', $data_content['id']);

@@ -1458,3 +1458,12 @@ a.btn-default {
     border: 0;
     overflow: hidden;
 }
+
+.panel-shops-cat .more-cats a {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.panel-shops-cat .more-cats a:first-child {
+    margin-left: 0;
+}
