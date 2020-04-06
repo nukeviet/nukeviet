@@ -1637,6 +1637,7 @@ function nv_template_viewgrid($array_data, $page = '')
 
     $xtpl = new XTemplate('viewgird.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('MODULE_NAME', $module_name);
 
     if (!empty($array_data)) {
         $i = 1;

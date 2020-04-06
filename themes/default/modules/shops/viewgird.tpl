@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="viewgrid">
+<div class="row viewgrid shops-viewgrid shops-viewgrid-{MODULE_NAME}">
     <!-- BEGIN: loop -->
     <div class="col-sm-12 col-md-{NUM}">
         <div class="thumbnail">

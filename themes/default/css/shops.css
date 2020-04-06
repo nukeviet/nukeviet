@@ -70,7 +70,8 @@ table.table tr.bg {
     margin-bottom: 4px;
 }
 
-#products .col-sm-6 .thumbnail, #category .col-sm-6 .thumbnail {
+#products .col-sm-6 .thumbnail,
+#category .col-sm-6 .thumbnail {
     padding-top: 10px;
 }
 
@@ -571,6 +572,33 @@ a.pro_detail:hover, a.pro_order:hover {
 }
 
 /* GIRD */
+.shops-viewgrid {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.shops-viewgrid > div {
+    float: none;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    margin-bottom: 15px;
+}
+
+.shops-viewgrid > div > .thumbnail {
+    margin-bottom: 0;
+    height: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .shops-viewgrid > div {
+        width: 100%;
+    }
+}
+
 #category {
     margin-bottom: 8px;
     background: #ffffff;
