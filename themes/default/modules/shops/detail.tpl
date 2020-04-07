@@ -20,7 +20,7 @@
         <span itemprop="priceValidUntil">{PRICEVALIDUNTIL}</span>
         <span itemprop="availability">{AVAILABILITY}</span>
     </div>
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-product-info">
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-24 col-sm-10 col-md-10 text-center">
@@ -57,7 +57,7 @@
                     <div class="admin-links margin-bottom mb-2">{ADMINLINK}</div>
                     <!-- END: adminlink -->
                     <!-- BEGIN: social_icon -->
-                    <div class="news_column panel panel-default">
+                    <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="socialicon">
                                 <div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
@@ -224,7 +224,7 @@
     </div>
     <!-- END: tabs -->
     <!-- BEGIN: keywords -->
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-product-keywords">
         <div class="panel-body">
             <div class="keywords">
                 <em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
@@ -236,13 +236,13 @@
     </div>
     <!-- END: keywords -->
     <!-- BEGIN: other -->
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-product-others">
         <div class="panel-heading">{LANG.detail_others}</div>
         <div class="panel-body">{OTHER}</div>
     </div>
     <!-- END: other -->
     <!-- BEGIN: other_view -->
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-product-viewed">
         <div class="panel-heading">{LANG.detail_others_view}</div>
         <div class="panel-body">{OTHER_VIEW}</div>
     </div>
@@ -277,7 +277,7 @@ $(document).ready(function() {
         navText: ['<span><i class="fa fa-angle-left" aria-hidden="true"></i></span>', '<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>'],
         dots: false,
         lazyLoad: true,
-        autoplay: false,
+        autoplay: true,
         autoplayTimeout: 10000,
         autoplayHoverPause: true,
         margin: 5
