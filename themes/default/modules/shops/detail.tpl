@@ -1,6 +1,5 @@
 <!-- BEGIN: main -->
-<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/css/lightslider.min.css" rel="stylesheet" type="text/css">
-<div id="detail"<!-- BEGIN: popupid --> class="prodetail-popup"<!-- END: popupid --> itemtype="http://schema.org/Product" itemscope>
+<div id="detail" class="product-detail <!-- BEGIN: popupid -->prodetail-popup<!-- END: popupid -->" itemtype="http://schema.org/Product" itemscope>
     <span class="d-none hidden hide" itemprop="mpn" content="{PRODUCT_CODE}"></span>
     <span class="d-none hidden hide" itemprop="sku" content="{PRODUCT_CODE}"></span>
     <div class="d-none hidden hide" itemprop="brand" itemtype="http://schema.org/Thing" itemscope>
@@ -25,20 +24,38 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-24 col-sm-10 col-md-10 text-center">
+                    <!-- BEGIN: oneimage -->
+                    <div class="product-one-image mb-2">
+                        <img itemprop="image" src="{IMAGE.file}" alt="{DATA.homeimgalt}">
+                    </div>
+                    <!-- END: oneimage -->
                     <!-- BEGIN: image -->
-                    <div class="image">
-                        <ul id="imageGallery" class="gallery">
-                            <!-- BEGIN: loop -->
-                            <li data-thumb="{IMAGE.thumb}" data-src="{IMAGE.file}"><img itemprop="image" src="{IMAGE.file}" /></li>
-                            <!-- END: loop -->
-                        </ul>
+                    <div class="product-image-gallery mb-2">
+                        <div class="gallery-view">
+                            <div class="gallery-view-inner owl-carousel" id="product-image-gallery-view">
+                                <!-- BEGIN: loop -->
+                                <div class="item">
+                                    <div class="item-inner">
+                                        <img itemprop="image" src="{IMAGE.file}" alt="{DATA.homeimgalt}">
+                                    </div>
+                                </div>
+                                <!-- END: loop -->
+                            </div>
+                        </div>
+                        <div class="gallery-nav owl-carousel" id="product-image-gallery-nav">
+                            <!-- BEGIN: loop1 -->
+                            <div class="item<!-- BEGIN: active --> active<!-- END: active -->" data-item="{IMAGE_STT}">
+                                <div class="item-inner">
+                                    <a href="#" class="item-click-change" data-offset="{IMAGE_STT}"><img src="{IMAGE.thumb}" alt="{DATA.homeimgalt} thumb"></a>
+                                </div>
+                            </div>
+                            <!-- END: loop1 -->
+                        </div>
                     </div>
                     <!-- END: image -->
-
                     <!-- BEGIN: adminlink -->
                     <div class="admin-links margin-bottom mb-2">{ADMINLINK}</div>
                     <!-- END: adminlink -->
-
                     <!-- BEGIN: social_icon -->
                     <div class="news_column panel panel-default">
                         <div class="panel-body">
@@ -247,6 +264,41 @@
         </div>
     </div>
 </div>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/OwlCarousel2/assets/owl.carousel.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/OwlCarousel2/owl.carousel.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    // Slide ảnh sản phẩm
+    var owlView = $('#product-image-gallery-view');
+    var owlNav = $('#product-image-gallery-nav');
+    owlView.owlCarousel({
+        items: 1,
+        nav: true,
+        navText: ['<span><i class="fa fa-angle-left" aria-hidden="true"></i></span>', '<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>'],
+        dots: false,
+        lazyLoad: true,
+        autoplay: false,
+        autoplayTimeout: 10000,
+        autoplayHoverPause: true,
+        margin: 5
+    });
+    owlNav.owlCarousel({
+        nav: false,
+        dots: false,
+        autoplay: false,
+        items: 5,
+        margin: 5
+    });
+    owlView.on('changed.owl.carousel', function(e) {
+        $('.item', owlNav).removeClass('active');
+        $('[data-item="' + e.item.index + '"]', owlNav).addClass('active');
+    });
+    $('.item-click-change', owlNav).on('click', function(e) {
+        e.preventDefault();
+        owlView.trigger('to.owl.carousel', [$(this).data('offset'), 300]);
+    });
+});
+</script>
 <!-- BEGIN: allowed_print_js -->
 <script type="text/javascript" data-show="after">
     $(function() {
@@ -292,25 +344,6 @@
         <!-- END: check_price -->
         resize_popup();
     }
-</script>
-<script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/lightSlider/js/lightslider.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    $('#imageGallery').lightSlider({
-        gallery:true,
-        item:1,
-        loop:true,
-        thumbItem:5,
-        slideMargin:0,
-        enableDrag: false,
-        currentPagerPosition:'left',
-        onSliderLoad: function(el) {
-            //el.lightGallery({
-            //    selector: '#imageGallery .lslide'
-            //});
-        }
-    });
-  });
 </script>
 <!-- BEGIN: popup -->
 <script type="text/javascript">

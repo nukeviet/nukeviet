@@ -3,7 +3,7 @@
     <!-- BEGIN: loop -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="image pull-left" style="height: {HEIGHT}px">
+            <div class="mb-2 mr-2 pull-left" style="height: {HEIGHT}px">
                 <a href="{ROW.link_pro}" title="{ROW.title}"><img src="{ROW.homeimgthumb}" alt="{ROW.title}" class="img-thumbnail" style="max-height: {HEIGHT}px"></a>
             </div>
             <h3>

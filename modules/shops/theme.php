@@ -237,11 +237,28 @@ function nv_template_detail($data_content, $data_unit, $data_others, $array_othe
         } else {
             $xtpl->assign('AVAILABILITY', 'https://schema.org/InStock');
         }
+        if (empty($data_content['homeimgalt'])) {
+            $data_content['homeimgalt'] = $data_content[NV_LANG_DATA . '_title'];
+        }
+        $xtpl->assign('DATA', $data_content);
 
-        if (!empty($data_content['image'])) {
+        // Xuất ảnh sản phẩm
+        $num_images = sizeof($data_content['image']);
+        if ($num_images == 1) {
+            // Sản phẩm có 1 ảnh
+            $xtpl->assign('IMAGE', current($data_content['image']));
+            $xtpl->parse('main.oneimage');
+        } elseif ($num_images > 1) {
+            // Gallery ảnh
+            $stt = 0;
             foreach ($data_content['image'] as $image) {
+                $xtpl->assign('IMAGE_STT', $stt++);
                 $xtpl->assign('IMAGE', $image);
                 $xtpl->parse('main.image.loop');
+                if ($stt == 1) {
+                    $xtpl->parse('main.image.loop1.active');
+                }
+                $xtpl->parse('main.image.loop1');
             }
             $xtpl->parse('main.image');
         }
