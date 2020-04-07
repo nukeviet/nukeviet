@@ -33,6 +33,10 @@ $captcha_array = [
 $captcha_type_array = [0 => $lang_module['captcha_type_0'], 2 => $lang_module['captcha_type_2']];
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 $admin_2step_array = ['code', 'facebook', 'google'];
+$array_iptypes = [
+    4 => 'IPv4',
+    6 => 'IPv6'
+];
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
@@ -283,12 +287,21 @@ if (!empty($del) and !empty($cid)) {
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
+    $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
     $cid = $nv_Request->get_int('cid', 'post', 0);
-    $ip = $nv_Request->get_title('ip', 'post', '', 1);
+    $ip = $nv_Request->get_title('ip', 'post', '');
     $area = $nv_Request->get_int('area', 'post', 0);
     $mask = $nv_Request->get_int('mask', 'post', 0);
+    $mask6 = $nv_Request->get_int('mask6', 'post', 1);
 
-    if (empty($ip) or !$ips->nv_validip($ip)) {
+    if ($ip_version != 4 and $ip_version != 6) {
+        $ip_version = 4;
+    }
+    if ($mask6 < 1 or $mask6 > 128) {
+        $mask6 = 128;
+    }
+
+    if (empty($ip) or ($ip_version == 4 and !$ips->isIp4($ip)) or ($ip_version == 6 and !$ips->isIp6($ip))) {
         $error[] = $lang_module['banip_error_validip'];
     }
 
@@ -309,6 +322,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $notice = $nv_Request->get_title('notice', 'post', '', 1);
+    $banmask = $ip_version == 4 ? $mask : $mask6;
 
     if (empty($error)) {
         if ($cid > 0) {
@@ -316,7 +330,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
                 WHERE id=' . $cid);
             $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
-            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+            $sth->bindParam(':mask', $banmask, PDO::PARAM_STR);
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
             $sth->execute();
         } else {
@@ -324,7 +338,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             if ($result) {
                 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES (0, :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
                 $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
-                $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+                $sth->bindParam(':mask', $banmask, PDO::PARAM_STR);
                 $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
                 $sth->execute();
             }
@@ -344,7 +358,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $xtpl->parse('main.error_save');
     }
 } else {
-    $id = $ip = $mask = $area = $begintime = $endtime = $notice = '';
+    if (!empty($cid)) {
+        list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $cid)->fetch(3);
+        $lang_module['banip_add'] = $lang_module['banip_edit'];
+        if ($ips->isIp4($ip)) {
+            $ip_version = 4;
+            $mask6 = 128;
+        } else {
+            $ip_version = 6;
+            $mask6 = $mask;
+            $mask = '';
+        }
+    } else {
+        $id = $ip = $mask = $area = $begintime = $endtime = $notice = '';
+        $ip_version = 4;
+        $mask6 = 128;
+    }
 }
 
 // Xử lý các IP bỏ qua kiểm tra flood
@@ -360,11 +389,24 @@ if (!empty($fldel) and !empty($flid)) {
 }
 
 if ($nv_Request->isset_request('submitfloodip', 'post')) {
-    $array_flip['flip'] = $nv_Request->get_title('flip', 'post', '', 1);
+    $array_flip['ip_version'] = $nv_Request->get_int('fip_version', 'post', 4);
+    $array_flip['flip'] = $nv_Request->get_title('flip', 'post', '');
     $array_flip['flarea'] = 1;
     $array_flip['flmask'] = $nv_Request->get_int('flmask', 'post', 0);
+    $array_flip['flmask6'] = $nv_Request->get_int('flmask_v6', 'post', 1);
 
-    if (empty($array_flip['flip']) or !$ips->nv_validip($array_flip['flip'])) {
+    if ($array_flip['ip_version'] != 4 and $array_flip['ip_version'] != 6) {
+        $array_flip['ip_version'] = 4;
+    }
+    if ($array_flip['flmask6'] < 1 or $array_flip['flmask6'] > 128) {
+        $array_flip['flmask6'] = 128;
+    }
+
+    if (
+        empty($array_flip['flip']) or
+        ($array_flip['ip_version'] == 4 and !$ips->isIp4($array_flip['flip'])) or
+        ($array_flip['ip_version'] == 6 and !$ips->isIp6($array_flip['flip']))
+    ) {
         $error[] = $lang_module['banip_error_validip'];
     }
 
@@ -385,14 +427,16 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
     }
 
     $array_flip['flnotice'] = $nv_Request->get_title('flnotice', 'post', '', 1);
+    $flmask = $array_flip['ip_version'] == 4 ? $array_flip['flmask'] : $array_flip['flmask6'];
 
     if (empty($error)) {
         if ($flid > 0) {
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
-                SET ip=:ip, mask=:mask, area=' . $array_flip['flarea'] . ', begintime=' . $array_flip['flbegintime'] . ', endtime=' . $array_flip['flendtime'] . ', notice=:notice
+                SET ip=:ip, mask=:mask, area=' . $array_flip['flarea'] . ', begintime=' . $array_flip['flbegintime'] . ',
+                endtime=' . $array_flip['flendtime'] . ', notice=:notice
             WHERE id=' . $flid);
             $sth->bindParam(':ip', $array_flip['flip'], PDO::PARAM_STR);
-            $sth->bindParam(':mask', $array_flip['flmask'], PDO::PARAM_STR);
+            $sth->bindParam(':mask', $flmask, PDO::PARAM_INT);
             $sth->bindParam(':notice', $array_flip['flnotice'], PDO::PARAM_STR);
             $sth->execute();
         } else {
@@ -404,7 +448,7 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
                     1, :ip, :mask, ' . $array_flip['flarea'] . ', ' . $array_flip['flbegintime'] . ', ' . $array_flip['flendtime'] . ', :notice
                 )');
                 $sth->bindParam(':ip', $array_flip['flip'], PDO::PARAM_STR);
-                $sth->bindParam(':mask', $array_flip['flmask'], PDO::PARAM_STR);
+                $sth->bindParam(':mask', $flmask, PDO::PARAM_INT);
                 $sth->bindParam(':notice', $array_flip['flnotice'], PDO::PARAM_STR);
                 $sth->execute();
             }
@@ -431,17 +475,29 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
         }
         $array_flip['flip'] = $row['ip'];
         $array_flip['flarea'] = $row['area'];
-        $array_flip['flmask'] = $row['mask'];
+
         $array_flip['flbegintime'] = $row['begintime'];
         $array_flip['flendtime'] = $row['endtime'];
         $array_flip['flnotice'] = $row['notice'];
+
+        if ($ips->isIp6($row['ip'])) {
+            $array_flip['flmask'] = '';
+            $array_flip['flmask6'] = $row['mask'];
+            $array_flip['ip_version'] = 6;
+        } else {
+            $array_flip['flmask'] = $row['mask'];
+            $array_flip['flmask6'] = 128;
+            $array_flip['ip_version'] = 4;
+        }
     } else {
         $array_flip['flip'] = '';
         $array_flip['flarea'] = '';
         $array_flip['flmask'] = '';
+        $array_flip['flmask6'] = 128;
         $array_flip['flbegintime'] = '';
         $array_flip['flendtime'] = '';
         $array_flip['flnotice'] = '';
+        $array_flip['ip_version'] = 4;
     }
 }
 
@@ -537,6 +593,45 @@ $banip_area_array[3] = $lang_module['banip_area_both'];
 $xtpl->assign('MASK_TEXT_ARRAY', $mask_text_array);
 $xtpl->assign('BANIP_AREA_ARRAY', $banip_area_array);
 
+// Xuất kiểu IP
+foreach ($array_iptypes as $_key => $_value) {
+    $xtpl->assign('IP_VERSION', [
+        'key' => $_key,
+        'title' => $_value,
+        'f_selected' => $_key == $array_flip['ip_version'] ? ' selected="selected"' : '',
+        'b_selected' => $_key == $ip_version ? ' selected="selected"' : '',
+    ]);
+    $xtpl->parse('main.ip_version');
+    $xtpl->parse('main.fip_version');
+}
+
+if ($array_flip['ip_version'] == 4) {
+    $xtpl->assign('CLASS_FIP_VERSION4', '');
+    $xtpl->assign('CLASS_FIP_VERSION6', ' hidden');
+} else {
+    $xtpl->assign('CLASS_FIP_VERSION4', ' hidden');
+    $xtpl->assign('CLASS_FIP_VERSION6', '');
+}
+if ($ip_version == 4) {
+    $xtpl->assign('CLASS_IP_VERSION4', '');
+    $xtpl->assign('CLASS_IP_VERSION6', ' hidden');
+} else {
+    $xtpl->assign('CLASS_IP_VERSION4', ' hidden');
+    $xtpl->assign('CLASS_IP_VERSION6', '');
+}
+
+// Xuất mask IPv6
+for ($i = 1; $i <= 128; $i++) {
+    $xtpl->assign('IPMASK', [
+        'key' => $i,
+        'title' => '/' . $i,
+        'f_selected' => $i == $array_flip['flmask6'] ? ' selected="selected"' : '',
+        'b_selected' => $i == $mask6 ? ' selected="selected"' : '',
+    ]);
+    $xtpl->parse('main.flmask6');
+    $xtpl->parse('main.mask6');
+}
+
 // Danh sách các IP cấm
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=0 ORDER BY ip DESC';
 $result = $db->query($sql);
@@ -545,7 +640,7 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
     ++$i;
     $xtpl->assign('ROW', array(
         'dbip' => $dbip,
-        'dbmask' => $mask_text_array[$dbmask],
+        'dbmask' => $ips->isIp4($dbip) ? $mask_text_array[$dbmask] : ('/' . $dbmask),
         'dbarea' => $banip_area_array[$dbarea],
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
@@ -557,11 +652,6 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
 }
 if ($i) {
     $xtpl->parse('main.listip');
-}
-
-if (!empty($cid)) {
-    list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $cid)->fetch(3);
-    $lang_module['banip_add'] = $lang_module['banip_edit'];
 }
 
 $xtpl->assign('BANIP_TITLE', ($cid) ? $lang_module['banip_title_edit'] : $lang_module['banip_title_add']);
@@ -587,7 +677,7 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
     ++$i;
     $xtpl->assign('ROW', array(
         'dbip' => $dbip,
-        'dbmask' => $mask_text_array[$dbmask],
+        'dbmask' => $ips->isIp4($dbip) ? $mask_text_array[$dbmask] : ('/' . $dbmask),
         'dbarea' => $banip_area_array[$dbarea],
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
