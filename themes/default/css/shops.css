@@ -365,6 +365,13 @@ div.step_bar a.step_current {
     padding: 3px;
 }
 
+.product-detail .socialicon {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
 /* TAB */
 .r-tabs {
     margin: 10px 0 10px 0;
