@@ -321,6 +321,7 @@ div.step_bar a.step_current {
     opacity: 0.6;
     color: #ddd;
     transform: translate3d(0px, -50%, 0px);
+    z-index: 10;
 }
 
 .product-detail .product-image-gallery .gallery-view .owl-nav .owl-prev:focus,

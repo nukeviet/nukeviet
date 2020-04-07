@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/jquery.ez-plus.js"></script>
 <div id="detail" class="product-detail <!-- BEGIN: popupid -->prodetail-popup<!-- END: popupid -->" itemtype="http://schema.org/Product" itemscope>
     <span class="d-none hidden hide" itemprop="mpn" content="{PRODUCT_CODE}"></span>
     <span class="d-none hidden hide" itemprop="sku" content="{PRODUCT_CODE}"></span>
@@ -26,17 +27,22 @@
                 <div class="col-xs-24 col-sm-10 col-md-10 text-center">
                     <!-- BEGIN: oneimage -->
                     <div class="product-one-image mb-2">
-                        <img itemprop="image" src="{IMAGE.file}" alt="{DATA.homeimgalt}">
+                        <img itemprop="image" src="{IMAGE.file}" alt="{DATA.homeimgalt}" id="product-image-one-view">
                     </div>
+                    <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#product-image-one-view').ezPlus();
+                    });
+                    </script>
                     <!-- END: oneimage -->
                     <!-- BEGIN: image -->
                     <div class="product-image-gallery mb-2">
                         <div class="gallery-view">
                             <div class="gallery-view-inner owl-carousel" id="product-image-gallery-view">
                                 <!-- BEGIN: loop -->
-                                <div class="item">
+                                <div class="item" data-item="{IMAGE_STT}">
                                     <div class="item-inner">
-                                        <img itemprop="image" src="{IMAGE.file}" alt="{DATA.homeimgalt}">
+                                        <img itemprop="image" src="{IMAGE.file}" alt="{DATA.homeimgalt}" data-zoom-image="{IMAGE.file}">
                                     </div>
                                 </div>
                                 <!-- END: loop -->
@@ -52,6 +58,48 @@
                             <!-- END: loop1 -->
                         </div>
                     </div>
+                    <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/OwlCarousel2/assets/owl.carousel.min.css">
+                    <script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/OwlCarousel2/owl.carousel.min.js"></script>
+                    <script type="text/javascript">
+                    $(document).ready(function() {
+                        // Slide ảnh sản phẩm
+                        var owlView = $('#product-image-gallery-view');
+                        var owlNav = $('#product-image-gallery-nav');
+                        owlView.owlCarousel({
+                            items: 1,
+                            nav: true,
+                            navText: ['<span><i class="fa fa-angle-left" aria-hidden="true"></i></span>', '<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>'],
+                            dots: false,
+                            lazyLoad: true,
+                            autoplay: false,
+                            margin: 5
+                        });
+                        owlNav.owlCarousel({
+                            nav: false,
+                            dots: false,
+                            autoplay: false,
+                            items: 5,
+                            margin: 5
+                        });
+                        owlView.on('changed.owl.carousel', function(e) {
+                            $('.item', owlNav).removeClass('active');
+                            $('[data-item="' + e.item.index + '"]', owlNav).addClass('active');
+                            $('[data-item="' + e.item.index + '"]', owlView).find('img').ezPlus({
+                                zIndex: 9,
+                                zoomContainerAppendTo: owlView
+                            });
+                        });
+                        $('.item-click-change', owlNav).on('click', function(e) {
+                            e.preventDefault();
+                            owlView.trigger('to.owl.carousel', [$(this).data('offset'), 300]);
+                        });
+                        // Zoom ảnh đầu tiên
+                        $('[data-item="0"]', owlView).find('img').ezPlus({
+                            zIndex: 9,
+                            zoomContainerAppendTo: owlView
+                        });
+                    });
+                    </script>
                     <!-- END: image -->
                     <!-- BEGIN: adminlink -->
                     <div class="admin-links margin-bottom mb-2">{ADMINLINK}</div>
@@ -264,41 +312,6 @@
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/OwlCarousel2/assets/owl.carousel.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/OwlCarousel2/owl.carousel.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    // Slide ảnh sản phẩm
-    var owlView = $('#product-image-gallery-view');
-    var owlNav = $('#product-image-gallery-nav');
-    owlView.owlCarousel({
-        items: 1,
-        nav: true,
-        navText: ['<span><i class="fa fa-angle-left" aria-hidden="true"></i></span>', '<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>'],
-        dots: false,
-        lazyLoad: true,
-        autoplay: true,
-        autoplayTimeout: 10000,
-        autoplayHoverPause: true,
-        margin: 5
-    });
-    owlNav.owlCarousel({
-        nav: false,
-        dots: false,
-        autoplay: false,
-        items: 5,
-        margin: 5
-    });
-    owlView.on('changed.owl.carousel', function(e) {
-        $('.item', owlNav).removeClass('active');
-        $('[data-item="' + e.item.index + '"]', owlNav).addClass('active');
-    });
-    $('.item-click-change', owlNav).on('click', function(e) {
-        e.preventDefault();
-        owlView.trigger('to.owl.carousel', [$(this).data('offset'), 300]);
-    });
-});
-</script>
 <!-- BEGIN: allowed_print_js -->
 <script type="text/javascript" data-show="after">
     $(function() {
