@@ -29,15 +29,16 @@
                     <div class="image">
                         <ul id="imageGallery" class="gallery">
                             <!-- BEGIN: loop -->
-                            <li data-thumb="{IMAGE.thumb}" style="height: 200px" data-src="{IMAGE.file}"><img itemprop="image" src="{IMAGE.file}" /></li>
+                            <li data-thumb="{IMAGE.thumb}" data-src="{IMAGE.file}"><img itemprop="image" src="{IMAGE.file}" /></li>
                             <!-- END: loop -->
                         </ul>
                     </div>
                     <!-- END: image -->
-                    <a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" class="img-thumbnail" id="imageproduct"></a> <br />
+
                     <!-- BEGIN: adminlink -->
-                    <p class="tab-pane">{ADMINLINK}</p>
+                    <div class="admin-links margin-bottom mb-2">{ADMINLINK}</div>
                     <!-- END: adminlink -->
+
                     <!-- BEGIN: social_icon -->
                     <div class="news_column panel panel-default">
                         <div class="panel-body">

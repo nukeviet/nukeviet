@@ -543,12 +543,12 @@ function print_product($data_content, $data_unit, $page_title)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TEMPLATE', $module_info['template']);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+
     if (!empty($data_content)) {
         $xtpl->assign('proid', $data_content['id']);
         $data_content['money_unit'] = ($data_content['money_unit'] != '') ? $data_content['money_unit'] : 'N/A';
         $data_content[NV_LANG_DATA . '_address'] = ($data_content[NV_LANG_DATA . '_address'] != '') ? $data_content[NV_LANG_DATA . '_address'] : 'N/A';
         $xtpl->assign('SRC_PRO', $data_content['homeimgthumb']);
-        $xtpl->assign('SRC_PRO_LAGE', $data_content['homeimgthumb']);
         $xtpl->assign('TITLE', $data_content[NV_LANG_DATA . '_title']);
         $xtpl->assign('NUM_VIEW', $data_content['hitstotal']);
         $xtpl->assign('DATE_UP', $lang_module['detail_dateup'] . date(' d-m-Y ', $data_content['addtime']) . $lang_module['detail_moment'] . date(" H:i'", $data_content['addtime']));
@@ -567,9 +567,11 @@ function print_product($data_content, $data_unit, $page_title)
         $xtpl->assign('contact', $global_config['site_email']);
         $xtpl->assign('page_title', $page_title);
     }
-    if ($pro_config['active_price'] == '1') {
+
+    if (!empty($pro_config['active_price'])) {
         $xtpl->parse('main.price');
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
