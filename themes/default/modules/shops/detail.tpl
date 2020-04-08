@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/images/{MODULE_FILE}/jquery.ez-plus.js"></script>
-<div id="detail" class="product-detail <!-- BEGIN: popupid -->prodetail-popup<!-- END: popupid -->" itemtype="http://schema.org/Product" itemscope>
+<div class="product-detail <!-- BEGIN: popupid -->prodetail-popup<!-- END: popupid -->" itemtype="http://schema.org/Product" itemscope>
     <span class="d-none hidden hide" itemprop="mpn" content="{PRODUCT_CODE}"></span>
     <span class="d-none hidden hide" itemprop="sku" content="{PRODUCT_CODE}"></span>
     <div class="d-none hidden hide" itemprop="brand" itemtype="http://schema.org/Thing" itemscope>
@@ -116,35 +116,31 @@
                     <!-- END: social_icon -->
                 </div>
                 <div class="col-xs-24 col-sm-14 col-md-14">
-                    <ul class="product_info">
-                        <li><h1 itemprop="name">{TITLE}</h1></li>
-                        <li class="text-muted">{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}</li>
+                    <ul class="product-info">
+                        <li class="info-title"><h1 itemprop="name">{TITLE}</h1></li>
+                        <li class="info-meta text-muted">{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}</li>
                         <!-- BEGIN: product_code -->
-                        <li>{LANG.product_code}: <strong>{PRODUCT_CODE}</strong></li>
+                        <li class="info-code">{LANG.product_code}: <strong>{PRODUCT_CODE}</strong></li>
                         <!-- END: product_code -->
                         <!-- BEGIN: price -->
-                        <li>
-                            <p>
-                                {LANG.detail_pro_price}:
-                                <!-- BEGIN: discounts -->
-                                <span class="money">{PRICE.sale_format} {PRICE.unit}</span> <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span> <span class="money">{product_discounts} {money_unit}</span>
-                                <!-- END: discounts -->
-                                <!-- BEGIN: no_discounts -->
-                                <span class="money">{PRICE.price_format} {PRICE.unit}</span>
-                                <!-- END: no_discounts -->
-                            </p>
+                        <li class="info-price">
+                            {LANG.detail_pro_price}:
+                            <!-- BEGIN: discounts -->
+                            <span class="money">{PRICE.sale_format} {PRICE.unit}</span> <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span> <span class="money">{product_discounts} {money_unit}</span>
+                            <!-- END: discounts -->
+                            <!-- BEGIN: no_discounts -->
+                            <span class="money">{PRICE.price_format} {PRICE.unit}</span>
+                            <!-- END: no_discounts -->
                         </li>
                         <!-- END: price -->
                         <!-- BEGIN: product_weight -->
-                        <li>{LANG.weights}: <strong>{PRODUCT_WEIGHT}</strong>&nbsp<span>{WEIGHT_UNIT}</span>
-                        </li>
+                        <li class="info-weight">{LANG.weights}: <strong>{PRODUCT_WEIGHT}</strong>&nbsp<span>{WEIGHT_UNIT}</span></li>
                         <!-- END: product_weight -->
                         <!-- BEGIN: contact -->
-                        <li>{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-                        </li>
+                        <li class="info-priceno">{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span></li>
                         <!-- END: contact -->
                         <!-- BEGIN: group_detail -->
-                        <li>
+                        <li class="info-groups">
                             <!-- BEGIN: loop --> <!-- BEGIN: maintitle -->
                             <div class="pull-left">
                                 <strong>{MAINTITLE}:</strong>&nbsp;
@@ -158,23 +154,23 @@
                         </li>
                         <!-- END: group_detail -->
                         <!-- BEGIN: custom_data -->
-                        {CUSTOM_DATA}
+                        <div class="info-customs">{CUSTOM_DATA}</div>
                         <!-- END: custom_data -->
                         <!-- BEGIN: hometext -->
-                        <li>
+                        <li class="info-hometext">
                             <p class="text-justify" itemprop="description">{hometext}</p>
                         </li>
                         <!-- END: hometext -->
                         <!-- BEGIN: promotional -->
-                        <li><strong>{LANG.detail_promotional}:</strong> {promotional}</li>
+                        <li class="info-promotion"><strong>{LANG.detail_promotional}:</strong> {promotional}</li>
                         <!-- END: promotional -->
                         <!-- BEGIN: warranty -->
-                        <li><strong>{LANG.detail_warranty}:</strong> {warranty}</li>
+                        <li class="info-warranty"><strong>{LANG.detail_warranty}:</strong> {warranty}</li>
                         <!-- END: warranty -->
                     </ul>
                     <hr />
                     <!-- BEGIN: gift -->
-                    <div class="alert alert-info">
+                    <div class="alert alert-info pro-gift">
                         <div class="pull-left">
                             <em class="fa fa-gift fa-3x">&nbsp;</em>
                         </div>
@@ -185,7 +181,7 @@
                     </div>
                     <!-- END: gift -->
                     <!-- BEGIN: group -->
-                    <div class="well">
+                    <div class="well pro-group-lists">
                         <div class="filter_product">
                             <!-- BEGIN: items -->
                             <div class="row">
@@ -206,7 +202,7 @@
                     </div>
                     <!-- END: group -->
                     <!-- BEGIN: order_number -->
-                    <div class="well">
+                    <div class="well order-number">
                         <div class="row">
                             <div class="col-xs-8 col-sm-5">{LANG.detail_pro_number}</div>
                             <div class="col-xs-16 col-sm-19">
@@ -221,7 +217,7 @@
                     <!-- END: order_number -->
                     <div class="clearfix"></div>
                     <!-- BEGIN: typepeice -->
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-bordered table-hover type-peice">
                         <thead>
                             <tr>
                                 <th class="text-right">{LANG.detail_pro_number}</th>
@@ -239,11 +235,11 @@
                     </table>
                     <!-- END: typepeice -->
                     <!-- BEGIN: order -->
-                    <button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, {POPUP}, 0); return !1;">
-                        <em class="fa fa-shopping-cart fa-lg">&nbsp;</em> {LANG.add_cart}
+                    <button class="btn btn-danger btn-order btn-order-cart" data-id="{proid}" onclick="cartorder_detail(this, {POPUP}, 0); return !1;">
+                        <i class="fa fa-shopping-cart fa-lg"></i> {LANG.add_cart}
                     </button>
-                    <button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, {POPUP}, 1); return !1;">
-                        <em class="fa fa-paper-plane-o fa-lg">&nbsp;</em> {LANG.buy_now}
+                    <button class="btn btn-success btn-order btn-order-buy" data-id="{proid}" onclick="cartorder_detail(this, {POPUP}, 1); return !1;">
+                        <i class="fa fa-paper-plane-o fa-lg"></i> {LANG.buy_now}
                     </button>
                     <!-- END: order -->
                     <!-- BEGIN: product_empty -->
