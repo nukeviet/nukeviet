@@ -105,7 +105,7 @@
                     <div class="admin-links margin-bottom mb-2">{ADMINLINK}</div>
                     <!-- END: adminlink -->
                     <!-- BEGIN: social_icon -->
-                    <div class="panel panel-default">
+                    <div class="panel panel-default socialicon-wrap">
                         <div class="panel-body">
                             <div class="socialicon">
                                 <div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
