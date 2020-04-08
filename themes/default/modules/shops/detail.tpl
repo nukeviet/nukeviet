@@ -285,13 +285,13 @@
     <!-- END: keywords -->
     <!-- BEGIN: other -->
     <div class="panel panel-default panel-product-others">
-        <div class="panel-heading">{LANG.detail_others}</div>
+        <div class="panel-heading"><span>{LANG.detail_others}</span></div>
         <div class="panel-body">{OTHER}</div>
     </div>
     <!-- END: other -->
     <!-- BEGIN: other_view -->
     <div class="panel panel-default panel-product-viewed">
-        <div class="panel-heading">{LANG.detail_others_view}</div>
+        <div class="panel-heading"><span>{LANG.detail_others_view}</span></div>
         <div class="panel-body">{OTHER_VIEW}</div>
     </div>
     <!-- END: other_view -->
