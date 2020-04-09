@@ -1,19 +1,19 @@
 <!-- BEGIN: main -->
-<div class="viewlist">
+<div class="product-viewlist">
     <!-- BEGIN: loop -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="mb-2 mr-2 pull-left" style="height: {HEIGHT}px">
-                <a href="{ROW.link_pro}" title="{ROW.title}"><img src="{ROW.homeimgthumb}" alt="{ROW.title}" class="img-thumbnail" style="max-height: {HEIGHT}px"></a>
+            <div class="mb-2 mr-2 pull-left">
+                <a href="{ROW.link_pro}" title="{ROW.title}"><img src="{ROW.homeimgthumb}" alt="{ROW.title}" width="{WIDTH}"></a>
             </div>
             <h3>
                 <a href="{ROW.link_pro}" title="{ROW.title}">{ROW.title}</a>
             </h3>
             <!-- BEGIN: product_code -->
-            <p class="label label-default">{PRODUCT_CODE}</p>
+            <p class="label label-default pro-code">{PRODUCT_CODE}</p>
             <!-- END: product_code -->
             <!-- BEGIN: price -->
-            <p class="price">
+            <p class="price price-value">
                 {LANG.detail_pro_price}:
                 <!-- BEGIN: discounts -->
                 <span class="money">{PRICE.sale_format} {PRICE.unit}</span> <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
@@ -24,11 +24,11 @@
             </p>
             <!-- END: price -->
             <!-- BEGIN: contact -->
-            <p class="price">
+            <p class="price price-contact">
                 {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
             </p>
             <!-- END: contact -->
-            <div class="clearfix">
+            <div class="clearfix pro-order">
                 <!-- BEGIN: order -->
                 <a href="javascript:void(0)" id="{ROW.id}" title="{ROW.title}" onclick="cartorder(this, {GROUP_REQUIE}, '{ROW.link_pro}'); return !1;"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                 <!-- END: order -->

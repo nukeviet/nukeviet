@@ -1398,19 +1398,16 @@ img.calendar {
 }
 
 a.btn-default {
-    color: #1a3f5e
+    color: #1a3f5e;
 }
 
-.viewlist .image {
-    margin-right: 6px
-}
-
-.viewlist .price {
+.product-viewlist .price {
     height: inherit;
     margin: 10px 0 10px 0
 }
 
-.viewlist input[type="checkbox"], .viewlist input[type="radio"] {
+.product-viewlist input[type="checkbox"],
+.product-viewlist input[type="radio"] {
     margin: 0
 }
 

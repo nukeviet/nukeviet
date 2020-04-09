@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/18/2017 09:47
  */
+
 if (!defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
