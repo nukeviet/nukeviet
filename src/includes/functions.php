@@ -2412,7 +2412,7 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
             if ($_email_data['is_plaintext']) {
                 $email_content = nv_nl2br(strip_tags($email_content));
             } else {
-                $email_content = preg_replace('/["|\'][\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '//1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
+                $email_content = preg_replace('/(["|\'])[\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '\\1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
             }
 
             // Dùng để xử lý nội dung email trước khi gửi
