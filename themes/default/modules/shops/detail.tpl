@@ -31,7 +31,10 @@
                     </div>
                     <script type="text/javascript">
                     $(document).ready(function() {
-                        $('#product-image-one-view').ezPlus();
+                        $('#product-image-one-view').ezPlus({
+                            scrollZoom: true,
+                            containLensZoom: true
+                        });
                     });
                     </script>
                     <!-- END: oneimage -->
@@ -86,7 +89,9 @@
                             $('[data-item="' + e.item.index + '"]', owlNav).addClass('active');
                             $('[data-item="' + e.item.index + '"]', owlView).find('img').ezPlus({
                                 zIndex: 9,
-                                zoomContainerAppendTo: owlView
+                                zoomContainerAppendTo: owlView,
+                                scrollZoom: true,
+                                containLensZoom: true
                             });
                         });
                         $('.item-click-change', owlNav).on('click', function(e) {
@@ -96,7 +101,9 @@
                         // Zoom ảnh đầu tiên
                         $('[data-item="0"]', owlView).find('img').ezPlus({
                             zIndex: 9,
-                            zoomContainerAppendTo: owlView
+                            zoomContainerAppendTo: owlView,
+                            scrollZoom: true,
+                            containLensZoom: true
                         });
                     });
                     </script>

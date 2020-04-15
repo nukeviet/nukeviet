@@ -358,8 +358,9 @@ function check_price(id_pro, pro_unit) {
 
 function fix_image_content() {
     var news = $('.tab-content'), newsW, w, h;
-    if (news.length) {
-        var newsW = news.innerWidth();
+    var newsInner = $('.tab-content > .tab-pane');
+    if (news.length && newsInner.length) {
+        var newsW = newsInner.width();
         $.each($('img', news), function() {
             if (typeof $(this).data('width') == "undefined") {
                 w = $(this).innerWidth();
