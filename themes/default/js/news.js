@@ -14,7 +14,7 @@ $(function() {
     });
     $('[data-toggle="newsattachimage"]').click(function(e) {
         e.preventDefault();
-        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width:auto;"/></div>');
+        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%;"/></div>');
     });
 });
 

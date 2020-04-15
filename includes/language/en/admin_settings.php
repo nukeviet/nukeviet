@@ -23,6 +23,7 @@ $lang_module['global_config'] = 'General configuration';
 $lang_module['site_config'] = 'Site Configuration';
 $lang_module['lang_site_config'] = 'Configuration site in %s language:';
 $lang_module['bots_config'] = 'Search Engines';
+$lang_module['ip_version'] = 'IP Version';
 $lang_module['site_domain'] = 'Primary Domain';
 $lang_module['sitename'] = 'Site name';
 $lang_module['theme'] = 'Default theme for PC';

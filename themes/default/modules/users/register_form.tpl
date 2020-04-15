@@ -1,4 +1,4 @@
-<form action="{USER_REGISTER}" method="post" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+<form class="user-reg-form" action="{USER_REGISTER}" method="post" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
     <div class="nv-info margin-bottom" data-default="{LANG.info}">{LANG.info}</div>
 
     <div class="form-detail">
@@ -122,16 +122,18 @@
         <!-- BEGIN: loop -->
         <!-- BEGIN: textbox -->
         <div class="form-group">
+            <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
             <div>
-                <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess=""/>
+                <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess="" id="nvcf-{FIELD.field}">
             </div>
         </div>
         <!-- END: textbox -->
 
         <!-- BEGIN: date -->
         <div class="form-group">
+            <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
             <div class="input-group">
-                <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess=""/>
+                <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess="" id="nvcf-{FIELD.field}">
                 <span class="input-group-addon pointer" onclick="button_datepickerShow(this);"> <em class="fa fa-calendar"></em> </span>
             </div>
         </div>
@@ -139,22 +141,25 @@
 
         <!-- BEGIN: textarea -->
         <div class="form-group">
+            <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
             <div>
-                <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess="">{FIELD.value}</textarea>
+                <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess="" id="nvcf-{FIELD.field}">{FIELD.value}</textarea>
             </div>
         </div>
         <!-- END: textarea -->
 
         <!-- BEGIN: editor -->
         <div class="form-group">
+            <label>{FIELD.title}:</label>
             {EDITOR}
         </div>
         <!-- END: editor -->
 
         <!-- BEGIN: select -->
         <div class="form-group">
+            <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
             <div>
-                <select name="custom_fields[{FIELD.field}]" class="form-control {FIELD.required} {FIELD.class}" onchange="validErrorHidden(this);" data-mess="">
+                <select name="custom_fields[{FIELD.field}]" class="form-control {FIELD.required} {FIELD.class}" onchange="validErrorHidden(this);" data-mess="" id="nvcf-{FIELD.field}">
                     <!-- BEGIN: loop -->
                     <option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}> {FIELD_CHOICES.value} </option>
                     <!-- END: loop -->
@@ -195,8 +200,9 @@
 
         <!-- BEGIN: multiselect -->
         <div class="form-group">
+            <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
             <div>
-                <select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class} {FIELD.required} form-control" onchange="validErrorHidden(this);" data-mess="">
+                <select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class} {FIELD.required} form-control" onchange="validErrorHidden(this);" data-mess="" id="nvcf-{FIELD.field}">
                     <!-- BEGIN: loop -->
                     <option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                     <!-- END: loop -->

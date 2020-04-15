@@ -18,7 +18,7 @@
         <!-- END: hots_news_img -->
         <div class="col-md-12">
             <div id="tabs" class="tabs">
-                <ul class="clearfix">
+                <ul class="clearfix list-none list-items">
                     <!-- BEGIN: loop_tabs_title -->
                     <li>
                         <a href="#tabs-{TAB_TITLE.id}"><span><span>{TAB_TITLE.title}</span></span></a>
@@ -28,7 +28,7 @@
                 <!-- BEGIN: loop_tabs_content -->
                 <div id="tabs-{TAB_TITLE.id}">
                     <!-- BEGIN: content -->
-                    <ul class="lastest-news">
+                    <ul class="lastest-news list-none list-items">
                         <!-- BEGIN: loop -->
                         <li>
                             <a {TITLE} class="show" href="{LASTEST.link}" {LASTEST.target_blank} data-content="{LASTEST.hometext_clean}" data-img="{LASTEST.homeimgfile}" data-rel="block_headline_tooltip">{LASTEST.title}</a>

@@ -15,16 +15,6 @@ if (!defined('NV_IS_MOD_NEWS')) {
 $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
-
-$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
-if ($page > 1) {
-    $base_url_rewrite .= '/page-' . $page;
-}
-$base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-    nv_redirect_location($base_url_rewrite);
-}
-
 $set_view_page = ($page > 1 and substr($viewcat, 0, 13) == 'viewcat_main_') ? true : false;
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
@@ -36,6 +26,12 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
     if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
         $contents = $cache;
     }
+}
+
+// Kiểm tra và chặn đánh tùy ý các op
+if (($page < 2 and isset($array_op[1])) or isset($array_op[2])) {
+    $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
+    nv_redirect_location($url);
 }
 
 $page_title = (!empty($global_array_cat[$catid]['titlesite'])) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
@@ -556,7 +552,7 @@ if (empty($contents)) {
 }
 
 if ($page > 1) {
-    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
     $description .= ' ' . $page;
 }
 

@@ -54,13 +54,12 @@ if ($submit) {
         $array_config['site_keywords'] = (! empty($array_config['site_keywords'])) ? implode(', ', $array_config['site_keywords']) : '';
     }
 
-    $site_logo = $nv_Request->get_title('site_logo', 'post');
+    $site_logo = $nv_Request->get_title('site_logo', 'post', '');
     if (empty($site_logo) or $site_logo == NV_ASSETS_DIR . '/images/logo.png') {
         $array_config['site_logo'] = '';
     } elseif (! nv_is_url($site_logo)) {
         if (nv_is_file($site_logo) === true) {
-            $lu = strlen(NV_BASE_SITEURL);
-            $array_config['site_logo'] = substr($site_logo, $lu);
+            $array_config['site_logo'] = substr($site_logo, strlen(NV_BASE_SITEURL));
         } else {
             $array_config['site_logo'] = '';
         }

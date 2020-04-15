@@ -744,7 +744,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $contents .= $xtpl->text('main');
 
         if ($page > 1) {
-            $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+            $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
         }
     }
 } elseif ($array_post_user['addcontent']) {

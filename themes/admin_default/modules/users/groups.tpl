@@ -194,44 +194,43 @@
 </script>
 <!-- END: add -->
 
-<!-- BEGIN: list -->
-<div class="table-responsive">
+<!-- BEGIN: main -->
+<!-- BEGIN: addnew -->
+<div class="form-group">
+    <a href="{MODULE_URL}={OP}&amp;add" class="btn btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i> {LANG.nv_admin_add}</a>
+</div>
+<!-- END: addnew -->
+<div class="table-responsive" id="pageContent">
     <table class="table table-striped table-bordered table-hover">
-        <col class="w100" />
-        <col span="6"/>
         <thead>
-            <tr class="text-center">
-                <th> {LANG.weight} </th>
-                <th> {LANG.title} </th>
-                <th class="text-center"> {LANG.add_time} </th>
-                <th class="text-center"> {LANG.exp_time} </th>
-                <th class="text-center"> {LANG.users} </th>
-                <th class="text-center"> {GLANG.active} </th>
-                <th class="text-center"> {GLANG.actions} </th>
+            <tr>
+                <th class="text-nowrap min-w100" style="width: 10%;"> {LANG.weight} </th>
+                <th class="text-nowrap" style="width: 20%;"> {LANG.title} </th>
+                <th class="text-nowrap" style="width: 15%;"> {LANG.add_time} </th>
+                <th class="text-nowrap" style="width: 15%;"> {LANG.exp_time} </th>
+                <th class="text-nowrap" style="width: 10%;"> {LANG.users} </th>
+                <th class="text-nowrap text-center" style="width: 10%;"> {GLANG.active} </th>
+                <th class="text-nowrap text-center" style="width: 20%;"> {GLANG.actions} </th>
             </tr>
         </thead>
         <tbody>
             <!-- BEGIN: loop -->
-            <tr class="text-center">
+            <tr>
                 <td>
-                    <!-- BEGIN: weight -->
-                    <select name="w_{GROUP_ID}" class="form-control newWeight">
-                        <!-- BEGIN: loop -->
-                        <option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
-                        <!-- END: loop -->
-                    </select>
-                    <!-- END: weight -->
                     <!-- BEGIN: weight_text -->{WEIGHT_TEXT}<!-- END: weight_text -->
+                    <!-- BEGIN: weight -->
+                    <button id="group_weight_{LOOP.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{START_WEIGHT}" data-num="{MAX_WEIGHT}" data-id="{LOOP.group_id}" data-current="{STT}" data-tokend="{TOKEND}" data-msgerror="{LANG.errorChangeWeight}" type="button" class="btn btn-default btn-xs btn-block btn-dropdown-tool"><span class="caret"></span><span class="text">{STT}</span></button>
+                    <!-- END: weight -->
                 </td>
                 <td class="text-left"><a title="{LANG.users}" href="{LOOP.link_userlist}">{LOOP.title}</a></td>
                 <td>{LOOP.add_time}</td>
                 <td>{LOOP.exp_time}</td>
-                <td>{LOOP.number}</td>
-                <td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
-                <td>
+                <td><strong class="text-danger">{LOOP.number}</strong></td>
+                <td class="text-center"><input data-id="{LOOP.group_id}" data-tokend="{TOKEND}" type="checkbox" class="actGroup" value="1"{LOOP.act}{LOOP.disabled}></td>
+                <td class="text-center">
                     <!-- BEGIN: action -->
-                    <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}" class="btn btn-default btn-xs"><i class="fa fa-edit fa-fw"></i>{GLANG.edit}</a>
-                    <!-- BEGIN: delete --><a class="del btn btn-danger btn-xs" href="{GROUP_ID}"><i class="fa fa-trash-o fa-fw"></i>{GLANG.delete}</a><!-- END: delete -->
+                    <a href="{MODULE_URL}={OP}&edit&id={LOOP.group_id}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i> {GLANG.edit}</a>
+                    <!-- BEGIN: delete --><a class="delGroup btn btn-danger btn-xs" href="#" data-id="{LOOP.group_id}" data-tokend="{TOKEND}"><i class="fa fa-trash-o"></i> {GLANG.delete}</a><!-- END: delete -->
                     <!-- END: action -->
                 </td>
             </tr>
@@ -240,76 +239,39 @@
     </table>
 </div>
 <!-- BEGIN: action_js -->
+<div class="form-group">
+    <a class="btn btn-danger" href="#" data-toggle="delInactiveGroup" data-tokend="{TOKEND}" data-msgconfirm="{LANG.delConfirm} ?"><i class="fa fa-trash-o" aria-hidden="true"></i> {LANG.group_del_inactive}</a>
+</div>
 <script type="text/javascript">
-//<![CDATA[
-$("a.del").click(function() {
-    confirm("{LANG.delConfirm} ?") && $.ajax({
-        type : "POST",
-        url : "{MODULE_URL}={OP}",
-        data : "del=" + $(this).attr("href"),
-        success : function(a) {
-            a == "OK" ? window.location.href = window.location.href : alert(a)
-        }
+$(document).ready(function() {
+    $("a.delGroup").click(function(e) {
+        e.preventDefault();
+        confirm("{LANG.delConfirm} ?") && $.ajax({
+            type : "POST",
+            url : "{MODULE_URL}={OP}",
+            data : "del=" + $(this).data('id') + '&tokend=' + $(this).data('tokend'),
+            success : function(a) {
+                a == "OK" ? location.reload() : alert(a);
+            }
+        });
     });
-    return false
-});
-$("select.newWeight").change(function() {
-    var a = $(this).attr("name").split("_"), b = $(this).val(), c = this, a = a[1];
-    $("#pageContent input, #pageContent select").attr("disabled", "disabled");
-    $.ajax({
-        type : "POST",
-        url : "{MODULE_URL}={OP}",
-        data : "cWeight=" + b + "&id=" + a,
-        success : function(a) {
-            a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10)) : alert("{LANG.errorChangeWeight}");
-            $("#pageContent input, #pageContent select").removeAttr("disabled")
-        }
+    $("input.actGroup").change(function() {
+        var $this = $(this);
+        $this.prop("disabled", true);
+        $.ajax({
+            type : "POST",
+            url : "{MODULE_URL}={OP}",
+            data : "act=" + $this.data('id') + '&tokend=' + $this.data('tokend') + "&rand=" + nv_randomPassword(10),
+            success : function(a) {
+                a = a.split("|");
+                $this.prop("disabled", false);
+                a[0] == "ERROR" && (a[1] == "1" ? $this.prop("checked", true) : $this.prop("checked", false));
+            }
+        });
     });
-    return false
 });
-
-$("input.act").change(function() {
-    var a = $(this).attr("name").split("_"), a = a[1], b = this;
-    $("#pageContent input, #pageContent select").attr("disabled", "disabled");
-    $.ajax({
-        type : "POST",
-        url : "{MODULE_URL}={OP}",
-        data : "act=" + a + "&rand=" + nv_randomPassword(10),
-        success : function(a) {
-            a = a.split("|");
-            $("#pageContent input, #pageContent select").removeAttr("disabled");
-            a[0] == "ERROR" && (a[1] == "1" ? $(b).prop("checked", true) : $(b).prop("checked", false));
-
-        }
-    });
-    return !1;
-});
-//]]>
 </script>
 <!-- END: action_js -->
-<!-- END: list -->
-
-<!-- BEGIN: main -->
-<div class="myh3">
-    {GLANG.mod_groups}
-</div>
-<div id="pageContent"></div>
-<!-- BEGIN: addnew -->
-<div id="ablist">
-    <input name="addNew" type="button" value="{LANG.nv_admin_add}" class="btn btn-default" />
-</div>
-<!-- END: addnew -->
-<script type="text/javascript">
-    //<![CDATA[
-    $(function() {
-        $("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10));
-    });
-    $("input[name=addNew]").click(function() {
-        window.location.href = "{MODULE_URL}={OP}&add";
-        return !1;
-    });
-    //]]>
-</script>
 <!-- END: main -->
 
 <!-- BEGIN: listUsers -->

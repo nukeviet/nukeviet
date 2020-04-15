@@ -26,7 +26,7 @@
     min-height:400px;
     border: 1px solid #D0D0D0;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     padding: 0
 }
 
@@ -72,41 +72,51 @@
 .users-avupload .img-area{
     position:relative;
     width: 100%;
-	text-align:center;
+    text-align:center;
     padding:10px
 }
 .users-avupload .img-area img{
-	width:100%;
+    width:100%;
 }
 .users-av-wraper .guide{
-	padding:8px;
+    padding:8px;
     background: #D8EAF8;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 .users-av-wraper .exit-bt{
-	position: fixed;
+    position: fixed;
     top: 380px;
     right: 30px
 }
 
 /* EDIT INFO */
 #change-photo{
-	display: none;
+    display: none;
 }
 
 .users-menu > li > a{
     padding: 8px 10px !important;
 }
 
-/*Login-box*/
-.login-box{
+/* LOGIN, REGISTER FORM BOX */
+.login-box {
     width:334px
 }
+
 @media (max-width:399px) {
-    .login-box{
-    width:100%
+    .login-box {
+        width: 100%;
+    }
 }
+
+.user-reg-form .form-detail .form-group > label {
+    font-weight: 500;
+}
+
+.login-box img.logo {
+    max-width: 100%;
+    height: auto;
 }
 
 .openid-btns {

@@ -19,13 +19,8 @@ $contents = '';
 $cache_file = '';
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-$base_url_internal = str_replace('&amp;', '&', $base_url);
-$base_url_rewrite = nv_url_rewrite($base_url_internal, true);
-$page_url_rewrite = ($page > 1) ? nv_url_rewrite($base_url_internal . '/page-' . $page, true) : $base_url_rewrite;
-$request_uri = $_SERVER['REQUEST_URI'];
-if (!($home or $request_uri == $base_url_rewrite or $request_uri == $page_url_rewrite or NV_MAIN_DOMAIN . $request_uri == $base_url_rewrite or NV_MAIN_DOMAIN . $request_uri == $page_url_rewrite)) {
-    $redirect = '<meta http-equiv="Refresh" content="3;URL=' . $base_url_rewrite . '" />';
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
+if (($page < 2 and isset($array_op[0])) or isset($array_op[1])) {
+    nv_redirect_location($base_url);
 }
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
@@ -37,8 +32,8 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 if (empty($contents)) {
     $viewcat = $module_config[$module_name]['indexfile'];
     $show_no_image = $module_config[$module_name]['show_no_image'];
-    $array_catpage = array();
-    $array_cat_other = array();
+    $array_catpage = [];
+    $array_cat_other = [];
 
     if ($viewcat == 'viewcat_none') {
         $contents = '';
@@ -106,7 +101,7 @@ if (empty($contents)) {
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
         $contents = call_user_func($viewcat, $array_catpage, $array_cat_other, $generate_page);
     } elseif ($viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom') {
-        $array_cat = array();
+        $array_cat = [];
 
         $key = 0;
         $db_slave->sqlreset()
@@ -177,7 +172,7 @@ if (empty($contents)) {
         $contents = viewsubcat_main($viewcat, $array_cat);
     } elseif ($viewcat == 'viewcat_two_column') {
         // Cac bai viet phan dau
-        $array_content = $array_catpage = array();
+        $array_content = $array_catpage = [];
 
         // cac bai viet cua cac chu de con
         $key = 0;
@@ -337,7 +332,7 @@ if (empty($contents)) {
 }
 
 if ($page > 1) {
-    $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
 }
 
 include NV_ROOTDIR . '/includes/header.php';

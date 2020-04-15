@@ -757,4 +757,107 @@ $(document).ready(function() {
         var wrp = $(this).parent().parent();
         wrp.find('[type="text"]').focus();
     });
+
+    // Thay đổi thứ tự nhóm
+    var popOverALl = new Array();
+
+    function destroyAllPop() {
+        $.each(popOverALl, function(k, v) {
+            $(v).popover('destroy');
+            $(v).data('havepop', false);
+        });
+        popOverALl = new Array();
+    }
+
+    function getPopoverContent(e) {
+        var keyID = "#tmpgroup_" + $(e).data('mod');
+        var tmpgroup = $(keyID);
+        if (tmpgroup.length && tmpgroup.data('num') != $(e).data('num')) {
+            tmpgroup.remove();
+            tmpgroup = $(keyID);
+        }
+        if (!tmpgroup.length) {
+            $('body').append('<ul id="tmpgroup_' + $(e).data('mod') + '" class="hidden" data-num="' + $(e).data('num') + '"></ul>');
+            tmpgroup = $(keyID);
+            for (i = $(e).data('min'); i <= $(e).data('num'); i++) {
+                tmpgroup.append('<li><a href="#" data-value="' + i + '">' + i + '</a></li>');
+            }
+        }
+        return '<div class="dropdown-tool-ctn"><ul class="dropdown-tool" data-mod="' + $(e).data('mod') + '" data-id="' + $(e).data('id') + '">' + tmpgroup.html() + '</ul></div>';
+    }
+
+    $(document).delegate('[data-toggle="changegroupweight"]', 'click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        popOverALl.push(this);
+        if (!$(this).data('havepop')) {
+            $(this).data('havepop', true);
+            $(this).popover({
+                container: "body",
+                html: true,
+                placement: "bottom",
+                content: getPopoverContent(this),
+                trigger: "manual"
+            });
+            $(this).popover('show');
+            $(this).on('shown.bs.popover', function() {
+                var $this = $(this);
+                var ctn = $('#' + $this.attr('aria-describedby'));
+                var wrapArea = ctn.find('.dropdown-tool-ctn');
+                var wrapContent = ctn.find('.dropdown-tool');
+                wrapContent.find('[data-value="' + $this.data('current') + '"]').addClass('active');
+                if (wrapArea.height() < wrapContent.height()) {
+                    var item = wrapContent.find('li:first');
+                    var scrollTop = ($this.data('current') - $this.data('min')) * item.height();
+                    wrapArea.scrollTop(scrollTop);
+                }
+            });
+        }
+    });
+    $(document).delegate('.dropdown-tool a', 'click', function(e) {
+        e.preventDefault();
+        destroyAllPop();
+        var $this = $(this);
+        var ctn = $this.parent().parent();
+        var btn = $('#group_' + ctn.data('mod') + '_' + ctn.data('id'));
+        btn.find('span.text').html('<i class="fa fa-spinner fa-spin fa-fw"></i>' + $this.html());
+        btn.prop('disabled', true);
+        $.post(
+            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+            'id=' + ctn.data('id') + '&cWeight=' + $this.data('value') + '&tokend=' + btn.data('tokend'),
+            function(res) {
+                if (res != 'OK') {
+                    alert(btn.data('msgerror'));
+                }
+                location.reload();
+            }
+        );
+    });
+    // Các thao tác với popover
+    $(document).delegate('div.popover', 'click', function(e) {
+        e.stopPropagation();
+    });
+    $(window).on('click', function() {
+        destroyAllPop();
+    });
+
+    // Xóa các nhóm ngưng kích hoạt
+    $('[data-toggle="delInactiveGroup"]').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($this.data('busy')) {
+            return false;
+        }
+        if (confirm($this.data('msgconfirm'))) {
+            $this.data('busy', true);
+            $.post(
+                script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                'deleteinactive=1&tokend=' + $this.data('tokend'),
+                function(res) {
+                    alert(res);
+                    location.reload();
+                }
+            );
+        }
+    });
 });

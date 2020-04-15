@@ -552,6 +552,10 @@ sup.required {
     width: 100px!important
 }
 
+.min-w100 {
+    min-width: 100px!important;
+}
+
 .w150 {
     width: 150px!important
 }

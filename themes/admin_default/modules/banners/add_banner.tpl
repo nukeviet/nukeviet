@@ -52,6 +52,11 @@
                     <td><input name="{CONTENTS.upload.1}" type="file" /></td>
                 </tr>
                 <tr>
+                    <td>{CONTENTS.upload.2}:</td>
+                    <td>&nbsp;</td>
+                    <td><input name="{CONTENTS.upload.3}" type="file" /></td>
+                </tr>
+                <tr>
                     <td>{CONTENTS.file_alt.0}:</td>
                     <td>&nbsp;</td>
                     <td><input class="form-control w300" name="{CONTENTS.file_alt.1}" type="text" value="{CONTENTS.file_alt.2}" maxlength="{CONTENTS.file_alt.3}" /></td>

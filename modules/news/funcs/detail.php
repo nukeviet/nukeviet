@@ -69,17 +69,14 @@ if (!empty($news_contents)) {
         nv_htmlOutput($contents);
     }
 
-    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-        // Chuyển hướng nếu url bài viết không đúng (do đổi alias bài viết hoặc thay đổi chuyên mục)
+    // Kiểm tra URL, không cho đánh tùy ý phần alias
+    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'];
+    $base_url_rewrite = nv_url_rewrite($base_url, true);
+    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+    if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
         nv_redirect_location($base_url_rewrite);
-    } else {
-        $canonicalUrl = $base_url_rewrite;
     }
-    $canonicalUrl = str_replace('&', '&amp;', $canonicalUrl);
-    $news_contents['link'] = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $news_contents['link'] = $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
     /*
      * Không có quyền xem bài viết thì dừng
@@ -167,16 +164,17 @@ if (!empty($news_contents)) {
             $news_contents['files'] = [];
 
             foreach ($files as $file_id => $file) {
-                $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $lang_module['click_to_download'];
+                $is_localfile = (!nv_is_url($file));
+                $file_title = $is_localfile ? basename($file) : $lang_module['click_to_download'];
                 $news_contents['files'][] = [
                     'title' => $file_title,
                     'key' => md5($file_id . $file_title),
                     'ext' => nv_getextension($file_title),
                     'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                     'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
-                    'url' => (!preg_match("/^http*/", $file)) ? $base_url_rewrite . '?download=1&amp;id=' . $file_id : $file,
-                    'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $file_id,
-                    'urldoc' => (preg_match("/^http*/", $file)) ? $file : 'https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file
+                    'url' => $is_localfile ? ($base_url . '&amp;download=1&amp;id=' . $file_id) : $file,
+                    'urlpdf' => $base_url . '&amp;pdf=1&amp;id=' . $file_id,
+                    'urldoc' => $is_localfile ? $file : ('https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file)
                 ];
             }
         }

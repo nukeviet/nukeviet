@@ -192,7 +192,7 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
 
     // Tieu de khi phan trang
     if ($page > 1) {
-        $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . sprintf($lang_module['page'], ceil($page / $per_page));
+        $page_title .= NV_TITLEBAR_DEFIS . sprintf($lang_module['page'], ceil($page / $per_page));
     }
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);

@@ -22,10 +22,6 @@ if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
     $contents['file_allowed_ext'][] = 'images';
 }
 
-if (preg_match('/flash/', NV_ALLOW_FILES_TYPE)) {
-    $contents['file_allowed_ext'][] = 'flash';
-}
-
 if (empty($contents['file_allowed_ext'])) {
     $contents['upload_blocked'] = $lang_module['upload_blocked'];
 
@@ -118,6 +114,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     } elseif (!is_uploaded_file($_FILES['banner']['tmp_name']) and $array_require_image[0]['require_image'] == 1) {
         $error = $lang_module['file_upload_empty'];
     } else {
+        $imageforswf = '';
+
         if (empty($publ_date)) {
             $publtime = NV_CURRENTTIME;
         } else {
@@ -153,53 +151,35 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $_weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
             $_weight = intval($_weight) + 1;
         }
-        if (!is_uploaded_file($_FILES['banner']['tmp_name'])) {
-            $file_name = 'no_image';
-            $file_ext = 'no_image';
-            $file_mime = 'no_image';
-            $width = 0;
-            $height = 0;
-            $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
-                title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml,
-                add_time, publ_time, exp_time, hits_total, act, weight
-            ) VALUES (
-                :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
-                " . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
-                0, " . $act . ", " . $_weight . "
-            )";
 
-            $data_insert = array();
-            $data_insert['title'] = $title;
-            $data_insert['file_name'] = $file_name;
-            $data_insert['file_ext'] = $file_ext;
-            $data_insert['file_mime'] = $file_mime;
-            $data_insert['file_alt'] = $file_alt;
-            $data_insert['click_url'] = $click_url;
-            $data_insert['target'] = $target;
-            $data_insert['bannerhtml'] = $bannerhtml;
-            $id = $db->insert_id($_sql, 'id', $data_insert);
-        } else {
+        // Upload ảnh trên mobile
+        if (isset($_FILES['imageforswf']) and is_uploaded_file($_FILES['imageforswf']['tmp_name'])) {
             $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $upload->setLanguage($lang_global);
-            $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
-            @unlink($_FILES['banner']['tmp_name']);
+            $upload_info = $upload->save_file($_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
+            @unlink($_FILES['imageforswf']['tmp_name']);
 
             if (!empty($upload_info['error'])) {
                 $error = $upload_info['error'];
             } else {
                 @chmod($upload_info['name'], 0644);
-                $file_name = $upload_info['basename'];
-                $file_ext = $upload_info['ext'];
-                $file_mime = $upload_info['mime'];
-                $width = $upload_info['img_info'][0];
-                $height = $upload_info['img_info'][1];
+                $imageforswf = $upload_info['basename'];
+            }
+        }
 
+        if (empty($error)) {
+            if (!is_uploaded_file($_FILES['banner']['tmp_name'])) {
+                $file_name = 'no_image';
+                $file_ext = 'no_image';
+                $file_mime = 'no_image';
+                $width = 0;
+                $height = 0;
                 $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
-                    title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf,
-                    click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
+                    title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml,
+                    add_time, publ_time, exp_time, hits_total, act, weight
                 ) VALUES (
                     :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
-                    " . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
+                    " . $width . ", " . $height . ", :file_alt, :imageforswf, :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
                     0, " . $act . ", " . $_weight . "
                 )";
 
@@ -209,10 +189,48 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $data_insert['file_ext'] = $file_ext;
                 $data_insert['file_mime'] = $file_mime;
                 $data_insert['file_alt'] = $file_alt;
+                $data_insert['imageforswf'] = $imageforswf;
                 $data_insert['click_url'] = $click_url;
                 $data_insert['target'] = $target;
                 $data_insert['bannerhtml'] = $bannerhtml;
                 $id = $db->insert_id($_sql, 'id', $data_insert);
+            } else {
+                $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                $upload->setLanguage($lang_global);
+                $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
+                @unlink($_FILES['banner']['tmp_name']);
+
+                if (!empty($upload_info['error'])) {
+                    $error = $upload_info['error'];
+                } else {
+                    @chmod($upload_info['name'], 0644);
+                    $file_name = $upload_info['basename'];
+                    $file_ext = $upload_info['ext'];
+                    $file_mime = $upload_info['mime'];
+                    $width = $upload_info['img_info'][0];
+                    $height = $upload_info['img_info'][1];
+
+                    $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+                        title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf,
+                        click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
+                    ) VALUES (
+                        :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
+                        " . $width . ", " . $height . ", :file_alt, :imageforswf, :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
+                        0, " . $act . ", " . $_weight . "
+                    )";
+
+                    $data_insert = array();
+                    $data_insert['title'] = $title;
+                    $data_insert['file_name'] = $file_name;
+                    $data_insert['file_ext'] = $file_ext;
+                    $data_insert['file_mime'] = $file_mime;
+                    $data_insert['file_alt'] = $file_alt;
+                    $data_insert['imageforswf'] = $imageforswf;
+                    $data_insert['click_url'] = $click_url;
+                    $data_insert['target'] = $target;
+                    $data_insert['bannerhtml'] = $bannerhtml;
+                    $id = $db->insert_id($_sql, 'id', $data_insert);
+                }
             }
         }
 
@@ -220,8 +238,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid']);
             nv_CreateXML_bannerPlan();
             $nv_Cache->delMod($module_name);
-            $op2 = ($file_ext == 'swf') ? 'edit_banner' : 'info_banner';
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op2 . '&id=' . $id);
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
         }
     }
 } else {
@@ -236,6 +253,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $exp_date_h = 23;
     $exp_date_m = 59;
     $assign_user = '';
+    $imageforswf = '';
 
     if ($nv_Request->get_bool('pid', 'get') and isset($plans[$nv_Request->get_int('pid', 'get')])) {
         $pid = $nv_Request->get_int('pid', 'get');
@@ -264,7 +282,9 @@ $contents['plan'] = array(
 );
 $contents['upload'] = array(
     sprintf($lang_module['upload'], $contents['file_allowed_ext']),
-    'banner'
+    'banner',
+    $lang_module['imageforswf'],
+    'imageforswf'
 );
 $contents['file_alt'] = array(
     $lang_module['file_alt'],

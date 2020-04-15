@@ -65,34 +65,27 @@
 </div>
 
 <script type="text/javascript">
-    $(function() {
-        $('a[class=delfile]').click(function(event) {
-            event.preventDefault();
-            if (confirm('{LANG.file_del_confirm}')) {
-                var href = $(this).attr('href');
-                $.ajax({
-                    type : 'POST',
-                    url : href,
-                    data : '',
-                    success : function(data) {
-                        alert(data);
-                        window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banner_list';
-                    }
-                });
-            }
-        });
-
-        $("#open_modal_image").on("click", function() {
-            $('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
-            $('#imagemodal .modal-body').html('<img src="' + $(this).data('src') + '" />');
-            $('#imagemodal').modal('show');
-        });
-
-        $("#open_modal_flash").on("click", function() {
-            $('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
-            $('#imagemodal .modal-body').html('<object type="application/x-shockwave-flash" data="' + $(this).data('src') + '" width="' + $(this).data('width') + '"><param name="movie" value="' + $(this).data('src') + '"><param name="wmode" value="transparent"></object>');
-            $('#imagemodal').modal('show');
-        });
+$(function() {
+    $('a[class=delfile]').click(function(event) {
+        event.preventDefault();
+        if (confirm('{LANG.file_del_confirm}')) {
+            var href = $(this).attr('href');
+            $.ajax({
+                type : 'POST',
+                url : href,
+                data : '',
+                success : function(data) {
+                    alert(data);
+                    window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banner_list';
+                }
+            });
+        }
     });
+
+    $(".open_modal_image").on("click", function() {
+        $('#imagemodal .modal-body').html('<div class="text-center"><img class="img-banner-preview" src="' + $(this).data('src') + '"></div>');
+        $('#imagemodal').modal('show');
+    });
+});
 </script>
 <!-- END: main -->

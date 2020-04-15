@@ -36,10 +36,6 @@ if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
     $contents['file_allowed_ext'][] = 'images';
 }
 
-if (preg_match('/flash/', NV_ALLOW_FILES_TYPE)) {
-    $contents['file_allowed_ext'][] = 'flash';
-}
-
 if (empty($contents['file_allowed_ext'])) {
     $contents['upload_blocked'] = $lang_module['upload_blocked'];
 
@@ -82,6 +78,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $bannerhtml = $nv_Request->get_editor('bannerhtml', '', NV_ALLOWED_HTML_TAGS);
     $assign_user = $nv_Request->get_title('assign_user', 'post', '');
     $assign_user_id = $admin_info['userid'];
+    $remove_banner = intval($nv_Request->get_bool('remove_banner', 'post', false));
+    $remove_imageforswf = intval($nv_Request->get_bool('remove_imageforswf', 'post', false));
 
     if (!empty($publ_date) and !preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
         $publ_date = '';
@@ -111,131 +109,150 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 
+    // Upload file ảnh mới
+    $new_tmpbanner = '';
+    $old_banner = $file_name;
+
+    if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
+        $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $upload->setLanguage($lang_global);
+        $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
+        @unlink($_FILES['banner']['tmp_name']);
+
+        if (!empty($upload_info['error'])) {
+            $error = $upload_info['error'];
+        } else {
+            @chmod($upload_info['name'], 0644);
+            $new_tmpbanner = $upload_info['basename'];
+            $file_name = $new_tmpbanner = $upload_info['basename'];
+            $file_ext = $upload_info['ext'];
+            $file_mime = $upload_info['mime'];
+            $width = $upload_info['img_info'][0];
+            $height = $upload_info['img_info'][1];
+        }
+    } elseif ($remove_banner) {
+        $file_name = $file_ext = $file_mime = 'no_image';
+        $width = $height = 0;
+    }
+
+    // Upload ảnh mobile mới
+    $new_tmpmobile_banner = '';
+    $old_mobile_banner = $imageforswf;
+
+    if (isset($_FILES['imageforswf']) and is_uploaded_file($_FILES['imageforswf']['tmp_name'])) {
+        $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $upload->setLanguage($lang_global);
+        $upload_info = $upload->save_file($_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
+        @unlink($_FILES['imageforswf']['tmp_name']);
+
+        if (!empty($upload_info['error'])) {
+            $error = $upload_info['error'];
+        } else {
+            @chmod($upload_info['name'], 0644);
+            $new_tmpmobile_banner = $imageforswf = $upload_info['basename'];
+        }
+    } elseif ($remove_imageforswf) {
+        $imageforswf = '';
+    }
+
     if (empty($title)) {
         $error = $lang_module['title_empty'];
     } elseif (empty($pid) or !isset($plans[$pid])) {
         $error = $lang_module['plan_not_selected'];
     } elseif (!empty($error_assign_user)) {
         $error = $error_assign_user;
-    } elseif (!is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 && empty($file_name)) {
+    } elseif ($array_require_image[0]['require_image'] == 1 and (empty($file_name) or $file_name == 'no_image')) {
         $error = $lang_module['file_upload_empty'];
-    } else {
-        if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
-            $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            $upload->setLanguage($lang_global);
-            $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
-            @unlink($_FILES['banner']['tmp_name']);
-
-            if (!empty($upload_info['error'])) {
-                $error = $upload_info['error'];
-            } else {
-                @chmod($upload_info['name'], 0644);
-
-                if (!empty($file_name) and is_file(NV_ROOTDIR . '/' . $file_name)) {
-                    @nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $file_name);
-                }
-
-                $file_name = $upload_info['basename'];
-                $file_ext = $upload_info['ext'];
-                $file_mime = $upload_info['mime'];
-                $width = $upload_info['img_info'][0];
-                $height = $upload_info['img_info'][1];
-            }
-        }
-        if ($file_ext == 'swf') {
-            if (isset($_FILES['imageforswf']) and is_uploaded_file($_FILES['imageforswf']['tmp_name'])) {
-                $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-                $upload->setLanguage($lang_global);
-                $upload_info = $upload->save_file($_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
-                @unlink($_FILES['imageforswf']['tmp_name']);
-
-                if (!empty($upload_info['error'])) {
-                    $error = $upload_info['error'];
-                } else {
-                    @chmod($upload_info['name'], 0644);
-                    if (!empty($imageforswf) and is_file(NV_ROOTDIR . '/' . $imageforswf)) {
-                        @nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf);
-                    }
-                    $imageforswf = $upload_info['basename'];
-                }
-            }
+    } elseif (empty($error)) {
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
+            $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
+            // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
+            //if ($publtime < $row['add_time']) {
+            //    $publtime = $row['add_time'];
+            //}
         } else {
-            if (!empty($imageforswf) and is_file(NV_ROOTDIR . '/' . $imageforswf)) {
-                @nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf);
-            }
-            $imageforswf = '';
+            $publtime = $publtime = $row['add_time'];
         }
-        if (empty($error)) {
-            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
-                $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
-                // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
-                //if ($publtime < $row['add_time']) {
-                //    $publtime = $row['add_time'];
-                //}
-            } else {
-                $publtime = $publtime = $row['add_time'];
-            }
 
-            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
-                $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
-                if ($exptime <= $publtime) {
-                    $exptime = $publtime;
-                }
-            } else {
-                if (!empty($plans_exp[$pid])) {
-                    $exptime = $publtime + $plans_exp[$pid];
-                } else {
-                    $exptime = 0;
-                }
-            }
-            if ($exptime != 0 and $exptime <= $publtime) {
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
+            $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
+            if ($exptime <= $publtime) {
                 $exptime = $publtime;
             }
-
-            $act = $row['act'];
-            // Quảng cáo đang chờ duyệt và bị đình chỉ thì sửa cái này không làm thay đổi trạng thái
-            if ($publtime > NV_CURRENTTIME) {
-                // Chờ hoạt động
-                $act = ($act != 3 and $act != 4) ? 0 : $act;
-            } elseif ($publtime <= NV_CURRENTTIME and ($exptime <= 0 or $exptime > NV_CURRENTTIME)) {
-                // Hoạt động
-                $act = ($act != 3 and $act != 4) ? 1 : $act;
-            } elseif ($exptime > 0 and $exptime <= NV_CURRENTTIME) {
-                // Hết hạn
-                $act = ($act != 3 and $act != 4) ? 2 : $act;
+        } else {
+            if (!empty($plans_exp[$pid])) {
+                $exptime = $publtime + $plans_exp[$pid];
+            } else {
+                $exptime = 0;
             }
+        }
+        if ($exptime != 0 and $exptime <= $publtime) {
+            $exptime = $publtime;
+        }
 
-            $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . intval($id))->fetchColumn();
+        $act = $row['act'];
+        // Quảng cáo đang chờ duyệt và bị đình chỉ thì sửa cái này không làm thay đổi trạng thái
+        if ($publtime > NV_CURRENTTIME) {
+            // Chờ hoạt động
+            $act = ($act != 3 and $act != 4) ? 0 : $act;
+        } elseif ($publtime <= NV_CURRENTTIME and ($exptime <= 0 or $exptime > NV_CURRENTTIME)) {
+            // Hoạt động
+            $act = ($act != 3 and $act != 4) ? 1 : $act;
+        } elseif ($exptime > 0 and $exptime <= NV_CURRENTTIME) {
+            // Hết hạn
+            $act = ($act != 3 and $act != 4) ? 2 : $act;
+        }
 
-            $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET
-                title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
-                file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
-                width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
-                click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
-                publ_time=' . $publtime . ', exp_time=' . $exptime . ', act=' . $act . '
-            WHERE id=' . $id);
+        $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . intval($id))->fetchColumn();
 
-            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-            $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
-            $stmt->bindParam(':file_ext', $file_ext, PDO::PARAM_STR);
-            $stmt->bindParam(':file_mime', $file_mime, PDO::PARAM_STR);
-            $stmt->bindParam(':file_alt', $file_alt, PDO::PARAM_STR);
-            $stmt->bindParam(':imageforswf', $imageforswf, PDO::PARAM_STR);
-            $stmt->bindParam(':click_url', $click_url, PDO::PARAM_STR);
-            $stmt->bindParam(':target', $target, PDO::PARAM_STR);
-            $stmt->bindParam(':bannerhtml', $bannerhtml, PDO::PARAM_STR, strlen($bannerhtml));
-            $stmt->execute();
+        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET
+            title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
+            file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
+            width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
+            click_url= :click_url, target= :target, bannerhtml=:bannerhtml,
+            publ_time=' . $publtime . ', exp_time=' . $exptime . ', act=' . $act . '
+        WHERE id=' . $id);
 
-            if ($pid_old != $pid) {
-                nv_fix_banner_weight($pid);
-                nv_fix_banner_weight($pid_old);
-            }
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
+        $stmt->bindParam(':file_ext', $file_ext, PDO::PARAM_STR);
+        $stmt->bindParam(':file_mime', $file_mime, PDO::PARAM_STR);
+        $stmt->bindParam(':file_alt', $file_alt, PDO::PARAM_STR);
+        $stmt->bindParam(':imageforswf', $imageforswf, PDO::PARAM_STR);
+        $stmt->bindParam(':click_url', $click_url, PDO::PARAM_STR);
+        $stmt->bindParam(':target', $target, PDO::PARAM_STR);
+        $stmt->bindParam(':bannerhtml', $bannerhtml, PDO::PARAM_STR, strlen($bannerhtml));
+        $stmt->execute();
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_banner', 'bannerid ' . $id, $admin_info['userid']);
-            nv_CreateXML_bannerPlan();
-            $nv_Cache->delMod($module_name);
+        if ($pid_old != $pid) {
+            nv_fix_banner_weight($pid);
+            nv_fix_banner_weight($pid_old);
+        }
 
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
+        // Xóa file cũ
+        if ($file_name != $old_banner and is_file(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $old_banner)) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $old_banner);
+        }
+        if ($imageforswf != $old_mobile_banner and is_file(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $old_mobile_banner)) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $old_mobile_banner);
+        }
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_banner', 'bannerid ' . $id, $admin_info['userid']);
+        nv_CreateXML_bannerPlan();
+        $nv_Cache->delMod($module_name);
+
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id);
+    }
+
+    if (!empty($error)) {
+        // Xóa file upload tạm
+        if (!empty($new_tmpbanner) and is_file(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $new_tmpbanner)) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $new_tmpbanner);
+        }
+
+        // Xóa file banner mobile tạm
+        if (!empty($new_tmpmobile_banner) and is_file(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $new_tmpmobile_banner)) {
+            nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $new_tmpmobile_banner);
         }
     }
 } else {
@@ -245,6 +262,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $click_url = $row['click_url'];
     $target = $row['target'];
     $bannerhtml = $row['bannerhtml'];
+    $remove_banner = 0;
+    $remove_imageforswf = 0;
 
     if (!empty($row['publ_time'])) {
         $publ_date = date('d/m/Y', $row['publ_time']);
@@ -302,15 +321,17 @@ if ($file_ext != 'no_image') {
     $contents['file_name'] = array(
         $lang_module['file_name'],
         NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name,
-        "data-width=" . $width . " id=" . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . "",
+        "class=\"open_modal_image\"",
         NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif",
         $lang_global['show_picture'],
-        $imageforswf,
-        NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif"
     );
 } else {
     $contents['file_name'] = array($lang_module['file_name'], '');
 }
+$contents['imageforswf'] = [
+    $imageforswf,
+    NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif"
+];
 
 $contents['upload'] = array(
     sprintf($lang_module['re_upload'], $contents['file_allowed_ext']),
@@ -354,6 +375,8 @@ $contents['exp_date'] = array(
 );
 
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
+$contents['remove_banner'] = $remove_banner;
+$contents['remove_imageforswf'] = $remove_imageforswf;
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
