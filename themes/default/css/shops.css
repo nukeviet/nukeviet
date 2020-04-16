@@ -11,6 +11,10 @@
     display: inline-block!important;
 }
 
+.w-100 {
+    width: 100%!important;
+}
+
 /* Cat Filter */
 .s-cat-fillter .form-control {
     width: auto;

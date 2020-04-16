@@ -67,7 +67,7 @@
     </div>
     <!-- END: loop -->
     <!-- BEGIN: page -->
-    <div class="text-center">{PAGE}</div>
+    <div class="text-center w-100 gen-page">{PAGE}</div>
     <!-- END: page -->
 </div>
 <!-- BEGIN: tooltip_js -->
