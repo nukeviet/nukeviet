@@ -82,36 +82,56 @@ function nv_template_view_home($array_data, $compare_id, $pages = '', $sort = 0,
         }
         $xtpl->parse('main.viewall');
     } elseif ($pro_config['home_data'] == 'cat' || $pro_config['home_data'] == 'group') {
-        if (!empty($array_data)) {
-            foreach ($array_data as $data_row) {
-                if ($data_row['num_pro'] > 0) {
-                    $xtpl->assign('TITLE_CATALOG', $data_row['title']);
-                    $xtpl->assign('LINK_CATALOG', $data_row['link']);
-                    $xtpl->assign('NUM_PRO', $data_row['num_pro']);
+        $xtpl->assign('CONTENT', nv_template_main_cat($array_data, $pages, $viewtype));
+        $xtpl->parse('main.viewcat');
+    }
 
-                    if (function_exists('nv_template_' . $viewtype)) {
-                        $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $data_row['data'], $pages));
-                    }
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
 
-                    if (!empty($data_row['subcatid'])) {
-                        $data_row['subcatid'] = explode(',', $data_row['subcatid']);
-                        foreach ($data_row['subcatid'] as $subcatid) {
-                            $items = $global_array_shops_cat[$subcatid];
-                            if ($items['inhome']) {
-                                $xtpl->assign('SUBCAT', $global_array_shops_cat[$subcatid]);
-                                $xtpl->parse('main.viewcat.catalogs.subcatloop');
-                            }
+/**
+ * @param array $array_data
+ * @param string $pages
+ * @param string $viewtype
+ * @return string
+ */
+function nv_template_main_cat($array_data, $pages = '', $viewtype = 'viewgrid')
+{
+    global $module_info, $module_file, $lang_module, $lang_global, $global_array_shops_cat;
+
+    $xtpl = new XTemplate('main_cat.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', $lang_module);
+
+    if (!empty($array_data)) {
+        foreach ($array_data as $data_row) {
+            if ($data_row['num_pro'] > 0) {
+                $xtpl->assign('TITLE_CATALOG', $data_row['title']);
+                $xtpl->assign('LINK_CATALOG', $data_row['link']);
+                $xtpl->assign('NUM_PRO', $data_row['num_pro']);
+
+                if (function_exists('nv_template_' . $viewtype)) {
+                    $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $data_row['data'], $pages));
+                }
+
+                if (!empty($data_row['subcatid'])) {
+                    $data_row['subcatid'] = explode(',', $data_row['subcatid']);
+                    foreach ($data_row['subcatid'] as $subcatid) {
+                        $items = $global_array_shops_cat[$subcatid];
+                        if ($items['inhome']) {
+                            $xtpl->assign('SUBCAT', $global_array_shops_cat[$subcatid]);
+                            $xtpl->parse('main.loop.subcatloop');
                         }
                     }
-
-                    if ($data_row['num_pro'] > $data_row['num_link']) {
-                        $xtpl->parse('main.viewcat.catalogs.view_next');
-                    }
-                    $xtpl->parse('main.viewcat.catalogs');
                 }
+
+                if ($data_row['num_pro'] > $data_row['num_link']) {
+                    $xtpl->parse('main.loop.view_next');
+                }
+                $xtpl->parse('main.loop');
             }
         }
-        $xtpl->parse('main.viewcat');
     }
 
     $xtpl->parse('main');
@@ -1923,6 +1943,7 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
     $xtpl->assign('CAT_NAME', $data_content['title']);
     $xtpl->assign('COUNT', $data_content['count']);
 
+    // Hiển thị phần giới thiệu loại sản phẩm
     if ($op != 'group') {
         if (($global_array_shops_cat[$data_content['id']]['viewdescriptionhtml'] and $page == 1) or $global_array_shops_cat[$data_content['id']]['viewdescriptionhtml'] == 2) {
             $xtpl->assign('DESCRIPTIONHTML', $global_array_shops_cat[$data_content['id']]['descriptionhtml']);
@@ -1943,6 +1964,7 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
         }
     }
 
+    // Hiển thị phần sắp xếp sản phẩm
     if ($pro_config['show_displays'] == 1) {
         foreach ($array_displays as $k => $array_displays_i) {
             $se = '';
@@ -1973,7 +1995,9 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
         $xtpl->parse('main.displays');
     }
 
-    if (function_exists('nv_template_' . $viewtype)) {
+    if ($global_array_shops_cat[$data_content['id']]['viewcat'] == 'view_home_cat') {
+        $xtpl->assign('CONTENT', nv_template_main_cat($data_content['data']));
+    } elseif (function_exists('nv_template_' . $viewtype)) {
         $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $data_content['data'], $pages));
     }
 

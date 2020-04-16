@@ -234,20 +234,12 @@ if (empty($contents)) {
 
                 while (list ($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $showprice, $gift_content, $gift_from, $gift_to) = $result->fetch(3)) {
                     if ($homeimgthumb == 1) {
-                        //image thumb
-
                         $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
                     } elseif ($homeimgthumb == 2) {
-                        //image file
-
                         $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
                     } elseif ($homeimgthumb == 3) {
-                        //image url
-
                         $thumb = $homeimgfile;
                     } else {
-                        //no image
-
                         $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
                     }
 
