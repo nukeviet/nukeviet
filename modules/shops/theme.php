@@ -1995,7 +1995,7 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
         $xtpl->parse('main.displays');
     }
 
-    if ($global_array_shops_cat[$data_content['id']]['viewcat'] == 'view_home_cat') {
+    if ($op != 'group' and $global_array_shops_cat[$data_content['id']]['viewcat'] == 'view_home_cat') {
         $xtpl->assign('CONTENT', nv_template_main_cat($data_content['data']));
     } elseif (function_exists('nv_template_' . $viewtype)) {
         $xtpl->assign('CONTENT', call_user_func('nv_template_' . $viewtype, $data_content['data'], $pages));
