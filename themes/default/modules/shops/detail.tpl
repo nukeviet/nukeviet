@@ -348,18 +348,29 @@
 </script>
 <!-- END: order_number_limit -->
 <script type="text/javascript">
-    var detail_error_group = '{LANG.detail_error_group}';
-    function check_quantity( _this ){
-        $('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
-        if( _this.is(':checked') ) {
-            _this.parent().css('border-color', 'blue');
-        }
-        $('#group_error').css( 'display', 'none' );
-        <!-- BEGIN: check_price -->
-        check_price( '{proid}', '{pro_unit}' );
-        <!-- END: check_price -->
-        resize_popup();
+var detail_error_group = '{LANG.detail_error_group}';
+function check_quantity(_this) {
+    $('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
+    if (_this.is(':checked')) {
+        _this.parent().css('border-color', 'blue');
     }
+    $('#group_error').css( 'display', 'none' );
+    <!-- BEGIN: check_price -->
+    check_price( '{proid}', '{pro_unit}' );
+    <!-- END: check_price -->
+    resize_popup();
+}
+$(document).ready(function() {
+    // Chọn ngay nhóm sản phẩm đầu tiên nếu có 1 nhóm mỗi loại
+    var itemsgroup = $('.itemsgroup');
+    itemsgroup.each(function() {
+        var item = $(this);
+        var radio = $('[type="radio"]', item);
+        if (radio.length == 1) {
+            radio.trigger('click');
+        }
+    });
+});
 </script>
 <!-- BEGIN: popup -->
 <script type="text/javascript">
