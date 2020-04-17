@@ -1964,8 +1964,12 @@ function nv_template_viewcat($data_content, $compare_id, $pages, $sort = 0, $vie
         }
     }
 
-    // Hiển thị phần sắp xếp sản phẩm
-    if ($pro_config['show_displays'] == 1) {
+    /*
+     * Hiển thị phần sắp xếp sản phẩm nếu cấu hình bật
+     * - Trên nhóm sản phẩm
+     * - Trên loại sản phẩm khi không xem theo từng loại con
+     */
+    if (!empty($pro_config['show_displays']) and ($op == 'group' or $global_array_shops_cat[$data_content['id']]['viewcat'] != 'view_home_cat')) {
         foreach ($array_displays as $k => $array_displays_i) {
             $se = '';
             $xtpl->assign('value', $array_displays_i);
