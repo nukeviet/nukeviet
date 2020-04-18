@@ -36,7 +36,7 @@ See [LICENSE](LICENSE) for the full license.
 
 
 
-## Nukeviet Centre for Research and Development
+## NukeViet Centre for Research and Development
 VIETNAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY (VINADES.,JSC)
 
 Website: http://vinades.vn | http://nukeviet.vn | http://nukeviet.com
