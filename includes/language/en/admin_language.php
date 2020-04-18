@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['order'] = 'Order';
 $lang_module['nv_lang_data'] = 'Data language';
 $lang_module['site_lang'] = 'Default language';
 $lang_module['nv_lang_interface'] = 'Interface language';
@@ -54,14 +55,14 @@ $lang_module['nv_lang_slsite'] = 'Show Site';
 $lang_module['nv_lang_native_name'] = 'Indigenous languages';
 $lang_module['nv_lang_sl'] = 'Select';
 $lang_module['nv_lang_error_exit'] = 'Announcement: The current language does not have to be read into the database, <br /> <br /> system will automatically read data in a language';
-$lang_module['nv_data_note'] = 'To create a new data language, you need <a title="Enable multi-language: Configuration -> General configuration" href="%s">enable multi-language</a>, to download new language visit <a title="Site Language Translation for NukeViet 4" href="http://translate.nukeviet.vn" target="_blank">Site Language Translation for NukeViet 4</a>';
+$lang_module['nv_data_note'] = 'To download new language visit <a title="Site Language Translation for NukeViet 4" href="http://translate.nukeviet.vn" target="_blank">Site Language Translation for NukeViet 4</a>';
+$lang_module['nv_data_note2'] = 'To create a new data language, you need <a title="Enable multi-language: Configuration -&gt; General configuration" href="%s">enable multi-language</a>.';
 $lang_module['nv_setup'] = 'Installed';
 $lang_module['nv_setup_new'] = 'Setup';
 $lang_module['nv_setup_delete'] = 'Delete data language';
 $lang_module['nv_data_setup'] = 'Data of this language has been installed';
 $lang_module['nv_data_setup_ok'] = 'Successful installation, the system will move to site configuration';
-$lang_module['nv_lang_readok'] = 'Done reading the language interface, the system will automatically switch to the file list';
-$lang_module['nv_lang_copyok'] = 'Done creating the language interface, the system will automatically switch to the file list.';
+$lang_module['nv_lang_readok'] = 'Done reading the language interface, the system will automatically switch to the file list. Click here if you wait too long';
 $lang_module['nv_lang_deleteok'] = 'Delete interface language successful';
 $lang_module['nv_lang_wite_ok'] = 'Create interface language successful';
 $lang_module['nv_lang_delete'] = 'Delete interface language';
@@ -80,3 +81,5 @@ $lang_module['nv_check_type_2'] = 'Check all';
 $lang_module['nv_lang_check_title'] = 'Check the language has not been translated';
 $lang_module['countries'] = 'Language by country';
 $lang_module['countries_name'] = 'Country';
+$lang_module['lang_installed'] = 'Installed language';
+$lang_module['lang_can_install'] = 'Language is not installed';

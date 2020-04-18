@@ -157,7 +157,15 @@
 					<td><strong>{LANG.icon}</strong></td>
 					<td>
 						<input class="form-control w200 pull-left" type="text" name="icon" id="icon" value="{DATA.icon}"/>
-						&nbsp;<input id="select-img-menurow" type="button" value="Browse" name="selectimg" class="btn btn-info" />
+						&nbsp;<input type="button" value="Browse" class="btn btn-info selectimg" data-area="icon" />
+					</td>
+                    <td>&nbsp;</td>
+				</tr>
+                <tr>
+					<td><strong>{LANG.image}</strong></td>
+					<td>
+						<input class="form-control w200 pull-left" type="text" name="image" id="image" value="{DATA.image}"/>
+						&nbsp;<input type="button" value="Browse" class="btn btn-info selectimg" data-area="image" />
 					</td>
                     <td>&nbsp;</td>
 				</tr>
@@ -209,7 +217,7 @@
 var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
 $(document).ready(function() {
-	$("#parentid, #module_name_page").select2();
+	$("#parentid, #module_name_page, select[name='module_name']").select2();
 });
 </script>
 <!-- END: main -->

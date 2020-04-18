@@ -17,6 +17,7 @@ $sql_drop_module = array();
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_supporter";
 
 $sql_create_module = $sql_drop_module;
 
@@ -50,9 +51,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  send_time int(11) unsigned NOT NULL DEFAULT '0',
  sender_id mediumint(8) unsigned NOT NULL DEFAULT '0',
  sender_name varchar(100) NOT NULL,
+ sender_address varchar(250) NOT NULL,
  sender_email varchar(100) NOT NULL,
  sender_phone varchar(20) DEFAULT '',
- sender_ip varchar(15) NOT NULL,
+ sender_ip varchar(39) NOT NULL DEFAULT '',
  is_read tinyint(1) unsigned NOT NULL DEFAULT '0',
  is_reply tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
@@ -68,3 +70,20 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (rid),
  KEY id (id)
 ) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_supporter (
+ id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+ departmentid smallint(5) unsigned NOT NULL,
+ full_name varchar(255) NOT NULL,
+ image varchar(255) NOT NULL  DEFAULT '',
+ phone varchar(255) NOT NULL,
+ email varchar(100) NOT NULL,
+ others text NOT NULL,
+ act tinyint(1) unsigned NOT NULL DEFAULT '1',
+ weight smallint(5) NOT NULl,
+ PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+// Cấu hình mặc định của module
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'bodytext', '')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sendcopymode', '0')";

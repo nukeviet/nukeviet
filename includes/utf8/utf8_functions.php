@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 23/8/2010, 0:13
@@ -118,7 +118,7 @@ function unicode_to_utf8($str)
  */
 function nv_str_split($str, $split_len = 1)
 {
-    if (! is_int($split_len) || $split_len < 1) {
+    if (! is_int($split_len) or $split_len < 1) {
         return false;
     }
 
@@ -142,7 +142,7 @@ function nv_str_split($str, $split_len = 1)
  */
 function nv_strspn($str, $mask, $start = null, $length = null)
 {
-    if ($start !== null || $length !== null) {
+    if ($start !== null or $length !== null) {
         $str = nv_substr($str, $start, $length);
     }
 
@@ -262,16 +262,27 @@ function change_alias($alias)
 }
 
 /**
+ * change_alias_tags()
+ *
+ * @return
+ */
+function change_alias_tags($alias)
+{
+    // Pho phép dấu .
+    $search = ['&lt;lt;', '&gt;gt;', '&#039;', '&quot;', '&lt;', '&gt;', '!', '*', '\'', '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '#', '[', ']', '"', '%', '-', '_', '<', '>', '\\', '^', '`', '{', '|', '}', '~'];
+    $alias = preg_replace(['/[ ]+/u', '/^[\-]+/u', '/[\-]+$/u'], ['-', '', ''], str_replace($search, ' ', $alias));
+    return $alias;
+}
+
+/**
  * nv_clean60()
  *
  * @param mixed $string
  * @param integer $num
  * @return
  */
-function nv_clean60($string, $num = 60, $specialchars = false)
+function nv_clean60($string, $num = 60, $specialchars = true)
 {
-    global $global_config;
-
     $string = nv_unhtmlspecialchars($string);
 
     $len = nv_strlen($string);
@@ -285,10 +296,10 @@ function nv_clean60($string, $num = 60, $specialchars = false)
             $string = nv_substr($string, 0, $num) . '...';
         }
     }
-    
+
     if ($specialchars) {
         $string = nv_htmlspecialchars($string);
     }
-    
+
     return $string;
 }

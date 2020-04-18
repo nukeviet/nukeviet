@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die();
 }
 
@@ -23,7 +23,7 @@ $db_config['prefix'] = 'nv4';
 $db_config['persistent'] = false;
 $db_config['collation'] = '';//utf8_general_ci, utf8mb4_unicode_ci, utf8mb4_vietnamese_ci
 
-$array_data = array();
+$array_data = [];
 $array_data['lang_multi'] = 0;
 $array_data['site_name'] = '';
 $array_data['nv_login'] = '';
@@ -34,8 +34,10 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['version'] = '4.0.29';// NukeViet 4.0
+$global_config['unofficial_mode'] = 0; // Cảnh báo bản thử nghiệm
+$global_config['version'] = '4.3.08'; // NukeViet 4.3
 $global_config['site_email'] = '';
+$global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
@@ -51,6 +53,7 @@ $global_config['idsite'] = 0;
 $global_config['site_timezone'] = 'byCountry';
 $global_config['statistics_timezone'] = '';
 $global_config['gzip_method'] = 1;
+$global_config['rewrite_enable'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
 $global_config['rewrite_optional'] = 0;
@@ -62,33 +65,33 @@ $global_config['str_referer_blocker'] = 0;
 $global_config['lang_multi'] = 1;
 $global_config['lang_geo'] = 0;
 $global_config['site_lang'] = 'en';
-$global_config['engine_allowed'] = array();
+$global_config['engine_allowed'] = [];
 $global_config['site_theme'] = 'default';
 $global_config['gfx_chk'] = 3;
 
 // Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt
 $global_config['nv_unick_type'] = 4;
 
-// Mật khẩu cần kết hợp số và chữ
-$global_config['nv_upass_type'] = 2;
+// Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA
+$global_config['nv_upass_type'] = 3;
 
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
 $global_config['dump_interval'] = 1;
 
-//hashprefix: support LDAP({SSHA}, {SHA}, {MD5}); {NV3}
-$global_config['hashprefix'] = '{SSHA}';
+//hashprefix: support LDAP({SSHA512}, {SSHA256}, {SSHA}, {SHA}, {MD5}); {NV3}
+$global_config['hashprefix'] = '{SSHA512}';
 
 //so ky tu toi da cua password doi voi user
-define('NV_UPASSMAX', 20);
+$global_config['nv_upassmax'] = 32;
 
 //so ky tu toi thieu cua password doi voi user
-define('NV_UPASSMIN', 8);
+$global_config['nv_upassmin'] = 8;
 
 //so ky tu toi da cua ten tai khoan doi voi user
-define('NV_UNICKMAX', 20);
+$global_config['nv_unickmax'] = 20;
 
 //so ky tu toi thieu cua ten tai khoan doi voi user
-define('NV_UNICKMIN', 4);
+$global_config['nv_unickmin'] = 4;
 
 define('NV_LIVE_COOKIE_TIME', 31104000);
 
@@ -98,10 +101,13 @@ define('NV_LIVE_SESSION_TIME', 0);
 define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
 
 //Chống IFRAME
-define('NV_ANTI_IFRAME', 0);
+define('NV_ANTI_IFRAME', 1);
 
 //Chặn các bots nếu agent không có
 define('NV_ANTI_AGENT', 0);
+
+// Chế độ phát triển
+define('NV_DEBUG', 0);
 
 $nv_parse_ini_timezone = array(
     'Pacific/Midway' => array( 'winter_offset' => -39600, 'summer_offset' => -39600 ),
@@ -315,7 +321,7 @@ $nv_parse_ini_timezone = array(
     'Asia/Bangkok' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Jakarta' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Phnom_Penh' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
-    'Asia/Saigon' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
+    'Asia/Ho_Chi_Minh' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Vientiane' => array( 'winter_offset' => 25200, 'summer_offset' => 25200 ),
     'Asia/Krasnoyarsk' => array( 'winter_offset' => 25200, 'summer_offset' => 28800 ),
     'Asia/Brunei' => array( 'winter_offset' => 28800, 'summer_offset' => 28800 ),

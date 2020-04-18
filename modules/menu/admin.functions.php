@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
@@ -13,6 +13,11 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 }
 
 define('NV_IS_FILE_ADMIN', true);
+
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:menu';
+$array_url_instruction['menu'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:menu#lấy_menu_tự_dộng_từ_ten_cac_chuyen_mục_module';
+$array_url_instruction['rows'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:menu#xem_sửa_khối';
 
 $allow_func = array( 'main', 'menu', 'rows', 'link_menu', 'link_module', 'change_weight_row', 'del_row', 'change_active' );
 
@@ -56,9 +61,8 @@ function nv_list_menu()
  */
 function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
 {
-    global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
+    global $db, $lang_global, $module_name, $module_data, $op;
 
-    $array = array();
     $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
 

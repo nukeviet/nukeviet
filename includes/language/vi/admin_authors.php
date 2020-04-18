@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -103,6 +103,7 @@ $lang_module['config'] = 'Cấu hình';
 $lang_module['funcs'] = 'Chức năng';
 $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
+$lang_module['ip_version'] = 'Loại IP';
 
 $lang_module['adminip'] = 'Quản lý IP truy cập khu vực quản trị';
 $lang_module['adminip_ip'] = 'Ip';
@@ -111,7 +112,7 @@ $lang_module['adminip_timeendban'] = 'Thời gian kết thúc';
 $lang_module['adminip_add'] = 'Thêm địa chỉ IP';
 $lang_module['adminip_address'] = 'Địa chỉ';
 $lang_module['adminip_begintime'] = 'Thời gian bắt đầu';
-$lang_module['adminip_endtime'] = 'Thời gian bắt kết thúc';
+$lang_module['adminip_endtime'] = 'Thời gian kết thúc';
 $lang_module['adminip_notice'] = 'Ghi chú';
 $lang_module['save'] = 'Lưu thay đổi';
 $lang_module['adminip_mask_select'] = 'Hãy chọn';
@@ -123,7 +124,6 @@ $lang_module['adminip_edit'] = 'Sửa địa chỉ IP';
 $lang_module['adminip_delete'] = 'Xóa';
 $lang_module['adminip_error_ip'] = 'Hãy nhập Ip được truy cập khu vực quản trị ';
 $lang_module['adminip_error_validip'] = 'Lỗi: Bạn cần nhập IP đúng chuẩn';
-$lang_module['adminip_note'] = 'Chú ý: nếu chọn chế độ Kiểm tra IP, bạn cần nắm được cấu trúc sau: Mỗi số IP được xác định bằng 4 đại lượng A.B.C.D. Nếu số IP của bạn có cả 4 đại lượng A, B, C, D bất biến, hãy chọn giá trị của dòng \'Mask IP\' là 255.255.255.255. Nếu chỉ có A, B, C cố định - chọn 255.255.255.xxx v.v...';
 $lang_module['title_username'] = 'Quản lý tài khoản tường lửa khu vực admin';
 $lang_module['admfirewall'] = 'Kiểm tra tường lửa cho khu vực admin';
 $lang_module['block_admin_ip'] = 'Kiểm tra IP khi truy cập khu vực admin';
@@ -154,3 +154,19 @@ $lang_module['users'] = 'Tài khoản';
 $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';
 $lang_module['custom_title'] = 'Tiêu đề';
+$lang_module['main_module'] = 'Module trang chính';
+$lang_module['themeadmin'] = 'Giao diện người quản trị';
+$lang_module['theme_default'] = 'Mặc định theo cấu hình site';
+
+$lang_module['2step_manager'] = 'Quản lý xác thực hai bước';
+$lang_module['2step_code_off'] = 'Xác thực hai bước bằng ứng dụng đang tắt';
+$lang_module['2step_code_on'] = 'Xác thực hai bước bằng ứng dụng đang bật';
+$lang_module['2step_oauth'] = 'Xác thực hai bước bằng Oauth';
+$lang_module['2step_oauth_gate'] = 'Cổng Oauth';
+$lang_module['2step_oauth_email'] = 'Email sử dụng';
+$lang_module['2step_oauth_empty'] = 'Chưa có tài khoản xác thực nào';
+$lang_module['2step_add_google'] = 'Thêm tài khoản Google';
+$lang_module['2step_add_facebook'] = 'Thêm tài khoản Facebook';
+$lang_module['2step_delete_all'] = 'Gỡ tất cả';
+$lang_module['2step_error_oauth_exists'] = 'Tài khoản này đã có trong danh sách xác thực';
+$lang_module['2step_addtime'] = 'Thêm lúc';

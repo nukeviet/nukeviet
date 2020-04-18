@@ -39,7 +39,7 @@
 <div class="table-responsive margin-bottom-lg">
     <table class="table table-bordered table-striped">
         <colgroup>
- 			<col style="width:30%"/>
+ 			<col style="width:45%"/>
   		</colgroup>
         <tbody>
             <tr>
@@ -71,6 +71,10 @@
             <tr>
                 <td>{LANG.st_login2}</td>
                 <td>{USER.st_login}</td>
+            </tr>
+            <tr>
+                <td>{LANG.2step_status}</td>
+                <td>{USER.active2step} (<a href="{URL_2STEP}">{LANG.2step_link}</a>)</td>
             </tr>
             <tr>
                 <td>{LANG.last_login}</td>

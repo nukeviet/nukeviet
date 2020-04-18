@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -90,6 +90,7 @@ $lang_module['search_modul_title'] = 'Tin tức';
 $lang_module['type_title'] = 'Lựa chọn kiểu tìm kiếm';
 $lang_module['finter_title'] = 'Thời gian';
 $lang_module['source_title'] = 'Nguồn tin';
+$lang_module['tags'] = 'Tags';
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['no_permission'] = 'Bạn không được phép xem bài viết';
 $lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
@@ -138,6 +139,7 @@ $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được n�
 $lang_module['update_content'] = 'Sửa bài viết';
 $lang_module['del_content'] = 'Xóa bài viết';
 $lang_module['no_public'] = 'Chú ý: Bài viết này chưa được xuất bản, chỉ có những người có quyền thao tác mới có thể xem được nội dung.';
+$lang_module['insrss_not_auth'] = 'Tường lửa đã chặn truy cập khu vực này';
 
 $lang_module['status_alert'] = 'Bài viết đang ở trạng thái: %1$s';
 $lang_module['status_0'] = 'Ngưng hiệu lực';
@@ -151,3 +153,10 @@ $lang_module['status_7'] = 'Đang duyệt bài';
 $lang_module['status_8'] = 'Chuyển đăng bài';
 $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
+
+$lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
+$lang_module['click_to_download'] = 'Nhấn vào để tải file.';
+$lang_module['files'] = 'File đính kèm';
+$lang_module['default_layout'] = 'Mặc định';
+$lang_module['download'] = 'Tập tin';
+$lang_module['quick_view_pdf'] = 'Xem trước';

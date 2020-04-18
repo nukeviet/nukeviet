@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -40,6 +40,8 @@ $install_lang['modules']['Page'] = 'Page';
 $install_lang['modules']['Page_for_acp'] = '';
 $install_lang['modules']['freecontent'] = 'Giới thiệu sản phẩm';
 $install_lang['modules']['freecontent_for_acp'] = '';
+$install_lang['modules']['two_step_verification'] = 'Xác thực hai bước';
+$install_lang['modules']['two_step_verification_for_acp'] = '';
 
 $install_lang['modfuncs'] = array();
 $install_lang['modfuncs']['users'] = array();
@@ -47,7 +49,7 @@ $install_lang['modfuncs']['users']['login'] = 'Đăng nhập';
 $install_lang['modfuncs']['users']['register'] = 'Đăng ký';
 $install_lang['modfuncs']['users']['lostpass'] = 'Khôi phục mật khẩu';
 $install_lang['modfuncs']['users']['active'] = 'Kích hoạt tài khoản';
-$install_lang['modfuncs']['users']['editinfo'] = 'Thiếp lập tài khoản';
+$install_lang['modfuncs']['users']['editinfo'] = 'Thiết lập tài khoản';
 $install_lang['modfuncs']['users']['memberlist'] = 'Danh sách thành viên';
 $install_lang['modfuncs']['users']['logout'] = 'Thoát';
 $install_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
@@ -99,7 +101,7 @@ $install_lang['groups']['NukeViet-Admins'] = 'Nhóm những người quản lý 
 $install_lang['groups']['NukeViet-Programmers'] = 'Nhóm Lập trình viên hệ thống NukeViet';
 
 $install_lang['vinades_fullname'] = "Công ty cổ phần phát triển nguồn mở Việt Nam";
-$install_lang['vinades_address'] = "Phòng 2004 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";
+$install_lang['vinades_address'] = "Phòng 1706 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";
 $install_lang['nukeviet_description'] = 'Chia sẻ thành công, kết nối đam mê';
 $install_lang['disable_site_content'] = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
 

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
@@ -12,7 +12,6 @@ if (! defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
-$show_ssl_modules = $nv_Request->get_int('show_ssl_modules', 'post,get', $global_config['ssl_https'] == 3);
 $array_theme_type = array('r', 'd', 'm');
 $submit = $nv_Request->get_string('submit', 'post');
 $errormess = '';
@@ -55,13 +54,12 @@ if ($submit) {
         $array_config['site_keywords'] = (! empty($array_config['site_keywords'])) ? implode(', ', $array_config['site_keywords']) : '';
     }
 
-    $site_logo = $nv_Request->get_title('site_logo', 'post');
+    $site_logo = $nv_Request->get_title('site_logo', 'post', '');
     if (empty($site_logo) or $site_logo == NV_ASSETS_DIR . '/images/logo.png') {
         $array_config['site_logo'] = '';
     } elseif (! nv_is_url($site_logo)) {
         if (nv_is_file($site_logo) === true) {
-            $lu = strlen(NV_BASE_SITEURL);
-            $array_config['site_logo'] = substr($site_logo, $lu);
+            $array_config['site_logo'] = substr($site_logo, strlen(NV_BASE_SITEURL));
         } else {
             $array_config['site_logo'] = '';
         }
@@ -103,10 +101,6 @@ if ($submit) {
         $array_config['disable_site_content'] = $lang_global['disable_site_content'];
     }
 
-    $array_config['ssl_https_modules'] = $nv_Request->get_array('ssl_https_modules', 'post', array());
-    $array_config['ssl_https_modules'] = array_intersect($array_config['ssl_https_modules'], array_keys($site_mods));
-    $array_config['ssl_https_modules'] = empty($array_config['ssl_https_modules']) ? '' : implode(',', $array_config['ssl_https_modules']);
-
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -117,8 +111,7 @@ if ($submit) {
     $nv_Cache->delAll();
 
     if (empty($errormess)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . ($show_ssl_modules ? '&show_ssl_modules=1' : '') . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass());
     } else {
         $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
         $result = $db->query($sql);
@@ -130,8 +123,6 @@ if ($submit) {
                 $module_config[$c_module][$c_config_name] = $c_config_value;
             }
         }
-
-        $global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_intersect(array_map('trim', explode(',', $global_config['ssl_https_modules'])), array_keys($site_mods));
     }
 }
 
@@ -241,18 +232,6 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 $xtpl->assign('DISABLE_SITE_CONTENT', $disable_site_content);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('SHOW_SSL_MODULES', intval($show_ssl_modules));
-
-if (! $show_ssl_modules) {
-    $xtpl->parse('main.ssl_https_modules_hide');
-}
-
-foreach ($site_mods as $_mod_title => $_mod_values) {
-    $xtpl->assign('MOD_TITLE', $_mod_title);
-    $xtpl->assign('MOD_CHECKED', in_array($_mod_title, $global_config['ssl_https_modules']) ? ' checked="checked"' : '');
-
-    $xtpl->parse('main.ssl_https_modules');
-}
 
 if ($errormess != '') {
     $xtpl->assign('ERROR', $errormess);

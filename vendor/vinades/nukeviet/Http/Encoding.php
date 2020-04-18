@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2/3/2012, 9:10
@@ -12,6 +12,7 @@ namespace NukeViet\Http;
 
 class Encoding
 {
+
     /**
      * Encoding::compress()
      *
@@ -20,7 +21,7 @@ class Encoding
      * @param mixed $supports
      * @return
      */
-    public static function compress($raw, $level = 9, $supports = null)
+    public static function compress($raw, $level = 9)
     {
         return gzdeflate($raw, $level);
     }
@@ -32,7 +33,7 @@ class Encoding
      * @param mixed $length
      * @return
      */
-    public static function decompress($compressed, $length = null)
+    public static function decompress($compressed)
     {
         if (empty($compressed)) {
             return $compressed;
@@ -53,11 +54,11 @@ class Encoding
                 return $decompressed;
             }
         }
-        
+
         if (($decompressed = @gzinflate($compressed)) !== false) {
             return $decompressed;
         }
-        
+
         return $compressed;
     }
 
@@ -75,7 +76,7 @@ class Encoding
             $flg = ord(substr($gzData, 3, 1));
             if ($flg > 0) {
                 if ($flg & 4) {
-                    list($xlen) = unpack('v', substr($gzData, $i, 2));
+                    list ($xlen) = unpack('v', substr($gzData, $i, 2));
                     $i = $i + 2 + $xlen;
                 }
 
@@ -121,7 +122,7 @@ class Encoding
         $type = array();
         $compression_enabled = Encoding::is_available();
 
-        if (! $args['decompress']) {
+        if (!$args['decompress']) {
             // decompression specifically disabled
             $compression_enabled = false;
         } elseif ($args['stream']) {
@@ -168,7 +169,7 @@ class Encoding
     public static function should_decode($headers)
     {
         if (is_array($headers)) {
-            if (array_key_exists('content-encoding', $headers) and ! empty($headers['content-encoding'])) {
+            if (array_key_exists('content-encoding', $headers) and !empty($headers['content-encoding'])) {
                 return true;
             }
         } elseif (is_string($headers)) {

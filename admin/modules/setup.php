@@ -2,20 +2,20 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
 $array_site_cat_module = array();
 if ($global_config['idsite']) {
     $_module = $db->query('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
-    if (! empty($_module)) {
+    if (!empty($_module)) {
         $array_site_cat_module = explode(',', $_module);
     }
 }
@@ -25,7 +25,7 @@ $contents = '';
 // Thiet lap module moi
 $setmodule = $nv_Request->get_title('setmodule', 'get', '', 1);
 
-if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
+if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
     if ($nv_Request->get_title('checkss', 'get') == md5('setmodule' . $setmodule . NV_CHECK_SESSION)) {
         $sample = $nv_Request->get_int('sample', 'get', 0);
 
@@ -34,36 +34,40 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
         $sth->execute();
         $modrow = $sth->fetch();
 
-        if (! empty($modrow)) {
-            if (! empty($array_site_cat_module) and ! in_array($modrow['basename'], $array_site_cat_module)) {
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-                die();
+        if (!empty($modrow)) {
+            if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module)) {
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
 
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MODULES_TABLE)->fetchColumn();
             $weight = intval($weight) + 1;
 
             $module_version = array();
+            $custom_title = preg_replace('/(\W+)/i', ' ', $setmodule);
             $version_file = NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/version.php';
 
             if (file_exists($version_file)) {
                 include $version_file;
+                if ($setmodule == $modrow['basename'] and isset($module_version['name'])) {
+                    $custom_title = $module_version['name'];
+                }
             }
 
-            $admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin.functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin/main.php')) ? 1 : 0;
-            $main_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/funcs/main.php')) ? 1 : 0;
-
-            $custom_title = preg_replace('/(\W+)/i', ' ', $setmodule);
+            $_admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin.functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin/main.php')) ? 1 : 0;
+            $_main_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/funcs/main.php')) ? 1 : 0;
+            $_module_data = (strlen($modrow['table_prefix']) > 30) ? trim(substr($modrow['table_prefix'], 0, 20), '_') . '_' . NV_CURRENTTIME : $modrow['table_prefix'];
 
             try {
                 $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . "
-					(title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :module_upload, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '',1)
+					(title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES
+					(:title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '', " . NV_CURRENTTIME . ", " . $_main_file . ", " . $_admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1)
 				");
+
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
-                $sth->bindParam(':module_data', $modrow['table_prefix'], PDO::PARAM_STR);
+                $sth->bindParam(':module_data', $_module_data, PDO::PARAM_STR);
                 $sth->bindParam(':module_upload', $setmodule, PDO::PARAM_STR);
+                $sth->bindParam(':module_theme', $modrow['basename'], PDO::PARAM_STR);
                 $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
                 $sth->execute();
             } catch (PDOException $e) {
@@ -80,14 +84,12 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
                 $sth->execute();
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid']);
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
             }
         }
     }
 
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
 $page_title = $lang_module['modules'];
@@ -168,8 +170,7 @@ foreach ($arr_module_news as $module_name_i => $arr) {
         $module_version['virtual'] = ($module_version['virtual'] == 1) ? 1 : 0;
 
         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (
-			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)'
-        );
+			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
 
         $sth->bindParam(':title', $module_name_i, PDO::PARAM_STR);
         $sth->bindParam(':basename', $module_name_i, PDO::PARAM_STR);
@@ -207,7 +208,7 @@ $array_modules = $array_virtual_modules = $mod_virtual = array();
 
 foreach ($modules_data as $row) {
     if (in_array($row['basename'], $modules_exit)) {
-        if (! empty($array_site_cat_module) and ! in_array($row['basename'], $array_site_cat_module)) {
+        if (!empty($array_site_cat_module) and !in_array($row['basename'], $array_site_cat_module)) {
             continue;
         }
 
@@ -238,12 +239,26 @@ foreach ($modules_data as $row) {
 
 $array_head = array(
     'caption' => $lang_module['module_sys'],
-    'head' => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['version'], $lang_module['settime'], $lang_module['author'], '' )
+    'head' => array(
+        $lang_module['weight'],
+        $lang_module['module_name'],
+        $lang_module['version'],
+        $lang_module['settime'],
+        $lang_module['author'],
+        ''
+    )
 );
 
 $array_virtual_head = array(
     'caption' => $lang_module['vmodule'],
-    'head' => array( $lang_module['weight'], $lang_module['module_name'], $lang_module['vmodule_file'], $lang_module['settime'], $lang_module['vmodule_note'], '' )
+    'head' => array(
+        $lang_module['weight'],
+        $lang_module['module_name'],
+        $lang_module['vmodule_file'],
+        $lang_module['settime'],
+        $lang_module['vmodule_note'],
+        ''
+    )
 );
 
 $contents .= call_user_func('setup_modules', $array_head, $array_modules, $array_virtual_head, $array_virtual_modules);

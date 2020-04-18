@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -41,3 +41,9 @@ $lang_module['os'] = 'Hệ điều hành';
 $lang_module['bot'] = 'Máy chủ tìm kiếm';
 $lang_module['referer'] = 'Đường dẫn đến site';
 $lang_module['refererbysite'] = 'Thống kê Đường dẫn từ site %s';
+$lang_module['access_times'] = 'Lượt truy cập';
+$lang_module['access_times1'] = 'lượt truy cập';
+$lang_module['hour'] = 'Giờ';
+$lang_module['day'] = 'Ngày';
+$lang_module['month'] = 'Tháng';
+$lang_module['year'] = 'Năm';

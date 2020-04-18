@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 5:50
@@ -13,6 +13,9 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 }
 
 define('NV_IS_FILE_EXTENSIONS', true);
+
+//Document
+$array_url_instruction['manage'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:manage';
 
 $menu_top = array(
     'title' => $module_name,
@@ -46,20 +49,12 @@ if ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] 
  */
 function nv_extensions_is_installed($type, $name, $version)
 {
-    global $db;
-
     // Module
     if ($type == 1) {
         if (! is_dir(NV_ROOTDIR . '/modules/' . $name)) {
             return 0;
         }
-
         return 1;
-
-        //$stmt = $db->prepare( 'SELECT version FROM ' . NV_PREFIXLANG . '_setup_extensions WHERE basename= :basename AND basename=title AND type=\'module\'' );
-        //$stmt->bindParam( ':basename', $name, PDO::PARAM_STR );
-        //$stmt->execute();
-        //$row = $stmt->fetch();
     }
     // Theme
     elseif ($type == 2) {
@@ -101,9 +96,9 @@ function is_serialized_string($data)
 
     if ($length < 4) {
         return false;
-    } elseif ($data{1} !== ':') {
+    } elseif ($data[1] !== ':') {
         return false;
-    } elseif ($data{0} !== 'a') {
+    } elseif ($data[0] !== 'a') {
         return false;
     } else {
         return true;

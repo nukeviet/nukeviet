@@ -21,11 +21,11 @@
 <!-- END: removelocalstorage-->
 
 <!-- BEGIN: meta_refresh -->
-<meta http-equiv="refresh" content="2;url={NV_REDIRECT}" />
+<meta http-equiv="refresh" content="{REDRIECT_T1};url={NV_REDIRECT}" />
 <!-- END: meta_refresh -->
 <!-- BEGIN: go_back -->
 <script type="text/javascript">
-	setTimeout('history.back()',2000)
+	setTimeout('history.back()',{REDRIECT_T2})
 </script>
 <!-- END: go_back -->
 

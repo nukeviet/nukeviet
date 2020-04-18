@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -57,10 +57,10 @@ $check_type = $nv_Request->get_int('check_type', 'post,get', 0);
 if ($nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
     $pozlang = $nv_Request->get_array('pozlang', 'post', array());
 
-    if (! empty($pozlang) and isset($language_array[$typelang])) {
+    if (!empty($pozlang) and isset($language_array[$typelang])) {
         foreach ($pozlang as $id => $lang_value) {
             $lang_value = trim(strip_tags($lang_value, NV_ALLOWED_HTML_LANG));
-            if (! empty($lang_value)) {
+            if (!empty($lang_value)) {
                 $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value, update_' . $typelang . '= ' . NV_CURRENTTIME . ' WHERE id= :id');
                 $sth->bindParam(':id', $id, PDO::PARAM_INT);
                 $sth->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
@@ -105,6 +105,7 @@ foreach ($language_array_source as $key) {
 $sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query($sql);
 while (list($idfile_i, $module, $admin_file, ) = $result->fetch(3)) {
+    $module = preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module);
     switch ($admin_file) {
         case '1':
             $langsitename = $lang_module['nv_lang_admin'];
@@ -168,7 +169,7 @@ if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typela
         );
     }
 
-    if (! empty($array_lang_data)) {
+    if (!empty($array_lang_data)) {
         $xtpl->assign('DATA', array(
             'typelang' => $typelang,
             'sourcelang' => $sourcelang,

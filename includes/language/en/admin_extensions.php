@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -135,6 +135,7 @@ $lang_module['autoinstall_uploaded_filelist'] = 'List of file';
 $lang_module['autoinstall_uploaded_num_exists'] = 'The number of duplicate files';
 $lang_module['autoinstall_uploaded_num_invalid'] = 'The number does not match the file structure';
 $lang_module['autoinstall_error_uploadfile'] = 'Error: Can not upload files to the system. Please check back or chmod tmp directory';
+$lang_module['autoinstall_error_uploadfile1'] = 'Error: Unable to upload file to system. Please check that the file size exceeds %s';
 $lang_module['autoinstall_error_downloaded'] = 'Error: Could not find file upload';
 $lang_module['autoinstall_error_createfile'] = 'Error: Unable to save file buffer list. Please check back or chmod tmp directory';
 $lang_module['autoinstall_error_invalidfile'] = 'Error: Invalid File zip';

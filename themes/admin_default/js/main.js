@@ -12,9 +12,9 @@ function timeoutsesscancel() {
         myTimerPage = setTimeout(function() {
             timeoutsessrun();
         }, nv_check_pass_mstime);
-        if (typeof nv_get_notification === "function") { 
+        if (typeof nv_get_notification === "function") {
             nv_get_notification();
-        }        
+        }
     });
 }
 
@@ -22,7 +22,7 @@ function timeoutsessrun() {
     clearInterval(myTimerPage);
     var Timeout = 60;
     document.getElementById('secField').innerHTML = Timeout;
-    jQuery("#timeoutsess").show();
+    $("#timeoutsess").show();
     var msBegin = new Date().getTime();
     myTimersecField = setInterval(function() {
         load_notification = 0;
@@ -31,20 +31,37 @@ function timeoutsessrun() {
         if (ms >= 0) {
             document.getElementById('secField').innerHTML = ms;
         } else {
-        	clearInterval(myTimersecField);
-        	$.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&nocache=" + (new Date).getTime(), function(re) {
-                window.location.reload();
-			});        	
+            clearInterval(myTimersecField);
+            $("#timeoutsess").hide();
+            $.getJSON(nv_base_siteurl + "index.php", {
+                second : "time_login",
+                nocache : (new Date).getTime()
+            }).done(function(json) {
+                if (json.showtimeoutsess == 1) {
+                    $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&system=1&nocache=" + (new Date).getTime(), function(re) {
+                        window.location.reload();
+                    });
+                }
+                else {
+                    myTimerPage = setTimeout(function() {timeoutsessrun();}, json.check_pass_time);
+                }
+            });
         }
     }, 1000);
 }
 
 // ModalShow
-function modalShow(a, b) {
+function modalShow(a, b, callback) {
     "" == a && (a = "&nbsp;");
     $("#sitemodal").find(".modal-title").html(a);
     $("#sitemodal").find(".modal-body").html(b);
-    $("#sitemodal").modal()
+    $("#sitemodal").modal();
+    $('#sitemodal').on('shown.bs.modal', function(e) {
+        if (typeof callback === "function") {
+            callback(this);
+            $(e.currentTarget).unbind('shown');
+        };
+    });
 }
 
 var NV = {
@@ -118,5 +135,5 @@ $(document).ready(function() {
     });
 
     // Bootstrap tooltip
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 });

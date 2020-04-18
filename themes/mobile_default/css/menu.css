@@ -60,7 +60,7 @@
 	color: #fafafa;
 }
 
-*html #navbar_menu li a:hover { /* IE6 only */
+#navbar_menu li a:hover {
 	color: #fafafa;
 }
 

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
@@ -50,12 +50,19 @@ if ($id > 0 and $catid > 0) {
                     $link = NV_MY_DOMAIN . $link;
                 }
                 $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
-                $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+
+                if ($global_config['captcha_type'] == 2) {
+                    $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+                } else {
+                    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+                }
 
                 $to_mail = $nv_Request->get_title('email', 'post', '');
                 $content = $nv_Request->get_title('content', 'post', '', 1);
-                $err_email = nv_check_valid_email($to_mail);
-                $err_youremail = nv_check_valid_email($youremail);
+                $err_email = nv_check_valid_email($to_mail, true);
+                $err_youremail = nv_check_valid_email($youremail, true);
+                $to_mail = $err_email[1];
+                $youremail = $err_youremail[1];
                 $err_name = '';
                 $message = '';
                 $success = '';
@@ -63,7 +70,7 @@ if ($id > 0 and $catid > 0) {
                     $err_name = $lang_global['securitycodeincorrect'];
                 } elseif (empty($name)) {
                     $err_name = $lang_module['sendmail_err_name'];
-                } elseif (empty($err_email) and empty($err_youremail)) {
+                } elseif (empty($err_email[0]) and empty($err_youremail[0])) {
                     $subject = $lang_module['sendmail_subject'] . $name;
                     $message .= $lang_module['sendmail_welcome'] . ' <strong>' . $global_config['site_name'] . '</strong> ' . $lang_module['sendmail_welcome1'] . '<br /><br />' . $content . '<br /><br />' . $hometext . ' <br/><br /><strong>' . $lang_module['sendmail_welcome2'] . '</strong><br />' . $link;
                     $from = array( $name, $youremail );
@@ -76,8 +83,8 @@ if ($id > 0 and $catid > 0) {
                 }
                 $result = array(
                     'err_name' => $err_name,
-                    'err_email' => $err_email,
-                    'err_yourmail' => $err_youremail,
+                    'err_email' => $err_email[0],
+                    'err_yourmail' => $err_youremail[0],
                     'send_success' => $success,
                     'check' => $check
                 );
@@ -102,5 +109,4 @@ if ($id > 0 and $catid > 0) {
         }
     }
 }
-Header('Location: ' . $global_config['site_url']);
-exit();
+nv_redirect_location($global_config['site_url']);

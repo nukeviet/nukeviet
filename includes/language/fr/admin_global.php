@@ -2,15 +2,15 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -71,3 +71,20 @@ $lang_global['phone_note_title'] = 'Règle de déclarer le numéro de téléphon
 $lang_global['phone_note_content'] = 'Le numéro de téléphone est divisé en 2 parties. La première partie est obligée et est utilisée pour l\'affichage sur le site, la deuxième est facultative et est utilisée pour faire les appels un fois qu\'on clique au dessus.La première partie est écrite librement sans utiliser le crochet. La deuxième partie est mise entre les crochets juste après la première partie et ne contient que les caractères suivants: chiffre, étoile, dièse, virgule, point, point-virgule et plus ([0-9\*\#\.\,\;\+]).Par exemple, si vous utiliser <strong>0438211725 (ext 601)</strong>, alors le numéro <strong>0438211725 (ext 601)</strong> sera affiché simplement sur le site. Si vous déclarez <strong>0438211725 (ext 601)[+84438211725,601]</strong>, alors le système va afficher <strong>0438211725 (ext 601)</strong> sur le site et l\'url quand vous cliquer sur ce dernier sera <strong>tel:+84438211725,601</strong>Vous pouvez déclarer plusieurs numéros selon la règle au dessus. Il sont séparé par |.';
 $lang_global['multi_note'] = 'Pouvez déclarer plus qu\'une valeur. Les valeurs sont séparées par les point-virgule';
 $lang_global['multi_email_note'] = 'Pouvez déclarer plus qu\'une valeur. Les valeurs sont séparées par les point-virgule. La première adresse email est considéré comme la principale et qui sera utilisée pour envoyer et recevoir des messages';
+$lang_global['view_all'] = 'voir tous les';
+$lang_global['email'] = 'E-mail';
+$lang_global['phonenumber'] = 'Téléphone';
+$lang_global['admin_pre_logout'] = 'Pas moi, déconnectez-vous';
+$lang_global['admin_hello_2step'] = 'Hé! <strong class="admin-name">%s</strong>, veuillez vérifier votre compte';
+$lang_global['admin_noopts_2step'] = 'Aucune méthode de vérification en deux étapes n\'a été accordée, vous ne pouvez pas vous connecter temporairement à l\'administrateur';
+$lang_global['admin_mactive_2step'] = 'Vous ne pouvez pas vérifier car aucune méthode n\'a encore été activée';
+$lang_global['admin_mactive_2step_choose0'] = 'Veuillez cliquer sur le bouton ci-dessous pour activer la méthode de vérification';
+$lang_global['admin_mactive_2step_choose1'] = 'Veuillez sélectionner l\'une des méthodes de vérification ci-dessous';
+$lang_global['admin_2step_opt_code'] = 'Étape 2 - Code de Vérification';
+$lang_global['admin_2step_opt_facebook'] = 'Compte Facebook';
+$lang_global['admin_2step_opt_google'] = 'Compte Google';
+$lang_global['admin_2step_other'] = 'Autres méthodes';
+$lang_global['admin_oauth_error_getdata'] = 'Erreur: Le système n\'a pas reconnu les données de vérification. Échec de la vérification!';
+$lang_global['admin_oauth_error_email'] = 'Erreur: L\'email de retour n\'est pas valide, vous ne pouvez pas vérifier';
+$lang_global['admin_oauth_error_savenew'] = 'Erreur: Impossible d\'enregistrer les données de vérification';
+$lang_global['admin_oauth_error'] = 'Erreur: La vérification n\'est pas valide, ce compte n\'a pas été autorisé à vérifier';

@@ -2,18 +2,18 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
 $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -52,7 +52,7 @@ $lang_module['answer'] = 'Answer';
 $lang_module['gender'] = 'Gender';
 $lang_module['male'] = 'Male';
 $lang_module['female'] = 'Female';
-$lang_module['NA'] = 'N/A';
+$lang_module['na'] = 'N/A';
 $lang_module['name_show'] = 'Type display name';
 $lang_module['firstname_lastname'] = 'Firstname and Lastname';
 $lang_module['lastname_firstname'] = 'Lastname and Firstname';
@@ -67,9 +67,11 @@ $lang_module['show_email'] = 'Display email';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'Member of group';
 $lang_module['in_group_default'] = 'Group default';
+$lang_module['clear_group_default'] = 'Clear group default';
 $lang_module['is_official'] = 'Is an official member';
 $lang_module['is_official_note'] = 'If not selected, this account will be included in the group of new member registration';
 $lang_module['set_official_note'] = 'To make an official member';
+$lang_module['msgnocheck'] = 'You need to select at least 1 account to perform';
 $lang_module['question'] = 'Secret question';
 $lang_module['addquestion'] = 'Add secret question';
 $lang_module['savequestion'] = 'Save secret question';
@@ -124,7 +126,6 @@ $lang_module['edit_add_error'] = 'Can\'t update member information!';
 $lang_module['edit_error_question'] = 'Empty secret question';
 $lang_module['edit_error_answer'] = 'Empty answer';
 $lang_module['edit_error_group'] = 'Please select group for member';
-$lang_module['edit_error_group_default'] = 'Choose default account groups';
 $lang_module['account_deny_name'] = 'Sorry, Account %s banned.';
 $lang_module['awaiting_active'] = 'Activate';
 $lang_module['delconfirm_message'] = 'Do you realy want to delete selected member?';
@@ -134,9 +135,17 @@ $lang_module['delconfirm_ok'] = 'Ok!';
 $lang_module['delconfirm_email_title'] = 'Email notification to delete account';
 $lang_module['delconfirm_email_content'] = 'Hi %1$s,<br />We are so sorry to delete your account at website %2$s.';
 $lang_module['adduser_email'] = 'Send notification email:';
+$lang_module['adduser_email1'] = 'Send email notification';
+$lang_module['adduser_email1_note'] = 'If selected, after creating a successful account the member who created the account will receive an email notification that the account has been created, including login details and password.';
+$lang_module['adduser_email1_note1'] = 'If selected, after successfully updating the account members will receive an email notification of account changes, including login information and password (if the password is replaced).';
 $lang_module['adduser_email_yes'] = 'Yes';
 $lang_module['adduser_register'] = 'Your account was created';
+$lang_module['adduser_register1'] = 'Your account has been updated';
 $lang_module['adduser_register_info'] = 'Hi %1$s,<br />Your account at website %2$s activated. Your login information:<br />URL: <a href="%3$s">%3$s</a><br />Account: %4$s<br />Password: %5$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
+$lang_module['adduser_register_info1'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been created. Here are the logins: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s<br /> < Password: %5$s<br /><br />We recommend that you change your password before using your account. <br /> <br /> This is an automated message sent to Your email box from %2$s. website. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
+$lang_module['adduser_register_info2'] = 'Hello %1$s,<br /><br /> Your account at website %2$s has been updated. Here are the new login information: <br /><br />URL: <a href="%3$s">%3$s</a><br /> Account Name: %4$s';
+$lang_module['adduser_register_info3'] = '<br /> Password: %1$s';
+$lang_module['adduser_register_info4'] = '<br /> <br /> This is an automated message sent to your email from %1$s. If you do not understand the content of this letter, simply delete it. <br /> <br /> Site Admin';
 $lang_module['openid_servers'] = 'Oauth accepted list';
 $lang_module['openid_processing'] = 'The default processing mode after Oauth login';
 $lang_module['openid_processing_0'] = 'Users can choose the mode of processing';
@@ -164,6 +173,7 @@ $lang_module['group_type_2'] = 'Nhóm tham gia tự do';
 $lang_module['group_color'] = 'Colour group';
 $lang_module['group_avatar'] = 'Avatar group';
 $lang_module['group_is_default'] = 'Default groups when members register';
+$lang_module['group_del_inactive'] = 'Delete inactive groups';
 $lang_module['siteus'] = 'Allow subsite add members to the group';
 $lang_module['users'] = 'User';
 $lang_module['promote'] = 'Promote';
@@ -193,6 +203,7 @@ $lang_module['add_user'] = 'Member %1$s group %2$s';
 $lang_module['exclude_user'] = 'Delete member %1$s in group %2$s';
 $lang_module['siteinfo_user'] = 'Members';
 $lang_module['siteinfo_waiting'] = 'Unactive members';
+$lang_module['siteinfo_editcensor'] = 'Users waiting for moderation of personal information';
 $lang_module['pagetitle'] = 'Get Member ID';
 $lang_module['pagetitle1'] = 'Search Member ID';
 $lang_module['search'] = 'Find Member';
@@ -327,6 +338,10 @@ $lang_module['field_options_choicesql_table'] = 'Select the data table';
 $lang_module['field_options_choicesql_column'] = 'Select the column data';
 $lang_module['field_options_choicesql_key'] = 'Select columns as key';
 $lang_module['field_options_choicesql_val'] = 'Select column as value';
+$lang_module['field_options_choicesql_order'] = 'Select the sort column';
+$lang_module['field_options_choicesql_sort'] = 'Select sorting style';
+$lang_module['field_options_choicesql_sort_asc'] = 'Ascending';
+$lang_module['field_options_choicesql_sort_desc'] = 'Descending';
 $lang_module['field_sql_choices_empty'] = 'Error: Selection retrieve data from the database is not full';
 $lang_module['oauth_config'] = 'Configure login, register width %s';
 $lang_module['oauth_client_id'] = 'App ID/API Key';
@@ -417,7 +432,76 @@ $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['safe_active_info'] = 'Your account is in safe mode,  all the features to edit your account information is protected.';
 $lang_module['safe_deactivate'] = 'Safe mode turn off';
 $lang_module['group_description'] = 'Description';
-$lang_module['group_description_empty'] = 'Take a brief description of the group.';
 $lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
 $lang_module['active_group_newusers'] = 'Enable new member';
 $lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';
+$lang_module['active_editinfo_censor'] = 'Turn on edit censor';
+$lang_module['active_editinfo_censor_note'] = 'If this function is enabled, all accounts that edit the information themselves will be moderated before being displayed, not applicable to editing the username, email, avatar, team leader, administrator edit. member information. When this feature is turned off, the administrative moderation menu will be hidden to save space, but you can still censor';
+$lang_module['active_editinfo_censor_note1'] = '<a href="%s">here</a>';
+$lang_module['active_user_logs'] = 'Log the log, log out of the member';
+$lang_module['user_openid_mamager'] = 'Manage OpenID & Oauth';
+$lang_module['user_2step_mamager'] = 'Manage two-step authentication';
+$lang_module['user_2step_of'] = 'Manage two-step member authentication:';
+$lang_module['user_2step_off'] = 'Two-step authentication is off';
+$lang_module['user_2step_turnoff'] = 'Turn off two-step authentication';
+$lang_module['user_2step_turnoff_info'] = 'Two-step authentication is required for some regions. If you turn off, the member will have to force it back on';
+$lang_module['user_2step_codes'] = 'Backup code';
+$lang_module['user_2step_newcodes'] = 'New backup code';
+$lang_module['user_2step_codes_timecreat'] = 'Creation time';
+$lang_module['user_2step_codes_timeuse'] = 'Time to use';
+$lang_module['user_2step_codes_s0'] = 'Not used yet';
+$lang_module['user_2step_codes_s1'] = 'Used';
+$lang_module['user_2step_reset'] = 'Generate backup codes';
+$lang_module['user_2step_sendmail'] = 'Email a new backup code for members';
+$lang_module['user_2step_bodymail'] = 'Hello %1$s,<br /><br /> backup code to your account at the website %2$s has been changed. Here is a new backup code: <br /><br />%3$s<br /><br /> You keep your backup safe. If you lose your phone and lose your backup code, you will no longer be able to access your account. <br /><br /> This is an automated message sent to your e-mail from website %2$s. If you do not understand the content of this letter, simply delete it. <br /><br /> Site Admin';
+$lang_module['user_oauthmanager'] = 'Manage Oauth, OpenID members';
+$lang_module['user_oauthmanager_list'] = 'Oauth list, OpenID is using the member';
+$lang_module['user_oauthmanager_empty'] = 'This user does not have any OpenID or Oauth';
+$lang_module['user_oauthmanager_gate'] = 'Port name';
+$lang_module['user_oauthmanager_email'] = 'Email use';
+$lang_module['user_oauthmanager_deleteall'] = 'Delete all';
+$lang_module['min_old_user'] = 'Minimum age to join members';
+$lang_module['error_system'] = '%s can not be empty';
+$lang_module['old_min_user_error'] = 'Your age is under %s so it is not old enough to register';
+$lang_module['two_step_verification_require_admin'] = 'Mandatory two-step authentication of the admin area';
+$lang_module['two_step_verification_require_site'] = 'Two-step authentication is required outside the site';
+$lang_module['two_step_verification_require_admindefault'] = 'Security settings are required to be enabled in the admin area, though not enabled here. Administrators still have to enable two-step authentication to log in.';
+$lang_module['two_step_verification_require_sitedefault'] = 'The security setting is asking to be enabled outside the site, even if not enabled. The team member must still enable two-step authentication to log in.';
+$lang_module['notification_new_acount'] = 'Acount %s is wating for active';
+$lang_module['notification_sendactive_fail'] = 'Account %s is awaiting activation because the system could not send email';
+$lang_module['editcensor'] = 'Moderate information';
+$lang_module['editcensor_lastedit'] = 'Last modified';
+$lang_module['editcensor_confirm_approval'] = 'Are you sure to confirm approved? After browsing this information will override current member information';
+$lang_module['editcensor_confirm_denied'] = 'Are you sure to refuse? After denial, this information will be deleted and cannot be restored';
+$lang_module['editcensor_field'] = 'Data fields';
+$lang_module['editcensor_current'] = 'Current value';
+$lang_module['editcensor_new'] = 'New value';
+$lang_module['editcensor_info_basic'] = 'Basic info';
+$lang_module['editcensor_info_custom'] = 'Other info';
+$lang_module['emailverify_sys1'] = 'Account by system';
+$lang_module['emailverify_sys2'] = 'Account activated by admin';
+$lang_module['emailverify_sys3'] = 'Account no activation required';
+$lang_module['emailverify_sys4'] = 'Email has not been verified';
+$lang_module['emailverify_sys5'] = 'Verify email at %s';
+$lang_module['active_obj_1'] = 'Activate by system';
+$lang_module['active_obj_2'] = 'Activate via email';
+$lang_module['active_obj_3'] = 'Activate via Oauth %s';
+$lang_module['active_obj_4'] = 'Admin <strong title="%s">%s</strong> activated';
+
+$lang_module['account_active'] = 'Activate information';
+$lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br /><br />Activate expired on %6$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
+
+$lang_module['userwait_resend_email'] = 'Resend the activation email';
+$lang_module['userwait_resend_per_email'] = 'Number of emails once sent';
+$lang_module['userwait_resend_pause_time'] = 'Waiting time between two emails';
+$lang_module['userwait_resend_counter'] = 'The next time the email is sent is';
+$lang_module['userwait_resend_run'] = 'Emailing';
+$lang_module['userwait_resend_note'] = 'Please do not turn off the browser';
+$lang_module['userwait_resend_complete'] = 'The process is complete. Details see below';
+$lang_module['userwait_resend_start'] = 'Start at';
+$lang_module['userwait_resend_end'] = 'Ended at';
+$lang_module['userwait_resend_delete'] = 'Email already exists (has been activated in some way), deleting information waiting for activation';
+$lang_module['userwait_resend_ok'] = 'Resend the activation email';
+$lang_module['userwait_resend_error'] = 'Unable to send email, please check your mail configuration';
+$lang_module['is_email_verified'] = 'Email verification status';
+$lang_module['is_email_verified1'] = 'If checked here, the email status of the account is verified. Otherwise, the status of the account email is unverified';

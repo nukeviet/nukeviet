@@ -2,30 +2,31 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
 $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4';
+$lang_module['titlesetup'] = 'Cài đặt NukeViet';
 $lang_module['select_language'] = 'Lựa chọn ngôn ngữ';
 $lang_module['license'] = 'Bản quyền';
 $lang_module['check_server'] = 'Kiểm tra máy chủ';
 $lang_module['check_chmod'] = 'Kiểm tra việc CHMOD';
 $lang_module['config_database'] = 'Cấu hình cơ sở dữ liệu';
 $lang_module['website_info'] = 'Thông tin website';
+$lang_module['sample_data'] = 'Dữ liệu mẫu';
 $lang_module['done'] = 'Kết thúc';
 $lang_module['select_lang_des'] = 'Hãy lựa chọn ngôn ngữ mà bạn dự định sử dụng trong site';
 $lang_module['choose_lang'] = 'Lựa chọn ngôn ngữ';
@@ -52,13 +53,16 @@ $lang_module['recommnet'] = 'Khuyến cáo';
 $lang_module['request_more'] = 'Yêu cầu thêm (không bắt buộc)';
 $lang_module['turnoff'] = 'Nên tắt';
 $lang_module['turnon'] = 'Nên bật';
+$lang_module['and'] = 'và';
 $lang_module['is_support'] = 'Nên hỗ trợ';
 $lang_module['supports_rewrite'] = 'Hỗ trợ rewrite';
 $lang_module['opendir_support'] = 'PHP hỗ trợ opendir';
 $lang_module['gd_support'] = 'PHP hỗ trợ thư viện xử lý ảnh GD';
-$lang_module['mcrypt_support'] = 'PHP hỗ trợ thư viện mã hóa mcrypt';
+$lang_module['xml_support'] = 'PHP hỗ trợ thư viện xử lý XML';
+$lang_module['openssl_support'] = 'PHP hỗ trợ thư viện mã hóa Openssl';
 $lang_module['session_support'] = 'PHP hỗ trợ session';
 $lang_module['fileuploads_support'] = 'PHP hỗ trợ uploads file';
+$lang_module['json_support'] = 'PHP hỗ trợ JSON';
 $lang_module['dir_noexit'] = 'Không tồn tại';
 $lang_module['dir_not_writable'] = 'Không ghi được';
 $lang_module['dir_not_writable_ip_files'] = 'Không ghi được các file trong thư mục %1$s';
@@ -161,11 +165,13 @@ $lang_module['update_auto_type_1'] = 'Nâng cấp tự động';
 $lang_module['update_auto_type_2'] = 'Nâng cấp nửa tự động';
 $lang_module['update_package_error'] = 'Gói cập nhật này không hợp lệ do đó sẽ không thể nâng cấp được.';
 $lang_module['update_package_delete'] = 'Xóa gói cập nhật';
-$lang_module['update_version_current'] = 'Thông tin phiên bản đang sử dụng';
+$lang_module['update_version_current'] = 'Phiên bản và khả năng thực hiện';
 $lang_module['update_version_current_name'] = 'Số phiên bản';
 $lang_module['update_ability'] = 'Khả năng nâng cấp';
 $lang_module['update_ability_0'] = 'Không thể nâng cấp do không tương thích phiên bản';
 $lang_module['update_ability_1'] = 'Có thể nâng cấp';
+$lang_module['update_ability_2'] = 'Không thể nâng cấp do máy chủ không hỗ trợ phiên bản mới';
+$lang_module['update_ability_3'] = 'Không thể nâng cấp do phiên bản hiện tại không được hỗ trợ và máy chủ không hỗ trợ phiên bản mới';
 $lang_module['update_cannot_start'] = 'Không thể nâng cấp do gói cập nhật không hỗ trợ phiên bản bạn đang sử dụng';
 $lang_module['update_info_start'] = 'Các bước kiểm tra gói cập nhật và kiểm tra tương thích phiên bản đã hoàn tất, bạn có thể thực hiện cập nhật lên phiên bản mới';
 $lang_module['update_or'] = 'hoặc';
@@ -258,3 +264,17 @@ $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại C
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này, vui lòng chọn loại khác';
 $lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
 $lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';
+
+$lang_module['thanks'] = 'Lời cảm ơn';
+$lang_module['thanks_text'] = 'Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đồng hành cũng như đóng góp công sức của mình cho công cuộc phát triển NuKeViet từ trước cho đến nay, mong các bạn tiếp tục phát huy và luôn luôn ủng hộ cũng như tiếp tục chung tay xây dựng NuKeViet ngày càng lớn mạnh.';
+$lang_module['thanks_list_member_all'] = 'Danh sách thành viên:';
+$lang_module['thanks_list_member_other_version'] = 'Danh sách các thành viên đã đóng góp theo từng phiên bản';
+$lang_module['thanks_other_version'] = 'Phiên bản';
+$lang_module['is_unofficial_mode'] = 'Chú ý: Đây là phiên bản dùng để phát triển và thử nghiệm, bạn không nên sử dụng để làm website chính thức';
+
+$lang_module['spdata_name'] = 'Tên gói dữ liệu';
+$lang_module['spdata_compatible'] = 'Gói dữ liệu mẫu này tương thích';
+$lang_module['spdata_incompatible'] = 'Gói dữ liệu mẫu này được xây dựng ở thư mục %s, việc cài đặt site ở thư mục %s sẽ khiến một số link không chính xác';
+$lang_module['spdata_root'] = 'gốc';
+$lang_module['spdata_note'] = 'Chọn gói dữ liệu mẫu bằng cách nhấp vào ô tương ứng bên phải sau đó nhấp nút <strong>Cài đặt</strong>';
+$lang_module['spdata_choose'] = 'Cài đặt';

@@ -2,15 +2,15 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -122,7 +122,6 @@ $lang_module['adminip_edit'] = 'Éditer';
 $lang_module['adminip_delete'] = 'Supprimer';
 $lang_module['adminip_error_ip'] = 'Saisissez IP autorisé de connecter à l\'administration';
 $lang_module['adminip_error_validip'] = 'Erreur: IP invalide';
-$lang_module['adminip_note'] = 'Attention: si vous activez le contrôle de IP, vous devez connaitre la structure des adresses IP: un IP se compose de 4 nombres sous forme A.B.C.D. Si tous ces nombres sont constants, sélectionnez le Masque 255.255.255.255. Si A, B  et C sont invariables, il faut choisir 255.255.255.xxx etc...';
 $lang_module['title_username'] = 'Gestion de compte Parefeu de l\'Administration';
 $lang_module['admfirewall'] = 'Contrôler le Parefeu de l\'Administration';
 $lang_module['block_admin_ip'] = 'Vérifier IP lors de la connexion de l\'Administration';
@@ -151,3 +150,19 @@ $lang_module['users'] = 'Compte';
 $lang_module['number'] = 'Numéro';
 $lang_module['module'] = 'Nom du module';
 $lang_module['custom_title'] = 'Titre';
+$lang_module['main_module'] = 'Module de la page principale';
+$lang_module['themeadmin'] = 'Thème de l\'Administration';
+$lang_module['theme_default'] = 'Défaut';
+$lang_module['2step_manager'] = 'Gestion de la vérification en deux étapes';
+$lang_module['2step_code_off'] = 'La vérification en deux étapes via l\'application est désactivée';
+$lang_module['2step_code_on'] = 'La vérification en deux étapes via l\'application est activée';
+$lang_module['2step_oauth'] = 'Vérification en deux étapes avec Oauth';
+$lang_module['2step_oauth_gate'] = 'Serveur Oauth';
+$lang_module['2step_oauth_email'] = 'Email';
+$lang_module['2step_oauth_empty'] = 'Pas encore de comptes de vérification';
+$lang_module['2step_add_google'] = 'Ajouter un compte Google';
+$lang_module['2step_add_facebook'] = 'Ajouter un compte Facebook';
+$lang_module['2step_delete_all'] = 'Enlever tout';
+$lang_module['2step_error_oauth_exists'] = 'Ce compte est déjà dans la liste de vérification';
+$lang_module['2step_addtime'] = 'Ajouter du temps';
+$lang_module['ip_version'] = 'Version IP';

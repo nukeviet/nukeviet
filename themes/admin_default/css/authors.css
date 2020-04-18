@@ -1,0 +1,36 @@
+.btn-facebook {
+    background-color: #4267b2;
+    border-color: #4267b2;
+    color: #fff;
+}
+
+.btn-facebook:hover,
+.btn-facebook:active,
+.btn-facebook:focus {
+    background-color: #5180e0!important;
+    border-color: #5180e0!important;
+}
+
+.btn-google {
+    background-color: #ea4335;
+    border-color: #ea4335;
+    color: #fff;
+}
+
+.btn-google:hover,
+.btn-google:active,
+.btn-google:focus {
+    background-color: #f2574b!important;
+    border-color: #f2574b!important;
+}
+
+.btn-facebook:active,
+.btn-facebook:focus,
+.btn-facebook:active:focus,
+.btn-facebook:hover,
+.btn-google:active,
+.btn-google:focus,
+.btn-google:active:focus,
+.btn-google:hover {
+    color: #fff!important;
+}

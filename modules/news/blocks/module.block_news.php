@@ -8,33 +8,72 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_news_block_news')) {
+if (!nv_function_exists('nv_news_block_news')) {
+    /**
+     * nv_block_config_news()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news($module, $data_block, $lang_block)
     {
-        $html = '<tr>';
-        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '	<td><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
-        $html .= '<td>';
-        $html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /><br /><br />';
-        $tooltip_position = array( 'top' => $lang_block['tooltip_position_top'], 'bottom' => $lang_block['tooltip_position_bottom'], 'left' => $lang_block['tooltip_position_left'], 'right' => $lang_block['tooltip_position_right'] );
-        $html .= '<span class="text-middle pull-left">' . $lang_block['tooltip_position'] . '&nbsp;</span><select name="config_tooltip_position" class="form-control w100 pull-left">';
+        $tooltip_position = array(
+            'top' => $lang_block['tooltip_position_top'],
+            'bottom' => $lang_block['tooltip_position_bottom'],
+            'left' => $lang_block['tooltip_position_left'],
+            'right' => $lang_block['tooltip_position_right']
+        );
+
+        $html = '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<div class="col-sm-18"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<div class="col-sm-18">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-sm-4">';
+        $html .= '<div class="checkbox"><label><input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></label>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group margin-bottom-sm">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<select name="config_tooltip_position" class="form-control">';
+
         foreach ($tooltip_position as $key => $value) {
             $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
         }
+
         $html .= '</select>';
-        $html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</td>';
-        $html .= '</tr>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="col-sm-10">';
+        $html .= '<div class="input-group">';
+        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_news_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_news_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -48,6 +87,13 @@ if (! nv_function_exists('nv_news_block_news')) {
         return $return;
     }
 
+    /**
+     * nv_news_block_news()
+     *
+     * @param mixed $block_config
+     * @param mixed $mod_data
+     * @return
+     */
     function nv_news_block_news($block_config, $mod_data)
     {
         global $nv_Cache, $module_array_cat, $module_info, $db_slave, $module_config, $global_config, $site_mods;
@@ -55,6 +101,8 @@ if (! nv_function_exists('nv_news_block_news')) {
         $module = $block_config['module'];
         $blockwidth = $module_config[$module]['blockwidth'];
         $show_no_image = $module_config[$module]['show_no_image'];
+        $order_articles_by = ($module_config[$module]['order_articles']) ? 'weight' : 'publtime';
+
         $numrow = (isset($block_config['numrow'])) ? $block_config['numrow'] : 20;
 
         $cache_file = NV_LANG_DATA . '__block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
@@ -64,14 +112,14 @@ if (! nv_function_exists('nv_news_block_news')) {
             $array_block_news = array();
 
             $db_slave->sqlreset()
-                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext')
+                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
                 ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
                 ->where('status= 1')
-                ->order('publtime DESC')
+                ->order($order_articles_by . ' DESC')
                 ->limit($numrow);
             $result = $db_slave->query($db_slave->sql());
 
-            while (list($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext) = $result->fetch(3)) {
+            while (list ($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                 if ($homeimgthumb == 1) {
                     //image thumb
@@ -82,7 +130,7 @@ if (! nv_function_exists('nv_news_block_news')) {
                 } elseif ($homeimgthumb == 3) {
                     //image url
                     $imgurl = $homeimgfile;
-                } elseif (! empty($show_no_image)) {
+                } elseif (!empty($show_no_image)) {
                     //no image
                     $imgurl = NV_BASE_SITEURL . $show_no_image;
                 } else {
@@ -94,7 +142,10 @@ if (! nv_function_exists('nv_news_block_news')) {
                     'link' => $link,
                     'imgurl' => $imgurl,
                     'width' => $blockwidth,
-                    'hometext' => $hometext
+                    'hometext' => $hometext,
+                    'external_link' => $external_link,
+                    'publtime' => $publtime,
+                    'newday' => $module_array_cat[$catid]['newday']
                 );
             }
             $cache = serialize($array_block_news);
@@ -106,19 +157,31 @@ if (! nv_function_exists('nv_news_block_news')) {
         } else {
             $block_theme = 'default';
         }
-        $xtpl = new XTemplate('block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news/');
+        $xtpl = new XTemplate('block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $block_theme);
 
         foreach ($array_block_news as $array_news) {
-            $array_news['hometext'] = nv_clean60($array_news['hometext'], $block_config['tooltip_length'], true);
+            $newday = $array_news['publtime'] + (86400 * $array_news['newday']);
+            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
+            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
+
+            if ($array_news['external_link']) {
+                $array_news['target_blank'] = 'target="_blank"';
+            }
+
             $xtpl->assign('blocknews', $array_news);
-            if (! empty($array_news['imgurl'])) {
+
+            if (!empty($array_news['imgurl'])) {
                 $xtpl->parse('main.newloop.imgblock');
             }
 
-            if (! $block_config['showtooltip']) {
+            if (!$block_config['showtooltip']) {
                 $xtpl->assign('TITLE', 'title="' . $array_news['title'] . '"');
+            }
+
+            if ($newday >= NV_CURRENTTIME) {
+                $xtpl->parse('main.newloop.newday');
             }
 
             $xtpl->parse('main.newloop');
@@ -144,10 +207,9 @@ if (defined('NV_SYSTEM')) {
             unset($module_array_cat[0]);
         } else {
             $module_array_cat = array();
-            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
+            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, newday, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
-            if(!empty($list))
-            {
+            if (!empty($list)) {
                 foreach ($list as $l) {
                     $module_array_cat[$l['catid']] = $l;
                     $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];

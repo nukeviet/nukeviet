@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat WHERE status=1 OR status=2 ORDER BY sort ASC';
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $array_item[$row['catid']] = array(

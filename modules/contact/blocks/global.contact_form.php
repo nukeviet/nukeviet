@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 global $module_name, $site_mods, $global_config, $lang_global;
 
 $content = '';
-if ($module_name != $block_config['module'] && defined('NV_SYSTEM')) {
+if ($module_name != $block_config['module'] and defined('NV_SYSTEM')) {
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/contact/block.contact_form.tpl')) {
         $block_theme = $global_config['module_theme'];
     } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/contact/block.contact_form.tpl')) {

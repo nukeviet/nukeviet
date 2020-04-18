@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_SYSTEM') and ! defined('NV_ADMIN') and ! defined('NV_WYSIWYG')) {
+if (!defined('NV_SYSTEM') and !defined('NV_ADMIN') and !defined('NV_WYSIWYG')) {
     Header('Location: index.php');
     exit();
 }
@@ -32,7 +32,7 @@ if (extension_loaded('suhosin')) {
     $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
 }
 
-$sys_info['ini_set_support'] = (function_exists('ini_set') and ! in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
+$sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
 
 //Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
@@ -44,7 +44,7 @@ require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
-$global_config['my_domains'] = $_SERVER['SERVER_NAME'];
+$global_config['my_domains'] = [$_SERVER['SERVER_NAME']];
 
 // Xac dinh cac tags cho phep
 $global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
@@ -79,7 +79,6 @@ $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
-set_error_handler(array( &$ErrorHandler, 'error_handler' ));
 
 //Ket noi voi cac file cau hinh, function va template
 require NV_ROOTDIR . '/install/ini.php';
@@ -136,8 +135,6 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain;
 //vd: .mydomain1.com
 $global_config['site_url'] = $nv_Request->site_url;
 //vd: http://mydomain1.com/ten_thu_muc_chua_site
-$global_config['my_domains'] = $nv_Request->my_domains;
-//vd: "mydomain1.com,mydomain2.com"
 
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
 //vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/

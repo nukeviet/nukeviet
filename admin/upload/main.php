@@ -22,10 +22,20 @@ $type = $nv_Request->get_string('type', 'get');
 $popup = $nv_Request->get_int('popup', 'get', 0);
 $area = htmlspecialchars(trim($nv_Request->get_string('area', 'get')), ENT_QUOTES);
 $alt = htmlspecialchars(trim($nv_Request->get_string('alt', 'get')), ENT_QUOTES);
+$currentfile = $nv_Request->get_string('currentfile', 'get', '');
 
+$selectfile = '';
+if (!empty($currentfile)) {
+    $selectfile = nv_string_to_filename(pathinfo($currentfile, PATHINFO_BASENAME));
+    $currentfilepath = nv_check_path_upload(pathinfo($currentfile, PATHINFO_DIRNAME));
+    if (!empty($currentfilepath) and !empty($selectfile)) {
+        $currentpath = $currentfilepath;
+    }
+}
 if (empty($currentpath)) {
     $currentpath = NV_UPLOADS_DIR;
 }
+
 if ($type != 'image' and $type != 'flash') {
     $type = 'file';
 }
@@ -34,8 +44,12 @@ $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 
 if ($popup) {
     $lang_module['browse_file'] = $lang_global['browse_file'];
-    $sys_max_size = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
+    $sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
+    if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {
+        $sys_max_size_local = $global_config['nv_overflow_size'];
+    }
 
+    $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -43,8 +57,9 @@ if ($popup) {
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('NV_MAX_SIZE', nv_convertfromBytes($sys_max_size));
-    $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size);
+    $xtpl->assign('NV_MAX_SIZE_REMOTE', nv_convertfromBytes($sys_max_size));
+    $xtpl->assign('NV_MAX_SIZE_LOCAL', nv_convertfromBytes($sys_max_size_local));
+    $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size_local);
     $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
     $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
     $xtpl->assign('NV_MIN_WIDTH', 10);
@@ -55,6 +70,8 @@ if ($popup) {
     $xtpl->assign('AREA', $area);
     $xtpl->assign('ALT', $alt);
     $xtpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
+    $xtpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
+    $xtpl->assign('SELFILE', $selectfile);
 
     $sfile = ($type == 'file') ? ' selected="selected"' : '';
     $simage = ($type == 'image') ? ' selected="selected"' : '';
@@ -82,21 +99,6 @@ if ($popup) {
         $allow_files_type = array( 'flash' );
     } else {
         $allow_files_type = $admin_info['allow_files_type'];
-    }
-
-    $mimes = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
-
-    foreach ($mimes as $mime_type => $file_ext) {
-        if (! in_array($mime_type, $global_config['forbid_mimes']) and in_array($mime_type, $allow_files_type)) {
-            $file_ext = array_diff(array_keys($file_ext), $global_config['forbid_extensions']);
-
-            if (! empty($file_ext)) {
-                $xtpl->assign('MIMI_TYPE', ucfirst($mime_type));
-                $xtpl->assign('MIME_EXTS', implode(',', $file_ext));
-
-                $xtpl->parse('main.mime');
-            }
-        }
     }
 
     $xtpl->assign('UPLOAD_ALT_REQUIRE', ! empty($global_config['upload_alt_require']) ? 'true' : 'false');

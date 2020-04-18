@@ -1,19 +1,19 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -71,3 +71,20 @@ $lang_global['phone_note_title'] = 'Rules of entering phone numbers';
 $lang_global['phone_note_content'] = '<ul><li>Phone number is divided into two parts. The first part is mandatory and for display on the site, the second part is not mandatory, and to make a call when you click on it.</li><li>The first part is expressed freely, but without the square brackets. The second part is in square brackets and contains only the following characters: digits, asterisk, pound sign, commas, periods, semicolons, and the plus sign ([0-9\*\#\.\,\;\+]).</li><li>For example, if you declare <strong>0438211725 (ext 601)</strong>, the number <strong>0438211725 (ext 601)</strong> will simply be displayed on the site. If you declare <strong>0438211725 (ext 601)[+84438211725,601]</strong>, the system will display the number <strong>0438211725 (ext 601)</strong> on the site. When clicked on this number will automatically call the following number <strong>tel:+84438211725,601</strong></li><li>You can declare more phone numbers in accordance with the above regulations. They are separated by |</li></ul>';
 $lang_global['multi_note'] = 'You can enter more than one value, separated by comma';
 $lang_global['multi_email_note'] = 'You can enter more than one value, separated by comma. The first e-mail is considered to be the main email and is used to send and receive mail.';
+$lang_global['view_all'] = 'View all';
+$lang_global['email'] = 'Email';
+$lang_global['phonenumber'] = 'Phone';
+$lang_global['admin_pre_logout'] = 'Not me, log out';
+$lang_global['admin_hello_2step'] = 'Hi <strong class="admin-name">%s</strong>, please verify your account';
+$lang_global['admin_noopts_2step'] = 'No two-step verification method has been granted, temporarily you cannot log in to the administrator';
+$lang_global['admin_mactive_2step'] = 'You cannot verify because no method has been activated yet';
+$lang_global['admin_mactive_2step_choose0'] = 'Please click the button below to activate the verification method';
+$lang_global['admin_mactive_2step_choose1'] = 'Please select one of the verification methods below';
+$lang_global['admin_2step_opt_code'] = '2-Step Verification Code';
+$lang_global['admin_2step_opt_facebook'] = 'Facebook account';
+$lang_global['admin_2step_opt_google'] = 'Google account';
+$lang_global['admin_2step_other'] = 'Other methods';
+$lang_global['admin_oauth_error_getdata'] = 'Error: The system did not recognize the verification data. Verification failed!';
+$lang_global['admin_oauth_error_email'] = 'Error: The return email is not valid, you cannot verification';
+$lang_global['admin_oauth_error_savenew'] = 'Error: Unable to save the verification data';
+$lang_global['admin_oauth_error'] = 'Error: The verification is not valid, this account has not been authorized to verify';

@@ -7,10 +7,11 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'TrueBV\\' => array($vendorDir . '/true/punycode/src'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'OAuth\\' => array($vendorDir . '/and/oauth/src'),
     'NukeViet\\' => array($vendorDir . '/vinades/nukeviet'),
     'League\\Url\\' => array($vendorDir . '/league/url/src'),
-    'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
 );

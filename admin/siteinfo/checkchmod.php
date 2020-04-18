@@ -22,7 +22,7 @@ if (defined('NV_IS_GODADMIN')) {
         $conn_id = ftp_connect($global_config['ftp_server'], $global_config['ftp_port'], 10);
         $login_result = ftp_login($conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass']);
 
-        if ((! $conn_id) || (! $login_result)) {
+        if ((! $conn_id) or (! $login_result)) {
             $error[] = $lang_module['checkchmod_error_account'];
         } elseif (ftp_chdir($conn_id, $global_config['ftp_path'])) {
             $ftp_check_login = 1;

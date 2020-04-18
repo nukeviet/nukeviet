@@ -2,10 +2,8 @@
 <!-- BEGIN: management -->
 <ul class="nav nav-tabs m-bottom">
 	<li><a href="{MANAGEMENT.main}">{LANG.plan_info}</a></li>
-	<li class="active"><a href="{MANAGEMENT.link}">{LANG.client_info}</a></li>
 	<li><a href="{MANAGEMENT.addads}">{LANG.client_addads}</a></li>
 	<li class="active"><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
-	<li><a href="{MANAGEMENT.logout}">{GLANG.logout}</a></li>
 </ul>
 <!-- END: management -->
 <div id="clinfo">
@@ -13,8 +11,7 @@
 		{LANG.stats_views_ads}
 		<div class="btn-group">
 			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-				<span id="text-ads">{LANG.stats_views_select}</span>
-				<span class="caret">&nbsp;</span>
+				<span id="text-ads">{LANG.stats_views_select}</span>&nbsp;<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" id="adsstat-ads">
 				<!-- BEGIN: ads -->
@@ -25,8 +22,7 @@
 		{LANG.stats_views}
 		<div class="btn-group">
 			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-				<span id="text-type">{LANG.stats_views_select}</span>
-				<span class="caret">&nbsp;</span>
+				<span id="text-type">{LANG.stats_views_select}</span>&nbsp;<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" id="adsstat-type">
 				<li><a href="#" rel="country">Country</a></li>
@@ -34,19 +30,18 @@
 				<li><a href="#" rel="date">Date</a></li>
 				<li><a href="#" rel="os">Operating System</a></li>
 			</ul>
-		</div>	
+		</div>
 		{LANG.stats_views_month}
 		<div class="btn-group">
 			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-				<span id="text-month">{LANG.stats_views_select}</span>
-				<span class="caret">&nbsp;</span>
+				<span id="text-month">{LANG.stats_views_select}</span>&nbsp;<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" id="adsstat-month">
 				<!-- BEGIN: month -->
 				<li><a href="#" rel="{month}">{month}</a></li>
 				<!-- END: month -->
 			</ul>
-		</div>	
+		</div>
 	</div>
 	<script type="text/javascript">
 	charturl = '{charturl}';

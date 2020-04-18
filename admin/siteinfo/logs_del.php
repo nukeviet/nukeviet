@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 11-10-2010 14:43
@@ -46,5 +46,4 @@ if ($id > 0) {
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang_module['logs_title'], $number_del, $admin_info['userid']);
 
-echo $contents;
-exit();
+nv_htmlOutput($contents);

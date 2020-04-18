@@ -2,18 +2,18 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -21,6 +21,8 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['notallowuserlogin'] = 'Sorry, login temporary not available';
 $lang_module['register'] = 'Register';
+$lang_module['userlogout'] = 'Log out of a user\'s account';
+$lang_module['userloginviaopt'] = 'Login by port';
 $lang_module['login_title'] = 'If you had an account';
 $lang_module['lostpass_title'] = 'Are you forgot your password';
 $lang_module['memberlist'] = 'Member list';
@@ -34,6 +36,7 @@ $lang_module['male'] = 'Male';
 $lang_module['female'] = 'Female';
 $lang_module['na'] = 'N/A';
 $lang_module['account'] = 'Account';
+$lang_module['sig'] = 'Signature';
 $lang_module['email'] = 'Email';
 $lang_module['check'] = 'Check';
 $lang_module['page'] = 'Page %d';
@@ -44,7 +47,7 @@ $lang_module['question'] = 'Security Question';
 $lang_module['select_question'] = 'Please select question';
 $lang_module['your_question'] = 'Or your question';
 $lang_module['answer_question'] = 'Your answer';
-$lang_module['answer_your_question'] = 'Answer';
+$lang_module['answer'] = 'Answer';
 $lang_module['captcha'] = 'Security code';
 $lang_module['retype_captcha'] = 'Enter the Security code';
 $lang_module['usage_terms'] = 'Terms to register';
@@ -76,6 +79,7 @@ $lang_module['avatar_news_copy_error'] = 'Unable to save avatar';
 $lang_module['birthday'] = 'Birthday';
 $lang_module['showmail'] = 'Display email';
 $lang_module['login'] = 'Member login';
+$lang_module['login_with'] = 'Sign in with';
 $lang_module['login_submit'] = 'Login';
 $lang_module['user_info'] = 'Member information';
 $lang_module['regdate'] = 'Date';
@@ -131,10 +135,11 @@ $lang_module['pass_new'] = 'New password';
 $lang_module['pass_new_re'] = 'Repeat password';
 $lang_module['change_pass_ok'] = 'Password changed';
 $lang_module['lostpass_email_subject'] = 'Guide password recovery in website %s';
-$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
-$lang_module['lostpass_content_mess'] = 'An email is sent to %1$s, <br /><br /> please follow istruction to activate';
+$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you will need to enter the verification code below in the corresponding box at the password change area.<br /><br />Verification code: <strong>%3$s</strong><br /><br />This code is only used once and before the deadline of %4$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
+$lang_module['lostpass_content_mess'] = 'An email is sent to %1$s, please follow istruction to activate';
 $lang_module['lostpass_active_error'] = 'The Verification code does not match!';
 $lang_module['lostpass_newpass_mess'] = 'Let declare a new password in this box';
+$lang_module['lostpass_sendmail_error'] = 'Currently the system can not send email so you can temporarily not get your password, please contact the site administrator for assistance. Honestly apologize for this inconvenience!';
 $lang_module['logout_title'] = 'Logout';
 $lang_module['edit_info_title'] = 'Edit';
 $lang_module['img_size_title'] = 'Your avatar';
@@ -167,7 +172,7 @@ $lang_module['not_logged_in'] = 'You still not login by OpenID';
 $lang_module['logged_in_failed'] = 'OpenID server doesn\'t provide some required information to login to our website';
 $lang_module['logged_no_email'] = 'Unfortunately, this app does not offer e-mail, please check that you have declared for the application email then try again';
 $lang_module['openid_confirm_failed'] = 'You provided wrong infomation';
-$lang_module['openid_confirm_info'] = 'Your OpenID can be use on this site,<br />but email $s exists.<br />If you are owner of account using this email,<br />please provide password.<br />';
+$lang_module['openid_confirm_info'] = 'Email %s of OpenID that you just declare were attached earlier to the account %s. If this is your account, please confirm by declaring login password.';
 $lang_module['openid_active_info'] = 'Welcom %1$s,<br /><br />Your account at website %2$s wait to activate. To activate it, click link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Information:<br /><br />Account:%4$s<br />Email: %5$s<br />OpenID: %6$s<br /><br />Activate link will be expired at %8$s<br /><br />This is automatic sent email from website %2$s. If you doesn\'t know about it\'s content, please delete it.<br /><br /><br /><br />Site admin';
 $lang_module['openid_register_info'] = 'Welcome %1$s,<br /><br />Your account at website %2$s activated. You can log in by OpenID or your account. Your account information:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account: %4$s<br /><br /> <br />OpenID: %5$s<br /><br />This is an email automatic sent from website %2$s. If you doesn\'t know about it\'s content, please delete it. <br /><br />Site admin';
 $lang_module['openid_register'] = 'Register through OpenID';
@@ -191,6 +196,7 @@ $lang_module['resend_activelink'] = 'Not receive activate link after registered'
 $lang_module['change_question_ok'] = 'Reserve question was changed';
 $lang_module['editinfo_error'] = '. Notice %s';
 $lang_module['editinfo_ok'] = 'Updated';
+$lang_module['editinfo_okcensor'] = 'Your information has been saved and will take effect after being moderated. While waiting for approval, you can continue to edit the information';
 $lang_module['question2'] = 'Reserve question';
 $lang_module['current_mode'] = 'Current login';
 $lang_module['current_login'] = 'Current login at';
@@ -226,6 +232,7 @@ $lang_module['field_min_max_error'] = '%1$s enter from %2$s to %3$s letters';
 $lang_module['field_match_type_required'] = '%s require press';
 $lang_module['errorMessage'] = 'Notifications from website';
 $lang_module['login_info'] = 'Please complete this form';
+$lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
 $lang_module['edit_basic'] = 'Basic';
 $lang_module['edit_others'] = 'Other';
 $lang_module['edit_avatar'] = 'Avatar';
@@ -334,7 +341,7 @@ $lang_module['active_users'] = 'Active users';
 $lang_module['actived_users'] = 'The user has been successfully activated!';
 $lang_module['not_active'] = 'Can\'t active user, please check again!';
 $lang_module['adduser_register'] = 'User has been created';
-$lang_module['adduser_register_info'] = 'Hi %1$s,<br  /><br  />Your account at website %2$s activated. Your login information:<br  /><br  />URL: <a href="%3$s">%3$s</a><br  />Account: %4$s<br  />This is email automatic sending from website %2$s.<br  />Site administrator';
+$lang_module['adduser_register_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s activated. Your login information:<br /><br />URL: <a href="%3$s">%3$s</a><br />Account: %4$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
 $lang_module['noresult'] = 'No results matching your request';
 $lang_module['STT'] = 'Order';
 $lang_module['min_search'] = 'Please enter more than %s characters';
@@ -343,3 +350,10 @@ $lang_module['info_user'] = 'Complete the form below to add new user';
 $lang_module['note_remove_leader'] = 'You can not remove yourself from the group!';
 $lang_module['not_del_user'] = 'You can\'t delete this user because user is member of other group. You can only remove this user from your group';
 $lang_module['UserNotInGroup'] = 'This user not in your group';
+$lang_module['for_admin'] = 'For admin';
+$lang_module['2step_require_title'] = 'Requires enabled two-step authentication';
+$lang_module['2step_require_content'] = 'You must enable two-factor authentication can login. The system will automatically switch to activate this page momentarily';
+$lang_module['2step_require_directgo'] = 'Click here if the system did not redirect';
+$lang_module['2step_error_opt_backup'] = 'Please enter confirmation code from the Google Authenticator app or redundant code saved';
+$lang_module['2step_status'] = 'Two-step authentication';
+$lang_module['2step_link'] = 'Settings';

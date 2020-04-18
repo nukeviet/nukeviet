@@ -2,15 +2,15 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -23,6 +23,7 @@ $lang_module['global_config'] = 'Configuration générale';
 $lang_module['site_config'] = 'Configuration du site';
 $lang_module['lang_site_config'] = 'Configuration selon langue: %s';
 $lang_module['bots_config'] = 'Moteurs de recherche';
+$lang_module['ip_version'] = 'Version IP';
 $lang_module['site_domain'] = 'Nom du domaine principal du site';
 $lang_module['sitename'] = 'Nom du site';
 $lang_module['theme'] = 'Interface par défaut du PC';
@@ -37,16 +38,22 @@ $lang_module['disable_content'] = 'Notification de fermeture du site';
 $lang_module['submit'] = 'Enregistrer cette configuration';
 $lang_module['err_writable'] = 'Erreur: impossible d\'entregister le fichier: %s merci de vérifier les permissions (chmod) de ce fichier.';
 $lang_module['err_supports_rewrite'] = 'Erreur: le serveur ne supporte pas le module rewrite';
+$lang_module['err_save_sysconfig'] = 'Les modifications ont été enregistrées, mais le système est pas configuré pour enregistrer le fichier. Écrivons les autorisations pour le fichier% s puis refaisons';
 $lang_module['security'] = 'Configuration de la sécurité';
+$lang_module['flood_blocker'] = 'Capacité contre flood';
 $lang_module['is_flood_blocker'] = 'Active la capacité contre flood';
 $lang_module['max_requests_60'] = 'Le nombre de requests maximum pendant 1 minutes';
 $lang_module['max_requests_300'] = 'Le nombre de requests maximum pendant 5 minutes';
+$lang_module['max_requests_error'] = 'Erreur: Veuillez entrer un numéro de requête supérieur à 0';
 $lang_module['nv_anti_iframe'] = 'Contre IFRAME';
 $lang_module['nv_anti_agent'] = 'Vérifier et bloquer les ordinateurs qui n\'ont pas d\'agent';
 $lang_module['nv_allowed_html_tags'] = 'Code HTML est accepté par le système';
+$lang_module['nv_debug'] = 'Mode développeur';
+$lang_module['nv_debug_help'] = 'Si cette option est activée, le système affichera des erreurs pour aider les développeurs à vérifier facilement le processus de programmation. Si votre site Web fonctionne dans un environnement réel, <strong>désactivez</strong> cette option.';
 $lang_module['captcha_type'] = 'Type de captcha';
 $lang_module['captcha_type_0'] = 'Défaut captcha';
 $lang_module['captcha_type_1'] = 'Bon php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Configuration de captcha';
 $lang_module['captcha_0'] = 'Masqué';
 $lang_module['captcha_1'] = 'Lors de l\'identification de l\'admin';
@@ -58,8 +65,24 @@ $lang_module['captcha_6'] = 'Lors de l\'identification de l\'admin ou l\'inscrip
 $lang_module['captcha_7'] = 'Toujours';
 $lang_module['captcha_num'] = 'Le nombre de caractères de captcha';
 $lang_module['captcha_size'] = 'Dimension du captcha';
+$lang_module['recaptcha_sitekey'] = 'Clé du site';
+$lang_module['recaptcha_secretkey'] = 'Clef secrète';
+$lang_module['recaptcha_type'] = 'Exemple confirmé';
+$lang_module['recaptcha_type_image'] = 'Images (recommandé)';
+$lang_module['recaptcha_type_audio'] = 'son';
+$lang_module['recaptcha_guide'] = 'Cliquez ici pour obtenir la clé des paramètres du site clé et secret.';
+$lang_module['mail_sender_name'] = 'Nom de l\'expéditeur';
+$lang_module['mail_sender_name_default'] = 'Laissant vide, le système prendra la valeur spécifiée (le cas échéant) ou le nom du site';
+$lang_module['mail_sender_email'] = 'Adresse e-mail de l\'expéditeur';
+$lang_module['mail_sender_email_default'] = 'Laissant vide, le système prendra à partir de la valeur spécifiée (le cas échéant), le courrier électronique du système ou le site Web en fonction de la méthode d\'envoi du courrier. Remarque: cette valeur peut ne pas fonctionner selon le serveur d\'envoi ou de réception';
+$lang_module['mail_reply_name'] = 'Nom de la réponse';
+$lang_module['mail_reply_name_default'] = 'Si aucun paramètre n\'est transmis au moment de l\'envoi du courrier, le système prendra cette valeur. Laissant vide, le système prendra du nom du site';
+$lang_module['mail_reply_email'] = 'Courriel de réponse';
+$lang_module['mail_reply_email_default'] = 'Si aucun paramètre n\'est transmis au moment de l\'envoi du courrier, le système prendra cette valeur. Laissant vide, le système prendra à partir du courrier électronique du site';
+$lang_module['mail_force_sender'] = 'Expéditeur forcé. Utilisez pour forcer toutes les informations sur l\'expéditeur à être valides selon la configuration ici au lieu des informations dans chaque e-mail envoyé';
+$lang_module['mail_force_reply'] = 'Réponse forcée. Utilisez pour forcer toutes les informations de réponse à être valides selon la configuration ici au lieu des informations dans chaque e-mail envoyé';
 $lang_module['ftp_config'] = 'Configuration de FTP';
-$lang_module['smtp_config'] = 'Configuration de SMTP';
+$lang_module['smtp_config'] = 'Configuration de la remise des e-mails';
 $lang_module['server'] = 'Serveur ou Lien';
 $lang_module['port'] = 'Porte';
 $lang_module['username'] = 'Identifiant';
@@ -71,12 +94,23 @@ $lang_module['type_linux'] = 'Linux Mail';
 $lang_module['type_phpmail'] = 'PHPmail';
 $lang_module['smtp_server'] = 'Infos du serveur';
 $lang_module['incoming_ssl'] = 'Connexion sécurisée';
+$lang_module['verify_peer_ssl'] = 'Ssl verify peer';
+$lang_module['verify_peer_ssl_yes'] = 'Oui';
+$lang_module['verify_peer_ssl_no'] = 'Non';
+$lang_module['verify_peer_name_ssl'] = 'Ssl verify name peer';
 $lang_module['outgoing'] = 'Ordinateur central SMTP) Courrier envoyé';
 $lang_module['outgoing_port'] = 'Outgoing port(SMTP)';
 $lang_module['smtp_username'] = 'Infos du compte';
 $lang_module['smtp_login'] = 'Nom d\'utilisateur';
 $lang_module['smtp_pass'] = 'Mot de passe';
 $lang_module['smtp_error_openssl'] = 'Erreur: Voitre serveur ne supporte pas d\'envoyer les e mails par ssl';
+$lang_module['smtp_test'] = 'Vérifiez la configuration';
+$lang_module['smtp_test_subject'] = 'Test email';
+$lang_module['smtp_test_message'] = 'Ceci est un courrier électronique de test pour vérifier la configuration du courrier. Supprimez-le simplement!';
+$lang_module['smtp_test_success'] = 'Envoyer un email avec succès';
+$lang_module['smtp_test_fail'] = 'Email échoué';
+$lang_module['smtp_test_note'] = 'Remarque: Cliquez sur Enregistrer la configuration s\'il y a une modification dans le formulaire ci-dessus avant de vérifier la configuration.';
+$lang_module['notify_email_error'] = 'Créer des notifications système en cas d\'échec de l\'e-mail';
 $lang_module['bot_name'] = 'Moteurs de recherche';
 $lang_module['bot_agent'] = 'Agent du serveur';
 $lang_module['bot_ips'] = 'IP du serveur';
@@ -196,9 +230,7 @@ $lang_module['ssl_https_module'] = 'Les modules activés avec SSL';
 $lang_module['ssl_https_0'] = 'Eteindre SSL';
 $lang_module['ssl_https_1'] = 'Activer le site global';
 $lang_module['ssl_https_2'] = 'Activer le zone d\'admin';
-$lang_module['ssl_https_3'] = 'Activer les modules suivants';
 $lang_module['note_ssl'] = 'Etes-vous certain que votre site soutien https? Sinon vous ne pouvez pas entrer dans le site après la sauvegarde.';
-$lang_module['note_ssl_modules'] = 'Chaque langue aura des différents module, cliquez ici pour choisir des modules';
 $lang_module['timezoneAuto'] = 'Selon l\'ordinateur du visiteur';
 $lang_module['timezoneByCountry'] = 'Selon le pays du visiteur';
 $lang_module['allow_switch_mobi_des'] = 'Échange possible de thème de mobile et de bureau';
@@ -216,6 +248,7 @@ $lang_module['plugin_area'] = 'Aréa';
 $lang_module['plugin_area_1'] = 'Avant la connexion CSDL';
 $lang_module['plugin_area_2'] = 'Avant l\'appel des modules';
 $lang_module['plugin_area_3'] = 'Avant l\'envoie des données du site au navigateur';
+$lang_module['plugin_area_4'] = 'Après l\'appel des modules';
 $lang_module['plugin_number'] = 'Numero';
 $lang_module['plugin_func'] = 'Fonctionnement';
 $lang_module['plugin_add'] = 'Ajouter plugin';
@@ -225,3 +258,28 @@ $lang_module['notification_active'] = 'Lever les annonces en cas de nouvelles ac
 $lang_module['notification_autodel'] = 'Supprimer automatiquement après un temps';
 $lang_module['notification_autodel_note'] = 'Remplir <strong>0</strong> si vous ne voulez pas supprimer automatiquement';
 $lang_module['notification_day'] = 'jour';
+$lang_module['is_login_blocker'] = 'Activer journal bloc fonction incorrectement plusieurs fois';
+$lang_module['login_number_tracking'] = 'Mauvaises connexions piste maximale période';
+$lang_module['login_time_tracking'] = 'Time Tracking';
+$lang_module['login_time_ban'] = 'Forclose Connexion';
+$lang_module['two_step_verification'] = 'Nécessite deux étapes journal d\'authentification';
+$lang_module['two_step_verification0'] = 'Ne demandez pas';
+$lang_module['two_step_verification1'] = 'Admin Area';
+$lang_module['two_step_verification2'] = 'Espace extérieur du site';
+$lang_module['two_step_verification3'] = 'Toutes les zones';
+$lang_module['two_step_verification_note'] = 'Remarque: Cette configuration s\'applique à tous les comptes des groupes, si vous devez configurer chaque groupe individuellement, sélectionnez cette valeur en tant que <strong>%s</strong> puis modifiez le <a href="%s">groupe</a> , puis sélectionnez le champ de déclenchement d\'authentification en deux étapes requis comme vous le souhaitez';
+$lang_module['site_phone'] = 'Nom du fichier Téléphone';
+$lang_module['noflood_ip_add'] = 'Ajouter une adresse IP pour ignorer le contrôle d\'inondation';
+$lang_module['noflood_ip_edit'] = 'Correction du contournement de l\'inondation IP';
+$lang_module['noflood_ip_list'] = 'L\'IP contourne le contrôle d\'inondation';
+$lang_module['cron_interval_type'] = 'Répéter le type (si disponible)';
+$lang_module['cron_interval_type0'] = 'Après l\'heure de lancement dans la base de données';
+$lang_module['cron_interval_type1'] = 'Après l\'heure de lancement réelle';
+$lang_module['cors'] = 'CORS Setting';
+$lang_module['cors_help'] = 'Activer cette fonctionnalité pour limiter la demande CORS des autres domaines au site Web';
+$lang_module['cors_restrict_domains'] = 'Limite de domaine';
+$lang_module['cors_valid_domains'] = 'Domaines valides';
+$lang_module['cors_valid_domains_help'] = 'Entrez chaque nom de domaine en une ligne (veuillez saisir le formulaire complet http://votredomaine.com). Les demandes CORS de ces domaines sont autorisées';
+$lang_module['admin_2step_opt'] = 'Les méthodes de vérification en deux étapes sont autorisées dans l\'administration';
+$lang_module['admin_2step_default'] = 'La méthode de vérification en deux étapes par défaut dans l\'administration';
+$lang_module['admin_2step_appconfig'] = 'Configurez l\'application ici';

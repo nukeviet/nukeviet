@@ -13,7 +13,7 @@
 		<div class="m-bottom">{CONTENT}</div>
 
 		<!-- BEGIN: loading_icon -->
-		<em class="fa fa-spinner fa-spin fa-2x m-bottom"> </em>
+		<em class="fa fa-spinner fa-spin fa-2x m-bottom"></em>
 		<!-- END: loading_icon -->
 
 		<!-- BEGIN: url_back_button -->

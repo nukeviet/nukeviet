@@ -6,6 +6,12 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+$(document).ready(function(){
+	$('#departmentid').change(function(){
+		window.location.href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=supporter&departmentid=" + $(this).val();
+	});
+});
+
 function mark_as_unread() {
 	$.ajax({
 		type: "POST",

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -116,17 +116,14 @@ if (! empty($savecat)) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
-    $alias = str_replace('&', ' ', $alias);
-    $alias = str_replace('-', ' ', nv_unhtmlspecialchars($alias));
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;
-    $keywords = array_map('strip_punctuation', $keywords);
     $keywords = array_map('trim', $keywords);
-    $keywords = array_diff($keywords, array( '' ));
+    $keywords = array_diff($keywords, array(''));
     $keywords = array_unique($keywords);
     $keywords = implode(',', $keywords);
 
-    $alias = str_replace(' ', '-', strip_punctuation($alias));
+    $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($alias) : change_alias_tags($alias);
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
@@ -154,8 +151,7 @@ if (! empty($savecat)) {
             $sth->execute();
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $msg_lg, $alias, $admin_info['userid']);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ($incomplete ? '&incomplete=1' : ''));
-            die();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ($incomplete ? '&incomplete=1' : ''));
         } catch (PDOException $e) {
             $error = $lang_module['errorsave'];
         }

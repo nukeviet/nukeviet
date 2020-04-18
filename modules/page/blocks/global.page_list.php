@@ -2,32 +2,46 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 18:6
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_page_list')) {
+if (!nv_function_exists('nv_page_list')) {
+    /**
+     * nv_block_config_page_list()
+     *
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_page_list($module, $data_block, $lang_block)
     {
-        global $db, $site_mods;
         $html = '';
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['title_length'] . '</td>';
-        $html .= '	<td><input type="text" class="form-control w200" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
-        $html .= '	<td><input type="text" name="config_numrow" class="form-control w200" size="5" value="' . $data_block['numrow'] . '"/></td>';
-        $html .= '</tr>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '	<div class="col-sm-9"><input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/></div>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<div class="col-sm-9"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
+        $html .= '</div>';
         return $html;
     }
 
+    /**
+     * nv_block_config_page_list_submit()
+     *
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_page_list_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -42,23 +56,19 @@ if (! nv_function_exists('nv_page_list')) {
     /**
      * nv_page_list()
      *
+     * @param mixed $block_config
      * @return
      */
     function nv_page_list($block_config)
     {
-        global $nv_Cache, $global_config, $site_mods, $db, $module_name;
+        global $nv_Cache, $global_config, $site_mods, $db;
         $module = $block_config['module'];
 
-        if (! isset($site_mods[$module])) {
+        if (!isset($site_mods[$module])) {
             return '';
         }
 
-        $db->sqlreset()
-            ->select('id, title, alias, description')
-            ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])
-            ->where('status = 1')
-            ->order('weight ASC')
-            ->limit($block_config['numrow']);
+        $db->sqlreset()->select('id, title, alias, description')->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])->where('status = 1')->order('weight ASC')->limit($block_config['numrow']);
 
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
@@ -87,6 +97,7 @@ if (! nv_function_exists('nv_page_list')) {
         }
     }
 }
+
 if (defined('NV_SYSTEM')) {
     $content = nv_page_list($block_config);
 }

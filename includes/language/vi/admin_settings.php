@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -23,6 +23,7 @@ $lang_module['global_config'] = 'Cấu hình chung';
 $lang_module['site_config'] = 'Cấu hình site';
 $lang_module['lang_site_config'] = 'Cấu hình site Theo ngôn ngữ: %s';
 $lang_module['bots_config'] = 'Máy chủ tìm kiếm';
+$lang_module['ip_version'] = 'Loại IP';
 
 $lang_module['site_domain'] = 'Tên miền chính của site';
 $lang_module['sitename'] = 'Tên gọi của site';
@@ -38,18 +39,24 @@ $lang_module['disable_content'] = 'Nội dung thông báo site ngưng hoạt đ�
 $lang_module['submit'] = 'Lưu cấu hình';
 $lang_module['err_writable'] = 'Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.';
 $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không hỗ trợ module rewrite';
+$lang_module['err_save_sysconfig'] = 'Các thay đổi đã được lưu lại tuy nhiên hệ thống không ghi được cấu hình ra file. Hãy cấp quyền ghi cho file %s sau đó thực hiện lại';
 
 $lang_module['security'] = 'Thiết lập an ninh';
+$lang_module['flood_blocker'] = 'Chống flood';
 $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
 $lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
 $lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
+$lang_module['max_requests_error'] = 'Lỗi: Cần nhập số request lớn hơn 0';
 $lang_module['nv_anti_iframe'] = 'Chống IFRAME';
 $lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu agent không có';
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
+$lang_module['nv_debug'] = 'Chế độ nhà phát triển';
+$lang_module['nv_debug_help'] = 'Nếu bật tùy chọn này, hệ thống sẽ hiển thị các lỗi để giúp nhà phát triển dễ dàng kiểm tra trong quá trình lập trình. Nếu website đang hoạt động trên môi trường thật, bạn <strong>nên tắt</strong> tùy chọn này';
 
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Cấu hình hiển thị captcha';
 $lang_module['captcha_0'] = 'Không hiển thị';
 $lang_module['captcha_1'] = 'Khi admin đăng nhập';
@@ -61,26 +68,53 @@ $lang_module['captcha_6'] = 'Khi admin đăng nhập hoặc khách đăng ký';
 $lang_module['captcha_7'] = 'Hiển thị trong mọi trường hợp';
 $lang_module['captcha_num'] = 'Số ký tự của captcha';
 $lang_module['captcha_size'] = 'Kích thước của captcha';
+$lang_module['recaptcha_sitekey'] = 'Site key';
+$lang_module['recaptcha_secretkey'] = 'Secret key';
+$lang_module['recaptcha_type'] = 'Kiểu xác nhận';
+$lang_module['recaptcha_type_image'] = 'Hình ảnh (nên chọn)';
+$lang_module['recaptcha_type_audio'] = 'Âm thanh';
+$lang_module['recaptcha_guide'] = 'Nhấp vào đây để lấy thông số Site key và Secret key.';
 
+$lang_module['mail_sender_name'] = 'Tên người gửi';
+$lang_module['mail_sender_name_default'] = 'Để trống hệ thống sẽ lấy từ giá trị được chỉ định (nếu có) hoặc tên site';
+$lang_module['mail_sender_email'] = 'Email người gửi';
+$lang_module['mail_sender_email_default'] = 'Để trống hệ thống sẽ lấy từ giá trị được chỉ định, email hệ thống hoặc email site tùy phương thức gửi mail. Lưu ý: Giá trị này có thể không có tác dụng tùy theo máy chủ gửi hoặc máy chủ nhận';
+$lang_module['mail_reply_name'] = 'Tên người nhận phản hồi';
+$lang_module['mail_reply_name_default'] = 'Khi không có tham số truyền vào lúc gửi mail, hệ thống sẽ lấy giá trị này. Bỏ trống hệ thống sẽ lấy từ tên site';
+$lang_module['mail_reply_email'] = 'Email nhận phản hồi';
+$lang_module['mail_reply_email_default'] = 'Khi không có tham số truyền vào lúc gửi mail, hệ thống sẽ lấy giá trị này. Bỏ trống hệ thống sẽ lấy từ email của site';
+$lang_module['mail_force_sender'] = 'Cố định người gửi. Dùng để ép tất cả thông tin người gửi có giá trị theo cấu hình tại đây thay vì thông tin trong mỗi lần gửi';
+$lang_module['mail_force_reply'] = 'Cố định người nhận phản hồi. Dùng để ép tất cả thông tin người nhận phản hồi có giá trị theo cấu hình tại đây thay vì thông tin trong mỗi lần gửi';
 $lang_module['ftp_config'] = 'Cấu hình FTP';
-$lang_module['smtp_config'] = 'Cấu hình SMTP';
+$lang_module['smtp_config'] = 'Cấu hình gửi mail';
 $lang_module['server'] = 'Server or Url';
 $lang_module['port'] = 'Port';
 $lang_module['username'] = 'User name';
 $lang_module['password'] = 'Password';
 $lang_module['ftp_path'] = 'Remote path';
-$lang_module['mail_config'] = 'Lựa chọn cấu hình';
+$lang_module['mail_config'] = 'Lựa chọn phương thức';
 $lang_module['type_smtp'] = 'SMTP';
 $lang_module['type_linux'] = 'Linux Mail';
 $lang_module['type_phpmail'] = 'PHPmail';
 $lang_module['smtp_server'] = 'Cấu hình máy chủ gửi mail';
 $lang_module['incoming_ssl'] = 'Sử dụng Xác thực';
+$lang_module['verify_peer_ssl'] = 'Ssl verify peer';
+$lang_module['verify_peer_ssl_yes'] = 'Có';
+$lang_module['verify_peer_ssl_no'] = 'Không';
+$lang_module['verify_peer_name_ssl'] = 'Ssl verify name peer';
 $lang_module['outgoing'] = 'Máy chủ (SMTP) Thư Gửi đi';
 $lang_module['outgoing_port'] = 'Cổng gửi mail';
 $lang_module['smtp_username'] = 'Tài khoản gửi mail';
 $lang_module['smtp_login'] = 'Tên Tài khoản';
 $lang_module['smtp_pass'] = 'Mật khẩu';
 $lang_module['smtp_error_openssl'] = 'Lỗi: Máy chủ của bạn không hỗ trợ gửi mail qua ssl';
+$lang_module['smtp_test'] = 'Kiểm tra cấu hình';
+$lang_module['smtp_test_subject'] = 'Email thử nghiệm';
+$lang_module['smtp_test_message'] = 'Đây là email thử nghiệm để kiểm tra cấu hình gửi mail. Đơn giản bạn hãy xóa nó đi!';
+$lang_module['smtp_test_success'] = 'Gửi email thành công';
+$lang_module['smtp_test_fail'] = 'Gửi email thất bại';
+$lang_module['smtp_test_note'] = 'Lưu ý: Nhấp lưu cấu hình nếu có thay đổi ở form trên trước khi kiểm tra cấu hình';
+$lang_module['notify_email_error'] = 'Tạo cảnh báo hệ thống khi gửi email thất bại';
 $lang_module['bot_name'] = 'Tên máy chủ ';
 $lang_module['bot_agent'] = 'UserAgent của máy chủ';
 $lang_module['bot_ips'] = 'IP của máy chủ';
@@ -193,6 +227,9 @@ $lang_module['last_result'] = 'Kết quả của lần thực hiện gần đây
 $lang_module['last_result_empty'] = 'n/a';
 $lang_module['last_result0'] = 'Tồi';
 $lang_module['last_result1'] = 'Đã hoàn thành';
+$lang_module['cron_interval_type'] = 'Kiểu lặp lại (nếu có)';
+$lang_module['cron_interval_type0'] = 'Sau thời gian khởi chạy trong CSDL';
+$lang_module['cron_interval_type1'] = 'Sau thời gian khởi chạy thực tế';
 $lang_module['closed_site'] = 'Chế độ đóng cửa site';
 $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site chỉ có Quản trị tối cao truy cập';
@@ -203,9 +240,7 @@ $lang_module['ssl_https_module'] = 'Các module kích hoạt SSL';
 $lang_module['ssl_https_0'] = 'Tắt SSL';
 $lang_module['ssl_https_1'] = 'Kích hoạt toàn site';
 $lang_module['ssl_https_2'] = 'Kích hoạt khu vực admin';
-$lang_module['ssl_https_3'] = 'Kích hoạt tại các module được chọn';
 $lang_module['note_ssl'] = 'Bạn có chắc chắn site bạn hỗ trợ https không? Nếu không hỗ trợ sẽ không truy cập được các khu vực tương ứng sau khi lưu?';
-$lang_module['note_ssl_modules'] = 'Mỗi ngôn ngữ sẽ có các module khác nhau, nhấp vào đây để chọn các module';
 $lang_module['timezoneAuto'] = 'Theo máy tính của khách truy cập';
 $lang_module['timezoneByCountry'] = 'Theo quốc gia của khách truy cập';
 $lang_module['allow_switch_mobi_des'] = 'Cho phép chuyển đổi giao diện mobile, desktop';
@@ -224,6 +259,7 @@ $lang_module['plugin_area'] = 'Khu vực';
 $lang_module['plugin_area_1'] = 'Trước khi kết nối CSDL';
 $lang_module['plugin_area_2'] = 'Trước khi gọi các module';
 $lang_module['plugin_area_3'] = 'Trước khi website gửi nội dung tới trình duyệt';
+$lang_module['plugin_area_4'] = 'Sau khi gọi các module';
 $lang_module['plugin_number'] = 'Số thứ tự';
 $lang_module['plugin_func'] = 'Chức năng';
 $lang_module['plugin_add'] = 'Thêm plugin';
@@ -234,3 +270,30 @@ $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt �
 $lang_module['notification_autodel'] = 'Tự động xóa thông báo sau thời gian';
 $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu không muốn tự động xóa';
 $lang_module['notification_day'] = 'ngày';
+
+$lang_module['is_login_blocker'] = 'Kích hoạt chức năng chặn đăng nhập sai nhiều lần';
+$lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoảng thời gian theo dõi';
+$lang_module['login_time_tracking'] = 'Thời gian theo dõi';
+$lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';
+
+$lang_module['two_step_verification'] = 'Yêu cầu xác thực đăng nhập hai bước tại';
+$lang_module['two_step_verification0'] = 'Không yêu cầu';
+$lang_module['two_step_verification1'] = 'Khu vực quản trị';
+$lang_module['two_step_verification2'] = 'Khu vực ngoài site';
+$lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+$lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụng cho toàn bộ tài khoản của các nhóm, nếu cần cấu hình riêng cho từng nhóm hãy chọn giá trị này là <strong>%s</strong> sau đó sửa <a href="%s">nhóm</a> rồi chọn khu vực bắt buộc kích hoạt xác thực hai bước theo ý muốn';
+$lang_module['admin_2step_opt'] = 'Các phương thức xác nhận hai bước được phép trong quản trị';
+$lang_module['admin_2step_default'] = 'Phương thức xác nhận hai bước mặc định trong quản trị';
+$lang_module['admin_2step_appconfig'] = 'Thiết lập ứng dụng tại đây';
+
+$lang_module['site_phone'] = 'Số điện thoại của site';
+
+$lang_module['noflood_ip_add'] = 'Thêm IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_edit'] = 'Sửa IP bỏ qua kiểm tra flood';
+$lang_module['noflood_ip_list'] = 'Các IP bỏ qua kiểm tra flood';
+
+$lang_module['cors'] = 'Thiết lập CORS';
+$lang_module['cors_help'] = 'Bật tính năng này để hạn chế các truy vấn CORS từ các tên miền khác đến website';
+$lang_module['cors_restrict_domains'] = 'Giới hạn tên miền';
+$lang_module['cors_valid_domains'] = 'Tên miền hợp lệ';
+$lang_module['cors_valid_domains_help'] = 'Nhập mỗi tên miền một dòng (vui lòng nhập đầy đủ dạng http://yourdomain.com). Các truy vấn CORS từ các tên miền này được phép thực hiện';

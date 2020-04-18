@@ -283,6 +283,14 @@ div.step_content_title {
 	padding: 2px 5px
 }
 
+.checkbox {
+    vertical-align: middle;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    top: -1px;
+}
+
 .select {
 	padding: 1px
 }
@@ -468,4 +476,39 @@ div.infoerror a {
 .nv-modal-content ul{
 	list-style: circle!important;
 	padding: 5px 0 5px 30px;
+}
+#thanks {
+	margin-top: 20px;
+	border-top: 1px solid #e6e6e6;
+}
+#thanks a {
+	color: #1b7fa9;
+}
+#thanks .administrator h1 {
+	z-index: 3;
+    font-size: 16px;
+    line-height: 2.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #3a9705;
+    font-family: Segoe UI, Tahoma, sans-serif;
+}
+#thanks .list-member {
+	max-height: 220px;
+	overflow-y: auto;
+}
+#thanks .list-member h4 {
+	font-family: Segoe UI, Tahoma, sans-serif;
+	font-size: 14px;
+	color: #ff3300;
+}
+#thanks .list-member h5 {
+	color: #333;
+}
+#thanks .list-member .list-member-all {
+	padding-bottom: 20px
+}
+#thanks .list-member .list-member-other-version .version {
+	padding: 10px 0px;
+	text-transform: inherit;
 }

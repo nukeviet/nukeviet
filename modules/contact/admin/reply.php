@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (@) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -16,15 +16,14 @@ $id = $nv_Request->get_int('id', 'get', 0);
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
+$row['title'] = 'Re:' . $row['title'];
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $contact_allowed = nv_getAllowed();
 if (!isset($contact_allowed['view'][$row['cid']]) or !isset($contact_allowed['reply'][$row['cid']])) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 if (defined('NV_EDITOR')) {
@@ -34,6 +33,7 @@ if (defined('NV_EDITOR')) {
 $xtpl = new XTemplate('reply.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('POST', $row);
 
 $is_read = intval($row['is_read']);
 if (!$is_read) {
@@ -46,10 +46,10 @@ $mess_content = $error = '';
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
     if (strip_tags($mess_content) != '') {
-        
+
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
         $mail->To($row['sender_email']);
-        
+
         $_array_email = array();
         $frow = $db->query('SELECT full_name, email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $row['cid'])->fetch();
         if (!empty($frow)) {
@@ -60,7 +60,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     $_array_email[] = $_email;
                 }
             }
-            
+
             // Gửi cho các quản trị trong bộ phận
             $obt_level = array();
             $admins_list = $frow['admins'];
@@ -83,7 +83,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 }
             }
         }
-        
+
         if (empty($_array_email)) {
             $mail->addReplyTo($admin_info['email'], $admin_info['full_name']);
             $_array_email[] = $admin_info['email'];
@@ -91,37 +91,31 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $mail->Cc($admin_info['email'], $admin_info['full_name']);
             $_array_email[] = $admin_info['email'];
         }
-        
+
         $mail->Content($mess_content);
-        $mail->Subject('Re: ' . $row['title']);
+        $mail->Subject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
             $sth->execute();
-            
+
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_reply=1 WHERE id=' . $id);
-            
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id);
-            die();
+
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id);
         } else {
             $error = $lang_global['error_sendmail_admin'];
         }
     }
 } else {
-    $mess_content .= '<br /><br />----------<br />Best regards,<br /><br />' . $admin_info['full_name'] . '<br />';
-    if (!empty($admin_info['position'])) {
-        $mess_content .= $admin_info['position'] . '<br />';
-    }
-    $mess_content .= '<br />';
-    $mess_content .= 'E-mail: ' . $admin_info['email'] . '<br />';
-    $mess_content .= 'Website: ' . $global_config['site_name'] . '<br />' . $global_config['site_url'] . '<br /><br />';
-    
     $mess_content .= '--------------------------------------------------------------------------------<br />';
     $mess_content .= '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';
     $mess_content .= '<strong>Sent:</strong> ' . date('r', $row['send_time']) . '<br />';
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
+    
+    require_once NV_ROOTDIR . '/modules/contact/sign.php';
+    $mess_content .= $sign_content;
 }
 
 $mess_content = htmlspecialchars(nv_editor_br2nl($mess_content));
@@ -143,7 +137,7 @@ if (!empty($error)) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

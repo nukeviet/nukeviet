@@ -42,13 +42,13 @@
         	<div class="text-center search_adv">
         		<a href="#" class="IntSearch">{LANG.search_adv_internet}</a>
         	</div>
-        	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+        	<script src="//www.google.com/jsapi" type="text/javascript"></script>
         	<script type="text/javascript">
         		google.load('search', '1', {
         			language : nv_lang_data
         		});
         	</script>
-        	<link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" type="text/css" />
+        	<link rel="stylesheet" href="//www.google.com/cse/style/look/default.css" type="text/css" />
         	<!-- END: search_engine_unique_ID -->
         	<hr />
         </div>

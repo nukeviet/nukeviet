@@ -95,7 +95,7 @@
 <!-- END: version -->
 <script type="text/javascript">
 	$(function () {
-	    $("img.imgstatnkv").attr("src","http://static.nukeviet.vn/img.jpg");
+	    $("img.imgstatnkv").attr("src","//static.nukeviet.vn/img.jpg");
 	});
 </script>
 <!-- END: main -->

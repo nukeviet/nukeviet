@@ -36,3 +36,5 @@ $lang_module['goback'] = 'Quay lại';
 $lang_module['voting_total'] = 'Tổng số';
 $lang_module['voting_counter'] = 'lượt';
 $lang_module['voting_pubtime'] = 'Tính từ';
+$lang_module['enter_captcha'] = 'Mời nhập mã xác nhận';
+$lang_module['enter_captcha_error'] = 'Vui lòng nhập mã xác nhận';

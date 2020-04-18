@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:33
  */
@@ -16,10 +15,10 @@ if (!defined('NV_IS_MOD_VOTING')) {
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 if (empty($vid)) {
-    $page_title = $module_info['custom_title'];
+    $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
 
-    $sql = 'SELECT vid, question, link, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
+    $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     $allowed = array();
@@ -45,11 +44,14 @@ if (empty($vid)) {
     }
 
     if (!empty($allowed)) {
-        $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+        $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+        $xtpl->assign('LANG', $lang_module);
+
         foreach ($allowed as $current_voting) {
             $voting_array = array(
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
+                'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
                 'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], (int) $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
                 'vid' => $current_voting['vid'],
                 'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
@@ -74,8 +76,27 @@ if (empty($vid)) {
                     $xtpl->parse('main.loop.result1');
                 }
             }
+
+            if ($voting_array['active_captcha']) {
+                if ($global_config['captcha_type'] == 2) {
+                    $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                    $xtpl->parse('main.loop.has_captcha.recaptcha');
+                } else {
+                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+                    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+                    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+                    $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
+                    $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
+                    $xtpl->parse('main.loop.has_captcha.basic');
+                }
+                $xtpl->parse('main.loop.has_captcha');
+            }
+
             $xtpl->parse('main.loop');
         }
+
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
     }
@@ -84,15 +105,19 @@ if (empty($vid)) {
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $checkss = $nv_Request->get_string('checkss', 'get', '');
-    $lid = $nv_Request->get_string('lid', 'get', '');
+    $checkss = $nv_Request->get_title('checkss', 'get', '');
+    $lid = $nv_Request->get_title('lid', 'get', '');
+    $captcha = $nv_Request->get_title('captcha', 'get', '');
 
     if ($checkss != md5($vid . NV_CHECK_SESSION) or $vid <= 0 or $lid == '') {
         header('location:' . $global_config['site_url']);
         exit();
     }
 
-    $sql = 'SELECT vid, question, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1';
+    $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data;
+    if (!defined('NV_IS_MODADMIN')) {
+        $sql .= ' WHERE act=1';
+    }
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     if (empty($list) or !isset($list[$vid])) {
@@ -101,7 +126,7 @@ if (empty($vid)) {
     }
 
     $row = $list[$vid];
-    if ((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) {
+    if (((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) and !defined('NV_IS_MODADMIN')) {
         header('location:' . $global_config['site_url']);
         exit();
     }
@@ -137,6 +162,10 @@ if (empty($vid)) {
     $note = '';
 
     if ($count) {
+        if ($row['active_captcha'] and !nv_capcha_txt($captcha)) {
+            die('ERROR|' . $lang_global['securitycodeincorrect']);
+        }
+
         $acceptcm = (int) $row['acceptcm'];
         $logfile = md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
 

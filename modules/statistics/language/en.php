@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -41,3 +41,9 @@ $lang_module['os'] = 'Operating Systems';
 $lang_module['bot'] = 'Search Engines';
 $lang_module['referer'] = 'Referer';
 $lang_module['refererbysite'] = 'Statistics from site path %s';
+$lang_module['access_times'] = 'Hits';
+$lang_module['access_times1'] = 'hits';
+$lang_module['hour'] = 'Hour';
+$lang_module['day'] = 'Day';
+$lang_module['month'] = 'Month';
+$lang_module['year'] = 'Year';

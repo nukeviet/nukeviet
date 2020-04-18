@@ -8,7 +8,7 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -20,7 +20,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main'] = 'Trang chính';
 $lang_module['config'] = 'Cấu hình';
-$lang_module['save'] = 'Save';
+$lang_module['save'] = 'Lưu cấu hình';
 
 $lang_module['comment'] = 'Quản lý bình luận';
 $lang_module['edit'] = 'Sửa';
@@ -72,6 +72,12 @@ $lang_module['auto_postcomm'] = 'Kiểm duyệt bình luận';
 $lang_module['auto_postcomm_0'] = 'Kiểm duyệt tất cả';
 $lang_module['auto_postcomm_1'] = 'Không kiểm duyệt';
 $lang_module['auto_postcomm_2'] = 'Kiểm duyệt nếu không là thành viên';
+$lang_module['perpagecomm'] = 'Số bình luận hiển thị trên một trang';
+$lang_module['perpagecomm_note'] = 'Nhập tối thiểu 1 và không nên quá 100';
+$lang_module['timeoutcomm'] = 'Thời gian (giây) tối thiểu giữa hai lần gửi bình luận';
+$lang_module['timeoutcomm_note'] = 'Nhập 0 nếu không giới hạn. Lưu ý nên bật captcha nếu chọn giá trị này là 0, giá trị này không tính cho Admin';
+$lang_module['allowattachcomm'] = 'Cho phép đính kèm file';
+$lang_module['alloweditorcomm'] = 'Cho phép trình soạn thảo';
 
 $lang_module['adminscomm'] = 'Admin quản lý bình luận';
 $lang_module['view_comm'] = 'Ai được phép xem bình luận';
@@ -92,3 +98,7 @@ $lang_module['captcha_3'] = 'Hiển thị trong mọi trường hợp';
 
 $lang_module['siteinfo_queue_comments'] = 'Số bình luận chờ duyệt';
 $lang_module['notification_comment_queue'] = 'Kiểm duyệt bình luận gửi bởi %s<br /><em>%s</em>';
+$lang_module['attach'] = 'Đính kèm file';
+$lang_module['attach_choose'] = 'Chọn';
+$lang_module['attach_view'] = 'Truy cập';
+$lang_module['attach_download'] = 'Tải đính kèm';

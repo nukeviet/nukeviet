@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -140,3 +140,15 @@ $lang_module['show_device_1'] = 'Show all device';
 $lang_module['show_device_2'] = 'Show in mobile';
 $lang_module['show_device_3'] = 'Show in tablet';
 $lang_module['show_device_4'] = 'Show other device';
+
+$lang_module['preview_theme_on'] = 'Enable preview';
+$lang_module['preview_theme_off'] = 'Disable preview';
+$lang_module['preview_theme_link'] = 'Preview link';
+$lang_module['preview_theme_link_copied'] = 'The link has been copied to the clipboard';
+
+$lang_module['settings'] = 'Config';
+$lang_module['settings_utheme'] = 'Config user theme';
+$lang_module['settings_utheme_help'] = 'Users can switch between themes below';
+$lang_module['settings_utheme_note'] = 'You need to set up theme before it can appear below';
+$lang_module['settings_utheme_lnote'] = 'This configuration applies to language <strong>%s</strong>';
+$lang_module['settings_utheme_choose'] = 'Choose theme';

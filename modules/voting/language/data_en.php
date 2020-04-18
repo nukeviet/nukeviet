@@ -18,7 +18,7 @@ if (! defined('NV_ADMIN')) {
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " VALUES (:vid, :question, '', 1, 1, '6', 1275318563, 0, 1)");
+$sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " VALUES (:vid, :question, '', 1, 0, 1, '6', 1275318563, 0, 1)");
 $sth->bindValue(':vid', 2, PDO::PARAM_INT);
 $sth->bindValue(':question', 'Do you know about Nukeviet 3?', PDO::PARAM_STR);
 $sth->execute();

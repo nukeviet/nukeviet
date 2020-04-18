@@ -22,7 +22,7 @@ var SA = (navigator.userAgent.indexOf('Safari') != -1 );
 var DOM = document.getElementById;
 var NS4 = document.layers;
 
-var nv_mailfilter = /^[_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/;
+var nv_mailfilter = /^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/;
 var nv_numcheck = /^([0-9])+$/;
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var nv_md5check = /^[a-z0-9]{32}$/;
@@ -396,6 +396,9 @@ function nv_show_hidden(div_id, st) {
 }
 
 function nv_checkAll(oForm, cbName, caName, check_value) {
+    if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
+        return false;
+    }
 	if (oForm[cbName].length) {
 		for (var i = 0; i < oForm[cbName].length; i++) {
 			oForm[cbName][i].checked = check_value;
@@ -414,6 +417,9 @@ function nv_checkAll(oForm, cbName, caName, check_value) {
 }
 
 function nv_UncheckAll(oForm, cbName, caName, check_value) {
+    if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
+        return false;
+    }
 	var ts = 0;
 
 	if (oForm[cbName].length) {

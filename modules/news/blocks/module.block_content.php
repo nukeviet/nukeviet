@@ -8,13 +8,13 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
 global $global_config, $module_name, $module_info, $module_file, $lang_module, $client_info;
 
-if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/block_content.tpl')) {
+if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/block_content.tpl')) {
     $block_theme = $module_info['template'];
 } else {
     $block_theme = "default";

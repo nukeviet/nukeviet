@@ -13,4 +13,7 @@ if (! defined('NV_ADMIN')) {
 }
 
 $submenu['content'] = $lang_module['add'];
-$submenu['config'] = $lang_module['config'];
+
+if (defined('NV_IS_SPADMIN')) {
+	$submenu['config'] = $lang_module['config'];
+}

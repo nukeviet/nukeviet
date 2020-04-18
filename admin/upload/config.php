@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -64,8 +64,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $nv_Cache->delAll();
 
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
 $page_title = $lang_module['configlogo'];
@@ -103,7 +102,7 @@ if ($global_config['autologomod'] == 'all') {
 }
 
 foreach ($site_mods as $mod => $value) {
-    if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $mod)) {
+    if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $value['module_upload'])) {
         ++$a;
         $xtpl->assign('MOD_VALUE', $mod);
         $xtpl->assign('LEV_CHECKED', (in_array($mod, $autologomod)) ? 'checked="checked"' : '');

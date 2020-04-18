@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -105,12 +105,12 @@ $lang_module['setup_error_layout'] = 'Không thể thực hiện lệnh thiết 
 $lang_module['setup_save_layout'] = 'Lưu tất cả thay đổi';
 $lang_module['theme_manager'] = 'Quản lý giao diện';
 $lang_module['theme_recent'] = 'Danh sách giao diện hiện có';
-$lang_module['theme_created_by'] = 'thiết kế bởi';
+$lang_module['theme_created_by'] = 'Thiết kế bởi';
 $lang_module['theme_created_website'] = 'ghé thăm website của tác giả';
 $lang_module['theme_created_folder'] = 'Các file + thư mục nằm trong:';
 $lang_module['theme_created_position'] = 'Các vị trí thiết kế trong theme:';
 $lang_module['theme_created_activate'] = 'Kích hoạt sử dụng';
-$lang_module['theme_created_setting'] = 'Thiết lập giao diện theo cấu hình mặc định';
+$lang_module['theme_created_setting'] = 'Thiết lập theo mặc định';
 $lang_module['theme_created_activate_layout'] = 'Lỗi: Bạn cần thiết lập layout cho giao diện này trước khi kích hoạt';
 $lang_module['theme_delete'] = 'Xóa các thiết lập';
 $lang_module['theme_delete_confirm'] = 'Bạn có chắc chắn Xóa các thiết lập: ';
@@ -142,3 +142,15 @@ $lang_module['show_device_1'] = 'Tất cả';
 $lang_module['show_device_2'] = 'Hiển thị di động';
 $lang_module['show_device_3'] = 'Hiển thị máy tính bảng';
 $lang_module['show_device_4'] = 'Các thiết bị khác';
+
+$lang_module['preview_theme_on'] = 'Cho phép xem trước';
+$lang_module['preview_theme_off'] = 'Hủy xem trước';
+$lang_module['preview_theme_link'] = 'Liên kết xem trước giao diện';
+$lang_module['preview_theme_link_copied'] = 'Liên kết đã được sao chép vào bộ nhớ tạm';
+
+$lang_module['settings'] = 'Cấu hình';
+$lang_module['settings_utheme'] = 'Thiết lập giao diện người dùng';
+$lang_module['settings_utheme_help'] = 'Người sử dụng có thể chuyển đổi giữa các giao diện bên dưới';
+$lang_module['settings_utheme_note'] = 'Bạn cần thiết lập giao diện trước khi giao diện có thể xuất hiện bên dưới';
+$lang_module['settings_utheme_lnote'] = 'Cấu hình này áp dụng cho ngôn ngữ <strong>%s</strong>';
+$lang_module['settings_utheme_choose'] = 'Chọn giao diện';

@@ -15,7 +15,7 @@
 	<div class="form-group">
 		<label for="password" class="col-sm-4 control-label">{GLANG.password}</label>
 		<div class="col-sm-20 col-lg-4">
-			<input type="password" class="form-control" id="password" name="password"/>
+			<input type="password" autocomplete="off" class="form-control" id="password" name="password"/>
 		</div>
 	</div>
 	<div class="form-group">

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/30/2009 6:18
@@ -13,24 +13,17 @@ define('NV_ADMIN', true);
 //Xac dinh thu muc goc cua site
 define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
 
-require NV_ROOTDIR .'/includes/mainfile.php';
-
-// SSL
-if ($global_config['ssl_https'] === 2 and (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-    header("HTTP/1.1 301 Moved Permanently");
-    header("Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
-    exit();
-}
+require NV_ROOTDIR . '/includes/mainfile.php';
 
 // Admin dang nhap
-if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
+if (!defined('NV_IS_ADMIN') or !isset($admin_info) or empty($admin_info)) {
     require NV_ROOTDIR . '/includes/core/admin_access.php';
     require NV_ROOTDIR . '/includes/core/admin_login.php';
-    exit();
+    exit(0);
 }
 
 // Khong cho xac dinh tu do cac variables
-$array_url_instruction = $select_options = array();
+$array_url_instruction = $select_options = [];
 
 if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php')) {
     require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
@@ -42,14 +35,18 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
 
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
-$admin_mods = array();
-$result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC');
+$admin_mods = [];
+$result = $db->query('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC');
 while ($row = $result->fetch()) {
     $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : $row['module'];
     $admin_mods[$row['module']] = $row;
 }
 
-$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', 'siteinfo'));
+$site_mods = nv_site_mods();
+if (!isset($admin_mods[$admin_info['main_module']]) and !isset($site_mods[$admin_info['main_module']])) {
+    $admin_info['main_module'] = 'siteinfo';
+}
+$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $admin_info['main_module']));
 if (preg_match($global_config['check_module'], $module_name)) {
     $include_functions = $include_file = $include_menu = $lang_file = $mod_theme_file = '';
     $module_data = $module_file = $module_name;
@@ -58,22 +55,19 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
     if (empty($op) or $op == 'functions') {
         $op = 'main';
-    } elseif (! preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+    } elseif (!preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    $site_mods = nv_site_mods();
     if (empty($site_mods) and $module_name != 'language') {
         $sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
         $setup = $db->query($sql)->fetchColumn();
         if (empty($setup)) {
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');
-            exit();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');
         }
     }
-    $menu_top = array();
-    if (isset($admin_mods['database']) and ! (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0))) {
+    $menu_top = [];
+    if (isset($admin_mods['database']) and !(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0))) {
         unset($admin_mods['database']);
     }
 
@@ -117,7 +111,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     if (file_exists($include_functions) and file_exists($include_file)) {
         define('NV_IS_MODADMIN', true);
 
-        $array_lang_admin = array();
+        $array_lang_admin = [];
 
         if ($global_config['lang_multi']) {
             $_language_array = nv_scandir(NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/');
@@ -128,18 +122,19 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
         }
 
-        //ket noi voi giao dien chung cua admin
-        require NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme.php';
+        // Ket noi voi giao dien chung cua admin
+        $admin_info['admin_theme'] = (!empty($admin_info['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/theme.php')) ? $admin_info['admin_theme'] : $global_config['admin_theme'];
+        require NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php';
 
         // Ket noi giao dien cua module
         $global_config['module_theme'] = '';
-        if (is_dir(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/modules/' . $module_file)) {
-            $global_config['module_theme'] = $global_config['admin_theme'];
+        if (is_dir(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/modules/' . $module_file)) {
+            $global_config['module_theme'] = $admin_info['admin_theme'];
         } elseif (is_dir(NV_ROOTDIR . '/themes/admin_default/modules/' . $module_file)) {
             $global_config['module_theme'] = 'admin_default';
         }
 
-        $allow_func = array();
+        $allow_func = [];
         //Ket noi menu cua module
         if (file_exists($include_menu)) {
             require $include_menu;
@@ -166,8 +161,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
         }
 
         if (in_array($op, $allow_func)) {
-            $admin_menu_mods = array();
-            if (! empty($menu_top) and ! empty($submenu)) {
+            $admin_menu_mods = [];
+            if (!empty($menu_top) and !empty($submenu)) {
                 $admin_menu_mods[$module_name] = $menu_top['custom_title'];
             } elseif (isset($site_mods[$module_name])) {
                 $admin_menu_mods[$module_name] = $site_mods[$module_name]['admin_title'];

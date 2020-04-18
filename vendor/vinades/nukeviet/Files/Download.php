@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 17/8/2010, 0:16
@@ -316,7 +316,7 @@ class Download
             return $_ENV[$key];
         } elseif (@getenv($key)) {
             return @getenv($key);
-        } elseif (function_exists('apache_getenv') && apache_getenv($key, true)) {
+        } elseif (function_exists('apache_getenv') and apache_getenv($key, true)) {
             return apache_getenv($key, true);
         }
         return '';
@@ -363,7 +363,7 @@ class Download
     public function download_file()
     {
         if (! $this->properties['path']) {
-            die('Nothing to download!');
+            exit('Nothing to download!');
         }
 
         $seek_start = 0;
@@ -406,7 +406,7 @@ class Download
         $res = fopen($this->properties['path'], 'rb');
 
         if (! $res) {
-            die('File error');
+            exit('File error');
         }
 
         if ($seek_start) {
@@ -430,8 +430,7 @@ class Download
         header('Last-Modified: ' . date('D, d M Y H:i:s \G\M\T', $this->properties['mtime']));
 
         if ($data_section and $this->properties['resume']) {
-            header('HTTP/1.1 206 Partial Content');
-            header('Status: 206 Partial Content');
+            http_response_code(206);
             header('Accept-Ranges: bytes');
             header('Content-Range: bytes ' . $seek_start . '-' . $seek_end . '/' . $this->properties['size']);
             header('Content-Length: ' . ($seek_end - $seek_start + 1));
@@ -458,6 +457,6 @@ class Download
         if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit(ini_get('max_execution_time'));
         }
-        exit();
+        exit(0);
     }
 }

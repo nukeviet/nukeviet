@@ -6,10 +6,19 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
 {
+    public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'T' => 
         array (
             'TrueBV\\' => 7,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\OptionsResolver\\' => 34,
         ),
         'P' => 
         array (
@@ -27,10 +36,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             'League\\Url\\' => 11,
         ),
-        'G' => 
-        array (
-            'Gregwar\\Captcha\\' => 16,
-        ),
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
@@ -41,6 +46,14 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'TrueBV\\' => 
         array (
             0 => __DIR__ . '/..' . '/true/punycode/src',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
         'PHPMailer\\PHPMailer\\' => 
         array (
@@ -57,10 +70,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'League\\Url\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/url/src',
-        ),
-        'Gregwar\\Captcha\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/gregwar/captcha',
         ),
         'Endroid\\QrCode\\' => 
         array (

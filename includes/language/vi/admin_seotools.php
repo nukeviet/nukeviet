@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -59,20 +59,10 @@ $lang_module['metaTagsOgp'] = 'Kích hoạt meta-Tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: là 1 chuẩn dữ liệu để chia sẻ dữ liệu lên facebook, xem chi tiết tại <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Số ký tự của thẻ meta tag description';
 $lang_module['description_note'] = ' = 0 không giới hạn số ký tự';
+$lang_module['private_site'] = 'Chặn các máy chủ tìm kiếm đánh chỉ mục website';
 
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
-
-$lang_module['googleplus'] = 'Xác thực Google+';
-$lang_module['googleplus_page_title'] = 'Cấu hình xác thực Google+ (quyền tác giả)';
-$lang_module['googleplus_list'] = 'Danh sách tài khoản Google+';
-$lang_module['googleplus_module'] = 'Cấu hình tài khoản Google+ mặc định cho module';
-
-$lang_module['googleplus_title'] = 'Tên tài khoản profile Google+';
-$lang_module['googleplus_idprofile'] = 'ID profile Google+';
-$lang_module['googleplus_add'] = 'Thêm mới';
-$lang_module['googleplusNote1'] = 'Việc thiết lập xác minh quyền tác giả sẽ giúp bảo vệ bài viết gốc, tránh tình trạng bài copy TOP cao hơn bài gốc. Việc thiết lập này, sẽ được thiết lập cho toàn module. <br />Nếu trong module có chức năng Cấu hình xác thực Google+, thì chức năng đó được ưu tiên hơn';
-$lang_module['googleplusNote2'] = 'Nếu link Google+ là https://plus.google.com/105065032561530186108 thì ID profile Google+ chỉ cần nhập 105065032561530186108';
 
 $lang_module['rpc'] = "Dịch vụ PING";
 $lang_module['rpc_setting'] = "Cấu hình dịch vụ PING";

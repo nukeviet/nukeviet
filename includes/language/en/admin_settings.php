@@ -2,18 +2,18 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -23,6 +23,7 @@ $lang_module['global_config'] = 'General configuration';
 $lang_module['site_config'] = 'Site Configuration';
 $lang_module['lang_site_config'] = 'Configuration site in %s language:';
 $lang_module['bots_config'] = 'Search Engines';
+$lang_module['ip_version'] = 'IP Version';
 $lang_module['site_domain'] = 'Primary Domain';
 $lang_module['sitename'] = 'Site name';
 $lang_module['theme'] = 'Default theme for PC';
@@ -37,16 +38,22 @@ $lang_module['disable_content'] = 'Site closing notification';
 $lang_module['submit'] = 'Submit';
 $lang_module['err_writable'] = 'Error system can\'t write file %s. Please chmod or check server config!';
 $lang_module['err_supports_rewrite'] = 'Error, server doesn\'t support rewrite.';
+$lang_module['err_save_sysconfig'] = 'The changes have been saved but the system does not write to the configuration file. Please grant write permission to file %s and then execute again';
 $lang_module['security'] = 'Setup security';
+$lang_module['flood_blocker'] = 'Anti-flood';
 $lang_module['is_flood_blocker'] = 'Active anti-flood';
 $lang_module['max_requests_60'] = 'The maximum number of requests per minute';
 $lang_module['max_requests_300'] = 'The maximum number of requests in 5 minute';
+$lang_module['max_requests_error'] = 'Error: Please enter a request number greater than 0';
 $lang_module['nv_anti_iframe'] = 'Anti-Iframe';
 $lang_module['nv_anti_agent'] = 'Check and block computer if the agent does not exist';
 $lang_module['nv_allowed_html_tags'] = 'HTML code was approved in the system';
+$lang_module['nv_debug'] = 'Debug mode';
+$lang_module['nv_debug_help'] = 'If this option is enabled, the system will display errors to help developers easily check in the programming process. If your website is operating in a real environment, <strong>disable</strong> this option';
 $lang_module['captcha_type'] = 'Captcha type';
 $lang_module['captcha_type_0'] = 'Default captcha';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Captcha display method';
 $lang_module['captcha_0'] = 'Hide';
 $lang_module['captcha_1'] = 'When admin login';
@@ -58,8 +65,24 @@ $lang_module['captcha_6'] = 'When admin login or guest register';
 $lang_module['captcha_7'] = 'Display at all';
 $lang_module['captcha_num'] = 'Number characters of captcha';
 $lang_module['captcha_size'] = 'Size of captcha';
+$lang_module['recaptcha_sitekey'] = 'Site key';
+$lang_module['recaptcha_secretkey'] = 'Secret key';
+$lang_module['recaptcha_type'] = 'Recaptcha type';
+$lang_module['recaptcha_type_image'] = 'Image';
+$lang_module['recaptcha_type_audio'] = 'Audio';
+$lang_module['recaptcha_guide'] = 'Guide';
+$lang_module['mail_sender_name'] = 'Sender name';
+$lang_module['mail_sender_name_default'] = 'Leaving blank, the system will take from specified value (if any) or site name';
+$lang_module['mail_sender_email'] = 'Sender email';
+$lang_module['mail_sender_email_default'] = 'Leaving blank, the system will take from specified value (if any), sys email or site email depending on the method of sending mail. Note: This value may not work depending on the sending or receiving server';
+$lang_module['mail_reply_name'] = 'Reply name';
+$lang_module['mail_reply_name_default'] = 'When there is no parameter passed at the time of sending mail, the system will take this value. Leaving blank, the system will take from site name';
+$lang_module['mail_reply_email'] = 'Reply email';
+$lang_module['mail_reply_email_default'] = 'When there is no parameter passed at the time of sending mail, the system will take this value. Leaving blank, the system will take from site email';
+$lang_module['mail_force_sender'] = 'Forced sender. Use to force all sender information to be valid according to the configuration here instead of the information in each email sent';
+$lang_module['mail_force_reply'] = 'Forced reply. Use to force all reply information to be valid according to the configuration here instead of the information in each email sent';
 $lang_module['ftp_config'] = 'FTP Configuration';
-$lang_module['smtp_config'] = 'SMTP Configuration';
+$lang_module['smtp_config'] = 'Send mail configuration';
 $lang_module['server'] = 'Server or Url';
 $lang_module['port'] = 'Port';
 $lang_module['username'] = 'Username';
@@ -71,12 +94,23 @@ $lang_module['type_linux'] = 'Linux Mail';
 $lang_module['type_phpmail'] = 'PHPmail';
 $lang_module['smtp_server'] = 'Mail Server Configurations';
 $lang_module['incoming_ssl'] = 'Encrypted connection Method';
+$lang_module['verify_peer_ssl'] = 'Ssl verify peer';
+$lang_module['verify_peer_ssl_yes'] = 'Yes';
+$lang_module['verify_peer_ssl_no'] = 'No';
+$lang_module['verify_peer_name_ssl'] = 'Ssl verify name peer';
 $lang_module['outgoing'] = 'Outgoing mail server (SMTP)';
 $lang_module['outgoing_port'] = 'Outgoing port';
 $lang_module['smtp_username'] = 'Mail Account';
 $lang_module['smtp_login'] = 'User Name';
 $lang_module['smtp_pass'] = 'Password';
 $lang_module['smtp_error_openssl'] = 'Error: Your server does not support sending mail via ssl';
+$lang_module['smtp_test'] = 'Check the configuration';
+$lang_module['smtp_test_subject'] = 'Test email';
+$lang_module['smtp_test_message'] = 'This is a test email to check the mail configuration. Simply delete it!';
+$lang_module['smtp_test_success'] = 'Send email successfully';
+$lang_module['smtp_test_fail'] = 'Email failed';
+$lang_module['smtp_test_note'] = 'Note: Click Save configuration if there is a change in the above form before checking the configuration';
+$lang_module['notify_email_error'] = 'Create system notifications when email fails';
 $lang_module['bot_name'] = 'Server\'s name';
 $lang_module['bot_agent'] = 'UserAgent';
 $lang_module['bot_ips'] = 'Server\'s IP';
@@ -196,9 +230,7 @@ $lang_module['ssl_https_module'] = 'These modules enable SSL';
 $lang_module['ssl_https_0'] = 'Turn off SSL';
 $lang_module['ssl_https_1'] = 'Activate whole site';
 $lang_module['ssl_https_2'] = 'Activate the admin area';
-$lang_module['ssl_https_3'] = 'Activation in the selected module';
 $lang_module['note_ssl'] = 'Are you sure your site support https does not? If not supported site will be inaccessible after saving?';
-$lang_module['note_ssl_modules'] = 'Each language will have different modules, click to select the module';
 $lang_module['timezoneAuto'] = 'By computer of visitor';
 $lang_module['timezoneByCountry'] = 'By country of visitor';
 $lang_module['allow_switch_mobi_des'] = 'Allow to switch mobile, desktop theme';
@@ -216,6 +248,7 @@ $lang_module['plugin_area'] = 'Area';
 $lang_module['plugin_area_1'] = 'Before the database connection';
 $lang_module['plugin_area_2'] = 'Before run the module';
 $lang_module['plugin_area_3'] = 'Website content before sending to the browser';
+$lang_module['plugin_area_4'] = 'After run the module';
 $lang_module['plugin_number'] = 'Order Number';
 $lang_module['plugin_func'] = 'Aunction';
 $lang_module['plugin_add'] = 'Add a plugin';
@@ -225,3 +258,28 @@ $lang_module['notification_active'] = 'Show notification when a new activity';
 $lang_module['notification_autodel'] = 'Automatically deleted after a period of notice';
 $lang_module['notification_autodel_note'] = 'Fill <strong>0</strong> if you do not want to automatically delete';
 $lang_module['notification_day'] = 'Day';
+$lang_module['is_login_blocker'] = 'Activate login blocker';
+$lang_module['login_number_tracking'] = 'Wrong logins maximum track time period';
+$lang_module['login_time_tracking'] = 'Time Tracking';
+$lang_module['login_time_ban'] = 'Ban time';
+$lang_module['two_step_verification'] = 'Requires two-step authentication log in';
+$lang_module['two_step_verification0'] = 'Not required';
+$lang_module['two_step_verification1'] = 'Admin Area';
+$lang_module['two_step_verification2'] = 'Site area';
+$lang_module['two_step_verification3'] = 'All areas';
+$lang_module['two_step_verification_note'] = 'Note: This configuration applies to all accounts of groups, if you need to configure each group individually, select this value as <strong>%s</strong> then edit the <a href="%s">group</a>, then select the required two-step authentication trigger field as desired';
+$lang_module['site_phone'] = 'Site\'s phone';
+$lang_module['noflood_ip_add'] = 'Add IP to ignore flood check';
+$lang_module['noflood_ip_edit'] = 'Edit IP bypass flood check';
+$lang_module['noflood_ip_list'] = 'The IP bypasses the flood check';
+$lang_module['cron_interval_type'] = 'Repeat type (if available)';
+$lang_module['cron_interval_type0'] = 'After the launch time in the database';
+$lang_module['cron_interval_type1'] = 'After the actual launch time';
+$lang_module['cors'] = 'CORS Setting';
+$lang_module['cors_help'] = 'Enable this feature to restrict CORS request from other domains to the website';
+$lang_module['cors_restrict_domains'] = 'Domain limit';
+$lang_module['cors_valid_domains'] = 'Valid domains';
+$lang_module['cors_valid_domains_help'] = 'Enter each one-line domain name (please enter the full form http://yourdomain.com). CORS request from these domains are allowed';
+$lang_module['admin_2step_opt'] = 'Two-step verification methods are allowed in administration';
+$lang_module['admin_2step_default'] = 'The default two-step verification method in administration';
+$lang_module['admin_2step_appconfig'] = 'Set up the application here';

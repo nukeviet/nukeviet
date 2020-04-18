@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
@@ -18,7 +18,7 @@ function nv_getTimezoneName_from_cookie($cookie)
     global $nv_parse_ini_timezone;
     if (preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|(.*)$/', rawurldecode($cookie), $matches)) {
         foreach ($nv_parse_ini_timezone as $name => $offset) {
-            if ($offset['winter_offset'] == intval($matches[2]) * 60 && $offset['summer_offset'] == intval($matches[1]) * 60) {
+            if ($offset['winter_offset'] == intval($matches[2]) * 60 and $offset['summer_offset'] == intval($matches[1]) * 60) {
                 return $name;
             }
         }
@@ -40,7 +40,7 @@ if (isset($_COOKIE[$global_config['cookie_prefix'] . '_cltn'])) {
     }
 }
 
-if (! defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cookie_prefix'] . '_cltz']) and preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|(.*)$/', rawurldecode($_COOKIE[$global_config['cookie_prefix'] . '_cltz']), $matches2)) {
+if (! defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cookie_prefix'] . '_cltz']) and preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|([^\|]*)\|(.*)$/', rawurldecode($_COOKIE[$global_config['cookie_prefix'] . '_cltz']), $matches2)) {
     $client_timezone_name = nv_getTimezoneName_from_cookie($_COOKIE[$global_config['cookie_prefix'] . '_cltz']);
 
     if (! empty($client_timezone_name)) {
@@ -57,7 +57,7 @@ if (! defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cook
 
     $client_timezone_name = base64_encode(NV_CLIENT_TIMEZONE_NAME . '.' . NV_CLIENT_TIMEZONE_OFFSET . '.' . NV_CLIENT_TIMEZONE_DST);
 
-    setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], '', 0);
+    setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $matches2[5], 0);
 
     unset($client_timezone_name, $sd);
 }
@@ -67,7 +67,7 @@ $site_timezone = ($global_config['site_timezone'] == 'byCountry') ? $countries[$
 if ($site_timezone == '') {
     $site_timezone = defined('NV_CLIENT_TIMEZONE_NAME') ? NV_CLIENT_TIMEZONE_NAME : ((isset($global_config['statistics_timezone']) ? $global_config['statistics_timezone'] : ''));
     if ($site_timezone == '') {
-        $site_timezone = 'Asia/Saigon';
+        $site_timezone = 'Asia/Ho_Chi_Minh';
     }
 }
 

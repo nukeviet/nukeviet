@@ -10,8 +10,8 @@
 				</thead>
 				<tfoot>
 					<tr>
-						<td>
-							<input name="update" type="submit" value="{LANG.save}" />
+						<td colspan="2">
+							<input name="update" type="submit" value="{LANG.save}" class="btn btn-primary"/>
 						</td>
 					</tr>
 				</tfoot>
@@ -56,14 +56,14 @@
 	    $('input[name=checkall]').click(function() {
 	    	$("input[name='idcheck[]']").prop( "checked", $(this).is(':checked') );
 	    });
-	    
+
 		$("input[name='idcheck[]']").click(function() {
 			if ( ! $(this).is(':checked') )
 			{
 				$('input[name=checkall]').prop( "checked", false );
 			}
 		});
-		
+
 		$("input[name='catids[]']").click(function() {
 				var catid = $("input:radio[name=catid]:checked").val();
 				var radios_catid = $("input:radio[name=catid]");
@@ -79,7 +79,7 @@
 						}
 					}
 				});
-		
+
 				if (catids.length > 1) {
 					for ( i = 0; i < catids.length; i++) {
 						$("#catright_" + catids[i]).show();
@@ -89,7 +89,7 @@
 						radios_catid.filter("[value=" + catids[0] + "]").prop("checked", true);
 					}
 				}
-			});		
+			});
 
 		$('input[name=update]').click(function() {
 			var listid = [];
@@ -101,7 +101,7 @@
 				alert('{LANG.topic_nocheck}');
 				return false;
 			}
-			
+
 			var catids = [];
 			$("input[name='catids[]']:checked").each(function() {
 				catids.push($(this).val());
@@ -110,7 +110,7 @@
 			if (catids.length < 1) {
 				alert('{LANG.content_cat}');
 				return false;
-			}			
+			}
 			return true;
 		});
 	});

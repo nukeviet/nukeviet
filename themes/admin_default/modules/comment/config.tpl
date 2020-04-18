@@ -119,6 +119,28 @@
 					<!-- END: adminscomm -->
 					</td>
 				</tr>
+                <tr>
+                    <td><strong>{LANG.perpagecomm}</strong></td>
+                    <td>
+                        <input type="text" name="perpagecomm" value="{DATA.perpagecomm}" class="w300 form-control"/>
+                        <span class="help-block m-bottom-none">{LANG.perpagecomm_note}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.timeoutcomm}</strong></td>
+                    <td>
+                        <input type="text" name="timeoutcomm" value="{DATA.timeoutcomm}" class="w300 form-control"/>
+                        <span class="help-block m-bottom-none">{LANG.timeoutcomm_note}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.allowattachcomm}</strong></td>
+                    <td><input type="checkbox" value="1" name="allowattachcomm"{ALLOWATTACHCOMM}/></td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.alloweditorcomm}</strong></td>
+                    <td><input type="checkbox" value="1" name="alloweditorcomm"{ALLOWEDITORCOMM}/></td>
+                </tr>
 			</tbody>
 		</table>
 	</div>

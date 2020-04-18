@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_IS_MOD_RSS')) {
+if (!defined('NV_IS_MOD_RSS')) {
     die('Stop!!!');
 }
 
@@ -20,8 +20,6 @@ if (! defined('NV_IS_MOD_RSS')) {
  */
 function nv_rss_main_theme($array)
 {
-    global $img_dir, $module_name, $module_info;
-    
     $array .= '<div class="tree well"><ul>';
     $array .= nv_get_rss_link();
     $array .= '</ul></div>';

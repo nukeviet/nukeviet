@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:5
@@ -44,7 +44,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             'id' => 0,
             'type' => $request['type'],
             'basename' => $request['title'],
-            'author' => 'VINADES (contact@vinades.vn)',
+            'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'] . ' ' . NV_CURRENTTIME,
             'is_sys' => 1,
             'virtual' => 0,
@@ -62,13 +62,13 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
     if (sizeof($row) == 1) {
         $row = $row[0];
 
-        if (preg_match("/^(.*?) \((.*?)\)$/i", $row['author'], $m)) {
+        if (preg_match("/^(.*?)[\s](\(|\<)(.*?)(\)|\>)$/iu", $row['author'], $m)) {
             $row['author'] = trim($m[1]);
-            $row['email'] = trim($m[2]);
+            $row['email'] = trim($m[3]);
         } else {
-            $row['author'] = 'N/A';
             $row['email'] = 'N/A';
         }
+        $row['author'] = str_replace('=', '', $row['author']);
 
         if (preg_match("/^([0-9\.]+) ([0-9]+)$/i", $row['version'], $m)) {
             $row['version'] = trim($m[1]);
@@ -432,32 +432,30 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                 die('ERROR_' . printf($lang_module['delele_ext_theme_note_module'], implode('; ', $lang_module_array)));
             } else {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid']);
+                nv_deletefile(NV_ROOTDIR . '/themes/' . $request['title'], true);
 
-                if (file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
-                    $result = nv_deletefile(NV_ROOTDIR . '/themes/' . $request['title'], true);
-                    if (! empty($result[0])) {
-                        $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1');
-                        while (list($_lang) = $result->fetch(3)) {
-                            $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
-                            $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
-                            $sth->execute();
+                if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
+                    $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+                    while (list($_lang) = $result->fetch(3)) {
+                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
+                        $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                        $sth->execute();
 
-                            $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)');
-                            $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
-                            $sth->execute();
+                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)');
+                        $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                        $sth->execute();
 
-                            $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme');
-                            $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
-                            $sth->execute();
-                        }
-                        $nv_Cache->delMod('themes');
-
-                        $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
-                        $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');
-                        $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups');
-                    } else {
-                        die('ERROR_' . $lang_module['delele_ext_unsuccess']);
+                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme');
+                        $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                        $sth->execute();
                     }
+                    $nv_Cache->delMod('themes');
+
+                    $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
+                    $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');
+                    $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups');
+                } else {
+                    die('ERROR_' . $lang_module['delele_ext_unsuccess']);
                 }
             }
         }
@@ -521,7 +519,12 @@ foreach ($array_extType as $_type) {
 }
 
 $selecttype_old = $nv_Request->get_string('selecttype', 'cookie', '');
-$selecttype = $nv_Request->get_string('selecttype', 'get', $selecttype_old);
+$selecttype = $nv_Request->get_string('selecttype', 'get', '');
+if ($nv_Request->isset_request('selecttype', 'get') and empty($selecttype)) {
+    $nv_Request->unset_request('selecttype', 'cookie');
+} elseif (empty($selecttype)) {
+    $selecttype = $selecttype_old;
+}
 
 if (! in_array($selecttype, $array_extType)) {
     $selecttype = '';
@@ -641,7 +644,7 @@ if ($selecttype == '' or $selecttype == 'admin') {
         $array_parse[] = array(
             'type' => $lang_module['extType_module'],
             'basename' => $row,
-            'author' => 'VINADES (contact@vinades.vn)',
+            'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'],
             'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=module&amp;title=' . $row . '&amp;checksess=' . md5('package_module_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
@@ -652,6 +655,7 @@ if ($selecttype == '' or $selecttype == 'admin') {
 }
 
 // Them cac theme admin
+$is_reload = false;
 if ($selecttype == '' or $selecttype == 'theme') {
     $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme']);
     $theme_mobile_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile']);
@@ -661,7 +665,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
             if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
                 $info = $xml->xpath('info');
                 $table_prefix = preg_replace('/(\W+)/i', '_', $_theme);
-                $version = '4.0.0 ' . NV_CURRENTTIME;
+                $version = $global_config['version'] . ' ' . NV_CURRENTTIME;
                 $note = ( string )$info[0]->description;
                 $author = ( string )$info[0]->author;
 
@@ -686,6 +690,8 @@ if ($selecttype == '' or $selecttype == 'theme') {
                 $sth->bindParam(':version', $version, PDO::PARAM_STR);
                 $sth->bindParam(':note', $note, PDO::PARAM_STR);
                 $sth->execute();
+
+                $is_reload = true;
             }
         }
     }
@@ -694,7 +700,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
         $array_parse[] = array(
             'type' => $lang_module['extType_theme'],
             'basename' => $row,
-            'author' => 'VINADES (contact@vinades.vn)',
+            'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'],
             'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $row . '&amp;checksess=' . md5('package_theme_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
@@ -704,7 +710,13 @@ if ($selecttype == '' or $selecttype == 'theme') {
     }
 }
 
+if ($is_reload) {
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+}
+
 foreach ($array_parse as $row) {
+    $row['author'] = nv_htmlspecialchars($row['author']);
+
     $xtpl->assign('ROW', $row);
 
     if (! empty($row['icon'])) {

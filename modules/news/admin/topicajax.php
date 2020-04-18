@@ -34,9 +34,4 @@ while (list($title) = $sth->fetch(3)) {
     $array_data[] = $title;
 }
 
-header('Cache-Control: no-cache, must-revalidate');
-header('Content-type: application/json');
-
-ob_start('ob_gzhandler');
-echo json_encode($array_data);
-exit();
+nv_jsonOutput($array_data);

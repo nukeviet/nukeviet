@@ -13,6 +13,17 @@
     		</ul>
     	</div>
     </div>
+    
+    <!-- BEGIN: for_admin -->
+    <div class="m-bottom clearfix">
+        <div class="pull-right">
+            {LANG.for_admin}: 
+            <!-- BEGIN: edit --><a href="{USER.link_edit}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> {GLANG.edit}</a><!-- END: edit -->
+            <!-- BEGIN: delete --><a href="#" class="btn btn-danger btn-xs" data-toggle="admindeluser" data-userid="{USER.userid}" data-link="{USER.link_delete}" data-back="{USER.link_delete_callback}"><i class="fa fa-trash-o"></i> {GLANG.delete}</a><!-- END: delete -->
+        </div>
+    </div>
+    <!-- END: for_admin -->
+
     <div class="table-responsive">
     	<table class="table table-bordered table-striped">
             <colgroup>

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
@@ -21,6 +21,12 @@ $menu_top = array(
 );
 define('NV_IS_FILE_AUTHORS', true);
 
+//Document
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#quản_trị';
+$array_url_instruction['add'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#them_quản_trị';
+$array_url_instruction['module'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#quyền_hạn_quản_ly_module';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#cấu_hinh';
+
 /**
  * nv_admin_add_result()
  *
@@ -31,8 +37,7 @@ function nv_admin_add_result($result)
 {
     global $module_name, $lang_global, $lang_module, $page_title, $global_config;
     if (! defined('NV_IS_GODADMIN')) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        die();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
     //parse content
     $xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors');
@@ -55,13 +60,11 @@ function nv_admin_add_result($result)
     $contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 
     $xtpl->assign('TITLE', $contents['title']);
-    $a = 0;
-    foreach ($contents['info'] as $key => $value) {
+    foreach ($contents['info'] as $value) {
         if (! empty($value[1])) {
             $xtpl->assign('VALUE0', $value[0]);
             $xtpl->assign('VALUE1', $value[1]);
             $xtpl->parse('add_result.loop');
-            ++$a;
         }
     }
     $xtpl->assign('ACTION', $contents['action']);
@@ -110,13 +113,11 @@ function nv_admin_edit_result($result)
     $xtpl->assign('THEAD1', $contents['thead'][1]);
     $xtpl->assign('THEAD2', $contents['thead'][2]);
 
-    $a = 0;
-    foreach ($contents['change'] as $key => $value) {
+    foreach ($contents['change'] as $value) {
         $xtpl->assign('VALUE0', $value[0]);
         $xtpl->assign('VALUE1', $value[1]);
         $xtpl->assign('VALUE2', $value[2]);
         $xtpl->parse('edit_resuilt.loop');
-        ++$a;
     }
 
     $xtpl->assign('DOWNLOAD', $contents['download']);

@@ -1,5 +1,9 @@
 <?php
 
-$ranges = array(
-'240e:100::/24' => 'CN', '240e:200::/23' => 'CN', '240e:400::/22' => 'CN', '240e:800::/21' => 'CN', '240e::/24' => 'CN'
-);
+/**
+ * @Project NUKEVIET 4.x
+ * @This product includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com
+ * @Createdate Wed, 18 Apr 2018 03:28:19 GMT
+ */
+
+$ranges = array('240e::/20'=>'CN');

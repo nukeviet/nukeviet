@@ -14,7 +14,8 @@
 			<input type="text" class="form-control" name="title" id="idtitle" value="{DATA.title}" />
 		</div>
 	</div>
-
+    
+    <!-- BEGIN: alias -->
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.alias}</label>
 		<div class="col-sm-20">
@@ -22,6 +23,7 @@
 			<em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" onclick="get_alias('{OP}');" alt="Click">&nbsp;</em>
 		</div>
 	</div>
+    <!-- END: alias -->
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.content_cat} <span class="txtrequired">(*)</span></label>
@@ -50,7 +52,21 @@
 			</select>
 		</div>
 	</div>
-
+    
+    <!-- BEGIN: layout_func -->
+	<div class="form-group">
+		<label class="col-sm-4 control-label">{LANG.pick_layout}</label>
+		<div class="col-sm-20">
+			<select name="layout_func" class="form-control">
+				<option value="">{LANG.default_layout}</option>
+				<!-- BEGIN: loop -->
+				<option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+				<!-- END: loop -->
+			</select>
+		</div>
+	</div>
+    <!-- END: layout_func -->
+    
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.content_homeimg}</label>
 		<div class="col-sm-20">
@@ -64,18 +80,7 @@
 			<input maxlength="255" value="{DATA.homeimgalt}" name="homeimgalt" type="text" class="form-control" />
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label class="col-sm-4 control-label">{LANG.imgposition}</label>
-		<div class="col-sm-20">
-			<select name="imgposition" class="form-control">
-				<!-- BEGIN: imgposition -->
-				<option value="{DATAIMGOP.value}"{DATAIMGOP.selected}>{DATAIMGOP.title}</option>
-				<!-- END: imgposition -->
-			</select>
-		</div>
-	</div>
-
+    
 	<div class="form-group">
 		<label>{LANG.content_hometext}</label>
 		<textarea class="form-control" rows="6" cols="60" name="hometext"> {DATA.hometext}</textarea>
@@ -100,13 +105,7 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-sm-4 control-label">{LANG.content_keywords}</label>
-		<div class="col-sm-20">
-			<input maxlength="255" value="{DATA.keywords}" name="keywords" type="text" class="form-control" />
-		</div>
-	</div>
-
+    <!-- BEGIN: captcha -->
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.captcha} <span class="txtrequired">(*)</span></label>
 		<div class="col-sm-20">
@@ -115,8 +114,23 @@
             <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
 		</div>
 	</div>
-
-	<br />
+    <!-- END: captcha -->
+    
+    <!-- BEGIN: recaptcha -->
+    <div class="form-group">
+        <label class="col-sm-4 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
+        <div class="col-sm-20">
+            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+            <script type="text/javascript">
+            nv_recaptcha_elements.push({
+                id: "{RECAPTCHA_ELEMENT}",
+                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+            })
+            </script>
+        </div>
+    </div>
+    <!-- END: recaptcha -->
+    
 	<ul class="list-inline text-center">
 		<input type="hidden" name="contentid" value="{DATA.id}" />
 		<input type="hidden" name="checkss" value="{CHECKSS}" />

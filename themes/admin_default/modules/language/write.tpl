@@ -3,7 +3,7 @@
 <br />
 <br />
 <p class="text-center">
-	<strong>{LANG.nv_lang_wite_ok}: {INCLUDE_LANG}</strong>
+	<strong><a href="{URL}">{LANG.nv_lang_wite_ok}: {INCLUDE_LANG}</a></strong>
 </p>
 <meta http-equiv="Refresh" content="10;URL={URL}" />
 <!-- END: complete -->
@@ -25,7 +25,7 @@
 <br />
 <br />
 <p class="text-center">
-	<strong>{LANG.nv_lang_wite_ok}</strong>
+	<strong><a href="{URL}">{LANG.nv_lang_wite_ok}</a></strong>
 </p>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">

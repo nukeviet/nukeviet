@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jan 26, 2014, 05:08:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jan 26, 2014, 05:08:00 PM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -70,6 +70,10 @@ $lang_module['auto_postcomm'] = 'Auto post comment';
 $lang_module['auto_postcomm_0'] = 'Censorship all';
 $lang_module['auto_postcomm_1'] = 'No censorship';
 $lang_module['auto_postcomm_2'] = 'Nensorship if not member';
+$lang_module['perpagecomm'] = 'Number of comments displayed on one page';
+$lang_module['perpagecomm_note'] = 'Enter at least 1 and not more than 100';
+$lang_module['timeoutcomm'] = 'Time (sec) minimum between each post comment';
+$lang_module['timeoutcomm_note'] = 'Enter 0 for unlimited. Note should enable captcha if choose this value is 0, the value is not applicable for Admin';
 $lang_module['adminscomm'] = 'Admin manage comments';
 $lang_module['view_comm'] = 'Who view comment';
 $lang_module['allowed_comm'] = 'Who post comment';
@@ -86,3 +90,9 @@ $lang_module['captcha_2'] = 'If not the manager comment';
 $lang_module['captcha_3'] = 'Display at all';
 $lang_module['siteinfo_queue_comments'] = 'Total commments need approval';
 $lang_module['notification_comment_queue'] = 'Comment moderation posts by %s<br /><em>%s</em>';
+$lang_module['allowattachcomm'] = 'Allow Attach';
+$lang_module['alloweditorcomm'] = 'Allow editor';
+$lang_module['attach'] = 'File attach';
+$lang_module['attach_download'] = 'Download attach';
+$lang_module['attach_choose'] = 'Choose';
+$lang_module['attach_view'] = 'Download';

@@ -7,10 +7,10 @@
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/table.css" />
         <script type="text/javascript">
-		var nv_base_siteurl = '{NV_BASE_SITEURL}';
-		var update_package_deleted = '{LANG.update_package_deleted}';
-		var update_package_not_deleted = '{LANG.update_package_not_deleted}';
-		</script>
+        var nv_base_siteurl = '{NV_BASE_SITEURL}';
+        var update_package_deleted = '{LANG.update_package_deleted}';
+        var update_package_not_deleted = '{LANG.update_package_not_deleted}';
+        </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_UPDATE}.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
@@ -30,7 +30,7 @@
                     <li>
                         <a href="{NV_BASE_SITEURL}install/update.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
                     </li>
-					<!-- END: looplang -->
+                    <!-- END: looplang -->
                 </ul>
             </div>
         </div>

@@ -1,3 +1,9 @@
 <?php
 
-$ranges = array(3841982464 => array(4110417919, 'ZZ'));
+/**
+ * @Project NUKEVIET 4.x
+ * @This product includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com
+ * @Createdate Wed, 18 Apr 2018 03:23:27 GMT
+ */
+
+$ranges=array();

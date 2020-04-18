@@ -18,7 +18,7 @@ $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 
 if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
-    $_sql = 'SELECT cid, module, id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
+    $_sql = 'SELECT cid, pid, module, id, attach FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
     $row = $db->query($_sql)->fetch();
     if (isset($row['cid'])) {
         $module = $row['module'];
@@ -37,6 +37,12 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
 
         if ($is_delete) {
             $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid);
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET pid=' . $row['pid'] . ' WHERE pid=' . $cid);
+
+            if (!empty($row['attach'])) {
+                nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['attach']);
+            }
+
             $mod_info = $site_mods[$module];
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
                 $row = array();

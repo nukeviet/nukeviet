@@ -2,15 +2,15 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 30, 2010, 03:30:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -26,6 +26,7 @@ $lang_module['check_server'] = 'Vérification du système';
 $lang_module['check_chmod'] = 'Vérification les permissions (CHMOD)';
 $lang_module['config_database'] = 'Configuration de base de données';
 $lang_module['website_info'] = 'Information du site';
+$lang_module['sample_data'] = 'Exemple de données';
 $lang_module['done'] = 'Terminer';
 $lang_module['select_lang_des'] = 'Veuillez sélectionner la langue utilisée sur votre site';
 $lang_module['choose_lang'] = 'Sélectionnez la langue';
@@ -52,13 +53,16 @@ $lang_module['recommnet'] = 'Recommandé';
 $lang_module['request_more'] = 'Exigences supplementaires';
 $lang_module['turnoff'] = 'Inactif recommandé';
 $lang_module['turnon'] = 'Actif recommandé';
+$lang_module['and'] = 'et';
 $lang_module['is_support'] = 'Support recommandé';
 $lang_module['supports_rewrite'] = 'Support de rewrite';
 $lang_module['opendir_support'] = 'PHP supporte opendir';
 $lang_module['gd_support'] = 'PHP supporte GD';
-$lang_module['mcrypt_support'] = 'PHP entraide le bibliothèque chiffé mycrypt';
+$lang_module['xml_support'] = 'PHP supporte XML';
+$lang_module['openssl_support'] = 'PHP entraide le bibliothèque chiffé openssl';
 $lang_module['session_support'] = 'PHP supporte session';
 $lang_module['fileuploads_support'] = 'PHP supporte le transfert des fichiers';
+$lang_module['json_support'] = 'PHP supporte JSON';
 $lang_module['dir_noexit'] = 'Inexistant';
 $lang_module['dir_not_writable'] = 'inmodifiable';
 $lang_module['dir_not_writable_ip_files'] = 'Impossible d\'enregistrer les fichiers dans la répertoire %1$s';
@@ -119,7 +123,7 @@ $lang_module['success'] = 'Installation réussie!';
 $lang_module['congratulations'] = 'Félicitation!!! Vous avez réussi d\'installer le système de NukeViet. Entrer à l\'Administration pour commencer à configurer votre site.';
 $lang_module['notesupport'] = 'En cas de tous les besoins d\'aides techniques, contactez au <a href="http://nukeviet.vn" target="_blank"><strong>site Web Nukeviet.VN</strong></a>.';
 $lang_module['noteuploads'] = '<strong>Notification:</strong> <strong>CHMOD le dossier des "uploads"</strong> sur webroot et les dossiers fils à l\'intérieur  en état 777. Si on ne le fait pas immédiatement, le système ne vous permet pas à mettre vos fichiers dans votre host en ligne';
-$lang_module['thanks'] = 'Merci et bonne réussisse!';
+$lang_module['thanks'] = 'Remerciements';
 $lang_module['gohome'] = 'Accueil';
 $lang_module['goadmin'] = 'Administration';
 $lang_module['finish'] = 'Terminer';
@@ -166,6 +170,8 @@ $lang_module['update_version_current_name'] = 'Numéro de la version';
 $lang_module['update_ability'] = 'Possibilité de mettre à jour';
 $lang_module['update_ability_0'] = 'Impossible à cause de l\'incompatibilité';
 $lang_module['update_ability_1'] = 'Possible';
+$lang_module['update_ability_2'] = 'Ne peut pas être mis à jour parce que le serveur ne supporte pas la nouvelle version';
+$lang_module['update_ability_3'] = 'Ne peut pas être mis à jour, car la version actuelle est pas prise en charge et le serveur ne supporte pas la nouvelle version';
 $lang_module['update_cannot_start'] = 'Impossible a cause de le version non supportée';
 $lang_module['update_info_start'] = 'La vérification est complète, vous pouvez mettre à jour';
 $lang_module['update_or'] = 'ou';
@@ -258,3 +264,14 @@ $lang_module['dbcheck_error_files'] = 'Pour installer Nukeviet avec ce type de C
 $lang_module['dbcheck_error_driver'] = 'Erreur: Systeme n\'est pas compatible a ce type de CSDL, veuillez utiliser un autre type';
 $lang_module['update_error_check_version_sys'] = 'Erreur: Impossible de vérifier la version du système';
 $lang_module['update_error_check_version_ext'] = 'Erreur: Impossible de vérifier la version de l\'application';
+$lang_module['thanks_text'] = 'gestion NuKeViets denvoyer nos sincères Muon grâce à nos collègues ainsi que la contribution au développement pour chung de NukeViet jusqu à présent, espérons que vous continuerez à promouvoir et soutenir toujours aussi bien que continuer à bâtir NuKeViets croissance mains.';
+$lang_module['thanks_list_member_all'] = 'Liste des membres:';
+$lang_module['thanks_list_member_other_version'] = 'La liste des membres Contribution de chaque version';
+$lang_module['thanks_other_version'] = 'Version';
+$lang_module['is_unofficial_mode'] = 'Note: Cette version est utilisée pour le développement et les tests, vous ne devriez pas être utilisé pour rendre le site officiel';
+$lang_module['spdata_name'] = 'Nom du package';
+$lang_module['spdata_compatible'] = 'Cet exemple de package de données est compatible';
+$lang_module['spdata_incompatible'] = 'Cet exemple de package est intégré au répertoire% s, l\'installation du site dans le répertoire% s entraînera des imprécisions.';
+$lang_module['spdata_root'] = 'Original';
+$lang_module['spdata_note'] = 'Sélectionnez l\'exemple de package en cliquant sur la cellule correspondante, puis en cliquant sur le bouton <strong /> Paramètres';
+$lang_module['spdata_choose'] = 'Installation';

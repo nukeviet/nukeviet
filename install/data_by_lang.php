@@ -13,21 +13,22 @@ if (! defined('NV_MAINFILE')) {
 }
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules');
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-$sth->execute(array( 'about', 'page', 'about', 'about', $install_lang['modules']['about'], $install_lang['modules']['about_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0));
-$sth->execute(array( 'news', 'news', 'news', 'news', $install_lang['modules']['news'], $install_lang['modules']['news_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0));
-$sth->execute(array( 'users', 'users', 'users', 'users', $install_lang['modules']['users'], $install_lang['modules']['users_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0));
-$sth->execute(array( 'contact', 'contact', 'contact', 'contact', $install_lang['modules']['contact'], $install_lang['modules']['contact_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0));
-$sth->execute(array( 'statistics', 'statistics', 'statistics', 'statistics', $install_lang['modules']['statistics'], $install_lang['modules']['statistics_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0));
-$sth->execute(array( 'voting', 'voting', 'voting', 'voting', $install_lang['modules']['voting'], $install_lang['modules']['voting_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0));
-$sth->execute(array( 'banners', 'banners', 'banners', 'banners', $install_lang['modules']['banners'], $install_lang['modules']['banners_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0));
-$sth->execute(array( 'seek', 'seek', 'seek', 'seek', $install_lang['modules']['seek'], $install_lang['modules']['seek_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0));
-$sth->execute(array( 'menu', 'menu', 'menu', 'menu', $install_lang['modules']['menu'], $install_lang['modules']['menu_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0));
-$sth->execute(array( 'feeds', 'feeds', 'feeds', 'feeds', $install_lang['modules']['feeds'], $install_lang['modules']['feeds'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0));
-$sth->execute(array( 'page', 'page', 'page', 'page', $install_lang['modules']['Page'], $install_lang['modules']['Page_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0));
-$sth->execute(array( 'comment', 'comment', 'comment', 'comment', $install_lang['modules']['comment'], $install_lang['modules']['comment_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 12, 1, '', 0, 0));
-$sth->execute(array( 'siteterms', 'page', 'siteterms', 'siteterms', $install_lang['modules']['siteterms'], $install_lang['modules']['siteterms_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0));
-$sth->execute(array( 'freecontent', 'freecontent', 'freecontent', 'freecontent', $install_lang['modules']['freecontent'], $install_lang['modules']['freecontent_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 14, 1, '', 0, 0));
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+$sth->execute(array( 'about', 'page', 'about', 'about', 'page', $install_lang['modules']['about'], $install_lang['modules']['about_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 1));
+$sth->execute(array( 'news', 'news', 'news', 'news', 'news', $install_lang['modules']['news'], $install_lang['modules']['news_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 1));
+$sth->execute(array( 'users', 'users', 'users', 'users', 'users', $install_lang['modules']['users'], $install_lang['modules']['users_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 1));
+$sth->execute(array( 'contact', 'contact', 'contact', 'contact', 'contact', $install_lang['modules']['contact'], $install_lang['modules']['contact_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 1));
+$sth->execute(array( 'statistics', 'statistics', 'statistics', 'statistics', 'statistics', $install_lang['modules']['statistics'], $install_lang['modules']['statistics_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 1));
+$sth->execute(array( 'voting', 'voting', 'voting', 'voting', 'voting', $install_lang['modules']['voting'], $install_lang['modules']['voting_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 1));
+$sth->execute(array( 'banners', 'banners', 'banners', 'banners', 'banners',$install_lang['modules']['banners'], $install_lang['modules']['banners_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 1));
+$sth->execute(array( 'seek', 'seek', 'seek', 'seek', 'seek', $install_lang['modules']['seek'], $install_lang['modules']['seek_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 1));
+$sth->execute(array( 'menu', 'menu', 'menu', 'menu', 'menu', $install_lang['modules']['menu'], $install_lang['modules']['menu_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 1));
+$sth->execute(array( 'feeds', 'feeds', 'feeds', 'feeds', 'feeds', $install_lang['modules']['feeds'], $install_lang['modules']['feeds'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 1));
+$sth->execute(array( 'page', 'page', 'page', 'page', 'page', $install_lang['modules']['Page'], $install_lang['modules']['Page_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0));
+$sth->execute(array( 'comment', 'comment', 'comment', 'comment', 'comment', $install_lang['modules']['comment'], $install_lang['modules']['comment_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 12, 1, '', 0, 1));
+$sth->execute(array( 'siteterms', 'page', 'siteterms', 'siteterms', 'page', $install_lang['modules']['siteterms'], $install_lang['modules']['siteterms_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 1));
+$sth->execute(array( 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', $install_lang['modules']['freecontent'], $install_lang['modules']['freecontent_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 14, 1, '', 0, 1));
+$sth->execute(array( 'two-step-verification', 'two-step-verification', 'two_step_verification', 'two_step_verification', 'two-step-verification', $install_lang['modules']['two_step_verification'], $install_lang['modules']['two_step_verification_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 15, 1, '', 0, 1));
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
@@ -50,6 +51,7 @@ $sth->execute(array( 'print', 'print', 'Print', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'rating', 'rating', 'Rating', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, ''));
+$sth->execute(array( 'instant-rss', 'instant-rss', 'Instant Articles RSS', 'news', 0, 0, 0, ''));
 //Users
 $sth->execute(array( 'main', 'main', 'Main', 'users', 1, 0, 1, ''));
 $sth->execute(array( 'login', 'login', $install_lang['modfuncs']['users']['login'], 'users', 1, 1, 2, ''));
@@ -86,6 +88,7 @@ $sth->execute(array( 'main', 'main', 'main', 'comment', 1, 0, 1, ''));
 $sth->execute(array( 'post', 'post', 'post', 'comment', 1, 0, 2, ''));
 $sth->execute(array( 'like', 'like', 'Like', 'comment', 1, 0, 3, ''));
 $sth->execute(array( 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, ''));
+$sth->execute(array( 'down', 'down', 'Down', 'comment', 1, 0, 5, ''));
 //Page
 $sth->execute(array( 'main', 'main', 'Main', 'page', 1, 0, 1, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, ''));
@@ -94,6 +97,10 @@ $sth->execute(array( 'rss', 'rss', 'Rss', 'page', 0, 0, 0, ''));
 $sth->execute(array( 'main', 'main', 'Main', 'siteterms', 1, 0, 1, ''));
 $sth->execute(array( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
+//Two-Step Verification
+$sth->execute(array( 'main', 'main', 'Main', 'two-step-verification', 1, 0, 1, ''));
+$sth->execute(array( 'confirm', 'confirm', 'Confirm', 'two-step-verification', 1, 0, 2, ''));
+$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 3, ''));
 //Others
 $sth->execute(array( 'main', 'main', 'Main', 'contact', 1, 0, 1, ''));
 $sth->execute(array( 'main', 'main', 'Main', 'voting', 1, 0, 1, ''));
@@ -144,7 +151,10 @@ $themes_default['left-main-right'] = array(
     $array_funcid_mod['comment']['like'],
     $array_funcid_mod['comment']['delete'],
     $array_funcid_mod['siteterms']['main'],
-    $array_funcid_mod['siteterms']['rss']
+    $array_funcid_mod['siteterms']['rss'],
+    $array_funcid_mod['two-step-verification']['main'],
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
     );
 
 $themes_default['left-main'] = array(
@@ -203,7 +213,11 @@ $themes_mobile['main'] = array(
     $array_funcid_mod['comment']['like'],
     $array_funcid_mod['comment']['delete'],
     $array_funcid_mod['siteterms']['main'],
-    $array_funcid_mod['siteterms']['rss'] );
+    $array_funcid_mod['siteterms']['rss'],
+    $array_funcid_mod['two-step-verification']['main'],
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
+);
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)');
@@ -224,7 +238,7 @@ foreach ($array_funcid as $funcid) {
     }
 }
 
-$company = array();
+$company = [];
 $company['company_name'] = $install_lang['vinades_fullname'];
 $company['company_address'] = $install_lang['vinades_address'];
 $company['company_sortname'] = "VINADES.,JSC";
@@ -233,19 +247,15 @@ $company['company_regplace'] = "";
 $company['company_licensenumber'] = "";
 $company['company_responsibility'] = "";
 $company['company_showmap'] = 1;
-$company['company_mapcenterlat'] = (float)20.984516000000013;
-$company['company_mapcenterlng'] = (float)105.7954749999999961573848850093781948089599609375;
-$company['company_maplat'] = (float)20.9845159999999992805896908976137638092041015625;
-$company['company_maplng'] = (float)105.7954750000000103682396002113819122314453125;
-$company['company_mapzoom'] = 17;
-$company['company_phone'] = "+84-4-85872007[+84485872007]|+84-904762534[+84904762534]";
-$company['company_fax'] = "+84-4-35500914";
+$company['company_mapurl'] = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2634.116366996857!2d105.79399620326203!3d20.9844946314258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac93055e2f2f%3A0x91f4b423089193dd!2zQ8O0bmcgdHkgQ-G7lSBwaOG6p24gUGjDoXQgdHJp4buDbiBOZ3Xhu5NuIG3hu58gVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1558315703646!5m2!1svi!2s';
+$company['company_phone'] = "+84-24-85872007[+842485872007]|+84-904762534[+84904762534]";
+$company['company_fax'] = "+84-24-35500914";
 $company['company_email'] = "contact@vinades.vn";
 $company['company_website'] = "http://vinades.vn";
 $company = serialize($company);
 
 $copyright = 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:'. (38 + strlen(NV_BASE_SITEURL)).':"' . NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&amp;nv=siteterms";}';
-$social = 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}';
+$social = 'a:3:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}';
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -254,7 +264,7 @@ $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '
 $sth->execute(array('default', 'news', 'module.block_newscenter.php', $install_lang['blocks_groups']['news']['module.block_newscenter'], '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}'));
 $sth->execute(array('default', 'banners', 'global.banners.php', $install_lang['blocks_groups']['banners']['global.banners1'], '', 'no_title', '[TOP]', 0, '1', '6', 0, 2, 'a:1:{s:12:"idplanbanner";i:1;}'));
 
-$sth->execute(array('default', 'news', 'global.block_category.php', $install_lang['blocks_groups']['news']['global.block_category'], '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}'));
+$sth->execute(array('default', 'news', 'global.block_category.php', $install_lang['blocks_groups']['news']['global.block_category'], '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:0;}'));
 $sth->execute(array('default', 'theme', 'global.module_menu.php', 'Module Menu', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 2, ''));
 $sth->execute(array('default', 'banners', 'global.banners.php', $install_lang['blocks_groups']['banners']['global.banners2'], '', 'no_title', '[LEFT]', 0, '1', '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}'));
 $sth->execute(array('default', 'statistics', 'global.counter.php', $install_lang['blocks_groups']['statistics']['global.counter'], '', 'primary', '[LEFT]', 0, '1', '6', 1, 4, ''));

@@ -118,7 +118,6 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                             set_time_limit(0);
                         }
                         if ($sys_info['ini_set_support']) {
-                            ini_set('allow_url_fopen', 1);
                             ini_set('default_socket_timeout', 200);
                         }
 

@@ -36,3 +36,5 @@ $lang_module['goback'] = 'Back';
 $lang_module['voting_total'] = 'Total';
 $lang_module['voting_counter'] = 'Voting count';
 $lang_module['voting_pubtime'] = 'From';
+$lang_module['enter_captcha'] = 'Enter the confirmation code';
+$lang_module['enter_captcha_error'] = 'Please enter confirmation code';

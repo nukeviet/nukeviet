@@ -2,15 +2,15 @@
 
 /**
 * @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Author VINADES.,JSC <contact@vinades.vn>
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 29, 2010, 05:00:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -51,6 +51,9 @@ $lang_module['rename'] = 'Renommer le fichier';
 $lang_module['renamefolder'] = 'Renommer le répertoire';
 $lang_module['deletefolder'] = 'Supprimer le répertoire';
 $lang_module['createfolder'] = 'Créer  un répertoire';
+$lang_module['recreatethumb'] = 'Régénérer pouce image';
+$lang_module['recreatethumb_note'] = 'Remarque: Cette fonction efface tous les pouces sous le dossier, les deux sous-dossiers et recréer l\'image du pouce en fonction de la nouvelle configuration. Ce processus peut prendre beaucoup de temps, vous ne pouvez pas fermer le navigateur';
+$lang_module['recreatethumb_result'] = 'A créé l\'image pour le pouce';
 $lang_module['rename_newname'] = 'Nouveau nom';
 $lang_module['rename_noname'] = 'Vous n\'avez pas encore nommé le fichier';
 $lang_module['rename_error_folder'] = 'Erreur: Le système ne peut pas changer le nom du dossier';
@@ -78,9 +81,14 @@ $lang_module['author0'] = 'de tout';
 $lang_module['author1'] = 'moi';
 $lang_module['uploadError1'] = 'Merci de sélectionner le fichier dans votre ordinateur ou donner le lien';
 $lang_module['uploadError2'] = 'Erreur: lien invalide';
+$lang_module['uploadError3'] = 'Erreur: nombre de téléchargements non standard';
 $lang_module['pubdate'] = 'Mis à jour';
 $lang_module['newSize'] = 'Créer une image';
 $lang_module['prView'] = 'Voir';
+$lang_module['prViewExample'] = 'Voir un exemple';
+$lang_module['prViewExampleError'] = 'Sélectionnez le dossier, et entrez la taille complète du plan, le pouce avant la qualité d\'image';
+$lang_module['prViewExampleError1'] = 'Erreur de données';
+$lang_module['prViewExampleError2'] = 'Le système n\'a pas pu trouver des photos pour donner des exemples. Vous devez télécharger au moins une image dans le répertoire de téléchargement';
 $lang_module['errorMinX'] = 'Erreur: largeur inférieur au niveau autorisé';
 $lang_module['errorMaxX'] = 'Erreur: largeur supérieur au niveau autorisé';
 $lang_module['errorMinY'] = 'Erreur: hauteur inférieur le minimum';
@@ -105,6 +113,7 @@ $lang_module['upload_logo'] = 'Logo à ajouter aux images';
 $lang_module['upload_logo_pos'] = 'La position du logo';
 $lang_module['selectimg'] = 'Sélectionner l\'image';
 $lang_module['autologo'] = 'Ajouter automatiquement le logo aux images';
+$lang_module['autologo_for_upload'] = 'Insérer le logo dans le fichier de téléchargement (s\'il s\'agit d\'une image)';
 $lang_module['autologomodall'] = 'Tous les modules';
 $lang_module['logosizecaption'] = 'Taille de logo';
 $lang_module['imagewith'] = 'Si la largeur de l\'image';
@@ -120,7 +129,10 @@ $lang_module['logopostopright'] = 'Ci-dessus, à droite';
 $lang_module['logopostopleft'] = 'Au-dessus, à gauche';
 $lang_module['logopostopcenter'] = 'Ci-dessus, au milieu';
 $lang_module['fileimage'] = 'Image';
+$lang_module['filerelativepath'] = 'Chemin relatif';
+$lang_module['fileabsolutepath'] = 'Chemin absolu';
 $lang_module['altimage'] = 'Note de l\'image';
+$lang_module['filepathcopied'] = 'Le chemin a été copié';
 $lang_module['uploadconfig'] = 'Configuration du Transfert';
 $lang_module['uploadconfig_ban_ext'] = 'Extensioins interdites';
 $lang_module['uploadconfig_ban_mime'] = 'Types de Mime interdits';
@@ -143,6 +155,7 @@ $lang_module['thumb_type_1'] = 'Re-dimensionner selon la larguer';
 $lang_module['thumb_type_2'] = 'Re-dimensionner selon la hauteur';
 $lang_module['thumb_type_3'] = 'Re-dimensionner selon deux directions';
 $lang_module['thumb_type_4'] = 'Re-dimensionner et couper l\'image selon les dimensions';
+$lang_module['thumb_type_5'] = 'Redimensionner et recadrer l\'image en taille supérieure';
 $lang_module['thumb_quality'] = 'Qualité de l\'image re-dimensionnée';
 $lang_module['thumb_dir'] = 'Dossier';
 $lang_module['thumb_dir_default'] = 'Configuration par défaut';
@@ -152,8 +165,11 @@ $lang_module['order1'] = 'Mettre en ordre de date la plus loin';
 $lang_module['order2'] = 'Mettre en ordre de nom de fichier';
 $lang_module['searchdir'] = 'Recherche dans le dossier';
 $lang_module['searchkey'] = 'Le mot clé de recherche';
+$lang_module['original_image'] = 'l\'image originale';
+$lang_module['thumb_image'] = 'photo pouce';
 $lang_module['crop'] = 'Couper image';
 $lang_module['crop_error_small'] = 'Cette image a des mesures trop petites, ne recommande pas de couper';
+$lang_module['crop_keep_original'] = 'Gardez l\'image originale';
 $lang_module['rotate'] = 'Tourner image';
 $lang_module['waiting'] = 'En cours de télécharger les données, veuillez-vous attendre';
 $lang_module['file_no_exists'] = 'Fichier n\'existe pas';
@@ -169,3 +185,7 @@ $lang_module['upload_auto_alt'] = 'Déterminer la description de l\'image automa
 $lang_module['upload_alt_note'] = 'Veuillez saisir des commentaires pour le fichier avant';
 $lang_module['upload_view_thumbnail'] = 'Passer à l\'affichage de la grille';
 $lang_module['upload_view_detail'] = 'Passer à un affichage de la liste';
+$lang_module['upload_chunk'] = 'Vérifier le téléchargement';
+$lang_module['upload_chunk_help'] = 'Cette fonction prend en charge le fractionnement du fichier de téléchargement en plusieurs petits paquets, la prise en charge pour télécharger de gros fichiers sur le serveur. Si vous n\'avez pas l\'intention d\'autoriser le téléchargement de fichiers volumineux, laissez ce champ vide';
+$lang_module['upload_overflow'] = 'Taille du fichier de débordement';
+$lang_module['upload_overflow_help'] = 'Permet de télécharger des fichiers plus grands que la taille de fichier maximale. Remarque: ne fonctionne que lors du téléchargement de fichiers directement à partir de votre ordinateur dans le gestionnaire de fichiers, la section Téléchargement de blocs ci-dessus est définie. La valeur configurée ici ne doit pas être inférieure à la taille maximale de l\'ensemble de fichiers téléchargé ci-dessus';

@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['order'] = 'Thứ tự';
 $lang_module['nv_lang_data'] = 'Ngôn ngữ data';
 $lang_module['site_lang'] = 'Ngôn ngữ mặc định';
 $lang_module['nv_lang_interface'] = 'Ngôn ngữ giao diện';
@@ -54,16 +55,16 @@ $lang_module['nv_lang_slsite'] = 'Hiển thị ngoài site';
 $lang_module['nv_lang_native_name'] = 'Ngôn ngữ bản địa';
 $lang_module['nv_lang_sl'] = ' Có thể chọn';
 $lang_module['nv_lang_error_exit'] = 'Thông báo: hiện tại chưa có ngôn ngữ nào được đọc vào Cơ sở dữ liệu, <br /> <br />Hệ thống sẽ tự động chuyển sang phần đọc dữ liệu ngôn ngữ.';
-$lang_module['nv_data_note'] = 'Để thêm mới ngôn ngữ dữ liệu, bạn cần <a title="Kích hoạt chức năng đa ngôn ngữ: Cấu hình -> Cấu hình chung " href="%s">kích hoạt chức năng đa ngôn ngữ</a>, để download ngôn ngữ mới truy cập website <a title="Site dịch Ngôn ngữ cho NukeViet 4" href="http://translate.nukeviet.vn" target="_blank">Ngôn ngữ cho NukeViet 4</a>';
+$lang_module['nv_data_note'] = 'Để download ngôn ngữ mới truy cập website <a title="Site dịch Ngôn ngữ cho NukeViet 4" href="http://translate.nukeviet.vn" target="_blank">Ngôn ngữ cho NukeViet 4</a>';
+$lang_module['nv_data_note2'] = 'Để thêm mới ngôn ngữ dữ liệu, bạn cần <a title="Kích hoạt chức năng đa ngôn ngữ: Cấu hình -&gt; Cấu hình chung " href="%s">kích hoạt chức năng đa ngôn ngữ</a>.';
 $lang_module['nv_setup'] = 'Đã được cài đặt';
 $lang_module['nv_setup_new'] = 'Cài đặt mới';
 $lang_module['nv_setup_delete'] = 'Xóa ngôn ngữ data';
 $lang_module['nv_data_setup'] = 'Data Ngôn ngữ này đã được cài đặt';
 $lang_module['nv_data_setup_ok'] = 'Cài đặt thành công!<br /><br /> Hệ thống sẽ chuyển tới phần cấu hình site của ngôn ngữ mới để bạn bắt đầu thiết lập các cấu hình cho trang ngôn ngữ mới.';
-$lang_module['nv_lang_readok'] = 'Thực hiện xong việc đọc ngôn ngữ giao diện, hệ thống sẽ tự động chuyển sang danh sách các file.';
-$lang_module['nv_lang_copyok'] = 'Thực hiện xong việc tạo ngôn ngữ giao diện, hệ thống sẽ tự động chuyển sang danh sách các file.';
+$lang_module['nv_lang_readok'] = 'Thực hiện xong việc đọc ngôn ngữ giao diện, hệ thống sẽ tự động chuyển sang danh sách các file. Nhấp vào đây nếu cảm thấy đợi lâu.';
 $lang_module['nv_lang_deleteok'] = 'Thực hiện xong việc xóa ngôn ngữ giao diện.';
-$lang_module['nv_lang_wite_ok'] = 'Thực hiện xong việc tạo file ngôn ngữ giao diện.';
+$lang_module['nv_lang_wite_ok'] = 'Thực hiện xong việc tạo file ngôn ngữ giao diện';
 $lang_module['nv_lang_delete'] = 'Xóa ngôn ngữ giao diện';
 $lang_module['nv_lang_delete_error'] = 'Có lỗi trong quá trình xóa file ngôn ngữ giao diện, bạn cần kiểm tra lại các file không được xóa.';
 $lang_module['nv_error_write_file'] = 'Lỗi không ghi được file';
@@ -80,3 +81,5 @@ $lang_module['nv_check_type_2'] = 'Kiểm tra tất cả';
 $lang_module['nv_lang_check_title'] = 'Kiểm tra các ngôn ngữ chưa được dịch';
 $lang_module['countries'] = 'Ngôn ngữ theo quốc gia';
 $lang_module['countries_name'] = 'Tên quốc gia';
+$lang_module['lang_installed'] = 'Ngôn ngữ đã cài đặt';
+$lang_module['lang_can_install'] = 'Ngôn ngữ chưa cài đặt';

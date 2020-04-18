@@ -9,7 +9,7 @@
  * @Createdate Jun 22, 2010, 08:22:00 AM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -23,6 +23,7 @@ $lang_block['blockid'] = 'Nhóm tin liên quan';
 $lang_block['numrow'] = 'Số bài hiển thị';
 $lang_block['type'] = 'Cách thức hiển thị';
 $lang_block['showtooltip'] = 'Hiển thị tooltip';
+$lang_block['title_length'] = 'Số ký tự tiêu đề';
 $lang_block['tooltip_position'] = 'Vị trí';
 $lang_block['tooltip_position_top'] = 'Trên';
 $lang_block['tooltip_position_bottom'] = 'Dưới';

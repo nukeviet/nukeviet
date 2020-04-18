@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
+ * @Author VINADES <contact@vinades.vn>
  * @Copyright (@) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -17,15 +17,13 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $contact_allowed = nv_getAllowed();
 
 if (! isset($contact_allowed['view'][$row['cid']])) {
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $is_read = intval($row['is_read']);
@@ -37,7 +35,7 @@ if ($mark == 'unread') {
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
 
-    die(json_encode(array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name )));
+    nv_jsonOutput(array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name ));
 }
 
 if (! $is_read) {
@@ -46,7 +44,7 @@ if (! $is_read) {
     $is_read = 1;
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -80,7 +78,10 @@ if (isset($contact_allowed['reply'][$row['cid']])) {
     $xtpl->parse('main.reply');
 }
 
-if ($row['is_reply']) {
+$xtpl->assign('URL_FORWARD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=forward&amp;id=' . $row['id']);
+
+
+if ($row['is_reply']>=1) {
     $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id=' . $id);
     while ($row = $result->fetch()) {
         $sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.first_name, t2.last_name FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval($row['reply_aid']);

@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -74,3 +74,21 @@ $lang_global['phone_note_title'] = 'Quy định khai báo số điện thoại';
 $lang_global['phone_note_content'] = '<ul><li>Số điện thoại được chia ra hai phần, phần đầu là bắt buộc và dành cho việc hiển thị trên site, phần hai không bắt buộc và dành cho việc quay số khi click chuột vào nó.</li><li>Phần đầu được viết tự do nhưng không có dấu ngoặc vuông. Phần hai để trong dấu ngoặc vuông ngay sau phần đầu và chỉ được chứa các ký tự sau: chữ số, dấu sao, dấu thăng, dấu phẩy, dấu chấm, dấu chấm phẩy và dấu cộng ([0-9\*\#\.\,\;\+]).</li><li>Ví dụ, nếu bạn khai báo <strong>0438211725 (ext 601)</strong>, thì số <strong>0438211725 (ext 601)</strong> sẽ được hiển thị đơn thuần trên site. Còn nếu bạn khai báo <strong>0438211725 (ext 601)[+84438211725,601]</strong>, hệ thống sẽ cho hiển thị <strong>0438211725 (ext 601)</strong> trên site và url khi click chuột vào số điện thoại trên sẽ là <strong>tel:+84438211725,601</strong></li><li>Bạn có thể khai báo nhiều số điện thoại theo quy tắc trên. Chúng được phân cách bởi dấu |.</li></ul>';
 $lang_global['multi_note'] = 'Có thể khai báo hơn 1 giá trị, được phân cách bởi dấu phẩy.';
 $lang_global['multi_email_note'] = 'Có thể khai báo hơn 1 giá trị, được phân cách bởi dấu phẩy. Email đầu tiên được coi là email chính, được sử dụng để gửi, nhận thư.';
+
+$lang_global['view_all'] = 'Xem tất cả';
+$lang_global['email'] = 'Email';
+$lang_global['phonenumber'] = 'Điện thoại';
+$lang_global['admin_pre_logout'] = 'Không phải tôi, đăng xuất';
+$lang_global['admin_hello_2step'] = 'Chào <strong class="admin-name">%s</strong>, mời bạn xác thực tài khoản';
+$lang_global['admin_noopts_2step'] = 'Chưa có phương thức xác thực hai bước nào được cấp phép, tạm thời bạn không thể đăng nhập quản trị';
+$lang_global['admin_mactive_2step'] = 'Bạn chưa thể xác thực vì chưa kích hoạt phương thức nào';
+$lang_global['admin_mactive_2step_choose0'] = 'Mời bạn nhấp vào nút bên dưới để kích hoạt phương thức xác thực';
+$lang_global['admin_mactive_2step_choose1'] = 'Mời bạn lựa chọn một trong các phương thức xác thực bên dưới';
+$lang_global['admin_2step_opt_code'] = 'Mã xác nhận từ ứng dụng';
+$lang_global['admin_2step_opt_facebook'] = 'Tài khoản Facebook';
+$lang_global['admin_2step_opt_google'] = 'Tài khoản Google';
+$lang_global['admin_2step_other'] = 'Phương thức xác thực khác';
+$lang_global['admin_oauth_error_getdata'] = 'Lỗi: Hệ thống nhận dạng được dữ liệu xác thực. Xác thực thất bại!';
+$lang_global['admin_oauth_error_email'] = 'Lỗi: Email trả về không hợp lệ, bạn không thể xác thực';
+$lang_global['admin_oauth_error_savenew'] = 'Lỗi: Không thể lưu thông tin xác thực';
+$lang_global['admin_oauth_error'] = 'Lỗi: Xác thực không hợp lệ, tài khoản này chưa được cấp phép';

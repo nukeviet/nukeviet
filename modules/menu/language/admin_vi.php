@@ -9,7 +9,7 @@
  * @Createdate Apr 15, 2011, 02:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -92,5 +92,6 @@ $lang_module['action_menu_sys_1'] = 'Các menu là các module';
 $lang_module['action_menu_sys_2'] = 'Các menu là các module, submenu là các chủ đề hoặc chức năng';
 $lang_module['action_menu_sys_3'] = 'Các menu là chủ đề hoặc chức năng module';
 $lang_module['icon'] = 'Icon menu';
+$lang_module['image'] = 'Hình ảnh';
 $lang_module['action_form'] = 'Thực hiện';
 $lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 bài viết để thực hiện';

@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 5/12/2010, 1:34
@@ -21,7 +21,7 @@ if (! defined('NV_IS_FILE_SEOTOOLS')) {
  */
 function nv_sitemapPing($module, $link)
 {
-    global $sys_info, $lang_module;
+    global $sys_info, $lang_module, $global_config;
 
     $md5 = md5($link . $module . NV_LANG_DATA);
     $cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/sitemapPing_' . $md5 . '.cache';
@@ -30,7 +30,7 @@ function nv_sitemapPing($module, $link)
         return $lang_module['pleasePingAgain'];
     }
 
-    if ($sys_info['supports_rewrite']) {
+    if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
         $myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap-' . NV_LANG_DATA . '.' . $module . '.xml';
     } else {
         $myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=sitemap';
@@ -118,10 +118,10 @@ while ($row = $result->fetch()) {
     $sitemapFiles[$row['name']] = $row['title'];
 }
 
-if ($global_config['check_rewrite_file']) {
+if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
     $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
 } else {
-    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 }
 
 $xtpl = new XTemplate('sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

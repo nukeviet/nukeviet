@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
@@ -30,6 +30,18 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     $array_config['activecomm'] = $nv_Request->get_int('activecomm', 'post', 0);
     $array_config['sortcomm'] = $nv_Request->get_int('sortcomm', 'post', 0);
     $array_config['captcha'] = $nv_Request->get_int('captcha', 'post', 0);
+    $array_config['perpagecomm'] = $nv_Request->get_int('perpagecomm', 'post', 0);
+    $array_config['timeoutcomm'] = $nv_Request->get_int('timeoutcomm', 'post', 0);
+    $array_config['allowattachcomm'] = ($nv_Request->get_int('allowattachcomm', 'post', 0) == 1 ? 1 : 0);
+    $array_config['alloweditorcomm'] = ($nv_Request->get_int('alloweditorcomm', 'post', 0) == 1 ? 1 : 0);
+
+    if ($array_config['perpagecomm'] < 1 or $array_config['perpagecomm'] > 1000) {
+        $array_config['perpagecomm'] = 5;
+    }
+
+    if ($array_config['timeoutcomm'] < 0) {
+        $array_config['timeoutcomm'] = 360;
+    }
 
     $_groups_com = $nv_Request->get_array('allowed_comm', 'post', array());
     if (in_array(-1, $_groups_com)) {
@@ -60,8 +72,7 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
         $sth->execute();
     }
     $nv_Cache->delMod('settings');
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-    die();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -74,11 +85,13 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
-if (! empty($mod_name)) {
+if (!empty($mod_name)) {
     $xtpl->assign('MOD_NAME', $mod_name);
     $xtpl->assign('DATA', $module_config[$mod_name]);
     $xtpl->assign('ACTIVECOMM', $module_config[$mod_name]['activecomm'] ? ' checked="checked"' : '');
     $xtpl->assign('EMAILCOMM', $module_config[$mod_name]['emailcomm'] ? ' checked="checked"' : '');
+    $xtpl->assign('ALLOWATTACHCOMM', empty($module_config[$mod_name]['allowattachcomm']) ? '' : ' checked="checked"');
+    $xtpl->assign('ALLOWEDITORCOMM', empty($module_config[$mod_name]['alloweditorcomm']) ? '' : ' checked="checked"');
 
     $admins_mod_name = explode(',', $site_mod_comm[$mod_name]['admins']);
     $admins_module_name = explode(',', $site_mods[$module_name]['admins']);
@@ -157,7 +170,7 @@ if (! empty($mod_name)) {
     }
 
     // Thao luan mac dinh khi tao bai viet moi
-    while (list($i, $title_i) = each($captcha_array)) {
+    foreach ($captcha_array as $i => $title_i) {
         $xtpl->assign('OPTION', array(
             'key' => $i,
             'title' => $title_i,

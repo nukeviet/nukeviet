@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -20,14 +20,17 @@ $contents = 'NO_' . $id;
 if ($listid != '' and NV_CHECK_SESSION == $checkss) {
     $del_array = array_map('intval', explode(',', $listid));
 } elseif (md5($id . NV_CHECK_SESSION) == $checkss) {
-    $del_array = array( $id );
+    $del_array = array(
+        $id
+    );
 }
-if (! empty($del_array)) {
-    $sql = 'SELECT id, listcatid, admin_id, title, alias, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $del_array) . ')';
+if (!empty($del_array)) {
+    $weight_min = 0;
+    $sql = 'SELECT id, listcatid, admin_id, title, alias, status, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $del_array) . ') ORDER BY weight DESC';
     $result = $db->query($sql);
     $del_array = $no_del_array = array();
     $artitle = array();
-    while (list($id, $listcatid, $post_id, $title, $alias, $status) = $result->fetch(3)) {
+    while (list ($id, $listcatid, $post_id, $title, $alias, $status, $weight) = $result->fetch(3)) {
         $check_permission = false;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission = true;
@@ -59,6 +62,7 @@ if (! empty($del_array)) {
             $contents = nv_del_content_module($id);
             $artitle[] = $title;
             $del_array[] = $id;
+            $weight_min = $weight;
         } else {
             $no_del_array[] = $id;
         }
@@ -67,9 +71,11 @@ if (! empty($del_array)) {
     if ($count) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['permissions_del_content'], implode(', ', $artitle), $admin_info['userid']);
     }
-    if (! empty($no_del_array)) {
+    if (!empty($no_del_array)) {
         $contents = 'ERR_' . $lang_module['error_no_del_content_id'] . ': ' . implode(', ', $no_del_array);
     }
+
+    nv_fix_weight_content($weight_min);
     nv_set_status_module();
 }
 

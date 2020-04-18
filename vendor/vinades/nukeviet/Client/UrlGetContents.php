@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 5-8-2010 1:13
@@ -45,12 +45,7 @@ class UrlGetContents
         }
 
         if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions)) {
-            ini_set('allow_url_fopen', 1);
             ini_set('default_socket_timeout', $this->time_limit);
-            $memoryLimitMB = ( integer )ini_get('memory_limit');
-            if ($memoryLimitMB < 64) {
-                ini_set('memory_limit', '64M');
-            }
             ini_set('user_agent', $this->user_agent);
         }
 
@@ -87,7 +82,7 @@ class UrlGetContents
      */
     private function check_url($is_200 = 0)
     {
-        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' || strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
         if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
@@ -163,7 +158,7 @@ class UrlGetContents
             return false;
         }
         if (preg_match('/(301)|(302)|(303)/', $res[0])) {
-            foreach ($res as $k => $v) {
+            foreach ($res as $v) {
                 if (preg_match("/location:\s(.*?)$/is", $v, $matches)) {
                     ++$is_200;
                     $location = trim($matches[1]);
@@ -239,7 +234,7 @@ class UrlGetContents
 
         $result = curl_exec($curlHandle);
 
-        if (curl_errno($curlHandle) == 23 || curl_errno($curlHandle) == 61) {
+        if (curl_errno($curlHandle) == 23 or curl_errno($curlHandle) == 61) {
             curl_setopt($curlHandle, CURLOPT_ENCODING, 'none');
             $result = curl_exec($curlHandle);
         }
@@ -254,7 +249,7 @@ class UrlGetContents
         $response = curl_getinfo($curlHandle);
 
         if ($this->open_basedir) {
-            if ($response['http_code'] == 301 || $response['http_code'] == 302 || $response['http_code'] == 303) {
+            if ($response['http_code'] == 301 or $response['http_code'] == 302 or $response['http_code'] == 303) {
                 if (preg_match('/^(Location:|URI:)[\s]*(.*?)$/m', $header, $matches) and $this->redirectCount <= 5) {
                     ++$this->redirectCount;
 
@@ -273,7 +268,7 @@ class UrlGetContents
             }
         }
 
-        if (($response['http_code'] < 200) || (300 <= $response['http_code'])) {
+        if (($response['http_code'] < 200) or (300 <= $response['http_code'])) {
             curl_close($curlHandle);
             return false;
         }
@@ -363,7 +358,7 @@ class UrlGetContents
 
         $response = '';
 
-        while ((!@feof($fp)) && (!$in_f['timed_out'])) {
+        while ((!@feof($fp)) and (!$in_f['timed_out'])) {
             $response .= @fgets($fp, 4096);
             $inf = @stream_get_meta_data($fp);
             if ($inf['timed_out']) {

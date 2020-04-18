@@ -2,13 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 5/12/2010, 1:34
  */
 
-if (! defined('NV_IS_FILE_SEOTOOLS')) {
+if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
@@ -29,23 +29,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $optionother = $nv_Request->get_array('optionother', 'post');
     $robots_other = array();
     foreach ($fileother as $key => $value) {
-        if (! empty($value)) {
+        if (!empty($value)) {
             $robots_other[$value] = intval($optionother[$key]);
         }
     }
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
     $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
-    $content_config .= "\$cache_other = '" . serialize($robots_other) . "';";
+    $content_config .= "\$cache_other = '" . serialize($robots_other) . "';\n";
 
     file_put_contents($cache_file, $content_config, LOCK_EX);
 
-    $check_rewrite_file = nv_check_rewrite_file();
-
     $redirect = false;
-    if (empty($global_config['check_rewrite_file'])) {
+    if (!$global_config['check_rewrite_file'] or !$global_config['rewrite_enable']) {
         $rbcontents = array();
         $rbcontents[] = 'User-agent: *';
 
@@ -57,7 +55,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         }
 
-        $rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+        $rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 
         $rbcontents = implode("\n", $rbcontents);
 
@@ -66,19 +64,25 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $redirect = true;
         } else {
             $xtpl->assign('TITLE', $lang_module['robots_error_writable']);
-            $xtpl->assign('CONTENT', str_replace(array( "\n", "\t" ), array( '<br />', '&nbsp;&nbsp;&nbsp;&nbsp;' ), nv_htmlspecialchars($rbcontents)));
+            $xtpl->assign('CONTENT', str_replace(array(
+                "\n",
+                "\t"
+            ), array(
+                '<br />',
+                '&nbsp;&nbsp;&nbsp;&nbsp;'
+            ), nv_htmlspecialchars($rbcontents)));
             $xtpl->parse('main.nowrite');
         }
     }
 
     if ($redirect) {
-        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-        exit();
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 }
 
 $robots_data = array();
 $robots_other = array();
+
 if (file_exists($cache_file)) {
     include $cache_file;
     $robots_data = unserialize($cache);
@@ -91,22 +95,34 @@ if (file_exists($cache_file)) {
     $robots_data['/robots.php'] = 0;
     $robots_data['/web.config'] = 0;
 }
-$robots_other[''] = 0;
 
+if ($global_config['rewrite_enable']) {
+    foreach ($site_mods as $key => $value) {
+        if ($value['module_file'] == 'users' or $value['module_file'] == 'statistics') {
+            $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $key, true);
+            if (!isset($robots_other[$_url])) {
+                $robots_other[$_url] = 0;
+            }
+        }
+    }
+}
 $files = scandir(NV_ROOTDIR, true);
 sort($files);
 $contents = array();
 $contents[] = 'User-agent: *';
 $number = 0;
 foreach ($files as $file) {
-    if (! preg_match('/^\.(.*)$/', $file)) {
+    if (!preg_match('/^\.(.*)$/', $file)) {
         if (is_dir(NV_ROOTDIR . '/' . $file)) {
             $file = '/' . $file . '/';
         } else {
             $file = '/' . $file;
         }
 
-        $data = array( 'number' => ++$number, 'filename' => $file );
+        $data = array(
+            'number' => ++$number,
+            'filename' => $file
+        );
 
         $type = isset($robots_data[$file]) ? $robots_data[$file] : 1;
 
@@ -126,7 +142,10 @@ foreach ($files as $file) {
     }
 }
 foreach ($robots_other as $file => $value) {
-    $data = array( 'number' => ++$number, 'filename' => $file );
+    $data = array(
+        'number' => ++$number,
+        'filename' => $file
+    );
     $xtpl->assign('DATA', $data);
 
     for ($i = 0; $i <= 2; $i++) {

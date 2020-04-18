@@ -8,11 +8,11 @@
  * @Createdate 3/25/2010 18:6
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_freecontent')) {
+if (!nv_function_exists('nv_block_freecontent')) {
     /**
      * nv_block_config_freecontent()
      *
@@ -27,9 +27,9 @@ if (! nv_function_exists('nv_block_freecontent')) {
 
         $html = '';
 
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['blockid'] . '</td>';
-        $html .= '	<td>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['blockid'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_blockid" class="form-control">';
 
         $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_blocks ORDER BY title ASC';
@@ -40,21 +40,21 @@ if (! nv_function_exists('nv_block_freecontent')) {
         }
 
         $html .= '		</select>';
-        $html .= '	</td>';
-        $html .= '</tr>';
+        $html .= '	</div>';
+        $html .= '</div>';
 
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['numrows'] . '</td>';
-        $html .= '	<td>';
+        $html .= '<div class="form-group">';
+        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrows'] . ':</label>';
+        $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_numrows" class="form-control">';
 
-        for ($i = 1; $i <= 10; $i ++) {
+        for ($i = 1; $i <= 10; $i++) {
             $html .= '	<option value="' . $i . '"' . ($i == $data_block['numrows'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
 
         $html .= '		</select>';
-        $html .= '	</td>';
-        $html .= '</tr>';
+        $html .= '	</div>';
+        $html .= '</div>';
 
         return $html;
     }
@@ -89,7 +89,7 @@ if (! nv_function_exists('nv_block_freecontent')) {
         $module = $block_config['module'];
 
         // Set content status
-        if (! empty($module_config[$module]['next_execute']) and $module_config[$module]['next_execute'] <= NV_CURRENTTIME) {
+        if (!empty($module_config[$module]['next_execute']) and $module_config[$module]['next_execute'] <= NV_CURRENTTIME) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows SET status = 2 WHERE end_time > 0 AND end_time < ' . NV_CURRENTTIME;
             $db->query($sql);
 
@@ -108,14 +108,14 @@ if (! nv_function_exists('nv_block_freecontent')) {
             unset($next_execute);
         }
 
-        if (! isset($site_mods[$module]) or empty($block_config['blockid'])) {
+        if (!isset($site_mods[$module]) or empty($block_config['blockid'])) {
             return '';
         }
 
         $sql = 'SELECT id, title, description, image, link, target FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE status = 1 AND bid = ' . $block_config['blockid'];
         $list = $nv_Cache->db($sql, 'id', $module);
 
-        if (! empty($list)) {
+        if (!empty($list)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl')) {
                 $block_theme = $global_config['module_theme'];
             } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl')) {
@@ -132,14 +132,14 @@ if (! nv_function_exists('nv_block_freecontent')) {
             }
 
             foreach ($list as $row) {
-                if (! empty($row['image'])) {
+                if (!empty($row['image'])) {
                     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'];
                 }
 
                 $xtpl->assign('ROW', $row);
 
-                if (! empty($row['link'])) {
-                    if (! empty($row['target'])) {
+                if (!empty($row['link'])) {
+                    if (!empty($row['target'])) {
                         $xtpl->parse('main.loop.title_link.target');
                     }
 
@@ -148,9 +148,9 @@ if (! nv_function_exists('nv_block_freecontent')) {
                     $xtpl->parse('main.loop.title_text');
                 }
 
-                if (! empty($row['image'])) {
-                    if (! empty($row['link'])) {
-                        if (! empty($row['target'])) {
+                if (!empty($row['image'])) {
+                    if (!empty($row['link'])) {
+                        if (!empty($row['target'])) {
                             $xtpl->parse('main.loop.image_link.target');
                         }
 

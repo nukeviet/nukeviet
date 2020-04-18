@@ -2,18 +2,18 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
@@ -48,9 +48,12 @@ $lang_module['type_file'] = 'Tất cả';
 $lang_module['type_image'] = 'Hình ảnh';
 $lang_module['type_flash'] = 'Flash';
 $lang_module['rename'] = 'Đổi tên file';
-$lang_module['renamefolder'] = 'Đổi tên folder';
-$lang_module['deletefolder'] = 'Xóa folder';
-$lang_module['createfolder'] = 'Tạo folder';
+$lang_module['renamefolder'] = 'Đổi tên Thư mục';
+$lang_module['deletefolder'] = 'Xóa Thư mục';
+$lang_module['createfolder'] = 'Tạo Thư mục';
+$lang_module['recreatethumb'] = 'Tạo lại ảnh thumb';
+$lang_module['recreatethumb_note'] = 'Chú ý: Chức năng này sẽ Xóa tất cả thumb thuộc thư mục, cả thư mục con và tạo lại ảnh thumb theo cấu hình mới. Quá trình này có thể kéo dài rất lâu, bạn không được đóng trình duyệt';
+$lang_module['recreatethumb_result'] = 'Đã tạo lại ảnh thumb cho';
 $lang_module['rename_newname'] = 'Tên mới';
 $lang_module['rename_noname'] = 'Bạn chưa đặt tên mới cho file';
 $lang_module['rename_error_folder'] = 'Lỗi: Hệ thống không đổi tên được thư mục';
@@ -78,9 +81,14 @@ $lang_module['author0'] = 'của tất cả';
 $lang_module['author1'] = 'của tôi';
 $lang_module['uploadError1'] = 'Bạn cần chọn file trên PC hoặc chép đường dẫn tới file vào ô URL';
 $lang_module['uploadError2'] = 'Lỗi: URL không đúng quy chuẩn';
+$lang_module['uploadError3'] = 'Lỗi: Dữ liệu upload nhiều phần không đúng chuẩn';
 $lang_module['pubdate'] = 'Cập nhật';
 $lang_module['newSize'] = 'Tạo ảnh mới';
 $lang_module['prView'] = 'Xem';
+$lang_module['prViewExample'] = 'Xem ví dụ';
+$lang_module['prViewExampleError'] = 'Hãy chọn thư mục, phương án và nhập đầy đủ kích thước, chất lượng ảnh thumb trước';
+$lang_module['prViewExampleError1'] = 'Lỗi dữ liệu';
+$lang_module['prViewExampleError2'] = 'Hệ thống không tìm thấy bất kỳ ảnh nào để đưa ra ví dụ. Bạn cần upload lên ít nhất một ảnh ở thư mục upload';
 $lang_module['errorMinX'] = 'Lỗi: Chiều rộng nhỏ hơn mức cho phép';
 $lang_module['errorMaxX'] = 'Lỗi: Chiều rộng lớn hơn mức cho phép';
 $lang_module['errorMinY'] = 'Lỗi: Chiều cao nhỏ hơn mức cho phép';
@@ -106,6 +114,7 @@ $lang_module['upload_logo'] = 'Logo khi thêm vào hình ảnh ';
 $lang_module['upload_logo_pos'] = 'Vị trí của logo';
 $lang_module['selectimg'] = 'Chọn hình ảnh';
 $lang_module['autologo'] = 'Tự động chèn Logo vào ảnh của các module';
+$lang_module['autologo_for_upload'] = 'Chèn logo vào tập tin tải lên (nếu là ảnh)';
 $lang_module['autologomodall'] = 'Tất cả các module';
 $lang_module['logosizecaption'] = 'Kích thước của logo';
 $lang_module['imagewith'] = 'Nếu chiều rộng ảnh';
@@ -121,7 +130,10 @@ $lang_module['logopostopright'] = 'Phía trên, bên phải';
 $lang_module['logopostopleft'] = 'Phía trên, bên trái';
 $lang_module['logopostopcenter'] = 'Phía trên, ở giữa';
 $lang_module['fileimage'] = 'ảnh';
+$lang_module['filerelativepath'] = 'Đường dẫn tương đối';
+$lang_module['fileabsolutepath'] = 'Đường dẫn tuyệt đối';
 $lang_module['altimage'] = 'Chú thích cho hình';
+$lang_module['filepathcopied'] = 'Đường dẫn đã được sao chép';
 
 $lang_module['uploadconfig'] = 'Cấu hình upload';
 $lang_module['uploadconfig_ban_ext'] = 'Phần mở rộng bị cấm';
@@ -146,6 +158,7 @@ $lang_module['thumb_type_1'] = 'resize ảnh theo chiều rộng';
 $lang_module['thumb_type_2'] = 'resize ảnh theo chiều cao';
 $lang_module['thumb_type_3'] = 'resize ảnh theo hai chiều';
 $lang_module['thumb_type_4'] = 'resize và crop ảnh theo kích thước';
+$lang_module['thumb_type_5'] = 'resize và crop top ảnh theo kích thước';
 $lang_module['thumb_quality'] = 'Chất lượng hình ảnh resize';
 $lang_module['thumb_dir'] = 'Thư mục';
 $lang_module['thumb_dir_default'] = 'Cấu hình mặc định';
@@ -157,9 +170,12 @@ $lang_module['order2'] = 'Sắp xếp theo tên file';
 
 $lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
 $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
+$lang_module['original_image'] = 'Ảnh gốc';
+$lang_module['thumb_image'] = 'Ảnh thumb';
 
 $lang_module['crop'] = 'Cắt ảnh';
 $lang_module['crop_error_small'] = 'Ảnh này kích thước quá nhỏ, không nên cắt';
+$lang_module['crop_keep_original'] = 'Giữ lại ảnh gốc';
 $lang_module['rotate'] = 'Xoay ảnh';
 $lang_module['waiting'] = 'Đang tải dữ liệu, vui lòng đợi';
 $lang_module['file_no_exists'] = 'File không tồn tại';
@@ -175,3 +191,7 @@ $lang_module['upload_auto_alt'] = 'Tự xác định mô tả từ tên ảnh';
 $lang_module['upload_alt_note'] = 'Hãy nhập chú thích cho file trước';
 $lang_module['upload_view_thumbnail'] = 'Chuyển sang xem theo dạng lưới';
 $lang_module['upload_view_detail'] = 'Chuyển sang xem theo dạng danh sách';
+$lang_module['upload_chunk'] = 'Chunk Upload';
+$lang_module['upload_chunk_help'] = 'Chức năng này hỗ trợ chia nhỏ tập tin upload thành nhiều gói nhỏ, hỗ trợ upload tập tin lớn đến rất lớn lên máy chủ. Nếu bạn không có ý định cho phép upload các tập tin lớn hãy để trống giá bị bên trên';
+$lang_module['upload_overflow'] = 'Upload vượt giới hạn';
+$lang_module['upload_overflow_help'] = 'Cho phép tải lên các tập tin có kích thước lớn hơn dung lượng tối đa được tải lên. Lưu ý: Chỉ có tác dụng khi tải lên trực tiếp tập tin từ máy tính tại phần quản lý file, phần Chunk Upload bên trên được thiết lập. Giá trị cấu hình tại đây không được nhỏ hơn dung lượng tối đa của file tải lên được thiết lập bên trên';

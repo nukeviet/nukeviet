@@ -29,13 +29,11 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     $message = $array ? '' : 'Invalid post data';
 
-    include NV_ROOTDIR . '/includes/header.php';
-    echo json_encode(array(
+    nv_jsonOutput(array(
         'status' => ! empty($array) ? 'success' : 'error',
         'message' => $message,
         'data' => $array
     ));
-    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 // Delete block
@@ -62,12 +60,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         $message = 'Invalid post data';
     }
 
-    include NV_ROOTDIR . '/includes/header.php';
-    echo json_encode(array(
+    nv_jsonOutput(array(
         'status' => ! $message ? 'success' : 'error',
         'message' => $message,
     ));
-    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 // Add + Edit submit
@@ -120,13 +116,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
     }
 
-    include NV_ROOTDIR . '/includes/header.php';
-    echo json_encode(array(
+    nv_jsonOutput(array(
         'status' => empty($error) ? 'success' : 'error',
         'message' => $message,
         'error' => $error
     ));
-    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 // Write row

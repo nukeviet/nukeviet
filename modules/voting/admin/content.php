@@ -2,7 +2,7 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
@@ -35,7 +35,7 @@ if (! empty($submit)) {
 
     $answervotenews = $nv_Request->get_array('answervotenews', 'post');
     $urlvotenews = $nv_Request->get_array('urlvotenews', 'post');
-    if ($maxoption > ($sizeof = sizeof($answervotenews) + sizeof($array_answervote)) || $maxoption <= 0) {
+    if ($maxoption > ($sizeof = sizeof($answervotenews) + sizeof($array_answervote)) or $maxoption <= 0) {
         $maxoption = $sizeof;
     }
 
@@ -76,14 +76,21 @@ if (! empty($submit)) {
         'link' => $link
     );
 
+    $active_captcha = $nv_Request->get_int('active_captcha', 'post', 0) ? 1 : 0;
+
     if (! empty($question) and $number_answer > 1) {
         $error = $lang_module['voting_error'];
 
         if (empty($vid)) {
-            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (question, link, acceptcm, admin_id, groups_view, publ_time, exp_time, act) VALUES (' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0,0,1)';
+            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
+                question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act
+            ) VALUES (
+                ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1
+            )';
             $vid = $db->insert_id($sql, 'vid');
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid']);
         }
+
         if ($vid > 0) {
             $maxoption_data = 0;
             foreach ($array_answervote as $id => $title) {
@@ -92,7 +99,7 @@ if (! empty($submit)) {
                     $url = nv_unhtmlspecialchars(strip_tags($array_urlvote[$id]));
                     if (!nv_is_url($url)) {
                         $url = '';
-                    }                    
+                    }
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . intval($id) . ' AND vid =' . $vid);
                     ++$maxoption_data;
                 } else {
@@ -121,13 +128,17 @@ if (! empty($submit)) {
             } else {
                 $act = 1;
             }
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ', publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ' WHERE vid =' . $vid;
+
+            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
+                question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ',
+                admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ',
+                publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . '
+            WHERE vid =' . $vid;
+
             if ($db->query($sql)) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid']);
                 $nv_Cache->delMod($module_name);
-                $error = '';
-                Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-                die();
+                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
             }
         }
     } else {
@@ -145,6 +156,7 @@ if (! empty($submit)) {
     $maxoption = 1;
     $array_answervote = array();
     $array_urlvote = array();
+
     if ($vid > 0) {
         $queryvote = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
         $rowvote = $db->query($queryvote)->fetch();
@@ -160,15 +172,19 @@ if (! empty($submit)) {
         if ($maxoption > 1) {
             $maxoption = $maxoption - 1;
         }
+
+        $active_captcha = $rowvote['active_captcha'];
     } else {
         $rowvote = array(
             'groups_view' => '6',
             'publ_time' => NV_CURRENTTIME,
             'exp_time' => '',
             'acceptcm' => 1,
+            'active_captcha' => 1,
             'question' => '',
             'link' => ''
         );
+        $active_captcha = 1;
     }
 }
 
@@ -178,6 +194,9 @@ $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;vid=' . $vid);
 
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link']);
+$rowvote['active_captcha'] = $active_captcha ? ' checked="checked"' : '';
+$rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
+
 $xtpl->assign('DATA', $rowvote);
 
 if ($error != '') {

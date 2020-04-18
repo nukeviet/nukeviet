@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -20,10 +20,10 @@ if (! defined('NV_IS_FILE_ADMIN')) {
  */
 function nv_set_dir_class($array)
 {
-    $class = array( 'folder' );
+    $class = ['folder'];
     $menu = false;
 
-    if (! empty($array)) {
+    if (!empty($array)) {
         foreach ($array as $key => $item) {
             if ($item) {
                 $class[] = $key;
@@ -60,18 +60,18 @@ function viewdirtree($dir, $currentpath)
 {
     global $array_dirname, $global_config, $module_file;
 
-    $pattern = ! empty($dir) ? '/^(' . nv_preg_quote($dir) . ')\/([^\/]+)$/' : '/^([^\/]+)$/';
+    $pattern = !empty($dir) ? '/^(' . nv_preg_quote($dir) . ')\/([^\/]+)$/' : '/^([^\/]+)$/';
     $_dirlist = preg_grep($pattern, array_keys($array_dirname));
 
     $content = '';
     foreach ($_dirlist as $_dir) {
         $check_allow_upload_dir = nv_check_allow_upload_dir($_dir);
 
-        if (! empty($check_allow_upload_dir)) {
+        if (!empty($check_allow_upload_dir)) {
             $class_li = ($_dir == $currentpath or strpos($currentpath, $_dir . '/') !== false) ? 'open collapsable' : 'expandable';
             $style_color = ($_dir == $currentpath) ? ' style="color:red"' : '';
 
-            $tree = array();
+            $tree = [];
             $tree['class1'] = $class_li;
             $tree['class2'] = nv_set_dir_class($check_allow_upload_dir) . ' pos' . nv_string_to_filename($dir);
             $tree['style'] = $style_color;
@@ -87,7 +87,7 @@ function viewdirtree($dir, $currentpath)
                 $content2 = '<li class="hide">&nbsp;</li>';
             }
 
-            if (! empty($content2)) {
+            if (!empty($content2)) {
                 $xtpl->assign('TREE_CONTENT', $content2);
                 $xtpl->parse('tree.tree_content');
             }
@@ -107,7 +107,7 @@ if (empty($path)) {
 $currentpath = nv_check_path_upload($nv_Request->get_string('currentpath', 'request', NV_UPLOADS_DIR));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
-$data = array();
+$data = [];
 $data['style'] = $path == $currentpath ? ' style="color:red"' : '';
 $data['class'] = nv_set_dir_class($check_allow_upload_dir) . ' pos' . nv_string_to_filename($path);
 $data['title'] = $path;
@@ -137,7 +137,7 @@ if (empty($content)) {
     $content = '<li class="hide">&nbsp;</li>';
 }
 
-if (! empty($content)) {
+if (!empty($content)) {
     $xtpl->assign('CONTENT', $content);
     $xtpl->parse('main.main_content');
 }

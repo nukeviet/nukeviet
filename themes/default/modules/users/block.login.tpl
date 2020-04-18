@@ -1,11 +1,11 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: display_button -->
 <div id="nv-block-login" class="text-center">
-	<button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}')">
+	<button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}', 'recaptchareset')">
 		{GLANG.signin}
 	</button>
 	<!-- BEGIN: allowuserreg2 -->
-	<button type="button" class="register btn btn-primary btn-sm" onclick="modalShowByObj('#guestReg_{BLOCKID}')">
+	<button type="button" class="register btn btn-primary btn-sm" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">
 		{GLANG.register}
 	</button>
 	<!-- END: allowuserreg2 -->
@@ -50,7 +50,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- END: datepicker -->
 
-<script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: main -->
 
 <!-- BEGIN: signed -->
@@ -118,5 +118,5 @@
     	</div>
     </div>
 </div>
-<script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: signed -->

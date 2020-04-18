@@ -18,7 +18,7 @@ $func_id = $nv_Request->get_int('func_id', 'post');
 
 $position = $nv_Request->get_string('position', 'post');
 
-if (! empty($array_bid) && ! empty($position)) {
+if (! empty($array_bid) and ! empty($position)) {
     $pos_new = '[' . $position . ']';
 
     $sth = $db->prepare('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE position != :position AND bid IN (' . implode(',', $array_bid) . ')');

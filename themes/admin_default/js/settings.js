@@ -20,14 +20,6 @@ function nv_is_del_cron(cronid) {
 	return false;
 }
 
-function show_rewrite_op() {
-	if ($("input[name=rewrite_optional]").is(":checked")) {
-		$('#tr_rewrite_op_mod').show();
-	} else {
-		$('#tr_rewrite_op_mod').hide();
-	}
-}
-
 function nv_chang_weight(pid) {
 	window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&pid=' + pid + '&weight=' + $('#weight_' + pid).val();
 }
@@ -37,7 +29,27 @@ $(document).ready(function(){
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
 	});
-	
+    $('[data-toggle="controlrw1"]').change(function() {
+        var rewrite_optional = $(this).is(':checked');
+        if (rewrite_optional) {
+            $('#tr_rewrite_op_mod').show();
+        } else {
+            $('#tr_rewrite_op_mod').hide();
+            $('[name="rewrite_op_mod"]').find('option').prop('selected', false);
+        }
+    });
+    $('[data-toggle="controlrw"]').change(function() {
+        var lang_multi = $('[name="lang_multi"]').is(':checked');
+        var rewrite_enable = $('[name="rewrite_enable"]').is(':checked');
+        if (!lang_multi && rewrite_enable) {
+            $('#tr_rewrite_optional').show();
+        } else {
+            $('#tr_rewrite_optional').hide();
+            $('[name="rewrite_optional"]').prop('checked', false);
+        }
+        $('[data-toggle="controlrw1"]').change();
+    });
+
 	// Smtp
 	$("input[name=mailer_mode]").click(function() {
 		var type = $(this).val();
@@ -49,7 +61,7 @@ $(document).ready(function(){
 	});
 
 	// Security
-	if( $.fn.datepicker ){
+	if($.fn.datepicker) {
 		$(".datepicker, #start_date").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
@@ -60,36 +72,32 @@ $(document).ready(function(){
 			buttonImageOnly : true
 		});
 	}
-	$('.submit-security').click(function() {
-		var ip = $('input[name=ip]').val();
-		$('input[name=ip]').focus();
-		if (ip == '') {
-			alert(LANG.banip_error_ip);
-			return false;
-		}
-		var area = $('select[name=area]').val();
-		$('select[name=area]').focus();
-		if (area == '0') {
-			alert(LANG.banip_error_area);
-			return false;
-		}
-	});
 	$('a.deleteone-ip').click(function() {
 		if (confirm(LANG.banip_delete_confirm)) {
 			var url = $(this).attr('href');
+            var selectedtab = $('[name="gselectedtab"]').val();
 			$.ajax({
 				type : 'POST',
 				url : url,
 				data : '',
 				success : function(data) {
 					alert(LANG.banip_del_success);
-					window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security";
+					window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security&selectedtab=" + selectedtab;
 				}
 			});
 		}
 		return false;
 	});
-	
+    $('[data-toggle="ctcaptcha"]').change(function() {
+        if ($(this).val() == '2') {
+            $('[data-captcha="typebasic"]').hide();
+            $('[data-captcha="typerecaptcha"]').show();
+        } else {
+            $('[data-captcha="typebasic"]').show();
+            $('[data-captcha="typerecaptcha"]').hide();
+        }
+    });
+
 	// Site setting
 	$(".selectimg").click(function() {
 		var area = $(this).attr('data-name');
@@ -99,7 +107,7 @@ $(document).ready(function(){
 		nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-	
+
 	// FTP setting
 	$('#autodetectftp').click(function() {
 		var ftp_server = $('input[name="ftp_server"]').val();
@@ -132,21 +140,14 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
-	// 
+
 	$('#ssl_https').change(function(){
 		var val = $(this).data('val');
 		var mode = $(this).val();
-		
+
 		if( mode != 0 && val == 0 && ! confirm(LANG.note_ssl) ){
 			$(this).val('0');
 			return;
-		}
-		
-		if( mode == '3' ){
-			$('#ssl_https_modules').removeClass('hidden');
-		}else{
-			$('#ssl_https_modules').addClass('hidden');
 		}
 	});
 });

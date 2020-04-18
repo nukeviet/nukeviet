@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -122,7 +122,6 @@ $lang_module['adminip_edit'] = 'Edit';
 $lang_module['adminip_delete'] = 'Delete';
 $lang_module['adminip_error_ip'] = 'Please enter IPs allowed to access Administration';
 $lang_module['adminip_error_validip'] = 'Invalid IP';
-$lang_module['adminip_note'] = 'Note: You need basic knowledge about networking to use check IP features!';
 $lang_module['title_username'] = 'Manage firewall account';
 $lang_module['admfirewall'] = 'Check firewall';
 $lang_module['block_admin_ip'] = 'Check IP to access to administration area';
@@ -151,3 +150,19 @@ $lang_module['users'] = 'Users';
 $lang_module['number'] = 'No.';
 $lang_module['module'] = 'Module name';
 $lang_module['custom_title'] = 'Title';
+$lang_module['main_module'] = 'Main module';
+$lang_module['themeadmin'] = 'Administration theme';
+$lang_module['theme_default'] = 'Default';
+$lang_module['2step_manager'] = 'Two-step verification management';
+$lang_module['2step_code_off'] = 'Two-step verification via application is off';
+$lang_module['2step_code_on'] = 'Two-step verification via application is on';
+$lang_module['2step_oauth'] = 'Two-step verification using Oauth';
+$lang_module['2step_oauth_gate'] = 'Oauth server';
+$lang_module['2step_oauth_email'] = 'Email';
+$lang_module['2step_oauth_empty'] = 'No verification accounts yet';
+$lang_module['2step_add_google'] = 'Add Google account';
+$lang_module['2step_add_facebook'] = 'Add Facebook account';
+$lang_module['2step_delete_all'] = 'Remove all';
+$lang_module['2step_error_oauth_exists'] = 'This account is already in the verification list';
+$lang_module['2step_addtime'] = 'Add time';
+$lang_module['ip_version'] = 'IP Version';
