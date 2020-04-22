@@ -12,6 +12,9 @@ if (! defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
+// Chặn lập chỉ mục tìm kiếm
+$nv_BotManager->setPrivate();
+
 $id = $nv_Request->get_int('id', 'get,post', 0);
 
 $result = $db->query("SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id);

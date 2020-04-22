@@ -16,6 +16,9 @@ $order_id = $nv_Request->get_string('order_id', 'get', '');
 $checkss = $nv_Request->get_string('checkss', 'get', '');
 
 if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . session_id())) {
+    // Chặn lập chỉ mục tìm kiếm
+    $nv_BotManager->setPrivate();
+
     $table_name = $db_config['prefix'] . '_' . $module_data . '_orders';
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
