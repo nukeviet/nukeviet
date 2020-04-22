@@ -37,6 +37,18 @@ if (!$global_config['allowuserreg']) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+if ($global_config['max_user_number'] > 0) {
+    $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+    $user_number = $db->query($sql)->fetchColumn();
+    if ($user_number >= $global_config['max_user_number']) {
+        $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+        $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+        include NV_ROOTDIR . '/includes/header.php';
+        echo nv_site_theme($contents);
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
+}
+
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
