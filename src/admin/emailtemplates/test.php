@@ -77,6 +77,9 @@ if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
             $email_data['from'][1] = $global_config['site_email'];
         }
 
+        // Hook xử lý biến $email_data trước khi build ra HTML
+        $email_data = nv_apply_hook('', 'get_email_data_before_fetch_test', [$emailid, $email_data, $merge_fields, $field_data], $email_data);
+
         $tpl_string = new \NukeViet\Template\Smarty();
         foreach ($merge_fields as $field_key => $field_value) {
             $tpl_string->assign($field_key, $field_data[$field_key]);
