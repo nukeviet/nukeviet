@@ -54,7 +54,7 @@ class Sendmail extends PHPMailer
             );
         } elseif ($mailer_mode == 'sendmail') {
             $this->IsSendmail();
-        } else {
+        } elseif ($mailer_mode == 'mail') {
             //disable_functions
             $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
 
@@ -64,8 +64,11 @@ class Sendmail extends PHPMailer
             if (!in_array('mail', $disable_functions)) {
                 $this->IsMail();
             } else {
-                return false;
+                $this->Mailer = 'no';
             }
+        }
+        else{
+            $this->Mailer = 'no';
         }
 
         $this->From = $config['site_email'];
@@ -130,6 +133,15 @@ class Sendmail extends PHPMailer
 
         $this->Body = $message;
         $this->AltBody = strip_tags($message);
+    }
+
+    public function Send()
+    {
+        if ($this->Mailer = 'no') {
+            return false;
+        } else {
+            return $this->Send();
+        }
     }
 
 }
