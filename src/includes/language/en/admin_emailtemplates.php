@@ -69,3 +69,10 @@ $lang_module['merge_field_guild3'] = 'For more details, see <a href="https://www
 $lang_module['merge_field_guild4'] = 'Output as a loop';
 $lang_module['merge_field_guild5'] = 'Loop array to output elements in that array. For example:';
 $lang_module['merge_field_guild6'] = 'For more details, see <a href="https://www.smarty.net/docs/en/language.function.foreach.tpl" target="_blank">here</a>';
+$lang_module['test'] = 'Send test email';
+$lang_module['test_tomail'] = 'Received email';
+$lang_module['test_error_tomail'] = 'Received email empty';
+$lang_module['test_error_template'] = 'This email template does not exist';
+$lang_module['test_tomail_note'] = 'Enter one email per line, usually up to 50 emails';
+$lang_module['test_value_fields'] = 'Custom fields';
+$lang_module['test_success'] = 'Test email sent successfully, please check your inbox (spam box if not in your inbox) to see the email received';

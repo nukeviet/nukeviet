@@ -85,7 +85,8 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('DATA', $array);
 $tpl->assign('CATS', $array_cat_change);
-$tpl->assign('EDIT_BASEURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=contents&amp;emailid=');
+$tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$tpl->assign('MODULE_NAME', $module_name);
 
 $contents = $tpl->fetch('main.tpl');
 

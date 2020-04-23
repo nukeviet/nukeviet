@@ -17,14 +17,15 @@ define('NV_IS_FILE_EMAILTEMPLATES', true);
 $allow_func = [
     'main',
     'categories',
-    'contents'
+    'contents',
+    'test'
 ];
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_emailtemplates')
-);
+];
 
 $sql = 'SELECT catid, time_add, time_update, weight, is_system, ' . NV_LANG_DATA . '_title title FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories ORDER BY weight ASC';
 $global_array_cat = $nv_Cache->db($sql, 'catid', $module_name);

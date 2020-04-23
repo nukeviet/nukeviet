@@ -69,3 +69,11 @@ $lang_module['merge_field_guild3'] = 'Chi tiết hơn, mời xem tại <a href="
 $lang_module['merge_field_guild4'] = 'Xuất ra dạng vòng lặp';
 $lang_module['merge_field_guild5'] = 'Duyệt mảng để xuất ra các phần tử trong mảng đó. Ví dụ:';
 $lang_module['merge_field_guild6'] = 'Chi tiết hơn, mời xem tại <a href="https://www.smarty.net/docs/en/language.function.foreach.tpl" target="_blank">đây</a>';
+
+$lang_module['test'] = 'Gửi thử nghiệm email';
+$lang_module['test_tomail'] = 'Email nhận';
+$lang_module['test_error_tomail'] = 'Bạn chưa nhập email nhận';
+$lang_module['test_error_template'] = 'Mẫu email này không tồn tại';
+$lang_module['test_tomail_note'] = 'Nhập một email mỗi dòng, thường tối đa 50 email';
+$lang_module['test_value_fields'] = 'Dữ liệu mẫu tùy biến';
+$lang_module['test_success'] = 'Đã gửi thử nghiệm email thành công, vui lòng kiểm tra hộp thư đến (cả hộp thư rác nếu không có ở hộp thư đến) để xem email nhận được';

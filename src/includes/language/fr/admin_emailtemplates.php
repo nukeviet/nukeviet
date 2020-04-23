@@ -69,3 +69,10 @@ $lang_module['merge_field_guild3'] = 'Pour plus de détails, voir <a href="https
 $lang_module['merge_field_guild4'] = 'Sortie en boucle';
 $lang_module['merge_field_guild5'] = 'Boucle tableau pour générer des éléments dans ce tableau. Par exemple:';
 $lang_module['merge_field_guild6'] = 'Pour plus de détails, voir <a href="https://www.smarty.net/docs/en/language.function.foreach.tpl" target="_blank">ici</a>';
+$lang_module['test'] = 'Envoyer un e-mail de test';
+$lang_module['test_tomail'] = 'E-mail reçu';
+$lang_module['test_error_tomail'] = 'E-mail reçu vide';
+$lang_module['test_error_template'] = 'Ce modèle d\'e-mail n\'existe pas';
+$lang_module['test_tomail_note'] = 'Entrez un e-mail par ligne, généralement jusqu\'à 50 e-mails';
+$lang_module['test_value_fields'] = 'Les champs personnalisés';
+$lang_module['test_success'] = 'Test e-mail envoyé avec succès, veuillez vérifier votre boîte de réception (boîte de spam si elle n\'est pas dans votre boîte de réception) pour voir l\'e-mail reçu';
