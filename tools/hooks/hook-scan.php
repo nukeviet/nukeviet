@@ -10,6 +10,11 @@
 
 set_time_limit(0);
 
+/**
+ * @param string $dir
+ * @param string $base_dir
+ * @return mixed[]|array[]
+ */
 function list_all_file($dir = '', $base_dir = '')
 {
     $file_list = [];
@@ -42,49 +47,170 @@ define('NV_ROOTDIR', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../..
 
 echo('<pre><code style="font-size: 16px;font-family: Courier New;">');
 
+$debug = false;
+
+/*
+ * Xuất hướng dẫn sử dụng của hook
+ */
 if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
     $file = $_GET['f'];
     $line = $_GET['l'];
-    $filecontents = explode("\n", file_get_contents(NV_ROOTDIR . '/' . $file));
+
+    $filecontents = file_get_contents(NV_ROOTDIR . '/' . $file);
+    $filecontents = str_replace("\025", "\n", $filecontents); // IBM mainframe systems
+    $filecontents = str_replace("\n\r", "\n", $filecontents); // Acorn BBC
+    $filecontents = str_replace("\r\n", "\n", $filecontents); // Microsoft Windows
+    $filecontents = str_replace("\r", "\n", $filecontents); // Mac OS,
+    $filecontents = explode("\n", $filecontents);
     $linecontents = $filecontents[$line];
+    $numberLines = sizeof($filecontents);
 
-    preg_match('/nv\_apply\_hook[\s]*\((\$module\_name|""|\'\')[\s]*\,[\s]*(\'|")([a-zA-Z0-9\_]+)(\'|")[\s]*\,/', $linecontents, $m);
-
-    $hook_tag = $m[3];
-    $linecontents = trim(preg_replace('/^(.*?)' . preg_quote($m[0], '/') . '(.*?)$/', '\\2', $linecontents));
-
-    $return_var = '';
-    if (preg_match('/(\)|\])[\s]*\,[\s]*\$([0-9a-zA-Z\_\'"\[\]]+)[\s]*\)[\s]*\;/', $linecontents, $m)) {
-        $return_var = '$' . $m[2];
+    if ($debug) {
+        echo "<strong>Line ban đầu:</strong>\n";
+        print_r($linecontents . "\n\n");
     }
 
-    if (!empty($return_var)) {
-        $linecontents = preg_replace('/\,[\s]*' . preg_quote($return_var, '/') . '[\s]*/', '', $linecontents);
+    // Cắt line từ hàm nv_apply_hook về cuối
+    if (($offset = strpos($linecontents, 'nv_apply_hook')) !== false) {
+        $linecontents = substr($linecontents, $offset);
     } else {
-        // Tính lại line khi không có biến trả về
-        $offset = strlen($linecontents) - 1;
-        $prepared_end = false;
-        while ($offset >= 0) {
-            $char = $linecontents[$offset];
+        die("Không tìm thấy hàm nv_apply_hook\n");
+    }
+    if ($debug) {
+        echo "<strong>Cắt lấy từ hàm nv_apply_hook về sau:</strong>\n";
+        print_r($linecontents . "\n\n");
+    }
 
-            if ($prepared_end and ($char == ']' or $char == ')')) {
-                $linecontents = substr($linecontents, 0, $offset + 1);
-            }
-
-            if ($char == ',') {
-                $prepared_end = true;
-            } else {
-                $prepared_end = false;
-            }
-
-            $offset--;
+    // Kiểm tra xem kết thúc hàm hay chưa
+    while (substr_count($linecontents, ')') < substr_count($linecontents, '(')) {
+        $line++;
+        $linecontents .= "\n" . $filecontents[$line];
+        if ($line >= $numberLines) {
+            die("Không tìm thấy chỗ kết thúc hàm\n");
         }
     }
-
-    $array_para = [];
-    if (preg_match('/^(array[\s]*\(|\[)([\sa-zA-Z0-9\_\$\,\'\"\[\]]+)(\)|\])$/', $linecontents, $m)) {
-        $array_para = array_map('trim', explode(',', $m[2]));
+    if ($debug) {
+        echo "<strong>Xác định đầy đủ nội dung hàm:</strong>\n";
+        print_r($linecontents . "\n\n");
     }
+
+    // Đưa hàm về 1 dòng
+    $linecontents = str_replace("\n", " ", $linecontents);
+    if ($debug) {
+        echo "<strong>Đưa hàm về 1 dòng:</strong>\n";
+        print_r($linecontents . "\n\n");
+    }
+
+    preg_match('/nv\_apply\_hook[\s]*\([\s]*(\$module\_name|""|\'\')[\s]*\,[\s]*(\'|")([a-zA-Z0-9\_]+)(\'|")[\s]*/', $linecontents, $m);
+    if ($debug) {
+        echo "<strong>Phân tách ra:</strong>\n";
+        print_r($m);
+        print_r("\n");
+    }
+
+    // Lấy ra tên hook
+    $hook_tag = $m[3];
+    if ($debug) {
+        echo "<strong>Lấy được tên HOOK:</strong>\n";
+        print_r($hook_tag . "\n\n");
+    }
+
+    // Cắt bớt dòng này kể từ sau tên hook
+    $linecontents = trim(preg_replace('/^(.*?)' . preg_quote($m[0], '/') . '(.*?)$/', '\\2', $linecontents));
+
+    if ($debug) {
+        echo "<strong>Cắt bớt line kể từ tên HOOK:</strong>\n";
+        print_r($linecontents . "\n\n");
+
+        echo "<strong>Lấy các biến tham số đầu vào:</strong>\n";
+    }
+
+    // Lấy các biến tham số đầu vào
+    $array_para = '';
+    if (preg_match('/^\)/', $linecontents)) {
+        if ($debug) {
+            echo "Không có tham số đầu vào\n\n";
+        }
+    } elseif (preg_match('/^\,[\s]*(array[\s]*\(|\[)/', $linecontents, $m)) {
+        // Danh sách các tham số được liệt kê trực tiếp
+        if ($debug) {
+            echo "<strong>Danh sách các tham số được liệt kê trực tiếp, preg_match để xác định kiểu viết array( hay là [:</strong>\n";
+            print_r($m);
+            print_r("\n");
+        }
+        $linecontents = mb_substr($linecontents, mb_strlen($m[0]));
+        $_offset = 0;
+        $_line_length = mb_strlen($linecontents);
+        $bracket_open_count = 1;
+        $bracket_close_count = 0;
+        if ($m[1] == '[') {
+            $bracket_open = '[';
+            $bracket_close = ']';
+        } else {
+            $bracket_open = '(';
+            $bracket_close = ')';
+        }
+        while (1) {
+            $char = mb_substr($linecontents, $_offset, 1);
+            if ($char == $bracket_open) {
+                $bracket_open_count++;
+            } elseif ($char == $bracket_close) {
+                $bracket_close_count++;
+            }
+            if ($bracket_open_count <= $bracket_close_count) {
+                break;
+            }
+            $array_para .= $char;
+            $_offset++;
+            if ($_offset >= $_line_length) {
+                break;
+            }
+        }
+        // Nếu có tham số đầu vào thì cắt tiếp $linecontents để tìm default. Cắt đến dấu phảy tiếp theo
+        if (!empty($array_para)) {
+            $linecontents = preg_replace('/^' . preg_quote($array_para, '/') . '[\s]*[\)|\]]+[\s]*\,*[\s]*/', '', $linecontents);
+        }
+    } else {
+        // FIXME tham số đầu vào từ 1 biến khác cần viết thêm
+    }
+
+    if ($debug) {
+        echo "<strong>Tham số đầu vào</strong>\n";
+        if (empty($array_para)) {
+            echo "Không có tham số đầu vào\n\n";
+        } else {
+            echo $array_para . "\n\n";
+        }
+
+        echo "<strong>Sau khi xác định tham số đầu vào, line còn lại là</strong>\n";
+        print_r($linecontents);
+        print_r("\n");
+        print_r("\n");
+    }
+
+    // Lấy biến trả về
+    $return_var = '';
+    if ($debug) {
+        echo "<strong>Biến trả về</strong>\n";
+    }
+    if (!empty($array_para)) {
+        if (preg_match('/([\$a-zA-Z0-9\_]+)/', $linecontents, $m)) {
+            if ($debug) {
+                print_r($m);
+            }
+            $return_var = trim($m[1]);
+        }
+    }
+    if ($debug) {
+        if (empty($return_var)) {
+            echo "Không có biến trả về\n\n";
+        } else {
+            echo $return_var . "\n\n";
+        }
+        print_r("\n\n\n\n");
+    }
+
+    $array_para = empty($array_para) ? [] : array_map('trim', explode(',', $array_para));
 
     $array_table_rows = [];
     $i = 0;
@@ -147,33 +273,135 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
     die();
 }
 
+/*
+ * Hiển thị dòng code hook đó
+ */
+$debug = true;
+
 if (isset($_GET['f']) and isset($_GET['c'])) {
     $file = $_GET['f'];
     $code = $_GET['c'];
 
-    $filecontents = explode("\n", file_get_contents(NV_ROOTDIR . '/' . $file));
-    foreach ($filecontents as $l => $line) {
-        if (strpos($line, $code) !== false) {
-            echo("<span id=\"highlight\" style=\"background-color:#e01a31;\"><a style=\"text-decoration: none;color:#fff;\" href=\"?template=1&amp;f=" . urlencode($file) . "&amp;l=" . $l . "\" target=\"_blank\">" . htmlspecialchars($line) . "</a></span>\n");
-        } else {
-            echo(htmlspecialchars($line) . "\n");
+    $code = str_replace("\025", "\n", $code); // IBM mainframe systems
+    $code = str_replace("\n\r", "\n", $code); // Acorn BBC
+    $code = str_replace("\r\n", "\n", $code); // Microsoft Windows
+    $code = str_replace("\r", "\n", $code); // Mac OS,
+
+    $code = explode("\n", $code);
+    $checkNumber = sizeof($code);
+
+    $handle = @fopen(NV_ROOTDIR . '/' . $file, 'r');
+    if ($handle) {
+        $offset_check = 0;
+        $array_buffer_out = '';
+        $start_line = 0;
+
+        $stack_bracket_str = '';
+
+        $offset_line = -1;
+        while (($buffer = fgets($handle, 4096)) !== false) {
+            $offset_line++;
+
+            // Tìm kiếm line trùng đầu tiên
+            if (!$offset_check and (($str_pos = strpos($buffer, $code[0])) !== false)) {
+                $offset_check = 1;
+                $start_line = $offset_line;
+
+                $array_buffer_out .= '---[[START:HIGHLIGHT]]---' . htmlspecialchars(rtrim($buffer));
+                $stack_bracket_str .= substr($buffer, $str_pos);
+
+                // Nếu chỉ có 1 line thì đánh dấu luôn hết thúc highlight
+                if ($checkNumber == 1) {
+                    $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', "<span id=\"highlight\" style=\"background-color:#e01a31;\"><a style=\"text-decoration: none;color:#fff;\" href=\"?template=1&amp;f=" . urlencode($file) . "&amp;l=" . $start_line . "\" target=\"_blank\">", $array_buffer_out);
+                    $array_buffer_out .= "</a></span>";
+                    $stack_bracket_str = '';
+                }
+                $array_buffer_out .= "\n";
+                continue;
+            } elseif (!$offset_check or $checkNumber == 1) {
+                // Chưa tìm thấy line bắt đầu hoặc check line trên 1 dòng thì xuất ra
+                $array_buffer_out .= htmlspecialchars(rtrim($buffer)) . "\n";
+                $stack_bracket_str = '';
+                continue;
+            }
+
+            if ($offset_check and $checkNumber > 1) {
+                $is_equal = false;
+
+                if ($offset_check < $checkNumber - 1) {
+                    // Dòng giữa thì kiểm tra bằng
+                    if (rtrim($buffer) == rtrim($code[$offset_check])) {
+                        $is_equal = true;
+                    }
+                } elseif ($offset_check == $checkNumber - 1) {
+                    // Dòng cuối lại kiểm tra pos = 0, nhưng lần này kiểm tra pos phải bằng 0
+                    if (strpos($buffer, $code[$offset_check]) === 0) {
+                        $is_equal = true;
+                    }
+                } else {
+                    // Vượt quá dòng kiểm tra thì chờ kết thúc hàm
+                    $is_equal = true;
+                }
+
+                $array_buffer_out .= htmlspecialchars(rtrim($buffer));
+                $stack_bracket_str .= $buffer;
+
+                if ($is_equal) {
+                    $offset_check++;
+                    if ($offset_check >= $checkNumber) {
+                        // FIXME chỗ này đếm ký tự ( và ) nếu có inline-comment mà trong comment có xuất hiện nữa nó chưa đếm chính xác
+                        if (substr_count($stack_bracket_str, ')') >= substr_count($stack_bracket_str, '(')) {
+                            // Xong lượt check
+                            $offset_check = 0;
+                            $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', "<span id=\"highlight\" style=\"background-color:#e01a31;\"><a style=\"text-decoration: none;color:#fff;\" href=\"?template=1&amp;f=" . urlencode($file) . "&amp;l=" . $start_line . "\" target=\"_blank\">", $array_buffer_out);
+                            $array_buffer_out .= "</a></span>";
+                        }
+                    }
+                } else {
+                    /*
+                     * Sai, không phải đoạn này
+                     * - Đánh dấu lại $offset_check để tìm đoạn khác
+                     * - Bỏ đánh highlight các đoạn đã đánh dấu
+                     */
+                    $offset_check = 0;
+                    $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', '', $array_buffer_out);
+                    $stack_bracket_str = '';
+                }
+
+                $array_buffer_out .= "\n";
+            }
         }
+        fclose($handle);
+
+        echo $array_buffer_out;
     }
 
     echo('</code></pre>');
     die();
 }
 
+/*
+ * Quét tất cả các file php trên hệ thống tìm ra hook
+ */
 $allfiles = list_all_file(NV_ROOTDIR);
 
 $hook_sys = [];
 $hook_modules = [];
+$debug = false;
 
 foreach ($allfiles as $filepath) {
     $filecontents = file_get_contents(NV_ROOTDIR . '/' . $filepath);
 
     unset($m);
-    preg_match_all('/nv\_apply\_hook[\s]*\((\$module\_name|""|\'\')[\s]*\,[\s]*(\'|")([a-zA-Z0-9\_]+)(\'|")[\s]*\,/', $filecontents, $m);
+    preg_match_all('/nv\_apply\_hook[\s]*\([\s]*(\$module\_name|""|\'\')[\s]*\,[\s]*(\'|")([a-zA-Z0-9\_]+)(\'|")[\s]*/', $filecontents, $m);
+
+    if ($filepath == 'index.php') {
+        if ($debug) {
+            print_r($m);
+            die();
+        }
+    }
+
     if (!empty($m[1])) {
         foreach ($m[1] as $k => $v) {
             $hook_tag = $m[3][$k];

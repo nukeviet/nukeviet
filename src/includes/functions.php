@@ -2082,9 +2082,9 @@ function nv_get_redirect($mode = 'post,get', $decode = false)
 }
 
 /**
- * nv_set_authorization()
+ * Hàm bật tường lửa HTTP (HTTP Auth)
  *
- * @return
+ * @return string[]
  */
 function nv_set_authorization()
 {
@@ -2120,8 +2120,6 @@ function nv_set_authorization()
 }
 
 /**
- * nv_apply_hook()
- *
  * @param string $module => Module khởi chạy, để trống là hệ thống
  * @param mixed $tag => Khóa
  * @param mixed $args => Tham số truyền vào

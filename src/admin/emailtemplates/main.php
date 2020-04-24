@@ -27,8 +27,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
     if ($db->exec($sql)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete tpl', 'ID: ' . $emailid, $admin_info['userid']);
-        $args = [$emailid];
-        nv_apply_hook('', 'emailtemplates_after_delete', $args);
+        nv_apply_hook('', 'emailtemplates_after_delete', [$emailid]);
         $nv_Cache->delMod($module_name);
     } else {
         die('NO_' . $emailid);
