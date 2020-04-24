@@ -77,6 +77,9 @@ if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
             $email_data['from'][1] = $global_config['site_email'];
         }
 
+        // Ghi nhận ký
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'Send test email', 'ID: ' . $emailid . '. To mail: ' . implode(', ', $array['test_tomail']), $admin_info['userid']);
+
         // Hook xử lý biến $email_data trước khi build ra HTML
         $email_data = nv_apply_hook('', 'get_email_data_before_fetch_test', [$emailid, $email_data, $merge_fields, $field_data], $email_data);
 
