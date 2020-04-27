@@ -45,13 +45,13 @@ class Sendmail extends PHPMailer
                 default:
                     $this->SMTPSecure = '';
             }
-            $this->SMTPOptions = array(
-            		'ssl' => array(
-            				'verify_peer' => ($config['verify_peer_ssl'] == 1) ? true : false,
-            				'verify_peer_name' => ($config['verify_peer_name_ssl'] == 1) ? true : false,
-            				'allow_self_signed' => true
-            		)
-            );
+            $this->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => ($config['verify_peer_ssl'] == 1) ? true : false,
+                    'verify_peer_name' => ($config['verify_peer_name_ssl'] == 1) ? true : false,
+                    'allow_self_signed' => true
+                ]
+            ];
         } elseif ($mailer_mode == 'sendmail') {
             $this->IsSendmail();
         } elseif ($mailer_mode == 'mail') {
@@ -66,8 +66,7 @@ class Sendmail extends PHPMailer
             } else {
                 $this->Mailer = 'no';
             }
-        }
-        else{
+        } else {
             $this->Mailer = 'no';
         }
 
@@ -135,13 +134,15 @@ class Sendmail extends PHPMailer
         $this->AltBody = strip_tags($message);
     }
 
+    /**
+     * @return boolean
+     */
     public function Send()
     {
-        if ($this->Mailer = 'no') {
+        if ($this->Mailer == 'no') {
             return false;
         } else {
             return $this->Send();
         }
     }
-
 }
