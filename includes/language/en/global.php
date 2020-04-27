@@ -338,7 +338,9 @@ $lang_global['required'] = 'Note: You need to declare all the boxes marked with 
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'Off';
 $lang_global['address'] = 'Address';
-
+$lang_global['limit_user_number'] = 'Your website is restricted to %s users, to add an user please contact the system administrator';
+$lang_global['limit_admin_number'] = 'Your website is restricted by %s admin, to add an admin, please contact the system administrator';
+$lang_global['2teplogin'] = 'Two-factor authentication';
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'United Arab Emirates';
 $lang_global['country_AF'] = 'Afghanistan';
