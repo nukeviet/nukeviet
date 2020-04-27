@@ -1,6 +1,40 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.00
+
+- Ckeditor 4.14.0, PHPMailer 6.1.5, Jquery 3.5.0, Select2 4.0.13, clipboard js 2.0.6
+- Fix delete author (#2944)
+- Add option of not sending email at the function of sending email configuration
+- Module users: General operator customized data
+- Module contact: fix insert multiple email
+- Support IPv6 in the configuration function to access the admin area (#2899)
+- Support IPv6 in the functions: Ban IP, Flood Blocker (#2899)
+- Module banner, site logo: Stop supporting Flash files
+- Module comment: ctrl + enter to post reply (#2648)
+- Improve user group management function (#2931)
+- User login: Only show logo at login popup (#2663)
+- Fix user register theme (#2756)
+- Fix rewrite module news (#2919)
+- Fix the website title in the module page (#2928)
+- Add some security alert emails: Two-factor authentication change, re-creat backup code, change user email
+- Add notification when email failed (#2905)
+- Change email configuration
+- Fix nv_html_meta_tags (#2915)
+- Add config: Upload file exceeds size limit
+- Fix function nv_blocks_content (#2890)
+- Module page: Fix copy article (#2888)
+- Expand field to support IPv6 (#2889, #2899)
+- Fix comment on mobile theme, change link load comment (#2908, #2891)
+- Upload: Change external link checking type (#2921)
+- Module news: Add notes for public post operations (#2924)
+- Change Timezone Asia/Saigon > Asia/Ho_Chi_Minh
+- Manage two-step verification of admin accounts
+- Use google and facebook accounts to verify 2-step in admin
+- Notification function: Support programming to send notifications to each group and each recipient (#2879)
+- Remove Review-aggregate module news (#2886), add CreativeWorkSeries AggregateRating for module news
+- Change Breadcrumb from vocabulary to schema.org
+
 NUKEVIET 4.3.08
 
 - Support php 7.4
