@@ -196,8 +196,7 @@ $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['title'] = (!empty($error)) ? $error : sprintf($lang_module['delete_sendmail_info'], $row_user['username']);
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
 $contents['sendmail'] = $sendmail;
-$contents['reason'] = [$reason, 255];
-$contents['admin_password'] = [$lang_global['admin_password'], $adminpass, $global_config['nv_upassmax']];
+$contents['admin_password'] = [$lang_global['admin_password'], $adminpass];
 
 $page_title = $lang_module['nv_admin_del'];
 
@@ -214,12 +213,10 @@ $xtpl->assign('TITLE', $contents['title']);
 $xtpl->assign('ACTION', $contents['action']);
 $xtpl->assign('CHECKED', $contents['sendmail'] ? ' checked="checked"' : '');
 
-$xtpl->assign('REASON1', $contents['reason'][0]);
-$xtpl->assign('REASON2', $contents['reason'][1]);
+$xtpl->assign('REASON', $reason);
 
 $xtpl->assign('ADMIN_PASSWORD0', $contents['admin_password'][0]);
 $xtpl->assign('ADMIN_PASSWORD1', $contents['admin_password'][1]);
-$xtpl->assign('ADMIN_PASSWORD2', $contents['admin_password'][2]);
 foreach ($array_action_account as $key => $value) {
     $xtpl->assign('ACTION_ACCOUNT_KEY', $key);
     $xtpl->assign('ACTION_ACCOUNT_CHECK', ($key == $action_account) ? ' checked="checked"' : '');
