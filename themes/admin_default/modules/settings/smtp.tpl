@@ -75,11 +75,16 @@
                         <label class="radio-inline">
                             <input type="radio" name="mailer_mode" value="smtp"{DATA.mailer_mode_smtpt}> {LANG.type_smtp}
                         </label>
+                        <!-- BEGIN: mailhost -->
                         <label class="radio-inline">
                             <input type="radio" name="mailer_mode" value="sendmail"{DATA.mailer_mode_sendmail}> {LANG.type_linux}
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="mailer_mode" value=""{DATA.mailer_mode_phpmail}> {LANG.type_phpmail}
+                            <input type="radio" name="mailer_mode" value="mail"{DATA.mailer_mode_phpmail}> {LANG.type_phpmail}
+                        </label>
+                        <!-- END: mailhost -->
+                        <label class="radio-inline">
+                            <input type="radio" name="mailer_mode" value="no"{DATA.mailer_mode_no}> {LANG.verify_peer_ssl_no}
                         </label>
                     </div>
                 </div>

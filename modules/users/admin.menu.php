@@ -77,15 +77,13 @@ if ($module_data == 'users' and isset($admin_mods['authors'])) {
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    if (empty($global_config['idsite'])) {
+    if (empty($global_config['idsite']) or $global_config['users_special']) {
         $submenu['question'] = $lang_module['question'];
         $submenu['siteterms'] = $lang_module['siteterms'];
+        $submenu['fields'] = $lang_module['fields'];
         $allow_func[] = 'question';
         $allow_func[] = 'siteterms';
-        if (defined('NV_IS_GODADMIN')) {
-            $submenu['fields'] = $lang_module['fields'];
-            $allow_func[] = 'fields';
-        }
+        $allow_func[] = 'fields';
     }
     $submenu['config'] = $lang_module['config'];
     $allow_func[] = 'config';

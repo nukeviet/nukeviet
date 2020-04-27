@@ -12,6 +12,8 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
     die('Stop!!!');
 }
 
+$page_title = $lang_module['nv_admin_add'];
+
 if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['spadmin_add_admin'] == 1))) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -31,6 +33,17 @@ if ($nv_Request->get_int('result', 'get', 0)) {
     $nv_Request->unset_request('nv_admin_profile', 'session');
     nv_admin_add_result($session_files);
     exit();
+}
+
+if ($global_config['max_user_admin'] > 0) {
+    $sql = 'SELECT count(*) FROM ' . NV_AUTHORS_GLOBALTABLE;
+    $user_number = $db->query($sql)->fetchColumn();
+    if ($user_number >= $global_config['max_user_admin']) {
+        $contents = sprintf($lang_global['limit_admin_number'], $global_config['max_user_admin']);
+        include NV_ROOTDIR . '/includes/header.php';
+        echo nv_admin_theme($contents);
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
 }
 
 $adminThemes = [''];
@@ -178,8 +191,6 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $allow_modify_files = $allow_modify_subdirectories = 0;
     $allow_create_subdirectories = 1;
 }
-
-$page_title = $lang_module['nv_admin_add'];
 
 $mods = [];
 $array_keys = array_keys($site_mods);

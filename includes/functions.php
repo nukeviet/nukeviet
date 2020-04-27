@@ -1195,7 +1195,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                     $sender_mail = $global_config['site_email'];
                 }
             }
-        } elseif (!in_array('mail', $sys_info['disable_functions'])) {
+        } elseif ($mailer_mode == 'mail' and !in_array('mail', $sys_info['disable_functions'])) {
             // PHPmail
             $mail->IsMail();
 
