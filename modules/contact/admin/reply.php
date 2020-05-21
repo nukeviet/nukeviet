@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -48,7 +47,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (strip_tags($mess_content) != '') {
 
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
-        $mail->To($row['sender_email']);
+        $mail->addTo($row['sender_email']);
 
         $_array_email = array();
         $frow = $db->query('SELECT full_name, email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $row['cid'])->fetch();
@@ -56,7 +55,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $_arr_mail = explode(',', $frow['email']);
             foreach ($_arr_mail as $_email) {
                 if (nv_check_valid_email($_email) != '') {
-                    $mail->addReplyTo($_email, $frow['full_name']);
+                    $mail->addReply($_email, $frow['full_name']);
                     $_array_email[] = $_email;
                 }
             }
@@ -64,7 +63,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             // Gửi cho các quản trị trong bộ phận
             $obt_level = array();
             $admins_list = $frow['admins'];
-            $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : array();
+            $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : [];
             foreach ($admins_list as $l) {
                 $l2 = array_map('intval', explode('/', $l));
                 if (isset($l2[3]) and $l2[3] === 1) {
@@ -77,7 +76,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 while ($_row = $_result->fetch()) {
                     if (!in_array($_row['email'], $_array_email)) {
                         $_row['full_name'] = nv_show_name_user($_row['first_name'], $_row['last_name'], $_row['username']);
-                        $mail->Cc($_row['email'], $_row['full_name']);
+                        $mail->addCC($_row['email'], $_row['full_name']);
                         $_array_email[] = $_row['email'];
                     }
                 }
@@ -85,15 +84,17 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         if (empty($_array_email)) {
-            $mail->addReplyTo($admin_info['email'], $admin_info['full_name']);
-            $_array_email[] = $admin_info['email'];
-        } elseif (!in_array($admin_info['email'], $_array_email)) {
-            $mail->Cc($admin_info['email'], $admin_info['full_name']);
+            $mail->addReply($admin_info['email'], $admin_info['full_name']);
             $_array_email[] = $admin_info['email'];
         }
 
-        $mail->Content($mess_content);
-        $mail->Subject($row['title']);
+        if (!in_array($admin_info['email'], $_array_email)) {
+            $mail->addCC($admin_info['email'], $admin_info['full_name']);
+            $_array_email[] = $admin_info['email'];
+        }
+
+        $mail->setContent($mess_content);
+        $mail->setSubject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
@@ -113,7 +114,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
-    
+
     require_once NV_ROOTDIR . '/modules/contact/sign.php';
     $mess_content .= $sign_content;
 }
