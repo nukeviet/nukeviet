@@ -18,4 +18,4 @@ if (!empty($admin_info['position'])) {
 }
 $sign_content .= '<br />';
 $sign_content .= 'E-mail: ' . $admin_info['email'] . '<br />';
-$sign_content .= 'Website: ' . $global_config['site_name'] . '<br />' . $global_config['site_url'];
+//$sign_content .= 'Website: ' . $global_config['site_name'] . '<br />' . $global_config['site_url'];
