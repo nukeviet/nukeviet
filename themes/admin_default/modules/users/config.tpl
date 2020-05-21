@@ -7,6 +7,7 @@
             <thead>
                 <tr class="text-center">
                     <th>{LANG.access_admin}</th>
+                    <th class="text-center">{LANG.access_viewlist}</th>
                     <th class="text-center">{LANG.access_addus}</th>
                     <th class="text-center">{LANG.access_waiting}</th>
                     <th class="text-center">{LANG.editcensor}</th>
@@ -20,6 +21,7 @@
                 <!-- BEGIN: loop -->
                 <tr>
                     <td><strong>{ACCESS.title}</strong></td>
+                    <td class="text-center"><input type="checkbox" {ACCESS.checked_viewlist} value="1" name="access_viewlist[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_addus} value="1" name="access_addus[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_waiting} value="1" name="access_waiting[{ACCESS.id}]"></td>
                     <td class="text-center"><input type="checkbox" {ACCESS.checked_editcensor} value="1" name="access_editcensor[{ACCESS.id}]"></td>
