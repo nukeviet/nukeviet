@@ -18,6 +18,8 @@ if (empty($area)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
+$access_viewlist = empty($access_admin['access_viewlist'][$admin_info['level']]) ? false : true;
+
 $page_title = $lang_module['pagetitle'];
 $filtersql = $nv_Request->get_string('filtersql', 'get', '');
 
@@ -206,9 +208,14 @@ if ($nv_Request->isset_request('submit', 'get')) {
     $_array_f_return = array_map('trim', $_array_f_return);
     $return = (in_array($return, $_array_f_return)) ? $return : 'userid';
 
-    $db->select($select_return)
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
+    if ($access_viewlist) {
+        $db->select($select_return)
+            ->limit($per_page)
+            ->offset(($page - 1) * $per_page);
+    } else {
+        $db->select($select_return)
+            ->limit(5);
+    }
     if (! empty($order_by)) {
         $db->order($order_by);
     }
@@ -218,10 +225,15 @@ if ($nv_Request->isset_request('submit', 'get')) {
     }
 
     if (! empty($array_user)) {
-        $xtpl->assign('ODER_ID', $orderida);
-        $xtpl->assign('ODER_USERNAME', $orderusernamea);
-        $xtpl->assign('ODER_EMAIL', $orderemaila);
-        $xtpl->assign('ODER_REGDATE', $orderregdatea);
+        if ($access_viewlist) {
+            $xtpl->assign('ODER_ID', $orderida);
+            $xtpl->assign('ODER_USERNAME', $orderusernamea);
+            $xtpl->assign('ODER_EMAIL', $orderemaila);
+            $xtpl->assign('ODER_REGDATE', $orderregdatea);
+            $xtpl->parse('resultdata.data.order');
+        } else {
+            $xtpl->parse('resultdata.data.no_order');
+        }
 
         foreach ($array_user as $row) {
             $row['regdate'] = nv_date('d/m/Y H:i', $row['regdate']);
@@ -230,10 +242,12 @@ if ($nv_Request->isset_request('submit', 'get')) {
             $xtpl->parse('resultdata.data.row');
         }
 
-        $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-        if (! empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('resultdata.data.generate_page');
+        if ($access_viewlist) {
+            $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
+            if (! empty($generate_page)) {
+                $xtpl->assign('GENERATE_PAGE', $generate_page);
+                $xtpl->parse('resultdata.data.generate_page');
+            }
         }
 
         $xtpl->parse('resultdata.data');

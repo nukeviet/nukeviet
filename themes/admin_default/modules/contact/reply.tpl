@@ -8,7 +8,7 @@
         <table class="table table-striped table-bordered table-hover">
             <tfoot>
                 <tr>
-                    <td class="text-center"><input name="submit1" type="submit" value="{LANG.send_title}" class="btn btn-primary" /></td>
+                    <td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.send_title}" class="btn btn-primary" /></td>
                 </tr>
             </tfoot>
             <tbody>

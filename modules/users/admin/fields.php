@@ -159,7 +159,7 @@ $error = '';
 $field_choices = array();
 if ($nv_Request->isset_request('submit', 'post')) {
     $validatefield = array(
-        'pattern' => '/[^a-zA-Z\_]/',
+        'pattern' => '/[^a-zA-Z0-9\_]/',
         'replacement' => ''
     );
     $validatefieldCss = array(
@@ -402,7 +402,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                         //2^32 LONGTEXT
                         $type_date = 'LONGTEXT NOT NULL';
                     }
-                    $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info ADD " . $dataform['field'] . " " . $type_date);
+                    $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info ADD " . $dataform['field'] . " " . $type_date . " COMMENT " . $db->quote($dataform['title']));
                 }
             }
         } elseif ($dataform['max_length'] <= 4294967296) {
@@ -453,7 +453,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     }
                     $save = false;
                     try {
-                        $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date);
+                        $save = $db->exec("ALTER TABLE " . NV_MOD_TABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date . " COMMENT " . $db->quote($dataform['title']));
                     } catch (PDOException $e) {
                         trigger_error($e->getMessage());
                     }
