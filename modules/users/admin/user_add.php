@@ -23,6 +23,9 @@ $page_title = $lang_module['user_add'];
 
 if ($global_config['max_user_number'] > 0) {
     $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+    if ($global_config['idsite'] > 0) {
+        $sql .= ' WHERE idsite=' . $global_config['idsite'];
+    }
     $user_number = $db->query($sql)->fetchColumn();
     if ($user_number >= $global_config['max_user_number']) {
         $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
