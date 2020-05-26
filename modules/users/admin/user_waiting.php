@@ -18,7 +18,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     if($global_config['idsite'] > 0){
-        $sql = ' AND idsite=' . $global_config['idsite'];
+        $sql .= ' AND idsite=' . $global_config['idsite'];
     }
     if ($db->exec($sql)) {
         nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
@@ -29,11 +29,23 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 //Kich hoat thanh vien
 if ($nv_Request->isset_request('act', 'get')) {
+    $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+    if ($global_config['idsite'] > 0) {
+        $sql .= ' WHERE idsite=' . $global_config['idsite'];
+    }
+    $user_number = $db->query($sql)->fetchColumn();
+    if ($user_number >= $global_config['max_user_number']) {
+        $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+        include NV_ROOTDIR . '/includes/header.php';
+        echo nv_admin_theme($contents, $showheader);
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
+
     $userid = $userid_reg = $nv_Request->get_int('userid', 'get', 0);
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     if($global_config['idsite'] > 0){
-        $sql = ' AND idsite=' . $global_config['idsite'];
+        $sql .= ' AND idsite=' . $global_config['idsite'];
     }
 
     $row = $db->query($sql)->fetch();
