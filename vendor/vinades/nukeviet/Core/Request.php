@@ -695,7 +695,7 @@ class Request
                     '&quot;'
                 ], "'", $attrSubSet[1]);
 
-                if (preg_match("/(data|expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
+                if (preg_match("/(data\:|expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/i", $attrSubSet[1])) {
                     continue;
                 }
 
@@ -717,7 +717,7 @@ class Request
                 ];
                 $value = preg_replace(array_values($search), array_keys($search), $value);
 
-                if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $value)) {
+                if (preg_match("/(data\:|expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/i", $value)) {
                     continue;
                 }
 
