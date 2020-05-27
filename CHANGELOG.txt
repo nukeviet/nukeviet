@@ -1,6 +1,10 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.3.09
+
+- Security fix.
+
 NUKEVIET 4.3.08
 
 - Support php 7.4
