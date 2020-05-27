@@ -695,7 +695,7 @@ class Request
                     '&quot;'
                 ], "'", $attrSubSet[1]);
 
-                if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
+                if (preg_match("/(data|expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
                     continue;
                 }
 
