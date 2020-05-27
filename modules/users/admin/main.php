@@ -30,7 +30,7 @@ if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
 }
 $_arr_where = [];
-if($global_config['idsite'] > 0){
+if ($global_config['idsite'] > 0) {
     $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
 }
 if ($usactive == -3) {
