@@ -1,6 +1,10 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.01
+ALTER TABLE `nv4_users_reg` ADD `idsite` MEDIUMINT NOT NULL DEFAULT '0' AFTER `openid_info`, ADD INDEX (`idsite`);
+
+
 NUKEVIET 4.4.00
 
 - Ckeditor 4.14.0, PHPMailer 6.1.5, Jquery 3.5.0, Select2 4.0.13, clipboard js 2.0.6
