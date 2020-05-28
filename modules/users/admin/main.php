@@ -30,6 +30,9 @@ if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
 }
 $_arr_where = [];
+if ($global_config['idsite'] > 0) {
+    $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+}
 if ($usactive == -3) {
     $_arr_where[] = 'group_id!=7';
 } elseif ($usactive == -2) {
@@ -37,9 +40,6 @@ if ($usactive == -3) {
 } else {
     if ($usactive > -1) {
         $_arr_where[] = 'active=' . ($usactive % 2);
-    }
-    if ($usactive > 1) {
-        $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
     }
 }
 
@@ -268,7 +268,7 @@ foreach ($methods as $m) {
     $xtpl->assign('METHODS', $m);
     $xtpl->parse('main.method');
 }
-$_bg = (defined('NV_CONFIG_DIR')) ? 3 : 1;
+$_bg = (defined('NV_CONFIG_DIR') and $global_config['idsite'] == 0) ? 3 : 1;
 for ($i = $_bg; $i >= 0; $i--) {
     $m = [
         'key' => $i,

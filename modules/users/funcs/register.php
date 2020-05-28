@@ -39,13 +39,20 @@ if (!$global_config['allowuserreg']) {
 
 if ($global_config['max_user_number'] > 0) {
     $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+    if ($global_config['idsite'] > 0) {
+        $sql .= ' WHERE idsite=' . $global_config['idsite'];
+    }
     $user_number = $db->query($sql)->fetchColumn();
     if ($user_number >= $global_config['max_user_number']) {
-        $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
-        $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_site_theme($contents);
-        include NV_ROOTDIR . '/includes/footer.php';
+        if (defined('NV_REGISTER_DOMAIN')) {
+            nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
+        } else {
+            $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+            $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_site_theme($contents);
+            include NV_ROOTDIR . '/includes/footer.php';
+        }
     }
 }
 
@@ -345,7 +352,7 @@ if ($checkss == $array_register['checkss']) {
 
     if (!defined('ACCESS_ADDUS') and ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
-            username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info
+            username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info, idsite
         ) VALUES (
             :username,
             :md5username,
@@ -360,7 +367,8 @@ if ($checkss == $array_register['checkss']) {
             :question,
             :answer,
             :checknum,
-            :users_info
+            :users_info,
+            :idsite
         )";
 
         $data_insert = array();
@@ -377,7 +385,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
         $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
-
+        $data_insert['idsite'] = $global_config['idsite'];
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
