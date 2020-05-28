@@ -513,6 +513,7 @@ $lang_module['is_email_verified1'] = 'Nếu chọn vào đây, trạng thái ema
 $lang_module['account_active'] = 'Thông tin kích hoạt tài khoản';
 $lang_module['account_active_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4$s<br />Email: %5$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site';
 
+$lang_module['userwait_note'] = 'Các tài khoản chờ kích hoạt sẽ bị xóa tự động trong vòng %s giờ kể từ lúc đăng ký nếu không được kích hoạt';
 $lang_module['userwait_resend_email'] = 'Gửi lại email kích hoạt';
 $lang_module['userwait_resend_per_email'] = 'Số email một lần gửi';
 $lang_module['userwait_resend_pause_time'] = 'Dừng giữa hai lần gửi';

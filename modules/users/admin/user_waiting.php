@@ -268,16 +268,19 @@ foreach ($orders as $order) {
     }
 }
 
+if (defined('NV_IS_USER_FORUM')) {
+    $lang_module['warning'] = $lang_module['modforum'];
+} else {
+    $register_active_time = isset($global_users_config['register_active_time']) ? round($global_users_config['register_active_time']/3600) : 24;
+    $lang_module['warning'] = sprintf($lang_module['userwait_note'], $register_active_time);
+}
+
 $xtpl = new XTemplate('user_waitting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting');
 $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
-
-if (defined('NV_IS_USER_FORUM')) {
-    $xtpl->parse('main.is_forum');
-}
 
 foreach ($methods as $m) {
     $xtpl->assign('METHODS', $m);

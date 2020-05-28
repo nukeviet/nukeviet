@@ -1,7 +1,5 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: is_forum -->
-<div class="alert alert-warning">{LANG.modforum}</div>
-<!-- END: is_forum -->
+<div class="alert alert-warning">{LANG.warning}</div>
 <div id="users">
     <div class="row">
         <div class="col-md-16">
