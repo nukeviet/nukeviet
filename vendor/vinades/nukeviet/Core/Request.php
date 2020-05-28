@@ -1356,6 +1356,7 @@ class Request
             foreach ($this->corsHeaders as $header => $value) {
                 header($header . ': ' . $value);
             }
+            die('');
         }
 
         // Chặn các request bên ngoài vào khu vực quản trị
