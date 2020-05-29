@@ -572,9 +572,10 @@ class Request
     /**
      * @param string[] $attrSet
      * @param string $tagName
+     * @param boolean $isvalid
      * @return string[]
      */
-    private function filterAttr($attrSet, $tagName)
+    private function filterAttr($attrSet, $tagName, &$isvalid)
     {
         $newSet = [];
 
@@ -603,16 +604,14 @@ class Request
                         $dataURLs = (string) base64_decode($m[3]);
                     }
 
-                    if (preg_match('/\<[\r\n\s\t]*s[\r\n\s\t]*c[\r\n\s\t]*r[\r\n\s\t]*i[\r\n\s\t]*p[\r\n\s\t]*t([^\>]*)\>(.*)\<[\r\n\s\t]*\/[\r\n\s\t]*s[\r\n\s\t]*c[\r\n\s\t]*r[\r\n\s\t]*i[\r\n\s\t]*p[\r\n\s\t]*t[\r\n\s\t]*\>/isU', $dataURLs)) {
+                    $checkValid = true;
+                    $this->filterTags($dataURLs, $checkValid);
+                    if (!$checkValid) {
                         continue;
                     }
-
-                    $valueCheck = $dataURLs;
-                } else {
-                    $valueCheck = $attrSubSet[1];
                 }
 
-                $value = $this->unhtmlentities($valueCheck);
+                $value = $this->unhtmlentities($attrSubSet[1]);
                 $search = [
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
@@ -654,14 +653,17 @@ class Request
     }
 
     /**
-     * Request::filterTags()
-     *
-     * @param mixed $source
-     * @return
+     * @param string $source
+     * @param boolean $isvalid
+     * @return string
      */
-    private function filterTags($source)
+    private function filterTags($source, &$isvalid = true)
     {
-        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source);
+        $checkInvalid = 0;
+        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source, -1, $checkInvalid);
+        if ($checkInvalid > 0) {
+            $isvalid = false;
+        }
 
         $preTag = null;
         $postTag = $source;
@@ -712,6 +714,7 @@ class Request
             if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) or in_array($tagName, $this->disabletags)) {
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
+                $isvalid = false;
                 continue;
             }
 
@@ -742,7 +745,7 @@ class Request
 
             if (!$isCloseTag) {
                 if (!empty($attrSet)) {
-                    $attrSet = $this->filterAttr($attrSet, $tagName);
+                    $attrSet = $this->filterAttr($attrSet, $tagName, $isvalid);
                 }
                 if (!('param' == $tagName and empty($attrSet))) {
                     $preTag .= '{@[' . $tagName;
