@@ -595,7 +595,24 @@ class Request
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", "\\1", $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
-                $value = $this->unhtmlentities($attrSubSet[1]);
+                // Security check Data URLs
+                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $attrSubSet[1], $m)) {
+                    if (empty($m[2])) {
+                        $dataURLs = urldecode($m[3]);
+                    } else {
+                        $dataURLs = (string) base64_decode($m[3]);
+                    }
+
+                    if (preg_match('/\<[\r\n\s\t]*s[\r\n\s\t]*c[\r\n\s\t]*r[\r\n\s\t]*i[\r\n\s\t]*p[\r\n\s\t]*t([^\>]*)\>(.*)\<[\r\n\s\t]*\/[\r\n\s\t]*s[\r\n\s\t]*c[\r\n\s\t]*r[\r\n\s\t]*i[\r\n\s\t]*p[\r\n\s\t]*t[\r\n\s\t]*\>/isU', $dataURLs)) {
+                        continue;
+                    }
+
+                    $valueCheck = $dataURLs;
+                } else {
+                    $valueCheck = $attrSubSet[1];
+                }
+
+                $value = $this->unhtmlentities($valueCheck);
                 $search = [
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
@@ -619,11 +636,6 @@ class Request
                 }
                 if (!empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $value)) {
                     continue;
-                }
-
-                // Security check Data URLs
-                if (preg_match('/^[\r\n\s\t]*data\:([^\,]*?)\;*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $value, $m)) {
-                    // FIXME
                 }
 
                 $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', [$this, 'color_hex2rgb_callback'], $attrSubSet[1]);
