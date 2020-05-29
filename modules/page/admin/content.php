@@ -88,7 +88,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $lang_module['empty_title'];
     } elseif ($is_exists) {
         $error = $lang_module['erroralias'];
-    } elseif (strip_tags($row['bodytext']) == '') {
+    } elseif (trim($row['bodytext']) == '') {
         $error = $lang_module['empty_bodytext'];
     } else {
         if (empty($row['keywords'])) {
