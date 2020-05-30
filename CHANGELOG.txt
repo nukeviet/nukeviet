@@ -2,8 +2,12 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.4.01
-ALTER TABLE `nv4_users_reg` ADD `idsite` MEDIUMINT NOT NULL DEFAULT '0' AFTER `openid_info`, ADD INDEX (`idsite`);
 
+- Security fix
+- Update SendMail class
+- Function nv_sendmail: add parameters cc and bcc
+- Module users: add config view members list for admin
+- Jquery 3.5.1 (#2950)
 
 NUKEVIET 4.4.00
 

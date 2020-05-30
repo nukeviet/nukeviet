@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }

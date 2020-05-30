@@ -257,6 +257,7 @@ $lang_module['upass_type_0'] = 'Unlimit';
 $lang_module['access_other'] = 'Other configure';
 $lang_module['access_caption'] = 'Configure using module';
 $lang_module['access_admin'] = 'Group manage';
+$lang_module['access_viewlist'] = 'View member list';
 $lang_module['access_addus'] = 'Create member';
 $lang_module['access_waiting'] = 'Active member';
 $lang_module['access_editus'] = 'Edit member';
@@ -266,6 +267,8 @@ $lang_module['access_groups'] = 'Group manage';
 $lang_module['access_caption_leader'] = 'User configuration module powers of the leader';
 $lang_module['access_groups_add'] = 'Add members to the group';
 $lang_module['access_groups_del'] = 'Remove member from group';
+$lang_module['viewlist_error_permission'] = 'You do not have permission to view the account list';
+
 $lang_module['fields'] = 'Custom User Fields';
 $lang_module['captionform_add'] = 'Add User Fields';
 $lang_module['captionform_edit'] = 'Edit User Fields';

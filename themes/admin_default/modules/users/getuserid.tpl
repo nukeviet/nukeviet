@@ -71,14 +71,24 @@
             <col class="w50" />
         </colgroup>
         <thead>
+            <!-- BEGIN: order -->
             <tr>
                 <th><a class="{ODER_ID.class}" href="{ODER_ID.url}" title="">ID</a></th>
                 <th><a class="{ODER_USERNAME.class}" href="{ODER_USERNAME.url}" title="">{LANG.username}</a></th>
                 <th><a class="{ODER_EMAIL.class}" href="{ODER_EMAIL.url}" title="">{LANG.email}</a></th>
                 <th><a class="{ODER_REGDATE.class}" href="{ODER_REGDATE.url}" title="">{LANG.regdate}</a></th>
-                <td class="text-center">{LANG.select}
-                </th>
+                <th class="text-center">{LANG.select}</th>
             </tr>
+            <!-- END: order -->
+            <!-- BEGIN: no_order -->
+            <tr>
+                <th>ID</th>
+                <th>{LANG.username}</th>
+                <th>{LANG.email}</th>
+                <th>{LANG.regdate}</th>
+                <th class="text-center">{LANG.select}</th>
+            </tr>
+            <!-- END: no_order -->
         </thead>
         <!-- BEGIN: generate_page -->
         <tfoot>

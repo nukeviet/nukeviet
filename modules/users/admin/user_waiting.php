@@ -17,7 +17,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
 
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
-    if($global_config['idsite'] > 0){
+    if ($global_config['idsite'] > 0) {
         $sql .= ' AND idsite=' . $global_config['idsite'];
     }
     if ($db->exec($sql)) {
@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('act', 'get')) {
     $userid = $userid_reg = $nv_Request->get_int('userid', 'get', 0);
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
-    if($global_config['idsite'] > 0){
+    if ($global_config['idsite'] > 0) {
         $sql .= ' AND idsite=' . $global_config['idsite'];
     }
 

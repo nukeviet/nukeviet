@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -46,24 +45,25 @@ $mess_content = $error = '';
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
     if (strip_tags($mess_content) != '') {
-        $from_name = [];
-        $from_email = [];
-        $cc = [];
-        $_array_email = [];
+
+        $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
+        $mail->addTo($row['sender_email']);
+
+        $_array_email = array();
         $frow = $db->query('SELECT full_name, email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $row['cid'])->fetch();
         if (!empty($frow)) {
             $_arr_mail = explode(',', $frow['email']);
             foreach ($_arr_mail as $_email) {
                 if (nv_check_valid_email($_email) != '') {
-                    $from_name[] = $frow['full_name'];
-                    $from_email[] = $_email;
+                    $mail->addReply($_email, $frow['full_name']);
                     $_array_email[] = $_email;
                 }
             }
 
             // Gửi cho các quản trị trong bộ phận
-            $obt_level = [];
-            $admins_list = !empty($frow['admins']) ? array_map('trim', explode(';', $frow['admins'])) : [];
+            $obt_level = array();
+            $admins_list = $frow['admins'];
+            $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : [];
             foreach ($admins_list as $l) {
                 $l2 = array_map('intval', explode('/', $l));
                 if (isset($l2[3]) and $l2[3] === 1) {
@@ -76,27 +76,26 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 while ($_row = $_result->fetch()) {
                     if (!in_array($_row['email'], $_array_email)) {
                         $_row['full_name'] = nv_show_name_user($_row['first_name'], $_row['last_name'], $_row['username']);
-                        
-                        $cc[$_row['email']] = $_row['full_name'];
+                        $mail->addCC($_row['email'], $_row['full_name']);
                         $_array_email[] = $_row['email'];
                     }
                 }
             }
         }
 
-        if (empty($from_email)) {
-            $from_email[] = $admin_info['email'];
-            $from_name[] = $admin_info['full_name'];
+        if (empty($_array_email)) {
+            $mail->addReply($admin_info['email'], $admin_info['full_name']);
             $_array_email[] = $admin_info['email'];
         }
-        
-        if (!in_array($admin_info['email'], $_array_email)) {
-            $cc[] = $admin_info['email'];
-        }
-        
-        $from = [$from_name, $from_email];
 
-        if (@nv_sendmail($from, $row['sender_email'], $row['title'], $mess_content, '', false, false, $cc)) {
+        if (!in_array($admin_info['email'], $_array_email)) {
+            $mail->addCC($admin_info['email'], $admin_info['full_name']);
+            $_array_email[] = $admin_info['email'];
+        }
+
+        $mail->setContent($mess_content);
+        $mail->setSubject($row['title']);
+        if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
             $sth->execute();
@@ -115,7 +114,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
     $mess_content .= '<strong>Subject:</strong> ' . $row['title'] . '<br /><br />';
     $mess_content .= $row['content'];
-    
+
     require_once NV_ROOTDIR . '/modules/contact/sign.php';
     $mess_content .= $sign_content;
 }

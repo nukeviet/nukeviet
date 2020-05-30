@@ -257,6 +257,7 @@ $lang_module['upass_type_0'] = 'Illimité';
 $lang_module['access_other'] = 'Autre configuration';
 $lang_module['access_caption'] = 'Configuration d\'utilisation du module';
 $lang_module['access_admin'] = 'Groupe d\'administration';
+$lang_module['access_viewlist'] = 'Afficher la liste des membres';
 $lang_module['access_addus'] = 'Créez les utilisateurs';
 $lang_module['access_waiting'] = 'Activer l\'utilisateur';
 $lang_module['access_editus'] = 'Modifier l\'utilisateur';
@@ -266,6 +267,8 @@ $lang_module['access_groups'] = 'Gérer le groupe';
 $lang_module['access_caption_leader'] = 'Puissances du module de configuration de l\'utilisateur du leader';
 $lang_module['access_groups_add'] = 'Ajouter des membres au groupe';
 $lang_module['access_groups_del'] = 'Retirer membre du groupe';
+$lang_module['viewlist_error_permission'] = 'Vous n\'êtes pas autorisé à afficher la liste des comptes';
+
 $lang_module['fields'] = 'Modification des données';
 $lang_module['captionform_add'] = 'Ajouter les lexiques de données';
 $lang_module['captionform_edit'] = 'Modifier la lexique de données';

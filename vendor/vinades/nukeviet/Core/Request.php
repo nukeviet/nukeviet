@@ -14,45 +14,134 @@ namespace NukeViet\Core;
 class Request
 {
     const IS_HEADERS_SENT = 'Warning: Headers already sent';
+
     const INCORRECT_IP = 'Incorrect IP address specified';
 
     public $session_id;
+
     public $doc_root;
+
     public $site_url;
+
     public $base_siteurl;
+
     public $base_adminurl;
+
     public $server_name;
+
     public $server_protocol;
+
     public $server_port;
+
     public $my_current_domain;
+
     public $headerstatus;
+
     public $session_save_path;
+
     public $cookie_path;
+
     public $cookie_domain;
+
     public $referer;
+
     public $referer_key;
+
     public $referer_host = '';
+
     public $referer_queries = false;
+
     public $request_uri;
+
     public $user_agent;
+
     public $search_engine = '';
 
     private $request_default_mode = 'request';
-    private $allow_request_mods = ['get', 'post', 'request', 'cookie', 'session', 'env', 'server'];
+
+    private $allow_request_mods = [
+        'get',
+        'post',
+        'request',
+        'cookie',
+        'session',
+        'env',
+        'server'
+    ];
+
     private $cookie_prefix = 'NV4';
+
     private $session_prefix = 'NV4';
+
     private $cookie_key = 'nv4';
+
     private $secure = false;
+
     private $httponly = true;
+
     private $ip_addr;
+
     private $is_filter = false;
+
     private $str_referer_blocker = false;
+
     private $engine_allowed = [];
 
     // Cac tags bi cam dung mac dinh, co the go bo bang cach thay doi cac tags cho phep cua NV_ALLOWED_HTML_TAGS
-    private $disabletags = ['applet', 'body', 'basefont', 'head', 'html', 'id', 'meta', 'xml', 'blink', 'link', 'style', 'script', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base'];
-    private $disabledattributes = ['action', 'background', 'codebase', 'dynsrc', 'lowsrc'];
-    private $disablecomannds = ['base64_decode', 'cmd', 'passthru', 'eval', 'exec', 'system', 'fopen', 'fsockopen', 'file', 'file_get_contents', 'readfile', 'unlink'];
+    private $disabletags = [
+        'applet',
+        'body',
+        'basefont',
+        'head',
+        'html',
+        'id',
+        'meta',
+        'xml',
+        'blink',
+        'link',
+        'style',
+        'script',
+        'iframe',
+        'frame',
+        'frameset',
+        'ilayer',
+        'layer',
+        'bgsound',
+        'title',
+        'base'
+    ];
+
+    /**
+     * Các attr bị cấm, sẽ bị lọc bỏ.
+     * - Tất cả các arrt bắt đầu bằng on
+     * - Các attr bên dưới
+     */
+    private $disabledattributes = [
+        'action',
+        'background',
+        'codebase',
+        'dynsrc',
+        'lowsrc',
+        'allownetworking', // Control a SWF file’s access to network functionality by setting the allowNetworking parameter = internal
+        'allowscriptaccess', // Loại bỏ điều khiển cho phép javascript trong embed, tự động đặt = never
+        'fscommand', // attacker can use this when executed from within an embedded Flash object
+        'seeksegmenttime' // this is a method that locates the specified point on the element’s segment time line and begins playing from that point. The segment consists of one repetition of the time line including reverse play using the AUTOREVERSE attribute.
+    ];
+
+    private $disablecomannds = [
+        'base64_decode',
+        'cmd',
+        'passthru',
+        'eval',
+        'exec',
+        'system',
+        'fopen',
+        'fsockopen',
+        'file',
+        'file_get_contents',
+        'readfile',
+        'unlink'
+    ];
 
     /**
      * @var array
@@ -462,27 +551,31 @@ class Request
      */
     private function unhtmlentities($value)
     {
-        $value = preg_replace("/%3A%2F%2F/", '', $value);
+        $value = preg_replace("/%3A%2F%2F/", '', $value); // :// to empty
         $value = preg_replace('/([\x00-\x08][\x0b-\x0c][\x0e-\x20])/', '', $value);
         $value = preg_replace("/%u0([a-z0-9]{3})/i", "&#x\\1;", $value);
         $value = preg_replace("/%([a-z0-9]{2})/i", "&#x\\1;", $value);
         $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
+
         $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
         $value = preg_replace_callback($search, [$this, 'chr_hexdec_callback'], $value);
+
         $search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
         $value = preg_replace_callback($search, [$this, 'chr_callback'], $value);
+
         $search = ['&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C'];
         $value = str_ireplace($search, '<', $value);
+
         return $value;
     }
 
     /**
-     * Request::filterAttr()
-     *
-     * @param mixed $attrSet
-     * @return
+     * @param string[] $attrSet
+     * @param string $tagName
+     * @param boolean $isvalid
+     * @return string[]
      */
-    private function filterAttr($attrSet)
+    private function filterAttr($attrSet, $tagName, &$isvalid)
     {
         $newSet = [];
 
@@ -503,12 +596,19 @@ class Request
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", "\\1", $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
-                if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
-                    continue;
-                }
+                // Security check Data URLs
+                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $attrSubSet[1], $m)) {
+                    if (empty($m[2])) {
+                        $dataURLs = urldecode($m[3]);
+                    } else {
+                        $dataURLs = (string) base64_decode($m[3]);
+                    }
 
-                if (!empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $attrSubSet[1])) {
-                    continue;
+                    $checkValid = true;
+                    $this->filterTags($dataURLs, $checkValid);
+                    if (!$checkValid) {
+                        continue;
+                    }
                 }
 
                 $value = $this->unhtmlentities($attrSubSet[1]);
@@ -521,14 +621,18 @@ class Request
                     'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si',
                     'write' => '/w\s*r\s*i\s*t\s*e/si',
                     'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
-                    'window' => '/w\s*i\s*n\s*d\s*o\s*w/si'
+                    'window' => '/w\s*i\s*n\s*d\s*o\s*w/si',
+                    'data:' => '/d\s*a\s*t\s*a\s*\:/si'
                 ];
                 $value = preg_replace(array_values($search), array_keys($search), $value);
 
-                if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $value)) {
+                // Security remove object param tag
+                if ('param' == $tagName and 'name' == $attrSubSet[0] and preg_match('/^[\r\n\s\t]*(allowscriptaccess|allownetworking)/isu', strtolower($value))) {
+                    return [];
+                }
+                if (preg_match('/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/', $value)) {
                     continue;
                 }
-
                 if (!empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $value)) {
                     continue;
                 }
@@ -539,18 +643,27 @@ class Request
             }
             $newSet[] = $attrSubSet[0] . '=[@{' . $attrSubSet[1] . '}@]';
         }
+
+        if ($tagName == 'embed') {
+            $newSet[] = 'allowscriptaccess=[@{never}@]';
+            $newSet[] = 'allownetworking=[@{internal}@]';
+        }
+
         return $newSet;
     }
 
     /**
-     * Request::filterTags()
-     *
-     * @param mixed $source
-     * @return
+     * @param string $source
+     * @param boolean $isvalid
+     * @return string
      */
-    private function filterTags($source)
+    private function filterTags($source, &$isvalid = true)
     {
-        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source);
+        $checkInvalid = 0;
+        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source, -1, $checkInvalid);
+        if ($checkInvalid > 0) {
+            $isvalid = false;
+        }
 
         $preTag = null;
         $postTag = $source;
@@ -601,6 +714,7 @@ class Request
             if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) or in_array($tagName, $this->disabletags)) {
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
+                $isvalid = false;
                 continue;
             }
 
@@ -630,14 +744,24 @@ class Request
             }
 
             if (!$isCloseTag) {
-                $preTag .= '{@[' . $tagName;
-
                 if (!empty($attrSet)) {
-                    $attrSet = $this->filterAttr($attrSet);
-                    $preTag .= ' ' . implode(' ', $attrSet);
+                    $attrSet = $this->filterAttr($attrSet, $tagName, $isvalid);
                 }
-
-                $preTag .= (strpos($fromTagOpen, '</' . $tagName)) ? ']@}' : ' /]@}';
+                if (!('param' == $tagName and empty($attrSet))) {
+                    $preTag .= '{@[' . $tagName;
+                    if (!empty($attrSet)) {
+                        $preTag .= ' ' . implode(' ', $attrSet);
+                    }
+                    $preTag .= (strpos($fromTagOpen, '</' . $tagName)) ? ']@}' : ' /]@}';
+                    if ($tagName == 'object') {
+                        if (preg_match('/\]\@\}([\s]+)\{\@\[' . $tagName . '/', $preTag, $m)) {
+                            $space = $m[1] . '    ';
+                        } else {
+                            $space = "\n    ";
+                        }
+                        $preTag .= $space . "{@[param name=[@{allowscriptaccess}@] value=[@{never}@] /]@}" . $space . "{@[param name=[@{allownetworking}@] value=[@{internal}@] /]@}\n";
+                    }
+                }
             } else {
                 $preTag .= '{@[/' . $tagName . ']@}';
             }
@@ -1084,7 +1208,7 @@ class Request
      */
     public function get_bool($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( bool )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (bool) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1099,7 +1223,7 @@ class Request
      */
     public function get_int($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( int )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (int) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1129,7 +1253,7 @@ class Request
      */
     public function get_float($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( float )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (float) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1144,7 +1268,7 @@ class Request
      */
     public function get_string($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( string )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (string) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1189,7 +1313,7 @@ class Request
      */
     public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = [], $filter = true)
     {
-        $value = ( string )$this->get_value($name, $mode, $default, true, $filter);
+        $value = (string) $this->get_value($name, $mode, $default, true, $filter);
         return $this->_get_title($value, $specialchars, $preg_replace);
     }
 
@@ -1241,7 +1365,7 @@ class Request
             $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
             $value = strip_tags($value, $allowed_html_tags);
         }
-        if ((bool)$save) {
+        if ((bool) $save) {
             $value = strtr($value, [
                 "\r\n" => '<br />',
                 "\r" => '<br />',
@@ -1279,7 +1403,7 @@ class Request
      */
     public function get_array($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return (array)$this->get_value($name, $mode, $default, $decode, $filter);
+        return (array) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1299,28 +1423,28 @@ class Request
         foreach ($array_keys as $key) {
             switch ($type) {
                 case 'bool':
-                    $arr[$key] = ( bool )$arr[$key];
+                    $arr[$key] = (bool) $arr[$key];
                     break;
                 case 'int':
-                    $arr[$key] = ( int )$arr[$key];
+                    $arr[$key] = (int) $arr[$key];
                     break;
                 case 'float':
-                    $arr[$key] = ( float )$arr[$key];
+                    $arr[$key] = (float) $arr[$key];
                     break;
                 case 'string':
-                    $arr[$key] = ( string )$arr[$key];
+                    $arr[$key] = (string) $arr[$key];
                     break;
                 case 'array':
-                    $arr[$key] = ( array )$arr[$key];
+                    $arr[$key] = (array) $arr[$key];
                     break;
                 case 'title':
-                    $arr[$key] = ( string )$this->_get_title($arr[$key], $specialchars, $preg_replace);
+                    $arr[$key] = (string) $this->_get_title($arr[$key], $specialchars, $preg_replace);
                     break;
                 case 'textarea':
-                    $arr[$key] = ( string )$this->_get_textarea($arr[$key], $allowed_html_tags, $save);
+                    $arr[$key] = (string) $this->_get_textarea($arr[$key], $allowed_html_tags, $save);
                     break;
                 case 'editor':
-                    $arr[$key] = ( string )$this->_get_editor($arr[$key], $allowed_html_tags);
+                    $arr[$key] = (string) $this->_get_editor($arr[$key], $allowed_html_tags);
             }
         }
         return $arr;
@@ -1365,7 +1489,7 @@ class Request
     }
 
     /**
-     * @return boolean|null
+     * @return string|NULL
      */
     private function getAllowOriginHeaderValue()
     {

@@ -261,6 +261,7 @@ $lang_module['upass_type_0'] = 'Không giới hạn';
 $lang_module['access_other'] = 'Cấu hình khác';
 $lang_module['access_caption'] = 'Cấu hình quyền hạn sử dụng module';
 $lang_module['access_admin'] = 'Nhóm quản trị';
+$lang_module['access_viewlist'] = 'Xem danh sách tài khoản';
 $lang_module['access_addus'] = 'Tạo tài khoản';
 $lang_module['access_waiting'] = 'Kích hoạt tài khoản';
 $lang_module['access_editus'] = 'Sửa tài khoản';
@@ -270,6 +271,7 @@ $lang_module['access_groups'] = 'Quản lý nhóm';
 $lang_module['access_caption_leader'] = 'Cấu hình quyền hạn sử dụng module của trưởng nhóm';
 $lang_module['access_groups_add'] = 'Thêm thành viên vào nhóm';
 $lang_module['access_groups_del'] = 'Xóa thành viên khỏi nhóm';
+$lang_module['viewlist_error_permission'] = 'Bạn không có quyền xem danh sách tài khoản';
 
 $lang_module['fields'] = 'Tùy biến dữ liệu';
 $lang_module['captionform_add'] = 'Thêm trường dữ liệu';
