@@ -13,10 +13,10 @@ if (! defined('NV_IS_FILE_SETTINGS')) {
 }
 
 $array_theme_type = array('r', 'd', 'm');
-$submit = $nv_Request->get_string('submit', 'post');
 $errormess = '';
 
-if ($submit) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config = array();
 
     $site_domain = $nv_Request->get_title('site_domain', 'post', '');
@@ -160,6 +160,7 @@ if (! empty($global_config['site_favicon']) and $global_config['site_favicon'] !
 }
 
 $value_setting = array(
+    'checkss' => $checkss,
     'sitename' => $global_config['site_name'],
     'site_logo' => $site_logo,
     'site_banner' => $site_banner,

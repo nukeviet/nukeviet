@@ -14,7 +14,8 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $error = '';
 
-if ($nv_Request->get_int('save', 'post') == '1') {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $cron_name = $nv_Request->get_title('cron_name', 'post', '', 1);
     $run_file = $nv_Request->get_title('run_file', 'post', '');
     $run_func = $nv_Request->get_title('run_func_iavim', 'post', '');
@@ -114,6 +115,7 @@ $contents['interval'] = array( $lang_module['interval'], $interval, 11, $lang_mo
 $contents['del'] = array( $lang_module['is_del'], $del );
 $contents['inter_val_type'] = $inter_val_type;
 $contents['submit'] = $lang_global['submit'];
+$contents['checkss'] = $checkss;
 $contents = nv_admin_add_theme($contents);
 
 $page_title = $lang_global['mod_cronjobs'] . ' -> ' . $lang_module['nv_admin_add'];

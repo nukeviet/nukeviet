@@ -14,7 +14,7 @@ if (! defined('NV_IS_FILE_SETTINGS')) {
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-if (! empty($id)) {
+if (!empty($id) and md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $id) == $nv_Request->get_string('checkss', 'get')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_atc', 'id ' . $id, $admin_info['userid']);
 
     $sql = 'SELECT act FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND (is_sys=0 OR act=0)';

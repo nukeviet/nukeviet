@@ -240,7 +240,6 @@ $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detect
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
 $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
-$lang_module['cdn_download'] = 'Download javascript, css';
 $lang_module['plugin'] = 'Configuration Plugin';
 $lang_module['plugin_info'] = 'php file plugin implementation is contained in the &ldquo;<strong>includes/plugin/</strong>&rdquo;. The plugin will always run when the system is activated';
 $lang_module['plugin_file'] = 'Executable File';

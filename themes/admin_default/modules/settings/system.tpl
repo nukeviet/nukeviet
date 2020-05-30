@@ -118,7 +118,7 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.cdn_url}</strong></td>
-                    <td><input type="text" name="cdn_url" value="{DATA.cdn_url}" class="form-control pull-left" style="width: 220px; margin-right: 10px"/><input type="button" value="{LANG.cdn_download}"  id="cdn_download" class="btn btn-info"/></td>
+                    <td><input type="text" name="cdn_url" value="{DATA.cdn_url}" class="form-control pull-left" style="width: 450px"/></td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.error_set_logs}</strong></td>
@@ -159,6 +159,7 @@
         </table>
     </div>
     <div class="text-center">
+        <input type="hidden" name="checkss" value="{DATA.checkss}" />
         <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/>
     </div>
 </form>

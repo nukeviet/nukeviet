@@ -240,7 +240,6 @@ $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';
 $lang_module['ftp_error_support'] = 'Votre hébergeur a bloqué FTP, veuillez leur contacter pour l\'activer';
 $lang_module['cdn_url'] = 'Hosting CDN pour javascript, css';
-$lang_module['cdn_download'] = 'Télécharge les fichiers javascript, css';
 $lang_module['plugin'] = 'Configuration du Plugin';
 $lang_module['plugin_info'] = 'Plugin doit être un fichier php se situé dans le dossier &ldquo;<strong>includes/plugin/</strong>&rdquo;. Ces Plugin exécutent toujours avec le système en cas d\'activation';
 $lang_module['plugin_file'] = 'Fichier Plugin';

@@ -13,7 +13,7 @@
 					<a class="btn btn-primary btn-xs pull-right" style="margin-left: 5px" href="{DATA.disable.2}">{DATA.disable.1}</a>
 					<!-- END: disable -->
 					<!-- BEGIN: delete -->
-					<a class="btn btn-primary btn-xs pull-right" href="javascript:void(0);" onclick="nv_is_del_cron('{DATA.id}');">{DATA.delete.1}</a>
+					<a class="btn btn-primary btn-xs pull-right" href="javascript:void(0);" onclick="nv_is_del_cron('{DATA.id}', '{DATA.delete.2}');">{DATA.delete.1}</a>
 					<!-- END: delete -->
 				</div> {DATA.caption} </th>
 			</tr>

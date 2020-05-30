@@ -15,6 +15,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 $error = '';
 
 $page_title = $lang_module['ftp_config'];
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $xtpl = new XTemplate('ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -33,6 +34,7 @@ if ($sys_info['ftp_support']) {
     $array_config['ftp_user_pass'] = $nv_Request->get_title('ftp_user_pass', 'post', $global_config['ftp_user_pass'], 0);
     $array_config['ftp_path'] = $nv_Request->get_title('ftp_path', 'post', $global_config['ftp_path'], 1);
     $array_config['ftp_check_login'] = $global_config['ftp_check_login'];
+    $array_config['checkss'] = $checkss;
 
     // Tu dong nhan dang Remove Path
     if ($nv_Request->isset_request('tetectftp', 'post')) {
@@ -67,7 +69,7 @@ if ($sys_info['ftp_support']) {
         die('ERROR|' . $lang_module['ftp_error_detect_root']);
     }
 
-    if ($nv_Request->isset_request('ftp_server', 'post')) {
+    if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config['ftp_check_login'] = 0;
 
         if (! empty($array_config['ftp_server']) and ! empty($array_config['ftp_user_name']) and ! empty($array_config['ftp_user_pass'])) {
