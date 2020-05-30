@@ -7,7 +7,7 @@
         <table class="table table-striped table-bordered table-hover">
             <tfoot>
                 <tr>
-                    <td colspan="2" class="text-center"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/></td>
+                    <td colspan="2" class="text-center"><input type="hidden" name="checkss" value="{CHECKSS}" /><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/></td>
                 </tr>
             </tfoot>
             <tbody>

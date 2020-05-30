@@ -16,7 +16,8 @@ $timezone_array = array_keys($nv_parse_ini_timezone);
 
 $array_config_global = array();
 
-if ($nv_Request->isset_request('submit', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global['online_upd'] = $nv_Request->get_int('online_upd', 'post');
     $array_config_global['statistic'] = $nv_Request->get_int('statistic', 'post');
     $array_config_global['referer_blocker'] = $nv_Request->get_int('referer_blocker', 'post', 0);
@@ -62,6 +63,8 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', $checkss);
+
 sort($timezone_array);
 foreach ($timezone_array as $site_timezone_i) {
     $xtpl->assign('TIMEZONEOP', $site_timezone_i);
