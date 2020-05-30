@@ -45,10 +45,10 @@ function nv_chang_weight(modname) {
 	return;
 }
 
-function nv_chang_act(modname) {
+function nv_chang_act(modname, checkss) {
 	if (confirm(nv_is_change_act_confirm[0])) {
 		var nv_timer = nv_settimeout_disable('change_act_' + modname, 5000);
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act&nocache=' + new Date().getTime(), 'mod=' + modname, function(res) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act&nocache=' + new Date().getTime(), 'mod=' + modname + '&checkss=' + checkss, function(res) {
 			var r_split = res.split("_");
 			if (r_split[0] != 'OK') {
 				alert(nv_is_change_act_confirm[2]);
@@ -63,9 +63,9 @@ function nv_chang_act(modname) {
 	return;
 }
 
-function nv_mod_del(modname) {
+function nv_mod_del(modname, checkss) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'mod=' + modname, function(res) {
+        	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'mod=' + modname + '&checkss=' + checkss, function(res) {
 			var r_split = res.split("_");
 			if (r_split[0] == 'OK') {
 				window.location.href = script_name + '?' + nv_name_variable + '=modules&' + nv_randomPassword(6) + '=' + nv_randomPassword(8);
@@ -240,6 +240,7 @@ $(document).ready(function(){
 			dataType: 'json',
 			success: function(e){
 				if( e.status == 'success' ){
+				    $("input[name='checkss']").val(e.checkss);
 					var option = $this.find('option');
 					option.removeClass('hidden');
 					option.prop('selected', false);
@@ -269,7 +270,7 @@ $(document).ready(function(){
 			type: 'POST',
 			cache: false,
 			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(),
-			data: 'mod=' + $container.data('title') + '&sample=' + $container.find('.option').val(),
+            data : 'mod=' + $container.data('title') + '&checkss=' + $('input[name=checkss]').val() + '&sample=' + $container.find('.option').val(),
 			success: function(e){
 				$container.modal('hide');
 				var r_split = e.split("_");

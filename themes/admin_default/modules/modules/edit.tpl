@@ -8,7 +8,7 @@
             <tfoot>
                 <tr>
                     <td colspan="2" class="text-center">
-                        <input name="save" id="save" type="hidden" value="1" />
+                        <input type="hidden" name="checkss" value="{DATA.checkss}" />
                         <input name="module_theme" type="hidden" value="{DATA.module_theme}" />
                         <input name="go_add" type="submit" value="{DATA.submit}" class="btn btn-primary" />
                     </td>
