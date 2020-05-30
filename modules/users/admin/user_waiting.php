@@ -15,30 +15,33 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 //Xoa thanh vien
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
-
-    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
-    if ($global_config['idsite'] > 0) {
-        $sql .= ' AND idsite=' . $global_config['idsite'];
-    }
-    if ($db->exec($sql)) {
-        nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
-        die('OK');
+    if (md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid) == $nv_Request->get_string('checkss', 'post')) {
+        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+        if ($global_config['idsite'] > 0) {
+            $sql .= ' AND idsite=' . $global_config['idsite'];
+        }
+        if ($db->exec($sql)) {
+            nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
+            die('OK');
+        }
     }
     die('NO');
 }
 
 //Kich hoat thanh vien
 if ($nv_Request->isset_request('act', 'get')) {
-    $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
-    if ($global_config['idsite'] > 0) {
-        $sql .= ' WHERE idsite=' . $global_config['idsite'];
-    }
-    $user_number = $db->query($sql)->fetchColumn();
-    if ($user_number >= $global_config['max_user_number']) {
-        $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_admin_theme($contents, $showheader);
-        include NV_ROOTDIR . '/includes/footer.php';
+    if ($global_config['max_user_number']) {
+        $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+        if ($global_config['idsite'] > 0) {
+            $sql .= ' WHERE idsite=' . $global_config['idsite'];
+        }
+        $user_number = $db->query($sql)->fetchColumn();
+        if ($user_number >= $global_config['max_user_number']) {
+            $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_admin_theme($contents, $showheader);
+            include NV_ROOTDIR . '/includes/footer.php';
+        }
     }
 
     $userid = $userid_reg = $nv_Request->get_int('userid', 'get', 0);
@@ -49,7 +52,7 @@ if ($nv_Request->isset_request('act', 'get')) {
     }
 
     $row = $db->query($sql)->fetch();
-    if (empty($row)) {
+    if (empty($row) or md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid) != $nv_Request->get_string('checkss', 'get')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -293,9 +296,9 @@ foreach ($head_tds as $head_td) {
 }
 
 foreach ($users_list as $u) {
+    $u['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $u['userid']);
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('ACTIVATE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;act=1&amp;userid=' . $u['userid']);
-    $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;del&amp;userid=' . $u['userid']);
     $xtpl->parse('main.xusers');
 }
 

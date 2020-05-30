@@ -90,7 +90,7 @@ $array = array();
 $array['success'] = 0;
 $array['error'] = '';
 $array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
-$array['checkss'] = NV_CHECK_SESSION;
+$array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 //Xoa avatar

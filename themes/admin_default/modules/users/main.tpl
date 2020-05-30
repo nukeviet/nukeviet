@@ -107,6 +107,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="7">
+                            <input type="hidden" name="checkss" value="{CHECKSESS}" />
                             <!-- BEGIN: action -->
                             <div class="pull-left margin-right form-inline">
                                 <select class="form-control w150" id="mainuseropt">

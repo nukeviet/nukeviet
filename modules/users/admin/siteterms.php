@@ -29,12 +29,13 @@ if (empty($row)) {
     $mode = 'edit';
 }
 
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . NV_LANG_DATA);
 if ($nv_Request->get_int('save', 'post') == 1) {
     $content = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
 
     if (empty($content)) {
         $error = $lang_module['error_content'];
-    } else {
+    } elseif ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if ($mode == 'edit') {
             $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET
 				content= :content,
@@ -62,6 +63,8 @@ $content = htmlspecialchars(nv_editor_br2nl($content));
 $xtpl = new XTemplate('siteterms.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('CHECKSS', $checkss);
+
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 if (! empty($error)) {

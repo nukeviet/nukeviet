@@ -137,7 +137,7 @@
             </tbody>
         </table>
         <!-- END: config -->
-
+        <input type="hidden" name="checkss" value="{DATA.checkss}" />
         <input type="hidden" name="save" value="1" />
         <p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
     </form>

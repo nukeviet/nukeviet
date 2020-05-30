@@ -259,6 +259,7 @@ $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
 $xtpl->assign('HEAD', $head_tds);
+$xtpl->assign('CHECKSESS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
@@ -299,7 +300,6 @@ foreach ($users_list as $u) {
     } else {
         $u['active_obj'] = 'N/A';
     }
-
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
