@@ -13,7 +13,7 @@
 	<div class="text-info">
 		{LANG.pagetitleNote}
 	</div>
-	<div class="text-center"><input type="hidden" name="save" value="1" /><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" />
+	<div class="text-center"><input type="hidden" name="checkss" value="{CHECKSS}" /><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" />
 	</div>
 </form>
 <!-- END: main -->
