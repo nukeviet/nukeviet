@@ -17,6 +17,7 @@ if (! defined('NV_IS_SPADMIN')) {
 }
 
 $admin_id = $nv_Request->get_int('admin_id', 'get', 0);
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_id);
 
 if (empty($admin_id) or $admin_id == $admin_info['admin_id']) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -62,7 +63,7 @@ if ($allow_change) {
 
         if (! empty($new_suspend) and empty($new_reason)) {
             $error = sprintf($lang_module['susp_reason_empty'], $row_user['username']);
-        } else {
+        } elseif ($checkss == $nv_Request->get_string('checkss', 'post')) {
             if ($new_suspend) {
                 if ($clean_history) {
                     $susp_reason = array();
@@ -211,6 +212,7 @@ $page_title = sprintf($lang_module['nv_admin_chg_suspend'], $row_user['username'
 // Parse content
 $xtpl = new XTemplate('suspend.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('SUSPEND_INFO', $contents['suspend_info'][0]);
+$xtpl->assign('CHECKSS', $checkss);
 
 if (empty($contents['suspend_info'][1])) {
     $xtpl->parse('suspend.suspend_info');

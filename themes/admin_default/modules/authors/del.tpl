@@ -5,7 +5,7 @@
     <table class="table table-striped table-bordered table-hover">
         <tfoot>
             <tr>
-                <td colspan="3"><input name="ok" type="hidden" value="{CHECKSS}" /><input name="go_del" type="submit" value="{LANG.nv_admin_del}" class="btn btn-danger" /></td>
+                <td colspan="3"><input name="checkss" type="hidden" value="{CHECKSS}" /><input name="go_del" type="submit" value="{LANG.nv_admin_del}" class="btn btn-danger" /></td>
             </tr>
         </tfoot>
         <tbody>

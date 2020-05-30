@@ -49,8 +49,11 @@ if ($global_config['max_user_admin'] > 0) {
 $adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 if ($nv_Request->get_int('save', 'post', 0)) {
+    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+        nv_htmlOutput('Error Session, Please close the browser and try again');
+    }
     $userid = $nv_Request->get_title('userid', 'post', 0);
     $lev = $nv_Request->get_int('lev', 'post', 0);
     $editor = $nv_Request->get_title('editor', 'post');
@@ -273,6 +276,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
 $xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 $xtpl->assign('ACTION', $contents['action']);
+$xtpl->assign('CHECKSS', $checkss);
 
 foreach ($adminThemes as $_admin_theme) {
     $xtpl->assign('THEME_NAME', $_admin_theme);
