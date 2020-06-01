@@ -2,17 +2,19 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 23 Apr 2017 04:03:27 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
-$sys_info['disable_classes']=array();
-$sys_info['disable_functions']=array();
-$sys_info['ini_set_support']= true;
+$sys_info['disable_classes']=[];
+$sys_info['disable_functions']=[];
+$sys_info['ini_set_support']=true;
 $sys_info['supports_rewrite']='rewrite_mode_apache';
 
 define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
@@ -81,6 +83,8 @@ $global_config['read_type']=0;
 $global_config['recaptcha_secretkey']='';
 $global_config['recaptcha_sitekey']='';
 $global_config['recaptcha_type']='image';
+$global_config['remote_block']=1;
+$global_config['remote_valid_domains']=[];
 $global_config['rewrite_enable']=1;
 $global_config['rewrite_endurl']='/';
 $global_config['rewrite_exturl']='.html';
