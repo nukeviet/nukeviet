@@ -26,7 +26,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $db->sqlreset()->select('*')->from($db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA)->order('alias ASC');
 
     if ($incomplete === true) {
-        $db->where(NV_LANG_DATA . '_description = \'\'');
+        $db->where('description = \'\'');
     }
 
     if (! empty($q)) {
