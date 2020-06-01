@@ -13,10 +13,10 @@ if (! defined('NV_IS_FILE_THEMES')) {
 }
 
 $bid = $nv_Request->get_int('bid', 'post');
-
+$checkss = $nv_Request->get_string('checkss', 'post');
 list($bid, $theme, $position) = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if (intval($bid) > 0) {
+if ($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SESSION . '_' . $bid) == $checkss)) {
     $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid);
     $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid);
 

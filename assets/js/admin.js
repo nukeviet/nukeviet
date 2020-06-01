@@ -19,13 +19,13 @@ function nv_sh(b, a) {
 $(function() {
 	if ("undefined" != typeof drag_block && 0 != drag_block) {
 		$("a.delblock").click(function() {
-			confirm(block_delete_confirm) && $.post(post_url + "blocks_del", "bid=" + $(this).attr("name"), function(a) {
+			confirm(block_delete_confirm) && $.post(post_url + "blocks_del", "bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
 				alert(a);
 				window.location.href = selfurl
 			})
 		});
 		$("a.outgroupblock").click(function() {
-			confirm(block_outgroup_confirm) && $.post(post_url + "block_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name"), function(a) {
+			confirm(block_outgroup_confirm) && $.post(post_url + "block_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
 				alert(a);
 				window.location.href = selfurl
 			})
@@ -39,7 +39,7 @@ $(function() {
         	$.ajax({
         		type: "post",
         		url: post_url + "block_change_show",
-        		data: "bid=" + $(this).attr("name"),
+        		data: "bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"),
         		cache: !1,
         		dataType: "json"
         	}).done(function(b) {
@@ -54,12 +54,12 @@ $(function() {
 			cursor: "move",
 			receive: function() {
 				b = !0;
-				$.post(post_url + "sort_order", $(this).sortable("serialize") + "&position=" + $(this).attr("id") + "&func_id=" + func_id, function(a) {
+				$.post(post_url + "sort_order", $(this).sortable("serialize") + "&position=" + $(this).data("id") + "&checkss=" + $(this).data("checkss") + "&func_id=" + func_id, function(a) {
 					a == "OK_" + func_id ? $("div#toolbar>ul.info").html('<li><span style="color:#ff0000;padding-left:150px;font-weight:700;">' + blocks_saved + "</span></li>").fadeIn(1E3) : alert(blocks_saved_error)
 				})
 			},
 			stop: function() {
-				0 == b && $.post(post_url + "sort_order", $(this).sortable("serialize") + "&func_id=" + func_id, function(a) {
+				0 == b && $.post(post_url + "sort_order", $(this).sortable("serialize") + "&checkss=" + $(this).data("checkss") + "&func_id=" + func_id, function(a) {
 					a == "OK_" + func_id ? $("div#toolbar>ul.info").html('<span style="color:#ff0000;padding-left:150px;font-weight:700;">' + blocks_saved + "</span>").fadeIn(1E3) : alert(blocks_saved_error)
 				})
 			}

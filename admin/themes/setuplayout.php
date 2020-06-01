@@ -78,7 +78,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     }
 
     $page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
-
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $selectthemes . '_' . $admin_info['userid']);
     $xtpl = new XTemplate('setuplayout.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -87,44 +87,47 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xtpl->assign('OP', $op);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('CHECKSS', $checkss);
 
-    if ($nv_Request->isset_request('save', 'post') and $nv_Request->isset_request('func', 'post')) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
+    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+        if ($nv_Request->isset_request('save', 'post') and $nv_Request->isset_request('func', 'post')) {
+            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
-        $func_arr_save = $nv_Request->get_array('func', 'post');
+            $func_arr_save = $nv_Request->get_array('func', 'post');
 
-        foreach ($func_arr_save as $func_id => $layout_name) {
-            if (in_array($layout_name, $layout_array)) {
-                $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout=:layout WHERE func_id = :func_id AND theme= :theme');
-                $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
-                $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-                $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-                $sth->execute();
+            foreach ($func_arr_save as $func_id => $layout_name) {
+                if (in_array($layout_name, $layout_array)) {
+                    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout=:layout WHERE func_id = :func_id AND theme= :theme');
+                    $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
+                    $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
+                    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+                    $sth->execute();
+                }
             }
-        }
 
-        $set_layout_site = true;
+            $set_layout_site = true;
 
-        $xtpl->parse('main.complete');
-    } elseif ($nv_Request->isset_request('saveall', 'post') and $nv_Request->isset_request('layout', 'post')) {
-        $layout = $nv_Request->get_string('layout', 'post');
-        $module = $nv_Request->get_string('block_module', 'post');
-        if (in_array($layout, $layout_array)) {
-            if (empty($module)) {
-                //Setup layout for all module
-                $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1) AND theme= :theme');
-                $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
-                $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-                $sth->execute();
-                $set_layout_site = true;
-            } elseif (isset($site_mods[$module])) {
-                //Setup layout for module
-                $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND show_func=1) AND theme= :theme');
-                $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
-                $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-                $sth->bindParam(':in_module', $module, PDO::PARAM_STR);
-                $sth->execute();
-                $set_layout_site = true;
+            $xtpl->parse('main.complete');
+        } elseif ($nv_Request->isset_request('saveall', 'post') and $nv_Request->isset_request('layout', 'post')) {
+            $layout = $nv_Request->get_string('layout', 'post');
+            $module = $nv_Request->get_string('block_module', 'post');
+            if (in_array($layout, $layout_array)) {
+                if (empty($module)) {
+                    //Setup layout for all module
+                    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1) AND theme= :theme');
+                    $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
+                    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+                    $sth->execute();
+                    $set_layout_site = true;
+                } elseif (isset($site_mods[$module])) {
+                    //Setup layout for module
+                    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND show_func=1) AND theme= :theme');
+                    $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
+                    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+                    $sth->bindParam(':in_module', $module, PDO::PARAM_STR);
+                    $sth->execute();
+                    $set_layout_site = true;
+                }
             }
         }
     }

@@ -20,6 +20,7 @@
 			<!-- END: module -->
 		</select>
 		&nbsp;
+        <input type="hidden" name="checkss" value="{CHECKSS}" />
 		<input name="saveall" type="submit" value="{LANG.setup_save_layout}" class="btn btn-primary"/>
 	</div>
 </form>
@@ -53,7 +54,7 @@
 			<!-- END: fixend -->
 		</tr>
 		<tr>
-			<td colspan="3" class="text-center"><input name="save" type="submit" value="{LANG.setup_save_layout}" class="btn btn-primary"/></td>
+			<td colspan="3" class="text-center"><input type="hidden" name="checkss" value="{CHECKSS}" /><input name="save" type="submit" value="{LANG.setup_save_layout}" class="btn btn-primary"/></td>
 		</tr>
 	</table>
 </div>

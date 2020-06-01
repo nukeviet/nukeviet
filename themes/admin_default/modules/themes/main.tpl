@@ -15,13 +15,13 @@
                     <div class="actions">
                         <div class="ctn">
                             <!-- BEGIN: link_setting -->
-                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-fw fa-sun-o"></i>{LANG.theme_created_setting}</a>
+                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" data-title="{ROW.value}" data-checkss="{ROW.checkss}"><i class="fa fa-fw fa-sun-o"></i>{LANG.theme_created_setting}</a>
                             <!-- END: link_setting -->
                             <!-- BEGIN: link_active -->
-                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" title="{ROW.value}"><i class="fa fa-sun-o fa-fw"></i>{LANG.theme_created_activate}</a>
+                            <a href="javascript:void(0);" class="btn btn-default btn-block activate ellipsis" data-title="{ROW.value}" data-checkss="{ROW.checkss}"><i class="fa fa-sun-o fa-fw"></i>{LANG.theme_created_activate}</a>
                             <!-- END: link_active -->
                             <!-- BEGIN: link_delete -->
-                            <a href="javascript:void(0);" class="btn btn-default btn-block delete ellipsis" title="{ROW.value}"><i class="fa fa-trash-o fa-fw"></i>{LANG.theme_delete}</a>
+                            <a href="javascript:void(0);" class="btn btn-default btn-block delete ellipsis"data-title="{ROW.value}" data-checkss="{ROW.checkss}"><i class="fa fa-trash-o fa-fw"></i>{LANG.theme_delete}</a>
                             <!-- END: link_delete -->
                         </div>
                     </div>
