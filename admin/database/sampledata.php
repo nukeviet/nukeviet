@@ -65,26 +65,11 @@ if ($nv_Request->isset_request('delete', 'post')) {
         nv_htmlOutput('Wrong URL');
     }
     $sname = nv_strtolower(nv_substr($nv_Request->get_title('sname', 'post', ''), 0, 50));
-    if (preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
+    if ($nv_Request->get_string('delete', 'post') == md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $sname) and preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
         nv_deletefile(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php');
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['sampledata'], 'Delete: ' . $sname, $admin_info['userid']);
     }
     nv_htmlOutput('OK');
-}
-
-// Tải về file dữ liệu
-if ($nv_Request->isset_request('downloadfile', 'get')) {
-    $sample_name = nv_strtolower(nv_substr($nv_Request->get_title('sample_name', 'get', ''), 0, 50));
-
-    if (!file_exists($file_data_dump) or !preg_match('/^([a-z0-9]+)$/', $sample_name)) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-    }
-
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['sampledata'], 'Manual Download: ' . $sample_name, $admin_info['userid']);
-
-    $download = new NukeViet\Files\Download($file_data_dump, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'data_' . $sample_name . '.php');
-    $download->download_file();
-    exit();
 }
 
 // Tiến trình quét bằng AJAX
@@ -355,6 +340,7 @@ if (empty($array)) {
     $xtpl->parse('main.empty');
 } else {
     foreach ($array as $row) {
+        $row['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['title']);
         $xtpl->assign('ROW', $row);
         $xtpl->parse('main.data.loop');
     }
