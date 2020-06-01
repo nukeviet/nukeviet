@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_MODULES')) {
 $modname = $nv_Request->get_title('mod', 'post');
 $contents = 'NO_' . $modname;
 
-if (! empty($modname) and preg_match($global_config['check_module'], $modname)) {
+if (!empty($modname) and preg_match($global_config['check_module'], $modname) and md5(NV_CHECK_SESSION . '_' . $module_name . '_del_' . $modname) == $nv_Request->get_string('checkss', 'post')) {
     $sth = $db->prepare('SELECT is_sys, basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
     $sth->bindParam(':title', $modname, PDO::PARAM_STR);
     $sth->execute();

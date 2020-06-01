@@ -69,8 +69,11 @@ $error = '';
 $adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_id);
 if ($nv_Request->get_int('save', 'post', 0)) {
+    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
     $editor = $nv_Request->get_title('editor', 'post', '');
     if (defined('NV_IS_SPADMIN')) {
         $allow_files_type = $nv_Request->get_array('allow_files_type', 'post', []);
@@ -393,6 +396,7 @@ $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
 $xtpl->assign('INFO', $contents['info']);
 $xtpl->assign('ACTION', $contents['action']);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('CHECKSS', $checkss);
 
 foreach ($adminThemes as $_admin_theme) {
     $xtpl->assign('THEME_NAME', $_admin_theme);

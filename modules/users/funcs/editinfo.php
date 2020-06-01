@@ -216,7 +216,7 @@ function nv_groups_list_pub2()
 }
 
 $array_data = [];
-$array_data['checkss'] = NV_CHECK_SESSION;
+$array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $user_info['userid']);
 $array_data['awaitinginfo'] = [];
 $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
 $checkss = $nv_Request->get_title('checkss', 'post', '');

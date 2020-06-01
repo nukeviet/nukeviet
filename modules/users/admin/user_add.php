@@ -48,7 +48,15 @@ $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
+
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
 if ($nv_Request->isset_request('confirm', 'post')) {
+    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error Session, Please close the browser and try again'
+        ]);
+    }
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
     $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 1));
     $_user['password1'] = $nv_Request->get_title('password1', 'post', '', 0);
@@ -346,6 +354,7 @@ $_user['is_official'] = ' checked="checked"';
 $_user['adduser_email'] = '';
 $_user['view_mail'] = '';
 $_user['is_email_verified'] = ' checked="checked"';
+$_user['checkss'] = $checkss;
 
 $groups = [];
 if (!empty($groups_list)) {

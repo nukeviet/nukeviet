@@ -12,9 +12,8 @@ if (! defined('NV_IS_FILE_WEBTOOLS')) {
     die('Stop!!!');
 }
 
-$submit = $nv_Request->get_string('submit', 'post');
-
-if ($submit) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global = array();
     $array_config_global['autocheckupdate'] = $nv_Request->get_int('autocheckupdate', 'post', 0);
     $array_config_global['autoupdatetime'] = $nv_Request->get_int('autoupdatetime', 'post', 24);
@@ -40,6 +39,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('CHECKSS', $checkss);
 $xtpl->assign('AUTOCHECKUPDATE', ($global_config['autocheckupdate']) ? ' checked="checked"' : '');
 
 for ($i = 1; $i <= 100; ++$i) {

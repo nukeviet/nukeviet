@@ -14,9 +14,10 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $errormess = $lang_module['plugin_info'];
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $plugin_file = $nv_Request->get_title('plugin_file', 'post,get');
-if ($nv_Request->isset_request('plugin_file', 'post')) {
+if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('plugin_file', 'post')) {
     $config_plugin = array();
     if (preg_match($pattern_plugin, $plugin_file) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
         $plugin_area = $nv_Request->get_int('plugin_area', 'post');
@@ -93,6 +94,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', $checkss);
 
 $plugin_new = array();
 $plugin_all = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);

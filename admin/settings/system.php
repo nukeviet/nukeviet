@@ -36,7 +36,8 @@ $timezone_array = array_keys($nv_parse_ini_timezone);
 $errormess = '';
 $array_config_define = [];
 
-if ($nv_Request->isset_request('submit', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_site = [];
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
@@ -211,6 +212,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 }
 
 $page_title = $lang_module['global_config'];
+$global_config['checkss'] = $checkss;
 
 $xtpl = new XTemplate('system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);

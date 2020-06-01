@@ -13,7 +13,8 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 }
 
 $errormess = '';
-if ($nv_Request->isset_request('submit', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $preg_replace = array('pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '');
 
     $array_config_global = array();
@@ -47,7 +48,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-$page_title = $lang_module['variables'];
+$global_config['checkss'] = $checkss;
 
 $xtpl = new XTemplate('variables.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -70,6 +71,7 @@ if ($errormess != '') {
 $xtpl->parse('main');
 $content = $xtpl->text('main');
 
+$page_title = $lang_module['variables'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($content);
 include NV_ROOTDIR . '/includes/footer.php';

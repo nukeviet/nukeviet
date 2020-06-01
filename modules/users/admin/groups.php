@@ -529,6 +529,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     if (defined('NV_IS_SPADMIN')) {
         $post = [];
         $post['id'] = $nv_Request->get_int('id', 'get');
+        $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $post['id']);
 
         if ($nv_Request->isset_request('edit', 'get')) {
             if (empty($post['id']) or !isset($groupsList[$post['id']]) or $groupsList[$post['id']]['idsite'] != $global_config['idsite']) {
@@ -549,6 +550,9 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
+            if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+                die('Error Session, Please close the browser and try again');
+            }
             // Sửa / Thêm full thông tin
             if (empty($post['id']) or $post['id'] > 9) {
                 $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
@@ -752,7 +756,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         if (!empty($post['group_avatar']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['group_avatar'])) {
             $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
         }
-
+        $post['checkss'] = $checkss;
         $xtpl->assign('CONFIG', $post['config']);
         $xtpl->assign('DATA', $post);
 

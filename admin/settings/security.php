@@ -48,8 +48,9 @@ $array_config_global = [];
 $array_config_define = [];
 $array_config_site = [];
 
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 // Xử lý các thiết lập cơ bản
-if ($nv_Request->isset_request('submitbasic', 'post')) {
+if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $proxy_blocker = $nv_Request->get_int('proxy_blocker', 'post');
     if (isset($proxy_blocker_array[$proxy_blocker])) {
         $array_config_global['proxy_blocker'] = $proxy_blocker;
@@ -132,7 +133,7 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
 $array_config_flood = [];
 
 // Xử lý phần chống Flood
-if ($nv_Request->isset_request('submitflood', 'post')) {
+if ($nv_Request->isset_request('submitflood', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_flood['is_flood_blocker'] = (int)$nv_Request->get_bool('is_flood_blocker', 'post');
     $array_config_flood['max_requests_60'] = $nv_Request->get_int('max_requests_60', 'post');
     $array_config_flood['max_requests_300'] = $nv_Request->get_int('max_requests_300', 'post');
@@ -162,7 +163,7 @@ $array_config_captcha = [];
 $array_define_captcha = [];
 
 // Xử lý phần captcha
-if ($nv_Request->isset_request('submitcaptcha', 'post')) {
+if ($nv_Request->isset_request('submitcaptcha', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $gfx_chk = $nv_Request->get_int('gfx_chk', 'post');
     if (isset($captcha_array[$gfx_chk])) {
         $array_config_captcha['gfx_chk'] = $gfx_chk;
@@ -223,7 +224,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
 $lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_verification_note'], $lang_module['two_step_verification0'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
 
 // Xử lý thiết lập CORS
-if ($nv_Request->isset_request('submitcors', 'post')) {
+if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_site['cors_restrict_domains'] = (int)$nv_Request->get_bool('cors_restrict_domains', 'post', false);
     $cors_valid_domains = $nv_Request->get_textarea('cors_valid_domains', '', NV_ALLOWED_HTML_TAGS, true);
     $cors_valid_domains = explode('<br />', strip_tags($cors_valid_domains, '<br>'));
@@ -271,6 +272,8 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('SELECTEDTAB', $selectedtab);
+$xtpl->assign('CHECKSS', $checkss);
+
 for ($i = 0; $i <= 4; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
 }
@@ -280,13 +283,13 @@ $error = [];
 $cid = $nv_Request->get_int('id', 'get');
 $del = $nv_Request->get_int('del', 'get');
 
-if (!empty($del) and !empty($cid)) {
+if (!empty($del) and !empty($cid) and $checkss == $nv_Request->get_string('checkss', 'get')) {
     $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=0 AND id=' . $cid);
     nv_save_file_ips(0);
     nv_htmlOutput('OK');
 }
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('submit', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
     $cid = $nv_Request->get_int('cid', 'post', 0);
     $ip = $nv_Request->get_title('ip', 'post', '');
@@ -382,13 +385,13 @@ $flid = $nv_Request->get_int('flid', 'get,post', 0);
 $fldel = $nv_Request->get_int('fldel', 'get,post', 0);
 $array_flip = [];
 
-if (!empty($fldel) and !empty($flid)) {
+if (!empty($fldel) and !empty($flid) and  $checkss == $nv_Request->get_string('checkss', 'get,post')) {
     $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=1 AND id=' . $flid);
     nv_save_file_ips(1);
     nv_htmlOutput('OK');
 }
 
-if ($nv_Request->isset_request('submitfloodip', 'post')) {
+if ($nv_Request->isset_request('submitfloodip', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_flip['ip_version'] = $nv_Request->get_int('fip_version', 'post', 4);
     $array_flip['flip'] = $nv_Request->get_title('flip', 'post', '');
     $array_flip['flarea'] = 1;
@@ -645,7 +648,7 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;id=' . $dbid,
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;del=1&amp;id=' . $dbid
+        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;del=1&amp;id=' . $dbid . '&checkss=' . $checkss
     ));
 
     $xtpl->parse('main.listip.loop');
@@ -682,7 +685,7 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;flid=' . $dbid,
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;fldel=1&amp;flid=' . $dbid
+        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;fldel=1&amp;flid=' . $dbid . '&amp;checkss=' . $checkss
     ));
 
     $xtpl->parse('main.noflips.loop');

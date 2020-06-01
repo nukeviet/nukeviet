@@ -244,6 +244,7 @@
     </div>
     <div class="text-center">
         <input type="hidden" name="confirm" value="1" />
+        <input type="hidden" name="checkss" value="{DATA.checkss}" />
         <input type="hidden" name="nv_redirect" value="{NV_REDIRECT}" />
         <button class="btn btn-primary" type="submit">
             <i class="fa fa-spin fa-spinner hidden"></i>

@@ -110,6 +110,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <div class="text-center">
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="submit" class="btn btn-primary w100" name="submitbasic" value="{LANG.submit}" />
                                         </div>
                                     </td>
@@ -148,6 +149,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <div class="text-center">
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="submit" class="btn btn-primary w100" name="submitflood" value="{LANG.submit}" />
                                         </div>
                                     </td>
@@ -262,6 +264,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                                         <input type="submit" value="{LANG.banip_confirm}" name="submitfloodip" class="btn btn-primary">
                                     </div>
                                 </div>
@@ -345,6 +348,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <div class="text-center">
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="submit" class="btn btn-primary w100" name="submitcaptcha" value="{LANG.submit}" />
                                         </div>
                                     </td>
@@ -477,6 +481,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                                         <input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary">
                                     </div>
                                 </div>
@@ -498,7 +503,7 @@
                             </colgroup>
                             <tfoot>
                                 <tr>
-                                    <td colspan="2" class="text-center"><input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/></td>
+                                    <td colspan="2" class="text-center"><input type="hidden" name="checkss" value="{CHECKSS}" /><input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/></td>
                                 </tr>
                             </tfoot>
                             <tbody>

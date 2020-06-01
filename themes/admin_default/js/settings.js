@@ -6,9 +6,9 @@
  * @Createdate 31/05/2010, 9:36
  */
 
-function nv_is_del_cron(cronid) {
+function nv_is_del_cron(cronid, checkss) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&nocache=" + new Date().getTime(), function(res) {
+        	$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&checkss=" + checkss + "&nocache=" + new Date().getTime(), function(res) {
 			if (res == 1) {
 				alert(nv_is_del_confirm[1]);
 				window.location.href = window.location.href;
