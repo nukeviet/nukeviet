@@ -102,6 +102,7 @@ foreach ($theme_list as $value) {
         'author' => (string)$info[0]->author,
         'thumbnail' => (string)$info[0]->thumbnail,
         'description' => (string)$info[0]->description,
+        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'] . '_' . $value),
         'value' => $value
     ));
 

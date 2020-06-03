@@ -66,7 +66,8 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 
-if ($nv_Request->isset_request('confirm', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['bid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $error = array();
     $list_file_name = $nv_Request->get_title('file_name', 'post', '', 0);
     $array_file_name = explode('|', $list_file_name);
@@ -425,8 +426,10 @@ $xtpl->assign('ROW', array(
     'exp_time' => ($row['exp_time'] > 0) ? date('d/m/Y', $row['exp_time']) : '',
     'link' => nv_htmlspecialchars($row['link']),
     'bid' => $row['bid'],
+    'checkss' => $checkss,
     'module' => $row['module'],
-    'file_name' => $row['file_name'] ));
+    'file_name' => $row['file_name']
+));
 
 $templ_list = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', '/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/');
 $templ_list = preg_replace('/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/', '\\1', $templ_list);

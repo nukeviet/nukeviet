@@ -43,7 +43,7 @@
 			<!-- BEGIN: loop -->
 			<tr>
 				<td>
-				<select class="order form-control" title="{ROW.bid}">
+				<select class="order_func form-control" title="{ROW.bid}">
 					<!-- BEGIN: order -->
 					<option value="{ORDER.key}"{ORDER.selected}>{ORDER.key}</option>
 					<!-- END: order -->
@@ -69,6 +69,7 @@
 var blockredirect = '{BLOCKREDIRECT}';
 var func_id = '{FUNC_ID}';
 var selectedmodule = '{SELECTEDMODULE}';
+var blockcheckss = '{CHECKSS}';
 LANG.block_delete_per_confirm = '{LANG.block_delete_per_confirm}';
 LANG.block_weight_confirm = '{LANG.block_weight_confirm}';
 LANG.block_error_noblock = '{LANG.block_error_noblock}';
