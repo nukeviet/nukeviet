@@ -339,13 +339,7 @@ class Request
         $_SERVER['QUERY_STRING'] = $query;
         $_SERVER['argv'] = [$query];
         $this->request_uri = (empty($_SERVER['REQUEST_URI'])) ? $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] : $_SERVER['REQUEST_URI'];
-        $doc_root = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '';
-        if (!empty($doc_root)) {
-            $doc_root = str_replace(DIRECTORY_SEPARATOR, '/', $doc_root);
-        }
-        if (!empty($doc_root)) {
-            $doc_root = preg_replace('/[\/]+$/', '', $doc_root);
-        }
+        $doc_root = isset($_SERVER['DOCUMENT_ROOT']) ? preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER['DOCUMENT_ROOT'])) : '';
 
         if (defined('NV_BASE_SITEURL')) {
             $base_siteurl = preg_replace('/[\/]+$/', '', NV_BASE_SITEURL);
@@ -364,15 +358,13 @@ class Request
                 $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
             }
             if (defined('NV_WYSIWYG') and !defined('NV_ADMIN')) {
-                $base_siteurl = preg_replace('#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl);
-            } elseif (defined('NV_IS_UPDATE')) {
-                // Update se bao gom ca admin nen update phai dat truoc
-
-                $base_siteurl = preg_replace('#/install(.*)$#', '', $base_siteurl);
+                $base_siteurl = preg_replace('/\/' . NV_EDITORSDIR . '(.*)$/i', '', $base_siteurl);
+            } elseif (defined('NV_IS_UPDATE') or defined('NV_IS_INSTALL')) {
+                $base_siteurl = preg_replace('/\/install(\/(index|update)\.php.*)*$/i', '', $base_siteurl);
             } elseif (defined('NV_ADMIN')) {
-                $base_siteurl = preg_replace('#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl);
+                $base_siteurl = preg_replace('/\/' . NV_ADMINDIR . '(\/index\.php.*)*$/i', '', $base_siteurl);
             } elseif (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
+                $base_siteurl = preg_replace('/\/index\.php(.*)$/', '', $base_siteurl);
             }
         }
 
