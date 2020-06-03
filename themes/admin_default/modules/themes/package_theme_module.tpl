@@ -26,7 +26,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="text-center"><input name="continue_ptm" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
+					<td colspan="2" class="text-center"><input type="hidden" name="checkss" value="{CHECKSS}" /><input name="continue_ptm" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
 				</tr>
 				<tr>
 					<td colspan="2" class="text-center">

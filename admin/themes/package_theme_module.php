@@ -12,11 +12,14 @@ if (! defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+
 $xtpl = new XTemplate('package_theme_module.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('CHECKSS', $checkss);
 
-if ($nv_Request->isset_request('op', 'post')) {
+if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('op', 'post')) {
     $contents = $lang_module['package_noselect_module_theme'];
     $themename = $nv_Request->get_string('themename', 'post');
 
