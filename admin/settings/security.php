@@ -44,9 +44,7 @@ if ($selectedtab < 0 or $selectedtab > 4) {
     $selectedtab = 0;
 }
 
-$array_config_global = [];
-$array_config_define = [];
-$array_config_site = [];
+$array_config_global = $array_config_define = $array_config_cross = [];
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 // Xử lý các thiết lập cơ bản
@@ -56,8 +54,8 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
         $array_config_global['proxy_blocker'] = $proxy_blocker;
     }
 
-    $array_config_global['str_referer_blocker'] = (int)$nv_Request->get_bool('str_referer_blocker', 'post');
-    $array_config_global['is_login_blocker'] = (int)$nv_Request->get_bool('is_login_blocker', 'post', false);
+    $array_config_global['str_referer_blocker'] = (int) $nv_Request->get_bool('str_referer_blocker', 'post');
+    $array_config_global['is_login_blocker'] = (int) $nv_Request->get_bool('is_login_blocker', 'post', false);
     $array_config_global['login_number_tracking'] = $nv_Request->get_int('login_number_tracking', 'post', 0);
     $array_config_global['login_time_tracking'] = $nv_Request->get_int('login_time_tracking', 'post', 0);
     $array_config_global['login_time_ban'] = $nv_Request->get_int('login_time_ban', 'post', 0);
@@ -223,43 +221,72 @@ if ($nv_Request->isset_request('submitcaptcha', 'post') and $checkss == $nv_Requ
 
 $lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_verification_note'], $lang_module['two_step_verification0'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
 
-// Xử lý thiết lập CORS
+// Xử lý thiết lập CORS, Anti CSRF
 if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
-    $array_config_site['cors_restrict_domains'] = (int)$nv_Request->get_bool('cors_restrict_domains', 'post', false);
-    $cors_valid_domains = $nv_Request->get_textarea('cors_valid_domains', '', NV_ALLOWED_HTML_TAGS, true);
-    $cors_valid_domains = explode('<br />', strip_tags($cors_valid_domains, '<br>'));
+    $array_config_cross['crosssite_restrict'] = (int) $nv_Request->get_bool('crosssite_restrict', 'post', false);
+    $array_config_cross['crossadmin_restrict'] = (int) $nv_Request->get_bool('crossadmin_restrict', 'post', false);
 
-    $array_config_site['cors_valid_domains'] = [];
-    foreach ($cors_valid_domains as $domain) {
-        if (!empty($domain)) {
-            $domain = parse_url($domain);
-            if (is_array($domain)) {
-                if (sizeof($domain) == 1 and !empty($domain['path'])) {
-                    $domain['host'] = $domain['path'];
+    // Lấy các request domain
+    $cfg_keys = ['crosssite_valid_domains', 'crossadmin_valid_domains'];
+    foreach ($cfg_keys as $cfg_key) {
+        $domains = $nv_Request->get_textarea($cfg_key, '', NV_ALLOWED_HTML_TAGS, true);
+        $domains = explode('<br />', strip_tags($domains, '<br>'));
+
+        $array_config_cross[$cfg_key] = [];
+        foreach ($domains as $domain) {
+            if (!empty($domain)) {
+                $domain = parse_url($domain);
+                if (is_array($domain)) {
+                    if (sizeof($domain) == 1 and !empty($domain['path'])) {
+                        $domain['host'] = $domain['path'];
+                    }
+                    if (!isset($domain['scheme'])) {
+                        $domain['scheme'] = 'http';
+                    }
+                    $domain_name = nv_check_domain($domain['host']);
+                    if (!empty($domain_name)) {
+                        $domain = $domain['scheme'] . '://' . $domain_name . ((isset($domain['port']) and $domain['port'] != '80') ? (':' . $domain['port']) : '');
+                        $array_config_cross[$cfg_key][] = $domain;
+                    }
                 }
-                if (!isset($domain['scheme'])) {
-                    $domain['scheme'] = 'http';
-                }
-                $array_config_site['cors_valid_domains'][] = $domain['scheme'] . '://' . $domain['host'] . ((isset($domain['port']) and $domain['port'] != '80') ? (':' . $domain['port']) : '');
             }
         }
+        $array_config_cross[$cfg_key] = empty($array_config_cross[$cfg_key]) ? '' : json_encode(array_unique($array_config_cross[$cfg_key]));
     }
-    $array_config_site['cors_valid_domains'] = empty($array_config_site['cors_valid_domains']) ? '' : json_encode($array_config_site['cors_valid_domains']);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
-    foreach ($array_config_site as $config_name => $config_value) {
+    // Lấy các request IPs
+    $cfg_keys = ['crosssite_valid_ips', 'crossadmin_valid_ips'];
+    foreach ($cfg_keys as $cfg_key) {
+        $str_ips = $nv_Request->get_textarea($cfg_key, '', NV_ALLOWED_HTML_TAGS, true);
+        $str_ips = explode('<br />', strip_tags($str_ips, '<br>'));
+
+        $array_config_cross[$cfg_key] = [];
+        foreach ($str_ips as $str_ip) {
+            if ($ips->isIp4($str_ip) or $ips->isIp6($str_ip)) {
+                $array_config_cross[$cfg_key][] = $str_ip;
+            }
+        }
+        $array_config_cross[$cfg_key] = empty($array_config_cross[$cfg_key]) ? '' : json_encode(array_unique($array_config_cross[$cfg_key]));
+    }
+
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
+    foreach ($array_config_cross as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_CORS_SETTING', $global_config['cors_restrict_domains'] . ': ' . $array_config_site['cors_valid_domains'], $admin_info['userid']);
-    $nv_Cache->delMod($module_name);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_CORS_SETTING', json_encode($array_config_cross), $admin_info['userid']);
+    nv_save_file_config_global();
 
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
 } else {
-    $array_config_site['cors_restrict_domains'] = $global_config['cors_restrict_domains'];
-    $array_config_site['cors_valid_domains'] = empty($global_config['cors_valid_domains']) ? '' : implode("\n", $global_config['cors_valid_domains']);
+    $array_config_cross['crosssite_restrict'] = $global_config['crosssite_restrict'];
+    $array_config_cross['crosssite_valid_domains'] = empty($global_config['crosssite_valid_domains']) ? '' : implode("\n", $global_config['crosssite_valid_domains']);
+    $array_config_cross['crosssite_valid_ips'] = empty($global_config['crosssite_valid_ips']) ? '' : implode("\n", $global_config['crosssite_valid_ips']);
+    $array_config_cross['crossadmin_restrict'] = $global_config['crossadmin_restrict'];
+    $array_config_cross['crossadmin_valid_domains'] = empty($global_config['crossadmin_valid_domains']) ? '' : implode("\n", $global_config['crossadmin_valid_domains']);
+    $array_config_cross['crossadmin_valid_ips'] = empty($global_config['crossadmin_valid_ips']) ? '' : implode("\n", $global_config['crossadmin_valid_ips']);
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -509,9 +536,10 @@ if (!empty($errormess)) {
     $xtpl->parse('main.error_save');
 }
 
-$array_config_site['cors_restrict_domains'] = empty($array_config_site['cors_restrict_domains']) ? '' : ' checked="checked"';
+$array_config_cross['crosssite_restrict'] = empty($array_config_cross['crosssite_restrict']) ? '' : ' checked="checked"';
+$array_config_cross['crossadmin_restrict'] = empty($array_config_cross['crossadmin_restrict']) ? '' : ' checked="checked"';
 
-$xtpl->assign('CONFIG_SITE', $array_config_site);
+$xtpl->assign('CONFIG_CROSS', $array_config_cross);
 
 $xtpl->assign('IS_FLOOD_BLOCKER', ($array_config_flood['is_flood_blocker']) ? ' checked="checked"' : '');
 $xtpl->assign('MAX_REQUESTS_60', $array_config_flood['max_requests_60']);

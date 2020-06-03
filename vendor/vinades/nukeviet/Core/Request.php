@@ -17,6 +17,10 @@ class Request
 
     const INCORRECT_IP = 'Incorrect IP address specified';
 
+    const INCORRECT_ORIGIN = 'Incorrect Origin specified';
+
+    const REQUEST_BLOCKED = 'Your request is blocked';
+
     public $session_id;
 
     public $doc_root;
@@ -45,7 +49,27 @@ class Request
 
     public $referer;
 
+    private $origin;
+
+    private $method;
+
+    /**
+     * @var integer
+     *
+     * 0 cross origin referer
+     * 1 same origin referer
+     * 2 không có referer
+     */
     public $referer_key;
+
+    /**
+     * @var integer
+     *
+     * 0 cross origin
+     * 1 same origin
+     * 2 no origin header
+     */
+    private $origin_key;
 
     public $referer_host = '';
 
@@ -81,7 +105,7 @@ class Request
 
     private $ip_addr;
 
-    private $is_filter = false;
+    private $remote_ip;
 
     private $str_referer_blocker = false;
 
@@ -148,69 +172,75 @@ class Request
      */
     protected $corsHeaders = [
         'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type',
-        'Access-Control-Allow-Methods' => 'PUT, GET, POST, DELETE, OPTIONS',
-        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type', // Các Header được phép trong CORS
+        'Access-Control-Allow-Methods' => 'PUT, GET, POST, DELETE, OPTIONS', // Các phương thước được phép trong CORS
+        'Access-Control-Allow-Credentials' => 'true', // Cho phép gửi cookie trong truy vấn CORS
         'Access-Control-Max-Age' => 10 * 60 * 60, // 10 min, max age for Chrome. Thời gian cache preflight request (request OPTIONS kiểm tra)
+        'Vary' => 'Origin' // Thông báo cho trình duyệt biết, mỗi Origin khác nhau sẽ có mỗi phản hồi khác nhau thay vì dùng *
     ];
 
     /**
-     * @var bool
+     * @since 4.4.01
      */
-    protected $requestOriginIsValid = false;
+    protected $restrictCrossDomain = true;
+    protected $validCrossDomains = [];
+    protected $validCrossIPs = [];
+
+    protected $isOriginValid = false;
+    protected $isRefererValid = false;
+
+    protected $isIpValid = false;
 
     /**
-     * @var bool
-     */
-    protected $restrictCORSDomains = true;
-
-    /**
-     * @var array
-     */
-    protected $validCORSDomains = [];
-
-    /**
-     * Request::__construct()
-     *
-     * @param mixed $config
-     * @param mixed $ip
-     * @return
+     * @param array $config
+     * @param string $ip Client IP
      */
     public function __construct($config, $ip)
     {
         if (isset($config['allowed_html_tags']) and is_array($config['allowed_html_tags'])) {
             $this->disabletags = array_diff($this->disabletags, $config['allowed_html_tags']);
         }
-        if (isset($config['allow_request_mods']) and !empty($config['allow_request_mods'])) {
+        if (!empty($config['allow_request_mods'])) {
             if (!is_array($config['allow_request_mods'])) {
                 $config['allow_request_mods'] = [$config['allow_request_mods']];
             }
             $this->allow_request_mods = array_intersect($this->allow_request_mods, $config['allow_request_mods']);
         }
-        if (isset($config['request_default_mode']) and !empty($config['request_default_mode']) and in_array($config['request_default_mode'], $this->allow_request_mods)) {
+        if (!empty($config['request_default_mode']) and in_array($config['request_default_mode'], $this->allow_request_mods)) {
             $this->request_default_mode = $config['request_default_mode'];
         }
-        if (isset($config['cookie_secure']) and !empty($config['cookie_secure'])) {
+        if (!empty($config['cookie_secure'])) {
             $this->secure = true;
         }
-        if (isset($config['cookie_httponly']) and !empty($config['cookie_httponly'])) {
+        if (!empty($config['cookie_httponly'])) {
             $this->httponly = true;
         }
-        if (isset($config['cookie_prefix']) and !empty($config['cookie_prefix'])) {
+        if (!empty($config['cookie_prefix'])) {
             $this->cookie_prefix = preg_replace('/[^a-zA-Z0-9\_]+/', '', $config['cookie_prefix']);
         }
-        if (isset($config['session_prefix']) and !empty($config['session_prefix'])) {
+        if (!empty($config['session_prefix'])) {
             $this->session_prefix = preg_replace('/[^a-zA-Z0-9\_]+/', '', $config['session_prefix']);
         }
-        if (isset($config['sitekey']) and !empty($config['sitekey'])) {
+        if (!empty($config['sitekey'])) {
             $this->cookie_key = $config['sitekey'];
         }
         if (!empty($config['str_referer_blocker'])) {
             $this->str_referer_blocker = true;
         }
-        $this->engine_allowed = ( array )$config['engine_allowed'];
+        $this->engine_allowed = (array) $config['engine_allowed'];
         if (empty($ip)) {
             $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        $this->remote_ip = $ip;
+
+        if (defined('NV_ADMIN')) {
+            $this->restrictCrossDomain = !empty($config['crossadmin_restrict']) ? true : false;
+            $this->validCrossDomains = !empty($config['crossadmin_valid_domains']) ? ((array) $config['crossadmin_valid_domains']) : [];
+            $this->validCrossIPs = !empty($config['crossadmin_valid_ips']) ? ((array) $config['crossadmin_valid_ips']) : [];
+        } else {
+            $this->restrictCrossDomain = !empty($config['crosssite_restrict']) ? true : false;
+            $this->validCrossDomains = !empty($config['crosssite_valid_domains']) ? ((array) $config['crosssite_valid_domains']) : [];
+            $this->validCrossIPs = !empty($config['crosssite_valid_ips']) ? ((array) $config['crosssite_valid_ips']) : [];
         }
 
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
@@ -234,9 +264,6 @@ class Request
 
         $this->cookie_key = md5($this->cookie_key);
 
-        if (extension_loaded('filter') and filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
-            $this->is_filter = true;
-        }
         $this->Initialize();
         $this->get_cookie_save_path();
 
@@ -396,20 +423,108 @@ class Request
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
 
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
+
+        $this->standardizeReferer();
+        $this->standardizeOrigin();
+        $this->method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
+
+        // CORS handle
+        if (!empty($this->origin)) {
+            $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
+            $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
+
+            foreach ($this->corsHeaders as $header => $value) {
+                header($header . ': ' . $value);
+            }
+
+            // Kiểm tra preflight request
+            if ($this->method == 'OPTIONS' and !empty($hasControlRequestHeader)) {
+                exit(0);
+            }
+        }
+
+        if ($this->str_referer_blocker and !empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
+            header('Location: ' . $this->site_url);
+            exit(0);
+        }
+
+        $user_agent = (string) $this->get_Env('HTTP_USER_AGENT');
+        $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
+        if (!empty($user_agent)) {
+            $user_agent = trim($user_agent);
+        }
+        if (empty($user_agent) or $user_agent == '-') {
+            $user_agent = 'none';
+        }
+        $this->user_agent = $user_agent;
+        $_SERVER['HTTP_USER_AGENT'] = $user_agent;
+
+        // Cross-Site handle
+        if (sizeof($_POST) or $this->method == 'POST') {
+            if ($this->origin_key == 0 or $this->referer_key !== 1) {
+                if (!$this->restrictCrossDomain or in_array($this->remote_ip, $this->validCrossIPs)) {
+                    $this->isIpValid = true;
+                }
+            } else {
+                $this->isIpValid = true;
+            }
+            if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
+                trigger_error(Request::REQUEST_BLOCKED, 256);
+            }
+        }
+    }
+
+    /**
+     * Chuẩn hóa, kiểm tra Origin header
+     */
+    private function standardizeOrigin()
+    {
+        $this->origin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
+        if (!empty($this->origin)) {
+            $origin = parse_url($this->origin);
+            if (isset($origin['scheme']) and in_array($origin['scheme'], ['http', 'https', 'ftp', 'gopher']) and isset($origin['host'])) {
+                $_SERVER['HTTP_ORIGIN'] = ($origin['scheme'] . '://' . $origin['host'] . ((isset($origin['port']) and $origin['port'] != '80' and $origin['port'] != '443') ? (':' . $origin['port']) : ''));
+                $this->origin = $_SERVER['HTTP_ORIGIN'];
+
+                if ($this->my_current_domain == $this->origin) {
+                    $this->origin_key = 1;
+                } else {
+                    $this->origin_key = 0;
+                }
+            } else {
+                /*
+                 * Origin có dạng `Origin: <scheme> "://" <hostname> [ ":" <port> ]`
+                 * Nếu sai thì từ chối truy vấn
+                 */
+                trigger_error(Request::INCORRECT_ORIGIN, 256);
+                unset($_SERVER['HTTP_ORIGIN']);
+            }
+        } else {
+            $this->origin_key = 2;
+        }
+    }
+
+    /**
+     * Chuẩn hóa, kiểm tra Referer header
+     */
+    private function standardizeReferer()
+    {
         $this->referer = $this->get_Env(['HTTP_REFERER', 'Referer']);
         if (!empty($this->referer)) {
-            $ref = @parse_url($this->referer);
+            $ref = parse_url($this->referer);
             if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher']) and isset($ref['host'])) {
+                $ref_origin = ($ref['scheme'] . '://' . $ref['host'] . ((isset($ref['port']) and $ref['port'] != '80' and $ref['port'] != '443') ? (':' . $ref['port']) : ''));
+                // Server dạng IPv6 trực tiếp
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
                     $ref['host'] = substr($ref['host'], 1, -1);
                 }
-                if (preg_match('/^' . preg_quote($ref['host']) . '/', $this->server_name)) {
+                if (preg_match('/^' . preg_quote($ref['host'], '/') . '/', $this->server_name)) {
                     $this->referer_key = 1;
                 } else {
                     $this->referer_key = 0;
                     if (!empty($this->engine_allowed)) {
                         foreach ($this->engine_allowed as $se => $v) {
-                            if (preg_match('/' . preg_quote($v['host_pattern']) . '/i', $ref['host'])) {
+                            if (preg_match('/' . preg_quote($v['host_pattern'], '/') . '/i', $ref['host'])) {
                                 $this->search_engine = $se;
                                 break;
                             }
@@ -435,6 +550,10 @@ class Request
                     $_SERVER['HTTP_REFERER'] = $base;
                 }
                 $this->referer = $_SERVER['HTTP_REFERER'];
+
+                if (!$this->restrictCrossDomain or $this->referer_key === 1 or in_array($ref_origin, $this->validCrossDomains)) {
+                    $this->isRefererValid = true;
+                }
             } else {
                 $this->referer_key = 0;
                 $this->referer = '';
@@ -444,19 +563,6 @@ class Request
             $this->referer_key = 2;
             unset($_SERVER['HTTP_REFERER']);
         }
-        if ($this->str_referer_blocker and !empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
-            header('Location: ' . $this->site_url);
-            exit(0);
-        }
-
-        $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
-        $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
-        if(!empty($user_agent)) $user_agent = trim($user_agent);
-        if (empty($user_agent) or $user_agent == '-') {
-            $user_agent = 'none';
-        }
-        $this->user_agent = $user_agent;
-        $_SERVER['HTTP_USER_AGENT'] = $user_agent;
     }
 
     /**
@@ -1451,70 +1557,17 @@ class Request
     }
 
     /**
-     * @param array $config
-     */
-    public function CORSHandle($config)
-    {
-        $this->restrictCORSDomains = isset($config['cors_restrict_domains']) ? (bool)$config['cors_restrict_domains']  : true;
-        $this->validCORSDomains = isset($config['cors_valid_domains']) ? (array)$config['cors_valid_domains']  : [];
-
-        $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
-
-        $method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
-        $hasOrigin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
-
-        // Preflight request
-        if ($method === 'OPTIONS') {
-            $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
-
-            if ($this->requestOriginIsValid and !empty($hasControlRequestHeader) and !empty($hasOrigin)) {
-                foreach ($this->corsHeaders as $header => $value) {
-                    header($header . ': ' . $value);
-                }
-            }
-            die('');
-        }
-
-        $isXmlRequest = (strtoupper($this->get_Env(['HTTP_X_REQUESTED_WITH', 'X-Requested-With'])) === 'XMLHTTPREQUEST');
-        if ($isXmlRequest) {
-            foreach ($this->corsHeaders as $header => $value) {
-                header($header . ': ' . $value);
-            }
-        }
-
-        // Chặn các request bên ngoài vào khu vực quản trị
-        if (defined('NV_ADMIN') and $this->referer_key == 0 and !$this->requestOriginIsValid and !empty($hasOrigin)) {
-            exit(0);
-        }
-    }
-
-    /**
      * @return string|NULL
      */
     private function getAllowOriginHeaderValue()
     {
-        $origin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
-
-        // Không block hoặc domain hợp lệ
-        if (!$this->restrictCORSDomains or in_array($origin, $this->validCORSDomains)) {
-            $this->requestOriginIsValid = true;
-
-            return $origin;
+        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self)
+        if (!$this->restrictCrossDomain or $this->origin_key === 1 or in_array($this->origin, $this->validCrossDomains)) {
+            $this->isOriginValid = true;
+            return $this->origin;
         }
 
-        // Kiểm tra tên miền hợp lệ
-        $validCorsDomainFilter = function ($validCorsDomain) use ($origin) {
-            return fnmatch($validCorsDomain, $origin, FNM_CASEFOLD);
-        };
-        if (array_filter($this->validCORSDomains, $validCorsDomainFilter)) {
-            $this->requestOriginIsValid = true;
-            $this->corsHeaders['Vary']  = 'Origin';
-
-            return $origin;
-        }
-
-        $this->requestOriginIsValid = false;
-
-        return null;
+        $this->isOriginValid = false;
+        return $this->my_current_domain;
     }
 }

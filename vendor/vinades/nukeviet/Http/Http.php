@@ -117,7 +117,7 @@ class Http
         $args = $this->build_args($args, $defaults);
 
         // Get url info
-        $infoURL = @parse_url($url);
+        $infoURL = parse_url($url);
 
         // Check valid url
         if (empty($url) or empty($infoURL['scheme'])) {
@@ -453,11 +453,11 @@ class Http
             return $maybe_relative_path;
         }
 
-        if (!$url_parts = @parse_url($url)) {
+        if (!$url_parts = parse_url($url)) {
             return $maybe_relative_path;
         }
 
-        if (!$relative_url_parts = @parse_url($maybe_relative_path)) {
+        if (!$relative_url_parts = parse_url($maybe_relative_path)) {
             return $maybe_relative_path;
         }
 

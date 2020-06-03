@@ -100,9 +100,9 @@ function nv_save_file_config_global()
 
     $content_config = "<?php" . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
 
-    $config_variable = array();
+    $config_variable = [];
     $allowed_html_tags = '';
     $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
@@ -145,6 +145,7 @@ function nv_save_file_config_global()
     $config_variable['error_send_email'] = $config_variable['error_send_email'];
 
     $config_name_array = ['file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_request_mods', 'config_sso'];
+    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if (in_array($c_config_name, $config_name_array)) {
@@ -153,7 +154,15 @@ function nv_save_file_config_global()
             } else {
                 $c_config_value = '';
             }
-            $content_config .= "\$global_config['" . $c_config_name . "']=array(" . $c_config_value . ");\n";
+            $content_config .= "\$global_config['" . $c_config_name . "']=[" . $c_config_value . "];\n";
+        } elseif (in_array($c_config_name, $config_name_json)) {
+            $c_config_value = empty($c_config_value) ? [] : ((array) json_decode($c_config_value, true));
+            if (empty($c_config_value)) {
+                $c_config_value = '';
+            } else {
+                $c_config_value = "'" . implode("','", array_map('trim', $c_config_value)) . "'";
+            }
+            $content_config .= "\$global_config['" . $c_config_name . "']=[" . $c_config_value . "];\n";
         } else {
             if (preg_match('/^(0|[1-9][0-9]*)$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
                 $content_config .= "\$global_config['" . $c_config_name . "']=" . $c_config_value . ";\n";
@@ -175,7 +184,7 @@ function nv_save_file_config_global()
     while ($row = $result->fetch()) {
         $c_config_value[] = $row['lang'];
     }
-    $content_config .= "\$global_config['setup_langs']=array('" . implode("','", $c_config_value) . "');\n";
+    $content_config .= "\$global_config['setup_langs']=['" . implode("','", $c_config_value) . "'];\n";
 
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
@@ -183,7 +192,7 @@ function nv_save_file_config_global()
     } else {
         $allowed_html_tags = '';
     }
-    $content_config .= "\$global_config['allowed_html_tags']=array(" . $allowed_html_tags . ");\n";
+    $content_config .= "\$global_config['allowed_html_tags']=[" . $allowed_html_tags . "];\n";
 
     //Xac dinh cac search_engine
     $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : array();
@@ -218,7 +227,7 @@ function nv_save_file_config_global()
     }
     $content_config .= "\$nv_plugin_area=" . nv_var_export($nv_plugin_area) . ";\n\n";
 
-    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
+    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config) . "\n", LOCK_EX);
     $nv_Cache->delAll();
 
     //Resets the contents of the opcode cache

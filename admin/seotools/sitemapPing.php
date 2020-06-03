@@ -61,7 +61,7 @@ function nv_sitemapPing($module, $link)
     }
 
     if (! $result and nv_function_exists('fsockopen')) {
-        $url_parts = @parse_url($link);
+        $url_parts = parse_url($link);
         if (! $url_parts) {
             return $lang_module['searchEngineFailed'];
         }

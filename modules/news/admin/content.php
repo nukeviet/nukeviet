@@ -668,7 +668,7 @@ if ($is_submit_form) {
 
         $rowcontent['sourceid'] = 0;
         if (!empty($rowcontent['sourcetext'])) {
-            $url_info = @parse_url($rowcontent['sourcetext']);
+            $url_info = parse_url($rowcontent['sourcetext']);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
                 $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link= :link');
