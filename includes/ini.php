@@ -59,11 +59,22 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     } elseif (strpos($_server_software[0], 'nginx') !== false) {
         $sys_info['supports_rewrite'] = 'nginx';
     } else {
-        $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
-        if ($_check_rewrite == 'mod_rewrite works') {
-            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-        } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
-            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+        /**
+         * @since v4.4.01
+         * @link https://github.com/nukeviet/nukeviet/issues/2955
+         *
+         * Khi đổi thư mục install hệ thống gọi qua file error.php status 404 và tiếp tục gọi lại
+         * tiến trình này vô hạn làm treo server do đó trong error.php thêm nvDisableRewriteCheck để không chạy tiến trình này trở lại
+         */
+        if (isset($_GET['nvDisableRewriteCheck'])) {
+            $sys_info['supports_rewrite'] = false;
+        } else {
+            $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
+            if ($_check_rewrite == 'mod_rewrite works') {
+                $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+            } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
+                $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+            }
         }
     }
     $content_config .= "\$sys_info['supports_rewrite'] = " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : "false") . ";\n";
