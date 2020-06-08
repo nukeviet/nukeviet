@@ -376,14 +376,14 @@ function nv_html_meta_tags($html = true)
     // Robot metatags
     $return = array_merge_recursive($return, $nv_BotManager->getMetaTags());
 
-    /*
+    /**
      * Đọc kỹ giấy phép trước khi thay đổi giá trị này
-     * https://github.com/nukeviet/nukeviet/blob/nukeviet4.3/LICENSE.txt
+     * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.4/LICENSE
      */
     $return[] = [
         'name' => 'name',
         'value' => 'generator',
-        'content' => 'NukeViet v4.3'
+        'content' => 'NukeViet v4.4'
     ];
 
     if (defined('NV_IS_ADMIN')) {
