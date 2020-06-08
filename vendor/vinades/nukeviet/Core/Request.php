@@ -135,6 +135,12 @@ class Request
         'base'
     ];
 
+    protected $remoteAttrCheck = [
+        'action' => ['form'],
+        'src' => ['iframe', 'embed'],
+        'data' => ['object']
+    ];
+
     /**
      * Các attr bị cấm, sẽ bị lọc bỏ.
      * - Tất cả các arrt bắt đầu bằng on
@@ -191,6 +197,9 @@ class Request
 
     protected $isIpValid = false;
 
+    protected $isRestrictDomain = true;
+    protected $validDomains = [];
+
     /**
      * @param array $config
      * @param string $ip Client IP
@@ -242,6 +251,9 @@ class Request
             $this->validCrossDomains = !empty($config['crosssite_valid_domains']) ? ((array) $config['crosssite_valid_domains']) : [];
             $this->validCrossIPs = !empty($config['crosssite_valid_ips']) ? ((array) $config['crosssite_valid_ips']) : [];
         }
+
+        $this->isRestrictDomain = !empty($config['domains_restrict']) ? true : false;
+        $this->validDomains = !empty($config['domains_whitelist']) ? ((array) $config['domains_whitelist']) : [];
 
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
@@ -723,6 +735,20 @@ class Request
                     'data:' => '/d\s*a\s*t\s*a\s*\:/si'
                 ];
                 $value = preg_replace(array_values($search), array_keys($search), $value);
+
+                // Giới hạn link từ các tên miền bên ngoài
+                if ($this->isRestrictDomain and isset($this->remoteAttrCheck[$attrSubSet[0]]) and in_array($tagName, $this->remoteAttrCheck[$attrSubSet[0]])) {
+                    $url_info = parse_url($value);
+                    if (isset($url_info['host'])) {
+                        $domain = $url_info['host'];
+                        $callBack = function ($domain_allowed) use ($domain) {
+                            return preg_match('/^' . preg_quote($domain, '/') . '$/iu', $domain_allowed);
+                        };
+                        if (!array_filter($this->validDomains, $callBack)) {
+                            continue;
+                        }
+                    }
+                }
 
                 // Security remove object param tag
                 if ('param' == $tagName and 'name' == $attrSubSet[0] and preg_match('/^[\r\n\s\t]*(allowscriptaccess|allownetworking)/isu', strtolower($value))) {

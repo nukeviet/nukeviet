@@ -62,6 +62,30 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
     $array_config_global['two_step_verification'] = $nv_Request->get_int('two_step_verification', 'post', 0);
     $array_config_global['admin_2step_opt'] = $nv_Request->get_typed_array('admin_2step_opt', 'post', 'title', []);
     $array_config_global['admin_2step_default'] = $nv_Request->get_title('admin_2step_default', 'post', '');
+    $array_config_global['domains_restrict'] = (int) $nv_Request->get_bool('domains_restrict', 'post', false);
+
+    $domains = $nv_Request->get_textarea('domains_whitelist', '', NV_ALLOWED_HTML_TAGS, true);
+    $domains = explode('<br />', strip_tags($domains, '<br>'));
+
+    $array_config_global['domains_whitelist'] = [];
+    foreach ($domains as $domain) {
+        if (!empty($domain)) {
+            $domain = parse_url($domain);
+            if (is_array($domain)) {
+                if (sizeof($domain) == 1 and !empty($domain['path'])) {
+                    $domain['host'] = $domain['path'];
+                }
+                if (!isset($domain['scheme'])) {
+                    $domain['scheme'] = 'http';
+                }
+                $domain_name = nv_check_domain($domain['host']);
+                if (!empty($domain_name)) {
+                    $array_config_global['domains_whitelist'][] = $domain_name;
+                }
+            }
+        }
+    }
+    $array_config_global['domains_whitelist'] = empty($array_config_global['domains_whitelist']) ? '' : json_encode(array_unique($array_config_global['domains_whitelist']));
 
     if ($array_config_global['login_number_tracking'] < 1) {
         $array_config_global['login_number_tracking'] = 5;
@@ -126,6 +150,7 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
     $array_config_define['nv_anti_iframe'] = NV_ANTI_IFRAME;
     $array_config_define['nv_allowed_html_tags'] = NV_ALLOWED_HTML_TAGS;
     $array_config_global['admin_2step_opt'] = empty($global_config['admin_2step_opt']) ? [] : explode(',', $global_config['admin_2step_opt']);
+    $array_config_global['domains_whitelist'] = empty($global_config['domains_whitelist']) ? '' : implode("\n", $global_config['domains_whitelist']);
 }
 
 $array_config_flood = [];
@@ -556,9 +581,11 @@ $xtpl->assign('REFERER_BLOCKER', ($array_config_global['str_referer_blocker']) ?
 $xtpl->assign('ANTI_IFRAME', $array_config_define['nv_anti_iframe'] ? ' checked="checked"' : '');
 
 $xtpl->assign('IS_LOGIN_BLOCKER', ($array_config_global['is_login_blocker']) ? ' checked="checked"' : '');
+$xtpl->assign('DOMAINS_RESTRICT', ($array_config_global['domains_restrict']) ? ' checked="checked"' : '');
 $xtpl->assign('LOGIN_NUMBER_TRACKING', $array_config_global['login_number_tracking']);
 $xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']);
 $xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);
+$xtpl->assign('DOMAINS_WHITELIST', $array_config_global['domains_whitelist']);
 
 foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang) {
     $array = array(

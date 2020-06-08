@@ -105,6 +105,18 @@
                                     <td><strong>{LANG.nv_allowed_html_tags}</strong></td>
                                     <td><textarea name="nv_allowed_html_tags" class="form-control" style="height: 100px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.domains_restrict}</strong></td>
+                                    <td>
+                                        <input type="checkbox" name="domains_restrict" value="1"{DOMAINS_RESTRICT}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.domains_whitelist}</strong></td>
+                                    <td>
+                                        <textarea name="domains_whitelist" class="form-control" rows="5">{DOMAINS_WHITELIST}</textarea>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>

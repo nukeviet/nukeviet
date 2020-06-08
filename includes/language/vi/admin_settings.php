@@ -52,6 +52,8 @@ $lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu age
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
 $lang_module['nv_debug'] = 'Chế độ nhà phát triển';
 $lang_module['nv_debug_help'] = 'Nếu bật tùy chọn này, hệ thống sẽ hiển thị các lỗi để giúp nhà phát triển dễ dàng kiểm tra trong quá trình lập trình. Nếu website đang hoạt động trên môi trường thật, bạn <strong>nên tắt</strong> tùy chọn này';
+$lang_module['domains_restrict'] = 'Giới hạn tên miền ở các thẻ HTML nguy hiểm (iframe, object, embed...)';
+$lang_module['domains_whitelist'] = 'Tên miền tin cậy (mỗi tên miền một dòng). Nếu kích hoạt giới hạn tên miền ở mục bên trên, hệ thống sẽ cho phép sử dụng tài nguyên, liên kết từ các tên miền này';
 
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
