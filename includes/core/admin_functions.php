@@ -270,7 +270,7 @@ function nv_geVersion($updatetime = 3600)
         );
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = !empty($array['body']) ? @unserialize($array['body']) : array();
+        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : array();
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -726,7 +726,7 @@ function nv_getExtVersion($updatetime = 3600)
             );
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = !empty($apidata['body']) ? @unserialize($apidata['body']) : array();
+            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body']) : array();
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {

@@ -228,7 +228,7 @@ class Http
         }
 
         // Append cookies that were used in this request to the response
-        if (!empty($args['cookies'])) {
+        if (!empty($args['cookies']) and is_array($response)) {
             $cookies_set = array();
             foreach ($response['cookies'] as $key => $value) {
                 if (is_object($value)) {

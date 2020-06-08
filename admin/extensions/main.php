@@ -55,10 +55,13 @@ $args = array(
     'body' => $request
 );
 
+$cookies = [];
 $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
-$cookies = $array['cookies'];
-$array = ! empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body']) : array()) : array();
+if (is_array($array)) {
+    $cookies = $array['cookies'];
+    $array = ! empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body']) : array()) : array();
+}
 
 $error = '';
 if (! empty(NukeViet\Http\Http::$error)) {

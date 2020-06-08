@@ -531,9 +531,9 @@ function nv_capcha_txt($seccode)
                 'body' => $request
             );
             $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
-            if (is_array($array) and isset($array['body'])) {
-                $jsonRes = nv_object2array(@json_decode($array['body']));
-                if (is_array($jsonRes) and isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {
+            if (is_array($array) and !empty($array['body'])) {
+                $jsonRes = (array) json_decode($array['body'], true);
+                if (isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {
                     return true;
                 }
             }
