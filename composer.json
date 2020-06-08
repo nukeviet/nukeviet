@@ -5,7 +5,7 @@
     "description": "NukeViet is the first opensource CMS in Vietnam.",
     "keywords": ["cms","nukeviet", "nukeviet4", "portal"],
     "homepage": "https://github.com/nukeviet/nukeviet",
-	"license": "GPL-2.0+",
+    "license": "GPL-2.0+",
     "authors": [
         {
             "name": "VINADES.,JSC",
@@ -21,14 +21,14 @@
         "wiki": "http://wiki.nukeviet.vn",
         "source": "https://github.com/nukeviet/nukeviet/releases"
     },
-	"autoload" : {
-		"psr-4" : {
-			"NukeViet\\" : "vendor/vinades/nukeviet"
-		},
+    "autoload" : {
+        "psr-4" : {
+            "NukeViet\\" : "vendor/vinades/nukeviet"
+        },
         "classmap" : [
             "vendor/vinades/pclzip/pclzip.lib.php"
         ]
-	},
+    },
     "require": {
         "php": ">=5.5.0",
         "ext-mbstring": "*",
