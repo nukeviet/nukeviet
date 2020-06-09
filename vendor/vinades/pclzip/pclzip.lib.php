@@ -2592,7 +2592,12 @@ class PclZip
                     }
 
                     // ----- Read the file content
-                    $v_content = @fread($v_file, $p_header['size']);
+                    if ($p_header['size'] <= 0) {
+                        // File rỗng
+                        $v_content = '';
+                    } else {
+                        $v_content = @fread($v_file, $p_header['size']);
+                    }
 
                     // ----- Close the file
                     @fclose($v_file);
