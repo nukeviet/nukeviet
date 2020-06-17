@@ -400,7 +400,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     } elseif ($extConfig['extension']['type'] == 'cronjob') {
                         $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=cronjobs_add&file=' . $extConfig['extension']['name']);
                     } else {
-                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' + $module_name + '&' . NV_OP_VARIABLE . '=' . $op);
+                        $xtpl->assign('URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                     }
 
                     $xtpl->parse('extract.complete.ok');
@@ -435,7 +435,7 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
         $error = $lang_global['error_zlib_support'];
     } elseif (!empty($_FILES['extfile']['error'])) {
         $error = sprintf($lang_module['autoinstall_error_uploadfile1'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name'])) {
+    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and $nv_Request->get_title('checksess', 'post', '') === md5(NV_CHECK_SESSION . 'submit-ext')) {
         if (file_exists($filename)) {
             nv_deletefile($filename);
         }

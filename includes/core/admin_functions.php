@@ -100,9 +100,9 @@ function nv_save_file_config_global()
 
     $content_config = "<?php" . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
 
-    $config_variable = array();
+    $config_variable = [];
     $allowed_html_tags = '';
     $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
@@ -145,6 +145,7 @@ function nv_save_file_config_global()
     $config_variable['error_send_email'] = $config_variable['error_send_email'];
 
     $config_name_array = ['file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_request_mods', 'config_sso'];
+    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if (in_array($c_config_name, $config_name_array)) {
@@ -153,7 +154,15 @@ function nv_save_file_config_global()
             } else {
                 $c_config_value = '';
             }
-            $content_config .= "\$global_config['" . $c_config_name . "']=array(" . $c_config_value . ");\n";
+            $content_config .= "\$global_config['" . $c_config_name . "']=[" . $c_config_value . "];\n";
+        } elseif (in_array($c_config_name, $config_name_json)) {
+            $c_config_value = empty($c_config_value) ? [] : ((array) json_decode($c_config_value, true));
+            if (empty($c_config_value)) {
+                $c_config_value = '';
+            } else {
+                $c_config_value = "'" . implode("','", array_map('trim', $c_config_value)) . "'";
+            }
+            $content_config .= "\$global_config['" . $c_config_name . "']=[" . $c_config_value . "];\n";
         } else {
             if (preg_match('/^(0|[1-9][0-9]*)$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
                 $content_config .= "\$global_config['" . $c_config_name . "']=" . $c_config_value . ";\n";
@@ -175,7 +184,7 @@ function nv_save_file_config_global()
     while ($row = $result->fetch()) {
         $c_config_value[] = $row['lang'];
     }
-    $content_config .= "\$global_config['setup_langs']=array('" . implode("','", $c_config_value) . "');\n";
+    $content_config .= "\$global_config['setup_langs']=['" . implode("','", $c_config_value) . "'];\n";
 
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
@@ -183,7 +192,7 @@ function nv_save_file_config_global()
     } else {
         $allowed_html_tags = '';
     }
-    $content_config .= "\$global_config['allowed_html_tags']=array(" . $allowed_html_tags . ");\n";
+    $content_config .= "\$global_config['allowed_html_tags']=[" . $allowed_html_tags . "];\n";
 
     //Xac dinh cac search_engine
     $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : array();
@@ -218,7 +227,7 @@ function nv_save_file_config_global()
     }
     $content_config .= "\$nv_plugin_area=" . nv_var_export($nv_plugin_area) . ";\n\n";
 
-    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
+    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config) . "\n", LOCK_EX);
     $nv_Cache->delAll();
 
     //Resets the contents of the opcode cache
@@ -261,7 +270,7 @@ function nv_geVersion($updatetime = 3600)
         );
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = !empty($array['body']) ? @unserialize($array['body']) : array();
+        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : array();
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -508,15 +517,15 @@ function nv_server_config_change($array_config)
         $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
         $config_contents .= "##################################################################################\n\n";
         $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n\n";
-        $config_contents .= "ErrorDocument 400 /error.php?code=400\n";
-        $config_contents .= "ErrorDocument 403 /error.php?code=403\n";
-        $config_contents .= "ErrorDocument 404 /error.php?code=404\n";
-        $config_contents .= "ErrorDocument 405 /error.php?code=405\n";
-        $config_contents .= "ErrorDocument 408 /error.php?code=408\n";
-        $config_contents .= "ErrorDocument 500 /error.php?code=500\n";
-        $config_contents .= "ErrorDocument 502 /error.php?code=502\n";
-        $config_contents .= "ErrorDocument 503 /error.php?code=503\n";
-        $config_contents .= "ErrorDocument 504 /error.php?code=504\n\n";
+        $config_contents .= "ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 404 /error.php?code=404&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 405 /error.php?code=405&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 408 /error.php?code=408&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 500 /error.php?code=500&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 502 /error.php?code=502&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 503 /error.php?code=503&nvDisableRewriteCheck=1\n";
+        $config_contents .= "ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1\n\n";
         $config_contents .= "<IfModule mod_deflate.c>\n";
         $config_contents .= "  <FilesMatch \"\.(css|js|xml|ttf)$\">\n";
         $config_contents .= "    SetOutputFilter DEFLATE\n";
@@ -717,7 +726,7 @@ function nv_getExtVersion($updatetime = 3600)
             );
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = !empty($apidata['body']) ? @unserialize($apidata['body']) : array();
+            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body']) : array();
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {

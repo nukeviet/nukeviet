@@ -44,24 +44,23 @@ $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
 if ($base_siteurl == DIRECTORY_SEPARATOR) {
     $base_siteurl = '';
 }
-if (! empty($base_siteurl)) {
+if (!empty($base_siteurl)) {
     $base_siteurl = str_replace(DIRECTORY_SEPARATOR, '/', $base_siteurl);
 }
-if (! empty($base_siteurl)) {
+if (!empty($base_siteurl)) {
     $base_siteurl = preg_replace('/[\/]+$/', '', $base_siteurl);
 }
-if (! empty($base_siteurl)) {
+if (!empty($base_siteurl)) {
     $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
 }
-if (defined('NV_WYSIWYG') and ! defined('NV_ADMIN')) {
-    $base_siteurl = preg_replace('#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl);
-} elseif (defined('NV_IS_UPDATE')) {
-    // Update se bao gom ca admin nen update phai dat truoc
-    $base_siteurl = preg_replace('#/install(.*)$#', '', $base_siteurl);
+if (defined('NV_WYSIWYG') and !defined('NV_ADMIN')) {
+    $base_siteurl = preg_replace('/\/' . NV_EDITORSDIR . '(.*)$/i', '', $base_siteurl);
+} elseif (defined('NV_IS_UPDATE') or defined('NV_IS_INSTALL')) {
+    $base_siteurl = preg_replace('/\/install(\/(index|update)\.php.*)*$/i', '', $base_siteurl);
 } elseif (defined('NV_ADMIN')) {
-    $base_siteurl = preg_replace('#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl);
-} elseif (! empty($base_siteurl)) {
-    $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
+    $base_siteurl = preg_replace('/\/' . NV_ADMINDIR . '(\/index\.php.*)*$/i', '', $base_siteurl);
+} elseif (!empty($base_siteurl)) {
+    $base_siteurl = preg_replace('/\/index\.php(.*)$/', '', $base_siteurl);
 }
 define('NV_SERVER_NAME', $server_name);// vd: mydomain1.com
 define('NV_SERVER_PROTOCOL', $server_protocol);// vd: http
@@ -351,14 +350,6 @@ if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
-
-// CORS handler
-if (!empty($global_config['cors_valid_domains'])) {
-    $global_config['cors_valid_domains'] = json_decode($global_config['cors_valid_domains'], true);
-} else {
-    $global_config['cors_valid_domains'] = [];
-}
-$nv_Request->CORSHandle($global_config);
 
 if (defined('NV_ADMIN')) {
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php')) {

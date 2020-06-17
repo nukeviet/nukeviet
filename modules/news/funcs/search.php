@@ -161,7 +161,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 
         } else if ($choose == 3) {
             $qurl = $key;
-            $url_info = @parse_url($qurl);
+            $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
@@ -276,14 +276,14 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $where = "AND ( tb1.author LIKE '%" . $dbkeyhtml . "%' ) ";
         } elseif ($choose == 3) {
             $qurl = $key;
-            $url_info = @parse_url($qurl);
+            $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
             $where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
         } else {
             $qurl = $key;
-            $url_info = @parse_url($qurl);
+            $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }

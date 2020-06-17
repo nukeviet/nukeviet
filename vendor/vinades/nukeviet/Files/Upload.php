@@ -1090,7 +1090,7 @@ class Upload
     private function url_get_info($url)
     {
         //URL: http://username:password@www.example.com:80/dir/page.php?foo=bar&foo2=bar2#bookmark
-        $url_info = @parse_url($url);
+        $url_info = parse_url($url);
 
         //[host] => www.example.com
         if (!isset($url_info['host'])) {
@@ -1164,7 +1164,7 @@ class Upload
         if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
         } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions)) {
-            $url_info = @parse_url($this->url_info['uri']);
+            $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
 
             $userAgents = [

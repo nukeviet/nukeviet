@@ -3,7 +3,12 @@ http://nukeviet.vn
 
 NUKEVIET 4.4.01
 
-- Security fix
+- Jquery Validate 1.19.2
+- PHPMailer v6.1.6
+- Fix class PclZip on php 7.1
+- Fix rewrite check on PHP CGI (#2955)
+- Fix bug XSS (thanks Trung Thanh Le from baomatcoban.info)
+- Optimize anti-CSRF function
 - Update SendMail class
 - Function nv_sendmail: add parameters cc and bcc
 - Module users: add config view members list for admin

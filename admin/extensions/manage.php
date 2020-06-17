@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
@@ -16,7 +16,7 @@ $page_title = $lang_module['manage'];
 
 $theme_config = array(
     'sys_icon' => 'fa-cubes',
-    'admin_icon' => 'fa-cube',
+    'admin_icon' => 'fa-cube'
 );
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -40,16 +40,18 @@ $array_theme_admin = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_th
 if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_SESSION) == $request['checksess']) {
     // Kiem tra ung dung ton tai
     if (($request['type'] == 'module' and in_array($request['title'], $array_module_admin)) or ($request['type'] == 'theme' and in_array($request['title'], $array_theme_admin))) {
-        $row = array( 0 => array(
-            'id' => 0,
-            'type' => $request['type'],
-            'basename' => $request['title'],
-            'author' => 'VINADES <contact@vinades.vn>',
-            'version' => $global_config['version'] . ' ' . NV_CURRENTTIME,
-            'is_sys' => 1,
-            'virtual' => 0,
-            'note' => '',
-        ) );
+        $row = array(
+            0 => array(
+                'id' => 0,
+                'type' => $request['type'],
+                'basename' => $request['title'],
+                'author' => 'VINADES <contact@vinades.vn>',
+                'version' => $global_config['version'] . ' ' . NV_CURRENTTIME,
+                'is_sys' => 1,
+                'virtual' => 0,
+                'note' => ''
+            )
+        );
     } else {
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
@@ -111,7 +113,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                 $theme_package = $global_config['site_theme'];
             }
 
-            if (! empty($theme_package)) {
+            if (!empty($theme_package)) {
                 $files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/modules/' . $row['basename'] . '/';
 
                 if (file_exists(NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css')) {
@@ -149,19 +151,26 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             }
         } elseif ($row['type'] == 'theme') {
             $list = scandir(NV_ROOTDIR . '/themes/' . $row['basename']);
-            $array_no_zip = in_array($row['basename'], $array_theme_admin) ? array( '.', '..' ) : array( '.', '..', 'config.ini' );
+            $array_no_zip = in_array($row['basename'], $array_theme_admin) ? array(
+                '.',
+                '..'
+            ) : array(
+                '.',
+                '..',
+                'config.ini'
+            );
 
             foreach ($list as $file_i) {
-                if (! in_array($file_i, $array_no_zip)) {
+                if (!in_array($file_i, $array_no_zip)) {
                     $files_folders[] = NV_ROOTDIR . '/themes/' . $row['basename'] . '/' . $file_i;
                 }
             }
 
-            if (! in_array($row['basename'], $array_theme_admin)) {
+            if (!in_array($row['basename'], $array_theme_admin)) {
                 if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $row['basename'] . '/config.ini')) {
                     $info = $xml->xpath('info');
-                    $layoutdefault = ( string )$xml->layoutdefault;
-                    $config_ini = "<?xml version='1.0'?>\n<theme>\n\t<info>\n\t\t<name>" . ( string )$info[0]->name . "</name>\n\t\t<author>" . ( string )$info[0]->author . "</author>\n\t\t<website>" . ( string )$info[0]->website . "</website>\n\t\t<description>" . ( string )$info[0]->description . "</description>\n\t\t<thumbnail>" . ( string )$info[0]->thumbnail . "</thumbnail>\n\t</info>\n\n\t<layoutdefault>" . $layoutdefault . "</layoutdefault>\n\n\t<positions>";
+                    $layoutdefault = (string) $xml->layoutdefault;
+                    $config_ini = "<?xml version='1.0'?>\n<theme>\n\t<info>\n\t\t<name>" . (string) $info[0]->name . "</name>\n\t\t<author>" . (string) $info[0]->author . "</author>\n\t\t<website>" . (string) $info[0]->website . "</website>\n\t\t<description>" . (string) $info[0]->description . "</description>\n\t\t<thumbnail>" . (string) $info[0]->thumbnail . "</thumbnail>\n\t</info>\n\n\t<layoutdefault>" . $layoutdefault . "</layoutdefault>\n\n\t<positions>";
 
                     $position = $xml->xpath('positions');
                     $positions = $position[0]->position;
@@ -173,10 +182,10 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
 
                     $array_layout_other = array();
                     $result = $db->query('SELECT layout, in_module, func_name FROM ' . NV_PREFIXLANG . '_modthemes t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.theme=' . $db->quote($row['basename']) . ' AND t1.func_id=t2.func_id AND t1.layout!=' . $db->quote($layoutdefault));
-                    while (list($layout, $in_module, $func_name) = $result->fetch(3)) {
+                    while (list ($layout, $in_module, $func_name) = $result->fetch(3)) {
                         $array_layout_other[$layout][$in_module][] = $func_name;
                     }
-                    if (! empty($array_layout_other)) {
+                    if (!empty($array_layout_other)) {
                         $config_ini .= "\n\n\t<setlayout>";
                         foreach ($array_layout_other as $layout => $array_layout_i) {
                             $config_ini .= "\n\t\t<layout>\n\t\t\t<name>" . $layout . "</name>";
@@ -199,19 +208,18 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                         }
                     }
 
-                    if (! empty($array_layout_block)) {
+                    if (!empty($array_layout_block)) {
                         $array_block_func = array();
-                        if (! empty($array_not_all_func)) {
+                        if (!empty($array_not_all_func)) {
                             $result = $db->query('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . implode(',', $array_not_all_func) . ') AND t1.func_id=t2.func_id');
-                            while (list($bid, $func_name, $in_module) = $result->fetch(3)) {
+                            while (list ($bid, $func_name, $in_module) = $result->fetch(3)) {
                                 $array_block_func[$bid][$in_module][] = $func_name;
                             }
                         }
 
-
                         $config_ini .= "\n\n\t<setblocks>";
                         foreach ($array_layout_block as $_row) {
-                            if (! empty($_row['config'])) {
+                            if (!empty($_row['config'])) {
                                 $_row['config'] = htmlspecialchars($_row['config']);
                             }
 
@@ -241,8 +249,8 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             }
         }
 
-        //Kiểm tra các file không có trong cấu trúc của module, giao diện
-        if (! empty($files)) {
+        // Kiểm tra các file không có trong cấu trúc của module, giao diện
+        if (!empty($files)) {
             foreach ($files as $file) {
                 $file = NV_ROOTDIR . '/' . $file['path'];
 
@@ -259,7 +267,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             }
         }
 
-        if (! empty($files_folders)) {
+        if (!empty($files_folders)) {
             $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $row['type'] . '_' . $row['basename'] . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.zip';
 
             if (file_exists($file_src)) {
@@ -270,12 +278,14 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             $zip = new PclZip($file_src);
             $zip->add($files_folders, PCLZIP_OPT_REMOVE_PATH, $row['type'] == 'theme' ? (NV_ROOTDIR . '/themes') : NV_ROOTDIR);
 
-            if (! empty($config_ini)) {
-                $zip->add(array( array(
-                    PCLZIP_ATT_FILE_NAME => 'config.ini',
-                    PCLZIP_ATT_FILE_CONTENT => $config_ini,
-                    PCLZIP_ATT_FILE_NEW_FULL_NAME => $row['basename'] . '/config.ini'
-                ) ));
+            if (!empty($config_ini)) {
+                $zip->add(array(
+                    array(
+                        PCLZIP_ATT_FILE_NAME => 'config.ini',
+                        PCLZIP_ATT_FILE_CONTENT => $config_ini,
+                        PCLZIP_ATT_FILE_NEW_FULL_NAME => $row['basename'] . '/config.ini'
+                    )
+                ));
             }
 
             // Them file cau hinh ung ung
@@ -290,11 +300,13 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             $extension_ini .= "\n[note]\n";
             $extension_ini .= "text=\"" . $row['note'] . "\"\n";
 
-            $zip->add(array( array(
-                PCLZIP_ATT_FILE_NAME => 'config.ini',
-                PCLZIP_ATT_FILE_CONTENT => $extension_ini,
-                PCLZIP_ATT_FILE_NEW_FULL_NAME => 'config.ini'
-            ) ));
+            $zip->add(array(
+                array(
+                    PCLZIP_ATT_FILE_NAME => 'config.ini',
+                    PCLZIP_ATT_FILE_CONTENT => $extension_ini,
+                    PCLZIP_ATT_FILE_NEW_FULL_NAME => 'config.ini'
+                )
+            ));
 
             $filesize = @filesize($file_src);
 
@@ -333,7 +345,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             $module_exit = array();
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-            while (list($lang_i) = $result->fetch(3)) {
+            while (list ($lang_i) = $result->fetch(3)) {
                 $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
                 $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
@@ -359,7 +371,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                 while ($row = $result->fetch()) {
                     try {
                         $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                        while (list($lang_i) = $result2->fetch(3)) {
+                        while (list ($lang_i) = $result2->fetch(3)) {
                             $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
                             $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
                             $sth->execute();
@@ -410,25 +422,25 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             $sql_theme = (preg_match($global_config['check_theme_mobile'], $request['title'])) ? 'mobile' : 'theme';
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup = 1');
-            while (list($lang_i) = $result->fetch(3)) {
+            while (list ($lang_i) = $result->fetch(3)) {
                 $module_array = array();
 
                 $sth = $db->prepare('SELECT title, custom_title
-					FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules
-					WHERE ' . $sql_theme . ' = :theme
-					ORDER BY weight ASC');
+                    FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules
+                    WHERE ' . $sql_theme . ' = :theme
+                    ORDER BY weight ASC');
                 $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
-                while (list($title, $custom_title) = $sth->fetch(3)) {
+                while (list ($title, $custom_title) = $sth->fetch(3)) {
                     $module_array[] = $custom_title;
                 }
 
-                if (! empty($module_array)) {
+                if (!empty($module_array)) {
                     $lang_module_array[] = $lang_i . ': ' . implode(', ', $module_array);
                 }
             }
 
-            if (! empty($lang_module_array)) {
+            if (!empty($lang_module_array)) {
                 die('ERROR_' . printf($lang_module['delele_ext_theme_note_module'], implode('; ', $lang_module_array)));
             } else {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid']);
@@ -436,7 +448,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
 
                 if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
                     $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                    while (list($_lang) = $result->fetch(3)) {
+                    while (list ($_lang) = $result->fetch(3)) {
                         $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
                         $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                         $sth->execute();
@@ -461,9 +473,9 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
         }
 
         // Delete other files
-        if (! empty($files)) {
+        if (!empty($files)) {
             clearstatcache();
-            //Resets the contents of the opcode cache
+            // Resets the contents of the opcode cache
             if (function_exists('opcache_reset')) {
                 opcache_reset();
             }
@@ -487,7 +499,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             }
 
             clearstatcache();
-            //Resets the contents of the opcode cache
+            // Resets the contents of the opcode cache
             if (function_exists('opcache_reset')) {
                 opcache_reset();
             }
@@ -512,7 +524,15 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
     die("ERROR_" . $lang_module['delele_ext_unsuccess']);
 }
 
-$array_extType = array( 'module', 'block', 'theme', 'cronjob', 'other', 'sys', 'admin' );
+$array_extType = array(
+    'module',
+    'block',
+    'theme',
+    'cronjob',
+    'other',
+    'sys',
+    'admin'
+);
 $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype='] = $lang_module['manage'];
 foreach ($array_extType as $_type) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype=' . $_type] = $lang_module['extType_' . $_type];
@@ -526,19 +546,20 @@ if ($nv_Request->isset_request('selecttype', 'get') and empty($selecttype)) {
     $selecttype = $selecttype_old;
 }
 
-if (! in_array($selecttype, $array_extType)) {
+if (!in_array($selecttype, $array_extType)) {
     $selecttype = '';
 }
 
-if ($selecttype_old != $selecttype and ! empty($selecttype)) {
+if ($selecttype_old != $selecttype and !empty($selecttype)) {
     $nv_Request->set_Cookie('selecttype', $selecttype, NV_LIVE_COOKIE_TIME);
 }
 
 // Cho phep upload
 if ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
     $xtpl->assign('SUBMIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
+    $xtpl->assign('SUBMIT_CHECKSESS', md5(NV_CHECK_SESSION . 'submit-ext'));
 
-    if (! $sys_info['zlib_support']) {
+    if (!$sys_info['zlib_support']) {
         $xtpl->parse('main.upload_allowed.nozlib');
     } else {
         $xtpl->parse('main.upload_allowed.upload');
@@ -610,7 +631,9 @@ while ($row = $result->fetch()) {
         $array_themes_indb[] = $row['basename'];
     }
 
-    $row['icon'] = $row['is_sys'] ? array( $theme_config['sys_icon'] ) : array();
+    $row['icon'] = $row['is_sys'] ? array(
+        $theme_config['sys_icon']
+    ) : array();
     $row['is_admin'] = false;
     $row['delete_allowed'] = $row['is_sys'] == 0 ? true : false;
 
@@ -648,8 +671,11 @@ if ($selecttype == '' or $selecttype == 'admin') {
             'version' => $global_config['version'],
             'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=module&amp;title=' . $row . '&amp;checksess=' . md5('package_module_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
-            'icon' => array( $theme_config['admin_icon'], $theme_config['sys_icon'] ),
-            'delete_allowed' => false,
+            'icon' => array(
+                $theme_config['admin_icon'],
+                $theme_config['sys_icon']
+            ),
+            'delete_allowed' => false
         );
     }
 }
@@ -661,13 +687,13 @@ if ($selecttype == '' or $selecttype == 'theme') {
     $theme_mobile_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile']);
     $theme_list = array_merge($theme_list, $theme_mobile_list);
     foreach ($theme_list as $_theme) {
-        if (! in_array($_theme, $array_themes_indb) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
+        if (!in_array($_theme, $array_themes_indb) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
             if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
                 $info = $xml->xpath('info');
                 $table_prefix = preg_replace('/(\W+)/i', '_', $_theme);
                 $version = $global_config['version'] . ' ' . NV_CURRENTTIME;
-                $note = ( string )$info[0]->description;
-                $author = ( string )$info[0]->author;
+                $note = (string) $info[0]->description;
+                $author = (string) $info[0]->author;
 
                 $array_parse[] = array(
                     'type' => $lang_module['extType_theme'],
@@ -677,7 +703,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
                     'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $_theme . '&amp;checksess=' . md5('package_theme_' . $_theme . '_' . NV_CHECK_SESSION),
                     'is_admin' => false,
                     'icon' => array(),
-                    'delete_allowed' => true,
+                    'delete_allowed' => true
                 );
 
                 // Save to database
@@ -704,8 +730,11 @@ if ($selecttype == '' or $selecttype == 'theme') {
             'version' => $global_config['version'],
             'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $row . '&amp;checksess=' . md5('package_theme_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
-            'icon' => array( $theme_config['admin_icon'], $theme_config['sys_icon'] ),
-            'delete_allowed' => false,
+            'icon' => array(
+                $theme_config['admin_icon'],
+                $theme_config['sys_icon']
+            ),
+            'delete_allowed' => false
         );
     }
 }
@@ -719,7 +748,7 @@ foreach ($array_parse as $row) {
 
     $xtpl->assign('ROW', $row);
 
-    if (! empty($row['icon'])) {
+    if (!empty($row['icon'])) {
         foreach ($row['icon'] as $icon) {
             $xtpl->assign('ICON', $icon);
             $xtpl->parse('main.loop.icons.loop');

@@ -494,6 +494,7 @@ $lang_module['active_obj_4'] = 'Admin <strong title="%s">%s</strong> activated';
 $lang_module['account_active'] = 'Activate information';
 $lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br /><br />Activate expired on %6$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
 
+$lang_module['userwait_note'] = 'Users that are pending activation will be automatically deleted within %s hours of registration if not activated';
 $lang_module['userwait_resend_email'] = 'Resend the activation email';
 $lang_module['userwait_resend_per_email'] = 'Number of emails once sent';
 $lang_module['userwait_resend_pause_time'] = 'Waiting time between two emails';
