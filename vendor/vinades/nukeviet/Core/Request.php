@@ -203,8 +203,9 @@ class Request
     /**
      * @param array $config
      * @param string $ip Client IP
+     * @param \NukeViet\Core\Server|boolean $nv_Server
      */
-    public function __construct($config, $ip)
+    public function __construct($config, $ip, $nv_Server = false)
     {
         if (isset($config['allowed_html_tags']) and is_array($config['allowed_html_tags'])) {
             $this->disabletags = array_diff($this->disabletags, $config['allowed_html_tags']);
@@ -276,7 +277,10 @@ class Request
 
         $this->cookie_key = md5($this->cookie_key);
 
-        $this->Initialize();
+        if ($nv_Server === false) {
+            $nv_Server = new Server();
+        }
+        $this->Initialize($nv_Server);
         $this->get_cookie_save_path();
 
         $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
@@ -310,9 +314,9 @@ class Request
     }
 
     /**
-     *
+     * @param \NukeViet\Core\Server $nv_Server
      */
-    private function Initialize()
+    private function Initialize($nv_Server)
     {
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
@@ -356,28 +360,7 @@ class Request
         if (defined('NV_BASE_SITEURL')) {
             $base_siteurl = preg_replace('/[\/]+$/', '', NV_BASE_SITEURL);
         } else {
-            $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
-            if ($base_siteurl == DIRECTORY_SEPARATOR) {
-                $base_siteurl = '';
-            }
-            if (!empty($base_siteurl)) {
-                $base_siteurl = str_replace(DIRECTORY_SEPARATOR, '/', $base_siteurl);
-            }
-            if (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('/[\/]+$/', '', $base_siteurl);
-            }
-            if (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
-            }
-            if (defined('NV_WYSIWYG') and !defined('NV_ADMIN')) {
-                $base_siteurl = preg_replace('/\/' . NV_EDITORSDIR . '(.*)$/i', '', $base_siteurl);
-            } elseif (defined('NV_IS_UPDATE') or defined('NV_IS_INSTALL')) {
-                $base_siteurl = preg_replace('/\/install(\/(index|update)\.php.*)*$/i', '', $base_siteurl);
-            } elseif (defined('NV_ADMIN')) {
-                $base_siteurl = preg_replace('/\/' . NV_ADMINDIR . '(\/index\.php.*)*$/i', '', $base_siteurl);
-            } elseif (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('/\/index\.php(.*)$/', '', $base_siteurl);
-            }
+            $base_siteurl = $nv_Server->getWebsitePath();
         }
 
         if (NV_ROOTDIR !== $doc_root . $base_siteurl) {
@@ -395,39 +378,31 @@ class Request
         if (defined('NV_SERVER_NAME')) {
             $this->server_name = NV_SERVER_NAME;
         } else {
-            $this->server_name = preg_replace('/^[a-z]+\:\/\//i', '', $this->get_Env(['HTTP_HOST', 'SERVER_NAME']));
-            $this->server_name = preg_replace('/(\:[0-9]+)$/', '', $this->server_name);
+            $this->server_name = $nv_Server->getServerHost();
         }
-        $_SERVER['SERVER_NAME'] = $this->server_name;
-
-        $this->base_siteurl = $base_siteurl;
-        $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
-        $this->doc_root = $doc_root;
         if (defined('NV_SERVER_PROTOCOL')) {
             $this->server_protocol = NV_SERVER_PROTOCOL;
         } else {
-            $this->server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($this->get_Env('HTTPS') == 'on') ? 's' : '');
+            $this->server_protocol = $nv_Server->getServerProtocol();
         }
         if (defined('NV_SERVER_PORT')) {
             $this->server_port = NV_SERVER_PORT;
         } else {
-            $this->server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
+            $this->server_port = $nv_Server->getServerPort();
         }
+
+        $this->base_siteurl = $base_siteurl;
+        $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
+        $this->doc_root = $doc_root;
 
         if (defined('NV_MY_DOMAIN')) {
             $this->my_current_domain = NV_MY_DOMAIN;
         } else {
-            if (filter_var($this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-                $this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
-            } else {
-                $this->my_current_domain = $this->server_protocol . '://[' . $this->server_name . ']' . $this->server_port;
-            }
+            $this->my_current_domain = $nv_Server->getOriginalDomain();
         }
 
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
-
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
-
         $this->standardizeReferer();
         $this->standardizeOrigin();
         $this->method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));

@@ -28,45 +28,16 @@ $editor = false;
 
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
+require NV_ROOTDIR . '/vendor/autoload.php';
 
-$server_name = trim((isset($_SERVER['HTTP_HOST']) and ! empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
-$server_name = preg_replace('/^[a-z]+\:\/\//i', '', $server_name);
-$server_name = preg_replace('/(\:[0-9]+)$/', '', $server_name);
-$server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($_SERVER['HTTPS'] == 'on') ? 's' : '');
-$server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
-if (filter_var($server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-    $my_current_domain = $server_protocol . '://' . $server_name . $server_port;
-} else {
-    $my_current_domain = $server_protocol . '://[' . $server_name . ']' . $server_port;
-}
+$nv_Server = new NukeViet\Core\Server();
 
-$base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
-if ($base_siteurl == DIRECTORY_SEPARATOR) {
-    $base_siteurl = '';
-}
-if (!empty($base_siteurl)) {
-    $base_siteurl = str_replace(DIRECTORY_SEPARATOR, '/', $base_siteurl);
-}
-if (!empty($base_siteurl)) {
-    $base_siteurl = preg_replace('/[\/]+$/', '', $base_siteurl);
-}
-if (!empty($base_siteurl)) {
-    $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
-}
-if (defined('NV_WYSIWYG') and !defined('NV_ADMIN')) {
-    $base_siteurl = preg_replace('/\/' . NV_EDITORSDIR . '(.*)$/i', '', $base_siteurl);
-} elseif (defined('NV_IS_UPDATE') or defined('NV_IS_INSTALL')) {
-    $base_siteurl = preg_replace('/\/install(\/(index|update)\.php.*)*$/i', '', $base_siteurl);
-} elseif (defined('NV_ADMIN')) {
-    $base_siteurl = preg_replace('/\/' . NV_ADMINDIR . '(\/index\.php.*)*$/i', '', $base_siteurl);
-} elseif (!empty($base_siteurl)) {
-    $base_siteurl = preg_replace('/\/index\.php(.*)$/', '', $base_siteurl);
-}
-define('NV_SERVER_NAME', $server_name);// vd: mydomain1.com
-define('NV_SERVER_PROTOCOL', $server_protocol);// vd: http
-define('NV_SERVER_PORT', $server_port);// vd: 80
-define('NV_MY_DOMAIN', $my_current_domain);// vd: http://mydomain1.com:80
-define('NV_BASE_SITEURL', $base_siteurl . '/');// vd: /ten_thu_muc_chua_site/
+define('NV_SERVER_NAME', $nv_Server->getServerHost());
+define('NV_SERVER_PROTOCOL', $nv_Server->getServerProtocol());
+define('NV_SERVER_PORT', $nv_Server->getServerPort());
+
+define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
+define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
 
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
     require realpath(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME);
@@ -87,9 +58,6 @@ if (empty($global_config['my_domains'])) {
 }
 
 require NV_ROOTDIR . '/includes/ini.php';
-
-// Vendor autoload
-require NV_ROOTDIR . '/vendor/autoload.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 // Xac dinh IP cua client
@@ -150,7 +118,7 @@ if (defined('NV_SYSTEM')) {
 }
 
 // Ket noi voi class xu ly request
-$nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
+$nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP, $nv_Server);
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
