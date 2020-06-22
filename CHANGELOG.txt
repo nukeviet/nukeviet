@@ -1,6 +1,12 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.02
+
+- Fix drag block (#2964)
+- Module contact: fix send mail
+- Fixe bug with some proxy systems and load balancers (#2966)
+
 NUKEVIET 4.4.01
 
 - Jquery Validate 1.19.2
