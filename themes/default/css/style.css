@@ -1075,6 +1075,11 @@ a.btn {
   color:#333333;
 }
 
+.headerSearch .form-control,
+.headerSearch .btn {
+    z-index: 0;
+}
+
 /* Bootstrap Menu */
 #menusite .navbar-default {
     background-color: #428BCA;
