@@ -216,18 +216,23 @@ function nv_blocks_content($sitecontent)
                     }
 
                     if (defined('NV_IS_DRAG_BLOCK')) {
-                        $act_class = $_row['act'] ? '' : ' act0';
-                        $act_title = $_row['act'] ? $nv_Lang->getGlobal('act_block') : $nv_Lang->getGlobal('deact_block');
-                        $act_icon = $_row['act'] ? 'fa fa-check-square-o' : 'fa fa-square-o';
-                        $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
-                             <div class="tool">
-                                 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('edit_block') . '" title="' . $nv_Lang->getGlobal('edit_block') . '"><em class="fa fa-wrench"></em></a>
-                                 <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('delete_block') . '" title="' . $nv_Lang->getGlobal('delete_block') . '"><em class="fa fa-trash"></em></a>
-                                 <a href="javascript:void(0)" class="actblock" name="' . $_row['bid'] . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $nv_Lang->getGlobal('act_block') . '" data-deact="' . $nv_Lang->getGlobal('deact_block') . '"><em class="' . $act_icon . '" data-act="fa fa-check-square-o" data-deact="fa fa-square-o"></em></a>
-                                 <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('outgroup_block') . '" title="' . $nv_Lang->getGlobal('outgroup_block') . '"><em class="fa fa-share-square-o"></em></a>
-                             </div>
-                             <div class="blockct' . $act_class . '">' . $content . '</div>
+                        $drag_content = nv_apply_hook('', 'get_drag_block_content', [$_row, $content], false);
+                        if ($drag_content === false) {
+                            $act_class = $_row['act'] ? '' : ' act0';
+                            $act_title = $_row['act'] ? $nv_Lang->getGlobal('act_block') : $nv_Lang->getGlobal('deact_block');
+                            $act_icon = $_row['act'] ? 'fa fa-check-square-o' : 'fa fa-square-o';
+                            $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
+                                <div class="tool">
+                                    <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('edit_block') . '" title="' . $nv_Lang->getGlobal('edit_block') . '"><em class="fa fa-wrench"></em></a>
+                                    <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('delete_block') . '" title="' . $nv_Lang->getGlobal('delete_block') . '"><em class="fa fa-trash"></em></a>
+                                    <a href="javascript:void(0)" class="actblock" name="' . $_row['bid'] . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $nv_Lang->getGlobal('act_block') . '" data-deact="' . $nv_Lang->getGlobal('deact_block') . '"><em class="' . $act_icon . '" data-act="fa fa-check-square-o" data-deact="fa fa-square-o"></em></a>
+                                    <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('outgroup_block') . '" title="' . $nv_Lang->getGlobal('outgroup_block') . '"><em class="fa fa-share-square-o"></em></a>
+                                </div>
+                                <div class="blockct' . $act_class . '">' . $content . '</div>
                              </div>';
+                        } else {
+                            $content = $drag_content;
+                        }
                     }
 
                     $_posReal[$_row['position']] .= $content;
