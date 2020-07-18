@@ -27,7 +27,7 @@ if (defined('NV_IS_ADMIN')) {
     } else {
         define('NV_IS_USER', true);
     }
-} elseif (defined('NV_IS_USER_FORUM')) {
+} elseif (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/is_user.php';
 
     if (isset($user_info['userid']) and $user_info['userid'] > 0) {

@@ -46,8 +46,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
         $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
-        $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post', 0);
-        if (!$array_config['is_user_forum'] or !is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
+        $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post');
+        if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
             $array_config['dir_forum'] = '';
         }
 

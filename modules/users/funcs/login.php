@@ -680,7 +680,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         ]);
     }
 
-    if (defined('NV_IS_USER_FORUM')) {
+    if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
         $error = '';
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
         if (!empty($error)) {
