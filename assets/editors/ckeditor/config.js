@@ -10,6 +10,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload,cleanlink,googledocs';
     config.entities = false;
     config.image2_altRequired = false;
+    config.image2_alignClasses = ['image-left', 'image-center', 'image-right'];
     config.youtube_width = '640';
     config.youtube_height = '480';
     config.youtube_related = false;

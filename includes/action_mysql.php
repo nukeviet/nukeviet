@@ -174,21 +174,21 @@ function nv_create_table_sys($lang)
         title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file,
         theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap
     ) VALUES
-         ('about', 'page', 'about', 'about', 'page', 'About', '', 1592038800, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1),
-         ('news', 'news', 'news', 'news', 'news', 'News', '', 1592038800, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
-         ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1592038800, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 1),
-         ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1592038800, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
-         ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1592038800, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 1),
-         ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1592038800, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 1),
-         ('banners', 'banners', 'banners', 'banners', 'banners', 'Banners', '', 1592038800, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 1),
-         ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1592038800, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
-         ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1592038800, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
-         ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1592038800, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
-         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1592038800, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
-         ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1592038800, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
-         ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1592038800, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
-         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1592038800, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),
-         ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1592038800, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 1)";
+         ('about', 'page', 'about', 'about', 'page', 'About', '', 1592816400, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1),
+         ('news', 'news', 'news', 'news', 'news', 'News', '', 1592816400, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
+         ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1592816400, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 1),
+         ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1592816400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
+         ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1592816400, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 1),
+         ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1592816400, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 1),
+         ('banners', 'banners', 'banners', 'banners', 'banners', 'Banners', '', 1592816400, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 1),
+         ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1592816400, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
+         ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1592816400, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
+         ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1592816400, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
+         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1592816400, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
+         ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1592816400, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
+         ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1592816400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
+         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1592816400, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),
+         ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1592816400, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 1)";
 
     $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
          ('" . $lang . "', 'global', 'site_domain', ''),

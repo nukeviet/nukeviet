@@ -81,13 +81,12 @@ function nv_is_myreferer($referer = '')
         return 2;
     }
 
-    $server_name = preg_replace('/^[w]+\./', '', nv_getenv('HTTP_HOST'));
-    $referer = preg_replace(array(
+    $referer = preg_replace([
         '/^[a-zA-Z]+\:\/\/([w]+\.)?/',
         '/^[w]+\./'
-    ), '', $referer);
+    ], '', $referer);
 
-    if (preg_match('/^' . nv_preg_quote($server_name) . '/', $referer)) {
+    if (preg_match('/^' . nv_preg_quote(NV_SERVER_NAME) . '/', $referer)) {
         return 1;
     }
 
