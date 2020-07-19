@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Sep 19, 2012, 09:05:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Sep 19, 2012, 09:05:00 PM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -91,3 +91,4 @@ $lang_module['commnum'] = 'Number of comments per page';
 $lang_module['cbroken'] = 'Bad Content';
 $lang_module['error8'] = 'Error! Please report content in the textarea';
 $lang_module['per_title'] = 'The number of title characters is cut off';
+$lang_module['error_regex_alias'] = 'Error: Alias cannot start with video- or end with -video';

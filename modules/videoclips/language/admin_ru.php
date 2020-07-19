@@ -93,4 +93,5 @@ $lang_module['tit0'] = 'Приостановлены';
 $lang_module['tit1'] = 'Активный';
 $lang_module['homeclips'] = 'Видео, отображаемое на главной странице';
 $lang_module['error_required_alias'] = 'Ошибка: вам нужно импортировать данные для Static Link';
+$lang_module['error_regex_alias'] = 'Ошибка: псевдоним не может начинаться с видео или заканчиваться на видео';
 $lang_module['alias'] = 'Статическая ссылка';

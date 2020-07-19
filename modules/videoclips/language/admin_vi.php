@@ -7,7 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
-if (!defined('NV_MAINFILE')) die('Stop!!!');
+
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '20/09/2012, 04:05';
@@ -89,6 +92,7 @@ $lang_module['error5'] = 'Lỗi! Tập tin video chưa được xác định';
 $lang_module['error6'] = 'Lỗi! Hình minh họa chưa được xác định';
 $lang_module['error7'] = 'Lỗi! Vui lòng điền nội dung vào ô Mô tả ngắn gọn';
 $lang_module['error_required_alias'] = 'Lỗi: bạn cần nhập dữ liệu cho Liên kết tĩnh';
+$lang_module['error_regex_alias'] = 'Lỗi: Liên kết tĩnh không được bắt đầu bằng video- hoặc kết thúc bằng -video';
 
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['per_title'] = 'Số lượng ký tự tiêu đề bị cắt';

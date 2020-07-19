@@ -8,7 +8,9 @@
  * @Createdate Thu, 20 Sep 2012 04:05:46 GMT
  */
 
-if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
+}
 
 if ($nv_Request->isset_request('get_alias_title', 'post')) {
     $title = $nv_Request->get_title('get_alias_title', 'post', '');
@@ -90,10 +92,9 @@ function nv_del_topic($tid)
 $array = array();
 $error = "";
 
-//them the loai
+// them the loai
 if ($nv_Request->isset_request('add', 'get')) {
     $array = array();
-    $error = array();
     $array['id'] = $nv_Request->get_int('id', 'post,get', 0);
     $page_title = $lang_module['addtopic_titlebox'];
 
@@ -108,12 +109,16 @@ if ($nv_Request->isset_request('add', 'get')) {
         $array['alias'] = (empty($row['alias'])) ? change_alias($array['title']) : change_alias($array['alias']);
 
         if (empty($array['alias'])) {
-            $error[]= $lang_module['error_required_alias'];
+            $error = $lang_module['error_required_alias'];
+            $is_error = true;
+        } elseif (preg_match('/^video\-/i', $array['alias']) or preg_match('/\-video$/i', $array['alias'])) {
+            $error = $lang_module['error_regex_alias'];
+            $is_error = true;
         }
         if (empty($array['title'])) {
             $error = $lang_module['error1'];
             $is_error = true;
-        }elseif (!empty($array['parentid'])) {
+        } elseif (!empty($array['parentid'])) {
             $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id=" . $array['parentid'];
             $result = $db->query($sql);
             $count = $result->fetchColumn();
@@ -125,7 +130,6 @@ if ($nv_Request->isset_request('add', 'get')) {
         }
 
         if (!$is_error) {
-
             $array['img'] = "";
             $homeimg = $nv_Request->get_title('img', 'post');
             if (!empty($homeimg)) {
@@ -133,7 +137,8 @@ if ($nv_Request->isset_request('add', 'get')) {
                 if (preg_match("/^([a-z0-9\/\.\-\_]+)\.(jpg|png|gif)$/i", $homeimg)) {
                     $image = NV_ROOTDIR . "/" . $homeimg;
                     $image = nv_is_image($image);
-                    if (!empty($image)) $array['img'] = $homeimg;
+                    if (!empty($image))
+                        $array['img'] = $homeimg;
                 }
             }
 
@@ -183,7 +188,8 @@ if ($nv_Request->isset_request('add', 'get')) {
         $array['img'] = "";
     }
 
-    if (!empty($array['img'])) $array['img'] = NV_BASE_SITEURL . $array['img'];
+    if (!empty($array['img']))
+        $array['img'] = NV_BASE_SITEURL . $array['img'];
 
     $listTopics = array(
         array(
@@ -223,7 +229,7 @@ if ($nv_Request->isset_request('add', 'get')) {
     exit();
 }
 
-//Sua the loai
+// Sua the loai
 if ($nv_Request->isset_request('edit', 'get')) {
     $page_title = $lang_module['edittopic_titlebox'];
 
@@ -259,7 +265,10 @@ if ($nv_Request->isset_request('edit', 'get')) {
         if (empty($array['title'])) {
             $error = $lang_module['error1'];
             $is_error = true;
-        } else {
+        } elseif (preg_match('/^video\-/i', $array['alias']) or preg_match('/\-video$/i', $array['alias'])) {
+            $error = $lang_module['error_regex_alias'];
+            $is_error = true;
+        }else {
             if (!empty($array['parentid'])) {
                 $sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id=" . $array['parentid'];
                 $result = $db->query($sql);
@@ -291,7 +300,8 @@ if ($nv_Request->isset_request('edit', 'get')) {
                 if (preg_match("/^([a-z0-9\/\.\-\_]+)\.(jpg|png|gif)$/i", $homeimg)) {
                     $image = NV_ROOTDIR . "/" . $homeimg;
                     $image = nv_is_image($image);
-                    if (!empty($image)) $array['img'] = $homeimg;
+                    if (!empty($image))
+                        $array['img'] = $homeimg;
                 }
             }
             if (empty($array['keywords'])) {
@@ -346,7 +356,8 @@ if ($nv_Request->isset_request('edit', 'get')) {
         $array['img'] = $row['img'];
     }
 
-    if (!empty($array['img'])) $array['img'] = NV_BASE_SITEURL . $array['img'];
+    if (!empty($array['img']))
+        $array['img'] = NV_BASE_SITEURL . $array['img'];
 
     $listTopics = array(
         array(
@@ -384,9 +395,10 @@ if ($nv_Request->isset_request('edit', 'get')) {
     exit();
 }
 
-//Xoa chu de
+// Xoa chu de
 if ($nv_Request->isset_request('del', 'post,get')) {
-    if (!defined('NV_IS_AJAX')) die('Wrong URL');
+    if (!defined('NV_IS_AJAX'))
+        die('Wrong URL');
 
     $tid = $nv_Request->get_int('tid', 'post,get', 0);
 
@@ -408,19 +420,22 @@ if ($nv_Request->isset_request('del', 'post,get')) {
     die('OK');
 }
 
-//Chinh thu tu chu de
+// Chinh thu tu chu de
 if ($nv_Request->isset_request('changeweight', 'post,get')) {
-    if (!defined('NV_IS_AJAX')) die('Wrong URL');
+    if (!defined('NV_IS_AJAX'))
+        die('Wrong URL');
 
     $tid = $nv_Request->get_int('tid', 'post,get', 0);
     $new = $nv_Request->get_int('new', 'post,get', 0);
 
-    if (empty($tid)) die('NO');
+    if (empty($tid))
+        die('NO');
 
     $query = "SELECT parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id=" . $tid;
     $result = $db->query($query);
     $numrows = $result->rowCount();
-    if ($numrows != 1) die('NO');
+    if ($numrows != 1)
+        die('NO');
     $parentid = $result->fetchColumn();
 
     $query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id!=" . $tid . " AND parentid=" . $parentid . " ORDER BY weight ASC";
@@ -428,7 +443,8 @@ if ($nv_Request->isset_request('changeweight', 'post,get')) {
     $weight = 0;
     while ($row = $result->fetch()) {
         ++$weight;
-        if ($weight == $new) ++$weight;
+        if ($weight == $new)
+            ++$weight;
         $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topic SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query($sql);
     }
@@ -437,18 +453,21 @@ if ($nv_Request->isset_request('changeweight', 'post,get')) {
     die('OK');
 }
 
-//Kich hoat - dinh chi
+// Kich hoat - dinh chi
 if ($nv_Request->isset_request('changestatus', 'post,get')) {
-    if (!defined('NV_IS_AJAX')) die('Wrong URL');
+    if (!defined('NV_IS_AJAX'))
+        die('Wrong URL');
 
     $tid = $nv_Request->get_int('tid', 'post,get', 0);
 
-    if (empty($tid)) die('NO');
+    if (empty($tid))
+        die('NO');
 
     $query = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_topic WHERE id=" . $tid;
     $result = $db->query($query);
     $numrows = $result->rowCount();
-    if ($numrows != 1) die('NO');
+    if ($numrows != 1)
+        die('NO');
 
     $status = $result->fetchColumn();
     $status = $status ? 0 : 1;
@@ -458,7 +477,7 @@ if ($nv_Request->isset_request('changestatus', 'post,get')) {
     die('OK');
 }
 
-//Danh sach chu de
+// Danh sach chu de
 $page_title = $lang_module['topic_management'];
 
 $pid = $nv_Request->get_int('pid', 'get', 0);
