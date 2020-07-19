@@ -157,8 +157,8 @@
     $("input[name=selectfile]").click(function() {
         var area = "internalpath";
         var alt = "homeimgalt";
-        var paths = "{UPLOAD_CURRENT}/video";
-        var currentpaths = "{UPLOAD_CURRENT}/video";
+        var paths = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/video";
+        var currentpaths = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/video";
         var type = "file";
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + paths + "&type=" + type + "&currentpath=" + currentpaths, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
@@ -172,7 +172,7 @@
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
-    
+
     $("form#addInformation").submit(function() {
         var a = trim($("input[name=title]").val());
         $("input[name=title]").val(a);
@@ -191,7 +191,7 @@
         $("form#addInformation").submit();
         return !1
     });
-    
+
     function nv_get_alias(id) {
         var title = strip_tags($("[name='title']").val());
         if (title != '') {
