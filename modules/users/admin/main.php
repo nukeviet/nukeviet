@@ -126,7 +126,7 @@ $users_list = [];
 $admin_in = [];
 $is_edit = (in_array('edit', $allow_func)) ? true : false;
 $is_delete = (in_array('del', $allow_func)) ? true : false;
-$is_setactive = (in_array('setactive', $allow_func)) ? true : false;
+$is_setactive = (in_array('setactive', $allow_func) and !defined('NV_IS_USER_FORUM')) ? true : false;
 $array_userids = $array_users = [];
 
 while ($row = $result2->fetch()) {
@@ -306,6 +306,12 @@ foreach ($users_list as $u) {
 
     if ($u['is_admin']) {
         $xtpl->parse('main.xusers.is_admin');
+    }
+
+    if ($view_user_allowed) {
+        $xtpl->parse('main.xusers.view');
+    } else {
+        $xtpl->parse('main.xusers.show');
     }
 
     if (!defined('NV_IS_USER_FORUM')) {
