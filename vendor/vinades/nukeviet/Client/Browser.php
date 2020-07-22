@@ -472,7 +472,7 @@ class Browser
         //     before Safari
         // (5) Netscape 9+ is based on Firefox so Netscape checks
         //     before FireFox are necessary
-        $this->checkBrowserWebTv() or $this->checkBrowserInternetExplorer() or $this->checkBrowserOpera() or $this->checkBrowserGaleon() or $this->checkBrowserNetscapeNavigator9Plus() or $this->checkBrowserFirefox() or $this->checkBrowserChrome() or $this->checkBrowserOmniWeb() or // common mobile
+        $this->checkBrowserWebTv() or $this->checkBrowserEdge() or $this->checkBrowserInternetExplorer() or $this->checkBrowserOpera() or $this->checkBrowserGaleon() or $this->checkBrowserNetscapeNavigator9Plus() or $this->checkBrowserFirefox() or $this->checkBrowserChrome() or $this->checkBrowserOmniWeb() or // common mobile
             $this->checkBrowserAndroid() or $this->checkBrowseriPad() or $this->checkBrowseriPod() or $this->checkBrowseriPhone() or $this->checkBrowserBlackBerry() or $this->checkBrowserNokia() or // common bots
             $this->checkBrowserGoogleBot() or $this->checkBrowserMSNBot() or $this->checkBrowserBingBot() or $this->checkBrowserSlurp() or // check for facebook external hit when loading URL
             $this->checkFacebookExternalHit() or // WebKit base check (post mobile and others)
@@ -661,6 +661,27 @@ class Browser
         }
         return false;
     }
+    
+    /**
+     * Determine if the browser is Edge or not
+     * @return boolean True if the browser is Edge otherwise false
+     */
+    protected function checkBrowserEdge()
+    {
+        if ($name = (stripos($this->_agent, 'Edge/') !== false ? 'Edge' : ((stripos($this->_agent, 'Edg/') !== false || stripos($this->_agent, 'EdgA/') !== false) ? 'Edg' : false))) {
+            $aresult = explode('/', stristr($this->_agent, $name));
+            if (isset($aresult[1])) {
+                $aversion = explode(' ', $aresult[1]);
+                $this->setVersion($aversion[0]);
+                $this->setBrowser(self::BROWSER_EDGE, self::BROWSER_EDGE_NAME);
+                if (stripos($this->_agent, 'Windows Phone') !== false || stripos($this->_agent, 'Android') !== false) {
+                    $this->setMobile(true);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Determine if the browser is Internet Explorer or not (last updated 1.7)
@@ -674,12 +695,6 @@ class Browser
             $this->setVersion('11.0');
             return true;
         }
-        // Test for Microsoft Edge
-        elseif (preg_match('/\sEdge\/([0-9]+)\.([0-9]+)/', $this->_agent, $m)) {
-            $this->setBrowser(self::BROWSER_EDGE, self::BROWSER_EDGE_NAME);
-            $this->setVersion($m[1] . '.' . $m[2]);
-            return true;
-        } // Test for versions > 1.5
         // Test for v1 - v1.5 IE
         elseif (stripos($this->_agent, 'microsoft internet explorer') !== false) {
             $this->setBrowser(self::BROWSER_IE, self::BROWSER_IE_NAME);
