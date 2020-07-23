@@ -12,6 +12,11 @@ if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
+if (defined('NV_IS_USER_FORUM')) {
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/avatar.php';
+    exit();
+}
+
 if (!defined('NV_IS_ADMIN')) {
     if (!defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -52,7 +57,7 @@ function updateAvatar($file)
         }
 
         $photo = SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $new_photo_name;
-        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo=:photo WHERE userid=' . $user_info['userid']);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo=:photo, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $user_info['userid']);
         $stmt->bindParam(':photo', $photo, PDO::PARAM_STR);
         $stmt->execute();
     }
@@ -79,7 +84,7 @@ function deleteAvatar()
             nv_deletefile(NV_ROOTDIR . '/' . $oldAvatar);
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET photo='' WHERE userid=" . $user_info['userid']);
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET photo='', last_update=' . NV_CURRENTTIME . ' WHERE userid=" . $user_info['userid']);
         $stmt->execute();
     }
 }

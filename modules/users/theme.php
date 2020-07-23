@@ -965,9 +965,9 @@ function user_welcome()
     $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
     $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
 
-    if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
+    if (!empty($user_info['avata'])) {
         $xtpl->assign('IMG', array(
-            'src' => NV_BASE_SITEURL . $user_info['photo'],
+            'src' => $user_info['avata'],
             'title' => $lang_module['img_size_title']
         ));
     } else {

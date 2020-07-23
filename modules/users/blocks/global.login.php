@@ -123,8 +123,8 @@ if (!nv_function_exists('nv_block_login')) {
             $xtpl->assign('BLOCK_JS', $block_js);
 
             if (defined('NV_IS_USER')) {
-                if (file_exists(NV_ROOTDIR . '/' . $user_info['photo']) and !empty($user_info['photo'])) {
-                    $avata = NV_BASE_SITEURL . $user_info['photo'];
+                if (!empty($user_info['avata'])) {
+                    $avata = $user_info['avata'];
                 } else {
                     $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
                 }
