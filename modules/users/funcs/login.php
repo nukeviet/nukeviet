@@ -239,7 +239,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ]);
         }
 
-        if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php')) {
+        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
             $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id;
@@ -321,17 +321,23 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             }
         }
 
-        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . (int) $nv_row['userid'] . ', :server, :opid, :email )');
+        $user_id = (int) $nv_row['userid'];
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid, :email )');
         $stmt->bindParam(':server', $attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-        validUserLog($nv_row, 1, $opid, $current_mode);
 
-        opidr([
-            'status' => 'success',
-            'mess' => $lang_module['login_ok']
-        ]);
+        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
+        } else {
+            validUserLog($nv_row, 1, $opid, $current_mode);
+
+            opidr([
+                'status' => 'success',
+                'mess' => $lang_module['login_ok']
+            ]);
+        }
     }
 
     /**
@@ -373,7 +379,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ]);
         }
 
-        if (defined('NV_IS_USER_FORUM')) {
+        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
             $error = '';
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
             if (!empty($error)) {
@@ -536,7 +542,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
 
         // Luu vao bang OpenID
-        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . intval($row['userid']) . ', :server, :opid , :email)');
+        $user_id = intval($row['userid']);
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :email)');
         $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
@@ -547,13 +554,18 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             nv_user_register_callback($userid);
         }
 
-        validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
         $nv_Cache->delMod($module_name);
 
-        opidr([
-            'status' => 'success',
-            'mess' => $lang_module['login_ok']
-        ]);
+        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
+        }
+        else{
+            validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
+            opidr([
+                'status' => 'success',
+                'mess' => $lang_module['login_ok']
+            ]);
+        }
     }
 
     /**
