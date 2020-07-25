@@ -17,12 +17,6 @@ if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-// Chuyen trang dang ki neu tich hop dien dan
-if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
-    exit();
-}
-
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
     $page_title = $lang_module['register'];
@@ -59,6 +53,18 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+}
+elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+
+// Chuyen trang dang ki neu tich hop dien dan
+if (defined('NV_IS_USER_FORUM')) {
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
+    exit();
 }
 
 /**
@@ -424,12 +430,21 @@ if ($checkss == $array_register['checkss']) {
                 nv_insert_notification($module_name, 'contact_new', ['title' => $array_register['username']], $userid, 0, 0, 1);
             }
 
-            $nv_redirect = '';
-            reg_result(array(
+            $array = array(
                 'status' => 'ok',
                 'input' => '',
                 'mess' => $info
-            ));
+            );
+            if (defined('SSO_REGISTER_SECRET')) {
+                $sso_redirect_users = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+                $iv = substr(SSO_REGISTER_SECRET, 0, 16);
+                $sso_redirect_users = strtr($sso_redirect_users, '-_,', '+/=');
+                $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
+                if (!empty($sso_redirect_users)) {
+                    $array['input'] = $sso_redirect_users;
+                }
+            }
+            nv_jsonOutput($array);
         }
     } else {
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (

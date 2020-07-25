@@ -315,11 +315,6 @@ foreach ($users_list as $u) {
     }
 
     if (!defined('NV_IS_USER_FORUM')) {
-        if ($view_user_allowed) {
-            $xtpl->parse('main.xusers.view');
-        } else {
-            $xtpl->parse('main.xusers.show');
-        }
         if ($u['is_edit']) {
             $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid']);
             $xtpl->assign('EDIT_2STEP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $u['userid']);
