@@ -98,6 +98,15 @@ $array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] ==
 $array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
+if (defined('SSO_CLIENT_DOMAIN')) {
+    $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+    $array['client'] = $nv_Request->get_title('client', 'get,post', '');
+    if (!empty($array['client']) and !in_array($array['client'], $allowed_client_origin)) {
+        // 406 Not Acceptable
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+    }
+}
+
 //Xoa avatar
 if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post')) {
     deleteAvatar();

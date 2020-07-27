@@ -34,6 +34,7 @@
                 <button class="btn btn-primary btn-sm" onclick=" window.close();return!1">{GLANG.cancel}</button>
             </div>
         </div>
+        <input type="hidden" name="client" value="{DATA.client}">
         <input type="hidden" id="crop_x" name="crop_x"/>
         <input type="hidden" id="crop_y" name="crop_y"/>
         <input type="hidden" id="crop_width" name="crop_width"/>
@@ -58,7 +59,11 @@
 		window.close();
 		<!-- END: complete -->
         <!-- BEGIN: complete2 -->
-        window.opener.location.href = window.opener.location.href;
+        if ('{DATA.client}' != '') {
+            window.opener.postMessage('SUCCESS', '{DATA.client}');
+        } else {
+            window.opener.location.reload();
+        }
 		window.close();
 		<!-- END: complete2 -->
         <!-- BEGIN: complete3 -->
