@@ -9,6 +9,17 @@
                     <figcaption>{IMG.title}</figcaption>
                 </div>
             </figure>
+            <!-- BEGIN: crossdomain_listener -->
+            <script type="text/javascript">
+            function SSOReciver(event) {
+                if (event.origin !== '{SSO_REGISTER_ORIGIN}') {
+                    return false;
+                }
+                location.reload();
+            }
+            window.addEventListener("message", SSOReciver, false);
+            </script>
+            <!-- END: crossdomain_listener -->
         	<div>
         		<ul class="nv-list-item xsm">
         			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
