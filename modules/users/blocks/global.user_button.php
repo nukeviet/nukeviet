@@ -86,6 +86,10 @@ if ($global_config['allowuserlogin']) {
         if (defined('NV_OPENID_ALLOWED')) {
             $xtpl->parse('signed.allowopenid');
         }
+        if (defined('SSO_REGISTER_DOMAIN')) {
+            $xtpl->assign('SSO_REGISTER_ORIGIN', SSO_REGISTER_DOMAIN);
+            $xtpl->parse('signed.crossdomain_listener');
+        }
 
         if (defined('NV_IS_ADMIN')) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
