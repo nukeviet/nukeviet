@@ -21,7 +21,8 @@ $smtp_encrypted_array[2] = 'TLS';
 $array_config = [];
 $errormess = '';
 
-if ($nv_Request->isset_request('submitsave', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', '', 1), 0, 255);
     $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', '', 1), 0, 255);
     $array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', '', 1), 0, 255);
@@ -100,10 +101,10 @@ $array_config['notify_email_error'] = $array_config['notify_email_error'] ? ' ch
 
 $array_config['mailer_mode_smtpt'] = ($array_config['mailer_mode'] == 'smtp') ? ' checked="checked"' : '';
 $array_config['mailer_mode_sendmail'] = ($array_config['mailer_mode'] == 'sendmail') ? ' checked="checked"' : '';
-$array_config['mailer_mode_phpmail'] = ($array_config['mailer_mode'] == '') ? ' checked="checked"' : '';
+$array_config['mailer_mode_phpmail'] = ($array_config['mailer_mode'] == 'mail') ? ' checked="checked"' : '';
 $array_config['mailer_mode_no'] = ($array_config['mailer_mode'] == 'no') ? ' checked="checked"' : '';
 $array_config['mailer_mode_smtpt_show'] = ($array_config['mailer_mode'] == 'smtp') ? '' : ' style="display: none" ';
-
+$array_config['checkss'] = $checkss;
 $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 $xtpl->assign('LANG', $lang_module);
@@ -113,9 +114,11 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+
 if (empty($global_config['idsite'])) {
     $xtpl->parse('smtp.mailhost');
 }
+
 foreach ($smtp_encrypted_array as $id => $value) {
     $encrypted = [
         'id' => $id,

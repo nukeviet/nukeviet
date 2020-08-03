@@ -83,10 +83,13 @@ while ($row = $result->fetch()) {
     $mod['version'] = preg_replace_callback('/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['version']);
     $mod['custom_title'] = $row['custom_title'];
     $mod['weight'] = array( $row['weight'], "nv_chang_weight('" . $row['title'] . "');" );
-    $mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
+    $mod['act'] = array(
+        $row['act'],
+        "nv_chang_act('" . $row['title'] . "', '" . md5(NV_CHECK_SESSION . '_' . $module_name . '_change_act_' . $row['title']) . "');"
+    );
 
     $mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $lang_global['edit'] );
-    $mod['del'] = ($row['is_sys'] == 0 or $row['title'] != $row['module_file']) ? array( "nv_mod_del('" . $row['title'] . "');", $lang_global['delete'] ) : array();
+    $mod['del'] = ($row['is_sys'] == 0 or $row['title'] != $row['module_file']) ? array( "nv_mod_del('" . $row['title'] . "', '" . md5(NV_CHECK_SESSION . '_' . $module_name . '_del_' . $row['title']) . "');", $lang_global['delete'] ) : array();
 
     if ($row['title'] == $global_config['site_home_module']) {
         $row['is_sys'] = 1;

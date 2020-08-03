@@ -233,132 +233,116 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 
     if (empty($post['title'])) {
         $error = $lang_module['error_menu_name'];
-    } elseif (empty($post['link'])) {
-        $error = $lang_module['error_menu_link'];
     } elseif ($post['id'] == 0) {
-        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title= :title AND parentid=' . $post['parentid'] . ' AND mid=' . $post['mid']);
-        $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->fetchColumn()) {
-            $error = $lang_module['title_exit_cat'];
-        } else {
-            $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
-            $weight = intval($weight) + 1;
-            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-                (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view,
-                module_name, op, target, css, active_type, status) VALUES
-                (" . intval($post['parentid']) . ", " . intval($post['mid']) . ", :title, :link, :icon, :image, :note, " . intval($weight) . ", 0, 0, '',
-				:groups_view, :module_name, :op, " . intval($post['target']) . ", :css, " . intval($post['active_type']) . ", 1
-			)";
+        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
+        $weight = intval($weight) + 1;
+        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
+            (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view,
+            module_name, op, target, css, active_type, status) VALUES
+            (" . intval($post['parentid']) . ", " . intval($post['mid']) . ", :title, :link, :icon, :image, :note, " . intval($weight) . ", 0, 0, '',
+            :groups_view, :module_name, :op, " . intval($post['target']) . ", :css, " . intval($post['active_type']) . ", 1
+        )";
 
-            $data_insert = array();
-            $data_insert['title'] = $post['title'];
-            $data_insert['link'] = $post['link'];
-            $data_insert['icon'] = $post['icon'];
-            $data_insert['image'] = $post['image'];
-            $data_insert['note'] = $post['note'];
-            $data_insert['groups_view'] = $post['groups_view'];
-            $data_insert['module_name'] = $post['module_name'];
-            $data_insert['op'] = $post['op'];
-            $data_insert['css'] = $post['css'];
+        $data_insert = array();
+        $data_insert['title'] = $post['title'];
+        $data_insert['link'] = $post['link'];
+        $data_insert['icon'] = $post['icon'];
+        $data_insert['image'] = $post['image'];
+        $data_insert['note'] = $post['note'];
+        $data_insert['groups_view'] = $post['groups_view'];
+        $data_insert['module_name'] = $post['module_name'];
+        $data_insert['op'] = $post['op'];
+        $data_insert['css'] = $post['css'];
 
-            if ($db->insert_id($sql, 'id', $data_insert)) {
-                menu_fix_order($post['mid']);
+        if ($db->insert_id($sql, 'id', $data_insert)) {
+            menu_fix_order($post['mid']);
 
-                if ($post['parentid'] != 0) {
-                    $arr_item_menu = array();
-                    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $post['mid'] . ' AND parentid=' . $post['parentid'];
-                    $result = $db->query($sql);
+            if ($post['parentid'] != 0) {
+                $arr_item_menu = array();
+                $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $post['mid'] . ' AND parentid=' . $post['parentid'];
+                $result = $db->query($sql);
 
-                    while ($row = $result->fetch()) {
-                        $arr_item_menu[] = $row['id'];
-                    }
-
-                    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid= " . $post['mid'] . " AND id=" . $post['parentid'];
-                    $db->query($sql);
+                while ($row = $result->fetch()) {
+                    $arr_item_menu[] = $row['id'];
                 }
 
-                $nv_Cache->delMod($module_name);
-                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
-            } else {
-                $error = $sql;
+                $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid= " . $post['mid'] . " AND id=" . $post['parentid'];
+                $db->query($sql);
             }
+
+            $nv_Cache->delMod($module_name);
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
+        } else {
+            $error = $sql;
         }
     } else {
-        $stmt = $db->prepare("SELECT count(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE title= :title AND parentid=" . $post['parentid'] . " AND mid=" . $post['mid'] . " AND id NOT IN (" . $post['id'] . ")");
+        $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
+            parentid=" . intval($post['parentid']) . ",
+            mid=" . intval($post['mid']) . ",
+            title= :title,
+            link= :link,
+            icon= :icon,
+            image= :image,
+            note= :note,
+            groups_view= :groups_view,
+            module_name= :module_name,
+            op= :op,
+            target=" . intval($post['target']) . ",
+            css= :css,
+            active_type=" . intval($post['active_type']) . "
+        WHERE id=" . intval($post['id']));
+
         $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->fetchColumn()) {
-            $error = $lang_module['title_exit_cat'];
-        } else {
-            $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
-				parentid=" . intval($post['parentid']) . ",
-				mid=" . intval($post['mid']) . ",
-				title= :title,
-				link= :link,
-                icon= :icon,
-                image= :image,
-				note= :note,
-				groups_view= :groups_view,
-				module_name= :module_name,
-				op= :op,
-				target=" . intval($post['target']) . ",
-				css= :css,
-				active_type=" . intval($post['active_type']) . "
-			WHERE id=" . intval($post['id']));
+        $stmt->bindParam(':link', $post['link'], PDO::PARAM_STR);
+        $stmt->bindParam(':icon', $post['icon'], PDO::PARAM_STR);
+        $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
+        $stmt->bindParam(':note', $post['note'], PDO::PARAM_STR);
+        $stmt->bindParam(':groups_view', $post['groups_view'], PDO::PARAM_STR);
+        $stmt->bindParam(':module_name', $post['module_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':op', $post['op'], PDO::PARAM_STR);
+        $stmt->bindParam(':css', $post['css'], PDO::PARAM_STR);
 
-            $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-            $stmt->bindParam(':link', $post['link'], PDO::PARAM_STR);
-            $stmt->bindParam(':icon', $post['icon'], PDO::PARAM_STR);
-            $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
-            $stmt->bindParam(':note', $post['note'], PDO::PARAM_STR);
-            $stmt->bindParam(':groups_view', $post['groups_view'], PDO::PARAM_STR);
-            $stmt->bindParam(':module_name', $post['module_name'], PDO::PARAM_STR);
-            $stmt->bindParam(':op', $post['op'], PDO::PARAM_STR);
-            $stmt->bindParam(':css', $post['css'], PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            if ($pa_old != $post['parentid']) {
+                $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid=" . intval($post['mid']) . " AND parentid=" . intval($post['parentid'] . " "))->fetchColumn();
+                $weight = intval($weight) + 1;
 
-            if ($stmt->execute()) {
-                if ($pa_old != $post['parentid']) {
-                    $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid=" . intval($post['mid']) . " AND parentid=" . intval($post['parentid'] . " "))->fetchColumn();
-                    $weight = intval($weight) + 1;
-
-                    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . intval($weight) . " WHERE id=" . intval($post['id']);
-                    $db->query($sql);
-                }
-
-                menu_fix_order($post['mid']);
-
-                if ($post['mid'] != $mid_old) {
-                    menu_fix_order($mid_old);
-                }
-
-                if ($post['parentid'] != 0) {
-                    $arr_item_menu = array();
-                    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $post['mid'] . ' AND parentid=' . $post['parentid'];
-                    $result = $db->query($sql);
-                    while ($row = $result->fetch()) {
-                        $arr_item_menu[] = $row['id'];
-                    }
-
-                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $arr_item_menu) . "' WHERE mid=" . $post['mid'] . " AND id=" . $post['parentid']);
-                }
-
-                if ($pa_old != 0) {
-                    $arr_item_menu = array();
-                    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $mid_old . ' AND parentid=' . $pa_old;
-                    $result = $db->query($sql);
-                    while ($row = $result->fetch()) {
-                        $arr_item_menu[] = $row['id'];
-                    }
-
-                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old);
-                }
-
-                $nv_Cache->delMod($module_name);
-                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
-            } else {
-                $error = $lang_module['errorsave'];
+                $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . intval($weight) . " WHERE id=" . intval($post['id']);
+                $db->query($sql);
             }
+
+            menu_fix_order($post['mid']);
+
+            if ($post['mid'] != $mid_old) {
+                menu_fix_order($mid_old);
+            }
+
+            if ($post['parentid'] != 0) {
+                $arr_item_menu = array();
+                $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $post['mid'] . ' AND parentid=' . $post['parentid'];
+                $result = $db->query($sql);
+                while ($row = $result->fetch()) {
+                    $arr_item_menu[] = $row['id'];
+                }
+
+                $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $arr_item_menu) . "' WHERE mid=" . $post['mid'] . " AND id=" . $post['parentid']);
+            }
+
+            if ($pa_old != 0) {
+                $arr_item_menu = array();
+                $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $mid_old . ' AND parentid=' . $pa_old;
+                $result = $db->query($sql);
+                while ($row = $result->fetch()) {
+                    $arr_item_menu[] = $row['id'];
+                }
+
+                $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old);
+            }
+
+            $nv_Cache->delMod($module_name);
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
+        } else {
+            $error = $lang_module['errorsave'];
         }
     }
 }

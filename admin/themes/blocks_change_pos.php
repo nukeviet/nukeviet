@@ -16,7 +16,7 @@ $pos_new = nv_unhtmlspecialchars($nv_Request->get_title('pos', 'post', '', 0));
 
 list($bid, $theme, $pos_old) = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if ($bid > 0) {
+if ($bid > 0 and md5($theme . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
     $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=8388607 WHERE bid=' . $bid);
     $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
     $sth->execute();

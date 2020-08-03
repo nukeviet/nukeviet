@@ -30,6 +30,9 @@ if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
 }
 $_arr_where = [];
+if ($global_config['idsite'] > 0) {
+    $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+}
 if ($usactive == -3) {
     $_arr_where[] = 'group_id!=7';
 } elseif ($usactive == -2) {
@@ -37,9 +40,6 @@ if ($usactive == -3) {
 } else {
     if ($usactive > -1) {
         $_arr_where[] = 'active=' . ($usactive % 2);
-    }
-    if ($usactive > 1) {
-        $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
     }
 }
 
@@ -126,7 +126,7 @@ $users_list = [];
 $admin_in = [];
 $is_edit = (in_array('edit', $allow_func)) ? true : false;
 $is_delete = (in_array('del', $allow_func)) ? true : false;
-$is_setactive = (in_array('setactive', $allow_func)) ? true : false;
+$is_setactive = (in_array('setactive', $allow_func) and !defined('NV_IS_USER_FORUM')) ? true : false;
 $array_userids = $array_users = [];
 
 while ($row = $result2->fetch()) {
@@ -259,6 +259,7 @@ $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
 $xtpl->assign('HEAD', $head_tds);
+$xtpl->assign('CHECKSESS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
@@ -268,7 +269,7 @@ foreach ($methods as $m) {
     $xtpl->assign('METHODS', $m);
     $xtpl->parse('main.method');
 }
-$_bg = (defined('NV_CONFIG_DIR')) ? 3 : 1;
+$_bg = (defined('NV_CONFIG_DIR') and $global_config['idsite'] == 0) ? 3 : 1;
 for ($i = $_bg; $i >= 0; $i--) {
     $m = [
         'key' => $i,
@@ -299,7 +300,6 @@ foreach ($users_list as $u) {
     } else {
         $u['active_obj'] = 'N/A';
     }
-
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
@@ -308,12 +308,13 @@ foreach ($users_list as $u) {
         $xtpl->parse('main.xusers.is_admin');
     }
 
+    if ($view_user_allowed) {
+        $xtpl->parse('main.xusers.view');
+    } else {
+        $xtpl->parse('main.xusers.show');
+    }
+
     if (!defined('NV_IS_USER_FORUM')) {
-        if ($view_user_allowed) {
-            $xtpl->parse('main.xusers.view');
-        } else {
-            $xtpl->parse('main.xusers.show');
-        }
         if ($u['is_edit']) {
             $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid']);
             $xtpl->assign('EDIT_2STEP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $u['userid']);

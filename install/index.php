@@ -9,6 +9,7 @@
  */
 
 define('NV_ADMIN', true);
+define('NV_IS_INSTALL', true);
 
 require_once 'mainfile.php';
 

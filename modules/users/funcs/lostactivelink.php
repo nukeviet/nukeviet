@@ -29,7 +29,7 @@ $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 
 $data = [];
-$data['checkss'] = NV_CHECK_SESSION;
+$data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
 $data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
 $data['send'] = $nv_Request->get_bool('send', 'post', false);

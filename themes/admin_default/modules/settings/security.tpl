@@ -105,11 +105,24 @@
                                     <td><strong>{LANG.nv_allowed_html_tags}</strong></td>
                                     <td><textarea name="nv_allowed_html_tags" class="form-control" style="height: 100px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.domains_restrict}</strong></td>
+                                    <td>
+                                        <input type="checkbox" name="domains_restrict" value="1"{DOMAINS_RESTRICT}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.domains_whitelist}</strong></td>
+                                    <td>
+                                        <textarea name="domains_whitelist" class="form-control" rows="5">{DOMAINS_WHITELIST}</textarea>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="2">
                                         <div class="text-center">
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="submit" class="btn btn-primary w100" name="submitbasic" value="{LANG.submit}" />
                                         </div>
                                     </td>
@@ -148,6 +161,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <div class="text-center">
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="submit" class="btn btn-primary w100" name="submitflood" value="{LANG.submit}" />
                                         </div>
                                     </td>
@@ -262,6 +276,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                                         <input type="submit" value="{LANG.banip_confirm}" name="submitfloodip" class="btn btn-primary">
                                     </div>
                                 </div>
@@ -345,6 +360,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <div class="text-center">
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="submit" class="btn btn-primary w100" name="submitcaptcha" value="{LANG.submit}" />
                                         </div>
                                     </td>
@@ -477,6 +493,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                                         <input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary">
                                     </div>
                                 </div>
@@ -496,29 +513,62 @@
                                 <col style="width: 40%" />
                                 <col style="width: 60%" />
                             </colgroup>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2" class="text-center"><input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/></td>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 <tr>
-                                    <td><strong>{LANG.cors_restrict_domains}</strong></td>
+                                    <td><strong>{LANG.cors_site_restrict}</strong></td>
                                     <td>
                                         <label>
-                                            <input type="checkbox" value="1" name="cors_restrict_domains" {CONFIG_SITE.cors_restrict_domains}>
-                                            {LANG.cors_help}
+                                            <input type="checkbox" value="1" name="crosssite_restrict" {CONFIG_CROSS.crosssite_restrict}>
+                                            {LANG.cors_site_restrict_help}
                                         </label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>{LANG.cors_valid_domains}</strong></td>
+                                    <td><strong>{LANG.cors_site_valid_domains}</strong></td>
                                     <td>
-                                        <textarea rows="3" class="form-control" name="cors_valid_domains">{CONFIG_SITE.cors_valid_domains}</textarea>
+                                        <textarea rows="3" class="form-control" name="crosssite_valid_domains">{CONFIG_CROSS.crosssite_valid_domains}</textarea>
                                         <div class="form-text text-muted">{LANG.cors_valid_domains_help}</div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.cors_site_valid_ips}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="crosssite_valid_ips">{CONFIG_CROSS.crosssite_valid_ips}</textarea>
+                                        <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.cors_admin_restrict}</strong></td>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="1" name="crossadmin_restrict" {CONFIG_CROSS.crossadmin_restrict}>
+                                            {LANG.cors_admin_restrict_help}
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.cors_admin_valid_domains}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="crossadmin_valid_domains">{CONFIG_CROSS.crossadmin_valid_domains}</textarea>
+                                        <div class="form-text text-muted">{LANG.cors_valid_domains_help}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.cors_admin_valid_ips}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="crossadmin_valid_ips">{CONFIG_CROSS.crossadmin_valid_ips}</textarea>
+                                        <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
+                                    </td>
+                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
+                                        <input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>

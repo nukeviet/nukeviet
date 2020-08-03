@@ -11,7 +11,6 @@
         </div>
         <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
         <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="description">{SCHEMA_HEADLINE}</span>
         <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
         <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
         <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>

@@ -494,6 +494,7 @@ $lang_module['active_obj_4'] = ' <strong title="%s">%s</strong> activé';
 $lang_module['account_active'] = 'Infos pour l\'activation du compte';
 $lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br />Password: %6$s<br /><br />Activate expired on %7$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
 
+$lang_module['userwait_note'] = 'Les utilisateurs en attente d\'activation seront automatiquement supprimés dans les% s heures suivant l\'inscription s\'ils ne sont pas activés';
 $lang_module['userwait_resend_email'] = 'Renvoyer le courrier activé';
 $lang_module['userwait_resend_per_email'] = 'Nombre d\'emails envoyés une fois';
 $lang_module['userwait_resend_pause_time'] = 'Arrêtez-vous entre deux soumissions';

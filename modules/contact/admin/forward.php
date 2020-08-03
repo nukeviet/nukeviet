@@ -47,12 +47,12 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         foreach ($_arr_mail as $_email) {
             $_email = nv_unhtmlspecialchars($_email);
             if (nv_check_valid_email($_email) == '') {
-                $mail->addAddress($_email);
+                $mail->addTo($_email);
             }
         }
 
-        $mail->Content($mess_content);
-        $mail->Subject($row['title']);
+        $mail->setContent($mess_content);
+        $mail->setSubject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $content = sprintf($lang_module['forward'], $forward_to)  . '</br>' . $mess_content;

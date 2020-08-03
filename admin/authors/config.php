@@ -67,14 +67,17 @@ function nv_save_file_admin_config()
     return file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php', $content_config, LOCK_EX);
 }
 
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $delid = $nv_Request->get_int('delid', 'get');
 if (!empty($delid)) {
-    $sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
-    $keyname = $db->query($sql)->fetchColumn();
+    if (md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $delid) == $nv_Request->get_string('checkss', 'get')) {
+        $sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
+        $keyname = $db->query($sql)->fetchColumn();
 
-    $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid);
-    nv_save_file_admin_config();
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . ' ' . $lang_module['config'], ' keyname : ' . $keyname, $admin_info['userid']);
+        $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid);
+        nv_save_file_admin_config();
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . ' ' . $lang_module['config'], ' keyname : ' . $keyname, $admin_info['userid']);
+    }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
@@ -85,86 +88,90 @@ $array_iptypes = [
 ];
 
 if ($nv_Request->isset_request('savesetting', 'post')) {
-    $array_config_global = [];
-    $array_config_global['admfirewall'] = $nv_Request->get_int('admfirewall', 'post');
-    $array_config_global['block_admin_ip'] = $nv_Request->get_int('block_admin_ip', 'post');
+    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+        $array_config_global = [];
+        $array_config_global['admfirewall'] = $nv_Request->get_int('admfirewall', 'post');
+        $array_config_global['block_admin_ip'] = $nv_Request->get_int('block_admin_ip', 'post');
 
-    $array_config_global['spadmin_add_admin'] = $nv_Request->get_int('spadmin_add_admin', 'post');
-    $array_config_global['authors_detail_main'] = $nv_Request->get_int('authors_detail_main', 'post');
-    $array_config_global['admin_check_pass_time'] = 60 * $nv_Request->get_int('admin_check_pass_time', 'post');
-    if ($array_config_global['admin_check_pass_time'] < 120) {
-        $array_config_global['admin_check_pass_time'] = 120;
+        $array_config_global['spadmin_add_admin'] = $nv_Request->get_int('spadmin_add_admin', 'post');
+        $array_config_global['authors_detail_main'] = $nv_Request->get_int('authors_detail_main', 'post');
+        $array_config_global['admin_check_pass_time'] = 60 * $nv_Request->get_int('admin_check_pass_time', 'post');
+        if ($array_config_global['admin_check_pass_time'] < 120) {
+            $array_config_global['admin_check_pass_time'] = 120;
+        }
+
+        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+        foreach ($array_config_global as $config_name => $config_value) {
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
+
+        nv_save_file_config_global();
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['save'] . ' ' . $lang_module['config'], 'config', $admin_info['userid']);
     }
-
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
-    foreach ($array_config_global as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->execute();
-    }
-
-    nv_save_file_config_global();
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['save'] . ' ' . $lang_module['config'], 'config', $admin_info['userid']);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
 if ($nv_Request->isset_request('submituser', 'post')) {
-    $uid = $nv_Request->get_int('uid', 'post', 0);
-    $username = $nv_Request->get_title('username', 'post', '', 1);
-    $password = $nv_Request->get_title('password', 'post', '', 1);
-    $password2 = $nv_Request->get_title('password2', 'post', '', 1);
-    $begintime1 = $nv_Request->get_title('begintime1', 'post', 0, 1);
-    $endtime1 = $nv_Request->get_title('endtime1', 'post', 0, 1);
+    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+        $uid = $nv_Request->get_int('uid', 'post', 0);
+        $username = $nv_Request->get_title('username', 'post', '', 1);
+        $password = $nv_Request->get_title('password', 'post', '', 1);
+        $password2 = $nv_Request->get_title('password2', 'post', '', 1);
+        $begintime1 = $nv_Request->get_title('begintime1', 'post', 0, 1);
+        $endtime1 = $nv_Request->get_title('endtime1', 'post', 0, 1);
 
-    $errorlogin = nv_check_valid_login($username, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
-    if (!empty($errorlogin)) {
-        $error[] = $errorlogin;
-    } elseif (preg_match('/[^a-zA-Z0-9_-]/', $username)) {
-        $error[] = $lang_module['rule_user'];
-    }
-    if (!empty($password) or empty($uid)) {
-        $errorpassword = nv_check_valid_pass($password, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
-        if (!empty($errorpassword)) {
-            $error[] = $errorpassword;
+        $errorlogin = nv_check_valid_login($username, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
+        if (!empty($errorlogin)) {
+            $error[] = $errorlogin;
+        } elseif (preg_match('/[^a-zA-Z0-9_-]/', $username)) {
+            $error[] = $lang_module['rule_user'];
         }
-        if ($password != $password2) {
-            $error[] = $lang_module['passwordsincorrect'];
-        } elseif (preg_match('/[^a-zA-Z0-9_-]/', $password)) {
-            $error[] = $lang_module['rule_pass'];
+        if (!empty($password) or empty($uid)) {
+            $errorpassword = nv_check_valid_pass($password, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
+            if (!empty($errorpassword)) {
+                $error[] = $errorpassword;
+            }
+            if ($password != $password2) {
+                $error[] = $lang_module['passwordsincorrect'];
+            } elseif (preg_match('/[^a-zA-Z0-9_-]/', $password)) {
+                $error[] = $lang_module['rule_pass'];
+            }
         }
-    }
 
-    if (!empty($begintime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\.([0-9]{4})$/', $begintime1, $m)) {
-        $begintime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $begintime1 = NV_CURRENTTIME;
-    }
-    if (!empty($endtime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime1, $m)) {
-        $endtime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $endtime1 = 0;
-    }
-    if (empty($error)) {
-        if ($uid > 0 and $password != '') {
-            $sth = $db->prepare("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname= :username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . ", notice='" . md5($password) . "' WHERE id=" . $uid);
-            $sth->bindParam(':username', $username, PDO::PARAM_STR);
-            $sth->execute();
-
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . ' username: ' . $username, $admin_info['userid']);
-        } elseif ($uid > 0) {
-            $sth = $db->prepare("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname=:username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . " WHERE id=" . $uid);
-            $sth->bindParam(':username', $username, PDO::PARAM_STR);
-            $sth->execute();
-
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . ' username: ' . $username, $admin_info['userid']);
+        if (!empty($begintime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\.([0-9]{4})$/', $begintime1, $m)) {
+            $begintime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         } else {
-            $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5($password) . "' )");
-            $sth->bindParam(':username', $username, PDO::PARAM_STR);
-            $sth->execute();
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . ' username: ' . $username, $admin_info['userid']);
+            $begintime1 = NV_CURRENTTIME;
         }
-        nv_save_file_admin_config();
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+        if (!empty($endtime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime1, $m)) {
+            $endtime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+        } else {
+            $endtime1 = 0;
+        }
+        if (empty($error)) {
+            if ($uid > 0 and $password != '') {
+                $sth = $db->prepare("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname= :username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . ", notice='" . md5($password) . "' WHERE id=" . $uid);
+                $sth->bindParam(':username', $username, PDO::PARAM_STR);
+                $sth->execute();
+
+                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . ' username: ' . $username, $admin_info['userid']);
+            } elseif ($uid > 0) {
+                $sth = $db->prepare("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname=:username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . " WHERE id=" . $uid);
+                $sth->bindParam(':username', $username, PDO::PARAM_STR);
+                $sth->execute();
+
+                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . ' username: ' . $username, $admin_info['userid']);
+            } else {
+                $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5($password) . "' )");
+                $sth->bindParam(':username', $username, PDO::PARAM_STR);
+                $sth->execute();
+                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . ' username: ' . $username, $admin_info['userid']);
+            }
+            nv_save_file_admin_config();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+        }
     }
 } else {
     $username = $password = $password2 = $begintime1 = $endtime1 = '';
@@ -175,64 +182,66 @@ $uid = $nv_Request->get_int('uid', 'get,post');
 
 // Gửi thông tin IP cấm truy cập
 if ($nv_Request->isset_request('submitip', 'post')) {
-    $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
-    $cid = $nv_Request->get_int('cid', 'post', 0);
-    $keyname = $nv_Request->get_title('keyname', 'post', '');
-    $mask = $nv_Request->get_int('mask', 'post', 0);
-    $mask6 = $nv_Request->get_int('mask6', 'post', 1);
-    $begintime = $nv_Request->get_title('begintime', 'post', 0);
-    $endtime = $nv_Request->get_title('endtime', 'post', 0);
+    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+        $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
+        $cid = $nv_Request->get_int('cid', 'post', 0);
+        $keyname = $nv_Request->get_title('keyname', 'post', '');
+        $mask = $nv_Request->get_int('mask', 'post', 0);
+        $mask6 = $nv_Request->get_int('mask6', 'post', 1);
+        $begintime = $nv_Request->get_title('begintime', 'post', 0);
+        $endtime = $nv_Request->get_title('endtime', 'post', 0);
 
-    if ($ip_version != 4 and $ip_version != 6) {
-        $ip_version = 4;
-    }
-    if ($mask6 < 1 or $mask6 > 128) {
-        $mask6 = 128;
-    }
-    if ($mask < 0 or $mask > 3) {
-        $mask = 0;
-    }
+        if ($ip_version != 4 and $ip_version != 6) {
+            $ip_version = 4;
+        }
+        if ($mask6 < 1 or $mask6 > 128) {
+            $mask6 = 128;
+        }
+        if ($mask < 0 or $mask > 3) {
+            $mask = 0;
+        }
 
-    if (empty($keyname) or ($ip_version == 4 and !$ips->isIp4($keyname)) or ($ip_version == 6 and !$ips->isIp6($keyname))) {
-        $error[] = $lang_module['adminip_error_validip'];
-    }
-    if (!empty($begintime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m)) {
-        $begintime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $begintime = NV_CURRENTTIME;
-    }
-    if (!empty($endtime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m)) {
-        $endtime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $endtime = 0;
-    }
-
-    $notice = $nv_Request->get_title('notice', 'post', '', 1);
-    $ipmask = $ip_version == 4 ? $mask : $mask6;
-
-    if (empty($error)) {
-        if ($cid > 0) {
-            $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_config SET keyname= :keyname, mask= :mask, begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice WHERE id=' . $cid);
-            $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
-            $sth->bindParam(':mask', $ipmask, PDO::PARAM_STR);
-            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
-            $sth->execute();
-
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_edit'] . ' ID ' . $cid . ' -> ' . $keyname, $admin_info['userid']);
+        if (empty($keyname) or ($ip_version == 4 and !$ips->isIp4($keyname)) or ($ip_version == 6 and !$ips->isIp6($keyname))) {
+            $error[] = $lang_module['adminip_error_validip'];
+        }
+        if (!empty($begintime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m)) {
+            $begintime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         } else {
-            $result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
-            if ($result) {
-                $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
+            $begintime = NV_CURRENTTIME;
+        }
+        if (!empty($endtime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m)) {
+            $endtime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+        } else {
+            $endtime = 0;
+        }
+
+        $notice = $nv_Request->get_title('notice', 'post', '', 1);
+        $ipmask = $ip_version == 4 ? $mask : $mask6;
+
+        if (empty($error)) {
+            if ($cid > 0) {
+                $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_config SET keyname= :keyname, mask= :mask, begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice WHERE id=' . $cid);
                 $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
                 $sth->bindParam(':mask', $ipmask, PDO::PARAM_STR);
                 $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
                 $sth->execute();
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . ' ' . $keyname, $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_edit'] . ' ID ' . $cid . ' -> ' . $keyname, $admin_info['userid']);
+            } else {
+                $result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
+                if ($result) {
+                    $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
+                    $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
+                    $sth->bindParam(':mask', $ipmask, PDO::PARAM_STR);
+                    $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
+                    $sth->execute();
+
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . ' ' . $keyname, $admin_info['userid']);
+                }
             }
+            nv_save_file_admin_config();
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
-        nv_save_file_admin_config();
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 } else {
     if (!empty($cid)) {
@@ -265,6 +274,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 $xtpl->assign('ADMIN_CHECK_PASS_TIME', round($global_config['admin_check_pass_time'] / 60));
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', $checkss);
 
 $xtpl->assign('DATA', [
     'admfirewall' => $global_config['admfirewall'] ? ' checked="checked"' : '',
@@ -288,7 +298,7 @@ while (list($dbid, $dbkeyname, $dbbegintime, $dbendtime) = $result->fetch(3)) {
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['adminip_nolimit'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;uid=' . $dbid . '#iduser',
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
+        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid . '&checkss=' . md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $dbid)
     ]);
 
     $xtpl->parse('main.list_firewall.loop');
@@ -335,7 +345,7 @@ while (list($dbid, $dbkeyname, $dbmask, $dbbegintime, $dbendtime) = $result->fet
         'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : '',
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid . '#idip',
-        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
+        'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid . '&checkss=' . md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $dbid)
     ]);
 
     $xtpl->parse('main.ipaccess.loop');

@@ -40,7 +40,7 @@
 		</colgroup>
 		<tfoot>
 			<tr>
-				<td colspan="2"><input name="save" type="hidden" value="1" /></td>
+				<td colspan="2"><input name="save" type="hidden" value="1" /><input type="hidden" name="checkss" value="{CHECKSS}" /></td>
 				<td><input name="go_change" type="submit" value="{SUBMIT}" class="btn btn-primary" /></td>
 			</tr>
 		</tfoot>

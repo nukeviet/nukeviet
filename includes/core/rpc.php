@@ -22,7 +22,7 @@ function nv_getRPC($url, $data)
     $rand = array_rand($userAgents);
     $agent = $userAgents[$rand];
 
-    $url_info = @parse_url($url);
+    $url_info = parse_url($url);
     $url_info['port'] = isset($url_info['port']) ? intval($url_info['port']) : 80;
     if (isset($url_info['path'])) {
         if (substr($url_info['path'], 0, 1) != '/') {

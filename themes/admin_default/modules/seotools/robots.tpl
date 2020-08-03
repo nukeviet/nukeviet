@@ -20,7 +20,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="3"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" /></td>
+					<td class="text-center" colspan="3"><input type="hidden" name="checkss" value="{CHECKSS}" /><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" /></td>
 				</tr>
 			</tfoot>
 			<tbody>

@@ -72,7 +72,8 @@ while (list($theme) = $result->fetch(3)) {
 
 $groups_list = nv_groups_list();
 
-if ($nv_Request->get_int('save', 'post') == '1') {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $custom_title = $nv_Request->get_title('custom_title', 'post', '', 1);
     $site_title = $nv_Request->get_title('site_title', 'post', '');
     $admin_title = $nv_Request->get_title('admin_title', 'post', '', 1);
@@ -274,7 +275,7 @@ $data['description'] = $description;
 $data['keywords'] = $keywords;
 $data['mod_name'] = $mod;
 $data['module_theme'] = $module_theme;
-
+$data['checkss'] = $checkss;
 if ($mod != $global_config['site_home_module']) {
     $data['groups_view'] = [$lang_global['groups_view'], $groups_list, $groups_view];
 } else {

@@ -27,7 +27,7 @@ if (defined('NV_IS_ADMIN')) {
 }
 
 $url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-if (defined('NV_IS_USER_FORUM')) {
+if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
 } else {
     $nv_Request->unset_request('nvloginhash', 'cookie');

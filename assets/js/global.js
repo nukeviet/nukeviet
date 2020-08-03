@@ -503,3 +503,29 @@ function nv_setIframeHeight(iframeId) {
 }
 
 nv_check_timezone();
+
+(function () {
+  if ( typeof window.CustomEvent === "function" ) return false; //If not IE
+
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+  
+  //closest for IE
+  Element.prototype.matches || (Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
+    Element.prototype.closest || (Element.prototype.closest = function(b) {
+    	var a = this;
+    	do {
+    		if (Element.prototype.matches.call(a, b)) return a;
+    		a = a.parentElement || a.parentNode
+    	} while (null !== a && 1 === a.nodeType);
+    	return null
+    })
+})();

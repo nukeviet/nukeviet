@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['userwait_resend_email'];
 $set_active_op = 'user_waiting';
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $set_active_op);
 if ($nv_Request->isset_request('ajax', 'post')) {
     $per_email = $nv_Request->get_int('per_email', 'post', 0);
     $offset = $nv_Request->get_int('offset', 'post', 0);
@@ -27,8 +27,12 @@ if ($nv_Request->isset_request('ajax', 'post')) {
         'useriddel' => '',
     ];
 
-    if ($tokend == NV_CHECK_SESSION and $per_email > 0 and $offset >= 0) {
-        $sql = "SELECT * FROM " . NV_MOD_TABLE . "_reg ORDER BY userid ASC LIMIT " . $offset . ", " . $per_email;
+    if ($tokend == $checkss and $per_email > 0 and $offset >= 0) {
+        $sql = "SELECT * FROM " . NV_MOD_TABLE . "_reg";
+        if($global_config['idsite'] > 0){
+            $sql .= ' WHERE idsite=' . $global_config['idsite'];
+        }
+        $sql .= " ORDER BY userid ASC LIMIT " . $offset . ", " . $per_email;
         $result = $db->query($sql);
         $numrows = $result->rowCount();
         if ($numrows) {
@@ -87,7 +91,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
 $xtpl = new XTemplate('user_waiting_remail.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('TOKEND', NV_CHECK_SESSION);
+$xtpl->assign('TOKEND', $checkss);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

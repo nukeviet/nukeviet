@@ -23,7 +23,7 @@ if (!empty($savecat)) {
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $link = strtolower($nv_Request->get_title('link', 'post', ''));
 
-    $url_info = @parse_url($link);
+    $url_info = parse_url($link);
     if (isset($url_info['scheme']) and isset($url_info['host'])) {
         $link = $url_info['scheme'] . '://' . $url_info['host'];
     } else {

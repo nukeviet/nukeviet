@@ -31,6 +31,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+                <input type="hidden" name="checkss" value="" />
 				<button type="button" class="btn btn-primary submit">{GLANG.submit}</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
 			</div>

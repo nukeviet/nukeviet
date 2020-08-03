@@ -9,6 +9,7 @@
                     <div class="nv-panel-body w350">
                         <!-- BEGIN: upload -->
                         <form onsubmit="return checkform();" class="form-inline" method="post" enctype="multipart/form-data" action="{SUBMIT_URL}">
+                            <input type="hidden" name="checksess" value="{SUBMIT_CHECKSESS}">
                             <input type="file" class="form-control w200 input-sm" name="extfile"/>
                             <input type="submit" name="submit" class="btn btn-primary btn-sm" value="{LANG.install_submit}"/>
                         </form>

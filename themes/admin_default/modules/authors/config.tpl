@@ -11,6 +11,7 @@
 <form action="{NV_BASE_ADMINURL}index.php" method="post" id="frm">
     <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
     <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -81,6 +82,7 @@
     <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
     <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
     <input type="hidden" name="uid" value="{FIREWALLDATA.uid}" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -160,6 +162,7 @@
     <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
     <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
     <input type="hidden" name="cid" value="{IPDATA.cid}" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="panel panel-default">
         <div class="panel-heading"><strong>{LANG.adminip_add}</strong></div>
         <div class="panel-body">

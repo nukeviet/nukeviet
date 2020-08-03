@@ -13,8 +13,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
 }
 
 $selectthemes = $nv_Request->get_title('theme', 'post', '');
-
-if (empty($selectthemes) or !(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
+if (md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'] . '_' . $selectthemes) != $nv_Request->get_string('checkss', 'post') or empty($selectthemes) or !(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
     die();
 }
 

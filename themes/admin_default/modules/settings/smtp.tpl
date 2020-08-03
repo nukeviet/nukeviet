@@ -167,6 +167,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                    <input type="hidden" name="checkss" value="{DATA.checkss}" />
                     <input type="submit" name="submitsave" value="{LANG.submit}" class="btn btn-primary">
                     <!-- BEGIN: testmail -->
                     <input type="submit" name="submittest" value="{LANG.smtp_test}" class="btn btn-default">

@@ -90,7 +90,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4" class="text-center">
-                        <input name="save" id="save" type="hidden" value="1">
+                        <input type="hidden" name="checkss" value="{DATA.checkss}" />
                         <input name="go_add" type="submit" value="{DATA.submit}" class="btn btn-primary">
                     </td>
                 </tr>

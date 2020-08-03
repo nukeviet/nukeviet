@@ -83,8 +83,14 @@ if (defined('NV_EDITOR')) {
 
 $access_passus = (isset($access_admin['access_passus'][$admin_info['level']]) and $access_admin['access_passus'][$admin_info['level']] == 1) ? true : false;
 $_user = $custom_fields = [];
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
 if ($nv_Request->isset_request('confirm', 'post')) {
+    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error Session, Please close the browser and try again'
+        ]);
+    }
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
     $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 1));
     if ($access_passus) {
@@ -364,6 +370,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 $_user = $row;
 $_user['password1'] = $_user['password2'] = '';
 $_user['in_groups'] = $array_old_groups;
+$_user['checkss'] = $checkss;
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
 $result = $db->query($sql);
@@ -398,7 +405,6 @@ $xtpl->assign('DATA', $_user);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-
 $xtpl->assign('NV_REDIRECT', $nv_redirect);
 
 if (defined('NV_IS_USER_FORUM')) {

@@ -7,23 +7,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 5/12/2010, 1:34
  */
-
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
-
-$xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
-
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $robots_data = $nv_Request->get_array('filename', 'post');
     $fileother = $nv_Request->get_array('fileother', 'post');
     $optionother = $nv_Request->get_array('optionother', 'post');
@@ -74,11 +63,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $xtpl->parse('main.nowrite');
         }
     }
-
-    if ($redirect) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-    }
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
+
+$xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+$xtpl->assign('MODULE_NAME', $module_name);
+$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+$xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', $checkss);
 
 $robots_data = array();
 $robots_other = array();
@@ -120,13 +116,13 @@ foreach ($files as $file) {
         }
 
         $data = array(
-            'number' => ++$number,
+            'number' => ++ $number,
             'filename' => $file
         );
 
         $type = isset($robots_data[$file]) ? $robots_data[$file] : 1;
 
-        for ($i = 0; $i <= 2; $i++) {
+        for ($i = 0; $i <= 2; $i ++) {
             $option = array(
                 'value' => $i,
                 'title' => $lang_module['robots_type_' . $i],
@@ -143,12 +139,12 @@ foreach ($files as $file) {
 }
 foreach ($robots_other as $file => $value) {
     $data = array(
-        'number' => ++$number,
+        'number' => ++ $number,
         'filename' => $file
     );
     $xtpl->assign('DATA', $data);
 
-    for ($i = 0; $i <= 2; $i++) {
+    for ($i = 0; $i <= 2; $i ++) {
         $option = array(
             'value' => $i,
             'title' => $lang_module['robots_type_' . $i],

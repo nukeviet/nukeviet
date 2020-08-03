@@ -151,7 +151,8 @@ function nv_add_question() {
 
 function nv_row_del(vid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
+        var checkss =  $("input[name='checkss']").val();
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -180,9 +181,9 @@ function nv_set_official(vid) {
     return false;
 }
 
-function nv_waiting_row_del(uid) {
+function nv_waiting_row_del(uid,checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -217,7 +218,8 @@ function nv_editcensor_row_accept(uid, msg) {
 
 function nv_chang_status(vid) {
     var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
-    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
+    var checkss =  $("input[name='checkss']").val();
+    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
             window.location.href = window.location.href;
@@ -531,9 +533,10 @@ function nv_main_action(btn) {
 
     if (listid != '') {
         var action = $('#mainuseropt').val();
+        var checkss =  $("input[name='checkss']").val();
         if (action == 'del') {
             if (confirm(nv_is_del_confirm[0])) {
-                $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid, function(res) {
+                $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid + '&checkss=' + checkss, function(res) {
                     if (res == 'OK') {
                         window.location.href = window.location.href;
                     } else {
@@ -554,7 +557,7 @@ function nv_main_action(btn) {
             if (action == 'active') {
                 setactive = 1;
             }
-            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + listid + '&setactive=' + setactive, function(res) {
+            $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + listid + '&setactive=' + setactive + '&checkss=' + checkss, function(res) {
                 if (res != 'OK') {
                     alert(nv_is_change_act_confirm[2]);
                     btn.prop('disabled', false);

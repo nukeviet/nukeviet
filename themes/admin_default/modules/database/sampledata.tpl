@@ -53,7 +53,7 @@
                         <div class="col-sm-16"><strong>{ROW.title}</strong></div>
                         <div class="col-sm-8">
                             {ROW.creattime}
-                            <a href="javascript:void(0);" class="pull-right text-danger" onclick="nv_delete_sampledata('{ROW.title}');"><i class="fa fa-trash-o"></i></a>
+                            <a href="javascript:void(0);" class="pull-right text-danger" onclick="nv_delete_sampledata('{ROW.title}', '{ROW.checkss}');"><i class="fa fa-trash-o"></i></a>
                         </div>
                     </div>
                 </div>

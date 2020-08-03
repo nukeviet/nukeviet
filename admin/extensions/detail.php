@@ -37,7 +37,7 @@ $args = array(
 );
 
 $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-$array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+$array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : array();
 
 $error = '';
 if (! empty(NukeViet\Http\Http::$error)) {

@@ -17,8 +17,7 @@ $theme2 = $nv_Request->get_title('theme2', 'post');
 
 $position = $nv_Request->get_title('position', 'post');
 $position = explode(',', $position);
-
-if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini') and ! empty($position)) {
+if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['userid']) == $nv_Request->get_string('checkss', 'post') and preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini') and !empty($position)) {
     foreach ($position as $pos) {
         $pos = nv_unhtmlspecialchars($pos);
         // Begin drop all exist blocks behavior with theme 2 and position relative

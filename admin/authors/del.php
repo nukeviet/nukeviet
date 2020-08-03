@@ -65,8 +65,8 @@ $row_user = $db->query($sql)->fetch();
 $action_account = $nv_Request->get_int('action_account', 'post', 0);
 $action_account = (isset($array_action_account[$action_account])) ? $action_account : 0;
 $error = '';
-$checkss = md5($admin_id . NV_CHECK_SESSION);
-if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_id);
+if ($nv_Request->get_title('checkss', 'post') == $checkss) {
     $sendmail = $nv_Request->get_int('sendmail', 'post', 0);
     $reason = $nv_Request->get_title('reason', 'post', '', 1);
     $adminpass = $nv_Request->get_title('adminpass_iavim', 'post');

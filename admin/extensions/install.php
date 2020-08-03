@@ -56,21 +56,28 @@ if (empty($error) and empty($message)) {
         'body' => $request
     );
 
+    $cookies = [];
     $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-    $cookies = $array['cookies'];
-    $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+
+    if (is_array($array)) {
+        $cookies = $array['cookies'];
+        $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+    } else {
+        // Do post có thể trả về object
+        $array = [];
+    }
 
     // Next step
-    if (! empty($array['data']['compatible']['id']) and $request['mode'] == 'getfile') {
+    if (!empty($array['data']['compatible']['id']) and $request['mode'] == 'getfile') {
         header('location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=install&id=' . $array['data']['id'] . '&fid=' . $array['data']['compatible']['id'] . '&getfile=1');
         die();
     }
 
-    if (! empty(NukeViet\Http\Http::$error)) {
+    if (!empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-    } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
+    } elseif (empty($array['status']) or !isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
         $error = $lang_global['error_valid_response'];
-    } elseif (! empty($array['error']['message'])) {
+    } elseif (!empty($array['error']['message'])) {
         $error = $array['error']['message'];
     }
 }

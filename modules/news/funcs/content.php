@@ -333,7 +333,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;
             if (!empty($rowcontent['sourcetext'])) {
-                $url_info = @parse_url($rowcontent['sourcetext']);
+                $url_info = parse_url($rowcontent['sourcetext']);
 
                 if (isset($url_info['scheme']) and isset($url_info['host'])) {
                     $sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];

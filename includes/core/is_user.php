@@ -27,30 +27,8 @@ if (defined('NV_IS_ADMIN')) {
     } else {
         define('NV_IS_USER', true);
     }
-} elseif (defined('NV_IS_USER_FORUM')) {
+} elseif (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/is_user.php';
-
-    if (isset($user_info['userid']) and $user_info['userid'] > 0) {
-        $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
-        view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip,
-        last_openid, password, safemode, email_verification_time
-        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval($user_info['userid']) . ' AND active=1';
-
-        $user_info = $db->query($_sql)->fetch();
-        if (!empty($user_info)) {
-            define('NV_IS_USER', true);
-
-            $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
-            $user_info['in_groups'] = nv_user_groups($user_info['in_groups']);
-            $user_info['st_login'] = !empty($user_info['password']) ? true : false;
-            $user_info['current_mode'] = 0;
-            $user_info['valid_question'] = true;
-
-            unset($user_info['password']);
-        } else {
-            $user_info = [];
-        }
-    }
 } else {
     if ($nv_Request->get_bool('nvloginhash', 'cookie', false)) {
         $user = $nv_Request->get_string('nvloginhash', 'cookie', '');
@@ -83,6 +61,7 @@ if (defined('NV_IS_ADMIN')) {
 
                         if ($checknum) {
                             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
+                            $user_info['avata'] = !empty($user_info['photo']) ? NV_BASE_SITEURL . $user_info['photo'] : '';
                             $check_in_groups = nv_user_groups($user_info['in_groups'], true);
                             $user_info['in_groups'] = $check_in_groups[0];
                             $user_info['2step_require'] = $check_in_groups[1];

@@ -27,7 +27,7 @@ $mess_content = $error = '';
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
-    
+
     if (empty($post['email'])) {
         $error = $lang_module['error_mail_empty'];
     } elseif (strip_tags($mess_content) == '') {
@@ -36,17 +36,17 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $lang_module['error_title'];
     } else {
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
-        $mail->Subject($post['title']);
-        
+        $mail->setSubject($post['title']);
+
         $_arr_mail = explode(',', $post['email']);
         foreach ($_arr_mail as $_email) {
             $_email = nv_unhtmlspecialchars($_email);
             if (nv_check_valid_email($_email) == '') {
-                $mail->addAddress($_email);
+                $mail->addTo($_email);
             }
         }
-        
-        $mail->Content($mess_content);
+
+        $mail->setContent($mess_content);
         if ($mail->Send()) {
             $error = $lang_module['send_suc_send_title'];
         } else {

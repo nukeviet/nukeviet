@@ -15,13 +15,13 @@ if (! defined('NV_IS_FILE_DATABASE')) {
 $page_title = $lang_global['mod_settings'];
 $array_sql_ext = array( 'sql', 'gz' );
 
-$errormess = '';
 $array_config_global = array();
 $array_config_global['dump_backup_day'] = $global_config['dump_backup_day'];
 $array_config_global['dump_backup_ext'] = $global_config['dump_backup_ext'];
 $array_config_global['dump_interval'] = $global_config['dump_interval'];
 
-if ($nv_Request->isset_request('submit', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global = array();
     $array_config_global['dump_backup_ext'] = $nv_Request->get_title('dump_backup_ext', 'post', '', 1);
     $array_config_global['dump_autobackup'] = $nv_Request->get_int('dump_autobackup', 'post');
@@ -56,6 +56,7 @@ $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('DATA', $array_config_global);
+$xtpl->assign('CHECKSS', $checkss);
 
 foreach ($array_sql_ext as $ext_i) {
     $xtpl->assign('BACKUPEXTSELECTED', ($ext_i == $array_config_global['dump_backup_ext']) ? ' selected="selected"' : '');

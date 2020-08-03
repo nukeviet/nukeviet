@@ -49,7 +49,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: MODULE_URL + "=xcopyprocess",
-                data: "position=" + positionlist + "&theme1=" + theme1 + "&theme2=" + theme2,
+                data: "position=" + positionlist + "&theme1=" + theme1 + "&theme2=" + theme2 + "&checkss=" + $("input[name=checkss]").val(),
                 success: function(data) {
                     $("#loadposition").html(data);
                 }
@@ -78,7 +78,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name,
-                data: "themename=" + themename + "&module_file=" + module_file + "&" + nv_fc_variable + "=package_theme_module",
+                data: "themename=" + themename + "&module_file=" + module_file + "&" + nv_fc_variable + "=package_theme_module&checkss=" + $("input[name=checkss]").val(),
                 success: function(data) {
                     $("input[name=continue_ptm]").removeAttr("disabled");
                     $("#message").html(data);
@@ -92,11 +92,11 @@ $(document).ready(function() {
 
     // Main theme
     $("a.activate").click(function() {
-        var theme = $(this).attr("title");
+        var theme = $(this).data("title");
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=activatetheme",
-            data: "theme=" + theme,
+            data : "theme=" + theme + "&checkss=" + $(this).data("checkss"),
             success: function(data) {
                 if (data != "OK_" + theme) {
                     alert(data);
@@ -106,12 +106,12 @@ $(document).ready(function() {
         });
     });
     $("a.delete").click(function() {
-        var theme = $(this).attr("title");
+        var theme = $(this).data("title");
         if (confirm(LANG.theme_delete_confirm + theme + " ?")) {
             $.ajax({
                 type: "POST",
                 url: MODULE_URL + "=deletetheme",
-                data: "theme=" + theme,
+                data : "theme=" + theme + "&checkss=" + $(this).data("checkss"),
                 success: function(data) {
                     alert(data);
                     window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name;
@@ -196,7 +196,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_order_group",
-            data: "order=" + order + "&bid=" + bid,
+            data: "order=" + order + "&bid=" + bid + "&checkss=" + blockcheckss,
             success: function(data) {
                 window.location = MODULE_URL + "=blocks";
             }
@@ -209,7 +209,7 @@ $(document).ready(function() {
     $("a.delete_block").click(function() {
         var bid = parseInt($(this).attr("title"));
         if (bid > 0 && confirm(LANG.block_delete_per_confirm)) {
-            $.post(MODULE_URL + "=blocks_del", "bid=" + bid, function(theResponse) {
+            $.post(MODULE_URL + "=blocks_del", "bid=" + bid + "&checkss=" + blockcheckss, function(theResponse) {
                 alert(theResponse);
                 window.location = MODULE_URL + "=blocks";
             });
@@ -236,7 +236,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: MODULE_URL + "=blocks_del_group",
-                data: "list=" + list,
+                data: "list=" + list + "&checkss=" + blockcheckss,
                 success: function(data) {
                     alert(data);
                     window.location = MODULE_URL + "=blocks";
@@ -261,7 +261,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_pos",
-            data: "bid=" + bid + "&pos=" + pos,
+            data: "bid=" + bid + "&pos=" + pos + "&checkss=" + blockcheckss,
             success: function(data) {
                 alert(data);
                 window.location = MODULE_URL + "=blocks";
@@ -279,8 +279,8 @@ $(document).ready(function() {
         var func = $(this).val();
         window.location = MODULE_URL + "=blocks_func&module=" + module + "&func=" + func;
     });
-    $("select.order").change(function() {
-        $("select.order").attr({
+    $("select.order_func").change(function() {
+        $("select.order_func").attr({
             "disabled": ""
         });
         var order = $(this).val();
@@ -288,7 +288,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_order",
-            data: "func_id=" + func_id + "&order=" + order + "&bid=" + bid,
+            data: "func_id=" + func_id + "&order=" + order + "&bid=" + bid + "&checkss=" + blockcheckss,
             success: function(data) {
                 window.location = MODULE_URL + "=blocks_func&func=" + func_id + "&module=" + selectedmodule;
             }
@@ -297,7 +297,7 @@ $(document).ready(function() {
     $("a.delete_block_fucs").click(function() {
         var bid = parseInt($(this).attr("title"));
         if (bid > 0 && confirm(LANG.block_delete_per_confirm)) {
-            $.post(MODULE_URL + "=blocks_del", "bid=" + bid, function(theResponse) {
+            $.post(MODULE_URL + "=blocks_del", "bid=" + bid + "&checkss=" + blockcheckss, function(theResponse) {
                 alert(theResponse);
                 window.location = MODULE_URL + "=blocks_func&func=" + func_id;
             });
@@ -316,7 +316,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: MODULE_URL + "=blocks_del_group",
-                data: "list=" + list,
+                data: "list=" + list + "&checkss=" + blockcheckss,
                 success: function(data) {
                     alert(data);
                     window.location = MODULE_URL + "=blocks_func&func=" + func_id;
@@ -332,7 +332,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: MODULE_URL + "=blocks_change_pos",
-                data: "bid=" + bid + "&pos=" + pos,
+                data: "bid=" + bid + "&pos=" + pos + "&checkss=" + blockcheckss,
                 success: function(data) {
                     alert(data);
                     window.location = MODULE_URL + "=blocks_func&func=" + func_id;
@@ -372,7 +372,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=blocks_change_active",
-            data: "list=" + list + "&active_device=" + active_device,
+            data: "list=" + list + "&active_device=" + active_device + "&selectthemes=" + selectthemes + "&checkss=" + blockcheckss,
             success: function(data) {
                 alert(data);
                 $('#modal_show_device').modal('hide');
