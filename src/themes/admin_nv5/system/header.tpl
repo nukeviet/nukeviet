@@ -18,6 +18,20 @@
         {if isset($NV_CSS_MODULE_THEME)}
         <link rel="stylesheet" href="{$NV_CSS_MODULE_THEME}" type="text/css">
         {/if}
+        <style type="text/css">
+        .switch-button label:before {
+            content: "{$LANG->get('off')}";
+        }
+        .switch-button input[type=checkbox]:checked + span label:before {
+            content: "{$LANG->get('on')}";
+        }
+        .switch-button.switch-button-yesno label:before {
+            content: "{$LANG->get('no')}";
+        }
+        .switch-button.switch-button-yesno input[type=checkbox]:checked+span label:before {
+            content: "{$LANG->get('yes')}";
+        }
+        </style>
 
         <script type="text/javascript">
         var  nv_base_siteurl = '{$NV_BASE_SITEURL}',

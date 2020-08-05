@@ -13713,6 +13713,7 @@ textarea.form-control {
   text-align: right;
   padding-right: 10px;
   color: #FFF;
+  text-transform: uppercase;
 }
 
 .switch-button input[type=checkbox]:checked + span {

@@ -17,10 +17,6 @@ if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['i
     $submenu['system'] = $nv_Lang->getModule('global_config');
 }
 
-if (isset($admin_mods['language'])) {
-    $submenu['language'] = $nv_Lang->getGlobal('mod_language');
-}
-
 $submenu['smtp'] = $nv_Lang->getModule('smtp_config');
 if (defined('NV_IS_GODADMIN')) {
     $submenu['security'] = $nv_Lang->getModule('security');

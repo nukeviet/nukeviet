@@ -104,7 +104,8 @@ function nv_admin_checkdata($adm_session_value)
         return [];
     }
 
-    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme, a.check_num check_num, a.last_agent current_agent,
+    $sql = 'SELECT a.admin_id admin_id, a.lev lev, a.position position, a.main_module main_module, a.admin_theme admin_theme,
+        a.config_theme config_theme, a.check_num check_num, a.last_agent current_agent,
         a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
         b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
         b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
@@ -155,7 +156,7 @@ function nv_admin_checkdata($adm_session_value)
     $admin_info['allow_modify_files'] = intval($allow_modify_files);
     $admin_info['allow_create_subdirectories'] = intval($allow_create_subdirectories);
     $admin_info['allow_modify_subdirectories'] = intval($allow_modify_subdirectories);
-    $admin_info['config_theme'] = empty($admin_info['config_theme']) ? [] : unserialize($admin_info['config_theme']);
+    $admin_info['config_theme'] = empty($admin_info['config_theme']) ? [] : ((array) json_decode($admin_info['config_theme'], true));
 
     if (empty($admin_info['first_name'])) {
         $admin_info['first_name'] = $admin_info['username'];

@@ -71,11 +71,6 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     $allow_func[] = 'groups';
 }
 
-if ($module_data == 'users' and isset($admin_mods['authors'])) {
-    $submenu['authors'] = $nv_Lang->getGlobal('mod_authors');
-    $allow_func[] = 'authors';
-}
-
 if (defined('NV_IS_SPADMIN')) {
     if (empty($global_config['idsite'])) {
         $submenu['question'] = $nv_Lang->getModule('question');

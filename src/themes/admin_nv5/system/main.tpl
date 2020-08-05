@@ -242,7 +242,7 @@
                         {if !empty($ARRAY_LANGS)}
                         <li class="nav-item" role="presentation"><a class="nav-link active" href="#main-admin-tab-languages" aria-controls="main-admin-tab-languages" role="tab" data-toggle="tab">{$LANG->get('mod_language')}</a></li>
                         {/if}
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#main-admin-tab-settings" aria-controls="main-admin-tab-settings" role="tab" data-toggle="tab">{$LANG->get('theme_cfg')}</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link{if empty($ARRAY_LANGS)} active{/if}" href="#main-admin-tab-settings" aria-controls="main-admin-tab-settings" role="tab" data-toggle="tab">{$LANG->get('theme_cfg')}</a></li>
                     </ul>
                 </div>
                 <div class="tab-panel">
@@ -275,7 +275,7 @@
                             </div>
                         </div>
                         {/if}
-                        <div class="tab-pane tab-settings" id="main-admin-tab-settings" role="tabpanel" data-action="siteinfo">
+                        <div class="tab-pane tab-settings{if empty($ARRAY_LANGS)} active{/if}" id="main-admin-tab-settings" role="tabpanel" data-action="siteinfo">
                             <div class="settings-wrapper">
                                 <div class="nv-scroller">
                                     <div class="category-title">{$LANG->get('theme_cfg_title')}</div>

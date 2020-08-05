@@ -168,14 +168,6 @@ function nv_admin_theme($contents, $head_site = 1)
 
         // Menu các module quản trị
         $top_menu = $admin_mods;
-        if (sizeof($top_menu) > 8) {
-            if ($module_name != 'authors') {
-                unset($top_menu['authors']);
-            }
-            if ($module_name != 'language') {
-                unset($top_menu['language']);
-            }
-        }
         $array_sys_menu = [];
         $loop_sys_menu = 0;
         $key_sys_menu = 0;
@@ -311,12 +303,12 @@ function nv_admin_theme($contents, $head_site = 1)
 
 // Lưu thiết lập giao diện
 if ($nv_Request->isset_request('nv_change_theme_config', 'post')) {
-    $collapsed_leftsidebar = (int)$nv_Request->get_bool('collapsed_leftsidebar', 'post', false);
+    $collapsed_leftsidebar = (int) $nv_Request->get_bool('collapsed_leftsidebar', 'post', false);
     $config_theme = $admin_info['config_theme'];
     $config_theme[$admin_info['admin_theme']] = [
         'collapsed_leftsidebar' => $collapsed_leftsidebar
     ];
-    $sql = "UPDATE " . NV_AUTHORS_GLOBALTABLE . " SET config_theme=" . $db->quote(serialize($config_theme)) . " WHERE admin_id=" . $admin_info['admin_id'];
+    $sql = "UPDATE " . NV_AUTHORS_GLOBALTABLE . " SET config_theme=" . $db->quote(json_encode($config_theme)) . " WHERE admin_id=" . $admin_info['admin_id'];
     if ($db->exec($sql)) {
         nv_htmlOutput('OK');
     }
