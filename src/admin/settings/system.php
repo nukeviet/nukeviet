@@ -164,7 +164,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $array_config_global['cdn_url'] = $cdn_url . $_p;
             }
         }
-        $array_config_global['remote_api_access'] = (int)$nv_Request->get_bool('remote_api_access', 'post', 0);
+        $array_config_global['remote_api_access'] = (int) $nv_Request->get_bool('remote_api_access', 'post', 0);
+        $array_config_global['remote_api_log'] = (int) $nv_Request->get_bool('remote_api_log', 'post', 0);
 
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {

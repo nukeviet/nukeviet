@@ -238,6 +238,7 @@ $lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
 $lang_module['cdn_download'] = 'Download các file javascript, css';
 $lang_module['remote_api_access'] = 'Bật Remote API';
 $lang_module['remote_api_access_help'] = 'Nếu tắt toàn bộ quyền truy cập API từ bên ngoài sẽ bị chặn. Các API bên trong vẫn sử dụng bình thường';
+$lang_module['remote_api_log'] = 'Ghi lại nhật ký Remote API';
 
 $lang_module['plugin'] = 'Thiết lập Plugin';
 $lang_module['plugin_file'] = 'File thực thi';

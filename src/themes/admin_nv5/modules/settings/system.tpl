@@ -214,6 +214,14 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group row py-0">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right d-none d-sm-block"></label>
+                <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                    <label class="custom-control custom-checkbox custom-control-inline mb-1">
+                        <input class="custom-control-input" type="checkbox" id="remote_api_log" name="remote_api_log" value="1"{if $CONFIG['remote_api_log']} checked="checked"{/if}><span class="custom-control-label">{$LANG->get('remote_api_log')}</span>
+                    </label>
+                </div>
+            </div>
             {/if}
             <div class="form-group row">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right" for="searchEngineUniqueID">{$LANG->get('searchEngineUniqueID')}</label>

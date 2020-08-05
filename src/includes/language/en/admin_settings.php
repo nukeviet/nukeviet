@@ -228,6 +228,7 @@ $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
 $lang_module['cdn_download'] = 'Download javascript, css';
 $lang_module['remote_api_access'] = 'Enable Remote API';
 $lang_module['remote_api_access_help'] = 'Disabling all API access from outside will be blocked. Internal APIs are still used normally';
+$lang_module['remote_api_log'] = 'Enable Remote API Logging';
 $lang_module['plugin'] = 'Set up Plugin';
 $lang_module['plugin_file'] = 'File';
 $lang_module['plugin_area'] = 'Hook';

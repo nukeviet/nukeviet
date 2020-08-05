@@ -161,7 +161,9 @@ if (!empty($api_request['module'])) {
 }
 
 // Ghi nhật ký
-nv_insert_logs(NV_LANG_DATA, $api_request['module'], 'LOG_REMOTE_API_REQUEST', 'Command: ' . $api_request['action'], $credential_data['admin_id']);
+if (!empty($global_config['remote_api_log'])) {
+    nv_insert_logs(NV_LANG_DATA, $api_request['module'], 'LOG_REMOTE_API_REQUEST', 'Command: ' . $api_request['action'], $credential_data['admin_id']);
+}
 
 unset($credential_data, $api_request);
 

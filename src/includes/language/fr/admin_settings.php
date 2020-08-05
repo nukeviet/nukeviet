@@ -228,6 +228,7 @@ $lang_module['cdn_url'] = 'Hosting CDN pour javascript, css';
 $lang_module['cdn_download'] = 'Télécharge les fichiers javascript, css';
 $lang_module['remote_api_access'] = 'Activer l\'API à distance';
 $lang_module['remote_api_access_help'] = 'La désactivation de tous les accès API de l\'extérieur sera bloquée. Les API internes sont toujours utilisées normalement';
+$lang_module['remote_api_log'] = 'Activer la journalisation d\'API à distance';
 $lang_module['plugin'] = 'Configurer le plugin';
 $lang_module['plugin_file'] = 'Fichier exécutable';
 $lang_module['plugin_area'] = 'Hook';
