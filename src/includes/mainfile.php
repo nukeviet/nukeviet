@@ -313,8 +313,12 @@ foreach ($list as $row) {
     }
 }
 
-// Check https
-if (($global_config['ssl_https'] == 1 or $global_config['ssl_https'] == 2 and defined('NV_ADMIN')) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
+// Chuyển sang https
+if (
+    ($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and
+    (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off') and
+    nv_apply_hook('', 'force_ssl_redirect', [], true)
+) {
     nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
 }
 

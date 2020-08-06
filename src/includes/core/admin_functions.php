@@ -401,8 +401,7 @@ function nv_rewrite_change($array_config_global)
 
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return array(true, true);
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         $filename = NV_ROOTDIR . '/web.config';
         $rulename = 0;
         $rewrite_rule .= "\n";
