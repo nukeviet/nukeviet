@@ -58,27 +58,26 @@
     </div>
 </div>
 <script type="text/javascript">
-//<![CDATA[
 function show_advSearch() {
     var data = $('#search_query_mod').find('option:selected').data();
-    if( data.adv == true ){
+    if (data.adv == true) {
         $("a.advSearch").show();
-    }else if( data.adv == false ){
+    } else if (data.adv == false) {
         $("a.advSearch").hide();
-    }else{
+    } else {
         $("a.advSearch").show();
     }
 }
 $(function() {
     show_advSearch();
 });
-$('#search_query_mod').change(function(){
+$('#search_query_mod').change(function() {
     show_advSearch();
 });
-$("a.advSearch").click(function(e){
+$("a.advSearch").click(function(e) {
     e.preventDefault();
     var b = $("#form_search #search_query_mod").val();
-    if("all" == b){
+    if ("all" == b) {
         return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
     }
     var b = nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
@@ -86,7 +85,7 @@ $("a.advSearch").click(function(e){
 
     window.location.href = b;
 });
-$("a.IntSearch").click(function(){
+$("a.IntSearch").click(function() {
     var a = $("#form_search [name=q]").val();
     $("#search-form").hide();
     $("#search_result").hide();
@@ -95,14 +94,13 @@ $("a.IntSearch").click(function(){
     customSearchControl.draw('cse');
     customSearchControl.execute(a);
 });
-$("#form_search").submit(function(){
+$("#form_search").submit(function() {
     var a = $("#form_search [name=q]").val(), a = strip_tags(a), b;
     $("#form_search [name=q]").val(a);
-    if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length){
+    if ({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
         return $("#form_search [name=q]").select(), !1
     }
     return true;
 });
-//]]>
 </script>
 <!-- END: main -->
