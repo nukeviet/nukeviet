@@ -147,6 +147,10 @@ if (!nv_function_exists('nv_block_login')) {
                 if (defined('NV_OPENID_ALLOWED')) {
                     $xtpl->parse('signed.allowopenid');
                 }
+                if (defined('SSO_REGISTER_DOMAIN')) {
+                    $xtpl->assign('SSO_REGISTER_ORIGIN', SSO_REGISTER_DOMAIN);
+                    $xtpl->parse('signed.crossdomain_listener');
+                }
 
                 if (defined('NV_IS_ADMIN')) {
                     $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
@@ -185,7 +189,7 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
                 $xtpl->assign('NV_HEADER', '');
                 $xtpl->assign('NV_REDIRECT', '');
-                $xtpl->assign('CHECKSS', NV_CHECK_SESSION);
+                $xtpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $block_config['module'] . '_register'));
 
                 $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
                 $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);

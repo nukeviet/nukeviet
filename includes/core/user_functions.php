@@ -633,9 +633,19 @@ function nv_html_site_rss($html = true)
  * Thêm js vào ngay sau global.js
  * Mặc định rỗng
  * 
+ * @param bool $language_js
+ * Có kết nối với file ngôn ngữ JS hay không
+ * 
+ * @param bool $global_js
+ * Có kết nối với file global.js hay không
+ * 
+ * @param bool $default_js
+ * Có kết nối với file JS của theme Default hay không
+ * Khi thiếu file tương ứng ở theme đang sử dụng
+ * 
  * @return string | array
  */
-function nv_html_site_js($html = true, $other_js = [])
+function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
 {
     global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info;
 
@@ -660,14 +670,20 @@ function nv_html_site_js($html = true, $other_js = [])
         'ext' => 1,
         'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'
     );
-    $return[] = array(
-        'ext' => 1,
-        'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
-    );
-    $return[] = array(
-        'ext' => 1,
-        'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
-    );
+    
+    if ($language_js) {
+        $return[] = array(
+            'ext' => 1,
+            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
+        );
+    }
+    
+    if ($global_js) {
+        $return[] = array(
+            'ext' => 1,
+            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
+        );
+    }
 
     if (!empty($other_js)) {
         foreach ($other_js as $other) {
@@ -697,7 +713,7 @@ function nv_html_site_js($html = true, $other_js = [])
             'ext' => 1,
             'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
         );
-    } elseif (file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
+    } elseif ($default_js and file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
         $return[] = array(
             'ext' => 1,
             'content' => NV_BASE_SITEURL . 'themes/default/js/' . $module_file . '.js'
