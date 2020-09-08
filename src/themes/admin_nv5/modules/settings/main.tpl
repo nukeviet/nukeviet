@@ -11,9 +11,9 @@
         <div class="card-body">
             {if sizeof($GLOBAL_CONFIG['my_domains']) gt 1}
             <div class="form-group row">
-                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="ftp_user_name">{$LANG->get('site_domain')}</label>
+                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="site_domain">{$LANG->get('site_domain')}</label>
                 <div class="col-12 col-sm-8 col-lg-6">
-                    <select class="form-control form-control-sm" id="ftp_user_name" name="ftp_user_name">
+                    <select class="form-control form-control-sm" id="site_domain" name="site_domain">
                         {foreach from=$GLOBAL_CONFIG['my_domains'] item=row}
                         <option value="{$row}"{if $row eq $GLOBAL_CONFIG['site_domain']} selected="selected"{/if}>{$row}</option>
                         {/foreach}
