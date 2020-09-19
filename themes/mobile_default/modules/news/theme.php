@@ -790,6 +790,10 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     }
     if (!empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {
+            if (!empty($topic_array_i['external_link'])) {
+                $topic_array_i['target_blank'] = 'target="_blank"';
+            }
+
             $xtpl->assign('TOPIC', $topic_array_i);
             $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
             $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));

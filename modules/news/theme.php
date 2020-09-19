@@ -994,8 +994,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     }
     if (!empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {
-
-            if ($topic_array_i['external_link']) {
+            if (!empty($topic_array_i['external_link'])) {
                 $topic_array_i['target_blank'] = 'target="_blank"';
             }
 
