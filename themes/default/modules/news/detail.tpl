@@ -76,7 +76,7 @@
         <!-- BEGIN: files -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-download fa-fw"></i><strong>{LANG.files}</strong>
+                <i class="fa fa-download"></i> <strong>{LANG.files}</strong>
             </div>
             <div class="list-group news-download-file">
                 <!-- BEGIN: loop -->
@@ -104,14 +104,6 @@
                         </div>
                     </div>
                     <!-- END: content_quick_viewpdf -->
-                    <!-- BEGIN: content_quick_viewdoc -->
-                    <div class="clearfix"></div>
-                    <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urldoc}" data-toggle="collapsepdf">
-                        <div class="well margin-top">
-                            <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
-                        </div>
-                    </div>
-                    <!-- END: content_quick_viewdoc -->
                 </div>
                 <!-- END: loop -->
             </div>

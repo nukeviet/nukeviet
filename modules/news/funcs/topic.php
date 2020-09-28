@@ -122,7 +122,7 @@ if (!empty($alias)) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']);
     }
 } else {
-    $page_title = $module_info['site_title'];
+    $page_title = $module_info['funcs'][$op]['func_site_title'];
     $key_words = $module_info['keywords'];
 
     $result = $db_slave->query('SELECT topicid as id, title, alias, image, description as hometext, keywords, add_time as publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');

@@ -239,12 +239,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ]);
         }
 
-        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+        if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
             $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id;
             $row = $db->query($query)->fetch();
-            validUserLog($row, 1, $opid, $current_mode);
+            validUserLog($row, 1, ['id' => $opid, 'provider' => $attribs['server']], $current_mode);
         }
 
         opidr([
@@ -328,10 +328,10 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
-        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+        if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
-            validUserLog($nv_row, 1, $opid, $current_mode);
+            validUserLog($nv_row, 1, ['id' => $opid, 'provider' => $attribs['server']], $current_mode);
 
             opidr([
                 'status' => 'success',
@@ -379,7 +379,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ]);
         }
 
-        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+        if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
             $error = '';
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
             if (!empty($error)) {
@@ -556,11 +556,10 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         $nv_Cache->delMod($module_name);
 
-        if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+        if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
-        }
-        else{
-            validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
+        } else {
+            validUserLog($row, 1, ['id' => $reg_attribs['opid'], 'provider' => $reg_attribs['server']], $current_mode);
             opidr([
                 'status' => 'success',
                 'mess' => $lang_module['login_ok']
@@ -692,7 +691,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         ]);
     }
 
-    if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+    if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
         $error = '';
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
         if (!empty($error)) {

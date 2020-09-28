@@ -264,6 +264,10 @@
     background-color: #eee;
 }
 
+ul.list-items {
+    padding-left: 0;
+}
+
 ul.list-items > li {
     margin-bottom: 10px;
 }
