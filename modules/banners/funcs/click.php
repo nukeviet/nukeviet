@@ -7,22 +7,18 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:19
  */
-
 if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
 $links = NV_MY_DOMAIN;
 $id = $nv_Request->get_int('id', 'get', 0);
-
-if ($id > 0 and $nv_Request->get_string('s', 'get', 0) == md5($id . NV_CHECK_SESSION)) {
-    list ($id, $click_url) = $db->query('SELECT id, click_url FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id . ' AND act=1')->fetch(3);
-
-    if ($id > 0 and !empty($click_url)) {
+if ($id > 0) {
+    $click_url = $db->query('SELECT click_url FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id . ' AND act=1')->fetchColumn();
+    if (!empty($click_url)) {
         $links = $click_url;
         $time_set = $nv_Request->get_int($module_name . '_clickid_' . $id, 'cookie', 0);
-
-        if ($time_set == 0) {
+        if ($time_set == 0 and $nv_Request->get_string('s', 'get', 0) == md5($id . NV_CHECK_SESSION)) {
             $nv_Request->set_Cookie($module_name . '_clickid_' . $id, 3600, NV_LIVE_COOKIE_TIME);
 
             $browser = ($client_info['is_mobile']) ? "Mobile" : $client_info['browser']['key'];
