@@ -198,7 +198,7 @@ class Gfonts
             }
         }
 
-        return implode($_fonts, '|');
+        return implode('|', $_fonts);
     }
 
     /**
