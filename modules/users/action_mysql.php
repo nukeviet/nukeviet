@@ -65,14 +65,16 @@ $num_module_exists = sizeof($array_lang_module_setup);
 if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
     // Không xóa khi cài lại module users
     if ($module_data != 'users' or $op != 'recreate_mod') {
-        $sql = "SELECT fid, language FROM " . $db_config['prefix'] . "_" . $module_data . "_field";
-        $_result = $db->query($sql);
-        while ($_row = $_result->fetch()) {
-            $_row['language'] = unserialize($_row['language']);
-            if (isset($_row['language'][$lang])) {
-                unset($_row['language'][$lang]);
-                $_row['language'] = empty($_row['language']) ? '' : serialize($_row['language']);
-                $sql_drop_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote($_row['language']) . ' WHERE fid=' . $_row['fid'];
+        if (empty($global_config['idsite'])) {
+            $sql = "SELECT fid, language FROM " . $db_config['prefix'] . "_" . $module_data . "_field";
+            $_result = $db->query($sql);
+            while ($_row = $_result->fetch()) {
+                $_row['language'] = unserialize($_row['language']);
+                if (isset($_row['language'][$lang])) {
+                    unset($_row['language'][$lang]);
+                    $_row['language'] = empty($_row['language']) ? '' : serialize($_row['language']);
+                    $sql_drop_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote($_row['language']) . ' WHERE fid=' . $_row['fid'];
+                }
             }
         }
         $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . $lang . "'";
