@@ -97,3 +97,4 @@ $lang_module['error_regex_alias'] = 'Lỗi: Liên kết tĩnh không được b�
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['per_title'] = 'Số lượng ký tự tiêu đề bị cắt';
 $lang_module['ratio_w_h'] = 'Tỉ lệ chiều rộng: chiều cao';
+$lang_module['hint_ratio'] = 'Nhập tỉ lệ theo định dạng XX:YY trong đó XX và YY là số tự nhiên như: 4:3';

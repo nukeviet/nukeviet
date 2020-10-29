@@ -5,7 +5,8 @@
 <script type="text/javascript">jwplayer.key="KzcW0VrDegOG/Vl8Wb9X3JLUql+72MdP1coaag==";</script>
 <script type="text/javascript">
     var ratio = '{ratio}';
-    ratio = parseInt(ratio);
+    ratio = parseFloat(ratio);
+    console.log(ratio);
 </script>
 <div class="detailContent clearfix">
     <h1>{DETAILCONTENT.title}</h1>
@@ -24,7 +25,7 @@
         var a = $("#" + ele).outerWidth(), b;
         //640 < a && (a = 640);
         b = a;
-        a = Math.ceil(10*b/ratio) + 4;
+        a = Math.ceil(b/ratio) + 4;
 
         $("#" + ele).parent().css({
             width: b,
@@ -49,7 +50,7 @@
         var a = $("div.detailContent").width(), b;
         //640 < a && (a = 640);
         b = a;
-        a = Math.ceil(10*b/ratio) + 4;
+        a = Math.ceil(b/ratio) + 4;
         $("div.detailContent").append('<div class="videoplayer"><div class="clearfix" style="height: ' + a + 'px;width:' + b + 'px;margin:0 auto;"><iframe class="detailContent clearfix" allowfullscreen="" frameborder="0" style="height: ' + a + 'px;width:' + b + 'px" src="//www.youtube.com/embed/{CODE}?rel=0&amp;controls=1{autoplay}"></iframe></div></div>');
     });
     </script>

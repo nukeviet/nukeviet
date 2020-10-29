@@ -23,11 +23,10 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.ratio_w_h}</strong></td>
-                    <td><select style="width: 500px" class="form-control" name="ratio_w_h">
-                            <option value="18" {ratio_18}>16:9</option>
-                            <option value="13" {ratio_13}>4:3</option>
-                            <option value="16" {ratio_16}>16:10</option>
-                    </select></td>
+                    <td>
+                        <input  style="width: 500px"  class="form-control" type="text" name="ratio_w_h" value="{ratio_w_h}" >
+                        <span style="font-size:0.8em; padding: 5px 0px">{LANG.hint_ratio}</span>
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.NumberOfLinks}</strong></td>
@@ -71,4 +70,16 @@
         <input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" style="width: 100px;" />
     </div>
 </form>
+<script type="text/javascript">
+//<![CDATA[
+    $("input[name=ratio_w_h]").change(function(){
+        var ratio = $(this).val();
+        var patt = /^\d+:\d+$/;
+        if (!patt.test(ratio)) {
+            $(this).val('');
+            $(this).focus();
+        }
+    });
+//]]> 
+</script>
 <!-- END: main -->
