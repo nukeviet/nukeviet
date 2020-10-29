@@ -22,6 +22,14 @@
                     </select></td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.ratio_w_h}</strong></td>
+                    <td><select style="width: 500px" class="form-control" name="ratio_w_h">
+                            <option value="18" {ratio_18}>16:9</option>
+                            <option value="13" {ratio_13}>4:3</option>
+                            <option value="16" {ratio_16}>16:10</option>
+                    </select></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.NumberOfLinks}</strong></td>
                     <td><select class="form-control w200" name="otherClipsNum" id="otherClipsNum">
                             <!-- BEGIN: otherClipsNum -->

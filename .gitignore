@@ -23,7 +23,7 @@
 /COPYRIGHT.txt
 /.gitattributes
 /composer.json
-
+/LICENSE
 # Ignore fix module files and directories.
 /modules/*
 !/modules/videoclips
@@ -45,3 +45,4 @@
 !/themes/default/modules/videoclips
 !/themes/default/modules/videoclips/*
 /error.php
+vinades/readme.txt
