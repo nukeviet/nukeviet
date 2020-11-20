@@ -19,6 +19,7 @@ $page_title = $nv_Lang->getModule('logs_title');
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
 $data = [];
+$listall_search = '';
 $array_userid = [];
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
@@ -92,7 +93,7 @@ if ($nv_Request->isset_request('checksess', 'get')) {
     }
 
     if (!empty($data_search['user'])) {
-        $user_tmp = ($data_search['user'] == 'system') ? 0 : ( int )$data_search['user'];
+        $user_tmp = ($data_search['user'] == 'system') ? 0 : (int)$data_search['user'];
 
         $array_where[] = 'userid=' . $user_tmp;
         $base_url .= '&amp;user=' . $data_search['user'];
@@ -152,6 +153,20 @@ if ($check_like) {
 }
 $sth->execute();
 $num_items = $sth->fetchColumn();
+
+if ($data_search['is_search']) {
+    $db->select('id');
+    $sth = $db->prepare($db->sql());
+    if ($check_like) {
+        $keyword = '%' . addcslashes($data_search['q'], '_%') . '%';
+
+        $sth->bindParam(':keyword1', $keyword, PDO::PARAM_STR);
+        $sth->bindParam(':keyword2', $keyword, PDO::PARAM_STR);
+    }
+    $sth->execute();
+    $listall_search = implode(',', $sth->fetchAll(PDO::FETCH_COLUMN, 0));
+}
+
 
 $db->select('*')->limit($per_page)->offset(($page - 1) * $per_page);
 
@@ -225,6 +240,7 @@ $tpl->assign('DATA_ORDER', $order);
 $tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $num_items, $per_page, $page));
 $tpl->assign('ALLOW_DELETE', $logs_del);
 $tpl->assign('DATA', $data);
+$tpl->assign('LISTALL_SEARCH', $listall_search);
 $tpl->assign('DATA_USER', $data_users);
 
 $contents = $tpl->fetch('logs.tpl');

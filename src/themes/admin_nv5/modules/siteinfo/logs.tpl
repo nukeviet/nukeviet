@@ -143,7 +143,11 @@
         <div class="page-tools">
             {if $ALLOW_DELETE}
             <button class="btn btn-space btn-hspace btn-danger" data-toggle="del-logs" data-message="{$LANG->get('log_del_confirm')}"><i class="icon icon-left fas fa-trash-alt"></i> {$LANG->get('delete')}</button>
+            {if $DATA_SEARCH['is_search']}
+            <button class="btn btn-space btn-danger" data-toggle="del-search-logs" data-message="{$LANG->get('log_del_confirm')}" data-listall="{$LISTALL_SEARCH}"><i class="icon icon-left far fa-times-circle"></i> {$LANG->get('log_empty')}</button>
+            {else}
             <button class="btn btn-space btn-danger" data-toggle="del-all-logs" data-message="{$LANG->get('log_del_confirm')}" data-checksess="{$CHECKSESS}"><i class="icon icon-left far fa-times-circle"></i> {$LANG->get('log_empty')}</button>
+            {/if}
             {/if}
         </div>
         {if not empty($GENERATE_PAGE)}

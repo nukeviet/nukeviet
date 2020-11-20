@@ -117,6 +117,33 @@ $(document).ready(function(){
         }
     });
 
+    // Xóa toàn bộ nhật ký (có search)
+    $('[data-toggle="del-search-logs"]').click(function(e) {
+        e.preventDefault();
+        if (confirm($(this).data('message'))) {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logs_del&nocache=' + new Date().getTime(),
+                data: {
+                    'listall': $(this).data('listall')
+                },
+                cache: false,
+                success: function(data) {
+                    var s = data.split('_');
+                    if (s[0] == 'OK') {
+                        location.reload();
+                    } else {
+                        alert(s[1]);
+                    }
+                },
+                error: function(jqXHR, exception) {
+                    alert(nv_is_del_confirm[2]);
+                    location.reload();
+                }
+            });
+        }
+    });
+
     // Xóa toàn bộ nhật ký
     $('[data-toggle="del-all-logs"]').click(function(e) {
         e.preventDefault();
