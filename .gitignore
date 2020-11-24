@@ -7,6 +7,10 @@
 /src/composer.json
 /src/composer.lock
 
+# Editor
+.vscode
+.vs
+
 # Base ignore
 /.buildpath
 /.project
