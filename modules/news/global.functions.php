@@ -237,22 +237,6 @@ function nv_get_firstimage($contents)
 }
 
 /**
- * xml_entity_decode()
- * 
- * @param string $s
- * @return string
- */
-function xml_entity_decode($s)
-{
-    static $XENTITIES = array('&amp;', '&gt;', '&lt;');
-    static $XSAFENTITIES = array('#_x_amp#;', '#_x_gt#;', '#_x_lt#;');
-    $s = str_replace($XENTITIES, $XSAFENTITIES, $s);
-    $s = html_entity_decode($s, ENT_HTML5 | ENT_NOQUOTES, 'UTF-8');
-    $s = str_replace($XSAFENTITIES, $XENTITIES, $s);
-    return $s;
-}
-
-/**
  * nv_check_block_topcat_news()
  *
  * @param string $catid
@@ -340,7 +324,7 @@ function nv_add_block_topcat_news($catid)
         $doc = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput = true;
         $doc->loadXML($contents);
-        $contents = xml_entity_decode($doc->saveXML());
+        $contents = $doc->saveXML();
 
         $fname = $ini_file;
         $fhandle = fopen($fname, "w");
@@ -389,7 +373,7 @@ function nv_add_block_botcat_news($catid)
         $doc = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput = true;
         $doc->loadXML($contents);
-        $contents = xml_entity_decode($doc->saveXML());
+        $contents = $doc->saveXML();
 
         $fname = $ini_file;
         $fhandle = fopen($fname, "w");
@@ -435,7 +419,7 @@ function nv_remove_block_topcat_news($catid)
         foreach ($positions as $position) {
             $position->parentNode->removeChild($position);
         }
-        $contents = xml_entity_decode($doc->saveXML());
+        $contents = $doc->saveXML();
         $fname = $ini_file;
         $fhandle = fopen($fname, "w");
         $fwrite = fwrite($fhandle, $contents);
@@ -480,7 +464,7 @@ function nv_remove_block_botcat_news($catid)
         foreach ($positions as $position) {
             $position->parentNode->removeChild($position);
         }
-        $contents = xml_entity_decode($doc->saveXML());
+        $contents = $doc->saveXML();
         $fname = $ini_file;
         $fhandle = fopen($fname, "w");
         $fwrite = fwrite($fhandle, $contents);
