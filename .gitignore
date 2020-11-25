@@ -23,7 +23,8 @@
 /src/data/config/efloodip.php
 /src/data/config/banip.php
 /src/data/logs/data_logs/
-/src/data/logs/dump_backup/
+/src/data/logs/dump_backup/*.sql.gz
+/src/data/logs/dump_backup/*.sql
 /src/data/logs/error_logs/
 /src/data/logs/ip_logs/
 /src/data/logs/ref_logs/
