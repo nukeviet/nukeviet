@@ -8,8 +8,8 @@
 /src/composer.lock
 
 # Editor
-.vscode
-.vs
+/.vscode
+/.vs
 
 # Base ignore
 /.buildpath
@@ -18,12 +18,10 @@
 /src/assets/css/*.opt.css
 /src/config.php
 /src/data/cache/*
-/src/data/config/config_global.php
 /src/data/config/config_ini.*.php
 /src/data/config/diagnostic-*.xml
 /src/data/config/efloodip.php
 /src/data/config/banip.php
-/src/data/config/robots.php
 /src/data/logs/data_logs/
 /src/data/logs/dump_backup/
 /src/data/logs/error_logs/
