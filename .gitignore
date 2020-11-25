@@ -7,10 +7,6 @@
 /src/composer.json
 /src/composer.lock
 
-# Editor
-/.vscode
-/.vs
-
 # Base ignore
 /.buildpath
 /.project
@@ -23,8 +19,7 @@
 /src/data/config/efloodip.php
 /src/data/config/banip.php
 /src/data/logs/data_logs/
-/src/data/logs/dump_backup/*.sql.gz
-/src/data/logs/dump_backup/*.sql
+/src/data/logs/dump_backup/
 /src/data/logs/error_logs/
 /src/data/logs/ip_logs/
 /src/data/logs/ref_logs/
@@ -94,7 +89,6 @@
 /src/assets/emailtemplates/*.jpg
 /src/uploads/emailtemplates/*.jpg
 /src/uploads/users/*.jpg
-/src/uploads/users/*.png
 /src/uploads/contact/*.jpg
 /src/uploads/about/*.jpg
 /src/uploads/banners/*.jpg
