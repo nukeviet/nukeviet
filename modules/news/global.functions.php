@@ -44,7 +44,7 @@ function nv_set_status_module()
 
     // Dang cai bai cho kich hoat theo thoi gian
     $query = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC');
-    while (list ($id, $listcatid) = $query->fetch(3)) {
+    while (list($id, $listcatid) = $query->fetch(3)) {
         $array_catid = explode(',', $listcatid);
         foreach ($array_catid as $catid_i) {
             $catid_i = intval($catid_i);
@@ -58,7 +58,7 @@ function nv_set_status_module()
     // Ngung hieu luc cac bai da het han
     $weight_min = 0;
     $query = $db->query('SELECT id, listcatid, archive, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY weight DESC, exptime ASC');
-    while (list ($id, $listcatid, $archive, $weight) = $query->fetch(3)) {
+    while (list($id, $listcatid, $archive, $weight) = $query->fetch(3)) {
         if (intval($archive) == 0) {
             nv_del_content_module($id);
             $weight_min = $weight;
@@ -100,7 +100,7 @@ function nv_del_content_module($id)
     global $db, $module_name, $module_data, $title, $lang_module, $module_config;
     $content_del = 'NO_' . $id;
     $title = '';
-    list ($id, $listcatid, $title) = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval($id))->fetch(3);
+    list($id, $listcatid, $title) = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval($id))->fetch(3);
     if ($id > 0) {
         $number_no_del = 0;
         $array_catid = explode(',', $listcatid);
@@ -167,7 +167,8 @@ function nv_fix_weight_content($weight_min)
             foreach ($_array_catid as $_catid) {
                 try {
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
-                } catch (PDOException $e) {}
+                } catch (PDOException $e) {
+                }
             }
             ++$weight;
         }
