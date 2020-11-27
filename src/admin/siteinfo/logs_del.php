@@ -14,12 +14,24 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 
 // Xóa toàn bộ nhật ký hệ thống
 if ($nv_Request->get_title('logempty', 'post', '') == md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid'])) {
-    if ($db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_logs')) {
-        $nv_Cache->delMod($module_name);
-        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('log_empty_log'), 'All', $admin_info['userid']);
-        nv_htmlOutput('OK');
+    $filtersql = $nv_Request->get_title('filtersql', 'post', '');
+    if (!empty($filtersql)) {
+        $where_str = $crypt->decrypt($filtersql, md5(NV_CHECK_SESSION . '-del-all-logs'));
+        if ($db->query('DELETE FROM ' . $db_config['prefix'] . '_logs WHERE ' . $where_str)) {
+            $nv_Cache->delMod($module_name);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('log_empty_log_filter'), str_replace('AND', ',', $where_str), $admin_info['userid']);
+            nv_htmlOutput('OK');
+        } else {
+            nv_htmlOutput($nv_Lang->getModule('log_del_error') . ' toang');
+        }
     } else {
-        nv_htmlOutput($nv_Lang->getModule('log_del_error'));
+        if ($db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_logs')) {
+            $nv_Cache->delMod($module_name);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('log_empty_log'), 'All', $admin_info['userid']);
+            nv_htmlOutput('OK');
+        } else {
+            nv_htmlOutput($nv_Lang->getModule('log_del_error'));
+        }
     }
 }
 
