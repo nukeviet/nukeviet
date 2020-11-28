@@ -972,7 +972,7 @@ function user_welcome()
 
     if (!empty($user_info['avata'])) {
         $xtpl->assign('IMG', array(
-            'src' => $user_info['avata'],
+            'src' => NV_BASE_SITEURL . "{$user_info['photo']}",
             'title' => $lang_module['img_size_title']
         ));
     } else {
