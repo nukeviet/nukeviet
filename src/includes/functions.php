@@ -1092,14 +1092,15 @@ function nv_get_keywords($content, $keyword_limit = 20)
  * @param string|array $cc
  * @param string|array $bcc
  * @param boolean $testmode
+ * @param boolean $template
  * @return
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $cc = '', $bcc = '', $testmode = false)
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $cc = '', $bcc = '', $testmode = false, $template = true)
 {
     global $global_config, $sys_info;
 
     // Dùng hook để gửi mail
-    $override_send = nv_apply_hook('', 'override_sendmail', [$from, $to, $subject, $message, $files, $AddEmbeddedImage, $cc, $bcc, $testmode], 9999);
+    $override_send = nv_apply_hook('', 'override_sendmail', [$from, $to, $subject, $message, $files, $AddEmbeddedImage, $cc, $bcc, $testmode, $template], 9999);
     if ($override_send !== 9999) {
         return $override_send;
     }
@@ -1166,11 +1167,11 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                 $mail->From = $global_config['site_email'];
             }
         } else {
-            return ($testmode ? 'No mail mode' : false);;
+            return ($testmode ? 'No mail mode' : false);
         }
 
         $AltBody = strip_tags($message);
-        if (function_exists("nv_mailHTML")) {
+        if (function_exists('nv_mailHTML') and $template) {
             $message = nv_mailHTML($subject, $message);
             $AddEmbeddedImage = true;
         }
@@ -1222,7 +1223,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->AltBody = $AltBody;
         $mail->IsHTML(true);
 
-        if($AddEmbeddedImage) {
+        if ($AddEmbeddedImage) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
         }
 

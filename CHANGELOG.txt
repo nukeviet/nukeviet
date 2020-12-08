@@ -3,6 +3,7 @@ http://nukeviet.vn
 
 NUKEVIET 5.0.00
 
+- Add parameter $template for function nv_sendmail
 - Add hook force_ssl_redirect (#2983)
 - New admin theme
 - Api system
