@@ -99,7 +99,7 @@ if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
         // Gọi 1 hook trước khi gửi email test
         nv_apply_hook('', 'event_before_sending_test_mail', [$emailid, $email_data, $merge_fields, $field_data]);
 
-        $check_send = nv_sendmail($email_data['from'], $array['test_tomail'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc'], true);
+        $check_send = nv_sendmail($email_data['from'], $array['test_tomail'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, $email_data['cc'], $email_data['bcc'], true, !$email_data['is_selftemplate']);
         if (!empty($check_send)) {
             $error[] = $check_send;
         } else {
