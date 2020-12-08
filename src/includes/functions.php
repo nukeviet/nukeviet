@@ -2325,7 +2325,7 @@ function nv_get_email_template($emailid)
 {
     global $db;
 
-    $sql = "SELECT sys_pids, pids, send_name, send_email, send_cc, send_bcc, attachments, is_plaintext, is_disabled, default_subject, default_content,
+    $sql = "SELECT sys_pids, pids, send_name, send_email, send_cc, send_bcc, attachments, is_plaintext, is_disabled, is_selftemplate, default_subject, default_content,
     " . NV_LANG_DATA . "_subject lang_subject, " . NV_LANG_DATA . "_content lang_content FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE emailid=:emailid";
     $sth = $db->prepare($sql);
     $sth->bindParam(':emailid', $emailid, PDO::PARAM_INT);
@@ -2354,7 +2354,8 @@ function nv_get_email_template($emailid)
         'subject' => empty($email_data['lang_subject']) ? $email_data['default_subject'] : $email_data['lang_subject'],
         'content' => empty($email_data['lang_content']) ? $email_data['default_content'] : $email_data['lang_content'],
         'is_disabled' => $email_data['is_disabled'],
-        'is_plaintext' => $email_data['is_plaintext']
+        'is_plaintext' => $email_data['is_plaintext'],
+        'is_selftemplate' => $email_data['is_selftemplate']
     ];
 
     return $data;
@@ -2417,7 +2418,7 @@ function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
             // Dùng để xử lý nội dung email trước khi gửi
             $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row, $emailid], $email_content);
 
-            $result = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $_email_data['cc'], $_email_data['bcc']);
+            $result = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $_email_data['cc'], $_email_data['bcc'], false, !$email_data['is_selftemplate']);
         }
     } catch (Exception $e) {
         trigger_error(print_r($e, true));

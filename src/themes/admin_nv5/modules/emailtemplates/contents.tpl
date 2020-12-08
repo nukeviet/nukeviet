@@ -55,6 +55,14 @@
                     </label>
                 </div>
             </div>
+            <div class="form-group row pt-1 pb-0">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right">{$LANG->get('tpl_is_selftemplate')}</label>
+                <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                    <label class="custom-control custom-checkbox custom-control-inline mb-1">
+                        <input class="custom-control-input" type="checkbox" name="is_selftemplate" value="1"{if $DATA['is_selftemplate']} checked="checked"{/if}><span class="custom-control-label"> {$LANG->get('tpl_is_selftemplate_help')}</span>
+                    </label>
+                </div>
+            </div>
             {if not $DATA['is_system']}
             {* Tên và danh mục không thể sửa đổi đối với các trường hệ thống *}
             <div class="form-group row">

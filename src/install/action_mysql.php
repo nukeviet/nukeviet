@@ -388,6 +388,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates 
   is_system tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Của hệ thống hay không',
   is_plaintext tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Gửi dạng text thuần hay có định dạng',
   is_disabled tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Đình chỉ gửi mail hay không',
+  is_selftemplate tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1 thì không dùng template của giao diện, 0 thì dùng',
   default_subject varchar(250) NOT NULL DEFAULT '' COMMENT 'Tiêu đề email tất cả các ngôn ngữ',
   default_content mediumtext NOT NULL COMMENT 'Nội dung email tất cả các ngôn ngữ',
   PRIMARY KEY (emailid),

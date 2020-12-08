@@ -94,6 +94,7 @@ if (!empty($emailid)) {
         'attachments' => [],
         'is_plaintext' => 0,
         'is_disabled' => 0,
+        'is_selftemplate' => 0,
         'title' => '',
         'default_subject' => '',
         'default_content' => '',
@@ -120,6 +121,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['send_bcc'] = $nv_Request->get_title('send_bcc', 'post', '');
     $array['is_plaintext'] = intval($nv_Request->get_bool('is_plaintext', 'post', false));
     $array['is_disabled'] = intval($nv_Request->get_bool('is_disabled', 'post', false));
+    $array['is_selftemplate'] = intval($nv_Request->get_bool('is_selftemplate', 'post', false));
     $array['attachments'] = $nv_Request->get_typed_array('attachments', 'post', 'string', []);
     $array['default_subject'] = $nv_Request->get_title('default_subject', 'post', '');
     $array['default_content'] = $nv_Request->get_editor('default_content', '', NV_ALLOWED_HTML_TAGS);
@@ -205,10 +207,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
 
                 $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' (
-                    catid, pids, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled, default_subject, default_content' . $field_title . '
+                    catid, pids, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled,
+                    is_selftemplate, default_subject, default_content' . $field_title . '
                 ) VALUES (
-                    ' . $array['catid'] . ', ' . $db->quote(implode(',', $array['pids'])) . ', ' . NV_CURRENTTIME . ', :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0,
-                    ' . $array['is_plaintext'] . ', ' . $array['is_disabled'] . ', :default_subject, :default_content' . $field_value . '
+                    ' . $array['catid'] . ', ' . $db->quote(implode(',', $array['pids'])) . ', ' . NV_CURRENTTIME . ',
+                    :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0,
+                    ' . $array['is_plaintext'] . ', ' . $array['is_disabled'] . ', ' . $array['is_selftemplate'] . ',
+                    :default_subject, :default_content' . $field_value . '
                 )';
             } else {
                 $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET
@@ -222,6 +227,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     attachments = :attachments,
                     is_plaintext = ' . $array['is_plaintext'] . ',
                     is_disabled = ' . $array['is_disabled'] . ',
+                    is_selftemplate = ' . $array['is_selftemplate'] . ',
                     default_subject = :default_subject,
                     default_content = :default_content,
                     ' . NV_LANG_DATA . '_title = :' . NV_LANG_DATA . '_title,
