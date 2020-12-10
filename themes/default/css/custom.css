@@ -8,6 +8,7 @@
 
 /* Các tùy chỉnh CSS của giao diện nên để vào đây */
 @media screen and (max-width: 991px){
+	/*khi screen nhỏ hơn 992 thì ẩn 1 số class*/
 	.time, .headerSearch, .about, .tophits, .laws {
 		display: none;
 	}
@@ -15,14 +16,36 @@
 		width: 100%;
 	}
 	.welcome marquree {
-
+		position: relative;
+	    top: -670px; 
 	}
-	.statistic, .voting {
-
+	
+	.voting {
+	    position: relative;
+	    top: 20px;
+	    left: 100px;
+	    width: 30%;
 	}
-
+	.statistic {
+	    position: relative;
+	    top: 370px;
+	    left: 500px;
+	    width: 50%;
+	}
 }
-
+@media screen and (max-width: 767px){
+	.voting {
+	    position: relative;
+	   
+	    width: 100%;
+	}
+	.statistic {
+	    position: relative;
+	   
+	   
+	    width: 100%;
+	}
+}
 #footer_2 {
     position: relative;
     min-height: 100px;

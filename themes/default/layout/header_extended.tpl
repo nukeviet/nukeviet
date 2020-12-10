@@ -82,7 +82,9 @@
                                     <!-- BEGIN: currenttime --><span class="current-time">{NV_CURRENTTIME}</span><!-- END: currenttime -->
                                 </div>
                                 <div class="welcome col-xs-24 col-sm-12 col-md-12">
-                                    [WELCOME]
+                                    <marquee>
+                                        [WELCOME]
+                                    </marquee>
                                 </div>
                                 <div class="headerSearch col-xs-24 col-sm-6 col-md-6">
                                     <div class="input-group">
