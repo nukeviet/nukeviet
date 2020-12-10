@@ -1,0 +1,37 @@
+﻿.cell {
+	background-color: #FFFF99;
+	border: 1px solid #666666;
+	text-align: center;
+}
+.key {
+	background-color: #FFCC99;
+	text-align: center;
+	border: 1px solid #333333;
+}
+#dhtmltooltip{
+position: absolute;
+left: -300px;
+width: 300px;
+border: 1px solid black;
+padding: 2px;
+background-color: lightyellow;
+visibility: hidden;
+z-index: 100;
+/*Remove below line to remove shadow. Below line should always appear last within this CSS*/
+filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135);
+}
+
+#dhtmlpointer{
+position:absolute;
+left: -300px;
+z-index: 101;
+visibility: hidden;
+}
+form.ochu input {
+	width: 100%;
+	height: 30px;
+}
+form.ochu input.submit {
+	width: 60px;
+	height: 20px;
+}
