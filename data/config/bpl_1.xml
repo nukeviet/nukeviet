@@ -4,13 +4,13 @@
   <lang></lang>
   <title>Quang cao giua trang</title>
   <form>sequential</form>
-  <width>575</width>
-  <height>72</height>
+  <width>700</width>
+  <height>150</height>
   <banners>
     <banners_item>
       <id>3</id>
       <title>Quang cao giua trang</title>
-      <clid>0</clid>
+      <clid>1</clid>
       <file_name>webnhanh.jpg</file_name>
       <imageforswf></imageforswf>
       <file_ext>png</file_ext>
@@ -21,7 +21,7 @@
       <file_click>http://webnhanh.vn</file_click>
       <target>_blank</target>
       <bannerhtml></bannerhtml>
-      <publ_time>1453191549</publ_time>
+      <publ_time>1607500339</publ_time>
       <exp_time>0</exp_time>
     </banners_item>
   </banners>

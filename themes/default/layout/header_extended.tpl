@@ -65,7 +65,7 @@
                         <div class="row">
                             <div class="bg">
                             <div class="clearfix">
-                                <div class="col-xs-24 col-sm-18 col-md-18">
+                                <div class="col-xs-24 col-sm-6 col-md-6 time">
                                     <!-- BEGIN: breadcrumbs -->
                                     <div class="breadcrumbs-wrap">
                                         <div class="display">
@@ -80,6 +80,9 @@
                                     </div>
                                     <!-- END: breadcrumbs -->
                                     <!-- BEGIN: currenttime --><span class="current-time">{NV_CURRENTTIME}</span><!-- END: currenttime -->
+                                </div>
+                                <div class="welcome col-xs-24 col-sm-12 col-md-12">
+                                    [WELCOME]
                                 </div>
                                 <div class="headerSearch col-xs-24 col-sm-6 col-md-6">
                                     <div class="input-group">

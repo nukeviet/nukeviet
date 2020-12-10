@@ -29,9 +29,22 @@
                         [FOOTER_SITE]
                     </div>
                 </div>
+                <div class="row">
+                    
+                </div>
             </div>
         </div>
     </footer>
+
+    <footer class="section-footer-bottom" id="footer_2">
+        <div class="wraper">
+            <div class="container">
+                [FOOTER_2]
+            </div>
+        </div>
+    </footer>
+
+
     <nav class="section-footer-bottom footerNav2">
         <div class="wraper">
             <div class="container">

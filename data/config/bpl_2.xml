@@ -10,7 +10,7 @@
     <banners_item>
       <id>2</id>
       <title>vinades</title>
-      <clid>0</clid>
+      <clid>1</clid>
       <file_name>vinades.jpg</file_name>
       <imageforswf></imageforswf>
       <file_ext>jpg</file_ext>
@@ -21,7 +21,7 @@
       <file_click>http://vinades.vn</file_click>
       <target>_blank</target>
       <bannerhtml></bannerhtml>
-      <publ_time>1453191549</publ_time>
+      <publ_time>1607500339</publ_time>
       <exp_time>0</exp_time>
     </banners_item>
   </banners>

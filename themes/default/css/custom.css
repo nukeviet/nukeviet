@@ -7,3 +7,34 @@
  */
 
 /* Các tùy chỉnh CSS của giao diện nên để vào đây */
+@media screen and (max-width: 991px){
+	.time, .headerSearch, .about, .tophits, .laws {
+		display: none;
+	}
+	.welcome, .bottom_ads, .module_content {
+		width: 100%;
+	}
+	.welcome marquree {
+
+	}
+	.statistic, .voting {
+
+	}
+
+}
+
+#footer_2 {
+    position: relative;
+    min-height: 100px;
+    width: 100%;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #428BCA;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #245682;
+    background-color: #245682;
+    background-image: linear-gradient(to bottom,rgba(0,0,0,.1) 0,rgba(0,0,0,0) 100%);
+    padding: 20px 0;
+    font-size: 13px;
+}

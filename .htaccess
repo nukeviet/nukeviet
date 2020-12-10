@@ -55,7 +55,7 @@ ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-#RewriteBase /
+#RewriteBase /nukeviet4x/
 RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
 RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]
 RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
@@ -66,8 +66,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)(\/|\.html)$ index.php
 RewriteRule (.*)tag\/([^?]+)$ index.php
-RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]
-RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
+RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /nukeviet4x/$1/$2/ [L,R=301]
+RewriteRule ^([a-zA-Z0-9-]+)$ /nukeviet4x/$1/ [L,R=301]
 </IfModule>
 
 #nukeviet_rewrite_end
