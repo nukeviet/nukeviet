@@ -6,7 +6,6 @@
 <script type="text/javascript">
     var ratio = '{ratio}';
     ratio = parseFloat(ratio);
-    console.log(ratio);
 </script>
 <div class="detailContent clearfix">
     <h1>{DETAILCONTENT.title}</h1>
