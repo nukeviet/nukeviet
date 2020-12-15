@@ -124,10 +124,10 @@ $xtpl->assign('MODULE_FILE', $module_file);
 $xtpl->assign('MODULECONFIG', $configMods);
 $xtpl->assign('MODULEURL', nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $clip['alias'], 1));
 $xtpl->assign('SELFURL', $client_info['selfurl']);
-list($w,$h) = explode(':',$module_config[$module_name]['ratio_w_h']);
-$w=intval(trim($w));
-$h=intval(trim($h));
-$xtpl->assign('ratio', round($w/$h,1));
+list($w, $h) = explode(':', $module_config[$module_name]['ratio_w_h']);
+$w = intval(trim($w));
+$h = intval(trim($h));
+$xtpl->assign('ratio', round($w / $h, 1));
 
 $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
 $xtpl->assign('FACEBOOK_LANG', $lang);
