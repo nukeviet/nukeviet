@@ -23,9 +23,8 @@
     $(function() {
         var ele = "videoCont";
         var a = $("#" + ele).outerWidth(), b;
-        //640 < a && (a = 640);
         b = a;
-        a = Math.ceil(b/ratio) + 4;
+        a = Math.ceil(b / ratio) + 4;
 
         $("#" + ele).parent().css({
             width: b,
@@ -48,9 +47,8 @@
     <script type="text/javascript">
     $(function() {
         var a = $("div.detailContent").width(), b;
-        //640 < a && (a = 640);
         b = a;
-        a = Math.ceil(b/ratio) + 4;
+        a = Math.ceil(b / ratio) + 4;
         $("div.detailContent").append('<div class="videoplayer"><div class="clearfix" style="height: ' + a + 'px;width:' + b + 'px;margin:0 auto;"><iframe class="detailContent clearfix" allowfullscreen="" frameborder="0" style="height: ' + a + 'px;width:' + b + 'px" src="//www.youtube.com/embed/{CODE}?rel=0&amp;controls=1{autoplay}"></iframe></div></div>');
     });
     </script>
