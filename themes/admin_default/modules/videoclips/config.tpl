@@ -6,7 +6,7 @@
             <tbody>
                 <tr>
                     <td><strong>{LANG.viewtype}</strong></td>
-                    <td><select style="width: 500px" class="form-control" name="viewtype">
+                    <td><select class="form-control" name="viewtype">
                             <!-- BEGIN: viewtype -->
                             <option value="{VIEWTYPE.index}"{VIEWTYPE.selected}>{VIEWTYPE.value}</option>
                             <!-- END: viewtype -->
@@ -14,7 +14,7 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.homeclips}</strong></td>
-                    <td><select style="width: 500px" class="form-control" name="idhomeclips" id="idhomeclips">
+                    <td><select class="form-control" name="idhomeclips" id="idhomeclips">
                             <option value="0">-----</option>
                             <!-- BEGIN: idhomeclips -->
                             <option value="{VHOME.id}"{VHOME.select}>{VHOME.title}</option>
@@ -24,8 +24,8 @@
                 <tr>
                     <td><strong>{LANG.ratio_w_h}</strong></td>
                     <td>
-                        <input  style="width: 500px"  class="form-control" type="text" name="ratio_w_h" value="{ratio_w_h}" >
-                        <span style="font-size:0.8em; padding: 5px 0px">{LANG.hint_ratio}</span>
+                        <input class="form-control" type="text" name="ratio_w_h" value="{ratio_w_h}" >
+                        <span class="help-block">{LANG.hint_ratio}</span>
                     </td>
                 </tr>
                 <tr>
