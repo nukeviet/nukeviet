@@ -6,7 +6,7 @@
             <tbody>
                 <tr>
                     <td><strong>{LANG.viewtype}</strong></td>
-                    <td><select style="width: 500px" class="form-control" name="viewtype">
+                    <td><select class="form-control" name="viewtype">
                             <!-- BEGIN: viewtype -->
                             <option value="{VIEWTYPE.index}"{VIEWTYPE.selected}>{VIEWTYPE.value}</option>
                             <!-- END: viewtype -->
@@ -14,12 +14,19 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.homeclips}</strong></td>
-                    <td><select style="width: 500px" class="form-control" name="idhomeclips" id="idhomeclips">
+                    <td><select class="form-control" name="idhomeclips" id="idhomeclips">
                             <option value="0">-----</option>
                             <!-- BEGIN: idhomeclips -->
                             <option value="{VHOME.id}"{VHOME.select}>{VHOME.title}</option>
                             <!-- END: idhomeclips -->
                     </select></td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.ratio_w_h}</strong></td>
+                    <td>
+                        <input class="form-control" type="text" name="ratio_w_h" value="{ratio_w_h}" >
+                        <span class="help-block">{LANG.hint_ratio}</span>
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.NumberOfLinks}</strong></td>
@@ -63,4 +70,16 @@
         <input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" style="width: 100px;" />
     </div>
 </form>
+<script type="text/javascript">
+//<![CDATA[
+    $("input[name=ratio_w_h]").change(function(){
+        var ratio = $(this).val();
+        var patt = /^\d+:\d+$/;
+        if (!patt.test(ratio)) {
+            $(this).val('');
+            $(this).focus();
+        }
+    });
+//]]> 
+</script>
 <!-- END: main -->

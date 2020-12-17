@@ -3,6 +3,10 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/{MODULE_THEME}_jquery.matchHeight-min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/{MODULE_THEME}/jwplayer/jwplayer.js"></script>
 <script type="text/javascript">jwplayer.key="KzcW0VrDegOG/Vl8Wb9X3JLUql+72MdP1coaag==";</script>
+<script type="text/javascript">
+    var ratio = '{ratio}';
+    ratio = parseFloat(ratio);
+</script>
 <div class="detailContent clearfix">
     <h1>{DETAILCONTENT.title}</h1>
     <div class="message" id="mesHide"></div>
@@ -18,9 +22,9 @@
     $(function() {
         var ele = "videoCont";
         var a = $("#" + ele).outerWidth(), b;
-        640 < a && (a = 640);
         b = a;
-        a = Math.ceil(45 * a / 80) + 4;
+        a = Math.ceil(b / ratio) + 4;
+
         $("#" + ele).parent().css({
             width: b,
             height: a,
@@ -42,9 +46,8 @@
     <script type="text/javascript">
     $(function() {
         var a = $("div.detailContent").width(), b;
-        640 < a && (a = 640);
         b = a;
-        a = Math.ceil(45 * a / 80) + 4;
+        a = Math.ceil(b / ratio) + 4;
         $("div.detailContent").append('<div class="videoplayer"><div class="clearfix" style="height: ' + a + 'px;width:' + b + 'px;margin:0 auto;"><iframe class="detailContent clearfix" allowfullscreen="" frameborder="0" style="height: ' + a + 'px;width:' + b + 'px" src="//www.youtube.com/embed/{CODE}?rel=0&amp;controls=1{autoplay}"></iframe></div></div>');
     });
     </script>

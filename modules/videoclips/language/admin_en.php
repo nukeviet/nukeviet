@@ -92,3 +92,5 @@ $lang_module['cbroken'] = 'Bad Content';
 $lang_module['error8'] = 'Error! Please report content in the textarea';
 $lang_module['per_title'] = 'The number of title characters is cut off';
 $lang_module['error_regex_alias'] = 'Error: Alias cannot start with video- or end with -video';
+$lang_module['ratio_w_h'] = 'Scale width: height';
+$lang_module['hint_ratio'] = 'Enter the ratio in the XX: YY format where XX and YY are natural numbers like: 4: 3';

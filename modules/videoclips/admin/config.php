@@ -23,6 +23,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['playerMaxWidth'] = $nv_Request->get_int('playerMaxWidth', 'post', 0);
     $array_config['idhomeclips'] = $nv_Request->get_int('idhomeclips', 'post', 0);
     $array_config['clean_title_video'] = $nv_Request->get_int('clean_title_video', 'post', 0);
+    $array_config['ratio_w_h'] = $nv_Request->get_title('ratio_w_h', 'post', '16:9');
     if (!in_array($array_config['playerSkin'] . ".zip", $skins)) $array_config['playerSkin'] = "";
     if ($array_config['playerMaxWidth'] < 50 or $array_config['playerMaxWidth'] > 1000) $array_config['playerMaxWidth'] = 640;
 
@@ -49,6 +50,7 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op);
 $xtpl->assign('CONFIGMODULE', $configMods);
 $xtpl->assign('CLEAN_TITLE_VIDEO', $configMods['clean_title_video']);
+$xtpl->assign('ratio_w_h', $configMods['ratio_w_h']);
 
 $sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_clip ORDER BY addtime DESC LIMIT 100";
 $result = $db->query($sql);
