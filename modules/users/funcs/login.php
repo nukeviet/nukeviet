@@ -165,7 +165,7 @@ function set_reg_attribs($attribs)
     return $reg_attribs;
 }
 
-// Dang nhap bang Open ID
+// Đăng nhập qua Oauth
 $server = $nv_Request->get_string('server', 'get', '');
 if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')) {
     $server = $nv_Request->get_string('server', 'get', '');
@@ -212,12 +212,13 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
 
     /**
-     * Neu da co trong CSDL
+     * Oauth này đã có trong CSDL
      */
-    $stmt = $db->prepare('SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive, b.safemode AS safemode FROM ' . NV_MOD_TABLE . '_openid a, ' . NV_MOD_TABLE . ' b
-        WHERE a.opid= :opid
-        AND a.email= :email
-        AND a.userid=b.userid');
+    $stmt = $db->prepare('SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive, b.safemode AS safemode
+    FROM ' . NV_MOD_TABLE . '_openid a, ' . NV_MOD_TABLE . ' b
+    WHERE a.opid= :opid
+    AND a.email= :email
+    AND a.userid=b.userid');
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
@@ -254,7 +255,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     }
 
     /**
-     * Neu chua co trong CSDL nhung email da duoc su dung
+     * Oauth này chưa có nhưng email đã được sử dụng
      */
     $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE email= :email');
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -276,7 +277,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ]);
         }
 
-        if (!empty($nv_row['password'])) {
+        /**
+         * Nếu tài khoản trùng email này có mật khẩu và chức năng tự động gán Oauh bị tắt
+         * thì yêu cầu nhập mật khẩu xác nhận
+         */
+        if (!empty($nv_row['password']) and empty($global_users_config['auto_assign_oauthuser'])) {
             if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                 $password = $nv_Request->get_string('password', 'post', '');
 
