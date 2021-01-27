@@ -8,11 +8,12 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-if (! function_exists('nv_news_array_cat_admin')) {
+if (!function_exists('nv_news_array_cat_admin')) {
+
     /**
      * nv_news_array_cat_admin()
      *
@@ -22,7 +23,7 @@ if (! function_exists('nv_news_array_cat_admin')) {
     {
         global $db_slave;
 
-        $array_cat_admin = array();
+        $array_cat_admin = [];
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins ORDER BY userid ASC';
         $result = $db_slave->query($sql);
 
@@ -37,10 +38,10 @@ if (! function_exists('nv_news_array_cat_admin')) {
 $is_refresh = false;
 $array_cat_admin = nv_news_array_cat_admin($module_data);
 
-if (! empty($module_info['admins'])) {
+if (!empty($module_info['admins'])) {
     $module_admin = explode(',', $module_info['admins']);
     foreach ($module_admin as $userid_i) {
-        if (! isset($array_cat_admin[$userid_i])) {
+        if (!isset($array_cat_admin[$userid_i])) {
             $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $userid_i . ', 0, 1, 1, 1, 1, 1)');
             $is_refresh = true;
         }
@@ -65,9 +66,24 @@ if (defined('NV_IS_SPADMIN')) {
     }
 }
 
-$allow_func = array( 'main', 'view', 'stop', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'alias', 'topicajax', 'sourceajax', 'tagsajax' );
+$allow_func = [
+    'main',
+    'view',
+    'stop',
+    'publtime',
+    'waiting',
+    'declined',
+    're-published',
+    'content',
+    'rpc',
+    'del_content',
+    'alias',
+    'topicajax',
+    'sourceajax',
+    'tagsajax'
+];
 
-if (! isset($site_mods['cms'])) {
+if (!isset($site_mods['cms'])) {
     $submenu['content'] = $lang_module['content_add'];
 }
 

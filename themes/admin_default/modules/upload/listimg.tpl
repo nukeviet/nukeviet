@@ -30,8 +30,18 @@ $('.imgcontent').bind("mouseup contextmenu", function(e) {
     fileMouseup(this, e);
 });
 
-$('.imgcontent').dblclick(function() {
-    insertvaluetofield();
+var touchtime = 0;
+$('.imgcontent').on('click', function() {
+    if (touchtime == 0) {
+        touchtime = new Date().getTime();
+    } else {
+        if (((new Date().getTime()) - touchtime) < 500) {
+            insertvaluetofield();
+            touchtime = 0;
+        } else {
+            touchtime = 0;
+        }
+    }
 });
 
 $( "#imglist" ).selectable({

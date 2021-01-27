@@ -184,21 +184,20 @@ function nv_admin_theme($contents, $head_site = 1)
         $xtpl->assign('NV_GO_ALL_NOTIFICATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=notification');
 
         if (!empty($array_lang_admin)) {
-            $xtpl->assign('NV_LANGDATA', $lang_global['langdata']);
             $xtpl->assign('NV_LANGDATA_CURRENT', $array_lang_admin[NV_LANG_DATA]);
             $xtpl->assign('NV_LANGINTERFACE_CURRENT', $array_lang_admin[NV_LANG_INTERFACE]);
             foreach ($array_lang_admin as $lang_i => $lang_name) {
                 $xtpl->assign('LANGVALUE', $lang_name);
-                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "");
-                $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . NV_LANG_INTERFACE . '&' . NV_LANG_VARIABLE . '=' . $lang_i);
-                $xtpl->parse('main.langdata.option');
+                $xtpl->assign('DATA_DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "");
+                $xtpl->assign('DATA_LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . NV_LANG_INTERFACE . '&' . NV_LANG_VARIABLE . '=' . $lang_i);
+                $xtpl->parse('main.lang.data');
 
-                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_INTERFACE) ? " class=\"disabled\"" : "");
-                $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i . '&' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-                $xtpl->parse('main.langinterface.option');
+                $xtpl->assign('INTERFACE_DISABLED', ($lang_i == NV_LANG_INTERFACE) ? " class=\"disabled\"" : "");
+                $xtpl->assign('INTERFACE_LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i . '&' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+                $xtpl->parse('main.lang.interface');
             }
-            $xtpl->parse('main.langdata');
-            $xtpl->parse('main.langinterface');
+            $xtpl->parse('main.lang');
+            $xtpl->parse('main.lang1');
         }
 
         // Top_menu
