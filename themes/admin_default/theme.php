@@ -254,7 +254,9 @@ function nv_admin_theme($contents, $head_site = 1)
 
         // Admin photo
         $xtpl->assign('ADMIN_USERNAME', $admin_info['username']);
-        if (!empty($admin_info['photo']) and file_exists(NV_ROOTDIR . '/' . $admin_info['photo'])) {
+        if (isset($admin_info['avata']) and !empty($admin_info['avata'])) {
+            $xtpl->assign('ADMIN_PHOTO', $admin_info['avata']);
+        } elseif (!empty($admin_info['photo']) and file_exists(NV_ROOTDIR . '/' . $admin_info['photo'])) {
             $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . $admin_info['photo']);
         } else {
             $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png');
