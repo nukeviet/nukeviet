@@ -433,8 +433,6 @@ UAV.config = {
     maxsize: 2097152,
     avatar_width: 80,
     avatar_height: 80,
-    max_width: 1500,
-    max_height: 1500,
     target: 'preview',
     uploadInfo: 'uploadInfo',
     uploadGuide: 'guide',
@@ -497,11 +495,6 @@ UAV.common = {
                 var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
                 var minCropBoxWidth = UAV.config.avatar_width / (img.naturalWidth / boxWidth);
                 var minCropBoxHeight = UAV.config.avatar_height / (img.naturalHeight / boxHeight);
-                if (img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height) {
-                    UAV.common.error(UAV.lang.bigsize);
-                    UAV.data.error = true;
-                    return false;
-                }
                 if (img.naturalWidth < UAV.config.avatar_width || img.naturalHeight < UAV.config.avatar_height) {
                     UAV.common.error(UAV.lang.smallsize);
                     UAV.data.error = true;
