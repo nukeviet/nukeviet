@@ -19,6 +19,7 @@ $page_title = $nv_Lang->getModule('logs_title');
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
 $data = [];
+$filtersql = '';
 $array_userid = [];
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
@@ -92,7 +93,7 @@ if ($nv_Request->isset_request('checksess', 'get')) {
     }
 
     if (!empty($data_search['user'])) {
-        $user_tmp = ($data_search['user'] == 'system') ? 0 : ( int )$data_search['user'];
+        $user_tmp = ($data_search['user'] == 'system') ? 0 : (int)$data_search['user'];
 
         $array_where[] = 'userid=' . $user_tmp;
         $base_url .= '&amp;user=' . $data_search['user'];
@@ -152,6 +153,14 @@ if ($check_like) {
 }
 $sth->execute();
 $num_items = $sth->fetchColumn();
+
+if ($data_search['is_search'] && !empty($array_where)) {
+    $filtersql = implode(' AND ', $array_where);
+    if ($check_like) {
+        $filtersql = str_replace([':keyword1', ':keyword2'], '\'%' . addcslashes($data_search['q'], '_%') . '%\'', $filtersql);
+    }
+    $filtersql = $crypt->encrypt($filtersql, md5(NV_CHECK_SESSION . '-del-all-logs'));
+}
 
 $db->select('*')->limit($per_page)->offset(($page - 1) * $per_page);
 
@@ -225,6 +234,7 @@ $tpl->assign('DATA_ORDER', $order);
 $tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $num_items, $per_page, $page));
 $tpl->assign('ALLOW_DELETE', $logs_del);
 $tpl->assign('DATA', $data);
+$tpl->assign('FILTERSQL', $filtersql);
 $tpl->assign('DATA_USER', $data_users);
 
 $contents = $tpl->fetch('logs.tpl');

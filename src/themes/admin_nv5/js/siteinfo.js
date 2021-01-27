@@ -126,7 +126,8 @@ $(document).ready(function(){
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logs_del&nocache=' + new Date().getTime(),
                 data: {
-                    'logempty': $(this).data('checksess')
+                    'logempty': $(this).data('checksess'),
+                    'filtersql': $(this).data('filtersql')
                 },
                 cache: false,
                 success: function(data) {
