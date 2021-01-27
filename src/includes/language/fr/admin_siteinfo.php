@@ -154,6 +154,7 @@ $lang_module['filter_lang_desc'] = 'descendant';
 $lang_module['filter_order_by'] = 'Arranger par ordre %s';
 $lang_module['log_empty'] = 'Supprimer tout';
 $lang_module['log_empty_log'] = 'Supprimer tous les historiques du système';
+$lang_module['log_empty_log_filter'] = 'Effacer les journaux système en fonction de la condition';
 $lang_module['update_package_detected'] = 'Mise à jours disponibles, le site sera en suspens. Merci de faire 1 de 2 procès suivants avant que le site puisse remet en marche';
 $lang_module['update_package_delete'] = 'Supprimer la mise à jour';
 $lang_module['update_package_do'] = 'Mettre à jour';
