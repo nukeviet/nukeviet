@@ -46,8 +46,6 @@
 	UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
 	UAV.config.avatar_width = {NV_AVATAR_WIDTH};
 	UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
-	UAV.config.max_width = {NV_MAX_WIDTH};
-	UAV.config.max_height = {NV_MAX_HEIGHT};
 	UAV.lang.bigsize = '{LANG.avatar_bigsize}';
 	UAV.lang.smallsize = '{LANG.avatar_smallsize}';
 	UAV.lang.filetype = '{LANG.avatar_filetype}';
