@@ -52,7 +52,6 @@ $(function() {
 });
 </script>
 <!-- END: video_youtube -->
-[HEADER]
 <!-- BEGIN: otherClips -->
 {OTHERCLIPSCONTENT}
 <!-- END: otherClips -->
