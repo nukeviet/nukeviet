@@ -673,10 +673,11 @@ function viewcat_two_column($array_content, $array_catpage)
                     $xtpl->parse('main.loopcat.other');
                 }
             }
+            
+            //Show banner after two column
+            //Top
             $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : array();
             if (($a+1) % 2) {
-                //Top
-                
                 $_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_catpage_i['catid'] . ']';
                 if( in_array( '1', $array_catpage_i['ad_block_cat']) ){
                     if( !nv_check_block_topcat_news( $array_catpage_i['catid'] ) ){
@@ -691,9 +692,8 @@ function viewcat_two_column($array_content, $array_catpage)
                 }
             }
 
+            // Bottom
             if ($a % 2) {
-                // show banner after two column
-                // Bottom
                 $_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_catpage_i['catid'] . ']';
                 if( in_array( '2', $array_catpage_i['ad_block_cat']) ){
                     if( !nv_check_block_block_botcat_news( $array_catpage_i['catid'] )){

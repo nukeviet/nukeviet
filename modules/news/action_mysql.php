@@ -224,7 +224,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      app_content tinyint(4) NOT NULL default '0',
      UNIQUE KEY userid (userid,catid)
     ) ENGINE=MyISAM";
-
+    
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
      tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
      numnews mediumint(8) NOT NULL DEFAULT '0',
