@@ -612,12 +612,11 @@ function viewcat_two_column($array_content, $array_catpage)
 
     // Theo chu de
     $a = 0;
+    
     foreach ($array_catpage as $key => $array_catpage_i) {
         $number_content = isset($array_catpage[$key]['content']) ? sizeof($array_catpage[$key]['content']) : 0;
-
         if ($number_content > 0) {
             $array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_catpage_i['alias'];
-
             $xtpl->assign('CAT', $array_catpage_i);
             $xtpl->assign('ID', ($a + 1));
 
@@ -651,6 +650,7 @@ function viewcat_two_column($array_content, $array_catpage)
                 $xtpl->parse('main.loopcat.content.comment');
             }
 
+            
             $xtpl->parse('main.loopcat.content');
 
             if ($number_content > 1) {
@@ -673,9 +673,39 @@ function viewcat_two_column($array_content, $array_catpage)
                     $xtpl->parse('main.loopcat.other');
                 }
             }
+            $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : array();
+            if (($a+1) % 2) {
+                //Top
+                
+                $_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_catpage_i['catid'] . ']';
+                if( in_array( '1', $array_catpage_i['ad_block_cat']) ){
+                    if( !nv_check_block_topcat_news( $array_catpage_i['catid'] ) ){
+                        nv_add_block_topcat_news( $array_catpage_i['catid'] );
+                    }
+                    $xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_id );
+                    $xtpl->parse( 'main.loopcat.block_topcat' );
+                }else{
+                    if( nv_check_block_topcat_news( $array_catpage_i['catid'] ) ){
+                        nv_remove_block_topcat_news( $array_catpage_i['catid'] );
+                    }
+                }
+            }
 
             if ($a % 2) {
-                $xtpl->parse('main.loopcat.clear');
+                // show banner after two column
+                // Bottom
+                $_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_catpage_i['catid'] . ']';
+                if( in_array( '2', $array_catpage_i['ad_block_cat']) ){
+                    if( !nv_check_block_block_botcat_news( $array_catpage_i['catid'] )){
+                        nv_add_block_botcat_news( $array_catpage_i['catid'] );
+                    }
+                    $xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_id );
+                    $xtpl->parse( 'main.loopcat.block_bottomcat' );
+                }else{
+                    if( nv_check_block_block_botcat_news( $array_catpage_i['catid'] ) ){
+                        nv_remove_block_botcat_news( $array_catpage_i['catid'] );
+                    }
+                }
             }
 
             $xtpl->parse('main.loopcat');

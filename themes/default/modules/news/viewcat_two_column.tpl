@@ -55,6 +55,11 @@
 </div>
 <div class="row">
     <!-- BEGIN: loopcat -->
+      <!-- BEGIN: block_topcat -->
+        <div class="block-top clear">
+            {BLOCK_TOPCAT}
+        </div>
+        <!-- END: block_topcat -->
     <div class="news_column two_column col-md-12">
         <div class="panel panel-default clearfix">
             <div class="panel-heading">
@@ -98,9 +103,11 @@
             </div>
         </div>
     </div>
-    <!-- BEGIN: clear -->
-    <div class="clear">&nbsp;</div>
-    <!-- END: clear -->
+    <!-- BEGIN: block_bottomcat -->
+    <div class="bottom-cat clear">
+        {BLOCK_BOTTOMCAT}
+    </div>
+    <!-- END: block_bottomcat -->
     <!-- END: loopcat -->
 </div>
 <div class="clear">&nbsp;</div>
