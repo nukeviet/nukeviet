@@ -673,9 +673,8 @@ function viewcat_two_column($array_content, $array_catpage)
                     $xtpl->parse('main.loopcat.other');
                 }
             }
-            
-            //Show banner after two column
-            //Top
+
+            //Block Top
             $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : array();
             if (($a+1) % 2) {
                 $_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_catpage_i['catid'] . ']';
@@ -692,7 +691,7 @@ function viewcat_two_column($array_content, $array_catpage)
                 }
             }
 
-            // Bottom
+            //Block Bottom
             if ($a % 2) {
                 $_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_catpage_i['catid'] . ']';
                 if( in_array( '2', $array_catpage_i['ad_block_cat']) ){

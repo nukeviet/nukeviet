@@ -103,11 +103,11 @@
             </div>
         </div>
     </div>
-    <!-- BEGIN: block_bottomcat -->
-    <div class="bottom-cat clear">
-        {BLOCK_BOTTOMCAT}
-    </div>
-    <!-- END: block_bottomcat -->
+        <!-- BEGIN: block_bottomcat -->
+        <div class="bottom-cat clear">
+            {BLOCK_BOTTOMCAT}
+        </div>
+        <!-- END: block_bottomcat -->
     <!-- END: loopcat -->
 </div>
 <div class="clear">&nbsp;</div>
