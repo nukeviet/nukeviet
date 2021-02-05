@@ -174,7 +174,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      KEY instant_active (instant_active),
      KEY instant_creatauto (instant_creatauto)
     ) ENGINE=MyISAM";
-    
+
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (
      id int(11) unsigned NOT NULL,
      titlesite varchar(255) NOT NULL DEFAULT '',
