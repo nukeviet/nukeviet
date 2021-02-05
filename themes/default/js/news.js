@@ -6,15 +6,18 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-$(function() {
+$(document).ready(function() {
+    // Xem PDF đính kèm
     $('[data-toggle="collapsepdf"]').each(function() {
         $('#' + $(this).attr('id')).on('shown.bs.collapse', function() {
             $(this).find('iframe').attr('src', $(this).data('src'));
         });
     });
+
+    // Xem ảnh đính kèm
     $('[data-toggle="newsattachimage"]').click(function(e) {
         e.preventDefault();
-        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%;"/></div>');
+        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%; height: auto;"/></div>');
     });
 });
 
@@ -38,7 +41,7 @@ function nv_del_content(id, checkss, base_adminurl, detail) {
         $.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
             var r_split = res.split('_');
             if (r_split[0] == 'OK') {
-                if( detail ){
+                if (detail) {
                     window.location.href = r_split[2];
                 } else {
                     window.location.href = strHref;
@@ -67,22 +70,22 @@ function get_alias(op) {
     return false;
 }
 
-function fix_news_image(){
+function fix_news_image() {
     var news = $('#news-bodyhtml'), newsW, w, h;
-    if( news.length ){
+    if (news.length) {
         var newsW = news.innerWidth();
-        $.each($('img', news), function(){
-            if( typeof $(this).data('width') == "undefined" ){
+        $.each($('img', news), function() {
+            if (typeof $(this).data('width') == "undefined") {
                 w = $(this).innerWidth();
                 h = $(this).innerHeight();
                 $(this).data('width', w);
                 $(this).data('height', h);
-            }else{
+            } else {
                 w = $(this).data('width');
                 h = $(this).data('height');
             }
 
-            if( w > newsW ){
+            if (w > newsW) {
                 $(this).prop('width', newsW);
                 $(this).prop('height', h * newsW / w);
             }

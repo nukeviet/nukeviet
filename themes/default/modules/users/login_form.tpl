@@ -4,7 +4,7 @@
         <div class="form-group loginstep1">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
+                <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){1,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
             </div>
         </div>
 
@@ -68,7 +68,7 @@
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
-       	</div>
+           </div>
 
         <!-- BEGIN: allowuserreg2_form -->
         <div class="form-group">
@@ -87,14 +87,14 @@
         <!-- END: allowuserreg_linkform -->
 
         <!-- BEGIN: openid -->
-       	<div class="text-center openid-btns">
-      		<!-- BEGIN: server -->
+           <div class="text-center openid-btns">
+              <!-- BEGIN: server -->
             <div class="btn-group m-bottom btn-group-justified">
                 <button class="btn openid-{OPENID.server} disabled" type="button" tabindex="-1"><i class="fa fa-fw fa-{OPENID.icon}"></i></button>
                 <a class="btn openid-{OPENID.server}" href="{OPENID.href}" onclick="return openID_load(this);">{LANG.login_with} {OPENID.title}</a>
             </div>
             <!-- END: server -->
-       	</div>
-       	<!-- END: openid -->
+           </div>
+           <!-- END: openid -->
     </div>
 </form>

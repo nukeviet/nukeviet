@@ -142,11 +142,23 @@ if ($check_update_user) {
     }
 }
 
+$nv_redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+if (defined('SSO_REGISTER_SECRET')) {
+    $sso_redirect_users = $nv_Request->get_title('sso_redirect_users', 'session', '');
+    $iv = substr(SSO_REGISTER_SECRET, 0, 16);
+    $sso_redirect_users = strtr($sso_redirect_users, '-_,', '+/=');
+    $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
+    if (!empty($sso_redirect_users)) {
+        $nv_redirect = $sso_redirect_users;
+    }
+    $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
+}
+
 $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
-$info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_login'] . "</a>]";
+$info .= "[<a href=\"" . $nv_redirect . "\">" . $lang_module['redirect_to_login'] . "</a>]";
 
 $contents = user_info_exit($info);
-$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . "\" />";
+$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . $nv_redirect . "\" />";
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

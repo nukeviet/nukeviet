@@ -41,6 +41,9 @@ while ($row = $result->fetch()) {
     $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : $row['module'];
     $admin_mods[$row['module']] = $row;
 }
+if (!defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
+    unset($admin_mods['seotools']);
+}
 
 $site_mods = nv_site_mods();
 if (!isset($admin_mods[$admin_info['main_module']]) and !isset($site_mods[$admin_info['main_module']])) {

@@ -11,7 +11,6 @@
         </div>
         <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
         <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="description">{SCHEMA_HEADLINE}</span>
         <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
         <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
         <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>
@@ -61,7 +60,7 @@
             <!-- END: empty -->
             <!-- END: imgthumb -->
 
-             <div class="hometext m-bottom" itemprop="description">{DETAIL.hometext}</div>
+            <div class="hometext m-bottom" itemprop="description">{DETAIL.hometext}</div>
 
             <!-- BEGIN: imgfull -->
             <figure class="article center">
@@ -77,7 +76,7 @@
         <!-- BEGIN: files -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-download fa-fw"></i><strong>{LANG.files}</strong>
+                <i class="fa fa-download"></i> <strong>{LANG.files}</strong>
             </div>
             <div class="list-group news-download-file">
                 <!-- BEGIN: loop -->
@@ -105,14 +104,6 @@
                         </div>
                     </div>
                     <!-- END: content_quick_viewpdf -->
-                    <!-- BEGIN: content_quick_viewdoc -->
-                    <div class="clearfix"></div>
-                    <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urldoc}" data-toggle="collapsepdf">
-                        <div class="well margin-top">
-                            <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
-                        </div>
-                    </div>
-                    <!-- END: content_quick_viewdoc -->
                 </div>
                 <!-- END: loop -->
             </div>

@@ -19,7 +19,7 @@ if (!defined('NV_IS_AJAX')) {
 $userids = $nv_Request->get_title('userid', 'post', '');
 $userids = array_filter(array_unique(array_map('intval', array_map('trim', explode(',', $userids)))));
 $setactive = $nv_Request->get_int('setactive', 'post', -1);
-if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_string('checkss', 'post')) {
+if (!defined('NV_IS_USER_FORUM') and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_string('checkss', 'post')) {
     foreach ($userids as $userid) {
         if (!$userid or $admin_info['admin_id'] == $userid) {
             continue;
