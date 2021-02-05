@@ -149,7 +149,7 @@ if (!empty($plugin_new)) {
                 $positions = $position[0]->position;
                 for ($j = 0, $count = sizeof($positions); $j < $count; ++$j) {
                     $_index = $positions[$j]->id;
-                    if ($_index >= 1 and $_index <= 4) {
+                    if ($_index >= 1 and $_index <= 5) {
                         $xtpl->assign('AREA_VALUE', $_index);
                         $xtpl->assign('AREA_TEXT', $lang_module['plugin_area_' . $_index]);
                         $xtpl->parse('main.add.area');

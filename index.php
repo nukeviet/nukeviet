@@ -32,6 +32,16 @@ if (defined('NV_IS_USER')) {
 }
 require NV_ROOTDIR . '/includes/core/is_user.php';
 
+/*
+ * Kết nối với các plugin trước khi gọi các module ngoài site
+ * Các plugin này có thể sử dụng thông tin thành viên
+ */
+if (isset($nv_plugin_area[5])) {
+    foreach ($nv_plugin_area[5] as $_fplugin) {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+    }
+}
+
 // Cap nhat trang thai online
 if ($global_config['online_upd'] and !defined('NV_IS_AJAX') and !defined('NV_IS_MY_USER_AGENT')) {
     require NV_ROOTDIR . '/includes/core/online.php';
@@ -70,6 +80,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_re
         if ($tokend === NV_CHECK_SESSION and in_array($theme, $global_config['array_user_allowed_theme'])) {
             $nv_Request->set_Cookie('nv_u_theme_' . NV_LANG_DATA, $theme, NV_LIVE_COOKIE_TIME);
         }
+        $nv_BotManager->setNoIndex()->printToHeaders();
         nv_htmlOutput('OK');
     }
 } else {
@@ -111,6 +122,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
             // Tuy chon kieu giao dien
             if ($nv_Request->isset_request('nv' . NV_LANG_DATA . 'themever', 'get')) {
+                $nv_BotManager->setNoIndex()->printToHeaders();
                 $theme_type = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
                 if (in_array($theme_type, $global_config['array_theme_type'])) {
                     $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME);

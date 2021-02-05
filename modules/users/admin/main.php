@@ -126,7 +126,7 @@ $users_list = [];
 $admin_in = [];
 $is_edit = (in_array('edit', $allow_func)) ? true : false;
 $is_delete = (in_array('del', $allow_func)) ? true : false;
-$is_setactive = (in_array('setactive', $allow_func)) ? true : false;
+$is_setactive = (in_array('setactive', $allow_func) and !defined('NV_IS_USER_FORUM')) ? true : false;
 $array_userids = $array_users = [];
 
 while ($row = $result2->fetch()) {
@@ -308,12 +308,13 @@ foreach ($users_list as $u) {
         $xtpl->parse('main.xusers.is_admin');
     }
 
+    if ($view_user_allowed) {
+        $xtpl->parse('main.xusers.view');
+    } else {
+        $xtpl->parse('main.xusers.show');
+    }
+
     if (!defined('NV_IS_USER_FORUM')) {
-        if ($view_user_allowed) {
-            $xtpl->parse('main.xusers.view');
-        } else {
-            $xtpl->parse('main.xusers.show');
-        }
         if ($u['is_edit']) {
             $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid']);
             $xtpl->assign('EDIT_2STEP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $u['userid']);

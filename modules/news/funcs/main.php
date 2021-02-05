@@ -17,11 +17,19 @@ $key_words = $module_info['keywords'];
 
 $contents = '';
 $cache_file = '';
-
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-if (($page < 2 and isset($array_op[0])) or isset($array_op[1])) {
+$viewcat = $module_config[$module_name]['indexfile'];
+$no_generate = ['viewcat_none', 'viewcat_main_left', 'viewcat_main_right', 'viewcat_main_bottom', 'viewcat_two_column'];
+
+/**
+ * @link https://github.com/nukeviet/nukeviet/issues/2990
+ * Không cho điền page-1, không cho điền op đằng sau page
+ * Một số kiểu hiển thị không được đánh page > 1
+ */
+if (($page < 2 and isset($array_op[0])) or isset($array_op[1]) or ($page > 1 and in_array($viewcat, $no_generate))) {
     nv_redirect_location($base_url);
 }
+
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
@@ -30,7 +38,6 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 }
 
 if (empty($contents)) {
-    $viewcat = $module_config[$module_name]['indexfile'];
     $show_no_image = $module_config[$module_name]['show_no_image'];
     $array_catpage = [];
     $array_cat_other = [];
@@ -75,6 +82,11 @@ if (empty($contents)) {
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
             $weight_publtime = ($order_articles) ? $item['weight'] : $item['publtime'];
+        }
+
+        // Không cho tùy ý đánh số page
+        if ($page > 1 and empty($array_catpage)) {
+            nv_redirect_location($base_url);
         }
 
         if ($st_links > 0) {
@@ -278,6 +290,11 @@ if (empty($contents)) {
             $array_catpage[] = $item;
         }
 
+        // Không cho tùy ý đánh số page
+        if ($page > 1 and empty($array_catpage)) {
+            nv_redirect_location($base_url);
+        }
+
         $viewcat = 'viewcat_grid_new';
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
         $contents = call_user_func($viewcat, $array_catpage, 0, $generate_page);
@@ -319,6 +336,11 @@ if (empty($contents)) {
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
+        }
+
+        // Không cho tùy ý đánh số page
+        if ($page > 1 and empty($array_catpage)) {
+            nv_redirect_location($base_url);
         }
 
         $viewcat = 'viewcat_list_new';

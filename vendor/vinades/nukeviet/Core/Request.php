@@ -470,13 +470,16 @@ class Request
                 } else {
                     $this->origin_key = 0;
                 }
+            } elseif (strtolower($this->origin) == 'null') {
+                // Null Origin xem như là Cross-Site
+                $this->origin_key = 0;
             } else {
                 /*
-                 * Origin có dạng `Origin: <scheme> "://" <hostname> [ ":" <port> ]`
+                 * Origin có dạng `Origin: <scheme> "://" <hostname> [ ":" <port> ]` hoặc null
                  * Nếu sai thì từ chối truy vấn
                  */
-                trigger_error(Request::INCORRECT_ORIGIN, 256);
                 unset($_SERVER['HTTP_ORIGIN']);
+                trigger_error(Request::INCORRECT_ORIGIN, 256);
             }
         } else {
             $this->origin_key = 2;

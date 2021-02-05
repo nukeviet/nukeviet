@@ -9,14 +9,25 @@
                     <figcaption>{IMG.title}</figcaption>
                 </div>
             </figure>
-        	<div>
-        		<ul class="nv-list-item xsm">
-        			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
-        			<li><em class="fa fa-angle-right">&nbsp;</em> {USER.current_mode}</li>
-        			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
-        			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
-        		</ul>
-        	</div>
+            <!-- BEGIN: crossdomain_listener -->
+            <script type="text/javascript">
+            function SSOReciver(event) {
+                if (event.origin !== '{SSO_REGISTER_ORIGIN}') {
+                    return false;
+                }
+                location.reload();
+            }
+            window.addEventListener("message", SSOReciver, false);
+            </script>
+            <!-- END: crossdomain_listener -->
+            <div>
+                <ul class="nv-list-item xsm">
+                    <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
+                    <li><em class="fa fa-angle-right">&nbsp;</em> {USER.current_mode}</li>
+                    <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
+                    <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -39,8 +50,8 @@
 <div class="table-responsive margin-bottom-lg">
     <table class="table table-bordered table-striped">
         <colgroup>
- 			<col style="width:30%"/>
-  		</colgroup>
+             <col style="width:30%"/>
+          </colgroup>
         <tbody>
             <tr>
                 <td>{LANG.name}</td>

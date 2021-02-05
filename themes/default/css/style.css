@@ -264,6 +264,10 @@
     background-color: #eee;
 }
 
+ul.list-items {
+    padding-left: 0;
+}
+
 ul.list-items > li {
     margin-bottom: 10px;
 }
@@ -561,16 +565,37 @@ div.check-box label [type="radio"] {
 
 figure {
     position: relative;
-    padding: 3px;
-    display: block;
-    float: left;
-    margin: 5px 10px 10px 0;
+    margin: 5px 0 10px 0;
     text-align: center
 }
-figure.article{
+
+figure.image.image-left,
+img.image-left {
+    margin-right: 15px;
+    float: left!important;
+}
+
+figure.image.image-right,
+img.image-right {
+    margin-left: 15px;
+    float: right!important;
+}
+
+.image-center figure.image,
+.image-center {
+    text-align: center;
+    float: none!important;
+}
+
+div.image-center,
+p.image-center {
+    margin-bottom: 10px;
+}
+
+figure.article {
     background-color: #939393;
 }
-figure.left{
+figure.left {
     float: left;
     margin: 5px 10px 10px 0;
 }

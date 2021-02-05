@@ -170,7 +170,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                 if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $row['basename'] . '/config.ini')) {
                     $info = $xml->xpath('info');
                     $layoutdefault = (string) $xml->layoutdefault;
-                    $config_ini = "<?xml version='1.0'?>\n<theme>\n\t<info>\n\t\t<name>" . (string) $info[0]->name . "</name>\n\t\t<author>" . (string) $info[0]->author . "</author>\n\t\t<website>" . (string) $info[0]->website . "</website>\n\t\t<description>" . (string) $info[0]->description . "</description>\n\t\t<thumbnail>" . (string) $info[0]->thumbnail . "</thumbnail>\n\t</info>\n\n\t<layoutdefault>" . $layoutdefault . "</layoutdefault>\n\n\t<positions>";
+                    $config_ini = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<theme>\n\t<info>\n\t\t<name>" . (string) $info[0]->name . "</name>\n\t\t<author>" . (string) $info[0]->author . "</author>\n\t\t<website>" . (string) $info[0]->website . "</website>\n\t\t<description>" . (string) $info[0]->description . "</description>\n\t\t<thumbnail>" . (string) $info[0]->thumbnail . "</thumbnail>\n\t</info>\n\n\t<layoutdefault>" . $layoutdefault . "</layoutdefault>\n\n\t<positions>";
 
                     $position = $xml->xpath('positions');
                     $positions = $position[0]->position;
