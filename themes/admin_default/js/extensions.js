@@ -118,7 +118,7 @@ $(document).ready(function(){
             $('#login-result').html('<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>');
 
             $.post(
-                script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
+                script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
                 'username=' + username + '&password=' + password + '&checksess=' + checksess + '&redirect=' + $('[name="redirect"]').val(),
                 function(res) {
                     $('#login-form input, #login-form button').removeAttr('disabled');

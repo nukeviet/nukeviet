@@ -9,7 +9,7 @@
 function nv_chang_weight(vid) {
 	var nv_timer = nv_settimeout_disable('change_weight_' + vid, 5000);
 	var new_weight = $('#change_weight_' + vid).val();
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'id=' + vid + '&new_weight=' + new_weight, function(res) {
+	$.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'id=' + vid + '&new_weight=' + new_weight, function(res) {
 		nv_chang_weight_res(res);
 	});
 	return;
@@ -18,7 +18,7 @@ function nv_chang_weight(vid) {
 function nv_chang_status(vid) {
 	var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
 	var new_status = $('#change_status_' + vid).val();
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_status&nocache=' + new Date().getTime(), 'id=' + vid + '&new_status=' + new_status, function(res) {
+	$.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_status&nocache=' + new Date().getTime(), 'id=' + vid + '&new_status=' + new_status, function(res) {
 		nv_chang_weight_res(res);
 	});
 	return;
@@ -37,7 +37,7 @@ function nv_chang_weight_res(res) {
 
 function nv_module_del(did) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'id=' + did, function(res) {
+		$.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'id=' + did, function(res) {
 			var r_split = res.split("_");
 			if (r_split[0] == 'OK') {
 				window.location.href = window.location.href;
@@ -52,7 +52,7 @@ function nv_module_del(did) {
 function get_alias(id) {
 	var title = strip_tags(document.getElementById('idtitle').value);
 	if (title != '') {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title) + '&id=' + id, function(res) {
+		$.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title) + '&id=' + id, function(res) {
 			if (res != "") {
 				document.getElementById('idalias').value = res;
 			} else {

@@ -132,7 +132,7 @@ $(document).ready(function(){
                 data : nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty=1&checksess=" + CFG.checksess,
                 success : function(data) {
                     if (data == 'OK') {
-                        window.location = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";
+                        window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";
                     } else {
                         alert(data);
                     }
