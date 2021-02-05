@@ -674,7 +674,7 @@ function viewcat_two_column($array_content, $array_catpage)
             }
 
             // Block Top
-            $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : array();
+            $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : [];
             if (($a + 1) % 2) {
                 $_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_catpage_i['catid'] . ']';
                 if (in_array('1', $array_catpage_i['ad_block_cat'])) {
