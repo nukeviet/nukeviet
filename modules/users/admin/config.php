@@ -46,8 +46,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
         $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
-        $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post', 0);
-        if (!$array_config['is_user_forum'] or !is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
+        $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post');
+        if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
             $array_config['dir_forum'] = '';
         }
 
@@ -100,6 +100,12 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $sth->bindValue(':config_name', 'name_show', PDO::PARAM_STR);
         $sth->bindParam(':config_value', $array_config['name_show'], PDO::PARAM_INT);
         $sth->execute();
+
+        // Tự động gán oauth vào tài khoản đã tồn tại
+        $array_config['auto_assign_oauthuser'] = (int) $nv_Request->get_bool('auto_assign_oauthuser', 'post', false);
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='auto_assign_oauthuser'");
+        $stmt->bindParam(':content', $array_config['auto_assign_oauthuser'], PDO::PARAM_STR);
+        $stmt->execute();
 
         if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
             // Cau hinh kich thuoc avatar
@@ -201,7 +207,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE
         config='deny_email' OR config='deny_name' OR config='password_simple' OR
-        config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR config='active_editinfo_censor' OR config='active_user_logs' OR config='min_old_user'
+        config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR
+        config='active_editinfo_censor' OR config='active_user_logs' OR config='min_old_user' OR
+        config='auto_assign_oauthuser'
     ";
     $result = $db->query($sql);
     while (list ($config, $content) = $result->fetch(3)) {
@@ -213,6 +221,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['active_group_newusers'] = !empty($array_config['active_group_newusers']) ? ' checked="checked"' : '';
     $array_config['active_editinfo_censor'] = !empty($array_config['active_editinfo_censor']) ? ' checked="checked"' : '';
     $array_config['active_user_logs'] = !empty($array_config['active_user_logs']) ? ' checked="checked"' : '';
+    $array_config['auto_assign_oauthuser'] = !empty($array_config['auto_assign_oauthuser']) ? ' checked="checked"' : '';
 
     $array_name_show = array(
         0 => $lang_module['lastname_firstname'],

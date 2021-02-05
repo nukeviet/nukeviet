@@ -39,7 +39,7 @@ if (!empty($list)) {
     }
 }
 
-//Xac dinh RSS
+// Xac dinh RSS
 if ($module_info['rss']) {
     $rss[] = [
         'title' => $module_info['custom_title'],
@@ -77,7 +77,7 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
         ];
     }
 
-    //Xac dinh RSS
+    // Xac dinh RSS
     if ($catid_i and $module_info['rss']) {
         $rss[] = [
             'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'],
@@ -96,18 +96,21 @@ $st_links = $module_config[$module_name]['st_links'];
 $count_op = sizeof($array_op);
 if (!empty($array_op) and $op == 'main') {
     if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
-        if ($count_op > 1 or $catid > 0) {
-            $op = 'viewcat';
-            if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
-                $page = intval(substr($array_op[1], 5));
-            }
-        } elseif ($catid == 0) {
+        if ($catid == 0) {
+            // Trang chủ
             $contents = $lang_module['nocatpage'] . $array_op[0];
             if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
                 $page = intval(substr($array_op[0], 5));
             }
+        } else {
+            // Xem chuyên mục
+            $op = 'viewcat';
+            if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
+                $page = intval(substr($array_op[1], 5));
+            }
         }
     } elseif ($count_op == 2) {
+        // Chi tiết tin
         $array_page = explode('-', $array_op[1]);
         $id = intval(end($array_page));
         $number = strlen($id) + 1;

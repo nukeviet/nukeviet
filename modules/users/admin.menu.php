@@ -77,7 +77,7 @@ if ($module_data == 'users' and isset($admin_mods['authors'])) {
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    if (empty($global_config['idsite']) or $global_config['users_special']) {
+    if (!defined('NV_IS_USER_FORUM') and empty($global_config['idsite']) or $global_config['users_special']) {
         $submenu['question'] = $lang_module['question'];
         $submenu['siteterms'] = $lang_module['siteterms'];
         $submenu['fields'] = $lang_module['fields'];

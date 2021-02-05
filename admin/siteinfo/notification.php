@@ -160,8 +160,8 @@ while ($data = $result->fetch()) {
                     $data['send_from'] = $lang_global['level5'];
                 }
 
-                if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
-                    $data['photo'] = NV_BASE_SITEURL . $admin_info['photo'];
+                if (!empty($user_info['avata'])) {
+                    $data['photo'] = $user_info['avata'];
                 } else {
                     $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
                 }

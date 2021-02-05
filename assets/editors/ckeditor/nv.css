@@ -4,3 +4,23 @@
 blockquote {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+/* Plugin image có setting image2_alignClasses */
+.cke_widget_image.image-left,
+.cke_widget_image.image-left img {
+    margin-right: 15px;
+    float: left!important;
+}
+
+.cke_widget_image.image-right,
+.cke_widget_image.image-right img {
+    margin-left: 15px;
+    float: right!important;
+}
+
+.cke_widget_image .image-center,
+.cke_widget_image.image-center figure.image {
+    text-align: center;
+    float: none!important;
+    display: block;
+}

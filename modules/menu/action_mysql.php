@@ -8,17 +8,18 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
-$sql_drop_module = array();
+$sql_drop_module = [];
 
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows';
 
 $sql_create_module = $sql_drop_module;
 
+// Menu trong các bộ menu
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
  id mediumint(5) NOT NULL AUTO_INCREMENT,
  parentid mediumint(5) unsigned NOT NULL,
@@ -43,6 +44,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  KEY parentid (parentid, mid)
 ) ENGINE=MyISAM";
 
+// Các bộ menu
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,

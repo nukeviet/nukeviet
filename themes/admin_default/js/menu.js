@@ -30,6 +30,7 @@ function nv_link_module(module) {
 		$('input#module').val(new_status);
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_module&nocache=' + new Date().getTime(), 'module=' + new_status, function(res) {
 			$('#thu').html(res);
+			$('#thu').show();
 			$('#module_sub_menu').select2();
 		});
 	} else {

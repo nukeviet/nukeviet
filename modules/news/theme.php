@@ -224,7 +224,10 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 
         $n = 1;
         foreach ($array_row_i['listcatid'] as $listcatid) {
-            $listcat = array('title' => $global_array_cat[$listcatid]['title'], "link" => $global_array_cat[$listcatid]['link']);
+            $listcat = array(
+                'title' => $global_array_cat[$listcatid]['title'],
+                "link" => $global_array_cat[$listcatid]['link']
+            );
             $xtpl->assign('CAT', $listcat);
             (($n < $num_cat) ? $xtpl->parse('main.viewcatloop.cat.comma') : '');
             $xtpl->parse('main.viewcatloop.cat');
@@ -821,14 +824,12 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         foreach ($news_contents['files'] as $file) {
             $xtpl->assign('FILE', $file);
 
+            // Hỗ trợ xem trực tuyến PDF và ảnh, các định dạng khác tải về để xem
             if ($file['ext'] == 'pdf') {
                 $xtpl->parse('main.files.loop.show_quick_viewpdf');
                 $xtpl->parse('main.files.loop.content_quick_viewpdf');
             } elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
                 $xtpl->parse('main.files.loop.show_quick_viewimg');
-            } else {
-                $xtpl->parse('main.files.loop.show_quick_viewpdf');
-                $xtpl->parse('main.files.loop.content_quick_viewdoc');
             }
             $xtpl->parse('main.files.loop');
         }
@@ -1021,8 +1022,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     }
     if (!empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {
-
-            if ($topic_array_i['external_link']) {
+            if (!empty($topic_array_i['external_link'])) {
                 $topic_array_i['target_blank'] = 'target="_blank"';
             }
 
@@ -1269,7 +1269,12 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
         } elseif (strpos($url_link, '?page=') > 0) {
             $url_link = substr($url_link, 0, strpos($url_link, '?page='));
         }
-        $_array_url = array('link' => $url_link, 'amp' => '&page=');
+
+        $_array_url = array(
+            'link' => $url_link,
+            'amp' => '&page='
+        );
+
         $generate_page = nv_generate_page($_array_url, $numRecord, $per_pages, $page);
 
         $xtpl->assign('VIEW_PAGES', $generate_page);

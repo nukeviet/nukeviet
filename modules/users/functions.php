@@ -20,20 +20,19 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 /**
- * validUserLog()
- *
- * @param mixed $array_user
- * @param mixed $remember
- * @param mixed $opid
- * @return
+ * @param array $array_user
+ * @param number $remember
+ * @param array|string $oauth_data
+ * @param number $current_mode
  */
-function validUserLog($array_user, $remember, $opid, $current_mode = 0)
+function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 {
     global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $client_info;
 
     $remember = intval($remember);
     $checknum = md5(nv_genpass(10));
-    $user = array(
+    $opid = empty($oauth_data) ? '' : $oauth_data['id'];
+    $user = [
         'userid' => $array_user['userid'],
         'current_mode' => $current_mode,
         'checknum' => $checknum,
@@ -46,7 +45,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
         'last_login' => intval($array_user['last_login']),
         'last_openid' => $array_user['last_openid'],
         'current_openid' => $opid
-    );
+    ];
 
     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
         checknum = :checknum,
@@ -67,7 +66,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
     $nv_Request->set_Cookie('nvloginhash', json_encode($user), $live_cookie_time);
 
     if (!empty($global_users_config['active_user_logs'])) {
-        $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $opid) : $lang_module['st_login'];
+        $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $oauth_data['provider']) : $lang_module['st_login'];
         nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);
     }
 }

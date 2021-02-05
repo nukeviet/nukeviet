@@ -22,11 +22,11 @@ foreach ($list as $values) {
     $page_config[$values['config_name']] = $values['config_value'];
 }
 
-if ($page_config['viewtype'] != 2) {
-    $id = 0;
-    $page = 1;
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$id = 0;
+$page = 1;
 
+if ($page_config['viewtype'] != 2) {
     $alias = (!empty($array_op) and !empty($array_op[0])) ? $array_op[0] : '';
     if (substr($alias, 0, 5) == 'page-') {
         $page = intval(substr($array_op[0], 5));

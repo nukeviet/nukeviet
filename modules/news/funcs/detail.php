@@ -413,7 +413,7 @@ $module_info['layout_funcs'][$op_file] = !empty($news_contents['layout_func']) ?
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 
 $key_words = ($module_config[$module_name]['keywords_tag'] and empty($news_contents['keywords'])) ? implode(',', $key_words) : $news_contents['keywords'];
-$description = empty($news_contents['description']) ? nv_clean60(strip_tags($news_contents['hometext']), 160) : $news_contents['description'];
+$description = empty($news_contents['description']) ? $news_contents['hometext'] : $news_contents['description'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
