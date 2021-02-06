@@ -30,6 +30,8 @@ if (($page < 2 and isset($array_op[0])) or isset($array_op[1]) or ($page > 1 and
     nv_redirect_location($base_url);
 }
 
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($page > 1 ? ('&amp;' . NV_OP_VARIABLE . '=page-' . $page) : ''), true);
+
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {

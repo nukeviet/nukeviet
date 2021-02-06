@@ -624,25 +624,25 @@ function nv_html_site_rss($html = true)
 
 /**
  * nv_html_site_js()
- * 
+ *
  * @param bool $html
  * Xuất ra dạng string (html) hay để nguyên dạng array
  * Mặc định true
- * 
+ *
  * @param array $other_js
  * Thêm js vào ngay sau global.js
  * Mặc định rỗng
- * 
+ *
  * @param bool $language_js
  * Có kết nối với file ngôn ngữ JS hay không
- * 
+ *
  * @param bool $global_js
  * Có kết nối với file global.js hay không
- * 
+ *
  * @param bool $default_js
  * Có kết nối với file JS của theme Default hay không
  * Khi thiếu file tương ứng ở theme đang sử dụng
- * 
+ *
  * @return string | array
  */
 function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
@@ -670,14 +670,14 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         'ext' => 1,
         'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'
     );
-    
+
     if ($language_js) {
         $return[] = array(
             'ext' => 1,
             'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
         );
     }
-    
+
     if ($global_js) {
         $return[] = array(
             'ext' => 1,
