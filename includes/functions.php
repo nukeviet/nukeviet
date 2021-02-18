@@ -81,13 +81,12 @@ function nv_is_myreferer($referer = '')
         return 2;
     }
 
-    $server_name = preg_replace('/^[w]+\./', '', nv_getenv('HTTP_HOST'));
-    $referer = preg_replace(array(
+    $referer = preg_replace([
         '/^[a-zA-Z]+\:\/\/([w]+\.)?/',
         '/^[w]+\./'
-    ), '', $referer);
+    ], '', $referer);
 
-    if (preg_match('/^' . nv_preg_quote($server_name) . '/', $referer)) {
+    if (preg_match('/^' . nv_preg_quote(NV_SERVER_NAME) . '/', $referer)) {
         return 1;
     }
 
@@ -531,9 +530,9 @@ function nv_capcha_txt($seccode)
                 'body' => $request
             );
             $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
-            if (is_array($array) and isset($array['body'])) {
-                $jsonRes = nv_object2array(@json_decode($array['body']));
-                if (is_array($jsonRes) and isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {
+            if (is_array($array) and !empty($array['body'])) {
+                $jsonRes = (array) json_decode($array['body'], true);
+                if (isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {
                     return true;
                 }
             }
@@ -1766,7 +1765,7 @@ function nv_is_url($url)
 
     $url = nv_strtolower($url);
 
-    if (!($parts = @parse_url($url))) {
+    if (!($parts = parse_url($url))) {
         return false;
     }
 
@@ -1783,7 +1782,7 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
+    if (isset($parts['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!\:]*$/', $parts['path'])) {
         return false;
     }
 
@@ -1813,7 +1812,7 @@ function nv_check_url($url, $is_200 = 0)
     if (nv_function_exists('get_headers') and $allow_url_fopen == 1) {
         $res = get_headers($url);
     } elseif (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
-        $url_info = @parse_url($url);
+        $url_info = parse_url($url);
         $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
 
         $userAgents = array(

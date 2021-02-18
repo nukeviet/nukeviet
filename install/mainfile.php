@@ -108,9 +108,9 @@ define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 //vd: HTTP/1.0
 define('NV_USER_AGENT', $nv_Request->user_agent);
 //HTTP_USER_AGENT
-define("NV_BASE_SITEURL", preg_replace("/\/install$/", "/", $nv_Request->base_siteurl));
+define('NV_BASE_SITEURL', $nv_Request->base_siteurl . '/');
 //vd: /ten_thu_muc_chua_site/
-define("NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/');
+define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 //vd: /ten_thu_muc_chua_site/admin/
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // D:/AppServ/www

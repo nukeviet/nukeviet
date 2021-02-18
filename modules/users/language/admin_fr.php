@@ -494,6 +494,7 @@ $lang_module['active_obj_4'] = ' <strong title="%s">%s</strong> activé';
 $lang_module['account_active'] = 'Infos pour l\'activation du compte';
 $lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br />Password: %6$s<br /><br />Activate expired on %7$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
 
+$lang_module['userwait_note'] = 'Les utilisateurs en attente d\'activation seront automatiquement supprimés dans les% s heures suivant l\'inscription s\'ils ne sont pas activés';
 $lang_module['userwait_resend_email'] = 'Renvoyer le courrier activé';
 $lang_module['userwait_resend_per_email'] = 'Nombre d\'emails envoyés une fois';
 $lang_module['userwait_resend_pause_time'] = 'Arrêtez-vous entre deux soumissions';
@@ -508,3 +509,5 @@ $lang_module['userwait_resend_ok'] = 'Renvoyer l\'e-mail d\'activation';
 $lang_module['userwait_resend_error'] = 'Impossible d\'envoyer un courrier électronique, veuillez vérifier la configuration de votre messagerie';
 $lang_module['is_email_verified'] = 'Statut de vérification des e-mails';
 $lang_module['is_email_verified1'] = 'Si cette case est cochée, le statut de messagerie du compte est vérifié. Sinon, le statut de l\'e-mail du compte n\'est pas vérifié';
+$lang_module['auto_assign_oauthuser'] = 'Gérer automatiquement les e-mails Oauth en double';
+$lang_module['auto_assign_oauthuser_note'] = 'Lorsque cette option est activée, si l\'e-mail est connecté via Oauth, le système attribuera automatiquement Oauth à ce compte sans entrer de mot de passe pour confirmer';

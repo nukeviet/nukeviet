@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <div id="main_module">
 <div class="table-responsive">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr class="text-center">

@@ -17,7 +17,7 @@ $func_id = $nv_Request->get_int('func_id', 'post');
 
 $row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
 
-if ($func_id > 0 and isset($row['bid'])) {
+if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) == $nv_Request->get_string('checkss', 'post')) {
     $sth = $db->prepare('SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme');
     $sth->bindParam(':theme', $row['theme'], PDO::PARAM_STR);
     $sth->execute();

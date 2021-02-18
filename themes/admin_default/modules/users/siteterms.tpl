@@ -4,6 +4,7 @@
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
 	<input type="hidden" name ="save" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 	{DATA}
 	<div style="text-align:center;padding-top:15px">
 		<input class="btn btn-primary" name="submit1" type="submit" value="{GLANG.save}" />

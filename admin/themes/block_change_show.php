@@ -16,7 +16,7 @@ $bid = $nv_Request->get_int('bid', 'post');
 
 list($bid, $act) = $db->query('SELECT bid, act FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if (intval($bid) > 0) {
+if (intval($bid) > 0 and md5(NV_CHECK_SESSION . '_' . $bid) == $nv_Request->get_string('checkss', 'post')) {
     $act = $act ? 0 : 1;
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=' . $act . ' WHERE bid=' . $bid);
     $nv_Cache->delMod('themes');

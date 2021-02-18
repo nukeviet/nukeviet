@@ -1,6 +1,25 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.02
+
+- Fix drag block (#2964)
+- Module contact: fix send mail
+- Fixe bug with some proxy systems and load balancers (#2966)
+
+NUKEVIET 4.4.01
+
+- Jquery Validate 1.19.2
+- PHPMailer v6.1.6
+- Fix class PclZip on php 7.1
+- Fix rewrite check on PHP CGI (#2955)
+- Fix bug XSS (thanks Trung Thanh Le from baomatcoban.info)
+- Optimize anti-CSRF function
+- Update SendMail class
+- Function nv_sendmail: add parameters cc and bcc
+- Module users: add config view members list for admin
+- Jquery 3.5.1 (#2950)
+
 NUKEVIET 4.4.00
 
 - Ckeditor 4.14.0, PHPMailer 6.1.5, Jquery 3.5.0, Select2 4.0.13, clipboard js 2.0.6

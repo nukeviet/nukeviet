@@ -93,7 +93,7 @@ $(document).ready(function(){
             $.ajax({
                 type : 'POST',
                 url : CFG.url_del,
-                data : 'listall=' + listall,
+                data : 'listall=' + listall + '&checksess=' + CFG.checksess,
                 success : function(data) {
                     var s = data.split('_');
                     if (s[0] == 'OK') {
@@ -111,7 +111,7 @@ $(document).ready(function(){
             $.ajax({
                 type : 'POST',
                 url : href,
-                data : '',
+                data : 'checksess=' + CFG.checksess,
                 success : function(data) {
                     var s = data.split('_');
                     if (s[0] == 'OK') {
@@ -129,10 +129,10 @@ $(document).ready(function(){
             $.ajax({
                 type : 'POST',
                 url : script_name,
-                data : nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty=" + CFG.checksess,
+                data : nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty=1&checksess=" + CFG.checksess,
                 success : function(data) {
                     if (data == 'OK') {
-                        window.location = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";
+                        window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";
                     } else {
                         alert(data);
                     }

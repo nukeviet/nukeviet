@@ -61,7 +61,7 @@ function nv_sitemapPing($module, $link)
     }
 
     if (! $result and nv_function_exists('fsockopen')) {
-        $url_parts = @parse_url($link);
+        $url_parts = parse_url($link);
         if (! $url_parts) {
             return $lang_module['searchEngineFailed'];
         }
@@ -123,14 +123,15 @@ if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
 } else {
     $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 }
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $xtpl = new XTemplate('sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('URL_SITEMAP', $url_sitemap);
 $xtpl->assign('ACTION_FORM', NV_BASE_ADMINURL. 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '='.$op);
-
-if ($nv_Request->isset_request('submit', 'post') and empty($global_config['idsite'])) {
+$xtpl->assign('CHECKSS', $checkss);
+if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_config['idsite'])) {
     $searchEngineName = $nv_Request->get_array('searchEngineName', 'post');
     $searchEngineValue = $nv_Request->get_array('searchEngineValue', 'post');
     $searchEngineActive = $nv_Request->get_array('searchEngineActive', 'post');
@@ -170,7 +171,7 @@ if ($nv_Request->isset_request('submit', 'post') and empty($global_config['idsit
         }
     }
 
-    if (! empty($searchEngines['searchEngine']) and $nv_Request->isset_request('ping', 'post')) {
+    if (!empty($searchEngines['searchEngine']) and $nv_Request->isset_request('ping', 'post') and $checkss == $nv_Request->get_string('checkss1', 'post')) {
         $searchEngine = $nv_Request->get_string('searchEngine', 'post');
         $module = nv_substr($nv_Request->get_title('in_module', 'post', '', 1), 0, 255);
 

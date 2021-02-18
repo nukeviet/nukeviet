@@ -71,7 +71,7 @@ function nv_chsubmit(oForm, cbName) {
 }
 
 function nv_show_dbtables() {
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'show_tabs=1', function(res) {
+	$.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'show_tabs=1', function(res) {
 		$("#show_tables").html(res);
 	});
 }
@@ -83,9 +83,9 @@ function nv_show_highlight(tp) {
 	return false;
 }
 
-function nv_delete_sampledata(sname) {
+function nv_delete_sampledata(sname, checkss) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=sampledata&nocache=' + new Date().getTime(), 'delete=1&sname=' + encodeURIComponent(sname), function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=sampledata&nocache=' + new Date().getTime(), 'delete=' + checkss + '&sname=' + encodeURIComponent(sname), function(res) {
 			window.location.reload(true);
 		});
 	}

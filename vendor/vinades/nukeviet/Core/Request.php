@@ -14,115 +14,247 @@ namespace NukeViet\Core;
 class Request
 {
     const IS_HEADERS_SENT = 'Warning: Headers already sent';
+
     const INCORRECT_IP = 'Incorrect IP address specified';
 
+    const INCORRECT_ORIGIN = 'Incorrect Origin specified';
+
+    const REQUEST_BLOCKED = 'Your request is blocked';
+
     public $session_id;
+
     public $doc_root;
+
     public $site_url;
+
     public $base_siteurl;
+
     public $base_adminurl;
+
     public $server_name;
+
     public $server_protocol;
+
     public $server_port;
+
     public $my_current_domain;
+
     public $headerstatus;
+
     public $session_save_path;
+
     public $cookie_path;
+
     public $cookie_domain;
+
     public $referer;
+
+    private $origin;
+
+    private $method;
+
+    /**
+     * @var integer
+     *
+     * 0 cross origin referer
+     * 1 same origin referer
+     * 2 không có referer
+     */
     public $referer_key;
+
+    /**
+     * @var integer
+     *
+     * 0 cross origin
+     * 1 same origin
+     * 2 no origin header
+     */
+    private $origin_key;
+
     public $referer_host = '';
+
     public $referer_queries = false;
+
     public $request_uri;
+
     public $user_agent;
+
     public $search_engine = '';
 
     private $request_default_mode = 'request';
-    private $allow_request_mods = ['get', 'post', 'request', 'cookie', 'session', 'env', 'server'];
+
+    private $allow_request_mods = [
+        'get',
+        'post',
+        'request',
+        'cookie',
+        'session',
+        'env',
+        'server'
+    ];
+
     private $cookie_prefix = 'NV4';
+
     private $session_prefix = 'NV4';
+
     private $cookie_key = 'nv4';
+
     private $secure = false;
+
     private $httponly = true;
+
     private $ip_addr;
-    private $is_filter = false;
+
+    private $remote_ip;
+
     private $str_referer_blocker = false;
+
     private $engine_allowed = [];
 
     // Cac tags bi cam dung mac dinh, co the go bo bang cach thay doi cac tags cho phep cua NV_ALLOWED_HTML_TAGS
-    private $disabletags = ['applet', 'body', 'basefont', 'head', 'html', 'id', 'meta', 'xml', 'blink', 'link', 'style', 'script', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base'];
-    private $disabledattributes = ['action', 'background', 'codebase', 'dynsrc', 'lowsrc'];
-    private $disablecomannds = ['base64_decode', 'cmd', 'passthru', 'eval', 'exec', 'system', 'fopen', 'fsockopen', 'file', 'file_get_contents', 'readfile', 'unlink'];
+    private $disabletags = [
+        'applet',
+        'body',
+        'basefont',
+        'head',
+        'html',
+        'id',
+        'meta',
+        'xml',
+        'blink',
+        'link',
+        'style',
+        'script',
+        'iframe',
+        'frame',
+        'frameset',
+        'ilayer',
+        'layer',
+        'bgsound',
+        'title',
+        'base'
+    ];
+
+    protected $remoteAttrCheck = [
+        'action' => ['form'],
+        'src' => ['iframe', 'embed'],
+        'data' => ['object']
+    ];
+
+    /**
+     * Các attr bị cấm, sẽ bị lọc bỏ.
+     * - Tất cả các arrt bắt đầu bằng on
+     * - Các attr bên dưới
+     */
+    private $disabledattributes = [
+        'action',
+        'background',
+        'codebase',
+        'dynsrc',
+        'lowsrc',
+        'allownetworking', // Control a SWF file’s access to network functionality by setting the allowNetworking parameter = internal
+        'allowscriptaccess', // Loại bỏ điều khiển cho phép javascript trong embed, tự động đặt = never
+        'fscommand', // attacker can use this when executed from within an embedded Flash object
+        'seeksegmenttime' // this is a method that locates the specified point on the element’s segment time line and begins playing from that point. The segment consists of one repetition of the time line including reverse play using the AUTOREVERSE attribute.
+    ];
+
+    private $disablecomannds = [
+        'base64_decode',
+        'cmd',
+        'passthru',
+        'eval',
+        'exec',
+        'system',
+        'fopen',
+        'fsockopen',
+        'file',
+        'file_get_contents',
+        'readfile',
+        'unlink'
+    ];
 
     /**
      * @var array
      */
     protected $corsHeaders = [
         'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type',
-        'Access-Control-Allow-Methods' => 'PUT, GET, POST, DELETE, OPTIONS',
-        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type', // Các Header được phép trong CORS
+        'Access-Control-Allow-Methods' => 'PUT, GET, POST, DELETE, OPTIONS', // Các phương thước được phép trong CORS
+        'Access-Control-Allow-Credentials' => 'true', // Cho phép gửi cookie trong truy vấn CORS
         'Access-Control-Max-Age' => 10 * 60 * 60, // 10 min, max age for Chrome. Thời gian cache preflight request (request OPTIONS kiểm tra)
+        'Vary' => 'Origin' // Thông báo cho trình duyệt biết, mỗi Origin khác nhau sẽ có mỗi phản hồi khác nhau thay vì dùng *
     ];
 
     /**
-     * @var bool
+     * @since 4.4.01
      */
-    protected $requestOriginIsValid = false;
+    protected $restrictCrossDomain = true;
+    protected $validCrossDomains = [];
+    protected $validCrossIPs = [];
+
+    protected $isOriginValid = false;
+    protected $isRefererValid = false;
+
+    protected $isIpValid = false;
+
+    protected $isRestrictDomain = true;
+    protected $validDomains = [];
 
     /**
-     * @var bool
+     * @param array $config
+     * @param string $ip Client IP
+     * @param \NukeViet\Core\Server|boolean $nv_Server
      */
-    protected $restrictCORSDomains = true;
-
-    /**
-     * @var array
-     */
-    protected $validCORSDomains = [];
-
-    /**
-     * Request::__construct()
-     *
-     * @param mixed $config
-     * @param mixed $ip
-     * @return
-     */
-    public function __construct($config, $ip)
+    public function __construct($config, $ip, $nv_Server = false)
     {
         if (isset($config['allowed_html_tags']) and is_array($config['allowed_html_tags'])) {
             $this->disabletags = array_diff($this->disabletags, $config['allowed_html_tags']);
         }
-        if (isset($config['allow_request_mods']) and !empty($config['allow_request_mods'])) {
+        if (!empty($config['allow_request_mods'])) {
             if (!is_array($config['allow_request_mods'])) {
                 $config['allow_request_mods'] = [$config['allow_request_mods']];
             }
             $this->allow_request_mods = array_intersect($this->allow_request_mods, $config['allow_request_mods']);
         }
-        if (isset($config['request_default_mode']) and !empty($config['request_default_mode']) and in_array($config['request_default_mode'], $this->allow_request_mods)) {
+        if (!empty($config['request_default_mode']) and in_array($config['request_default_mode'], $this->allow_request_mods)) {
             $this->request_default_mode = $config['request_default_mode'];
         }
-        if (isset($config['cookie_secure']) and !empty($config['cookie_secure'])) {
+        if (!empty($config['cookie_secure'])) {
             $this->secure = true;
         }
-        if (isset($config['cookie_httponly']) and !empty($config['cookie_httponly'])) {
+        if (!empty($config['cookie_httponly'])) {
             $this->httponly = true;
         }
-        if (isset($config['cookie_prefix']) and !empty($config['cookie_prefix'])) {
+        if (!empty($config['cookie_prefix'])) {
             $this->cookie_prefix = preg_replace('/[^a-zA-Z0-9\_]+/', '', $config['cookie_prefix']);
         }
-        if (isset($config['session_prefix']) and !empty($config['session_prefix'])) {
+        if (!empty($config['session_prefix'])) {
             $this->session_prefix = preg_replace('/[^a-zA-Z0-9\_]+/', '', $config['session_prefix']);
         }
-        if (isset($config['sitekey']) and !empty($config['sitekey'])) {
+        if (!empty($config['sitekey'])) {
             $this->cookie_key = $config['sitekey'];
         }
         if (!empty($config['str_referer_blocker'])) {
             $this->str_referer_blocker = true;
         }
-        $this->engine_allowed = ( array )$config['engine_allowed'];
+        $this->engine_allowed = (array) $config['engine_allowed'];
         if (empty($ip)) {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
+        $this->remote_ip = $ip;
+
+        if (defined('NV_ADMIN')) {
+            $this->restrictCrossDomain = !empty($config['crossadmin_restrict']) ? true : false;
+            $this->validCrossDomains = !empty($config['crossadmin_valid_domains']) ? ((array) $config['crossadmin_valid_domains']) : [];
+            $this->validCrossIPs = !empty($config['crossadmin_valid_ips']) ? ((array) $config['crossadmin_valid_ips']) : [];
+        } else {
+            $this->restrictCrossDomain = !empty($config['crosssite_restrict']) ? true : false;
+            $this->validCrossDomains = !empty($config['crosssite_valid_domains']) ? ((array) $config['crosssite_valid_domains']) : [];
+            $this->validCrossIPs = !empty($config['crosssite_valid_ips']) ? ((array) $config['crosssite_valid_ips']) : [];
+        }
+
+        $this->isRestrictDomain = !empty($config['domains_restrict']) ? true : false;
+        $this->validDomains = !empty($config['domains_whitelist']) ? ((array) $config['domains_whitelist']) : [];
 
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
@@ -145,10 +277,10 @@ class Request
 
         $this->cookie_key = md5($this->cookie_key);
 
-        if (extension_loaded('filter') and filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
-            $this->is_filter = true;
+        if ($nv_Server === false) {
+            $nv_Server = new Server();
         }
-        $this->Initialize();
+        $this->Initialize($nv_Server);
         $this->get_cookie_save_path();
 
         $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
@@ -182,9 +314,9 @@ class Request
     }
 
     /**
-     *
+     * @param \NukeViet\Core\Server $nv_Server
      */
-    private function Initialize()
+    private function Initialize($nv_Server)
     {
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
@@ -223,41 +355,12 @@ class Request
         $_SERVER['QUERY_STRING'] = $query;
         $_SERVER['argv'] = [$query];
         $this->request_uri = (empty($_SERVER['REQUEST_URI'])) ? $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] : $_SERVER['REQUEST_URI'];
-        $doc_root = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '';
-        if (!empty($doc_root)) {
-            $doc_root = str_replace(DIRECTORY_SEPARATOR, '/', $doc_root);
-        }
-        if (!empty($doc_root)) {
-            $doc_root = preg_replace('/[\/]+$/', '', $doc_root);
-        }
+        $doc_root = isset($_SERVER['DOCUMENT_ROOT']) ? preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER['DOCUMENT_ROOT'])) : '';
 
         if (defined('NV_BASE_SITEURL')) {
             $base_siteurl = preg_replace('/[\/]+$/', '', NV_BASE_SITEURL);
         } else {
-            $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
-            if ($base_siteurl == DIRECTORY_SEPARATOR) {
-                $base_siteurl = '';
-            }
-            if (!empty($base_siteurl)) {
-                $base_siteurl = str_replace(DIRECTORY_SEPARATOR, '/', $base_siteurl);
-            }
-            if (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('/[\/]+$/', '', $base_siteurl);
-            }
-            if (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
-            }
-            if (defined('NV_WYSIWYG') and !defined('NV_ADMIN')) {
-                $base_siteurl = preg_replace('#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl);
-            } elseif (defined('NV_IS_UPDATE')) {
-                // Update se bao gom ca admin nen update phai dat truoc
-
-                $base_siteurl = preg_replace('#/install(.*)$#', '', $base_siteurl);
-            } elseif (defined('NV_ADMIN')) {
-                $base_siteurl = preg_replace('#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl);
-            } elseif (!empty($base_siteurl)) {
-                $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
-            }
+            $base_siteurl = $nv_Server->getWebsitePath();
         }
 
         if (NV_ROOTDIR !== $doc_root . $base_siteurl) {
@@ -275,52 +378,135 @@ class Request
         if (defined('NV_SERVER_NAME')) {
             $this->server_name = NV_SERVER_NAME;
         } else {
-            $this->server_name = preg_replace('/^[a-z]+\:\/\//i', '', $this->get_Env(['HTTP_HOST', 'SERVER_NAME']));
-            $this->server_name = preg_replace('/(\:[0-9]+)$/', '', $this->server_name);
+            $this->server_name = $nv_Server->getServerHost();
         }
-        $_SERVER['SERVER_NAME'] = $this->server_name;
-
-        $this->base_siteurl = $base_siteurl;
-        $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
-        $this->doc_root = $doc_root;
         if (defined('NV_SERVER_PROTOCOL')) {
             $this->server_protocol = NV_SERVER_PROTOCOL;
         } else {
-            $this->server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($this->get_Env('HTTPS') == 'on') ? 's' : '');
+            $this->server_protocol = $nv_Server->getServerProtocol();
         }
         if (defined('NV_SERVER_PORT')) {
             $this->server_port = NV_SERVER_PORT;
         } else {
-            $this->server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
+            $this->server_port = $nv_Server->getServerPort();
         }
+
+        $this->base_siteurl = $base_siteurl;
+        $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
+        $this->doc_root = $doc_root;
 
         if (defined('NV_MY_DOMAIN')) {
             $this->my_current_domain = NV_MY_DOMAIN;
         } else {
-            if (filter_var($this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-                $this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
-            } else {
-                $this->my_current_domain = $this->server_protocol . '://[' . $this->server_name . ']' . $this->server_port;
-            }
+            $this->my_current_domain = $nv_Server->getOriginalDomain();
         }
 
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
-
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
+        $this->standardizeReferer();
+        $this->standardizeOrigin();
+        $this->method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
+
+        // CORS handle
+        if (!empty($this->origin)) {
+            $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
+            $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
+
+            foreach ($this->corsHeaders as $header => $value) {
+                header($header . ': ' . $value);
+            }
+
+            // Kiểm tra preflight request
+            if ($this->method == 'OPTIONS' and !empty($hasControlRequestHeader)) {
+                exit(0);
+            }
+        }
+
+        if ($this->str_referer_blocker and !empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
+            header('Location: ' . $this->site_url);
+            exit(0);
+        }
+
+        $user_agent = (string) $this->get_Env('HTTP_USER_AGENT');
+        $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
+        if (!empty($user_agent)) {
+            $user_agent = trim($user_agent);
+        }
+        if (empty($user_agent) or $user_agent == '-') {
+            $user_agent = 'none';
+        }
+        $this->user_agent = $user_agent;
+        $_SERVER['HTTP_USER_AGENT'] = $user_agent;
+
+        // Cross-Site handle
+        if (sizeof($_POST) or $this->method == 'POST') {
+            if ($this->origin_key == 0 or $this->referer_key !== 1) {
+                if (!$this->restrictCrossDomain or in_array($this->remote_ip, $this->validCrossIPs)) {
+                    $this->isIpValid = true;
+                }
+            } else {
+                $this->isIpValid = true;
+            }
+            if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
+                trigger_error(Request::REQUEST_BLOCKED, 256);
+            }
+        }
+    }
+
+    /**
+     * Chuẩn hóa, kiểm tra Origin header
+     */
+    private function standardizeOrigin()
+    {
+        $this->origin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
+        if (!empty($this->origin)) {
+            $origin = parse_url($this->origin);
+            if (isset($origin['scheme']) and in_array($origin['scheme'], ['http', 'https', 'ftp', 'gopher']) and isset($origin['host'])) {
+                $_SERVER['HTTP_ORIGIN'] = ($origin['scheme'] . '://' . $origin['host'] . ((isset($origin['port']) and $origin['port'] != '80' and $origin['port'] != '443') ? (':' . $origin['port']) : ''));
+                $this->origin = $_SERVER['HTTP_ORIGIN'];
+
+                if ($this->my_current_domain == $this->origin) {
+                    $this->origin_key = 1;
+                } else {
+                    $this->origin_key = 0;
+                }
+            } elseif (strtolower($this->origin) == 'null') {
+                // Null Origin xem như là Cross-Site
+                $this->origin_key = 0;
+            } else {
+                /*
+                 * Origin có dạng `Origin: <scheme> "://" <hostname> [ ":" <port> ]` hoặc null
+                 * Nếu sai thì từ chối truy vấn
+                 */
+                unset($_SERVER['HTTP_ORIGIN']);
+                trigger_error(Request::INCORRECT_ORIGIN, 256);
+            }
+        } else {
+            $this->origin_key = 2;
+        }
+    }
+
+    /**
+     * Chuẩn hóa, kiểm tra Referer header
+     */
+    private function standardizeReferer()
+    {
         $this->referer = $this->get_Env(['HTTP_REFERER', 'Referer']);
         if (!empty($this->referer)) {
-            $ref = @parse_url($this->referer);
+            $ref = parse_url($this->referer);
             if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher']) and isset($ref['host'])) {
+                $ref_origin = ($ref['scheme'] . '://' . $ref['host'] . ((isset($ref['port']) and $ref['port'] != '80' and $ref['port'] != '443') ? (':' . $ref['port']) : ''));
+                // Server dạng IPv6 trực tiếp
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
                     $ref['host'] = substr($ref['host'], 1, -1);
                 }
-                if (preg_match('/^' . preg_quote($ref['host']) . '/', $this->server_name)) {
+                if (preg_match('/^' . preg_quote($ref['host'], '/') . '/', $this->server_name)) {
                     $this->referer_key = 1;
                 } else {
                     $this->referer_key = 0;
                     if (!empty($this->engine_allowed)) {
                         foreach ($this->engine_allowed as $se => $v) {
-                            if (preg_match('/' . preg_quote($v['host_pattern']) . '/i', $ref['host'])) {
+                            if (preg_match('/' . preg_quote($v['host_pattern'], '/') . '/i', $ref['host'])) {
                                 $this->search_engine = $se;
                                 break;
                             }
@@ -346,6 +532,10 @@ class Request
                     $_SERVER['HTTP_REFERER'] = $base;
                 }
                 $this->referer = $_SERVER['HTTP_REFERER'];
+
+                if (!$this->restrictCrossDomain or $this->referer_key === 1 or in_array($ref_origin, $this->validCrossDomains)) {
+                    $this->isRefererValid = true;
+                }
             } else {
                 $this->referer_key = 0;
                 $this->referer = '';
@@ -355,19 +545,6 @@ class Request
             $this->referer_key = 2;
             unset($_SERVER['HTTP_REFERER']);
         }
-        if ($this->str_referer_blocker and !empty($_SERVER['QUERY_STRING']) and $this->referer_key == 0 and empty($this->search_engine)) {
-            header('Location: ' . $this->site_url);
-            exit(0);
-        }
-
-        $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
-        $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
-        if(!empty($user_agent)) $user_agent = trim($user_agent);
-        if (empty($user_agent) or $user_agent == '-') {
-            $user_agent = 'none';
-        }
-        $this->user_agent = $user_agent;
-        $_SERVER['HTTP_USER_AGENT'] = $user_agent;
     }
 
     /**
@@ -462,27 +639,31 @@ class Request
      */
     private function unhtmlentities($value)
     {
-        $value = preg_replace("/%3A%2F%2F/", '', $value);
+        $value = preg_replace("/%3A%2F%2F/", '', $value); // :// to empty
         $value = preg_replace('/([\x00-\x08][\x0b-\x0c][\x0e-\x20])/', '', $value);
         $value = preg_replace("/%u0([a-z0-9]{3})/i", "&#x\\1;", $value);
         $value = preg_replace("/%([a-z0-9]{2})/i", "&#x\\1;", $value);
         $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
+
         $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
         $value = preg_replace_callback($search, [$this, 'chr_hexdec_callback'], $value);
+
         $search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
         $value = preg_replace_callback($search, [$this, 'chr_callback'], $value);
+
         $search = ['&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C'];
         $value = str_ireplace($search, '<', $value);
+
         return $value;
     }
 
     /**
-     * Request::filterAttr()
-     *
-     * @param mixed $attrSet
-     * @return
+     * @param string[] $attrSet
+     * @param string $tagName
+     * @param boolean $isvalid
+     * @return string[]
      */
-    private function filterAttr($attrSet)
+    private function filterAttr($attrSet, $tagName, &$isvalid)
     {
         $newSet = [];
 
@@ -503,12 +684,19 @@ class Request
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", "\\1", $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
-                if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $attrSubSet[1])) {
-                    continue;
-                }
+                // Security check Data URLs
+                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $attrSubSet[1], $m)) {
+                    if (empty($m[2])) {
+                        $dataURLs = urldecode($m[3]);
+                    } else {
+                        $dataURLs = (string) base64_decode($m[3]);
+                    }
 
-                if (!empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $attrSubSet[1])) {
-                    continue;
+                    $checkValid = true;
+                    $this->filterTags($dataURLs, $checkValid);
+                    if (!$checkValid) {
+                        continue;
+                    }
                 }
 
                 $value = $this->unhtmlentities($attrSubSet[1]);
@@ -521,14 +709,32 @@ class Request
                     'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si',
                     'write' => '/w\s*r\s*i\s*t\s*e/si',
                     'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
-                    'window' => '/w\s*i\s*n\s*d\s*o\s*w/si'
+                    'window' => '/w\s*i\s*n\s*d\s*o\s*w/si',
+                    'data:' => '/d\s*a\s*t\s*a\s*\:/si'
                 ];
                 $value = preg_replace(array_values($search), array_keys($search), $value);
 
-                if (preg_match("/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/", $value)) {
-                    continue;
+                // Giới hạn link từ các tên miền bên ngoài
+                if ($this->isRestrictDomain and isset($this->remoteAttrCheck[$attrSubSet[0]]) and in_array($tagName, $this->remoteAttrCheck[$attrSubSet[0]])) {
+                    $url_info = parse_url($value);
+                    if (isset($url_info['host'])) {
+                        $domain = $url_info['host'];
+                        $callBack = function ($domain_allowed) use ($domain) {
+                            return preg_match('/^' . preg_quote($domain, '/') . '$/iu', $domain_allowed);
+                        };
+                        if (!array_filter($this->validDomains, $callBack)) {
+                            continue;
+                        }
+                    }
                 }
 
+                // Security remove object param tag
+                if ('param' == $tagName and 'name' == $attrSubSet[0] and preg_match('/^[\r\n\s\t]*(allowscriptaccess|allownetworking)/isu', strtolower($value))) {
+                    return [];
+                }
+                if (preg_match('/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/', $value)) {
+                    continue;
+                }
                 if (!empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $value)) {
                     continue;
                 }
@@ -539,18 +745,27 @@ class Request
             }
             $newSet[] = $attrSubSet[0] . '=[@{' . $attrSubSet[1] . '}@]';
         }
+
+        if ($tagName == 'embed') {
+            $newSet[] = 'allowscriptaccess=[@{never}@]';
+            $newSet[] = 'allownetworking=[@{internal}@]';
+        }
+
         return $newSet;
     }
 
     /**
-     * Request::filterTags()
-     *
-     * @param mixed $source
-     * @return
+     * @param string $source
+     * @param boolean $isvalid
+     * @return string
      */
-    private function filterTags($source)
+    private function filterTags($source, &$isvalid = true)
     {
-        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source);
+        $checkInvalid = 0;
+        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source, -1, $checkInvalid);
+        if ($checkInvalid > 0) {
+            $isvalid = false;
+        }
 
         $preTag = null;
         $postTag = $source;
@@ -601,6 +816,7 @@ class Request
             if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) or in_array($tagName, $this->disabletags)) {
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
+                $isvalid = false;
                 continue;
             }
 
@@ -630,14 +846,24 @@ class Request
             }
 
             if (!$isCloseTag) {
-                $preTag .= '{@[' . $tagName;
-
                 if (!empty($attrSet)) {
-                    $attrSet = $this->filterAttr($attrSet);
-                    $preTag .= ' ' . implode(' ', $attrSet);
+                    $attrSet = $this->filterAttr($attrSet, $tagName, $isvalid);
                 }
-
-                $preTag .= (strpos($fromTagOpen, '</' . $tagName)) ? ']@}' : ' /]@}';
+                if (!('param' == $tagName and empty($attrSet))) {
+                    $preTag .= '{@[' . $tagName;
+                    if (!empty($attrSet)) {
+                        $preTag .= ' ' . implode(' ', $attrSet);
+                    }
+                    $preTag .= (strpos($fromTagOpen, '</' . $tagName)) ? ']@}' : ' /]@}';
+                    if ($tagName == 'object') {
+                        if (preg_match('/\]\@\}([\s]+)\{\@\[' . $tagName . '/', $preTag, $m)) {
+                            $space = $m[1] . '    ';
+                        } else {
+                            $space = "\n    ";
+                        }
+                        $preTag .= $space . "{@[param name=[@{allowscriptaccess}@] value=[@{never}@] /]@}" . $space . "{@[param name=[@{allownetworking}@] value=[@{internal}@] /]@}\n";
+                    }
+                }
             } else {
                 $preTag .= '{@[/' . $tagName . ']@}';
             }
@@ -1084,7 +1310,7 @@ class Request
      */
     public function get_bool($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( bool )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (bool) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1099,7 +1325,7 @@ class Request
      */
     public function get_int($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( int )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (int) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1129,7 +1355,7 @@ class Request
      */
     public function get_float($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( float )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (float) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1144,7 +1370,7 @@ class Request
      */
     public function get_string($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return ( string )$this->get_value($name, $mode, $default, $decode, $filter);
+        return (string) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1189,7 +1415,7 @@ class Request
      */
     public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = [], $filter = true)
     {
-        $value = ( string )$this->get_value($name, $mode, $default, true, $filter);
+        $value = (string) $this->get_value($name, $mode, $default, true, $filter);
         return $this->_get_title($value, $specialchars, $preg_replace);
     }
 
@@ -1241,7 +1467,7 @@ class Request
             $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
             $value = strip_tags($value, $allowed_html_tags);
         }
-        if ((bool)$save) {
+        if ((bool) $save) {
             $value = strtr($value, [
                 "\r\n" => '<br />',
                 "\r" => '<br />',
@@ -1279,7 +1505,7 @@ class Request
      */
     public function get_array($name, $mode = null, $default = null, $decode = true, $filter = true)
     {
-        return (array)$this->get_value($name, $mode, $default, $decode, $filter);
+        return (array) $this->get_value($name, $mode, $default, $decode, $filter);
     }
 
     /**
@@ -1299,98 +1525,45 @@ class Request
         foreach ($array_keys as $key) {
             switch ($type) {
                 case 'bool':
-                    $arr[$key] = ( bool )$arr[$key];
+                    $arr[$key] = (bool) $arr[$key];
                     break;
                 case 'int':
-                    $arr[$key] = ( int )$arr[$key];
+                    $arr[$key] = (int) $arr[$key];
                     break;
                 case 'float':
-                    $arr[$key] = ( float )$arr[$key];
+                    $arr[$key] = (float) $arr[$key];
                     break;
                 case 'string':
-                    $arr[$key] = ( string )$arr[$key];
+                    $arr[$key] = (string) $arr[$key];
                     break;
                 case 'array':
-                    $arr[$key] = ( array )$arr[$key];
+                    $arr[$key] = (array) $arr[$key];
                     break;
                 case 'title':
-                    $arr[$key] = ( string )$this->_get_title($arr[$key], $specialchars, $preg_replace);
+                    $arr[$key] = (string) $this->_get_title($arr[$key], $specialchars, $preg_replace);
                     break;
                 case 'textarea':
-                    $arr[$key] = ( string )$this->_get_textarea($arr[$key], $allowed_html_tags, $save);
+                    $arr[$key] = (string) $this->_get_textarea($arr[$key], $allowed_html_tags, $save);
                     break;
                 case 'editor':
-                    $arr[$key] = ( string )$this->_get_editor($arr[$key], $allowed_html_tags);
+                    $arr[$key] = (string) $this->_get_editor($arr[$key], $allowed_html_tags);
             }
         }
         return $arr;
     }
 
     /**
-     * @param array $config
-     */
-    public function CORSHandle($config)
-    {
-        $this->restrictCORSDomains = isset($config['cors_restrict_domains']) ? (bool)$config['cors_restrict_domains']  : true;
-        $this->validCORSDomains = isset($config['cors_valid_domains']) ? (array)$config['cors_valid_domains']  : [];
-
-        $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
-
-        $method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
-        $hasOrigin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
-
-        // Preflight request
-        if ($method === 'OPTIONS') {
-            $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
-
-            if ($this->requestOriginIsValid and !empty($hasControlRequestHeader) and !empty($hasOrigin)) {
-                foreach ($this->corsHeaders as $header => $value) {
-                    header($header . ': ' . $value);
-                }
-            }
-            die('');
-        }
-
-        $isXmlRequest = (strtoupper($this->get_Env(['HTTP_X_REQUESTED_WITH', 'X-Requested-With'])) === 'XMLHTTPREQUEST');
-        if ($isXmlRequest) {
-            foreach ($this->corsHeaders as $header => $value) {
-                header($header . ': ' . $value);
-            }
-        }
-
-        // Chặn các request bên ngoài vào khu vực quản trị
-        if (defined('NV_ADMIN') and $this->referer_key == 0 and !$this->requestOriginIsValid and !empty($hasOrigin)) {
-            exit(0);
-        }
-    }
-
-    /**
-     * @return boolean|null
+     * @return string|NULL
      */
     private function getAllowOriginHeaderValue()
     {
-        $origin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
-
-        // Không block hoặc domain hợp lệ
-        if (!$this->restrictCORSDomains or in_array($origin, $this->validCORSDomains)) {
-            $this->requestOriginIsValid = true;
-
-            return $origin;
+        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self)
+        if (!$this->restrictCrossDomain or $this->origin_key === 1 or in_array($this->origin, $this->validCrossDomains)) {
+            $this->isOriginValid = true;
+            return $this->origin;
         }
 
-        // Kiểm tra tên miền hợp lệ
-        $validCorsDomainFilter = function ($validCorsDomain) use ($origin) {
-            return fnmatch($validCorsDomain, $origin, FNM_CASEFOLD);
-        };
-        if (array_filter($this->validCORSDomains, $validCorsDomainFilter)) {
-            $this->requestOriginIsValid = true;
-            $this->corsHeaders['Vary']  = 'Origin';
-
-            return $origin;
-        }
-
-        $this->requestOriginIsValid = false;
-
-        return null;
+        $this->isOriginValid = false;
+        return $this->my_current_domain;
     }
 }

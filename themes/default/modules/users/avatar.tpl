@@ -34,6 +34,7 @@
                 <button class="btn btn-primary btn-sm" onclick=" window.close();return!1">{GLANG.cancel}</button>
             </div>
         </div>
+        <input type="hidden" name="client" value="{DATA.client}">
         <input type="hidden" id="crop_x" name="crop_x"/>
         <input type="hidden" id="crop_y" name="crop_y"/>
         <input type="hidden" id="crop_width" name="crop_width"/>
@@ -45,8 +46,6 @@
 	UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
 	UAV.config.avatar_width = {NV_AVATAR_WIDTH};
 	UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
-	UAV.config.max_width = {NV_MAX_WIDTH};
-	UAV.config.max_height = {NV_MAX_HEIGHT};
 	UAV.lang.bigsize = '{LANG.avatar_bigsize}';
 	UAV.lang.smallsize = '{LANG.avatar_smallsize}';
 	UAV.lang.filetype = '{LANG.avatar_filetype}';
@@ -58,7 +57,11 @@
 		window.close();
 		<!-- END: complete -->
         <!-- BEGIN: complete2 -->
-        window.opener.location.href = window.opener.location.href;
+        if ('{DATA.client}' != '') {
+            window.opener.postMessage('SUCCESS', '{DATA.client}');
+        } else {
+            window.opener.location.reload();
+        }
 		window.close();
 		<!-- END: complete2 -->
         <!-- BEGIN: complete3 -->

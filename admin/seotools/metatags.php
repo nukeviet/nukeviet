@@ -48,7 +48,8 @@ $vas = [
     '{SITE_EMAIL} (' . $global_config['site_email'] . ')'
 ];
 
-if ($nv_Request->isset_request('submit', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $metaGroupsName = $nv_Request->get_array('metaGroupsName', 'post');
     $metaGroupsValue = $nv_Request->get_array('metaGroupsValue', 'post');
     $metaContents = $nv_Request->get_array('metaContents', 'post');
@@ -122,6 +123,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', $checkss);
 
 // Các meta hiện có
 if (!empty($metatags['meta'])) {

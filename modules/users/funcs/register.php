@@ -17,12 +17,6 @@ if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-// Chuyen trang dang ki neu tich hop dien dan
-if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
-    exit();
-}
-
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
     $page_title = $lang_module['register'];
@@ -39,19 +33,38 @@ if (!$global_config['allowuserreg']) {
 
 if ($global_config['max_user_number'] > 0) {
     $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+    if ($global_config['idsite'] > 0) {
+        $sql .= ' WHERE idsite=' . $global_config['idsite'];
+    }
     $user_number = $db->query($sql)->fetchColumn();
     if ($user_number >= $global_config['max_user_number']) {
-        $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
-        $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_site_theme($contents);
-        include NV_ROOTDIR . '/includes/footer.php';
+        if (defined('NV_REGISTER_DOMAIN')) {
+            nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
+        } else {
+            $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+            $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_site_theme($contents);
+            include NV_ROOTDIR . '/includes/footer.php';
+        }
     }
 }
 
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+}
+elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+
+// Chuyen trang dang ki neu tich hop dien dan
+if (defined('NV_IS_USER_FORUM')) {
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
+    exit();
 }
 
 /**
@@ -174,7 +187,7 @@ while ($row = $result->fetch()) {
 $gfx_chk = (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) ? 1 : 0;
 
 $array_register = array();
-$array_register['checkss'] = NV_CHECK_SESSION;
+$array_register['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
@@ -345,7 +358,7 @@ if ($checkss == $array_register['checkss']) {
 
     if (!defined('ACCESS_ADDUS') and ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
-            username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info
+            username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info, idsite
         ) VALUES (
             :username,
             :md5username,
@@ -360,7 +373,8 @@ if ($checkss == $array_register['checkss']) {
             :question,
             :answer,
             :checknum,
-            :users_info
+            :users_info,
+            :idsite
         )";
 
         $data_insert = array();
@@ -377,7 +391,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
         $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
-
+        $data_insert['idsite'] = $global_config['idsite'];
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
@@ -416,12 +430,21 @@ if ($checkss == $array_register['checkss']) {
                 nv_insert_notification($module_name, 'contact_new', ['title' => $array_register['username']], $userid, 0, 0, 1);
             }
 
-            $nv_redirect = '';
-            reg_result(array(
+            $array = array(
                 'status' => 'ok',
                 'input' => '',
                 'mess' => $info
-            ));
+            );
+            if (defined('SSO_REGISTER_SECRET')) {
+                $sso_redirect_users = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+                $iv = substr(SSO_REGISTER_SECRET, 0, 16);
+                $sso_redirect_users = strtr($sso_redirect_users, '-_,', '+/=');
+                $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
+                if (!empty($sso_redirect_users)) {
+                    $array['input'] = $sso_redirect_users;
+                }
+            }
+            nv_jsonOutput($array);
         }
     } else {
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (

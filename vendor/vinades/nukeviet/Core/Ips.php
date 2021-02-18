@@ -79,7 +79,7 @@ class Ips
      * @param string $ip
      * @return mixed
      */
-    public function isIp4(string $ip)
+    public function isIp4($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
@@ -88,7 +88,7 @@ class Ips
      * @param string $ip
      * @return mixed
      */
-    public function isIp6(string $ip)
+    public function isIp6($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }

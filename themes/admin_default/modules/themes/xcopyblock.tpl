@@ -6,6 +6,7 @@
             <tfoot>
                 <tr>
                     <td class="text-center" colspan="4">
+                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                         <input name="continue" type="button" value="{LANG.xcopyblock_process}" class="btn btn-primary" />
                         <input type="button" value="{LANG.block_checkall}" data-toggle="checkallpos" data-target="[name='position[]']" class="btn btn-default"/>
                     </td>

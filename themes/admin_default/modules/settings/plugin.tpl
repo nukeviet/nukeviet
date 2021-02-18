@@ -50,6 +50,7 @@
 						<option value="{AREA_VALUE}">{AREA_TEXT} </option>
 						<!-- END: area -->
 					</select> &nbsp; 
+                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                     <input class="btn btn-primary" type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/> &nbsp; <input class="btn btn-danger" type="submit" name="delete" onclick="return confirm(nv_is_del_confirm[0]);" value="{LANG.plugin_file_delete}" style="width: 150px;"/></td>
 				</tr>
 				<!-- END: add -->

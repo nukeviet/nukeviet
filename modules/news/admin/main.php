@@ -256,8 +256,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         }
     } elseif ($stype == 'sourcetext') {
         $qurl = $q;
-        $url_info = @parse_url($qurl);
-        //print_r($url_info);die('pass');
+        $url_info = parse_url($qurl);
         if (isset($url_info['scheme']) and isset($url_info['host'])) {
             $qurl = $url_info['scheme'] . '://' . $url_info['host'];
         }
@@ -524,7 +523,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             $where = " r." . $stype . " LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
         } elseif ($stype == 'sourcetext') {
             $qurl = $q;
-            $url_info = @parse_url($qurl);
+            $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }

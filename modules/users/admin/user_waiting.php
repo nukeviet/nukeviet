@@ -15,22 +15,44 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 //Xoa thanh vien
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
-
-    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
-    if ($db->exec($sql)) {
-        nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
-        die('OK');
+    if (md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid) == $nv_Request->get_string('checkss', 'post')) {
+        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+        if ($global_config['idsite'] > 0) {
+            $sql .= ' AND idsite=' . $global_config['idsite'];
+        }
+        if ($db->exec($sql)) {
+            nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
+            die('OK');
+        }
     }
     die('NO');
 }
 
 //Kich hoat thanh vien
 if ($nv_Request->isset_request('act', 'get')) {
+    if ($global_config['max_user_number']) {
+        $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+        if ($global_config['idsite'] > 0) {
+            $sql .= ' WHERE idsite=' . $global_config['idsite'];
+        }
+        $user_number = $db->query($sql)->fetchColumn();
+        if ($user_number >= $global_config['max_user_number']) {
+            $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_admin_theme($contents, $showheader);
+            include NV_ROOTDIR . '/includes/footer.php';
+        }
+    }
+
     $userid = $userid_reg = $nv_Request->get_int('userid', 'get', 0);
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+    if ($global_config['idsite'] > 0) {
+        $sql .= ' AND idsite=' . $global_config['idsite'];
+    }
+
     $row = $db->query($sql)->fetch();
-    if (empty($row)) {
+    if (empty($row) or md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid) != $nv_Request->get_string('checkss', 'get')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -54,7 +76,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         " . $row['regdate'] . ",
         :question,
         :answer,
-        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", -2, '" . $admin_info['userid'] . "'
+        '', 0, 0, '', 1, '', 0, '', '', '', " . $row['idsite'] . ", -2, '" . $admin_info['userid'] . "'
     )";
 
     $data_insert = array();
@@ -178,6 +200,10 @@ if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
 
+$ar_where = [];
+if ($global_config['idsite'] > 0) {
+    $ar_where[] = 'idsite=' . $global_config['idsite'];
+}
 $db->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_MOD_TABLE . '_reg');
@@ -186,8 +212,10 @@ if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
     $methods[$method]['selected'] = ' selected="selected"';
     $table_caption = $lang_module['search_page_title'];
-
-    $db->where($methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'");
+    $ar_where[] = $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+}
+if (!empty($ar_where)) {
+    $db->where(implode(' AND ', $ar_where));
 }
 
 $page = $nv_Request->get_int('page', 'get', 1);
@@ -243,16 +271,19 @@ foreach ($orders as $order) {
     }
 }
 
+if (defined('NV_IS_USER_FORUM')) {
+    $lang_module['warning'] = $lang_module['modforum'];
+} else {
+    $register_active_time = isset($global_users_config['register_active_time']) ? round($global_users_config['register_active_time']/3600) : 24;
+    $lang_module['warning'] = sprintf($lang_module['userwait_note'], $register_active_time);
+}
+
 $xtpl = new XTemplate('user_waitting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting');
 $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
-
-if (defined('NV_IS_USER_FORUM')) {
-    $xtpl->parse('main.is_forum');
-}
 
 foreach ($methods as $m) {
     $xtpl->assign('METHODS', $m);
@@ -265,9 +296,9 @@ foreach ($head_tds as $head_td) {
 }
 
 foreach ($users_list as $u) {
+    $u['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $u['userid']);
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('ACTIVATE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;act=1&amp;userid=' . $u['userid']);
-    $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;del&amp;userid=' . $u['userid']);
     $xtpl->parse('main.xusers');
 }
 

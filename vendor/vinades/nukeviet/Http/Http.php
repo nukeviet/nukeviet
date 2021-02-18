@@ -10,7 +10,9 @@
 
 namespace NukeViet\Http;
 
-class Http
+use NukeViet\Core\Server;
+
+class Http extends Server
 {
     /**
      * Variable to set dir
@@ -62,16 +64,8 @@ class Http
         }
 
         // Find my domain
-        $server_name = preg_replace('/^[a-z]+\:\/\//i', '', $this->get_Env(array( 'HTTP_HOST', 'SERVER_NAME' )));
-        $server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $this->get_Env('SERVER_PROTOCOL'))) . (($this->get_Env('HTTPS') == 'on') ? 's' : '');
-        $server_port = $this->get_Env('SERVER_PORT');
-        $server_port = ($server_port == '80') ? '' : (':' . $server_port);
-
-        if (filter_var($server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
-            Http::$site_config['my_domain'] = $server_protocol . '://' . $server_name . $server_port;
-        } else {
-            Http::$site_config['my_domain'] = $server_protocol . '://[' . $server_name . ']' . $server_port;
-        }
+        parent::__construct();
+        Http::$site_config['my_domain'] = $this->original_domain;
 
         // Check user custom temp dir
         if (!is_null($tmp_dir)) {
@@ -117,7 +111,7 @@ class Http
         $args = $this->build_args($args, $defaults);
 
         // Get url info
-        $infoURL = @parse_url($url);
+        $infoURL = parse_url($url);
 
         // Check valid url
         if (empty($url) or empty($infoURL['scheme'])) {
@@ -228,7 +222,7 @@ class Http
         }
 
         // Append cookies that were used in this request to the response
-        if (!empty($args['cookies'])) {
+        if (!empty($args['cookies']) and is_array($response)) {
             $cookies_set = array();
             foreach ($response['cookies'] as $key => $value) {
                 if (is_object($value)) {
@@ -453,11 +447,11 @@ class Http
             return $maybe_relative_path;
         }
 
-        if (!$url_parts = @parse_url($url)) {
+        if (!$url_parts = parse_url($url)) {
             return $maybe_relative_path;
         }
 
-        if (!$relative_url_parts = @parse_url($maybe_relative_path)) {
+        if (!$relative_url_parts = parse_url($maybe_relative_path)) {
             return $maybe_relative_path;
         }
 

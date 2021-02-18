@@ -1600,7 +1600,7 @@ class PclZip
                         $p_options_list[$i + 1] = strtr($p_options_list[$i + 1], ' ', '');
 
                         // ----- Parse items
-                        $v_work_list = explode(',', $p_options_list[$i + 1]);
+                        $v_work_list = explode(",", $p_options_list[$i + 1]);
                     } elseif (is_integer($p_options_list[$i + 1])) {
                         $v_work_list[0] = $p_options_list[$i + 1] . '-' . $p_options_list[$i + 1];
                     } elseif (is_array($p_options_list[$i + 1])) {
@@ -1787,6 +1787,7 @@ class PclZip
         $v_memory_limit = ini_get('memory_limit');
         $v_memory_limit = trim($v_memory_limit);
         $last           = strtolower(substr($v_memory_limit, -1));
+        $v_memory_limit = preg_replace('/\s*[KkMmGg]$/', '', $v_memory_limit);
 
         if ($last == 'g') {
             //$v_memory_limit = $v_memory_limit*1024*1024*1024;
@@ -2591,7 +2592,12 @@ class PclZip
                     }
 
                     // ----- Read the file content
-                    $v_content = @fread($v_file, $p_header['size']);
+                    if ($p_header['size'] <= 0) {
+                        // File rỗng
+                        $v_content = '';
+                    } else {
+                        $v_content = @fread($v_file, $p_header['size']);
+                    }
 
                     // ----- Close the file
                     @fclose($v_file);
@@ -5398,12 +5404,12 @@ function PclZipUtilOptionText($p_option)
 // --------------------------------------------------------------------------------
 function PclZipUtilTranslateWinPath($p_path, $p_remove_disk_letter = true)
 {
-	$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
-	if( extension_loaded( 'suhosin' ) ) {
-		$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
-	}
-	$os = strtoupper( ( function_exists( 'php_uname' ) and !in_array( 'php_uname', $disable_functions ) and strtoupper( php_uname( 's' ) ) != '' ) ? php_uname( 's' ) : PHP_OS );
-	if( stristr( $os, 'windows' ) !== false ) {
+    $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
+    if (extension_loaded('suhosin')) {
+        $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
+    }
+    $os = strtoupper((function_exists('php_uname') and !in_array('php_uname', $disable_functions) and strtoupper(php_uname('s')) != '') ? php_uname('s') : PHP_OS);
+    if (stristr($os, 'windows') !== false) {
         // ----- Look for potential disk letter
         if (($p_remove_disk_letter) && (($v_position = strpos($p_path, ':')) != false)) {
             $p_path = substr($p_path, $v_position + 1);

@@ -13,7 +13,8 @@ if (! defined('NV_IS_FILE_SEOTOOLS')) {
 }
 
 $array_config = array();
-if ($nv_Request->isset_request('save', 'post')) {
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $pageTitleMode = $nv_Request->get_title('pageTitleMode', 'post', '', 1);
     if (isset($global_config['pageTitleMode'])) {
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'");
@@ -39,6 +40,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $global_config);
+$xtpl->assign('CHECKSS', $checkss);
 
 $xtpl->parse('main');
 $content = $xtpl->text('main');

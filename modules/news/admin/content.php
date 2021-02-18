@@ -504,7 +504,7 @@ if ($is_submit_form) {
         $rowcontent['archive'] = ($rowcontent['exptime'] > NV_CURRENTTIME) ? 1 : 2;
     }
     $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
-    //Xử lý file đính kèm
+    // Xử lý file đính kèm
     $rowcontent['files'] = array();
     $fileupload = $nv_Request->get_array('files', 'post');
     if (!empty($fileupload)) {
@@ -623,8 +623,8 @@ if ($is_submit_form) {
         $error[] = $lang_module['error_bodytext'];
     }
 
-    if(!empty($error)){
-        //Nếu có lỗi thì chuyển sang trạng thái đăng nháp, cho đến khi nào đủ thông tin mới cho xuất bản
+    if (!empty($error)) {
+        // Nếu có lỗi thì chuyển sang trạng thái đăng nháp, cho đến khi nào đủ thông tin mới cho xuất bản
         $rowcontent['status'] = 4;
         $error_data = $error;
         $error = array();
@@ -668,7 +668,7 @@ if ($is_submit_form) {
 
         $rowcontent['sourceid'] = 0;
         if (!empty($rowcontent['sourcetext'])) {
-            $url_info = @parse_url($rowcontent['sourcetext']);
+            $url_info = parse_url($rowcontent['sourcetext']);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
                 $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link= :link');
@@ -731,13 +731,14 @@ if ($is_submit_form) {
 
         // Xử lý lưu vào CSDL khi đăng mới hoặc sao chép
         if ($rowcontent['id'] == 0 or $copy) {
-            if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
+            // Toàn quyền module trở lên được đăng bài lùi về sau
+            if (!$NV_IS_ADMIN_FULL_MODULE and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
                 $rowcontent['publtime'] = NV_CURRENTTIME;
             }
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
             }
-            //Reset lượt xem, lượt tải, số comment, số vote, điểm vote về 0
+            // Reset lượt xem, lượt tải, số comment, số vote, điểm vote về 0
             if ($copy) {
                 $rowcontent['hitstotal'] = 0;
                 $rowcontent['hitscm'] = 0;
@@ -839,7 +840,7 @@ if ($is_submit_form) {
                 }
                 unset($ct_query);
                 if ($module_config[$module_name]['elas_use'] == 1) {
-                    /*connect to elasticsearch */
+                    /* connect to elasticsearch */
                     $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
@@ -863,12 +864,13 @@ if ($is_submit_form) {
                 $rowcontent['status'] = 1;
             }
 
-            if(!empty($error_data)){
-                //Nếu khi sửa bài viết mà có lỗi nhập liệu lại chuyển về trạng thái đăng nháp
+            if (!empty($error_data)) {
+                // Nếu khi sửa bài viết mà có lỗi nhập liệu lại chuyển về trạng thái đăng nháp
                 $rowcontent['status'] = 4;
             }
 
-            if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
+            // Toàn quyền module trở lên được sửa thời gian đăng bài lùi về sau
+            if (!$NV_IS_ADMIN_FULL_MODULE and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
                 $rowcontent['publtime'] = $rowcontent_old['addtime'];
             }
 
@@ -1070,12 +1072,12 @@ if ($is_submit_form) {
                     }
                 }
             }
-            if(!empty($error_data)){
+            if (!empty($error_data)) {
                 $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'];
                 $msg1 = implode('<br />', $error_data);
                 $msg2 = $lang_module['content_back'];
                 redriect($msg1, $msg2, $url, $module_data . '_detail');
-            }else {
+            } else {
                 if (isset($module_config['seotools']['prcservice']) and !empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 } else {
@@ -1089,10 +1091,8 @@ if ($is_submit_form) {
                         $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
                         redriect($msg1, $msg2, $url, $module_data . '_detail');
                     }
-
                 }
             }
-
         }
     } else {
         $url = 'javascript: history.go(-1)';

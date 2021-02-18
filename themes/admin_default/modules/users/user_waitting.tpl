@@ -1,7 +1,5 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: is_forum -->
-<div class="alert alert-warning">{LANG.modforum}</div>
-<!-- END: is_forum -->
+<div class="alert alert-warning">{LANG.warning}</div>
 <div id="users">
     <div class="row">
         <div class="col-md-16">
@@ -57,8 +55,8 @@
                     <td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
                     <td> {CONTENT_TD.regdate} </td>
                     <td>
-                        <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
-                        <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+                        <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ACTIVATE_URL}&amp;checkss={CONTENT_TD.checkss}">{LANG.awaiting_active}</a> &nbsp;
+                        <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid}, '{CONTENT_TD.checkss}');">{LANG.delete}</a>
                     </td>
                 </tr>
                 <!-- END: xusers -->
