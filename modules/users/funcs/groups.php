@@ -36,10 +36,15 @@ if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
         die($lang_module['no_premission_leader']);
     }
 
+    // Báo lỗi nếu không có quyền thêm thành viên vào nhóm
+    if (empty($groupsList[$gid]['config']['access_groups_add'])) {
+        die($lang_module['no_premission']);
+    }
+
     $db->sqlreset()
         ->select('userid, username, email, first_name, last_name')
         ->from(NV_MOD_TABLE)
-        ->where('( username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name ) AND userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users)')
+        ->where('( username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name ) AND userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $gid . ')')
         ->order('username ASC')
         ->limit(20);
 
@@ -64,6 +69,11 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
 
     if (! isset($groupsList[$gid])) {
         die($lang_module['no_premission_leader']);
+    }
+
+    // Báo lỗi nếu không có quyền kích hoạt thành viên
+    if (empty($groupsList[$gid]['config']['access_waiting'])) {
+        die($lang_module['no_premission']);
     }
 
     //Kich hoat thanh vien
@@ -127,7 +137,15 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
-                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
+                if ($row_f['is_system'] == 1) {
+                    continue;
+                }
+                if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
+                    $default_value = floatval($row_f['default_value']);
+                } else {
+                    $default_value = $db->quote($row_f['default_value']);
+                }
+                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
@@ -270,6 +288,11 @@ if ($nv_Request->isset_request('gid,del', 'post')) {
         die($lang_module['error_group_not_found']);
     }
 
+    // Báo lỗi nếu không có quyền xóa thành viên
+    if (empty($groupsList[$gid]['config']['access_delus'])) {
+        die($lang_module['no_premission']);
+    }
+
     //kiểm tra user_id xóa có nằm trong nhóm được quản lí k, hoặc nằm trong nhóm khác
     $result_user = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $uid );
     $array_groups_user = array();
@@ -277,9 +300,18 @@ if ($nv_Request->isset_request('gid,del', 'post')) {
         $array_groups_user[$_row['group_id']] = $_row;
     }
 
-    if (! isset($array_groups_user[$gid])){// không nằm trong danh sách nhóm dc quản lí
+    // Báo lỗi nếu thành viên không thuộc nhóm quản lý
+    if (! isset($array_groups_user[$gid])) {
         die($lang_module['del_user_err']);
-    }else{// nằm ở 2 nhóm khác
+    }
+
+    // Báo lỗi nếu thành viên là trưởng nhóm
+    if ($array_groups_user[$gid]['is_leader']) {
+        die($lang_module['not_del_leader']);
+    }
+
+    // Báo lỗi nếu thành viên còn tham gia nhóm khác
+    if (sizeof($array_groups_user) > 1) {
         die($lang_module['not_del_user']);
     }
 
@@ -307,6 +339,11 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     $uid = $nv_Request->get_int('uid', 'post', 0);
     if (! isset($groupsList[$gid]) or $gid < 10) {
         die($lang_module['error_group_not_found']);
+    }
+
+    // Báo lỗi nếu không có quyền thêm thành viên vào nhóm
+    if (empty($groupsList[$gid]['config']['access_groups_add'])) {
+        die($lang_module['no_premission']);
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
@@ -351,6 +388,11 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
         die($lang_module['error_group_not_found']);
     }
 
+    // Báo lỗi nếu không có quyền loại thành viên khỏi nhóm
+    if (empty($groupsList[$gid]['config']['access_groups_del'])) {
+        die($lang_module['no_premission']);
+    }
+
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
@@ -360,6 +402,15 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
         } else {
             die($lang_module['search_not_result']);
         }
+    }
+
+    // Không cho loại trừ quản trị khỏi nhóm
+    $row = $db->query('SELECT is_leader FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $gid . ' AND userid=' . $uid)->fetch();
+    if (empty($row)) {
+        die($lang_module['search_not_result']);
+    }
+    if ($row['is_leader']) {
+        die($lang_module['not_exclude_leader']);
     }
 
     if (! nv_groups_del_user($gid, $uid, $module_data)) {
@@ -379,6 +430,7 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     die('OK');
 }
 
+/* Không cho quản trị thăng cấp hay hạ cấp quản trị khác
 // Thang cap thanh vien
 if ($nv_Request->isset_request('gid,promote', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
@@ -429,7 +481,7 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['demote'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $user_info['userid']);
     die('OK');
-}
+}*/
 
 // Duyet vao nhom
 if ($nv_Request->isset_request('gid,approved', 'post')) {

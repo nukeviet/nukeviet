@@ -725,7 +725,9 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
                 " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
                 " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
             )");
-            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+            if ($approved) {
+                $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+            }
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
@@ -771,8 +773,9 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
         if ($set_number) {
             $db->query('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
 
-            // Chỗ này chỉ xóa những thành viên đã được xét duyệt vào nhóm nên sẽ cập nhật luôn số thành viên, không cần kiểm tra approved = 1 hay không
-            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+            if ($row['approved']) {
+                $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+            }
         }
         return true;
     } else {
