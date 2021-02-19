@@ -21,7 +21,7 @@ $storage = new Session();
 $serviceFactory = new \OAuth\ServiceFactory();
 
 // Setup the credentials for the requests
-$credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google');
+$credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google');
 
 // Instantiate the Google service using the credentials, http client and storage mechanism for the token
 /** @var $googleService Google */
