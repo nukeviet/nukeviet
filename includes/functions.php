@@ -755,7 +755,7 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
     global $db, $db_config, $global_config;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-    $row = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
+    $row = $db->query('SELECT data, approved FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
     if (!empty($row)) {
         $set_number = false;
         if ($group_id > 3) {
