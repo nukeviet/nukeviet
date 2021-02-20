@@ -165,8 +165,8 @@
                         </label>
                     </td>
                 </tr>
-                <!-- BEGIN: avatar_size -->
-                <!-- END: user_forum -->
+                <!-- END: avatar_size -->
+                <!-- BEGIN: user_forum -->
                 <tr>
                     <td>{LANG.is_user_forum}</td>
                     <td><input name="is_user_forum" value="1" type="checkbox"{DATA.is_user_forum} /></td>
