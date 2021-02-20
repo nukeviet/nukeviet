@@ -47,9 +47,10 @@ if (empty($contents)) {
         $in = " cid IN(" . implode(",", $in) . ")";
     }
 
-    $order = ($nv_laws_setting['typeview'] == 1) ? "ASC" : "DESC";
+    $order = ($nv_laws_setting['typeview'] == 1 or $nv_laws_setting['typeview'] == 4) ? "ASC" : "DESC";
+    $order_param = ($nv_laws_setting['typeview'] == 0 or $nv_laws_setting['typeview'] == 1) ? "publtime" : "addtime";
 
-    $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
+    $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND" . $in . " ORDER BY " .  $order_param . " " . $order . " LIMIT " . $page . "," . $per_page;
 
     $result = $db->query($sql);
     $query = $db->query("SELECT FOUND_ROWS()");
