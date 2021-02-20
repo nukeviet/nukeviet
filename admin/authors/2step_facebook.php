@@ -20,7 +20,7 @@ use OAuth\Common\Consumer\Credentials;
 
 $storage = new Session();
 $serviceFactory = new ServiceFactory();
-$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=facebook');
+$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=facebook');
 $facebookService = $serviceFactory->createService('facebook', $credentials, $storage, ['email']);
 
 if (!empty($_GET['code'])) {
