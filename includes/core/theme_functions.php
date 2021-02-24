@@ -159,22 +159,58 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 }
 
 /**
- * nv_htmlOutput()
- *
- * @param array $html
- * @return void
+ * @param string $html
+ * @param string $type
  */
-function nv_htmlOutput($html)
+function nv_htmlOutput($html, $type = 'html')
 {
-    header('Content-Type: text/html; charset=utf-8');
-    Header('Cache-Control: no-cache, must-revalidate');
+    global $global_config, $headers, $sys_info, $nv_BotManager;
 
-    if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        Header('X-Frame-Options: SAMEORIGIN');
+    // Xuất cấu hình robot vào header
+    $nv_BotManager->outputToHeaders($headers, $sys_info);
+
+    $html_headers = $global_config['others_headers'];
+    if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
+        $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
+    }
+    if ($type == 'json') {
+        $html_headers['Content-Type'] = 'application/json';
+    } else {
+        $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
+    }
+    $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+    $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
+    $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
+    $html_headers['Expires'] = '-1'; // Proxies.
+    $html_headers['X-Content-Type-Options'] = 'nosniff';
+    $html_headers['X-XSS-Protection'] = '1; mode=block';
+
+    if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
+        $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
     }
 
-    Header('X-Content-Type-Options: nosniff');
-    Header('X-XSS-Protection: 1; mode=block');
+    if (!empty($headers)) {
+        // $headers sẽ ghi đè $html_headers
+        $html_headers = array_merge($html_headers, $headers);
+    }
+
+    if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
+        unset($html_headers['Strict-Transport-Security']);
+    }
+
+    foreach ($html_headers as $key => $value) {
+        $_key = strtolower($key);
+        if (!isset($sys_info['server_headers'][$_key])) {
+            if (!is_array($value)) {
+                $value = [$value];
+            }
+
+            foreach ($value as $val) {
+                $replace = ($key != 'link') ? true : false;
+                Header($key . ': ' . $val, $replace);
+            }
+        }
+    }
 
     ob_start('ob_gzhandler');
     echo $html;
@@ -182,26 +218,11 @@ function nv_htmlOutput($html)
 }
 
 /**
- * nv_jsonOutput()
- *
  * @param array $array_data
- * @return void
  */
 function nv_jsonOutput($array_data)
 {
-    Header('Cache-Control: no-cache, must-revalidate');
-    Header('Content-type: application/json');
-
-    if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        Header('X-Frame-Options: SAMEORIGIN');
-    }
-
-    Header('X-Content-Type-Options: nosniff');
-    Header('X-XSS-Protection: 1; mode=block');
-
-    ob_start('ob_gzhandler');
-    echo json_encode($array_data);
-    exit(0);
+    nv_htmlOutput(json_encode($array_data), 'json');
 }
 
 /**
