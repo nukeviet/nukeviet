@@ -22,6 +22,7 @@ if (!isset($site_mods[NV_BRIDGE_USER_MODULE]) or (!defined('NV_IS_USER') and !de
 }
 
 $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
+$nv_BotManager->setPrivate();
 
 /**
  * nv_get_user_secretkey()

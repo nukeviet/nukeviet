@@ -27,7 +27,6 @@ if (!empty($module) and isset($module_config[$module]['activecomm'])) {
     if (!defined('NV_COMM_ID')) {
         $nv_BotManager->setNoIndex()->setFollow();
         $content_comment .= $nv_BotManager->getMetaTags(true);
-        $nv_BotManager->outputToHeaders($headers, $sys_info);
     }
     include NV_ROOTDIR . '/includes/header.php';
     echo $content_comment;

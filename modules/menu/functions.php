@@ -13,3 +13,5 @@ if (! defined('NV_SYSTEM')) {
 }
 
 define('NV_IS_MOD_MENU', true);
+
+$nv_BotManager->setPrivate();
