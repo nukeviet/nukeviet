@@ -45,6 +45,9 @@ if (!defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
     unset($admin_mods['seotools']);
 }
 
+// Chặn BOT index và follow khu vực quản trị
+$nv_BotManager->setNoIndex()->setNoFollow();
+
 $site_mods = nv_site_mods();
 if (!isset($admin_mods[$admin_info['main_module']]) and !isset($site_mods[$admin_info['main_module']])) {
     $admin_info['main_module'] = 'siteinfo';

@@ -7,9 +7,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:19
  */
+
 if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
+
+$nv_BotManager->setPrivate();
 
 $links = NV_MY_DOMAIN;
 $id = $nv_Request->get_int('id', 'get', 0);

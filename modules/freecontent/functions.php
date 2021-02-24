@@ -13,3 +13,5 @@ if (! defined('NV_SYSTEM')) {
 }
 
 define('NV_IS_MOD_FREE_CONTENT', true);
+
+$nv_BotManager->setPrivate();
