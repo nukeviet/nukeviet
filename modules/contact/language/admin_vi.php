@@ -94,7 +94,6 @@ $lang_module['addNew'] = 'Thêm mới';
 $lang_module['cats'] = 'Các chủ đề liên quan';
 $lang_module['cat'] = 'Chủ đề';
 $lang_module['mark_as_unread'] = 'Đánh dấu là chưa đọc';
-$lang_module['mark_as_processed'] = 'Đánh dấu đã xử lý';
 $lang_module['mark_as_read'] = 'Đánh dấu là đã đọc';
 $lang_module['mark_as_forward'] = 'Chuyển tiếp';
 $lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh sách trên.';
@@ -111,6 +110,6 @@ $lang_module['config_sendcopymode'] = 'Quyền gửi bản sao tới email';
 $lang_module['config_sendcopymode0'] = 'Thành viên đã xác thực email';
 $lang_module['config_sendcopymode1'] = 'Tất cả người dùng';
 
-$lang_module['processed_mark'] = 'Đánh dấu đã xử lý: ';
 $lang_module['processed_by'] = 'Người thực hiện: ';
 $lang_module['processed_time'] = 'Thời gian: ';
+$lang_module['mark_as_processed'] = 'Đánh dấu đã xử lý';
