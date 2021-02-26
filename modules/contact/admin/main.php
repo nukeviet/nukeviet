@@ -11,7 +11,7 @@
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
-
+global $admin_info;
 $mark = $nv_Request->get_title('mark', 'post', '');
 
 if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
@@ -27,6 +27,22 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 
     $sends = implode(',', $sends);
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
+    nv_jsonOutput(array( 'status' => 'ok', 'mess' => '' ));
+} else if (!empty($mark) and ($mark == 'processed')) {
+    $mark = 1;
+    $sends = $nv_Request->get_array('sends', 'post', array());
+    if (empty($sends)) {
+        nv_jsonOutput(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ));
+    }
+
+    foreach ($sends as $id) {
+        nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, $mark);
+    }
+
+    $sends = implode(',', $sends);
+    $processed_by = $admin_info['userid'];
+    $processed_time = NV_CURRENTTIME;
+    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $processed_time . ' WHERE id IN (' . $sends . ')');
     nv_jsonOutput(array( 'status' => 'ok', 'mess' => '' ));
 }
 
@@ -79,11 +95,19 @@ if (!empty($contact_allowed['view'])) {
 	            }elseif ($row['is_reply']==2) {
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14 );
 	                $status = $lang_module['tt2_row_title'];
-	            }else{
+	            }elseif ($row['is_processed']) {
+                    $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/processed.png', 13, 14 );
+                    $status = $lang_module['tt3_row_title'];
+                }else{
 	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );
 	                $status = $lang_module['tt1_row_title'];
 	            }
             }
+
+            if ($row['is_processed'] == 1) {
+                $processed = 'fa-check-square-o';
+            } else 
+                $processed = 'fa-square-o';
 
             $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
 
@@ -95,6 +119,7 @@ if (!empty($contact_allowed['view'])) {
                 'title' => nv_clean60($row['title'], 60),
                 'time' => $row['send_time'] >= $currday ? nv_date('H:i d/m/Y', $row['send_time']) : nv_date('d/m/Y', $row['send_time']),
                 'style' => $style,
+                'processed' => $processed,
                 'onclick' => $onclick,
                 'status' => $status,
                 'image' => $image

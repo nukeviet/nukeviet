@@ -100,6 +100,20 @@ if ($row['is_reply']>=1) {
     }
 }
 
+if ($row['is_processed']) {
+    $sql = 'SELECT username, email FROM nv4_users WHERE userid=' . $row['processed_by'];
+    $adm_row = $db->query($sql)->fetch();
+    $reply_name = $adm_row['username'];
+    $reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . intval($row['reply_aid']) . '">' . $reply_name . '</a>';
+
+    $processed_time = nv_date('H:i d/m/Y', $row['processed_time']);
+
+    $xtpl->assign('processed_by', $reply_name);
+    $xtpl->assign('processed_email', $adm_row['email']);
+    $xtpl->assign('processed_time', $processed_time);
+    $xtpl->parse('main.data_processed');
+}
+
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
