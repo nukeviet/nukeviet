@@ -110,3 +110,4 @@ $lang_module['processed_by'] = 'La personne qui exécute: ';
 $lang_module['processed_time'] = 'Temps d\'exécution: ';
 $lang_module['mark_as_processed'] = 'Marquer comme traité';
 $lang_module['tt3_row_title'] = 'Exécute';
+$lang_module['process'] = 'Exécute';

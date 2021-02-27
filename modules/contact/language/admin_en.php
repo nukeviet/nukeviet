@@ -110,3 +110,4 @@ $lang_module['processed_by'] = 'Handler: ';
 $lang_module['processed_time'] = 'Processing Time: ';
 $lang_module['mark_as_processed'] = 'Mark processed';
 $lang_module['tt3_row_title'] = 'Processed!';
+$lang_module['process'] = 'Processed!';
