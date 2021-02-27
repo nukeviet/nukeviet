@@ -48,7 +48,7 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     }
 
     $sends = implode(',', $sends);
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['processed_mark'], 'ID: ' . $sends, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
 
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= ' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id IN (' . $sends . ')');
     nv_jsonOutput(array(
