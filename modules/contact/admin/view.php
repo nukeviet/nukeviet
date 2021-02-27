@@ -26,14 +26,27 @@ if (!isset($contact_allowed['view'][$row['cid']])) {
 }
 
 $is_read = intval($row['is_read']);
+$processed = intval($row['is_processed']);
 $mark = $nv_Request->get_title('mark', 'post', '');
 
 if ($mark == 'unread') {
     if ($is_read) {
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0 WHERE id=' . $id);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0, is_processed=0, processed_by=0, processed_time=0 WHERE id=' . $id);
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
 
+    nv_jsonOutput(array(
+        'status' => 'ok',
+        'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
+    ));
+} elseif ($mark == 'toogle_process') { 
+    if ($processed) {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=0, processed_by=0, processed_time=0 WHERE id=' . $id);
+        nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
+    } else {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=1, processed_by=' . $admin_info['userid'] .', processed_time=' . NV_CURRENTTIME . ' WHERE id=' . $id);
+        nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
+    }
     nv_jsonOutput(array(
         'status' => 'ok',
         'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
@@ -57,6 +70,12 @@ $sender_id = intval($row['sender_id']);
 
 if ($sender_id) {
     $sender_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $sender_id . '">' . $sender_name . '</a>';
+}
+
+if ($processed) {
+    $xtpl->assign('MARK_PROCESS', $lang_module['mark_as_unprocess']);
+} else {
+    $xtpl->assign('MARK_PROCESS', $lang_module['mark_as_processed']);
 }
 
 $row['send_name'] = $sender_name;

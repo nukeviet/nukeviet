@@ -24,6 +24,18 @@ function mark_as_unread() {
 	});
 	return !1
 }
+function mark_toogle_process() {
+	$.ajax({
+		type: "POST",
+		url: window.location.href,
+		cache: !1,
+		data: "&mark=toogle_process",
+		dataType: "json"
+	}).done(function(a) {
+		"error" == a.status ? alert(a.mess) : window.location.href = a.mess
+	});
+	return !1
+}
 function mark_as_processed(a, b) {
     $.ajax({
         type: "POST",

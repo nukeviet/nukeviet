@@ -29,8 +29,9 @@
                         <a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_submit(document.myform, 'sends[]');"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.bt_del_row_title}</a> &nbsp;
                         <a class="btn btn-default" href="javascript:void(0)" onclick="nv_delall_submit();"><em class="fa fa-trash-o">&nbsp;</em> {LANG.delall}</a> &nbsp;
                         <a class="btn btn-default" href="javascript:void(0);" onclick="multimark('#myform','unread');"><em class="fa fa-bookmark">&nbsp;</em> {LANG.mark_as_unread}</a> &nbsp;
-                        <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_processed('#myform','processed');"><em class="fa fa-check">&nbsp;</em> {LANG.mark_as_processed}</a> &nbsp;
                         <a class="btn btn-default" href="javascript:void(0);" onclick="multimark('#myform','read');"><em class="fa fa-bookmark-o">&nbsp;</em> {LANG.mark_as_read}</a>&nbsp;
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_processed('#myform','unprocess');"><em class="fa fa-circle-o">&nbsp;</em> {LANG.mark_as_unprocess}</a> &nbsp;
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_processed('#myform','processed');"><em class="fa fa-check-circle-o">&nbsp;</em> {LANG.mark_as_processed}</a> &nbsp;
                     </td>
 				</tr>
 			</tfoot>
