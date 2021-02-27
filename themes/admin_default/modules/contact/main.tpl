@@ -6,7 +6,7 @@
 <form name="myform" id="myform" method="post" action="{FORM_ACTION}">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<colgroup>
+			<colgroup> 
 				<col class="w50" />
 				<col width="30" />
 				<col span="4" />
@@ -14,7 +14,7 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></th>
+					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></th> 
 					<th colspan="2">{LANG.name_user_send_title}</th>
 					<th>{LANG.part_row_title}</th>
                     <th>{LANG.cat}</th>
@@ -29,6 +29,7 @@
                         <a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_submit(document.myform, 'sends[]');"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.bt_del_row_title}</a> &nbsp;
                         <a class="btn btn-default" href="javascript:void(0)" onclick="nv_delall_submit();"><em class="fa fa-trash-o">&nbsp;</em> {LANG.delall}</a> &nbsp;
                         <a class="btn btn-default" href="javascript:void(0);" onclick="multimark('#myform','unread');"><em class="fa fa-bookmark">&nbsp;</em> {LANG.mark_as_unread}</a> &nbsp;
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_processed('#myform','processed');"><em class="fa fa-check">&nbsp;</em> {LANG.mark_as_processed}</a> &nbsp;
                         <a class="btn btn-default" href="javascript:void(0);" onclick="multimark('#myform','read');"><em class="fa fa-bookmark-o">&nbsp;</em> {LANG.mark_as_read}</a>&nbsp;
                     </td>
 				</tr>
