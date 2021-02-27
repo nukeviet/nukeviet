@@ -106,7 +106,7 @@ if ($row['is_processed']) {
     $adm_row = $db->query($sql)->fetch();
     if (!empty($adm_row)) {
         $reply_name = $adm_row['username'];
-        $reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $row['reply_aid'] . '">' . $reply_name . '</a>';
+        $reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $row['processed_by'] . '">' . $reply_name . '</a>';
         $reply_email = $adm_row['email'];
     } else {
         $reply_name = 'N/A';
