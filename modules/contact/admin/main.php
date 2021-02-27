@@ -35,7 +35,7 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     ));
 } else if (!empty($mark) and ($mark == 'processed')) {
     $mark = 1;
-    $sends = $nv_Request->get_typed_array('sends', $mode = null, $type = int);
+    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
     if (empty($sends)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -49,7 +49,6 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 
     $sends = implode(',', $sends);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['processed_mark'], 'ID: ' . $sends, $admin_info['userid']);
-    // nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['processed_mark'], 'Xử lý các email: ' . explode(',',$sends), 0);
 
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= ' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id IN (' . $sends . ')');
     nv_jsonOutput(array(
