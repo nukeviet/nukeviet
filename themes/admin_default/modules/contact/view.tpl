@@ -50,6 +50,25 @@
 		</tbody>
 	</table>
 </div>
+<!-- BEGIN: data_processed -->
+<table class="table table-striped table-bordered table-hover">
+    <caption> <em class="fa fa-file-text-o"> &nbsp; </em> {LANG.mark_as_processed}: {DATA.title}</caption>
+    <colgroup>
+        <col class="w150">
+        <col>
+    </colgroup>	
+    <tbody>
+        <tr>
+            <td>{LANG.processed_by}</td>
+            <td>{PROCESSED_DATA.user} ({PROCESSED_DATA.email})</td>
+        </tr>
+        <tr>
+            <td>{LANG.processed_time}</td>
+            <td>{PROCESSED_DATA.time}</td>
+        </tr> 
+    </tbody>		
+</table>
+<!-- END: data_processed -->
 <!-- BEGIN: data_reply -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">

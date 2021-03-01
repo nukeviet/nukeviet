@@ -57,6 +57,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  sender_ip varchar(39) NOT NULL DEFAULT '',
  is_read tinyint(1) unsigned NOT NULL DEFAULT '0',
  is_reply tinyint(1) unsigned NOT NULL DEFAULT '0',
+ is_processed tinyint(1) unsigned NOT NULL DEFAULT '0',
+ processed_by int(11) unsigned NOT NULL DEFAULT '0',
+ processed_time int(11) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  KEY sender_name (sender_name)
 ) ENGINE=MyISAM";

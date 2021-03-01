@@ -107,3 +107,9 @@ $lang_module['config'] = 'Cấu hình module';
 $lang_module['config_sendcopymode'] = 'Quyền gửi bản sao tới email';
 $lang_module['config_sendcopymode0'] = 'Thành viên đã xác thực email';
 $lang_module['config_sendcopymode1'] = 'Tất cả người dùng';
+
+$lang_module['processed_by'] = 'Người thực hiện: ';
+$lang_module['processed_time'] = 'Thời gian: ';
+$lang_module['mark_as_processed'] = 'Đánh dấu đã xử lý';
+$lang_module['tt3_row_title'] = 'Đã xử lý';
+$lang_module['process'] = 'Đã xử lý';
