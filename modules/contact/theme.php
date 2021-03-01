@@ -43,10 +43,23 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                 continue;
             }
 
+            // Hiển thị hình
+            ! empty($dep['image']) && $dep['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'];
+
             $xtpl->assign('DEP', $dep);
+
+            // Hiển thị hình
+            if (! empty($dep['image'])) {
+                $xtpl->parse('main.dep.image');
+            }
 
             if (! empty($dep['note'])) {
                 $xtpl->parse('main.dep.note');
+            }
+
+            // Hiển thị địa chỉ
+            if (! empty($dep['address'])) {
+                $xtpl->parse('main.dep.address');
             }
 
             if (! empty($dep['phone'])) {
