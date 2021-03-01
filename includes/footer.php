@@ -48,8 +48,13 @@ if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
     $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
 }
 
-// Xuất cấu hình robot vào header
-$nv_BotManager->outputToHeaders($headers, $sys_info);
+/*
+ * Xuất cấu hình robot vào header
+ * Chú ý kiểm tra biến $nv_BotManager vì có trường hợp undefined $nv_BotManager
+ */
+if (!empty($nv_BotManager)) {
+    $nv_BotManager->outputToHeaders($headers, $sys_info);
+}
 
 if (!empty($headers)) {
     // $headers sẽ ghi đè $html_headers
