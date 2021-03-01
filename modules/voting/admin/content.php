@@ -29,6 +29,7 @@ if (! empty($submit)) {
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
     $exp_date = $nv_Request->get_title('exp_date', 'post', '');
     $maxoption = $nv_Request->get_int('maxoption', 'post', 1);
+    $vote_one = $nv_Request->get_int('vote_one', 'post', 0) ? 1 : 0;
 
     $array_answervote = $nv_Request->get_array('answervote', 'post');
     $array_urlvote = $nv_Request->get_array('urlvote', 'post');
@@ -83,9 +84,9 @@ if (! empty($submit)) {
 
         if (empty($vid)) {
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
-                question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act
+                question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act, vote_one
             ) VALUES (
-                ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1
+                ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1, ' . $vote_one . '
             )';
             $vid = $db->insert_id($sql, 'vid');
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid']);
@@ -132,7 +133,7 @@ if (! empty($submit)) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
                 question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ',
                 admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ',
-                publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . '
+                publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ', vote_one=' . $vote_one . '
             WHERE vid =' . $vid;
 
             if ($db->query($sql)) {
@@ -182,7 +183,8 @@ if (! empty($submit)) {
             'acceptcm' => 1,
             'active_captcha' => 1,
             'question' => '',
-            'link' => ''
+            'link' => '',
+            'vote_one' => 0
         );
         $active_captcha = 1;
     }
@@ -196,6 +198,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link']);
 $rowvote['active_captcha'] = $active_captcha ? ' checked="checked"' : '';
 $rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
+$rowvote['vote_one'] = $rowvote['vote_one']  ? ' checked="checked"' : '';
 
 $xtpl->assign('DATA', $rowvote);
 

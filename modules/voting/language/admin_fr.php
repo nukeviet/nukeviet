@@ -58,3 +58,4 @@ $lang_module['warning'] = 'Remarque: Nombre d\'options doivent être moins ou é
 $lang_module['voting_error_content'] = 'Remarques: vous devez saisir le contenu de sondage et les réponses';
 $lang_module['voting_active_captcha'] = 'Activation code de confirmation';
 $lang_module['voting_result'] = 'Résultats du vote';
+$lang_module['voting_type'] = 'Votez 1 fois';

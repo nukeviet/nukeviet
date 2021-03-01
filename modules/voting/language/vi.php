@@ -38,3 +38,4 @@ $lang_module['voting_counter'] = 'lượt';
 $lang_module['voting_pubtime'] = 'Tính từ';
 $lang_module['enter_captcha'] = 'Mời nhập mã xác nhận';
 $lang_module['enter_captcha_error'] = 'Vui lòng nhập mã xác nhận';
+$lang_module['limit_vote_msg'] = 'Bạn chỉ được bình chọn 1 lần';
