@@ -41,6 +41,7 @@ while ($row = $result->fetch()) {
 
 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid);
 
+nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight row menu', 'Row menu id: ' . $id . ', new weight: ' . $new_weight, $admin_info['userid']);
 menu_fix_order($mid);
 $nv_Cache->delMod($module_name);
 

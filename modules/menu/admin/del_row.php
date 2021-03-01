@@ -24,6 +24,7 @@ if (!nv_menu_del_sub($id, $parentid)) {
     die('NO_' . $id);
 }
 menu_fix_order($mid);
+nv_insert_logs(NV_LANG_DATA, $module_name, 'Del row menu', 'Row menu id: ' . $id . ' of Menu id: ' . $mid, $admin_info['userid']);
 $nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';

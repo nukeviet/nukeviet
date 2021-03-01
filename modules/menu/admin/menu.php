@@ -29,12 +29,16 @@ if ($nv_Request->get_int('save', 'post')) {
         $arr['id'] = $db->insert_id($sql, 'id', $data_insert);
         if (empty($arr['id'])) {
             $error = $lang_module['errorsave'];
+        } else {
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Add menu','Menu id: ' . $arr['id'], $admin_info['userid']);
         }
     } else {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title WHERE id =' . $arr['id']);
         $stmt->bindParam(':title', $arr['title'], PDO::PARAM_STR);
         if (! $stmt->execute()) {
             $error = $lang_module['errorsave'];
+        } else {
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit menu','Menu id: ' . $arr['id'], $admin_info['userid']);
         }
     }
     if (empty($error)) {

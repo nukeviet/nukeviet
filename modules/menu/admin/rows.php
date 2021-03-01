@@ -254,7 +254,8 @@ if ($nv_Request->isset_request('submit1', 'post')) {
         $data_insert['op'] = $post['op'];
         $data_insert['css'] = $post['css'];
 
-        if ($db->insert_id($sql, 'id', $data_insert)) {
+        $insert_id = $db->insert_id($sql, 'id', $data_insert);
+        if (!empty($insert_id)) {
             menu_fix_order($post['mid']);
 
             if ($post['parentid'] != 0) {
@@ -269,6 +270,8 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                 $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid= " . $post['mid'] . " AND id=" . $post['parentid'];
                 $db->query($sql);
             }
+
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Add row menu', 'Row menu id: ' . $insert_id . ' of Menu id: ' . $post['mid'], $admin_info['userid']);
 
             $nv_Cache->delMod($module_name);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
@@ -339,6 +342,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                 $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old);
             }
 
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit row menu', 'Row menu id: ' . $post['id'], $admin_info['userid']);
             $nv_Cache->delMod($module_name);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
         } else {
@@ -352,6 +356,7 @@ if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_
     foreach ($array_id as $id) {
         nv_menu_del_sub($id, $post['parentid']);
     }
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Del row menu', 'Row menu id: ' . implode(',',$array_id), $admin_info['userid']);
     menu_fix_order($post['mid']);
     $nv_Cache->delMod($module_name);
 }
