@@ -116,9 +116,9 @@ function change_captcha(a) {
 }
 
 function checkAll(a) {
-    $(".checkAll", a).is(":checked") ? $(".checkSingle", a).each(function() {
+    $(".checkAll", a).is(":checked") ? $(".checkSingle", a).not(":disabled").each(function() {
         $(this).prop("checked", !0)
-    }) : $(".checkSingle", a).each(function() {
+    }) : $(".checkSingle", a).not(":disabled").each(function() {
         $(this).prop("checked", !1)
     });
     return !1
