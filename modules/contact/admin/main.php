@@ -39,34 +39,32 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     ));
 } else if (!empty($mark) and ($mark == 'processed' or $mark == 'unprocess')) {
     $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
+    $mark = $mark == 'processed' ? 1 : 0;
     if (empty($sends)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $lang_module['please_choose']
         ]);
-    }
-
-    if ($mark == 'processed') {
-        $mark = 1;
-        $is_read = 1;
-        $processed_by = $admin_info['userid'];
-        $time = NV_CURRENTTIME;
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . implode(',', $sends), $admin_info['userid']);
-    } else {
-        $mark = 0;
-        $is_read = 0;
-        $processed_by = 0;
-        $time = 0;
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . implode(',', $sends), $admin_info['userid']);
-    }
+    }    
 
     foreach ($sends as $id) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, $mark);
     }
 
     $sends = implode(',', $sends);    
-
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= ' . $is_read . ', is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
+    if ($mark) {
+        $is_read = 1;
+        $processed_by = $admin_info['userid'];
+        $time = NV_CURRENTTIME;
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= ' . $is_read . ', is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
+    } else {
+        $processed_by = 0;
+        $time = 0;
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . $sends, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
+    }
+    
     nv_jsonOutput(array(
         'status' => 'ok',
         'mess' => ''
