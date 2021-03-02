@@ -7,8 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
-
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -21,7 +20,7 @@ $page_title = $lang_module['m_list'];
 
 // Delete menu
 if ($nv_Request->isset_request('del', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -59,7 +58,7 @@ while ($row = $query2->fetch()) {
     $arr_items = array();
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $row['id'] . ' ORDER BY sort ASC';
     $result = $db->query($sql);
-    while (list($title_i) = $result->fetch(3)) {
+    while (list ($title_i) = $result->fetch(3)) {
         $arr_items[] = $title_i;
     }
 
@@ -74,7 +73,6 @@ while ($row = $query2->fetch()) {
         'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=menu&amp;id=' . $row['id']
     );
 }
-
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);

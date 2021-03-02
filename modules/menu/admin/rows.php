@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -356,7 +355,7 @@ if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_
     foreach ($array_id as $id) {
         nv_menu_del_sub($id, $post['parentid']);
     }
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'Del row menu', 'Row menu id: ' . implode(',',$array_id), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Del row menu', 'Row menu id: ' . implode(',', $array_id), $admin_info['userid']);
     menu_fix_order($post['mid']);
     $nv_Cache->delMod($module_name);
 }

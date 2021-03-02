@@ -7,11 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 20-03-2011 20:08
  */
-
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 
