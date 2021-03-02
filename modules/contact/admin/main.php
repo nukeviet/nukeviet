@@ -45,13 +45,13 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
             'status' => 'error',
             'mess' => $lang_module['please_choose']
         ]);
-    }    
+    }
 
     foreach ($sends as $id) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, $mark);
     }
 
-    $sends = implode(',', $sends);    
+    $sends = implode(',', $sends);
     if ($mark) {
         $is_read = 1;
         $processed_by = $admin_info['userid'];
@@ -64,7 +64,7 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . $sends, $admin_info['userid']);
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
     }
-    
+
     nv_jsonOutput(array(
         'status' => 'ok',
         'mess' => ''

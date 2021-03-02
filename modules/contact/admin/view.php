@@ -39,12 +39,12 @@ if ($mark == 'unread') {
         'status' => 'ok',
         'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
     ));
-} elseif ($mark == 'toogle_process') { 
+} elseif ($mark == 'toogle_process') {
     if ($processed) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=0, processed_by=0, processed_time=0 WHERE id=' . $id);
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     } else {
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=1, processed_by=' . $admin_info['userid'] .', processed_time=' . NV_CURRENTTIME . ' WHERE id=' . $id);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id=' . $id);
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
     nv_jsonOutput(array(
