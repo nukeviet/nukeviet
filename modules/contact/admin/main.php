@@ -59,10 +59,8 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= ' . $is_read . ', is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
     } else {
-        $processed_by = 0;
-        $time = 0;
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . $sends, $admin_info['userid']);
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= 0, processed_time=0 WHERE id IN (' . $sends . ')');
     }
 
     nv_jsonOutput(array(
