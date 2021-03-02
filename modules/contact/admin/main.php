@@ -53,11 +53,8 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 
     $sends = implode(',', $sends);
     if ($mark) {
-        $is_read = 1;
-        $processed_by = $admin_info['userid'];
-        $time = NV_CURRENTTIME;
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= ' . $is_read . ', is_processed=' . $mark . ', processed_by= ' . $processed_by . ', processed_time=' . $time . ' WHERE id IN (' . $sends . ')');
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= 1, is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id IN (' . $sends . ')');
     } else {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . $sends, $admin_info['userid']);
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= 0, processed_time=0 WHERE id IN (' . $sends . ')');
