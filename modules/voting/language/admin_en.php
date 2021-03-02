@@ -59,3 +59,4 @@ $lang_module['voting_error_content'] = 'Notice: you should input Vote content an
 $lang_module['voting_active_captcha'] = 'Activation confirmation code';
 $lang_module['voting_result'] = 'Voting results';
 $lang_module['voting_type'] = 'Vote 1 time';
+$lang_module['note_voting_type'] = 'One-time voting is only available when "Groups viewed" is selected for the member';

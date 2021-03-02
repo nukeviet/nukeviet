@@ -28,14 +28,14 @@ if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
         $nv_Cache->delMod($module_name);
 
         $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
-        $pattern = '/^vo' . $vid . '/';
+        $pattern = '/^vo' . $vid . '_/';
         $logs = nv_scandir($dir, $pattern);
         if (!empty($logs)) {
             foreach ($logs as $file) {
-                @unlink($dir . '/' . $file);
+                nv_deletefile($dir . '/' . $file);
             }
         }
-        
+
         $contents = "OK_" . $vid;
     } else {
         $contents = "ERR_" . $lang_module['voting_delete_unsuccess'];

@@ -58,4 +58,5 @@ $lang_module['warning'] = 'Lưu ý: số cho phép chọn phải nhỏ hơn ho�
 $lang_module['voting_error_content'] = 'Lưu ý: bạn cần nhập Nội dung thăm dò và các câu trả lời';
 $lang_module['voting_active_captcha'] = 'Kích hoạt mã xác nhận';
 $lang_module['voting_result'] = 'Kết quả';
-$lang_module['voting_type'] = 'Thành viên bình chọn 1 lần';
+$lang_module['voting_type'] = 'Bình chọn 1 lần';
+$lang_module['note_voting_type'] = 'Bình chọn một lần chỉ áp dụng khi "Các nhóm được xem" được chọn từ thành viên trở lên';

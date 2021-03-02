@@ -121,7 +121,7 @@
                     <label><input type="checkbox" name="active_captcha" value="1"{DATA.active_captcha}/> <strong>{LANG.voting_active_captcha}</strong></label>
                 </div>
                 <div class="col-lg-24">
-                    <label><input class="mt-1" type="checkbox" name="vote_one" value="1" {DATA.vote_one}/> <strong>{LANG.voting_type}</strong></label>
+                    <label><input class="mt-1" type="checkbox" name="vote_one" value="1" {DATA.vote_one}/> <strong>{LANG.voting_type}</strong> ({LANG.note_voting_type})</label>
                 </div>
             </div>
         </div>

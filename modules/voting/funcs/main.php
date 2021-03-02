@@ -167,8 +167,8 @@ if (empty($vid)) {
         }
 
         $acceptcm = (int) $row['acceptcm'];
-        $logfile = md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
-        if (defined('NV_IS_USER') && ($row['vote_one'] == 1)) {
+        $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
+        if (defined('NV_IS_USER') and !empty($row['vote_one'])) {
             $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $user_info['userid'] . $vid) . '.' . $log_fileext;
             if (file_exists($dir . '/' . $logfile)) {
                 $note = $lang_module['limit_vote_msg'];
