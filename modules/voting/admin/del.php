@@ -27,6 +27,15 @@ if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
         $db->query("DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid=" . $vid);
         $nv_Cache->delMod($module_name);
 
+        $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
+        $pattern = '/^vo' . $vid . '_/';
+        $logs = nv_scandir($dir, $pattern);
+        if (!empty($logs)) {
+            foreach ($logs as $file) {
+                nv_deletefile($dir . '/' . $file);
+            }
+        }
+
         $contents = "OK_" . $vid;
     } else {
         $contents = "ERR_" . $lang_module['voting_delete_unsuccess'];

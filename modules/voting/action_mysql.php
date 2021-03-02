@@ -30,6 +30,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  publ_time int(11) unsigned NOT NULL DEFAULT '0',
  exp_time int(11) unsigned NOT NULL DEFAULT '0',
  act tinyint(1) unsigned NOT NULL DEFAULT '0',
+ vote_one tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 cho phép vote nhiều lần 1 cho phép vote 1 lần',
  PRIMARY KEY (vid),
  UNIQUE KEY question (question)
 ) ENGINE=MyISAM";
