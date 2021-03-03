@@ -13,6 +13,7 @@
                 <th class="text-nowrap">{LANG.add_time}</th>
                 <th class="text-nowrap">{LANG.edit_time}</th>
                 <th class="text-nowrap">{LANG.status}</th>
+                <th class="text-center text-nowrap">{LANG.hitstotal}</th>
                 <th class="text-center text-nowrap">{LANG.feature}</th>
             </tr>
         </thead>
@@ -26,7 +27,9 @@
                         <!-- END: weight -->
                     </select>
                 </td>
-                <td><a href="{ROW.url_view}" title="{ROW.title}" target="_blank">{ROW.title}</a></td>
+                <td>
+                    <a href="{ROW.url_view}" title="{ROW.title}" target="_blank">{ROW.title}</a>
+                </td>
                 <td>{ROW.add_time}</td>
                 <td>{ROW.edit_time}</td>
                 <td class="text-center">
@@ -36,10 +39,12 @@
                         <!-- END: status -->
                     </select>
                 </td>
+                <td class="text-center">{ROW.hitstotal}</td>
                 <td class="text-center text-nowrap">
-                    <!-- BEGIN: copy_page --><a href={URL_COPY} title="{LANG.title_copy_page}" class="btn btn-success btn-sm"><i class="fa fa-copy"></i></a><!-- END: copy_page -->
-                    <a href="{ROW.url_edit}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> {GLANG.edit}</a>
-                    <a href="javascript:void(0);" onclick="nv_module_del({ROW.id}, '{ROW.checkss}');" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> {GLANG.delete}</a>
+                    <!-- BEGIN: copy_page -->
+                    <a href={URL_COPY} title="{LANG.title_copy_page}" class="btn btn-success btn-sm"><i class="fa fa-copy"></i></a>
+                    <!-- END: copy_page -->
+                    <a href="{ROW.url_edit}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i> {GLANG.edit}</a> <a href="javascript:void(0);" onclick="nv_module_del({ROW.id}, '{ROW.checkss}');" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> {GLANG.delete}</a>
                 </td>
             </tr>
             <!-- END: row -->

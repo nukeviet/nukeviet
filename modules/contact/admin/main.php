@@ -28,14 +28,18 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     }
 
     $sends = implode(',', $sends);
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
+    if ($mark) {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
+    } else {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0, is_processed=0, processed_by=0, processed_time=0 WHERE id IN (' . $sends . ')');
+    }
     nv_jsonOutput(array(
         'status' => 'ok',
         'mess' => ''
     ));
-} else if (!empty($mark) and ($mark == 'processed')) {
-    $mark = 1;
+} else if (!empty($mark) and ($mark == 'processed' or $mark == 'unprocess')) {
     $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
+    $mark = $mark == 'processed' ? 1 : 0;
     if (empty($sends)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -48,9 +52,14 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     }
 
     $sends = implode(',', $sends);
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
+    if ($mark) {
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= 1, is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id IN (' . $sends . ')');
+    } else {
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . $sends, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= 0, processed_time=0 WHERE id IN (' . $sends . ')');
+    }
 
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= 1, is_processed=' . $mark . ', processed_by= ' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id IN (' . $sends . ')');
     nv_jsonOutput(array(
         'status' => 'ok',
         'mess' => ''
@@ -134,12 +143,6 @@ if (!empty($contact_allowed['view'])) {
                     );
                     $status = $lang_module['tt1_row_title'];
                 }
-            }
-
-            if ($row['is_processed'] == 1) {
-                $processed = 'fa-check-square-o';
-            } else {
-                $processed = 'fa-square-o';
             }
 
             $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
