@@ -367,3 +367,5 @@ $lang_module['2step_require_directgo'] = 'Nhấp vào đây nếu hệ thống k
 $lang_module['2step_error_opt_backup'] = 'Vui lòng nhập mã xác nhận từ ứng dụng Google Authenticator hoặc Mã dự phòng đã lưu';
 $lang_module['2step_status'] = 'Xác thực hai bước';
 $lang_module['2step_link'] = 'Thiết lập';
+$lang_module['delconfirm_email_title'] = 'Thư thông báo xóa tài khoản';
+$lang_module['delconfirm_email_content'] = 'Xin chào %1$s,<br /><br />Chúng tôi rất lấy làm tiếc thông báo về việc tài khoản của bạn đã bị xóa khỏi website %2$s.';

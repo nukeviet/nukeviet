@@ -361,3 +361,5 @@ $lang_module['2step_require_directgo'] = 'Click here if the system did not redir
 $lang_module['2step_error_opt_backup'] = 'Please enter confirmation code from the Google Authenticator app or redundant code saved';
 $lang_module['2step_status'] = 'Two-step authentication';
 $lang_module['2step_link'] = 'Settings';
+$lang_module['delconfirm_email_title'] = 'Email notification to delete account';
+$lang_module['delconfirm_email_content'] = 'Hi %1$s,<br />We are so sorry to delete your account at website %2$s.';

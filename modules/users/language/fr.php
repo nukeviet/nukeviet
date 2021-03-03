@@ -361,3 +361,5 @@ $lang_module['2step_require_directgo'] = 'Cliquez ici si pas système d\'auto-na
 $lang_module['2step_error_opt_backup'] = 'S\'il vous plaît entrez le code de confirmation de l\'application Google Authenticator ou code redondant sauvé';
 $lang_module['2step_status'] = 'L\'authentification à deux étapes';
 $lang_module['2step_link'] = 'Réglage';
+$lang_module['delconfirm_email_title'] = 'Notification de suppression du compte';
+$lang_module['delconfirm_email_content'] = 'Bonjour %1$s,<br /><br />Nous sommes désolé de vous informer la suppression de votre compte sur le site %2$s.';
