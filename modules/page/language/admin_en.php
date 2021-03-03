@@ -8,7 +8,6 @@
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 08:22:00 AM
  */
-
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -28,6 +27,7 @@ $lang_module['edit_time'] = 'Edit time';
 $lang_module['order'] = 'Order';
 $lang_module['status'] = 'Status';
 $lang_module['active'] = 'Active';
+$lang_module['hitstotal'] = 'View';
 $lang_module['inactive'] = 'Inactive';
 $lang_module['delete'] = 'Delete article';
 $lang_module['empty_title'] = 'Article has not title';

@@ -7,11 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 20-03-2011 20:08
  */
-
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 
@@ -41,6 +40,7 @@ while ($row = $result->fetch()) {
 
 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid);
 
+nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight row menu', 'Row menu id: ' . $id . ', new weight: ' . $new_weight, $admin_info['userid']);
 menu_fix_order($mid);
 $nv_Cache->delMod($module_name);
 
