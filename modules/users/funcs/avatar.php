@@ -84,7 +84,7 @@ function deleteAvatar()
             nv_deletefile(NV_ROOTDIR . '/' . $oldAvatar);
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET photo='', last_update=' . NV_CURRENTTIME . ' WHERE userid=" . $user_info['userid']);
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET photo='', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $user_info['userid']);
         $stmt->execute();
     }
 }
@@ -95,7 +95,7 @@ $array = array();
 $array['success'] = 0;
 $array['error'] = '';
 $array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
-$array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
+$array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_editinfo_' . $user_info['userid']);
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 if (defined('SSO_CLIENT_DOMAIN')) {
