@@ -34,38 +34,13 @@ if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
         $user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
 
         // Lay cac du lieu tuy bien
-        $array_field_config = [];
-        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC');
-        while ($row_field = $result_field->fetch()) {
-            $language = unserialize($row_field['language']);
-            $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
-            $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
-            
-            if (!empty($row_field['field_choices'])) {
-                $row_field['field_choices'] = unserialize($row_field['field_choices']);
-            } elseif (!empty($row_field['sql_choices'])) {
-                $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
-                $row_field['field_choices'] = [];
-                $sql = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-                if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
-                    $sql .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
-                }
-                $result = $db->query($sql);
-                
-                $weight = 0;
-                while (list ($key, $val) = $result->fetch(3)) {
-                    $row_field['field_choices'][$key] = $val;
-                }
-            }
-            $row_field['system'] = $row_field['is_system'];
-            $array_field_config[] = $row_field;
-        }
+        $array_field_config = nv_get_users_field_config();
 
         // Cac du lieu tuy bien cua thanh vien
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $user_info['userid'];
         $result = $db->query($sql);
         $custom_fields = $result->fetch();
-        
+
         $contents = user_welcome($array_field_config, $custom_fields);
     }
 }
