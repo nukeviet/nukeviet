@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10/03/2010 10:51
  */
-
 if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
@@ -953,7 +952,7 @@ function openid_callback($openid_info)
  *
  * @return
  */
-function user_welcome()
+function user_welcome($array_field_config, $custom_fields)
 {
     global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $op;
 
@@ -1021,6 +1020,46 @@ function user_welcome()
 
     if ($user_info['group_manage'] > 0) {
         $xtpl->parse('main.group_manage');
+    }
+
+    // Parse custom fields
+    if (!empty($array_field_config)) {
+        foreach ($array_field_config as $row) {
+            if ($row['system'] == 1) {
+                continue;
+            }
+            if ($row['show_profile']) {
+                $question_type = $row['field_type'];
+                if ($question_type == 'date') {
+                    $value = date("d/m/Y", $custom_fields[$row['field']]);
+                } elseif ($question_type == 'checkbox') {
+                    $result = explode(',', $custom_fields[$row['field']]);
+                    $value = [];
+                    foreach ($result as $item) {
+                        if (isset($row['field_choices'][$item])) {
+                            $value[] = $row['field_choices'][$item];
+                        } elseif (!empty($item)) {
+                            $value[] = $item;
+                        }
+                    }
+                    $value = empty($value) ? '' : implode('<br />', $value);
+                } elseif ($question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio') {
+                    if (isset($row['field_choices'][$custom_fields[$row['field']]])) {
+                        $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    } else {
+                        $value = $custom_fields[$row['field']];
+                    }
+                } else {
+                    $value = $custom_fields[$row['field']];
+                }
+                $xtpl->assign('FIELD', array(
+                    'title' => $row['title'],
+                    'value' => $value
+                ));
+                $xtpl->parse('main.field.loop');
+            }
+        }
+        $xtpl->parse('main.field');
     }
 
     $_lis = $module_info['funcs'];
@@ -1289,7 +1328,9 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
             }
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
-                if ($question_type == 'checkbox') {
+                if ($question_type == 'date') {
+                    $value = date("d/m/Y", $custom_fields[$row['field']]);
+                } elseif ($question_type == 'checkbox') {
                     $result = explode(',', $custom_fields[$row['field']]);
                     $value = [];
                     foreach ($result as $item) {
