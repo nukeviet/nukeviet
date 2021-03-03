@@ -1031,7 +1031,7 @@ function user_welcome($array_field_config, $custom_fields)
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'date') {
-                    $value = date("d/m/Y", $custom_fields[$row['field']]);
+                    $value = !empty($custom_fields[$row['field']]) ? date("d/m/Y", $custom_fields[$row['field']]) : "";
                 } elseif ($question_type == 'checkbox') {
                     $result = explode(',', $custom_fields[$row['field']]);
                     $value = [];
@@ -1329,7 +1329,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
             if ($row['show_profile']) {
                 $question_type = $row['field_type'];
                 if ($question_type == 'date') {
-                    $value = date("d/m/Y", $custom_fields[$row['field']]);
+                    $value = !empty($custom_fields[$row['field']]) ? date("d/m/Y", $custom_fields[$row['field']]) : "";
                 } elseif ($question_type == 'checkbox') {
                     $result = explode(',', $custom_fields[$row['field']]);
                     $value = [];
