@@ -28,6 +28,7 @@ $lang_module['edit_time'] = 'Cập nhật lần cuối';
 $lang_module['order'] = 'Thứ tự';
 $lang_module['status'] = 'Trạng thái';
 $lang_module['active'] = 'Hoạt động';
+$lang_module['hitstotal'] = 'Lượt xem';
 $lang_module['inactive'] = 'Ngưng hoạt động';
 $lang_module['delete'] = 'Xóa bài viết';
 $lang_module['empty_title'] = 'Bài viết chưa có tiêu đề';

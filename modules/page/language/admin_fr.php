@@ -1,14 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jul 31, 2015, 09:30:00 AM
-*/
-
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jul 31, 2015, 09:30:00 AM
+ */
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -28,6 +27,7 @@ $lang_module['edit_time'] = 'dernière mise à jour';
 $lang_module['order'] = 'Numero';
 $lang_module['status'] = 'Etat';
 $lang_module['active'] = 'Active';
+$lang_module['hitstotal'] = 'Vue';
 $lang_module['inactive'] = 'Désactive';
 $lang_module['delete'] = 'Supprimer l\'article';
 $lang_module['empty_title'] = 'L\'article n\'a pas de titre';

@@ -7,8 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
-
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -21,11 +20,16 @@ if (empty($id)) {
 }
 
 $new_status = $nv_Request->get_bool('new_status', 'post');
-$new_status = ( int )$new_status;
+$new_status = (int) $new_status;
 
 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=' . $new_status . ' WHERE id=' . $id;
 $db->query($sql);
 $nv_Cache->delMod($module_name);
+if ($new_status) {
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Active row menu', 'Row menu id: ' . $id, $admin_info['userid']);
+} else {
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Inactive row menu', 'Row menu id: ' . $id, $admin_info['userid']);
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id;
