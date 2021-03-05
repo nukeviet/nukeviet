@@ -17,16 +17,16 @@ error_reporting(0);
 
 define('NV_MAINFILE', true);
 
-//Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $select_options = $error_info = $countries = array();
+// Khong cho xac dinh tu do cac variables
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $select_options = $error_info = $countries = [];
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
-//Xac dinh thu muc goc cua site
+// Xac dinh thu muc goc cua site
 define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
 
-$sys_info['disable_classes'] = (($disable_classes = ini_get("disable_classes")) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
-$sys_info['disable_functions'] = (($disable_functions = ini_get("disable_functions")) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
+$sys_info['disable_classes'] = (($disable_classes = ini_get("disable_classes")) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : [];
+$sys_info['disable_functions'] = (($disable_functions = ini_get("disable_functions")) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
 
 if (extension_loaded('suhosin')) {
     $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
@@ -34,7 +34,7 @@ if (extension_loaded('suhosin')) {
 
 $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
 
-//Ket noi voi cac file constants, config
+// Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 define('NV_FILES_DIR', NV_ASSETS_DIR);
 
@@ -44,29 +44,31 @@ require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
-$global_config['my_domains'] = [$_SERVER['SERVER_NAME']];
+$global_config['my_domains'] = [
+    $_SERVER['SERVER_NAME']
+];
 
 // Xac dinh cac tags cho phep
 $global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
 
-//Xac dinh IP cua client
+// Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
 $client_info['ip'] = $ips->remote_ip;
 if ($client_info['ip'] == "none") {
     die('Error: Your IP address is not correct');
 }
 
-//Neu khong co IP
-//define( 'NV_SERVER_IP', $ips->server_ip );
+// Neu khong co IP
+// define( 'NV_SERVER_IP', $ips->server_ip );
 define('NV_FORWARD_IP', $ips->forward_ip);
 define('NV_REMOTE_ADDR', $ips->remote_addr);
 define('NV_CLIENT_IP', $client_info['ip']);
 
-//Xac dinh Quoc gia
+// Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
 $client_info['country'] = isset($_SERVER['GEOIP_COUNTRY_CODE']) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie(NV_CLIENT_IP);
 
-//Mui gio
+// Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
 define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
@@ -77,10 +79,10 @@ $global_config['error_log_path'] = NV_LOGS_DIR . '/error_logs';
 $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
-//Ket noi voi class Error_handler
+// Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
 
-//Ket noi voi cac file cau hinh, function va template
+// Ket noi voi cac file cau hinh, function va template
 require NV_ROOTDIR . '/install/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
@@ -93,76 +95,79 @@ $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV
 
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
 
-//Ket noi voi class xu ly request
+// Ket noi voi class xu ly request
 $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 
 define('NV_SERVER_NAME', $nv_Request->server_name);
-//vd: mydomain1.com
+// vd: mydomain1.com
 define('NV_SERVER_PROTOCOL', $nv_Request->server_protocol);
-//vd: http
+// vd: http
 define('NV_SERVER_PORT', $nv_Request->server_port);
-//vd: 80
+// vd: 80
 define('NV_MY_DOMAIN', $nv_Request->my_current_domain);
-//vd: http://mydomain1.com:80
+// vd: http://mydomain1.com:80
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
-//vd: HTTP/1.0
+// vd: HTTP/1.0
 define('NV_USER_AGENT', $nv_Request->user_agent);
-//HTTP_USER_AGENT
+// HTTP_USER_AGENT
 define('NV_BASE_SITEURL', $nv_Request->base_siteurl . '/');
-//vd: /ten_thu_muc_chua_site/
+// vd: /ten_thu_muc_chua_site/
 define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
-//vd: /ten_thu_muc_chua_site/admin/
+// vd: /ten_thu_muc_chua_site/admin/
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // D:/AppServ/www
 define('NV_EOL', (strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? "\r\n" : (strtoupper(substr(PHP_OS, 0, 3) == 'MAC') ? "\r" : "\n")));
-//Ngat dong
+// Ngat dong
 define('NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR);
-//Xac dinh duong dan thuc den thu muc upload
+// Xac dinh duong dan thuc den thu muc upload
 
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_BASE_SITEURL));
-//Hau to cua file cache
+// Hau to cua file cache
 
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
 
-//Ngon ngu
+// Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 
 $global_config['cookie_path'] = $nv_Request->cookie_path;
-//vd: /ten_thu_muc_chua_site/
+// vd: /ten_thu_muc_chua_site/
 $global_config['cookie_domain'] = $nv_Request->cookie_domain;
-//vd: .mydomain1.com
+// vd: .mydomain1.com
 $global_config['site_url'] = $nv_Request->site_url;
-//vd: http://mydomain1.com/ten_thu_muc_chua_site
+// vd: http://mydomain1.com/ten_thu_muc_chua_site
 
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
-//vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
+// vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
 
 $client_info['session_id'] = $nv_Request->session_id;
-//ten cua session
+// ten cua session
 $client_info['referer'] = $nv_Request->referer;
-//referer
+// referer
 $client_info['is_myreferer'] = $nv_Request->referer_key;
-//0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
+// 0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri;
-//trang dang xem
+// trang dang xem
 $client_info['agent'] = $nv_Request->user_agent;
-//HTTP_USER_AGENT
+// HTTP_USER_AGENT
 
 $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id']);
 
-//Chan truy cap neu HTTP_USER_AGENT == 'none'
+// Chan truy cap neu HTTP_USER_AGENT == 'none'
 if (NV_USER_AGENT == "none") {
     trigger_error('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256);
 }
 
-//Captcha
+// Captcha
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     include_once NV_ROOTDIR . '/includes/core/captcha.php';
 }
 
-//Class ma hoa du lieu
+// Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
+
+// Quản lý thẻ meta, header các máy chủ tìm kiếm
+$nv_BotManager = new NukeViet\Seo\BotManager(1);
