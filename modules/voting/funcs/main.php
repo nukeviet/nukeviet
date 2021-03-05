@@ -184,7 +184,7 @@ if (empty($vid)) {
         } else {
             if (file_exists($dir . '/' . $logfile)) {
                 $timeout = filemtime($dir . '/' . $logfile);
-                $timeout = ceil(($difftimeout - NV_CURRENTTIME + $vtime) / 60);
+                $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
                 $note = sprintf($lang_module['timeoutmsg'], $timeout);
             } elseif ($count <= $acceptcm) {
                 $in = implode(',', $array_id);
