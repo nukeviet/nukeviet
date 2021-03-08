@@ -50,7 +50,7 @@ function nv_commment_delete(cid, checkss) {
 		$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=delete&nocache=' + new Date().getTime(), 'cid=' + cid + '&checkss=' + checkss, function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
-				var data = $('#formcomment form').data();
+				var data = $('#idcomment').data();
 				$("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime());
 			} else if (rs[0] == 'ERR') {
 				alert(rs[1]);
@@ -61,7 +61,7 @@ function nv_commment_delete(cid, checkss) {
 
 function nv_commment_reload(res) {
 	var rs = res.split('_');
-	var data = $('#formcomment form').data();
+	var data = $('#idcomment').data();
 	if (rs[0] == 'OK') {
 		$("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&status_comment=' + rs[1] + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime(), function() {
 			$("#formcomment form .reset").trigger("click")
@@ -70,7 +70,7 @@ function nv_commment_reload(res) {
 			scrollTop: $("#idcomment").offset().top
 		}, 800);
 	} else {
-		if (data.gfxnum > 0) {
+		if (0 < parseInt($("#formcomment form").data('gfxnum'))) {
 			change_captcha('#commentseccode');
 		}
 		if (rs[0] == 'ERR') {
@@ -121,7 +121,7 @@ function nv_comment_submit(form) {
 
 function nv_comment_sort_change(event, sel) {
 	event.preventDefault();
-	var data = $('#formcomment form').data();
+	var data = $('#idcomment').data();
 	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1' + '&nocache=' + new Date().getTime(), 'sortcomm=' + $(sel).val(), function(res) {
 		$('#showcomment').html(res);
 	});

@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE_JS}/js/comment.js"></script>
 <link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
 <!-- END: header -->
-<div id="idcomment" class="nv-fullbg">
+<div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}">
     <div class="row clearfix margin-bottom-lg">
         <div class="col-xs-12 text-left">
             <button type="button" class="btn btn-default btn-sm pull-right" onclick="$('.fa', this).toggleClass('fa-eye fa-eye-slash'),nv_show_hidden('showcomment',2);" title="{LANG.comment_hide_show}">
@@ -24,7 +24,7 @@
     <div id="showcomment" class="margin-bottom-lg">{COMMENTCONTENT}</div>
     <div id="formcomment" class="comment-form">
         <!-- BEGIN: allowed_comm -->
-        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" onsubmit="return nv_comment_submit(this);" autocomplete="off" novalidate data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}" data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}>
+        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" onsubmit="return nv_comment_submit(this);" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}>
             <input type="hidden" name="module" value="{MODULE_COMM}" />
             <input type="hidden" name="area" value="{AREA_COMM}" />
             <input type="hidden" name="id" value="{ID_COMM}" />
