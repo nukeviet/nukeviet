@@ -446,7 +446,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
  * @param mixed $module
  * @param mixed $comment_array
  * @param mixed $is_delete
- * @param mixed $allowed
+ * @param mixed $allowed_comm
  * @param mixed $status_comment
  * @return
  */
@@ -523,7 +523,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
  * @param mixed $module
  * @param mixed $comment_array
  * @param mixed $is_delete
- * @param mixed $allowed
+ * @param mixed $allowed_comm
  * @return
  */
 function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allowed_comm)
