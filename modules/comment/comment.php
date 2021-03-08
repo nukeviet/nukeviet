@@ -166,6 +166,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
 
             $view_comm = nv_user_in_groups($module_config[$module]['view_comm']);
             if ($view_comm) {
+                $allowed_comm = nv_user_in_groups($allowed);
                 $sortcomm_old = $nv_Request->get_int('sortcomm', 'cookie', $module_config[$module]['sortcomm']);
                 $sortcomm = $nv_Request->get_int('sortcomm', 'post', $sortcomm_old);
                 if ($sortcomm < 0 or $sortcomm > 2) {
@@ -188,7 +189,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
                         $is_delete = true;
                     }
                 }
-                return nv_comment_module_data($module, $comment_array, $is_delete, $allowed, $status_comment);
+                return nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
             }
         }
     }
@@ -288,7 +289,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             }
             if ($view_comm) {
                 $comment_array = nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url);
-                $comment = nv_comment_module_data($module, $comment_array, $is_delete, $allowed, $status_comment);
+                $comment = nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
             } else {
                 $comment = '';
             }
@@ -449,12 +450,11 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
  * @param mixed $status_comment
  * @return
  */
-function nv_comment_module_data($module, $comment_array, $is_delete, $allowed, $status_comment)
+function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment)
 {
     global $global_config, $module_config, $lang_module_comment;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
-    $allowed_comm = nv_user_in_groups($allowed);
 
     if (!empty($comment_array['comment'])) {
         $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
@@ -469,7 +469,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed, $
 
         foreach ($comment_array['comment'] as $comment_array_i) {
             if (!empty($comment_array_i['subcomment'])) {
-                $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed);
+                $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed_comm);
                 $xtpl->assign('CHILDREN', $comment_array_reply);
                 $xtpl->parse('main.detail.children');
             }
@@ -526,12 +526,11 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed, $
  * @param mixed $allowed
  * @return
  */
-function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allowed)
+function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allowed_comm)
 {
     global $global_config, $module_file, $module_config, $lang_module_comment;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
-    $allowed_comm = nv_user_in_groups($allowed);
 
     $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('TEMPLATE', $template);
@@ -539,7 +538,7 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
 
     foreach ($comment_array as $comment_array_i) {
         if (!empty($comment_array_i['subcomment'])) {
-            $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed);
+            $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed_comm);
             $xtpl->assign('CHILDREN', $comment_array_reply);
             $xtpl->parse('children.detail.children');
         }
