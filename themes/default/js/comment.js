@@ -23,13 +23,15 @@ function nv_comment_reset(event, form) {
 
 function nv_commment_feedback(event, cid, post_name) {
 	event.preventDefault();
-	$("#formcomment form [name=pid]").val(cid);
-	var data = $('#formcomment form').data();
-	if (data.editor) {
-		CKEDITOR.instances['commentcontent'].insertText("@" + post_name + " ");
-	} else {
-		$("#formcomment form [name=content]").focus();
-		$("#formcomment form [name=content]").val("@" + post_name + " ");
+	if ($('#formcomment form').length) {
+		$("#formcomment form [name=pid]").val(cid);
+		var data = $('#formcomment form').data();
+		if (data.editor) {
+			CKEDITOR.instances['commentcontent'].insertText("@" + post_name + " ");
+		} else {
+			$("#formcomment form [name=content]").focus();
+			$("#formcomment form [name=content]").val("@" + post_name + " ");
+		}
 	}
 }
 
@@ -75,9 +77,7 @@ function nv_commment_reload(res) {
 		}
 		if (rs[0] == 'ERR') {
 			alert(rs[2]);
-			if ("" != rs[1]) {
-				$("#formcomment form [name=" + rs[1] + "]").focus()
-			}
+			"" != rs[1] && $("#formcomment form [name=" + rs[1] + "]").focus()
 		} else {
 			alert(nv_content_failed);
 		}
