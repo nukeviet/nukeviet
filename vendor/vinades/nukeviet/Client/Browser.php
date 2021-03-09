@@ -354,27 +354,23 @@ class Browser
                 if (isset($aresult[1])) {
                     $this->setRobot(true);
                 }
-            }
-            elseif (stripos($this->_agent, 'msnbot') !== false) {
+            } elseif (stripos($this->_agent, 'msnbot') !== false) {
                 $aresult = explode('/', stristr($this->_agent, 'msnbot'));
                 if (isset($aresult[1])) {
                     $this->setRobot(true);
                     return true;
                 }
-            }
-            elseif (stripos($this->_agent, 'bingbot') !== false) {
+            } elseif (stripos($this->_agent, 'bingbot') !== false) {
                 $aresult = explode('/', stristr($this->_agent, 'bingbot'));
                 if (isset($aresult[1])) {
                     $this->setRobot(true);
                 }
-            }
-            elseif (stripos($this->_agent, 'slurp') !== false) {
+            } elseif (stripos($this->_agent, 'slurp') !== false) {
                 $aresult = explode('/', stristr($this->_agent, 'Slurp'));
                 if (isset($aresult[1])) {
                     $this->setRobot(true);
                 }
-            }
-            elseif (stristr($this->_agent, 'FacebookExternalHit')) {
+            } elseif (stristr($this->_agent, 'FacebookExternalHit')) {
                 $this->setRobot(true);
                 $this->setFacebook(true);
             }
