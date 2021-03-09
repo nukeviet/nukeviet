@@ -1,24 +1,33 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<!-- BEGIN: comment_result -->
+<div class="alert alert-info" id="alert-info">{STATUS_COMMENT}</div>
+<script type="text/javascript">$('#alert-info').delay(5000).fadeOut('slow');</script>
+<!-- END: comment_result -->
 <ul class="comment-list">
     <!-- BEGIN: detail -->
-    <li class="media" id="cid_{COMMENT.cid}"><a class="pull-left" href="#"> <img class="media-object bg-gainsboro" src="{COMMENT.photo}" alt="{COMMENT.post_name}" width="40" />
-    </a>
+    <li class="media" id="cid_{COMMENT.cid}">
+        <div class="pull-left">
+            <img class="media-object bg-gainsboro" src="{COMMENT.photo}" alt="{COMMENT.post_name}" width="40" />
+        </div>
         <div class="media-body">
             <div class="margin-bottom">{COMMENT.content}</div>
             <div class="comment-info clearfix">
-                <em class="pull-left fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
-                <!-- BEGIN: emailcomm -->
-                <em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
-                <!-- END: emailcomm -->
-                <em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
+                <div class="clearfix">
+                    <em class="fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
+                    <!-- BEGIN: emailcomm -->
+                    <em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
+                    <!-- END: emailcomm -->
+                    <em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
+                </div>
                 <ul class="comment-tool clearfix">
                     <!-- BEGIN: delete -->
                     <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li>
                     <!-- END: delete -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
-                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
+                    <!-- BEGIN: allowed_comm -->
+                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback(event, {COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+                    <!-- END: allowed_comm -->
+                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
+                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
                     <!-- BEGIN: attach -->
                     <li><a href="{COMMENT.attach}" rel="nofollow"><i class="fa fa-fw fa-download"></i>{LANG.attachdownload}</a></li>
                     <!-- END: attach -->
@@ -27,17 +36,11 @@
             <!-- BEGIN: children -->
             {CHILDREN}
             <!-- END: children -->
-        </div></li>
+        </div>
+    </li>
     <!-- END: detail -->
 </ul>
 <div class="text-center">{PAGE}</div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script>
-    if(window.location.hash) {
-        var hash = window.location.hash.substring(1);
-        $('#' + hash).effect("highlight", {}, 5000);        
-    }
-</script>
 <!-- END: main -->
 <!-- BEGIN: children -->
 <ul class="comment-list">
@@ -46,18 +49,22 @@
         <div class="media-body">
             <div class="margin-bottom">{COMMENT.content}</div>
             <div class="comment-info clearfix">
-                <em class="pull-left fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
-                <!-- BEGIN: emailcomm -->
-                <em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
-                <!-- END: emailcomm -->
-                <em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
+                <div class="clearfix">
+                    <em class="fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
+                    <!-- BEGIN: emailcomm -->
+                    <em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
+                    <!-- END: emailcomm -->
+                    <em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
+                </div>
                 <ul class="comment-tool">
                     <!-- BEGIN: delete -->
                     <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li>
                     <!-- END: delete -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
-                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
+                    <!-- BEGIN: allowed_comm -->
+                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback(event, {COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+                    <!-- END: allowed_comm -->
+                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
+                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
                     <!-- BEGIN: attach -->
                     <li><a href="{COMMENT.attach}" rel="nofollow"><i class="fa fa-fw fa-download"></i>{LANG.attachdownload}</a></li>
                     <!-- END: attach -->

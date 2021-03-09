@@ -7,39 +7,47 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
-
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 /**
- * nv_comment_module()
+ * nv_comment_data()
  *
- * @param mixed $id
- * @param mixed $module
- * @param mixed $page
- * @return
- *
+ * @param string $module
+ * @param int $area
+ * @param int $id
+ * @param int $page
+ * @param int $sortcomm
+ * @param string $base_url
+ * @return array
  */
-function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_url)
+function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 {
-    global $db_slave, $module_config, $db_config;
+    global $db_slave, $module_config;
 
-    $comment_array = array();
+    $comment_array = [];
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
 
-    $_where = 'a.module=' .$db_slave->quote($module);
+    $_where = 'a.module=' . $db_slave->quote($module);
     if ($area) {
         $_where .= ' AND a.area= ' . $area;
     }
     $_where .= ' AND a.id= ' . $id . ' AND a.status=1 AND a.pid=0';
 
-    $db_slave->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_comment a')->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')->where($_where);
+    $db_slave->sqlreset()
+        ->select('COUNT(*)')
+        ->from(NV_PREFIXLANG . '_comment a')
+        ->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')
+        ->where($_where);
 
-    $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
+    $num_items = $db_slave->query($db_slave->sql())
+        ->fetchColumn();
     if ($num_items) {
         $emailcomm = $module_config[$module]['emailcomm'];
-        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')->limit($per_page_comment)->offset(($page - 1) * $per_page_comment);
+        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')
+            ->limit($per_page_comment)
+            ->offset(($page - 1) * $per_page_comment);
 
         if ($sortcomm == 1) {
             $db_slave->order('a.cid ASC');
@@ -64,13 +72,13 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
             }
             $comment_array[$row['cid']] = $row;
         }
-        if (! empty($comment_list_id)) {
+        if (!empty($comment_list_id)) {
             foreach ($comment_list_id as $cid) {
                 $comment_array[$cid]['subcomment'] = nv_comment_get_reply($cid, $module, NV_CHECK_SESSION, $sortcomm);
             }
             $result->closeCursor();
             unset($row, $result);
-            $generate_page = nv_generate_page($base_url, $num_items, $per_page_comment, $page, true, true, 'nv_urldecode_ajax', 'idcomment');
+            $generate_page = nv_generate_page($base_url, $num_items, $per_page_comment, $page, true, true, 'nv_urldecode_ajax', 'showcomment');
         } else {
             $generate_page = '';
         }
@@ -93,11 +101,17 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
 function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 {
     global $db_slave, $module_config;
-    $db_slave->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_comment a')->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')->where('a.pid=' . $cid . ' AND a.status=1');
+
+    $db_slave->sqlreset()
+        ->select('COUNT(*)')
+        ->from(NV_PREFIXLANG . '_comment a')
+        ->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')
+        ->where('a.pid=' . $cid . ' AND a.status=1');
 
     $data_reply_comment = array();
 
-    $num_items_sub = $db_slave->query($db_slave->sql())->fetchColumn();
+    $num_items_sub = $db_slave->query($db_slave->sql())
+        ->fetchColumn();
     if ($num_items_sub) {
         $emailcomm = $module_config[$module]['emailcomm'];
         $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail');
@@ -125,6 +139,65 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 }
 
 /**
+ * nv_comment_load()
+ *
+ * @param mixed $module
+ * @param mixed $checkss
+ * @param mixed $area
+ * @param mixed $id
+ * @param mixed $allowed
+ * @param mixed $page
+ * @param string $status_comment
+ * @return
+ */
+function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status_comment = '')
+{
+    global $module_config, $nv_Request, $lang_module_comment;
+
+    // Kiểm tra module có được Sử dụng chức năng bình luận
+    if (!empty($module) and isset($module_config[$module]['activecomm'])) {
+        if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
+            if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
+                require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
+            } else {
+                require NV_ROOTDIR . '/modules/comment/language/en.php';
+            }
+            $lang_module_comment = $lang_module;
+
+            $view_comm = nv_user_in_groups($module_config[$module]['view_comm']);
+            if ($view_comm) {
+                $allowed_comm = nv_user_in_groups($allowed);
+                $sortcomm_old = $nv_Request->get_int('sortcomm', 'cookie', $module_config[$module]['sortcomm']);
+                $sortcomm = $nv_Request->get_int('sortcomm', 'post', $sortcomm_old);
+                if ($sortcomm < 0 or $sortcomm > 2) {
+                    $sortcomm = 0;
+                }
+                if ($sortcomm_old != $sortcomm) {
+                    $nv_Request->set_Cookie('sortcomm', $sortcomm, NV_LIVE_COOKIE_TIME);
+                }
+                $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
+                $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
+                $comment_array = nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url);
+
+                $is_delete = false;
+                if (defined('NV_IS_SPADMIN')) {
+                    $is_delete = true;
+                } elseif (defined('NV_IS_ADMIN')) {
+                    global $admin_info;
+                    $adminscomm = explode(',', $module_config[$module]['adminscomm']);
+                    if (in_array($admin_info['admin_id'], $adminscomm)) {
+                        $is_delete = true;
+                    }
+                }
+                return nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
+            }
+        }
+    }
+
+    return '';
+}
+
+/**
  * nv_comment_module()
  *
  * @param mixed $module
@@ -142,10 +215,10 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
     global $module_config, $nv_Request, $lang_module_comment, $module_info, $global_config, $lang_global;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
-    if (! empty($module) and isset($module_config[$module]['activecomm'])) {
+    if (!empty($module) and isset($module_config[$module]['activecomm'])) {
         if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
-            $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
+            $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
 
             if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
                 require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
@@ -166,7 +239,11 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             // Xử lý nếu có quyền xem và không có quyền bình
             if ($view_comm and !$allowed_comm and $global_config['allowuserlogin']) {
                 $allowed_tmp = explode(',', $allowed);
-                $allowed_tmp = array_flip(array_diff($allowed_tmp, array(1, 2 , 3))); // Loại nhóm quản trị ra
+                $allowed_tmp = array_flip(array_diff($allowed_tmp, array(
+                    1,
+                    2,
+                    3
+                ))); // Loại nhóm quản trị ra
                 if ((isset($allowed_tmp['4']) or isset($allowed_tmp['7']))) {
                     // Thành viên chính thức hoặc thành viên mới thì đăng nhập trực tiếp
                     $form_login['display'] = 1;
@@ -195,14 +272,11 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             $page_title = $module_info['site_title'];
             $key_words = $module_info['keywords'];
 
-            $sortcomm_old = $nv_Request->get_int('sortcomm', 'cookie', $module_config[$module]['sortcomm']);
-            $sortcomm = $nv_Request->get_int('sortcomm', 'post,get', $sortcomm_old);
+            $sortcomm = $nv_Request->get_int('sortcomm', 'cookie', $module_config[$module]['sortcomm']);
             if ($sortcomm < 0 or $sortcomm > 2) {
                 $sortcomm = 0;
             }
-            if ($sortcomm_old != $sortcomm) {
-                $nv_Request->set_Cookie('sortcomm', $sortcomm, NV_LIVE_COOKIE_TIME);
-            }
+
             $is_delete = false;
             if (defined('NV_IS_SPADMIN')) {
                 $is_delete = true;
@@ -214,12 +288,13 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 }
             }
             if ($view_comm) {
-                $comment_array = nv_comment_data($module, $area, $id, $allowed_comm, $page, $sortcomm, $base_url);
-                $comment = nv_comment_module_data($module, $comment_array, $is_delete);
+                $comment_array = nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url);
+                $comment = nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
             } else {
                 $comment = '';
             }
-            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment, $header, $per_page_comment);
+
+            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $form_login, $header);
         } else {
             return '';
         }
@@ -236,14 +311,11 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
  * @param mixed $checkss
  * @param mixed $comment
  * @param mixed $sortcomm
- * @param mixed $base_url
  * @param mixed $form_login
- * @param string $status_comment
  * @param integer $header
- * @param integer $per_page_comment
  * @return
  */
-function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '', $header = 1, $per_page_comment = 10)
+function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $form_login, $header = 1)
 {
     global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $lang_module_comment, $module_name;
 
@@ -263,7 +335,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('AREA_COMM', $area);
     $xtpl->assign('ID_COMM', $id);
     $xtpl->assign('ALLOWED_COMM', $allowed_comm);
-    $xtpl->assign('PER_PAGE', $per_page_comment);
+    $xtpl->assign('COMMENTCONTENT', $comment);
 
     // Hiện không dùng, giữ lại để tương thích phiên bản cũ.
     $xtpl->assign('BASE_URL_COMM', $base_url);
@@ -283,11 +355,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
         $xtpl->parse('main.sortcomm');
     }
 
-    if (! empty($comment)) {
-        $xtpl->assign('COMMENTCONTENT', $comment);
-        $xtpl->parse('main.showContent');
-    }
-
     $allowed_comm = nv_user_in_groups($allowed_comm);
     if ($allowed_comm) {
         $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=post');
@@ -303,7 +370,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
         }
 
         if (!empty($module_config[$module]['allowattachcomm'])) {
-            $xtpl->parse('main.allowed_comm.enctype');
+            $xtpl->assign('ENCTYPE', ' enctype="multipart/form-data"');
             $xtpl->parse('main.allowed_comm.attach');
         }
 
@@ -355,12 +422,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             $xtpl->assign('GFX_NUM', 0);
         }
 
-        if (! empty($status_comment)) {
-            $status_comment = nv_base64_decode($status_comment);
-            $xtpl->assign('STATUS_COMMENT', $status_comment);
-            $xtpl->parse('main.allowed_comm.comment_result');
-        }
-
         $xtpl->parse('main.allowed_comm');
     } elseif ($form_login['display']) {
         if ($form_login['mode'] == 'direct') {
@@ -385,28 +446,36 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
  * @param mixed $module
  * @param mixed $comment_array
  * @param mixed $is_delete
+ * @param mixed $allowed_comm
+ * @param mixed $status_comment
  * @return
  */
-function nv_comment_module_data($module, $comment_array, $is_delete)
+function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment)
 {
     global $global_config, $module_config, $lang_module_comment;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
 
-    if (! empty($comment_array['comment'])) {
+    if (!empty($comment_array['comment'])) {
         $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
         $xtpl->assign('TEMPLATE', $template);
         $xtpl->assign('LANG', $lang_module_comment);
 
+        if (!empty($status_comment)) {
+            $status_comment = nv_base64_decode($status_comment);
+            $xtpl->assign('STATUS_COMMENT', $status_comment);
+            $xtpl->parse('main.comment_result');
+        }
+
         foreach ($comment_array['comment'] as $comment_array_i) {
-            if (! empty($comment_array_i['subcomment'])) {
-                $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete);
+            if (!empty($comment_array_i['subcomment'])) {
+                $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed_comm);
                 $xtpl->assign('CHILDREN', $comment_array_reply);
                 $xtpl->parse('main.detail.children');
             }
             $comment_array_i['post_time'] = nv_date('d/m/Y H:i', $comment_array_i['post_time']);
 
-            if (! empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
+            if (!empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
             } elseif (is_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png')) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
@@ -414,14 +483,18 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
                 $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
             }
 
-            if (! empty($comment_array_i['userid'])) {
+            if (!empty($comment_array_i['userid'])) {
                 $comment_array_i['post_name'] = nv_show_name_user($comment_array_i['first_name'], $comment_array_i['last_name'], $comment_array_i['username']);
             }
 
             $xtpl->assign('COMMENT', $comment_array_i);
 
-            if ($module_config[$module]['emailcomm'] and ! empty($comment_array_i['post_email'])) {
+            if ($module_config[$module]['emailcomm'] and !empty($comment_array_i['post_email'])) {
                 $xtpl->parse('main.detail.emailcomm');
+            }
+
+            if ($allowed_comm) {
+                $xtpl->parse('main.detail.allowed_comm');
             }
 
             if ($is_delete) {
@@ -434,7 +507,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
 
             $xtpl->parse('main.detail');
         }
-        if (! empty($comment_array['page'])) {
+        if (!empty($comment_array['page'])) {
             $xtpl->assign('PAGE', $comment_array['page']);
         }
         $xtpl->parse('main');
@@ -450,9 +523,10 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
  * @param mixed $module
  * @param mixed $comment_array
  * @param mixed $is_delete
+ * @param mixed $allowed_comm
  * @return
  */
-function nv_comment_module_data_reply($module, $comment_array, $is_delete)
+function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allowed_comm)
 {
     global $global_config, $module_file, $module_config, $lang_module_comment;
 
@@ -463,27 +537,31 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete)
     $xtpl->assign('LANG', $lang_module_comment);
 
     foreach ($comment_array as $comment_array_i) {
-        if (! empty($comment_array_i['subcomment'])) {
-            $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete);
+        if (!empty($comment_array_i['subcomment'])) {
+            $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed_comm);
             $xtpl->assign('CHILDREN', $comment_array_reply);
             $xtpl->parse('children.detail.children');
         }
         $comment_array_i['post_time'] = nv_date('d/m/Y H:i', $comment_array_i['post_time']);
 
-        if (! empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
+        if (!empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
             $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
         } else {
             $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
         }
 
-        if (! empty($comment_array_i['userid'])) {
+        if (!empty($comment_array_i['userid'])) {
             $comment_array_i['post_name'] = nv_show_name_user($comment_array_i['first_name'], $comment_array_i['last_name']);
         }
 
         $xtpl->assign('COMMENT', $comment_array_i);
 
-        if ($module_config[$module]['emailcomm'] and ! empty($comment_array_i['post_email'])) {
+        if ($module_config[$module]['emailcomm'] and !empty($comment_array_i['post_email'])) {
             $xtpl->parse('children.detail.emailcomm');
+        }
+
+        if ($allowed_comm) {
+            $xtpl->parse('children.detail.allowed_comm');
         }
 
         if ($is_delete) {

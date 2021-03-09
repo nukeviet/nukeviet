@@ -31,8 +31,10 @@ $lang_module['comment_name'] = 'Tên của bạn';
 $lang_module['comment_email'] = 'Email';
 $lang_module['comment_content'] = 'Nội dung';
 $lang_module['comment_seccode'] = 'Mã an toàn';
+$lang_module['comment_name_error'] = 'Lỗi: Bạn chưa khai báo tên của mình';
+$lang_module['comment_content_error'] = 'Lỗi: Bạn chưa nhập nội dung';
 $lang_module['comment_submit'] = 'Gửi bình luận';
-$lang_module['comment_timeout'] = 'Bạn đã bình chọn, vui lòng đợi %s sau để có thể gửi bình luận tiếp.';
+$lang_module['comment_timeout'] = 'Bạn vừa mới bình luận. Vui lòng đợi %s để có thể gửi bình luận tiếp.';
 
 $lang_module['sortcomm'] = 'Sắp xếp bình luận';
 $lang_module['sortcomm_0'] = 'Sắp xếp theo bình luận mới';
