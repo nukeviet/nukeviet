@@ -63,7 +63,7 @@
                 <label class="hidden-xs">{LANG.comment_seccode}</label>
                 <div class="row">
                     <div class="col-xs-12">
-                        <img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /> &nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
+                        <img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /> &nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode');">&nbsp;</em>
                     </div>
                     <div class="col-xs-12">
                         <input id="commentseccode" type="text" class="form-control" maxlength="{GFX_NUM}" name="code" />

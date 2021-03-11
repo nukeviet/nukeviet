@@ -1,16 +1,15 @@
 <!-- BEGIN: main -->
 <div class="page panel panel-default">
     <div class="panel-body">
-        <div id="cse"></div>
+        <h3 class="text-center margin-bottom-lg">{LANG.info_title}</h3>
         <div id="search-form" class="text-center">
-            <h3 class="text-center margin-bottom-lg">{LANG.info_title}</h3>
             <form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form">
-                <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
-                <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
+                <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
+                <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
                 <div class="m-bottom">
                     <div class="form-group">
                         <label class="sr-only" for="search_query">{LANG.key_title}</label>
-                        <input class="form-control" id="search_query" name="q" value="{DATA.key}" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.key_title}"/>
+                        <input class="form-control" id="search_query" name="q" value="{DATA.key}" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.key_title}" />
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="search_query_mod">{LANG.type_search}</label>
@@ -22,37 +21,28 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="submit" id="search_submit" value="{LANG.search_title}" class="btn btn-primary"/>
+                        <input type="submit" id="search_submit" value="{LANG.search_title}" class="btn btn-primary" />
                         <a href="#" class="advSearch">{LANG.search_title_adv}</a>
                     </div>
                 </div>
                 <div class="radio">
-                    <label class="radio-inline">
-                        <input name="l" id="search_logic_and" type="radio"{DATA.andChecked} value="1" />
-                        {LANG.logic_and}
-                    </label>
-                    <label class="radio-inline">
-                        <input name="l" id="search_logic_or" type="radio"{DATA.orChecked} value="0" />
-                        {LANG.logic_or}
-                    </label>
+                    <label class="radio-inline"> <input name="l" id="search_logic_and" type="radio" {DATA.andChecked} value="1" /> {LANG.logic_and}</label>
+                    <label class="radio-inline"> <input name="l" id="search_logic_or" type="radio" {DATA.orChecked} value="0" /> {LANG.logic_or}</label>
                 </div>
-                <input type="hidden" name="page" value="{PAGE}"/>
+                <input type="hidden" name="page" value="{PAGE}" />
             </form>
-            <!-- BEGIN: search_engine_unique_ID -->
-            <div class="text-center search_adv">
-                <a href="#" class="IntSearch">{LANG.search_adv_internet}</a>
-            </div>
-            <script src="//www.google.com/jsapi" type="text/javascript"></script>
-            <script type="text/javascript">
-                google.load('search', '1', {
-                    language : nv_lang_data
-                });
-            </script>
-            <link rel="stylesheet" href="//www.google.com/cse/style/look/default.css" type="text/css" />
-            <!-- END: search_engine_unique_ID -->
-            <hr />
         </div>
+        <!-- BEGIN: search_engine_unique_ID -->
+        <script async src="//cse.google.com/cse.js?cx={SEARCH_ENGINE_UNIQUE_ID}"></script>
+        <div class="text-center margin-bottom-lg search_adv">
+            <a href="javascript:void(0);" class="IntSearch"><i class="fa fa-eye" aria-hidden="true"></i> {LANG.search_adv_internet}</a>
+        </div>
+        <div id="gcse" class="hidden">
+            <div class="gcse-search"></div>
+        </div>
+        <!-- END: search_engine_unique_ID -->
         <div id="search_result">
+            <hr />
             {SEARCH_RESULT}
         </div>
     </div>
@@ -85,14 +75,10 @@ $("a.advSearch").click(function(e) {
 
     window.location.href = b;
 });
-$("a.IntSearch").click(function() {
-    var a = $("#form_search [name=q]").val();
-    $("#search-form").hide();
-    $("#search_result").hide();
-    var customSearchControl = new google.search.CustomSearchControl('{SEARCH_ENGINE_UNIQUE_ID}');
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    customSearchControl.draw('cse');
-    customSearchControl.execute(a);
+$("a.IntSearch").click(function(e) {
+    e.preventDefault();
+    $(".fa", this).toggleClass("fa-eye fa-eye-slash");
+    $("#search-form, #gcse, #search_result").toggleClass("hidden")
 });
 $("#form_search").submit(function() {
     var a = $("#form_search [name=q]").val(), a = strip_tags(a), b;
