@@ -30,10 +30,6 @@ class Files
 
     private $_Db;
 
-    private $_FunCompress = '';
-
-    private $_FunUnCompress = '';
-
     private $_Current_Time = 0;
 
     /**
@@ -49,15 +45,6 @@ class Files
         $this->_CacheDir = $CacheDir;
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
-
-        // Xac dinh function nen string
-        if (function_exists('gzcompress') and function_exists('gzuncompress')) {
-            $this->_FunCompress = 'gzcompress';
-            $this->_FunUnCompress = 'gzuncompress';
-        } elseif (function_exists('gzdeflate') and function_exists('gzinflate')) {
-            $this->_FunCompress = 'gzdeflate';
-            $this->_FunUnCompress = 'gzinflate';
-        }
 
         if (defined('NV_CURRENTTIME')) {
             $this->_Current_Time = NV_CURRENTTIME;
@@ -153,12 +140,7 @@ class Files
             return false;
         }
 
-        $content = file_get_contents($fullname);
-        if (!empty($this->_FunUnCompress)) {
-            $content = call_user_func($this->_FunUnCompress, $content);
-        }
-
-        return $content;
+        return file_get_contents($fullname);
     }
 
     /**
@@ -179,10 +161,6 @@ class Files
 
         if (!is_dir($this->_CacheDir . '/' . $module_name)) {
             mkdir($this->_CacheDir . '/' . $module_name, 0777, true);
-        }
-
-        if (!empty($this->_FunCompress)) {
-            $content = call_user_func($this->_FunCompress, $content);
         }
 
         return file_put_contents($this->_CacheDir . '/' . $module_name . '/' . $filename, $content);
