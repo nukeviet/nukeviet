@@ -207,3 +207,4 @@ $lang_module['api_cr_notice'] = 'Note: Gardez votre code secret secret et vos cl
 $lang_module['api_System'] = 'Fonctions du système';
 $lang_module['api_System_SendMail'] = 'Envoyer un email';
 $lang_module['other_info'] = 'Autres informations';
+$lang_module['value_copied'] = 'La valeur a été copiée';

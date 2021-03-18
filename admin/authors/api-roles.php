@@ -21,9 +21,6 @@ $array_api_actions = $array_api_actions[0];
 $xtpl = new XTemplate('api-roles.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
 
 // Danh sách
 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_role ORDER BY role_id DESC';
@@ -89,8 +86,6 @@ if ($nv_Request->isset_request('del', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete API role', $role_id . ': ' . $array[$role_id]['role_title'], $admin_info['userid']);
     nv_htmlOutput('OK');
 }
-
-//$tpl->assign('SITE_MODS', $site_mods);
 
 $current_cat = '';
 $error = '';
@@ -286,27 +281,117 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
     $array_api_trees[$keysysmodule]['total_api'] = $cat1_total_api;
 }
 
-//$tpl->assign('ROLE_ID', $role_id);
-//$tpl->assign('IS_SUBMIT_FORM', $is_submit_form);
-//$tpl->assign('ERROR', $error);
-//$tpl->assign('ARRAY_API_TREES', $array_api_trees);
-//$tpl->assign('ARRAY_API_CONTENTS', $array_api_contents);
-
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('CAPTION', $caption);
 $xtpl->assign('CURRENT_CAT', $current_cat);
 $xtpl->assign('DATA', $array_post);
 
+// Xuất các API role đã có hoặc thông báo rỗng
 if (empty($array)) {
     $xtpl->parse('main.empty');
 } else {
-    //$tpl->assign('ARRAY', $array);
+    foreach ($array as $row) {
+        $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
+        $row['edittime'] = $row['edittime'] ? nv_date('H:i d/m/Y', $row['edittime']) : '';
+        $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;role_id=' . $row['role_id'];
+
+        $xtpl->assign('ROW', $row);
+
+        // List API hệ thống
+        if (!empty($row['apis'][''])) {
+            foreach ($row['apis'][''] as $cat_key => $cat_data) {
+                $xtpl->assign('CAT_DATA', $cat_data);
+
+                foreach ($cat_data['apis'] as $api_data) {
+                    $xtpl->assign('API_DATA', $api_data);
+                    $xtpl->parse('main.data.loop.catsys.loop');
+                }
+
+                $xtpl->parse('main.data.loop.catsys');
+            }
+        }
+
+        // List API theo ngôn ngữ
+        if (!empty($row['apis'][NV_LANG_DATA])) {
+            foreach ($row['apis'][NV_LANG_DATA] as $mod_title => $mod_data) {
+                $xtpl->assign('MOD_TITLE', $site_mods[$mod_title]['custom_title']);
+
+                foreach ($mod_data as $cat_data) {
+                    $xtpl->assign('CAT_DATA', $cat_data);
+
+                    foreach ($cat_data['apis'] as $api_data) {
+                        $xtpl->assign('API_DATA', $api_data);
+                        $xtpl->parse('main.data.loop.apimod.mod.loop');
+                    }
+
+                    if (!empty($cat_data['title'])) {
+                        $xtpl->parse('main.data.loop.apimod.mod.title');
+                    }
+
+                    $xtpl->parse('main.data.loop.apimod.mod');
+                }
+
+                $xtpl->parse('main.data.loop.apimod');
+            }
+        }
+
+        $xtpl->parse('main.data.loop');
+    }
+
     $xtpl->parse('main.data');
 }
 
 if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
+}
+
+// Xuất các danh mục API
+foreach ($array_api_trees as $api_tree) {
+    $xtpl->assign('API_TREE', $api_tree);
+
+    foreach ($api_tree['subs'] as $sub) {
+        $xtpl->assign('SUB', $sub);
+
+        if (!empty($sub['active'])) {
+            $xtpl->parse('main.api_tree.sub.active');
+        }
+        if (!empty($sub['total_api'])) {
+            $xtpl->parse('main.api_tree.sub.total_api');
+        }
+
+        $xtpl->parse('main.api_tree.sub');
+    }
+
+    if (!empty($api_tree['active'])) {
+        $xtpl->parse('main.api_tree.active');
+    }
+    if (!empty($api_tree['total_api'])) {
+        $xtpl->parse('main.api_tree.total_api');
+    }
+
+    $xtpl->parse('main.api_tree');
+}
+
+// Xuất danh sách các API
+foreach ($array_api_contents as $api_content) {
+    $xtpl->assign('API_CONTENT', $api_content);
+
+    foreach ($api_content['apis'] as $api) {
+        $xtpl->assign('API', $api);
+
+        if (!empty($api['checked'])) {
+            $xtpl->parse('main.api_content.api.checked');
+        }
+
+        $xtpl->parse('main.api_content.api');
+    }
+
+    if (!empty($api_content['active'])) {
+        $xtpl->parse('main.api_content.active');
+    }
+
+    $xtpl->parse('main.api_content');
 }
 
 if (!$is_submit_form) {

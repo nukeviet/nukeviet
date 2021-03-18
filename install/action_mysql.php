@@ -86,7 +86,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (role_id)
-) ENGINE=InnoDB COMMENT 'Bảng lưu quyền truy cập API'";
+) ENGINE=MyISAM COMMENT 'Bảng lưu quyền truy cập API'";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credential (
   admin_id int(11) unsigned NOT NULL,
@@ -100,7 +100,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credentia
   UNIQUE KEY credential_ident (credential_ident),
   UNIQUE KEY credential_secret (credential_secret(191)),
   KEY admin_id (admin_id)
-) ENGINE=InnoDB COMMENT 'Bảng lưu key API của quản trị'";
+) ENGINE=MyISAM COMMENT 'Bảng lưu key API của quản trị'";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
   lang varchar(3) NOT NULL DEFAULT 'sys',

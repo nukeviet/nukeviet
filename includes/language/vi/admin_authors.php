@@ -216,3 +216,4 @@ $lang_module['api_System'] = 'Các chức năng hệ thống';
 $lang_module['api_System_SendMail'] = 'Gửi email';
 
 $lang_module['other_info'] = 'Thông tin khác';
+$lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nhớ';
