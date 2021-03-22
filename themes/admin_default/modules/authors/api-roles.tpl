@@ -136,7 +136,7 @@
                                         <div class="col-sm-12">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input data-toggle="apiroleit" class="custom-control-input" type="checkbox" name="api_{API_CONTENT.key}[]" value="{API.cmd}"<!-- BEGIN: checked --> checked="checked"<!-- END: checked -->> {API.name}
+                                                    <input data-toggle="apiroleit" class="custom-control-input" type="checkbox" name="api_{API_CONTENT.input_key}[]" value="{API.cmd}"<!-- BEGIN: checked --> checked="checked"<!-- END: checked -->> {API.name}
                                                 </label>
                                             </div>
                                         </div>
