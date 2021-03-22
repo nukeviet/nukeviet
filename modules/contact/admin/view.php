@@ -7,8 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -22,23 +21,39 @@ if (empty($row)) {
 
 $contact_allowed = nv_getAllowed();
 
-if (! isset($contact_allowed['view'][$row['cid']])) {
+if (!isset($contact_allowed['view'][$row['cid']])) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 $is_read = intval($row['is_read']);
+$processed = intval($row['is_processed']);
 $mark = $nv_Request->get_title('mark', 'post', '');
 
 if ($mark == 'unread') {
     if ($is_read) {
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0 WHERE id=' . $id);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0, is_processed=0, processed_by=0, processed_time=0 WHERE id=' . $id);
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
 
-    nv_jsonOutput(array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name ));
+    nv_jsonOutput(array(
+        'status' => 'ok',
+        'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
+    ));
+} elseif ($mark == 'toogle_process') {
+    if ($processed) {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=0, processed_by=0, processed_time=0 WHERE id=' . $id);
+        nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
+    } else {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id=' . $id);
+        nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
+    }
+    nv_jsonOutput(array(
+        'status' => 'ok',
+        'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
+    ));
 }
 
-if (! $is_read) {
+if (!$is_read) {
     nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $row['id']);
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id);
     $is_read = 1;
@@ -57,6 +72,12 @@ if ($sender_id) {
     $sender_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $sender_id . '">' . $sender_name . '</a>';
 }
 
+if ($processed) {
+    $xtpl->assign('MARK_PROCESS', $lang_module['mark_as_unprocess']);
+} else {
+    $xtpl->assign('MARK_PROCESS', $lang_module['mark_as_processed']);
+}
+
 $row['send_name'] = $sender_name;
 $row['time'] = nv_date('H:i d/m/Y', $row['send_time']);
 
@@ -68,7 +89,7 @@ $row['url_back'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV
 
 $xtpl->assign('DATA', $row);
 
-if (! empty($row['sender_phone'])) {
+if (!empty($row['sender_phone'])) {
     $xtpl->parse('main.sender_phone');
 }
 
@@ -80,8 +101,7 @@ if (isset($contact_allowed['reply'][$row['cid']])) {
 
 $xtpl->assign('URL_FORWARD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=forward&amp;id=' . $row['id']);
 
-
-if ($row['is_reply']>=1) {
+if ($row['is_reply'] >= 1) {
     $result = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id=' . $id);
     while ($row = $result->fetch()) {
         $sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.first_name, t2.last_name FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval($row['reply_aid']);
@@ -98,6 +118,26 @@ if ($row['is_reply']>=1) {
 
         $xtpl->parse('main.data_reply');
     }
+}
+
+if ($row['is_processed']) {
+    $sql = 'SELECT username, email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['processed_by'];
+    $adm_row = $db->query($sql)->fetch();
+    if (!empty($adm_row)) {
+        $reply_name = $adm_row['username'];
+        $reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $row['processed_by'] . '">' . $reply_name . '</a>';
+        $reply_email = $adm_row['email'];
+    } else {
+        $reply_name = 'N/A';
+        $reply_email = '';
+    }
+
+    $xtpl->assign('PROCESSED_DATA', [
+        'user' => $reply_name,
+        'email' => $reply_email,
+        'time' => nv_date('H:i d/m/Y', $row['processed_time'])
+    ]);
+    $xtpl->parse('main.data_processed');
 }
 
 $xtpl->parse('main');

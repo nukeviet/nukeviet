@@ -36,10 +36,10 @@ if ($nv_Request->get_int('result', 'get', 0)) {
 }
 
 if ($global_config['max_user_admin'] > 0) {
-    $sql = 'SELECT count(*) FROM ' . NV_AUTHORS_GLOBALTABLE;
+    $sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE lev>1';
     $user_number = $db->query($sql)->fetchColumn();
     if ($user_number >= $global_config['max_user_admin']) {
-        $contents = sprintf($lang_global['limit_admin_number'], $global_config['max_user_admin']);
+        $contents = nv_theme_alert('', sprintf($lang_global['limit_admin_number'], $global_config['max_user_admin']));
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_admin_theme($contents);
         include NV_ROOTDIR . '/includes/footer.php';

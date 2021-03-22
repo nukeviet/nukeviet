@@ -743,7 +743,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password']) and !defined('ACCESS_PASSUS')) {
         nv_jsonOutput(array(
             'status' => 'error',
-            'input' => 'password',
+            'input' => 'nv_password',
             'mess' => $lang_global['incorrect_password']
         ));
     }
@@ -846,13 +846,19 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     ));
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     // Groups
+    $in_groups = $nv_Request->get_typed_array('in_groups', 'post', 'int');
+
     $array_old_groups = [];
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $edit_userid);
+    $result_gru = $db->query('SELECT group_id, is_leader FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $edit_userid);
     while ($row_gru = $result_gru->fetch()) {
         $array_old_groups[] = $row_gru['group_id'];
+
+        // Trưởng nhóm không thể tự ra khỏi nhóm
+        if ($row_gru['is_leader'] AND !in_array($row_gru['group_id'], $in_groups)) {
+            $in_groups[] = $row_gru['group_id'];
+        }
     }
 
-    $in_groups = $nv_Request->get_typed_array('in_groups', 'post', 'int');
     $in_groups = array_intersect($in_groups, array_keys($groups_list));
     $in_groups_hiden = array_diff($array_old_groups, array_keys($groups_list));
     $in_groups = array_unique(array_merge($in_groups, $in_groups_hiden));

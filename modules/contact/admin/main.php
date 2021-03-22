@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -18,7 +17,10 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
     $sends = $nv_Request->get_array('sends', 'post', array());
     if (empty($sends)) {
-        nv_jsonOutput(array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ));
+        nv_jsonOutput(array(
+            'status' => 'error',
+            'mess' => $lang_module['please_choose']
+        ));
     }
 
     foreach ($sends as $id) {
@@ -26,8 +28,42 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     }
 
     $sends = implode(',', $sends);
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
-    nv_jsonOutput(array( 'status' => 'ok', 'mess' => '' ));
+    if ($mark) {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
+    } else {
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0, is_processed=0, processed_by=0, processed_time=0 WHERE id IN (' . $sends . ')');
+    }
+    nv_jsonOutput(array(
+        'status' => 'ok',
+        'mess' => ''
+    ));
+} else if (!empty($mark) and ($mark == 'processed' or $mark == 'unprocess')) {
+    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
+    $mark = $mark == 'processed' ? 1 : 0;
+    if (empty($sends)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['please_choose']
+        ]);
+    }
+
+    foreach ($sends as $id) {
+        nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, $mark);
+    }
+
+    $sends = implode(',', $sends);
+    if ($mark) {
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_processed'], 'ID: ' . $sends, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read= 1, is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id IN (' . $sends . ')');
+    } else {
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['mark_as_unprocess'], 'ID: ' . $sends, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= 0, processed_time=0 WHERE id IN (' . $sends . ')');
+    }
+
+    nv_jsonOutput(array(
+        'status' => 'ok',
+        'mess' => ''
+    ));
 }
 
 $page_title = $module_info['site_title'];
@@ -51,7 +87,8 @@ if (!empty($contact_allowed['view'])) {
         ->from(NV_PREFIXLANG . '_' . $module_data . '_send')
         ->where('cid IN (' . $in . ')');
 
-    $num_items = $db->query($db->sql())->fetchColumn();
+    $num_items = $db->query($db->sql())
+        ->fetchColumn();
 
     if ($num_items) {
         $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;t=2');
@@ -67,22 +104,45 @@ if (!empty($contact_allowed['view'])) {
         $result = $db->query($db->sql());
 
         while ($row = $result->fetch()) {
-            $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_new.gif', 12, 9 );
+            $image = array(
+                NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_new.gif',
+                12,
+                9
+            );
             $status = 'New';
             $style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
             if ($row['is_read'] == 1) {
-            	$style = " style=\"cursor:pointer;white-space:nowrap;\"";
-	            if ($row['is_reply']==1) {
-	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
-	                $status = $lang_module['tt2_row_title'];
-	            }elseif ($row['is_reply']==2) {
-	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14 );
-	                $status = $lang_module['tt2_row_title'];
-	            }else{
-	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );
-	                $status = $lang_module['tt1_row_title'];
-	            }
+                $style = " style=\"cursor:pointer;white-space:nowrap;\"";
+                if ($row['is_reply'] == 1) {
+                    $image = array(
+                        NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif',
+                        13,
+                        14
+                    );
+                    $status = $lang_module['tt2_row_title'];
+                } elseif ($row['is_reply'] == 2) {
+                    $image = array(
+                        NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif',
+                        13,
+                        14
+                    );
+                    $status = $lang_module['tt2_row_title'];
+                } elseif ($row['is_processed']) {
+                    $image = array(
+                        NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/processed.png',
+                        13,
+                        14
+                    );
+                    $status = $lang_module['tt3_row_title'];
+                } else {
+                    $image = array(
+                        NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif',
+                        12,
+                        11
+                    );
+                    $status = $lang_module['tt1_row_title'];
+                }
             }
 
             $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
@@ -95,6 +155,7 @@ if (!empty($contact_allowed['view'])) {
                 'title' => nv_clean60($row['title'], 60),
                 'time' => $row['send_time'] >= $currday ? nv_date('H:i d/m/Y', $row['send_time']) : nv_date('d/m/Y', $row['send_time']),
                 'style' => $style,
+                'processed' => $processed,
                 'onclick' => $onclick,
                 'status' => $status,
                 'image' => $image

@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 23:48
  */
+
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -725,7 +726,9 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
                 " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
                 " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
             )");
-            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+            if ($approved) {
+                $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+            }
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
@@ -753,7 +756,7 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
     global $db, $db_config, $global_config;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-    $row = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
+    $row = $db->query('SELECT data, approved FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
     if (!empty($row)) {
         $set_number = false;
         if ($group_id > 3) {
@@ -771,8 +774,9 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
         if ($set_number) {
             $db->query('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
 
-            // Chỗ này chỉ xóa những thành viên đã được xét duyệt vào nhóm nên sẽ cập nhật luôn số thành viên, không cần kiểm tra approved = 1 hay không
-            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+            if ($row['approved']) {
+                $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+            }
         }
         return true;
     } else {
@@ -2415,4 +2419,119 @@ function nv_set_authorization()
         'auth_user' => $auth_user,
         'auth_pw' => $auth_pw
     );
+}
+
+/**
+ * @param string $cmd
+ * @param string[] $params
+ * @param string $adminidentity
+ * @param string $module
+ */
+function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
+{
+    // Default api trả về error
+    $apiresults = new NukeViet\Api\ApiResult();
+
+    /*
+     * Kiểm tra nếu là API của module
+     * API là kiểu chạy sau khi tài nguyên của hệ thống đã load
+     * Do đó chỉ cần truyền module_name vào và căn cứ $sys_mods để lấy các thông tin còn lại
+     * Khác với HOOK phải tuyền module_file vào để xác định
+     */
+    if (NukeViet\Api\Api::test($module)) {
+        global $sys_mods;
+        if (!isset($sys_mods[$module])) {
+            $apiresults->setCode(NukeViet\Api\ApiResult::CODE_MODULE_NOT_EXISTS)->setMessage('Module not exists!!!');
+            return $apiresults->getResult();
+        }
+
+        $module_info = $sys_mods[$module];
+        $module_file = $module_info['module_file'];
+        $classname = 'NukeViet\\Module\\' . $module_file . '\\Api\\' . $cmd;
+    } elseif ($module != '') {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_MODULE_INVALID)->setMessage('Module is invalid!!!');
+        return $apiresults->getResult();
+    } else {
+        $classname = 'NukeViet\\Api\\' . $cmd;
+    }
+
+    // Class tồn tại
+    if (!class_exists($classname)) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_API_NOT_EXISTS)->setMessage('API not exists!!!');
+        return $apiresults->getResult();
+    }
+
+    // Kiểm tra quyền hạn admin
+    if (empty($adminidentity) and !defined('NV_IS_ADMIN')) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_ADMIN_IDENT)->setMessage('Admin Ident is required if no admin logged!!!');
+        return $apiresults->getResult();
+    }
+    if ($adminidentity) {
+        global $db;
+        if (is_numeric($adminidentity)) {
+            $where = 'tb2.userid=' . intval($adminidentity);
+        } else {
+            $where = 'tb2.username=' . $db->quote($adminidentity);
+        }
+        $sql = 'SELECT tb1.admin_id, tb1.lev, tb2.username FROM ' . NV_AUTHORS_GLOBALTABLE . ' tb1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2
+        ON tb1.admin_id=tb2.userid WHERE tb1.is_suspend=0 AND tb2.active=1 AND ' . $where;
+        $admin_info = $db->query($sql)->fetch();
+        if (empty($admin_info)) {
+            $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_ADMIN_FOUND)->setMessage('No admin found!!!');
+            return $apiresults->getResult();
+        }
+        NukeViet\Api\Api::setAdminId($admin_info['admin_id']);
+        NukeViet\Api\Api::setAdminLev($admin_info['lev']);
+        NukeViet\Api\Api::setAdminName($admin_info['username']);
+    } else {
+        global $admin_info;
+        NukeViet\Api\Api::setAdminId($admin_info['admin_id']);
+        NukeViet\Api\Api::setAdminLev($admin_info['level']);
+        NukeViet\Api\Api::setAdminName($admin_info['username']);
+    }
+
+    /*
+     * Nếu API của module kiểm tra xem admin có phải là Admin module không
+     * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
+     */
+    if ($module != '' and NukeViet\Api\Api::getAdminLev() > 2 and !in_array(NukeViet\Api\Api::getAdminId(), explode(',', $sys_mods[$module]['admins']))) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)->setMessage('Admin do not have the right to manage this module!!!');
+        return $apiresults->getResult();
+    }
+
+    // Kiểm tra quyền thực thi API theo quy định của API
+    if ($classname::getAdminLev() < NukeViet\Api\Api::getAdminLev()) {
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_ADMINLEV_NOT_ENOUGH)->setMessage('Admin level not enough to perform this api!!!');
+        return $apiresults->getResult();
+    }
+
+    // Lưu thông tin module nếu là API của module để sử dụng trong API
+    if ($module != '') {
+        NukeViet\Api\Api::setModuleName($module);
+        NukeViet\Api\Api::setModuleInfo($module_info);
+    }
+
+    // Sau khi đã xong tất cả các bước kiểm tra quyền thì tiến hành chạy API
+    if (!is_array($params)) {
+        $params = [];
+    }
+
+    $_POSTbackup = $_POST;
+    $_POST = [];
+
+    foreach ($params as $_key => $_value) {
+        if (NukeViet\Api\Api::testParamKey($_key)) {
+            $_POST[$_key] = $_value;
+        }
+    }
+
+    // Thực hiện API
+    $api = new $classname();
+    $api->setResultHander($apiresults);
+    $return = $api->execute();
+
+    $_POST = $_POSTbackup;
+    NukeViet\Api\Api::reset();
+
+    return $return;
 }

@@ -15,7 +15,7 @@ if ((!defined('NV_SYSTEM') and !defined('NV_ADMIN')) or !defined('NV_MAINFILE'))
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
 
 // Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
-global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global;
+global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global, $nv_BotManager;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -46,6 +46,14 @@ $html_headers['Expires'] = '-1'; // Proxies.
 
 if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
     $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
+}
+
+/*
+ * Xuất cấu hình robot vào header
+ * Chú ý kiểm tra biến $nv_BotManager vì có trường hợp undefined $nv_BotManager
+ */
+if (!empty($nv_BotManager)) {
+    $nv_BotManager->outputToHeaders($headers, $sys_info);
 }
 
 if (!empty($headers)) {

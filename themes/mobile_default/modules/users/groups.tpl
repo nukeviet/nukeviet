@@ -111,14 +111,11 @@ $("a.denied").click(function() {
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<col width="50"/>
-			<col span="2" />
-			<col width="250" />
 			<thead>
 				<tr>
 					<th class="text-center"> {LANG.STT} </th>
 					<th> {LANG.account} </th>
 					<th> {LANG.nametitle} </th>
-					<th class="text-center"> {GLANG.actions} </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -127,12 +124,6 @@ $("a.denied").click(function() {
 					<td class="text-center"> {LOOP.stt} </td>
 					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
-					<td class="text-center">
-					<!-- BEGIN: tools -->
-	                <i class="fa fa-star-half-o"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a> -
-					<em class="fa fa-trash-o">&nbsp;</em> <a class="deleteleader" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
-					<!-- END: tools -->
-					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
@@ -142,32 +133,6 @@ $("a.denied").click(function() {
 	<div class="text-center">{PAGE}</div>
 	<!-- END: page -->
 </div>
-<script type="text/javascript">
-//<![CDATA[
-$("a.deleteleader").click(function() {
-	confirm("{LANG.delConfirm} ?") && $.ajax({
-		type : "POST",
-		url : "{MODULE_URL}={OP}",
-		data : "gid={GID}&exclude=" + $(this).attr("title"),
-		success : function(a) {
-			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
-		}
-	});
-	return !1;
-});
-$("a.demote").click(function() {
-	$.ajax({
-		type : "POST",
-		url : "{MODULE_URL}={OP}",
-		data : "gid={GID}&demote=" + $(this).data("id"),
-		success : function(a) {
-			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
-		}
-	});
-	return !1;
-});
-//]]>
-</script>
 <!-- END: leaders -->
 
 <!-- BEGIN: members -->
@@ -194,9 +159,7 @@ $("a.demote").click(function() {
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
 					<!-- BEGIN: tools -->
-	                <!--<i class="fa fa-star">&nbsp;</i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> - -->
-	                
-		                <!-- BEGIN: deletemember -->
+	                   <!-- BEGIN: deletemember -->
 							<i class="fa fa-ban">&nbsp;</i><a class="deletemember" href="javascript:void(0);" data-userid="{LOOP.userid}">{LANG.exclude_user2}</a>&nbsp; 
 						<!-- END: deletemember -->
 						<!-- BEGIN: edituser -->
@@ -234,17 +197,6 @@ $("a.deletemember").click(function() {
 		type : "POST",
 		url : "{MODULE_URL}={OP}",
 		data : "gid={GID}&exclude=" + $(this).attr("data-userid"),
-		success : function(a) {
-			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
-		}
-	});
-	return !1;
-});
-$("a.promote").click(function() {
-	$.ajax({
-		type : "POST",
-		url : "{MODULE_URL}={OP}",
-		data : "gid={GID}&promote=" + $(this).data("id"),
 		success : function(a) {
 			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
 		}

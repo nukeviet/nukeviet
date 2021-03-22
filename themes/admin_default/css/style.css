@@ -87,6 +87,17 @@ a.link:hover {
     white-space: nowrap!important;
 }
 
+.text-truncate {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.d-inline-block {
+    display: inline-block!important;
+    max-width: 100%;
+}
+
 #timeoutsess {
     display: none;
 }

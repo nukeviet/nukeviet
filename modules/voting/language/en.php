@@ -38,3 +38,4 @@ $lang_module['voting_counter'] = 'Voting count';
 $lang_module['voting_pubtime'] = 'From';
 $lang_module['enter_captcha'] = 'Enter the confirmation code';
 $lang_module['enter_captcha_error'] = 'Please enter confirmation code';
+$lang_module['limit_vote_msg'] = 'You can only vote once';

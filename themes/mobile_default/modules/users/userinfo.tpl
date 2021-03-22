@@ -73,6 +73,14 @@
                 <td>{LANG.regdate}</td>
                 <td>{USER.regdate}</td>
             </tr>
+            <!-- BEGIN: field -->
+            <!-- BEGIN: loop -->
+            <tr>
+                <td>{FIELD.title}</td>
+                <td>{FIELD.value}</td>
+            </tr>
+            <!-- END: loop -->
+            <!-- END: field -->
             <!-- BEGIN: group_manage -->
             <tr>
                 <td>{LANG.group_manage_count}</td>

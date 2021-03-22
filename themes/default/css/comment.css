@@ -40,5 +40,9 @@
 }
 .comment-list{
 	margin: 0;
+	padding-left: 0;
+}
+
+.comment-list .comment-list {
 	padding-left: 20px;
 }

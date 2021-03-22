@@ -13,9 +13,17 @@
                     <h3>{DEP.full_name}</h3>
                 </div>
                 <div class="panel-body">
+                    <!-- BEGIN: image -->
+                    <div class="margin-bottom"><img src="{DEP.image}" class="img-thumbnail" alt="{DEP.full_name}" /></div>
+                    <!-- END: image -->
                     <!-- BEGIN: note -->
                     <div class="margin-bottom">{DEP.note}</div>
                     <!-- END: note -->
+                    <!-- BEGIN: address -->
+                    <p>
+                        <em class="fa fa-map-marker fa-horizon margin-right"></em>{LANG.address}: <span>{DEP.address}</span>
+                    </p>
+                    <!-- END: address -->
                     <!-- BEGIN: phone -->
                     <p><em class="fa fa-phone fa-horizon margin-right"></em>{LANG.phone}: 
                         <span><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><!-- BEGIN: href --><a href="tel:{PHONE.href}" class="black"><!-- END: href -->{PHONE.number}<!-- BEGIN: href2 --></a><!-- END: href2 --><!-- END: item --></span>

@@ -218,12 +218,10 @@ if (!empty($admins)) {
             $xtpl->assign('THREAD_LEV', $values['thead']['level']);
             $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
 
-            $a = 0;
             foreach ($values['options'] as $key => $value) {
                 if (!empty($value[1])) {
                     $xtpl->assign('VALUE0', $value[0]);
                     $xtpl->assign('VALUE1', $value[1]);
-                    ++$a;
                     $xtpl->parse('main.loop.option_loop');
                 }
             }
@@ -233,8 +231,11 @@ if (!empty($admins)) {
         $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', $lang_module);
 
-        $a = 0;
         foreach ($admins as $id => $values) {
+            if ($global_config['idsite'] > 0 and $values['thead']['level'] == 1) {
+                continue;
+            }
+
             $is_tools = 0;
 
             // Nút sửa luôn có, nếu không có nút sửa cũng không có nút khác
@@ -289,7 +290,6 @@ if (!empty($admins)) {
             }
 
             $xtpl->parse('main.loop');
-            ++$a;
         }
     }
 

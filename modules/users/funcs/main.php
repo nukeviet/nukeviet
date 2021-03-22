@@ -33,7 +33,15 @@ if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
         // So nhom dang quan ly
         $user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
 
-        $contents = user_welcome();
+        // Lay cac du lieu tuy bien
+        $array_field_config = nv_get_users_field_config();
+
+        // Cac du lieu tuy bien cua thanh vien
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $user_info['userid'];
+        $result = $db->query($sql);
+        $custom_fields = $result->fetch();
+
+        $contents = user_welcome($array_field_config, $custom_fields);
     }
 }
 

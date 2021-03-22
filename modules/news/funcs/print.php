@@ -67,7 +67,7 @@ if ($id > 0 and $catid > 0) {
             'bodytext' => $content['bodytext'],
             'copyright' => $content['copyright'],
             'copyvalue' => $module_config[$module_name]['copyright'],
-            'link' => "<a href=\"" . NV_MY_DOMAIN . $base_url_rewrite . "\" title=\"" . $content['title'] . "\">" . NV_MY_DOMAIN . $base_url_rewrite . "</a>\n",
+            'link' => NV_MY_DOMAIN . $base_url_rewrite,
             'contact' => $global_config['site_email'],
             'author' => $content['author'],
             'source' => $sourcetext

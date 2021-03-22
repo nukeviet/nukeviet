@@ -38,3 +38,4 @@ $lang_module['voting_counter'] = 'votes';
 $lang_module['voting_pubtime'] = 'depuis';
 $lang_module['enter_captcha'] = 'Entrez le code de vérification';
 $lang_module['enter_captcha_error'] = 'S\'il vous plaît entrez le code de confirmation';
+$lang_module['limit_vote_msg'] = 'Vous ne pouvez voter qu\'une seule fois';

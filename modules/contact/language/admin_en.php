@@ -105,3 +105,10 @@ $lang_module['config'] = 'Configurer le module';
 $lang_module['config_sendcopymode'] = 'Le droit d\'envoyer une copie à l\'email';
 $lang_module['config_sendcopymode0'] = 'Les membres ont un email authentifié';
 $lang_module['config_sendcopymode1'] = 'Tous les utilisateurs';
+
+$lang_module['processed_by'] = 'Handler: ';
+$lang_module['processed_time'] = 'Processing Time: ';
+$lang_module['mark_as_processed'] = 'Mark processed';
+$lang_module['mark_as_unprocess'] = 'Mark unprocess';
+$lang_module['tt3_row_title'] = 'Processed!';
+$lang_module['process'] = 'Processed!';

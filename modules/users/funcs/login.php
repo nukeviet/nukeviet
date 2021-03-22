@@ -822,7 +822,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
 $nv_Request->unset_request('users_dismiss_captcha', 'session');
 
 if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
-    die(user_login(true));
+    die(nv_url_rewrite(user_login(true), true));
 }
 
 $page_title = $lang_module['login'];
