@@ -14,6 +14,13 @@
                     <input type="text" id="credential_title" name="credential_title" value="{DATA.credential_title}" class="form-control">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label" for="credential_ips">{LANG.api_cr_ips}:</label>
+                <div class="col-sm-18 col-lg-10">
+                    <textarea rows="3" class="form-control" name="credential_ips">{DATA.credential_ips}</textarea>
+                    <div class="form-text text-muted">{LANG.credential_ips_help}</div>
+                </div>
+            </div>
             <!-- BEGIN: for_admin -->
             <div class="form-group">
                 <label class="col-sm-6 control-label" for="admin_id">{LANG.api_cr_for_admin} <span class="text-danger">(*)</span>:</label>

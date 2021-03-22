@@ -7,8 +7,8 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jul 2, 2017 2:06:56 PM
  */
-
 define('NV_SYSTEM', true);
+define('NV_REMOTE_API', true);
 
 // Xác định thư mục gốc của site
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
@@ -23,17 +23,27 @@ $apiresults = new ApiResult();
 
 // Kiểm tra tắt Remote API
 if (empty($global_config['remote_api_access'])) {
-    $apiresults->setCode(ApiResult::CODE_REMOTE_OFF)->setMessage('Remote is off!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_REMOTE_OFF)
+    ->setMessage('Remote is off!!!')
+    ->returnResult();
 }
 
 $api_credential = [];
 $api_credential['apikey'] = $nv_Request->get_title('apikey', 'post', '');
-$api_credential['apisecret'] = $nv_Request->get_title('apisecret', 'post', '');
+$api_credential['timestamp'] = $nv_Request->get_int('timestamp', 'post', '');
+$api_credential['hashsecret'] = $nv_Request->get_string('hashsecret', 'post', '');
+
+if ($api_credential['timestamp'] + 5 < NV_CURRENTTIME or $api_credential['timestamp'] - 5 > NV_CURRENTTIME) {
+    // Sai lệch thời gian hơn 5 giây
+    $apiresults->setCode(ApiResult::CODE_MISSING_TIME)
+    ->setMessage('Incorrect API time: ' . date('H:i:s d/m/Y', $api_credential['timestamp']) . ', Server time: ' . date('H:i:s d/m/Y', NV_CURRENTTIME))
+    ->returnResult();
+}
 
 // Kiểm tra thông tin xác thực
 $db->sqlreset()->from(NV_AUTHORS_GLOBALTABLE . '_api_credential tb1');
 $db->join('INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.admin_id=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.admin_id=tb3.userid');
-$db->select('tb1.admin_id, tb1.credential_secret, tb1.api_roles, tb2.lev, tb3.username');
+$db->select('tb1.admin_id, tb1.credential_secret, tb1.credential_ips, tb1.api_roles, tb2.lev, tb3.username');
 $db->where('tb1.credential_ident=:credential_ident AND tb2.is_suspend=0 AND tb3.active=1');
 
 try {
@@ -42,15 +52,31 @@ try {
     $sth->execute();
     $credential_data = $sth->fetch();
 } catch (Exception $e) {
-    $apiresults->setCode(ApiResult::CODE_SYS_ERROR)->setMessage('System error, please try again later!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_SYS_ERROR)
+    ->setMessage('System error, please try again later !!!')
+    ->returnResult();
 }
 
 if (empty($credential_data)) {
-    $apiresults->setCode(ApiResult::CODE_NO_CREDENTIAL_FOUND)->setMessage('No Api Credential found!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_NO_CREDENTIAL_FOUND)
+    ->setMessage('No Api Credential found !!!')
+    ->returnResult();
 }
 
-if (strcmp($api_credential['apisecret'], $crypt->decrypt($credential_data['credential_secret'])) !== 0) {
-    $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)->setMessage('Api Authentication fail!!!')->returnResult();
+if (!empty($credential_data['credential_ips'])) {
+    $credential_ips = json_decode($credential_data['credential_ips'], true);
+    if (!in_array(NV_CLIENT_IP, $credential_ips)) {
+        $apiresults->setCode(ApiResult::CODE_MISSING_IP)
+        ->setMessage('Api IP fail !!! ')
+        ->returnResult();
+    }
+}
+
+$apisecret = $crypt->decrypt($credential_data['credential_secret']);
+if (!password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
+    $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
+    ->setMessage('Api Authentication fail !!! ')
+    ->returnResult();
 }
 
 // Cập nhật lại lần cuối sử dụng
@@ -72,9 +98,13 @@ $api_request['language'] = $nv_Request->get_title(NV_LANG_VARIABLE, 'post', '');
 
 // Nếu site đa ngôn ngữ bắt buộc phải truyền tham số language
 if (sizeof($global_config['allow_sitelangs']) > 1 and empty($api_request['language'])) {
-    $apiresults->setCode(ApiResult::CODE_MISSING_LANG)->setMessage('Lang Data is required for multi-language website!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_MISSING_LANG)
+    ->setMessage('Lang Data is required for multi-language website!!!')
+    ->returnResult();
 } elseif (!empty($api_request['language']) and NV_LANG_DATA != $api_request['language']) {
-    $apiresults->setCode(ApiResult::CODE_WRONG_LANG)->setMessage('Wrong Lang Data!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_WRONG_LANG)
+    ->setMessage('Wrong Lang Data!!!')
+    ->returnResult();
 }
 
 // Xác định các quyền được thiết lập trong CSDL
@@ -106,21 +136,31 @@ if (!empty($credential_data['api_roles'])) {
 }
 
 if (empty($api_request['action'])) {
-    $apiresults->setCode(ApiResult::CODE_MISSING_REQUEST_CMD)->setMessage('Missing Api Command!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_MISSING_REQUEST_CMD)
+    ->setMessage('Missing Api Command!!!')
+    ->returnResult();
 } elseif (empty($api_request['module'])) {
     // Api hệ thống
     if (!in_array($api_request['action'], $credential_data['api_allowed'][''])) {
-        $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)->setMessage('Api Command Not Found!!!')->returnResult();
+        $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)
+        ->setMessage('Api Command Not Found!!!')
+        ->returnResult();
     }
     $classname = 'NukeViet\\Api\\' . $api_request['action'];
 } else {
     // Api module theo ngôn ngữ
     if (!isset($credential_data['api_allowed'][NV_LANG_DATA])) {
-        $apiresults->setCode(ApiResult::CODE_LANG_NOT_EXISTS)->setMessage('Api Lang Not Found!!!')->returnResult();
+        $apiresults->setCode(ApiResult::CODE_LANG_NOT_EXISTS)
+        ->setMessage('Api Lang Not Found!!!')
+        ->returnResult();
     } elseif (!isset($credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']]) or !isset($sys_mods[$api_request['module']])) {
-        $apiresults->setCode(ApiResult::CODE_MODULE_NOT_EXISTS)->setMessage('Api Module Not Found!!!')->returnResult();
+        $apiresults->setCode(ApiResult::CODE_MODULE_NOT_EXISTS)
+        ->setMessage('Api Module Not Found!!!')
+        ->returnResult();
     } elseif (!in_array($api_request['action'], $credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']])) {
-        $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)->setMessage('Api Command Not Found!!!')->returnResult();
+        $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)
+        ->setMessage('Api Command Not Found!!!')
+        ->returnResult();
     }
 
     $module_info = $sys_mods[$api_request['module']];
@@ -129,7 +169,6 @@ if (empty($api_request['action'])) {
 }
 
 define('NV_ADMIN', true);
-define('NV_REMOTE_API', true);
 
 // Ngôn ngữ Admin Global
 if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php')) {
@@ -142,7 +181,9 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
 
 // Class tồn tại
 if (!class_exists($classname)) {
-    $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)->setMessage('API not exists!!!')->returnResult();
+    $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)
+    ->setMessage('API not exists!!!')
+    ->returnResult();
 }
 
 if (!empty($api_request['module'])) {
@@ -151,12 +192,16 @@ if (!empty($api_request['module'])) {
      * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
      */
     if ($credential_data['lev'] > 2 and !in_array($credential_data['admin_id'], explode(',', $module_info['admins']))) {
-        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)->setMessage('Admin do not have the right to manage this module!!!')->returnResult();
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)
+        ->setMessage('Admin do not have the right to manage this module!!!')
+        ->returnResult();
     }
 
     // Kiểm tra quyền thực thi API theo quy định của API
     if ($classname::getAdminLev() < $credential_data['lev']) {
-        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_ADMINLEV_NOT_ENOUGH)->setMessage('Admin level not enough to perform this api!!!')->returnResult();
+        $apiresults->setCode(NukeViet\Api\ApiResult::CODE_ADMINLEV_NOT_ENOUGH)
+        ->setMessage('Admin level not enough to perform this api!!!')
+        ->returnResult();
     }
 
     Api::setModuleName($api_request['module']);

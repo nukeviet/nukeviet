@@ -34,6 +34,8 @@ class ApiResult
     const CODE_LANG_NOT_EXISTS = '0016';
     const CODE_WRONG_LANG = '0017';
     const CODE_MISSING_LANG = '0018';
+    const CODE_MISSING_IP = '0019';
+    const CODE_MISSING_TIME = '0020';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 
