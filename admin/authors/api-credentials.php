@@ -34,7 +34,7 @@ if (empty($global_array_roles)) {
 // Lấy tất cả các API Credential
 $db->sqlreset()->from(NV_AUTHORS_GLOBALTABLE . '_api_credential tb1');
 $db->join('INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.admin_id=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.admin_id=tb3.userid');
-$db->select('tb1.admin_id, tb1.credential_title, tb1.credential_ident, tb1.api_roles, tb1.addtime, tb1.edittime, tb1.last_access, tb2.lev, tb3.username, tb3.first_name, tb3.last_name');
+$db->select('tb1.admin_id, tb1.credential_title, tb1.credential_ident, tb1.credential_ips, tb1.api_roles, tb1.addtime, tb1.edittime, tb1.last_access, tb2.lev, tb3.username, tb3.first_name, tb3.last_name');
 $db->order('tb1.addtime DESC');
 
 $result = $db->query($db->sql());
@@ -99,9 +99,12 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
     $error = '';
     if ($credential_ident) {
         $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;credential_ident=' . $credential_ident;
+        $credential_ips = empty($array[$credential_ident]['credential_ips']) ? [] : ((array) json_decode($array[$credential_ident]['credential_ips'], true));
+
         $array_post = [
             'admin_id' => $array[$credential_ident]['admin_id'],
             'credential_title' => $array[$credential_ident]['credential_title'],
+            'credential_ips' => implode("\n", $credential_ips),
             'api_roles' => $array[$credential_ident]['api_roles']
         ];
         $caption = $lang_module['api_cr_edit'];
@@ -110,6 +113,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
         $array_post = [
             'admin_id' => 0,
             'credential_title' => '',
+            'credential_ips' => '',
             'api_roles' => []
         ];
         $caption = $lang_module['api_cr_add'];
@@ -117,6 +121,18 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
 
     if ($nv_Request->isset_request('submit', 'post')) {
         $array_post['credential_title'] = nv_substr($nv_Request->get_title('credential_title', 'post', ''), 0, 255);
+
+        $str_ips = $nv_Request->get_textarea('credential_ips', '', NV_ALLOWED_HTML_TAGS, true);
+        $str_ips = explode('<br />', strip_tags($str_ips, '<br>'));
+
+        $array_credential_ips = [];
+        foreach ($str_ips as $str_ip) {
+            if ($ips->isIp4($str_ip) or $ips->isIp6($str_ip)) {
+                $array_credential_ips[] = $str_ip;
+            }
+        }
+        $array_post['credential_ips'] = empty($array_credential_ips) ? '' : json_encode(array_unique($array_credential_ips));
+
         if (empty($credential_ident)) {
             $array_post['admin_id'] = $nv_Request->get_int('admin_id', 'post', 0);
         }
@@ -141,9 +157,9 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 }
 
                 $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_api_credential (
-                    admin_id, credential_title, credential_ident, credential_secret, api_roles, addtime
+                    admin_id, credential_title, credential_ident, credential_secret, credential_ips, api_roles, addtime
                 ) VALUES (
-                    ' . $array_post['admin_id'] . ', :credential_title, :credential_ident, :credential_secret, :api_roles, ' . NV_CURRENTTIME . '
+                    ' . $array_post['admin_id'] . ', :credential_title, :credential_ident, :credential_secret, :credential_ips, :api_roles, ' . NV_CURRENTTIME . '
                 )';
                 $sth = $db->prepare($sql);
 
@@ -153,6 +169,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 $sth->bindParam(':credential_title', $array_post['credential_title'], PDO::PARAM_STR);
                 $sth->bindParam(':credential_ident', $new_credential_ident, PDO::PARAM_STR);
                 $sth->bindParam(':credential_secret', $new_credential_secret_db, PDO::PARAM_STR);
+                $sth->bindParam(':credential_ips', $array_post['credential_ips'], PDO::PARAM_STR);
                 $sth->bindParam(':api_roles', $api_roles, PDO::PARAM_STR);
 
                 if ($sth->execute()) {
@@ -175,12 +192,14 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 // Cập nhật
                 $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_api_credential SET
                     credential_title=:credential_title,
+                    credential_ips=:credential_ips,
                     api_roles=:api_roles,
                     edittime=' . NV_CURRENTTIME . '
                 WHERE credential_ident=' . $db->quote($credential_ident);
                 $sth = $db->prepare($sql);
                 $api_roles = implode(',', $array_post['api_roles']);
                 $sth->bindParam(':credential_title', $array_post['credential_title'], PDO::PARAM_STR);
+                $sth->bindParam(':credential_ips', $array_post['credential_ips'], PDO::PARAM_STR);
                 $sth->bindParam(':api_roles', $api_roles, PDO::PARAM_STR);
                 if ($sth->execute()) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit API Credential', $credential_ident, $admin_info['userid']);

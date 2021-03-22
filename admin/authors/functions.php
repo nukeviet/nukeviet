@@ -155,11 +155,11 @@ function nv_get_api_actions()
             $class_namespaces = 'NukeViet\\Api\\' . $class_name;
             if (nv_class_exists($class_namespaces)) {
                 $class_cat = $class_namespaces::getCat();
-                $cat_title = $lang_module['api_' . $class_cat];
-                $api_title = $lang_module['api_' . $class_cat . '_' . $class_name];
+                $cat_title = isset($lang_module['api_' . $class_cat]) ? $lang_module['api_' . $class_cat] : $class_cat;
+                $api_title = isset($lang_module['api_' . $class_cat . '_' . $class_name]) ? $lang_module['api_' . $class_cat . '_' . $class_name] :$class_cat . '_' . $class_name;
                 if (!isset($array_apis[''][$class_cat])) {
                     $array_apis[''][$class_cat] = [
-                        'title' => $lang_module['api_' . $class_cat],
+                        'title' => isset($lang_module['api_' . $class_cat]) ? $lang_module['api_' . $class_cat] : $class_cat,
                         'apis' => []
                     ];
                 }
