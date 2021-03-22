@@ -252,6 +252,9 @@ $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự 
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu';
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn hiện đang chặn hoặc không hỗ trợ thư viện FTP, hãy liên hệ với nhà cung cấp để được kích hoạt.';
 $lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
+$lang_module['remote_api_access'] = 'Bật Remote API';
+$lang_module['remote_api_access_help'] = 'Nếu tắt toàn bộ quyền truy cập API từ bên ngoài sẽ bị chặn. Các API bên trong vẫn sử dụng bình thường';
+$lang_module['remote_api_log'] = 'Ghi lại nhật ký Remote API';
 
 $lang_module['plugin'] = 'Thiết lập Plugin';
 $lang_module['plugin_info'] = 'Plugin thi phải là file php được chứa trong thư mục &ldquo;<strong>includes/plugin/</strong>&rdquo;. Các Plugin này sẽ luôn luôn chạy cùng hệ thống khi được kích hoạt';

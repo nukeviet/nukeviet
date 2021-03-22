@@ -30,6 +30,8 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'N' => 
         array (
+            'NukeViet\\Module\\' => 16,
+            'NukeViet\\Api\\' => 13,
             'NukeViet\\' => 9,
         ),
         'L' => 
@@ -62,6 +64,14 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'OAuth\\' => 
         array (
             0 => __DIR__ . '/..' . '/and/oauth/src',
+        ),
+        'NukeViet\\Module\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules',
+        ),
+        'NukeViet\\Api\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/includes/api',
         ),
         'NukeViet\\' => 
         array (
@@ -99,6 +109,7 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PclZip' => __DIR__ . '/..' . '/vinades/pclzip/pclzip.lib.php',
     );
 
