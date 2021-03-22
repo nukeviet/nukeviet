@@ -134,3 +134,111 @@ function nv_admin_edit_result($result)
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
+
+/**
+ * @return array[]
+ */
+function nv_get_api_actions()
+{
+    global $lang_module, $sys_mods;
+
+    $array_apis = [
+        '' => []
+    ];
+    $array_keys = $array_cats = $array_apis;
+
+    // Các API của hệ thống
+    $files = nv_scandir(NV_ROOTDIR . '/includes/api', '/(.*?)/');
+    foreach ($files as $file) {
+        if (preg_match('/^([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
+            $class_name = $m[1];
+            $class_namespaces = 'NukeViet\\Api\\' . $class_name;
+            if (nv_class_exists($class_namespaces)) {
+                $class_cat = $class_namespaces::getCat();
+                $cat_title = isset($lang_module['api_' . $class_cat]) ? $lang_module['api_' . $class_cat] : $class_cat;
+                $api_title = isset($lang_module['api_' . $class_cat . '_' . $class_name]) ? $lang_module['api_' . $class_cat . '_' . $class_name] :$class_cat . '_' . $class_name;
+                if (!isset($array_apis[''][$class_cat])) {
+                    $array_apis[''][$class_cat] = [
+                        'title' => isset($lang_module['api_' . $class_cat]) ? $lang_module['api_' . $class_cat] : $class_cat,
+                        'apis' => []
+                    ];
+                }
+                $array_apis[''][$class_cat]['apis'][$class_name] = [
+                    'title' => $api_title,
+                    'cmd' => $class_name
+                ];
+                $array_keys[''][$class_name] = $class_name;
+                $array_cats[''][$class_name] = [
+                    'key' => $class_cat,
+                    'title' => $cat_title,
+                    'api_title' => $api_title
+                ];
+            }
+        }
+    }
+
+    $lang_module_backup = $lang_module;
+
+    // Các API của module cung cấp
+    foreach ($sys_mods as $module_name => $module_info) {
+        $module_file = $module_info['module_file'];
+        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/Api')) {
+            // Đọc ngôn ngữ tạm của module
+            $lang_module = [];
+            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
+                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
+            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php')) {
+                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
+            }
+
+            // Lấy các API
+            $files = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/Api', '/(.*?)/');
+            foreach ($files as $file) {
+                if (preg_match('/^([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
+                    $class_name = $m[1];
+                    $class_namespaces = 'NukeViet\\Module\\' . $module_file . '\\Api\\' . $class_name;
+                    if (nv_class_exists($class_namespaces)) {
+                        $class_cat = $class_namespaces::getCat();
+                        $cat_title = $class_cat ? $lang_module['api_' . $class_cat] : '';
+                        $api_title = $class_cat ? $lang_module['api_' . $class_cat . '_' . $class_name] : $lang_module['api_' . $class_name];
+
+                        // Xác định key
+                        if (!isset($array_keys[$module_name])) {
+                            $array_keys[$module_name] = [];
+                        }
+                        $array_keys[$module_name][$class_name] = $class_name;
+
+                        // Xác định cây thư mục
+                        if (!isset($array_apis[$module_name])) {
+                            $array_apis[$module_name] = [];
+                        }
+                        if (!isset($array_apis[$module_name][$class_cat])) {
+                            $array_apis[$module_name][$class_cat] = [
+                                'title' => $cat_title,
+                                'apis' => []
+                            ];
+                        }
+                        $array_apis[$module_name][$class_cat]['apis'][$class_name] = [
+                            'title' => $api_title,
+                            'cmd' => $class_name
+                        ];
+
+                        // Phân theo cat
+                        if (!isset($array_cats[$module_name])) {
+                            $array_cats[$module_name] = [];
+                        }
+                        $array_cats[$module_name][$class_name] = [
+                            'key' => $class_cat,
+                            'title' => $cat_title,
+                            'api_title' => $api_title
+                        ];
+                    }
+                }
+            }
+        }
+    }
+
+    $lang_module = $lang_module_backup;
+
+    return [$array_apis, $array_keys, $array_cats];
+}

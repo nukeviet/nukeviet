@@ -129,6 +129,14 @@
                     <td><label><input type="checkbox" name="nv_debug" value="1"{CFG_DEFINE.nv_debug}/> {LANG.nv_debug_help}</label></td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.remote_api_access}</strong></td>
+                    <td><label><input type="checkbox" name="remote_api_access" value="1"{CHECKED_REMOTE_API_ACCESS}/> {LANG.remote_api_access_help}</label></td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.remote_api_log}</strong></td>
+                    <td><input type="checkbox" name="remote_api_log" value="1"{CHECKED_REMOTE_API_LOG}/></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.error_send_email}</strong></td>
                     <td><input type="email" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
                 </tr>
