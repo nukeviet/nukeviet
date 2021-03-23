@@ -560,6 +560,12 @@
                                         <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.allow_null_origin}</strong></td>
+                                    <td>
+                                        <input type="checkbox" value="1" name="allow_null_origin" {CONFIG_CROSS.allow_null_origin}>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>

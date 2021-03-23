@@ -291,6 +291,7 @@ $lang_module['cors_admin_valid_domains'] = 'Domaine valide pour la zone d\'admin
 $lang_module['cors_admin_valid_ips'] = 'IP valide pour la zone d\'administration';
 $lang_module['cors_valid_domains_help'] = 'Entrez un domaine par ligne (veuillez entrer le formulaire complet http://votredomaine.com), les demandes de publication de ces domaines sont autorisées';
 $lang_module['cors_valid_ips_help'] = 'Entrez une adresse IP par ligne, la demande de publication de ces adresses IP est autorisée';
+$lang_module['allow_null_origin'] = 'Autoriser POST avec une origine NULL';
 $lang_module['admin_2step_opt'] = 'Les méthodes de vérification en deux étapes sont autorisées dans l\'administration';
 $lang_module['admin_2step_default'] = 'La méthode de vérification en deux étapes par défaut dans l\'administration';
 $lang_module['admin_2step_appconfig'] = 'Configurez l\'application ici';

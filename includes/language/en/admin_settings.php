@@ -291,6 +291,7 @@ $lang_module['cors_admin_valid_domains'] = 'Valid domain for the admin area';
 $lang_module['cors_admin_valid_ips'] = 'Valid IP for the admin area';
 $lang_module['cors_valid_domains_help'] = 'Enter one domain per line (please enter the full form http://yourdomain.com), post request from these domains are allowed';
 $lang_module['cors_valid_ips_help'] = 'Enter one IP per line, post request from these IPs are allowed';
+$lang_module['allow_null_origin'] = 'Allow POST with NULL Origin';
 $lang_module['admin_2step_opt'] = 'Two-step verification methods are allowed in administration';
 $lang_module['admin_2step_default'] = 'The default two-step verification method in administration';
 $lang_module['admin_2step_appconfig'] = 'Set up the application here';

@@ -201,6 +201,11 @@ class Request
     protected $validDomains = [];
 
     /**
+     * @since 4.5.00
+     */
+    private $allowNullOrigin = false;
+
+    /**
      * @param array $config
      * @param string $ip Client IP
      * @param \NukeViet\Core\Server|boolean $nv_Server
@@ -259,6 +264,7 @@ class Request
 
         $this->isRestrictDomain = !empty($config['domains_restrict']) ? true : false;
         $this->validDomains = !empty($config['domains_whitelist']) ? ((array) $config['domains_whitelist']) : [];
+        $this->allowNullOrigin = !empty($config['allow_null_origin']) ? true : false;
 
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
@@ -445,10 +451,12 @@ class Request
         // Cross-Site handle
         if (sizeof($_POST) or $this->method == 'POST') {
             if ($this->origin_key == 0 or $this->referer_key !== 1) {
+                // Post cross hoặc không same referer
                 if (!$this->restrictCrossDomain or in_array($this->remote_ip, $this->validCrossIPs)) {
                     $this->isIpValid = true;
                 }
             } else {
+                // Same referer hoặc không cross
                 $this->isIpValid = true;
             }
             if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
@@ -1561,8 +1569,13 @@ class Request
      */
     private function getAllowOriginHeaderValue()
     {
-        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self)
-        if (!$this->restrictCrossDomain or $this->origin_key === 1 or in_array($this->origin, $this->validCrossDomains)) {
+        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self) hoặc null và
+        if (
+            !$this->restrictCrossDomain or
+            $this->origin_key === 1 or
+            ($this->origin === 'null' and $this->allowNullOrigin) or
+            in_array($this->origin, $this->validCrossDomains)
+        ) {
             $this->isOriginValid = true;
             return $this->origin;
         }
