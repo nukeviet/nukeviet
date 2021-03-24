@@ -560,6 +560,19 @@
                                         <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.allow_null_origin}</strong></td>
+                                    <td>
+                                        <input type="checkbox" value="1" name="allow_null_origin" {CONFIG_CROSS.allow_null_origin}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.ip_allow_null_origin}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="ip_allow_null_origin">{CONFIG_CROSS.ip_allow_null_origin}</textarea>
+                                        <div class="form-text text-muted">{LANG.ip_allow_null_origin_help}</div>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
