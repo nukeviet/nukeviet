@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10/03/2010 10:51
  */
+
 if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }

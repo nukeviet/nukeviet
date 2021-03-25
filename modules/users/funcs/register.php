@@ -53,8 +53,7 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
-}
-elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
     $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
     if (!empty($sso_redirect)) {
         $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
