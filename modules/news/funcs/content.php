@@ -107,6 +107,7 @@ if ($array_post_user['postcontent']) {
 }
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
 
 if (!$array_post_user['addcontent']) {
     if (defined('NV_IS_USER')) {
@@ -157,7 +158,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $contentid = (isset($rowcontent_old['id'])) ? intval($rowcontent_old['id']) : 0;
 
         if (empty($contentid)) {
-            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            nv_redirect_location($base_url);
         }
 
         if ($nv_Request->get_int('delcontent', 'get') and (empty($rowcontent_old['status']) or $array_post_user['delcontent'])) {
@@ -171,9 +172,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $nv_Cache->delMod($module_name);
             }
 
-            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            nv_redirect_location($base_url);
         } elseif (!(empty($rowcontent_old['status']) or $array_post_user['editcontent'])) {
-            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            nv_redirect_location($base_url);
         }
 
         $page_title = $lang_module['update_content'];
@@ -667,6 +668,13 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $num_items = $db->query($db->sql())
         ->fetchColumn();
+
+    // Không cho tùy ý đánh số page
+    $total = ceil($num_items/$per_page);
+    if ($page > $total) {
+        nv_redirect_location($base_url);
+    }
+
     if ($num_items) {
         $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
             ->order('id DESC')

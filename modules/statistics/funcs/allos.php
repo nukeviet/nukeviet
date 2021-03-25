@@ -12,6 +12,7 @@ if (! defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $lang_module['os'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['os'];

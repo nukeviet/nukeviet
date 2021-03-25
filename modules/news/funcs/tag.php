@@ -32,10 +32,18 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
     list($tid, $image_tag, $description, $key_words) = $stmt->fetch(3);
 
     if ($tid > 0) {
-        $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
+        $base_url = $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
         if ($page > 1) {
+            $base_url_rewrite .= '/page-' . $page;
             $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
         }
+        
+        $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+        $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+        if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
+            nv_redirect_location($base_url_check);
+        }
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
         $array_mod_title[] = array(
             'catid' => 0,
@@ -53,6 +61,9 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
             ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ')');
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        $total = ceil($num_items/$per_page);
+        betweenURLs($page, $total, $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by.' DESC')
