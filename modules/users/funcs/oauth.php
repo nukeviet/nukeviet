@@ -25,6 +25,25 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     }
 }
 
+if (defined('SSO_CLIENT_DOMAIN')) {
+    $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+    $sso_client = $nv_Request->get_title('client', 'get', '');
+    if (!empty($sso_client)) {
+        if (!in_array($sso_client, $allowed_client_origin)) {
+            // 406 Not Acceptable
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+        }
+        $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
+        // Xử lý nếu client đã đăng nhập rồi mà submit vào đây nữa
+        if (defined('NV_IS_USER')) {
+            opidr_login([
+                'status' => 'success',
+                'mess' => $lang_module['login_ok']
+            ]);
+        }
+    }
+}
+
 if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
     $server = $nv_Request->get_string('server', 'get', '');
 
