@@ -1522,6 +1522,33 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 }
 
 /**
+ * betweenURLs()
+ * 
+ * @param integer $page
+ * @param integer $total
+ * @param string $base_url
+ * @param string $urlappend
+ * @param string $prevPage
+ * @param string $nextPage
+ */
+function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPage)
+{
+    if ($page > 1 and $page > $total) {
+        nv_redirect_location($base_url);
+    }
+
+    if ($page > 1) {
+        $prev = $page - 1;
+        $prevPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($prev > 1 ? ($urlappend . $prev) : ''), true);
+    }
+
+    if ($page >= 1 and $page < $total) {
+        $next = $page + 1;
+        $nextPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . $urlappend . $next, true);
+    }
+}
+
+/**
  * nv_generate_page()
  *
  * @param string $base_url

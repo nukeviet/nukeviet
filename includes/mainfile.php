@@ -23,7 +23,7 @@ define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIM
 
 // Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = array();
-$page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
+$page_title = $key_words = $canonicalUrl = $prevPage = $nextPage = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
 // Ket noi voi cac file constants, config
@@ -308,7 +308,7 @@ $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 $global_config['array_preview_theme'] = explode(',', $global_config['preview_theme']);
 $global_config['array_user_allowed_theme'] = empty($global_config['user_allowed_theme']) ? [] : json_decode($global_config['user_allowed_theme'], true);
 
-define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
+define('NV_MAIN_DOMAIN', (!empty($global_config['site_domain']) and in_array($global_config['site_domain'], $global_config['my_domains'])) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
 $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
