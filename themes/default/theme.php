@@ -12,6 +12,20 @@ if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+$theme_config = [
+    'pagination' => [
+        // Nếu dùng bootstrap 3: 'pagination'
+        // Nếu dùng bootstrap 4/5: 'pagination justify-content-center'
+        'ul_class' => 'pagination',
+        // Nếu dùng bootstrap 3: '',
+        // Nếu dùng bootstrap 4/5: 'page-item'
+        'li_class' => '',
+        // Nếu dùng bootstrap 3: '',
+        // Nếu dùng bootstrap 4/5: 'page-link'
+        'a_class' => ''
+    ]
+];
+
 /**
  * @param string $title
  * @param string $content
