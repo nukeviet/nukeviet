@@ -265,23 +265,24 @@ $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 $full_theme = true;
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$canonicalUrl = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 if (!empty($alias_department)) {
     $base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
-    if (isset($array_op[1]) and $array_op[1] == 0) {
+    $canonicalUrl = $base_url;
+    if (isset($array_op[1]) and $array_op[1] == '0') {
         $base_url .= '/0';
         $full_theme = false;
     }
 }
 
 $base_url_rewrite = nv_url_rewrite($base_url, true);
-$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-    nv_redirect_location($base_url_rewrite_location);
+$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+if (strpos($_SERVER['REQUEST_URI'], $base_url_check) === 0) {
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($canonicalUrl, true);
+} elseif (strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) === 0) {
+    $canonicalUrl = nv_url_rewrite($canonicalUrl, true);
 } else {
-    $canonicalUrl = $base_url_rewrite;
+    nv_redirect_location($base_url_check);
 }
 
 $array_content = array(

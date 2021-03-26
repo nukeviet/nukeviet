@@ -27,6 +27,7 @@ foreach ($global_array_plans as $row) {
     $contents['rows'][$row['id']]['allowed'] = isset($global_array_uplans[$row['id']]) ? true : false;
 }
 
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 $page_title = $module_info['site_title'];
 $contents = nv_banner_theme_main($contents, $manament);
 

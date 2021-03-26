@@ -402,20 +402,6 @@ function nv_html_meta_tags($html = true)
         ];
     }
 
-    if (empty($canonicalUrl)) {
-        if ($home) {
-            $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-        } else {
-            $canonicalUrl = str_replace(NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl']);
-        }
-    }
-    if (substr($canonicalUrl, 0, 4) != 'http') {
-        if (substr($canonicalUrl, 0, 1) != '/') {
-            $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
-        }
-        $canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
-    }
-
     // Open Graph protocol http://ogp.me
     if ($global_config['metaTagsOgp']) {
         if (empty($meta_property['og:title'])) {
@@ -428,7 +414,15 @@ function nv_html_meta_tags($html = true)
             $meta_property['og:type'] = 'website';
         }
         if (empty($meta_property['og:url'])) {
-            $meta_property['og:url'] = $canonicalUrl;
+            $ogUrl = !empty($canonicalUrl) ? $canonicalUrl : $client_info['selfurl'];
+            $ogUrl = str_replace(NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $ogUrl);
+            if (substr($ogUrl, 0, 4) != 'http') {
+                if (substr($ogUrl, 0, 1) != '/') {
+                    $ogUrl = NV_BASE_SITEURL . $ogUrl;
+                }
+                $ogUrl = NV_MAIN_DOMAIN . $ogUrl;
+            }
+            $meta_property['og:url'] = $ogUrl;
         }
         $meta_property['og:site_name'] = $global_config['site_name'];
 
@@ -494,11 +488,35 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $canonicalUrl, $module_info, $db_config, $nv_Cache;
+    global $canonicalUrl, $prevPage, $nextPage, $module_info, $db_config, $nv_Cache;
 
     $return = [];
     if (!empty($canonicalUrl)) {
+        if (substr($canonicalUrl, 0, 4) != 'http') {
+            if (substr($canonicalUrl, 0, 1) != '/') {
+                $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
+            }
+            $canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
+        }
         $return[] = array( 'rel' => 'canonical', 'href' => $canonicalUrl );
+    }
+    if (!empty($prevPage)) {
+        if (substr($prevPage, 0, 4) != 'http') {
+            if (substr($prevPage, 0, 1) != '/') {
+                $prevPage = NV_BASE_SITEURL . $prevPage;
+            }
+            $prevPage = NV_MAIN_DOMAIN . $prevPage;
+        }
+        $return[] = array( 'rel' => 'prev', 'href' => $prevPage );
+    }
+    if (!empty($nextPage)) {
+        if (substr($nextPage, 0, 4) != 'http') {
+            if (substr($nextPage, 0, 1) != '/') {
+                $nextPage = NV_BASE_SITEURL . $nextPage;
+            }
+            $nextPage = NV_MAIN_DOMAIN . $nextPage;
+        }
+        $return[] = array( 'rel' => 'next', 'href' => $nextPage );
     }
 
     $nv_html_site_rss = nv_html_site_rss(false);

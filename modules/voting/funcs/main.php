@@ -12,17 +12,26 @@ if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 if (empty($vid)) {
+    $base_url_rewrite = nv_url_rewrite($base_url, true);
+    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+    if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
+        nv_redirect_location($base_url_check);
+    }
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
 
     $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
-    $allowed = array();
-    $is_update = array();
+    $allowed = [];
+    $is_update = [];
 
     $a = 0;
     foreach ($list as $row) {
@@ -105,15 +114,8 @@ if (empty($vid)) {
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $checkss = $nv_Request->get_title('checkss', 'get', '');
-    $lid = $nv_Request->get_title('lid', 'get', '');
-    $captcha = $nv_Request->get_title('captcha', 'get', '');
-
-    if ($checkss != md5($vid . NV_CHECK_SESSION) or $vid <= 0 or $lid == '') {
-        header('location:' . $global_config['site_url']);
-        exit();
-    }
-
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . '&amp;vid=' . $vid, true);
+    
     $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time, vote_one FROM ' . NV_PREFIXLANG . '_' . $module_data;
     if (!defined('NV_IS_MODADMIN')) {
         $sql .= ' WHERE act=1';
@@ -152,6 +154,8 @@ if (empty($vid)) {
         }
     }
 
+    $lid = $nv_Request->get_title('lid', 'get', '');
+
     $array_id = explode(',', $lid);
     $array_id = array_map('intval', $array_id);
     $array_id = array_diff($array_id, array(
@@ -162,6 +166,14 @@ if (empty($vid)) {
     $note = '';
 
     if ($count) {
+        $checkss = $nv_Request->get_title('checkss', 'get', '');
+        $captcha = $nv_Request->get_title('captcha', 'get', '');
+        
+        if ($checkss != md5($vid . NV_CHECK_SESSION)) {
+            header('location:' . $global_config['site_url']);
+            exit();
+        }
+
         if ($row['active_captcha'] and !nv_capcha_txt($captcha)) {
             die('ERROR|' . $lang_global['securitycodeincorrect']);
         }
@@ -202,7 +214,7 @@ if (empty($vid)) {
     $result = $db->query($sql);
 
     $totalvote = 0;
-    $vrow = array();
+    $vrow = [];
 
     while ($row2 = $result->fetch()) {
         $totalvote += (int) $row2['hitstotal'];
@@ -224,6 +236,7 @@ if (empty($vid)) {
         'note' => $note
     );
 
+    $page_title = $row['question'];
     $contents = voting_result($voting);
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -231,7 +244,7 @@ if (empty($vid)) {
     if ($is_ajax) {
         echo $contents;
     } else {
-        echo nv_site_theme($contents, false);
+        echo nv_site_theme($contents, true);
     }
     include NV_ROOTDIR . '/includes/footer.php';
 }

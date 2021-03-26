@@ -28,12 +28,13 @@ if (empty($row)) {
 }
 
 $contents = '';
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host, true);
 $mod_title = $page_title = sprintf($lang_module['refererbysite'], $host);
 $key_words = $module_info['keywords'];
 
-$cts = array();
+$cts = [];
 $cts['caption'] = $page_title;
-$cts['rows'] = array();
+$cts['rows'] = [];
 $cts['rows']['Jan'] = array( 'fullname' => $lang_global['january'], 'count' => $row['month01'] );
 $cts['rows']['Feb'] = array( 'fullname' => $lang_global['february'], 'count' => $row['month02'] );
 $cts['rows']['Mar'] = array( 'fullname' => $lang_global['march'], 'count' => $row['month03'] );

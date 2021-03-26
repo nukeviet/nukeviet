@@ -79,8 +79,14 @@ function nv_get_sub_rss_link($rssarray, $id)
 }
 
 $page_title = $module_info['site_title'];
-if (isset($array_op[0])) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+$base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+if (strpos($_SERVER['REQUEST_URI'], $base_url_check) === 0) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) === 0) {
+    $canonicalUrl = $base_url_rewrite;
+} else {
+    nv_redirect_location($base_url_check);
 }
 
 $array = '';
