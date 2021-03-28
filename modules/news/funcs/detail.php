@@ -407,8 +407,8 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
     $content_comment = '';
 }
 
-// Xu ly Layout tuy chinh
-$module_info['layout_funcs'][$op_file] = !empty($news_contents['layout_func']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
+// Xu ly Layout tuy chinh (khong ap dung cho theme mobile_default)
+$module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and "mobile_default" != $global_config['module_theme']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
 
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 
