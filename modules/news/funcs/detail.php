@@ -367,13 +367,33 @@ if ($news_contents['allowed_rating']) {
     }
     $news_contents['stringrating'] = sprintf($lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating']);
     $news_contents['numberrating'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating'], 1) : 0;
-    $news_contents['langstar'] = [
-        'note' => $lang_module['star_note'],
-        'verypoor' => $lang_module['star_verypoor'],
-        'poor' => $lang_module['star_poor'],
-        'ok' => $lang_module['star_ok'],
-        'good' => $lang_module['star_good}'],
-        'verygood' => $lang_module['star_verygood']
+    $news_contents['numberrating_star'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating']) : 0;
+    $news_contents['stars'] = [
+        [
+            'val' => '1',
+            'title' => $lang_module['star_verypoor'],
+            'checked' => 1 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '2',
+            'title' => $lang_module['star_poor'],
+            'checked' => 2 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '3',
+            'title' => $lang_module['star_ok'],
+            'checked' => 3 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '4',
+            'title' => $lang_module['star_good'],
+            'checked' => 4 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '5',
+            'title' => $lang_module['star_verygood'],
+            'checked' => 5 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ]
     ];
 }
 
