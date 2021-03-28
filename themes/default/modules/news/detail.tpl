@@ -165,30 +165,39 @@
                 </span>
                 <!-- END: data_rating -->
                 <div style="padding: 5px;">
-                    <input class="hover-star" type="radio" value="1" title="{LANGSTAR.verypoor}" /><input class="hover-star" type="radio" value="2" title="{LANGSTAR.poor}" /><input class="hover-star" type="radio" value="3" title="{LANGSTAR.ok}" /><input class="hover-star" type="radio" value="4" title="{LANGSTAR.good}" /><input class="hover-star" type="radio" value="5" title="{LANGSTAR.verygood}" /><span id="hover-test" style="margin: 0 0 0 20px;">{LANGSTAR.note}</span>
+                    <!-- BEGIN: star --><input class="hover-star required" type="radio" value="{STAR.val}" title="{STAR.title}"{STAR.checked}/><!-- END: star -->
+                    <span id="hover-test" style="margin: 0 0 0 20px;">{LANG.star_note}</span>
                 </div>
             </div>
         </form>
         <script type="text/javascript">
         $(function() {
-            var sr = 0;
-            $(".hover-star").rating({
-                focus: function(b, c) {
-                    var a = $("#hover-test");
-                    2 != sr && (a[0].data = a[0].data || a.html(), a.html(c.title || "value: " + b), sr = 1)
+            var isDisable = false;
+            $('.hover-star').rating({
+                focus : function(value, link) {
+                    var tip = $('#hover-test');
+                    if (!isDisable) {
+                        tip[0].data = tip[0].data || tip.html();
+                        tip.html(link.title || 'value: ' + value)
+                    }
                 },
-                blur: function(b, c) {
-                    var a = $("#hover-test");
-                    2 != sr && ($("#hover-test").html(a[0].data || ""), sr = 1)
+                blur : function(value, link) {
+                    var tip = $('#hover-test');
+                    if (!isDisable) {
+                        $('#hover-test').html(tip[0].data || '')
+                    }
                 },
-                callback: function(b, c) {
-                    1 == sr && (sr = 2, $(".hover-star").rating("disable"), sendrating("{NEWSID}", b, "{NEWSCHECKSS}"))
+                callback : function(value, link) {
+                    if (!isDisable) {
+                        isDisable = true;
+                        $('.hover-star').rating('disable');
+                        sendrating('{NEWSID}', value, '{NEWSCHECKSS}');
+                    }
                 }
             });
-            $(".hover-star").rating("select", "{NUMBERRATING}");
             <!-- BEGIN: disablerating -->
             $(".hover-star").rating('disable');
-            sr = 2;
+            isDisable = true;
             <!-- END: disablerating -->
         })
         </script>
