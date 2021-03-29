@@ -51,6 +51,11 @@
 		</table>
 	</div>
 </form>
+<!-- BEGIN: generate_page -->
+<div class="text-center">
+    {GENERATE_PAGE}
+</div>
+<!-- END: generate_page -->
 <script type="text/javascript">
 $(function(){
 	$('.tags-tip').tooltip();
