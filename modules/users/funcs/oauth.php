@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 10/03/2010 10:51
  */
+
 if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
@@ -17,11 +18,29 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     if (!empty($nv_redirect)) {
         $nv_Request->set_Session('nv_redirect_' . $module_data, $nv_redirect);
     }
-}
-elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
     $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
     if (!empty($sso_redirect)) {
         $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+
+if (defined('SSO_CLIENT_DOMAIN')) {
+    $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+    $sso_client = $nv_Request->get_title('client', 'get', '');
+    if (!empty($sso_client)) {
+        if (!in_array($sso_client, $allowed_client_origin)) {
+            // 406 Not Acceptable
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+        }
+        $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
+        // Xử lý nếu client đã đăng nhập rồi mà submit vào đây nữa
+        if (defined('NV_IS_USER')) {
+            opidr_login([
+                'status' => 'success',
+                'mess' => $lang_module['login_ok']
+            ]);
+        }
     }
 }
 

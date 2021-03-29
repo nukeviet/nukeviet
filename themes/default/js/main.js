@@ -246,11 +246,17 @@ function openID_load(a) {
 }
 
 function openID_result() {
-    $("#openidResult").fadeIn();
+    var resElement = $("#openidResult");
+    resElement.fadeIn();
     setTimeout(function() {
-        "" != $("#openidResult").attr("data-redirect") ? window.location.href = $("#openidResult").attr("data-redirect") : "success" == $("#openidResult").attr("data-result") ? window.location.href = window.location.href : $("#openidResult").hide(0).text("").attr("data-result", "").attr("data-redirect", "")
-    }, 5E3);
-    return !1
+        if (resElement.data('redirect') != '') {
+            window.location.href = resElement.data('redirect');
+        } else if (resElement.data('result') == 'success') {
+            location.reload();
+        } else {
+            resElement.hide(0).html('').data('result', '').data('redirect', '');
+        }
+    }, 5000);
 }
 
 // QR-code

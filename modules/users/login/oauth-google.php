@@ -24,7 +24,6 @@ $serviceFactory = new \OAuth\ServiceFactory();
 $credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google');
 
 // Instantiate the Google service using the credentials, http client and storage mechanism for the token
-/** @var $googleService Google */
 $googleService = $serviceFactory->createService('google', $credentials, $storage, array(
     'userinfo_email',
     'userinfo_profile'
@@ -43,8 +42,8 @@ if (!empty($_GET['code'])) {
             'result' => 'is_res',
             'id' => $result['id'],
             'contact/email' => $result['email'],
-            'namePerson/first' => $result['family_name'],
-            'namePerson/last' => $result['given_name'],
+            'namePerson/first' => empty($result['family_name']) ? '' : $result['family_name'],
+            'namePerson/last' => empty($result['given_name']) ? '' : $result['given_name'],
             'namePerson' => $result['name'],
             'person/gender' => empty($result['gender']) ? '' : $result['gender'],
             'server' => $server,
