@@ -940,9 +940,17 @@ function openid_callback($openid_info)
 
     $xtpl = new XTemplate('openid_callback.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('OPIDRESULT', $openid_info);
-    if ($openid_info['status'] == 'success') {
-        $xtpl->parse('main.success');
+
+    if (!empty($openid_info['client'])) {
+        $xtpl->parse('main.client');
+    } else {
+        if ($openid_info['status'] == 'success') {
+            $xtpl->parse('main.regular.success');
+        }
+
+        $xtpl->parse('main.regular');
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

@@ -243,6 +243,11 @@ function nv_site_theme($contents, $full = true)
         $xtpl->parse('main.no_drag_block');
     }
 
+    if (defined('SSO_REGISTER_DOMAIN')) {
+        $xtpl->assign('SSO_REGISTER_ORIGIN', SSO_REGISTER_DOMAIN);
+        $xtpl->parse('main.crossdomain_listener');
+    }
+
     $xtpl->parse('main');
     $sitecontent = $xtpl->text('main');
 
