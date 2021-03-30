@@ -85,9 +85,6 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $xtpl->parse('main.loop');
     }
     $sth->closeCursor();
-    if (empty($q) and $number >= $module_config[$module_name]['per_page']) {
-        $xtpl->parse('main.other');
-    }
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
     if (!empty($q)) {

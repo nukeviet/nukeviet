@@ -41,11 +41,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="2"><input class="btn btn-danger" name="submit_dell" type="button" onclick="nv_del_check_tags(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{GLANG.delete}" /></td>
-					<td colspan="3">
-						<!-- BEGIN: other -->
-						{LANG.alias_search}
-						<!-- END: other -->
-					</td>
+					<td colspan="3"></td>
 				</tr>
 			</tfoot>
 		</table>
