@@ -354,4 +354,3 @@ $lang_module['status_13'] = 'Sauvegarder l\'article, passer à la rédacteur en 
 $lang_module['error_edit'] = 'Les messages sont des modérateurs modérés. Vous ne pouvez pas éditer ensuite.';
 $lang_module['not_edit_by_admin'] = 'Vous avez été détourné pour éditer cette publication. Vos modifications ne peuvent pas être sauvegardées dans le système, copiez-les à nouveau pour éviter de perdre vos modifications.';
 $lang_module['post_is_editing'] = 'édite cet article';
-$lang_module['all_tags'] = 'Tous les tags';
