@@ -38,13 +38,19 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $where = "keywords LIKE '%" . $db_slave->dblikeescape($q) . "%'";
         $db_slave->sqlreset()
         ->select('COUNT(tid)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
-        ->where($where);
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_tags');
+        if ($incomplete === true) {
+            $where .= "AND description = \'\'";
+        }
+        $db_slave->where($where);
         $sth = $db_slave->prepare($db_slave->sql());
     } else {
         $db_slave->sqlreset()
         ->select('COUNT(tid)')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_tags');
+        if ($incomplete === true) {
+            $db_slave->where('description = \'\'');
+        }
         $sth = $db_slave->prepare($db_slave->sql());
     }
 
@@ -52,14 +58,13 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $num_items = $sth->fetchColumn();
     $db_slave->sqlreset()
     ->select('*')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
-    ->order('alias ASC')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
-
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags');
     if ($incomplete === true) {
         $db_slave->where('description = \'\'');
     }
+    $db_slave->order('alias ASC')
+    ->limit($per_page)
+    ->offset(($page - 1) * $per_page);
 
     if (!empty($q)) {
         $q = strip_punctuation($q);
@@ -76,6 +81,9 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $sth->execute();
 
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
+    if ($incomplete === true) {
+        $base_url .= ($incomplete === true ? '&amp;incomplete=1' : '');
+    }
     if (!empty($q)) {
         $base_url .= '&amp;q=' . urlencode($q);
     }
@@ -105,7 +113,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
     }
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-    if (!empty($q)) {
+    if (!empty($q) or $incomplete === 1) {
         $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'module_show_list');
     }
     if (!empty($generate_page)) {
