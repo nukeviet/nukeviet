@@ -25,7 +25,6 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $page = $nv_Request->get_absint('page', 'get', 1);
     $per_page_old = $nv_Request->get_absint('per_page_tagadmin_' . $module_data, 'cookie', 50);
     $per_page = $nv_Request->get_absint('per_page', 'get', $per_page_old);
-    $num_items = 0;
 
     if ($per_page < 1 and $per_page > 500) {
         $per_page = 50;
@@ -40,7 +39,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $where[] = "keywords LIKE '%" . $db_slave->dblikeescape($q) . "%'";
         $base_url .= '&amp;q=' . urlencode($q);
     }
-    if (isset($incomplete) and $incomplete === true) {
+    if ($incomplete === true) {
         $where[] = "description = ''";
         $base_url .= '&amp;incomplete=1';
     }
