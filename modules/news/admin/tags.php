@@ -22,20 +22,24 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 function nv_show_tags_list($q = '', $incomplete = false)
 {
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
-    $page = $nv_Request->get_int('page', 'get', 1);
-    $per_page_old = $nv_Request->get_int('per_page', 'cookie', 50);
-    $per_page = $nv_Request->get_int('per_page', 'get', $per_page_old);
+    $page = $nv_Request->get_absint('page', 'get', 1);
+    $per_page_old = $nv_Request->get_absint('per_page_tagadmin_' . $module_data, 'cookie', 50);
+    $per_page = $nv_Request->get_absint('per_page', 'get', $per_page_old);
     $num_items = 0;
 
     if ($per_page < 1 and $per_page > 500) {
         $per_page = 50;
     }
     if ($per_page_old != $per_page) {
-        $nv_Request->set_Cookie('per_page', $per_page, NV_LIVE_COOKIE_TIME);
+        $nv_Request->set_Cookie('per_page_tagadmin_' . $module_data, $per_page, NV_LIVE_COOKIE_TIME);
     }
 
-    if (! empty($q)) {
-        $where = "keywords LIKE " . $db_slave->quote('%' . $q . '%');
+    $q = $nv_Request->get_title('q', 'get', '');
+    $q = str_replace('+', ' ', $q);
+    $qhtml = nv_htmlspecialchars($q);
+
+    if (!empty($q)) {
+        $where = "keywords LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
         $db_slave->sqlreset()
         ->select('COUNT(tid)')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
@@ -61,7 +65,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $db_slave->where('description = \'\'');
     }
 
-    if (! empty($q)) {
+    if (!empty($q)) {
         $q = strip_punctuation($q);
         $db_slave->where('keywords LIKE :keywords');
     } else {
@@ -70,13 +74,15 @@ function nv_show_tags_list($q = '', $incomplete = false)
     }
 
     $sth = $db_slave->prepare($db_slave->sql());
-    if (! empty($q)) {
+    if (!empty($q)) {
         $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
     }
     $sth->execute();
 
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
-
+    if (!empty($q)) {
+        $base_url .= '&amp;q=' . $q;
+    }
     $xtpl = new XTemplate('tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
