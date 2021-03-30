@@ -22,25 +22,46 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 function nv_show_tags_list($q = '', $incomplete = false)
 {
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
+    $page = $nv_Request->get_absint('page', 'get', 1);
+    $per_page_old = $nv_Request->get_absint('per_page_tagadmin_' . $module_data, 'cookie', 50);
+    $per_page = $nv_Request->get_absint('per_page', 'get', $per_page_old);
 
-    $db_slave->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $module_data . '_tags')->order('alias ASC');
+    if ($per_page < 1 and $per_page > 500) {
+        $per_page = 50;
+    }
+    if ($per_page_old != $per_page) {
+        $nv_Request->set_Cookie('per_page_tagadmin_' . $module_data, $per_page, NV_LIVE_COOKIE_TIME);
+    }
 
+    $where = [];
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
+    if (!empty($q)) {
+        $where[] = "keywords LIKE '%" . $db_slave->dblikeescape($q) . "%'";
+        $base_url .= '&amp;q=' . urlencode($q);
+    }
     if ($incomplete === true) {
-        $db_slave->where('description = \'\'');
+        $where[] = "description = ''";
+        $base_url .= '&amp;incomplete=1';
     }
 
-    if (! empty($q)) {
-        $q = strip_punctuation($q);
-        $db_slave->where('keywords LIKE :keywords');
-    } else {
-        $per_page = $nv_Request->get_int('per_page', 'cookie', $module_config[$module_name]['per_page']);
-        $db_slave->order('alias ASC')->limit($per_page);
-    }
+    $db_slave->sqlreset()
+    ->select('COUNT(tid)')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+    ->where(implode(' AND ', $where));
 
     $sth = $db_slave->prepare($db_slave->sql());
-    if (! empty($q)) {
-        $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
-    }
+    $sth->execute();
+    $num_items = $sth->fetchColumn();
+
+    $db_slave->sqlreset()
+    ->select('*')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+    ->where(implode(' AND ', $where))
+    ->order('alias ASC')
+    ->limit($per_page)
+    ->offset(($page - 1) * $per_page);
+
+    $sth = $db_slave->prepare($db_slave->sql());
     $sth->execute();
 
     $xtpl = new XTemplate('tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -64,9 +85,17 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $xtpl->parse('main.loop');
     }
     $sth->closeCursor();
-
     if (empty($q) and $number >= $module_config[$module_name]['per_page']) {
         $xtpl->parse('main.other');
+    }
+
+    $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
+    if (!empty($q)) {
+        $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'module_show_list');
+    }
+    if (!empty($generate_page)) {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
     }
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -96,7 +125,6 @@ if ($nv_Request->isset_request('del_tid', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 } elseif ($nv_Request->isset_request('q', 'get')) {
     $q = $nv_Request->get_title('q', 'get', '');
-
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_show_tags_list($q);
     include NV_ROOTDIR . '/includes/footer.php';
