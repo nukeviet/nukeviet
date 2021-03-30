@@ -34,8 +34,6 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $nv_Request->set_Cookie('per_page_tagadmin_' . $module_data, $per_page, NV_LIVE_COOKIE_TIME);
     }
 
-    $q = $nv_Request->get_title('q', 'get', '');
-    $q = str_replace('+', ' ', $q);
     $qhtml = nv_htmlspecialchars($q);
 
     if (!empty($q)) {
