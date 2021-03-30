@@ -106,7 +106,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $xtpl->parse('main.other');
     }
 
-    $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
+    $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'module_show_list');
     if (!empty($generate_page)) {
         $xtpl->assign('GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.generate_page');
@@ -139,7 +139,6 @@ if ($nv_Request->isset_request('del_tid', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 } elseif ($nv_Request->isset_request('q', 'get')) {
     $q = $nv_Request->get_title('q', 'get', '');
-
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_show_tags_list($q);
     include NV_ROOTDIR . '/includes/footer.php';
