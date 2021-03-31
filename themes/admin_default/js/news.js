@@ -296,7 +296,7 @@ function nv_del_content_result(res) {
     return false;
 }
 
-function get_alias_tags(op) {
+function get_alias_tags() {
     var title = strip_tags(document.getElementById('idtitle').value);
     if (title != '') {
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias_tag&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title), function(res) {
