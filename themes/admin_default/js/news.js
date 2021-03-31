@@ -296,6 +296,20 @@ function nv_del_content_result(res) {
     return false;
 }
 
+function get_alias_tags(op) {
+    var title = strip_tags(document.getElementById('idtitle').value);
+    if (title != '') {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias_tag&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title), function(res) {
+            if (res != "") {
+                document.getElementById('idalias').value = res;
+            } else {
+                document.getElementById('idalias').value = '';
+            }
+        });
+    }
+    return false;
+}
+
 function get_alias(mod, id) {
     var title = strip_tags(document.getElementById('idtitle').value);
     if (title != '') {

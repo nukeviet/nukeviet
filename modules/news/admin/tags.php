@@ -134,23 +134,22 @@ list($tid, $title, $alias, $description, $image, $keywords) = array( 0, '', '', 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savetag = $nv_Request->get_int('savetag', 'post', 0);
-if (! empty($savetag)) {
-    $title = $nv_Request->get_title('mtitle', 'post', '');
-    $list_tag = explode(PHP_EOL, $title);
-    $msg_lg = 'add_multil_tags';
+if (!empty($savetag)) {
+    $title = $nv_Request->get_textarea('mtitle', '', NV_ALLOWED_HTML_TAGS, true);
+    $list_tag = explode('<br />', strip_tags($title, '<br>'));
     foreach ($list_tag as $tag_i) {
         $sth = $db->prepare('INSERT IGNORE INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, keywords) VALUES (0, :title, :alias, :keywords)');
         $sth->bindParam(':title', $tag_i, PDO::PARAM_STR);
         $sth->bindParam(':alias', change_alias_tags($tag_i), PDO::PARAM_STR);
         $sth->bindParam(':keywords', $tag_i, PDO::PARAM_STR);
         $sth->execute();
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'add_multil_tags', change_alias_tags($tag_i), $admin_info['userid']);
     }
-    nv_insert_logs(NV_LANG_DATA, $module_name, $msg_lg, $alias, $admin_info['userid']);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ($incomplete ? '&incomplete=1' : ''));
 }
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $tid = $nv_Request->get_int('tid', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '');
     $keywords = $nv_Request->get_title('keywords', 'post', '');
@@ -158,6 +157,11 @@ if (! empty($savecat)) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
+    $keywords = explode(',', $keywords);
+    $keywords = array_map('trim', $keywords);
+    $keywords = array_diff($keywords, array(''));
+    $keywords = array_unique($keywords);
+    $keywords = implode(',', $keywords);
     $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($alias) : change_alias_tags($alias);
 
     $image = $nv_Request->get_string('image', 'post', '');
@@ -220,7 +224,7 @@ $xtpl->assign('alias', $alias);
 $xtpl->assign('keywords', $keywords);
 $xtpl->assign('description', nv_htmlspecialchars(nv_br2nl($description)));
 
-if (! empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
+if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
     $currentpath = dirname($image);
 }
@@ -228,7 +232,7 @@ $xtpl->assign('image', $image);
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }
