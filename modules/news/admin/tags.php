@@ -155,7 +155,7 @@ if (! empty($savecat)) {
         $error = $lang_module['error_name'];
     } else {
         if ($tid == 0) {
-            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, description, image, keywords) VALUES (0, :alias, :title, :description, :image, :keywords)');
+            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, description, image, keywords) VALUES (0, :title, :alias, :description, :image, :keywords)');
             $msg_lg = 'add_tags';
         } else {
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title, alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid);
