@@ -35,8 +35,12 @@
 			</tfoot>
 			<tbody>
 				<tr>
+					<td class="text-right"><strong>{LANG.name}: </strong> <sup class="required">(∗)</sup></td>
+					<td><input class="form-control w500" name="title" id="idtitle" type="text" value="{title}" maxlength="250" /><span class="text-middle">{GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max}</span></td>
+				</tr>
+				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong> <sup class="required">(∗)</sup></td>
-					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="250" /><span class="text-middle">{GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max}</span></td>
+					<td><input class="form-control w500 pull-left" name="alias" id="idalias" type="text" value="{alias}" maxlength="250" />&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();" style="margin-top: 10px">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
@@ -59,9 +63,9 @@ var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
 CFG.upload_path = '{UPLOAD_PATH}';
 $(document).ready(function(){
-	$("#aliaslength").html($("#idalias").val().length);
-	$("#idalias").bind("keyup paste", function() {
-		$("#aliaslength").html($(this).val().length);
+	$("#titlelength").html($("#idtitle").val().length);
+	$("#idtitle").bind("keyup paste", function() {
+		$("#titlelength").html($(this).val().length);
 	});
 
 	$("#descriptionlength").html($("#description").val().length);
@@ -69,5 +73,10 @@ $(document).ready(function(){
 		$("#descriptionlength").html($(this).val().length);
 	});
 });
+<!-- BEGIN: getalias -->
+$("#idtitle").change(function() {
+	get_alias();
+});
+<!-- END: getalias -->
 </script>
 <!-- END: main -->

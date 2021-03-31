@@ -6,6 +6,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
 				<col class="w50" />
+				<col class="w250" />
 				<col span="2" />
 				<col class="w100" />
 				<col class="w150" />
@@ -13,6 +14,7 @@
 			<thead>
 				<tr>
 					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+					<th>{LANG.name}</th>
 					<th>{LANG.alias}</th>
 					<th>{LANG.keywords}</th>
 					<th class="text-center">{LANG.numlinks}</th>
@@ -23,6 +25,7 @@
 				<!-- BEGIN: loop -->
 				<tr>
 					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.tid}" name="idcheck[]" /></td>
+					<td>{ROW.title}</td>
 					<td><a href="{ROW.link}">{ROW.alias}</a></td>
 					<td>
 						{ROW.keywords}

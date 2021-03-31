@@ -228,6 +228,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
      tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
      numnews mediumint(8) NOT NULL DEFAULT '0',
+     title varchar(250) NOT NULL DEFAULT '',
      alias varchar(250) NOT NULL DEFAULT '',
      image varchar(255) DEFAULT '',
      description text,
