@@ -133,6 +133,22 @@ $incomplete = $nv_Request->get_bool('incomplete', 'get,post', false);
 list($tid, $title, $alias, $description, $image, $keywords) = array( 0, '', '', '', '', '' );
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
+$savetag = $nv_Request->get_int('savetag', 'post', 0);
+if (! empty($savetag)) {
+    $title = $nv_Request->get_title('mtitle', 'post', '');
+    $list_tag = explode(PHP_EOL, $title);
+    $msg_lg = 'add_multil_tags';
+    foreach ($list_tag as $tag_i) {
+        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, keywords) VALUES (0, :title, :alias, :keywords)');
+        $sth->bindParam(':title', $tag_i, PDO::PARAM_STR);
+        $sth->bindParam(':alias', change_alias_tags($tag_i), PDO::PARAM_STR);
+        $sth->bindParam(':keywords', $tag_i, PDO::PARAM_STR);
+        $sth->execute();
+    }
+    nv_insert_logs(NV_LANG_DATA, $module_name, $msg_lg, $alias, $admin_info['userid']);
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ($incomplete ? '&incomplete=1' : ''));
+}
+
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 if (! empty($savecat)) {
     $tid = $nv_Request->get_int('tid', 'post', 0);
