@@ -356,3 +356,4 @@ $lang_module['not_edit_by_admin'] = 'You have been hijacked to edit this post. Y
 $lang_module['post_is_editing'] = 'is editing this article';
 $lang_module['add_multiple_tags'] = 'Add multiple tags';
 $lang_module['tag'] = 'Tags';
+$lang_module['note_tags'] = 'Enter one tag per line, existing tags will be ignored';

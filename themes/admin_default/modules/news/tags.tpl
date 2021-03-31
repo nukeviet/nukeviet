@@ -73,7 +73,7 @@
             <tbody>
                 <tr>
                     <td class="text-right w150"><strong>{LANG.tag}: </strong> <sup class="required">(∗)</sup></td>
-                    <td><textarea class="form-control w500" name="mtitle" id="mtitle" type="text" cols="100" rows="5"></textarea></td>
+                    <td><textarea class="form-control w500" name="mtitle" id="mtitle" type="text" cols="100" rows="5"></textarea><span class="text-middle">{LANG.note_tags}</span></td>
                 </tr>
             </tbody>
         </table>
@@ -96,7 +96,7 @@ $(document).ready(function(){
 });
 <!-- BEGIN: getalias -->
 $("#idtitle").change(function() {
-    get_alias_tags('{OP}');
+    get_alias_tags();
 });
 <!-- END: getalias -->
 </script>

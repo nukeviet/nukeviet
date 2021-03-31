@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 

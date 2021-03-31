@@ -356,3 +356,4 @@ $lang_module['not_edit_by_admin'] = 'Bạn đã bị tấn công để chỉnh s
 $lang_module['post_is_editing'] = 'đang sửa bài viết này';
 $lang_module['add_multiple_tags'] = 'Thêm nhiều Tags';
 $lang_module['tag'] = 'Tags';
+$lang_module['note_tags'] = 'Nhập mỗi tag trên một dòng, các tag đã tồn tại sẽ được bỏ qua';

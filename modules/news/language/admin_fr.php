@@ -356,3 +356,4 @@ $lang_module['not_edit_by_admin'] = 'Vous avez été détourné pour éditer cet
 $lang_module['post_is_editing'] = 'édite cet article';
 $lang_module['add_multiple_tags'] = 'Ajouter plus de cartes';
 $lang_module['tag'] = 'Tags';
+$lang_module['note_tags'] = 'Entrez une balise par ligne, les balises existantes seront ignorées';
