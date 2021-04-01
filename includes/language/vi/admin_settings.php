@@ -59,6 +59,7 @@ $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
 $lang_module['captcha_type_2'] = 'reCAPTCHA';
+$lang_module['captcha_type_3'] = 'reCAPTCHA v3';
 $lang_module['captcha'] = 'Cấu hình hiển thị captcha';
 $lang_module['captcha_0'] = 'Không hiển thị';
 $lang_module['captcha_1'] = 'Khi admin đăng nhập';

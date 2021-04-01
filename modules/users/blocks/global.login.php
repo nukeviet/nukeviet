@@ -205,7 +205,9 @@ if (!nv_function_exists('nv_block_login')) {
                     5,
                     7
                 ))) {
-                    if ($global_config['captcha_type'] == 2) {
+                    if ($global_config['captcha_type'] == 3) {
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha3');
+                    } elseif ($global_config['captcha_type'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->parse('main.' . $display_layout . '.recaptcha.compact');
                         $xtpl->parse('main.' . $display_layout . '.recaptcha.smallbtn');
@@ -221,7 +223,9 @@ if (!nv_function_exists('nv_block_login')) {
                     6,
                     7
                 ))) {
-                    if ($global_config['captcha_type'] == 2) {
+                    if ($global_config['captcha_type'] == 3) {
+                        $xtpl->parse('main.allowuserreg.reg_recaptcha3');
+                    } elseif ($global_config['captcha_type'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                         $xtpl->parse('main.allowuserreg.reg_recaptcha');

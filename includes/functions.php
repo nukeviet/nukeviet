@@ -516,7 +516,7 @@ function nv_capcha_txt($seccode)
 {
     global $global_config, $nv_Request, $client_info, $crypt;
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         if (!empty($global_config['recaptcha_secretkey'])) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
             $request = array(

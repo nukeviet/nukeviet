@@ -18,7 +18,7 @@
     		</li>
     	</ul>
     </div>
-    <form id="lostpassForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
+    <form id="lostpassForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal m-bottom"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
     	<div class="m-bottom">
     		<em class="fa fa-quote-left">&nbsp;</em>
     		{DATA.info}

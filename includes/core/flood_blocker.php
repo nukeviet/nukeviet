@@ -41,7 +41,7 @@ if (!$ip_exclusion) {
 
     if ($flb->is_flooded) {
         // Nếu recaptcha được kích hoạt, dùng nó để xác nhận khi bị chặn
-        $captchaPass = (!empty($global_config['captcha_type']) and $global_config['captcha_type'] == 2);
+        $captchaPass = (!empty($global_config['captcha_type']) and ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3));
         if ($captchaPass) {
             if ($nv_Request->isset_request('captcha_pass_flood', 'post')) {
                 $tokend = $nv_Request->get_title('tokend', 'post', '');
@@ -80,6 +80,12 @@ if (!$ip_exclusion) {
                 $xtpl->assign('CATPCHA_TYPE', $global_config['recaptcha_type']);
                 $xtpl->assign('CATPCHA_LANG', NV_LANG_INTERFACE);
                 $xtpl->assign('REDIRECT', nv_redirect_encrypt($client_info['selfurl']));
+                
+                if ($global_config['captcha_type'] == 2) {
+                    $xtpl->parse('main.captchapass.recaptcha2');
+                } elseif ($global_config['captcha_type'] == 3) {
+                    $xtpl->parse('main.captchapass.recaptcha3');
+                }
                 $xtpl->parse('main.captchapass');
             }
 

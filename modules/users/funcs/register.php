@@ -288,7 +288,7 @@ if ($checkss == $array_register['checkss']) {
     $custom_fields['question'] = $array_register['question'];
     $custom_fields['answer'] = $array_register['answer'];
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -299,8 +299,8 @@ if ($checkss == $array_register['checkss']) {
     if (!$check_seccode) {
         reg_result(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
+            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 

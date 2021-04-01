@@ -35,7 +35,7 @@
             <!-- END: result -->
 
             <!-- BEGIN: content -->
-                <form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form-horizontal" role="form">
+                <form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form-horizontal" role="form"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
                     <div class="form-group">
                         <label for="sname" class="col-sm-4 control-label">{LANG.sendmail_name}<em>*</em></label>
                         <div class="col-sm-20">

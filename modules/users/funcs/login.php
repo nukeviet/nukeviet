@@ -264,7 +264,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                 $password = $nv_Request->get_string('password', 'post', '');
 
-                if ($global_config['captcha_type'] == 2) {
+                if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                 } else {
                     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -334,7 +334,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if ($nv_Request->isset_request('nv_login', 'post')) {
         $nv_username = $nv_Request->get_title('login', 'post', '', 1);
         $nv_password = $nv_Request->get_title('password', 'post', '');
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
         } else {
             $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -634,7 +634,7 @@ $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -646,8 +646,8 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
     if (!$check_seccode) {
         signin_result([
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
+            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
 

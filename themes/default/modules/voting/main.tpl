@@ -2,7 +2,7 @@
 <!-- BEGIN: loop -->
 <div class="page panel panel-default">
     <div class="panel-body">
-        <form action="">
+        <form action=""<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
         	<h3>{VOTING.question}</h3>
         	<fieldset>
         		<!-- BEGIN: resultn -->

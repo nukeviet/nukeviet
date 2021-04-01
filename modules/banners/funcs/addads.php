@@ -38,7 +38,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
     $array['url'] = $nv_Request->get_title('url', 'post', '', 0);
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $array['captcha'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $array['captcha'] = $nv_Request->get_title('captcha', 'post', '');
@@ -49,7 +49,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     if (!nv_capcha_txt($array['captcha'])) {
-        $error[] = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+        $error[] = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['title'])) {
         $error[] = $lang_module['title_empty'];
     } elseif (empty($array['blockid'])) {
@@ -101,10 +101,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
 
         $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
-            title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, add_time, publ_time, exp_time, hits_total, act, weight
+            title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
             :title, " . $array['blockid'] . ", " . $user_info['userid'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '',
-            :url, " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
+            :url, '', " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
         )";
 
         $data_insert = array();
@@ -141,8 +141,9 @@ foreach ($global_array_uplans as $row) {
 }
 
 $xtpl->assign('DATA', $array);
-
-if ($global_config['captcha_type'] == 2) {
+if ($global_config['captcha_type'] == 3) {
+    $xtpl->parse('main.recaptcha3');
+} elseif ($global_config['captcha_type'] == 2) {
     $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
     $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
     $xtpl->parse('main.recaptcha');

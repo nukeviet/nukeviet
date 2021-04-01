@@ -56,6 +56,7 @@ $lang_module['captcha_type'] = 'Type de captcha';
 $lang_module['captcha_type_0'] = 'Défaut captcha';
 $lang_module['captcha_type_1'] = 'Bon php captcha';
 $lang_module['captcha_type_2'] = 'reCAPTCHA';
+$lang_module['captcha_type_3'] = 'reCAPTCHA v3';
 $lang_module['captcha'] = 'Configuration de captcha';
 $lang_module['captcha_0'] = 'Masqué';
 $lang_module['captcha_1'] = 'Lors de l\'identification de l\'admin';

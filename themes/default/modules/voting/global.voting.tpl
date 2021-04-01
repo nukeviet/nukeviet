@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="{NV_BASE_SITEURL}" method="get">
+<form action="{NV_BASE_SITEURL}" method="get"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 	<h4>{VOTING.question}</h4>
 	<fieldset>
 		<!-- BEGIN: resultn -->
