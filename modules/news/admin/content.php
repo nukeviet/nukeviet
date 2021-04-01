@@ -585,8 +585,26 @@ if ($is_submit_form) {
     // Tu dong xac dinh tags
     if ($rowcontent['tags'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
         $tags = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
-        $tags = nv_get_keywords($tags, 100);
-        $tags = explode(',', $tags);
+        $tags = nv_unhtmlspecialchars($tags);
+        $tags = strip_punctuation($tags);
+        $tags = trim($tags);
+        $tags = nv_strtolower($tags);
+        $tags = ' ' . $tags . ' ';
+        // $tags = nv_get_keywords($tags, 100);
+        // $tags = explode(',', $tags);
+
+        $sth = $db->prepare('SELECT keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags');
+        $sth->bindParam(':keyword', $tag_i, PDO::PARAM_STR);
+        $sth->execute();
+        $data = $sth->fetchAll();
+
+        $keywords_return = [];
+        foreach($data as $k => $v){
+            if (strpos($tags, $v['keywords'])) {
+                $keywords_return[] = $v['keywords'];
+            }
+        }
+        $tags = $keywords_return;
 
         // Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
         $tags_return = array();
