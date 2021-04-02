@@ -6,7 +6,7 @@
 <!-- END: mainrefresh -->
 
 <!-- BEGIN: main -->
-<form action="{CONTENT_URL}" name="fsea" method="post" id="fsea" class="form-horizontal">
+<form action="{CONTENT_URL}" name="fsea" method="post" id="fsea" class="form-horizontal"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.name} <span class="txtrequired">(*)</span></label>

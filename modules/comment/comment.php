@@ -409,7 +409,9 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
         }
 
         if ($show_captcha) {
-            if ($global_config['captcha_type'] == 2) {
+            if ($global_config['captcha_type'] == 3) {
+                $xtpl->parse('main.allowed_comm.recaptcha3');
+            } elseif ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('GFX_NUM', -1);
                 $xtpl->parse('main.allowed_comm.recaptcha');

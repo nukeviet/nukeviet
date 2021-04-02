@@ -73,6 +73,7 @@
                         </p>
                         <!-- END: captcha -->
                         <!-- BEGIN: recaptcha -->
+                        <!-- BEGIN: recaptcha2 -->
                         <div class="m-bottom">
                             <label>{N_CAPTCHA}:</label>
                             <div id="reCaptcha"></div>
@@ -90,6 +91,18 @@
                             };
                             </script>
                         </div>
+                         <!-- END: recaptcha2 -->
+                         <!-- BEGIN: recaptcha3 -->
+                         <input type="hidden" name="g-recaptcha-response" value=""/>
+                         <script src="https://www.google.com/recaptcha/api.js?hl={SITELANG}&amp;render={RECAPTCHA_SITEKEY}"></script>
+                         <script>
+                         grecaptcha.ready(function () {
+                            grecaptcha.execute('{RECAPTCHA_SITEKEY}', {action: 'loginSubmit'}).then(function (token) {
+                                $("[name=g-recaptcha-response]").val(token)
+                            })
+                         });
+                         </script>
+                         <!-- END: recaptcha3 -->
                         <!-- END: recaptcha -->
                         <div id="smb">
                             <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">

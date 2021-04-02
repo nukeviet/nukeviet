@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div>
-	<form method="post" action="{ACTION_FILE}" onsubmit="return nv_validForm(this);" novalidate>
+	<form method="post" action="{ACTION_FILE}" onsubmit="return nv_validForm(this);" novalidate<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
         <div class="nv-info margin-bottom-lg" data-mess="{LANG.note}">{LANG.note}</div>
 		<!-- BEGIN: cats -->
 		<div class="form-group">

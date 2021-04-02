@@ -203,7 +203,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     }
 
     if ($gfx_chk) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.reg_recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.reg_recaptcha');
@@ -289,7 +291,9 @@ function user_login($is_ajax = false)
         5,
         7
     ))) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->parse('main.recaptcha.default');
             $xtpl->parse('main.recaptcha');
@@ -394,7 +398,9 @@ function user_openid_login($gfx_chk, $attribs)
     $xtpl->assign('GLANG', $lang_global);
 
     if ($gfx_chk) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
@@ -448,7 +454,9 @@ function user_lostpass($data)
     $xtpl->assign('DATA', $data);
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 3) {
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
@@ -518,7 +526,9 @@ function user_lostactivelink($data, $question)
     } else {
         $xtpl->assign('FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
 
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.step1.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.step1.recaptcha');
@@ -1139,7 +1149,9 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
 
     if ($gfx_chk) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');

@@ -258,7 +258,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if ($nv_Request->isset_request('contentid', 'post')) {
         $rowcontent['id'] = $contentid;
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
             $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
         } else {
             $fcode = $nv_Request->get_title('fcode', 'post', '');
@@ -322,7 +322,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
         } elseif (!nv_capcha_txt($fcode)) {
-            $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+            $error = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
                 $rowcontent['status'] = 1;
@@ -559,7 +559,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 3) {
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($global_config['captcha_type'] == 2) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');

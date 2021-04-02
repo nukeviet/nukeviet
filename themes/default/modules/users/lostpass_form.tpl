@@ -1,4 +1,4 @@
-<form action="{FORM_ACTION}" method="post" onsubmit="return lostpass_validForm(this);" autocomplete="off" novalidate>
+<form action="{FORM_ACTION}" method="post" onsubmit="return lostpass_validForm(this);" autocomplete="off" novalidate<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
     <div class="nv-info margin-bottom" data-default="{LANG.lostpass_info1}">{LANG.lostpass_info1}</div>
     <div class="form-detail">
         <div class="step1">

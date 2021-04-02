@@ -83,7 +83,7 @@ if ($checkss == $data['checkss']) {
     }
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
     } else {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -93,9 +93,9 @@ if ($checkss == $data['checkss']) {
         $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
+            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
             'step' => 'step1',
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 

@@ -148,11 +148,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'mess' => $lang_module['error_content']
         ));
     }
-    if (!nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
+    if (!nv_capcha_txt(($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', ''))) {
         nv_jsonOutput(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'fcode',
+            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 

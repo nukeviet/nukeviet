@@ -1086,7 +1086,9 @@ function sendmail_themme($sendmail)
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
     if ($global_config['gfx_chk'] > 0) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.content.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.content.recaptcha');

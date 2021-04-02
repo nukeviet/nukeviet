@@ -30,7 +30,11 @@ $captcha_array = [
     7 => $lang_module['captcha_7']
 ];
 
-$captcha_type_array = [0 => $lang_module['captcha_type_0'], 2 => $lang_module['captcha_type_2']];
+$captcha_type_array = [
+    0 => $lang_module['captcha_type_0'], 
+    2 => $lang_module['captcha_type_2'], 
+    3 => $lang_module['captcha_type_3']
+];
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 $admin_2step_array = ['code', 'facebook', 'google'];
 $array_iptypes = [
@@ -615,8 +619,9 @@ foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
 $xtpl->assign('RECAPTCHA_SITEKEY', $array_config_captcha['recaptcha_sitekey']);
 $xtpl->assign('RECAPTCHA_SECRETKEY', $array_config_captcha['recaptcha_secretkey'] ? $crypt->decrypt($array_config_captcha['recaptcha_secretkey']) : '');
 
-$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_captcha['captcha_type'] == 2) ? ' style="display:none;"' : '');
-$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_captcha['captcha_type'] == 2) ? '' : ' style="display:none;"');
+$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_captcha['captcha_type'] == 2 or $array_config_captcha['captcha_type'] == 3) ? ' style="display:none;"' : '');
+$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_captcha['captcha_type'] == 2 or $array_config_captcha['captcha_type'] == 3) ? '' : ' style="display:none;"');
+$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA2', ($array_config_captcha['captcha_type'] == 2) ? '' : ' style="display:none;"');
 
 foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
     $array = array(

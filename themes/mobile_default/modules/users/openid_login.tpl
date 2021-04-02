@@ -19,7 +19,7 @@
 				</form>
 				<!-- END: allowuserreg -->
 			</div>
-			<form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg"<!-- BEGIN: allowuserreg2 --> style="display:none"<!-- END: allowuserreg2 -->>
+			<form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg"<!-- BEGIN: allowuserreg2 --> style="display:none"<!-- END: allowuserreg2 --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 				<div class="form-group">
 					<div class="input-group">
 						<span class="input-group-addon">

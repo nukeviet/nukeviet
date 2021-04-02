@@ -60,7 +60,7 @@ if ($id > 0 and $catid > 0) {
                 }
                 $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
 
-                if ($global_config['captcha_type'] == 2) {
+                if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                 } else {
                     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');

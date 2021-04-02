@@ -9,6 +9,7 @@
 // NukeViet Default Custom JS
 var myTimerPage = "",
     myTimersecField = "",
+    gEInterval,
     tip_active = !1,
     ftip_active = !1,
     tip_autoclose = !0,
@@ -145,40 +146,45 @@ function tipShow(a, b, callback) {
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
         $("#tip").attr("data-content", b).show("fast", function() {
-            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
-                $('[data-toggle="recaptcha"]', $(this)).each(function() {
-                    var parent = $(this).parent();
-                    var oldID = $(this).attr('id');
-                    var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-                    var ele;
-                    var btn = false, pnum = 0, btnselector = '';
-
-                    $(this).remove();
-                    parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-
-                    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
-                        ele = nv_recaptcha_elements[i];
-                        if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
-                            pnum = ele.pnum;
-                            btnselector = ele.btnselector;
-                            btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
-                                btn = btn.parent();
+            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+                if (nv_is_recaptcha == 2) {
+                    $('[data-toggle="recaptcha"]', $(this)).each(function() {
+                        var parent = $(this).parent();
+                        var oldID = $(this).attr('id');
+                        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+                        var ele;
+                        var btn = false, pnum = 0, btnselector = '';
+    
+                        $(this).remove();
+                        parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
+    
+                        for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+                            ele = nv_recaptcha_elements[i];
+                            if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
+                                pnum = ele.pnum;
+                                btnselector = ele.btnselector;
+                                btn = $('#' + id);
+                                for (k = 1; k <= ele.pnum; k ++) {
+                                    btn = btn.parent();
+                                }
+                                btn = $(ele.btnselector, btn);
+                                break;
                             }
-                            btn = $(ele.btnselector, btn);
-                            break;
                         }
-                    }
-                    var newEle = {};
-                    newEle.id = id;
-                    if (btn != false) {
-                        newEle.btn = btn;
-                        newEle.pnum = pnum;
-                        newEle.btnselector = btnselector;
-                    }
-                    nv_recaptcha_elements.push(newEle);
-                });
-                reCaptchaLoadCallback();
+                        var newEle = {};
+                        newEle.id = id;
+                        if (btn != false) {
+                            newEle.btn = btn;
+                            newEle.pnum = pnum;
+                            newEle.btnselector = btnselector;
+                        }
+                        nv_recaptcha_elements.push(newEle);
+                    });
+                    reCaptchaLoadCallback();
+                } else if (nv_is_recaptcha == 3) {
+                    "undefined" != typeof grecaptcha ? grecaptchaExecute() : reCaptchaApiLoad()
+                }
+                
             }
         });
     } else {
@@ -197,40 +203,45 @@ function ftipShow(a, b, callback) {
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
         $("#ftip").attr("data-content", b).show("fast", function() {
-            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
-                $('[data-toggle="recaptcha"]', $(this)).each(function() {
-                    var parent = $(this).parent();
-                    var oldID = $(this).attr('id');
-                    var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-                    var ele;
-                    var btn = false, pnum = 0, btnselector = '';
-
-                    $(this).remove();
-                    parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-
-                    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
-                        ele = nv_recaptcha_elements[i];
-                        if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
-                            pnum = ele.pnum;
-                            btnselector = ele.btnselector;
-                            btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
-                                btn = btn.parent();
+            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+                if (nv_is_recaptcha == 2) {
+                    $('[data-toggle="recaptcha"]', $(this)).each(function() {
+                        var parent = $(this).parent();
+                        var oldID = $(this).attr('id');
+                        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+                        var ele;
+                        var btn = false, pnum = 0, btnselector = '';
+    
+                        $(this).remove();
+                        parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
+    
+                        for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+                            ele = nv_recaptcha_elements[i];
+                            if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
+                                pnum = ele.pnum;
+                                btnselector = ele.btnselector;
+                                btn = $('#' + id);
+                                for (k = 1; k <= ele.pnum; k ++) {
+                                    btn = btn.parent();
+                                }
+                                btn = $(ele.btnselector, btn);
+                                break;
                             }
-                            btn = $(ele.btnselector, btn);
-                            break;
                         }
-                    }
-                    var newEle = {};
-                    newEle.id = id;
-                    if (btn != false) {
-                        newEle.btn = btn;
-                        newEle.pnum = pnum;
-                        newEle.btnselector = btnselector;
-                    }
-                    nv_recaptcha_elements.push(newEle);
-                });
-                reCaptchaLoadCallback();
+                        var newEle = {};
+                        newEle.id = id;
+                        if (btn != false) {
+                            newEle.btn = btn;
+                            newEle.pnum = pnum;
+                            newEle.btnselector = btnselector;
+                        }
+                        nv_recaptcha_elements.push(newEle);
+                    });
+                    reCaptchaLoadCallback();
+                } else if (nv_is_recaptcha == 3) {
+                    "undefined" != typeof grecaptcha ? grecaptchaExecute() : reCaptchaApiLoad()
+                }
+                
             }
         });
     } else {
@@ -287,18 +298,22 @@ function switchTab(a) {
 
 // Change Captcha
 function change_captcha(a) {
-    if (typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
-        for (i = 0, j = reCapIDs.length; i < j; i++) {
-            var ele = reCapIDs[i];
-            var btn = nv_recaptcha_elements[ele[0]];
-            if ($('#' + btn.id).length) {
-                if (typeof btn.btn != "undefined" && btn.btn != "") {
-                    btn.btn.prop('disabled', true);
+    if (typeof nv_is_recaptcha != "undefined") {
+        if (nv_is_recaptcha == 2) {
+            for (i = 0, j = reCapIDs.length; i < j; i++) {
+                var ele = reCapIDs[i];
+                var btn = nv_recaptcha_elements[ele[0]];
+                if ($('#' + btn.id).length) {
+                    if (typeof btn.btn != "undefined" && btn.btn != "") {
+                        btn.btn.prop('disabled', true);
+                    }
+                    grecaptcha.reset(ele[1])
                 }
-                grecaptcha.reset(ele[1]);
             }
+            reCaptchaLoadCallback()
+        } else if (nv_is_recaptcha == 3) {
+            grecaptchaExecute()
         }
-        reCaptchaLoadCallback();
     } else {
         $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
         "undefined" != typeof a && "" != a && $(a).val("");
@@ -321,7 +336,7 @@ function loginForm(redirect) {
         data: '&nv_ajax=1',
         dataType: "html"
     }).done(function(a) {
-        modalShow('', a)
+        modalShow('', a, 'recaptchareset')
     });
     return !1
 }
@@ -334,42 +349,46 @@ function modalShow(a, b, callback) {
     $("#sitemodal").find(".modal-body").html(b);
     var scrollTop = false;
     if (typeof callback != "undefined") {
-        if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha) {
+        if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
             scrollTop = $(window).scrollTop();
             $('#sitemodal').on('show.bs.modal', function() {
-                $('[data-toggle="recaptcha"]', $(this)).each(function() {
-                    var parent = $(this).parent();
-                    var oldID = $(this).attr('id');
-                    var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-                    var ele;
-                    var btn = false, pnum = 0, btnselector = '';
-
-                    $(this).remove();
-                    parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
-
-                    for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
-                        ele = nv_recaptcha_elements[i];
-                        if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
-                            pnum = ele.pnum;
-                            btnselector = ele.btnselector;
-                            btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
-                                btn = btn.parent();
+                if (nv_is_recaptcha == 2) {
+                    $('[data-toggle="recaptcha"]', $(this)).each(function() {
+                        var parent = $(this).parent();
+                        var oldID = $(this).attr('id');
+                        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+                        var ele;
+                        var btn = false, pnum = 0, btnselector = '';
+    
+                        $(this).remove();
+                        parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
+    
+                        for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
+                            ele = nv_recaptcha_elements[i];
+                            if (typeof ele.pnum != "undefined" && typeof ele.btnselector != "undefined" && ele.pnum && ele.btnselector != "" && ele.id == oldID) {
+                                pnum = ele.pnum;
+                                btnselector = ele.btnselector;
+                                btn = $('#' + id);
+                                for (k = 1; k <= ele.pnum; k ++) {
+                                    btn = btn.parent();
+                                }
+                                btn = $(ele.btnselector, btn);
+                                break;
                             }
-                            btn = $(ele.btnselector, btn);
-                            break;
                         }
-                    }
-                    var newEle = {};
-                    newEle.id = id;
-                    if (btn != false) {
-                        newEle.btn = btn;
-                        newEle.pnum = pnum;
-                        newEle.btnselector = btnselector;
-                    }
-                    nv_recaptcha_elements.push(newEle);
-                });
-                reCaptchaLoadCallback();
+                        var newEle = {};
+                        newEle.id = id;
+                        if (btn != false) {
+                            newEle.btn = btn;
+                            newEle.pnum = pnum;
+                            newEle.btnselector = btnselector;
+                        }
+                        nv_recaptcha_elements.push(newEle);
+                    });
+                    reCaptchaLoadCallback();
+                } else if (nv_is_recaptcha == 3) {
+                    "undefined" != typeof grecaptcha ? grecaptchaExecute() : reCaptchaApiLoad()
+                }
             });
         }
     }
@@ -485,6 +504,39 @@ var reCaptchaResCallback = function() {
             }
         }
     }
+}
+
+// reCaptcha v3: grecaptchaExecute
+var grecaptchaExecute = function() {
+    grecaptcha.ready(function () {
+        if ($("[data-recaptcha3]").length) {
+            clearInterval(gEInterval);
+            
+            grecaptcha.execute(nv_recaptcha_sitekey, {action: 'formSubmit'}).then(function (token) {
+                $("[data-recaptcha3]").each(function() {
+                    if ($("[name=g-recaptcha-response]", this).length) {
+                        $("[name=g-recaptcha-response]", this).val(token)
+                    } else {
+                        var el = $('<input type="hidden" name="g-recaptcha-response" value="' + token + '"/>');
+                        $(this).append(el)
+                    }
+                })
+            })
+
+            gEInterval = setTimeout(function() {
+                grecaptchaExecute()
+            }, 120000)
+        }
+    })
+}
+
+// reCaptcha v3 API load
+var reCaptchaApiLoad = function() {
+    var a = document.createElement("script");
+    a.type = "text/javascript";
+    a.src = "https://www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey + "&onload=grecaptchaExecute";
+    var b = document.getElementsByTagName("script")[0];
+    b.parentNode.insertBefore(a, b);
 }
 
 $(document).ready(function() {
@@ -723,12 +775,16 @@ $(window).on('load', function() {
             var b = document.getElementsByTagName("script")[0];
             b.parentNode.insertBefore(a, b);
         }();
-    if (typeof nv_is_recaptcha != "undefined" && nv_is_recaptcha && nv_recaptcha_elements.length > 0) {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.async = !0;
-        a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
+    if (typeof nv_is_recaptcha != "undefined") {
+        if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
+            var a = document.createElement("script");
+            a.type = "text/javascript";
+            a.async = !0;
+            a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
+            var b = document.getElementsByTagName("script")[0];
+            b.parentNode.insertBefore(a, b);
+        } else if (nv_is_recaptcha == 3 && $("[data-recaptcha3]").length) {
+            reCaptchaApiLoad()
+        }
     }
 });

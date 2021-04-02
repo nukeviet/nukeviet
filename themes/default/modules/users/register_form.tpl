@@ -1,4 +1,4 @@
-<form class="user-reg-form" action="{USER_REGISTER}" method="post" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+<form class="user-reg-form" action="{USER_REGISTER}" method="post" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate<!-- BEGIN: reg_recaptcha3 --> data-recaptcha3="1"<!-- END: reg_recaptcha3 -->>
     <div class="nv-info margin-bottom" data-default="{LANG.info}">{LANG.info}</div>
 
     <div class="form-detail">

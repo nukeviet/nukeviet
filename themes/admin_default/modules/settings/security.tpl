@@ -345,7 +345,7 @@
                                         &nbsp; <a href="https://www.google.com/recaptcha/admin" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="text-middle"><i class="fa fa-info-circle"></i></a>
                                     </td>
                                 </tr>
-                                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
+                                <tr data-captcha="typerecaptcha2"{DISPLAY_CAPTCHA_RECAPTCHA2}>
                                     <td><strong>{LANG.recaptcha_type}</strong></td>
                                     <td>
                                         <select name="recaptcha_type" class="form-control w300">
