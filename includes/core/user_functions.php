@@ -689,20 +689,20 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     );
     $return[] = array(
         'ext' => 1,
-        'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'
+        'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'
     );
 
     if ($language_js) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
+            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
         );
     }
 
     if ($global_js) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
+            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/global.js'
         );
     }
 
@@ -719,7 +719,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if (defined('NV_IS_ADMIN')) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/admin.js'
+            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/admin.js'
         );
     }
 
@@ -744,7 +744,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if (defined('NV_IS_DRAG_BLOCK')) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery-ui/jquery-ui.min.js'
+            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery-ui/jquery-ui.min.js'
         );
     }
 

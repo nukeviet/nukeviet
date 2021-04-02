@@ -10,8 +10,8 @@
 	{pagetitle}{errorinfo}
 </div>
 <div id="clinfo">
-	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+	<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 	<form id="frm" action="" method="post" enctype="multipart/form-data" role="form" class="form-horizontal"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 		<div class="form-group">
 			<label for="title" class="col-sm-6 control-label">{LANG.addads_title}<span class="text-danger"> (*)</span>:</label>

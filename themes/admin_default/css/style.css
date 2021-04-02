@@ -157,6 +157,10 @@ a.link:hover {
     padding-top: 1px;
 }
 
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
 /* Heading
  -----------------------------------------------------------------------------*/
 h1, h2, h3, h4, h5, h6 {

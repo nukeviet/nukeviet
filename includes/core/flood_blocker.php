@@ -66,7 +66,7 @@ if (!$ip_exclusion) {
             $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
             $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
-            $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
+            $xtpl->assign('IMG_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/load_bar.gif');
             $xtpl->assign('IMG_WIDTH', 33);
             $xtpl->assign('IMG_HEIGHT', 8);
             $xtpl->assign('FLOOD_BLOCKER_INFO1', $lang_global['flood_info1']);

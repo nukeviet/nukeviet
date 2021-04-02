@@ -153,7 +153,7 @@ if ($global_config['captcha_type'] == 3) {
     $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-    $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+    $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
     $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
     $xtpl->parse('main.captcha');
 }
