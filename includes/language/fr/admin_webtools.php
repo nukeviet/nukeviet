@@ -84,5 +84,6 @@ $lang_module['global_statistics'] = 'Configuration statistique';
 $lang_module['statistic'] = 'Activer  les statistiques';
 $lang_module['statistics_timezone'] = 'Fuseau horaire pour les statistiques';
 $lang_module['online_upd'] = 'Activer l\'outil de compter le nombre des utilisateurs en ligne';
-$lang_module['googleAnalyticsID'] = 'ID du compte Google Analytics  (Sous format UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Regardez les details</a>)';
+$lang_module['googleAnalyticsID'] = 'ID du compte Google Universal Analytics  (Sous format UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Regardez les details</a>)';
+$lang_module['googleAnalytics4ID'] = 'ID du compte Google Analytics 4(Sous format G-XXXXXXXX, UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Regardez les details</a>)';
 $lang_module['referer_blocker'] = 'Activé referer utilité';

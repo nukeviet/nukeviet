@@ -31,9 +31,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 
     $array_config_global['googleAnalyticsID'] = nv_substr($nv_Request->get_title('googleAnalyticsID', 'post', '', 1), 0, 20);
+    $array_config_global['googleAnalytics4ID'] = nv_substr($nv_Request->get_title('googleAnalytics4ID', 'post', '', 1), 0, 20);
 
     if (!preg_match('/^UA\-\d{4,}\-\d+$/', $array_config_global['googleAnalyticsID'])) {
         $array_config_global['googleAnalyticsID'] = '';
+    }
+    if (!(preg_match('/^UA\-\d{4,}\-\d+$/', $array_config_global['googleAnalytics4ID']) or preg_match('/^G\-[a-zA-Z0-9]{8,}$/', $array_config_global['googleAnalytics4ID']))) {
+        $array_config_global['googleAnalytics4ID'] = '';
     }
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
@@ -54,6 +58,7 @@ $array_config_global['online_upd'] = ($global_config['online_upd']) ? ' checked=
 $array_config_global['statistic'] = ($global_config['statistic']) ? ' checked="checked"' : '';
 $array_config_global['referer_blocker'] = ($global_config['referer_blocker']) ? ' checked="checked"' : '';
 $array_config_global['googleAnalyticsID'] = $global_config['googleAnalyticsID'];
+$array_config_global['googleAnalytics4ID'] = $global_config['googleAnalytics4ID'];
 
 $xtpl = new XTemplate('statistics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
