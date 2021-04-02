@@ -137,7 +137,7 @@ if (!nv_function_exists('nv_block_headline')) {
 
         $xtpl = new XTemplate('block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
-        $xtpl->assign('PIX_IMG', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/pix.gif');
+        $xtpl->assign('PIX_IMG', NV_STATIC_URL . NV_ASSETS_DIR . '/images/pix.gif');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $module_info['template']);
 
@@ -213,11 +213,11 @@ if (!nv_function_exists('nv_block_headline')) {
         }
 
         if (empty($my_head) or !preg_match("/jquery\.imgpreload\.min\.js[^>]+>/", $my_head)) {
-            $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
+            $my_head .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
         }
 
         $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
-        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
         $my_head .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
         $my_head .= '$(document).ready(function(){var b=["' . implode('","', $images) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
         $my_head .= "\n//]]>\n</script>\n";

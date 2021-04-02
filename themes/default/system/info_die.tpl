@@ -9,12 +9,12 @@
         <title>{PAGE_TITLE}</title>
         <link rel="shortcut icon" href="{SITE_FAVICON}" />
         <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/css/font-awesome.min.css" rel="stylesheet" />
         <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
         <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.responsive.css" rel="stylesheet" />
-        <script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{LANG.Content_Language}.js"></script>
-        <script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js?t=1"></script>
-        <script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
+        <script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/{LANG.Content_Language}.js"></script>
+        <script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/global.js?t=1"></script>
+        <script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/main.js"></script>
     </head>

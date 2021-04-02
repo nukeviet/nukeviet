@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link  type="text/css"href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
+<link  type="text/css"href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
 <div class="users-av-wraper">
     <form id="upload-form" method="post" enctype="multipart/form-data" action="{NV_AVATAR_UPLOAD}">
         <div class="col-xs-16">

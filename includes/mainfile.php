@@ -57,6 +57,8 @@ if (empty($global_config['my_domains'])) {
     $global_config['my_domains'] = array_map('strtolower', $global_config['my_domains']);
 }
 
+define('NV_STATIC_URL', !empty($global_config['nv_static_url']) ? '//' . $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);
+
 require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 

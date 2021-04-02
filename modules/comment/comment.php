@@ -422,7 +422,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+                $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
                 $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
                 $xtpl->parse('main.allowed_comm.captcha');
             }
@@ -488,7 +488,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
             } elseif (is_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png')) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
             } else {
-                $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                $comment_array_i['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
             }
 
             if (!empty($comment_array_i['userid'])) {

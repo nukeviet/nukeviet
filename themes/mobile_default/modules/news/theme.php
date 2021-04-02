@@ -888,7 +888,7 @@ function sendmail_themme($sendmail)
         } else {
             $xtpl->assign('GFX_NUM', NV_GFX_NUM);
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
@@ -1093,7 +1093,7 @@ function nv_theme_viewpdf($file_url)
     $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
     return $xtpl->text('main');

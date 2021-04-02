@@ -120,7 +120,7 @@ function nv_site_theme($contents, $full = true)
     $html_links = [];
     $html_links[] = [
         'rel' => 'stylesheet',
-        'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/font-awesome.min.css'
+        'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css'
     ];
     if ($global_config['current_theme_type'] == 'r') {
         $html_links[] = [

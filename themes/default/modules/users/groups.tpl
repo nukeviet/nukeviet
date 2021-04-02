@@ -210,7 +210,7 @@ $("a.deletemember").click(function() {
 
 <!-- BEGIN: userlist -->
 <!-- BEGIN: tools -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<link rel="stylesheet" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <div id="ablist" class="m-bottom well">
 	<!-- BEGIN: addUserGroup -->
 	<select name="uid" id="uid" class="form-control" style="width: 250px">
@@ -227,8 +227,8 @@ $("a.deletemember").click(function() {
 		<button class="btn btn-primary" name="user_waiting" type="button">{LANG.user_waiting}</button>
 	<!-- END: user_waiting -->
 </div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#uid").select2({

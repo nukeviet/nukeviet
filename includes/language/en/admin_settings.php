@@ -242,6 +242,7 @@ $lang_module['ftp_auto_detect_root'] = 'Auto detection';
 $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detection the Remote path';
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
+$lang_module['static_url'] = 'Hosting of static files';
 $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
 $lang_module['remote_api_access'] = 'Enable Remote API';
 $lang_module['remote_api_access_help'] = 'Disabling all API access from outside will be blocked. Internal APIs are still used normally';
