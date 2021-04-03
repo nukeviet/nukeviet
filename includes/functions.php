@@ -2088,6 +2088,12 @@ function nv_change_buffer($buffer)
         $_google_analytics .= "</script>" . PHP_EOL;
         $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . "$1", $buffer, 1);
     }
+    
+    if (defined('NV_SYSTEM') and (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalytics4ID']) or preg_match('/^G\-[a-zA-Z0-9]{8,}$/', $global_config['googleAnalytics4ID']))) {
+        $_google_analytics4 = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $global_config['googleAnalytics4ID'] . '"></script>'. PHP_EOL;
+        $_google_analytics4 .= "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date);gtag('config','" . $global_config['googleAnalytics4ID'] . "');</script>" . PHP_EOL;
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics4 . "$1", $buffer, 1);
+    }
 
     if (NV_ANTI_IFRAME and empty($client_info['is_myreferer'])) {
         $buffer = preg_replace('/(<body[^>]*>)/', "$1" . PHP_EOL . "<script>if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1);

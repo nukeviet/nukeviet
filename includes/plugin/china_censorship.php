@@ -25,4 +25,5 @@ if ($client_info['country'] == 'CN' and defined('NV_SYSTEM')) {
 
     // Không load google Analytics khi truy cập từ trung quốc.
     $global_config['googleAnalyticsID'] = '';
+    $global_config['googleAnalytics4ID'] = '';
 }

@@ -33,6 +33,10 @@
                     <td><input type="checkbox" value="1" name="referer_blocker" {DATA.referer_blocker} /></td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.googleAnalytics4ID}</strong></td>
+                    <td><input type="text" class="form-control w400" name="googleAnalytics4ID" value="{DATA.googleAnalytics4ID}" maxlength="20" /></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.googleAnalyticsID}</strong></td>
                     <td><input type="text" class="form-control w400" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" maxlength="20" /></td>
                 </tr>
