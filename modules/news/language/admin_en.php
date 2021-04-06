@@ -108,6 +108,7 @@ $lang_module['delcat_msg_rows_noselect'] = 'You should choose the topic to move 
 $lang_module['deltopic_msg_rows'] = 'relevant news group %s article, have you sure deleted, then group related information is deleted from the article?';
 $lang_module['setting'] = 'Configuration';
 $lang_module['setting_indexfile'] = 'Home page plan';
+$lang_module['setting_mobile_indexfile'] = 'Home page plan in Mobile theme';
 $lang_module['setting_homesite'] = 'The size of the image at home';
 $lang_module['setting_thumbblock'] = 'The size of the image in the block';
 $lang_module['setting_imagefull'] = 'The size of the image under article preamble';

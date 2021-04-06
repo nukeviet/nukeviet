@@ -108,6 +108,7 @@ $lang_module['delcat_msg_rows_noselect'] = 'Sélectionnez une catégorie pour d�
 $lang_module['deltopic_msg_rows'] = 'Ce sujet a %s articles, êtes-vous sûr de vouloir le supprimer?.';
 $lang_module['setting'] = 'Configuration du module';
 $lang_module['setting_indexfile'] = 'Affichage à l\'Accueil';
+$lang_module['setting_mobile_indexfile'] = 'Affichage à l\'Accueil dans le thème Mobile';
 $lang_module['setting_homesite'] = 'Tailles de photo à l\'Accueil';
 $lang_module['setting_thumbblock'] = 'Tailles de photos dans les blocks';
 $lang_module['setting_imagefull'] = 'Tailles de photo sous l\'introduction de l\'article';
