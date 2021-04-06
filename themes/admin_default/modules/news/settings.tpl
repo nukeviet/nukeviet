@@ -21,6 +21,15 @@
                     </select></td>
                 </tr>
                 <tr>
+                    <th>{LANG.setting_mobile_indexfile}</th>
+                    <td>
+                    <select class="form-control" name="mobile_indexfile">
+                        <!-- BEGIN: mobile_indexfile -->
+                        <option value="{MOBILE_INDEXFILE.key}"{MOBILE_INDEXFILE.selected}>{MOBILE_INDEXFILE.title}</option>
+                        <!-- END: mobile_indexfile -->
+                    </select></td>
+                </tr>
+                <tr>
                     <th>{LANG.setting_homesite}</th>
                     <td><input class= "form-control" type="text" value="{DATA.homewidth}" name="homewidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.homeheight}" name="homeheight" /></td>
                 </tr>

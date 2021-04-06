@@ -20,8 +20,9 @@ if (defined('NV_EDITOR')) {
 
 $savesetting = $nv_Request->get_int('savesetting', 'post', 0);
 if (!empty($savesetting)) {
-    $array_config = array();
+    $array_config = [];
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', '', 1);
+    $array_config['mobile_indexfile'] = $nv_Request->get_title('mobile_indexfile', 'post', '', 1);
     $array_config['per_page'] = $nv_Request->get_int('per_page', 'post', 0);
     $array_config['st_links'] = $nv_Request->get_int('st_links', 'post', 0);
     $array_config['homewidth'] = $nv_Request->get_int('homewidth', 'post', 0);
@@ -142,6 +143,13 @@ foreach ($array_viewcat_full as $key => $val) {
         'selected' => $key == $module_config[$module_name]['indexfile'] ? ' selected="selected"' : ''
     ));
     $xtpl->parse('main.indexfile');
+    
+    $xtpl->assign('MOBILE_INDEXFILE', array(
+        'key' => $key,
+        'title' => $val,
+        'selected' => $key == $module_config[$module_name]['mobile_indexfile'] ? ' selected="selected"' : ''
+    ));
+    $xtpl->parse('main.mobile_indexfile');
 }
 
 // So bai viet tren mot trang

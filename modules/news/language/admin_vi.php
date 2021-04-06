@@ -108,6 +108,7 @@ $lang_module['delcat_msg_rows_noselect'] = 'Bạn cần chọn Chuyên mục đ�
 $lang_module['deltopic_msg_rows'] = 'nhóm tin liên quan có %s bài viết, bạn có chắc chắn xóa, khi đó nhóm tin liên quan sẽ bị xóa khỏi các bài viết.';
 $lang_module['setting'] = 'Cấu hình module';
 $lang_module['setting_indexfile'] = 'Phương án thể hiện trang chủ';
+$lang_module['setting_mobile_indexfile'] = 'Phương án thể hiện trang chủ ở giao diện mobile';
 $lang_module['setting_homesite'] = 'Kích thước của hình tại trang chủ';
 $lang_module['setting_thumbblock'] = 'Kích thước của hình tại các block ';
 $lang_module['setting_imagefull'] = 'Kích thước của hình dưới phần mở đầu bài viết ';
