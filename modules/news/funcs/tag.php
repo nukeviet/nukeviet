@@ -37,10 +37,11 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
             $base_url_rewrite .= '/page-' . $page;
             $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
         }
-        
+
         $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
         $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-        if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
+        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+        if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
             nv_redirect_location($base_url_check);
         }
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
