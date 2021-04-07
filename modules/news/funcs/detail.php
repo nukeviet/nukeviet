@@ -73,7 +73,8 @@ if (!empty($news_contents)) {
     $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'];
     $base_url_rewrite = nv_url_rewrite($base_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
+    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+    if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
         nv_redirect_location($base_url_rewrite);
     }
     $news_contents['link'] = $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
