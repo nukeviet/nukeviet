@@ -149,7 +149,7 @@
                                             {foreach from=$apicontent.apis item=api}
                                             <div class="col-12 col-sm-6">
                                                 <label class="custom-control custom-checkbox my-1">
-                                                    <input data-toggle="apiroleit" class="custom-control-input" type="checkbox" name="api_{$apicontent.key}[]" value="{$api.cmd}"{if $api.checked} checked="checked"{/if}><span class="custom-control-label">{$api.name}</span>
+                                                    <input data-toggle="apiroleit" class="custom-control-input" type="checkbox" name="api_{'-'|str_replace:'_':$apicontent.key}[]" value="{$api.cmd}"{if $api.checked} checked="checked"{/if}><span class="custom-control-label">{$api.name}</span>
                                                 </label>
                                             </div>
                                             {/foreach}
