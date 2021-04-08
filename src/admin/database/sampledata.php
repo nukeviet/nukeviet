@@ -12,10 +12,12 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 
-$array_ignore_save = array(
+$array_ignore_save = [
     NV_AUTHORS_GLOBALTABLE,
     NV_AUTHORS_GLOBALTABLE . '_config',
     NV_AUTHORS_GLOBALTABLE . '_module',
+    NV_AUTHORS_GLOBALTABLE . '_api_credential',
+    NV_AUTHORS_GLOBALTABLE . '_api_role',
     $db_config['prefix'] . '_banners_click',
     $db_config['prefix'] . '_cookies',
     $db_config['prefix'] . '_counter',
@@ -23,38 +25,38 @@ $array_ignore_save = array(
     $db_config['prefix'] . '_sessions',
     $db_config['prefix'] . '_upload_dir',
     $db_config['prefix'] . '_upload_file'
-);
-$array_ignore_drop = array(
+];
+$array_ignore_drop = [
     $db_config['prefix'] . '_config',
     NV_USERS_GLOBALTABLE
-);
-$array_method_update = array(
-    $db_config['prefix'] . '_config' => array(
-        'key' => array('lang', 'module', 'config_name'),
-        'value' => array('config_value'),
-        'ignore' => array(
-            0 => array(
+];
+$array_method_update = [
+    $db_config['prefix'] . '_config' => [
+        'key' => ['lang', 'module', 'config_name'],
+        'value' => ['config_value'],
+        'ignore' => [
+            0 => [
                 'module' => 'global',
                 'config_name' => 'site_name'
-            ),
-            1 => array(
+            ],
+            1 => [
                 'lang' => 'sys',
                 'module' => 'global',
                 'config_name' => 'lang_multi'
-            ),
-            2 => array(
+            ],
+            2 => [
                 'lang' => 'sys',
                 'module' => 'global',
                 'config_name' => 'cookie_prefix'
-            ),
-            3 => array(
+            ],
+            3 => [
                 'lang' => 'sys',
                 'module' => 'global',
                 'config_name' => 'session_prefix'
-            )
-        )
-    )
-);
+            ]
+        ]
+    ]
+];
 
 $file_data_tmp = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_samplewrite_' . NV_CHECK_SESSION;
 $file_data_dump = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_sampledump_' . NV_CHECK_SESSION . '.php';
@@ -93,16 +95,16 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
         set_time_limit(0);
     }
 
-    $json = array(
+    $json = [
         'next' => false,
-        'nextdata' => array(),
+        'nextdata' => [],
         'message' => 'Init Message',
         'lev' => 3,
         'finish' => false,
         'reload' => false
-    );
+    ];
 
-    $array_request =  array();
+    $array_request =  [];
     $array_request['sample_name'] = nv_strtolower(nv_substr($nv_Request->get_title('sample_name', 'post', ''), 0, 50));
     $array_request['delifexists'] = $nv_Request->get_int('delifexists', 'post', 0);
     $array_request['offsettable'] = $nv_Request->get_int('offsettable', 'post', 0);
@@ -119,7 +121,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
 
         // Quét các bảng dữ liệu
         $error = false;
-        $array_tables = array();
+        $array_tables = [];
 
         if (!file_exists($file_data_tmp)) {
             $a = 0;
@@ -133,7 +135,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                     if ($row['engine'] != 'MyISAM') {
                         $row['rows'] = $db->query("SELECT COUNT(*) FROM " . $row['name'])->fetchColumn();
                     }
-                    $array_tables[$a] = array();
+                    $array_tables[$a] = [];
                     $array_tables[$a]['name'] = $row['name'];
                     $array_tables[$a]['size'] = intval($row['data_length']) + intval($row['index_length']);
                     $array_tables[$a]['limit'] = 1 + round(1048576 / ($row['avg_row_length'] + 1));
@@ -155,7 +157,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
         // Kiểm tra và xuất file dump
         if (!$error) {
             if (!file_exists($file_data_dump)) {
-                $dump_content = "<?php\n\n" . NV_FILEHEAD . "\n\nif (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n\$sample_base_siteurl = '" . NV_BASE_SITEURL . "';\n\$sql_create_table = array();\n\n";
+                $dump_content = "<?php\n\n" . NV_FILEHEAD . "\n\nif (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n\$sample_base_siteurl = '" . NV_BASE_SITEURL . "';\n\$sql_create_table = [];\n\n";
                 $check = file_put_contents($file_data_dump, $dump_content, LOCK_EX);
                 if ($check === false) {
                     $json['message'] = sprintf($nv_Lang->getModule('sampledata_error_writetmp'), NV_TEMP_DIR);
@@ -184,7 +186,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
 
                 // Xuất dữ liệu
                 if (!empty($table['numrow'])) {
-                    $columns = array();
+                    $columns = [];
                     $columns_array = $db->columns_array($table['name']);
                     foreach ($columns_array as $col) {
                         $columns[$col['field']] = preg_match('/^(\w*int|year)/', $col['type']) ? 'int' : 'txt';
@@ -213,7 +215,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 // Các đường dẫn trong này không chỉnh được
                             } else {
                                 // Chỉnh lại đường dẫn các module
-                                $array_mods_news = $array_mods_page = array();
+                                $array_mods_news = $array_mods_page = [];
                                 foreach ($site_mods as $mod) {
                                     if ($mod['module_file'] == 'news') {
                                         $array_mods_news[] = nv_preg_quote($mod['module_data']);
@@ -223,20 +225,20 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 }
                                 if (!empty($array_mods_news) and preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_(' . implode('|', $array_mods_news) . ')\_detail$/', $table['name'])) {
                                     if (isset($row['bodyhtml'])) {
-                                        $row['bodyhtml'] = strtr($row['bodyhtml'], array(
+                                        $row['bodyhtml'] = strtr($row['bodyhtml'], [
                                             "\r\n" => '',
                                             "\r" => '',
                                             "\n" => ''
-                                        ));
+                                        ]);
                                         $row['bodyhtml'] = preg_replace('/(href|src)[\s]*\=[\s]*("|\')(' . nv_preg_quote(NV_BASE_SITEURL) . ')([a-zA-Z0-9\-]+)/i', '\\1=\\2{{NV_BASE_SITEURL}}\\4', $row['bodyhtml']);
                                     }
                                 } elseif (!empty($array_mods_page) and preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_(' . implode('|', $array_mods_page) . ')$/', $table['name'])) {
                                     if (isset($row['bodytext'])) {
-                                        $row['bodytext'] = strtr($row['bodytext'], array(
+                                        $row['bodytext'] = strtr($row['bodytext'], [
                                             "\r\n" => ' ',
                                             "\r" => ' ',
                                             "\n" => ' '
-                                        ));
+                                        ]);
                                         $row['bodytext'] = preg_replace('/(href|src)[\s]*\=[\s]*("|\')(' . nv_preg_quote(NV_BASE_SITEURL) . ')([a-zA-Z0-9\-]+)/i', '\\1=\\2{{NV_BASE_SITEURL}}\\4', $row['bodytext']);
                                     }
                                 }
@@ -260,7 +262,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 }
                                 if (empty($setting['ignore']) or !$is_ignore) {
                                     // Các bảng chực hiện thực hiện REPLACE
-                                    $row2 = array();
+                                    $row2 = [];
                                     foreach ($columns as $key => $kt) {
                                         $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
                                     }
@@ -270,7 +272,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 }
                             } else {
                                 // Các bảng chực hiện thực hiện Insert
-                                $row2 = array();
+                                $row2 = [];
                                 foreach ($columns as $key => $kt) {
                                     $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
                                 }

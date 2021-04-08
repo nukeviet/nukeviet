@@ -29,6 +29,36 @@
                         </tr>
                         {/foreach}
                         <tr>
+                            <td>
+                                <select class="form-control form-control-xs mw100" name="metaGroupsName[]">
+                                    <option value="name">name</option>
+                                    <option value="property">property</option>
+                                    <option value="http-equiv">http-equiv</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input class="form-control-xs form-control" type="text" value="" name="metaGroupsValue[]">
+                            </td>
+                            <td>
+                                <input class="form-control-xs form-control" type="text" value="" name="metaContents[]">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select class="form-control form-control-xs mw100" name="metaGroupsName[]">
+                                    <option value="name">name</option>
+                                    <option value="property">property</option>
+                                    <option value="http-equiv">http-equiv</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input class="form-control-xs form-control" type="text" value="" name="metaGroupsValue[]">
+                            </td>
+                            <td>
+                                <input class="form-control-xs form-control" type="text" value="" name="metaContents[]">
+                            </td>
+                        </tr>
+                        <tr>
                             <td colspan="2" class="text-right">
                                 {$LANG->get('metaTagsOgp')} (***)
                             </td>

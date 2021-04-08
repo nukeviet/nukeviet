@@ -23,6 +23,7 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 
 $tpl->registerPlugin('modifier', 'date', 'nv_date');
+$tpl->registerPlugin('modifier', 'str_replace', 'str_replace');
 
 // Danh sách
 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_role ORDER BY role_id DESC';
@@ -137,11 +138,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     // Lấy các API được phép
     foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
+        $input_key = str_replace('-', '_', $keysysmodule);
         // Các API không có CAT
-        $api_nocat = $nv_Request->get_typed_array('api_' . $keysysmodule, 'post', 'string', []);
+        $api_nocat = $nv_Request->get_typed_array('api_' . $input_key, 'post', 'string', []);
         $api_cat = [];
         foreach ($sysmodule_data as $catkey => $catapis) {
-            $api_cat = array_merge_recursive($api_cat, $nv_Request->get_typed_array('api_' . $keysysmodule . '_' . $catkey, 'post', 'string', []));
+            $api_cat = array_merge_recursive($api_cat, $nv_Request->get_typed_array('api_' . $input_key . '_' . $catkey, 'post', 'string', []));
         }
         $api_submits = array_filter(array_unique(array_merge_recursive($api_nocat, $api_cat)));
         $api_submits = array_intersect($api_submits, $array_api_keys[$keysysmodule]);
