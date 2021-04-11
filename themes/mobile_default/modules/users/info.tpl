@@ -581,12 +581,12 @@
                             <div>
                                 <div>
                                     <div class="form-group clearfix radio-box {FIELD.required}" data-mess="">
-                                        <label for="custom_fields[{FIELD.field}]" class="control-label col-md-6 {FIELD.required} text-normal" title="{FIELD.description}"> {FIELD.title} </label>
-                                        <div class="btn-group col-md-18">
-                                            <!-- BEGIN: loop -->
-                                            <label for="lb_{FIELD_CHOICES.id}" class="radio-box text-normal"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" class="{FIELD.class}" onclick="validErrorHidden(this,5);" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
-                                            <!-- END: loop -->
+                                        <div class="margin-bottom-sm">
+                                            <label class="control-label text-normal {FIELD.required}" title="{FIELD.description}"> {FIELD.title} </label>
                                         </div>
+                                        <!-- BEGIN: loop -->
+                                        <label for="lb_{FIELD_CHOICES.id}" class="radio-box"> <input type="radio" name="custom_fields[{FIELD.field}]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" style="margin-top:0" onclick="validErrorHidden(this,5);"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br/>
+                                        <!-- END: loop -->
                                     </div>
                                 </div>
                             </div>
@@ -596,12 +596,12 @@
                             <div>
                                 <div>
                                     <div class="form-group clearfix check-box {FIELD.required}" data-mess="">
-                                        <label for="custom_fields[{FIELD.field}]" class="col-md-6 control-label {FIELD.required} text-normal" title="{FIELD.description}"> {FIELD.title} </label>
-                                        <div class="btn-group col-md-18">
-                                            <!-- BEGIN: loop -->
-                                            <label for="lb_{FIELD_CHOICES.id}" class="check-box text-normal"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" class="{FIELD.class}" onclick="validErrorHidden(this,5);" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
-                                            <!-- END: loop -->
+                                        <div class="margin-bottom-sm">
+                                            <label class="control-label text-normal {FIELD.required}" title="{FIELD.description}"> {FIELD.title} </label>
                                         </div>
+                                        <!-- BEGIN: loop -->
+                                        <label for="lb_{FIELD_CHOICES.id}" class="check-box"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" style="margin-top:0" onclick="validErrorHidden(this,5);"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br/>
+                                        <!-- END: loop -->
                                     </div>
                                 </div>
                             </div>
