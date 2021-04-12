@@ -68,8 +68,7 @@
 
 <form class="navbar-form" name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
     <div class="table-responsive">
-        <!-- BEGIN: show_all -->
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover hide">
             <thead>
                 <tr>
                     <th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
@@ -130,7 +129,6 @@
                 </tr>
             </tfoot>
         </table>
-        <!-- END: show_all -->
         <!-- BEGIN: group_status_1 -->
         <table class="table table-striped table-bordered table-hover">
             <caption><i class="fa fa-file-text-o"></i> {LANG.table_group_status_1}</caption>
