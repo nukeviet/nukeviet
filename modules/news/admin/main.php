@@ -845,7 +845,10 @@ foreach ($search_status as $status_view) {
     $xtpl->assign('SEARCH_STATUS', $status_view);
     $xtpl->parse('main.search_status');
 }
-
+$group_status_1 = array();
+$group_status_2 = array();
+$group_status_3 = array();
+$group_status_4 = array();
 $url_copy = '';
 foreach ($data as $row) {
     $is_excdata = 0;
@@ -881,6 +884,13 @@ foreach ($data as $row) {
 
     if ($row['status_id'] == 4) {
         $xtpl->parse('main.loop.text');
+        $group_status_1[] = $row;
+    } else if ($row['status_id'] == 2) {
+        $group_status_2[] = $row;
+    } else if ($row['status_id'] == 5) {
+        $group_status_3[] = $row;
+    } else {
+        $group_status_4[] = $row;
     }
 
     if ($order_articles and !$is_locked_row) {
@@ -895,8 +905,133 @@ foreach ($data as $row) {
     if (!$is_locked_row) {
         $xtpl->parse('main.loop.checkrow');
     }
-
     $xtpl->parse('main.loop');
+}
+
+if ($group_status_1) {
+    foreach ($group_status_1 as $row) {
+        $is_excdata = 0;
+        $is_editing_row = (isset($array_editdata[$row['id']]) and $array_editdata[$row['id']]['admin_id'] != $admin_info['userid']) ? true : false;
+        $is_locked_row = (isset($array_editdata[$row['id']]) and !$array_editdata[$row['id']]['allowtakeover']) ? true : false;
+        if ($is_locked_row) {
+            unset($row['feature']['edit'], $row['feature']['delete']);
+        }
+        $row['feature'] = implode(' ', $row['feature']);
+        if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status_id'] == 1) {
+            $count = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db_slave->quote($module_name))
+                ->fetchColumn();
+            if ($count == 0) {
+                $is_excdata = 1;
+                $row['url_send'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=excdata&amp;' . NV_OP_VARIABLE . '=send&amp;module=' . $module_name . '&amp;id=' . $row['id'];
+            }
+        }
+
+        if (empty($row['title'])) {
+            $row['title'] = $lang_module['no_name'];
+        }
+        $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']]['username'] : '';
+        $xtpl->assign('ROW', $row);
+
+        if ($is_excdata) {
+            $xtpl->parse('main.group_status_1.loop.excdata');
+        }
+        if ($module_config[$module_name]['copy_news'] == 1) {
+            $url_copy = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;copy=1&amp;id=' . $row['id'];
+            $xtpl->assign('URL_COPY', $url_copy);
+            $xtpl->parse('main.group_status_1.loop.copy_news');
+        }
+        if ($order_articles and !$is_locked_row) {
+            $xtpl->parse('main.group_status_1.loop.sort');
+        }
+
+        if ($is_editing_row) {
+            $xtpl->assign('USER_EDITING', $array_userid[$array_editdata[$row['id']]['admin_id']]['username']);
+            $xtpl->assign('LEV_EDITING', $is_locked_row ? 'lock' : 'unlock-alt');
+            $xtpl->parse('main.group_status_1.loop.is_editing');
+        }
+        if (!$is_locked_row) {
+            $xtpl->parse('main.group_status_1.loop.checkrow');
+        }
+        $xtpl->parse('main.group_status_1.loop.text');
+
+        $xtpl->parse('main.group_status_1.loop');
+    }
+    $xtpl->parse('main.group_status_1');
+}
+
+if ($group_status_2) {
+    foreach ($group_status_2 as $row) {
+        $is_locked_row = (isset($array_editdata[$row['id']]) and !$array_editdata[$row['id']]['allowtakeover']) ? true : false;
+        if ($is_locked_row) {
+            unset($row['feature']['edit'], $row['feature']['delete']);
+        }
+        if ($order_articles and !$is_locked_row) {
+            $xtpl->parse('main.group_status_2.loop.sort');
+        }
+
+        if ($is_editing_row) {
+            $xtpl->assign('USER_EDITING', $array_userid[$array_editdata[$row['id']]['admin_id']]['username']);
+            $xtpl->assign('LEV_EDITING', $is_locked_row ? 'lock' : 'unlock-alt');
+            $xtpl->parse('main.group_status_2.loop.is_editing');
+        }
+        if (!$is_locked_row) {
+            $xtpl->parse('main.group_status_2.loop.checkrow');
+        }
+
+        $xtpl->assign('ROW', $row);
+        $xtpl->parse('main.group_status_2.loop');
+    }
+    $xtpl->parse('main.group_status_2');
+}
+
+if ($group_status_3) {
+    foreach ($group_status_3 as $row) {
+        $is_locked_row = (isset($array_editdata[$row['id']]) and !$array_editdata[$row['id']]['allowtakeover']) ? true : false;
+        if ($is_locked_row) {
+            unset($row['feature']['edit'], $row['feature']['delete']);
+        }
+        if ($order_articles and !$is_locked_row) {
+            $xtpl->parse('main.group_status_3.loop.sort');
+        }
+
+        if ($is_editing_row) {
+            $xtpl->assign('USER_EDITING', $array_userid[$array_editdata[$row['id']]['admin_id']]['username']);
+            $xtpl->assign('LEV_EDITING', $is_locked_row ? 'lock' : 'unlock-alt');
+            $xtpl->parse('main.group_status_3.loop.is_editing');
+        }
+        if (!$is_locked_row) {
+            $xtpl->parse('main.group_status_3.loop.checkrow');
+        }
+
+        $xtpl->assign('ROW', $row);
+        $xtpl->parse('main.group_status_3.loop');
+    }
+    $xtpl->parse('main.group_status_3');
+}
+
+if ($group_status_4) {
+    foreach ($group_status_4 as $row) {
+        $is_locked_row = (isset($array_editdata[$row['id']]) and !$array_editdata[$row['id']]['allowtakeover']) ? true : false;
+        if ($is_locked_row) {
+            unset($row['feature']['edit'], $row['feature']['delete']);
+        }
+        if ($order_articles and !$is_locked_row) {
+            $xtpl->parse('main.group_status_4.loop.sort');
+        }
+
+        if ($is_editing_row) {
+            $xtpl->assign('USER_EDITING', $array_userid[$array_editdata[$row['id']]['admin_id']]['username']);
+            $xtpl->assign('LEV_EDITING', $is_locked_row ? 'lock' : 'unlock-alt');
+            $xtpl->parse('main.group_status_4.loop.is_editing');
+        }
+        if (!$is_locked_row) {
+            $xtpl->parse('main.group_status_4.loop.checkrow');
+        }
+
+        $xtpl->assign('ROW', $row);
+        $xtpl->parse('main.group_status_4.loop');
+    }
+    $xtpl->parse('main.group_status_4');
 }
 
 foreach ($array_list_action as $action_i => $title_i) {

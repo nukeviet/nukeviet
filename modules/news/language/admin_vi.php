@@ -358,3 +358,7 @@ $lang_module['post_is_editing'] = 'đang sửa bài viết này';
 $lang_module['add_multiple_tags'] = 'Thêm nhiều Tags';
 $lang_module['tag'] = 'Tags';
 $lang_module['note_tags'] = 'Nhập mỗi tag trên một dòng, các tag đã tồn tại sẽ được bỏ qua';
+$lang_module['table_group_status_1'] = 'Bài viết nháp';
+$lang_module['table_group_status_2'] = 'Bài viết chờ duyệt, chờ đăng';
+$lang_module['table_group_status_3'] = 'Bài viết chuyển duyệt bài, chuyển đăng bài';
+$lang_module['table_group_status_4'] = 'Tất cả bài viết còn lại';
