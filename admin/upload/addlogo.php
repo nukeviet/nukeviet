@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
         die('ERROR#' . $lang_module['notlogo']);
     }
 
-    $config_logo = array();
+    $config_logo = [];
     $config_logo['x'] = $nv_Request->get_int('x', 'post', 0);
     $config_logo['y'] = $nv_Request->get_int('y', 'post', 0);
     $config_logo['w'] = $nv_Request->get_int('w', 'post', 0);
@@ -62,7 +62,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
         $createImage->close();
 
         if (isset($array_dirname[$path])) {
-            if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $path . '/' . $file, $m)) {
+            if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|webp)))$/i', $path . '/' . $file, $m)) {
                 @nv_deletefile(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1]);
             }
 
