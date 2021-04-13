@@ -65,25 +65,78 @@ class Image
      */
     public function is_image($img)
     {
-        $typeflag = array();
-        $typeflag[1] = array( 'type' => IMAGETYPE_GIF, 'ext' => 'gif' );
-        $typeflag[2] = array( 'type' => IMAGETYPE_JPEG, 'ext' => 'jpg' );
-        $typeflag[3] = array( 'type' => IMAGETYPE_PNG, 'ext' => 'png' );
-        $typeflag[4] = array( 'type' => IMAGETYPE_SWF, 'ext' => 'swf' );
-        $typeflag[5] = array( 'type' => IMAGETYPE_PSD, 'ext' => 'psd' );
-        $typeflag[6] = array( 'type' => IMAGETYPE_BMP, 'ext' => 'bmp' );
-        $typeflag[7] = array( 'type' => IMAGETYPE_TIFF_II, 'ext' => 'tiff' );
-        $typeflag[8] = array( 'type' => IMAGETYPE_TIFF_MM, 'ext' => 'tiff' );
-        $typeflag[9] = array( 'type' => IMAGETYPE_JPC, 'ext' => 'jpc' );
-        $typeflag[10] = array( 'type' => IMAGETYPE_JP2, 'ext' => 'jp2' );
-        $typeflag[11] = array( 'type' => IMAGETYPE_JPX, 'ext' => 'jpf' );
-        $typeflag[12] = array( 'type' => IMAGETYPE_JB2, 'ext' => 'jb2' );
-        $typeflag[13] = array( 'type' => IMAGETYPE_SWC, 'ext' => 'swc' );
-        $typeflag[14] = array( 'type' => IMAGETYPE_IFF, 'ext' => 'aiff' );
-        $typeflag[15] = array( 'type' => IMAGETYPE_WBMP, 'ext' => 'wbmp' );
-        $typeflag[16] = array( 'type' => IMAGETYPE_XBM, 'ext' => 'xbm' );
+        $typeflag = [];
+        $typeflag[1] = [
+            'type' => IMAGETYPE_GIF,
+            'ext' => 'gif'
+        ];
+        $typeflag[2] = [
+            'type' => IMAGETYPE_JPEG,
+            'ext' => 'jpg'
+        ];
+        $typeflag[3] = [
+            'type' => IMAGETYPE_PNG,
+            'ext' => 'png'
+        ];
+        $typeflag[4] = [
+            'type' => IMAGETYPE_SWF,
+            'ext' => 'swf'
+        ];
+        $typeflag[5] = [
+            'type' => IMAGETYPE_PSD,
+            'ext' => 'psd'
+        ];
+        $typeflag[6] = [
+            'type' => IMAGETYPE_BMP,
+            'ext' => 'bmp'
+        ];
+        $typeflag[7] = [
+            'type' => IMAGETYPE_TIFF_II,
+            'ext' => 'tiff'
+        ];
+        $typeflag[8] = [
+            'type' => IMAGETYPE_TIFF_MM,
+            'ext' => 'tiff'
+        ];
+        $typeflag[9] = [
+            'type' => IMAGETYPE_JPC,
+            'ext' => 'jpc'
+        ];
+        $typeflag[10] = [
+            'type' => IMAGETYPE_JP2,
+            'ext' => 'jp2'
+        ];
+        $typeflag[11] = [
+            'type' => IMAGETYPE_JPX,
+            'ext' => 'jpf'
+        ];
+        $typeflag[12] = [
+            'type' => IMAGETYPE_JB2,
+            'ext' => 'jb2'
+        ];
+        $typeflag[13] = [
+            'type' => IMAGETYPE_SWC,
+            'ext' => 'swc'
+        ];
+        $typeflag[14] = [
+            'type' => IMAGETYPE_IFF,
+            'ext' => 'aiff'
+        ];
+        $typeflag[15] = [
+            'type' => IMAGETYPE_WBMP,
+            'ext' => 'wbmp'
+        ];
+        $typeflag[16] = [
+            'type' => IMAGETYPE_XBM,
+            'ext' => 'xbm'
+        ];
+        
+        defined('IMAGETYPE_WEBP') && $typeflag[18] = [
+            'type' => IMAGETYPE_WEBP,
+            'ext' => 'webp'
+        ];
 
-        $imageinfo = array();
+        $imageinfo = [];
         $file = @getimagesize($img);
         if ($file) {
             $imageinfo['src'] = $img;
@@ -110,7 +163,7 @@ class Image
         $tweakfactor = 1.8;
         $memoryNeeded = round(($this->fileinfo['width'] * $this->fileinfo['height'] * $this->fileinfo['bits'] * $this->fileinfo['channels'] / 8 + $k64) * $tweakfactor);
 
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
         if (extension_loaded('suhosin')) {
             $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
@@ -133,22 +186,19 @@ class Image
      */
     public function get_createImage()
     {
-        switch ($this->fileinfo['type']) {
-            case IMAGETYPE_GIF:
-                $this->createImage = ImageCreateFromGif($this->filename);
-                break;
-            case IMAGETYPE_JPEG:
-                $this->createImage = ImageCreateFromJpeg($this->filename);
-                break;
-            case IMAGETYPE_PNG:
-                $this->createImage = ImageCreateFromPng($this->filename);
-                break;
-            case IMAGETYPE_BMP:
-                $this->createImage = $this->ImageCreateFromBmp($this->filename);
-                break;
+        if ($this->fileinfo['type'] == IMAGETYPE_GIF) {
+            $this->createImage = ImageCreateFromGif($this->filename);
+        } elseif ($this->fileinfo['type'] == IMAGETYPE_JPEG) {
+            $this->createImage = ImageCreateFromJpeg($this->filename);
+        } elseif ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+            $this->createImage = ImageCreateFromPng($this->filename);
+        } elseif ($this->fileinfo['type'] == IMAGETYPE_BMP) {
+            $this->createImage = $this->ImageCreateFromBmp($this->filename);
+        } elseif (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP) {
+            $this->createImage = ImageCreateFromWebp($this->filename);
         }
 
-        if (! $this->createImage) {
+        if (!$this->createImage) {
             $this->error = self::ERROR_IMAGE6;
         } else {
             $this->create_Image_info = $this->fileinfo;
@@ -180,7 +230,7 @@ class Image
      */
     public function check_file()
     {
-        if ($this->fileinfo == array()) {
+        if ($this->fileinfo == []) {
             return self::ERROR_IMAGE1;
         }
         if (! is_readable($this->filename)) {
@@ -189,10 +239,13 @@ class Image
         if ($this->fileinfo['src'] == '' or $this->fileinfo['width'] == 0 or $this->fileinfo['height'] == 0 or $this->fileinfo['mime'] == '') {
             return self::ERROR_IMAGE3;
         }
-        if (! in_array($this->fileinfo['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP ))) {
+        
+        $image_types = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP];
+        defined('IMAGETYPE_WEBP') && $image_types[] = IMAGETYPE_WEBP;
+        if (! in_array($this->fileinfo['type'], $image_types)) {
             return self::ERROR_IMAGE4;
         }
-        if (! preg_match('#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png|bmp|ms-bmp)#is', $this->fileinfo['mime'])) {
+        if (! preg_match('#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png|bmp|ms-bmp|webp)#is', $this->fileinfo['mime'])) {
             return self::ERROR_IMAGE5;
         }
         return '';
@@ -582,7 +635,7 @@ class Image
                         }
                     }
 
-                    if ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+                    if ($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) {
                         if (imagealphablending($workingImage, false)) {
                             $transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
                             if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
@@ -640,7 +693,7 @@ class Image
     					}
     				}
 
-    				if ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+    				if ($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) {
     					if (imagealphablending($workingImage, false)) {
     						$transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
     						if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
@@ -696,7 +749,7 @@ class Image
                         }
                     }
 
-                    if ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+                    if ($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) {
                         if (imagealphablending($workingImage, false)) {
                             $transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
                             if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
@@ -785,7 +838,9 @@ class Image
             }
 
             $logo_info = $this->is_image($logo);
-            if ($logo_info != array() and $logo_info['width'] != 0 and $logo_info['height'] != 0 and in_array($logo_info['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG )) and preg_match("#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $logo_info['mime'])) {
+            $image_types = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG];
+            defined('IMAGETYPE_WEBP') && $image_types[] = IMAGETYPE_WEBP;
+            if ($logo_info != [] and $logo_info['width'] != 0 and $logo_info['height'] != 0 and in_array($logo_info['type'], $image_types) and preg_match("#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png|webp)#is", $logo_info['mime'])) {
                 $this->set_memory_limit();
 
                 if (isset($config_logo['w']) and isset($config_logo['h'])) {
@@ -823,7 +878,7 @@ class Image
                 }
 
                 if ($X + $dst_w <= $this->create_Image_info['width']  and $Y + $dst_h <= $this->create_Image_info['height']) {
-                    if ($this->fileinfo['type'] == IMAGETYPE_PNG and ! $this->is_createWorkingImage) {
+                    if (($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) and ! $this->is_createWorkingImage) {
                         if (imagealphablending($this->createImage, false)) {
                             $transparency = imagecolorallocatealpha($this->createImage, 0, 0, 0, 127);
                             if (false !== $transparency and imagefill($this->createImage, 0, 0, $transparency)) {
@@ -834,19 +889,14 @@ class Image
 
                     imagealphablending($this->createImage, true);
 
-                    switch ($logo_info['type']) {
-                        case IMAGETYPE_GIF:
-                            $this->logoimg = ImageCreateFromGif($logo);
-                            break;
-                        case IMAGETYPE_JPEG:
-                            $this->logoimg = ImageCreateFromJpeg($logo);
-                            break;
-                        case IMAGETYPE_PNG:
-                            $this->logoimg = ImageCreateFromPng($logo);
-                            break;
-                        case IMAGETYPE_BMP:
-                            $this->logoimg = $this->ImageCreateFromBmp($logo);
-                            break;
+                    if ($logo_info['type'] == IMAGETYPE_GIF) {
+                        $this->logoimg = ImageCreateFromGif($logo);
+                    } elseif($logo_info['type'] == IMAGETYPE_JPEG) {
+                        $this->logoimg = ImageCreateFromJpeg($logo);
+                    } elseif($logo_info['type'] == IMAGETYPE_PNG) {
+                        $this->logoimg = ImageCreateFromPng($logo);
+                    } elseif(defined('IMAGETYPE_WEBP') and $logo_info['type'] == IMAGETYPE_WEBP) {
+                        $this->logoimg = ImageCreateFromWebp($logo);
                     }
 
                     ImageCopyResampled($this->createImage, $this->logoimg, $X, $Y, 0, 0, $dst_w, $dst_h, $logo_info['width'], $logo_info['height']);
@@ -930,27 +980,24 @@ class Image
             }
 
             header('Content-type: ' . $this->create_Image_info['mime']);
-            switch ($this->create_Image_info['type']) {
-                case IMAGETYPE_GIF:
-                    ImageGif($this->createImage);
-                    break;
+            if ($this->create_Image_info['type'] == IMAGETYPE_GIF) {
+                ImageGif($this->createImage);
+            } elseif ($this->create_Image_info['type'] == IMAGETYPE_JPEG) {
+                ImageJpeg($this->createImage, null, $quality);
+            } elseif ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
+                $quality = round(($quality / 100) * 10);
+                if ($quality < 1) {
+                    $quality = 1;
+                } elseif ($quality > 10) {
+                    $quality = 10;
+                }
+                $quality = 10 - $quality;
 
-                case IMAGETYPE_JPEG:
-                    ImageJpeg($this->createImage, null, $quality);
-                    break;
-
-                case IMAGETYPE_PNG:
-                    $quality = round(($quality / 100) * 10);
-                    if ($quality < 1) {
-                        $quality = 1;
-                    } elseif ($quality > 10) {
-                        $quality = 10;
-                    }
-                    $quality = 10 - $quality;
-
-                    ImagePng($this->createImage, $quality);
-                    break;
+                ImagePng($this->createImage, $quality);
+            } elseif (defined('IMAGETYPE_WEBP') and $this->create_Image_info['type'] == IMAGETYPE_WEBP) {
+                imageWebp($this->createImage, null, $quality);
             }
+
             $this->close();
         }
     }
@@ -978,7 +1025,7 @@ class Image
                         $basename = strstr($this->create_Image_info['src'], '.') ? substr($this->create_Image_info['src'], 0, strrpos($this->create_Image_info['src'], '.')) : '';
                     }
 
-                    if (! empty($basename)) {
+                    if (!empty($basename)) {
                         $newname .= '_' . $basename;
                     }
                 }
@@ -990,27 +1037,21 @@ class Image
                 $_ext = end($_array_name);
                 $newname = preg_replace("/." . array_pop($_array_name) . "$/", '', $newname);
 
-                if (! preg_match("/\/$/", $path)) {
+                if (!preg_match("/\/$/", $path)) {
                     $path = $path . '/';
                 }
                 $newname = $path . $newname . '.' . $_ext;
 
-                switch ($this->create_Image_info['type']) {
-                    case IMAGETYPE_GIF:
-                        ImageGif($this->createImage, $newname);
-                        break;
-
-                    case IMAGETYPE_JPEG:
-                        ImageJpeg($this->createImage, $newname, $quality);
-                        break;
-
-                    case IMAGETYPE_PNG:
-                        ImagePng($this->createImage, $newname);
-                        break;
-
-                    case IMAGETYPE_BMP:
-                        file_put_contents($newname, $this->GD2BMPstring($this->createImage));
-                        break;
+                if ($this->create_Image_info['type'] == IMAGETYPE_GIF) {
+                    ImageGif($this->createImage, $newname);
+                } elseif ($this->create_Image_info['type'] == IMAGETYPE_JPEG) {
+                    ImageJpeg($this->createImage, $newname, $quality);
+                } elseif ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
+                    ImagePng($this->createImage, $newname);
+                } elseif ($this->create_Image_info['type'] == IMAGETYPE_BMP) {
+                    file_put_contents($newname, $this->GD2BMPstring($this->createImage));
+                } elseif (defined('IMAGETYPE_WEBP') and $this->create_Image_info['type'] == IMAGETYPE_WEBP) {
+                    ImageWebp($this->createImage, $newname, $quality);
                 }
 
                 $this->create_Image_info['src'] = $newname;

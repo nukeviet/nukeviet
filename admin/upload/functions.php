@@ -199,7 +199,7 @@ function nv_get_viewImage($fileName, $refresh = 0)
 {
     global $array_thumb_config;
 
-    if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico)))$/i', $fileName, $m)) {
+    if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico|webp)))$/i', $fileName, $m)) {
         $viewFile = NV_FILES_DIR . '/' . $m[1];
 
         if (file_exists(NV_ROOTDIR . '/' . $viewFile)) {
@@ -538,7 +538,7 @@ function nv_listUploadDir($dir, $real_dirlist = [])
 $allow_upload_dir = [NV_UPLOADS_DIR];
 $array_hidefolders = ['.', '..', 'index.html', '.htaccess', '.tmp'];
 
-$array_images = ['gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'bmp', 'ico'];
+$array_images = ['gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'bmp', 'ico', 'webp'];
 $array_flash = ['swf', 'swc', 'flv'];
 $array_archives = ['rar', 'zip', 'tar'];
 $array_documents = ['doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx'];

@@ -40,7 +40,7 @@ if ($idf < 0) {
         if ($dh = opendir(NV_ROOTDIR . '/' . $pathimg)) {
             while (($file = readdir($dh)) !== false) {
                 $fileName = $pathimg . '/' . $file;
-                if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $fileName, $m)) {
+                if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|webp)))$/i', $fileName, $m)) {
                     $_array_filename[] = $fileName;
                 }
             }
