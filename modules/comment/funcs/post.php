@@ -62,7 +62,7 @@ if ($captcha == 0) {
         }
     }
 }
-$code = $global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('code', 'post', '');
+$code = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('code', 'post', '');
 if ($show_captcha and !nv_capcha_txt($code)) {
     _loadContents('ERR_code_' . $lang_global['securitycodeincorrect']);
 }

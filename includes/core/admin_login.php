@@ -233,7 +233,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -246,7 +246,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
     } elseif ($global_config['gfx_chk'] and !nv_capcha_txt($nv_seccode)) {
-        $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+        $error = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } else {
         // Đăng nhập khi kích hoạt diễn đàn
         if (defined('NV_IS_USER_FORUM')) {
@@ -468,10 +468,16 @@ if (empty($admin_pre_data)) {
 
     // Kích hoạt mã xác nhận
     if ($global_config['gfx_chk']) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
             $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
+            
+            if ($global_config['captcha_type'] == 2) {
+                $xtpl->parse('main.pre_form.recaptcha.recaptcha2');
+            } elseif ($global_config['captcha_type'] == 3) {
+                $xtpl->parse('main.pre_form.recaptcha.recaptcha3');
+            }
             $xtpl->parse('main.pre_form.recaptcha');
         } else {
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);

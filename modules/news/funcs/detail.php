@@ -73,7 +73,8 @@ if (!empty($news_contents)) {
     $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'];
     $base_url_rewrite = nv_url_rewrite($base_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
+    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+    if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
         nv_redirect_location($base_url_rewrite);
     }
     $news_contents['link'] = $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
@@ -84,6 +85,7 @@ if (!empty($news_contents)) {
      * bên trên đã được chuyển hướng
      */
     if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
+        $nv_BotManager->setPrivate();
         $contents = no_permission($global_array_cat[$catid]['groups_view']);
 
         include NV_ROOTDIR . '/includes/header.php';
@@ -367,13 +369,33 @@ if ($news_contents['allowed_rating']) {
     }
     $news_contents['stringrating'] = sprintf($lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating']);
     $news_contents['numberrating'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating'], 1) : 0;
-    $news_contents['langstar'] = [
-        'note' => $lang_module['star_note'],
-        'verypoor' => $lang_module['star_verypoor'],
-        'poor' => $lang_module['star_poor'],
-        'ok' => $lang_module['star_ok'],
-        'good' => $lang_module['star_good}'],
-        'verygood' => $lang_module['star_verygood']
+    $news_contents['numberrating_star'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating']) : 0;
+    $news_contents['stars'] = [
+        [
+            'val' => '1',
+            'title' => $lang_module['star_verypoor'],
+            'checked' => 1 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '2',
+            'title' => $lang_module['star_poor'],
+            'checked' => 2 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '3',
+            'title' => $lang_module['star_ok'],
+            'checked' => 3 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '4',
+            'title' => $lang_module['star_good'],
+            'checked' => 4 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ],
+        [
+            'val' => '5',
+            'title' => $lang_module['star_verygood'],
+            'checked' => 5 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
+        ]
     ];
 }
 
@@ -407,8 +429,8 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
     $content_comment = '';
 }
 
-// Xu ly Layout tuy chinh
-$module_info['layout_funcs'][$op_file] = !empty($news_contents['layout_func']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
+// Xu ly Layout tuy chinh (khong ap dung cho theme mobile_default)
+$module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and "mobile_default" != $global_config['module_theme']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
 
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 

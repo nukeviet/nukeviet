@@ -629,18 +629,21 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     }
 
     if ($news_contents['allowed_rating'] == 1) {
-        $xtpl->assign('LANGSTAR', $news_contents['langstar']);
         $xtpl->assign('STRINGRATING', $news_contents['stringrating']);
-        $xtpl->assign('NUMBERRATING', $news_contents['numberrating']);
-
+        
+        foreach ($news_contents['stars'] as $star) {
+            $xtpl->assign('STAR', $star);
+            $xtpl->parse('main.allowed_rating.star');
+        }
+        
         if ($news_contents['disablerating'] == 1) {
             $xtpl->parse('main.allowed_rating.disablerating');
         }
-
+        
         if ($news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point']) {
             $xtpl->parse('main.allowed_rating.data_rating');
         }
-
+        
         $xtpl->parse('main.allowed_rating');
     }
 
@@ -876,14 +879,16 @@ function sendmail_themme($sendmail)
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
     if ($global_config['gfx_chk'] > 0) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.content.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.content.recaptcha');
         } else {
             $xtpl->assign('GFX_NUM', NV_GFX_NUM);
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
@@ -1088,7 +1093,7 @@ function nv_theme_viewpdf($file_url)
     $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
     return $xtpl->text('main');

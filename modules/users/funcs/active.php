@@ -154,7 +154,7 @@ if (defined('SSO_REGISTER_SECRET')) {
     $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
 }
 
-$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
+$info .= "<img border=\"0\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
 $info .= "[<a href=\"" . $nv_redirect . "\">" . $lang_module['redirect_to_login'] . "</a>]";
 
 $contents = user_info_exit($info);

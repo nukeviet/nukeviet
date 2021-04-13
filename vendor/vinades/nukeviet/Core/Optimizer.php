@@ -53,8 +53,8 @@ class Optimizer
         // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
         if ($_isFullBuffer and $jquery) {
-            $_jsAfter = '<script src="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol;
-            $_jsSrcPreload = '<link rel="preload" as="script" href="' . $this->base_siteurl . NV_ASSETS_DIR . '/js/jquery/jquery.min.js">' . $this->eol;
+            $_jsAfter = '<script src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol;
+            $_jsSrcPreload = '<link rel="preload" as="script" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js">' . $this->eol;
         } else {
             $_jsAfter = $_jsSrcPreload = '';
         }

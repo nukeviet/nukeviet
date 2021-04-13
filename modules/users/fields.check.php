@@ -12,6 +12,9 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+// Gọi global biến này vì có thể file này include từ trong hàm
+global $op;
+
 if (empty($query_field)) {
     $query_field = [];
 }

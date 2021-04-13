@@ -89,11 +89,17 @@ $(document).ready(function(){
 		return false;
 	});
     $('[data-toggle="ctcaptcha"]').change(function() {
-        if ($(this).val() == '2') {
+        if ($(this).val() == '3') {
             $('[data-captcha="typebasic"]').hide();
+			$('[data-captcha="typerecaptcha2"]').hide();
+            $('[data-captcha="typerecaptcha"]').show();
+        } else if ($(this).val() == '2') {
+            $('[data-captcha="typebasic"]').hide();
+			$('[data-captcha="typerecaptcha2"]').show();
             $('[data-captcha="typerecaptcha"]').show();
         } else {
             $('[data-captcha="typebasic"]').show();
+			$('[data-captcha="typerecaptcha2"]').hide();
             $('[data-captcha="typerecaptcha"]').hide();
         }
     });

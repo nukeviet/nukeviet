@@ -203,7 +203,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     }
 
     if ($gfx_chk) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.reg_recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.reg_recaptcha');
@@ -212,7 +214,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
             $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
             $xtpl->parse('main.reg_captcha');
@@ -289,7 +291,9 @@ function user_login($is_ajax = false)
         5,
         7
     ))) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->parse('main.recaptcha.default');
             $xtpl->parse('main.recaptcha');
@@ -394,7 +398,9 @@ function user_openid_login($gfx_chk, $attribs)
     $xtpl->assign('GLANG', $lang_global);
 
     if ($gfx_chk) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
@@ -448,7 +454,9 @@ function user_lostpass($data)
     $xtpl->assign('DATA', $data);
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 3) {
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($global_config['captcha_type'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
@@ -518,7 +526,9 @@ function user_lostactivelink($data, $question)
     } else {
         $xtpl->assign('FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
 
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.step1.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.step1.recaptcha');
@@ -527,7 +537,7 @@ function user_lostactivelink($data, $question)
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
             $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
             $xtpl->parse('main.step1.captcha');
@@ -940,9 +950,17 @@ function openid_callback($openid_info)
 
     $xtpl = new XTemplate('openid_callback.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('OPIDRESULT', $openid_info);
-    if ($openid_info['status'] == 'success') {
-        $xtpl->parse('main.success');
+
+    if (!empty($openid_info['client'])) {
+        $xtpl->parse('main.client');
+    } else {
+        if ($openid_info['status'] == 'success') {
+            $xtpl->parse('main.regular.success');
+        }
+
+        $xtpl->parse('main.regular');
     }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -1131,7 +1149,9 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
 
     if ($gfx_chk) {
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 3) {
+            $xtpl->parse('main.recaptcha3');
+        } elseif ($global_config['captcha_type'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');

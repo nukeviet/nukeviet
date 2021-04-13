@@ -41,7 +41,7 @@ if (!$ip_exclusion) {
 
     if ($flb->is_flooded) {
         // Nếu recaptcha được kích hoạt, dùng nó để xác nhận khi bị chặn
-        $captchaPass = (!empty($global_config['captcha_type']) and $global_config['captcha_type'] == 2);
+        $captchaPass = (!empty($global_config['captcha_type']) and ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3));
         if ($captchaPass) {
             if ($nv_Request->isset_request('captcha_pass_flood', 'post')) {
                 $tokend = $nv_Request->get_title('tokend', 'post', '');
@@ -66,7 +66,7 @@ if (!$ip_exclusion) {
             $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
             $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
-            $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
+            $xtpl->assign('IMG_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/load_bar.gif');
             $xtpl->assign('IMG_WIDTH', 33);
             $xtpl->assign('IMG_HEIGHT', 8);
             $xtpl->assign('FLOOD_BLOCKER_INFO1', $lang_global['flood_info1']);
@@ -80,6 +80,12 @@ if (!$ip_exclusion) {
                 $xtpl->assign('CATPCHA_TYPE', $global_config['recaptcha_type']);
                 $xtpl->assign('CATPCHA_LANG', NV_LANG_INTERFACE);
                 $xtpl->assign('REDIRECT', nv_redirect_encrypt($client_info['selfurl']));
+                
+                if ($global_config['captcha_type'] == 2) {
+                    $xtpl->parse('main.captchapass.recaptcha2');
+                } elseif ($global_config['captcha_type'] == 3) {
+                    $xtpl->parse('main.captchapass.recaptcha3');
+                }
                 $xtpl->parse('main.captchapass');
             }
 

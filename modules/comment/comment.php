@@ -43,6 +43,12 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 
     $num_items = $db_slave->query($db_slave->sql())
         ->fetchColumn();
+
+    $total = ceil($num_items/$per_page_comment);
+    if ($page > 1 and $page > $total) {
+        $page = 1;
+    }
+
     if ($num_items) {
         $emailcomm = $module_config[$module]['emailcomm'];
         $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')
@@ -338,7 +344,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('COMMENTCONTENT', $comment);
 
     // Hiện không dùng, giữ lại để tương thích phiên bản cũ.
-    $xtpl->assign('BASE_URL_COMM', $base_url);
+    // $xtpl->assign('BASE_URL_COMM', $base_url);
 
     if (defined('NV_COMM_ID')) {
         $xtpl->parse('main.header');
@@ -403,7 +409,9 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
         }
 
         if ($show_captcha) {
-            if ($global_config['captcha_type'] == 2) {
+            if ($global_config['captcha_type'] == 3) {
+                $xtpl->parse('main.allowed_comm.recaptcha3');
+            } elseif ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('GFX_NUM', -1);
                 $xtpl->parse('main.allowed_comm.recaptcha');
@@ -414,7 +422,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+                $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
                 $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
                 $xtpl->parse('main.allowed_comm.captcha');
             }
@@ -480,7 +488,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
             } elseif (is_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png')) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
             } else {
-                $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                $comment_array_i['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
             }
 
             if (!empty($comment_array_i['userid'])) {

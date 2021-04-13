@@ -5,7 +5,7 @@
 			<h2 class="text-center margin-bottom-lg">
 				{LANG.mode_login_2}
 			</h2>
-			<form action="{OPENID_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg">
+			<form action="{OPENID_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 				<div class="row">
 					<div class="nv-info margin-bottom">
 						{LANG.openid_confirm_info}

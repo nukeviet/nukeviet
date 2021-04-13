@@ -83,7 +83,7 @@ if ($checkss == $data['checkss']) {
     }
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
     } else {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -93,9 +93,9 @@ if ($checkss == $data['checkss']) {
         $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
+            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
             'step' => 'step1',
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 
@@ -310,6 +310,7 @@ if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config[
     nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }
 
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 

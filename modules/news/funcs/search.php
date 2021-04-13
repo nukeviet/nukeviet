@@ -62,42 +62,46 @@ $key = str_replace('+', ' ', $key);
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
 
-$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if (!empty($key)) {
-    $base_url_rewrite .= '&q=' . urlencode($key);
+    $base_url .= '&q=' . urlencode($key);
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
 if (!empty($choose)) {
-    $base_url_rewrite .= '&choose=' . $choose;
+    $base_url .= '&choose=' . $choose;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 if (!empty($catid)) {
-    $base_url_rewrite .= '&catid=' . $catid;
+    $base_url .= '&catid=' . $catid;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
-    $base_url_rewrite .= '&from_date=' . $date_array['from_date'];
+    $base_url .= '&from_date=' . $date_array['from_date'];
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
-    $base_url_rewrite .= '&to_date=' . $date_array['to_date'];
+    $base_url .= '&to_date=' . $date_array['to_date'];
 }
 
+$base_url_rewrite = $base_url;
 $page = $nv_Request->get_int('page', 'get', 1);
 if ($page > 1) {
     $base_url_rewrite .= '&page=' . $page;
 }
 $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-
-$request_uri = $_SERVER['REQUEST_URI'];
-if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-    header('Location: ' . $base_url_rewrite);
-    die();
+$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+$request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+if (strpos($request_uri, $base_url_check) === 0) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) === 0) {
+    $canonicalUrl = $base_url_rewrite;
+} else {
+    nv_redirect_location($base_url_check);
 }
 
 $array_cat_search = array();
@@ -117,11 +121,6 @@ $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
 } else {
-    $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q=' . $key, true);
-    if (strpos($canonicalUrl, NV_MY_DOMAIN) !== 0) {
-        $canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
-    }
-
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
 
@@ -235,6 +234,9 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
         }
         $numRecord = $response['hits']['total'];
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        $total = ceil($numRecord/$per_page);
+        betweenURLs($page, $total, $base_url, '&page-', $prevPage, $nextPage);
 
         foreach ($response['hits']['hits'] as $key => $value) {
             $homeimgthumb = $value['_source']['homeimgthumb'];
@@ -312,6 +314,9 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 
         $numRecord = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        $total = ceil($numRecord/$per_page);
+        betweenURLs($page, $total, $base_url, '&page=', $prevPage, $nextPage);
 
         $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.' . $order_articles_by . ' DESC')

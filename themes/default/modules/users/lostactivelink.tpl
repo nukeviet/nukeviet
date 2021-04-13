@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="centered">
     <div class="login-box">
@@ -8,7 +8,7 @@
             <div class="panel-body">
                 <h2 class="text-center margin-bottom-lg">{LANG.lostactive_pagetitle}</h2>
                 <!-- BEGIN: step1 -->
-                <form id="lostpassForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal margin-bottom-lg">
+                <form id="lostpassForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal margin-bottom-lg"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
                     <div class="nv-info margin-bottom">
                         {LANG.lostactive_noactive}<br />- {LANG.lostactive_info1}<br />- {LANG.lostactive_info2}
                     </div>

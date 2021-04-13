@@ -27,7 +27,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
     $return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaid . '" name="' . $textareaname . '">' . $val . '</textarea>';
     if (!defined('CKEDITOR')) {
         define('CKEDITOR', true);
-        $return .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
+        $return .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
         $return .= '<script type="text/javascript">CKEDITOR.timestamp=CKEDITOR.timestamp+' . $global_config['timestamp'] . ';</script>';
         if (defined('NV_IS_ADMIN')) {
             $return .= "<script type=\"text/javascript\">
@@ -94,7 +94,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         }
     }
     $return .= "<script type=\"text/javascript\">CKEDITOR.replace( '" . $module_data . "_" . $textareaid . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',";
-    $return .= "contentsCss: '" . NV_BASE_SITEURL . NV_EDITORSDIR . "/ckeditor/nv.css?t=" . $global_config['timestamp'] . "',";
+    $return .= "contentsCss: '" . NV_STATIC_URL . NV_EDITORSDIR . "/ckeditor/nv.css?t=" . $global_config['timestamp'] . "',";
 
     if (defined('NV_IS_ADMIN')) {
         if (empty($path) and empty($currentpath)) {

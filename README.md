@@ -32,7 +32,7 @@ See [LICENSE](LICENSE) for the full license.
   - NukeViet group on FB: https://www.facebook.com/groups/nukeviet/
   - http://twitter.com/nukeviet
   - https://groups.google.com/forum/?fromgroups#!forum/nukeviet
-  - http://google.com/+nukeviet
+  - https://www.youtube.com/c/nukeviet
 
 
 

@@ -22,25 +22,46 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 function nv_show_tags_list($q = '', $incomplete = false)
 {
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
+    $page = $nv_Request->get_absint('page', 'get', 1);
+    $per_page_old = $nv_Request->get_absint('per_page_tagadmin_' . $module_data, 'cookie', 50);
+    $per_page = $nv_Request->get_absint('per_page', 'get', $per_page_old);
 
-    $db_slave->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $module_data . '_tags')->order('alias ASC');
+    if ($per_page < 1 and $per_page > 500) {
+        $per_page = 50;
+    }
+    if ($per_page_old != $per_page) {
+        $nv_Request->set_Cookie('per_page_tagadmin_' . $module_data, $per_page, NV_LIVE_COOKIE_TIME);
+    }
 
+    $where = [];
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
+    if (!empty($q)) {
+        $where[] = "keywords LIKE '%" . $db_slave->dblikeescape($q) . "%'";
+        $base_url .= '&amp;q=' . urlencode($q);
+    }
     if ($incomplete === true) {
-        $db_slave->where('description = \'\'');
+        $where[] = "description = ''";
+        $base_url .= '&amp;incomplete=1';
     }
 
-    if (! empty($q)) {
-        $q = strip_punctuation($q);
-        $db_slave->where('keywords LIKE :keywords');
-    } else {
-        $per_page = $nv_Request->get_int('per_page', 'cookie', $module_config[$module_name]['per_page']);
-        $db_slave->order('alias ASC')->limit($per_page);
-    }
+    $db_slave->sqlreset()
+    ->select('COUNT(tid)')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+    ->where(implode(' AND ', $where));
 
     $sth = $db_slave->prepare($db_slave->sql());
-    if (! empty($q)) {
-        $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
-    }
+    $sth->execute();
+    $num_items = $sth->fetchColumn();
+
+    $db_slave->sqlreset()
+    ->select('*')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+    ->where(implode(' AND ', $where))
+    ->order('alias ASC')
+    ->limit($per_page)
+    ->offset(($page - 1) * $per_page);
+
+    $sth = $db_slave->prepare($db_slave->sql());
     $sth->execute();
 
     $xtpl = new XTemplate('tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -65,8 +86,13 @@ function nv_show_tags_list($q = '', $incomplete = false)
     }
     $sth->closeCursor();
 
-    if (empty($q) and $number >= $module_config[$module_name]['per_page']) {
-        $xtpl->parse('main.other');
+    $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
+    if (!empty($q)) {
+        $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'module_show_list');
+    }
+    if (!empty($generate_page)) {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
     }
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -96,7 +122,6 @@ if ($nv_Request->isset_request('del_tid', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 } elseif ($nv_Request->isset_request('q', 'get')) {
     $q = $nv_Request->get_title('q', 'get', '');
-
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_show_tags_list($q);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -108,21 +133,35 @@ $incomplete = $nv_Request->get_bool('incomplete', 'get,post', false);
 list($tid, $title, $alias, $description, $image, $keywords) = array( 0, '', '', '', '', '' );
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
+$savetag = $nv_Request->get_int('savetag', 'post', 0);
+if (!empty($savetag)) {
+    $title = $nv_Request->get_textarea('mtitle', '', NV_ALLOWED_HTML_TAGS, true);
+    $list_tag = explode('<br />', strip_tags($title, '<br>'));
+    foreach ($list_tag as $tag_i) {
+        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, keywords) VALUES (0, :title, :alias, :keywords)');
+        $sth->bindParam(':title', $tag_i, PDO::PARAM_STR);
+        $sth->bindParam(':alias', change_alias_tags($tag_i), PDO::PARAM_STR);
+        $sth->bindParam(':keywords', $tag_i, PDO::PARAM_STR);
+        $sth->execute();
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'add_multil_tags', change_alias_tags($tag_i), $admin_info['userid']);
+    }
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ($incomplete ? '&incomplete=1' : ''));
+}
+
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $tid = $nv_Request->get_int('tid', 'post', 0);
+    $title = $nv_Request->get_title('title', 'post', '');
     $keywords = $nv_Request->get_title('keywords', 'post', '');
     $alias = $nv_Request->get_title('alias', 'post', '');
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
     $keywords = explode(',', $keywords);
-    $keywords[] = $alias;
     $keywords = array_map('trim', $keywords);
     $keywords = array_diff($keywords, array(''));
     $keywords = array_unique($keywords);
     $keywords = implode(',', $keywords);
-
     $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($alias) : change_alias_tags($alias);
 
     $image = $nv_Request->get_string('image', 'post', '');
@@ -136,14 +175,15 @@ if (! empty($savecat)) {
         $error = $lang_module['error_name'];
     } else {
         if ($tid == 0) {
-            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, alias, description, image, keywords) VALUES (0, :alias, :description, :image, :keywords)');
+            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, description, image, keywords) VALUES (0, :title, :alias, :description, :image, :keywords)');
             $msg_lg = 'add_tags';
         } else {
-            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid);
+            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title, alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid);
             $msg_lg = 'edit_tags';
         }
 
         try {
+            $sth->bindParam(':title', $title, PDO::PARAM_STR);
             $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
             $sth->bindParam(':description', $description, PDO::PARAM_STR);
             $sth->bindParam(':image', $image, PDO::PARAM_STR);
@@ -161,7 +201,7 @@ if (! empty($savecat)) {
 $tid = $nv_Request->get_int('tid', 'get', 0);
 
 if ($tid > 0) {
-    list($tid, $alias, $description, $image, $keywords) = $db_slave->query('SELECT tid, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
+    list($tid, $title, $alias, $description, $image, $keywords) = $db_slave->query('SELECT tid, title, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
     $lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 
@@ -179,11 +219,12 @@ $xtpl->assign('OP', $op);
 $xtpl->assign('TAGS_LIST', nv_show_tags_list('', $incomplete));
 
 $xtpl->assign('tid', $tid);
+$xtpl->assign('title', $title);
 $xtpl->assign('alias', $alias);
 $xtpl->assign('keywords', $keywords);
 $xtpl->assign('description', nv_htmlspecialchars(nv_br2nl($description)));
 
-if (! empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
+if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
     $currentpath = dirname($image);
 }
@@ -191,9 +232,13 @@ $xtpl->assign('image', $image);
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
+}
+
+if (empty($rowcontent['alias'])) {
+    $xtpl->parse('main.getalias');
 }
 
 // Nhac nho dang xem cac tags duoi dang khong co mo ta, thay doi gia tri submit form

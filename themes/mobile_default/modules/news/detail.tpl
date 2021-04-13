@@ -1,8 +1,8 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.pack.js"></script>
-<script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
-<link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
-<link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.pack.js"></script>
+<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
+<link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
+<link href="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <div class="news_column panel panel-default" itemtype="http://schema.org/NewsArticle" itemscope>
     <div class="panel-body">
         <h1 itemprop="headline">{DETAIL.title}</h1>
@@ -157,45 +157,42 @@
                         </span>
                         <!-- END: data_rating -->
                         <div style="padding: 5px;">
-                            <input class="hover-star" type="radio" value="1" title="{LANGSTAR.verypoor}" /><input class="hover-star" type="radio" value="2" title="{LANGSTAR.poor}" /><input class="hover-star" type="radio" value="3" title="{LANGSTAR.ok}" /><input class="hover-star" type="radio" value="4" title="{LANGSTAR.good}" /><input class="hover-star" type="radio" value="5" title="{LANGSTAR.verygood}" /><span id="hover-test" style="margin: 0 0 0 20px;">{LANGSTAR.note}</span>
+                            <!-- BEGIN: star --><input class="hover-star required" type="radio" value="{STAR.val}" title="{STAR.title}"{STAR.checked}/><!-- END: star -->
+                            <span id="hover-test" style="margin: 0 0 0 20px;">{LANG.star_note}</span>
                         </div>
                     </div>
                 </form>
                 <script type="text/javascript">
-                    var sr = 0;
+                $(function() {
+                    var isDisable = false;
                     $('.hover-star').rating({
                         focus : function(value, link) {
                             var tip = $('#hover-test');
-                            if (sr != 2) {
+                            if (!isDisable) {
                                 tip[0].data = tip[0].data || tip.html();
-                                tip.html(link.title || 'value: ' + value);
-                                sr = 1;
+                                tip.html(link.title || 'value: ' + value)
                             }
                         },
                         blur : function(value, link) {
                             var tip = $('#hover-test');
-                            if (sr != 2) {
-                                $('#hover-test').html(tip[0].data || '');
-                                sr = 1;
+                            if (!isDisable) {
+                                $('#hover-test').html(tip[0].data || '')
                             }
                         },
                         callback : function(value, link) {
-                            if (sr == 1) {
-                                sr = 2;
+                            if (!isDisable) {
+                                isDisable = true;
                                 $('.hover-star').rating('disable');
                                 sendrating('{NEWSID}', value, '{NEWSCHECKSS}');
                             }
                         }
                     });
-
-                    $('.hover-star').rating('select', '{NUMBERRATING}');
-                </script>
-                <!-- BEGIN: disablerating -->
-                <script type="text/javascript">
+                    <!-- BEGIN: disablerating -->
                     $(".hover-star").rating('disable');
-                    sr = 2;
+                    isDisable = true;
+                    <!-- END: disablerating -->
+                })
                 </script>
-                <!-- END: disablerating -->
                 <!-- END: allowed_rating -->
             </div>
         </div>

@@ -345,7 +345,7 @@
                                         &nbsp; <a href="https://www.google.com/recaptcha/admin" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="text-middle"><i class="fa fa-info-circle"></i></a>
                                     </td>
                                 </tr>
-                                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
+                                <tr data-captcha="typerecaptcha2"{DISPLAY_CAPTCHA_RECAPTCHA2}>
                                     <td><strong>{LANG.recaptcha_type}</strong></td>
                                     <td>
                                         <select name="recaptcha_type" class="form-control w300">
@@ -558,6 +558,19 @@
                                     <td>
                                         <textarea rows="3" class="form-control" name="crossadmin_valid_ips">{CONFIG_CROSS.crossadmin_valid_ips}</textarea>
                                         <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.allow_null_origin}</strong></td>
+                                    <td>
+                                        <input type="checkbox" value="1" name="allow_null_origin" {CONFIG_CROSS.allow_null_origin}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.ip_allow_null_origin}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="ip_allow_null_origin">{CONFIG_CROSS.ip_allow_null_origin}</textarea>
+                                        <div class="form-text text-muted">{LANG.ip_allow_null_origin_help}</div>
                                     </td>
                                 </tr>
                             </tbody>

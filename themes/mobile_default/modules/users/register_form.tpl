@@ -1,4 +1,4 @@
-<form class="user-reg-form" action="{USER_REGISTER}" method="post" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+<form class="user-reg-form" action="{USER_REGISTER}" method="post" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate<!-- BEGIN: reg_recaptcha3 --> data-recaptcha3="1"<!-- END: reg_recaptcha3 -->>
     <div class="nv-info margin-bottom" data-default="{LANG.info}">{LANG.info}</div>
 
     <div class="form-detail">
@@ -172,12 +172,12 @@
         <div>
             <div>
                 <div class="form-group clearfix radio-box {FIELD.required}" data-mess="">
-                    <label for="custom_fields[{FIELD.field}]" class="col-sm-8 control-label {FIELD.required}" title="{FIELD.description}"> {FIELD.title} </label>
-                    <div class="btn-group col-sm-16">
-                        <!-- BEGIN: loop -->
-                        <label for="lb_{FIELD_CHOICES.id}" class="radio-box"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" class="{FIELD.class}" onclick="validErrorHidden(this,5);" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
-                        <!-- END: loop -->
+                    <div class="margin-bottom-sm">
+                        <label class="control-label {FIELD.required}" title="{FIELD.description}"> {FIELD.title} </label>
                     </div>
+                    <!-- BEGIN: loop -->
+                    <label for="lb_{FIELD_CHOICES.id}" class="radio-box"><input type="radio" name="custom_fields[{FIELD.field}]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" style="margin-top:0" onclick="validErrorHidden(this,5);"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br/>
+                    <!-- END: loop -->
                 </div>
             </div>
         </div>
@@ -187,12 +187,12 @@
         <div>
             <div>
                 <div class="form-group clearfix check-box {FIELD.required}" data-mess="">
-                    <label for="custom_fields[{FIELD.field}]" class="col-sm-8 control-label {FIELD.required}" title="{FIELD.description}"> {FIELD.title} </label>
-                    <div class="btn-group col-sm-16">
-                        <!-- BEGIN: loop -->
-                        <label for="lb_{FIELD_CHOICES.id}" class="check-box"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" class="{FIELD.class}" onclick="validErrorHidden(this,5);" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
-                        <!-- END: loop -->
+                    <div class="margin-bottom-sm">
+                        <label class="control-label {FIELD.required}" title="{FIELD.description}"> {FIELD.title} </label>
                     </div>
+                    <!-- BEGIN: loop -->
+                    <label for="lb_{FIELD_CHOICES.id}" class="check-box"><input type="checkbox" name="custom_fields[{FIELD.field}][]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}"  style="margin-top:0" onclick="validErrorHidden(this,5);"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br/>
+                    <!-- END: loop -->
                 </div>
             </div>
         </div>
@@ -217,7 +217,7 @@
         <div>
             <div>
                 <div class="form-group text-center check-box required" data-mess="">
-                    <input type="checkbox" name="agreecheck" value="1" class="fix-box" onclick="validErrorHidden(this,3);"/>{LANG.accept2} <a onclick="usageTermsShow('{LANG.usage_terms}');" href="javascript:void(0);"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
+                    <input type="checkbox" name="agreecheck" value="1" class="fix-box" style="margin-top:0" onclick="validErrorHidden(this,3);"/>{LANG.accept2} <a onclick="usageTermsShow('{LANG.usage_terms}');" href="javascript:void(0);"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
                 </div>
             </div>
         </div>

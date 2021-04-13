@@ -131,11 +131,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     // Lấy các API được phép
     foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
+        $input_key = str_replace('-', '_', $keysysmodule);
         // Các API không có CAT
-        $api_nocat = $nv_Request->get_typed_array('api_' . $keysysmodule, 'post', 'string', []);
+        $api_nocat = $nv_Request->get_typed_array('api_' . $input_key, 'post', 'string', []);
+        // Các API theo CAT
         $api_cat = [];
         foreach ($sysmodule_data as $catkey => $catapis) {
-            $api_cat = array_merge_recursive($api_cat, $nv_Request->get_typed_array('api_' . $keysysmodule . '_' . $catkey, 'post', 'string', []));
+            $api_cat = array_merge_recursive($api_cat, $nv_Request->get_typed_array('api_' . $input_key . '_' . $catkey, 'post', 'string', []));
         }
         $api_submits = array_filter(array_unique(array_merge_recursive($api_nocat, $api_cat)));
         $api_submits = array_intersect($api_submits, $array_api_keys[$keysysmodule]);
@@ -375,6 +377,7 @@ foreach ($array_api_trees as $api_tree) {
 
 // Xuất danh sách các API
 foreach ($array_api_contents as $api_content) {
+    $api_content['input_key'] = str_replace('-', '_', $api_content['key']);
     $xtpl->assign('API_CONTENT', $api_content);
 
     foreach ($api_content['apis'] as $api) {

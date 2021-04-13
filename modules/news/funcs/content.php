@@ -17,7 +17,7 @@ if (defined('NV_EDITOR')) {
 } elseif (!nv_function_exists('nv_aleditor') and file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor.js')) {
     define('NV_EDITOR', true);
     define('NV_IS_CKEDITOR', true);
-    $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
+    $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
 
     /**
      * nv_aleditor()
@@ -107,6 +107,7 @@ if ($array_post_user['postcontent']) {
 }
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
 
 if (!$array_post_user['addcontent']) {
     if (defined('NV_IS_USER')) {
@@ -157,7 +158,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $contentid = (isset($rowcontent_old['id'])) ? intval($rowcontent_old['id']) : 0;
 
         if (empty($contentid)) {
-            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            nv_redirect_location($base_url);
         }
 
         if ($nv_Request->get_int('delcontent', 'get') and (empty($rowcontent_old['status']) or $array_post_user['delcontent'])) {
@@ -171,9 +172,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $nv_Cache->delMod($module_name);
             }
 
-            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            nv_redirect_location($base_url);
         } elseif (!(empty($rowcontent_old['status']) or $array_post_user['editcontent'])) {
-            nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+            nv_redirect_location($base_url);
         }
 
         $page_title = $lang_module['update_content'];
@@ -257,7 +258,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if ($nv_Request->isset_request('contentid', 'post')) {
         $rowcontent['id'] = $contentid;
-        if ($global_config['captcha_type'] == 2) {
+        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
             $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
         } else {
             $fcode = $nv_Request->get_title('fcode', 'post', '');
@@ -321,7 +322,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
         } elseif (!nv_capcha_txt($fcode)) {
-            $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
+            $error = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
                 $rowcontent['status'] = 1;
@@ -558,7 +559,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 3) {
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($global_config['captcha_type'] == 2) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
@@ -567,7 +570,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+        $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
         $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('CHECKSS', $checkss);
         $xtpl->parse('main.captcha');
@@ -667,6 +670,13 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $num_items = $db->query($db->sql())
         ->fetchColumn();
+
+    // Không cho tùy ý đánh số page
+    $total = ceil($num_items/$per_page);
+    if ($page > $total) {
+        nv_redirect_location($base_url);
+    }
+
     if ($num_items) {
         $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
             ->order('id DESC')

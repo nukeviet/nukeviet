@@ -128,6 +128,44 @@ function nv_del_user($userid)
     }
 }
 
+/**
+ * opidr_login()
+ *
+ * @param mixed $openid_info
+ * @return void
+ */
+function opidr_login($openid_info)
+{
+    global $nv_Request, $nv_redirect, $module_data;
+
+    $nv_Request->unset_request('openid_attribs', 'session');
+
+    $openid_info['redirect'] = nv_redirect_decrypt($nv_redirect);
+    $openid_info['client'] = '';
+
+    if (defined('SSO_REGISTER_SECRET')) {
+        $sso_client = $nv_Request->get_title('sso_client_' . $module_data, 'session', '');
+        $sso_redirect = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+        $iv = substr(SSO_REGISTER_SECRET, 0, 16);
+        $sso_redirect = strtr($sso_redirect, '-_,', '+/=');
+        $sso_redirect = openssl_decrypt($sso_redirect, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
+
+        if (!empty($sso_redirect) and !empty($sso_client) and strpos($sso_redirect, $sso_client) === 0) {
+            $openid_info['redirect'] = $sso_redirect;
+            $openid_info['client'] = $sso_client;
+        }
+
+        $nv_Request->unset_request('sso_client_' . $module_data, 'session');
+        $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
+    }
+
+    $contents = openid_callback($openid_info);
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_site_theme($contents, false);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
 // Xác định cấu hình module
 $global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';

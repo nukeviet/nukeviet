@@ -18,7 +18,8 @@ $key_words = $module_info['keywords'];
 $contents = '';
 $cache_file = '';
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-$viewcat = $module_config[$module_name]['indexfile'];
+$isMob = ((!empty($global_config['mobile_theme']) and $module_info['template'] == $global_config['mobile_theme']) or $client_info['is_mobile']);
+$viewcat = $isMob ? $module_config[$module_name]['mobile_indexfile'] : $module_config[$module_name]['indexfile'];
 $no_generate = ['viewcat_none', 'viewcat_main_left', 'viewcat_main_right', 'viewcat_main_bottom', 'viewcat_two_column'];
 
 /**
@@ -56,6 +57,10 @@ if (empty($contents)) {
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
 
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        $total = ceil($num_items/$per_page);
+        betweenURLs($page, $total, $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
+
         $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
@@ -84,11 +89,6 @@ if (empty($contents)) {
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
             $weight_publtime = ($order_articles) ? $item['weight'] : $item['publtime'];
-        }
-
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catpage)) {
-            nv_redirect_location($base_url);
         }
 
         if ($st_links > 0) {
@@ -268,6 +268,10 @@ if (empty($contents)) {
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
 
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        $total = ceil($num_items/$per_page);
+        betweenURLs($page, $total, $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
+
         $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
@@ -292,11 +296,6 @@ if (empty($contents)) {
             $array_catpage[] = $item;
         }
 
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catpage)) {
-            nv_redirect_location($base_url);
-        }
-
         $viewcat = 'viewcat_grid_new';
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
         $contents = call_user_func($viewcat, $array_catpage, 0, $generate_page);
@@ -311,6 +310,10 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        $total = ceil($num_items/$per_page);
+        betweenURLs($page, $total, $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
 
         $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
@@ -338,11 +341,6 @@ if (empty($contents)) {
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
-        }
-
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catpage)) {
-            nv_redirect_location($base_url);
         }
 
         $viewcat = 'viewcat_list_new';

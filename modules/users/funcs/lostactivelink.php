@@ -25,6 +25,7 @@ if ($global_config['allowuserreg'] != 2) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 
@@ -33,7 +34,7 @@ $data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
 $data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
 $data['send'] = $nv_Request->get_bool('send', 'post', false);
-if ($global_config['captcha_type'] == 2) {
+if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
     $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 } else {

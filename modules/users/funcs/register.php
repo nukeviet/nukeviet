@@ -53,8 +53,7 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
-}
-elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
     $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
     if (!empty($sso_redirect)) {
         $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
@@ -229,6 +228,7 @@ if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
 }
 
 // Dang ky thong thuong
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['register'];
@@ -288,7 +288,7 @@ if ($checkss == $array_register['checkss']) {
     $custom_fields['question'] = $array_register['question'];
     $custom_fields['answer'] = $array_register['answer'];
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -299,8 +299,8 @@ if ($checkss == $array_register['checkss']) {
     if (!$check_seccode) {
         reg_result(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
-            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
+            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 

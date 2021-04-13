@@ -57,7 +57,7 @@ function nv_error_info()
         $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
     } else {
         $tpl_path = NV_ROOTDIR . '/themes/default/system';
-        $image_path = NV_BASE_SITEURL . 'themes/default/images/icons/';
+        $image_path = NV_STATIC_URL . 'themes/default/images/icons/';
     }
 
     $xtpl = new XTemplate('error_info.tpl', $tpl_path);
@@ -307,7 +307,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     //Chi co tac dung voi IE6 va Chrome
-    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
+    $xtpl->assign('CSSPATH', NV_STATIC_URL . NV_ASSETS_DIR . '/css/rss.xsl');
     $xtpl->assign('CHARSET', $global_config['site_charset']);
     $xtpl->assign('SITELANG', $global_config['site_lang']);
 
@@ -477,7 +477,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
 {
     $lastModified = time() - 86400;
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement($sitemapHeader);
     if (!empty($url)) {
         foreach ($url as $key => $values) {
@@ -510,7 +510,7 @@ function nv_xmlSitemapCat_generate($url)
 {
     global $global_config;
 
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
     $lastModified = NV_CURRENTTIME - 86400;
 
@@ -546,7 +546,7 @@ function nv_xmlSitemapIndex_generate()
 {
     global $db_config, $db, $global_config;
 
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
 
     $lastModified = NV_CURRENTTIME - 86400;

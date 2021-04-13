@@ -1331,6 +1331,10 @@ header.header-up {
     height: 144px;
 }
 
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
 /* List item */
 
 .nv-list-item {

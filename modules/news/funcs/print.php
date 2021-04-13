@@ -38,18 +38,18 @@ if ($id > 0 and $catid > 0) {
 
     if ($content['allowed_print'] == 1 and (defined('NV_IS_MODADMIN') or ($content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ($content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME)))) {
         $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-        if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-            nv_redirect_location($base_url_rewrite);
+        $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+        if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
+            nv_redirect_location($base_url_check);
         }
+        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];
         $result = $db_slave->query($sql);
         $sourcetext = $result->fetchColumn();
         unset($sql, $result);
-
-        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
         $meta_tags = nv_html_meta_tags();
 

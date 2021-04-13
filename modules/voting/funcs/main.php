@@ -12,17 +12,27 @@ if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 if (empty($vid)) {
+    $base_url_rewrite = nv_url_rewrite($base_url, true);
+    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+    if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
+        nv_redirect_location($base_url_check);
+    }
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
 
     $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
-    $allowed = array();
-    $is_update = array();
+    $allowed = [];
+    $is_update = [];
 
     $a = 0;
     foreach ($list as $row) {
@@ -48,10 +58,10 @@ if (empty($vid)) {
         $xtpl->assign('LANG', $lang_module);
 
         foreach ($allowed as $current_voting) {
-            $voting_array = array(
+            $voting_array = [
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
-                'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
+                'active_captcha' => (int)$current_voting['active_captcha'] ? (($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $global_config['captcha_type'] : 1) : 0,
                 'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], (int) $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
                 'vid' => $current_voting['vid'],
                 'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
@@ -59,7 +69,7 @@ if (empty($vid)) {
                 'langresult' => $lang_module['voting_result'],
                 'langsubmit' => $lang_module['voting_hits'],
                 'publtime' => nv_date('l - d/m/Y H:i', $current_voting['publ_time'])
-            );
+            ];
             $xtpl->assign('VOTING', $voting_array);
 
             $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
@@ -78,20 +88,24 @@ if (empty($vid)) {
             }
 
             if ($voting_array['active_captcha']) {
-                if ($global_config['captcha_type'] == 2) {
-                    $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
-                    $xtpl->parse('main.loop.has_captcha.recaptcha');
+                if ($global_config['captcha_type'] == 3) {
+                    $xtpl->parse('main.loop.recaptcha3');
                 } else {
-                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-                    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-                    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                    $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-                    $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-                    $xtpl->parse('main.loop.has_captcha.basic');
+                    if ($global_config['captcha_type'] == 2) {
+                        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                        $xtpl->parse('main.loop.has_captcha.recaptcha');
+                    } else {
+                        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+                        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+                        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+                        $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
+                        $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
+                        $xtpl->parse('main.loop.has_captcha.basic');
+                    }
+                    $xtpl->parse('main.loop.has_captcha');
                 }
-                $xtpl->parse('main.loop.has_captcha');
             }
 
             $xtpl->parse('main.loop');
@@ -105,15 +119,8 @@ if (empty($vid)) {
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $checkss = $nv_Request->get_title('checkss', 'get', '');
-    $lid = $nv_Request->get_title('lid', 'get', '');
-    $captcha = $nv_Request->get_title('captcha', 'get', '');
-
-    if ($checkss != md5($vid . NV_CHECK_SESSION) or $vid <= 0 or $lid == '') {
-        header('location:' . $global_config['site_url']);
-        exit();
-    }
-
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . '&amp;vid=' . $vid, true);
+    
     $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time, vote_one FROM ' . NV_PREFIXLANG . '_' . $module_data;
     if (!defined('NV_IS_MODADMIN')) {
         $sql .= ' WHERE act=1';
@@ -152,6 +159,8 @@ if (empty($vid)) {
         }
     }
 
+    $lid = $nv_Request->get_title('lid', 'get', '');
+
     $array_id = explode(',', $lid);
     $array_id = array_map('intval', $array_id);
     $array_id = array_diff($array_id, array(
@@ -162,6 +171,14 @@ if (empty($vid)) {
     $note = '';
 
     if ($count) {
+        $checkss = $nv_Request->get_title('checkss', 'get', '');
+        $captcha = $nv_Request->get_title('captcha', 'get', '');
+        
+        if ($checkss != md5($vid . NV_CHECK_SESSION)) {
+            header('location:' . $global_config['site_url']);
+            exit();
+        }
+
         if ($row['active_captcha'] and !nv_capcha_txt($captcha)) {
             die('ERROR|' . $lang_global['securitycodeincorrect']);
         }
@@ -202,7 +219,7 @@ if (empty($vid)) {
     $result = $db->query($sql);
 
     $totalvote = 0;
-    $vrow = array();
+    $vrow = [];
 
     while ($row2 = $result->fetch()) {
         $totalvote += (int) $row2['hitstotal'];
@@ -224,6 +241,7 @@ if (empty($vid)) {
         'note' => $note
     );
 
+    $page_title = $row['question'];
     $contents = voting_result($voting);
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -231,7 +249,7 @@ if (empty($vid)) {
     if ($is_ajax) {
         echo $contents;
     } else {
-        echo nv_site_theme($contents, false);
+        echo nv_site_theme($contents, true);
     }
     include NV_ROOTDIR . '/includes/footer.php';
 }

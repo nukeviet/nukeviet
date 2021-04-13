@@ -155,6 +155,22 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $array_config_global['error_send_email'] = '';
         }
 
+        $array_config_global['nv_static_url'] = '';
+        $static_url = rtrim($nv_Request->get_string('nv_static_url', 'post'), '/');
+        if (!empty($static_url)) {
+            $static_url = preg_replace('/^(http|https)\:\/\//', '', $static_url);
+            $static_url = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $static_url);
+            $_p  = '';
+            if (preg_match('/(.*)\:([0-9]+)$/', $static_url, $m)) {
+                $static_url = $m[1];
+                $_p  = ':' . $m[2];
+            }
+            $static_url = nv_check_domain(nv_strtolower($static_url));
+            if (!empty($static_url)) {
+                $array_config_global['nv_static_url'] = $static_url . $_p;
+            }
+        }
+
         $array_config_global['cdn_url'] = '';
         $cdn_url = rtrim($nv_Request->get_string('cdn_url', 'post'), '/');
         if (!empty($cdn_url)) {

@@ -142,7 +142,9 @@ if ($global_config['allowuserlogin']) {
             5,
             7
         ))) {
-            if ($global_config['captcha_type'] == 2) {
+            if ($global_config['captcha_type'] == 3) {
+                $xtpl->parse('main.recaptcha3');
+            } elseif ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->parse('main.recaptcha.default');
                 $xtpl->parse('main.recaptcha');
@@ -157,7 +159,9 @@ if ($global_config['allowuserlogin']) {
             6,
             7
         ))) {
-            if ($global_config['captcha_type'] == 2) {
+            if ($global_config['captcha_type'] == 3) {
+                $xtpl->parse('main.allowuserreg.reg_recaptcha3');
+            } elseif ($global_config['captcha_type'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                 $xtpl->parse('main.allowuserreg.reg_recaptcha');

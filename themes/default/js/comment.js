@@ -72,9 +72,10 @@ function nv_commment_reload(res) {
 			scrollTop: $("#idcomment").offset().top
 		}, 800);
 	} else {
-		if (0 < parseInt($("#formcomment form").data('gfxnum'))) {
-			change_captcha('#commentseccode');
-		}
+        var b = $("#formcomment form [onclick*='change_captcha']");
+        b.length && b.click();
+        nv_is_recaptcha && change_captcha();
+
 		if (rs[0] == 'ERR') {
 			alert(rs[2]);
 			"" != rs[1] && $("#formcomment form [name=" + rs[1] + "]").focus()

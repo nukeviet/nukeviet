@@ -30,7 +30,11 @@ $captcha_array = [
     7 => $lang_module['captcha_7']
 ];
 
-$captcha_type_array = [0 => $lang_module['captcha_type_0'], 2 => $lang_module['captcha_type_2']];
+$captcha_type_array = [
+    0 => $lang_module['captcha_type_0'], 
+    2 => $lang_module['captcha_type_2'], 
+    3 => $lang_module['captcha_type_3']
+];
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 $admin_2step_array = ['code', 'facebook', 'google'];
 $array_iptypes = [
@@ -280,7 +284,7 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
     }
 
     // Lấy các request IPs
-    $cfg_keys = ['crosssite_valid_ips', 'crossadmin_valid_ips'];
+    $cfg_keys = ['crosssite_valid_ips', 'crossadmin_valid_ips', 'ip_allow_null_origin'];
     foreach ($cfg_keys as $cfg_key) {
         $str_ips = $nv_Request->get_textarea($cfg_key, '', NV_ALLOWED_HTML_TAGS, true);
         $str_ips = explode('<br />', strip_tags($str_ips, '<br>'));
@@ -293,6 +297,8 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
         }
         $array_config_cross[$cfg_key] = empty($array_config_cross[$cfg_key]) ? '' : json_encode(array_unique($array_config_cross[$cfg_key]));
     }
+
+    $array_config_cross['allow_null_origin'] = (int) $nv_Request->get_bool('allow_null_origin', 'post', false);
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
     foreach ($array_config_cross as $config_name => $config_value) {
@@ -312,6 +318,8 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
     $array_config_cross['crossadmin_restrict'] = $global_config['crossadmin_restrict'];
     $array_config_cross['crossadmin_valid_domains'] = empty($global_config['crossadmin_valid_domains']) ? '' : implode("\n", $global_config['crossadmin_valid_domains']);
     $array_config_cross['crossadmin_valid_ips'] = empty($global_config['crossadmin_valid_ips']) ? '' : implode("\n", $global_config['crossadmin_valid_ips']);
+    $array_config_cross['allow_null_origin'] = $global_config['allow_null_origin'];
+    $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -563,6 +571,7 @@ if (!empty($errormess)) {
 
 $array_config_cross['crosssite_restrict'] = empty($array_config_cross['crosssite_restrict']) ? '' : ' checked="checked"';
 $array_config_cross['crossadmin_restrict'] = empty($array_config_cross['crossadmin_restrict']) ? '' : ' checked="checked"';
+$array_config_cross['allow_null_origin'] = empty($array_config_cross['allow_null_origin']) ? '' : ' checked="checked"';
 
 $xtpl->assign('CONFIG_CROSS', $array_config_cross);
 
@@ -610,8 +619,9 @@ foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
 $xtpl->assign('RECAPTCHA_SITEKEY', $array_config_captcha['recaptcha_sitekey']);
 $xtpl->assign('RECAPTCHA_SECRETKEY', $array_config_captcha['recaptcha_secretkey'] ? $crypt->decrypt($array_config_captcha['recaptcha_secretkey']) : '');
 
-$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_captcha['captcha_type'] == 2) ? ' style="display:none;"' : '');
-$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_captcha['captcha_type'] == 2) ? '' : ' style="display:none;"');
+$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_captcha['captcha_type'] == 2 or $array_config_captcha['captcha_type'] == 3) ? ' style="display:none;"' : '');
+$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_captcha['captcha_type'] == 2 or $array_config_captcha['captcha_type'] == 3) ? '' : ' style="display:none;"');
+$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA2', ($array_config_captcha['captcha_type'] == 2) ? '' : ' style="display:none;"');
 
 foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
     $array = array(

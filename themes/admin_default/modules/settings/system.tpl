@@ -117,6 +117,10 @@
                     <td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.static_url}</strong></td>
+                    <td><input type="text" name="nv_static_url" value="{DATA.nv_static_url}" class="form-control pull-left" style="width: 450px"/></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.cdn_url}</strong></td>
                     <td><input type="text" name="cdn_url" value="{DATA.cdn_url}" class="form-control pull-left" style="width: 450px"/></td>
                 </tr>

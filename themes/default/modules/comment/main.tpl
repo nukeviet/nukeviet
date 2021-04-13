@@ -24,7 +24,7 @@
     <div id="showcomment" class="margin-bottom-lg">{COMMENTCONTENT}</div>
     <div id="formcomment" class="comment-form">
         <!-- BEGIN: allowed_comm -->
-        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" onsubmit="return nv_comment_submit(this);" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}>
+        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" onsubmit="return nv_comment_submit(this);" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
             <input type="hidden" name="module" value="{MODULE_COMM}" />
             <input type="hidden" name="area" value="{AREA_COMM}" />
             <input type="hidden" name="id" value="{ID_COMM}" />

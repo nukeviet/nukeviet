@@ -516,7 +516,7 @@ function nv_capcha_txt($seccode)
 {
     global $global_config, $nv_Request, $client_info, $crypt;
 
-    if ($global_config['captcha_type'] == 2) {
+    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
         if (!empty($global_config['recaptcha_secretkey'])) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
             $request = array(
@@ -1522,6 +1522,33 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 }
 
 /**
+ * betweenURLs()
+ * 
+ * @param integer $page
+ * @param integer $total
+ * @param string $base_url
+ * @param string $urlappend
+ * @param string $prevPage
+ * @param string $nextPage
+ */
+function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPage)
+{
+    if ($page > 1 and $page > $total) {
+        nv_redirect_location($base_url);
+    }
+
+    if ($page > 1) {
+        $prev = $page - 1;
+        $prevPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($prev > 1 ? ($urlappend . $prev) : ''), true);
+    }
+
+    if ($page >= 1 and $page < $total) {
+        $next = $page + 1;
+        $nextPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . $urlappend . $next, true);
+    }
+}
+
+/**
  * nv_generate_page()
  *
  * @param string $base_url
@@ -1537,7 +1564,17 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  */
 function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page', $full_theme = true)
 {
-    global $lang_global;
+    global $lang_global, $theme_config;
+
+    $ul_class = isset($theme_config['pagination']['ul_class']) ? $theme_config['pagination']['ul_class'] : 'pagination';
+    $li_class = isset($theme_config['pagination']['li_class']) ? $theme_config['pagination']['li_class'] : 'page-item';
+    $a_class = isset($theme_config['pagination']['a_class']) ? $theme_config['pagination']['a_class'] : 'page-link';
+
+    $li_active_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'active"';
+    $li_disabled_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'disabled"';
+    $ul_class = !empty($ul_class) ? ' class="' . $ul_class . '"' : '';
+    $li_class = !empty($li_class) ? ' class="' . $li_class . '"' : '';
+    $a_class = !empty($a_class) ? ' class="' . $a_class . '"' : '';
 
     // Round up total page
     $total_pages = ceil($num_items / $per_page);
@@ -1562,13 +1599,13 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         for ($i = 1; $i <= $init_page_max; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
             $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+            $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="javascript:void(0)"' : ' ' . $href) . '>' . $i . '</a></li>';
         }
 
         if ($total_pages > 3) {
             if ($on_page > 1 and $on_page < $total_pages) {
                 if ($on_page > 5) {
-                    $page_string .= '<li class="disabled"><span>...</span></li>';
+                    $page_string .= '<li' . $li_disabled_class . '><span>...</span></li>';
                 }
 
                 $init_page_min = ($on_page > 4) ? $on_page : 5;
@@ -1577,27 +1614,27 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
                 for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
                     $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
                     $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-                    $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+                    $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="javascript:void(0)"' : ' ' . $href) . '>' . $i . '</a></li>';
                 }
 
                 if ($on_page < $total_pages - 4) {
-                    $page_string .= '<li class="disabled"><span>...</span></li>';
+                    $page_string .= '<li' . $li_disabled_class . '><span>...</span></li>';
                 }
             } else {
-                $page_string .= '<li class="disabled"><span>...</span></li>';
+                $page_string .= '<li' . $li_disabled_class . '><span>...</span></li>';
             }
 
             for ($i = $total_pages - 2; $i < $total_pages + 1; ++$i) {
                 $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
                 $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-                $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+                $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="javascript:void(0)"' : ' ' . $href) . '>' . $i . '</a></li>';
             }
         }
     } else {
         for ($i = 1; $i < $total_pages + 1; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
             $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+            $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="javascript:void(0)"' : ' ' . $href) . '>' . $i . '</a></li>';
         }
     }
 
@@ -1605,17 +1642,17 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         if ($on_page > 1) {
             $href = ($on_page > 2) ? $base_url . $amp . ($on_page - 1) : $base_url;
             $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
+            $page_string = '<li' . $li_class . '><a' . $a_class . ' ' . $href . ' title="' . $lang_global['pageprev'] . '">&laquo;</a></li>' . $page_string;
         } else {
-            $page_string = '<li class="disabled"><a href="#">&laquo;</a></li>' . $page_string;
+            $page_string = '<li' . $li_disabled_class . '><a' . $a_class . ' href="javascript:void(0)">&laquo;</a></li>' . $page_string;
         }
 
         if ($on_page < $total_pages) {
             $href = ($on_page) ? $base_url . $amp . ($on_page + 1) : $base_url;
             $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
+            $page_string .= '<li' . $li_class . '><a' . $a_class . ' ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
         } else {
-            $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
+            $page_string .= '<li' . $li_disabled_class . '><a' . $a_class . ' href="javascript:void(0)">&raquo;</a></li>';
         }
     }
 
@@ -1623,7 +1660,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         return $page_string;
     }
 
-    return '<ul class="pagination">' . $page_string . '</ul>';
+    return '<ul' . $ul_class . '>' . $page_string . '</ul>';
 }
 
 /**
@@ -1639,7 +1676,17 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
  */
 function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $full_theme = true)
 {
-    global $lang_global;
+    global $lang_global, $theme_config;
+
+    $ul_class = isset($theme_config['pagination']['ul_class']) ? $theme_config['pagination']['ul_class'] : 'pagination';
+    $li_class = isset($theme_config['pagination']['li_class']) ? $theme_config['pagination']['li_class'] : 'page-item';
+    $a_class = isset($theme_config['pagination']['a_class']) ? $theme_config['pagination']['a_class'] : 'page-link';
+
+    $li_active_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'active"';
+    $li_disabled_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'disabled"';
+    $ul_class = !empty($ul_class) ? ' class="' . $ul_class . '"' : '';
+    $li_class = !empty($li_class) ? ' class="' . $li_class . '"' : '';
+    $a_class = !empty($a_class) ? ' class="' . $a_class . '"' : '';
 
     $total_pages = ceil($num_items / $per_page);
 
@@ -1648,24 +1695,24 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
     }
 
     $title .= NV_TITLEBAR_DEFIS . $lang_global['page'];
-    $page_string = ($on_page == 1) ? '<li class="active"><a href="#">1</a></li>' : '<li><a rel="prev" title="' . $title . ' 1" href="' . $base_url . '">1</a></li>';
+    $page_string = ($on_page == 1) ? '<li' . $li_active_class . '><a' . $a_class . ' href="javascript:void(0)">1</a></li>' : '<li' . $li_class . '><a' . $a_class . ' rel="prev" title="' . $title . ' 1" href="' . $base_url . '">1</a></li>';
 
     if ($total_pages > 7) {
         if ($on_page < 4) {
             $init_page_max = ($total_pages > 2) ? 2 : $total_pages;
             for ($i = 2; $i <= $init_page_max; ++$i) {
                 if ($i == $on_page) {
-                    $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="javascript:void(0)">' . $i . '</a></li>';
                 } else {
                     $rel = ($i > $on_page) ? 'next' : 'prev';
-                    $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
                 }
             }
         }
 
         if ($on_page > 1 and $on_page < $total_pages) {
             if ($on_page > 3) {
-                $page_string .= '<li class="disabled"><span>...</span></li>';
+                $page_string .= '<li' . $li_disabled_class . '><span>...</span></li>';
             }
 
             $init_page_min = ($on_page > 3) ? $on_page : 4;
@@ -1673,36 +1720,36 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 
             for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
                 if ($i == $on_page) {
-                    $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="javascript:void(0)">' . $i . '</a></li>';
                 } else {
                     $rel = ($i > $on_page) ? 'next' : 'prev';
-                    $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
                 }
             }
 
             if ($on_page < $total_pages - 3) {
-                $page_string .= '<li class="disabled"><span>...</span></li>';
+                $page_string .= '<li' . $li_disabled_class . '><span>...</span></li>';
             }
         } else {
-            $page_string .= '<li class="disabled"><span>...</span></li>';
+            $page_string .= '<li' . $li_disabled_class . '><span>...</span></li>';
         }
 
         $init_page_min = ($total_pages - $on_page > 3) ? $total_pages : $total_pages - 1;
         for ($i = $init_page_min; $i <= $total_pages; ++$i) {
             if ($i == $on_page) {
-                $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
+                $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="javascript:void(0)">' . $i . '</a></li>';
             } else {
                 $rel = ($i > $on_page) ? 'next' : 'prev';
-                $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
             }
         }
     } else {
         for ($i = 2; $i < $total_pages + 1; ++$i) {
             if ($i == $on_page) {
-                $page_string .= '<li class="active"><a href="#">' . $i . '</a><li>';
+                $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="javascript:void(0)">' . $i . '</a><li>';
             } else {
                 $rel = ($i > $on_page) ? 'next' : 'prev';
-                $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
             }
         }
     }
@@ -1710,15 +1757,15 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
     if ($add_prevnext_text) {
         if ($on_page > 1) {
             $href = ($on_page > 2) ? $base_url . '/page-' . ($on_page - 1) : $base_url;
-            $page_string = '<li><a rel="prev" title="' . $title . ' ' . ($on_page - 1) . '" href="' . $href . '">&laquo;</a></li>' . $page_string;
+            $page_string = '<li' . $li_class . '><a' . $a_class . ' rel="prev" title="' . $title . ' ' . ($on_page - 1) . '" href="' . $href . '">&laquo;</a></li>' . $page_string;
         } else {
-            $page_string = '<li class="disabled"><a href="#">&laquo;</a></li>' . $page_string;
+            $page_string = '<li' . $li_disabled_class . '><a' . $a_class . ' href="javascript:void(0)">&laquo;</a></li>' . $page_string;
         }
 
         if ($on_page < $total_pages) {
-            $page_string .= '<li><a rel="next" title="' . $title . ' ' . ($on_page + 1) . '" href="' . $base_url . '/page-' . ($on_page + 1) . '">&raquo;</a></li>';
+            $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="next" title="' . $title . ' ' . ($on_page + 1) . '" href="' . $base_url . '/page-' . ($on_page + 1) . '">&raquo;</a></li>';
         } else {
-            $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
+            $page_string .= '<li' . $li_disabled_class . '><a' . $a_class . ' href="javascript:void(0)">&raquo;</a></li>';
         }
     }
 
@@ -1726,7 +1773,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         return $page_string;
     }
 
-    return '<ul class="pagination">' . $page_string . '</ul>';
+    return '<ul' . $ul_class . '>' . $page_string . '</ul>';
 }
 
 /**
@@ -2040,6 +2087,12 @@ function nv_change_buffer($buffer)
         $_google_analytics .= "ga('send', 'pageview');" . PHP_EOL;
         $_google_analytics .= "</script>" . PHP_EOL;
         $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . "$1", $buffer, 1);
+    }
+    
+    if (defined('NV_SYSTEM') and (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalytics4ID']) or preg_match('/^G\-[a-zA-Z0-9]{8,}$/', $global_config['googleAnalytics4ID']))) {
+        $_google_analytics4 = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $global_config['googleAnalytics4ID'] . '"></script>'. PHP_EOL;
+        $_google_analytics4 .= "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date);gtag('config','" . $global_config['googleAnalytics4ID'] . "');</script>" . PHP_EOL;
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics4 . "$1", $buffer, 1);
     }
 
     if (NV_ANTI_IFRAME and empty($client_info['is_myreferer'])) {

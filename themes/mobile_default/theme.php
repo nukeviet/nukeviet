@@ -12,6 +12,20 @@ if (! defined('NV_SYSTEM') or ! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+$theme_config = [
+    'pagination' => [
+        // Nếu dùng bootstrap 3: 'pagination'
+        // Nếu dùng bootstrap 4/5: 'pagination justify-content-center'
+        'ul_class' => 'pagination',
+        // Nếu dùng bootstrap 3: '',
+        // Nếu dùng bootstrap 4/5: 'page-item'
+        'li_class' => '',
+        // Nếu dùng bootstrap 3: '',
+        // Nếu dùng bootstrap 4/5: 'page-link'
+        'a_class' => ''
+    ]
+];
+
 /**
  *  nv_mailHTML()
  *
@@ -84,7 +98,7 @@ function nv_site_theme($contents, $full = true)
 
     //Links
     $html_links = array();
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/font-awesome.min.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css' );
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
 
@@ -227,6 +241,11 @@ function nv_site_theme($contents, $full = true)
 
     if (!$drag_block) {
         $xtpl->parse('main.no_drag_block');
+    }
+
+    if (defined('SSO_REGISTER_DOMAIN')) {
+        $xtpl->assign('SSO_REGISTER_ORIGIN', SSO_REGISTER_DOMAIN);
+        $xtpl->parse('main.crossdomain_listener');
     }
 
     $xtpl->parse('main');
