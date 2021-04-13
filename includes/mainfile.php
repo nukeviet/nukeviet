@@ -372,7 +372,14 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site'])) {
         $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
+        $http_headers = [];
+        if ($global_config['site_reopening_time'] > NV_CURRENTTIME) {
+            $disable_site_content .= "<br/><br/>" . $lang_module['closed_site_reopening_time'] . ": " . nv_date('d/m/Y H:i', $global_config['site_reopening_time']);
+            $http_headers = [
+                'Retry-After: ' . gmdate('D, d M Y H:i:s', $global_config['site_reopening_time']) . ' GMT'
+            ];
+        }
+        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 503, '', '', '', '', $http_headers);
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
         nv_redirect_location(NV_BASE_SITEURL);
     }

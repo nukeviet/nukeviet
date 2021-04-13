@@ -228,6 +228,7 @@ $lang_module['closed_site_0'] = 'Mode normal';
 $lang_module['closed_site_1'] = 'Fermeture du site, seulement l\'administrateur suprême peut se connecter';
 $lang_module['closed_site_2'] = 'Fermeture du site - les administrateurs générales peuvent se connecter';
 $lang_module['closed_site_3'] = 'Fermeture du site - les administrateur peuvent se connecter';
+$lang_module['closed_site_reopening_time'] = 'Heure de réouverture prévue';
 $lang_module['ssl_https'] = 'Activez le mode d\'utilisation SSL';
 $lang_module['ssl_https_module'] = 'Les modules activés avec SSL';
 $lang_module['ssl_https_0'] = 'Eteindre SSL';

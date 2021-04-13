@@ -89,13 +89,34 @@ function nv_error_info()
  * @param string $admin_title
  * @param string $site_link
  * @param string $site_title
+ * @param array $http_headers
  * @return
  */
-function nv_info_die($page_title = '', $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
+function nv_info_die($page_title = '', $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '', $http_headers = [])
 {
     global $lang_global, $global_config;
 
     http_response_code($error_code);
+
+    if (!empty($http_headers)) {
+        foreach ($http_headers as $header) {
+            if (is_string($header) and !empty($header)) {
+                header($header);
+            } elseif (is_array($header)) {
+                $response_code = 0;
+                $replace = true;
+                if (is_string($header[0]) and !empty($header[0])) {
+                    if (isset($header[1])) {
+                        $replace = boolval($header[1]);
+                    }
+                    if (isset($header[2])) {
+                        $response_code = intval($header[2]);
+                    }
+                    header($header[0], $replace, $response_code);
+                }
+            }
+        }
+    }
 
     if (empty($page_title)) {
         $page_title = $global_config['site_description'];
@@ -140,12 +161,12 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('INFO_TITLE', $info_title);
     $xtpl->assign('INFO_CONTENT', $info_content);
 
-    if (defined('NV_IS_ADMIN') and ! empty($admin_link)) {
+    if (defined('NV_IS_ADMIN') and !empty($admin_link)) {
         $xtpl->assign('ADMIN_LINK', $admin_link);
         $xtpl->assign('GO_ADMINPAGE', empty($admin_title) ? $lang_global['admin_page'] : $admin_title);
         $xtpl->parse('main.adminlink');
     }
-    if (! empty($site_link)) {
+    if (!empty($site_link)) {
         $xtpl->assign('SITE_LINK', $site_link);
         $xtpl->assign('GO_SITEPAGE', empty($site_title) ? $lang_global['go_homepage'] : $site_title);
         $xtpl->parse('main.sitelink');

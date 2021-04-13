@@ -228,6 +228,7 @@ $lang_module['closed_site_0'] = 'Sites ordinary activities';
 $lang_module['closed_site_1'] = 'Closing of the site only has access to the Supreme Administrative';
 $lang_module['closed_site_2'] = 'Moderator\'s closing general site access';
 $lang_module['closed_site_3'] = 'Close all of the site admin access';
+$lang_module['closed_site_reopening_time'] = 'Expected reopening time';
 $lang_module['ssl_https'] = 'Enable the use of SSL';
 $lang_module['ssl_https_module'] = 'These modules enable SSL';
 $lang_module['ssl_https_0'] = 'Turn off SSL';

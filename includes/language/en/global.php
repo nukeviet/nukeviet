@@ -26,6 +26,7 @@ $lang_global['site_info'] = 'Notifications from the system';
 $lang_global['welcome'] = 'Welcome to visit website of %s';
 $lang_global['disable_site_title'] = 'Website suspended';
 $lang_global['disable_site_content'] = 'Our site is temporarily closed for maintenance. Please come back later. Thank you!';
+$lang_module['closed_site_reopening_time'] = 'Expected re-operation time';
 $lang_global['Home'] = 'Home';
 $lang_global['go_homepage'] = 'Back to home page';
 $lang_global['error_404_title'] = 'Connection Error 404';
