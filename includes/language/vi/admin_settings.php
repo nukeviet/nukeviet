@@ -238,6 +238,7 @@ $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site chỉ có Quản trị tối cao truy cập';
 $lang_module['closed_site_2'] = 'Đóng cửa site Người điều hành chung truy cập';
 $lang_module['closed_site_3'] = 'Đóng cửa site Tất cả admin truy cập';
+$lang_module['closed_site_reopening_time'] = 'Thời gian dự kiến mở lại';
 $lang_module['ssl_https'] = 'Chế độ sử dụng SSL';
 $lang_module['ssl_https_module'] = 'Các module kích hoạt SSL';
 $lang_module['ssl_https_0'] = 'Tắt SSL';

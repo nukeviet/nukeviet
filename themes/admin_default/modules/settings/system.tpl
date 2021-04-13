@@ -1,6 +1,9 @@
 <!-- BEGIN: main -->
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <!-- BEGIN: error -->
 <div class="alert alert-danger">
@@ -14,12 +17,27 @@
             <tbody>
                 <tr>
                     <td><strong>{LANG.closed_site}</strong></td>
-                    <td>
-                    <select name="closed_site" class="form-control w300">
-                        <!-- BEGIN: closed_site_mode -->
-                        <option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
-                        <!-- END: closed_site_mode -->
-                    </select></td>
+                    <td><select name="closed_site" class="form-control w300" onchange="reopeningTimeShow(this);">
+                            <!-- BEGIN: closed_site_mode -->
+                            <option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
+                            <!-- END: closed_site_mode -->
+                        </select>
+                        <div id="reopening_time" style="margin-top:10px;<!-- BEGIN: reopening_time -->display:none<!-- END: reopening_time -->">
+                            <label class="control-label">{LANG.closed_site_reopening_time}</label>
+                            <div class="form-inline">
+                                <input class="form-control" name="reopening_date" id="reopening_date" value="{DATA.reopening_date}" style="width: 90px;" maxlength="10" type="text" />
+                                <select class="form-control" name="reopening_hour">
+                                    <!-- BEGIN: reopening_hour -->
+                                    <option value="{RHOUR.num}"{RHOUR.sel}>{RHOUR.title}</option>
+                                    <!-- END: reopening_hour -->
+                                </select> : <select class="form-control" name="reopening_min">
+                                    <!-- BEGIN: reopening_min -->
+                                    <option value="{RMIN.num}"{RMIN.sel}>{RMIN.title}</option>
+                                    <!-- END: reopening_min -->
+                                </select>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.site_email}</strong></td>
@@ -176,8 +194,26 @@
     </div>
 </form>
 <script type="text/javascript">
+function reopeningTimeShow(t) {
+    var v = $(t).val();
+    if (v == '0') {
+        $("#reopening_time").hide()
+    } else {
+        $("#reopening_time").show()
+    }
+}
 $(document).ready(function() {
     $("#site_timezone").select2();
+    
+    $("#reopening_date").datepicker({
+        showOn : "both",
+        dateFormat : "dd/mm/yy",
+        changeMonth : true,
+        changeYear : true,
+        showOtherMonths : true,
+        buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
+        buttonImageOnly : true
+    });
 });
 
 var LANG = [];
