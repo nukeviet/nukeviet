@@ -234,7 +234,7 @@ if ($st_links > 0) {
         ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
         ->where('status=1 AND publtime > ' . $publtime)
-        ->order($order_articles_by . ' ASC')
+        ->order('publtime ASC')
         ->limit($st_links);
 
     $related = $db_slave->query($db_slave->sql());
@@ -274,7 +274,7 @@ if ($st_links > 0) {
         ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
         ->where('status=1 AND publtime < ' . $publtime)
-        ->order($order_articles_by . ' DESC')
+        ->order('publtime DESC')
         ->limit($st_links);
 
     $related = $db_slave->query($db_slave->sql());

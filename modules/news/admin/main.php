@@ -895,8 +895,10 @@ foreach ($data as $row) {
     if (!$is_locked_row) {
         $xtpl->parse('main.loop.checkrow');
     }
+
     $xtpl->parse('main.loop');
 }
+
 foreach ($array_list_action as $action_i => $title_i) {
     if (defined('NV_IS_ADMIN_MODULE') or isset($_permission_action[$action_i])) {
         $action_assign = array(
@@ -907,6 +909,7 @@ foreach ($array_list_action as $action_i => $title_i) {
         $xtpl->parse('main.action');
     }
 }
+
 if (!empty($generate_page)) {
     $xtpl->assign('GENERATE_PAGE', $generate_page);
     $xtpl->parse('main.generate_page');
