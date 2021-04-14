@@ -845,10 +845,7 @@ foreach ($search_status as $status_view) {
     $xtpl->assign('SEARCH_STATUS', $status_view);
     $xtpl->parse('main.search_status');
 }
-$group_status_1 = array();
-$group_status_2 = array();
-$group_status_3 = array();
-$group_status_4 = array();
+
 $url_copy = '';
 foreach ($data as $row) {
     $is_excdata = 0;
@@ -884,13 +881,6 @@ foreach ($data as $row) {
 
     if ($row['status_id'] == 4) {
         $xtpl->parse('main.loop.text');
-        $group_status_1[] = $row;
-    } else if ($row['status_id'] == 2) {
-        $group_status_2[] = $row;
-    } else if ($row['status_id'] == 5) {
-        $group_status_3[] = $row;
-    } else {
-        $group_status_4[] = $row;
     }
 
     if ($order_articles and !$is_locked_row) {
