@@ -321,7 +321,7 @@ if ($news_contents['topicid'] > 0 & $st_links > 0) {
         ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
         ->where('status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id)
-        ->order($order_articles_by . 'DESC')
+        ->order($order_articles_by . ' DESC')
         ->limit($st_links);
     $topic = $db_slave->query($db_slave->sql());
     while ($row = $topic->fetch()) {
