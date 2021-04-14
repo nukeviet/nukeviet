@@ -229,12 +229,14 @@ $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
 
 $related_new_array = [];
 $related_array = [];
+$order_articles = $module_config[$module_name]['order_articles'];
+$order_articles_by = ($order_articles) ? 'weight' : 'publtime';
 if ($st_links > 0) {
     $db_slave->sqlreset()
         ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
         ->where('status=1 AND publtime > ' . $publtime)
-        ->order('id ASC')
+        ->order($order_articles_by . ' ASC')
         ->limit($st_links);
 
     $related = $db_slave->query($db_slave->sql());
@@ -265,7 +267,7 @@ if ($st_links > 0) {
             'imghome' => $row['imghome'],
             'external_link' => $row['external_link']
         ];
-    }
+    };
     $related->closeCursor();
 
     sort($related_new_array, SORT_NUMERIC);
@@ -274,9 +276,9 @@ if ($st_links > 0) {
         ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
         ->where('status=1 AND publtime < ' . $publtime)
-        ->order('id DESC')
+        ->order($order_articles_by . ' DESC')
         ->limit($st_links);
-
+    
     $related = $db_slave->query($db_slave->sql());
     while ($row = $related->fetch()) {
         if ($row['homeimgthumb'] == 1) {
