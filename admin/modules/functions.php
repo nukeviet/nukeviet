@@ -8,19 +8,19 @@
  * @Createdate 12/31/2009 5:53
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_modules']
-);
+];
 
 define('NV_IS_FILE_MODULES', true);
 
-//Document
+// Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:modules';
 $array_url_instruction['setup'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:setup';
 $array_url_instruction['vmodule'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modules:vmodule';
@@ -90,7 +90,7 @@ function nv_setup_block_module($mod, $func_id = 0)
     global $db, $nv_Cache;
 
     if (empty($func_id)) {
-        //xoa du lieu tai bang blocks
+        // xoa du lieu tai bang blocks
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module)');
         $sth->bindParam(':module', $mod, PDO::PARAM_STR);
         $sth->execute();
@@ -104,11 +104,11 @@ function nv_setup_block_module($mod, $func_id = 0)
         $sth->execute();
     }
 
-    $array_funcid = array();
+    $array_funcid = [];
     $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module= :module ORDER BY subweight ASC');
     $sth->bindParam(':module', $mod, PDO::PARAM_STR);
     $sth->execute();
-    while (list($func_id_i) = $sth->fetch(3)) {
+    while (list ($func_id_i) = $sth->fetch(3)) {
         if ($func_id == 0 or $func_id == $func_id_i) {
             $array_funcid[] = $func_id_i;
         }
@@ -154,17 +154,17 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
     $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
     $sth->execute();
 
-    list($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
+    list ($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
 
-    if (! empty($module_file)) {
-        $module_version = array();
+    if (!empty($module_file)) {
+        $module_version = [];
         $version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
 
         if (file_exists($version_file)) {
             include $version_file;
         }
 
-        $arr_modfuncs = (isset($module_version['modfuncs']) and ! empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : array();
+        $arr_modfuncs = (isset($module_version['modfuncs']) and !empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : [];
 
         // Delete config value in prefix_config table
         $sth = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module");
@@ -175,7 +175,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
         // Re-Creat all module table
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
-            $sql_recreate_module = array();
+            $sql_recreate_module = [];
 
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
@@ -183,9 +183,9 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                 trigger_error($e->getMessage());
             }
 
-            include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ;
+            include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php';
 
-            if (! empty($sql_create_module)) {
+            if (!empty($sql_create_module)) {
                 foreach ($sql_create_module as $sql) {
                     try {
                         $db->query($sql);
@@ -198,36 +198,36 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         }
 
         // Setup layout if site module
-        $arr_func_id = array();
-        $arr_show_func = array();
+        $arr_func_id = [];
+        $arr_show_func = [];
         $new_funcs = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/funcs', $global_config['check_op_file']);
 
-        if (! empty($new_funcs)) {
+        if (!empty($new_funcs)) {
             // Get default layout
             $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout', $global_config['check_op_layout']);
-            if (! empty($layout_array)) {
+            if (!empty($layout_array)) {
                 $layout_array = preg_replace($global_config['check_op_layout'], '\\1', $layout_array);
             }
 
             $selectthemes = 'default';
-            if (! empty($module_theme) and file_exists(NV_ROOTDIR . '/themes/' . $module_theme . '/config.ini')) {
+            if (!empty($module_theme) and file_exists(NV_ROOTDIR . '/themes/' . $module_theme . '/config.ini')) {
                 $selectthemes = $module_theme;
             } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini')) {
                 $selectthemes = $global_config['site_theme'];
             }
 
             $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
-            $layoutdefault = ( string )$xml->layoutdefault;
+            $layoutdefault = (string) $xml->layoutdefault;
             $layout = $xml->xpath('setlayout/layout');
 
-            $array_layout_func_default = array();
+            $array_layout_func_default = [];
             for ($i = 0, $count = sizeof($layout); $i < $count; ++$i) {
-                $layout_name = ( string )$layout[$i]->name;
+                $layout_name = (string) $layout[$i]->name;
 
                 if (in_array($layout_name, $layout_array)) {
                     $layout_funcs = $layout[$i]->xpath('funcs');
                     for ($j = 0, $count2 = sizeof($layout_funcs); $j < $count2; ++$j) {
-                        $mo_funcs = ( string )$layout_funcs[$j];
+                        $mo_funcs = (string) $layout_funcs[$j];
                         $mo_funcs = explode(':', $mo_funcs);
                         $m = $mo_funcs[0];
                         $arr_f = explode(',', $mo_funcs[1]);
@@ -239,20 +239,20 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             }
 
             $_layoutdefault = (isset($module_version['layoutdefault'])) ? $module_version['layoutdefault'] : '';
-            if (! empty($_layoutdefault)) {
+            if (!empty($_layoutdefault)) {
                 $_layout_mod = explode(';', $_layoutdefault);
                 foreach ($_layout_mod as $_layout_fun) {
-                    list($layout_name, $_func) = explode(':', trim($_layout_fun));
+                    list ($layout_name, $_func) = explode(':', trim($_layout_fun));
                     $arr_f = explode(',', trim($_func));
                     foreach ($arr_f as $f) {
-                        if (! isset($array_layout_func_default[$module_name][$f])) {
+                        if (!isset($array_layout_func_default[$module_name][$f])) {
                             $array_layout_func_default[$module_name][$f] = $layout_name;
                         }
                     }
                 }
             }
 
-            $arr_func_id_old = array();
+            $arr_func_id_old = [];
 
             $sth = $db->prepare('SELECT func_id, func_name FROM ' . $db_config['prefix'] . '_' . $lang . '_modfuncs WHERE in_module= :in_module');
             $sth->bindParam(':in_module', $module_name, PDO::PARAM_STR);
@@ -265,7 +265,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             $new_funcs = array_flip($new_funcs);
             $array_keys = array_keys($new_funcs);
 
-            $array_submenu = (isset($module_version['submenu'])) ? explode(',', $module_version['submenu']) : array();
+            $array_submenu = (isset($module_version['submenu'])) ? array_map('trim', explode(',', $module_version['submenu'])) : [];
             foreach ($array_keys as $func) {
                 $show_func = 0;
                 $weight = 0;
@@ -274,7 +274,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     $arr_func_id[$func] = $arr_func_id_old[$func];
                     $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', in_submenu=' . $in_submenu . ', subweight=0 WHERE func_id=' . $arr_func_id[$func]);
                 } else {
-                    $data = array();
+                    $data = [];
                     $data['func_name'] = $func;
                     $data['alias'] = $func;
                     $data['func_custom_name'] = ucfirst($func);
@@ -313,7 +313,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         }
 
         // Creat upload dirs
-        if (isset($module_version['uploads_dir']) and ! empty($module_version['uploads_dir'])) {
+        if (isset($module_version['uploads_dir']) and !empty($module_version['uploads_dir'])) {
             $sth_dir = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)');
 
             foreach ($module_version['uploads_dir'] as $path) {
@@ -322,7 +322,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
                 foreach ($arr_p as $p) {
                     if (trim($p) != '') {
-                        if (! is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
+                        if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
                             $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $cp, $p);
                             if ($mk[0]) {
                                 try {
@@ -340,14 +340,14 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         }
 
         // Creat assets dirs
-        if (isset($module_version['files_dir']) and ! empty($module_version['files_dir'])) {
+        if (isset($module_version['files_dir']) and !empty($module_version['files_dir'])) {
             foreach ($module_version['files_dir'] as $path) {
                 $cp = '';
                 $arr_p = explode('/', $path);
 
                 foreach ($arr_p as $p) {
                     if (trim($p) != '') {
-                        if (! is_dir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp . $p)) {
+                        if (!is_dir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp . $p)) {
                             nv_mkdir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp, $p);
                         }
                         $cp .= $p . '/';
@@ -414,7 +414,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
     $xtpl->assign('CAPTION', $contents['caption']);
     $xtpl->assign('GLANG', $lang_global);
 
-    if (! empty($act_modules)) {
+    if (!empty($act_modules)) {
         foreach ($contents['thead'] as $thead) {
             $xtpl->assign('THEAD', $thead);
             $xtpl->parse('main.act_modules.thead');
@@ -422,18 +422,21 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
 
         $a = 0;
         foreach ($act_modules as $mod => $values) {
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'mod' => $mod,
                 'values' => $values,
                 'act_disabled' => (isset($values['act'][2]) and $values['act'][2] == 1) ? ' disabled="disabled"' : ''
-            ));
+            ]);
 
             foreach ($weight_list as $new_weight) {
-                $xtpl->assign('WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ));
+                $xtpl->assign('WEIGHT', [
+                    'key' => $new_weight,
+                    'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : ''
+                ]);
                 $xtpl->parse('main.act_modules.loop.weight');
             }
 
-            if (! empty($values['del'])) {
+            if (!empty($values['del'])) {
                 $xtpl->parse('main.act_modules.loop.delete');
             }
 
@@ -443,7 +446,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
         $xtpl->parse('main.act_modules');
     }
 
-    if (! empty($deact_modules)) {
+    if (!empty($deact_modules)) {
         foreach ($contents['thead'] as $thead) {
             $xtpl->assign('THEAD', $thead);
             $xtpl->parse('main.deact_modules.thead');
@@ -451,18 +454,21 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
 
         $a = 0;
         foreach ($deact_modules as $mod => $values) {
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'mod' => $mod,
                 'values' => $values,
                 'act_disabled' => (isset($values['act'][2]) and $values['act'][2] == 1) ? ' disabled="disabled"' : ''
-            ));
+            ]);
 
             foreach ($weight_list as $new_weight) {
-                $xtpl->assign('WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ));
+                $xtpl->assign('WEIGHT', [
+                    'key' => $new_weight,
+                    'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : ''
+                ]);
                 $xtpl->parse('main.deact_modules.loop.weight');
             }
 
-            if (! empty($values['del'])) {
+            if (!empty($values['del'])) {
                 $xtpl->parse('main.deact_modules.loop.delete');
             }
 
@@ -472,7 +478,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
         $xtpl->parse('main.deact_modules');
     }
 
-    if (! empty($bad_modules)) {
+    if (!empty($bad_modules)) {
         foreach ($contents['thead'] as $thead) {
             $xtpl->assign('THEAD', $thead);
             $xtpl->parse('main.bad_modules.thead');
@@ -480,18 +486,21 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
 
         $a = 0;
         foreach ($bad_modules as $mod => $values) {
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'mod' => $mod,
                 'values' => $values,
                 'act_disabled' => (isset($values['act'][2]) and $values['act'][2] == 1) ? ' disabled="disabled"' : ''
-            ));
+            ]);
 
             foreach ($weight_list as $new_weight) {
-                $xtpl->assign('WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ));
+                $xtpl->assign('WEIGHT', [
+                    'key' => $new_weight,
+                    'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : ''
+                ]);
                 $xtpl->parse('main.bad_modules.loop.weight');
             }
 
-            if (! empty($values['del'])) {
+            if (!empty($values['del'])) {
                 $xtpl->parse('main.bad_modules.loop.delete');
             }
 
@@ -519,12 +528,12 @@ function show_funcs_theme($contents)
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('CONTENT', $contents);
 
-    if (! empty($contents['ajax'][0])) {
+    if (!empty($contents['ajax'][0])) {
         $xtpl->parse('main.ajax0');
         $xtpl->parse('main.loading0');
     }
 
-    if (! empty($contents['ajax'][1])) {
+    if (!empty($contents['ajax'][1])) {
         $xtpl->parse('main.ajax1');
         $xtpl->parse('main.loading1');
     }
@@ -592,15 +601,15 @@ function setup_modules($array_head, $array_modules, $array_virtual_head, $array_
 
     $a = 0;
     foreach ($array_modules as $mod => $values) {
-        $xtpl->assign('ROW', array(
+        $xtpl->assign('ROW', [
             'stt' => ++$a,
             'values' => $values
-        ));
+        ]);
 
         $xtpl->parse('main.loop');
     }
 
-    if (! empty($array_virtual_modules)) {
+    if (!empty($array_virtual_modules)) {
         $xtpl->assign('VCAPTION', $array_virtual_head['caption']);
 
         foreach ($array_virtual_head['head'] as $thead) {
@@ -610,11 +619,11 @@ function setup_modules($array_head, $array_modules, $array_virtual_head, $array_
 
         $a = 0;
         foreach ($array_virtual_modules as $mod => $values) {
-            $xtpl->assign('VROW', array(
+            $xtpl->assign('VROW', [
                 'stt' => ++$a,
                 'values' => $values
-            ));
-            if (! empty($values['url_setup'])) {
+            ]);
+            if (!empty($values['url_setup'])) {
                 $xtpl->parse('main.vmodule.loop.setup');
             }
             $xtpl->parse('main.vmodule.loop');
