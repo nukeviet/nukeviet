@@ -1066,7 +1066,7 @@ $array_data['view_mail'] = $row['view_mail'] ? ' selected="selected"' : '';
 $array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? NV_BASE_SITEURL . $row['photo'] : "";
 
 if (empty($array_data['photo'])) {
-    $array_data['photo'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
+    $array_data['photo'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
     $array_data['photoWidth'] = 80;
     $array_data['photoHeight'] = 80;
     $array_data['imgDisabled'] = " disabled=\"disabled\"";

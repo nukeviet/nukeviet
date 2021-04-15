@@ -844,9 +844,9 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
     $return = array();
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png')) {
-        $default_photo = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png';
+        $default_photo = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/users/no_avatar.png';
     } else {
-        $default_photo = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+        $default_photo = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
     }
 
     if (nv_strlen($username) >= 3) {

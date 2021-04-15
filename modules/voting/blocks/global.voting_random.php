@@ -82,7 +82,7 @@ if (!nv_function_exists('nv_block_voting')) {
             }
 
             if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/voting.js')) {
-                $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/voting.js\"></script>\n";
+                $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . "themes/" . $block_theme . "/js/voting.js\"></script>\n";
             }
 
             $action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';

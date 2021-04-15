@@ -99,11 +99,11 @@ function nv_site_theme($contents, $full = true)
     //Links
     $html_links = array();
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css' );
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
 
     if (defined('NV_IS_ADMIN') and $full) {
-        $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
+        $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
     }
 
     $html_links = array_merge_recursive($html_links, nv_html_links(false));
@@ -157,7 +157,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     $html_js = nv_html_site_js(false);
-    $html_js[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/js/main.js' );
+    $html_js[] = array( 'ext' => 1, 'content' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/js/main.js' );
 
     foreach ($html_js as $js) {
         if ($js['ext']) {

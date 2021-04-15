@@ -29,8 +29,8 @@ if ($module_name != $block_config['module'] and defined('NV_SYSTEM')) {
 
     $xtpl = new XTemplate('block.contact_form.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/contact');
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('JS', NV_BASE_SITEURL . 'themes/' . $blockJs . '/js/contact.js');
-    $xtpl->assign('CSS', NV_BASE_SITEURL . 'themes/' . $blockJs . '/css/contact.css');
+    $xtpl->assign('JS', NV_STATIC_URL . 'themes/' . $blockJs . '/js/contact.js');
+    $xtpl->assign('CSS', NV_STATIC_URL . 'themes/' . $blockJs . '/css/contact.css');
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $block_theme);
     $xtpl->assign('MODULE', $block_config['module']);

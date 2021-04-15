@@ -37,7 +37,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     $xtpl->assign('OP', $op);
 
     $xtpl->assign('HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    $xtpl->assign('IMGPATH', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/' . $module_file);
+    $xtpl->assign('IMGPATH', NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/images/' . $module_file);
     $a = 0;
 
     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';

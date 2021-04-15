@@ -472,7 +472,7 @@ if (empty($admin_pre_data)) {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
             $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
-            
+
             if ($global_config['captcha_type'] == 2) {
                 $xtpl->parse('main.pre_form.recaptcha.recaptcha2');
             } elseif ($global_config['captcha_type'] == 3) {
@@ -481,7 +481,7 @@ if (empty($admin_pre_data)) {
             $xtpl->parse('main.pre_form.recaptcha');
         } else {
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('GFX_NUM', NV_GFX_NUM);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
