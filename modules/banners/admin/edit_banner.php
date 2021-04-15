@@ -322,7 +322,7 @@ if ($file_ext != 'no_image') {
         $lang_module['file_name'],
         NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name,
         "class=\"open_modal_image\"",
-        NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif",
+        NV_STATIC_URL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif",
         $lang_global['show_picture'],
     );
 } else {
@@ -330,7 +330,7 @@ if ($file_ext != 'no_image') {
 }
 $contents['imageforswf'] = [
     $imageforswf,
-    NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif"
+    NV_STATIC_URL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif"
 ];
 
 $contents['upload'] = array(

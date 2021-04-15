@@ -82,7 +82,12 @@ if (NV_CLIENT_IP == 'none') {
 
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
-$client_info['country'] = isset($_SERVER['GEOIP_COUNTRY_CODE']) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie(NV_CLIENT_IP);
+if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
+    // Cloudflare IP Geolocation
+    $client_info['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'];
+} else {
+    $client_info['country'] = isset($_SERVER['GEOIP_COUNTRY_CODE']) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie(NV_CLIENT_IP);
+}
 $client_info['ip'] = NV_CLIENT_IP;
 
 // Mui gio

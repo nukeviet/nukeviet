@@ -596,16 +596,16 @@ function nv_html_css($html = true)
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css')) {
         if ($html) {
-            return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css\" type=\"text/css\" />" . PHP_EOL;
+            return "<link rel=\"StyleSheet\" href=\"" . NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css\" type=\"text/css\" />" . PHP_EOL;
         } else {
-            return array( array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css" ) );
+            return array( array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css" ) );
         }
     }
     elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
         if ($html) {
-            return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />" . PHP_EOL;
+            return "<link rel=\"StyleSheet\" href=\"" . NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />" . PHP_EOL;
         } else {
-            return array( array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) );
+            return array( array( 'rel' => 'StyleSheet', 'href' => NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) );
         }
     }
 
@@ -727,17 +727,17 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js')) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js'
+            'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js'
         );
     } elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js')) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
+            'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
         );
     } elseif ($default_js and file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
         $return[] = array(
             'ext' => 1,
-            'content' => NV_BASE_SITEURL . 'themes/default/js/' . $module_file . '.js'
+            'content' => NV_STATIC_URL . 'themes/default/js/' . $module_file . '.js'
         );
     }
 

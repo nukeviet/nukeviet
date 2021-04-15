@@ -125,40 +125,40 @@ function nv_site_theme($contents, $full = true)
     if ($global_config['current_theme_type'] == 'r') {
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css'
         ];
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.css'
         ];
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.responsive.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.responsive.css'
         ];
     } else {
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.non-responsive.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.non-responsive.css'
         ];
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.css'
         ];
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.non-responsive.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.non-responsive.css'
         ];
     }
     if (defined('NV_IS_ADMIN') and $full) {
         $html_links[] = [
             'rel' => 'stylesheet',
-            'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css'
+            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/admin.css'
         ];
     }
     $html_links = array_merge_recursive($html_links, nv_html_links(false));
     $html_links[] = [
         'rel' => 'stylesheet',
-        'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/custom.css'
+        'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/custom.css'
     ];
 
     // Customs Style
@@ -226,11 +226,11 @@ function nv_site_theme($contents, $full = true)
     $html_js = nv_html_site_js(false);
     $html_js[] = [
         'ext' => 1,
-        'content' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/js/main.js'
+        'content' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/js/main.js'
     ];
     $html_js[] = [
         'ext' => 1,
-        'content' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/js/custom.js'
+        'content' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/js/custom.js'
     ];
 
     foreach ($html_js as $js) {
@@ -257,7 +257,7 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo']);
 
     if (empty($global_config['site_banner'])) {
-        $xtpl->assign('BANNER_SRC', NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/header.png');
+        $xtpl->assign('BANNER_SRC', NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/images/header.png');
     } else {
         $xtpl->assign('BANNER_SRC', NV_BASE_SITEURL . $global_config['site_banner']);
     }

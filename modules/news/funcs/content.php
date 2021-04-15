@@ -696,7 +696,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $item['imghome'] = $item['homeimgfile'];
             } else {
                 // no image
-                $item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+                $item['imghome'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
             }
 
             $item['is_edit_content'] = (empty($item['status']) or $array_post_user['editcontent']) ? 1 : 0;

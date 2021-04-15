@@ -153,10 +153,10 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('SITE_FAVICON', $site_favicon);
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css')) {
-        $xtpl->assign('NV_CSS_MODULE_THEME', NV_BASE_SITEURL . 'themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css');
+        $xtpl->assign('NV_CSS_MODULE_THEME', NV_STATIC_URL . 'themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css');
         $xtpl->parse('main.css_module');
     } elseif (file_exists(NV_ROOTDIR . '/themes/admin_default/css/' . $module_file . '.css')) {
-        $xtpl->assign('NV_CSS_MODULE_THEME', NV_BASE_SITEURL . 'themes/admin_default/css/' . $module_file . '.css');
+        $xtpl->assign('NV_CSS_MODULE_THEME', NV_STATIC_URL . 'themes/admin_default/css/' . $module_file . '.css');
         $xtpl->parse('main.css_module');
     }
 
@@ -169,10 +169,10 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/js/' . $module_file . '.js')) {
-        $xtpl->assign('NV_JS_MODULE', NV_BASE_SITEURL . 'themes/' . $admin_info['admin_theme'] . '/js/' . $module_file . '.js');
+        $xtpl->assign('NV_JS_MODULE', NV_STATIC_URL . 'themes/' . $admin_info['admin_theme'] . '/js/' . $module_file . '.js');
         $xtpl->parse('main.module_js');
     } elseif (file_exists(NV_ROOTDIR . '/themes/admin_default/js/' . $module_file . '.js')) {
-        $xtpl->assign('NV_JS_MODULE', NV_BASE_SITEURL . 'themes/admin_default/js/' . $module_file . '.js');
+        $xtpl->assign('NV_JS_MODULE', NV_STATIC_URL . 'themes/admin_default/js/' . $module_file . '.js');
         $xtpl->parse('main.module_js');
     }
 
@@ -259,7 +259,7 @@ function nv_admin_theme($contents, $head_site = 1)
         } elseif (!empty($admin_info['photo']) and file_exists(NV_ROOTDIR . '/' . $admin_info['photo'])) {
             $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . $admin_info['photo']);
         } else {
-            $xtpl->assign('ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png');
+            $xtpl->assign('ADMIN_PHOTO', NV_STATIC_URL . 'themes/default/images/users/no_avatar.png');
         }
 
         // Vertical menu

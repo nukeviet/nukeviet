@@ -603,7 +603,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     } elseif (nv_is_url($news_contents['homeimgfile'])) {
         $xtpl->assign('SCHEMA_IMAGE', $news_contents['homeimgfile']);
     } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
+        $xtpl->assign('SCHEMA_IMAGE', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
     }
 
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
@@ -630,20 +630,20 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
     if ($news_contents['allowed_rating'] == 1) {
         $xtpl->assign('STRINGRATING', $news_contents['stringrating']);
-        
+
         foreach ($news_contents['stars'] as $star) {
             $xtpl->assign('STAR', $star);
             $xtpl->parse('main.allowed_rating.star');
         }
-        
+
         if ($news_contents['disablerating'] == 1) {
             $xtpl->parse('main.allowed_rating.disablerating');
         }
-        
+
         if ($news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point']) {
             $xtpl->parse('main.allowed_rating.data_rating');
         }
-        
+
         $xtpl->parse('main.allowed_rating');
     }
 

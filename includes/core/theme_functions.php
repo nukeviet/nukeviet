@@ -48,13 +48,13 @@ function nv_error_info()
 
     if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
-        $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/images/icons/';
+        $image_path = NV_STATIC_URL . 'themes/' . $global_config['admin_theme'] . '/images/icons/';
     } elseif (defined('NV_ADMIN')) {
         $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
-        $image_path = NV_BASE_SITEURL . 'themes/admin_default/images/';
+        $image_path = NV_STATIC_URL . 'themes/admin_default/images/';
     } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/error_info.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
-        $image_path = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
+        $image_path = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
     } else {
         $tpl_path = NV_ROOTDIR . '/themes/default/system';
         $image_path = NV_STATIC_URL . 'themes/default/images/icons/';

@@ -153,7 +153,7 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         if (!empty($item['photo']) and file_exists(NV_ROOTDIR . '/' . $item['photo'])) {
             $item['photo'] = NV_BASE_SITEURL . $item['photo'];
         } else {
-            $item['photo'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
+            $item['photo'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
         }
 
         $item['regdate'] = nv_date('d/m/Y', $item['regdate']);
