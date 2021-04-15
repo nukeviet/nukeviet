@@ -60,9 +60,10 @@ if (!$ip_exclusion) {
             }
         }
 
-        include NV_ROOTDIR . '/includes/header.php';
-
         if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
+            http_response_code(429);
+            header('Retry-After: ' . $flb->flood_block_time);
+
             $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
             $xtpl->assign('GLANG', $lang_global);
             $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
@@ -90,7 +91,9 @@ if (!$ip_exclusion) {
             }
 
             $xtpl->parse('main');
-            echo $xtpl->text('main');
+            include NV_ROOTDIR . '/includes/header.php';
+            $xtpl->out('main');
+            include NV_ROOTDIR . '/includes/footer.php';
             exit();
         } else {
             trigger_error($lang_global['flood_info1'], 256);

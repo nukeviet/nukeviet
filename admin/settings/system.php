@@ -52,6 +52,15 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_site['closed_site'] = $closed_site;
     }
 
+    $reopening_date = $array_config_site['closed_site'] ? $nv_Request->get_title('reopening_date', 'post', '') : '';
+    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $reopening_date, $m)) {
+        $reopening_hour = $nv_Request->get_int('reopening_hour', 'post', 0);
+        $reopening_min = $nv_Request->get_int('reopening_min', 'post', 0);
+        $array_config_site['site_reopening_time'] = mktime($reopening_hour, $reopening_min, 0, $m[2], $m[1], $m[3]);
+    } else {
+        $array_config_site['site_reopening_time'] = 0;
+    }
+
     $site_email = nv_substr($nv_Request->get_title('site_email', 'post', '', 1), 0, 255);
     $check = nv_check_valid_email($site_email, true);
     if ($check[0] == '') {
@@ -232,6 +241,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
 $page_title = $lang_module['global_config'];
 $global_config['checkss'] = $checkss;
+$global_config['reopening_date'] = '';
+$global_config['reopening_hour'] = 0;
+$global_config['reopening_min'] = 0;
+if (!empty($global_config['site_reopening_time'])) {
+    $tdate = date('d/m/Y|H|i', $global_config['site_reopening_time']);
+    list ($global_config['reopening_date'], $global_config['reopening_hour'], $global_config['reopening_min']) = explode('|', $tdate);
+}
 
 $xtpl = new XTemplate('system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -331,6 +347,28 @@ foreach ($closed_site_Modes as $value => $name) {
     $xtpl->assign('MODE_NAME', $name);
     $xtpl->assign('MODE_SELECTED', ($value == $global_config['closed_site'] ? ' selected="selected"' : ''));
     $xtpl->parse('main.closed_site_mode');
+}
+
+if (empty($global_config['closed_site'])) {
+    $xtpl->parse('main.reopening_time');
+}
+
+for ($i = 0; $i <= 23; ++$i) {
+    $xtpl->assign('RHOUR', [
+        'num' => $i,
+        'sel' => $i == $global_config['reopening_hour'] ? ' selected="selected"' : '',
+        'title' => str_pad($i, 2, 0, STR_PAD_LEFT)
+    ]);
+    $xtpl->parse('main.reopening_hour');
+}
+
+for ($i = 0; $i <= 59; ++$i) {
+    $xtpl->assign('RMIN', [
+        'num' => $i,
+        'sel' => $i == $global_config['reopening_min'] ? ' selected="selected"' : '',
+        'title' => str_pad($i, 2, 0, STR_PAD_LEFT)
+    ]);
+    $xtpl->parse('main.reopening_min');
 }
 
 $xtpl->parse('main');

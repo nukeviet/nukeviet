@@ -95,7 +95,7 @@ if ($page > 1) {
 }
 $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
 $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-$request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+$request_uri = $_SERVER['REQUEST_URI'];
 if (strpos($request_uri, $base_url_check) === 0) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 } elseif (strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) === 0) {
