@@ -92,7 +92,7 @@ if (! empty($error)) {
         $row['compatible_title'] = empty($row['compatible']) ? $lang_module['incompatible'] : $lang_module['compatible'];
 
         if (empty($row['image_small'])) {
-            $row['image_small'] = NV_BASE_SITEURL . 'themes/default/images/no_image.gif';
+            $row['image_small'] = NV_STATIC_URL . 'themes/default/images/no_image.gif';
         }
 
         $row['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $row['id'];

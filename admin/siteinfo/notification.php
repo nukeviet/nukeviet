@@ -163,10 +163,10 @@ while ($data = $result->fetch()) {
                 if (!empty($user_info['avata'])) {
                     $data['photo'] = $user_info['avata'];
                 } else {
-                    $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                    $data['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
                 }
             } else {
-                $data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
+                $data['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
                 $data['send_from'] = $lang_global['level5'];
             }
 

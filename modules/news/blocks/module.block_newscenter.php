@@ -225,7 +225,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                         $row['imgsource'] = NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'];
                         $row['width'] = $width;
                     } else {
-                        $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+                        $row['imgsource'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                         $row['width'] = $width;
                     }
 
@@ -244,7 +244,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                     } elseif (!empty($module_config[$module_name]['show_no_image'])) {
                         $row['imgsource'] = NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'];
                     } else {
-                        $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+                        $row['imgsource'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                     }
 
                     if ($block_config['showtooltip']) {

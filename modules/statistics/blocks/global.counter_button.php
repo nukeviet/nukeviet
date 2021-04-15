@@ -28,7 +28,7 @@ if (! nv_function_exists('nv_block_counter_button')) {
         $xtpl = new XTemplate('global.counter_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics');
 
         $xtpl->assign('LANG', $lang_global);
-        $xtpl->assign('IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/');
+        $xtpl->assign('IMG_PATH', NV_STATIC_URL . 'themes/' . $block_theme . '/');
 
         $sql = "SELECT c_type, c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);

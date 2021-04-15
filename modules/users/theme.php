@@ -597,7 +597,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-    $xtpl->assign('AVATAR_DEFAULT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
+    $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src', true));
 
     $xtpl->assign('LANG', $lang_module);
@@ -725,7 +725,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $assigns = array();
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             $assigns['title'] = ucfirst($server);
-            $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
+            $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
             $assigns['img_width'] = $assigns['img_height'] = 24;
 
             $xtpl->assign('OPENID', $assigns);
@@ -994,7 +994,7 @@ function user_welcome($array_field_config, $custom_fields)
         ));
     } else {
         $xtpl->assign('IMG', array(
-            'src' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png',
+            'src' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png',
             'title' => $lang_module['change_avatar']
         ));
     }
@@ -1188,7 +1188,7 @@ function user_openid_administrator($data)
 
     $xtpl = new XTemplate('openid_administrator.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/openid.png');
+    $xtpl->assign('OPENID_IMG_SRC', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/openid.png');
     $xtpl->assign('OPENID_IMG_WIDTH', 150);
     $xtpl->assign('OPENID_IMG_HEIGHT', 60);
 
@@ -1224,7 +1224,7 @@ function user_openid_administrator($data)
     foreach ($global_config['openid_servers'] as $server) {
         $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
         $assigns['title'] = ucfirst($server);
-        $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
+        $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
         $assigns['img_width'] = $assigns['img_height'] = 24;
 
         $xtpl->assign('OPENID', $assigns);
@@ -1315,7 +1315,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     if (!empty($item['photo']) and file_exists(NV_ROOTDIR . '/' . $item['photo'])) {
         $xtpl->assign('SRC_IMG', NV_BASE_SITEURL . $item['photo']);
     } else {
-        $xtpl->assign('SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
+        $xtpl->assign('SRC_IMG', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     }
 
     $item['gender'] = ($item['gender'] == 'M') ? $lang_module['male'] : ($item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na']);

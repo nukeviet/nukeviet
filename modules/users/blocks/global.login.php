@@ -110,7 +110,7 @@ if (!nv_function_exists('nv_block_login')) {
                 } else {
                     include NV_ROOTDIR . '/modules/users/language/vi.php';
                 }
-                $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/users.css">';
+                $my_head .= '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $block_css . '/css/users.css">';
             } else {
                 global $lang_module;
             }
@@ -126,7 +126,7 @@ if (!nv_function_exists('nv_block_login')) {
                 if (!empty($user_info['avata'])) {
                     $avata = $user_info['avata'];
                 } else {
-                    $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
+                    $avata = NV_STATIC_URL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
                 }
 
                 $user_info['current_login_txt'] = nv_date('d/m, H:i', $user_info['current_login']);
