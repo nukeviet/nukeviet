@@ -6,6 +6,11 @@
 <!-- END: mainrefresh -->
 
 <!-- BEGIN: author_info -->
+<div class="margin-top margin-bottom">
+    <a class="btn btn-primary" href="{BASE_URL}">{LANG.your_content}</a>&nbsp; 
+    <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>
+</div>
+<h2 class="text-center">{LANG.author_info}</h2>
 <form action="{FORM_ACTION}" method="post" onsubmit="formSubmit(event, this)">
     <input type="hidden" name="save" value="1" />
     <div class="table-responsive">
@@ -67,7 +72,26 @@ function formSubmit(event, form) {
 </script>
 <!-- END: author_info -->
 
+<!-- BEGIN: your_articles -->
+<div class="margin-top margin-bottom">
+    <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>&nbsp; 
+    <a class="btn btn-primary" href="{BASE_URL}&amp;author_info=1">{LANG.author_info}</a>
+</div>
+<div>
+    <span class="pull-right"><i class="fa fa-arrow-right"></i>&nbsp;<a href="{AUTHOR_PAGE_URL}">{LANG.author_page}</a></span>
+    <h2>{LANG.your_content}</h2>
+</div>
+<!-- END: your_articles -->
+
 <!-- BEGIN: main -->
+<!-- BEGIN: if_user -->
+<div class="margin-top margin-bottom">
+    <a class="btn btn-primary" href="{BASE_URL}">{LANG.your_content}</a>&nbsp; 
+    <!-- BEGIN: add_content --><a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>&nbsp; <!-- END: add_content -->
+    <a class="btn btn-primary" href="{BASE_URL}&amp;author_info=1">{LANG.author_info}</a>
+</div>
+<!-- END: if_user -->
+<h2 class="text-center">{ADD_OR_UPDATE}</h2>
 <form action="{CONTENT_URL}" name="fsea" method="post" id="fsea" class="form-horizontal"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 
 	<div class="form-group">
@@ -162,7 +186,7 @@ function formSubmit(event, form) {
 
     <!-- BEGIN: internal_author -->
     <div class="form-group">
-		<div class="col-sm-8 text-right">{LANG.internal_author}:</div>
+		<label class="col-sm-8 control-label text-normal" style="padding-top:0">{LANG.internal_author}:</label>
 		<div class="col-sm-16">
             <!-- BEGIN: item -->
 			<a class="btn btn-default btn-xs active" href="{ITEM.href}">{ITEM.pseudonym}</a>
@@ -172,7 +196,7 @@ function formSubmit(event, form) {
     <!-- END: internal_author -->
 
 	<div class="form-group">
-		<label class="col-sm-8 control-label text-normal">{LANG.author}:</label>
+		<label class="col-sm-8 control-label text-normal">{LANG.external_author}:</label>
 		<div class="col-sm-16">
 			<input maxlength="255" value="{DATA.author}" name="author" type="text" class="form-control" />
 		</div>

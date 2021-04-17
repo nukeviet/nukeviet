@@ -201,12 +201,6 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
 
     $page_title = $lang_module['author_info'];
 
-    $contents = '<div class="margin-top margin-bottom">
-            <a class="btn btn-primary" href="' . $base_url . '">' . $lang_module['your_content'] . '</a>&nbsp; 
-            <a class="btn btn-primary" href="' . $base_url . '&amp;contentid=0&checkss=' . md5("0" . NV_CHECK_SESSION) . '">' . $lang_module['add_content'] . '</a>
-        </div>
-        <h2 class="text-center">' . $lang_module['author_info'] . '</h2>';
-
     $template = $module_info['template'];
 
     if (!file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
@@ -216,10 +210,12 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file);
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;author_info=1');
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('BASE_URL', $base_url);
+    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5("0" . NV_CHECK_SESSION));
     $my_author_detail['description_br2nl'] = !empty($my_author_detail['description']) ? nv_htmlspecialchars(nv_br2nl($my_author_detail['description'])) : '';
     $xtpl->assign('DATA', $my_author_detail);
     $xtpl->parse('author_info');
-    $contents .= $xtpl->text('author_info');
+    $contents = $xtpl->text('author_info');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -265,24 +261,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         }
 
         $page_title = $lang_module['update_content'];
-
-        $contents = '<div class="margin-top margin-bottom">
-            <a class="btn btn-primary" href="' . $base_url . '">' . $lang_module['your_content'] . '</a>&nbsp; 
-            <a class="btn btn-primary" href="' . $base_url . '&amp;contentid=0&checkss=' . md5("0" . NV_CHECK_SESSION) . '">' . $lang_module['add_content'] . '</a>&nbsp; 
-            <a class="btn btn-primary" href="' . $base_url . '&amp;author_info=1">' . $lang_module['author_info'] . '</a>
-        </div>
-        <h2 class="text-center">' . $lang_module['update_content'] . '</h2>';
     } else {
         $page_title = $lang_module['add_content'];
-
-        $contents = '';
-        if (defined('NV_IS_USER')) {
-            $contents .= '<div class="margin-top margin-bottom">
-                <a class="btn btn-primary" href="' . $base_url . '">' . $lang_module['your_content'] . '</a>&nbsp; 
-                <a class="btn btn-primary" href="' . $base_url . '&amp;author_info=1">' . $lang_module['author_info'] . '</a>
-            </div>';
-        }
-        $contents .= '<h2 class="text-center">' . $lang_module['add_content'] . '</h2>';
     }
 
     $rowcontent = [
@@ -657,9 +637,19 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('BASE_URL', $base_url);
+    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5("0" . NV_CHECK_SESSION));
+    $xtpl->assign('ADD_OR_UPDATE', $contentid > 0 ? $lang_module['update_content'] : $lang_module['add_content']);
     $xtpl->assign('OP', $module_info['alias']['content']);
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
+    
+    if (defined('NV_IS_USER')) {
+        if ($contentid > 0) {
+            $xtpl->parse('main.if_user.add_content');
+        }
+        $xtpl->parse('main.if_user');
+    }
 
     if ($global_config['captcha_type'] == 3) {
         $xtpl->parse('main.recaptcha3');
@@ -743,7 +733,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     }
 
     $xtpl->parse('main');
-    $contents .= $xtpl->text('main');
+    $contents = $xtpl->text('main');
 
     if (empty($rowcontent['alias'])) {
         $contents .= "<script type=\"text/javascript\">\n";
@@ -759,11 +749,13 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $page = intval(substr($array_op[1], 5));
     }
 
-    $contents = '<div class="margin-top margin-bottom">
-        <a class="btn btn-primary" href="' . $base_url . '&amp;contentid=0&checkss=' . md5("0" . NV_CHECK_SESSION) . '">' . $lang_module['add_content'] . '</a>&nbsp; 
-        <a class="btn btn-primary" href="' . $base_url . '&amp;author_info=1">' . $lang_module['author_info'] . '</a>
-    </div>
-    <h2 class="text-center">' . $lang_module['your_content'] . '</h2>';
+    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('BASE_URL', $base_url);
+    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5("0" . NV_CHECK_SESSION));
+    $xtpl->assign('AUTHOR_PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $my_author_detail['alias']);
+    $xtpl->parse('your_articles');
+    $contents = $xtpl->text('your_articles');
 
     $array_catpage = [];
 

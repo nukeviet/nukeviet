@@ -168,3 +168,4 @@ $lang_module['author_description'] = 'La description';
 $lang_module['author_pseudonym_empty'] = 'Le pseudonyme ne peut pas être laissé vide';
 $lang_module['author_pseudonym_error'] = 'Le pseudonyme est déjà utilisé. Veuillez déclarer un autre pseudonyme';
 $lang_module['author_unspecified_error'] = 'Une erreur non spécifiée s\'est produite. Veuillez réessayer plus tard!';
+$lang_module['author_page'] = 'Page auteur';

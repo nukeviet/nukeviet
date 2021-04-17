@@ -170,3 +170,4 @@ $lang_module['author_description'] = 'Giới thiệu';
 $lang_module['author_pseudonym_empty'] = 'Bút danh không được để trống';
 $lang_module['author_pseudonym_error'] = 'Bút danh đã được sử dụng. Vui lòng chọn bút danh khác';
 $lang_module['author_unspecified_error'] = 'Đã xảy ra lỗi không xác định. Vui lòng thử lại sau!';
+$lang_module['author_page'] = 'Trang tác giả';

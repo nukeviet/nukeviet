@@ -169,3 +169,4 @@ $lang_module['author_description'] = 'Description';
 $lang_module['author_pseudonym_empty'] = 'The pseudonym cannot be left blank';
 $lang_module['author_pseudonym_error'] = 'The pseudonym is already in use. Please declare another pseudonym';
 $lang_module['author_unspecified_error'] = 'An unspecified error has occurred. Please try again later!';
+$lang_module['author_page'] = 'Author page';
