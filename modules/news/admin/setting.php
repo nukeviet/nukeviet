@@ -320,6 +320,10 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
                 $editcontent = (isset($array_editcontent[$group_id]) and intval($array_editcontent[$group_id]) == 1) ? 1 : 0;
                 $delcontent = (isset($array_delcontent[$group_id]) and intval($array_delcontent[$group_id]) == 1) ? 1 : 0;
                 $addcontent = ($postcontent == 1) ? 1 : $addcontent;
+                if ($group_id == 5) {
+                    $editcontent = 0;
+                    $delcontent = 0;
+                }
                 $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id);
             }
         }
@@ -365,8 +369,8 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
             'group_title' => $group_title,
             'addcontent' => $addcontent ? ' checked="checked"' : '',
             'postcontent' => $postcontent ? ' checked="checked"' : '',
-            'editcontent' => $editcontent ? ' checked="checked"' : '',
-            'delcontent' => $delcontent ? ' checked="checked"' : ''
+            'editcontent' => $group_id !=5 ? ($editcontent ? ' checked="checked"' : '') : ' disabled="disabled"',
+            'delcontent' => $group_id !=5 ? ($delcontent ? ' checked="checked"' : '') : ' disabled="disabled"'
         ));
 
         $xtpl->parse('main.admin_config_post.loop');

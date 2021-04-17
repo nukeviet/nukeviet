@@ -91,6 +91,20 @@ if ($id > 0 and $catid > 0) {
                 'author' => $content['author'],
                 'source' => $sourcetext
             );
+            
+            $authors = [];
+            $db->sqlreset()
+                ->select('l.alias,l.pseudonym')
+                ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
+                ->where("l.id = " . $id . " AND a.active=1");
+            $author_result = $db->query($db->sql());
+            while ($row = $author_result->fetch()) {
+                $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
+            }
+            if (!empty($content['author'])) {
+                $authors[] = $content['author'];
+            }
+            $result['author'] = !empty($authors) ? implode(', ', $authors) : '';
 
             $page_title = $result['title'];
 

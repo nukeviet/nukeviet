@@ -218,7 +218,7 @@ $menu_rows_lev1['news'][] = array(
     'op' => 'rss'
 );
 $menu_rows_lev1['news'][] = array(
-    'title' => 'Đăng bài viết',
+    'title' => 'Quản lý bài viết',
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=content",
     'groups_view' => '6',
     'op' => 'content'
