@@ -78,6 +78,7 @@ $lang_module['search_adv_internet'] = 'Mở rộng trên Internet';
 $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
 $lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
+$lang_module['search_word_short'] = 'Từ tìm kiếm quá ngắn. Vui lòng nhập ít nhất 3 ký tự';
 $lang_module['search_in_module'] = 'trong mục';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';

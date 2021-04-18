@@ -42,17 +42,20 @@ function GetSourceNews($sourceid)
  */
 function BoldKeywordInStr($str, $keyword)
 {
+    $str = nv_br2nl($str);
+    $str = nv_nl2br($str, ' ');
+    $str = nv_unhtmlspecialchars(strip_tags(trim($str)));
     $str = nv_clean60($str, 300);
+
     if (!empty($keyword)) {
-        $tmp = explode(' ', $keyword);
-        foreach ($tmp as $k) {
-            $tp = strtolower($k);
-            $str = str_replace($tp, '<span class="keyword">' . $tp . '</span>', $str);
-            $tp = strtoupper($k);
-            $str = str_replace($tp, '<span class="keyword">' . $tp . '</span>', $str);
-            $k[0] = strtoupper($k[0]);
-            $str = str_replace($k, '<span class="keyword">' . $k . '</span>', $str);
-        }
+        $patterns = [
+            nv_preg_quote($keyword)
+        ];
+        $patterns[] = function_exists('searchPatternByLang') ? searchPatternByLang(nv_preg_quote(nv_EncString($keyword))) : nv_preg_quote(nv_EncString($keyword));
+        $patterns = array_unique($patterns);
+        $patterns = '/(' . implode('|', $patterns) . ')/uis';
+
+        $str = preg_replace($patterns, '<span class="keyword">$1</span>', $str);
     }
     return $str;
 }
@@ -119,6 +122,8 @@ $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
+} elseif (!empty($key) and nv_strlen($key) <= 2) {
+    $contents .= '<div class="alert alert-danger">' . $lang_module['search_word_short'] . '</div>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
