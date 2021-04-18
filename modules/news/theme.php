@@ -1322,14 +1322,14 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
             $authors = !empty($authors) ? implode(', ', $authors) : '';
 
             $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl']);
-            $xtpl->assign('TITLEROW', strip_tags(BoldKeywordInStr($value['title'], $key)));
-            $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key) . "...");
+            $xtpl->assign('TITLEROW', BoldKeywordInStr(strip_tags($value['title']), $key));
+            $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key));
             $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));
             $xtpl->assign('AUTHOR', $authors);
             $xtpl->assign('SOURCE', BoldKeywordInStr(GetSourceNews($value['sourceid']), $key));
 
             if ($value['external_link']) {
-                $xtpl->assign('TARGET_BLANK', 'target="blank"');
+                $xtpl->assign('TARGET_BLANK', ' target="blank"');
             }
 
             if (!empty($value['homeimgfile'])) {
