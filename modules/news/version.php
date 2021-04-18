@@ -14,7 +14,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
 
 $module_version = array(
     'name' => 'News', // Tieu de module
-    'modfuncs' => 'main,viewcat,topic,groups,detail,search,content,tag,rss', // Cac function co block
+    'modfuncs' => 'main,viewcat,topic,groups,author,detail,search,content,tag,rss', // Cac function co block
     'change_alias' => 'topic,groups,content,rss',
     'submenu' => 'content,rss,search',
     'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong

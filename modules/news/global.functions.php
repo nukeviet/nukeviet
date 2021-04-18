@@ -130,6 +130,9 @@ function nv_del_content_module($id)
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')');
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id);
 
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews-1 WHERE id IN (SELECT aid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id=' . $id . ')');
+        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id = ' . $id);
+
         nv_delete_notification(NV_LANG_DATA, $module_name, 'post_queue', $id);
 
         /*conenct to elasticsearch*/
@@ -476,4 +479,85 @@ function nv_remove_block_botcat_news($catid)
         }
         $nv_Cache->delMod($module_name);
     }
+}
+
+/**
+ * get_pseudonym_alias()
+ *
+ * @param string $pseudonym
+ * @param int $aid
+ * @param string $alias
+ * @return string
+ */
+function get_pseudonym_alias($pseudonym, $aid)
+{
+    global $db_slave, $module_data;
+
+    $alias = change_alias($pseudonym);
+
+    $tab = NV_PREFIXLANG . '_' . $module_data . '_author';
+    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE id!=' . $aid . ' AND alias= :alias');
+    $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+    $stmt->execute();
+    $nb = $stmt->fetchColumn();
+    if (!empty($nb)) {
+        return false;
+    }
+    return $alias;
+}
+
+/**
+ * my_author_detail()
+ * 
+ * @param int $userid
+ * @return array
+ */
+function my_author_detail($userid)
+{
+    global $db, $module_data;
+    
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE uid =' . $userid;
+    $result = $db->query($sql);
+    $detail = $result->fetch();
+    if (!$detail) {
+        $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid;
+        $result = $db->query($sql);
+        $row = $result->fetch();
+        $pseudonym = '';
+        if (!empty($row['first_name'])) {
+            $pseudonym .= $row['first_name'];
+            if (!empty($row['last_name'])) {
+                $pseudonym .= ' ' . $row['last_name'];
+            }
+        }
+        if (empty($pseudonym)) {
+            $pseudonym = $row['username'];
+        }
+        
+        $alias = get_pseudonym_alias($pseudonym, 0);
+        if (!$alias) {
+            $alias = change_alias($pseudonym) . '-' . $userid;
+        }
+        
+        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_author (uid, alias, pseudonym, image, description, add_time) VALUES ( " . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ")";
+        $data_insert = [];
+        $data_insert['alias'] = $alias;
+        $data_insert['pseudonym'] = $pseudonym;
+        $id = $db->insert_id($sql, 'id', $data_insert);
+
+        $detail = [
+            'id' => $id,
+            'uid' => $userid,
+            'alias' => $alias,
+            'pseudonym' => $pseudonym,
+            'image' => '',
+            'description' => '',
+            'add_time' => NV_CURRENTTIME,
+            'edit_time' => 0,
+            'active' => 1,
+            'numnews' => 0
+        ];
+    }
+    
+    return $detail;
 }

@@ -864,6 +864,78 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
 }
 
 /**
+ * author_theme()
+ *
+ * @param mixed $author_info
+ * @param mixed $topic_array
+ * @param mixed $topic_other_array
+ * @param mixed $generate_page
+ * @return
+ */
+function author_theme($author_info, $topic_array, $topic_other_array, $generate_page)
+{
+    global $lang_module, $module_info, $module_name, $module_config, $topicid;
+
+    $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('TOPPIC_TITLE', $author_info['pseudonym']);
+    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+    if (!empty($author_info['description'])) {
+        $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
+        if (!empty($author_info['image'])) {
+            $xtpl->assign('HOMEIMG1', $author_info['image']);
+            $xtpl->parse('main.topicdescription.image');
+        }
+        $xtpl->parse('main.topicdescription');
+    }
+    if (!empty($topic_array)) {
+        foreach ($topic_array as $topic_array_i) {
+            if (!empty($topic_array_i['external_link'])) {
+                $topic_array_i['target_blank'] = 'target="_blank"';
+            }
+
+            $xtpl->assign('TOPIC', $topic_array_i);
+            $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
+            $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));
+
+            if (!empty($topic_array_i['src'])) {
+                $xtpl->parse('main.topic.homethumb');
+            }
+
+            if ($topicid and defined('NV_IS_MODADMIN')) {
+                $xtpl->assign('ADMINLINK', nv_link_edit_page($topic_array_i['id']) . ' ' . nv_link_delete_page($topic_array_i['id']));
+                $xtpl->parse('main.topic.adminlink');
+            }
+
+            $xtpl->parse('main.topic');
+        }
+    }
+
+    if (!empty($topic_other_array)) {
+        foreach ($topic_other_array as $topic_other_array_i) {
+            $topic_other_array_i['publtime'] = nv_date('H:i d/m/Y', $topic_other_array_i['publtime']);
+
+            if ($topic_other_array_i['external_link']) {
+                $topic_other_array_i['target_blank'] = 'target="_blank"';
+            }
+
+            $xtpl->assign('TOPIC_OTHER', $topic_other_array_i);
+            $xtpl->parse('main.other.loop');
+        }
+
+        $xtpl->parse('main.other');
+    }
+
+    if (!empty($generate_page)) {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('main.generate_page');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
  * sendmail_themme()
  *
  * @param mixed $sendmail
@@ -1019,7 +1091,7 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
  * @param mixed $catid
  * @return
  */
-function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid)
+function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid, $internal_authors)
 {
     global $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
@@ -1032,12 +1104,22 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
     if (!empty($array_content)) {
         foreach ($array_content as $value) {
             $catid_i = $value['catid'];
+            $authors = [];
+            if (isset($internal_authors[$value['id']]) and !empty($internal_authors[$value['id']])) {
+                foreach($internal_authors[$value['id']] as $internal_author) {
+                    $authors[] = '<a href="' . $internal_author['href'] . '">' . BoldKeywordInStr($internal_author['pseudonym'], $key) . '</a>';
+                }
+            }
+            if (!empty($value['author'])) {
+                $authors[] = BoldKeywordInStr($value['author'], $key);
+            }
+            $authors = !empty($authors) ? implode(', ', $authors) : '';
 
             $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl']);
             $xtpl->assign('TITLEROW', strip_tags(BoldKeywordInStr($value['title'], $key)));
             $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key) . "...");
             $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));
-            $xtpl->assign('AUTHOR', BoldKeywordInStr($value['author'], $key));
+            $xtpl->assign('AUTHOR', $authors);
             $xtpl->assign('SOURCE', BoldKeywordInStr(GetSourceNews($value['sourceid']), $key));
 
             if (!empty($value['homeimgfile'])) {

@@ -225,6 +225,20 @@ if ($news_contents['sourceid']) {
     }
 }
 
+$authors = [];
+$db->sqlreset()
+    ->select('l.alias,l.pseudonym')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
+    ->where("l.id = " . $id . " AND a.active=1");
+$result = $db->query($db->sql());
+while ($row = $result->fetch()) {
+    $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
+}
+if (!empty($news_contents['author'])) {
+    $authors[] = $news_contents['author'];
+}
+$news_contents['author'] = !empty($authors) ? implode(', ', $authors) : '';
+
 $news_contents['number_publtime'] = $news_contents['publtime'];
 $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);
 $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);

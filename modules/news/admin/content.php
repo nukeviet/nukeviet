@@ -27,12 +27,12 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
     $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
     $sth->execute();
 
-    $array_data = array();
+    $array_data = [];
     while (list ($topicid, $title) = $sth->fetch(3)) {
-        $array_data[] = array(
+        $array_data[] = [
             'id' => $topicid,
             'title' => $title
-        );
+        ];
     }
 
     nv_jsonOutput($array_data);
@@ -66,7 +66,7 @@ $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', 
 
 // Xác định và tạo các thư mục upload
 $username_alias = change_alias($admin_info['username']);
-$array_structure_image = array();
+$array_structure_image = [];
 $array_structure_image[''] = $module_upload;
 $array_structure_image['Y'] = $module_upload . '/' . date('Y');
 $array_structure_image['Ym'] = $module_upload . '/' . date('Y_m');
@@ -121,8 +121,8 @@ if (!defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== fals
 }
 
 // Danh sách các nhóm tin
-$array_block_cat_module = array();
-$id_block_content = array();
+$array_block_cat_module = [];
+$id_block_content = [];
 $sql = 'SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
 while (list ($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
@@ -134,21 +134,23 @@ while (list ($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 $parentid = $nv_Request->get_int('parentid', 'get', 0);
-$array_imgposition = array(
+$array_imgposition = [
     0 => $lang_module['imgposition_0'],
     1 => $lang_module['imgposition_1'],
     2 => $lang_module['imgposition_2']
-);
+];
 $total_news_current = nv_get_mod_countrows();
 $is_submit_form = (($nv_Request->get_int('save', 'post') == 1) ? true : false);
 
-$rowcontent = array(
+$rowcontent = [
     'id' => '',
     'catid' => $catid,
     'listcatid' => $catid . ',' . $parentid,
     'topicid' => '',
     'admin_id' => $admin_id,
     'author' => '',
+    'internal_authors' => [],
+    'internal_authors_old' => [],
     'sourceid' => 0,
     'addtime' => NV_CURRENTTIME,
     'edittime' => NV_CURRENTTIME,
@@ -160,7 +162,7 @@ $rowcontent = array(
     'alias' => '',
     'hometext' => '',
     'sourcetext' => '',
-    'files' => array(),
+    'files' => [],
     'homeimgfile' => '',
     'homeimgalt' => '',
     'homeimgthumb' => '',
@@ -188,20 +190,28 @@ $rowcontent = array(
     'instant_template' => '',
     'instant_creatauto' => 0,
     'mode' => 'add'
-);
+];
 
 $rowcontent['topictext'] = '';
 $page_title = $lang_module['content_add'];
-$error = array();
+$error = [];
 $groups_list = nv_groups_list();
-$array_tags_old = array();
+$array_tags_old = [];
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
+$internal_authors_list = [];
 
 // ID của bài viết cần sửa hoặc cần copy
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 $copy = $nv_Request->get_int('copy', 'get,post', 0);
 
-if ($rowcontent['id'] > 0) {
+if ($rowcontent['id'] == 0) {
+    $my_author_detail = my_author_detail($admin_info['userid']);
+    $rowcontent['internal_authors'][] = $my_author_detail['id'];
+    $internal_authors_list[$my_author_detail['id']] = [
+        'id' => $my_author_detail['id'],
+        'pseudonym' => $my_author_detail['pseudonym']
+    ];
+} else {
     $check_permission = false;
     $rowcontent = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'])->fetch();
     if (!empty($rowcontent['id'])) {
@@ -257,7 +267,7 @@ if ($rowcontent['id'] > 0) {
 
     // Lấy các file đính kèm
     $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $rowcontent['id'])->fetch();
-    $body_contents['files'] = !empty($body_contents['files']) ? explode(",", $body_contents['files']) : array();
+    $body_contents['files'] = !empty($body_contents['files']) ? explode(",", $body_contents['files']) : [];
     $rowcontent = array_merge($rowcontent, $body_contents);
     unset($body_contents);
 
@@ -269,8 +279,23 @@ if ($rowcontent['id'] > 0) {
     $rowcontent['tags'] = implode(', ', $array_tags_old);
     $rowcontent['tags_old'] = $rowcontent['tags'];
 
+    // Lấy danh sach tac gia của bài viết
+    $rowcontent['internal_authors'] = [];
+    $rowcontent['internal_authors_old'] = [];
+    $_query = $db->query('SELECT aid, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id=' . $rowcontent['id'] . ' ORDER BY alias ASC');
+    while ($row = $_query->fetch()) {
+        $rowcontent['internal_authors'][] = $row['aid'];
+        if (!$copy) {
+            $rowcontent['internal_authors_old'][] = $row['aid'];
+        }
+        $internal_authors_list[$row['aid']] = [
+            'id' => $row['aid'],
+            'pseudonym' => $row['pseudonym']
+        ];
+    }
+
     // Các nhóm tin của bài viết
-    $id_block_content = array();
+    $id_block_content = [];
     $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
     while (list ($bid_i) = $result->fetch(3)) {
@@ -294,8 +319,8 @@ if ($rowcontent['id'] > 0) {
 }
 
 // Xác định các chuyên mục được quyền đăng bài, xuất bản bài viết, sửa bài, kiểm duyệt bài, các chuyên mục hiện đang bị khóa
-$array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = array();
-$array_cat_locked = array();
+$array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = [];
+$array_cat_locked = [];
 foreach ($global_array_cat as $catid_i => $array_value) {
     if (!in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
         $array_cat_locked[] = $catid_i;
@@ -423,11 +448,11 @@ if ($rowcontent['mode'] == 'edit') {
 
 if ($is_submit_form) {
     $rowcontent['referer'] = $nv_Request->get_string('referer', 'get,post');
-    $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
+    $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
     $rowcontent['listcatid'] = implode(',', $catids);
     $rowcontent['catid'] = $nv_Request->get_int('catid', 'post', 0);
 
-    $id_block_content_post = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', array()));
+    $id_block_content_post = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', []));
 
     if ($nv_Request->isset_request('status1', 'post') or $copy) {
         // Xuất bản
@@ -478,6 +503,7 @@ if ($is_submit_form) {
         }
     }
     $rowcontent['author'] = $nv_Request->get_title('author', 'post', '', 1);
+    $rowcontent['internal_authors'] = $nv_Request->get_typed_array('internal_authors', 'post', 'int', []);
     $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
 
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
@@ -505,7 +531,7 @@ if ($is_submit_form) {
     }
     $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
     // Xử lý file đính kèm
-    $rowcontent['files'] = array();
+    $rowcontent['files'] = [];
     $fileupload = $nv_Request->get_array('files', 'post');
     if (!empty($fileupload)) {
         $fileupload = array_map("trim", $fileupload);
@@ -564,7 +590,7 @@ if ($is_submit_form) {
     $rowcontent['copyright'] = (int) $nv_Request->get_bool('copyright', 'post');
     $rowcontent['inhome'] = (int) $nv_Request->get_bool('inhome', 'post');
 
-    $_groups_post = $nv_Request->get_array('allowed_comm', 'post', array());
+    $_groups_post = $nv_Request->get_array('allowed_comm', 'post', []);
     $rowcontent['allowed_comm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $rowcontent['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post');
@@ -589,7 +615,7 @@ if ($is_submit_form) {
         $tags = explode(',', $tags);
 
         // Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
-        $tags_return = array();
+        $tags_return = [];
         foreach ($tags as $tag_i) {
             $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where keyword = :keyword');
             $sth->bindParam(':keyword', $tag_i, PDO::PARAM_STR);
@@ -627,7 +653,7 @@ if ($is_submit_form) {
         // Nếu có lỗi thì chuyển sang trạng thái đăng nháp, cho đến khi nào đủ thông tin mới cho xuất bản
         $rowcontent['status'] = 4;
         $error_data = $error;
-        $error = array();
+        $error = [];
     }
 
     // Thao tác xử lý bài viết tức thời
@@ -657,7 +683,7 @@ if ($is_submit_form) {
             $weightopic = intval($weightopic) + 1;
             $aliastopic = get_mod_alias($rowcontent['topictext'], 'topics');
             $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-            $data_insert = array();
+            $data_insert = [];
             $data_insert['title'] = $rowcontent['topictext'];
             $data_insert['alias'] = $aliastopic;
             $data_insert['description'] = $rowcontent['topictext'];
@@ -681,7 +707,7 @@ if ($is_submit_form) {
                     $weight = intval($weight) + 1;
                     $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
-                    $data_insert = array();
+                    $data_insert = [];
                     $data_insert['title'] = $url_info['host'];
                     $data_insert['sourceid_link'] = $sourceid_link;
                     $data_insert['weight'] = $weight;
@@ -700,7 +726,7 @@ if ($is_submit_form) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
                     $weight = intval($weight) + 1;
                     $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . " , " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-                    $data_insert = array();
+                    $data_insert = [];
                     $data_insert['title'] = $rowcontent['sourcetext'];
 
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
@@ -747,7 +773,7 @@ if ($is_submit_form) {
             }
 
             // Nếu bài viết trong chuyên mục bị khóa thì xây dựng lại status
-            if (array_intersect($catids, $array_cat_locked) != array() and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
+            if (array_intersect($catids, $array_cat_locked) != [] and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
                 $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
             }
 
@@ -790,7 +816,7 @@ if ($is_submit_form) {
                  :instant_template,
                  ' . intval($rowcontent['instant_creatauto']) . ')';
 
-            $data_insert = array();
+            $data_insert = [];
             $data_insert['listcatid'] = $rowcontent['listcatid'];
             $data_insert['author'] = $rowcontent['author'];
             $data_insert['title'] = $rowcontent['title'];
@@ -805,7 +831,7 @@ if ($is_submit_form) {
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
-                $ct_query = array();
+                $ct_query = [];
 
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, keywords, sourcetext, files, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save) VALUES (
                     ' . $rowcontent['id'] . ',
@@ -879,7 +905,7 @@ if ($is_submit_form) {
             }
 
             // Nếu bài viết trong chuyên mục bị khóa thì xây dựng lại status
-            if (array_intersect($catids, $array_cat_locked) != array() and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
+            if (array_intersect($catids, $array_cat_locked) != [] and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
                 $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
             }
 
@@ -923,7 +949,7 @@ if ($is_submit_form) {
             if ($sth->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
 
-                $ct_query = array();
+                $ct_query = [];
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_detail SET
                     titlesite=:titlesite,
                     description=:description,
@@ -993,9 +1019,9 @@ if ($is_submit_form) {
         nv_set_status_module();
         if (empty($error)) {
             $id_block_content_new = $rowcontent['mode'] == 'edit' ? array_diff($id_block_content_post, $id_block_content) : $id_block_content_post;
-            $id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff($id_block_content, $id_block_content_post) : array();
+            $id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff($id_block_content, $id_block_content_post) : [];
 
-            $array_block_fix = array();
+            $array_block_fix = [];
             foreach ($id_block_content_new as $bid_i) {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', 0)');
                 $array_block_fix[] = $bid_i;
@@ -1013,9 +1039,9 @@ if ($is_submit_form) {
             if ($rowcontent['tags'] != $rowcontent['tags_old'] or $copy) {
                 $tags = explode(',', $rowcontent['tags']);
                 $tags = array_map('trim', $tags);
-                $tags = array_diff($tags, array(
+                $tags = array_diff($tags, [
                     ''
-                ));
+                ]);
                 $tags = array_unique($tags);
                 foreach ($tags as $_tag) {
                     if (!in_array($_tag, $array_tags_old)) {
@@ -1028,7 +1054,7 @@ if ($is_submit_form) {
 
                         list ($tid, $alias, $tag_i) = $sth->fetch(3);
                         if (empty($tid)) {
-                            $array_insert = array();
+                            $array_insert = [];
                             $array_insert['alias'] = $alias_i;
                             $array_insert['keyword'] = $_tag;
 
@@ -1072,6 +1098,29 @@ if ($is_submit_form) {
                     }
                 }
             }
+
+            // Them/xoa tac gia noi bo
+            $internal_authors_new = $rowcontent['mode'] == 'edit' ? array_diff($rowcontent['internal_authors'], $rowcontent['internal_authors_old']) : $rowcontent['internal_authors'];
+            $internal_authors_del = $rowcontent['mode'] == 'edit' ? array_diff($rowcontent['internal_authors_old'], $rowcontent['internal_authors']) : [];
+
+            if (!empty($internal_authors_new)) {
+                $internal_authors_new = implode(",", $internal_authors_new);
+                $_query = $db->query('SELECT id, alias, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id IN (' . $internal_authors_new . ')');
+                $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist (id, aid, alias, pseudonym) VALUES (' . $rowcontent['id'] . ', :aid, :alias, :pseudonym)');
+                while ($row = $_query->fetch()) {
+                    $sth->bindParam(':aid', $row['id'], PDO::PARAM_INT);
+                    $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
+                    $sth->bindParam(':pseudonym', $row['pseudonym'], PDO::PARAM_STR);
+                    $sth->execute();
+                }
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews+1 WHERE id IN (' . $internal_authors_new . ')');
+            }
+            if (!empty($internal_authors_del)) {
+                $internal_authors_del = implode(",", $internal_authors_del);
+                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid IN (' . $internal_authors_del . ') AND id = ' . $rowcontent['id']);
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews-1 WHERE id IN (' . $internal_authors_del . ')');
+            }
+
             if (!empty($error_data)) {
                 $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'];
                 $msg1 = implode('<br />', $error_data);
@@ -1119,7 +1168,7 @@ if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/'
 
 $array_catid_in_row = explode(',', $rowcontent['listcatid']);
 
-$array_topic_module = array();
+$array_topic_module = [];
 $array_topic_module[0] = $lang_module['topic_sl'];
 if (!empty($rowcontent['topicid'])) {
     $db->sqlreset()
@@ -1135,7 +1184,7 @@ if (!empty($rowcontent['topicid'])) {
 
 $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
 $result = $db->query($sql);
-$array_source_module = array();
+$array_source_module = [];
 $array_source_module[0] = $lang_module['sources_sl'];
 while (list ($sourceid_i, $title_i) = $result->fetch(3)) {
     $array_source_module[$sourceid_i] = $title_i;
@@ -1213,7 +1262,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     if (!empty($check_show) and ($rowcontent['id'] > 0 or in_array($array_value['status'], $global_code_defined['cat_visible_status']))) {
         $space = intval($array_value['lev']) * 30;
         $catiddisplay = (sizeof($array_catid_in_row) > 1 and (in_array($catid_i, $array_catid_in_row))) ? '' : ' display: none;';
-        $temp = array(
+        $temp = [
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
@@ -1221,7 +1270,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
             'checked' => (in_array($catid_i, $array_catid_in_row)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '',
             'catiddisplay' => $catiddisplay
-        );
+        ];
         $xtpl->assign('CATS', $temp);
         $xtpl->parse('main.catid');
     }
@@ -1236,18 +1285,18 @@ if (!empty($rowcontent['files'])) {
     $rowcontent['files'] = array_filter($rowcontent['files']);
     foreach ($rowcontent['files'] as $_id => $_file) {
         if (!empty($_file)) {
-            $xtpl->assign('FILEUPL', array(
+            $xtpl->assign('FILEUPL', [
                 'id' => $_id,
                 'value' => (!preg_match("/^http*/", $_file)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $_file : $_file
-            ));
+            ]);
             $xtpl->parse('main.files');
         }
     }
 } else {
-    $xtpl->assign('FILEUPL', array(
+    $xtpl->assign('FILEUPL', [
         'id' => 0,
         'value' => ''
-    ));
+    ]);
     $xtpl->parse('main.files');
 }
 
@@ -1302,11 +1351,11 @@ $xtpl->assign('emin', $select);
 // allowed comm
 $allowed_comm = explode(',', $rowcontent['allowed_comm']);
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ALLOWED_COMM', array(
+    $xtpl->assign('ALLOWED_COMM', [
         'value' => $_group_id,
         'checked' => in_array($_group_id, $allowed_comm) ? ' checked="checked"' : '',
         'title' => $_title
-    ));
+    ]);
     $xtpl->parse('main.allowed_comm');
 }
 if ($module_config[$module_name]['allowed_comm'] != '-1') {
@@ -1316,10 +1365,10 @@ if ($module_config[$module_name]['allowed_comm'] != '-1') {
 // Lua chon Layout
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', array(
+    $xtpl->assign('LAYOUT_FUNC', [
         'key' => $value,
         'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.layout_func');
 }
 
@@ -1350,11 +1399,11 @@ if ($has_editor) {
 $shtm = '';
 if (sizeof($array_block_cat_module)) {
     foreach ($array_block_cat_module as $bid_i => $bid_title) {
-        $xtpl->assign('BLOCKS', array(
+        $xtpl->assign('BLOCKS', [
             'title' => $bid_title,
             'bid' => $bid_i,
             'checked' => in_array($bid_i, $id_block_content) ? 'checked="checked"' : ''
-        ));
+        ]);
         $xtpl->parse('main.block_cat.loop');
     }
     $xtpl->parse('main.block_cat');
@@ -1375,6 +1424,14 @@ if (!empty($rowcontent['tags'])) {
         $xtpl->parse('main.tags');
     }
 }
+
+if (!empty($rowcontent['internal_authors'])) {
+    foreach ($rowcontent['internal_authors'] as $_aid) {
+        $xtpl->assign('INTERNAL_AUTHORS', $internal_authors_list[$_aid]);
+        $xtpl->parse('main.internal_authors');
+    }
+}
+
 $archive_checked = ($rowcontent['archive']) ? ' checked="checked"' : '';
 $xtpl->assign('archive_checked', $archive_checked);
 $inhome_checked = ($rowcontent['inhome']) ? ' checked="checked"' : '';

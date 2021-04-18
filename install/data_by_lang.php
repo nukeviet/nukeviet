@@ -46,6 +46,7 @@ $sth->execute(array( 'tag', 'tag', 'Tag', 'news', 1, 0, 6, ''));
 $sth->execute(array( 'rss', 'rss', 'Rss', 'news', 1, 1, 7, ''));
 $sth->execute(array( 'search', 'search', 'Search', 'news', 1, 1, 8, ''));
 $sth->execute(array( 'groups', 'groups', 'Groups', 'news', 1, 0, 9, ''));
+$sth->execute(array( 'author', 'author', 'Author', 'news', 1, 0, 10, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'print', 'print', 'Print', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'rating', 'rating', 'Rating', 'news', 0, 0, 0, ''));
@@ -123,6 +124,7 @@ $themes_default = array();
 $themes_default['left-main-right'] = array(
     $array_funcid_mod['about']['main'],
     $array_funcid_mod['news']['content'],
+    $array_funcid_mod['news']['author'],
     $array_funcid_mod['news']['detail'],
     $array_funcid_mod['news']['main'],
     $array_funcid_mod['news']['rss'],
@@ -175,6 +177,7 @@ $themes_mobile = array();
 $themes_mobile['main'] = array(
     $array_funcid_mod['about']['main'],
     $array_funcid_mod['news']['content'],
+    $array_funcid_mod['news']['author'],
     $array_funcid_mod['news']['detail'],
     $array_funcid_mod['news']['main'],
     $array_funcid_mod['news']['search'],

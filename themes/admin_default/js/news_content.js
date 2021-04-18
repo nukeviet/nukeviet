@@ -271,6 +271,54 @@ $(document).ready(function() {
         return false;
     });
     // Tags autocomplete end
+    
+    // internal_authors autocomplete
+    $("#author-search").bind("keydown", function(event) {
+        if ((event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) || event.keyCode==13) {
+            event.preventDefault();
+        }
+    }).autocomplete({
+        source: function (request, response) {
+            var aIDs = $("[name^=internal_authors]").map(function(){
+                    return $(this).val()
+                }).get().join();
+           $.ajax({
+               url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=authors&searchAjax=1",
+               type: 'GET',
+               dataType: 'json',
+               data: {term : extractLast(request.term), aids: aIDs},
+               success: function (data) {
+                   response($.map(data, function (value, key) { 
+                        return {
+                            label: value,
+                            value: key
+                        }
+                   }))
+               }
+           })
+        },
+        search : function() {
+            var term = extractLast(this.value);
+            if (term.length < 2) {
+                return false;
+            }
+        },
+        focus : function(event, ui) {
+          event.preventDefault();
+          $(this).val(ui.item.label)
+        },
+        select : function(event, ui) {
+            event.preventDefault();
+            nv_add_element( 'internal_authors', ui.item.value, ui.item.label );
+            $(this).val('');
+        }
+    }).on("focusout", function(event) {
+        event.preventDefault();
+        $(this).val('')
+    }).bind("keyup blur", function(event) {
+        event.preventDefault()
+    });
+    // internal_authors autocomplete end
 
     // hide message_body after the first one
     $(".message_list .message_body:gt(1)").hide();
