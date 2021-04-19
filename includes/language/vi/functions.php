@@ -32,3 +32,7 @@ function searchPatternByLang($str)
     $str = strtolower($str);
     return strtr($str, $unicode);
 }
+
+function searchKeywordforSQL($keyword) {
+    return searchPatternByLang(nv_EncString($keyword));
+}

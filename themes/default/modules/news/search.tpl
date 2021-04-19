@@ -15,7 +15,7 @@
 			<div class="form-group">
 				<label class="col-sm-7 control-label">{LANG.key_title}</label>
 				<div class="col-sm-17">
-					<input type="text" name="q" value="{KEY}" class="form-control" id="key"/>
+					<input type="text" name="q" value="{KEY}" class="form-control" id="key" maxlength="{NV_MAX_SEARCH_LENGTH}"/>
 				</div>
 			</div>
 
