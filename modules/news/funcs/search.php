@@ -122,7 +122,7 @@ $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
-} elseif (!empty($key) and nv_strlen($key) <= NV_MIN_SEARCH_LENGTH) {
+} elseif (!empty($key) and nv_strlen($key) < NV_MIN_SEARCH_LENGTH) {
     $contents .= '<div class="alert alert-danger">' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '</div>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
