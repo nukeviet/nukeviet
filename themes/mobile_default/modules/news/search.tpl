@@ -13,7 +13,7 @@
 			<hr />
 			<div class="form-group">
 				<div class="col-md-8">{LANG.key_title}</div>
-	  			<div class="col-md-16"><input type="text" name="q" value="{KEY}" class="form-control" id="key"/></div>
+	  			<div class="col-md-16"><input type="text" name="q" value="{KEY}" class="form-control" id="key" maxlength="{NV_MAX_SEARCH_LENGTH}"/></div>
 			</div>
 
 			<div class="form-group">

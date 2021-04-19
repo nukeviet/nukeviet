@@ -22,7 +22,7 @@ function searchPatternByLang($str)
 {
     $unicode = [
         'a'=>'(a|á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ)',
-        'd'=>'(d|đ)',
+        'd'=>'(d|đ|Đ)',// Trong mot so truong hop MySQL khong coi Đ la chu in hoa cua đ
         'e'=>'(e|é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ)',
         'i'=>'(i|í|ì|ỉ|ĩ|ị)',
         'o'=>'(o|ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ)',
@@ -31,4 +31,8 @@ function searchPatternByLang($str)
     ];
     $str = strtolower($str);
     return strtr($str, $unicode);
+}
+
+function searchKeywordforSQL($keyword) {
+    return searchPatternByLang(nv_EncString($keyword));
 }

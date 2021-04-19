@@ -61,7 +61,7 @@ function BoldKeywordInStr($str, $keyword)
 }
 
 $key = $nv_Request->get_title('q', 'get', '');
-$key = str_replace('+', ' ', $key);
+$key = str_replace('+', ' ', urldecode($key));
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
 
@@ -122,8 +122,8 @@ $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
-} elseif (!empty($key) and nv_strlen($key) <= 2) {
-    $contents .= '<div class="alert alert-danger">' . $lang_module['search_word_short'] . '</div>';
+} elseif (!empty($key) and nv_strlen($key) < NV_MIN_SEARCH_LENGTH) {
+    $contents .= '<div class="alert alert-danger">' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '</div>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
@@ -163,14 +163,20 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
             // Tim bai viet co internal author trung voi ket qua tim kiem
+            if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+                $where = 'alias REGEXP :q_alias OR pseudonym REGEXP :q_pseudonym';
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+            } else {
+                $where = 'alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym';
+                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+            }
             $db->sqlreset()
                 ->select('id')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-                ->where('alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym');
-
+                ->where($where);
             $sth = $db->prepare($db->sql());
-            $sth->bindValue(':q_alias', '%' . $dbkeyhtml . '%', PDO::PARAM_STR);
-            $sth->bindValue(':q_pseudonym', '%' . $dbkeyhtml . '%', PDO::PARAM_STR);
+            $sth->bindValue(':q_alias', $_dbkeyhtml, PDO::PARAM_STR);
+            $sth->bindValue(':q_pseudonym', $_dbkeyhtml, PDO::PARAM_STR);
             $sth->execute();
             $match = [];
             while ($id_search = $sth->fetch(3)) {
@@ -225,14 +231,20 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
             // Tim bai viet co internal author trung voi ket qua tim kiem
+            if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+                $where = 'alias REGEXP :q_alias OR pseudonym REGEXP :q_pseudonym';
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+            } else {
+                $where = 'alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym';
+                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+            }
             $db->sqlreset()
                 ->select('id')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-                ->where('alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym');
-
+                ->where($where);
             $sth = $db->prepare($db->sql());
-            $sth->bindValue(':q_alias', '%' . $dbkeyhtml . '%', PDO::PARAM_STR);
-            $sth->bindValue(':q_pseudonym', '%' . $dbkeyhtml . '%', PDO::PARAM_STR);
+            $sth->bindValue(':q_alias', $_dbkeyhtml, PDO::PARAM_STR);
+            $sth->bindValue(':q_pseudonym', $_dbkeyhtml, PDO::PARAM_STR);
             $sth->execute();
             $match = [];
             while ($id_search = $sth->fetch(3)) {
@@ -330,35 +342,66 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         }
     } else {
         if ($choose == 1) {
+            if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+                $_dbkey = searchKeywordforSQL($dbkey);
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+                $where = "AND ( tb1.title REGEXP '" . $_dbkeyhtml . "' OR tb1.hometext REGEXP '" . $_dbkey . "' OR tb2.bodyhtml REGEXP '" . $_dbkey . "' ) ";
+            } else {
+                $_dbkey = '%' . $dbkey . '%';
+                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+                $where = "AND ( tb1.title LIKE '" . $_dbkeyhtml . "' OR tb1.hometext LIKE '" . $_dbkey . "' OR tb2.bodyhtml LIKE '" . $_dbkey . "' ) ";
+            }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id ) ';
-            $where = "AND ( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%' ) ";
+            
         } elseif ($choose == 2) {
+            if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+                $where = "AND ( tb1.author REGEXP '" . $_dbkeyhtml . "'
+                    OR a.alias REGEXP '" . $_dbkeyhtml . "'
+                    OR a.pseudonym REGEXP '" . $_dbkeyhtml . "') ";
+            } else {
+                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+                $where = "AND ( tb1.author LIKE '" . $_dbkeyhtml . "'
+                    OR a.alias LIKE '" . $_dbkeyhtml . "'
+                    OR a.pseudonym LIKE '" . $_dbkeyhtml . "') ";
+            }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON (tb1.id = a.id) ';
-            $where = "AND ( tb1.author LIKE '%" . $dbkeyhtml . "%'
-                OR a.alias LIKE '%" . $dbkeyhtml . "%'
-                OR a.pseudonym LIKE '%" . $dbkeyhtml . "%') ";
         } elseif ($choose == 3) {
             $qurl = $key;
             $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
+            $where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%'))";
         } else {
             $qurl = $key;
             $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
+            if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+                $_dbkey = searchKeywordforSQL($dbkey);
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+                $where = " AND (( tb1.title REGEXP '" . $_dbkeyhtml . "' 
+                    OR tb1.hometext REGEXP '" . $_dbkey . "' 
+                    OR tb1.author REGEXP '" . $_dbkeyhtml . "' 
+                    OR tb2.bodyhtml REGEXP '" . $_dbkey . "'
+                    OR a.alias REGEXP '" . $_dbkeyhtml . "'
+                    OR a.pseudonym REGEXP '" . $_dbkeyhtml . "') 
+                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+            } else {
+                $_dbkey = '%' . $dbkey . '%';
+                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+                $where = " AND (( tb1.title LIKE '" . $_dbkeyhtml . "' 
+                    OR tb1.hometext LIKE '" . $_dbkey . "' 
+                    OR tb1.author LIKE '" . $_dbkeyhtml . "' 
+                    OR tb2.bodyhtml LIKE '" . $_dbkey . "'
+                    OR a.alias LIKE '" . $_dbkeyhtml . "'
+                    OR a.pseudonym LIKE '" . $_dbkeyhtml . "') 
+                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+            }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id )';
             $tbl_src .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON (tb1.id = a.id)';
-            $where = " AND (( tb1.title LIKE '%" . $dbkeyhtml . "%' 
-                OR tb1.hometext LIKE '%" . $dbkey . "%' 
-                OR tb1.author LIKE '%" . $dbkeyhtml . "%' 
-                OR tb2.bodyhtml LIKE '%" . $dbkey . "%'
-                OR a.alias LIKE '%" . $dbkeyhtml . "%'
-                OR a.pseudonym LIKE '%" . $dbkeyhtml . "%') 
-                OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')))";
         }
 
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'], $m)) {

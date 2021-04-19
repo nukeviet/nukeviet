@@ -136,10 +136,21 @@ function BoldKeywordInStr($str, $keyword, $logic)
  */
 function nv_like_logic($field, $dbkeyword, $logic)
 {
-    if ($logic == 'AND') {
-        $return = $field . " LIKE '%" . $dbkeyword . "%'";
+    global $db;
+
+    if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+        $dbkeyword = searchKeywordforSQL($dbkeyword);
+        if ($logic == 'AND') {
+            $return = $field . " REGEXP '" . $dbkeyword . "'";
+        } else {
+            $return = $field . " REGEXP '" . str_replace(" ", "' OR " . $field . " REGEXP '", $dbkeyword) . "'";
+        }
     } else {
-        $return = $field . " LIKE '%" . str_replace(" ", "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
+        if ($logic == 'AND') {
+            $return = $field . " LIKE '%" . $dbkeyword . "%'";
+        } else {
+            $return = $field . " LIKE '%" . str_replace(" ", "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
+        }
     }
     return $return;
 }
