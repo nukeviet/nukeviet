@@ -698,6 +698,13 @@ $(window).on('load', function() {
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }();
+    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
+            var a = document.createElement("script");
+            a.type = "text/javascript";
+            a.src = "//sp.zalo.me/plugins/sdk.js";
+            var b = document.getElementsByTagName("script")[0];
+            b.parentNode.insertBefore(a, b);
+    }();
     if (typeof nv_is_recaptcha != "undefined") {
         if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
             var a = document.createElement("script");

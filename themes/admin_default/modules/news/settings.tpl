@@ -83,7 +83,11 @@
                 </tr>
                 <tr>
                     <th>{LANG.socialbutton}</th>
-                    <td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
+                    <td>
+                        <!-- BEGIN: socialbutton -->
+                        <div><label><input type="checkbox" name="socialbutton[]" value="{SOCIALBUTTON.key}"{SOCIALBUTTON.checked}> {SOCIALBUTTON.title}</label></div>
+                        <!-- END: socialbutton -->
+                    </td>
                 </tr>
                 <tr>
                     <th>{LANG.allowed_rating_point}</th>

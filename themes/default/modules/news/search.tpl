@@ -15,7 +15,7 @@
 			<div class="form-group">
 				<label class="col-sm-7 control-label">{LANG.key_title}</label>
 				<div class="col-sm-17">
-					<input type="text" name="q" value="{KEY}" class="form-control" id="key" maxlength="{NV_MAX_SEARCH_LENGTH}"/>
+					<input type="text" name="q" value="{KEY}" class="form-control" id="key" maxlength="{NV_MAX_SEARCH_LENGTH}" data-minlength="{NV_MIN_SEARCH_LENGTH}"/>
 				</div>
 			</div>
 
@@ -46,7 +46,7 @@
 				<label class="col-sm-7 control-label">{LANG.from_date}</label>
 				<div class="col-sm-17">
 					<div class="input-group">
-						<input type="text" class="form-control" name="from_date" id="from_date" value="{FROM_DATE}" readonly="readonly" />
+						<input type="text" class="form-control" name="from_date" id="from_date" value="{FROM_DATE}" maxlength="10"/>
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="button" id="from-btn">
 								<em class="fa fa-calendar fa-fix">&nbsp;</em>
@@ -59,7 +59,7 @@
 				<label class="col-sm-7 control-label">{LANG.to_date}</label>
 				<div class="col-sm-17">
 					<div class="input-group">
-							<input type="text" class="form-control" name="to_date" id="to_date" value="{TO_DATE}" readonly="readonly" />
+							<input type="text" class="form-control" name="to_date" id="to_date" value="{TO_DATE}" maxlength="10"/>
 							<span class="input-group-btn">
 								<button class="btn btn-default" type="button" id="to-btn">
 									<em class="fa fa-calendar fa-fix">&nbsp;</em>
@@ -71,7 +71,8 @@
 			<div class="form-group">
 				<label class="col-sm-7 control-label">&nbsp;</label>
 				<div class="col-sm-17">
-					<input type="submit" class="btn btn-primary" value="{LANG.search_title}"/>
+					<input type="submit" class="btn btn-primary" value="{LANG.search_title}"/> 
+                    <a href="javascript:void(0);" data-href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=seek&amp;q=" onclick="searchOnSite(event,this)">{LANG.search_on_site}</a>
 				</div>
 			</div>
 		</div>
@@ -79,6 +80,15 @@
 </form>
 
 <script type="text/javascript">
+function searchOnSite(e,th) {
+    e.preventDefault();
+    var input = $("#fsea input[name=q]"),
+        maxlength = input.attr("maxlength"),
+        minlength = input.attr("data-minlength"),
+        q = strip_tags(trim(input.val()));
+    input.parent().removeClass("has-error");
+    "" == q || q.length < minlength || q.length > maxlength ? (input.parent().addClass("has-error"), input.val(q).focus()) : window.location.href = $(th).data("href") + rawurlencode(q);
+}
 	$(document).ready(function() {
 		$("#from_date, #to_date").datepicker({
 			dateFormat : "dd.mm.yy",

@@ -643,6 +643,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $xtpl->assign('OP', $module_info['alias']['content']);
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
+    $xtpl->assign('LANG_EXTERNAL_AUTHOR', defined('NV_IS_USER') ? $lang_module['external_author'] : $lang_module['author']);
     
     if (defined('NV_IS_USER')) {
         if ($contentid > 0) {

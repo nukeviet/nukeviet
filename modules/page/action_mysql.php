@@ -56,7 +56,8 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('news_first', '0'),
 ('related_articles', '5'),
 ('copy_page', '0'),
-('alias_lower', 1)
+('alias_lower', 1),
+('socialbutton', 'facebook,twitter')
 ";
 
 // Comments

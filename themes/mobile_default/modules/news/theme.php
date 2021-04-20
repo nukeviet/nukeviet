@@ -715,12 +715,22 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
     if ($module_config[$module_name]['socialbutton']) {
         global $meta_property;
-
-        if (!empty($module_config[$module_name]['facebookappid'])) {
-            $meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
-            $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
+        
+        if (strpos($module_config[$module_name]['socialbutton'], 'facebook') !== false) {
+            if (!empty($module_config[$module_name]['facebookappid'])) {
+                $meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+                $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
+            }
+            $xtpl->parse('main.socialbutton.facebook');
         }
-
+        if (strpos($module_config[$module_name]['socialbutton'], 'twitter') !== false) {
+            $xtpl->parse('main.socialbutton.twitter');
+        }
+        if (strpos($module_config[$module_name]['socialbutton'], 'zalo') !== false and !empty($global_config['zaloOfficialAccountID'])) {
+            $xtpl->assign('ZALO_OAID', $global_config['zaloOfficialAccountID']);
+            $xtpl->parse('main.socialbutton.zalo');
+        }
+        
         $xtpl->parse('main.socialbutton');
     }
 

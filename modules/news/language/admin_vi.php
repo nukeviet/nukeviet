@@ -250,7 +250,8 @@ $lang_module['error_del_content'] = 'Lỗi: Hệ thống không xóa hết đư�
 $lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 bài viết để thực hiện';
 $lang_module['facebookAppID'] = 'Facebook App ID';
 $lang_module['facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
-$lang_module['socialbutton'] = 'Hiển thị các công cụ Like facebook, G+, Twitter khi xem bài viết';
+$lang_module['socialbutton'] = 'Hiển thị các nút công cụ của mạng xã hội khi xem bài viết';
+$lang_module['socialbutton_zalo_note'] = 'Trước tiên cần khai báo Zalo Offficial Account ID';
 $lang_module['block'] = 'Các nhóm tin';
 $lang_module['adddefaultblock'] = 'Chọn mặc định khi tạo bài viết';
 $lang_module['source_logo'] = 'Logo nguồn tin';

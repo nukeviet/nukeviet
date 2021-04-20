@@ -196,7 +196,7 @@ function formSubmit(event, form) {
     <!-- END: internal_author -->
 
 	<div class="form-group">
-		<label class="col-sm-8 control-label text-normal">{LANG.external_author}:</label>
+		<label class="col-sm-8 control-label text-normal">{LANG_EXTERNAL_AUTHOR}:</label>
 		<div class="col-sm-16">
 			<input maxlength="255" value="{DATA.author}" name="author" type="text" class="form-control" />
 		</div>

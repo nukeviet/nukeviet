@@ -17,7 +17,7 @@ $page_title = $lang_module['setting'];
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
-
+$socialbuttons = ['facebook', 'twitter', 'zalo'];
 $savesetting = $nv_Request->get_int('savesetting', 'post', 0);
 if (!empty($savesetting)) {
     $array_config = [];
@@ -40,7 +40,7 @@ if (!empty($savesetting)) {
     $array_config['htmlhometext'] = $nv_Request->get_int('htmlhometext', 'post', 0);
 
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
-    $array_config['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
+    $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
     $array_config['show_no_image'] = $nv_Request->get_title('show_no_image', 'post', '', 0);
     $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
     $array_config['config_source'] = $nv_Request->get_int('config_source', 'post', 0);
@@ -88,6 +88,13 @@ if (!empty($savesetting)) {
     } else {
         $array_config['show_no_image'] = '';
     }
+
+    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
+    if (in_array('zalo', $array_config['socialbutton']) and empty($global_config['zaloOfficialAccountID'])) {
+        $array_config['socialbutton'] = array_diff($array_config['socialbutton'], ['zalo']);
+    }
+    $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
+    
     if (empty($error)) {
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -172,6 +179,22 @@ for ($i = 0; $i <= 50; ++$i) {
     $xtpl->parse('main.st_links');
 }
 
+// Social_buttons
+$my_socialbuttons = !empty($module_config[$module_name]['socialbutton']) ? array_map('trim', explode(',', $module_config[$module_name]['socialbutton'])) : [];
+foreach($socialbuttons as $socialbutton) {
+    $array = [
+        'key' => $socialbutton,
+        'title' => ucfirst($socialbutton),
+        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons)) ? ' checked="checked"' : ''
+    ];
+    if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
+        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
+        $array['checked'] = ' disabled="disabled"';
+    }
+    $xtpl->assign('SOCIALBUTTON', $array);
+    $xtpl->parse('main.socialbutton');
+}
+
 // Show points rating article on google
 for ($i = 0; $i <= 6; ++$i) {
     $xtpl->assign('RATING_POINT', array(
@@ -185,7 +208,6 @@ for ($i = 0; $i <= 6; ++$i) {
 $xtpl->assign('SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '');
 $xtpl->assign('HTMLHOMETEXT', $module_config[$module_name]['htmlhometext'] ? ' checked="checked"' : '');
-$xtpl->assign('SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $module_config[$module_name]['alias_lower'] ? ' checked="checked"' : '');
 $xtpl->assign('AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '');
