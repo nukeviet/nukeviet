@@ -83,6 +83,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_site['searchEngineUniqueID'] = '';
     }
 
+    $array_config_site['zaloOfficialAccountID'] = $nv_Request->get_title('zaloOfficialAccountID', 'post', '');
+    $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloOfficialAccountID']);
+
     $array_config_site['ssl_https'] = $nv_Request->get_int('ssl_https', 'post');
     if ($array_config_site['ssl_https'] < 0 or $array_config_site['ssl_https'] > 2) {
         $array_config_site['ssl_https'] = 0;

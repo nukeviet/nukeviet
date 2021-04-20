@@ -167,6 +167,10 @@
                     <td><strong>{LANG.searchEngineUniqueID}</strong></td>
                     <td><input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" style="width: 450px" maxlength="50" /></td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.zalo_official_account_id}</strong></td>
+                    <td><input type="text" name="zaloOfficialAccountID" value="{DATA.zaloOfficialAccountID}" class="form-control" style="width: 450px" maxlength="50" /></td>
+                </tr>
             </tbody>
         </table>
     </div>

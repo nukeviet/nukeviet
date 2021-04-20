@@ -250,7 +250,8 @@ $lang_module['error_del_content'] = 'Error: System can\'t delete all block\'s ar
 $lang_module['msgnocheck'] = 'No topic selected';
 $lang_module['facebookAppID'] = 'Facebook App ID';
 $lang_module['facebookAppIDNote'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
-$lang_module['socialbutton'] = 'Display Like facebook, G+, Twitter tools when view aricle';
+$lang_module['socialbutton'] = 'Display social media buttons when viewing an article';
+$lang_module['socialbutton_zalo_note'] = 'First of all, you need to declare the Zalo Official Account ID';
 $lang_module['block'] = 'Blocks';
 $lang_module['adddefaultblock'] = 'Select the default when creating article';
 $lang_module['source_logo'] = 'Source logo';

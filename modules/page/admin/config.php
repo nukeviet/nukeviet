@@ -15,6 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $lang_module['config'];
 
 $array_config = array();
+$socialbuttons = ['facebook', 'twitter', 'zalo'];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['viewtype'] = $nv_Request->get_int('viewtype', 'post', 0);
@@ -24,6 +25,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['news_first'] = $nv_Request->get_int('news_first', 'post', 0);
     $array_config['copy_page'] = $nv_Request->get_int('copy_page', 'post', 0);
     $array_config['alias_lower'] = $nv_Request->get_int('alias_lower', 'post', 0);
+    $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
+    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
+    if (in_array('zalo', $array_config['socialbutton']) and empty($global_config['zaloOfficialAccountID'])) {
+        $array_config['socialbutton'] = array_diff($array_config['socialbutton'], ['zalo']);
+    }
+    $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
 
     $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
     foreach ($array_config as $config_name => $config_value) {
@@ -38,6 +45,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 $array_config['viewtype'] = 0;
 $array_config['facebookapi'] = '';
+$array_config['socialbutton'] = '';
 $array_config['per_page'] = '5';
 $array_config['related_articles'] = '5';
 $array_config['news_first'] = 0;
@@ -87,6 +95,23 @@ for ($i = 0; $i <= 30; ++$i) {
     ));
     $xtpl->parse('main.related_articles');
 }
+
+// Social_buttons
+$my_socialbuttons = !empty($array_config['socialbutton']) ? array_map('trim', explode(',', $array_config['socialbutton'])) : [];
+foreach($socialbuttons as $socialbutton) {
+    $array = [
+        'key' => $socialbutton,
+        'title' => ucfirst($socialbutton),
+        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons)) ? ' checked="checked"' : ''
+    ];
+    if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
+        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
+        $array['checked'] = ' disabled="disabled"';
+    }
+    $xtpl->assign('SOCIALBUTTON', $array);
+    $xtpl->parse('main.socialbutton');
+}
+
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 

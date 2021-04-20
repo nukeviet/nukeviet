@@ -767,14 +767,20 @@ $(window).on('load', function() {
         var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
         a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
-    0 < $(".twitter-share-button").length &&
-        function() {
+    0 < $(".twitter-share-button").length && function() {
             var a = document.createElement("script");
             a.type = "text/javascript";
             a.src = "//platform.twitter.com/widgets.js";
             var b = document.getElementsByTagName("script")[0];
             b.parentNode.insertBefore(a, b);
-        }();
+    }();
+    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
+            var a = document.createElement("script");
+            a.type = "text/javascript";
+            a.src = "//sp.zalo.me/plugins/sdk.js";
+            var b = document.getElementsByTagName("script")[0];
+            b.parentNode.insertBefore(a, b);
+    }();
     if (typeof nv_is_recaptcha != "undefined") {
         if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
             var a = document.createElement("script");

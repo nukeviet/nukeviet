@@ -250,7 +250,8 @@ $lang_module['error_del_content'] = 'Erreur: impossible de supprimer tous les ar
 $lang_module['msgnocheck'] = 'Il faut sélectionner au moins un article';
 $lang_module['facebookAppID'] = 'Facebook App ID';
 $lang_module['facebookAppIDNote'] = '(En forme 1419186468293063,  <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">Regarder en détails</a>)';
-$lang_module['socialbutton'] = 'Afficher les outils comme Facebook, G+, Twitter quand vous regardez les articles';
+$lang_module['socialbutton'] = 'Afficher les boutons de réseaux sociaux lors de la consultation d\'un article';
+$lang_module['socialbutton_zalo_note'] = 'Tout d\'abord, vous devez déclarer l\'ID de compte officiel Zalo';
 $lang_module['block'] = 'Les groupes de nouvelles';
 $lang_module['adddefaultblock'] = 'Par défaut lors d\'ajout d\'article';
 $lang_module['source_logo'] = 'Logo de la source';
