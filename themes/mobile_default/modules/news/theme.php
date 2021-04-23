@@ -713,7 +713,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         $xtpl->parse('main.adminlink');
     }
 
-    if ($module_config[$module_name]['socialbutton']) {
+    if (!empty($module_config[$module_name]['socialbutton'])) {
         global $meta_property;
         
         if (strpos($module_config[$module_name]['socialbutton'], 'facebook') !== false) {
