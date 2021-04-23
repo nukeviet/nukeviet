@@ -873,7 +873,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         $xtpl->parse('main.adminlink');
     }
 
-    if ($module_config[$module_name]['socialbutton']) {
+    if (!empty($module_config[$module_name]['socialbutton'])) {
         global $meta_property;
         
         if (strpos($module_config[$module_name]['socialbutton'], 'facebook') !== false) {
@@ -1338,10 +1338,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
             $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));
             $xtpl->assign('AUTHOR', $authors);
             $xtpl->assign('SOURCE', BoldKeywordInStr(GetSourceNews($value['sourceid']), $key));
-
-            if ($value['external_link']) {
-                $xtpl->assign('TARGET_BLANK', ' target="blank"');
-            }
+            $xtpl->assign('TARGET_BLANK', !empty($value['external_link']) ? ' target="_blank"' : '');
 
             if (!empty($value['homeimgfile'])) {
                 $xtpl->assign('IMG_SRC', $value['homeimgfile']);
