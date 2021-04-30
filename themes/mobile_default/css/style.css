@@ -885,18 +885,6 @@ header.header-up {
     width:20px !important
 }
 
-.qlist {
-    position:absolute;
-    left:0;
-    bottom:35px;
-    width:100%;
-    background:#D8EAF8;
-    border:1px solid #ADD3F0;
-    padding:10px;
-    z-index:9998;
-    display:none;
-}
-
 /* guestBlock */
 
 .guestBlock > h3 {

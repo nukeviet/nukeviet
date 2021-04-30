@@ -97,27 +97,25 @@ function contentScrt() {
 
 /* Change Captcha */
 function change_captcha(a) {
-    if (typeof nv_is_recaptcha != "undefined") {
-        if (nv_is_recaptcha == 2) {
-            for (i = 0, j = reCapIDs.length; i < j; i++) {
-                var ele = reCapIDs[i];
-                var btn = nv_recaptcha_elements[ele[0]];
-                if ($('#' + btn.id).length) {
-                    if (typeof btn.btn != "undefined" && btn.btn != "") {
-                        btn.btn.prop('disabled', true);
-                    }
-                    grecaptcha.reset(ele[1])
-                }
-            }
-            reCaptchaLoadCallback()
-        } else if (nv_is_recaptcha == 3) {
-            grecaptchaExecute()
-        }
-    } else {
-        $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-        "undefined" != typeof a && "" != a && $(a).val("");
-    }
-    return !1
+	if (nv_is_recaptcha == 2) {
+		for (i = 0, j = reCapIDs.length; i < j; i++) {
+			var ele = reCapIDs[i];
+			var btn = nv_recaptcha_elements[ele[0]];
+			if ($('#' + btn.id).length) {
+				if (typeof btn.btn != "undefined" && btn.btn != "") {
+					btn.btn.prop('disabled', true);
+				}
+				grecaptcha.reset(ele[1])
+			}
+		}
+		reCaptchaLoadCallback()
+	} else if (nv_is_recaptcha == 3) {
+		grecaptchaExecute()
+	} else {
+		$("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+		"undefined" != typeof a && "" != a && $(a).val("");
+	}
+	return !1
 }
 
 function checkAll(a) {
@@ -172,7 +170,7 @@ function tipShow(a, b, callback) {
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
         $("#tip").attr("data-content", b).show("fast", function() {
-            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+            if (callback == "recaptchareset" && nv_is_recaptcha) {
                 if (nv_is_recaptcha == 2) {
                     $('[data-toggle="recaptcha"]', $(this)).each(function() {
                         var parent = $(this).parent();
@@ -233,7 +231,7 @@ function ftipShow(a, b, callback) {
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
         $("#ftip").attr("data-content", b).show("fast", function() {
-            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+            if (callback == "recaptchareset" && nv_is_recaptcha) {
                 if (nv_is_recaptcha == 2) {
                     $('[data-toggle="recaptcha"]', $(this)).each(function() {
                         var parent = $(this).parent();
@@ -367,7 +365,7 @@ function modalShow(a, b, callback) {
     $("#sitemodal").find(".modal-body").html(b);
     var scrollTop = false;
     if (typeof callback != "undefined") {
-        if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+        if (callback == "recaptchareset" && nv_is_recaptcha) {
             scrollTop = $(window).scrollTop();
             $('#sitemodal').on('show.bs.modal', function() {
                 if (nv_is_recaptcha == 2) {
@@ -475,6 +473,12 @@ function nvbreadcrumbs() {
       }), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li><a href="' + a[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
     }
   }
+}
+
+function locationReplace(url) {
+    if (history.pushState) {
+        history.pushState(null, null, url);
+    }
 }
 
 var reCaptchaLoadCallback = function() {
@@ -655,6 +659,10 @@ $(function() {
         openID_result();
         return !1
     });
+    //Change Localtion
+    $("[data-location]").on("click", function() {
+        locationReplace($(this).data("location"))
+    });
 });
 
 // Fix bootstrap multiple modal
@@ -683,38 +691,35 @@ $(window).on("resize", function() {
 
 // Load Social script - lasest
 $(window).on('load', function() {
-    nvbreadcrumbs();
-    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
-        var d = a.getElementsByTagName(b)[0];
-        var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
-        var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data=="vi") ? 'vi_VN' : 'en_US');
-        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
-    }(document, "script", "facebook-jssdk"));
-
-    0 < $(".twitter-share-button").length && function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//platform.twitter.com/widgets.js";
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }();
-    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
-            var a = document.createElement("script");
-            a.type = "text/javascript";
-            a.src = "//sp.zalo.me/plugins/sdk.js";
-            var b = document.getElementsByTagName("script")[0];
-            b.parentNode.insertBefore(a, b);
-    }();
-    if (typeof nv_is_recaptcha != "undefined") {
-        if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
-            var a = document.createElement("script");
-            a.type = "text/javascript";
-            a.async = !0;
-            a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
-            var b = document.getElementsByTagName("script")[0];
-            b.parentNode.insertBefore(a, b);
-        } else if (nv_is_recaptcha == 3 && $("[data-recaptcha3]").length) {
-            reCaptchaApiLoad()
-        }
-    }
+	nvbreadcrumbs();
+	(0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+		var d = a.getElementsByTagName(b)[0];
+		var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
+		var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
+		a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
+	}(document, "script", "facebook-jssdk"));
+	0 < $(".twitter-share-button").length && function() {
+		var a = document.createElement("script");
+		a.type = "text/javascript";
+		a.src = "//platform.twitter.com/widgets.js";
+		var b = document.getElementsByTagName("script")[0];
+		b.parentNode.insertBefore(a, b);
+	}();
+	0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
+		var a = document.createElement("script");
+		a.type = "text/javascript";
+		a.src = "//sp.zalo.me/plugins/sdk.js";
+		var b = document.getElementsByTagName("script")[0];
+		b.parentNode.insertBefore(a, b);
+	}();
+	if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
+		var a = document.createElement("script");
+		a.type = "text/javascript";
+		a.async = !0;
+		a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
+		var b = document.getElementsByTagName("script")[0];
+		b.parentNode.insertBefore(a, b);
+	} else if (nv_is_recaptcha == 3 && $("[data-recaptcha3]").length) {
+		reCaptchaApiLoad()
+	}
 });

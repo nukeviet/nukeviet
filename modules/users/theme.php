@@ -645,7 +645,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             }
             if ($row['field'] == 'gender') {
                 foreach ($global_array_genders as $gender) {
-                    $gender['checked'] = $row['value'] == $gender['key'] ? ' checked="checked"' : '';
+                    $gender['sel'] = $row['value'] == $gender['key'] ? ' selected="selected"' : '';
                     $xtpl->assign('GENDER', $gender);
                     $xtpl->parse('main.' . $show_key . '.gender');
                 }
@@ -741,13 +741,29 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $group_check_all_checked = 1;
         $count = 0;
         foreach ($groups as $group) {
-            $group['status'] = $lang_module['group_status_' . $group['status']];
-            $group['group_type'] = $lang_module['group_type_' . $group['group_type']];
+            $group['status_mess'] = $lang_module['group_status_' . $group['status']];
+            $group['group_type_mess'] = $lang_module['group_type_' . $group['group_type']];
+            $group['group_type_note'] = !empty($lang_module['group_type_' . $group['group_type'] . '_note']) ? $lang_module['group_type_' . $group['group_type'] . '_note'] : '';
             $xtpl->assign('GROUP_LIST', $group);
+            if ($group['status'] == 1) {
+                $xtpl->parse('main.tab_edit_group.group_list.if_joined');
+            } elseif ($group['status'] == 2) {
+                $xtpl->parse('main.tab_edit_group.group_list.if_waited');
+            } else {
+                $xtpl->parse('main.tab_edit_group.group_list.if_not_joined');
+            }
             if ($group['is_leader']) {
                 $xtpl->assign('URL_IS_LEADER', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group['group_id'], true));
                 $xtpl->parse('main.tab_edit_group.group_list.is_leader');
-                $xtpl->parse('main.tab_edit_group.group_list.is_disable_checkbox');
+            }
+            if ($group['group_type']) {
+                if ($group['is_leader']) {
+                    $xtpl->parse('main.tab_edit_group.group_list.is_checkbox.is_disable_checkbox');
+                }
+                $xtpl->parse('main.tab_edit_group.group_list.is_checkbox');
+            }
+            if (!empty($group['group_type_note'])) {
+                $xtpl->parse('main.tab_edit_group.group_list.group_type_note');
             }
             $xtpl->parse('main.tab_edit_group.group_list');
             if (empty($group['checked'])) {

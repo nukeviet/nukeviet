@@ -119,39 +119,39 @@ $installMods['users'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'login' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['login'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'register' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['register'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'lostpass' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['lostpass'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'active' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['active'],
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'lostactivelink' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'editinfo' => [
@@ -165,23 +165,24 @@ $installMods['users'] = [
             'func_custom_name' => $install_lang['modfuncs']['users']['memberlist'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
-        ],
-        'avatar' => [
-            'show_func' => 1,
-            'theme_default' => 'left-main-right'
-        ],
-        'logout' => [
-            'func_custom_name' => $install_lang['modfuncs']['users']['logout'],
-            'show_func' => 1,
-            'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
+            'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
         'groups' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['groups'],
             'show_func' => 1,
+            'in_submenu' => 1,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
+        ],
+        'avatar' => [
+            'show_func' => 1,
+            'theme_default' => 'left-main'
+        ],
+        'logout' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['logout'],
+            'show_func' => 1,
+            'in_submenu' => 1,
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
@@ -580,6 +581,7 @@ $blockGroups = [
                         'lostactivelink',
                         'editinfo',
                         'memberlist',
+                        'groups',
                         'avatar',
                         'logout'
                     ],

@@ -22,7 +22,7 @@
                 <input type="text" class="required form-control" placeholder="{GLANG.2teplogin_totppin_placeholder}" value="" name="nv_totppin" maxlength="6" data-pattern="/^(.){6,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.2teplogin_totppin_placeholder}">
             </div>
             <div class="text-center">
-                <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
+                <a href="javascript:void(0)" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
                 <input type="text" class="required form-control" placeholder="{GLANG.2teplogin_code_placeholder}" value="" name="nv_backupcodepin" maxlength="8" data-pattern="/^(.){8,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.2teplogin_code_placeholder}">
             </div>
             <div class="text-center">
-                <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
+                <a href="javascript:void(0)" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
 
@@ -73,7 +73,7 @@
         <!-- BEGIN: allowuserreg2_form -->
         <div class="form-group">
             <div class="text-right clearfix">
-                <a href="#" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">{GLANG.register}</a>
+                <a href="javascript:void(0)" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">{GLANG.register}</a>
             </div>
         </div>
         <!-- END: allowuserreg2_form -->

@@ -1396,20 +1396,6 @@ a.btn {
     background-size: contain;
 }
 
-.qlist {
-    position:absolute;
-    left:0;
-    bottom:35px;
-    width:100%;
-    background-color:#d9e8f4;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #a6c8e6;
-    padding:10px;
-    z-index:9998;
-    display:none;
-}
-
 /* block counter */
 .counter.display-table{
     width:100%

@@ -96,9 +96,13 @@ $install_lang['cron']['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
 $install_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
 
-$install_lang['groups']['NukeViet-Fans'] = 'Nhóm những người hâm mộ hệ thống NukeViet';
-$install_lang['groups']['NukeViet-Admins'] = 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet';
-$install_lang['groups']['NukeViet-Programmers'] = 'Nhóm Lập trình viên hệ thống NukeViet';
+$install_lang['groups']['NukeViet-Fans'] = 'Người hâm mộ';
+$install_lang['groups']['NukeViet-Admins'] = 'Người quản lý';
+$install_lang['groups']['NukeViet-Programmers'] = 'Lập trình viên';
+
+$install_lang['groups']['NukeViet-Fans-desc'] = 'Nhóm những người hâm mộ hệ thống NukeViet';
+$install_lang['groups']['NukeViet-Admins-desc'] = 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet';
+$install_lang['groups']['NukeViet-Programmers-desc'] = 'Nhóm Lập trình viên hệ thống NukeViet';
 
 $install_lang['vinades_fullname'] = "Công ty cổ phần phát triển nguồn mở Việt Nam";
 $install_lang['vinades_address'] = "Phòng 1706 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";

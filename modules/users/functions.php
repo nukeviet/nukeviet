@@ -184,7 +184,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
 
 $group_id = 0;
 if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($array_op[0] == 'register' or $array_op[0] == 'editinfo')) {
-    $sql = 'SELECT group_id, title, config FROM ' . NV_MOD_TABLE . '_groups';
+    $sql = "SELECT g.group_id, d.title, g.config FROM " . NV_MOD_TABLE . "_groups AS g LEFT JOIN " . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' )";
     $_query = $db->query($sql);
     $group_lists = array();
     while ($_row = $_query->fetch()) {

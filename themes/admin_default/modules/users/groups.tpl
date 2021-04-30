@@ -22,8 +22,17 @@
                         <td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
                     </tr>
                     <tr>
+                        <td>{LANG.alias} <span style="color:red">*</span>:</td>
+                        <td>
+                            <div class="input-group">
+                                <input title="{LANG.alias}" class="form-control" type="text" name="alias" value="{DATA.alias}" maxlength="240" />
+                                <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="get_alias();"><em class="fa fa-refresh"></em></button></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>{LANG.group_description}:</td>
-                        <td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="255" /></td>
+                        <td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="240" /></td>
                     </tr>
                     <tr>
                         <td>{LANG.exp_time}:</td>
@@ -143,8 +152,23 @@
     </form>
 </div>
 <script type="text/javascript">
+function get_alias() {
+    var title = strip_tags(trim($("#addCat [name=title]").val()));
+    if (title != '') {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(), 'getAlias=1&id={DATA.id}&title=' + encodeURIComponent(title), function(res) {
+            $("#addCat [name=alias]").val(res)
+        })
+    }
+    return false;
+}
     //<![CDATA[
     $(document).ready(function() {
+        $("#addCat [name=title]").change(function() {
+        	var alias = strip_tags(trim($("#addCat [name=alias]").val()));
+            if (alias == '') {
+                get_alias()
+            }
+        });
         $('[name="exp_time"]').datepicker({
             showOn : "both",
             dateFormat : "dd/mm/yy",
