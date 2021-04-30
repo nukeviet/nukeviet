@@ -632,7 +632,7 @@ function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array()
     $_2step_require = false;
 
     if (!empty($in_groups) or !empty($manual_groups)) {
-        $query = 'SELECT group_id, title, require_2step_admin, require_2step_site, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+        $query = "SELECT g.group_id, d.title, g.require_2step_admin, g.require_2step_site, g.exp_time FROM " . NV_GROUPS_GLOBALTABLE . " AS g LEFT JOIN " . NV_GROUPSDETAIL_GLOBALTABLE . " d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . " OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight";
         $list = $nv_Cache->db($query, '', 'users');
         if (!empty($list)) {
             $reload = array();

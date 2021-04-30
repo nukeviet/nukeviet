@@ -80,7 +80,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     }
 
     if (!empty($group_ids)) {
-        $sql = 'SELECT group_id, title FROM ' . $_mod_table . '_groups WHERE group_id > 9 AND group_id IN(' . implode(',', $group_ids) . ')';
+        $sql = "SELECT g.group_id, d.title FROM " . $_mod_table . "_groups AS g LEFT JOIN " . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.group_id > 9 AND g.group_id IN(" . implode(',', $group_ids) . ")";
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {

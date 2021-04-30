@@ -77,19 +77,20 @@ function locationReplace(url) {
 }
 
 function checkWidthMenu() {
+    var siteMenu = $("#menu-site-default");
     NVIsMobileMenu = (theme_responsive && "absolute" == $("#menusite").css("position"));
     NVIsMobileMenu ? (
-        $("li.dropdown ul").removeClass("dropdown-menu"),
-        $("li.dropdown ul").addClass("dropdown-submenu"),
-        $("li.dropdown a").addClass("dropdown-mobile"),
-        $("#menu-site-default ul li a.dropdown-toggle").addClass("dropdown-mobile"),
-        $("li.dropdown ul li a").removeClass("dropdown-mobile")
+        $("li.dropdown ul", siteMenu).removeClass("dropdown-menu"),
+        $("li.dropdown ul", siteMenu).addClass("dropdown-submenu"),
+        $("li.dropdown a", siteMenu).addClass("dropdown-mobile"),
+        $("ul li a.dropdown-toggle", siteMenu).addClass("dropdown-mobile"),
+        $("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile")
     ) : (
-        $("li.dropdown ul").addClass("dropdown-menu"),
-        $("li.dropdown ul").removeClass("dropdown-submenu"),
-        $("li.dropdown a").removeClass("dropdown-mobile"),
-        $("li.dropdown ul li a").removeClass("dropdown-mobile"),
-        $("#menu-site-default ul li a.dropdown-toggle").removeClass("dropdown-mobile")
+        $("li.dropdown ul", siteMenu).addClass("dropdown-menu"),
+        $("li.dropdown ul", siteMenu).removeClass("dropdown-submenu"),
+        $("li.dropdown a", siteMenu).removeClass("dropdown-mobile"),
+        $("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile"),
+        $("ul li a.dropdown-toggle", siteMenu).removeClass("dropdown-mobile")
     );
 }
 
@@ -146,7 +147,7 @@ function tipShow(a, b, callback) {
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
         $("#tip").attr("data-content", b).show("fast", function() {
-            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+            if (callback == "recaptchareset" && nv_is_recaptcha) {
                 if (nv_is_recaptcha == 2) {
                     $('[data-toggle="recaptcha"]', $(this)).each(function() {
                         var parent = $(this).parent();
@@ -203,7 +204,7 @@ function ftipShow(a, b, callback) {
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
         $("#ftip").attr("data-content", b).show("fast", function() {
-            if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+            if (callback == "recaptchareset" && nv_is_recaptcha) {
                 if (nv_is_recaptcha == 2) {
                     $('[data-toggle="recaptcha"]', $(this)).each(function() {
                         var parent = $(this).parent();
@@ -298,27 +299,25 @@ function switchTab(a) {
 
 // Change Captcha
 function change_captcha(a) {
-    if (typeof nv_is_recaptcha != "undefined") {
-        if (nv_is_recaptcha == 2) {
-            for (i = 0, j = reCapIDs.length; i < j; i++) {
-                var ele = reCapIDs[i];
-                var btn = nv_recaptcha_elements[ele[0]];
-                if ($('#' + btn.id).length) {
-                    if (typeof btn.btn != "undefined" && btn.btn != "") {
-                        btn.btn.prop('disabled', true);
-                    }
-                    grecaptcha.reset(ele[1])
-                }
-            }
-            reCaptchaLoadCallback()
-        } else if (nv_is_recaptcha == 3) {
-            grecaptchaExecute()
-        }
-    } else {
-        $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-        "undefined" != typeof a && "" != a && $(a).val("");
-    }
-    return !1
+	if (nv_is_recaptcha == 2) {
+		for (i = 0, j = reCapIDs.length; i < j; i++) {
+			var ele = reCapIDs[i];
+			var btn = nv_recaptcha_elements[ele[0]];
+			if ($('#' + btn.id).length) {
+				if (typeof btn.btn != "undefined" && btn.btn != "") {
+					btn.btn.prop('disabled', true);
+				}
+				grecaptcha.reset(ele[1])
+			}
+		}
+		reCaptchaLoadCallback()
+	} else if (nv_is_recaptcha == 3) {
+		grecaptchaExecute()
+	} else {
+		$("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+		"undefined" != typeof a && "" != a && $(a).val("");
+	}
+	return !1
 }
 
 //Form Ajax-login
@@ -349,7 +348,7 @@ function modalShow(a, b, callback) {
     $("#sitemodal").find(".modal-body").html(b);
     var scrollTop = false;
     if (typeof callback != "undefined") {
-        if (callback == "recaptchareset" && typeof nv_is_recaptcha != "undefined") {
+        if (callback == "recaptchareset" && nv_is_recaptcha) {
             scrollTop = $(window).scrollTop();
             $('#sitemodal').on('show.bs.modal', function() {
                 if (nv_is_recaptcha == 2) {
@@ -760,37 +759,35 @@ $(window).on("resize", function() {
 
 // Load Social script - lasest
 $(window).on('load', function() {
-    nvbreadcrumbs();
-    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
-        var d = a.getElementsByTagName(b)[0];
-        var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
-        var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
-        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
-    }(document, "script", "facebook-jssdk"));
-    0 < $(".twitter-share-button").length && function() {
-            var a = document.createElement("script");
-            a.type = "text/javascript";
-            a.src = "//platform.twitter.com/widgets.js";
-            var b = document.getElementsByTagName("script")[0];
-            b.parentNode.insertBefore(a, b);
-    }();
-    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
-            var a = document.createElement("script");
-            a.type = "text/javascript";
-            a.src = "//sp.zalo.me/plugins/sdk.js";
-            var b = document.getElementsByTagName("script")[0];
-            b.parentNode.insertBefore(a, b);
-    }();
-    if (typeof nv_is_recaptcha != "undefined") {
-        if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
-            var a = document.createElement("script");
-            a.type = "text/javascript";
-            a.async = !0;
-            a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
-            var b = document.getElementsByTagName("script")[0];
-            b.parentNode.insertBefore(a, b);
-        } else if (nv_is_recaptcha == 3 && $("[data-recaptcha3]").length) {
-            reCaptchaApiLoad()
-        }
-    }
+	nvbreadcrumbs();
+	(0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+		var d = a.getElementsByTagName(b)[0];
+		var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
+		var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
+		a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
+	}(document, "script", "facebook-jssdk"));
+	0 < $(".twitter-share-button").length && function() {
+		var a = document.createElement("script");
+		a.type = "text/javascript";
+		a.src = "//platform.twitter.com/widgets.js";
+		var b = document.getElementsByTagName("script")[0];
+		b.parentNode.insertBefore(a, b);
+	}();
+	0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
+		var a = document.createElement("script");
+		a.type = "text/javascript";
+		a.src = "//sp.zalo.me/plugins/sdk.js";
+		var b = document.getElementsByTagName("script")[0];
+		b.parentNode.insertBefore(a, b);
+	}();
+	if (nv_is_recaptcha == 2 && nv_recaptcha_elements.length > 0) {
+		var a = document.createElement("script");
+		a.type = "text/javascript";
+		a.async = !0;
+		a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptchaLoadCallback&render=explicit";
+		var b = document.getElementsByTagName("script")[0];
+		b.parentNode.insertBefore(a, b);
+	} else if (nv_is_recaptcha == 3 && $("[data-recaptcha3]").length) {
+		reCaptchaApiLoad()
+	}
 });

@@ -12,10 +12,39 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
+
+// Lay Alias
+function getAlias($alias, $id, $num = 0) {
+    global $db, $global_config;
+
+    $_alias = $num ? $alias . '-' . $num : $alias;
+    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id!= ' . intval($id) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))');            
+    $stmt->bindParam(':alias', $_alias, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+         $num++;
+         return getAlias($alias, $id, $num);
+    } else {
+        return $_alias;
+    }
+}
+
+if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
+    $id = $nv_Request->get_title('id', 'post', 0);
+    $title = $nv_Request->get_title('title', 'post', '', 1);
+    
+    $alias = '';
+    if (!empty($title)) {
+        $alias = getAlias(change_alias($title), $id);
+    }
+    echo $alias;
+    exit(0);
+}
+
 $page_title = $lang_global['mod_groups'];
 
 // Lấy danh sách nhóm
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = ' . $global_config['idsite'] . ' OR (idsite=0 AND group_id>3 AND siteus=1) ORDER BY idsite, weight ASC';
+$sql = "SELECT * FROM " . NV_MOD_TABLE . "_groups AS g LEFT JOIN " . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.idsite = " . $global_config['idsite'] . " OR (g.idsite=0 AND g.group_id>3 AND g.siteus=1) ORDER BY g.idsite, g.weight ASC";
 $result = $db->query($sql);
 $groupsList = [];
 $weight_siteus = 0;
@@ -325,7 +354,7 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups_users SET approved = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups_users SET approved = 1, time_approved = ' . NV_CURRENTTIME . ' WHERE group_id = ' . $gid . ' AND userid=' . $uid);
     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id = ' . $gid);
 
     $nv_Cache->delMod($module_name);
@@ -560,12 +589,17 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     die($lang_module['title_empty']);
                 }
 
+                $post['alias'] = $nv_Request->get_title('alias', 'post', '');
+                if (empty($post['alias'])) {
+                    die($lang_module['alias_empty']);
+                }
+
                 // Kiểm tra trùng tên nhóm
-                $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
-                $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
+                $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
+                $stmt->bindParam(':alias', $post['alias'], PDO::PARAM_STR);
                 $stmt->execute();
                 if ($stmt->fetchColumn()) {
-                    die(sprintf($lang_module['error_title_exists'], $post['title']));
+                    die(sprintf($lang_module['error_alias_exists'], $post['alias']));
                 }
 
                 $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
@@ -642,31 +676,34 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $weight = intval($weight) + 1;
 
                     $_sql = "INSERT INTO " . NV_MOD_TABLE . "_groups (
-                        title, email, description, content, group_type, group_color, group_avatar, require_2step_admin, require_2step_site, is_default, add_time, exp_time, weight, act,
+                        alias, email, group_type, group_color, group_avatar, require_2step_admin, require_2step_site, is_default, add_time, exp_time, weight, act,
                         idsite, numbers, siteus, config
                     ) VALUES (
-                        :title, :email, :description, :content, " . $post['group_type'] . ", :group_color,
+                        :alias, :email, " . $post['group_type'] . ", :group_color,
                         :group_avatar, " . $post['require_2step_admin'] . ", " . $post['require_2step_site'] . ", " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
                         " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ", :config
                     )";
 
                     $data_insert = [];
-                    $data_insert['title'] = $post['title'];
+                    $data_insert['alias'] = $post['alias'];
                     $data_insert['email'] = $post['email'];
-                    $data_insert['description'] = $post['description'];
-                    $data_insert['content'] = $post['content'];
                     $data_insert['group_color'] = $post['group_color'];
                     $data_insert['group_avatar'] = $post['group_avatar'];
                     $data_insert['config'] = $post['config'];
 
                     $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
+                    if ($ok) {
+                        $stmt = $db->prepare("INSERT INTO " . NV_MOD_TABLE . "_groups_detail (group_id, lang, title, description, content) VALUES (" . $post['id'] . ", '" . NV_LANG_DATA . "', :title, :description, :content)");
+                        $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
+                        $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
+                        $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
+                        $stmt->execute();
+                    }
                 } elseif ($post['id'] > 9) {
                     // Sửa nhóm tự tạo
                     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups SET
-                        title = :title,
+                        alias = :alias,
                         email = :email,
-                        description = :description,
-                        content = :content,
                         group_type = '" . $post['group_type'] . "',
                         group_color = :group_color,
                         group_avatar = :group_avatar,
@@ -678,15 +715,25 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                         config = :config
                     WHERE group_id = " . $post['id']);
 
-                    $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
+                    $stmt->bindParam(':alias', $post['alias'], PDO::PARAM_STR);
                     $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
-                    $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
-                    $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
                     $stmt->bindParam(':group_color', $post['group_color']);
                     $stmt->bindParam(':group_avatar', $post['group_avatar']);
                     $stmt->bindParam(':config', $post['config'], PDO::PARAM_STR);
 
                     $ok = $stmt->execute();
+                    if ($ok) {
+                        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups_detail SET
+                            title = :title,
+                            description = :description,
+                            content = :content
+                        WHERE group_id = " . $post['id'] . " AND lang='" . NV_LANG_DATA . "'");
+    
+                        $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
+                        $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
+                        $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
+                        $stmt->execute();
+                    }
                 } else {
                     // Sửa nhóm hệ thống
                     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups SET

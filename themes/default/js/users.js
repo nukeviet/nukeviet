@@ -90,17 +90,10 @@ function verkeySend(a) {
     return !1
 }
 
-function showQlist(a) {
-    var b = $(".qlist", $(a).parent().parent());
-    if ("no" == b.attr("data-show")) b.attr("data-show", "yes").show();
-    else b.attr("data-show", "no").hide();
-    return !1
-}
-
 function addQuestion(a) {
-    var b = $(a).parent().parent().parent().parent();
+    var b = $(a).parents('form');
     $("[name=question]", b).val($(a).text());
-    $(".qlist", b).attr("data-show", "no").hide();
+    validErrorHidden($("[name=question]", b));
     return !1
 }
 

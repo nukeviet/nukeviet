@@ -13,11 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $global_array_genders = [
-    'N' => [
-        'key' => 'N',
-        'title' => $lang_module['na'],
-        'selected' => ''
-    ],
     'M' => [
         'key' => 'M',
         'title' => $lang_module['male'],
@@ -26,6 +21,11 @@ $global_array_genders = [
     'F' => [
         'key' => 'F',
         'title' => $lang_module['female'],
+        'selected' => ''
+    ],
+    'N' => [
+        'key' => 'N',
+        'title' => $lang_module['na'],
         'selected' => ''
     ]
 ];
