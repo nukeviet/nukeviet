@@ -230,6 +230,8 @@ $checkss = md5($contentid . NV_CHECK_SESSION);
 $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
 
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     if ($contentid > 0) {
         if (!defined('NV_IS_USER')) {
@@ -329,9 +331,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if ($nv_Request->isset_request('contentid', 'post')) {
         $rowcontent['id'] = $contentid;
-        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+        if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
             $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        } else {
+        } elseif ($module_config[$module_name]['ucaptcha_type'] == 'captcha') {
             $fcode = $nv_Request->get_title('fcode', 'post', '');
         }
         $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
@@ -388,8 +390,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $error = $lang_module['error_cat'];
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
-        } elseif (!nv_capcha_txt($fcode)) {
-            $error = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+        } elseif (($module_config[$module_name]['ucaptcha_type'] == 'captcha' or ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($fcode, $module_config[$module_name]['ucaptcha_type'])) {
+            $error = ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
                 $rowcontent['status'] = 1;
@@ -469,7 +471,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                             " . intval($rowcontent['allowed_print']) . ",
                             " . intval($rowcontent['allowed_save']) . "
                         )");
-                    
+
                     if (defined('NV_IS_USER')) {
                         $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist (id, aid, alias, pseudonym) VALUES (' . $rowcontent['id'] . ', :aid, :alias, :pseudonym)');
                         $sth->bindParam(':aid', $my_author_detail['id'], PDO::PARAM_INT);
@@ -591,7 +593,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent = array_merge($rowcontent, $body_contents);
         unset($body_contents);
     }
-    
+
     $rowcontent['internal_authors'] = [];
     if (!empty($rowcontent['id'])) {
         $db->sqlreset()
@@ -644,7 +646,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
     $xtpl->assign('LANG_EXTERNAL_AUTHOR', defined('NV_IS_USER') ? $lang_module['external_author'] : $lang_module['author']);
-    
+
     if (defined('NV_IS_USER')) {
         if ($contentid > 0) {
             $xtpl->parse('main.if_user.add_content');
@@ -652,13 +654,13 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->parse('main.if_user');
     }
 
-    if ($global_config['captcha_type'] == 3) {
+    if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
-    } elseif ($global_config['captcha_type'] == 2) {
+    } elseif ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
-    } else {
+    } elseif ($module_config[$module_name]['ucaptcha_type'] == 'captcha') {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -724,9 +726,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     if ($array_post_user['postcontent'] or ($rowcontent['status'] and $rowcontent['id'] and $array_post_user['editcontent'])) {
         $xtpl->parse('main.postcontent');
     }
-    
+
     if (!empty($rowcontent['internal_authors'])) {
-        foreach($rowcontent['internal_authors'] as $internal_authors) {
+        foreach ($rowcontent['internal_authors'] as $internal_authors) {
             $xtpl->assign('ITEM', $internal_authors);
             $xtpl->parse('main.internal_author.item');
         }

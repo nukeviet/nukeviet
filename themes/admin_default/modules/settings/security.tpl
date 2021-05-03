@@ -14,11 +14,11 @@
 
 <div class="clearfix">
     <ul class="nav nav-tabs setting-tabnav" role="tablist" id="settingTabs">
-        <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab">{LANG.security}</a></li>
-        <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab">{LANG.flood_blocker}</a></li>
-        <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
-        <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
-        <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab">{LANG.cors}</a></li>
+        <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=0">{LANG.security}</a></li>
+        <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=1">{LANG.flood_blocker}</a></li>
+        <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=2">{LANG.captcha}</a></li>
+        <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=3">{LANG.banip}</a></li>
+        <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=4">{LANG.cors}</a></li>
     </ul>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
@@ -298,54 +298,44 @@
                             </colgroup>
                             <tbody>
                                 <tr>
-                                    <td><strong>{LANG.captcha}</strong></td>
-                                    <td>
-                                        <select name="gfx_chk" class="form-control w200">
-                                            <!-- BEGIN: opcaptcha -->
-                                            <option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
-                                            <!-- END: opcaptcha -->
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>{LANG.captcha_type}</strong></td>
-                                    <td>
-                                        <select name="captcha_type" class="form-control w200" data-toggle="ctcaptcha">
-                                            <!-- BEGIN: captcha_type -->
-                                            <option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
-                                            <!-- END: captcha_type -->
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr data-captcha="typebasic"{DISPLAY_CAPTCHA_BASIC}>
                                     <td><strong>{LANG.captcha_num}</strong></td>
                                     <td>
-                                        <select name="nv_gfx_num" class="form-control w200">
+                                        <select name="nv_gfx_num" class="form-control" style="width:auto">
                                             <!-- BEGIN: nv_gfx_num -->
                                             <option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
                                             <!-- END: nv_gfx_num -->
                                         </select>
                                     </td>
                                 </tr>
-                                <tr data-captcha="typebasic"{DISPLAY_CAPTCHA_BASIC}>
+                                <tr>
                                     <td><strong>{LANG.captcha_size}</strong></td>
                                     <td><input class="form-control pull-left" style="width:50px;" type="text" value="{NV_GFX_WIDTH}" name="nv_gfx_width" maxlength="3"/> <span class="text-middle pull-left">&nbsp;x&nbsp;</span> <input class="form-control pull-left" style="width:50px;" type="text" value="{NV_GFX_HEIGHT}" name="nv_gfx_height" maxlength="3"/></td>
                                 </tr>
-                                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
-                                    <td><strong>{LANG.recaptcha_sitekey} (<span style="color:red">*</span>)</strong></td>
+                                <tr>
+                                    <td><strong>{LANG.recaptcha_ver}</strong></td>
+                                    <td>
+                                        <select name="recaptcha_ver" class="form-control" style="width:auto">
+                                            <!-- BEGIN: recaptcha_ver -->
+                                            <option value="{OPTION.value}"{OPTION.select}>{OPTION.value}</option>
+                                            <!-- END: recaptcha_ver -->
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.recaptcha_sitekey}</strong></td>
                                     <td>
                                         <input class="form-control pull-left w300" type="text" value="{RECAPTCHA_SITEKEY}" name="recaptcha_sitekey" maxlength="200"/>
                                         &nbsp; <a href="https://www.google.com/recaptcha/admin" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="text-middle"><i class="fa fa-info-circle"></i></a>
                                     </td>
                                 </tr>
-                                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
-                                    <td><strong>{LANG.recaptcha_secretkey} (<span style="color:red">*</span>)</strong></td>
+                                <tr>
+                                    <td><strong>{LANG.recaptcha_secretkey}</strong></td>
                                     <td>
                                         <input class="form-control pull-left w300" type="text" value="{RECAPTCHA_SECRETKEY}" name="recaptcha_secretkey" maxlength="200"/>
                                         &nbsp; <a href="https://www.google.com/recaptcha/admin" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="text-middle"><i class="fa fa-info-circle"></i></a>
                                     </td>
                                 </tr>
-                                <tr data-captcha="typerecaptcha2"{DISPLAY_CAPTCHA_RECAPTCHA2}>
+                                <tr>
                                     <td><strong>{LANG.recaptcha_type}</strong></td>
                                     <td>
                                         <select name="recaptcha_type" class="form-control w300">

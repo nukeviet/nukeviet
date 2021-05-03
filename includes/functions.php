@@ -36,9 +36,9 @@ function nv_object2array($a)
 function nv_getenv($a)
 {
     if (!is_array($a)) {
-        $a = array(
+        $a = [
             $a
-        );
+        ];
     }
 
     foreach ($a as $b) {
@@ -185,7 +185,7 @@ function nv_convertfromBytes($size)
     }
 
     $i = 0;
-    $iec = array(
+    $iec = [
         'bytes',
         'KB',
         'MB',
@@ -195,7 +195,7 @@ function nv_convertfromBytes($size)
         'EB',
         'ZB',
         'YB'
-    );
+    ];
 
     while (($size / 1024) > 1) {
         $size = $size / 1024;
@@ -253,7 +253,7 @@ function nv_converttoBytes($string)
             return $matches[1];
         }
 
-        $suffixes = array(
+        $suffixes = [
             'B' => 0,
             'K' => 1,
             'M' => 2,
@@ -263,7 +263,7 @@ function nv_converttoBytes($string)
             'E' => 6,
             'Z' => 7,
             'Y' => 8
-        );
+        ];
 
         if (isset($suffixes[strtoupper($matches[2])])) {
             return round($matches[1] * pow(1024, $suffixes[strtoupper($matches[2])]));
@@ -438,7 +438,7 @@ function nv_check_valid_pass($pass, $max, $min)
  *
  * @param string $mail
  * @param boolean $return
- *            @since 4.3.08
+ * @since 4.3.08
  * @return string
  */
 function nv_check_valid_email($mail, $return = false)
@@ -509,27 +509,28 @@ function nv_check_valid_email($mail, $return = false)
 /**
  * nv_capcha_txt()
  *
- * @param mixed $seccode
+ * @param string $seccode
+ * @param string $type
  * @return
  */
-function nv_capcha_txt($seccode)
+function nv_capcha_txt($seccode, $type = 'captcha')
 {
     global $global_config, $nv_Request, $client_info, $crypt;
 
-    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+    if ($type == 'recaptcha') {
         if (!empty($global_config['recaptcha_secretkey'])) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
-            $request = array(
+            $request = [
                 'secret' => $crypt->decrypt($global_config['recaptcha_secretkey']),
                 'response' => $seccode,
                 'remoteip' => $client_info['ip']
-            );
-            $args = array(
-                'headers' => array(
+            ];
+            $args = [
+                'headers' => [
                     'Referer' => NV_MY_DOMAIN
-                ),
+                ],
                 'body' => $request
-            );
+            ];
             $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
             if (is_array($array) and !empty($array['body'])) {
                 $jsonRes = (array) json_decode($array['body'], true);
@@ -562,13 +563,13 @@ function nv_capcha_txt($seccode)
  */
 function nv_genpass($length = 8, $type = 0)
 {
-    $array_chars = array();
+    $array_chars = [];
     $array_chars[0] = 'abcdefghijklmnopqrstuvwxyz';
     $array_chars[1] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $array_chars[2] = '0123456789';
     $array_chars[3] = '-=~!@#$%^&*()_+,./<>?;:[]{}\|';
 
-    $_arr_m = array();
+    $_arr_m = [];
     $_arr_m[] = 0; // Chữ
     $_arr_m[] = 2; // 1. Số
     $_arr_m[] = ($type == 2 or $type == 4) ? 3 : mt_rand(0, 2); // 2. Đặc biệt
@@ -624,18 +625,18 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
  * @param array $manual_groups
  * @return
  */
-function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array())
+function nv_user_groups($in_groups, $res_2step = false, $manual_groups = [])
 {
     global $nv_Cache, $db, $global_config;
 
-    $_groups = array();
+    $_groups = [];
     $_2step_require = false;
 
     if (!empty($in_groups) or !empty($manual_groups)) {
         $query = "SELECT g.group_id, d.title, g.require_2step_admin, g.require_2step_site, g.exp_time FROM " . NV_GROUPS_GLOBALTABLE . " AS g LEFT JOIN " . NV_GROUPSDETAIL_GLOBALTABLE . " d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . " OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight";
         $list = $nv_Cache->db($query, '', 'users');
         if (!empty($list)) {
-            $reload = array();
+            $reload = [];
             $in_groups = explode(',', $in_groups);
             if (!empty($manual_groups)) {
                 $in_groups = array_unique(array_merge_recursive($in_groups, $manual_groups));
@@ -663,10 +664,10 @@ function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array()
     }
 
     if ($res_2step) {
-        return array(
+        return [
             $_groups,
             $_2step_require
-        );
+        ];
     }
 
     return $_groups;
@@ -697,7 +698,7 @@ function nv_user_in_groups($groups_view)
             if (empty($in_groups)) {
                 return false;
             }
-            return (array_intersect($in_groups, $groups_view) != array());
+            return (array_intersect($in_groups, $groups_view) != []);
         }
     } elseif (in_array(5, $groups_view)) {
         // Guest
@@ -817,16 +818,16 @@ function nv_date($format, $time = 0)
         $time = NV_CURRENTTIME;
     }
     $format = str_replace("r", "D, d M Y H:i:s O", $format);
-    $format = str_replace(array(
+    $format = str_replace([
         "D",
         "M"
-    ), array(
+    ], [
         "[D]",
         "[M]"
-    ), $format);
+    ], $format);
     $return = date($format, $time);
 
-    $replaces = array(
+    $replaces = [
         '/\[Sun\](\W|$)/' => $lang_global['sun'] . "$1",
         '/\[Mon\](\W|$)/' => $lang_global['mon'] . "$1",
         '/\[Tue\](\W|$)/' => $lang_global['tue'] . "$1",
@@ -865,7 +866,7 @@ function nv_date($format, $time = 0)
         '/October(\W|$)/' => $lang_global['october'] . "$1",
         '/November(\W|$)/' => $lang_global['november'] . "$1",
         '/December(\W|$)/' => $lang_global['december'] . "$1"
-    );
+    ];
 
     return preg_replace(array_keys($replaces), array_values($replaces), $return);
 }
@@ -881,7 +882,7 @@ function nv_monthname($i)
     global $lang_global;
 
     --$i;
-    $month_names = array(
+    $month_names = [
         $lang_global['january'],
         $lang_global['february'],
         $lang_global['march'],
@@ -894,7 +895,7 @@ function nv_monthname($i)
         $lang_global['october'],
         $lang_global['november'],
         $lang_global['december']
-    );
+    ];
 
     return (isset($month_names[$i]) ? $month_names[$i] : '');
 }
@@ -918,7 +919,7 @@ function nv_unhtmlspecialchars($string)
             $string[$key] = nv_unhtmlspecialchars($string[$key]);
         }
     } else {
-        $search = array(
+        $search = [
             '&amp;',
             '&#039;',
             '&quot;',
@@ -941,8 +942,8 @@ function nv_unhtmlspecialchars($string)
             '&#x7D;',
             '&#x60;',
             '&#x7E;'
-        );
-        $replace = array(
+        ];
+        $replace = [
             '&',
             '\'',
             '"',
@@ -965,7 +966,7 @@ function nv_unhtmlspecialchars($string)
             '}',
             '`',
             '~'
-        );
+        ];
 
         $string = str_replace($search, $replace, $string);
     }
@@ -992,7 +993,7 @@ function nv_htmlspecialchars($string)
             $string[$key] = nv_htmlspecialchars($string[$key]);
         }
     } else {
-        $search = array(
+        $search = [
             '&',
             '\'',
             '"',
@@ -1014,8 +1015,8 @@ function nv_htmlspecialchars($string)
             '}',
             '`',
             '~'
-        );
-        $replace = array(
+        ];
+        $replace = [
             '&amp;',
             '&#039;',
             '&quot;',
@@ -1037,7 +1038,7 @@ function nv_htmlspecialchars($string)
             '&#x7D;',
             '&#x60;',
             '&#x7E;'
-        );
+        ];
 
         $string = str_replace($replace, $search, $string);
         $string = str_replace('&#x23;', '#', $string);
@@ -1097,11 +1098,11 @@ function nv_nl2br($text, $replacement = '<br />')
         return '';
     }
 
-    return strtr($text, array(
+    return strtr($text, [
         "\r\n" => $replacement,
         "\r" => $replacement,
         "\n" => $replacement
-    ));
+    ]);
 }
 
 /**
@@ -1168,7 +1169,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
     $content = nv_strtolower($content);
 
     $content = ' ' . $content . ' ';
-    $keywords_return = array();
+    $keywords_return = [];
 
     $memoryLimitMB = (integer) ini_get('memory_limit');
 
@@ -1196,7 +1197,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
             }
         }
     } else {
-        $pattern_word = array();
+        $pattern_word = [];
 
         if (NV_SITEWORDS_MIN_3WORDS_LENGTH > 0 and NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR > 0) {
             $pattern_word[] = "/[\s]+([\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",})[\s]+/uis";
@@ -1250,32 +1251,32 @@ function nv_get_keywords($content, $keyword_limit = 20)
  *            reply_address: 'reply@nukeviet.vn'(string|array),
  *            from_name: contact@nukeviet.vn (string),
  *            from_address: 'NukeViet']
- *
+ *            
  * @param array|string $to
  *            address1@nukeviet.vn
  *            Hoặc: [address1@nukeviet.vn,address2@nukeviet.vn]
- *
+ *            
  * @param string $subject
  * @param string $message
  * @param string $files
  *            Có thể gửi nhiều files, ngăn cách bởi dấu phẩy
  *            Đường dẫn đến file là tuyệt đối
- *
+ *            
  * @param boolean $AddEmbeddedImage
  *            Có thêm logo của site hay không.
  *            Nếu có thì nó sẽ thay thế cho src="cid:sitelogo" trong thẻ img
- *
+ *            
  * @param boolean $testmode
  * @param string|array $cc
  *            contact@nukeviet.vn
  *            Hoặc: contact@nukeviet.vn => NukeViet1, contact2@nukeviet.vn => NukeViet2
  *            Hoặc: contact@nukeviet.vn,contact2@nukeviet.vn
- *
+ *            
  * @param array $bcc
  *            contact@nukeviet.vn
  *            Hoặc: contact@nukeviet.vn => NukeViet1, contact2@nukeviet.vn => NukeViet2
  *            Hoặc: contact@nukeviet.vn,contact2@nukeviet.vn
- *
+ *            
  * @return boolean
  */
 function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [])
@@ -1523,7 +1524,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
 /**
  * betweenURLs()
- * 
+ *
  * @param integer $page
  * @param integer $total
  * @param string $base_url
@@ -1866,13 +1867,13 @@ function nv_check_url($url, $is_200 = 0)
         $url_info = parse_url($url);
         $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
 
-        $userAgents = array(
+        $userAgents = [
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
             'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
             'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
             'Mozilla/4.8 [en] (Windows NT 6.0; U)',
             'Opera/9.25 (Windows NT 6.0; U; en)'
-        );
+        ];
 
         $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
@@ -1904,7 +1905,7 @@ function nv_check_url($url, $is_200 = 0)
             $res = explode('\n', $response);
         }
     } elseif (nv_function_exists('fsockopen') and nv_function_exists('fgets')) {
-        $res = array();
+        $res = [];
         $url_info = parse_url($url);
         $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
         $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
@@ -1995,12 +1996,12 @@ function nv_url_rewrite_callback($matches)
     global $global_config;
 
     $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
-    $query_array = array();
+    $query_array = [];
     $is_amp = (strpos($query_string, '&amp;') !== false);
     parse_str(str_replace('&amp;', '&', $query_string), $query_array);
 
     if (!empty($query_array)) {
-        $op_rewrite = array();
+        $op_rewrite = [];
         $op_rewrite_count = 0;
         $query_array_keys = array_keys($query_array);
         if (defined('NV_IS_GODADMIN') or defined('NV_IS_SPADMIN')) {
@@ -2088,9 +2089,9 @@ function nv_change_buffer($buffer)
         $_google_analytics .= "</script>" . PHP_EOL;
         $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . "$1", $buffer, 1);
     }
-    
+
     if (defined('NV_SYSTEM') and (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalytics4ID']) or preg_match('/^G\-[a-zA-Z0-9]{8,}$/', $global_config['googleAnalytics4ID']))) {
-        $_google_analytics4 = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $global_config['googleAnalytics4ID'] . '"></script>'. PHP_EOL;
+        $_google_analytics4 = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $global_config['googleAnalytics4ID'] . '"></script>' . PHP_EOL;
         $_google_analytics4 .= "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date);gtag('config','" . $global_config['googleAnalytics4ID'] . "');</script>" . PHP_EOL;
         $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics4 . "$1", $buffer, 1);
     }
@@ -2468,13 +2469,14 @@ function nv_set_authorization()
         }
         unset($usr_pass);
     }
-    return array(
+    return [
         'auth_user' => $auth_user,
         'auth_pw' => $auth_pw
-    );
+    ];
 }
 
 /**
+ *
  * @param string $cmd
  * @param string[] $params
  * @param string $adminidentity

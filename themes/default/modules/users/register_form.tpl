@@ -236,16 +236,8 @@
         <div class="form-group">
             <div class="middle text-center clearfix">
                 <div class="nv-recaptcha-default">
-                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div>
+                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
                 </div>
-                <script type="text/javascript">
-                    nv_recaptcha_elements.push({
-                        id : "{RECAPTCHA_ELEMENT}",
-                        btn : $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
-                        pnum : 4,
-                        btnselector : '[type="submit"]'
-                    })
-                </script>
             </div>
         </div>
         <!-- END: reg_recaptcha -->

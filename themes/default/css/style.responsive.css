@@ -307,10 +307,6 @@
     #header .logo img {
         max-height: 60px;
     }
-
-    .guestBlock{
-        width: 100%;
-    }
 }
 
 @media (min-width: 500px) and (max-width: 991.98px) {

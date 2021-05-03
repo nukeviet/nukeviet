@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
+
 if (!defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }
@@ -46,7 +47,7 @@ if (!nv_user_in_groups($allowed)) {
 }
 
 // kiểm tra captcha
-$captcha = intval($module_config[$module]['captcha']);
+$captcha = intval($module_config[$module]['captcha_area_comm']);
 $show_captcha = true;
 if ($captcha == 0) {
     $show_captcha = false;
@@ -62,8 +63,11 @@ if ($captcha == 0) {
         }
     }
 }
-$code = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('code', 'post', '');
-if ($show_captcha and !nv_capcha_txt($code)) {
+
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
+$code = ($module_config[$module]['captcha_type_comm'] == 'recaptcha') ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('code', 'post', '');
+if ($show_captcha and ($module_config[$module]['captcha_type_comm'] == 'captcha' or ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($code, $module_config[$module]['captcha_type_comm'])) {
     _loadContents('ERR_code_' . $lang_global['securitycodeincorrect']);
 }
 
@@ -194,9 +198,9 @@ try {
             $comment_success = $lang_module['comment_success_queue'];
 
             // Gui thong bao kiem duyet
-            nv_insert_notification($module_name, 'comment_queue', array(
+            nv_insert_notification($module_name, 'comment_queue', [
                 'content' => strip_tags($content)
-            ), $new_id);
+            ], $new_id);
         } else {
             $comment_success = $lang_module['comment_success'];
         }

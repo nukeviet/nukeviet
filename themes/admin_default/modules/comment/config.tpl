@@ -105,12 +105,23 @@
 				<tr>
 					<td><strong>{LANG.captcha}</strong></td>
 					<td>
-					<select name="captcha" class="form-control w300">
-						<!-- BEGIN: captcha -->
+					<select name="captcha_area_comm" class="form-control w300">
+						<!-- BEGIN: captcha_area_comm -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
-						<!-- END: captcha -->
+						<!-- END: captcha_area_comm -->
 					</select></td>
 				</tr>
+                <tr>
+                    <td><strong>{LANG.captcha_type}</strong></td>
+                    <td>
+                        <select class="form-control w300" name="captcha_type_comm" data-recaptcha-note="{IS_RECAPTCHA_NOTE}">
+                            <!-- BEGIN: captcha_type_comm -->
+                            <option value="{CAPTCHATYPE.key}"{CAPTCHATYPE.selected}>{CAPTCHATYPE.title}</option>
+                            <!-- END: captcha_type_comm -->
+                        </select>
+                        <span class="recaptcha_note help-block m-bottom-none"<!-- BEGIN: recaptcha_note_hide --> style="display:none"<!-- END: recaptcha_note_hide -->>{RECAPTCHA_NOTE}</span>
+                    </td>
+                </tr>
 				<tr>
 					<td><strong>{LANG.adminscomm}</strong></td>
 					<td>
@@ -146,5 +157,18 @@
 	</div>
 </form>
 <div class="alert alert-info">{LANG.adminscomm_note}</div>
+<script>
+$(function() {
+    $("[name=captcha_type_comm]").on('change', function(e) {
+        var v = $(this).val(),
+            is_recaptcha_note = $(this).data('recaptcha-note');
+        if (is_recaptcha_note && v == 'recaptcha') {
+            $(".recaptcha_note").show()
+        } else {
+            $(".recaptcha_note").hide()
+        }
+    })
+});
+</script>
 <!-- END: config -->
 <!-- END: main -->

@@ -19,22 +19,8 @@ $proxy_blocker_array = [
     3 => $lang_module['proxy_blocker_3']
 ];
 
-$captcha_array = [
-    0 => $lang_module['captcha_0'],
-    1 => $lang_module['captcha_1'],
-    2 => $lang_module['captcha_2'],
-    3 => $lang_module['captcha_3'],
-    4 => $lang_module['captcha_4'],
-    5 => $lang_module['captcha_5'],
-    6 => $lang_module['captcha_6'],
-    7 => $lang_module['captcha_7']
-];
+$recaptcha_vers = [2,3];
 
-$captcha_type_array = [
-    0 => $lang_module['captcha_type_0'], 
-    2 => $lang_module['captcha_type_2'], 
-    3 => $lang_module['captcha_type_3']
-];
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 $admin_2step_array = ['code', 'facebook', 'google'];
 $array_iptypes = [
@@ -191,25 +177,12 @@ $array_define_captcha = [];
 
 // Xử lý phần captcha
 if ($nv_Request->isset_request('submitcaptcha', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
-    $gfx_chk = $nv_Request->get_int('gfx_chk', 'post');
-    if (isset($captcha_array[$gfx_chk])) {
-        $array_config_captcha['gfx_chk'] = $gfx_chk;
-    } else {
-        $array_config_captcha['gfx_chk'] = 0;
-    }
-    $captcha_type = $nv_Request->get_int('captcha_type', 'post');
-    if (isset($captcha_type_array[$captcha_type])) {
-        $array_config_captcha['captcha_type'] = $captcha_type;
-    } else {
-        $array_config_captcha['captcha_type'] = $captcha_type_array[0];
-    }
+    $array_config_captcha['recaptcha_ver'] = $nv_Request->get_int('recaptcha_ver', 'post', 2);
+
     $array_config_captcha['recaptcha_sitekey'] = $nv_Request->get_title('recaptcha_sitekey', 'post', '');
     $array_config_captcha['recaptcha_secretkey'] = $nv_Request->get_title('recaptcha_secretkey', 'post', '');
     $array_config_captcha['recaptcha_type'] = $nv_Request->get_title('recaptcha_type', 'post', '');
 
-    if ($array_config_captcha['captcha_type'] == 2 and (empty($array_config_captcha['recaptcha_sitekey']) or empty($array_config_captcha['recaptcha_secretkey']))) {
-        $array_config_captcha['captcha_type'] = 0;
-    }
     if (!isset($recaptcha_type_array[$array_config_captcha['recaptcha_type']])) {
         $array_config_captcha['recaptcha_type'] = array_keys($array_config_captcha['recaptcha_type']);
         $array_config_captcha['recaptcha_type'] = $array_config_captcha['recaptcha_type'][0];
@@ -596,32 +569,8 @@ $xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']
 $xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);
 $xtpl->assign('DOMAINS_WHITELIST', $array_config_global['domains_whitelist']);
 
-foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang) {
-    $array = array(
-        "value" => $gfx_chk_i,
-        "select" => ($array_config_captcha['gfx_chk'] == $gfx_chk_i) ? ' selected="selected"' : '',
-        "text" => $gfx_chk_lang
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.opcaptcha');
-}
-
-foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
-    $array = array(
-        'value' => $captcha_type_i,
-        'select' => ($array_config_captcha['captcha_type'] == $captcha_type_i) ? ' selected="selected"' : '',
-        'text' => $captcha_type_lang
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.captcha_type');
-}
-
 $xtpl->assign('RECAPTCHA_SITEKEY', $array_config_captcha['recaptcha_sitekey']);
 $xtpl->assign('RECAPTCHA_SECRETKEY', $array_config_captcha['recaptcha_secretkey'] ? $crypt->decrypt($array_config_captcha['recaptcha_secretkey']) : '');
-
-$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($array_config_captcha['captcha_type'] == 2 or $array_config_captcha['captcha_type'] == 3) ? ' style="display:none;"' : '');
-$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($array_config_captcha['captcha_type'] == 2 or $array_config_captcha['captcha_type'] == 3) ? '' : ' style="display:none;"');
-$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA2', ($array_config_captcha['captcha_type'] == 2) ? '' : ' style="display:none;"');
 
 foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
     $array = array(
@@ -631,6 +580,15 @@ foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) 
     );
     $xtpl->assign('RECAPTCHA_TYPE', $array);
     $xtpl->parse('main.recaptcha_type');
+}
+
+foreach($recaptcha_vers as $ver) {
+    $array = [
+        'value' => $ver,
+        'select' => ($ver == $array_config_captcha['recaptcha_ver']) ? ' selected="selected"' : ''
+    ];
+    $xtpl->assign('OPTION', $array);
+    $xtpl->parse('main.recaptcha_ver');
 }
 
 for ($i = 2; $i < 10; $i++) {

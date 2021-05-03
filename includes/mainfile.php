@@ -51,7 +51,9 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
 if (empty($global_config['my_domains'])) {
-    $global_config['my_domains'] = [NV_SERVER_NAME];
+    $global_config['my_domains'] = [
+        NV_SERVER_NAME
+    ];
 } else {
     $global_config['my_domains'] = array_map('trim', explode(',', $global_config['my_domains']));
     $global_config['my_domains'] = array_map('strtolower', $global_config['my_domains']);
@@ -207,7 +209,7 @@ if (NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
 
 // Xac dinh borwser cua client
 $browser = new NukeViet\Client\Browser(NV_USER_AGENT);
-$client_info['browser'] = array();
+$client_info['browser'] = [];
 $client_info['browser']['key'] = $browser->getBrowserKey();
 $client_info['browser']['name'] = $browser->getBrowser();
 if (preg_match('/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches)) {
@@ -218,10 +220,10 @@ if (preg_match('/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches)) {
 $client_info['is_mobile'] = $browser->isMobile();
 $client_info['is_tablet'] = $browser->isTablet();
 $client_info['is_bot'] = $browser->isRobot();
-$client_info['client_os'] = array(
+$client_info['client_os'] = [
     'key' => $browser->getPlatformKey(),
     'name' => $browser->getPlatform()
-);
+];
 
 $is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
 if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session')) {
@@ -281,7 +283,7 @@ define('NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs');
 define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
-$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
+$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
 
 foreach ($list as $row) {
@@ -322,7 +324,11 @@ $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password'
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild','lite','none'))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], [
+    'mild',
+    'lite',
+    'none'
+])) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
@@ -399,7 +405,7 @@ $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     $sys_mods = unserialize($cache);
 } else {
-    $sys_mods = array();
+    $sys_mods = [];
     try {
         $result = $db->query('SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight');
         while ($row = $result->fetch()) {
@@ -407,7 +413,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
             $f_name = $row['func_name'];
             $f_alias = $row['alias'];
             if (!isset($sys_mods[$m_title])) {
-                $sys_mods[$m_title] = array(
+                $sys_mods[$m_title] = [
                     'module_file' => $row['module_file'],
                     'module_data' => $row['module_data'],
                     'module_upload' => $row['module_upload'],
@@ -426,17 +432,17 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'admins' => $row['admins'],
                     'rss' => $row['rss'],
                     'sitemap' => $row['sitemap'],
-                    'funcs' => array()
-                );
+                    'funcs' => []
+                ];
             }
-            $sys_mods[$m_title]['funcs'][$f_alias] = array(
+            $sys_mods[$m_title]['funcs'][$f_alias] = [
                 'func_id' => $row['func_id'],
                 'func_name' => $f_name,
                 'show_func' => $row['show_func'],
                 'func_custom_name' => $row['func_custom_name'],
                 'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
                 'in_submenu' => $row['in_submenu']
-            );
+            ];
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;
         }
         $cache = serialize($sys_mods);

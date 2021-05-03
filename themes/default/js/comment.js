@@ -8,9 +8,12 @@
 
 function nv_comment_reset(event, form) {
 	event.preventDefault();
-	var b = $("[onclick*='change_captcha']", form);
-	b.length && b.click();
-	nv_is_recaptcha && change_captcha();
+	var b = $("[onclick*='change_captcha']", $(form));
+	if (b.length) {
+		b.click();
+	} else if ($('[data-toggle=recaptcha]', $(form)).length || $("[data-recaptcha3]", $(form).parent()).length) {
+		change_captcha()
+	}
 	$("[name=pid]", form).val(0);
 	$(form)[0].reset();
 	if ($('#formcomment form').data().editor) {
@@ -72,9 +75,12 @@ function nv_commment_reload(res) {
 			scrollTop: $("#idcomment").offset().top
 		}, 800);
 	} else {
-        var b = $("#formcomment form [onclick*='change_captcha']");
-        b.length && b.click();
-        nv_is_recaptcha && change_captcha();
+		var b = $("#formcomment [onclick*='change_captcha']");
+		if (b.length) {
+			b.click()
+		} else if ($('#formcomment [data-toggle=recaptcha]').length || $("#formcomment [data-recaptcha3]").length) {
+			change_captcha()
+		}
 
 		if (rs[0] == 'ERR') {
 			alert(rs[2]);

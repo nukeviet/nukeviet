@@ -64,6 +64,12 @@ function modalShow(a, b, callback) {
     });
 }
 
+function locationReplace(url) {
+    if (history.pushState) {
+        history.pushState(null, null, url);
+    }
+}
+
 var NV = {
     menuBusy: false,
     menuTimer: null,
@@ -141,6 +147,11 @@ $(document).ready(function() {
     $('[data-btn="toggleLang"]').on('click', function(e) {
         e.preventDefault();
         $('.menu-lang').toggleClass('menu-lang-show');
+    });
+
+    //Change Localtion
+    $("[data-location]").on("click", function() {
+        locationReplace($(this).data("location"))
     });
 
     $(document).on('click', function(e) {

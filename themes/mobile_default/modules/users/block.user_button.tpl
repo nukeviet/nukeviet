@@ -1,19 +1,24 @@
 <!-- BEGIN: main -->
-<span class="pa"><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock_{BLOCKID}" data-click="y" data-callback="recaptchareset"><em class="fa fa-user fa-lg pointer mbt-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
+<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock_{BLOCKID}" data-click="y" data-callback="loginFormLoad"><em class="fa fa-user fa-lg pointer mbt-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
 <!-- START FORFOOTER -->
 <div id="guestBlock_{BLOCKID}" class="hidden">
-    <div class="guestBlock">
-        <h3><a class="guest-sign pointer margin-right current">{GLANG.signin}</a> <!-- BEGIN: allowuserreg --><a href="{USER_REGISTER}" class="guest-reg pointer">{GLANG.register}</a> <!-- END: allowuserreg --></h3>
-        <div class="log-area">
-            {FILE "login_form.tpl"}
-            <div class="text-center margin-top-lg" id="other_form">
-                <a href="{USER_LOSTPASS}">{GLANG.lostpass}?</a>
-            </div>
-        </div>
-    </div>
+    <div class="log-area" style="margin:-15px"></div>
 </div>
+<script>
+function loginFormLoad() {
+    $.ajax({
+        type: 'POST',
+        url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+        cache: !1,
+        data: '&nv_ajax=1',
+        dataType: "html"
+    }).done(function(a) {
+        $("#tip .log-area").html(a);
+        change_captcha()
+    });
+}
+</script>
 <!-- END FORFOOTER -->
-<script src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: main -->
 
 <!-- BEGIN: signed -->

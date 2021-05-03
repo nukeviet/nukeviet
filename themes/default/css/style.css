@@ -288,14 +288,8 @@ ul.list-items > li:last-child {
 
 /*Center DIV*/
 .centered {
-   text-align: center;
-   font-size: 0
-}
-.centered > div {
-   float: none;
-   display: inline-block;
-   text-align: left;
-   font-size: 14px;
+   display: flex;
+   justify-content: center;
 }
 
 /*nv-info*/
@@ -1403,32 +1397,6 @@ a.btn {
 
 .counter span + span{
     text-align: right;
-}
-
-/* guestBlock */
-
-.guestBlock {
-    width:350px;
-}
-
-.guestBlock > h3 {
-    border-bottom-width :1px;
-    border-bottom-style: solid;
-    border-bottom-color: #cccccc;
-}
-
-.guestBlock > h3 > a {
-    display:inline-block;
-    line-height:34px;
-    padding:0 17px;
-    background-color:#e5e5e5;
-    border-top-right-radius:5px;
-    border-top-left-radius:5px;
-}
-
-.guestBlock > h3 > a:hover,
-.guestBlock > h3 > a.current {
-    background-color:#cccccc;
 }
 
 .socialList,

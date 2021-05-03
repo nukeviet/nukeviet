@@ -44,15 +44,7 @@
             <strong>{N_CAPTCHA}</strong>
         </div>
         <div class="margin-bottom clearfix">
-            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div>
-            <script type="text/javascript">
-            nv_recaptcha_elements.push({
-                id: "{RECAPTCHA_ELEMENT}",
-                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent()),
-                pnum: 3,
-                btnselector: '[name="submit"]'
-            })
-            </script>
+            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="3" data-btnselector="[name=submit]"></div></div>
         </div>
         <!-- END: recaptcha -->
         <input type="button" name="submit" class="btn btn-primary btn-block" value="{VOTING.langsubmit}" onclick="nv_sendvoting_captcha(this, {VOTING.vid}, '{LANG.enter_captcha_error}');"/>
