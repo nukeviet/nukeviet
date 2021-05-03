@@ -113,58 +113,6 @@ if ($global_config['allowuserlogin']) {
         $xtpl->parse('signed');
         $content = $xtpl->text('signed');
     } else {
-        $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login');
-        $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register');
-        $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass');
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-        $xtpl->assign('NV_HEADER', '');
-        $xtpl->assign('NV_REDIRECT', '');
-
-        if (in_array($global_config['gfx_chk'], [
-            2,
-            4,
-            5,
-            7
-        ])) {
-            if ($global_config['captcha_type'] == 3) {
-                $xtpl->parse('main.recaptcha3');
-            } elseif ($global_config['captcha_type'] == 2) {
-                $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                $xtpl->parse('main.recaptcha.default');
-                $xtpl->parse('main.recaptcha');
-            } else {
-                $xtpl->parse('main.captcha');
-            }
-        }
-
-        if (defined('NV_OPENID_ALLOWED')) {
-            $icons = [
-                'single-sign-on' => 'lock',
-                'google' => 'google-plus',
-                'facebook' => 'facebook'
-            ];
-            foreach ($global_config['openid_servers'] as $server) {
-                $assigns = [];
-                $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
-                $assigns['title'] = ucfirst($server);
-                $assigns['server'] = $server;
-                $assigns['icon'] = $icons[$server];
-
-                $xtpl->assign('OPENID', $assigns);
-                $xtpl->parse('main.openid.server');
-            }
-            $xtpl->parse('main.openid');
-        }
-
-        if ($global_config['allowuserreg']) {
-            $xtpl->parse('main.allowuserreg');
-        }
-
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }

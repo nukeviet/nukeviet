@@ -204,13 +204,13 @@ $(".deletemember").click(function() {
 <link rel="stylesheet" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <div id="ablist" class="container-fluid margin-bottom">
     <div class="row">
-        <div class="col-sm-14 margin-bottom-lg">
+        <div class="col-sm-14 col-md-14 margin-bottom-lg">
             <!-- BEGIN: addUserGroup -->
         	<select name="uid" id="uid" class="form-control" style="width:150px"></select>
         	<button class="btn btn-primary" name="addUser" type="button" title="{LANG.addMemberToGroup}"><i class="fa fa-plus"></i></button>
         	<!-- END: addUserGroup -->
         </div>
-        <div class="col-sm-10 text-right margin-bottom-lg">
+        <div class="col-sm-10 col-md-10 text-right margin-bottom-lg">
             <a href="{EDIT_GROUP_URL}" class="btn btn-primary" title="{GLANG.edit}"><i class="fa fa-pencil-square-o"></i></a>
             <!-- BEGIN: add_user -->
         	<a href="{MODULE_URL}=register/{GID}" class="btn btn-primary" title="{LANG.addusers}"><i class="fa fa-user-plus"></i></a>

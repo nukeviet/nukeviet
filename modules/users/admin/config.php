@@ -81,6 +81,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
+        $array_config['ucaptcha_area'] = $nv_Request->get_typed_array('ucaptcha_area', 'post', 'string');
+        $array_config['ucaptcha_area'] = !empty($array_config['ucaptcha_area']) ? implode(',', $array_config['ucaptcha_area']) : '';
+        $array_config['ucaptcha_type'] = $nv_Request->get_title('ucaptcha_type', 'post', 'captcha');
 
         $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', []);
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
@@ -223,30 +226,30 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['active_user_logs'] = !empty($array_config['active_user_logs']) ? ' checked="checked"' : '';
     $array_config['auto_assign_oauthuser'] = !empty($array_config['auto_assign_oauthuser']) ? ' checked="checked"' : '';
 
-    $array_name_show = array(
+    $array_name_show = [
         0 => $lang_module['lastname_firstname'],
         1 => $lang_module['firstname_lastname']
-    );
+    ];
 
-    $array_registertype = array(
+    $array_registertype = [
         0 => $lang_module['active_not_allow'],
         1 => $lang_module['active_all'],
         2 => $lang_module['active_email'],
         3 => $lang_module['active_admin_check']
-    );
-    $array_openid_processing = array(
+    ];
+    $array_openid_processing = [
         0 => $lang_module['openid_processing_0'],
         3 => $lang_module['openid_processing_3'],
         4 => $lang_module['openid_processing_4']
-    );
+    ];
 
-    $ignorefolders = array(
+    $ignorefolders = [
         '',
         '.',
         '..',
         'index.html',
         '.htaccess'
-    );
+    ];
     $array_config['checkss'] = $checkss;
 
     $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -264,71 +267,71 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     }
 
     for ($id = 3; $id < 20; $id++) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['nv_unickmin'] == $id) ? ' selected="selected"' : '',
             'value' => $id
-        );
+        ];
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unickmin');
     }
     for ($id = 20; $id < 100; $id++) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['nv_unickmax'] == $id) ? ' selected="selected"' : '',
             'value' => $id
-        );
+        ];
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unickmax');
     }
 
     $lang_global['unick_type_0'] = $lang_module['unick_type_0'];
     for ($id = 0; $id < 5; $id++) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['nv_unick_type'] == $id) ? ' selected="selected"' : '',
             'value' => $lang_global['unick_type_' . $id]
-        );
+        ];
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unick_type');
     }
 
     for ($id = 5; $id < 20; $id++) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['nv_upassmin'] == $id) ? ' selected="selected"' : '',
             'value' => $id
-        );
+        ];
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upassmin');
     }
     for ($id = 20; $id < 255; $id++) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['nv_upassmax'] == $id) ? ' selected="selected"' : '',
             'value' => $id
-        );
+        ];
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upassmax');
     }
 
     $lang_global['upass_type_0'] = $lang_module['upass_type_0'];
     for ($id = 0; $id < 5; $id++) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['nv_upass_type'] == $id) ? ' selected="selected"' : '',
             'value' => $lang_global['upass_type_' . $id]
-        );
+        ];
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upass_type');
     }
 
     foreach ($array_registertype as $id => $titleregister) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($array_config['allowuserreg'] == $id) ? ' selected="selected"' : '',
             'value' => $titleregister
-        );
+        ];
         $xtpl->assign('REGISTERTYPE', $array);
         $xtpl->parse('main.registertype');
     }
@@ -338,11 +341,11 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     foreach ($nv_files as $value) {
         if (!in_array($value, $ignorefolders) and is_dir(NV_ROOTDIR . '/' . $value)) {
             if (is_dir(NV_ROOTDIR . '/' . $value . '/nukeviet')) {
-                $array = array(
+                $array = [
                     'id' => $value,
                     'select' => ($value == $global_config['dir_forum']) ? ' selected="selected"' : '',
                     'value' => $value
-                );
+                ];
                 $xtpl->assign('DIR_FORUM', $array);
                 $xtpl->parse('main.dir_forum.loop');
                 ++$i;
@@ -354,33 +357,71 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     }
 
     foreach ($array_name_show as $id => $titleregister) {
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => ($global_config['name_show'] == $id) ? ' selected="selected"' : '',
             'value' => $titleregister
-        );
+        ];
         $xtpl->assign('NAME_SHOW', $array);
         $xtpl->parse('main.name_show');
     }
 
+    $captcha_area_list = [
+        'a',
+        'l',
+        'r',
+        'm',
+        'p'
+    ];
+    foreach ($captcha_area_list as $area) {
+        $captcha_area = [
+            'key' => $area,
+            'checked' => strpos($array_config['ucaptcha_area'], $area) !== false ? ' checked="checked"' : '',
+            'title' => $lang_module['captcha_area_' . $area]
+        ];
+        $xtpl->assign('CAPTCHAAREA', $captcha_area);
+        $xtpl->parse('main.captcha_area');
+    }
+
+    $captcha_types = [
+        'captcha',
+        'recaptcha'
+    ];
+    foreach ($captcha_types as $type) {
+        $captcha_type = [
+            'key' => $type,
+            'selected' => $array_config['ucaptcha_type'] == $type ? ' selected="selected"' : '',
+            'title' => $lang_module['captcha_type_' . $type]
+        ];
+        $xtpl->assign('CAPTCHATYPE', $captcha_type);
+        $xtpl->parse('main.captcha_type');
+    }
+
+    $is_recaptcha_note = empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']);
+    $xtpl->assign('IS_RECAPTCHA_NOTE', (int) $is_recaptcha_note);
+    $xtpl->assign('RECAPTCHA_NOTE', $is_recaptcha_note ? sprintf($lang_module['captcha_type_recaptcha_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=2') : '');
+    if (!$is_recaptcha_note or $array_config['ucaptcha_type'] != 'recaptcha') {
+        $xtpl->parse('main.recaptcha_note_hide');
+    }
+
     $array_config['whoviewuser'] = explode(',', $array_config['whoviewuser']);
     foreach ($groups_list as $group_id => $group_name) {
-        $whoview = array(
+        $whoview = [
             'key' => $group_id,
             'checked' => in_array($group_id, $array_config['whoviewuser']) ? ' checked="checked"' : '',
             'title' => $group_name
-        );
+        ];
         $xtpl->assign('WHOVIEW', $whoview);
         $xtpl->parse('main.whoviewlistuser');
     }
 
     foreach ($array_openid_processing as $id => $titleregister) {
         $select = ($array_config['openid_processing'] == $id) ? ' selected="selected"' : '';
-        $array = array(
+        $array = [
             'id' => $id,
             'select' => $select,
             'value' => $titleregister
-        );
+        ];
         $xtpl->assign('OPENID_PROCESSING', $array);
         $xtpl->parse('main.openid_processing');
     }
@@ -401,14 +442,14 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 $disabled = ' disabled="disabled" ';
             }
 
-            $openid_assign = array(
+            $openid_assign = [
                 'name' => $m[2],
                 'title' => $m[1] . ' ' . $m[2],
                 'checked' => $checked,
                 'disabled' => $disabled,
                 'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
                 'note' => sprintf($lang_module['oauth_config'], $m[1] . ' ' . $m[2])
-            );
+            ];
 
             $xtpl->assign('OPENID', $openid_assign);
             if (file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')) {
@@ -420,20 +461,20 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         }
     }
 
-    $array_access = array(
-        array(
+    $array_access = [
+        [
             'id' => 1,
             'title' => $lang_global['level1']
-        ),
-        array(
+        ],
+        [
             'id' => 2,
             'title' => $lang_global['level2']
-        ),
-        array(
+        ],
+        [
             'id' => 3,
             'title' => $lang_global['level3']
-        )
-    );
+        ]
+    ];
 
     if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
         $xtpl->assign('LINK_EDITCENSOR', sprintf($lang_module['active_editinfo_censor_note1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editcensor'));

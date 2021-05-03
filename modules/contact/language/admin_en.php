@@ -112,3 +112,8 @@ $lang_module['mark_as_processed'] = 'Mark processed';
 $lang_module['mark_as_unprocess'] = 'Mark unprocess';
 $lang_module['tt3_row_title'] = 'Processed!';
 $lang_module['process'] = 'Processed!';
+$lang_module['captcha_type'] = 'Captcha type when the user submits a contact';
+$lang_module['captcha_type_'] = 'Do not use';
+$lang_module['captcha_type_captcha'] = 'Captcha-image';
+$lang_module['captcha_type_recaptcha'] = 'reCaptcha';
+$lang_module['captcha_type_recaptcha_note'] = 'Captcha won\'t run until you <a href="%s">configure reCaptcha</a>';

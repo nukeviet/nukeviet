@@ -14,14 +14,15 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 
 $submenu['content'] = $lang_module['voting_add'];
 
-$allow_func = array(
+$allow_func = [
     'main',
     'content',
-    'del'
-);
+    'del',
+    'setting'
+];
 
 define('NV_IS_FILE_ADMIN', true);
 
-//Document
+// Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:voting';
 $array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:voting#them_tham_do';

@@ -15,16 +15,11 @@ if (!defined('NV_MAINFILE')) {
 $array_except_flood_site = $array_except_flood_admin = [];
 $ip_exclusion = false;
 if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php')) {
-    include NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php' ;
+    include NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php';
 }
 
 foreach ($array_except_flood_site as $e => $f) {
-    if (
-        $f['begintime'] < NV_CURRENTTIME and ($f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME) and (
-            (empty($f['ip6']) and preg_replace($f['mask'], '', NV_CLIENT_IP) == preg_replace($f['mask'], '', $e)) or
-            (!empty($f['ip6']) and $ips->checkIp6(NV_CLIENT_IP, $f['mask']) === true)
-        )
-    ) {
+    if ($f['begintime'] < NV_CURRENTTIME and ($f['endtime'] == 0 or $f['endtime'] > NV_CURRENTTIME) and ((empty($f['ip6']) and preg_replace($f['mask'], '', NV_CLIENT_IP) == preg_replace($f['mask'], '', $e)) or (!empty($f['ip6']) and $ips->checkIp6(NV_CLIENT_IP, $f['mask']) === true))) {
         $ip_exclusion = true;
         break;
     }
@@ -41,14 +36,14 @@ if (!$ip_exclusion) {
 
     if ($flb->is_flooded) {
         // Nếu recaptcha được kích hoạt, dùng nó để xác nhận khi bị chặn
-        $captchaPass = (!empty($global_config['captcha_type']) and ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3));
+        $captchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
         if ($captchaPass) {
             if ($nv_Request->isset_request('captcha_pass_flood', 'post')) {
                 $tokend = $nv_Request->get_title('tokend', 'post', '');
                 $captcha_txt = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                 $redirect = $nv_Request->get_title('redirect', 'post', '');
 
-                if ($tokend === NV_CHECK_SESSION and nv_capcha_txt($captcha_txt)) {
+                if ($tokend === NV_CHECK_SESSION and nv_capcha_txt($captcha_txt, 'recaptcha')) {
                     $flb->resetTrackFlood();
 
                     $redirect = nv_redirect_decrypt($redirect);
@@ -81,10 +76,10 @@ if (!$ip_exclusion) {
                 $xtpl->assign('CATPCHA_TYPE', $global_config['recaptcha_type']);
                 $xtpl->assign('CATPCHA_LANG', NV_LANG_INTERFACE);
                 $xtpl->assign('REDIRECT', nv_redirect_encrypt($client_info['selfurl']));
-                
-                if ($global_config['captcha_type'] == 2) {
+
+                if ($global_config['recaptcha_ver'] == 2) {
                     $xtpl->parse('main.captchapass.recaptcha2');
-                } elseif ($global_config['captcha_type'] == 3) {
+                } elseif ($global_config['recaptcha_ver'] == 3) {
                     $xtpl->parse('main.captchapass.recaptcha3');
                 }
                 $xtpl->parse('main.captchapass');

@@ -77,13 +77,7 @@
                     <div class="form-group">
                         <label for="semail" class="col-sm-4 control-label">{N_CAPTCHA}<em>*</em></label>
                         <div class="col-sm-20">
-                            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
-                            <script type="text/javascript">
-                            nv_recaptcha_elements.push({
-                                id: "{RECAPTCHA_ELEMENT}",
-                                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
-                            })
-                            </script>
+                            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div></div>
                         </div>
                     </div>
                     <!-- END: recaptcha -->

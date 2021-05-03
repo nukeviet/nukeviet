@@ -49,13 +49,7 @@
             <div class="col-sm-8"></div>
             <div class="col-sm-8">
                 <div class="middle text-center clearfix">
-                    <div id="{RECAPTCHA_ELEMENT}"></div>
-                    <script type="text/javascript">
-                    nv_recaptcha_elements.push({
-                        id: "{RECAPTCHA_ELEMENT}",
-                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
-                    })
-                    </script>
+                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
                 </div>
             </div>
         </div>

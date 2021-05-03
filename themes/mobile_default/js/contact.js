@@ -6,22 +6,21 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-function nv_validReset(a)
-{
-    $(".has-error",a).removeClass("has-error");
-    $(".nv-info",a).removeClass("error success").html($(".nv-info",a).attr("data-mess"));
-    $(a)[0].reset();
+function nv_validReset(a) {
+	$(".has-error", a).removeClass("has-error");
+	$(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
+	$(a)[0].reset();
 }
 
 function nv_validErrorShow(a) {
 	$(a).parent().parent().addClass("has-error");
-    $(a).parent().parent().parent().find(".nv-info").removeClass("success").addClass("error").html($(a).attr("data-current-mess"));
+	$(a).parent().parent().parent().find(".nv-info").removeClass("success").addClass("error").html($(a).attr("data-current-mess"));
 	$(a).focus()
 }
 function nv_validErrorHidden(a) {
-    a = $(a).parent().parent().parent();
-	$(".has-error",a).removeClass("has-error");
-    $(".nv-info",a).removeClass("error success").html($(".nv-info",a).attr("data-mess"));
+	a = $(a).parent().parent().parent();
+	$(".has-error", a).removeClass("has-error");
+	$(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
 }
 
 function nv_validCheck(a) {
@@ -36,7 +35,7 @@ function nv_validCheck(a) {
 
 function nv_validForm(a) {
 	$(".has-error", a).removeClass("has-error");
-    $(".nv-info",a).removeClass("error success").html($(".nv-info",a).attr("data-mess"));
+	$(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
 	var c = 0;
 	$(a).find(".required").each(function() {
 		$(this).val(trim(strip_tags($(this).val())));
@@ -49,16 +48,15 @@ function nv_validForm(a) {
 		data: $(a).serialize(),
 		dataType: "json",
 		success: function(b) {
-		  change_captcha('.fcode');
+			change_captcha('.fcode');
 			"error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
 				nv_validErrorShow(this)
 			}), setTimeout(function() {
 				$(a).find("[type='submit']").prop("disabled", !1)
-			}, 1E3), (nv_is_recaptcha && change_captcha())) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info",a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info",a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
+			}, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info", a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info", a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
 				$("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
-                nv_validReset(a);
-                (nv_is_recaptcha && change_captcha());
+				nv_validReset(a)
 			}, 5E3))
 		}
 	}));

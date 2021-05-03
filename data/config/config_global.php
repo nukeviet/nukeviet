@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2020 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2021 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 08 Jun 2020 09:32:56 GMT
+ * @Createdate Mon, 03 May 2021 14:07:45 GMT
  */
 
 if (!defined('NV_MAINFILE')) {
@@ -28,12 +28,12 @@ $global_config['admfirewall']=0;
 $global_config['admin_2step_default']='code';
 $global_config['admin_2step_opt']='code';
 $global_config['admin_check_pass_time']=1800;
+$global_config['allow_null_origin']=0;
 $global_config['allow_sitelangs']=['vi'];
 $global_config['authors_detail_main']=0;
 $global_config['autocheckupdate']=1;
 $global_config['autoupdatetime']=24;
 $global_config['block_admin_ip']=0;
-$global_config['captcha_type']=0;
 $global_config['cdn_url']='';
 $global_config['cookie_httponly']=1;
 $global_config['cookie_prefix']='nv4c_z0FZ1';
@@ -46,7 +46,7 @@ $global_config['crosssite_valid_domains']=[];
 $global_config['crosssite_valid_ips']=[];
 $global_config['display_errors_list']=32767;
 $global_config['domains_restrict']=1;
-$global_config['domains_whitelist']=['youtube.com','www.youtube.com','google.com','www.google.com','drive.google.com'];
+$global_config['domains_whitelist']=['youtube.com','www.youtube.com','google.com','www.google.com','drive.google.com','docs.google.com'];
 $global_config['dump_autobackup']=1;
 $global_config['dump_backup_day']=30;
 $global_config['dump_backup_ext']='gz';
@@ -62,8 +62,8 @@ $global_config['ftp_port']=21;
 $global_config['ftp_server']='localhost';
 $global_config['ftp_user_name']='';
 $global_config['ftp_user_pass']='';
-$global_config['gfx_chk']=3;
 $global_config['gzip_method']=1;
+$global_config['ip_allow_null_origin']=[];
 $global_config['is_flood_blocker']=1;
 $global_config['is_login_blocker']=1;
 $global_config['lang_geo']=0;
@@ -80,11 +80,15 @@ $global_config['nv_auto_resize']=1;
 $global_config['nv_display_errors_list']=1;
 $global_config['nv_max_size']=2097152;
 $global_config['nv_overflow_size']=0;
+$global_config['nv_static_url']='';
 $global_config['proxy_blocker']=0;
 $global_config['read_type']=0;
 $global_config['recaptcha_secretkey']='';
 $global_config['recaptcha_sitekey']='';
 $global_config['recaptcha_type']='image';
+$global_config['recaptcha_ver']=2;
+$global_config['remote_api_access']=0;
+$global_config['remote_api_log']=1;
 $global_config['rewrite_enable']=1;
 $global_config['rewrite_endurl']='/';
 $global_config['rewrite_exturl']='.html';
@@ -104,7 +108,7 @@ $global_config['upload_checking_mode']='strong';
 $global_config['upload_chunk_size']=0;
 $global_config['useactivate']=2;
 $global_config['users_special']=0;
-$global_config['version']='4.4.01';
+$global_config['version']='4.5.00';
 $global_config['check_rewrite_file']=1;
 $global_config['allow_request_mods']=['get','post','cookie','session','request','env','server'];
 $global_config['request_default_mode']='request';

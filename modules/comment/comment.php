@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
+
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -44,7 +45,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
     $num_items = $db_slave->query($db_slave->sql())
         ->fetchColumn();
 
-    $total = ceil($num_items/$per_page_comment);
+    $total = ceil($num_items / $per_page_comment);
     if ($page > 1 and $page > $total) {
         $page = 1;
     }
@@ -64,7 +65,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
         }
 
         $result = $db_slave->query($db_slave->sql());
-        $comment_list_id = array();
+        $comment_list_id = [];
         while ($row = $result->fetch()) {
             $comment_list_id[] = $row['cid'];
             if ($row['userid'] > 0) {
@@ -88,10 +89,10 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
         } else {
             $generate_page = '';
         }
-        return array(
+        return [
             'comment' => $comment_array,
             'page' => $generate_page
-        );
+        ];
     }
 }
 
@@ -114,7 +115,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
         ->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')
         ->where('a.pid=' . $cid . ' AND a.status=1');
 
-    $data_reply_comment = array();
+    $data_reply_comment = [];
 
     $num_items_sub = $db_slave->query($db_slave->sql())
         ->fetchColumn();
@@ -130,7 +131,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
             $db_slave->order('a.cid DESC');
         }
         $result = $db_slave->query($db_slave->sql());
-        $comment_list_id_reply = array();
+        $comment_list_id_reply = [];
         while ($row = $result->fetch()) {
             $row['check_like'] = md5($row['cid'] . '_' . $session_id);
             $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
@@ -234,22 +235,22 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             $lang_module_comment = $lang_module;
 
             // Kiểm tra quyền xem bình luận
-            $form_login = array(
+            $form_login = [
                 'display' => 0, // Có hiển thị form login hay ẩn
                 'mode' => 'direct', // Trực tiếp đăng nhập hay đăng nhập nhóm
                 'link' => '', // Link thông báo
-                'groups' => array() // Các nhóm cần tham gia vào, hoặc đăng nhập dưới quyền
-            );
+                'groups' => [] // Các nhóm cần tham gia vào, hoặc đăng nhập dưới quyền
+            ];
             $view_comm = nv_user_in_groups($module_config[$module]['view_comm']);
             $allowed_comm = nv_user_in_groups($allowed);
             // Xử lý nếu có quyền xem và không có quyền bình
             if ($view_comm and !$allowed_comm and $global_config['allowuserlogin']) {
                 $allowed_tmp = explode(',', $allowed);
-                $allowed_tmp = array_flip(array_diff($allowed_tmp, array(
+                $allowed_tmp = array_flip(array_diff($allowed_tmp, [
                     1,
                     2,
                     3
-                ))); // Loại nhóm quản trị ra
+                ])); // Loại nhóm quản trị ra
                 if ((isset($allowed_tmp['4']) or isset($allowed_tmp['7']))) {
                     // Thành viên chính thức hoặc thành viên mới thì đăng nhập trực tiếp
                     $form_login['display'] = 1;
@@ -352,11 +353,11 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 
     // Order by comm
     for ($i = 0; $i <= 2; ++$i) {
-        $xtpl->assign('OPTION', array(
+        $xtpl->assign('OPTION', [
             'key' => $i,
             'title' => $lang_module_comment['sortcomm_' . $i],
             'selected' => ($i == $sortcomm) ? ' selected="selected"' : ''
-        ));
+        ]);
 
         $xtpl->parse('main.sortcomm');
     }
@@ -391,7 +392,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             $xtpl->assign('EDITOR_COMM', 0);
         }
 
-        $captcha = intval($module_config[$module]['captcha']);
+        $captcha = intval($module_config[$module]['captcha_area_comm']);
         $show_captcha = true;
         if ($captcha == 0) {
             $show_captcha = false;
@@ -408,14 +409,16 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             }
         }
 
+        $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
         if ($show_captcha) {
-            if ($global_config['captcha_type'] == 3) {
+            if ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
                 $xtpl->parse('main.allowed_comm.recaptcha3');
-            } elseif ($global_config['captcha_type'] == 2) {
+            } elseif ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('GFX_NUM', -1);
                 $xtpl->parse('main.allowed_comm.recaptcha');
-            } else {
+            } elseif ($module_config[$module]['captcha_type_comm'] == 'captcha') {
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
                 $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
                 $xtpl->assign('GFX_NUM', NV_GFX_NUM);
@@ -425,6 +428,8 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
                 $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
                 $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
                 $xtpl->parse('main.allowed_comm.captcha');
+            } else {
+                $xtpl->assign('GFX_NUM', 0);
             }
         } else {
             $xtpl->assign('GFX_NUM', 0);
