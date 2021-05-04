@@ -82,9 +82,9 @@ $page_title = $module_info['site_title'];
 $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
 $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
 $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-if (strpos($request_uri, $base_url_check) === 0) {
+if (str_starts_with($request_uri, $base_url_check)) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) === 0) {
+} elseif (str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
     $canonicalUrl = $base_url_rewrite;
 } else {
     nv_redirect_location($base_url_check);

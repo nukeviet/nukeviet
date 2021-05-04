@@ -1997,7 +1997,7 @@ function nv_url_rewrite_callback($matches)
 
     $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
     $query_array = [];
-    $is_amp = (strpos($query_string, '&amp;') !== false);
+    $is_amp = str_contains($query_string, '&amp;');
     parse_str(str_replace('&amp;', '&', $query_string), $query_array);
 
     if (!empty($query_array)) {
@@ -2018,7 +2018,7 @@ function nv_url_rewrite_callback($matches)
         }
         unset($query_array[NV_LANG_VARIABLE]);
         if (isset($query_array[NV_NAME_VARIABLE])) {
-            if (strpos($query_array[NV_NAME_VARIABLE], '/') !== false) {
+            if (str_contains($query_array[NV_NAME_VARIABLE], '/')) {
                 if (isset($query_array[NV_OP_VARIABLE])) {
                     return $matches[0];
                 }
@@ -2036,7 +2036,7 @@ function nv_url_rewrite_callback($matches)
         $rewrite_end = $global_config['rewrite_endurl'];
         if (isset($query_array[NV_OP_VARIABLE])) {
             if (preg_match('/^tag\/(.*)$/', $query_array[NV_OP_VARIABLE], $m)) {
-                if (strpos($m[1], '/') !== false and !preg_match('/page\-[0-9]+$/', $m[1])) {
+                if (str_contains($m[1], '/') and !preg_match('/page\-[0-9]+$/', $m[1])) {
                     return $matches[0];
                 }
                 $rewrite_end = '';
@@ -2464,7 +2464,7 @@ function nv_set_authorization()
 
     if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
         $usr_pass = base64_decode(substr($auth_user, 6));
-        if (!empty($usr_pass) and strpos($usr_pass, ':') !== false) {
+        if (!empty($usr_pass) and str_contains($usr_pass, ':')) {
             list ($auth_user, $auth_pw) = explode(':', $usr_pass);
         }
         unset($usr_pass);

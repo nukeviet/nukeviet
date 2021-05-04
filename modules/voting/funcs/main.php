@@ -22,7 +22,7 @@ if (empty($vid)) {
     $base_url_rewrite = nv_url_rewrite($base_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
     $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
+    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
         nv_redirect_location($base_url_check);
     }
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;

@@ -25,7 +25,7 @@ $db_config['collation'] = '';//utf8_general_ci, utf8mb4_unicode_ci, utf8mb4_viet
 
 $array_data = [];
 $array_data['lang_multi'] = 0;
-$array_data['site_name'] = '';
+$array_data['site_name'] = 'NUKEVIET';
 $array_data['nv_login'] = '';
 $array_data['nv_email'] = '';
 $array_data['nv_password'] = '';

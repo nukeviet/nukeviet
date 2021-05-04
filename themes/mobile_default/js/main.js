@@ -6,8 +6,8 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-var gEInterval,
-	tip_active = !1,
+var gEInterval, 
+    tip_active = !1,
 	ftip_active = !1,
 	tip_autoclose = !0,
 	ftip_autoclose = !0,
@@ -24,16 +24,16 @@ var gEInterval,
 	oldScrt = 0,
 	scrtRangeY = 0,
 	scrtRangeOffset = 1,
-	didScroll = false,
+	didScroll = !1,
 	wrapWidth = 0,
 	headerH = 0,
 	footerH = 0,
 	winHelp = !1,
-	breadcrumbs = $('.breadcrumbs'),
-	subbreadcrumbs = $('.sub-breadcrumbs'),
-	tempbreadcrumbs = $('.temp-breadcrumbs'),
-	isSafari = (/^((?!chrome).)*safari/i.test(navigator.userAgent)),
-	isRecaptcha = false,
+	breadcrumbs = $(".breadcrumbs"),
+	subbreadcrumbs = $(".sub-breadcrumbs"),
+	tempbreadcrumbs = $(".temp-breadcrumbs"),
+	isSafari = /^((?!chrome).)*safari/i.test(navigator.userAgent),
+	isRecaptcha = !1,
 	reCapIDs = [];
 
 function winResize() {
@@ -46,54 +46,30 @@ function winResize() {
 	cRangeX = Math.abs(winX - oldWinX);
 	cRangeY = Math.abs(winY - oldWinY);
 	scrh = $(window).scrollHeight;
-	headerH = $('header.first-child').outerHeight();
-	footerH = $('footer#footer').outerHeight();
+	headerH = $("header.first-child").outerHeight();
+	footerH = $("footer#footer").outerHeight()
 }
 
 function winHelpShow() {
-	if (0 != winHelp) {
-		return !1;
-	}
+    winHelp && winHelpHide();
 	tip_active && tipHide();
 	ftip_active && ftipHide();
-	winHelp = !0;
-	$("#winHelp").find(".logo-small").html($(".logo").html());
+    $("#winHelp").find(".logo-small").html($(".logo").html());
 	$("#winHelp").show(0);
+    winHelp = !0
 }
 
 function winHelpHide() {
-	if (1 != winHelp) {
-		return !1;
-	}
 	winHelp = !1;
-	$("#winHelp").hide();
+	$("#winHelp").hide()
 }
 
 function contentScrt() {
 	winHelp && winHelpHide();
 	scrt = $(window).scrollTop();
 	scrtRangeY = scrt - oldScrt;
-
-	0 >= scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-refresh", !0) : $(".bttop").find("em").removeClass("fa-refresh").toggleClass("fa-chevron-up", !0)
-
-	if (Math.abs(scrtRangeY) <= scrtRangeOffset) {
-		return;
-	}
-
-	if (scrt > oldScrt && scrt > headerH) {
-		$('header.first-child').removeClass('header-down').addClass('header-up');
-	} else {
-		if (scrt + winY < docY) {
-			$('header.first-child').removeClass('header-up').addClass('header-down');
-		}
-	}
-	if ((docY - (scrt + winY + (isSafari ? 44 : 0))) <= footerH || scrt <= 0) {
-		$('#footer').removeClass('footer-down').addClass('footer-up');
-	} else {
-		$('#footer').removeClass('footer-up').addClass('footer-down');
-	}
-
-	oldScrt = scrt;
+	0 >= scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-refresh", !0) : $(".bttop").find("em").removeClass("fa-refresh").toggleClass("fa-chevron-up", !0);
+	Math.abs(scrtRangeY) <= scrtRangeOffset || (scrt > oldScrt && scrt > headerH ? $("header.first-child").removeClass("header-down").addClass("header-up") : scrt + winY < docY && $("header.first-child").removeClass("header-up").addClass("header-down"), docY - (scrt + winY + (isSafari ? 44 : 0)) <= footerH || 0 >= scrt ? $("#footer").removeClass("footer-down").addClass("footer-up") : $("#footer").removeClass("footer-up").addClass("footer-down"), oldScrt = scrt)
 }
 
 function checkAll(a) {
@@ -214,28 +190,22 @@ function ctbtLoad(a) {
 
 function openID_load(a) {
 	nv_open_browse(a, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
-	return !1;
+	return !1
 }
 
 function openID_result() {
-	var resElement = $("#openidResult");
-	resElement.fadeIn();
+	var a = $("#openidResult");
+	a.fadeIn();
 	setTimeout(function() {
-		if (resElement.data('redirect') != '') {
-			window.location.href = resElement.data('redirect');
-		} else if (resElement.data('result') == 'success') {
-			location.reload();
-		} else {
-			resElement.hide(0).html('').data('result', '').data('redirect', '');
-		}
-	}, 5000);
+		"" != a.data("redirect") ? window.location.href = a.data("redirect") : "success" == a.data("result") ? location.reload() : a.hide(0).html("").data("result", "").data("redirect", "")
+	}, 5E3)
 }
 
 // QR-code
 function qrcodeLoad(a) {
 	var b = new Image,
 		c = $(a).data("img");
-	$(b).on('load', function() {
+	$(b).on("load", function() {
 		$(c).attr("src", b.src);
 		$(a).attr("data-load", "yes").click()
 	});
@@ -244,32 +214,26 @@ function qrcodeLoad(a) {
 
 // Switch tab
 function switchTab(a) {
-	if ($(a).is(".current")) {
-		return !1;
-	}
+	if ($(a).is(".current")) return !1;
 	var b = $(a).data("switch").split(/\s*,\s*/),
 		c = $(a).data("obj");
 	$(c + " [data-switch]").removeClass("current");
 	$(a).addClass("current");
 	$(c + " " + b[0]).removeClass("hidden");
-	for (i = 1; i < b.length; i++) {
-		$(c + " " + b[i]).addClass("hidden")
-	}
+	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 }
 
 //Form Ajax-login
 function loginForm() {
-	if (nv_is_user == 1) {
-		return !1;
-	}
+	if (1 == nv_is_user) return !1;
 	$.ajax({
-		type: 'POST',
-		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+		type: "POST",
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=login",
 		cache: !1,
-		data: '&nv_ajax=1',
+		data: "&nv_ajax=1",
 		dataType: "html"
 	}).done(function(a) {
-		modalShow('', a)
+		modalShow("", a)
 	});
 	return !1
 }
@@ -294,13 +258,17 @@ function modalShow(a, b, callback) {
 		}
 	}
 	if (scrollTop) {
-		$("html,body").animate({ scrollTop: 0 }, 200, function() {
+		$("html,body").animate({
+			scrollTop: 0
+		}, 200, function() {
 			$("#sitemodal").modal({
 				backdrop: "static"
 			});
 		});
 		$('#sitemodal').on('hide.bs.modal', function() {
-			$("html,body").animate({ scrollTop: scrollTop }, 200);
+			$("html,body").animate({
+				scrollTop: scrollTop
+			}, 200);
 		});
 	} else {
 		$("#sitemodal").modal({
@@ -313,15 +281,13 @@ function modalShow(a, b, callback) {
 }
 
 function modalShowByObj(a, callback) {
-	var b = $(a).attr("title"),
-		c = $(a).html();
-	modalShow(b, c, callback)
+    var b = $(a).attr("title"),
+        c = $(a).html();
+    modalShow(b, c, callback)
 }
 
 function headerSearchSubmit(a) {
-	if ("n" == $(a).attr("data-click")) {
-		return !1;
-	}
+	if ("n" == $(a).attr("data-click")) return !1;
 	$(a).attr("data-click", "n");
 	var b = $(".headerSearch input"),
 		c = b.attr("maxlength"),
@@ -343,114 +309,92 @@ function showSubBreadcrumbs(a, b) {
 	$("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
 	subbreadcrumbs.toggleClass("open");
 	$(document).on("click", function() {
-		$("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), subbreadcrumbs.removeClass("open"));
-	});
+		$("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), subbreadcrumbs.removeClass("open"))
+	})
 }
 
 function nvbreadcrumbs() {
-	var b = $(".breadcrumb", breadcrumbs), e = $(".toggle", breadcrumbs), f = breadcrumbs.innerWidth() - 75, a = [], d = !1, c;
-	if (b.length && subbreadcrumbs.length && tempbreadcrumbs.length) {
-		for (b.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
-			a.push([$(this).attr("title"), $(this).attr("href")]);
-		}), i = a.length - 1; 0 <= i; i--) {
-			d || (c = 0, b.prepend('<li id="brcr_' + i + '"><a href="' + a[i][1] + '"><span>' + a[i][0] + "</span></a></li>"), b.find("li").each(function() {
-				c += $(this).outerWidth(!0);
-			}), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li><a href="' + a[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
-		}
-	}
+	var a = $(".breadcrumb", breadcrumbs),
+		b = $(".toggle", breadcrumbs),
+		c = breadcrumbs.innerWidth() - 75,
+		d = [],
+		e = !1,
+		f;
+	if (a.length && subbreadcrumbs.length && tempbreadcrumbs.length) for (a.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
+		d.push([$(this).attr("title"), $(this).attr("href")])
+	}), i = d.length - 1; 0 <= i; i--) e || (f = 0, a.prepend('<li id="brcr_' + i + '"><a href="' + d[i][1] + '"><span>' + d[i][0] + "</span></a></li>"), a.find("li").each(function() {
+		f += $(this).outerWidth(!0)
+	}), f > c && ($("#brcr_" + i, a).remove(), e = !0)), e ? (b.show(), subbreadcrumbs.append('<li><a href="' + d[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + d[i][0] + "</span></a></li>")) : b.hide()
 }
 
-function locationReplace(url) {
-	if (history.pushState) {
-		history.pushState(null, null, url);
-	}
+function locationReplace(a) {
+	history.pushState && history.pushState(null, null, a)
 }
 
 // Change Captcha
 function change_captcha(a) {
-	if ($('[data-toggle=recaptcha]').length) {
-		"undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-	} else if ($("[data-recaptcha3]").length) {
-		"undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
-	}
-
-	if ($("img.captchaImg").length) {
-		$("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-		"undefined" != typeof a && "" != a && $(a).val("");
-	}
+	$("[data-toggle=recaptcha]").length ? "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad() : $("[data-recaptcha3]").length && ("undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad());
+	$("img.captchaImg").length && ($("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10)), "undefined" != typeof a && "" != a && $(a).val(""));
 	return !1
 }
 
 function isRecaptchaCheck() {
-	if (nv_recaptcha_sitekey == '') return 0;
-	return (nv_recaptcha_ver == 2 || nv_recaptcha_ver == 3) ? nv_recaptcha_ver : 0
+	return "" == nv_recaptcha_sitekey ? 0 : 2 == nv_recaptcha_ver || 3 == nv_recaptcha_ver ? nv_recaptcha_ver : 0
 }
 
-function reCaptcha2Recreate(obj) {
-	$('[data-toggle=recaptcha]', $(obj)).each(function() {
-		var pnum = $(this).data('pnum'),
-			btnselector = $(this).data('btnselector'),
-			size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
-		var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-		$(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>');
+function reCaptcha2Recreate(a) {
+	$("[data-toggle=recaptcha]", $(a)).each(function() {
+		var b = $(this).data("pnum"),
+			c = $(this).data("btnselector"),
+			d = $(this).data("size") && "compact" == $(this).data("size") ? "compact" : "",
+			e = "recaptcha" + (new Date).getTime() + nv_randomPassword(8);
+		$(this).replaceWith('<div id="' + e + '" data-toggle="recaptcha" data-pnum="' + b + '" data-btnselector="' + c + '" data-size="' + d + '"></div>')
 	})
 }
 
 var reCaptcha2OnLoad = function() {
-	$('[data-toggle=recaptcha]').each(function() {
-		var id = $(this).attr('id'),
-			pnum = parseInt($(this).data('pnum')),
-			btnselector = $(this).data('btnselector'),
-			size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '',
-			btn = $('#' + id),
-			k = 1;
-		for (k; k <= pnum; k++) {
-			btn = btn.parent();
-		}
+	$("[data-toggle=recaptcha]").each(function() {
+		var id = $(this).attr("id"),
+			pnum = parseInt($(this).data("pnum")),
+			btnselector = $(this).data("btnselector"),
+			size = $(this).data("size") && $(this).data("size") == "compact" ? "compact" : "",
+			btn = $("#" + id),
+			k;
+		for (k = 1; k <= pnum; k++) btn = btn.parent();
 		btn = $(btnselector, btn);
-		if (btn.length) {
-			btn.prop('disabled', true);
-		}
-
-		if (typeof reCapIDs[id] === "undefined") {
-			reCapIDs[id] = grecaptcha.render(id, {
-				'sitekey': nv_recaptcha_sitekey,
-				'type': nv_recaptcha_type,
-				'size': size,
-				'callback': function() {
-					reCaptcha2Callback(id, false)
-				},
-				'expired-callback': function() {
-					reCaptcha2Callback(id, true)
-				},
-				'error-callback': function() {
-					reCaptcha2Callback(id, true)
-				}
-			})
-		} else {
-			grecaptcha.reset(reCapIDs[id])
-		}
+		if (btn.length) btn.prop("disabled", true);
+		if (typeof reCapIDs[id] === "undefined") reCapIDs[id] = grecaptcha.render(id, {
+			"sitekey": nv_recaptcha_sitekey,
+			"type": nv_recaptcha_type,
+			"size": size,
+			"callback": function() {
+				reCaptcha2Callback(id, false)
+			},
+			"expired-callback": function() {
+				reCaptcha2Callback(id, true)
+			},
+			"error-callback": function() {
+				reCaptcha2Callback(id, true)
+			}
+		});
+		else grecaptcha.reset(reCapIDs[id])
 	})
 }
 
 // reCaptcha v2 callback
 var reCaptcha2Callback = function(id, val) {
-	var btn = $('#' + id),
-		pnum = parseInt(btn.data('pnum')),
-		btnselector = btn.data('btnselector'),
-		k = 1;
-	for (k; k <= pnum; k++) {
-		btn = btn.parent();
-	}
+	var btn = $("#" + id),
+		pnum = parseInt(btn.data("pnum")),
+		btnselector = btn.data("btnselector"),
+		k;
+	for (k = 1; k <= pnum; k++) btn = btn.parent();
 	btn = $(btnselector, btn);
-	if (btn.length) {
-		btn.prop('disabled', val);
-	}
+	if (btn.length) btn.prop("disabled", val)
 }
 
 // reCaptcha v2 load
-var reCaptcha2ApiLoad = function() {
-	if (isRecaptchaCheck() == 2) {
+reCaptcha2ApiLoad = function() {
+	if (2 == isRecaptchaCheck()) {
 		var a = document.createElement("script");
 		a.type = "text/javascript";
 		a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptcha2OnLoad&render=explicit";
@@ -495,7 +439,7 @@ $(function() {
 	// Smooth scroll to top
 	$(".bttop").click(function() {
 		if ($(this).find("em").is(".fa-chevron-up")) {
-			$('html,body').animate({  scrollTo: 0 }, 200);
+			$('html,body').animate({  scrollTop: 0 }, 200);
 		} else if ($(this).find("em").is(".fa-refresh")) {
 			window.location.href = window.location.href
 		}
@@ -510,7 +454,7 @@ $(function() {
 	$(document).bind("click touchstart", function(e) {
 		tip_active && tip_autoclose && tipHide();
 		ftip_active && ftip_autoclose && ftipHide();
-		if (!$(e.target).is('.modal') && $(e.target).closest('.modal').length <= 0) {
+		if (!$(e.target).is('.modal') && $(e.target).closest('.modal').length <= 0 && $(e.target).closest('[data-toggle=winHelp]').length <= 0) {
 			winHelp && winHelpHide();
 		}
 	});
@@ -526,7 +470,7 @@ $(function() {
 		return !1
 	});
 	$("[data-toggle=winHelp]").click(function() {
-		winHelp ? winHelpHide() : winHelpShow();
+		winHelpShow();
 		return !1
 	});
 	//Search form
@@ -557,9 +501,9 @@ $(function() {
 		}
 	}, 120);
 	//FeedBack Button
-	if ($('#contactButton').length)  
+	if ($('#contactButton').length) {
 		var script = $('<script type="text/javascript">').attr("src", nv_base_siteurl + "themes/mobile_default/js/contact.js");
-		$("body").append(script);
+		$("body").append(script)
 	}
 	// Change site lang
 	$(".nv_change_site_lang").change(function() {

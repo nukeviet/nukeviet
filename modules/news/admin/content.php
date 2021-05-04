@@ -113,7 +113,7 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
 
 $currentpath = str_replace(NV_ROOTDIR . '/', '', $upload_real_dir_page);
 $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
-if (!defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== false) {
+if (!defined('NV_IS_SPADMIN') and str_contains($structure_upload, 'username')) {
     $array_currentpath = explode('/', $currentpath);
     if ($array_currentpath[2] == $username_alias) {
         $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;

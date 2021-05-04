@@ -680,17 +680,18 @@ $blockGroups = [
         'QR_CODE' => [
             [
                 'module' => 'theme',
-                'file_name' => 'global.block_language.php',
-                'title' => 'Site Languages',
+                'file_name' => 'global.QR_code.php',
+                'title' => 'QR code',
                 'template' => 'no_title',
                 'active' => '1',
                 'groups_view' => '6',
-                'all_func' => 1
+                'all_func' => 1,
+                'config' => 'a:3:{s:5:"level";s:1:"M";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}'
             ],
             [
-                'module' => 'theme',
-                'file_name' => 'global.theme_switch.php',
-                'title' => 'Theme Change',
+                'module' => 'statistics',
+                'file_name' => 'global.counter_button.php',
+                'title' => 'Online button',
                 'template' => 'no_title',
                 'active' => '1',
                 'groups_view' => '6',

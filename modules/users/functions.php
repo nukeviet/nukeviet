@@ -150,7 +150,7 @@ function opidr_login($openid_info)
         $sso_redirect = strtr($sso_redirect, '-_,', '+/=');
         $sso_redirect = openssl_decrypt($sso_redirect, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
 
-        if (!empty($sso_redirect) and !empty($sso_client) and strpos($sso_redirect, $sso_client) === 0) {
+        if (!empty($sso_redirect) and !empty($sso_client) and str_starts_with($sso_redirect, $sso_client)) {
             $openid_info['redirect'] = $sso_redirect;
             $openid_info['client'] = $sso_client;
         }

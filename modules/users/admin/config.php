@@ -376,7 +376,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     foreach ($captcha_area_list as $area) {
         $captcha_area = [
             'key' => $area,
-            'checked' => strpos($array_config['ucaptcha_area'], $area) !== false ? ' checked="checked"' : '',
+            'checked' => str_contains($array_config['ucaptcha_area'], $area) ? ' checked="checked"' : '',
             'title' => $lang_module['captcha_area_' . $area]
         ];
         $xtpl->assign('CAPTCHAAREA', $captcha_area);

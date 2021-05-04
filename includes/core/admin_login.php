@@ -413,7 +413,7 @@ if ($admin_login_success === true) {
     define('NV_IS_ADMIN', true);
 
     $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-    if (!empty($admin_login_redirect) and strpos($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification') == 0) {
+    if (!empty($admin_login_redirect) and str_starts_with($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification')) {
         $redirect = $admin_login_redirect;
         $nv_Request->unset_request('admin_login_redirect', 'session');
     }

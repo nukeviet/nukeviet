@@ -272,7 +272,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
  */
 function nv_getextension($filename)
 {
-    if (strpos($filename, '.') === false) {
+    if (!str_contains($filename, '.')) {
         return '';
     }
     $filename = basename(strtolower($filename));

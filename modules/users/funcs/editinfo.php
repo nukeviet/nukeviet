@@ -936,7 +936,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                                 $global_config['site_email']
                             ];
                             $url_group = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
-                            if (strpos($url_group, NV_MY_DOMAIN) !== 0) {
+                            if (!str_starts_with($url_group, NV_MY_DOMAIN)) {
                                 $url_group = NV_MY_DOMAIN . $url_group;
                             }
                             $message = sprintf($lang_module['group_join_queue_message'], $groups_list['all'][$gid]['title'], $user_info['full_name'], $groups_list['all'][$gid]['title'], $url_group);
