@@ -487,7 +487,7 @@ class Database extends PDO
      * {@inheritDoc}
      * @see PDO::query()
      */
-    public function query(string $statement, ?int $fetchMode = null, mixed ...$fetchModeArgs)
+    public function query($statement, $fetchMode = NULL, ...$fetchModeArgs)
     {
         if ($this->debug) {
             $this->sqls[] = $statement;
