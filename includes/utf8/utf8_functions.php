@@ -303,3 +303,46 @@ function nv_clean60($string, $num = 60, $specialchars = true)
 
     return $string;
 }
+
+if (!function_exists('str_contains')) {
+    /**
+     * str_contains()
+     * 
+     * @param mixed $haystack
+     * @param mixed $needle
+     * @return
+     */
+    function str_contains($haystack, $needle)
+    {
+        return $needle === '' or nv_strpos($haystack, $needle) !== false;
+    }
+}
+
+if (!function_exists('str_starts_with')) {
+    /**
+     * str_starts_with()
+     * 
+     * @param mixed $haystack
+     * @param mixed $needle
+     * @return
+     */
+    function str_starts_with($haystack, $needle)
+    {
+        return $needle === '' or nv_strpos($haystack, $needle) === 0;
+    }
+}
+
+if (!function_exists('str_ends_with')) {
+    /**
+     * str_ends_with()
+     * 
+     * @param mixed $haystack
+     * @param mixed $needle
+     * @return
+     */
+    function str_ends_with($haystack, $needle)
+    {
+        $length = nv_strlen($needle);
+        return $length > 0 ? nv_substr($haystack, -$length, $length) === $needle : true;
+    }
+}

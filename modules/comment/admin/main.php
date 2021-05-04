@@ -161,13 +161,13 @@ if (!empty($array_where)) {
 }
 $sql = $db->sql();
 $sth = $db->prepare($sql);
-if (strpos($sql, ':content')) {
+if (str_contains($sql, ':content')) {
     $sth->bindValue(':content', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
-if (strpos($sql, ':post_name')) {
+if (str_contains($sql, ':post_name')) {
     $sth->bindValue(':post_name', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
-if (strpos($sql, ':post_email')) {
+if (str_contains($sql, ':post_email')) {
     $sth->bindValue(':post_email', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
 $sth->execute();
@@ -178,13 +178,13 @@ $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 $db->select('cid, module, area, id, content, attach, userid, post_name, post_email, status')->order('cid DESC')->limit($per_page)->offset(($page - 1) * $per_page);
 $sql = $db->sql();
 $sth = $db->prepare($sql);
-if (strpos($sql, ':content')) {
+if (str_contains($sql, ':content')) {
     $sth->bindValue(':content', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
-if (strpos($sql, ':post_name')) {
+if (str_contains($sql, ':post_name')) {
     $sth->bindValue(':post_name', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
-if (strpos($sql, ':post_email')) {
+if (str_contains($sql, ':post_email')) {
     $sth->bindValue(':post_email', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
 $sth->execute();

@@ -48,7 +48,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     if ($row['socialbutton'] and !empty($page_config['socialbutton'])) {
-        if (strpos($page_config['socialbutton'], 'facebook') !== false) {
+        if (str_contains($page_config['socialbutton'], 'facebook')) {
             if (!empty($page_config['facebookapi'])) {
                 $meta_property['fb:app_id'] = $page_config['facebookapi'];
                 $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
@@ -56,10 +56,10 @@ function nv_page_main($row, $ab_links, $content_comment)
             $xtpl->assign('SELFURL', $client_info['selfurl']);
             $xtpl->parse('main.socialbutton.facebook');
         }
-        if (strpos($page_config['socialbutton'], 'twitter') !== false) {
+        if (str_contains($page_config['socialbutton'], 'twitter')) {
             $xtpl->parse('main.socialbutton.twitter');
         }
-        if (strpos($page_config['socialbutton'], 'zalo') !== false and !empty($global_config['zaloOfficialAccountID'])) {
+        if (str_contains($page_config['socialbutton'], 'zalo') and !empty($global_config['zaloOfficialAccountID'])) {
             $xtpl->assign('ZALO_OAID', $global_config['zaloOfficialAccountID']);
             $xtpl->parse('main.socialbutton.zalo');
         }

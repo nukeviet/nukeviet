@@ -68,7 +68,7 @@ function viewdirtree($dir, $currentpath)
         $check_allow_upload_dir = nv_check_allow_upload_dir($_dir);
 
         if (!empty($check_allow_upload_dir)) {
-            $class_li = ($_dir == $currentpath or strpos($currentpath, $_dir . '/') !== false) ? 'open collapsable' : 'expandable';
+            $class_li = ($_dir == $currentpath or str_contains($currentpath, $_dir . '/')) ? 'open collapsable' : 'expandable';
             $style_color = ($_dir == $currentpath) ? ' style="color:red"' : '';
 
             $tree = [];

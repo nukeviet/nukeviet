@@ -287,9 +287,9 @@ if (!empty($alias_department)) {
 $base_url_rewrite = nv_url_rewrite($base_url, true);
 $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
 $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-if (strpos($request_uri, $base_url_check) === 0) {
+if (str_starts_with($request_uri, $base_url_check)) {
     $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($canonicalUrl, true);
-} elseif (strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) === 0) {
+} elseif (str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
     $canonicalUrl = nv_url_rewrite($canonicalUrl, true);
 } else {
     nv_redirect_location($base_url_check);

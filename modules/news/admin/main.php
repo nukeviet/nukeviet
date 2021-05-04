@@ -609,10 +609,10 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                 $where .= ' AND ' . $where_status;
             }
         }
-        if (strpos($where, 'u.username')) {
+        if (str_contains($where, 'u.username')) {
             $from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
         }
-        if (strpos($where, 'a.pseudonym')) {
+        if (str_contains($where, 'a.pseudonym')) {
             $from .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON r.id=a.id';
         }
     }
