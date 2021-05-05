@@ -46,7 +46,10 @@ if ($tokend_confirm_password != $tokend) {
     );
     $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
-    if ($checkss == NV_CHECK_SESSION) {
+    $db_password = $db->query('SELECT password FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
+    $is_pass_valid = !empty($db_password);
+
+    if ($checkss == NV_CHECK_SESSION and $is_pass_valid) {
         if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($user_info['username'])) {
             nv_json_result(array(
                 'status' => 'error',
@@ -56,7 +59,6 @@ if ($tokend_confirm_password != $tokend) {
         }
 
         $nv_password = $nv_Request->get_title('password', 'post', '');
-        $db_password = $db->query('SELECT password FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
 
         if ($crypt->validate_password($nv_password, $db_password)) {
             $blocker->reset_trackLogin($user_info['username']);
@@ -79,7 +81,7 @@ if ($tokend_confirm_password != $tokend) {
         ));
     }
 
-    $contents = nv_theme_confirm_password();
+    $contents = nv_theme_confirm_password($is_pass_valid);
 } else {
     if (empty($nv_redirect)) {
         header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
