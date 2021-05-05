@@ -552,6 +552,17 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             nv_user_register_callback($userid);
         }
 
+        $subject = $lang_module['account_register'];
+        $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+        if (!str_starts_with($_url, NV_MY_DOMAIN)) {
+            $_url = NV_MY_DOMAIN . $_url;
+        }
+        $message = sprintf($lang_module['account_register_openid_info'], $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+        nv_sendmail([
+            $global_config['site_name'],
+            $global_config['site_email']
+        ], $reg_attribs['email'], $subject, $message);
+
         $nv_Cache->delMod($module_name);
 
         if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
