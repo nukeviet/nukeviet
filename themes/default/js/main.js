@@ -23,6 +23,7 @@ var myTimerPage = "",
 	docX = 0,
 	docY = 0,
 	brcb = $('.breadcrumbs-wrap'),
+    siteMenu = $("#menu-site-default"),
 	NVIsMobileMenu = false,
 	isRecaptcha = false,
 	reCapIDs = [];
@@ -78,21 +79,18 @@ function locationReplace(url) {
 }
 
 function checkWidthMenu() {
-	var siteMenu = $("#menu-site-default");
 	NVIsMobileMenu = (theme_responsive && "absolute" == $("#menusite").css("position"));
 	NVIsMobileMenu ? (
-		$("li.dropdown ul", siteMenu).removeClass("dropdown-menu"),
-		$("li.dropdown ul", siteMenu).addClass("dropdown-submenu"),
+		$("li.dropdown ul", siteMenu).removeClass("dropdown-menu").addClass("dropdown-submenu"),
 		$("li.dropdown a", siteMenu).addClass("dropdown-mobile"),
 		$("ul li a.dropdown-toggle", siteMenu).addClass("dropdown-mobile"),
 		$("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile")
 	) : (
-			$("li.dropdown ul", siteMenu).addClass("dropdown-menu"),
-			$("li.dropdown ul", siteMenu).removeClass("dropdown-submenu"),
+			$("li.dropdown ul", siteMenu).addClass("dropdown-menu").removeClass("dropdown-submenu"),
 			$("li.dropdown a", siteMenu).removeClass("dropdown-mobile"),
 			$("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile"),
 			$("ul li a.dropdown-toggle", siteMenu).removeClass("dropdown-mobile")
-		);
+		)
 }
 
 function checkAll(a) {
@@ -470,7 +468,7 @@ var reCaptcha3ApiLoad = function() {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
 	winResize();
 	fix_banner_center();
 
@@ -536,20 +534,20 @@ $(document).ready(function() {
 	});
 
 	// Xử lý menu bootstrap nếu có
-	if ($('#menu-site-default').length) {
-		$("#menu-site-default .dropdown .caret").on('click', function(e) {
+	if (siteMenu.length) {
+		$(".dropdown .caret", siteMenu).on('click', function(e) {
 			if (NVIsMobileMenu) {
 				e.preventDefault();
 				var cMenu = $(this).parent().parent();
 				var cMenuOpen = cMenu.is('.open');
-				$("#menu-site-default .dropdown").removeClass("open");
+				$(".dropdown", siteMenu).removeClass("open");
 				if (!cMenuOpen) {
 					cMenu.addClass("open");
 				}
 			}
 		});
 
-		$("#menu-site-default .dropdown").hover(function() {
+		$(".dropdown", siteMenu).hover(function() {
 			if (!NVIsMobileMenu) {
 				$(this).addClass("open");
 			}
@@ -559,7 +557,7 @@ $(document).ready(function() {
 			}
 		});
 
-		$("#menu-site-default a").hover(function() {
+		$("a", siteMenu).hover(function() {
 			$(this).attr("rel", $(this).attr("title"));
 			$(this).removeAttr("title")
 		}, function() {
@@ -633,16 +631,6 @@ $(document).ready(function() {
 	$("[data-location]").on("click", function() {
 		locationReplace($(this).data("location"))
 	});
-
-	//Add preload: link rel="prefetch", link rel="prerender"
-	/*
-	$(document).bind("mousemove", function(e) {
-		if (!e.target.href || e.target.href.indexOf(location.host) == -1 || e.target.hintAdded) return;
-		add_hint("prefetch", e.target.href);
-		add_hint("prerender", e.target.href);
-		e.target.hintAdded = true
-	});
-	*/
 
 	// Chọn giao diện
 	$('[data-toggle="nvchoosetheme"]').on('change', function() {

@@ -272,7 +272,7 @@
         <div id="edit_question" class="well-lg tab-pane fade {TAB_QUESTION_ACTIVE}">
             <!-- BEGIN: question_empty_pass -->
             <div class="alert alert-danger">
-                <em class="fa fa-exclamation-triangle ">&nbsp;</em> {LANG.changeemail_notvalid}
+                <em class="fa fa-exclamation-triangle ">&nbsp;</em> {LANG.changequestion_notvalid}
                 <button type="button" class="btn btn-primary btn-xs" onclick="addpass()">{LANG.add_pass}</button>
             </div>
             <!-- END: question_empty_pass -->

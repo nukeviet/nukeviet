@@ -901,7 +901,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     // Tab đổi câu hỏi bảo mật (điều kiện trường dữ liệu câu hỏi và câu trả lời đều tồn tại)
     if (in_array('question', $types) and (isset($array_field_config['question']) or isset($array_field_config['answer']))) {
         if ($pass_empty) {
-            $xtpl->parse('main.question_empty_pass');
+            $xtpl->parse('main.tab_edit_question.question_empty_pass');
         }
 
         $array_question_key = [
@@ -936,7 +936,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     // Tab chế độ an toàn
     if (in_array('safemode', $types)) {
         if ($pass_empty) {
-            $xtpl->parse('main.safemode_empty_pass');
+            $xtpl->parse('main.tab_edit_safemode.safemode_empty_pass');
         }
         $xtpl->parse('main.edit_safemode');
         $xtpl->parse('main.tab_edit_safemode');
