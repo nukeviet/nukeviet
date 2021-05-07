@@ -350,6 +350,12 @@ function add_hint(type, url) {
 	document.getElementsByTagName("head")[0].appendChild(el)
 }
 
+// Hide Cookie Notice Popup
+function cookie_notice_hide() {
+    nv_setCookie(nv_cookie_prefix + '_cn', '1', 365);
+    $(".cookie-notice").hide()
+}
+
 // Change Captcha
 function change_captcha(a) {
 	if ($('[data-toggle=recaptcha]').length) {

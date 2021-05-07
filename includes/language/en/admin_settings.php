@@ -289,3 +289,4 @@ $lang_module['admin_2step_opt'] = 'Two-step verification methods are allowed in 
 $lang_module['admin_2step_default'] = 'The default two-step verification method in administration';
 $lang_module['admin_2step_appconfig'] = 'Set up the application here';
 $lang_module['zalo_official_account_id'] = 'Zalo Official Account ID';
+$lang_module['cookie_notice_popup'] = 'Enable pop-up cookie notification when a user first visits a website';

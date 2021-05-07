@@ -336,6 +336,12 @@ function locationReplace(a) {
 	history.pushState && history.pushState(null, null, a)
 }
 
+// Hide Cookie Notice Popup
+function cookie_notice_hide() {
+    nv_setCookie(nv_cookie_prefix + '_cn', '1', 365);
+    $(".cookie-notice").hide()
+}
+
 // Change Captcha
 function change_captcha(a) {
 	$("[data-toggle=recaptcha]").length ? "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad() : $("[data-recaptcha3]").length && ("undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad());

@@ -338,6 +338,7 @@ $lang_global['design_url'] = 'URL de la page qui a le droit de conception';
 $lang_global['signin'] = 'Connexion';
 $lang_global['feedback'] = 'Réaction';
 $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés avec l\'étoile (*)';
+$lang_global['cookie_notice'] = 'Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site web. Lorsque vous utilisez notre site, vous êtes informé que nous utilisons des cookies et que vous pouvez modifier cette utilisation à tout moment. <a href="%s">En savoir plus</a>.';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
 $lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateurs %s. Pour ajouter un utilisateur, veuillez contacter l\'administrateur système';

@@ -159,6 +159,10 @@
                     <td><input type="checkbox" name="remote_api_log" value="1"{CHECKED_REMOTE_API_LOG}/></td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.cookie_notice_popup}</strong></td>
+                    <td><input type="checkbox" name="cookie_notice_popup" value="1"{CHECKED_COOKIE_NOTICE_POPUP}/></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.error_send_email}</strong></td>
                     <td><input type="email" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
                 </tr>
