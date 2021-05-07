@@ -88,8 +88,17 @@ require NV_ROOTDIR . '/includes/countries.php';
 if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
     // Cloudflare IP Geolocation
     $client_info['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'];
+} elseif (isset($_SERVER['GEOIP_COUNTRY_CODE'])) {
+    // fastcgi_param GEOIP_COUNTRY_CODE
+    $client_info['country'] = $_SERVER['GEOIP_COUNTRY_CODE'];
+} elseif (isset($_SERVER['HTTP_GEOIP_COUNTRY_CODE'])) {
+    // proxy_set_header GEOIP_COUNTRY_CODE
+    $client_info['country'] = $_SERVER['HTTP_GEOIP_COUNTRY_CODE'];
+}  elseif (isset($_SERVER['COUNTRY_CODE'])) {
+    // fastcgi_param COUNTRY_CODE
+    $client_info['country'] = $_SERVER['COUNTRY_CODE'];
 } else {
-    $client_info['country'] = isset($_SERVER['GEOIP_COUNTRY_CODE']) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie(NV_CLIENT_IP);
+    $client_info['country'] = nv_getCountry_from_cookie(NV_CLIENT_IP);
 }
 $client_info['ip'] = NV_CLIENT_IP;
 

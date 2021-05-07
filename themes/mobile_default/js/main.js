@@ -54,6 +54,7 @@ function winHelpShow() {
     winHelp && winHelpHide();
 	tip_active && tipHide();
 	ftip_active && ftipHide();
+    $("body").css({'padding-right':'17px','overflow': 'hidden'});
     $("#winHelp").find(".logo-small").html($(".logo").html());
 	$("#winHelp").show(0);
     winHelp = !0
@@ -61,7 +62,8 @@ function winHelpShow() {
 
 function winHelpHide() {
 	winHelp = !1;
-	$("#winHelp").hide()
+	$("#winHelp").hide();
+    $("body").css({'padding-right':'','overflow': ''})
 }
 
 function contentScrt() {
@@ -189,7 +191,10 @@ function ctbtLoad(a) {
 }
 
 function openID_load(a) {
-	nv_open_browse(a, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+    winHelp && winHelpHide();
+	tip_active && tipHide();
+	ftip_active && ftipHide();
+    nv_open_browse($(a).attr("href"), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
 	return !1
 }
 
