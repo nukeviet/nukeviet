@@ -188,8 +188,10 @@ function ftipShow(a, b, callback) {
 };
 
 function openID_load(a) {
-	nv_open_browse(a, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
-	return !1;
+    tip_active && tipHide();
+    ftip_active && ftipHide();
+    nv_open_browse($(a).attr("href"), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+    return !1
 }
 
 function openID_result() {

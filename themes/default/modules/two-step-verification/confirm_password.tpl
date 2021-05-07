@@ -29,6 +29,6 @@
 <!-- END: main -->
 <!-- BEGIN: pass_empty -->
 <div class="centered">
-    <div class="alert alert-danger">{CHANGE_2STEP_NOTVALID}</div>
+    <div class="alert alert-danger margin-top-lg">{CHANGE_2STEP_NOTVALID}</div>
 </div>
 <!-- END: pass_empty -->

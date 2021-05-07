@@ -1108,7 +1108,7 @@ header.header-up {
 /* WinHelp */
 
 #winHelp {
-    position:absolute;
+    position:fixed;
     top:0;
     left:0;
     bottom:0;
@@ -1607,6 +1607,20 @@ hr {
 .contactForm .panel{
     margin-bottom:0;
     color: #333
+}
+
+/*alert*/
+.nv-alert {
+    position:fixed !important;
+    top:25% !important;
+    right:0;
+    left:0;
+    width:350px !important;
+    margin:auto;
+    z-index:99999999999999 !important;
+    text-align:center !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important
 }
 
 @media (max-height:599px) and (min-width:350px) {
