@@ -351,6 +351,7 @@ $lang_global['design_url'] = 'URL của trang giữ bản quyền thiết kế';
 $lang_global['signin'] = 'Đăng nhập';
 $lang_global['feedback'] = 'Gửi phản hồi';
 $lang_global['required'] = 'Chú ý: Bạn cần khai báo tất cả các ô có đánh dấu hoa thị (*).';
+$lang_global['cookie_notice'] = 'Chúng tôi đang sử dụng cookie để cung cấp cho bạn những trải nghiệm tốt nhất trên trang web này. Bằng cách tiếp tục truy cập, bạn đồng ý với <a href="%s">Chính sách thu thập và sử dụng cookie</a> của chúng tôi.';
 
 $lang_global['on'] = 'Bật';
 $lang_global['off'] = 'Tắt';

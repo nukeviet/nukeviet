@@ -302,3 +302,4 @@ $lang_module['allow_null_origin'] = 'Cho phép truy vấn POST với Origin NULL
 $lang_module['ip_allow_null_origin'] = 'IP được truy vấn POST với Origin NULL';
 $lang_module['ip_allow_null_origin_help'] = 'Nhập mỗi IP một dòng, nếu để trống thì tất cả các IP đều được phép';
 $lang_module['zalo_official_account_id'] = 'Zalo Official Account ID';
+$lang_module['cookie_notice_popup'] = 'Bật cửa sổ thông báo sử dụng cookie khi người dùng truy cập website lần đầu';

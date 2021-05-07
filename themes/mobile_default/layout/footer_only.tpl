@@ -1,4 +1,5 @@
         <!-- BEGIN: lt_ie9 --><p class="chromeframe">{LANG.chromeframe}</p><!-- END: lt_ie9 -->
+        <!-- BEGIN: cookie_notice --><div class="cookie-notice"><div><button onclick="cookie_notice_hide();">&times;</button>{COOKIE_NOTICE}</div></div><!-- END: cookie_notice -->
         <div id="openidResult" class="nv-alert" style="display:none"></div>
         <div id="openidBt" data-result="" data-redirect=""></div>
         <!-- BEGIN: crossdomain_listener -->

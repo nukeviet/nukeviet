@@ -2280,3 +2280,40 @@ button.close {
 .sum-voting {
     margin-top:5px;
 }
+
+/*cookie-notice popup*/
+.cookie-notice {
+    position:fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 350px;
+    z-index:99999999999999;
+    background-color: #eee;
+    border: solid 1px #dedede;
+    border-radius: 4px;
+    box-shadow:0 0 4px rgba(0,0,0,0.15);
+}
+
+.cookie-notice a {
+    color: #1a3f5e;
+    text-decoration: underline;
+}
+
+.cookie-notice div {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    color: #333;
+}
+
+.cookie-notice button {
+    float: right;
+    margin-top: -20px;
+    margin-right: -20px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    font-size: 24px;
+}

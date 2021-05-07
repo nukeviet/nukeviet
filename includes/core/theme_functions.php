@@ -163,7 +163,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
         }
     }
 
-    if (empty($page_title)) {
+    if (empty($page_title) and !empty($global_config['site_description'])) {
         $page_title = $global_config['site_description'];
     }
 
