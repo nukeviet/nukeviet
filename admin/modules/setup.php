@@ -207,7 +207,7 @@ $news_modules_for_file = array_diff_key($modules_data, $modules_for_file);
 $array_modules = $array_virtual_modules = $mod_virtual = array();
 
 foreach ($modules_data as $row) {
-    if (in_array($row['basename'], $modules_exit)) {
+    if (array_key_exists($row['basename'], $modules_exit)) {
         if (!empty($array_site_cat_module) and !in_array($row['basename'], $array_site_cat_module)) {
             continue;
         }
