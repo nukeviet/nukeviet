@@ -113,13 +113,16 @@ $(document).ready(function(){
 
 		$(this).attr('disabled', 'disabled');
 
-		var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
-		var url = CFG.detect_ftp;
-
 		$.ajax({
 			type : "POST",
-			url : url,
-			data : data,
+			url : CFG.detect_ftp,
+			data : {
+                'ftp_server':ftp_server,
+                'ftp_port':ftp_port,
+                'ftp_user_name':ftp_user_name,
+                'ftp_user_pass':ftp_user_pass,
+                'tetectftp':1
+            },
 			success : function(c) {
 				c = c.split('|');
 				if (c[0] == 'OK') {
