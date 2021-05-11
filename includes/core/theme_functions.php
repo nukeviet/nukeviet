@@ -169,22 +169,25 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
 
     // Get theme
     $template = '';
-    if (defined('NV_ADMIN') and isset($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
+    if (defined('NV_ADMIN') and !empty($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
         $template = $global_config['admin_theme'];
     } elseif (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
         $template = 'admin_default';
-    } elseif (isset($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl')) {
+    } elseif (!empty($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
         $template = $global_config['module_theme'];
-    } elseif (isset($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl')) {
+    } elseif (!empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
         $template = $global_config['site_theme'];
     } else {
         $tpl_path = NV_ROOTDIR . '/themes/default/system';
         $template = 'default';
     }
+
+    empty($global_config['site_url']) && $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
+    empty($global_config['site_logo']) && $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
 
     $xtpl = new XTemplate('info_die.tpl', $tpl_path);
     $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
@@ -785,4 +788,33 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
 
     $xtpl->parse('main');
     return $xtpl->text('main');
+}
+
+// Disable site
+/**
+ * nv_disable_site()
+ * 
+ * @return void
+ */
+function nv_disable_site()
+{
+    global $global_config, $lang_global;
+
+    $disable_site_content = $lang_global['disable_site_content'];
+    $disable_site_headers = [];
+    $disable_site_code = 200;
+
+    if (file_exists(NV_ROOTDIR . "/" . NV_DATADIR . "/disable_site_content." . NV_LANG_DATA . ".txt")) {
+        $disable_site_content = file_get_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/disable_site_content." . NV_LANG_DATA . ".txt");
+    }
+
+    if (!empty($global_config['site_reopening_time']) and $global_config['site_reopening_time'] > NV_CURRENTTIME) {
+        $disable_site_content .= "<br/><br/>" . $lang_global['closed_site_reopening_time'] . ": " . nv_date('d/m/Y H:i', $global_config['site_reopening_time']);
+        $disable_site_headers = [
+            'Retry-After: ' . gmdate('D, d M Y H:i:s', $global_config['site_reopening_time']) . ' GMT'
+        ];
+        $disable_site_code = 503;
+    }
+
+    nv_info_die($lang_global['disable_site_title'], $lang_global['disable_site_title'], $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
 }

@@ -47,20 +47,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_site['admin_theme'] = '';
     }
 
-    $closed_site = $nv_Request->get_int('closed_site', 'post');
-    if (isset($closed_site_Modes[$closed_site])) {
-        $array_config_site['closed_site'] = $closed_site;
-    }
-
-    $reopening_date = $array_config_site['closed_site'] ? $nv_Request->get_title('reopening_date', 'post', '') : '';
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $reopening_date, $m)) {
-        $reopening_hour = $nv_Request->get_int('reopening_hour', 'post', 0);
-        $reopening_min = $nv_Request->get_int('reopening_min', 'post', 0);
-        $array_config_site['site_reopening_time'] = mktime($reopening_hour, $reopening_min, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $array_config_site['site_reopening_time'] = 0;
-    }
-
     $site_email = nv_substr($nv_Request->get_title('site_email', 'post', '', 1), 0, 255);
     $check = nv_check_valid_email($site_email, true);
     if ($check[0] == '') {
@@ -202,6 +188,20 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_global['remote_api_access'] = (int) $nv_Request->get_bool('remote_api_access', 'post', false);
         $array_config_global['remote_api_log'] = (int) $nv_Request->get_bool('remote_api_log', 'post', false);
         $array_config_global['cookie_notice_popup'] = (int) $nv_Request->get_bool('cookie_notice_popup', 'post', false);
+        
+        $closed_site = $nv_Request->get_int('closed_site', 'post');
+        if (isset($closed_site_Modes[$closed_site])) {
+            $array_config_global['closed_site'] = $closed_site;
+        }
+    
+        $reopening_date = $array_config_global['closed_site'] ? $nv_Request->get_title('reopening_date', 'post', '') : '';
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $reopening_date, $m)) {
+            $reopening_hour = $nv_Request->get_int('reopening_hour', 'post', 0);
+            $reopening_min = $nv_Request->get_int('reopening_min', 'post', 0);
+            $array_config_global['site_reopening_time'] = mktime($reopening_hour, $reopening_min, 0, $m[2], $m[1], $m[3]);
+        } else {
+            $array_config_global['site_reopening_time'] = 0;
+        }
 
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
@@ -291,6 +291,37 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_COOKIE_NOTICE_POPUP', ($array_config_global['cookie_notice_popup'] == 1) ? ' checked ' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
+    
+    foreach ($closed_site_Modes as $value => $name) {
+        $xtpl->assign('MODE_VALUE', $value);
+        $xtpl->assign('MODE_NAME', $name);
+        $xtpl->assign('MODE_SELECTED', ($value == $global_config['closed_site'] ? ' selected="selected"' : ''));
+        $xtpl->parse('main.closed_site.closed_site_mode');
+    }
+    
+    if (empty($global_config['closed_site'])) {
+        $xtpl->parse('main.closed_site.reopening_time');
+    }
+    
+    for ($i = 0; $i <= 23; ++$i) {
+        $xtpl->assign('RHOUR', [
+            'num' => $i,
+            'sel' => $i == $global_config['reopening_hour'] ? ' selected="selected"' : '',
+            'title' => str_pad($i, 2, 0, STR_PAD_LEFT)
+        ]);
+        $xtpl->parse('main.closed_site.reopening_hour');
+    }
+    
+    for ($i = 0; $i <= 59; ++$i) {
+        $xtpl->assign('RMIN', [
+            'num' => $i,
+            'sel' => $i == $global_config['reopening_min'] ? ' selected="selected"' : '',
+            'title' => str_pad($i, 2, 0, STR_PAD_LEFT)
+        ]);
+        $xtpl->parse('main.closed_site.reopening_min');
+    }
+
+    $xtpl->parse('main.closed_site');
 
     foreach ($site_mods as $mod => $row) {
         $xtpl->assign('MODE_VALUE', $mod);
@@ -345,35 +376,6 @@ foreach ($adminThemes as $name) {
     $xtpl->assign('THEME_NAME', $name);
     $xtpl->assign('THEME_SELECTED', ($name == $global_config['admin_theme'] ? ' selected="selected"' : ''));
     $xtpl->parse('main.admin_theme');
-}
-
-foreach ($closed_site_Modes as $value => $name) {
-    $xtpl->assign('MODE_VALUE', $value);
-    $xtpl->assign('MODE_NAME', $name);
-    $xtpl->assign('MODE_SELECTED', ($value == $global_config['closed_site'] ? ' selected="selected"' : ''));
-    $xtpl->parse('main.closed_site_mode');
-}
-
-if (empty($global_config['closed_site'])) {
-    $xtpl->parse('main.reopening_time');
-}
-
-for ($i = 0; $i <= 23; ++$i) {
-    $xtpl->assign('RHOUR', [
-        'num' => $i,
-        'sel' => $i == $global_config['reopening_hour'] ? ' selected="selected"' : '',
-        'title' => str_pad($i, 2, 0, STR_PAD_LEFT)
-    ]);
-    $xtpl->parse('main.reopening_hour');
-}
-
-for ($i = 0; $i <= 59; ++$i) {
-    $xtpl->assign('RMIN', [
-        'num' => $i,
-        'sel' => $i == $global_config['reopening_min'] ? ' selected="selected"' : '',
-        'title' => str_pad($i, 2, 0, STR_PAD_LEFT)
-    ]);
-    $xtpl->parse('main.reopening_min');
 }
 
 $xtpl->parse('main');

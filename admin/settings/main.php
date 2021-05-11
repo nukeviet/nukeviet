@@ -108,6 +108,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $sth->execute();
     }
 
+    file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/disable_site_content." . NV_LANG_DATA . ".txt", $array_config['disable_site_content'], LOCK_EX);
+
     $nv_Cache->delAll();
 
     if (empty($errormess)) {
