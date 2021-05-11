@@ -34,6 +34,9 @@ if (isset($nv_plugin_area[3])) {
     }
 }
 
+//Close the connection by setting the PDO object
+$db = null;
+
 $html_headers = $global_config['others_headers'];
 if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
     $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
@@ -79,7 +82,6 @@ foreach ($html_headers as $key => $value) {
     }
 }
 
-$db = null;
 unset($lang_global, $global_config, $client_info);
 
 echo $contents;
