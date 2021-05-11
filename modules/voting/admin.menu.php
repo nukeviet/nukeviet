@@ -13,3 +13,4 @@ if (! defined('NV_ADMIN')) {
 }
 
 $submenu['content'] = $lang_module['voting_add'];
+$submenu['setting'] = $lang_module['setting'];

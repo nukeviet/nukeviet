@@ -13,6 +13,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_voting_select')) {
+
     /**
      * nv_block_voting_select_config()
      *
@@ -51,9 +52,9 @@ if (!nv_function_exists('nv_block_voting_select')) {
     {
         global $nv_Request;
 
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['vid'] = $nv_Request->get_int('vid', 'post', 0);
         return $return;
     }
@@ -67,7 +68,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
      */
     function nv_block_voting_select($block_config, $global_array_cat)
     {
-        global $nv_Cache, $global_config, $site_mods, $module_name, $my_footer, $client_info, $lang_global;
+        global $nv_Cache, $global_config, $site_mods, $module_name, $my_footer, $client_info, $lang_global, $module_config;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -100,17 +101,17 @@ if (!nv_function_exists('nv_block_voting_select')) {
 
                 $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
 
-                $voting_array = array(
+                $voting_array = [
                     'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                     'accept' => $current_voting['acceptcm'],
-                    'active_captcha' => (int)$current_voting['active_captcha'] ? (($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $global_config['captcha_type'] : 1) : 0,
+                    'active_captcha' => (int) $current_voting['active_captcha'],
                     'errsm' => $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
                     'vid' => $current_voting['vid'],
                     'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
                     'action' => $action,
                     'langresult' => $lang_module['voting_result'],
                     'langsubmit' => $lang_module['voting_hits']
-                );
+                ];
 
                 $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
                 $xtpl->assign('VOTING', $voting_array);
@@ -121,7 +122,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                         $row['title'] = '<a target="_blank" href="' . $row['url'] . '">' . $row['title'] . '</a>';
                     }
                     $xtpl->assign('RESULT', $row);
-                    if ((int)$current_voting['acceptcm'] > 1) {
+                    if ((int) $current_voting['acceptcm'] > 1) {
                         $xtpl->parse('main.resultn');
                     } else {
                         $xtpl->parse('main.result1');
@@ -129,10 +130,12 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 if ($voting_array['active_captcha']) {
-                    if ($global_config['captcha_type'] == 3) {
+                    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
+                    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.recaptcha3');
-                    } else {
-                        if ($global_config['captcha_type'] == 2) {
+                    } elseif (($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module_name]['captcha_type'] == 'captcha') {
+                        if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
                             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                             $xtpl->parse('main.has_captcha.recaptcha');

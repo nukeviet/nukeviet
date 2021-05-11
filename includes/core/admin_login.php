@@ -44,16 +44,21 @@ $admin_pre_data = nv_admin_check_predata($nv_Request->get_string('admin_pre', 's
 $admin_login_redirect = $nv_Request->get_string('admin_login_redirect', 'session', '');
 
 $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
-$rules = [$global_config['login_number_tracking'], $global_config['login_time_tracking'], $global_config['login_time_ban']];
+$rules = [
+    $global_config['login_number_tracking'],
+    $global_config['login_time_tracking'],
+    $global_config['login_time_ban']
+];
 $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
 $error = '';
-$array_gfx_chk = [1, 5, 6, 7];
-if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
-    $global_config['gfx_chk'] = 1;
+$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk)) {
+    $gfx_chk = 1;
 } else {
-    $global_config['gfx_chk'] = 0;
+    $gfx_chk = 0;
 }
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 $admin_login_success = false;
 
 // Đăng xuất tài khoản login bước 1 để login lại
@@ -92,7 +97,11 @@ if (!empty($admin_pre_data)) {
      * - Khi chưa có phương thức nào thì cho phép kích hoạt một trong số các phương thức đó
      * - Khi đã có rồi thì chỉ được sử dụng phương thức đó để xác thực (có thể 1 hoặc nhiều tùy cấu hình)
      */
-    $cfg_2step['count_active'] = sizeof(array_filter([$cfg_2step['active_code'], $cfg_2step['active_facebook'], $cfg_2step['active_google']]));
+    $cfg_2step['count_active'] = sizeof(array_filter([
+        $cfg_2step['active_code'],
+        $cfg_2step['active_facebook'],
+        $cfg_2step['active_google']
+    ]));
     $cfg_2step['count_opts'] = sizeof($cfg_2step['opts']);
 }
 
@@ -101,10 +110,7 @@ if (!empty($admin_pre_data)) {
  * - Có thể chưa kích hoạt: Điều kiện là chưa có phương thức xác thực nào
  * - Có thể đã kích hoạt rồi
  */
-if (
-    !empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 'get', '')), $cfg_2step['opts'])
-    and ((!$cfg_2step['active_' . $opt] and $cfg_2step['count_active'] < 1) or $cfg_2step['active_' . $opt])
-) {
+if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 'get', '')), $cfg_2step['opts']) and ((!$cfg_2step['active_' . $opt] and $cfg_2step['count_active'] < 1) or $cfg_2step['active_' . $opt])) {
     if ($opt == 'code') {
         // Login bằng tài khoản user 1 step để chuyển sang trang kích hoạt
         $checknum = md5(nv_genpass(10));
@@ -186,11 +192,7 @@ if (
 }
 
 // Login bước 2 bằng mã xác nhận từ ứng dụng
-if (
-    !empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post')
-    and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION
-    and $cfg_2step['active_code'] and in_array('code', $cfg_2step['opts'])
-) {
+if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION and $cfg_2step['active_code'] and in_array('code', $cfg_2step['opts'])) {
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
 
@@ -233,7 +235,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
-    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+    if ($global_config['ucaptcha_type'] == 'recaptcha') {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } else {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -245,8 +247,8 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
-    } elseif ($global_config['gfx_chk'] and !nv_capcha_txt($nv_seccode)) {
-        $error = ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+    } elseif ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type'])) {
+        $error = ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } else {
         // Đăng nhập khi kích hoạt diễn đàn
         if (defined('NV_IS_USER_FORUM')) {
@@ -291,7 +293,10 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
             if (!defined('ADMIN_LOGIN_MODE')) {
                 define('ADMIN_LOGIN_MODE', 3);
             }
-            if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [1, 2])) {
+            if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [
+                1,
+                2
+            ])) {
                 // Điều hành chung + Tối cao được đăng nhập
                 $error = $lang_global['admin_access_denied2'];
             } elseif (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
@@ -307,10 +312,15 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
              * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
              */
             // Kiểm tra cấu hình toàn hệ thống
-            $_2step_require = in_array($global_config['two_step_verification'], [1, 3]);
+            $_2step_require = in_array($global_config['two_step_verification'], [
+                1,
+                3
+            ]);
             if (!$_2step_require) {
                 // Nếu toàn hệ thống không bắt buộc thì kiểm tra nhóm thành viên
-                $manual_groups = [3];
+                $manual_groups = [
+                    3
+                ];
                 if ($row['admin_lev'] == 1 or $row['admin_lev'] == 2) {
                     $manual_groups[] = 2;
                 }
@@ -403,7 +413,7 @@ if ($admin_login_success === true) {
     define('NV_IS_ADMIN', true);
 
     $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-    if (!empty($admin_login_redirect) and strpos($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification') == 0) {
+    if (!empty($admin_login_redirect) and str_starts_with($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification')) {
         $redirect = $admin_login_redirect;
         $nv_Request->unset_request('admin_login_redirect', 'session');
     }
@@ -430,7 +440,7 @@ $xtpl->assign('SITELANG', NV_LANG_INTERFACE);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
-$xtpl->assign('CHECK_SC', ($global_config['gfx_chk'] == 1) ? 1 : 0);
+$xtpl->assign('CHECK_SC', $gfx_chk ? 1 : 0);
 $xtpl->assign('SITEURL', $global_config['site_url']);
 $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
 $xtpl->assign('NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS);
@@ -467,19 +477,19 @@ if (empty($admin_pre_data)) {
     }
 
     // Kích hoạt mã xác nhận
-    if ($global_config['gfx_chk']) {
-        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+    if ($gfx_chk) {
+        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
             $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
 
-            if ($global_config['captcha_type'] == 2) {
+            if ($global_config['recaptcha_ver'] == 2) {
                 $xtpl->parse('main.pre_form.recaptcha.recaptcha2');
-            } elseif ($global_config['captcha_type'] == 3) {
+            } elseif ($global_config['recaptcha_ver'] == 3) {
                 $xtpl->parse('main.pre_form.recaptcha.recaptcha3');
             }
             $xtpl->parse('main.pre_form.recaptcha');
-        } else {
+        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);

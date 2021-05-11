@@ -337,6 +337,7 @@ $lang_global['design_url'] = 'Design by URL';
 $lang_global['signin'] = 'Sign In';
 $lang_global['feedback'] = 'Feedback';
 $lang_global['required'] = 'Note: You need to declare all the boxes marked with an asterisk (*).';
+$lang_global['cookie_notice'] = 'We are using cookies to give you the best experience on our website. By continuing to browse, you are agreeing to our <a href="%s">Cookie Policy</a>.';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'Off';
 $lang_global['address'] = 'Address';

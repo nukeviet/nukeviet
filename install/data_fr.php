@@ -96,9 +96,13 @@ $install_lang['cron']['cron_ref_expired_del'] = 'Supprimer les referers expirés
 $install_lang['cron']['cron_auto_check_version'] = 'Vérifier la version NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Supprimer vieille notification';
 
-$install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
-$install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';
-$install_lang['groups']['NukeViet-Programmers'] = 'NukeViet-Programmeurs';
+$install_lang['groups']['NukeViet-Fans'] = 'Fans de NukeViet';
+$install_lang['groups']['NukeViet-Admins'] = 'Admins de NukeViet';
+$install_lang['groups']['NukeViet-Programmers'] = 'Programmeurs de NukeViet';
+
+$install_lang['groups']['NukeViet-Fans-desc'] = 'Groupe de ventilateurs du système NukeViet';
+$install_lang['groups']['NukeViet-Admins-desc'] = 'Groupe d\'administrateurs pour les sites créés par le système NukeViet';
+$install_lang['groups']['NukeViet-Programmers-desc'] = 'Groupe de programmeurs de systèmes NukeViet';
 
 $install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock Company";
 $install_lang['vinades_address'] = "Номер 1706/CT2, здание Nang Huong, д. 583, ул. Nguyen Trai, г. Ханой, Вьетнам";

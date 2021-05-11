@@ -17,7 +17,11 @@ $page_title = $lang_module['setting'];
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
-
+$socialbuttons = [
+    'facebook',
+    'twitter',
+    'zalo'
+];
 $savesetting = $nv_Request->get_int('savesetting', 'post', 0);
 if (!empty($savesetting)) {
     $array_config = [];
@@ -40,7 +44,8 @@ if (!empty($savesetting)) {
     $array_config['htmlhometext'] = $nv_Request->get_int('htmlhometext', 'post', 0);
 
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
-    $array_config['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
+    $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
+    $array_config['scaptcha_type'] = $nv_Request->get_string('scaptcha_type', 'post', '');
     $array_config['show_no_image'] = $nv_Request->get_title('show_no_image', 'post', '', 0);
     $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
     $array_config['config_source'] = $nv_Request->get_int('config_source', 'post', 0);
@@ -88,6 +93,15 @@ if (!empty($savesetting)) {
     } else {
         $array_config['show_no_image'] = '';
     }
+
+    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
+    if (in_array('zalo', $array_config['socialbutton']) and empty($global_config['zaloOfficialAccountID'])) {
+        $array_config['socialbutton'] = array_diff($array_config['socialbutton'], [
+            'zalo'
+        ]);
+    }
+    $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
+
     if (empty($error)) {
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -101,7 +115,6 @@ if (!empty($savesetting)) {
         $nv_Cache->delMod($module_name);
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
-
 }
 
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -118,74 +131,89 @@ if (!empty($error)) {
     $xtpl->parse('main.error');
 }
 
-$array_tooltip_position = array(
+$array_tooltip_position = [
     'top' => $lang_module['showtooltip_position_top'],
     'bottom' => $lang_module['showtooltip_position_bottom'],
     'left' => $lang_module['showtooltip_position_left'],
     'right' => $lang_module['showtooltip_position_right']
-);
+];
 
 // Vi tri hien thi tooltip
 foreach ($array_tooltip_position as $key => $val) {
-    $xtpl->assign('TOOLTIP_P', array(
+    $xtpl->assign('TOOLTIP_P', [
         'key' => $key,
         'title' => $val,
         'selected' => $key == $module_config[$module_name]['tooltip_position'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.tooltip_position');
 }
 
 // Cach hien thi tren trang chu
 foreach ($array_viewcat_full as $key => $val) {
-    $xtpl->assign('INDEXFILE', array(
+    $xtpl->assign('INDEXFILE', [
         'key' => $key,
         'title' => $val,
         'selected' => $key == $module_config[$module_name]['indexfile'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.indexfile');
-    
-    $xtpl->assign('MOBILE_INDEXFILE', array(
+
+    $xtpl->assign('MOBILE_INDEXFILE', [
         'key' => $key,
         'title' => $val,
         'selected' => $key == $module_config[$module_name]['mobile_indexfile'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.mobile_indexfile');
 }
 
 // So bai viet tren mot trang
 for ($i = 5; $i <= 100; ++$i) {
-    $xtpl->assign('PER_PAGE', array(
+    $xtpl->assign('PER_PAGE', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $module_config[$module_name]['per_page'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.per_page');
 }
 
 // Bai viet chi hien thi link
 for ($i = 0; $i <= 50; ++$i) {
-    $xtpl->assign('ST_LINKS', array(
+    $xtpl->assign('ST_LINKS', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $module_config[$module_name]['st_links'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.st_links');
+}
+
+// Social_buttons
+$my_socialbuttons = !empty($module_config[$module_name]['socialbutton']) ? array_map('trim', explode(',', $module_config[$module_name]['socialbutton'])) : [];
+foreach ($socialbuttons as $socialbutton) {
+    $array = [
+        'key' => $socialbutton,
+        'title' => ucfirst($socialbutton),
+        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons)) ? ' checked="checked"' : ''
+    ];
+    if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
+        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
+        $array['checked'] = ' disabled="disabled"';
+    }
+    $xtpl->assign('SOCIALBUTTON', $array);
+    $xtpl->parse('main.socialbutton');
 }
 
 // Show points rating article on google
 for ($i = 0; $i <= 6; ++$i) {
-    $xtpl->assign('RATING_POINT', array(
+    $xtpl->assign('RATING_POINT', [
         'key' => $i,
         'title' => ($i == 6) ? $lang_module['no_allowed_rating'] : $i,
         "selected" => $i == $module_config[$module_name]['allowed_rating_point'] ? " selected=\"selected\"" : ""
-    ));
+    ]);
     $xtpl->parse('main.allowed_rating_point');
 }
 
 $xtpl->assign('SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '');
 $xtpl->assign('HTMLHOMETEXT', $module_config[$module_name]['htmlhometext'] ? ' checked="checked"' : '');
-$xtpl->assign('SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $module_config[$module_name]['alias_lower'] ? ' checked="checked"' : '');
 $xtpl->assign('AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '');
@@ -209,7 +237,30 @@ if (!empty($module_config[$module_name]['instant_articles_password'])) {
     $xtpl->assign('INSTANT_ARTICLES_PASSWORD', '');
 }
 
-$array_structure_image = array();
+$is_recaptcha_note = empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']);
+$xtpl->assign('IS_RECAPTCHA_NOTE', (int) $is_recaptcha_note);
+$xtpl->assign('RECAPTCHA_NOTE', $is_recaptcha_note ? sprintf($lang_module['captcha_type_recaptcha_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=2') : '');
+$captcha_types = [
+    '',
+    'captcha',
+    'recaptcha'
+];
+
+foreach ($captcha_types as $type) {
+    $captcha_type = [
+        'key' => $type,
+        'selected' => $module_config[$module_name]['scaptcha_type'] == $type ? ' selected="selected"' : '',
+        'title' => $lang_module['captcha_type_' . $type]
+    ];
+    $xtpl->assign('SCAPTCHATYPE', $captcha_type);
+    $xtpl->parse('main.scaptcha_type');
+}
+
+if (!$is_recaptcha_note or $module_config[$module_name]['scaptcha_type'] != 'recaptcha') {
+    $xtpl->parse('main.srecaptcha_note_hide');
+}
+
+$array_structure_image = [];
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_upload;
 $array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y');
 $array_structure_image['Ym'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y_m');
@@ -228,44 +279,44 @@ $structure_image_upload = isset($module_config[$module_name]['structure_upload']
 
 // Thu muc uploads
 foreach ($array_structure_image as $type => $dir) {
-    $xtpl->assign('STRUCTURE_UPLOAD', array(
+    $xtpl->assign('STRUCTURE_UPLOAD', [
         'key' => $type,
         'title' => $dir,
         'selected' => $type == $structure_image_upload ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.structure_upload');
 }
 
 for ($i = 0; $i < 2; $i++) {
-    $xtpl->assign('ORDER_ARTICLES', array(
+    $xtpl->assign('ORDER_ARTICLES', [
         'key' => $i,
         'title' => $lang_module['order_articles_' . $i],
         'selected' => $i == $module_config[$module_name]['order_articles'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.order_articles');
 }
 
 // Cau hinh hien thi nguon tin
-$array_config_source = array(
+$array_config_source = [
     0 => $lang_module['config_source_title'],
     3 => $lang_module['config_source_link'],
     1 => $lang_module['config_source_link_nofollow'],
     2 => $lang_module['config_source_logo']
-);
+];
 foreach ($array_config_source as $key => $val) {
-    $xtpl->assign('CONFIG_SOURCE', array(
+    $xtpl->assign('CONFIG_SOURCE', [
         'key' => $key,
         'title' => $val,
         'selected' => $key == $module_config[$module_name]['config_source'] ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.config_source');
 }
 
-$array_imgposition = array(
+$array_imgposition = [
     0 => $lang_module['imgposition_0'],
     1 => $lang_module['imgposition_1'],
     2 => $lang_module['imgposition_2']
-);
+];
 
 // Position images
 foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
@@ -294,16 +345,16 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
 
     $savepost = $nv_Request->get_int('savepost', 'post', 0);
     if (!empty($savepost)) {
-        $array_config = array();
-        $array_group_id = $nv_Request->get_typed_array('array_group_id', 'post', 'int', array());
-        $array_addcontent = $nv_Request->get_typed_array('array_addcontent', 'post', 'int', array());
-        $array_postcontent = $nv_Request->get_typed_array('array_postcontent', 'post', 'int', array());
-        $array_editcontent = $nv_Request->get_typed_array('array_editcontent', 'post', 'int', array());
-        $array_delcontent = $nv_Request->get_typed_array('array_delcontent', 'post', 'int', array());
-
+        $array_config = [];
+        $array_group_id = $nv_Request->get_typed_array('array_group_id', 'post', 'int', []);
+        $array_addcontent = $nv_Request->get_typed_array('array_addcontent', 'post', 'int', []);
+        $array_postcontent = $nv_Request->get_typed_array('array_postcontent', 'post', 'int', []);
+        $array_editcontent = $nv_Request->get_typed_array('array_editcontent', 'post', 'int', []);
+        $array_delcontent = $nv_Request->get_typed_array('array_delcontent', 'post', 'int', []);
 
         $array_config['frontend_edit_alias'] = $nv_Request->get_int('frontend_edit_alias', 'post', 0);
         $array_config['frontend_edit_layout'] = $nv_Request->get_int('frontend_edit_layout', 'post', 0);
+        $array_config['ucaptcha_type'] = $nv_Request->get_string('ucaptcha_type', 'post', '');
 
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -320,6 +371,10 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
                 $editcontent = (isset($array_editcontent[$group_id]) and intval($array_editcontent[$group_id]) == 1) ? 1 : 0;
                 $delcontent = (isset($array_delcontent[$group_id]) and intval($array_delcontent[$group_id]) == 1) ? 1 : 0;
                 $addcontent = ($postcontent == 1) ? 1 : $addcontent;
+                if ($group_id == 5) {
+                    $editcontent = 0;
+                    $delcontent = 0;
+                }
                 $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id);
             }
         }
@@ -329,19 +384,19 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
 
-    $array_post_data = array();
+    $array_post_data = [];
 
     $sql = "SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post ORDER BY group_id ASC";
     $result = $db->query($sql);
     while (list ($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
         if (isset($groups_list[$group_id])) {
-            $array_post_data[$group_id] = array(
+            $array_post_data[$group_id] = [
                 'group_id' => $group_id,
                 'addcontent' => $addcontent,
                 'postcontent' => $postcontent,
                 'editcontent' => $editcontent,
                 'delcontent' => $delcontent
-            );
+            ];
         } else {
             $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post WHERE group_id = ' . $group_id);
         }
@@ -360,16 +415,30 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
             $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )");
         }
 
-        $xtpl->assign('ROW', array(
+        $xtpl->assign('ROW', [
             'group_id' => $group_id,
             'group_title' => $group_title,
             'addcontent' => $addcontent ? ' checked="checked"' : '',
             'postcontent' => $postcontent ? ' checked="checked"' : '',
-            'editcontent' => $editcontent ? ' checked="checked"' : '',
-            'delcontent' => $delcontent ? ' checked="checked"' : ''
-        ));
+            'editcontent' => $group_id != 5 ? ($editcontent ? ' checked="checked"' : '') : ' disabled="disabled"',
+            'delcontent' => $group_id != 5 ? ($delcontent ? ' checked="checked"' : '') : ' disabled="disabled"'
+        ]);
 
         $xtpl->parse('main.admin_config_post.loop');
+    }
+
+    foreach ($captcha_types as $type) {
+        $captcha_type = [
+            'key' => $type,
+            'selected' => $module_config[$module_name]['ucaptcha_type'] == $type ? ' selected="selected"' : '',
+            'title' => $lang_module['captcha_type_' . $type]
+        ];
+        $xtpl->assign('CAPTCHATYPE', $captcha_type);
+        $xtpl->parse('main.admin_config_post.captcha_type');
+    }
+
+    if (!$is_recaptcha_note or $module_config[$module_name]['ucaptcha_type'] != 'recaptcha') {
+        $xtpl->parse('main.admin_config_post.recaptcha_note_hide');
     }
 
     $xtpl->parse('main.admin_config_post');

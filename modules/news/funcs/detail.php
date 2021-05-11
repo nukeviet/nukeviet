@@ -74,7 +74,7 @@ if (!empty($news_contents)) {
     $base_url_rewrite = nv_url_rewrite($base_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
     $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
+    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
         nv_redirect_location($base_url_rewrite);
     }
     $news_contents['link'] = $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
@@ -224,6 +224,20 @@ if ($news_contents['sourceid']) {
         $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
     }
 }
+
+$authors = [];
+$db->sqlreset()
+    ->select('l.alias,l.pseudonym')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
+    ->where("l.id = " . $id . " AND a.active=1");
+$result = $db->query($db->sql());
+while ($row = $result->fetch()) {
+    $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
+}
+if (!empty($news_contents['author'])) {
+    $authors[] = $news_contents['author'];
+}
+$news_contents['author'] = !empty($authors) ? implode(', ', $authors) : '';
 
 $news_contents['number_publtime'] = $news_contents['publtime'];
 $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);

@@ -193,10 +193,8 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
 
     if ($sys_info['ini_set_support']) {
         ini_set('display_startup_errors', 0);
-        ini_set('track_errors', 1);
-
+        version_compare(PHP_VERSION, '8.0.0', '<') && ini_set('track_errors', 1);
         ini_set('log_errors', 0);
-        ini_set('display_errors', 0);
         ini_set('display_errors', 0);
 
         if (strcasecmp($global_config['session_handler'], $ini_list['session.save_handler']) != 0) {

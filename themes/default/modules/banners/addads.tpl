@@ -6,7 +6,7 @@
 	<li><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
 </ul>
 <!-- END: management -->
-<div id="clinfomessage" class="alert alert-danger">
+<div id="clinfomessage" class="alert <!-- BEGIN: error -->alert-danger<!-- END: error --><!-- BEGIN: info -->alert-info<!-- END: info -->">
 	{pagetitle}{errorinfo}
 </div>
 <div id="clinfo">
@@ -59,15 +59,8 @@
         <!-- END: captcha -->
         <!-- BEGIN: recaptcha -->
         <div class="form-group">
-            <label class="col-sm-6 control-label">{N_CAPTCHA} <span class="text-danger"> (*)</span>:</label>
-            <div class="col-sm-18">
-                <div id="{RECAPTCHA_ELEMENT}"></div>
-                <script type="text/javascript">
-                nv_recaptcha_elements.push({
-                    id: "{RECAPTCHA_ELEMENT}",
-                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent())
-                })
-                </script>
+            <div class="col-sm-offset-6 col-sm-18">
+                <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="3" data-btnselector="[type=submit]"></div>
             </div>
         </div>
         <!-- END: recaptcha -->

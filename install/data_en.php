@@ -100,6 +100,10 @@ $install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
 $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';
 $install_lang['groups']['NukeViet-Programmers'] = 'NukeViet-Programmers';
 
+$install_lang['groups']['NukeViet-Fans-desc'] = 'NukeViet System Fans Group';
+$install_lang['groups']['NukeViet-Admins-desc'] = 'Group of administrators for sites built by the NukeViet system';
+$install_lang['groups']['NukeViet-Programmers-desc'] = 'NukeViet System Programmers Group';
+
 $install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock Company";
 $install_lang['vinades_address'] = "Room 1706 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam";
 $install_lang['nukeviet_description'] = 'Sharing success, connect passions';

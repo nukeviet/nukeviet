@@ -31,29 +31,32 @@ function lost_pass_sendMail($row)
 {
     global $db, $global_config, $lang_module;
 
-    $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? array(
+    $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? [
         $matches[1],
         $matches[2]
-    ) : array();
+    ] : [];
     if (!isset($passlostkey[0]) or !isset($passlostkey[1]) or (int) $passlostkey[0] < NV_CURRENTTIME) {
         $key = strtoupper(nv_genpass(10));
         $passlostkey = md5($row['userid'] . $key . $global_config['sitekey']);
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
 
-        $name = $global_config['name_show'] ? array(
+        $name = $global_config['name_show'] ? [
             $row['first_name'],
             $row['last_name']
-        ) : array(
+        ] : [
             $row['last_name'],
             $row['first_name']
-        );
+        ];
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $lang_module['lostpass_email_subject'] = sprintf($lang_module['lostpass_email_subject'], NV_MY_DOMAIN);
         $message = sprintf($lang_module['lostpass_email_content'], $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
-        if (!nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['lostpass_email_subject'], $message)) {
+        if (!nv_sendmail([
+            $global_config['site_name'],
+            $global_config['site_email']
+        ], $row['email'], $lang_module['lostpass_email_subject'], $message)) {
             nv_jsonOutput(array(
                 'status' => 'error',
                 'input' => '',
@@ -72,7 +75,11 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
-$data = array();
+$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk)) ? 1 : 0;
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
+$data = [];
 $data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
@@ -81,21 +88,27 @@ if ($checkss == $data['checkss']) {
     if ($data['step'] != 'step2' and $data['step'] != 'step3' and $data['step'] != 'step4') {
         $data['step'] = 'step1';
     }
+
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
-    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
-    } else {
+    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
-    if (empty($data['nv_seccode']) or (!empty($data['nv_seccode']) and md5($data['nv_seccode']) != $seccode and !nv_capcha_txt($data['nv_seccode']))) {
+    $check_seccode = true;
+    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+        $check_seccode = ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type']));
+    }
+
+    if (!$check_seccode) {
         $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
+            'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
             'step' => 'step1',
-            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 
@@ -216,10 +229,10 @@ if ($checkss == $data['checkss']) {
     $data['verifykey'] = strtoupper($nv_Request->get_title('verifykey', 'post', '', 1));
 
     unset($matches);
-    $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? array(
+    $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? [
         $matches[1],
         $matches[2]
-    ) : array();
+    ] : [];
 
     if (!isset($passlostkey[0]) or !isset($passlostkey[1]) or (int) $passlostkey[0] < NV_CURRENTTIME) {
         lost_pass_sendMail($row);
@@ -281,18 +294,21 @@ if ($checkss == $data['checkss']) {
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? array(
+    $name = $global_config['name_show'] ? [
         $row['first_name'],
         $row['last_name']
-    ) : array(
+    ] : [
         $row['last_name'],
         $row['first_name']
-    );
+    ];
     $name = array_filter($name);
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
-    @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $lang_module['edit_mail_subject'], $message);
+    @nv_sendmail([
+        $global_config['site_name'],
+        $global_config['site_email']
+    ], $row['email'], $lang_module['edit_mail_subject'], $message);
 
     $redirect = nv_redirect_decrypt($nv_redirect, true);
     $url = !empty($redirect) ? $redirect : nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
@@ -306,7 +322,7 @@ if ($checkss == $data['checkss']) {
 
 $mailer_mode = strtolower($global_config['mailer_mode']);
 if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config['idsite'] > 0) {
-    //Chức năng quyên mật khẩu cần điều hướng về site chính, do các site con không có smtp để gửi mail
+    // Chức năng quyên mật khẩu cần điều hướng về site chính, do các site con không có smtp để gửi mail
     nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }
 

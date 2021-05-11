@@ -82,8 +82,23 @@
                     <td><input type="checkbox" value="1" name="htmlhometext"{HTMLHOMETEXT}/></td>
                 </tr>
                 <tr>
+                    <th>{LANG.scaptcha_type}</th>
+                    <td>
+                        <select class="form-control w200" name="scaptcha_type" data-recaptcha-note="{IS_RECAPTCHA_NOTE}">
+                            <!-- BEGIN: scaptcha_type -->
+                            <option value="{SCAPTCHATYPE.key}"{SCAPTCHATYPE.selected}>{SCAPTCHATYPE.title}</option>
+                            <!-- END: scaptcha_type -->
+                        </select>
+                        <span class="srecaptcha_note"<!-- BEGIN: srecaptcha_note_hide --> style="display:none"<!-- END: srecaptcha_note_hide -->>{RECAPTCHA_NOTE}</span>
+                    </td>
+                </tr>
+                <tr>
                     <th>{LANG.socialbutton}</th>
-                    <td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
+                    <td>
+                        <!-- BEGIN: socialbutton -->
+                        <div><label><input type="checkbox" name="socialbutton[]" value="{SOCIALBUTTON.key}"{SOCIALBUTTON.checked}> {SOCIALBUTTON.title}</label></div>
+                        <!-- END: socialbutton -->
+                    </td>
                 </tr>
                 <tr>
                     <th>{LANG.allowed_rating_point}</th>
@@ -293,11 +308,20 @@ CFG.path = '{PATH}';
 CFG.currentpath = '{CURRENTPATH}';
 $(document).ready(function() {
     $("#structure_upload").select2();
+    $("[name=scaptcha_type]").on('change', function(e) {
+        var v = $(this).val(),
+            is_recaptcha_note = $(this).data('recaptcha-note');
+        if (is_recaptcha_note && v == 'recaptcha') {
+            $(".srecaptcha_note").show()
+        } else {
+            $(".srecaptcha_note").hide()
+        }
+    })
 });
 //]]>
 </script>
 <!-- BEGIN: admin_config_post -->
-<form action="{FORM_ACTION}" method="post">
+<form class="form-inline" action="{FORM_ACTION}" method="post">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.group_content}</caption>
@@ -335,6 +359,17 @@ $(document).ready(function() {
                     <th class="w400">{LANG.frontend_edit_layout}</th>
                     <td><input type="checkbox" name="frontend_edit_layout" value="1"{FRONTEND_EDIT_LAYOUT}/></td>
                 </tr>
+                <tr>
+                    <th class="w400">{LANG.captcha_type}</th>
+                    <td>
+                        <select class="form-control w200" name="ucaptcha_type" data-recaptcha-note="{IS_RECAPTCHA_NOTE}">
+                            <!-- BEGIN: captcha_type -->
+                            <option value="{CAPTCHATYPE.key}"{CAPTCHATYPE.selected}>{CAPTCHATYPE.title}</option>
+                            <!-- END: captcha_type -->
+                        </select>
+                        <span class="urecaptcha_note"<!-- BEGIN: recaptcha_note_hide --> style="display:none"<!-- END: recaptcha_note_hide -->>{RECAPTCHA_NOTE}</span>
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
@@ -344,6 +379,19 @@ $(document).ready(function() {
         </table>
    </div>
 </form>
+<script>
+$(function() {
+    $("[name=ucaptcha_type]").on('change', function(e) {
+        var v = $(this).val(),
+            is_recaptcha_note = $(this).data('recaptcha-note');
+        if (is_recaptcha_note && v == 'recaptcha') {
+            $(".urecaptcha_note").show()
+        } else {
+            $(".urecaptcha_note").hide()
+        }
+    })
+});
+</script>
 <!-- END: admin_config_post -->
 
 <!-- END: main -->

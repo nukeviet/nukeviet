@@ -127,7 +127,7 @@ function nv_check_email_reg(&$email)
         return sprintf($lang_module['email_deny_name'], $email);
     }
 
-    list($left, $right) = explode('@', $email);
+    list ($left, $right) = explode('@', $email);
     $left = preg_replace('/[\.]+/', '', $left);
     $pattern = str_split($left);
     $pattern = implode('.?', $pattern);
@@ -172,25 +172,27 @@ function reg_result($array)
 }
 
 // Cau hoi lay lai mat khau
-$data_questions = array();
+$data_questions = [];
 $sql = "SELECT qid, title FROM " . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
-    $data_questions[$row['qid']] = array(
+    $data_questions[$row['qid']] = [
         'qid' => $row['qid'],
         'title' => $row['title']
-    );
+    ];
 }
 
 // Captcha
-$gfx_chk = (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) ? 1 : 0;
+$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$gfx_chk = (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk)) ? 1 : 0;
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-$array_register = array();
+$array_register = [];
 $array_register['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-//Check email address for AJAX
+// Check email address for AJAX
 if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_register['checkss']) {
     $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
     $check_email = nv_check_email_reg($email);
@@ -206,7 +208,7 @@ if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_regis
     ));
 }
 
-//Check Login for AJAX
+// Check Login for AJAX
 if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_register['checkss']) {
     $login = $nv_Request->get_title('login', 'post', '', 1);
     $check_login = nv_check_username_reg($login);
@@ -233,7 +235,7 @@ $page_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['register'];
 
-$array_field_config = array();
+$array_field_config = [];
 $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language']);
@@ -249,7 +251,7 @@ while ($row_field = $result_field->fetch()) {
             $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
         }
         $result = $db->query($query);
-        while (list($key, $val) = $result->fetch(3)) {
+        while (list ($key, $val) = $result->fetch(3)) {
             $row_field['field_choices'][$key] = $val;
         }
     }
@@ -288,19 +290,22 @@ if ($checkss == $array_register['checkss']) {
     $custom_fields['question'] = $array_register['question'];
     $custom_fields['answer'] = $array_register['answer'];
 
-    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } else {
+    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
-    $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
+    $check_seccode = true;
+    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+        $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
+    }
 
     if (!$check_seccode) {
         reg_result(array(
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
-            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
+            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ));
     }
 
@@ -345,7 +350,9 @@ if ($checkss == $array_register['checkss']) {
     }
 
     // Kiểm tra trường dữ liệu
-    $query_field = array('userid' => 0);
+    $query_field = [
+        'userid' => 0
+    ];
     $userid = 0;
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
@@ -377,7 +384,7 @@ if ($checkss == $array_register['checkss']) {
             :idsite
         )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['username'] = $array_register['username'];
         $data_insert['md5username'] = nv_md5safe($array_register['username']);
         $data_insert['password'] = $password;
@@ -407,7 +414,10 @@ if ($checkss == $array_register['checkss']) {
 
                 $subject = $lang_module['account_active'];
                 $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
-                $send = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
+                $send = nv_sendmail([
+                    $global_config['site_name'],
+                    $global_config['site_email']
+                ], $array_register['email'], $subject, $message);
 
                 if ($send) {
                     $info = $lang_module['account_active_mess'];
@@ -420,21 +430,25 @@ if ($checkss == $array_register['checkss']) {
                         for ($i = 1; $i <= 3; $i++) {
                             if (!empty($access_admin['access_waiting'][$i])) {
                                 $admin_view_allowed = $i == 3 ? 0 : $i;
-                                nv_insert_notification($module_name, 'send_active_link_fail', ['title' => $array_register['username']], $userid, 0, 0, 1, $admin_view_allowed, 1);
+                                nv_insert_notification($module_name, 'send_active_link_fail', [
+                                    'title' => $array_register['username']
+                                ], $userid, 0, 0, 1, $admin_view_allowed, 1);
                             }
                         }
                     }
                 }
             } else {
                 $info = $lang_module['account_register_to_admin'];
-                nv_insert_notification($module_name, 'contact_new', ['title' => $array_register['username']], $userid, 0, 0, 1);
+                nv_insert_notification($module_name, 'contact_new', [
+                    'title' => $array_register['username']
+                ], $userid, 0, 0, 1);
             }
 
-            $array = array(
+            $array = [
                 'status' => 'ok',
                 'input' => '',
                 'mess' => $info
-            );
+            ];
             if (defined('SSO_REGISTER_SECRET')) {
                 $sso_redirect_users = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
                 $iv = substr(SSO_REGISTER_SECRET, 0, 16);
@@ -471,7 +485,7 @@ if ($checkss == $array_register['checkss']) {
             1, '', 0, '', '', '', " . $global_config['idsite'] . ", -1, 'SYSTEM'
         )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['username'] = $array_register['username'];
         $data_insert['md5username'] = nv_md5safe($array_register['username']);
         $data_insert['password'] = $password;
@@ -507,24 +521,27 @@ if ($checkss == $array_register['checkss']) {
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
             $subject = $lang_module['account_register'];
             $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-            if (strpos($_url, NV_MY_DOMAIN) !== 0) {
+            if (!str_starts_with($_url, NV_MY_DOMAIN)) {
                 $_url = NV_MY_DOMAIN . $_url;
             }
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
-            nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
+            nv_sendmail([
+                $global_config['site_name'],
+                $global_config['site_email']
+            ], $array_register['email'], $subject, $message);
 
             if (defined('ACCESS_ADDUS')) {
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/' . $group_id;
             } else if (!empty($global_config['auto_login_after_reg'])) {
                 // Auto login
-                $array_user = array(
+                $array_user = [
                     'userid' => $userid,
                     'username' => $array_register['username'],
                     'last_agent' => '',
                     'last_ip' => '',
                     'last_login' => 0,
                     'last_openid' => ''
-                );
+                ];
                 validUserLog($array_user, 1, '');
 
                 $nv_redirect = nv_redirect_decrypt($nv_redirect);

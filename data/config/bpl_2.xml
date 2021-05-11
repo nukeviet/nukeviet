@@ -2,15 +2,15 @@
 <plan>
   <id>2</id>
   <lang></lang>
-  <title>Quang cao trai</title>
+  <title>Left-column ad block</title>
   <form>sequential</form>
   <width>212</width>
   <height>800</height>
   <banners>
     <banners_item>
       <id>2</id>
-      <title>vinades</title>
-      <clid>0</clid>
+      <title>Left-column advertisement</title>
+      <clid>1</clid>
       <file_name>vinades.jpg</file_name>
       <imageforswf></imageforswf>
       <file_ext>jpg</file_ext>
@@ -21,7 +21,7 @@
       <file_click>http://vinades.vn</file_click>
       <target>_blank</target>
       <bannerhtml></bannerhtml>
-      <publ_time>1453191549</publ_time>
+      <publ_time>1620048540</publ_time>
       <exp_time>0</exp_time>
     </banners_item>
   </banners>

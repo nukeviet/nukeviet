@@ -13,7 +13,7 @@
 			<hr />
 			<div class="form-group">
 				<div class="col-md-8">{LANG.key_title}</div>
-	  			<div class="col-md-16"><input type="text" name="q" value="{KEY}" class="form-control" id="key"/></div>
+	  			<div class="col-md-16"><input type="text" name="q" value="{KEY}" class="form-control" id="key" maxlength="{NV_MAX_SEARCH_LENGTH}" data-minlength="{NV_MIN_SEARCH_LENGTH}"/></div>
 			</div>
 
 			<div class="form-group">
@@ -47,7 +47,10 @@
 
 			<div class="form-group form-inline">
 				<div class="col-md-8 text-right">&nbsp;</div>
-	  			<div class="col-md-16"><input type="submit" class="btn btn-primary" value="{LANG.search_title}"/></div>
+	  			<div class="col-md-16">
+                  <input type="submit" class="btn btn-primary" value="{LANG.search_title}"/> 
+                  <a href="javascript:void(0);" data-href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=seek&amp;q=" onclick="searchOnSite(event,this)">{LANG.search_on_site}</a>
+                </div>
 			</div>
 
 		</div>
@@ -55,6 +58,15 @@
 </form>
 <script type="text/javascript">
 $(document).ready(function() {
+function searchOnSite(e,th) {
+    e.preventDefault();
+    var input = $("#fsea input[name=q]"),
+        maxlength = input.attr("maxlength"),
+        minlength = input.attr("data-minlength"),
+        q = strip_tags(trim(input.val()));
+    input.parent().removeClass("has-error");
+    "" == q || q.length < minlength || q.length > maxlength ? (input.parent().addClass("has-error"), input.val(q).focus()) : window.location.href = $(th).data("href") + rawurlencode(q);
+}
 	$(".datepicker").datepicker({
 		showOn : "both",
 		dateFormat : "dd.mm.yy",

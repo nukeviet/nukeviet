@@ -22,7 +22,7 @@
                 <input type="text" class="required form-control" placeholder="{GLANG.2teplogin_totppin_placeholder}" value="" name="nv_totppin" maxlength="6" data-pattern="/^(.){6,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.2teplogin_totppin_placeholder}">
             </div>
             <div class="text-center">
-                <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
+                <a href="javascript:void(0)" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
                 <input type="text" class="required form-control" placeholder="{GLANG.2teplogin_code_placeholder}" value="" name="nv_backupcodepin" maxlength="8" data-pattern="/^(.){8,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.2teplogin_code_placeholder}">
             </div>
             <div class="text-center">
-                <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
+                <a href="javascript:void(0)" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
 
@@ -48,17 +48,8 @@
         <!-- BEGIN: recaptcha -->
         <div class="form-group loginCaptcha">
             <div class="middle text-center clearfix">
-                <!-- BEGIN: default --><div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div><!-- END: default -->
-                <!-- BEGIN: compact --><div class="nv-recaptcha-compact"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div><!-- END: compact -->
-                <script type="text/javascript">
-                nv_recaptcha_elements.push({
-                    id: "{RECAPTCHA_ELEMENT}",
-                    <!-- BEGIN: smallbtn -->size: "compact",<!-- END: smallbtn -->
-                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
-                    pnum: 4,
-                    btnselector: '[type="submit"]'
-                })
-                </script>
+                <!-- BEGIN: default --><div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div></div><!-- END: default -->
+                <!-- BEGIN: compact --><div class="nv-recaptcha-compact"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]" data-size="compact"></div></div><!-- END: compact -->
             </div>
         </div>
         <!-- END: recaptcha -->
@@ -73,7 +64,7 @@
         <!-- BEGIN: allowuserreg2_form -->
         <div class="form-group">
             <div class="text-right clearfix">
-                <a href="#" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">{GLANG.register}</a>
+                <a href="javascript:void(0)" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">{GLANG.register}</a>
             </div>
         </div>
         <!-- END: allowuserreg2_form -->

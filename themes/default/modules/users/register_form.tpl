@@ -78,7 +78,7 @@
         <!-- BEGIN: show_birthday -->
         <div class="form-group">
             <div class="input-group">
-                <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="birthday" readonly="readonly" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess=""/>
+                <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="birthday" readonly="readonly" style="background-color:#fff" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess=""/>
                 <span class="input-group-addon pointer" onclick="button_datepickerShow(this);"> <em class="fa fa-calendar"></em> </span>
             </div>
         </div>
@@ -96,16 +96,16 @@
         <div class="form-group rel">
             <div class="input-group">
                 <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="question" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
-                <span class="input-group-addon pointer" title="{LANG.select_question}" onclick="showQlist(this);"><em class="fa fa-caret-down fa-lg"></em></span>
-            </div>
-            <div class="qlist" data-show="no">
-                <ul>
-                    <!-- BEGIN: frquestion -->
-                    <li>
-                        <a href="#" onclick="addQuestion(this);">{QUESTION}</a>
-                    </li>
-                    <!-- END: frquestion -->
-                </ul>
+                <div class="input-group-btn" role="group">
+                    <button type="button" class="btn btn-default pointer dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <!-- BEGIN: frquestion -->
+                        <li><a href="javascript:void(0)" onclick="addQuestion(this);">{QUESTION}</a></li>
+                        <!-- END: frquestion -->
+                    </ul>
+                </div>
             </div>
         </div>
         <!-- END: show_question -->
@@ -133,7 +133,7 @@
         <div class="form-group">
             <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
             <div class="input-group">
-                <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess="" id="nvcf-{FIELD.field}">
+                <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" style="background-color:#fff" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess="" id="nvcf-{FIELD.field}">
                 <span class="input-group-addon pointer" onclick="button_datepickerShow(this);"> <em class="fa fa-calendar"></em> </span>
             </div>
         </div>
@@ -236,16 +236,8 @@
         <div class="form-group">
             <div class="middle text-center clearfix">
                 <div class="nv-recaptcha-default">
-                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div>
+                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
                 </div>
-                <script type="text/javascript">
-                    nv_recaptcha_elements.push({
-                        id : "{RECAPTCHA_ELEMENT}",
-                        btn : $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
-                        pnum : 4,
-                        btnselector : '[type="submit"]'
-                    })
-                </script>
             </div>
         </div>
         <!-- END: reg_recaptcha -->

@@ -101,13 +101,7 @@
         <!-- BEGIN: recaptcha -->
         <div class="form-group">
             <div class="middle text-center clearfix">
-                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
-                <script type="text/javascript">
-                nv_recaptcha_elements.push({
-                    id: "{RECAPTCHA_ELEMENT}",
-                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
-                })
-                </script>
+                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div></div>
             </div>
         </div>
         <!-- END: recaptcha -->

@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -22,24 +22,27 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
         break;
     }
 }
+
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
 if ($id > 0 and $catid > 0) {
     $sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
     $result = $db_slave->query($sql);
-    list($id, $title, $alias, $hometext) = $result->fetch(3);
+    list ($id, $title, $alias, $hometext) = $result->fetch(3);
     if ($id > 0) {
         $allowed_send = $db_slave->query('SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $id)->fetchColumn();
         if ($allowed_send == 1) {
             unset($sql, $result);
-            
+
             $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
             $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
             $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-            if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
+            if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
                 nv_redirect_location($base_url_check);
             }
             $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
             $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-            
+
             $result = '';
             $check = false;
             $checkss = $nv_Request->get_string('checkss', 'post', '');
@@ -56,14 +59,14 @@ if ($id > 0 and $catid > 0) {
             $to_mail = $content = '';
             if ($checkss == md5($id . NV_CHECK_SESSION) and $allowed_send == 1) {
                 $link = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
-                if (strpos($link, NV_MY_DOMAIN) !== 0) {
+                if (!str_starts_with($link, NV_MY_DOMAIN)) {
                     $link = NV_MY_DOMAIN . $link;
                 }
-                $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
+                $link = '<a href="' . $link . '" title="' . $title . '">' . $link . '</a>\n';
 
-                if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+                if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-                } else {
+                } elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
                     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
                 }
 
@@ -76,14 +79,17 @@ if ($id > 0 and $catid > 0) {
                 $err_name = '';
                 $message = '';
                 $success = '';
-                if ($global_config['gfx_chk'] > 0 and ! nv_capcha_txt($nv_seccode)) {
+                if (($module_config[$module_name]['scaptcha_type'] == 'captcha' or ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($nv_seccode, $module_config[$module_name]['scaptcha_type'])) {
                     $err_name = $lang_global['securitycodeincorrect'];
                 } elseif (empty($name)) {
                     $err_name = $lang_module['sendmail_err_name'];
                 } elseif (empty($err_email[0]) and empty($err_youremail[0])) {
                     $subject = $lang_module['sendmail_subject'] . $name;
                     $message .= $lang_module['sendmail_welcome'] . ' <strong>' . $global_config['site_name'] . '</strong> ' . $lang_module['sendmail_welcome1'] . '<br /><br />' . $content . '<br /><br />' . $hometext . ' <br/><br /><strong>' . $lang_module['sendmail_welcome2'] . '</strong><br />' . $link;
-                    $from = array( $name, $youremail );
+                    $from = [
+                        $name,
+                        $youremail
+                    ];
                     $check = nv_sendmail($from, $to_mail, $subject, $message);
                     if ($check) {
                         $success = $lang_module['sendmail_success'] . '<strong> ' . $to_mail . '</strong>';
@@ -91,15 +97,15 @@ if ($id > 0 and $catid > 0) {
                         $err_name = $lang_module['sendmail_success_err'];
                     }
                 }
-                $result = array(
+                $result = [
                     'err_name' => $err_name,
                     'err_email' => $err_email[0],
                     'err_yourmail' => $err_youremail[0],
                     'send_success' => $success,
                     'check' => $check
-                );
+                ];
             }
-            $sendmail = array(
+            $sendmail = [
                 'id' => $id,
                 'catid' => $catid,
                 'checkss' => md5($id . NV_CHECK_SESSION),
@@ -109,7 +115,7 @@ if ($id > 0 and $catid > 0) {
                 'content' => $content,
                 'result' => $result,
                 'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'] //
-            );
+            ];
 
             $page_title = $title;
             $contents = sendmail_themme($sendmail);

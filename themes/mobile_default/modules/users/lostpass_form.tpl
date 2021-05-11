@@ -21,15 +21,9 @@
             <div class="form-group">
                 <div class="middle text-right clearfix">
                     <div class="nv-recaptcha-default">
-                        <div id="{RECAPTCHA_ELEMENT}"></div>
+                        <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="5" data-btnselector="[type=submit]"></div>
                         <input type="hidden" value="" name="gcaptcha_session"/>
                     </div>
-                    <script type="text/javascript">
-                    nv_recaptcha_elements.push({
-                        id: "{RECAPTCHA_ELEMENT}",
-                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent().parent())
-                    })
-                    </script>
                 </div>
             </div>
             <!-- END: recaptcha -->

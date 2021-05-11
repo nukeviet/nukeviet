@@ -40,7 +40,7 @@ if ($id > 0 and $catid > 0) {
         $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
         $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
         $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-        if (strpos($request_uri, $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $request_uri, $base_url_check) !== 0) {
+        if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
             nv_redirect_location($base_url_check);
         }
         $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
@@ -72,6 +72,20 @@ if ($id > 0 and $catid > 0) {
             'author' => $content['author'],
             'source' => $sourcetext
         );
+        
+        $authors = [];
+        $db->sqlreset()
+            ->select('l.alias,l.pseudonym')
+            ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
+            ->where("l.id = " . $id . " AND a.active=1");
+        $author_result = $db->query($db->sql());
+        while ($row = $author_result->fetch()) {
+            $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
+        }
+        if (!empty($content['author'])) {
+            $authors[] = $content['author'];
+        }
+        $result['author'] = !empty($authors) ? implode(', ', $authors) : '';
 
         if (! empty($content['homeimgfile']) and $content['imgposition'] > 0) {
             $src = $alt = $note = '';

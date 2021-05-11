@@ -141,11 +141,21 @@ if ($nv_Request->isset_request('act', 'get')) {
 
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $subject = $lang_module['adduser_register'];
-            $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-            if (strpos($_url, NV_MY_DOMAIN) !== 0) {
-                $_url = NV_MY_DOMAIN . $_url;
+
+            if (!empty($row['openid_info'])) {
+                $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+                if (!str_starts_with($_url, NV_MY_DOMAIN)) {
+                    $_url = NV_MY_DOMAIN . $_url;
+                }
+                $message = sprintf($lang_module['adduser_register_openid_info'], $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+            } else {
+                $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+                if (!str_starts_with($_url, NV_MY_DOMAIN)) {
+                    $_url = NV_MY_DOMAIN . $_url;
+                }
+                $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
             }
-            $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
+
             @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         } else {
             $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);

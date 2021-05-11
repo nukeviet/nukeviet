@@ -80,7 +80,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
             if (!empty($image_demo)) {
                 break;
             }
-            if (strpos($dirname, $select_dir) === 0) {
+            if (str_starts_with($dirname, $select_dir)) {
                 $image_demo = $db->query('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file tb1, ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 WHERE tb1.did=tb2.did AND tb1.type=\'image\' AND tb1.did=' . $did . ' ORDER BY RAND() LIMIT 1')->fetch();
             }
         }

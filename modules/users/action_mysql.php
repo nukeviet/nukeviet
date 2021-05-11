@@ -78,6 +78,7 @@ if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
             }
         }
         $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . $lang . "'";
+        $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_groups_detail WHERE lang='" . $lang . "'";
         $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='siteterms_" . $lang . "'";
     }
 } elseif ($op != "setup" and $module_data != 'users') {
@@ -87,6 +88,7 @@ if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_config';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_field';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_groups';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_groups_detail';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_groups_users';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_info';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_openid';
@@ -167,10 +169,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups (
     group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-    title varchar(240) NOT NULL,
+    alias varchar(240) NOT NULL,
     email varchar(100) DEFAULT '',
-    description text,
-    content text,
     group_type tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '0:Sys, 1:approval, 2:public',
     group_color varchar(10) NOT NULL,
     group_avatar varchar(255) NOT NULL,
@@ -186,9 +186,18 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     siteus tinyint(4) unsigned NOT NULL DEFAULT '0',
     config varchar(250) DEFAULT '',
     PRIMARY KEY (group_id),
-    UNIQUE KEY ktitle (title,idsite),
+    UNIQUE KEY kalias (alias,idsite),
     KEY exp_time (exp_time)
 ) ENGINE=MyISAM AUTO_INCREMENT=10";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (
+    group_id SMALLINT(5) unsigned NOT NULL DEFAULT '0',
+    lang CHAR(2) NOT NULL DEFAULT '',
+    title VARCHAR(240) NOT NULL,
+    description VARCHAR(240) NOT NULL DEFAULT '',
+    content TEXT,
+    UNIQUE KEY group_id_lang (lang,group_id)
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups_users (
     group_id smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -295,18 +304,29 @@ $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $mod
 
 $a = 0;
 if ($module_data == 'users') {
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (1, 'Super admin', '', 'Super Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (2, 'General admin', '', 'General Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (3, 'Module admin', '', 'Module Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (4, 'Users', '', 'Users', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (7, 'New Users', '', 'New Users', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (5, 'Guest', '', 'Guest', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (6, 'All', '', 'All', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (1, 'Super-Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (2, 'General-Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (3, 'Module-Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (4, 'Users', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (7, 'New-Users', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (5, 'Guest', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+    $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (6, 'All', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
 }
 
-$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (10, 'NukeViet-Fans', '', '" . $install_lang['groups']['NukeViet-Fans'] . "', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (11, 'NukeViet-Admins', '', '" . $install_lang['groups']['NukeViet-Admins'] . "', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
-$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (12, 'NukeViet-Programmers', '', '" . $install_lang['groups']['NukeViet-Programmers'] . "', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (10, 'NukeViet-Fans', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (11, 'NukeViet-Admins', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, alias, email, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (12, 'NukeViet-Programmers', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
+
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (1, '" . $lang . "', 'Super Admin', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (2, '" . $lang . "', 'General Admin', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (3, '" . $lang . "', 'Module Admin', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (4, '" . $lang . "', 'Users', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (7, '" . $lang . "', 'New Users', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (5, '" . $lang . "', 'Guest', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (6, '" . $lang . "', 'All', '', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (10, '" . $lang . "', '" . $install_lang['groups']['NukeViet-Fans'] . "', '" . $install_lang['groups']['NukeViet-Fans-desc'] . "', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (11, '" . $lang . "', '" . $install_lang['groups']['NukeViet-Admins'] . "', '" . $install_lang['groups']['NukeViet-Admins-desc'] . "', '')";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_groups_detail (group_id, lang, title, description, content) VALUES (12, '" . $lang . "', '" . $install_lang['groups']['NukeViet-Programmers'] . "', '" . $install_lang['groups']['NukeViet-Programmers-desc'] . "', '')";
 
 if ($lang == 'vi') {
     $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_question (title, lang, weight, add_time, edit_time) VALUES('Bạn thích môn thể thao nào nhất', '" . $lang . "', 1, 1274840238, 1274840238)";

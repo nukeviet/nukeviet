@@ -25,7 +25,7 @@ $db_config['collation'] = '';//utf8_general_ci, utf8mb4_unicode_ci, utf8mb4_viet
 
 $array_data = [];
 $array_data['lang_multi'] = 0;
-$array_data['site_name'] = '';
+$array_data['site_name'] = 'NUKEVIET';
 $array_data['nv_login'] = '';
 $array_data['nv_email'] = '';
 $array_data['nv_password'] = '';
@@ -71,7 +71,6 @@ $global_config['lang_geo'] = 0;
 $global_config['site_lang'] = 'en';
 $global_config['engine_allowed'] = [];
 $global_config['site_theme'] = 'default';
-$global_config['gfx_chk'] = 3;
 
 // Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt
 $global_config['nv_unick_type'] = 4;

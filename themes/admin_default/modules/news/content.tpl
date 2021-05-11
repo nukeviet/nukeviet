@@ -223,6 +223,27 @@
 							</div>
 						</li>
 						<li>
+                            <p class="message_head">
+								<cite>{LANG.content_internal_author}:</cite>
+							</p>
+							<div class="message_body" style="overflow: auto">
+								<div class="clearfix uiTokenizer uiInlineTokenizer">
+									<div id="internal_authors" class="tokenarea">
+										<!-- BEGIN: internal_authors -->
+										<span class="uiToken removable" title="{INTERNAL_AUTHORS.pseudonym}" ondblclick="$(this).remove();"> {INTERNAL_AUTHORS.pseudonym} <input type="hidden" autocomplete="off" name="internal_authors[]" value="{INTERNAL_AUTHORS.id}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+										<!-- END: internal_authors -->
+									</div>
+									<div class="uiTypeahead">
+										<div class="wrap">
+											<input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+											<div class="innerWrap">
+												<input id="author-search" type="text" placeholder="{LANG.input_pseudonym}" class="form-control textInput" style="width: 100%;" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+                            
 							<p class="message_head">
 								<cite>{LANG.content_author}:</cite>
 							</p>

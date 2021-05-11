@@ -1,32 +1,24 @@
 <!-- BEGIN: main -->
-<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock_{BLOCKID}" data-click="y" data-callback="recaptchareset"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
+<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock_{BLOCKID}" data-click="y" data-callback="loginFormLoad"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
 <!-- START FORFOOTER -->
 <div id="guestBlock_{BLOCKID}" class="hidden">
-    <div class="guestBlock">
-        <h3>
-            <a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a>
-            <!-- BEGIN: allowuserreg2 --><a href="{USER_REG}" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a><!-- END: allowuserreg2 -->
-        </h3>
-        <div class="log-area">
-            {FILE "login_form.tpl"}
-            <div class="text-center margin-top-lg" id="other_form">
-                <a href="{USER_LOSTPASS}">{GLANG.lostpass}?</a>
-            </div>
-        </div>
-        <!-- BEGIN: allowuserreg -->
-        <div class="reg-area hidden">
-            {FILE "register_form.tpl"}
-        </div>
-        <!-- END: allowuserreg -->
-    </div>
+    <div class="log-area" style="margin:-15px"></div>
 </div>
+<script>
+function loginFormLoad() {
+    $.ajax({
+        type: 'POST',
+        url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+        cache: !1,
+        data: '&nv_ajax=1',
+        dataType: "html"
+    }).done(function(a) {
+        $("#tip .log-area").html(a);
+        change_captcha()
+    });
+}
+</script>
 <!-- END FORFOOTER -->
-<!-- BEGIN: datepicker -->
-<link type="text/css" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<!-- END: datepicker -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: main -->
 
 <!-- BEGIN: signed -->
@@ -38,7 +30,7 @@
         <h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
         <div class="row">
             <div class="col-xs-8 text-center">
-                <a title="{LANG.edituser}" href="#" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+                <a title="{LANG.edituser}" href="javascript:void(0)" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
                 <!-- BEGIN: crossdomain_listener -->
                 <script type="text/javascript">
                 function SSOReciver(event) {

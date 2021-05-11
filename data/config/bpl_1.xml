@@ -2,15 +2,15 @@
 <plan>
   <id>1</id>
   <lang></lang>
-  <title>Quang cao giua trang</title>
+  <title>Mid-page ad block</title>
   <form>sequential</form>
   <width>575</width>
   <height>72</height>
   <banners>
     <banners_item>
-      <id>3</id>
-      <title>Quang cao giua trang</title>
-      <clid>0</clid>
+      <id>1</id>
+      <title>Mid-page advertisement</title>
+      <clid>1</clid>
       <file_name>webnhanh.jpg</file_name>
       <imageforswf></imageforswf>
       <file_ext>png</file_ext>
@@ -21,7 +21,7 @@
       <file_click>http://webnhanh.vn</file_click>
       <target>_blank</target>
       <bannerhtml></bannerhtml>
-      <publ_time>1453191549</publ_time>
+      <publ_time>1620048540</publ_time>
       <exp_time>0</exp_time>
     </banners_item>
   </banners>

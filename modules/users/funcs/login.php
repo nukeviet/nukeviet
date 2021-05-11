@@ -31,7 +31,9 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
-$gfx_chk = (in_array($global_config['gfx_chk'], [2, 4, 5, 7])) ? 1 : 0;
+$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk)) ? 1 : 0;
+$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 /**
  * login_result()
@@ -224,7 +226,10 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         } else {
             $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id;
             $row = $db->query($query)->fetch();
-            validUserLog($row, 1, ['id' => $opid, 'provider' => $attribs['server']], $current_mode);
+            validUserLog($row, 1, [
+                'id' => $opid,
+                'provider' => $attribs['server']
+            ], $current_mode);
         }
 
         opidr_login([
@@ -264,13 +269,16 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                 $password = $nv_Request->get_string('password', 'post', '');
 
-                if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+                if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-                } else {
+                } elseif ($global_config['ucaptcha_type'] == 'captcha') {
                     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
                 }
 
-                $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
+                $check_seccode = true;
+                if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+                    $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
+                }
 
                 $nv_Request->unset_request('openid_attribs', 'session');
                 if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php')) {
@@ -315,7 +323,10 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
-            validUserLog($nv_row, 1, ['id' => $opid, 'provider' => $attribs['server']], $current_mode);
+            validUserLog($nv_row, 1, [
+                'id' => $opid,
+                'provider' => $attribs['server']
+            ], $current_mode);
 
             opidr_login([
                 'status' => 'success',
@@ -334,13 +345,16 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if ($nv_Request->isset_request('nv_login', 'post')) {
         $nv_username = $nv_Request->get_title('login', 'post', '', 1);
         $nv_password = $nv_Request->get_title('password', 'post', '');
-        if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        } else {
+        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
             $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
         }
 
-        $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
+        $check_seccode = true;
+        if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+            $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
+        }
 
         if (!$check_seccode) {
             opidr_login([
@@ -538,12 +552,26 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             nv_user_register_callback($userid);
         }
 
+        $subject = $lang_module['account_register'];
+        $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+        if (!str_starts_with($_url, NV_MY_DOMAIN)) {
+            $_url = NV_MY_DOMAIN . $_url;
+        }
+        $message = sprintf($lang_module['account_register_openid_info'], $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+        nv_sendmail([
+            $global_config['site_name'],
+            $global_config['site_email']
+        ], $reg_attribs['email'], $subject, $message);
+
         $nv_Cache->delMod($module_name);
 
         if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
-            validUserLog($row, 1, ['id' => $reg_attribs['opid'], 'provider' => $reg_attribs['server']], $current_mode);
+            validUserLog($row, 1, [
+                'id' => $reg_attribs['opid'],
+                'provider' => $reg_attribs['server']
+            ], $current_mode);
             opidr_login([
                 'status' => 'success',
                 'mess' => $lang_module['login_ok']
@@ -634,20 +662,24 @@ $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
+
+    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } else {
+    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
+    $check_seccode = true;
     $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
-    $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
+    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+        $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
+    }
 
     if (!$check_seccode) {
         signin_result([
             'status' => 'error',
-            'input' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? '' : 'nv_seccode',
-            'mess' => ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
+            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
 

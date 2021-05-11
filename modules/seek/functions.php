@@ -8,7 +8,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
@@ -23,16 +23,16 @@ function LoadModulesSearch()
 {
     global $site_mods;
 
-    $arrayfolder = array();
+    $arrayfolder = [];
     foreach ($site_mods as $mod => $arr_mod) {
         if (file_exists(NV_ROOTDIR . '/modules/' . $arr_mod['module_file'] . '/search.php')) {
-            $arrayfolder[$mod] = array(
+            $arrayfolder[$mod] = [
                 'module_name' => $mod,
                 'module_file' => $arr_mod['module_file'],
                 'module_data' => $arr_mod['module_data'],
                 'custom_title' => $arr_mod['custom_title'],
-                'adv_search' => isset($arr_mod['funcs']['search']) ? true : false,
-            );
+                'adv_search' => isset($arr_mod['funcs']['search']) ? true : false
+            ];
         }
     }
     return $arrayfolder;
@@ -74,18 +74,23 @@ function BoldKeywordInStr($str, $keyword, $logic)
     $str = nv_nl2br($str, ' ');
     $str = nv_unhtmlspecialchars(strip_tags(trim($str)));
 
-    $pos = false;
-
     if ($logic == 'AND') {
-        $array_keyword = array( $keyword, nv_EncString($keyword) );
+        $array_keyword = [
+            $keyword,
+            nv_EncString($keyword)
+        ];
     } else {
         $keyword .= ' ' . nv_EncString($keyword);
         $array_keyword = explode(' ', $keyword);
-        $array_keyword = array_unique($array_keyword);
     }
+    $array_keyword = array_unique($array_keyword);
 
+    $pos = false;
+    $pattern = [];
     foreach ($array_keyword as $k) {
-        if (preg_match('/^(.*?)' . nv_preg_quote($k) . '/uis', $str, $matches)) {
+        $_k = function_exists('searchPatternByLang') ? searchPatternByLang(nv_preg_quote($k)) : nv_preg_quote($k);
+        $pattern[] = $_k;
+        if (!$pos and preg_match('/^(.*?)' . $_k . '/uis', $str, $matches)) {
             $strlen = nv_strlen($str);
             $kstrlen = nv_strlen($k);
             $residual = $strlen - 300;
@@ -107,21 +112,16 @@ function BoldKeywordInStr($str, $keyword, $logic)
             }
 
             $pos = true;
-            break;
         }
     }
 
-    if (! $pos) {
+    if (!$pos) {
         return nv_clean60($str, 300);
     }
 
-    $pattern = array();
-    foreach ($array_keyword as $k) {
-        $pattern[] = '/(' . nv_preg_quote($k) . ')/uis';
-    }
+    $pattern = '/(' . implode('|', $pattern) . ')/uis';
 
-    $str = preg_replace($pattern, '{\\1}', $str);
-    $str = str_replace(array( '{', '}' ), array( '<span class="keyword">', '</span>' ), $str);
+    $str = preg_replace($pattern, '<span class="keyword">$1</span>', $str);
 
     return $str;
 }
@@ -136,10 +136,21 @@ function BoldKeywordInStr($str, $keyword, $logic)
  */
 function nv_like_logic($field, $dbkeyword, $logic)
 {
-    if ($logic == 'AND') {
-        $return = $field . " LIKE '%" . $dbkeyword . "%'";
+    global $db;
+
+    if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
+        $dbkeyword = searchKeywordforSQL($dbkeyword);
+        if ($logic == 'AND') {
+            $return = $field . " REGEXP '" . $dbkeyword . "'";
+        } else {
+            $return = $field . " REGEXP '" . str_replace(" ", "' OR " . $field . " REGEXP '", $dbkeyword) . "'";
+        }
     } else {
-        $return = $field . " LIKE '%" . str_replace(" ", "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
+        if ($logic == 'AND') {
+            $return = $field . " LIKE '%" . $dbkeyword . "%'";
+        } else {
+            $return = $field . " LIKE '%" . str_replace(" ", "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
+        }
     }
     return $return;
 }

@@ -74,7 +74,7 @@
                     <th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
                     <th class="text-center"><a href="{base_url_name}">{LANG.name}</a></th>
                     <th class="text-center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
-                    <th>{LANG.content_admin}</th>
+                    <th>{LANG.author}</th>
                     <th>{LANG.status}</th>
                     <th class="text-center"><a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a></th>
                     <th class="text-center"><a href="{base_url_hitscm}"><em title="{LANG.numcomments}" class="fa fa-comment-o">&nbsp;</em></a></th>
@@ -103,7 +103,7 @@
                         <a target="_blank" href="{ROW.link}" id="id_{ROW.id}" title="{ROW.title}">{ROW.title_clean}</a>
                     </td>
                     <td>{ROW.publtime}</td>
-                    <td>{ROW.username}</td>
+                    <td>{ROW.author}</td>
                     <td title="{ROW.status}">{ROW.status}</td>
                     <td class="text-center">{ROW.hitstotal}</td>
                     <td class="text-center">{ROW.hitscm}</td>

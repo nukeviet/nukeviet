@@ -288,14 +288,8 @@ ul.list-items > li:last-child {
 
 /*Center DIV*/
 .centered {
-   text-align: center;
-   font-size: 0
-}
-.centered > div {
-   float: none;
-   display: inline-block;
-   text-align: left;
-   font-size: 14px;
+   display: flex;
+   justify-content: center;
 }
 
 /*nv-info*/
@@ -1396,20 +1390,6 @@ a.btn {
     background-size: contain;
 }
 
-.qlist {
-    position:absolute;
-    left:0;
-    bottom:35px;
-    width:100%;
-    background-color:#d9e8f4;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #a6c8e6;
-    padding:10px;
-    z-index:9998;
-    display:none;
-}
-
 /* block counter */
 .counter.display-table{
     width:100%
@@ -1417,32 +1397,6 @@ a.btn {
 
 .counter span + span{
     text-align: right;
-}
-
-/* guestBlock */
-
-.guestBlock {
-    width:350px;
-}
-
-.guestBlock > h3 {
-    border-bottom-width :1px;
-    border-bottom-style: solid;
-    border-bottom-color: #cccccc;
-}
-
-.guestBlock > h3 > a {
-    display:inline-block;
-    line-height:34px;
-    padding:0 17px;
-    background-color:#e5e5e5;
-    border-top-right-radius:5px;
-    border-top-left-radius:5px;
-}
-
-.guestBlock > h3 > a:hover,
-.guestBlock > h3 > a.current {
-    background-color:#cccccc;
 }
 
 .socialList,
@@ -2325,4 +2279,41 @@ button.close {
 }
 .sum-voting {
     margin-top:5px;
+}
+
+/*cookie-notice popup*/
+.cookie-notice {
+    position:fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 350px;
+    z-index:99999999999999;
+    background-color: #eee;
+    border: solid 1px #dedede;
+    border-radius: 4px;
+    box-shadow:0 0 4px rgba(0,0,0,0.15);
+}
+
+.cookie-notice a {
+    color: #1a3f5e;
+    text-decoration: underline;
+}
+
+.cookie-notice div {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    color: #333;
+}
+
+.cookie-notice button {
+    float: right;
+    margin-top: -20px;
+    margin-right: -20px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    font-size: 24px;
 }

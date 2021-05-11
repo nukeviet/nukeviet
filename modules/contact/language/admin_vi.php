@@ -114,3 +114,8 @@ $lang_module['mark_as_processed'] = 'Đánh dấu đã xử lý';
 $lang_module['mark_as_unprocess'] = 'Đánh dấu chưa xử lý';
 $lang_module['tt3_row_title'] = 'Đã xử lý';
 $lang_module['process'] = 'Đã xử lý';
+$lang_module['captcha_type'] = 'Kiểu captcha khi người dùng gửi liên hệ';
+$lang_module['captcha_type_'] = 'Không sử dụng';
+$lang_module['captcha_type_captcha'] = 'Captcha hình';
+$lang_module['captcha_type_recaptcha'] = 'reCaptcha';
+$lang_module['captcha_type_recaptcha_note'] = 'Captcha sẽ không chạy cho đến khi bạn <a href="%s">định cấu hình reCaptcha</a>';

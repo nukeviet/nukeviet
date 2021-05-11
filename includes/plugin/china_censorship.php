@@ -19,9 +19,9 @@ if (!defined('NV_MAINFILE')) {
 
 if ($client_info['country'] == 'CN' and defined('NV_SYSTEM')) {
     // Không dùng reCAPTCHA nếu truy cập từ trung quốc. Khi đó dùng: Cool php captcha
-    if ($global_config['captcha_type'] == 2 or $global_config['captcha_type'] == 3) {
-        $global_config['captcha_type'] = 0;
-    }
+    $global_config['recaptcha_sitekey'] = '';
+    $global_config['recaptcha_secretkey'] = '';
+    $global_config['recaptcha_ver'] = 0;
 
     // Không load google Analytics khi truy cập từ trung quốc.
     $global_config['googleAnalyticsID'] = '';
