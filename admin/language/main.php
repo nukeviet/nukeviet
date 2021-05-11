@@ -37,7 +37,7 @@ if ($_lang_multi == $_md5_lang_multi) {
     nv_save_file_config_global();
 
     $array_config_rewrite = array(
-        'rewrite_enable' => $array_config_global['rewrite_enable'],
+        'rewrite_enable' => $global_config['rewrite_enable'],
         'rewrite_optional' => $array_config_global['rewrite_optional'],
         'rewrite_endurl' => $global_config['rewrite_endurl'],
         'rewrite_exturl' => $global_config['rewrite_exturl'],
@@ -360,6 +360,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($row['lang']);
             $db->query($sql);
         }
+
+        nv_deletefile(NV_ROOTDIR . "/" . NV_DATADIR . "/disable_site_content." . $deletekeylang . ".txt");
 
         $nv_Cache->delAll();
 

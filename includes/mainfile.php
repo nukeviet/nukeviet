@@ -162,8 +162,6 @@ require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
-    $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
-    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
 // Ket noi Cache
@@ -265,7 +263,11 @@ if (isset($nv_plugin_area[1])) {
 // Bat dau phien lam viec cua Database
 $db = $db_slave = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
-    trigger_error('Sorry! Could not connect to data server', 256);
+    if (!empty($global_config['closed_site'])) {
+        nv_disable_site();
+    } else {
+        trigger_error('Sorry! Could not connect to data server', 256);
+    }
 }
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
@@ -387,20 +389,11 @@ if (!defined('NV_IS_ADMIN')) {
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     // Dinh chi neu khong la admin toi cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {
-        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
+        nv_disable_site();
     }
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site'])) {
-        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        $http_headers = [];
-        if ($global_config['site_reopening_time'] > NV_CURRENTTIME) {
-            $disable_site_content .= "<br/><br/>" . $lang_module['closed_site_reopening_time'] . ": " . nv_date('d/m/Y H:i', $global_config['site_reopening_time']);
-            $http_headers = [
-                'Retry-After: ' . gmdate('D, d M Y H:i:s', $global_config['site_reopening_time']) . ' GMT'
-            ];
-        }
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 503, '', '', '', '', $http_headers);
+        nv_disable_site();
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
         nv_redirect_location(NV_BASE_SITEURL);
     }

@@ -1061,6 +1061,7 @@ foreach($blocks_weight as $block_weight) {
 
 $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
 $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");
+file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/disable_site_content." . $lang_data . ".txt", $install_lang['disable_site_content'], LOCK_EX);
 
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
 while (list($id, $run_func) = $result->fetch(3)) {
