@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/chart/Chart.bundle.min.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/chart/chart.min.js"></script>
 
 <!-- BEGIN: hour -->
 <div class="panel panel-default">
@@ -19,7 +19,7 @@ var config_hour = {
     data: {
         labels: [{DATA_LABEL}],
         datasets: [{
-            label: "",
+            label: "{CTS.caption}",
             backgroundColor: 'rgb(54, 162, 235)',
             borderColor: 'rgb(54, 162, 235)',
             data: [{DATA_VALUE}],
@@ -93,7 +93,7 @@ var config_day_k = {
     data: {
         labels: [{DATA_LABEL}],
         datasets: [{
-            label: "",
+            label: "{CTS.caption}",
             backgroundColor: [{DATA_BGCOLOR}],
             data: [{DATA_VALUE}]
         }]
@@ -142,7 +142,7 @@ var config_day_m = {
     data: {
         labels: [{DATA_LABEL}],
         datasets: [{
-            label: "",
+            label: "{CTS.caption}",
             backgroundColor: 'rgb(54, 162, 235)',
             borderColor: 'rgb(54, 162, 235)',
             data: [{DATA_VALUE}],
@@ -216,7 +216,7 @@ var config_month = {
     data: {
         labels: [{DATA_LABEL}],
         datasets: [{
-            label: "",
+            label: "{CTS.caption}",
             backgroundColor: 'rgb(54, 162, 235)',
             borderColor: 'rgb(54, 162, 235)',
             data: [{DATA_VALUE}],
@@ -290,7 +290,7 @@ var config_year = {
     data: {
         labels: [{DATA_LABEL}],
         datasets: [{
-            label: "",
+            label: "{CTS.caption}",
             backgroundColor: 'rgb(54, 162, 235)',
             borderColor: 'rgb(54, 162, 235)',
             data: [{DATA_VALUE}],
