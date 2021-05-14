@@ -20,8 +20,184 @@ $smtp_encrypted_array[2] = 'TLS';
 
 $array_config = [];
 $errormess = '';
+$cert_list = nv_scandir(NV_ROOTDIR . '/' . NV_CERTS_DIR, '/^(.+)[\_]{2}(.+)\.crt/', 1);
+$cert_list = array_map(function($email) {
+    return substr(str_replace('__', '@', $email),0,-4);
+}, $cert_list);
+
+// Doc chung chi
+if ($nv_Request->isset_request('smimeread, email', 'post')) {
+    $email = $nv_Request->get_title('email', 'post', '');
+    
+    if (!in_array($email, $cert_list)) {
+        exit(0);
+    }
+
+    $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('EMAIL', $email);
+
+    $email_name = str_replace("@", "__", $email);
+    $cert_crt = file_get_contents(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt');
+    $certPriv   = openssl_x509_parse(openssl_x509_read($cert_crt));
+    $certPriv['validFrom_format'] = date('d/m/Y', $certPriv['validFrom_time_t']);
+    $certPriv['validTo_format'] = date('d/m/Y', $certPriv['validTo_time_t']);
+    $certPriv['purposes_list'] = [];
+    foreach($certPriv['purposes'] as $purpose) {
+        if ($purpose[0]) {
+            $val = $purpose[2];
+            if ($purpose[1]) {
+                $val .= ' (CA)';
+            }
+            $certPriv['purposes_list'][] = $val;
+        }
+    }
+    $certPriv['purposes_list'] = !empty($certPriv['purposes_list']) ? implode(', ', $certPriv['purposes_list']) : '';
+    
+    $xtpl->assign('SMIMEREAD', $certPriv);
+    $xtpl->parse('smimeread');
+    $contents = $xtpl->text('smimeread');
+    include NV_ROOTDIR . '/includes/header.php';
+    echo $contents;
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
+// Xoa chung chi
+if ($nv_Request->isset_request('smimedel, email', 'post')) {
+    $email = $nv_Request->get_title('email', 'post', '');
+    if (!in_array($email, $cert_list)) {
+        exit(0);
+    }
+    $email_name = str_replace("@", "__", $email);
+    if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt')) {
+        nv_deletefile(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt');
+    }
+    if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key')) {
+        nv_deletefile(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key');
+    }
+    if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem')) {
+        nv_deletefile(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem');
+    }
+    echo "OK";
+    exit(0);
+}
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+// Them chung chi
+if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $passphrase = $nv_Request->get_string('passphrase', 'post', '');
+    $upload = new NukeViet\Files\Upload(['certificate'], $global_config['forbid_extensions'], $global_config['forbid_mimes']);
+    $upload->setLanguage($lang_global);
+    $upload_info = $upload->save_file($_FILES['pkcs12'], NV_ROOTDIR . '/' . NV_CERTS_DIR, true);
+
+    if (is_file($_FILES['pkcs12']['tmp_name'])) {
+        @unlink($_FILES['pkcs12']['tmp_name']);
+    }
+
+    if (!empty($upload_info['error'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $upload_info['error']
+        ]);
+    }
+
+    if (!in_array($upload_info['ext'], ['pfx', 'p12'])) {
+        @unlink($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['smime_pkcs12_ext_error']
+        ]);
+    }
+
+    $results = [];
+    if (!openssl_pkcs12_read(file_get_contents($upload_info['name']), $results, $passphrase) or empty($results['cert']) or empty($results['pkey'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['smime_pkcs12_cannot_be_read'] . ' (' . openssl_error_string() . ')'
+        ]);
+    }
+
+    $certPriv   = openssl_x509_parse(openssl_x509_read($results['cert']));
+    $smimesign = false;
+    foreach($certPriv['purposes'] as $purpose) {
+        if ($purpose[0] == '1' and $purpose[2] == 'smimesign') {
+            $smimesign = true;
+            break;
+        }
+    }
+    if (!$smimesign) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['smime_pkcs12_smimesign_error']
+        ]);
+    }
+
+    $email = trim($certPriv['subject']['CN']);
+    $email_name = str_replace("@", "__", $email);
+    $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
+    $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
+    $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
+
+    $overwrite = $nv_Request->get_int('overwrite', 'post', 0);
+    if (file_exists($cert_crt) and !$overwrite) {
+        @unlink($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'overwrite',
+            'mess' => $lang_module['smime_pkcs12_overwrite']
+        ]);
+    }
+    
+    file_put_contents($cert_key, $results['pkey'], LOCK_EX);
+    file_put_contents($cert_crt, $results['cert'], LOCK_EX);
+    if (!empty($results['extracerts'])) {
+        $extracerts = implode('',$results['extracerts']);
+        file_put_contents($certchain_pem, $extracerts, LOCK_EX);
+    }
+
+    @unlink($upload_info['name']);
+
+    nv_jsonOutput([
+            'status' => 'ok',
+            'mess' => 'OK'
+    ]);
+}
+
+// Download chung chi
+if ($nv_Request->isset_request('smimedownload, email, passphrase', 'get')) {
+    $email = $nv_Request->get_title('email', 'get', '');
+    if (!in_array($email, $cert_list)) {
+        exit(0);
+    }
+
+    $passphrase = $nv_Request->get_string('passphrase', 'get', '');
+    if (empty($passphrase)) {
+        exit(0);
+    }
+
+    $email_name = str_replace("@", "__", $email);
+    $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
+    $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
+    $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
+    
+    $cerificate_out = null;
+    $signed_csr = file_get_contents($cert_crt);
+    $private_key_resource = file_get_contents($cert_key);
+    $pemChain = file_get_contents($certchain_pem);
+    $matches = [];
+    preg_match_all('/(-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----)/si', $pemChain, $matches);
+    $args = ['extracerts' => $matches[0]];
+    openssl_pkcs12_export($signed_csr, $cerificate_out, $private_key_resource, $passphrase, $args);
+    $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $email_name . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.pfx';
+    file_put_contents($file_src, $cerificate_out, LOCK_EX);
+    $filesize = @filesize($file_src);
+    if ($filesize > 0) {
+        $download = new NukeViet\Files\Download($file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, $email_name . '.pfx');
+        $download->download_file();
+        exit();
+    }
+    exit(0);
+}
+
 if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', '', 1), 0, 255);
     $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', '', 1), 0, 255);
@@ -113,6 +289,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+$xtpl->assign('SMIMEADD_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('OP', $op);
 
 if (empty($global_config['idsite'])) {
@@ -161,6 +338,17 @@ if (!empty($global_config['smtp_host']) and !empty($global_config['smtp_username
 
     $xtpl->parse('smtp.testmail');
     $xtpl->parse('smtp.testmail1');
+}
+
+if (!empty($cert_list)) {
+    foreach($cert_list as $num => $email) {
+        $xtpl->assign('CERT', [
+            'email' => $email,
+            'num' => $num
+        ]);
+        $xtpl->parse('smtp.cert_list.loop');
+    }
+    $xtpl->parse('smtp.cert_list');
 }
 
 $xtpl->parse('smtp');
