@@ -1,18 +1,18 @@
 <!-- BEGIN: smtp -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
-<!-- BEGIN: testmail_fail -->
-<div class="alert alert-danger">
-    <strong>{LANG.smtp_test_fail}: </strong> {TEST_MESSAGE}
-</div>
-<!-- END: testmail_fail -->
-<!-- BEGIN: testmail_success -->
-<div class="alert alert-success">{LANG.smtp_test_success}</div>
-<!-- END: testmail_success -->
 <div class="panel panel-default">
     <div class="panel-body">
-        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" class="form-horizontal">
+        <!-- BEGIN: error -->
+        <div class="alert alert-danger">{ERROR}</div>
+        <!-- END: error -->
+        <!-- BEGIN: testmail_fail -->
+        <div class="alert alert-danger">
+            <strong>{LANG.smtp_test_fail}: </strong> {TEST_MESSAGE}
+        </div>
+        <!-- END: testmail_fail -->
+        <!-- BEGIN: testmail_success -->
+        <div class="alert alert-success">{LANG.smtp_test_success}</div>
+        <!-- END: testmail_success -->
+        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" class="form-horizontal m-bottom">
             <div class="form-group">
                 <label for="sender_name" class="col-sm-6 control-label">{LANG.mail_sender_name}:</label>
                 <div class="col-sm-18 col-md-14 col-lg-10">
@@ -175,9 +175,175 @@
                 </div>
             </div>
         </form>
+        <!-- BEGIN: testmail1 -->
+        <div class="alert alert-info m-bottom-none">{LANG.smtp_test_note}</div>
+        <!-- END: testmail1 -->
     </div>
 </div>
-<!-- BEGIN: testmail1 -->
-<div class="alert alert-info">{LANG.smtp_test_note}</div>
-<!-- END: testmail1 -->
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="m-bottom-none"><strong>{LANG.smime_certificate}</strong></h3> 
+    </div>
+    <div class="panel-body">
+        <div class="m-bottom">{LANG.smime_note}</div>
+        <!-- BEGIN: cert_list -->
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <!-- BEGIN: loop -->
+            <div class="loop panel panel-default">
+                <a class="panel-heading btn-block" role="button" id="certificate{CERT.num}" data-toggle="collapse" data-parent="#accordion" href="#cert-collapse{CERT.num}" aria-expanded="false" aria-controls="cert-collapse{CERT.num}">
+                    <i class="fa fa-certificate"></i> {CERT.email}
+                </a>
+                <div id="cert-collapse{CERT.num}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="certificate{CERT.num}" data-email="{CERT.email}" data-loaded="false">
+                    <div class="panel-body cert-content"></div>
+                </div>
+            </div>
+            <!-- END: loop -->
+        </div>
+<script>
+function smimedownload(email) {
+    var person = prompt("{LANG.smime_download_passphrase}", "");
+    if (person != null && person != '') {
+        window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&smimedownload=1&email=" + email + "&passphrase=" + encodeURIComponent(person);
+    }
+}
+function smimedel(email) {
+    if (confirm('{LANG.smime_del_confirm}') == true) {
+        $.ajax({
+            type: 'POST',
+            url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+            data: {'smimedel':1,'email':email},
+            success: function() {
+                window.location.href = window.location.href
+            }
+        })
+    }
+}
+$(function() {
+    $('[id*=cert-collapse]').on('show.bs.collapse', function () {
+        $(this).parent().toggleClass('panel-default, panel-primary');
+        if ($(this).attr('data-loaded') === 'false') {
+            var t = $(this);
+            $.ajax({
+                type: 'POST',
+                url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+                data: {'smimeread':1,'email':t.data('email')},
+                success: function(data) {
+    				$('.cert-content', t).html(data);
+                    $(t).attr('data-loaded', 'true')
+                }
+            });
+        }
+    }).on('hidden.bs.collapse', function () {
+        $(this).parent().toggleClass('panel-default, panel-primary')
+    })
+})
+</script>
+        <!-- END: cert_list -->
+        <form class="form-horizontal m-bottom" id="certaddForm" action="{SMIMEADD_ACTION}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="col-sm-18 col-sm-push-6 col-md-14 col-md-push-6 col-lg-10 col-lg-push-6">
+                    <strong>{LANG.smime_add}</strong>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.smime_pkcs12}:</label>
+                <div class="col-sm-18 col-md-14 col-lg-10">
+                    <input type="file" name="pkcs12" class="form-control" accept=".p12, .pfx"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.smime_passphrase}:</label>
+                <div class="col-sm-18 col-md-14 col-lg-10">
+                    <input type="password" name="passphrase" class="form-control" maxlength="100"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-18 col-sm-push-6 col-md-14 col-md-push-6 col-lg-10 col-lg-push-6">
+                    <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                    <input type="hidden" name="smimeadd" value="1" />
+                    <input type="hidden" name="overwrite" value="0" />
+                    <input type="submit" name="submitsave" value="{LANG.smime_add_button}" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+$(function() {
+	$("#certaddForm").submit(function(e) {
+		e.preventDefault();
+        var data = new FormData(this),
+            th = this;
+        if ('' == $('[name=pkcs12]', this).val()) {
+            return false
+        }
+        $('input, button', this).prop('disabled', true);
+		$.ajax({
+			url: $(this).attr('action'),
+			type: 'POST',
+			data: data,
+			cache: false,
+			processData: false,
+			contentType: false,
+			dataType: "json"
+		}).done(function(a) {
+			if ('error' == a.status) {
+                alert(a.mess);
+                $('input, button', th).prop('disabled', false);
+			} else if ('overwrite' == a.status) {
+                $('input, button', th).prop('disabled', false);
+                if (confirm(a.mess) == true) {
+                    $('[name=overwrite]', th).val('1');
+                    $(th).submit()
+                }
+			} else {
+                window.location.href = window.location.href
+			}
+		});
+	})
+})
+</script>
 <!-- END: smtp -->
+<!-- BEGIN: smimeread -->
+<table class="table table-condensed table-bordered m-bottom-none">
+    <tbody>
+        <tr>
+            <td>{LANG.smime_cn}:</td>
+            <td>{SMIMEREAD.subject.CN}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_issuer_cn}:</td>
+            <td>{SMIMEREAD.issuer.O}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_subjectAltName}:</td>
+            <td>{SMIMEREAD.extensions.subjectAltName}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_validFrom}:</td>
+            <td>{SMIMEREAD.validFrom_format}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_validTo}:</td>
+            <td>{SMIMEREAD.validTo_format}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_signatureTypeSN}:</td>
+            <td>{SMIMEREAD.signatureTypeSN}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_purposes}:</td>
+            <td>{SMIMEREAD.purposes_list}</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2" class="text-center">
+                <button type="button" class="btn btn-danger btn-xs" onclick="smimedel('{EMAIL}');">{LANG.smime_del}</button>
+                <button type="button" class="btn btn-primary btn-xs" onclick="smimedownload('{EMAIL}');">{LANG.smime_download}</button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<!-- END: smimeread -->

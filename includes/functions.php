@@ -1504,6 +1504,23 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
+        // This PHPMailer example shows S/MIME signing a message and then sending.
+        // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
+        $email_name = str_replace("@", "__", $sm_parameters['from_address']);
+        $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
+        $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
+        $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
+        if (file_exists($cert_key) and file_exists($cert_crt)) {
+            $mail->sign(
+                $cert_crt, // The location of your certificate file
+                $cert_key, // The location of your private key file
+                // The password you protected your private key with (not the Import Password!
+                // May be empty but the parameter must not be omitted!
+                '',
+                $certchain_pem // The location of your chain file
+            );
+        }
+
         if (!$mail->Send()) {
             if (!$testmode and !empty($global_config['notify_email_error'])) {
                 nv_insert_notification('settings', 'sendmail_failure', [
