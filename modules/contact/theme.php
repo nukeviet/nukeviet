@@ -302,6 +302,17 @@ function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, 
             $xtpl->parse('main.sendinfo.phone');
         }
         $xtpl->parse('main.sendinfo');
+    } else {
+        if (!empty($fcat)) {
+            $xtpl->assign('CAT', $fcat);
+            $xtpl->parse('main.mysendinfo.cat');
+        }
+
+        if (!empty($fphone)) {
+            $xtpl->assign('PHONE', $fphone);
+            $xtpl->parse('main.mysendinfo.phone');
+        }
+        $xtpl->parse('main.mysendinfo');
     }
 
     $xtpl->parse('main');
