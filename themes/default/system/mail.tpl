@@ -32,9 +32,9 @@ a {
             <div style="margin-bottom:20px">
                 {LANG.email}:
                 <a href="mailto:{GCONFIG.site_email}" style="color:#666666;text-decoration:none">{GCONFIG.site_email}</a>
-                <br/>
+                <!-- BEGIN: phonenumber --><br/>
                 {LANG.phonenumber}:
-                <a href="tel:{GCONFIG.site_phone}" style="color:#666666;text-decoration:none">{GCONFIG.site_phone}</a>
+                <a href="tel:{GCONFIG.site_phone}" style="color:#666666;text-decoration:none">{GCONFIG.site_phone}</a><!-- END: phonenumber -->
             </div>
             <div style="font-size:10px">
                 ©
