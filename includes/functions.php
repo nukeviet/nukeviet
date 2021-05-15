@@ -1353,8 +1353,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     if (!empty($global_config['reply_email']) and (empty($sm_parameters['reply_address']) or $global_config['force_reply'])) {
         $sm_parameters['reply_address'] = $global_config['reply_email'];
     }
-    if (!empty($global_config['sender_mail']) and $global_config['force_sender']) {
-        $sm_parameters['from_address'] = $global_config['sender_mail'];
+    if (!empty($global_config['sender_email']) and $global_config['force_sender']) {
+        $sm_parameters['from_address'] = $global_config['sender_email'];
     }
 
     $sm_parameters['reply'] = [];
