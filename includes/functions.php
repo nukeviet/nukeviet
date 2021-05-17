@@ -1463,8 +1463,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             return ($testmode ? 'No mail mode' : false);
         }
 
-        $mail->From = $sm_parameters['from_address'];
-        $mail->FromName = nv_unhtmlspecialchars($sm_parameters['from_name']);
+        $mail->setFrom($sm_parameters['from_address'], nv_unhtmlspecialchars($sm_parameters['from_name']));
 
         if (!empty($sm_parameters['reply'])) {
             foreach ($sm_parameters['reply'] as $_m => $_n) {
@@ -1489,7 +1488,9 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         $mail->Subject = nv_unhtmlspecialchars($sm_parameters['subject']);
-        $mail->WordWrap = 120;
+        // https://www.php.net/manual/en/function.mail.php
+        // Lines should not be larger than 70 characters. 
+        $mail->WordWrap = 70;
         $mail->Body = $sm_parameters['message'];
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
@@ -1504,21 +1505,51 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
-        // This PHPMailer example shows S/MIME signing a message and then sending.
-        // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
-        $email_name = str_replace("@", "__", $sm_parameters['from_address']);
-        $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
-        $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
-        $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
-        if (file_exists($cert_key) and file_exists($cert_crt)) {
-            $mail->sign(
-                $cert_crt, // The location of your certificate file
-                $cert_key, // The location of your private key file
-                // The password you protected your private key with (not the Import Password!
-                // May be empty but the parameter must not be omitted!
-                '',
-                $certchain_pem // The location of your chain file
-            );
+        if (($mailer_mode == 'smtp' and !empty($global_config['smtp_dkimsmime_included'])) or (($mailer_mode == 'mail' or $mailer_mode == 'sendmail') and !empty($global_config['mail_dkimsmime_included']))) {
+            // This PHPMailer example shows S/MIME signing a message and then sending.
+            // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
+            $email_name = str_replace("@", "__", $sm_parameters['from_address']);
+            $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
+            $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
+            $certchain_pem = file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem') ? NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem' : '';
+            if (file_exists($cert_key) and file_exists($cert_crt)) {
+                $mail->sign(
+                    $cert_crt, // The location of your certificate file
+                    $cert_key, // The location of your private key file
+                    // The password you protected your private key with (not the Import Password!
+                    // May be empty but the parameter must not be omitted!
+                    '',
+                    $certchain_pem // The location of your chain file
+                );
+            }
+    
+            // https://github.com/PHPMailer/PHPMailer/blob/master/examples/DKIM_sign.phps
+            $domain = substr(strstr($sm_parameters['from_address'], '@'), 1);
+            $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
+            $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
+            $is_DKIM = false;
+            if (file_exists($verifiedkey)) {
+                $verifiedTime = file_get_contents($verifiedkey);
+                $verifiedTime = (int)$verifiedTime + 604800;
+                if (NV_CURRENTTIME > $verifiedTime) {
+                    $verified = DKIM_verify($domain, 'nv');
+                    if (!$verified) {
+                        @unlink($verifiedkey);
+                    } else {
+                        $verifiedTime = NV_CURRENTTIME;
+                        file_put_contents($verifiedkey, $verifiedTime, LOCK_EX);
+                    }
+                }
+                if (NV_CURRENTTIME <= $verifiedTime and file_exists($privatekeyfile)) {
+                    $mail->DKIM_domain = $domain;
+                    $mail->DKIM_private = $privatekeyfile;
+                    $mail->DKIM_selector = 'nv';
+                    $mail->DKIM_passphrase = '';
+                    $mail->DKIM_identity = $sm_parameters['from_address'];
+                    $mail->DKIM_copyHeaderFields = false;
+                    $mail->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
+                }
+            }
         }
 
         if (!$mail->Send()) {
@@ -2606,4 +2637,43 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
     NukeViet\Api\Api::reset();
 
     return $return;
+}
+
+/**
+ * DKIM_verify()
+ * 
+ * @param string $domain
+ * @param string $selector
+ * @return void
+ */
+function DKIM_verify($domain, $selector)
+{
+    $publickeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $selector . '_dkim.' . $domain . '.public.pem';
+    $publickey = file_get_contents($publickeyfile);
+    $publickey = preg_replace('/^-+.*?-+$/m', '', $publickey);
+    $publickey = str_replace(["\r", "\n"], '', $publickey);
+    $publickey = str_split($publickey, 253);
+    $publickey = implode('', $publickey);
+
+    $result = dns_get_record($selector . '._domainkey.' . $domain, DNS_TXT);
+
+    if (empty($result[0]) or empty($result[0]['host']) or $result[0]['host'] != $selector . '._domainkey.' . $domain or empty($result[0]['txt'])) {
+        return false;
+    }
+
+    $els = array_map('trim', explode(';', $result[0]['txt']));
+    $els2 = [];
+    foreach($els as $el) {
+        $el = array_map('trim', explode('=', $el, 2));
+        $els2[$el[0]] = $el[1];
+    }
+    if (!empty($els2['p'])) {
+        $els2['p'] = str_replace(["\r", "\n"], '', $els2['p']);
+        $els2['p'] = str_split($els2['p'], 253);
+        $els2['p'] = implode('', $els2['p']);
+    }
+    if (!isset($els2['v']) or strcasecmp($els2['v'], 'dkim1') != 0 or !isset($els2['p']) or $els2['p'] != $publickey) {
+        return false;
+    }
+    return true;
 }
