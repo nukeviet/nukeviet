@@ -1505,48 +1505,50 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
-        // This PHPMailer example shows S/MIME signing a message and then sending.
-        // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
-        $email_name = str_replace("@", "__", $sm_parameters['from_address']);
-        $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
-        $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
-        $certchain_pem = file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem') ? NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem' : '';
-        if (file_exists($cert_key) and file_exists($cert_crt)) {
-            $mail->sign(
-                $cert_crt, // The location of your certificate file
-                $cert_key, // The location of your private key file
-                // The password you protected your private key with (not the Import Password!
-                // May be empty but the parameter must not be omitted!
-                '',
-                $certchain_pem // The location of your chain file
-            );
-        }
-
-        // https://github.com/PHPMailer/PHPMailer/blob/master/examples/DKIM_sign.phps
-        $domain = substr(strstr($sm_parameters['from_address'], '@'), 1);
-        $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
-        $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
-        $is_DKIM = false;
-        if (file_exists($verifiedkey)) {
-            $verifiedTime = file_get_contents($verifiedkey);
-            $verifiedTime = (int)$verifiedTime + 604800;
-            if (NV_CURRENTTIME > $verifiedTime) {
-                $verified = DKIM_verify($domain, 'nv');
-                if (!$verified) {
-                    @unlink($verifiedkey);
-                } else {
-                    $verifiedTime = NV_CURRENTTIME;
-                    file_put_contents($verifiedkey, $verifiedTime, LOCK_EX);
-                }
+        if (($mailer_mode == 'smtp' and !empty($global_config['smtp_dkimsmime_included'])) or (($mailer_mode == 'mail' or $mailer_mode == 'sendmail') and !empty($global_config['mail_dkimsmime_included']))) {
+            // This PHPMailer example shows S/MIME signing a message and then sending.
+            // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
+            $email_name = str_replace("@", "__", $sm_parameters['from_address']);
+            $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
+            $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
+            $certchain_pem = file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem') ? NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem' : '';
+            if (file_exists($cert_key) and file_exists($cert_crt)) {
+                $mail->sign(
+                    $cert_crt, // The location of your certificate file
+                    $cert_key, // The location of your private key file
+                    // The password you protected your private key with (not the Import Password!
+                    // May be empty but the parameter must not be omitted!
+                    '',
+                    $certchain_pem // The location of your chain file
+                );
             }
-            if (NV_CURRENTTIME <= $verifiedTime and file_exists($privatekeyfile)) {
-                $mail->DKIM_domain = $domain;
-                $mail->DKIM_private = $privatekeyfile;
-                $mail->DKIM_selector = 'nv';
-                $mail->DKIM_passphrase = '';
-                $mail->DKIM_identity = $sm_parameters['from_address'];
-                $mail->DKIM_copyHeaderFields = false;
-                $mail->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
+    
+            // https://github.com/PHPMailer/PHPMailer/blob/master/examples/DKIM_sign.phps
+            $domain = substr(strstr($sm_parameters['from_address'], '@'), 1);
+            $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
+            $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
+            $is_DKIM = false;
+            if (file_exists($verifiedkey)) {
+                $verifiedTime = file_get_contents($verifiedkey);
+                $verifiedTime = (int)$verifiedTime + 604800;
+                if (NV_CURRENTTIME > $verifiedTime) {
+                    $verified = DKIM_verify($domain, 'nv');
+                    if (!$verified) {
+                        @unlink($verifiedkey);
+                    } else {
+                        $verifiedTime = NV_CURRENTTIME;
+                        file_put_contents($verifiedkey, $verifiedTime, LOCK_EX);
+                    }
+                }
+                if (NV_CURRENTTIME <= $verifiedTime and file_exists($privatekeyfile)) {
+                    $mail->DKIM_domain = $domain;
+                    $mail->DKIM_private = $privatekeyfile;
+                    $mail->DKIM_selector = 'nv';
+                    $mail->DKIM_passphrase = '';
+                    $mail->DKIM_identity = $sm_parameters['from_address'];
+                    $mail->DKIM_copyHeaderFields = false;
+                    $mail->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
+                }
             }
         }
 

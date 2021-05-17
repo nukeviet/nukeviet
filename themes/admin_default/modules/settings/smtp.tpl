@@ -69,6 +69,24 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="smtp_dkimsmime_included" value="1"{DATA.smtp_dkimsmime_included}> {LANG.smtp_dkimsmime_included}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="mail_dkimsmime_included" value="1"{DATA.mail_dkimsmime_included}> {LANG.mail_dkimsmime_included}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-6 control-label">{LANG.mail_config}:</label>
                 <div class="col-sm-18">
                     <div class="radio">

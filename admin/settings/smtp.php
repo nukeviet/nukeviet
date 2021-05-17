@@ -343,6 +343,8 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['force_sender'] = intval($nv_Request->get_bool('force_sender', 'post', false));
     $array_config['force_reply'] = intval($nv_Request->get_bool('force_reply', 'post', false));
     $array_config['notify_email_error'] = intval($nv_Request->get_bool('notify_email_error', 'post', false));
+    $array_config['smtp_dkimsmime_included'] = intval($nv_Request->get_bool('smtp_dkimsmime_included', 'post', false));
+    $array_config['mail_dkimsmime_included'] = intval($nv_Request->get_bool('mail_dkimsmime_included', 'post', false));
 
     $array_config['sender_email'] = nv_check_valid_email($array_config['sender_email'], true);
     if ($array_config['sender_email'][0] == '') {
@@ -400,12 +402,16 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['verify_peer_ssl'] = $global_config['verify_peer_ssl'];
     $array_config['verify_peer_name_ssl'] = $global_config['verify_peer_name_ssl'];
     $array_config['notify_email_error'] = $global_config['notify_email_error'];
+    $array_config['smtp_dkimsmime_included'] = $global_config['smtp_dkimsmime_included'];
+    $array_config['mail_dkimsmime_included'] = $global_config['mail_dkimsmime_included'];
 }
 
 $array_config['smtp_ssl_checked'] = ($array_config['smtp_ssl'] == 1) ? ' checked="checked"' : '';
 $array_config['force_sender'] = $array_config['force_sender'] ? ' checked="checked"' : '';
 $array_config['force_reply'] = $array_config['force_reply'] ? ' checked="checked"' : '';
 $array_config['notify_email_error'] = $array_config['notify_email_error'] ? ' checked="checked"' : '';
+$array_config['smtp_dkimsmime_included'] = $array_config['smtp_dkimsmime_included'] ? ' checked="checked"' : '';
+$array_config['mail_dkimsmime_included'] = $array_config['mail_dkimsmime_included'] ? ' checked="checked"' : '';
 
 $array_config['mailer_mode_smtpt'] = ($array_config['mailer_mode'] == 'smtp') ? ' checked="checked"' : '';
 $array_config['mailer_mode_sendmail'] = ($array_config['mailer_mode'] == 'sendmail') ? ' checked="checked"' : '';

@@ -328,3 +328,5 @@ $lang_module['DKIM_domain'] = 'Domaine de messagerie';
 $lang_module['DKIM_domain_error'] = 'Erreur: le domaine de messagerie est mal formé';
 $lang_module['DKIM_domain_exists'] = 'Ce domaine de messagerie est déjà sur le serveur';
 $lang_module['DKIM_created'] = 'La signature DKIM pour le domaine de messagerie %s a été créée. Vous devez vérifier cette signature DKIM conformément aux instructions de la page suivante.';
+$lang_module['smtp_dkimsmime_included'] = 'Inclure la signature numérique DKIM et le certificat S/MIME (le cas échéant) lors de l\'utilisation de la méthode SMTP';
+$lang_module['mail_dkimsmime_included'] = 'Inclure la signature numérique DKIM et le certificat S/MIME (le cas échéant) lors de l\'utilisation de la méthode SMTP Linux/PHP-Mail';
