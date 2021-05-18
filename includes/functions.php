@@ -1532,7 +1532,6 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             $domain = substr(strstr($sm_parameters['from_address'], '@'), 1);
             $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
             $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
-            $is_DKIM = false;
             if (file_exists($verifiedkey)) {
                 $verifiedTime = file_get_contents($verifiedkey);
                 $verifiedTime = (int)$verifiedTime + 604800;
