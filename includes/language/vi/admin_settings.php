@@ -341,5 +341,5 @@ $lang_module['DKIM_domain'] = 'Miền gửi thư';
 $lang_module['DKIM_domain_error'] = 'Lỗi: Miền gửi thư không đúng định dạng';
 $lang_module['DKIM_domain_exists'] = 'Miền gửi thư này đã có trên máy chủ';
 $lang_module['DKIM_created'] = 'Chữ ký số DKIM cho miền gửi thư %s đã được tạo. Bạn cần tiến hành xác nhận chữ ký số DKIM này theo hướng dẫn ở trang tiếp theo.';
-$lang_module['smtp_dkimsmime_included'] = 'Gửi kèm chữ ký số DKIM và chứng chỉ S/MIME (nếu có) khi dùng phương thức SMTP';
-$lang_module['mail_dkimsmime_included'] = 'Gửi kèm chữ ký số DKIM và chứng chỉ S/MIME (nếu có) khi dùng phương thức Linux/PHP-Mail';
+$lang_module['dkim_included'] = 'Gửi kèm chữ ký số DKIM (nếu có) khi dùng phương thức';
+$lang_module['smime_included'] = 'Gửi kèm chứng chỉ S/MIME (nếu có) khi dùng phương thức';

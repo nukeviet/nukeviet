@@ -69,20 +69,38 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                <label class="col-sm-6 control-label">{LANG.dkim_included}:</label>
+                <div class="col-sm-18">
                     <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="smtp_dkimsmime_included" value="1"{DATA.smtp_dkimsmime_included}> {LANG.smtp_dkimsmime_included}
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="dkim_included[]" value="smtp"{DATA.smtp_dkim_included}/> {LANG.type_smtp}
                         </label>
+                        <!-- BEGIN: mailhost2 -->
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="dkim_included[]" value="sendmail"{DATA.sendmail_dkim_included}/> {LANG.type_linux}
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="dkim_included[]" value="mail"{DATA.mail_dkim_included}/> {LANG.type_phpmail}
+                        </label>
+                        <!-- END: mailhost2 -->
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
+                <label class="col-sm-6 control-label">{LANG.smime_included}:</label>
+                <div class="col-sm-18">
                     <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="mail_dkimsmime_included" value="1"{DATA.mail_dkimsmime_included}> {LANG.mail_dkimsmime_included}
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="smime_included[]" value="smtp"{DATA.smtp_smime_included}/> {LANG.type_smtp}
                         </label>
+                        <!-- BEGIN: mailhost3 -->
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="smime_included[]" value="sendmail"{DATA.sendmail_smime_included}/> {LANG.type_linux}
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="smime_included[]" value="mail"{DATA.mail_smime_included}/> {LANG.type_phpmail}
+                        </label>
+                        <!-- END: mailhost3 -->
                     </div>
                 </div>
             </div>
