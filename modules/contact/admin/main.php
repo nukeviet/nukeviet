@@ -155,7 +155,6 @@ if (!empty($contact_allowed['view'])) {
                 'title' => nv_clean60($row['title'], 60),
                 'time' => $row['send_time'] >= $currday ? nv_date('H:i d/m/Y', $row['send_time']) : nv_date('d/m/Y', $row['send_time']),
                 'style' => $style,
-                'processed' => $processed,
                 'onclick' => $onclick,
                 'status' => $status,
                 'image' => $image
