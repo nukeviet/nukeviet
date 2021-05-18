@@ -1494,6 +1494,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->Body = $sm_parameters['message'];
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
+        $mail->XMailer = 'NukeViet CMS with PHPMailer';
 
         if ($sm_parameters['logo_add']) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
@@ -1505,7 +1506,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
-        if (($mailer_mode == 'smtp' and !empty($global_config['smtp_dkimsmime_included'])) or (($mailer_mode == 'mail' or $mailer_mode == 'sendmail') and !empty($global_config['mail_dkimsmime_included']))) {
+        $smime_included = !empty($global_config['smime_included']) ? array_map('trim', explode(',', $global_config['smime_included'])) : [];
+        if (!empty($smime_included) and in_array($mailer_mode, $smime_included)) {
             // This PHPMailer example shows S/MIME signing a message and then sending.
             // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
             $email_name = str_replace("@", "__", $sm_parameters['from_address']);
@@ -1522,7 +1524,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
                     $certchain_pem // The location of your chain file
                 );
             }
-    
+        }
+
+        $dkim_included = !empty($global_config['dkim_included']) ? array_map('trim', explode(',', $global_config['dkim_included'])) : [];
+        if (!empty($dkim_included) and in_array($mailer_mode, $dkim_included)) {
             // https://github.com/PHPMailer/PHPMailer/blob/master/examples/DKIM_sign.phps
             $domain = substr(strstr($sm_parameters['from_address'], '@'), 1);
             $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';

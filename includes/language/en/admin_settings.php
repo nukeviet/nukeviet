@@ -328,5 +328,5 @@ $lang_module['DKIM_domain'] = 'Mailing domain';
 $lang_module['DKIM_domain_error'] = 'Error: Mailing domain is malformed';
 $lang_module['DKIM_domain_exists'] = 'This mailing domain is already on the server';
 $lang_module['DKIM_created'] = 'DKIM-signature for mail domain %s has been created. You need to verify this DKIM-signature according to the instructions on the next page.';
-$lang_module['smtp_dkimsmime_included'] = 'Include DKIM digital signature and S/MIME certificate (if any) when using SMTP method';
-$lang_module['mail_dkimsmime_included'] = 'Include DKIM digital signature and S/MIME certificate (if any) when using Linux/PHP-Mail method';
+$lang_module['dkim_included'] = 'Include DKIM digital signature (if any) when using method';
+$lang_module['smime_included'] = 'Include S/MIME certificate (if any) when using method';
