@@ -45,7 +45,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
     $a = 0;
     foreach ($array_catpage as $array_row_i) {
         $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-        $array_row_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_row_i['publtime']);
+        $array_row_i['publtime'] = nv_date('d/m/Y H:i:s', $array_row_i['publtime']);
 
         if ($array_row_i['external_link']) {
             $array_row_i['target_blank'] = 'target="_blank"';
@@ -144,7 +144,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
     $a = $page;
     foreach ($array_catpage as $array_row_i) {
         $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-        $array_row_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_row_i['publtime']);
+        $array_row_i['publtime'] = nv_date('d/m/Y H:i:s', $array_row_i['publtime']);
 
         if ($module_config[$module_name]['showtooltip']) {
             $array_row_i['hometext_clean'] = nv_clean60(strip_tags($array_row_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
@@ -218,7 +218,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $a = 0;
     foreach ($array_catpage as $array_row_i) {
         $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-        $array_row_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_row_i['publtime']);
+        $array_row_i['publtime'] = nv_date('d/m/Y H:i:s', $array_row_i['publtime']);
         $array_row_i['listcatid'] = explode(',', $array_row_i['listcatid']);
         $num_cat = sizeof($array_row_i['listcatid']);
 
@@ -358,7 +358,7 @@ function viewcat_top($array_catcontent, $generate_page)
         $a = 0;
         foreach ($array_catcontent as $array_catcontent_i) {
             $newday = $array_catcontent_i['publtime'] + (86400 * $array_catcontent_i['newday']);
-            $array_catcontent_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_catcontent_i['publtime']);
+            $array_catcontent_i['publtime'] = nv_date('d/m/Y H:i:s', $array_catcontent_i['publtime']);
 
             if ($array_catcontent_i['external_link']) {
                 $array_catcontent_i['target_blank'] = 'target="_blank"';
@@ -567,7 +567,7 @@ function viewcat_two_column($array_content, $array_catpage)
     if (!empty($array_content)) {
         foreach ($array_content as $key => $array_content_i) {
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
-            $array_content_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_content_i['publtime']);
+            $array_content_i['publtime'] = nv_date('d/m/Y H:i:s', $array_content_i['publtime']);
 
             if ($array_content_i['external_link']) {
                 $array_content_i['target_blank'] = 'target="_blank"';
@@ -627,7 +627,7 @@ function viewcat_two_column($array_content, $array_catpage)
             $array_content_i = $array_catpage_i['content'][0];
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
             $array_content_i['hometext'] = nv_clean60(strip_tags($array_content_i['hometext']), 200);
-            $array_content_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_content_i['publtime']);
+            $array_content_i['publtime'] = nv_date('d/m/Y H:i:s', $array_content_i['publtime']);
 
             if ($array_content_i['external_link']) {
                 $array_content_i['target_blank'] = 'target="_blank"';
@@ -1209,7 +1209,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
             $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl']);
             $xtpl->assign('TITLEROW', strip_tags(BoldKeywordInStr($value['title'], $key)));
             $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key) . "...");
-            $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));
+            $xtpl->assign('TIME', date('d/m/Y H:i:s', $value['publtime']));
             $xtpl->assign('AUTHOR', BoldKeywordInStr($value['author'], $key));
             $xtpl->assign('SOURCE', BoldKeywordInStr(GetSourceNews($value['sourceid']), $key));
 
