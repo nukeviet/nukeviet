@@ -43,7 +43,17 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
             }
 
             // Hiển thị hình
-            !empty($dep['image']) && $dep['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'];
+            if (!empty($dep['image'])) {
+                $dep['srcset'] = '';
+                if (!nv_is_url($dep['image'])) {
+                    if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'])) {
+                        $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image']);
+                        $dep['srcset'] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'] . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
+                        $dep['srcset'] .= NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'] . ' ' . $imagesize[0] . 'w';
+                    }
+                    $dep['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'];
+                }
+            }
 
             $xtpl->assign('DEP', $dep);
 

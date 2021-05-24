@@ -40,11 +40,36 @@ if ($page_config['viewtype'] == 2) {
     }
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
-    if (!empty($rowdetail['image']) and !nv_is_url($rowdetail['image'])) {
-        $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
-        $rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
-        $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];
-        $meta_property['og:image'] = NV_MY_DOMAIN . $rowdetail['image'];
+    if (!empty($rowdetail['image'])) {
+        if (!nv_is_url($rowdetail['image'])) {
+            $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
+            $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
+            $srcset = '';
+            if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail['image'])) {
+                $srcset = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail['image'] . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
+                $srcset .= NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'] . ' ' . $imagesize[0] . 'w';
+            }
+
+            $rowdetail['thumb'] = [
+                'src' => file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowdetail['image']) ? NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $rowdetail['image'] : NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'],
+                'width' => 100
+            ];
+            $rowdetail['img'] = [
+                'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'],
+                'srcset' => $srcset,
+                'width' => $imagesize[0] > 500 ? 500 : $imagesize[0]
+            ];
+        } else {
+            $rowdetail['thumb'] = [
+                'src' => $rowdetail['image'],
+                'width' => 100
+            ];
+            $rowdetail['img'] = [
+                'src' => $rowdetail['image'],
+                'srcset' => '',
+                'width' => 500
+            ];
+        }
     }
 
     $rowdetail['number_add_time'] = $rowdetail['add_time'];

@@ -23,6 +23,7 @@ define('NV_LIVE_COOKIE_TIME', 31104000);
 define('NV_LIVE_SESSION_TIME', 0);
 define('NV_MAX_HEIGHT', 1500);
 define('NV_MAX_WIDTH', 1500);
+define('NV_MOBILE_MODE_IMG', 480);
 define('NV_EOL', "\r\n");
 define('NV_UPLOAD_MAX_FILESIZE', 2097152);
 $global_config['admfirewall']=0;

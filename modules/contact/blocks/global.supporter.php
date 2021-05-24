@@ -69,10 +69,16 @@ if (! nv_function_exists('nv_contact_supporter')) {
                 
                 if (! empty($supporter)) {
                     $row = $_array_department[$departmentid];
-                    if (! empty($row['image']) and file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'])) {
-                        $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'];
-                    } else {
-                        $row['image'] = '';
+                    if (! empty($row['image'])) {
+                        $row['srcset'] = '';
+                        if (!nv_is_url($row['image'])) {
+                            if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'])) {
+                                $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image']);
+                                $row['srcset'] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'] . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
+                                $row['srcset'] .= NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'] . ' ' . $imagesize[0] . 'w';
+                            }
+                            $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'];
+                        }
                     }
                     $xtpl->assign('DEPARTMENT', $row);
                     

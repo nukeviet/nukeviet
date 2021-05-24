@@ -350,6 +350,9 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                         if (!is_dir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp . $p)) {
                             nv_mkdir(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $cp, $p);
                         }
+                        if (!is_dir(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $cp . $p)) {
+                            nv_mkdir(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $cp, $p);
+                        }
                         $cp .= $p . '/';
                     }
                 }

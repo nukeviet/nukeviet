@@ -117,21 +117,30 @@ if (!empty($news_contents)) {
         }
         $news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
         if (!empty($news_contents['homeimgfile'])) {
+            $homeimgfile = $news_contents['homeimgfile'];
+            $news_contents['srcset'] = '';
+            
             $src = $alt = $note = '';
             $width = $height = 0;
             if ($news_contents['homeimgthumb'] == 1 and $news_contents['imgposition'] == 1) {
-                $src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $news_contents['homeimgfile'];
-                $news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $news_contents['homeimgfile'];
+                $src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
+                $news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
                 $width = $module_config[$module_name]['homewidth'];
+                
+                if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile)) {
+                    $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $homeimgfile);
+                    $news_contents['srcset'] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
+                    $news_contents['srcset'] .= $news_contents['homeimgfile'] . ' ' . $imagesize[0] . 'w';
+                }
             } elseif ($news_contents['homeimgthumb'] == 3) {
                 $src = $news_contents['homeimgfile'];
                 $width = ($news_contents['imgposition'] == 1) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
             } elseif (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $news_contents['homeimgfile'])) {
                 $src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $news_contents['homeimgfile'];
+                $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $news_contents['homeimgfile']);
                 if ($news_contents['imgposition'] == 1) {
                     $width = $module_config[$module_name]['homewidth'];
                 } else {
-                    $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $news_contents['homeimgfile']);
                     if ($imagesize[0] > 0 and $imagesize[0] > $module_config[$module_name]['imagefull']) {
                         $width = $module_config[$module_name]['imagefull'];
                     } else {
@@ -139,6 +148,11 @@ if (!empty($news_contents)) {
                     }
                 }
                 $news_contents['homeimgfile'] = $src;
+
+                if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile)) {
+                    $news_contents['srcset'] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
+                    $news_contents['srcset'] .= $news_contents['homeimgfile'] . ' ' . $imagesize[0] . 'w';
+                }
             }
 
             if (!empty($src)) {
