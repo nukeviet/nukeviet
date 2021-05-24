@@ -37,6 +37,7 @@ $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_se
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('NV_MOBILE_FILES_DIR', NV_ASSETS_DIR . '/mobile');
 
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
