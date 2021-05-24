@@ -330,3 +330,18 @@ $lang_module['DKIM_domain_exists'] = 'Ce domaine de messagerie est déjà sur le
 $lang_module['DKIM_created'] = 'La signature DKIM pour le domaine de messagerie %s a été créée. Vous devez vérifier cette signature DKIM conformément aux instructions de la page suivante.';
 $lang_module['dkim_included'] = 'Inclure la signature numérique DKIM (le cas échéant) lors de l\'utilisation de la méthode';
 $lang_module['smime_included'] = 'Inclure le certificat S/MIME (le cas échéant) lors de l\'utilisation de la méthode';
+
+$lang_module['csp'] = 'Paramètre CSP';
+$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) est le nom d\'un en-tête de réponse HTTP que les navigateurs modernes utilisent pour améliorer la sécurité de la page Web. Le CSP vous permet de restreindre la façon dont les ressources telles que JavaScript, CSS ou à peu près tout ce que le navigateur charge.';
+$lang_module['csp_details'] = 'Des détails';
+$lang_module['csp_note'] = 'Entrez une valeur par ligne. Si la valeur n\'est pas une URL, placez-la entre guillemets simples (ex: &#039;self&#039;)';
+$lang_module['csp_default_src'] = 'Politique par défaut, utilisée dans tous les cas sauf si elle est remplacée par une directive plus précise.';
+$lang_module['csp_script_src'] = 'Politique dédiée aux scripts';
+$lang_module['csp_object_src'] = 'Politique dédiée aux plugins (object, embed ou applet)';
+$lang_module['csp_style_src'] = 'Politique dédiée aux styles (CSS)';
+$lang_module['csp_img_src'] = 'Politique dédiée aux images (img, mais aussi url() ou image() de CSS, ou élément de lien lié à un type d\'image (ex: rel=”icon”)';
+$lang_module['csp_media_src'] = 'Politique dédiée aux médias (video, audio, source ou track)';
+$lang_module['csp_frame_src'] = 'Politique dédiée aux frames (iframe ou frame)';
+$lang_module['csp_font_src'] = 'Politique dédiée aux polices';
+$lang_module['csp_connect_src'] = 'Politique dédiée aux connexions depuis un objet XMLHttpRequest ou un WebSocket';
+$lang_module['csp_form_action'] = 'Définit les sources valides qui peuvent être utilisées comme action de formulaire.';
