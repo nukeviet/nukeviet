@@ -41,6 +41,11 @@ $html_headers = $global_config['others_headers'];
 if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
     $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
 }
+
+if (!empty($global_config['nv_csp'])) {
+    $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
+}
+
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
 $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.

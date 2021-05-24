@@ -30,7 +30,7 @@ $array_iptypes = [
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
-if ($selectedtab < 0 or $selectedtab > 4) {
+if ($selectedtab < 0 or $selectedtab > 5) {
     $selectedtab = 0;
 }
 
@@ -295,6 +295,37 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
     $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
 }
 
+// Xử lý thiết lập CSP
+if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $directives = $nv_Request->get_typed_array('directives', 'post', 'textarea');
+    $nv_csp = '';
+    foreach($directives as $key => $directive) {
+        $directive = trim(strip_tags($directive));
+        if (!empty($directive)) {
+            $directive = str_replace(["\r\n", "\r", "\n"], ' ', $directive);
+            $nv_csp .= $key . ' ' . preg_replace("/[ ]+/", " ", $directive) . ';';
+        }
+    }
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'nv_csp'");
+    $sth->bindParam(':config_value', $nv_csp, PDO::PARAM_STR);
+    $sth->execute();
+    $nv_Cache->delMod('settings');
+
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+} else {
+    $directives = !empty($global_config['nv_csp']) ? nv_unhtmlspecialchars($global_config['nv_csp']) : '';
+    if (!empty($directives)) {
+        $matches = [];
+        preg_match_all("/([a-zA-Z0-9\-]+)[\s]+([^\;]+)/i", $directives, $matches);
+        $directives = [];
+        foreach($matches[1] as $key => $name) {
+            $directives[$name] = trim($matches[2][$key]);
+        }
+    } else {
+        $directives = [];
+    }
+}
+
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -307,7 +338,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('SELECTEDTAB', $selectedtab);
 $xtpl->assign('CHECKSS', $checkss);
 
-for ($i = 0; $i <= 4; ++$i) {
+for ($i = 0; $i <= 5; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
 }
 
@@ -764,6 +795,29 @@ foreach ($admin_2step_array as $admin_2step) {
     ];
     $xtpl->assign('ADMIN_2STEP_DEFAULT', $admin_2step_default);
     $xtpl->parse('main.admin_2step_default');
+}
+
+//csp_directive
+$csp_directives = [
+    'default-src' => $lang_module['csp_default_src'],
+    'script-src' => $lang_module['csp_script_src'],
+    'object-src' => $lang_module['csp_object_src'],
+    'style-src' => $lang_module['csp_style_src'],
+    'img-src' => $lang_module['csp_img_src'],
+    'media-src' => $lang_module['csp_media_src'],
+    'frame-src' => $lang_module['csp_frame_src'],
+    'font-src' => $lang_module['csp_font_src'],
+    'connect-src' => $lang_module['csp_connect_src'],
+    'form-action' => $lang_module['csp_form_action']
+];
+foreach($csp_directives as $name => $desc) {
+    $direct = [
+        'name' => $name,
+        'desc' => $desc,
+        'value' => !empty($directives[$name]) ? preg_replace("/[\s]+/", "\n", $directives[$name]) : ''
+    ];
+    $xtpl->assign('DIRECTIVE', $direct);
+    $xtpl->parse('main.csp_directive');
 }
 
 $xtpl->parse('main');
