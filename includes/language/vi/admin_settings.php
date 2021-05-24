@@ -358,3 +358,4 @@ $lang_module['csp_frame_src'] = 'Chính sách dành riêng cho thẻ frame (ifra
 $lang_module['csp_font_src'] = 'Chính sách dành riêng cho tập phông chữ';
 $lang_module['csp_connect_src'] = 'Chính sách dành riêng cho các kết nối từ đối tượng XMLHttpRequest hoặc WebSocket';
 $lang_module['csp_form_action'] = 'Xác định các nguồn hợp lệ có thể được sử dụng như một hành động thực thi của biểu mẫu.';
+$lang_module['csp_base_uri'] = 'Chính sách bảo mật hạn chế các giá trị có thể có của phần tử &lt;base&gt;.';
