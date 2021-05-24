@@ -47,16 +47,23 @@
             <!-- BEGIN: imgthumb -->
             <!-- BEGIN: note -->
             <figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
-                <div id="imgpreview" style="width:{DETAIL.image.width}px;">
-                    <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+                <div style="width:{DETAIL.image.width}px;">
+                    <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
                     <figcaption>{DETAIL.image.note}</figcaption>
                 </div>
             </figure>
+            <div id="imgpreview" style="display:none">
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" srcset="{DETAIL.srcset}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+                <figcaption>{DETAIL.image.note}</figcaption>
+            </div>
             <!-- END: note -->
             <!-- BEGIN: empty -->
-            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj(this);">
-                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj('#imgpreview');">
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
+            <div id="imgpreview" style="display:none">
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" srcset="{DETAIL.srcset}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+            </div>
             <!-- END: empty -->
             <!-- END: imgthumb -->
 
@@ -64,7 +71,7 @@
 
             <!-- BEGIN: imgfull -->
             <figure class="article center">
-                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail"/>
+                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" srcset="{DETAIL.srcset}" width="{DETAIL.image.width}" class="img-thumbnail"/>
                 <!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
             </figure>
             <!-- END: imgfull -->

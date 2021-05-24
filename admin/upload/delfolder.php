@@ -28,6 +28,7 @@ $d = nv_deletefile(NV_ROOTDIR . '/' . $path, true);
 if ($d[0]) {
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/([a-z0-9\-\_\/]+)$/i', $path, $m)) {
         @nv_deletefile(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1], true);
+        @nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $m[1], true);
     }
 
     $result = $db->query("SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");

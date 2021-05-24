@@ -69,7 +69,7 @@ function nv_page_main($row, $ab_links, $content_comment)
 
     if (!empty($row['image'])) {
         if ($row['imageposition'] > 0) {
-            if ($row['imageposition'] == 1) {
+            if ($row['imageposition'] == 1 and !empty($row['description'])) {
                 if (!empty($row['imagealt'])) {
                     $xtpl->parse('main.imageleft.alt');
                 }

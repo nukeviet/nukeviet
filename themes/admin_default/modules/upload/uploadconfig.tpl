@@ -18,6 +18,10 @@
                     <td><input class="form-control w100 pull-left" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/><span class="pull-left text-middle">&nbsp; x &nbsp;</span><input class="form-control pull-left w100" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/> <span class="pull-left text-middle"><input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize}</span> </td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.nv_mobile_mode_img}</strong></td>
+                    <td><input class="form-control w100" type="text" value="{NV_MOBILE_MODE_IMG}" name="nv_mobile_mode_img" maxlength="3"/><span class="help-block m-bottom-none">{LANG.nv_mobile_mode_img_note}</span></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.nv_max_size}:</strong></td>
                     <td>
                     <select name="nv_max_size" id="nv_max_size" class="form-control w200">

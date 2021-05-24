@@ -114,6 +114,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
 
             nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $modname, true);
             nv_deletefile(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $modname, true);
+            nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $modname, true);
             nv_deletefile(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname, true);
 
             $sth = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname= :dirname OR dirname LIKE :dirnamelike');

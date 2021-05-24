@@ -31,10 +31,15 @@
         <!-- END: socialbutton -->
 
         <!-- BEGIN: imageleft -->
-        <figure class="article left noncaption pointer" style="width:100px" onclick="modalShow('', '<img src={CONTENT.image} />');">
-            <img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" />
-            <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+        <figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
+            <div style="width:{CONTENT.thumb.width}px;">
+                <img alt="{CONTENT.title}" src="{CONTENT.thumb.src}" class="img-thumbnail" />
+                <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+            </div>
         </figure>
+        <div id="imgpreview" style="display:none">
+            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" alt="{CONTENT.title}" class="img-thumbnail"/></p>
+        </div>
         <!-- END: imageleft -->
 
         <!-- BEGIN: description -->
@@ -43,7 +48,7 @@
 
         <!-- BEGIN: imagecenter -->
         <figure class="article center pointer" onclick="modalShowByObj(this);">
-            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
+            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" width="{CONTENT.img.width}" class="img-thumbnail" /></p>
             <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
         </figure>
         <!-- END: imagecenter -->

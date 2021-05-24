@@ -31,7 +31,7 @@
             <!-- BEGIN: imgthumb -->
             <div class="imghome text-center">
                 <a href="#" id="pop" title="{DETAIL.image.alt}">
-                    <img id="imageresource" alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" >
+                    <img id="imageresource" alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail"/>
                 </a>
                 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -41,7 +41,7 @@
                                 <h4 class="modal-title" id="myModalLabel">{DETAIL.image.alt}</h4>
                             </div>
                             <div class="modal-body">
-                                <img src="" id="imagepreview" class="img-thumbnail" >
+                                <img src="{DETAIL.homeimgfile}" srcset="{DETAIL.srcset}" id="imagepreview" class="img-thumbnail" >
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
         </div>
         <!-- BEGIN: imgfull -->
         <div style="max-width:{DETAIL.image.width}px;margin: 10px auto 10px auto">
-            <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
+            <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" srcset="{DETAIL.srcset}" width="{DETAIL.image.width}" class="img-thumbnail" />
             <p class="imgalt">
                 <em>{DETAIL.image.note}</em>
             </p>
@@ -263,8 +263,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
+        $('#imagemodal').modal('show');
     });
     $(".bodytext img").toggleClass('img-thumbnail');
 });

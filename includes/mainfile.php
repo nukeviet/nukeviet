@@ -73,6 +73,7 @@ define('NV_CLIENT_IP', $ips->remote_ip);
 
 define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
 define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('NV_MOBILE_FILES_DIR', NV_ASSETS_DIR . '/mobile');
 define('SYSTEM_CACHEDIR', NV_CACHEDIR);
 define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
 define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');

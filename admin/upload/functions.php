@@ -190,6 +190,62 @@ function nv_check_path_upload($path)
 }
 
 /**
+ * nv_create_mobileModeImage()
+ * 
+ * @param mixed $fileName
+ * @param bool $replace
+ * @return
+ */
+function nv_create_mobileModeImage($fileName, $replace = 0)
+{
+    if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico|webp)))$/i', $fileName, $m)) {
+        $mobileFile = NV_MOBILE_FILES_DIR . '/' . $m[1];
+        if (file_exists(NV_ROOTDIR . '/' . $mobileFile)) {
+            if ($replace) {
+                @nv_deletefile(NV_ROOTDIR . '/' . $mobileFile);
+            } else {
+                return true;
+            }
+        }
+
+        $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $resize_maxW = NV_MOBILE_MODE_IMG;
+        $resize_maxH = 0;
+
+        if ($image->fileinfo['width'] > $resize_maxW) {
+            $m[2] = rtrim($m[2], '/');
+            $mobileDir = NV_MOBILE_FILES_DIR;
+            if (!empty($m[2])) {
+                if (!is_dir(NV_ROOTDIR . '/' . $m[2])) {
+                    $e = explode('/', $m[2]);
+                    $cp = NV_MOBILE_FILES_DIR;
+                    foreach ($e as $p) {
+                        if (is_dir(NV_ROOTDIR . '/' . $cp . '/' . $p)) {
+                            $mobileDir .= '/' . $p;
+                        } else {
+                            $mk = nv_mkdir(NV_ROOTDIR . '/' . $cp, $p);
+                            if ($mk[0] > 0) {
+                                $mobileDir .= '/' . $p;
+                            }
+                        }
+                        $cp .= '/' . $p;
+                    }
+                }
+            }
+
+            $image->resizeXY($resize_maxW, $resize_maxH);
+            $image->save(NV_ROOTDIR . '/' . $mobileDir, $m[3] . $m[4], 90);
+            $error = $image->error;
+            $image->close();
+            return empty($error);
+        }
+
+        $image->close();
+    }
+    return false;
+}
+
+/**
  * nv_get_viewImage()
  *
  * @param mixed $fileName
@@ -200,6 +256,10 @@ function nv_get_viewImage($fileName, $refresh = 0)
     global $array_thumb_config;
 
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico|webp)))$/i', $fileName, $m)) {
+        if (defined('NV_MOBILE_MODE_IMG') and NV_MOBILE_MODE_IMG > 150) {
+            nv_create_mobileModeImage($fileName, $refresh);
+        }
+        
         $viewFile = NV_FILES_DIR . '/' . $m[1];
 
         if (file_exists(NV_ROOTDIR . '/' . $viewFile)) {
