@@ -95,7 +95,7 @@ if (!empty($news_contents)) {
 
     // Mở bài viết sang nguồn tin chính thức
     if ($news_contents['external_link']) {
-        nv_redirect_location($news_contents['sourcetext']);
+        nv_redirect_location($news_contents['sourcetext'], 0, true);
     }
 
     $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $news_contents['titlesite'];

@@ -2396,15 +2396,20 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 
 /**
  * nv_redirect_location()
- *
- * @param string $url
+ * 
+ * @param mixed $url
  * @param integer $error_code
+ * @param bool $noreferrer
  * @return void
- *
  */
-function nv_redirect_location($url, $error_code = 301)
+function nv_redirect_location($url, $error_code = 301, $noreferrer = false)
 {
-    http_response_code($error_code);
+    if (is_int($error_code) and $error_code >= 100) {
+        http_response_code($error_code);
+    }
+    if ($noreferrer) {
+        Header("Referrer-Policy: no-referrer");
+    }
     Header('Location: ' . str_replace('&amp;', '&', nv_url_rewrite($url, true)));
     exit(0);
 }
