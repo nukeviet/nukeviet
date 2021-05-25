@@ -1,7 +1,7 @@
 <!-- BEGIN: tree -->
 <li>
 	<!-- BEGIN: icon -->
-	<img src="{MENUTREE.icon}" />&nbsp;
+	<img src="{MENUTREE.icon}" alt="{MENUTREE.note}" />&nbsp;
 	<!-- END: icon -->
 	<a title="{MENUTREE.note}" href="{MENUTREE.link}" {MENUTREE.target}>{MENUTREE.title_trim}</a>
 	<!-- BEGIN: tree_content -->
@@ -21,7 +21,7 @@
 	<!-- BEGIN: loopcat1 -->
 	<li {CAT1.class}>
 		<!-- BEGIN: icon -->
-        <img src="{CAT1.icon}" />&nbsp;
+        <img src="{CAT1.icon}" alt="{CAT1.note}" />&nbsp;
         <!-- END: icon -->
 		<a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title_trim}</a>
 		<!-- BEGIN: cat2 -->

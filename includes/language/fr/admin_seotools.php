@@ -80,3 +80,4 @@ $lang_module['rpc_ping'] = 'PING en misant à jour des données';
 $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Processus de PING réussit, voulez-vous revenir à la page de gestion des articles?';
 $lang_module['private_site'] = 'Décourager les moteurs de recherche d\'indexer ce site';
+$lang_module['ogp_image'] = "Image par défaut pour les balises Open Graph<br/>(meilleure taille: 1080px x 1080px)";

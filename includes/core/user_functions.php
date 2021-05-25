@@ -12,16 +12,6 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-// Meta Property
-$meta_property = [
-    'og:title' => '',
-    'og:type' => '',
-    'og:description' => '',
-    'og:site_name' => '',
-    'og:image' => '',
-    'og:url' => ''
-];
-
 /**
  * nv_create_submenu()
  *
@@ -443,6 +433,16 @@ function nv_html_meta_tags($html = true)
                 $ogUrl = NV_MAIN_DOMAIN . $ogUrl;
             }
             $meta_property['og:url'] = $ogUrl;
+        }
+        if (empty($meta_property['og:image']) and !empty($global_config['ogp_image'])) {
+            $imagesize = @getimagesize(NV_ROOTDIR . '/' . $global_config['ogp_image']);
+            if (!empty($imagesize[0])) {
+                $meta_property['og:image'] = NV_MAIN_DOMAIN . NV_BASE_SITEURL . $global_config['ogp_image'];
+                $meta_property['og:image:url'] = NV_MAIN_DOMAIN . NV_BASE_SITEURL . $global_config['ogp_image'];
+                $meta_property['og:image:type'] = $imagesize['mime'];
+                $meta_property['og:image:width'] = $imagesize[0];
+                $meta_property['og:image:height'] = $imagesize[1];
+            }
         }
         $meta_property['og:site_name'] = $global_config['site_name'];
 
