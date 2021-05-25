@@ -130,7 +130,7 @@
         <!-- BEGIN: tab_edit_avatar -->
         <div id="edit_avatar" class="well-lg tab-pane fade {TAB_AVATAR_ACTIVE}">
             <div class="margin-bottom">
-                <img id="myavatar" class="img-thumbnail bg-gainsboro" src="{DATA.photo}" width="{DATA.photoWidth}" height="{DATA.photoHeight}" data-default="{AVATAR_DEFAULT}" />
+                <img id="myavatar" alt="My Avatar" class="img-thumbnail bg-gainsboro" src="{DATA.photo}" width="{DATA.photoWidth}" height="{DATA.photoHeight}" data-default="{AVATAR_DEFAULT}" />
             </div>
             <div>
                 <button type="button" class="btn btn-primary btn-xs margin-right-sm" onclick="changeAvatar('{URL_AVATAR}');">{LANG.change_avatar}</button>

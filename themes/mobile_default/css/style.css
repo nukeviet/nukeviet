@@ -10,8 +10,8 @@
   font-family: 'NukeVietIcons';
   src:
     url('../../default/fonts/NukeVietIcons.woff2?q28kko') format('woff2'),
-    url('../../default/fonts/NukeVietIcons.ttf?q28kko') format('truetype'),
     url('../../default/fonts/NukeVietIcons.woff?q28kko') format('woff'),
+    url('../../default/fonts/NukeVietIcons.ttf?q28kko') format('truetype'),
     url('../../default/fonts/NukeVietIcons.svg?q28kko#NukeVietIcons') format('svg');
   font-weight: normal;
   font-style: normal;

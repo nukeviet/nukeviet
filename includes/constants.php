@@ -209,3 +209,17 @@ $global_config['check_op_layout'] = '/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/';
 $global_config['check_version'] = '/^([0-9]{1})\.([0-9]{1})\.([0-9]{2})$/';
 
 $global_config['others_headers'] = array('X-Content-Type-Options'=>'nosniff','X-XSS-Protection'=>'1; mode=block','Strict-Transport-Security'=>'max-age=31536000; preload');
+
+// Meta Property
+$meta_property = [
+    'og:title' => '',
+    'og:type' => '',
+    'og:description' => '',
+    'og:site_name' => '',
+    'og:image' => '',
+    'og:image:url' => '',
+    'og:image:type' => '',
+    'og:image:width' => '',
+    'og:image:height' => '',
+    'og:url' => ''
+];
