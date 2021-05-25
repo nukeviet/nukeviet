@@ -477,16 +477,26 @@ function nv_urldecode_ajax(my_url, containerid) {
 	return;
 }
 
+function nv_isExternal(url) {
+    var host = window.location.hostname.toLowerCase(),
+        regex = new RegExp('^(?:(?:f|ht)tp(?:s)?\:)?//(?:[^\@]+\@)?([^:/]+)', 'im'),
+        match = url.match(regex),
+        domain = ((match ? match[1].toString() : ((url.indexOf(':') < 0) ? host : ''))).toLowerCase();
+    return domain != host
+}
+
 function nv_open_browse(theURL, winName, w, h, features) {
 	LeftPosition = (screen.width) ? (screen.width - w) / 2 : 0;
 	TopPosition = (screen.height) ? (screen.height - h) / 2 : 0;
 	settings = 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition;
 	if (features != '') {
-		settings = settings + ',' + features;
+		settings += ',' + features;
 	}
+    if (nv_isExternal(theURL)) {
+        settings += ',noopener,noreferrer'
+    }
 	window.open(theURL, winName, settings).focus();
 }
-
 
 function nv_setIframeHeight(iframeId) {
 	var ifDoc, ifRef = document.getElementById(iframeId);

@@ -447,6 +447,10 @@ $(function() {
 	winResize();
 	// Modify all empty link
 	$('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
+ 
+    // Add rel="noopener noreferrer nofollow" to all external links
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').attr({target: "_blank", rel: "noopener noreferrer nofollow"});
+
 	// Smooth scroll to top
 	$(".bttop").click(function() {
 		if ($(this).find("em").is(".fa-chevron-up")) {
