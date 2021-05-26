@@ -592,6 +592,14 @@
                                 <tr>
                                     <td colspan="2">{LANG.csp_desc} <a href="https://content-security-policy.com/" target="_blank">{LANG.csp_details}</a></td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.csp_act}</strong></td>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="1" name="nv_csp_act"{CSP_ACT}/>
+                                        </label>
+                                    </td>
+                                </tr>
                                 <!-- BEGIN: csp_directive -->
                                 <tr>
                                     <td><strong>{DIRECTIVE.name}</strong><br />{DIRECTIVE.desc}</td>
