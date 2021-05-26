@@ -50,6 +50,11 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
+// Check https
+if (($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
+    nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
+}
+
 if (empty($global_config['my_domains'])) {
     $global_config['my_domains'] = [
         NV_SERVER_NAME
@@ -304,11 +309,6 @@ foreach ($list as $row) {
     } else {
         $module_config[$row['module']][$row['config_name']] = $row['config_value'];
     }
-}
-
-// Check https
-if (($global_config['ssl_https'] == 1 or $global_config['ssl_https'] == 2 and defined('NV_ADMIN')) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
-    nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
 }
 
 if ($global_config['is_user_forum']) {
