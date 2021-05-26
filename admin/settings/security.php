@@ -298,17 +298,24 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
 // Xử lý thiết lập CSP
 if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $directives = $nv_Request->get_typed_array('directives', 'post', 'textarea');
-    $nv_csp = '';
+    $array_config_csp = [];
+    $array_config_csp['nv_csp'] = '';
     foreach($directives as $key => $directive) {
         $directive = trim(strip_tags($directive));
         if (!empty($directive)) {
             $directive = str_replace(["\r\n", "\r", "\n"], ' ', $directive);
-            $nv_csp .= $key . ' ' . preg_replace("/[ ]+/", " ", $directive) . ';';
+            $array_config_csp['nv_csp'] .= $key . ' ' . preg_replace("/[ ]+/", " ", $directive) . ';';
         }
     }
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'nv_csp'");
-    $sth->bindParam(':config_value', $nv_csp, PDO::PARAM_STR);
-    $sth->execute();
+    $array_config_csp['nv_csp_act'] = (int) $nv_Request->get_bool('nv_csp_act', 'post', false);
+
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_csp as $config_name => $config_value) {
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->execute();
+    }
+
     $nv_Cache->delMod('settings');
 
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
@@ -324,6 +331,7 @@ if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request-
     } else {
         $directives = [];
     }
+    
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -818,6 +826,7 @@ foreach($csp_directives as $name => $desc) {
         'value' => !empty($directives[$name]) ? preg_replace("/[\s]+/", "\n", $directives[$name]) : ''
     ];
     $xtpl->assign('DIRECTIVE', $direct);
+    $xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
     $xtpl->parse('main.csp_directive');
 }
 

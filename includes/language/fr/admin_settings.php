@@ -346,3 +346,4 @@ $lang_module['csp_font_src'] = 'Politique dédiée aux polices';
 $lang_module['csp_connect_src'] = 'Politique dédiée aux connexions depuis un objet XMLHttpRequest ou un WebSocket';
 $lang_module['csp_form_action'] = 'Définit les sources valides qui peuvent être utilisées comme action de formulaire.';
 $lang_module['csp_base_uri'] = 'Politique de sécurité limitant les valeurs possibles d\'un élément &lt;base&gt;.';
+$lang_module['csp_act'] = 'Activer CSP';
