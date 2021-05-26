@@ -72,11 +72,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_site['zaloOfficialAccountID'] = $nv_Request->get_title('zaloOfficialAccountID', 'post', '');
     $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloOfficialAccountID']);
 
-    $array_config_site['ssl_https'] = $nv_Request->get_int('ssl_https', 'post');
-    if ($array_config_site['ssl_https'] < 0 or $array_config_site['ssl_https'] > 2) {
-        $array_config_site['ssl_https'] = 0;
-    }
-
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -86,6 +81,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     if (defined('NV_IS_GODADMIN')) {
         $array_config_global = [];
+        $array_config_global['ssl_https'] = $nv_Request->get_int('ssl_https', 'post');
+        if ($array_config_global['ssl_https'] < 0 or $array_config_global['ssl_https'] > 2) {
+            $array_config_global['ssl_https'] = 0;
+        }
+        
         $site_timezone = $nv_Request->get_title('site_timezone', 'post', '', 0);
         if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == 'byCountry'))) {
             $array_config_global['site_timezone'] = $site_timezone;
@@ -262,17 +262,6 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
-for ($i = 0; $i <= 2; $i ++) {
-    $ssl_https = [
-        'key' => $i,
-        'title' => $lang_module['ssl_https_' . $i],
-        'selected' => $i == $global_config['ssl_https'] ? ' selected="selected"' : ''
-    ];
-
-    $xtpl->assign('SSL_HTTPS', $ssl_https);
-    $xtpl->parse('main.ssl_https');
-}
-
 if (defined('NV_IS_GODADMIN')) {
     $result = $db->query("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
     while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
@@ -322,6 +311,17 @@ if (defined('NV_IS_GODADMIN')) {
     }
 
     $xtpl->parse('main.closed_site');
+    
+    for ($i = 0; $i <= 2; $i ++) {
+        $ssl_https = [
+            'key' => $i,
+            'title' => $lang_module['ssl_https_' . $i],
+            'selected' => $i == $global_config['ssl_https'] ? ' selected="selected"' : ''
+        ];
+    
+        $xtpl->assign('SSL_HTTPS', $ssl_https);
+        $xtpl->parse('main.system.ssl_https');
+    }
 
     foreach ($site_mods as $mod => $row) {
         $xtpl->assign('MODE_VALUE', $mod);
