@@ -347,3 +347,19 @@ $lang_module['csp_connect_src'] = 'Politique dédiée aux connexions depuis un o
 $lang_module['csp_form_action'] = 'Définit les sources valides qui peuvent être utilisées comme action de formulaire.';
 $lang_module['csp_base_uri'] = 'Politique de sécurité limitant les valeurs possibles d\'un élément &lt;base&gt;.';
 $lang_module['csp_act'] = 'Activer CSP';
+
+$lang_module['rp'] = 'Paramètre RP';
+$lang_module['rp_desc'] = 'Referrer-Policy (RP) est le nom d\'un en-tête HTTP que les navigateurs modernes utilisent pour contrôler la quantité d\'informations de référent (envoyées via l\'en-tête Referer).';
+$lang_module['rp_desc2'] = 'Types d\'informations sur le référent (peuvent être envoyées via l\'en-tête Referer):<ul><li>Origin: inclut le scheme (ex: http, https), host (ex: nukeviet.vn) et le port (ex: 80, 443)</li><li>Path (chemin absolu sur le serveur, ex: thumuc1/index.php)</li><li>Querystring (ex: ?name=ferret&color=purple)</li></ul>';
+$lang_module['rp_details'] = 'Des détails';
+$lang_module['rp_act'] = 'Activer RP';
+$lang_module['rp_no_referrer'] = 'L\'en-tête Referer sera entièrement omis. Aucune information de référent n\'est envoyée avec les demandes.<br/>Le système NukeViet ne prend pas en charge cette directive!';
+$lang_module['rp_no_referrer_when_downgrade'] = 'L\'origin, le path, et la querystring de l\'URL sont envoyés comme référent quand le niveau de sécurité du protocole reste le même (HTTP vers HTTP, HTTPS vers HTTPS) ou s\'améliore (HTTP vers HTTPS) mais ne sont pas envoyés quand si la destination est moins sécurisée (HTTPS vers HTTP)';
+$lang_module['rp_origin'] = 'N\'envoie que l\'origin du document comme référent. Par exemple, un document à l\'adresse https://example.com/page.html enverra le référent https://example.com/.';
+$lang_module['rp_origin_when_cross_origin'] = 'Envoie l\'origine, le chemin et les paramètres de requête pour les requêtes same-origin et seulement l\'origine du document dans les autres cas.';
+$lang_module['rp_same_origin'] = 'Un référent sera envoyé aux page de même origine, mais des requêtes vers des adresses externes n\'enverront aucune information sur le référent.';
+$lang_module['rp_strict_origin'] = 'N\'envoie que l\'origine du document comme référent quand le niveau de sécurité du protocole reste le même (HTTPS vers HTTPS) mais n\'envoie rien si la destination est moins sécurisée (HTTPS vers HTTP).';
+$lang_module['rp_strict_origin_when_cross_origin'] = 'Envoie l\'origine, le chemin et les paramètres de requête pour les requêtes de même origine, n\'envoie que l\'origine quand le niveau de sécurité du protocole reste le même pour les requêtes vers des adresses externes (HTTPS vers HTTPS) et n\'envoie rien si la destination est moins sécurisée (HTTPS vers HTTP).';
+$lang_module['rp_unsafe_url'] = 'Envoie l\'origine, le chemin et les paramètres de requête pour toutes les requêtes sans tenir compte du niveau de sécurité. Cette valeur divulgera des informations potentiellement confidentielles de la part des URL de ressources HTTPS vers des origines non sécurisées. Considérez les conséquences de ce paramétrage avant de vous en servir.';
+$lang_module['rp_note'] = 'Si vous voulez spécifier une règle à appliquer par défaut dans les où la règle voulue n\'est pas supportée par les navigateurs, utilisez un liste de valeurs séparées par des virgules avec la règle voulue fournie en dernière position: Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. Ici, no-referrer-when-downgrade ne sera utilisée que si strict-origin-when-cross-origin n\'est pas supportée par le navigateur.';
+$lang_module['rp_directives'] = 'Referrer-Policy directives';
