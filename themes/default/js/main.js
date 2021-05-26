@@ -486,7 +486,7 @@ $(function() {
 	});
 
     // Add rel="noopener noreferrer nofollow" to all external links
-    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').attr({target: "_blank", rel: "noopener noreferrer nofollow"});
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({target: "_blank", rel: "noopener noreferrer nofollow"});
 
 	// Smooth scroll to top
 	$("#totop,#bttop,.bttop").click(function() {
