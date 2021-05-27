@@ -9,6 +9,11 @@
  */
 
 if (isset($_GET['response_headers_detect'])) {
+    if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
+        Header('x-is-https: 1');
+    } else {
+        Header('x-is-http: 1');
+    }
     exit(0);
 }
 

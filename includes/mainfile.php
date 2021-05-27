@@ -138,7 +138,7 @@ if (defined('NV_SYSTEM')) {
 }
 
 // Ket noi voi class xu ly request
-$nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP, $nv_Server);
+$nv_Request = new NukeViet\Core\Request($global_config + ['https_only' => !empty($sys_info['https_only'])], NV_CLIENT_IP, $nv_Server);
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
@@ -307,7 +307,7 @@ foreach ($list as $row) {
 }
 
 // Check https
-if (($global_config['ssl_https'] == 1 or $global_config['ssl_https'] == 2 and defined('NV_ADMIN')) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
+if (empty($sys_info['http_only']) and (($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off'))) {
     nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
 }
 
