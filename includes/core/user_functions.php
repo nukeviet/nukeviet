@@ -355,6 +355,9 @@ function nv_html_meta_tags($html = true)
     if (file_exists($file_metatags)) {
         $mt = file_get_contents($file_metatags);
         $patters = [];
+        $patters['/\{BASE\_SITEURL\}/'] = NV_BASE_SITEURL;
+        $patters['/\{UPLOADS\_DIR\}/'] = NV_UPLOADS_DIR;
+        $patters['/\{ASSETS\_DIR\}/'] = NV_ASSETS_DIR;
         $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
         $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
         $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
@@ -508,7 +511,7 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $canonicalUrl, $prevPage, $nextPage, $module_info, $db_config, $nv_Cache;
+    global $canonicalUrl, $prevPage, $nextPage, $module_info, $db_config, $nv_Cache, $global_config, $lang_global;
 
     $return = [];
     if (!empty($canonicalUrl)) {
@@ -556,6 +559,42 @@ function nv_html_links($html = true)
     $nv_html_css = nv_html_css(false);
     if ($nv_html_css) {
         $return = array_merge_recursive($return, $nv_html_css);
+    }
+
+    // Thêm các thẻ link từ cấu hình Link-Tags trong admin
+    if ($global_config['idsite'] and file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_linktags.xml')) {
+        $file_linktags = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_linktags.xml';
+    } else {
+        $file_linktags = NV_ROOTDIR . '/' . NV_DATADIR . '/linktags.xml';
+    }
+    if (file_exists($file_linktags)) {
+        $lt = file_get_contents($file_linktags);
+        $patters = [];
+        $patters['/\{BASE\_SITEURL\}/'] = NV_BASE_SITEURL;
+        $patters['/\{UPLOADS\_DIR\}/'] = NV_UPLOADS_DIR;
+        $patters['/\{ASSETS\_DIR\}/'] = NV_ASSETS_DIR;
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
+        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
+        $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
+        $lt = preg_replace(array_keys($patters), array_values($patters), $lt);
+        $lt = preg_replace('/\{(.*)\}/', '', $lt);
+        $lt = simplexml_load_string($lt);
+        $lt = nv_object2array($lt);
+
+        if (!empty($lt['link_item'])) {
+            $linktags = [];
+            if (isset($lt['link_item'][0])) {
+                $linktags = $lt['link_item'];
+            } else {
+                $linktags[] = $lt['link_item'];
+            }
+            foreach ($linktags as $link) {
+                if (!empty($link['rel'])) {
+                    $return[] = $link;
+                }
+            }
+        }
     }
 
     if (!$html) {

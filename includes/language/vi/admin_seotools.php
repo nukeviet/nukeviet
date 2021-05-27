@@ -21,7 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['pagetitle'] = 'Cấu hình tag "title"';
 $lang_module['metaTagsConfig'] = 'Cấu hình Meta-Tags';
-
+$lang_module['linkTagsConfig'] = "Cấu hình Link-Tags";
 $lang_module['sitemapPing'] = 'Sitemap Ping';
 $lang_module['searchEngine'] = 'Máy chủ tìm kiếm';
 $lang_module['searchEngineConfig'] = 'Quản lý Máy chủ tìm kiếm';
@@ -86,3 +86,11 @@ $lang_module['rpc_ping'] = "PING khi cập nhật dữ liệu";
 $lang_module['rpc_ping_page'] = "PING bài viết";
 $lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
 $lang_module['ogp_image'] = "Hình ảnh mặc định cho thẻ Open Graph<br/>(kích thước tốt nhất: 1080px x 1080px)";
+
+$lang_module['linkTags_attribute'] = 'Thuộc tính';
+$lang_module['linkTags_value'] = 'Giá trị';
+$lang_module['linkTags_add_attribute'] = 'Thêm thuộc tính';
+$lang_module['linkTags_rel_val_required'] = 'Bạn cần khai báo giá trị của thuộc tính rel';
+$lang_module['linkTags_add'] = 'Thêm thẻ link mới';
+$lang_module['linkTags_acceptVars'] = 'Các biến được chấp nhận trong giá trị thuộc tính';
+$lang_module['linkTags_del_confirm'] = 'Bạn thục sự muốn xoá?';

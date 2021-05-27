@@ -21,6 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['pagetitle'] = 'Configuration la balise "title"';
 $lang_module['metaTagsConfig'] = 'Configuration de Meta-Tags';
+$lang_module['linkTagsConfig'] = "Configuration de Link-Tags";
 $lang_module['sitemapPing'] = 'Ping Plan du site';
 $lang_module['searchEngine'] = 'Moteur de recherche';
 $lang_module['searchEngineConfig'] = 'Gérer les moteurs de recherches';
@@ -81,3 +82,11 @@ $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Processus de PING réussit, voulez-vous revenir à la page de gestion des articles?';
 $lang_module['private_site'] = 'Décourager les moteurs de recherche d\'indexer ce site';
 $lang_module['ogp_image'] = "Image par défaut pour les balises Open Graph<br/>(meilleure taille: 1080px x 1080px)";
+
+$lang_module['linkTags_attribute'] = 'Attribut';
+$lang_module['linkTags_value'] = 'Valeur';
+$lang_module['linkTags_add_attribute'] = 'Ajouter un attribut';
+$lang_module['linkTags_rel_val_required'] = 'Vous devez déclarer la valeur de l\'attribut rel';
+$lang_module['linkTags_add'] = 'Ajouter une nouvelle balise de lien';
+$lang_module['linkTags_acceptVars'] = 'Variables acceptées dans la valeur d\'attribut';
+$lang_module['linkTags_del_confirm'] = 'Voulez-vous vraiment supprimer?';
