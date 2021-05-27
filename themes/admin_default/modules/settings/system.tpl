@@ -66,7 +66,6 @@
                     <td><strong>{LANG.time_pattern}</strong></td>
                     <td><input type="text" name="time_pattern" value="{DATA.time_pattern}" class="w150 form-control"/></td>
                 </tr>
-                <!-- BEGIN: system -->
                 <tr>
                     <td><strong>{LANG.ssl_https}</strong></td>
                     <td>
@@ -77,6 +76,7 @@
                         </select>
                     </td>
                 </tr>
+                <!-- BEGIN: system -->
                 <tr>
                     <td><strong>{LANG.lang_multi}</strong></td>
                     <td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} data-toggle="controlrw"/></td>
