@@ -27,7 +27,7 @@ function nv_get_rss_link()
             $mod_data = $mod_info['module_data'];
             $mod_file = $mod_info['module_file'];
 
-            $contentrss .= "<li><span><i class=\"fa fa-rss text-warning\"></i> <a rel=\"nofollow\" title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></span></a>";
+            $contentrss .= "<li><span><i class=\"fa fa-rss text-warning\"></i> <a rel=\"nofollow\" title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></a></span>";
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
                 $rssarray = array();
                 include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;

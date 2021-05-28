@@ -82,7 +82,7 @@
                 <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
                     <div style="height:10px"></div>
                     <div class="well">
-                        <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+                        <iframe height="600" scrolling="yes" src="" width="100%"></iframe>
                     </div>
                 </div>
                 <!-- END: content_quick_viewpdf -->
