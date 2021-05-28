@@ -22,6 +22,9 @@ ob_end_clean();
 $contents = nv_url_rewrite($contents);
 if (!defined('NV_IS_AJAX')) {
     $contents = nv_change_buffer($contents);
+    $optimizer = new NukeViet\Core\Optimizer($contents, NV_BASE_SITEURL);
+    $contents = $optimizer->process();
+    $optimizer->headerPreload($headers);
     if (defined('NV_IS_SPADMIN')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($lang_global['memory_time_usage'], nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }

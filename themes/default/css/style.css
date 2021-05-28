@@ -10,10 +10,10 @@
 @font-face {
   font-family: 'NukeVietIcons';
   src:
-    url('../fonts/NukeVietIcons.woff2?q28kko') format('woff2'),
-    url('../fonts/NukeVietIcons.woff?q28kko') format('woff'),
-    url('../fonts/NukeVietIcons.ttf?q28kko') format('truetype'),
-    url('../fonts/NukeVietIcons.svg?q28kko#NukeVietIcons') format('svg');
+    url('../fonts/NukeVietIcons.woff2') format('woff2'),
+    url('../fonts/NukeVietIcons.woff') format('woff'),
+    url('../fonts/NukeVietIcons.ttf') format('truetype'),
+    url('../fonts/NukeVietIcons.svg') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
