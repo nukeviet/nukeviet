@@ -13,10 +13,14 @@ if (!defined('NV_MAINFILE')) {
 }
 
 // Gọi global bởi có trường hợp file footer.php include từ trong hàm
-global $global_config;
+global $global_config, $headers;
 
 if (!empty($global_config['cdn_url'])) {
     $contents = preg_replace("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!http(s?)\:\/\/)([^\>]*)\.(css|js|jpg|png|gif))['\"]([^\>]*)\>/i", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\8>", $contents);
 } else {
     $contents = preg_replace("/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $contents);
+}
+
+if (!empty($headers['link'])) {
+    $headers['link'] = preg_replace("/\<((?!http(s?)\:\/\/).*?\.(js|css))\>/", "<\\1?t=" . $global_config['timestamp'] . ">", $headers['link']);
 }

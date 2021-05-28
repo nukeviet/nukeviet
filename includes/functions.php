@@ -2157,8 +2157,7 @@ function nv_change_buffer($buffer)
         $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $_body_cronjobs . '</body>', $buffer, 1);
     }
 
-    $optimizer = new NukeViet\Core\Optimizer($buffer, NV_BASE_SITEURL);
-    return $optimizer->process();
+    return $buffer;
 }
 
 /**
