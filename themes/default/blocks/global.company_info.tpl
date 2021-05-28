@@ -19,7 +19,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <iframe frameborder="0" style="border: 0;" allowfullscreen class="company-map" id="company-map-{DATA.bid}" data-src="{DATA.company_mapurl}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/index.html" data-loaded="false"></iframe>
+                <iframe allowfullscreen class="company-map" id="company-map-{DATA.bid}" data-src="{DATA.company_mapurl}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/index.html" data-loaded="false"></iframe>
             </div>
         </div>
     </div>

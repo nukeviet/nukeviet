@@ -4,7 +4,7 @@
     <div class="panel-body">
         <form action=""<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
         	<h3>{VOTING.question}</h3>
-        	<fieldset>
+        	<div>
         		<!-- BEGIN: resultn -->
         		<div class="checkbox">
         		<label>
@@ -25,7 +25,7 @@
         			<input class="btn btn-success btn-sm" type="button" value="{VOTING.langsubmit}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', '{VOTING.accept}', '{VOTING.checkss}', '{VOTING.errsm}', '{VOTING.active_captcha}');" />
                     <input class="btn btn-primary btn-sm" type="button" value="{VOTING.langresult}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', 0, '{VOTING.checkss}', '', '{VOTING.active_captcha}');"/>
         		</div>
-        	</fieldset>
+        	</div>
         </form>
     </div>
 </div>
