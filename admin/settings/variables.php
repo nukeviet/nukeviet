@@ -14,6 +14,12 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $errormess = '';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$sameSite_array = [
+    'Empty' => $lang_module['cookie_SameSite_Empty'],
+    'Lax' => $lang_module['cookie_SameSite_Lax'],
+    'Strict' => $lang_module['cookie_SameSite_Strict'],
+    'None' => $lang_module['cookie_SameSite_None']
+];
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $preg_replace = array('pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '');
 
@@ -22,6 +28,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global['session_prefix'] = nv_substr($nv_Request->get_title('session_prefix', 'post', '', 0, $preg_replace), 0, 255);
     $array_config_global['cookie_secure'] = (int)$nv_Request->get_bool('cookie_secure', 'post', 0);
     $array_config_global['cookie_httponly'] = (int)$nv_Request->get_bool('cookie_httponly', 'post', 0);
+    $array_config_global['cookie_SameSite'] = $nv_Request->get_title('cookie_SameSite', 'post', '');
+    if (!empty($array_config_global['cookie_SameSite']) and !isset($sameSite_array[$array_config_global['cookie_SameSite']])) {
+        $array_config_global['cookie_SameSite'] = '';
+    }
+    $array_config_global['cookie_SameSite'] == 'Empty' && $array_config_global['cookie_SameSite'] = '';
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
@@ -67,6 +78,20 @@ $xtpl->assign('CHECKBOX_COOKIE_HTTPONLY', ($global_config['cookie_httponly'] == 
 if ($errormess != '') {
     $xtpl->assign('ERROR', $errormess);
     $xtpl->parse('main.error');
+}
+
+foreach($sameSite_array as $val => $note) {
+    if (empty($global_config['cookie_SameSite'])) {
+        $global_config['cookie_SameSite'] = 'Empty';
+    }
+
+    $sameSite = [
+        'val' => $val,
+        'note' => $note,
+        'checked' => $val == $global_config['cookie_SameSite'] ? ' checked="checked"' : ''
+    ];
+    $xtpl->assign('SAMESITE', $sameSite);
+    $xtpl->parse('main.SameSite');
 }
 $xtpl->parse('main');
 $content = $xtpl->text('main');

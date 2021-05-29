@@ -138,6 +138,16 @@ $lang_module['live_session_time'] = 'Le temps de vie de la session';
 $lang_module['live_session_time0'] = '=0 Vivre jusqu\'à ce que le navigateur soit fermé';
 $lang_module['cookie_secure'] = 'cookie secure';
 $lang_module['cookie_httponly'] = 'cookie http seul';
+$lang_module['cookie_SameSite'] = 'cookie SameSite';
+$lang_module['cookie_secure_note'] = 'Un cookie sécurisé est envoyé uniquement si la requête est faite en https:, sauf pour localhost';
+$lang_module['cookie_httponly_note'] = 'Empêche JavaScript d\'accéder au, par exemple, au travers de la propriété Document.cookie';
+$lang_module['cookie_SameSite_note'] = 'Contrôle si un cookie est envoyé avec les requêtes d\'origine croisée';
+$lang_module['cookie_SameSite_note2'] = 'Cet attribut ne prend effet que lorsque la version php du serveur >= 7.3';
+$lang_module['cookie_SameSite_Empty'] = 'Dépend du navigateur';
+$lang_module['cookie_SameSite_Lax'] = 'Les cookies ne sont pas envoyés lors de sous-requêtes intersites normales (par exemple pour charger des images), mais sont envoyés lorsqu\'un utilisateur navigue vers le site d\'origine';
+$lang_module['cookie_SameSite_Strict'] = 'Les cookies ne seront envoyés qu\'avec les requêtes effectuées sur le domaine de même niveau, et ne seront pas envoyées sur les requêtes vers des sites tiers';
+$lang_module['cookie_SameSite_None'] = 'Les cookies seront envoyés dans tous les contextes (l\'attribut cookie Secure doit être défini)';
+
 $lang_module['is_user_forum'] = 'Confier la gestion d\'utilisateurs au forum';
 $lang_module['banip'] = 'IPs interdits';
 $lang_module['banip_ip'] = 'IP';
