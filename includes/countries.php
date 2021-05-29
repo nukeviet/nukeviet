@@ -330,8 +330,22 @@ function nv_getCountry_from_cookie($ip)
 
     $cookie_domain = preg_replace(array( '/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain);
     $cookie_domain = preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain) ? '.' . $cookie_domain : '';
-
-    setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )$global_config['cookie_secure'], ( bool )$global_config['cookie_httponly']);
+    $cookie_path = '/';
+    if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
+        $options = [
+            'expires' => $livecookietime,
+            'path' => $cookie_path,
+            'domain' => $cookie_domain,
+            'secure' => ( bool )$global_config['cookie_secure'],
+            'httponly' => ( bool )$global_config['cookie_httponly']
+        ];
+        if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $global_config['cookie_secure']))) {
+            $options['samesite'] = $global_config['cookie_SameSite'];
+        }
+        setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $options);
+    } else {
+        setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, $cookie_path, $cookie_domain, ( bool )$global_config['cookie_secure'], ( bool )$global_config['cookie_httponly']);
+    }
 
     return $country;
 }

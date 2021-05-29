@@ -41,6 +41,7 @@ $global_config['closed_site']=0;
 $global_config['cookie_httponly']=1;
 $global_config['cookie_notice_popup']=0;
 $global_config['cookie_prefix']='nv4c_z0FZ1';
+$global_config['cookie_SameSite']='Lax';
 $global_config['cookie_secure']=0;
 $global_config['crossadmin_restrict']=1;
 $global_config['crossadmin_valid_domains']=[];

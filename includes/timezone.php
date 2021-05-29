@@ -64,7 +64,21 @@ if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cooki
     $client_timezone_name = base64_encode(NV_CLIENT_TIMEZONE_NAME . '.' . NV_CLIENT_TIMEZONE_OFFSET . '.' . NV_CLIENT_TIMEZONE_DST);
 
     $secure = NV_SERVER_PROTOCOL == 'https' ? true : false;
-    setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $matches2[5], $secure, true);
+    if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
+        $options = [
+            'expires' => 0,
+            'path' => $matches2[4],
+            'domain' => $matches2[5],
+            'secure' => $secure,
+            'httponly' => true
+        ];
+        if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $secure))) {
+            $options['samesite'] = $global_config['cookie_SameSite'];
+        }
+        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, $options);
+    } else {
+        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $matches2[5], $secure, true);
+    }
 
     unset($client_timezone_name, $sd);
 }
