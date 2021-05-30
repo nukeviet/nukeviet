@@ -25,6 +25,6 @@
         window.addEventListener('message', nvgSSOReciver, false);
         </script>
         <!-- END: crossdomain_listener -->
-        <script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/bootstrap.min.js"></script>
+        <script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/bootstrap.min.js"></script>
     </body>
 </html>
