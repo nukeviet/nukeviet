@@ -24,7 +24,7 @@ $checkss = $nv_Request->get_title('checkss', 'post');
 
 $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session', 0);
 
-if ($id > 0 and in_array($point, $array_point) and $checkss == md5($id . NV_CHECK_SESSION)) {
+if (!empty($module_config[$module_name]['allowed_rating']) and $id > 0 and in_array($point, $array_point) and $checkss == md5($id . NV_CHECK_SESSION)) {
     if (! empty($time_set)) {
         die($lang_module['rating_error2'] . '|0|0');
     }

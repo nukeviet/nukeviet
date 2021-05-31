@@ -35,6 +35,7 @@ if (!empty($savesetting)) {
     $array_config['blockheight'] = $nv_Request->get_int('blockheight', 'post', 0);
     $array_config['imagefull'] = $nv_Request->get_int('imagefull', 'post', 0);
 
+    $array_config['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post', false);
     $array_config['allowed_rating_point'] = $nv_Request->get_int('allowed_rating_point', 'post', 0);
     $array_config['copyright'] = $nv_Request->get_editor('copyright', '', NV_ALLOWED_HTML_TAGS);
     $array_config['showtooltip'] = $nv_Request->get_int('showtooltip', 'post', 0);
@@ -227,6 +228,7 @@ $xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_a
 $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant_articles_httpauth'] ? ' checked="checked"' : '');
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 $xtpl->assign('IDENTIFY_CAT_CHANGE', $module_config[$module_name]['identify_cat_change'] ? ' checked="checked"' : '');
+$xtpl->assign('ALLOWED_RATING', $module_config[$module_name]['allowed_rating'] ? ' checked="checked"' : '');
 
 $xtpl->assign('FRONTEND_EDIT_ALIAS', $module_config[$module_name]['frontend_edit_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('FRONTEND_EDIT_LAYOUT', $module_config[$module_name]['frontend_edit_layout'] ? ' checked="checked"' : '');

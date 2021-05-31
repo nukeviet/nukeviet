@@ -388,6 +388,9 @@ if ($news_contents['topicid'] > 0 & $st_links > 0) {
     unset($topic, $rows);
 }
 
+if (empty($module_config[$module_name]['allowed_rating'])) {
+    $news_contents['allowed_rating'] = false;
+}
 if ($news_contents['allowed_rating']) {
     $time_set_rating = $nv_Request->get_int($module_name . '_' . $op . '_' . $news_contents['id'], 'cookie', 0);
     if ($time_set_rating > 0) {
