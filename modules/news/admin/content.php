@@ -1500,6 +1500,12 @@ if ($rowcontent['mode'] == 'edit') {
     $xtpl->parse('main.holdon_edit');
 }
 
+if (!empty($module_config[$module_name]['allowed_rating'])) {
+    $xtpl->parse('main.allowed_rating');
+} else {
+    $xtpl->parse('main.not_allowed_rating');
+}
+
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 

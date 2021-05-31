@@ -101,6 +101,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>{LANG.content_allowed_rating}</th>
+                    <td><input type="checkbox" value="1" name="allowed_rating"{ALLOWED_RATING}/></td>
+                </tr>
+                <tr>
                     <th>{LANG.allowed_rating_point}</th>
                     <td>
                         <select class="form-control" name="allowed_rating_point">
