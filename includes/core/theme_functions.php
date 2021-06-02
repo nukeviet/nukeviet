@@ -369,13 +369,16 @@ function nv_xmlOutput($content, $lastModified)
 }
 
 /**
- *
- * @param array $channel
- * @param array $items
+ * nv_rss_generate()
+ * 
+ * @param mixed $channel
+ * @param mixed $items
+ * @param mixed $atomlink
  * @param string $timemode
- * @param boolean $noindex
+ * @param bool $noindex
+ * @return void
  */
-function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
+function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noindex = true)
 {
     global $global_config, $client_info;
 
@@ -387,7 +390,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 
     $channel['generator'] = 'NukeViet v4.0';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
-    $channel['atomlink'] = str_replace('&', '&amp;', $client_info['selfurl']);
+    $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite($atomlink, true);
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
 
@@ -402,14 +405,6 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
     $channel['link'] = nv_url_rewrite($channel['link'], true);
     if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
         $channel['link'] = NV_MY_DOMAIN . $channel['link'];
-    }
-
-    if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['atomlink'], $matches)) {
-        $channel['atomlink'] = NV_BASE_SITEURL . $matches[1];
-    }
-    $channel['atomlink'] = nv_url_rewrite($channel['atomlink'], true);
-    if (!str_starts_with($channel['atomlink'], NV_MY_DOMAIN)) {
-        $channel['atomlink'] = NV_MY_DOMAIN . $channel['atomlink'];
     }
 
     $channel['pubDate'] = 0;

@@ -14,10 +14,10 @@ if (!defined('NV_IS_MOD_NEWS')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $contents = '';
 $cache_file = '';
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $isMob = ((!empty($global_config['mobile_theme']) and $module_info['template'] == $global_config['mobile_theme']) or $client_info['is_mobile']);
 $viewcat = $isMob ? $module_config[$module_name]['mobile_indexfile'] : $module_config[$module_name]['indexfile'];
 $no_generate = ['viewcat_none', 'viewcat_main_left', 'viewcat_main_right', 'viewcat_main_bottom', 'viewcat_two_column'];
@@ -31,7 +31,19 @@ if (($page < 2 and isset($array_op[0])) or isset($array_op[1]) or ($page > 1 and
     nv_redirect_location($base_url);
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($page > 1 ? ('&amp;' . NV_OP_VARIABLE . '=page-' . $page) : ''), true);
+if ($page > 1) {
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
+}
+
+$base_url_rewrite = nv_url_rewrite($page_url, true);
+$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+    nv_redirect_location($base_url_rewrite_location);
+} else {
+    $canonicalUrl = $base_url_rewrite;
+}
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';

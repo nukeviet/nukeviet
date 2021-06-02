@@ -12,20 +12,22 @@ if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 if (empty($vid)) {
-    $base_url_rewrite = nv_url_rewrite($base_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
+    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+        nv_redirect_location($base_url_rewrite_location);
+    } else {
+        $canonicalUrl = $base_url_rewrite;
     }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
@@ -121,8 +123,6 @@ if (empty($vid)) {
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . '&amp;vid=' . $vid, true);
-
     $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time, vote_one FROM ' . NV_PREFIXLANG . '_' . $module_data;
     if (!defined('NV_IS_MODADMIN')) {
         $sql .= ' WHERE act=1';
@@ -130,19 +130,16 @@ if (empty($vid)) {
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     if (empty($list) or !isset($list[$vid])) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     $row = $list[$vid];
     if (((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) and !defined('NV_IS_MODADMIN')) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     if (!nv_user_in_groups($row['groups_view'])) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     $difftimeout = 3600;
@@ -177,8 +174,7 @@ if (empty($vid)) {
         $captcha = $nv_Request->get_title('captcha', 'get', '');
 
         if ($checkss != md5($vid . NV_CHECK_SESSION)) {
-            header('location:' . $global_config['site_url']);
-            exit();
+            nv_redirect_location(nv_url_rewrite($page_url, true));
         }
 
         if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($captcha, $module_config[$module_name]['captcha_type'])) {
@@ -243,8 +239,11 @@ if (empty($vid)) {
         'note' => $note
     ];
 
-    $page_title = $row['question'];
     $contents = voting_result($voting);
+
+    $page_title = $row['question'];
+    $page_url .= '&amp;vid=' . $vid;
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
     include NV_ROOTDIR . '/includes/header.php';
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');

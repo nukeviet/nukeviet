@@ -28,9 +28,18 @@ if (empty($row)) {
 }
 
 $contents = '';
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host, true);
 $mod_title = $page_title = sprintf($lang_module['refererbysite'], $host);
 $key_words = $module_info['keywords'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
+$base_url_rewrite = nv_url_rewrite($page_url, true);
+$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+    nv_redirect_location($base_url_rewrite_location);
+} else {
+    $canonicalUrl = $base_url_rewrite;
+}
 
 $cts = [];
 $cts['caption'] = $page_title;

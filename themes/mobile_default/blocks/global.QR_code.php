@@ -105,7 +105,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
      */
     function nv_block_qr_code($block_config)
     {
-        global $page_title, $global_config, $client_info, $lang_global;
+        global $page_title, $global_config, $page_url, $module_name, $home, $op, $lang_global;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.QR_code.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -119,7 +119,20 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $block_config['selfurl'] = $client_info['selfurl'];
+        if (empty($page_url)) {
+            if ($home) {
+                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+            } else {
+                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+                if ($op != 'main') {
+                    $current_page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $op;
+                }
+            }
+        } else {
+            $current_page_url = $page_url;
+        }
+
+        $block_config['selfurl'] = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
         $block_config['title'] = "QR-Code: " . str_replace('"', "&quot;", ($page_title ? $page_title : $global_config['site_name']));
         $xtpl->assign('QRCODE', $block_config);
 

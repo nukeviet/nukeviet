@@ -49,6 +49,8 @@ if ($nv_ajax_login) {
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
 $info = $lang_module['logout_ok'] . '<br /><br />';
 $info .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />';

@@ -16,7 +16,7 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 $set_view_page = ($page > 1 and substr($viewcat, 0, 13) == 'viewcat_main_') ? true : false;
-$base_url = $global_array_cat[$catid]['link'];
+$page_url = $base_url = $global_array_cat[$catid]['link'];
 $no_generate = ['viewcat_two_column'];
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
@@ -32,10 +32,20 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 
 // Kiểm tra và chặn đánh tùy ý các op
 if (($page < 2 and isset($array_op[1])) or isset($array_op[2]) or ($page > 1 and in_array($viewcat, $no_generate))) {
-    nv_redirect_location($base_url);
+    nv_redirect_location($page_url);
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($page > 1 ? ('/page-' . $page) : ''), true);
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+}
+
+$base_url_rewrite = nv_url_rewrite($page_url, true);
+$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
+$request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
+    nv_redirect_location($base_url_check);
+}
+$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
 $page_title = (!empty($global_array_cat[$catid]['titlesite'])) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
