@@ -18,6 +18,7 @@ $items = [];
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
+$atomlink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'];
 
 if ($module_info['rss']) {
     $sql = 'SELECT id, title, alias, image, imagealt, description, add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 ORDER BY weight ASC LIMIT 20';
@@ -34,5 +35,5 @@ if ($module_info['rss']) {
         ];
     }
 }
-nv_rss_generate($channel, $items);
+nv_rss_generate($channel, $items, $atomlink);
 die();

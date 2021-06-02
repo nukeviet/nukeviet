@@ -15,6 +15,7 @@ if (! defined('NV_IS_MOD_USER')) {
 $page_title = $module_info['funcs'][$op]['func_site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['listusers'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 if (!nv_user_in_groups($global_config['whoviewuser'])) {
     header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
@@ -35,6 +36,9 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
     if (preg_match('/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches)) {
         $md5 = $matches[2];
     }
+
+    $page_url .= '/' . $array_op[1];
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
     if (! empty($md5)) {
         $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5' . (defined('NV_IS_ADMIN') ? '' : ' AND active=1'));
@@ -125,12 +129,14 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
     $sortby = $nv_Request->get_string('sortby', 'get', 'DESC');
     $page = $nv_Request->get_int('page', 'get', 1);
 
+    $page_url .= '&orderby=' . $orderby . '&sortby=' . $sortby;
+
     // Kiem tra du lieu hop chuan
     if ((! empty($orderby) and ! in_array($orderby, array( 'username', 'gender', 'regdate' ))) or (! empty($sortby) and ! in_array($sortby, array( 'DESC', 'ASC' )))) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&orderby=' . $orderby . '&sortby=' . $sortby;
+    $base_url = $page_url;
 
     $per_page = 25;
     $array_order = array(
@@ -193,6 +199,7 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
     // Tieu de khi phan trang
     if ($page > 1) {
         $page_title .= NV_TITLEBAR_DEFIS . sprintf($lang_module['page'], ceil($page / $per_page));
+        $page_url .= '&page=' . $page;
     }
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
@@ -200,6 +207,8 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
     unset($result, $item);
 
     $contents = nv_memberslist_theme($users_array, $array_order_new, $generate_page);
+
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

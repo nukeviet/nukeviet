@@ -58,46 +58,46 @@ function BoldKeywordInStr($str, $keyword)
 }
 
 $key = $nv_Request->get_title('q', 'get', '');
+$key = str_replace(["'", '"', '<', '>', "&#039;", "&quot;", "&lt;", "&gt;"], '', $key);
 $key = str_replace('+', ' ', $key);
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
 
-$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if (!empty($key)) {
-    $base_url_rewrite .= '&q=' . urlencode($key);
+    $page_url .= '&q=' . urlencode($key);
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
 if (!empty($choose)) {
-    $base_url_rewrite .= '&choose=' . $choose;
+    $page_url .= '&choose=' . $choose;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 if (!empty($catid)) {
-    $base_url_rewrite .= '&catid=' . $catid;
+    $page_url .= '&catid=' . $catid;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
-    $base_url_rewrite .= '&from_date=' . $date_array['from_date'];
+    $page_url .= '&from_date=' . $date_array['from_date'];
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
-    $base_url_rewrite .= '&to_date=' . $date_array['to_date'];
+    $page_url .= '&to_date=' . $date_array['to_date'];
 }
 
 $page = $nv_Request->get_int('page', 'get', 1);
 if ($page > 1) {
-    $base_url_rewrite .= '&page=' . $page;
+    $page_url .= '&page=' . $page;
 }
-$base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+$base_url_rewrite = nv_url_rewrite($page_url, true);
 
 $request_uri = $_SERVER['REQUEST_URI'];
 if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-    header('Location: ' . $base_url_rewrite);
-    die();
+    nv_redirect_location($base_url_rewrite);
 }
 
 $array_cat_search = array();

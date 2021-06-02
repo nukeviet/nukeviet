@@ -265,16 +265,16 @@ $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 $full_theme = true;
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 if (!empty($alias_department)) {
-    $base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
-    if (isset($array_op[1]) and $array_op[1] == 0) {
-        $base_url .= '/0';
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
+    if (isset($array_op[1]) and $array_op[1] === '0') {
+        $page_url .= '/0';
         $full_theme = false;
     }
 }
 
-$base_url_rewrite = nv_url_rewrite($base_url, true);
+$base_url_rewrite = nv_url_rewrite($page_url, true);
 $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
@@ -292,7 +292,7 @@ $array_content = array(
     'bodytext' => $module_config[$module_name]['bodytext']
 );
 
-$contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
+$contents = contact_main_theme($array_content, $array_department, $catsName, $page_url, NV_CHECK_SESSION);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full_theme);

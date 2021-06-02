@@ -13,6 +13,7 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'];
 
 $array_mod_title[] = array(
     'catid' => 0,
@@ -34,15 +35,18 @@ if (!empty($alias)) {
     list ($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
 
     if ($topicid > 0) {
-        $base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $alias;
+        $page_url .= '/' . $alias;
+        $base_url = $page_url;
+
         if ($page > 1) {
             $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
-            $base_url_rewrite .= '/page-' . $page;
+            $page_url .= '/page-' . $page;
         }
-        $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url_rewrite), true);
+        $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $page_url), true);
         if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
             nv_redirect_location($base_url_rewrite);
         }
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
         $array_mod_title[] = array(
             'catid' => 0,
@@ -122,6 +126,8 @@ if (!empty($alias)) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']);
     }
 } else {
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+
     $page_title = $module_info['funcs'][$op]['func_site_title'];
     $key_words = $module_info['keywords'];
 

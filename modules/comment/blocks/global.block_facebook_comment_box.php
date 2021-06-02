@@ -83,7 +83,7 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
      */
     function nv_facebook_comment_box_blocks($block_config)
     {
-        global $client_info, $module_name;
+        global $page_url, $module_name;
         $content = '';
         if (!defined('FACEBOOK_JSSDK')) {
             $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
@@ -101,7 +101,9 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
 			</script>";
             define('FACEBOOK_JSSDK', true);
         }
-        $content .= '<div class="fb-comments" data-href="' . $client_info['selfurl'] . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
+        
+        $href = !empty($page_url) ? NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true) : '';
+        $content .= '<div class="fb-comments" data-href="' . $href . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
 
         return $content;
     }

@@ -12,9 +12,21 @@ if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 if (empty($vid)) {
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
+    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+        nv_redirect_location($base_url_rewrite_location);
+    } else {
+        $canonicalUrl = $base_url_rewrite;
+    }
+
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
 
@@ -110,8 +122,7 @@ if (empty($vid)) {
     $captcha = $nv_Request->get_title('captcha', 'get', '');
 
     if ($checkss != md5($vid . NV_CHECK_SESSION) or $vid <= 0 or $lid == '') {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data;
@@ -121,19 +132,16 @@ if (empty($vid)) {
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     if (empty($list) or !isset($list[$vid])) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     $row = $list[$vid];
     if (((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) and !defined('NV_IS_MODADMIN')) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     if (!nv_user_in_groups($row['groups_view'])) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     $difftimeout = 3600;
@@ -211,6 +219,10 @@ if (empty($vid)) {
     );
 
     $contents = voting_result($voting);
+
+    $page_title = $row['question'];
+    $page_url .= '&amp;vid=' . $vid;
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
     include NV_ROOTDIR . '/includes/header.php';
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');

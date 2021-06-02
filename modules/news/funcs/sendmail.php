@@ -30,6 +30,16 @@ if ($id > 0 and $catid > 0) {
         $allowed_send = $db_slave->query('SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $id)->fetchColumn();
         if ($allowed_send == 1) {
             unset($sql, $result);
+
+            $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
+            $base_url_rewrite = nv_url_rewrite($page_url, true);
+            if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+                nv_redirect_location($base_url_rewrite);
+            }
+
+            $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
+            $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+
             $result = '';
             $check = false;
             $checkss = $nv_Request->get_string('checkss', 'post', '');

@@ -32,9 +32,21 @@ if (!empty($page_title) and $page_title == strip_punctuation($page_title)) {
     list($tid, $image_tag, $description, $key_words) = $stmt->fetch(3);
 
     if ($tid > 0) {
-        $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
+        $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
         if ($page > 1) {
+            $page_url .= '/page-' . $page;
             $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        }
+
+        $base_url_rewrite = nv_url_rewrite($page_url, true);
+        $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+        if ($request_uri == $base_url_rewrite_location) {
+            $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+        } elseif (NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite_location) {
+            nv_redirect_location($base_url_rewrite_location);
+        } else {
+            $canonicalUrl = $base_url_rewrite;
         }
 
         $array_mod_title[] = array(

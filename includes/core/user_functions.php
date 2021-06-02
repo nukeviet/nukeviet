@@ -264,9 +264,25 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $nv_BotManager;
+    global $global_config, $lang_global, $key_words, $description, $module_name, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
 
     $return = [];
+
+    if (empty($site_description) or ($global_config['metaTagsOgp'] and empty($meta_property['og:url']))) {
+        if (empty($page_url)) {
+            if ($home) {
+                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+            } else {
+                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+                if ($op != 'main') {
+                    $current_page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $op;
+                }
+            }
+        } else {
+            $current_page_url = $page_url;
+        }
+        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
+    }
 
     // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ
     $site_description = $home ? $global_config['site_description'] : (!empty($description) ? $description : (empty($module_info['description']) ? '' : $module_info['description']));
@@ -280,7 +296,7 @@ function nv_html_meta_tags($html = true)
             $ds[] = $module_info['funcs'][$op]['func_custom_name'];
         }
         $ds[] = $module_info['custom_title'];
-        $ds[] = $client_info['selfurl'];
+        $ds[] = $current_page_url;
         $site_description = implode(' - ', $ds);
     } elseif ($site_description == 'no') {
         $site_description = '';
@@ -402,20 +418,6 @@ function nv_html_meta_tags($html = true)
         ];
     }
 
-    if (empty($canonicalUrl)) {
-        if ($home) {
-            $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-        } else {
-            $canonicalUrl = str_replace(NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl']);
-        }
-    }
-    if (substr($canonicalUrl, 0, 4) != 'http') {
-        if (substr($canonicalUrl, 0, 1) != '/') {
-            $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
-        }
-        $canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
-    }
-
     // Open Graph protocol http://ogp.me
     if ($global_config['metaTagsOgp']) {
         if (empty($meta_property['og:title'])) {
@@ -428,7 +430,7 @@ function nv_html_meta_tags($html = true)
             $meta_property['og:type'] = 'website';
         }
         if (empty($meta_property['og:url'])) {
-            $meta_property['og:url'] = $canonicalUrl;
+            $meta_property['og:url'] = $current_page_url;
         }
         $meta_property['og:site_name'] = $global_config['site_name'];
 
