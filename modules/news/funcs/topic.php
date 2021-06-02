@@ -11,7 +11,7 @@ if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'];
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
 
@@ -38,13 +38,13 @@ if (!empty($alias)) {
         nv_redirect_location($base_url);
     }
 
-    $base_url .= '/' . $alias;
-    $base_url_rewrite = $base_url;
+    $page_url .= '/' . $alias;
+    $base_url = $page_url;
     if ($page > 1) {
         $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
-        $base_url_rewrite .= '/page-' . $page;
+        $page_url .= '/page-' . $page;
     }
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
     $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
     if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
@@ -130,7 +130,7 @@ if (!empty($alias)) {
 
     $contents = topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image);
 } else {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
     $page_title = $module_info['funcs'][$op]['func_site_title'];
     $key_words = $module_info['keywords'];

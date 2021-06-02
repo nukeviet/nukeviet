@@ -16,13 +16,16 @@ if (!empty($user_info['active2step'])) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&amp;nv_redirect=' . $nv_redirect;
+    }
 }
 
 /**
@@ -86,6 +89,16 @@ if ($checkss == NV_CHECK_SESSION) {
         'input' => '',
         'mess' => ''
     ));
+}
+
+$base_url_rewrite = nv_url_rewrite($page_url, true);
+$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+    nv_redirect_location($base_url_rewrite_location);
+} else {
+    $canonicalUrl = $base_url_rewrite;
 }
 
 $contents = nv_theme_config_2step($secretkey, $nv_redirect);

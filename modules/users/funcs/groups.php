@@ -13,6 +13,9 @@ if (!defined('NV_IS_MOD_USER')) {
 }
 
 $page_title = $lang_module['group_manage'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+
 $contents = '';
 
 // Lay danh sach nhom

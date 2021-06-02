@@ -11,35 +11,36 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
 
 if (isset($array_op[1])) {
     $alias = trim($array_op[1]);
     $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? intval(substr($array_op[2], 5)) : 1;
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
 
     $stmt = $db_slave->prepare('SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
     list ($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
     if (!$bid) {
-        nv_redirect_location($base_url);
-    }
-    $base_url .= '/' . $alias;
-    $base_url_rewrite = $base_url;
-    if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
-        $base_url_rewrite .= '/page-' . $page;
+        nv_redirect_location($page_url);
     }
 
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (str_starts_with($request_uri, $base_url_check)) {
+    $page_url .= '/' . $alias;
+    $base_url = $page_url;
+
+    if ($page > 1) {
+        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_url .= '/page-' . $page;
+    }
+
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
+    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        $canonicalUrl = $base_url_rewrite;
+    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+        nv_redirect_location($base_url_rewrite_location);
     } else {
-        nv_redirect_location($base_url_check);
+        $canonicalUrl = $base_url_rewrite;
     }
 
     $array_mod_title[] = array(
@@ -121,7 +122,18 @@ if (isset($array_op[1])) {
     }
     $contents = topic_theme($item_array, $item_array_other, $generate_page, $page_title, $description, $image_group);
 } else {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
+    $page_title = $module_info['funcs']['groups']['func_site_title'];
+    $key_words = $module_info['keywords'];
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
+    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+        nv_redirect_location($base_url_rewrite_location);
+    } else {
+        $canonicalUrl = $base_url_rewrite;
+    }
     
     $array_cat = array();
     $key = 0;
@@ -178,9 +190,6 @@ if (isset($array_op[1])) {
     }
 
     $contents = viewsubcat_main($viewcat, $array_cat);
-
-    $page_title = $module_info['funcs']['groups']['func_site_title'];
-    $key_words = $module_info['keywords'];
 }
 
 include NV_ROOTDIR . '/includes/header.php';

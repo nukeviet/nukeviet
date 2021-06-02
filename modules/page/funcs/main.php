@@ -12,8 +12,10 @@ if (!defined('NV_IS_MOD_PAGE')) {
     die('Stop!!!');
 }
 
+$page_url = $base_url;
+
 if ($page_config['viewtype'] == 2) {
-    $base_url_rewrite = nv_url_rewrite($base_url, true);
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
     $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
     if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
@@ -28,11 +30,12 @@ if ($page_config['viewtype'] == 2) {
 
     // Không cho đánh op khi không hiển thị nội dung
     if (isset($array_op[0])) {
-        nv_redirect_location($base_url);
+        nv_redirect_location($page_url);
     }
 } elseif ($id) {
     // Xem theo bài viết
-    $base_url_rewrite = nv_url_rewrite($base_url . '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'];
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
     $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
     if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
@@ -141,7 +144,10 @@ if ($page_config['viewtype'] == 2) {
     $contents = nv_page_main($rowdetail, $other_links, $content_comment);
 } else {
     // Xem theo danh sách
-    $base_url_rewrite = nv_url_rewrite($base_url . ($page > 1 ? ('&amp;' . NV_OP_VARIABLE . '=page-' . $page) : ''), true);
+    if ($page > 1) {
+        $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
+    }
+    $base_url_rewrite = nv_url_rewrite($page_url, true);
     $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
     $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
     if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {

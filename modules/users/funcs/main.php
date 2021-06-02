@@ -16,21 +16,21 @@ if (isset($array_op[0])) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
     $contents = user_info_exit($lang_module['notallowuserlogin']);
 } else {
     if (!defined('NV_IS_USER')) {
-        $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
+        $page_url .= '&' . NV_OP_VARIABLE . '=login';
         $nv_redirect = nv_get_redirect();
         if (!empty($nv_redirect)) {
-            $url .= '&nv_redirect=' . $nv_redirect;
+            $page_url .= '&nv_redirect=' . $nv_redirect;
         }
-        nv_redirect_location($url);
+        nv_redirect_location($page_url);
     } else {
         // So nhom dang quan ly
         $user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
@@ -45,6 +45,16 @@ if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
 
         $contents = user_welcome($array_field_config, $custom_fields);
     }
+}
+
+$base_url_rewrite = nv_url_rewrite($page_url, true);
+$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
+if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
+    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
+    nv_redirect_location($base_url_rewrite_location);
+} else {
+    $canonicalUrl = $base_url_rewrite;
 }
 
 include NV_ROOTDIR . '/includes/header.php';

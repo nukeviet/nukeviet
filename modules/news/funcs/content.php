@@ -42,6 +42,8 @@ if (defined('NV_EDITOR')) {
 
 $page_title = $lang_module['content'];
 $key_words = $module_info['keywords'];
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
 // check user post content
 $array_post_config = [];
@@ -106,9 +108,6 @@ if ($array_post_user['postcontent']) {
     $array_post_user['addcontent'] = 1;
 }
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
-
 $array_mod_title[] = [
     'catid' => 0,
     'title' => $lang_module['content'],
@@ -154,6 +153,9 @@ $my_author_detail = defined('NV_IS_USER') ? my_author_detail($user_info['userid'
 
 // Chinh sua thong tin tac gia
 if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) {
+    $page_url .= '&amp;author_info=1';
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+
     if ($nv_Request->isset_request('save', 'post')) {
         $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
         if (empty($pseudonym)) {
@@ -233,6 +235,9 @@ $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
+    $page_url .= '&amp;author_info=1';
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+
     if ($contentid > 0) {
         if (!defined('NV_IS_USER')) {
             nv_redirect_location($base_url);
@@ -750,6 +755,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
         $page = intval(substr($array_op[1], 5));
+
+        $page_url .= '/page-' . $page;
+        $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
     }
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);

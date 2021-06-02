@@ -17,6 +17,9 @@ if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
     $page_title = $lang_module['register'];
@@ -230,7 +233,6 @@ if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
 }
 
 // Dang ky thong thuong
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['register'];
