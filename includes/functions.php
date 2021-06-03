@@ -1844,7 +1844,11 @@ function nv_check_domain($domain)
             $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
-            $domain_ascii = $Punycode->encode($domain);
+            try {
+                $domain_ascii = $Punycode->encode($domain);
+            } catch (\Exception $e) {
+                $domain_ascii = '';
+            }
         }
         if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain_ascii)) {
             return $domain_ascii;
