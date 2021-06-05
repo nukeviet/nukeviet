@@ -90,6 +90,15 @@ foreach ($array_field_config as $row_f) {
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                     ));
                 }
+            } elseif ($row_f['match_type'] == 'unicodename') {
+                $value_t = str_replace("&#039;", "'", $value);
+                if (!preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $value_t)) {
+                    nv_jsonOutput(array(
+                        'status' => 'error',
+                        'input' => $field_input_name,
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    ));
+                }
             } elseif ($row_f['match_type'] == 'email') {
                 $error = nv_check_valid_email($value, true);
                 if ($error[0] != '') {
@@ -110,12 +119,23 @@ foreach ($array_field_config as $row_f) {
                     ));
                 }
             } elseif ($row_f['match_type'] == 'regex') {
-                if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
-                    nv_jsonOutput(array(
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    ));
+                $value_t = str_replace(["&#039;", "&quot;", "&lt;", "&gt;"], ["'", '"', '<', '>'], $value);
+                if (@preg_match($row_f['match_regex'], '') !== false) {
+                    if (!preg_match($row_f['match_regex'], $value_t)) {
+                        nv_jsonOutput(array(
+                            'status' => 'error',
+                            'input' => $field_input_name,
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        ));
+                    }
+                } else {
+                    if (!preg_match('/' . $row_f['match_regex'] . '/', $value_t)) {
+                        nv_jsonOutput(array(
+                            'status' => 'error',
+                            'input' => $field_input_name,
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        ));
+                    }
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {

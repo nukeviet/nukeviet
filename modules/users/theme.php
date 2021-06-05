@@ -31,6 +31,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
     $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
     $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
+    $xtpl->assign('LOGINTYPE', $global_config['nv_unick_type']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
@@ -95,6 +96,16 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                 if ($row['required']) {
                     $xtpl->parse('main.' . $show_key . '.required');
                 }
+                if ($row['match_type'] == 'unicodename') {
+                    if ($row['required']) {
+                        $xtpl->assign('CALLFUNC', 'required_uname_check');
+                        $xtpl->assign('ERRMESS', $lang_module['field_req_uname_error']);
+                    } else {
+                        $xtpl->assign('CALLFUNC', 'uname_check');
+                        $xtpl->assign('ERRMESS', $lang_module['field_uname_error']);
+                    }
+                    $xtpl->parse('main.' . $show_key . '.data_callback');
+                }
                 if ($row['field'] == 'gender') {
                     foreach ($global_array_genders as $gender) {
                         $gender['checked'] = $row['value'] == $gender['key'] ? ' checked="checked"' : '';
@@ -116,6 +127,16 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                     $xtpl->parse('main.field.loop.required');
                 }
                 if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
+                    if ($row['match_type'] == 'unicodename') {
+                        if ($row['required']) {
+                            $xtpl->assign('CALLFUNC', 'required_uname_check');
+                            $xtpl->assign('ERRMESS', $lang_module['field_req_uname_error']);
+                        } else {
+                            $xtpl->assign('CALLFUNC', 'uname_check');
+                            $xtpl->assign('ERRMESS', $lang_module['field_uname_error']);
+                        }
+                        $xtpl->parse('main.field.loop.textbox.data_callback');
+                    }
                     $xtpl->parse('main.field.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
@@ -620,10 +641,17 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
     $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
     $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
+    $xtpl->assign('LOGINTYPE', $global_config['nv_unick_type']);
 
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 
+    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
+    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+
+    $xtpl->assign('USERNAME_RULE', $username_rule);
+    $xtpl->assign('PASSWORD_RULE', $password_rule);
+    
     $xtpl->assign('DATA', $data);
     if ($pass_empty) {
         $xtpl->assign('FORM_HIDDEN', ' hidden');
@@ -656,6 +684,16 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             }
             if ($row['required']) {
                 $xtpl->parse('main.' . $show_key . '.required');
+            }
+            if ($row['match_type'] == 'unicodename') {
+                if ($row['required']) {
+                    $xtpl->assign('CALLFUNC', 'required_uname_check');
+                    $xtpl->assign('ERRMESS', $lang_module['field_req_uname_error']);
+                } else {
+                    $xtpl->assign('CALLFUNC', 'uname_check');
+                    $xtpl->assign('ERRMESS', $lang_module['field_uname_error']);
+                }
+                $xtpl->parse('main.' . $show_key . '.data_callback');
             }
             if ($row['field'] == 'gender') {
                 foreach ($global_array_genders as $gender) {
@@ -812,6 +850,16 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                 }
 
                 if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
+                    if ($row['match_type'] == 'unicodename') {
+                        if ($row['required']) {
+                            $xtpl->assign('CALLFUNC', 'required_uname_check');
+                            $xtpl->assign('ERRMESS', $lang_module['field_req_uname_error']);
+                        } else {
+                            $xtpl->assign('CALLFUNC', 'uname_check');
+                            $xtpl->assign('ERRMESS', $lang_module['field_uname_error']);
+                        }
+                        $xtpl->parse('main.tab_edit_others.loop.textbox.data_callback');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);

@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label for="last_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess="">
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_last_name -->
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label for="first_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess="">
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_first_name -->
@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <label for="first_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess="">
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_first_name -->
@@ -77,7 +77,7 @@
                     <div class="form-group">
                         <label for="last_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess="">
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_last_name -->
@@ -158,7 +158,7 @@
                     <div class="form-group">
                         <label for="username" class="control-label col-md-6 text-normal">{LANG.newlogin}</label>
                         <div class="col-md-12">
-                            <input type="text" class="required form-control" placeholder="{LANG.newlogin}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-pattern="/^(.){{NICK_MINLENGTH},{NICK_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
+                            <input type="text" class="required form-control" placeholder="{LANG.newlogin}" value="" name="username" maxlength="{NICK_MAXLENGTH}" onkeypress="validErrorHidden(this);" data-mess="{USERNAME_RULE}" data-callback="login_check" data-minlength="{NICK_MINLENGTH}" data-type="{LOGINTYPE}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -240,20 +240,20 @@
                     <div class="form-group">
                         <label for="nv_password" class="control-label col-md-6 text-normal">{LANG.pass_old}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_old}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.required}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_old}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
                         </div>
                     </div>
                     <!-- END: is_old_pass -->
                     <div class="form-group">
                         <label for="new_password" class="control-label col-md-6 text-normal">{LANG.pass_new}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{PASSWORD_RULE}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="re_password" class="control-label col-md-6 text-normal">{LANG.pass_new_re}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.re_password_empty}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -472,7 +472,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess="" />
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->/>
                         </div>
                     </div>
                     <!-- END: textbox -->

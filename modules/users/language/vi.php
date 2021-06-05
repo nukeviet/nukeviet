@@ -235,6 +235,8 @@ $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['errorMessage'] = 'Thông báo từ hệ thống';
 $lang_module['login_info'] = 'Hãy đăng nhập thành viên để trải nghiệm đầy đủ các tiện ích trên site';
 $lang_module['old_min_user_error'] = 'Tuổi của bạn dưới %s nên chưa đủ tuổi đăng ký';
+$lang_module['field_uname_error'] = 'Vui lòng để trống hoặc nhập giá trị không có ký tự đặc biệt';
+$lang_module['field_req_uname_error'] = 'Vui lòng nhập một giá trị không có các ký tự đặc biệt';
 
 $lang_module['edit_basic'] = 'Cơ bản';
 $lang_module['edit_others'] = 'Khác';
