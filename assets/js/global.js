@@ -25,6 +25,7 @@ var NS4 = document.layers;
 var nv_mailfilter = /^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/;
 var nv_numcheck = /^([0-9])+$/;
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
+var nv_uname_filter = /^([\p{L}\p{Mn}\p{Pd}'][\p{L}\p{Mn}\p{Pd}',\s]*)*$/u;
 var nv_md5check = /^[a-z0-9]{32}$/;
 var nv_imgexts = /^.+\.(jpg|gif|png|bmp)$/;
 var nv_iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";

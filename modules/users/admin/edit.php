@@ -139,7 +139,15 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         ]);
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND (LOWER(username)=' . $db->quote(nv_strtolower($_user['username'])) . ' OR md5username=' . $db->quote(nv_md5safe($_user['username'])) . ')')->fetchColumn()) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'username',
+            'mess' => $lang_module['edit_error_username_exist']
+        ]);
+    }
+
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=' . $db->quote(nv_strtolower($_user['username'])) . ' OR md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',

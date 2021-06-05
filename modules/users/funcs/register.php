@@ -92,14 +92,24 @@ function nv_check_username_reg($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE md5username= :md5username');
+    // MySQL không phân biệt chữ có dấu và không dấu của các chữ cái unicode, nhưng md5 của chúng lại khác nhau.
+    // Vì thế cần kiểm tra cả username nếu không sẽ sinh ra lỗi trùng username (UNIQUE INDEX `login` (`username`))
+    // Ví dụ: "Anh Tú/Anh Tứ" khi đối chiếu là như nhau, nhưng md5 của chúng khác nhau
+    // 
+    // Khi đối chiếu, MySQL phân biệt chữ hoa-thường, nhưng khi thực thi thì không phân biệt yếu tố trên.
+    // Vì thế khi kiểm tra username cần cho về cùng định dạng LOWER hoặc UPPER,
+    // nếu không sẽ sinh ra lỗi khi thêm tài khoản có cùng username
+    // Ví dụ: "Anh Tu/anh tu" khi đối chiếu là khác nhau, nhưng khi thực thi lại giống nhau.
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE LOWER(username)=:username OR md5username= :md5username');
+    $stmt->bindValue(':username', nv_strtolower($login), PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE md5username= :md5username');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=:username OR md5username= :md5username');
+    $stmt->bindValue(':username', nv_strtolower($login), PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {

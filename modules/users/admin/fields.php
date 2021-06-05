@@ -731,6 +731,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $array_match_type['none'] = $lang_module['field_match_type_none'];
     if ($dataform['field_type'] != 'editor' and $dataform['field_type'] != 'textarea') {
         $array_match_type['alphanumeric'] = $lang_module['field_match_type_alphanumeric'];
+        $array_match_type['unicodename'] = $lang_module['field_match_type_unicodename'];
         $array_match_type['email'] = $lang_global['email'];
         $array_match_type['url'] = $lang_module['field_match_type_url'];
     }

@@ -234,6 +234,9 @@ $lang_module['field_match_type_required'] = '%s require press';
 $lang_module['errorMessage'] = 'Notifications from website';
 $lang_module['login_info'] = 'Please complete this form';
 $lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
+$lang_module['field_uname_error'] = 'Please leave it blank or enter a value without special characters';
+$lang_module['field_req_uname_error'] = 'Please enter a value without special characters';
+
 $lang_module['edit_basic'] = 'Basic';
 $lang_module['edit_others'] = 'Other';
 $lang_module['edit_avatar'] = 'Avatar';

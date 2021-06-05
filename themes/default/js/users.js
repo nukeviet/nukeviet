@@ -138,14 +138,38 @@ function validErrorShow(a) {
 	"DIV" == $(a).prop("tagName") && $("input", a)[0].focus()
 }
 
+function uname_check(val) {
+	return (val == '' || nv_uname_filter.test(val) ) ? true : false;
+}
+
+function required_uname_check(val) {
+	return (val != '' && nv_uname_filter.test(val) ) ? true : false;
+}
+
+function login_check(val, type, max, min) {
+    if ('' == val || val.length > max || val.length < min) return false;
+    else if (type == '1' && !/^[0-9]+$/.test(val)) return false;
+    else if(type == '2' && !/^[a-z0-9]+$/i.test(val)) return false;
+    else if(type == '3' && !/^[a-z0-9]+[a-z0-9\-\_\s]+[a-z0-9]+$/i.test(val)) return false;
+    else if(type == '4' && !/^[\p{L}\p{Mn}0-9]+([\s]+[\p{L}\p{Mn}0-9]+)*$/u.test(val)) return false;
+    return true;
+}
+
 function validCheck(a) {
 	if ($(a).is(':visible')) {
 		var c = $(a).attr("data-pattern"),
 			d = $(a).val(),
 			b = $(a).prop("tagName"),
-			e = $(a).prop("type");
+			e = $(a).prop("type"),
+            f = $(a).attr("data-callback");
 		if ("INPUT" == b && "email" == e) {
 			if (!nv_mailfilter.test(d)) return !1
+		} else if ("undefined" != typeof f && "uname_check" == f) {
+			if (!uname_check(d)) return $(a).attr("data-mess", $(a).attr("data-error")), !1
+		} else if ("undefined" != typeof f && "required_uname_check" == f) {
+			if (!required_uname_check(d)) return $(a).attr("data-mess", $(a).attr("data-error")), !1
+		} else if ("undefined" != typeof f && "login_check" == f) {
+			if (!login_check(d, $(a).data("type"), $(a).attr("maxlength"), $(a).data("minlength"))) return !1
 		} else if ("SELECT" == b) {
 			if (!$("option:selected", a).length) return !1
 		} else if ("DIV" == b && $(a).is(".radio-box")) {
@@ -253,7 +277,7 @@ function reg_validForm(a) {
 	$(".has-error", a).removeClass("has-error");
 	var d = 0,
 		c = [];
-	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+	$(a).find("input.required,input[data-callback],textarea.required,select.required,div.required").each(function() {
 		var b = $(this).prop("tagName");
 		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
 		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
