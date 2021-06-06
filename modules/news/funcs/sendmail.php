@@ -36,10 +36,10 @@ if ($id > 0 and $catid > 0) {
             if ($allowed_send == 1) {
                 $your_name = $your_email = '';
                 if (defined('NV_IS_ADMIN')) {
-                    $your_name = $admin_info['username'];
+                    $your_name = !empty($admin_info['full_name']) ? $admin_info['full_name'] : $admin_info['username'];
                     $your_email = $admin_info['email'];
                 } elseif (defined('NV_IS_USER')) {
-                    $your_name = $user_info['username'];
+                    $your_name = !empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
                     $your_email = $user_info['email'];
                 }
                 if ($nv_Request->isset_request('send', 'post')) {
