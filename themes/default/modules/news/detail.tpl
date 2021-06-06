@@ -26,7 +26,20 @@
             <div class="col-md-12">
                 <ul class="list-inline text-right">
                     <!-- BEGIN: allowed_send -->
-                    <li><a class="dimgray" rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',650,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+                    <li><a class="dimgray" title="{LANG.sendmail}" href="javascript:void(0);" onclick="newsSendMailModal('#newsSendMailModal', '{URL_SENDMAIL}', '{CHECKSESSION}');"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+                    <!-- START FORFOOTER -->
+<div class="modal fade" id="newsSendMailModal" tabindex="-1" role="dialog" data-loaded="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{LANG.sendmail}</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+                    <!-- END FORFOOTER -->
                     <!-- END: allowed_send -->
                     <!-- BEGIN: allowed_print -->
                     <li><a class="dimgray" rel="nofollow" title="{LANG.print}" href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
