@@ -1,89 +1,60 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: close -->
-<script type="text/javascript">
-    setTimeout("self.close()", 10000);
-</script>
-<!-- END: close -->
-<style type="text/css">
-    body {
-        padding: 20px;
-        font-size: 11pt;
-    }
-</style>
-
-<div id="sendmail">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h1 class="text-center">{LANG.sendmail}</h1>
-            <!-- BEGIN: result -->
-            <div class="alert alert-warning" style="margin-top: 10px;">
-                <div>
-                    {RESULT.err_name}
-                </div>
-                <div>
-                    {RESULT.err_email}
-                </div>
-                <div>
-                    {RESULT.err_yourmail}
-                </div>
-                <div class="text-center">
-                    {RESULT.send_success}
-                </div>
-            </div>
-            <!-- END: result -->
-
-            <!-- BEGIN: content -->
-                <form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form-horizontal" role="form"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
-                    <div class="form-group">
-                        <label for="sname" class="col-sm-4 control-label">{LANG.sendmail_name}<em>*</em></label>
-                        <div class="col-sm-20">
-                            <input id="sname" type="text" name="name" value="{SENDMAIL.v_name}" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="syourmail_iavim" class="col-sm-4 control-label">{LANG.sendmail_youremail}</label>
-                        <div class="col-sm-20">
-                            <input id="syourmail_iavim" type="email" name="youremail" value="{SENDMAIL.v_mail}" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="semail" class="col-sm-4 control-label">{LANG.sendmail_email}<em>*</em></label>
-                        <div class="col-sm-20">
-                            <input id="semail" type="text" name="email" value="{SENDMAIL.to_mail}" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="scontent" class="col-sm-4 control-label">{LANG.sendmail_content}</label>
-                        <div class="col-sm-20">
-                            <textarea id="scontent"  name="content" rows="5" cols="20" class="form-control">{SENDMAIL.content}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- BEGIN: captcha -->
-                    <div class="form-group">
-                        <label for="semail" class="col-sm-4 control-label">{LANG.captcha}<em>*</em></label>
-                        <div class="col-sm-20">
-                            <input name="nv_seccode" type="text" id="seccode" class="form-control" maxlength="{GFX_NUM}" style="width: 100px; float: left !important; margin: 2px 5px 0 !important;"/><img class="captchaImg pull-left" style="margin-top: 5px;" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh pull-left resfresh1" style="margin: 9px;" onclick="change_captcha('#seccode');"/>
-                        </div>
-                    </div>
-                    <!-- END: captcha -->
-
-                    <!-- BEGIN: recaptcha -->
-                    <div class="form-group">
-                        <label for="semail" class="col-sm-4 control-label">{N_CAPTCHA}<em>*</em></label>
-                        <div class="col-sm-20">
-                            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div></div>
-                        </div>
-                    </div>
-                    <!-- END: recaptcha -->
-
-                    <input type="hidden" name="checkss" value="{SENDMAIL.checkss}" /><input type="hidden" name="catid" value="{SENDMAIL.catid}" /><input type="hidden" name="id" value="{SENDMAIL.id}" /><input type="submit" value="{LANG.sendmail_submit}" class="btn btn-default" />
-                </form>
-            <!-- END: content -->
+<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form-horizontal margin-lg" role="form" onsubmit="newsSendMail(event,this)"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+    <div class="form-group">
+        <label for="friend_email" class="col-sm-8 control-label">{LANG.sendmail_email}<em>*</em></label>
+        <div class="col-sm-16">
+            <input type="text" id="friend_email" name="friend_email" value="" class="form-control" maxlength="100" data-error="{LANG.sendmail_err_mail}"/>
         </div>
     </div>
-</div>
+
+    <div class="form-group">
+        <label for="your_name" class="col-sm-8 control-label">{LANG.sendmail_name}<em>*</em></label>
+        <div class="col-sm-16">
+            <input id="your_name" type="text" name="your_name" value="{SENDMAIL.your_name}" class="form-control" maxlength="100" data-error="{LANG.sendmail_err_name}"/>
+        </div>
+    </div>
+
+    <!-- BEGIN: sender_is_user -->
+    <div class="form-group">
+        <label for="your_email" class="col-sm-8 control-label">{LANG.sendmail_youremail}</label>
+        <div class="col-sm-16">
+            <input type="email" id="your_email" name="your_email" value="{SENDMAIL.your_email}" class="form-control" maxlength="100" readonly="readonly"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="your_message" class="col-sm-8 control-label">{LANG.sendmail_content}</label>
+        <div class="col-sm-16">
+            <textarea id="your_message"  name="your_message" class="form-control" maxlength="500"></textarea>
+        </div>
+    </div>
+    <!-- END: sender_is_user -->
+
+    <!-- BEGIN: captcha -->
+    <div class="form-group">
+        <label for="nv_seccode" class="col-sm-8 control-label">{LANG.captcha}<em>*</em></label>
+        <div class="col-sm-16">
+            <input type="text" name="nv_seccode" id="nv_seccode" class="form-control" maxlength="{GFX_NUM}" autocomplete="off" style="width:100px;margin:4px 5px 0 0;float:left!important" data-error="{LANG.error_captcha}"/>
+            <img class="captchaImg pull-left" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+            <a class="display-inline-block middle margin-left margin-top" href="javascript:void(0);" title="{CAPTCHA_REFRESH}" onclick="change_captcha('#nv_seccode');"><em class="fa fa-refresh"></em></a>
+        </div>
+    </div>
+    <!-- END: captcha -->
+
+    <!-- BEGIN: recaptcha -->
+    <div class="form-group">
+        <div class="col-sm-16 col-sm-push-8">
+            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div></div>
+        </div>
+    </div>
+    <!-- END: recaptcha -->
+    <div class="form-group">
+        <div class="col-sm-16 col-sm-push-8">
+            <input type="hidden" name="checkss" value="{SENDMAIL.checkss}" />
+            <input type="hidden" name="send" value="1" />
+            <input type="submit" value="{LANG.sendmail_submit}" class="btn btn-primary" />
+            <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
+        </div>
+    </div>
+</form>
 <!-- END: main -->

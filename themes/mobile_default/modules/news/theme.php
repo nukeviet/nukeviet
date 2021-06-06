@@ -613,6 +613,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('DETAIL', $news_contents);
 
     if ($news_contents['allowed_send'] == 1) {
+        $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));
         $xtpl->assign('URL_SENDMAIL', $news_contents['url_sendmail']);
         $xtpl->parse('main.allowed_send');
     }
@@ -957,15 +958,20 @@ function sendmail_themme($sendmail)
     $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('SENDMAIL', $sendmail);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+
+    if (defined('NV_IS_USER')) {
+        $xtpl->parse('main.sender_is_user');
+    }
 
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
     if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.content.recaptcha3');
+        $xtpl->parse('main.recaptcha3');
     } elseif ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
-        $xtpl->parse('main.content.recaptcha');
+        $xtpl->parse('main.recaptcha');
     } elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
         $xtpl->assign('GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
@@ -973,18 +979,7 @@ function sendmail_themme($sendmail)
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->parse('main.content.captcha');
-    }
-
-    $xtpl->parse('main.content');
-
-    if (!empty($sendmail['result'])) {
-        $xtpl->assign('RESULT', $sendmail['result']);
-        $xtpl->parse('main.result');
-
-        if ($sendmail['result']['check'] == true) {
-            $xtpl->parse('main.close');
-        }
+        $xtpl->parse('main.captcha');
     }
 
     $xtpl->parse('main');
