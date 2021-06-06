@@ -129,7 +129,7 @@ function newsSendMail(event, form) {
 	$("[name=your_name]", form).val(a);
 	if ("" == a || !nv_uname_filter.test(a)) return alert($("[name=your_name]", form).data("error")), $("[name=your_name]", form).focus(), !1;
 	if ($("[name=nv_seccode]", form).length && (a = $("[name=nv_seccode]", form).val(), a.length != parseInt($("[name=nv_seccode]", form).attr("maxlength")) || !/^[a-z0-9]+$/i.test(a))) return alert($("[name=nv_seccode]", form).data("error")), $("[name=nv_seccode]", form).focus(), !1;
-	$("[name=your_message]", form).length && $("[name=your_message]", form).val(trim(strip_tags($("[name=your_message]", form).val())).replace(/([a-z0-9][a-z0-9-]{1,61}[a-z0-9])(\.[a-z]{2,})+/gi, "***"));
+	$("[name=your_message]", form).length && $("[name=your_message]", form).val(trim(strip_tags($("[name=your_message]", form).val())));
 	a = $(form).serialize();
 	$("input,button,textarea", form).prop("disabled", !0);
 	$.ajax({

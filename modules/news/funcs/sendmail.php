@@ -102,8 +102,9 @@ if ($id > 0 and $catid > 0) {
                         ]);
                     }
 
-                    $your_message = $nv_Request->get_title('your_message', 'post', '', 1);
-                    !empty($your_message) && $your_message = preg_replace('/([a-z0-9][a-z0-9-]{1,61}[a-z0-9])(\.[a-z]{2,})+/i', '***', $your_message);
+                    $your_message = $nv_Request->get_title('your_message', 'post', '');
+                    // Disable email engines from automatically hyperlinking a URL
+                    !empty($your_message) && $your_message = str_replace(['@','.',':'], ['<span>&#64;</span>','<span>&#46;</span>','<span>&#58;</span>'], $your_message);
 
                     $link = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
                     if (!str_starts_with($link, NV_MY_DOMAIN)) {
