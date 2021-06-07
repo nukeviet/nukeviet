@@ -9,8 +9,11 @@ abstract class Common extends Adapter
      */
     public function zoomCrop($width, $height, $background = 'transparent', $xPosLetter = 'center', $yPosLetter = 'center')
     {
+        $originalWidth = $this->width();
+        $originalHeight = $this->height();
+
         // Calculate the different ratios
-        $originalRatio = $this->width() / $this->height();
+        $originalRatio = $originalWidth / $originalHeight;
         $newRatio = $width / $height;
 
         // Compare ratios
@@ -37,8 +40,18 @@ abstract class Common extends Adapter
             case 'right':
                 $xPos = (int) $newWidth - $width;
                 break;
-            default:
+            case 'center':
                 $xPos = (int) ($newWidth - $width) / 2;
+                break;
+            default:
+                $factorW = $newWidth / $originalWidth;
+                $xPos = $xPosLetter * $factorW;
+
+                // If the desired cropping position goes beyond the width then
+                // set the crop to be within the correct bounds.
+                if ($xPos + $width > $newWidth) {
+                    $xPos = (int) $newWidth - $width;
+                }
         }
 
         // Define y position
@@ -51,8 +64,18 @@ abstract class Common extends Adapter
             case 'bottom':
                 $yPos = (int) $newHeight - $height;
                 break;
-            default:
+            case 'center':
                 $yPos = (int) ($newHeight - $height) / 2;
+                break;
+            default:
+                $factorH = $newHeight / $originalHeight;
+                $yPos = $yPosLetter * $factorH;
+
+                // If the desired cropping position goes beyond the height then
+                // set the crop to be within the correct bounds.
+                if ($yPos + $height > $newHeight) {
+                    $yPos = (int) $newHeight - $height;
+                }
         }
 
         // Crop image to reach desired size
@@ -91,11 +114,15 @@ abstract class Common extends Adapter
     }
 
     /**
-     * Fix orientation using Exif informations.
+     * Read exif rotation from file and apply it.
      */
     public function fixOrientation()
     {
-        if (!in_array(exif_imagetype($this->source->getInfos()), array(IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM))) {
+        if (!in_array(exif_imagetype($this->source->getInfos()), array(
+            IMAGETYPE_JPEG,
+            IMAGETYPE_TIFF_II,
+            IMAGETYPE_TIFF_MM,
+        ))) {
             return $this;
         }
 
@@ -109,7 +136,15 @@ abstract class Common extends Adapter
             return $this;
         }
 
-        switch ($exif['Orientation']) {
+        return $this->applyExifOrientation($exif['Orientation']);
+    }
+
+    /**
+     * Apply orientation using Exif orientation value.
+     */
+    public function applyExifOrientation($exif_orienation)
+    {
+        switch ($exif_orienation) {
             case 1:
                 break;
 
@@ -156,6 +191,8 @@ abstract class Common extends Adapter
 
     abstract protected function openPng($file);
 
+    abstract protected function openWebp($file);
+
     /**
      * Creates an image.
      */
@@ -190,6 +227,10 @@ abstract class Common extends Adapter
 
         if ($type == 'png') {
             $this->openPng($file);
+        }
+
+        if ($type == 'webp') {
+            $this->openWebp($file);
         }
 
         if (false === $this->resource) {
@@ -364,5 +405,13 @@ abstract class Common extends Adapter
     public function enableProgressive()
     {
         throw new \Exception('The Adapter '.$this->getName().' does not support Progressive Image loading');
+    }
+
+    /**
+     * This does nothing, but can be used to tag a ressource for instance (having a final image hash
+     * for the cache different depending on the tag)
+     */
+    public function tag($tag)
+    {
     }
 }

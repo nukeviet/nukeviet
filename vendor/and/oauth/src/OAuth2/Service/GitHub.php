@@ -124,7 +124,7 @@ class GitHub extends AbstractService
     protected $authorizationMethod = self::AUTHORIZATION_METHOD_QUERY_STRING;
     protected $extraOAuthHeaders = ['Accept' => 'application/json'];
     protected $extraApiHeaders = [
-        'Accept'     => 'application/vnd.github.beta+json',
+        'Accept'     => 'application/vnd.github.v3+json',
         'User-Agent' => 'and/oauth-library'
     ];
 
