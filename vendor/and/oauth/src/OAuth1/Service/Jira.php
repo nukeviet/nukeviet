@@ -5,13 +5,13 @@ namespace OAuth\OAuth1\Service;
 use OAuth\Common\Http\Exception\TokenResponseException;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 
-class Tumblr extends AbstractService
+class Jira extends AbstractService
 {
-
-    protected $baseApiUri = 'https://api.tumblr.com/v2';
-    protected $requestTokenEndpoint = 'https://www.tumblr.com/oauth/request_token';
-    protected $authorizationEndpoint = 'https://www.tumblr.com/oauth/authorize';
-    protected $accessTokenEndpoint = 'https://www.tumblr.com/oauth/access_token';
+    protected $baseApiUri = 'http://localhost/rest/api/2/';
+    protected $requestTokenEndpoint = 'http://localhost/plugins/servlet/oauth/request-token';
+    protected $authorizationEndpoint = 'http://localhost/plugins/servlet/oauth/authorize?oauth_token=%s';
+    protected $accessTokenEndpoint = 'http://localhost/plugins/servlet/oauth/access-token';
+    protected $signatureMethod = 'RSA-SHA1';
 
     /**
      * {@inheritdoc}
@@ -25,7 +25,6 @@ class Tumblr extends AbstractService
         } elseif (!isset($data[ 'oauth_callback_confirmed' ]) || $data[ 'oauth_callback_confirmed' ] !== 'true') {
             throw new TokenResponseException('Error in retrieving token.');
         }
-
         return $this->parseAccessTokenResponse($responseBody);
     }
 

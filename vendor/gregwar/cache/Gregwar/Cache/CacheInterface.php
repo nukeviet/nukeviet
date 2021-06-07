@@ -20,7 +20,7 @@ interface CacheInterface {
     /**
      * Sets the actual cache directory
      *
-     * @param string $actualCacheDirectory the actual cache directory
+     * @param string|null $actualCacheDirectory the actual cache directory
      * @return self
      */
     public function setActualCacheDirectory($actualCacheDirectory = null);
@@ -114,7 +114,7 @@ interface CacheInterface {
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getOrCreate($filename, array $conditions = array(), $function, $file = false, $actual = false);
+    public function getOrCreate($filename, array $conditions, $function, $file = false, $actual = false);
 
     /**
      * Alias to getOrCreate with $file = true
@@ -126,6 +126,6 @@ interface CacheInterface {
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getOrCreateFile($filename, array $conditions = array(), $function, $actual = false);
+    public function getOrCreateFile($filename, array $conditions, $function, $actual = false);
 
 }
