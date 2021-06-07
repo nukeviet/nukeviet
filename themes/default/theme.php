@@ -35,6 +35,9 @@ $theme_config = [
 function nv_mailHTML($title, $content, $footer = '')
 {
     global $global_config, $lang_global;
+
+    $title = nv_autoLinkDisable($title);
+
     $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
     $xtpl->assign('GCONFIG', $global_config);
