@@ -28,11 +28,18 @@ function nv_validErrorHidden(a) {
 	$(a).parent().parent().removeClass("has-error")
 }
 
+function nv_uname_check(val) {
+	return (val.length >= 3 && nv_uname_filter.test(val) ) ? true : false;
+}
+
 function nv_validCheck(a) {
 	var c = $(a).attr("data-pattern"),
-		b = $(a).val();
+		b = $(a).val(),
+        f = $(a).attr("data-callback");
 	if ("email" == $(a).prop("type") && !nv_mailfilter.test(b)) return !1;
-	if ("undefined" == typeof c || "" == c) {
+    else if ("undefined" != typeof f && "nv_uname_check" == f) {
+        if (!nv_uname_check(b)) return !1
+	} else if ("undefined" == typeof c || "" == c) {
 		if ("" == b) return !1
 	} else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(b)) return !1;
 	return !0
@@ -41,7 +48,7 @@ function nv_validCheck(a) {
 function nv_validForm(a) {
 	$(".has-error", a).removeClass("has-error");
 	var c = 0;
-	$(a).find(".required").each(function() {
+	$(a).find(".required,input[data-callback]").each(function() {
 		$(this).val(trim(strip_tags($(this).val())));
 		if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), nv_validErrorShow(this), !1
 	});

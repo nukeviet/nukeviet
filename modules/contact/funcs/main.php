@@ -112,57 +112,59 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
         exit($form);
     }
-
-    if (!defined('NV_IS_USER')) {
-        $fname = nv_substr($nv_Request->get_title('fname', 'post', '', 1), 0, 100);
-        $femail = nv_substr($nv_Request->get_title('femail', 'post', '', 1), 0, 100);
-    }
-
-    if (empty($fname)) {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'fname',
-            'mess' => $lang_module['error_fullname']
-        ));
-    }
-
-    $check_valid_email = nv_check_valid_email($femail, true);
-    $femail = $check_valid_email[1];
-
-    if ($check_valid_email[0] != '') {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'femail',
-            'mess' => $check_valid_email[0]
-        ));
-    }
-
-    if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'ftitle',
-            'mess' => $lang_module['error_title']
-        ));
-    }
-    if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'fcon',
-            'mess' => $lang_module['error_content']
-        ));
-    }
-
+    
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
         $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
     }
     if (($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? '' : 'fcode',
             'mess' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
-        ));
+        ]);
+    }
+
+    if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'ftitle',
+            'mess' => $lang_module['error_title']
+        ]);
+    }
+
+    if (!defined('NV_IS_USER')) {
+        $fname = nv_substr($nv_Request->get_title('fname', 'post', ''), 0, 100);
+        $femail = nv_substr($nv_Request->get_title('femail', 'post', '', 1), 0, 100);
+    }
+
+    $_fname = str_replace("&#039;", "'", $fname);
+    if (empty($fname) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_fname)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'fname',
+            'mess' => $lang_module['error_fullname']
+        ]);
+    }
+
+    $check_valid_email = nv_check_valid_email($femail, true);
+    $femail = $check_valid_email[1];
+
+    if ($check_valid_email[0] != '') {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'femail',
+            'mess' => $check_valid_email[0]
+        ]);
+    }
+
+    if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'fcon',
+            'mess' => $lang_module['error_content']
+        ]);
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -199,7 +201,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
-        $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart);
+        $_ftitle = nv_autoLinkDisable($ftitle);
+        $_fcon = nv_autoLinkDisable($fcon);
+        $_fphone = nv_autoLinkDisable($fphone);
+        $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart);
 
         $email_list = [];
         if (!empty($array_department[$fpart]['email'])) {
@@ -247,7 +252,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $global_config['site_name'],
                 $global_config['site_email']
             ];
-            $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false);
+            $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart, false);
             @nv_sendmail($from, $femail, $ftitle, $fcon_mail);
         }
 
