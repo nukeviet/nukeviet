@@ -1,71 +1,69 @@
-if ("undefined" == typeof nv_base_siteurl) var nv_base_siteurl = "/";
-if ("undefined" == typeof nv_lang_data) var nv_lang_data = "en";
-if ("undefined" == typeof nv_name_variable) var nv_name_variable = "nv";
-if ("undefined" == typeof nv_fc_variable) var nv_fc_variable = "op";
-if ("undefined" == typeof nv_lang_variable) var nv_lang_variable = "language";
-if ("undefined" == typeof nv_module_name) var nv_module_name = "";
-if ("undefined" == typeof nv_func_name) var nv_func_name = "";
-if ("undefined" == typeof nv_is_user) var nv_is_user = 0;
-if ("undefined" == typeof nv_area_admin) var nv_area_admin = 0;
-if ("undefined" == typeof nv_my_ofs) var nv_my_ofs = 7;
-if ("undefined" == typeof nv_my_dst) var nv_my_dst = !1;
-if ("undefined" == typeof nv_my_abbr) var nv_my_abbr = "ICT";
-if ("undefined" == typeof nv_cookie_prefix) var nv_cookie_prefix = "nv4";
-if ("undefined" == typeof nv_check_pass_mstime) var nv_check_pass_mstime = 1738E3;
-if ("undefined" == typeof theme_responsive) var theme_responsive = 0;
-if ("undefined" == typeof nv_safemode) var nv_safemode = 0;
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 19/3/2010 22:58
+ */
 
-var OP = (navigator.userAgent.indexOf('Opera') != -1 );
-var IE = (navigator.userAgent.indexOf('MSIE') != -1 && !OP );
-var GK = (navigator.userAgent.indexOf('Gecko') != -1 );
-var SA = (navigator.userAgent.indexOf('Safari') != -1 );
-var DOM = document.getElementById;
-var NS4 = document.layers;
+var nv_base_siteurl, nv_lang_data, nv_name_variable, nv_fc_variable, nv_lang_variable, nv_module_name, nv_func_name, nv_is_user, nv_area_admin, nv_my_ofs, nv_my_dst, nv_my_abbr, nv_cookie_prefix, nv_check_pass_mstime, theme_responsive, nv_safemode;
+var OP = -1 != navigator.userAgent.indexOf("Opera"),
+	IE = -1 != navigator.userAgent.indexOf("MSIE") && !OP,
+	GK = -1 != navigator.userAgent.indexOf("Gecko"),
+	SA = -1 != navigator.userAgent.indexOf("Safari"),
+	DOM = document.getElementById,
+	NS4 = document.layers,
+	nv_mailfilter = /^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/,
+	nv_numcheck = /^([0-9])+$/,
+	nv_namecheck = /^([a-zA-Z0-9_-])+$/,
+	nv_uname_filter = /^([\p{L}\p{Mn}\p{Pd}'][\p{L}\p{Mn}\p{Pd}',\s]*)*$/u,
+	nv_md5check = /^[a-z0-9]{32}$/,
+	nv_imgexts = /^.+\.(jpg|gif|png|bmp)$/,
+	nv_iChars = "!@#$%^&*()+=-[]\\';,./{}|\":<>?",
+	nv_specialchars = /\$|,|@|#|~|`|\%|\*|\^|\&|\(|\)|\+|\=|\[|\-|\_|\]|\[|\}|\{|\;|\:|\'|\"|\<|\>|\?|\||\\|\!|\$|\./g,
+	nv_old_Minute = -1,
+	strHref = window.location.href,
+	script_name = strHref,
+	query_string = "";
 
-var nv_mailfilter = /^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/;
-var nv_numcheck = /^([0-9])+$/;
-var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
-var nv_uname_filter = /^([\p{L}\p{Mn}\p{Pd}'][\p{L}\p{Mn}\p{Pd}',\s]*)*$/u;
-var nv_md5check = /^[a-z0-9]{32}$/;
-var nv_imgexts = /^.+\.(jpg|gif|png|bmp)$/;
-var nv_iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
-var nv_specialchars = /\$|,|@|#|~|`|\%|\*|\^|\&|\(|\)|\+|\=|\[|\-|\_|\]|\[|\}|\{|\;|\:|\'|\"|\<|\>|\?|\||\\|\!|\$|\./g;
+void 0 === nv_base_siteurl && (nv_base_siteurl = "/");
+void 0 === nv_lang_data && (nv_lang_data = "en");
+void 0 === nv_name_variable && (nv_name_variable = "nv");
+void 0 === nv_fc_variable && (nv_fc_variable = "op");
+void 0 === nv_lang_variable && (nv_lang_variable = "language");
+void 0 === nv_module_name && (nv_module_name = "");
+void 0 === nv_func_name && (nv_func_name = "");
+void 0 === nv_is_user && (nv_is_user = 0);
+void 0 === nv_area_admin && (nv_area_admin = 0);
+void 0 === nv_my_ofs && (nv_my_ofs = 7);
+void 0 === nv_my_dst && (nv_my_dst = !1);
+void 0 === nv_my_abbr && (nv_my_abbr = "ICT");
+void 0 === nv_cookie_prefix && (nv_cookie_prefix = "nv4");
+void 0 === nv_check_pass_mstime && (nv_check_pass_mstime = 1738E3);
+void 0 === theme_responsive && (theme_responsive = 0);
+void 0 === nv_safemode && (nv_safemode = 0);
 
-var nv_old_Minute = -1;
-
-var strHref = window.location.href;
-if (strHref.indexOf("?") > -1) {
-	var strHref_split = strHref.split("?");
-	var script_name = strHref_split[0];
-	var query_string = strHref_split[1];
-} else {
-	var script_name = strHref;
-	var query_string = '';
-}
+- 1 < strHref.indexOf("?") && ([script_name, query_string] = strHref.split("?"));
 
 function nv_email_check(field_id) {
-	return (field_id.value.length >= 7 && nv_mailfilter.test(field_id.value) ) ? true : false;
+	return 7 <= field_id.value.length && nv_mailfilter.test(field_id.value)
 }
 
 function nv_num_check(field_id) {
-	return (field_id.value.length >= 1 && nv_numcheck.test(field_id.value) ) ? true : false;
+	return 1 <= field_id.value.length && nv_numcheck.test(field_id.value)
 }
 
 function nv_name_check(field_id) {
-	return (field_id.value != '' && nv_namecheck.test(field_id.value) ) ? true : false;
+	return "" != field_id.value && nv_namecheck.test(field_id.value)
 }
 
 function nv_md5_check(field_id) {
-	return ( nv_md5check.test(field_id.value) ) ? true : false;
+	return nv_md5check.test(field_id.value)
 }
 
 function nv_iChars_check(field_id) {
-	for (var i = 0; i < field_id.value.length; i++) {
-		if (nv_iChars.indexOf(field_id.value.charAt(i)) != -1) {
-			return true;
-		}
-	}
-	return false;
+	for (var a = 0; a < field_id.value.length; a++) if (-1 != nv_iChars.indexOf(field_id.value.charAt(a))) return !0;
+	return !1
 }
 
 function nv_iChars_Remove(str) {
@@ -73,73 +71,49 @@ function nv_iChars_Remove(str) {
 }
 
 function nv_setCookie(name, value, expiredays, secure, SameSite) {
-	if (expiredays) {
-		var exdate = new Date();
-		exdate.setDate(exdate.getDate() + expiredays);
-		var expires = exdate.toGMTString();
-	}
-	var is_url = /^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/;
-	var domainName = document.domain;
-	domainName = domainName.replace(/www\./g, '');
-	domainName = is_url.test(domainName) ? '.' + domainName : '';
-    secure = ("undefined" != typeof secure && secure) ? "; secure" : "";
-    SameSite = ("undefined" != typeof SameSite && ('Lax' == SameSite || 'Strict' == SameSite || ('None' == SameSite && '' != secure))) ? "; SameSite=" + SameSite : "";
-	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_base_siteurl + SameSite + secure;
+	var a, domainName = document.domain;
+	expiredays = expiredays ? ((a = new Date).setDate(a.getDate() + expiredays), "; expires=" + a.toGMTString()) : "";
+	domainName = domainName.replace(/www\./g, "");
+	domainName = /^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,}$/i.test(domainName) ? "; domain=." + domainName : "";
+	secure = void 0 !== secure && secure ? "; secure" : "";
+	SameSite = void 0 !== SameSite && ("Lax" == SameSite || "Strict" == SameSite || "None" == SameSite && "" != secure) ? "; SameSite=" + SameSite : "";
+	document.cookie = name + "=" + escape(value) + expiredays + domainName + "; path=" + nv_base_siteurl + SameSite + secure
 }
 
 function nv_getCookie(name) {
-	var cookie = " " + document.cookie;
-	var search = " " + name + "=";
-	var setStr = null;
-	var offset = 0;
-	var end = 0;
-	if (cookie.length > 0) {
-		offset = cookie.indexOf(search);
-		if (offset != -1) {
-			offset += search.length;
-			end = cookie.indexOf(";", offset);
-			if (end == -1) {
-				end = cookie.length;
-			}
-			setStr = unescape(cookie.substring(offset, end));
-		}
-	}
-	return setStr;
+	var cookie = " " + document.cookie,
+		search = " " + name + "=",
+		offset = 0,
+		end = 0;
+	return 0 < cookie.length && (offset = cookie.indexOf(search), -1 != offset) ? (offset += search.length, end = cookie.indexOf(";", offset), -1 == end && (end = cookie.length), unescape(cookie.substring(offset, end))) : null
 }
 
 function nv_check_timezone() {
-	var is_url = /^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/;
-	var domainName = document.domain;
-	domainName = domainName.replace(/www\./g, '');
-	domainName = is_url.test(domainName) ? '.' + domainName : '';
-
-	var cookie_timezone = nv_getCookie(nv_cookie_prefix + '_cltz');
-	var giohientai = new Date();
-	var giomuahe = new Date(Date.UTC(2005, 6, 30, 0, 0, 0, 0));
-	var giomuadong = new Date(Date.UTC(2005, 12, 30, 0, 0, 0, 0));
-	var new_value = -giomuahe.getTimezoneOffset() + '.' + -giomuadong.getTimezoneOffset() + '.' + -giohientai.getTimezoneOffset();
-	new_value += '|' + nv_base_siteurl;
-	new_value += '|' + domainName;
-
-	if (rawurldecode(cookie_timezone) != new_value) {
-        var secure = (location.protocol === 'https:') ? true : false;
-		nv_setCookie(nv_cookie_prefix + '_cltz', rawurlencode(new_value), 365, secure, 'Strict');
-	}
+	var domainName = document.domain,
+		cookieName = nv_cookie_prefix + '_cltz',
+		currentTime = new Date(),
+		summerTime = new Date(Date.UTC(2005, 6, 30, 0, 0, 0, 0)),
+		winterTime = new Date(Date.UTC(2005, 12, 30, 0, 0, 0, 0)),
+		cookieVal;
+	domainName = domainName.replace(/www\./g, "");
+	domainName = /^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,}$/i.test(domainName) ? "." + domainName : "";
+	cookieVal = -summerTime.getTimezoneOffset() + "." + -winterTime.getTimezoneOffset() + "." + -currentTime.getTimezoneOffset() + "|" + nv_base_siteurl + "|" + domainName;
+	rawurldecode(nv_getCookie(cookieName)) != cookieVal && nv_setCookie(cookieName, rawurlencode(cookieVal), 365, "https:" === location.protocol ? !0 : !1, "Strict")
 }
 
 function is_array(mixed_var) {
-	return ( mixed_var instanceof Array );
+	return (mixed_var instanceof Array);
 }
 
 function strip_tags(str, allowed_tags) {
-	var key = '', allowed = false;
-	var matches = [];
-	var allowed_array = [];
-	var allowed_tag = '';
-	var i = 0;
-	var k = '';
-	var html = '';
-
+	var key = '',
+		allowed = false,
+		matches = [],
+		allowed_array = [],
+		allowed_tag = '',
+		i = 0,
+		k = '',
+		html = '';
 	var replacer = function(search, replace, str) {
 		return str.split(search).join(replace);
 	};
@@ -200,7 +174,10 @@ function strip_tags(str, allowed_tags) {
 
 // trim(' Kevin van Zonneveld ');
 function trim(str, charlist) {
-	var whitespace, l = 0, i = 0;
+	var whitespace,
+		l = 0,
+		i = 0;
+
 	str += '';
 
 	if (!charlist) {
@@ -211,7 +188,7 @@ function trim(str, charlist) {
 	}
 
 	l = str.length;
-	for ( i = 0; i < l; i++) {
+	for (i = 0; i < l; i++) {
 		if (whitespace.indexOf(str.charAt(i)) === -1) {
 			str = str.substring(i);
 			break;
@@ -219,7 +196,7 @@ function trim(str, charlist) {
 	}
 
 	l = str.length;
-	for ( i = l - 1; i >= 0; i--) {
+	for (i = l - 1; i >= 0; i--) {
 		if (whitespace.indexOf(str.charAt(i)) === -1) {
 			str = str.substring(0, i + 1);
 			break;
@@ -231,7 +208,6 @@ function trim(str, charlist) {
 
 // rawurlencode('Kevin van Zonneveld!'); = > 'Kevin%20van%20Zonneveld%21'
 function rawurlencode(str) {
-
 	str = (str + '').toString();
 	return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%5B').replace(/\)/g, '%5D').replace(/\*/g, '%2A');
 }
@@ -242,61 +218,23 @@ function rawurldecode(str) {
 }
 
 function is_numeric(mixed_var) {
-	return ! isNaN(mixed_var);
+	return !isNaN(mixed_var);
 }
 
 function intval(mixed_var, base) {
-	var type = typeof (mixed_var );
+	var type = typeof (mixed_var);
 
 	if (type === 'boolean') {
 		return (mixed_var) ? 1 : 0;
 	} else if (type === 'string') {
 		tmp = parseInt(mixed_var, base || 10);
-		return (isNaN(tmp) || ! isFinite(tmp)) ? 0 : tmp;
+		return (isNaN(tmp) || !isFinite(tmp)) ? 0 : tmp;
 	} else if (type === 'number' && isFinite(mixed_var)) {
 		return Math.floor(mixed_var);
 	} else {
 		return 0;
 	}
 }
-
-function nv_get_element_value(formElement) {
-	if (formElement.length != null)
-		var type = formElement[0].type;
-	if (( typeof (type ) == 'undefined' ) || (type == 0 ))
-		var type = formElement.type;
-
-	var val = '';
-	switch( type ) {
-		case 'undefined' :
-			break;
-
-		case 'radio' :
-			if (formElement.checked) {
-				val = formElement.value;
-			}
-			break;
-
-		case 'select-multiple' :
-			var myArray = new Array();
-			for (var x = 0; x < formElement.length; x++) {
-				if (formElement[x].selected == true) {
-					myArray[myArray.length] = formElement[x].value;
-				}
-			}
-			val = myArray;
-			break;
-
-		case 'checkbox' :
-			val = formElement.checked;
-			break;
-
-		default :
-			val = formElement.value;
-	}
-	return val;
-}
-
 
 function nv_is_dst() {
 	var now = new Date();
@@ -313,7 +251,7 @@ function nv_is_dst() {
 	// 2AM
 	// Need to be on first Sunday
 	if (dst_start.getDay())
-		dst_start.setDate(dst_start.getDate() + (7 - dst_start.getDay() ));
+		dst_start.setDate(dst_start.getDate() + (7 - dst_start.getDay()));
 	// Set to second Sunday
 	dst_start.setDate(dst_start.getDate() + 7);
 	// Set dst end to 2AM 1st Sunday of November
@@ -325,57 +263,39 @@ function nv_is_dst() {
 	// 2AM
 	// Need to be on first Sunday
 	if (dst_end.getDay())
-		dst_end.setDate(dst_end.getDate() + (7 - dst_end.getDay() ));
-	return (now > dst_start && now < dst_end );
+		dst_end.setDate(dst_end.getDate() + (7 - dst_end.getDay()));
+	return (now > dst_start && now < dst_end);
 }
 
 function nv_DigitalClock(div_id) {
 	if (document.getElementById(div_id)) {
-		if (nv_my_dst) {
-			var test_dst = nv_is_dst();
-			if (test_dst)
-				nv_my_ofs += 1;
-		}
+		nv_my_dst && nv_is_dst() && (nv_my_ofs += 1);
 
 		var newDate = new Date();
-		var ofs = newDate.getTimezoneOffset() / 60;
-		newDate.setHours(newDate.getHours() + ofs + nv_my_ofs);
+		newDate.setHours(newDate.getHours() + (newDate.getTimezoneOffset() / 60) + nv_my_ofs);
 
-		var intMinutes = newDate.getMinutes();
-		var intSeconds = newDate.getSeconds();
+		var intMinutes = newDate.getMinutes(),
+			intSeconds = newDate.getSeconds();
+
 		if (intMinutes != nv_old_Minute) {
 			nv_old_Minute = intMinutes;
-			var intDay = newDate.getDay();
-			var intMonth = newDate.getMonth();
-			var intWeekday = newDate.getDate();
-			var intYear = newDate.getYear();
-			var intHours = newDate.getHours();
+			var intHours = newDate.getHours(),
+				intDay = newDate.getDay(),
+				intMonth = newDate.getMonth(),
+				intWeekday = newDate.getDate(),
+				intYear = newDate.getYear();
 
-			if (intYear < 200)
-				intYear = intYear + 1900;
+			200 > intYear && (intYear += 1900);
 			var strDayName = new String(nv_aryDayName[intDay]);
-			var strDayNameShort = new String(nv_aryDayNS[intDay]);
-			var strMonthName = new String(nv_aryMonth[intMonth]);
-			var strMonthNameShort = new String(nv_aryMS[intMonth]);
 			var strMonthNumber = intMonth + 1;
-			var strYear = new String(intYear);
-			var strYearShort = strYear.substring(2, 4);
+			9 >= intHours && (intHours = "0" + intHours);
+			9 >= intMinutes && (intMinutes = "0" + intMinutes);
+			9 >= strMonthNumber && (strMonthNumber = "0" + strMonthNumber);
+			9 >= intWeekday && (intWeekday = "0" + intWeekday);
 
-			if (intHours <= 9)
-				intHours = '0' + intHours;
-			if (intMinutes <= 9)
-				intMinutes = '0' + intMinutes;
-			// if ( intSeconds <= 9 ) intSeconds = '0' + intSeconds;
-			if (intWeekday <= 9)
-				intWeekday = '0' + intWeekday;
-			if (strMonthNumber <= 9)
-				strMonthNumber = '0' + strMonthNumber;
-
-			var strClock = intHours + ':' + intMinutes + ' ' + nv_my_abbr + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber + '/' + intYear;
-			var spnClock = document.getElementById(div_id);
-			spnClock.innerHTML = strClock;
+			document.getElementById(div_id).innerHTML = intHours + ':' + intMinutes + ' ' + nv_my_abbr + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber + '/' + intYear;
 		}
-		setTimeout('nv_DigitalClock("' + div_id + '")', (60 - intSeconds ) * 1000);
+		setTimeout('nv_DigitalClock("' + div_id + '")', (60 - intSeconds) * 1000);
 	}
 }
 
@@ -400,9 +320,9 @@ function nv_show_hidden(div_id, st) {
 }
 
 function nv_checkAll(oForm, cbName, caName, check_value) {
-    if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
-        return false;
-    }
+	if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
+		return false;
+	}
 	if (oForm[cbName].length) {
 		for (var i = 0; i < oForm[cbName].length; i++) {
 			oForm[cbName][i].checked = check_value;
@@ -421,9 +341,9 @@ function nv_checkAll(oForm, cbName, caName, check_value) {
 }
 
 function nv_UncheckAll(oForm, cbName, caName, check_value) {
-    if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
-        return false;
-    }
+	if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
+		return false;
+	}
 	var ts = 0;
 
 	if (oForm[cbName].length) {
@@ -480,11 +400,11 @@ function nv_urldecode_ajax(my_url, containerid) {
 }
 
 function nv_isExternal(url) {
-    var host = window.location.hostname.toLowerCase(),
-        regex = new RegExp('^(?:(?:f|ht)tp(?:s)?\:)?//(?:[^\@]+\@)?([^:/]+)', 'im'),
-        match = url.match(regex),
-        domain = ((match ? match[1].toString() : ((url.indexOf(':') < 0) ? host : ''))).toLowerCase();
-    return domain != host
+	var host = window.location.hostname.toLowerCase(),
+		regex = new RegExp('^(?:(?:f|ht)tp(?:s)?\:)?//(?:[^\@]+\@)?([^:/]+)', 'im'),
+		match = url.match(regex),
+		domain = ((match ? match[1].toString() : ((url.indexOf(':') < 0) ? host : ''))).toLowerCase();
+	return domain != host
 }
 
 function nv_open_browse(theURL, winName, w, h, features) {
@@ -494,9 +414,9 @@ function nv_open_browse(theURL, winName, w, h, features) {
 	if (features != '') {
 		settings += ',' + features;
 	}
-    if (nv_isExternal(theURL)) {
-        settings += ',noopener,noreferrer'
-    }
+	if (nv_isExternal(theURL)) {
+		settings += ',noopener,noreferrer'
+	}
 	window.open(theURL, winName, settings).focus();
 }
 
@@ -504,10 +424,10 @@ function nv_setIframeHeight(iframeId) {
 	var ifDoc, ifRef = document.getElementById(iframeId);
 	try {
 		ifDoc = ifRef.contentWindow.document.documentElement;
-	} catch( e ) {
+	} catch (e) {
 		try {
 			ifDoc = ifRef.contentDocument.documentElement;
-		} catch(ee) {
+		} catch (ee) {
 		}
 	}
 	if (ifDoc) {
@@ -518,28 +438,28 @@ function nv_setIframeHeight(iframeId) {
 
 nv_check_timezone();
 
-(function () {
-  if ( typeof window.CustomEvent === "function" ) return false; //If not IE
+(function() {
+	if (typeof window.CustomEvent === "function") return false; //If not IE
 
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-   }
+	function CustomEvent(event, params) {
+		params = params || { bubbles: false, cancelable: false, detail: undefined };
+		var evt = document.createEvent('CustomEvent');
+		evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+		return evt;
+	}
 
-  CustomEvent.prototype = window.Event.prototype;
+	CustomEvent.prototype = window.Event.prototype;
 
-  window.CustomEvent = CustomEvent;
-  
-  //closest for IE
-  Element.prototype.matches || (Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
-    Element.prototype.closest || (Element.prototype.closest = function(b) {
-    	var a = this;
-    	do {
-    		if (Element.prototype.matches.call(a, b)) return a;
-    		a = a.parentElement || a.parentNode
-    	} while (null !== a && 1 === a.nodeType);
-    	return null
-    })
+	window.CustomEvent = CustomEvent;
+
+	//closest for IE
+	Element.prototype.matches || (Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
+	Element.prototype.closest || (Element.prototype.closest = function(b) {
+		var a = this;
+		do {
+			if (Element.prototype.matches.call(a, b)) return a;
+			a = a.parentElement || a.parentNode
+		} while (null !== a && 1 === a.nodeType);
+		return null
+	})
 })();
