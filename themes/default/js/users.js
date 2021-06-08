@@ -268,56 +268,49 @@ function login_validForm(a) {
 }
 
 function reg_validForm(a) {
-	// Xử lý các trình soạn thảo
-	if (typeof CKEDITOR != "undefined") {
-		for (var instanceName in CKEDITOR.instances) {
-			$('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
-		}
-	}
-	$(".has-error", a).removeClass("has-error");
-	var d = 0,
-		c = [];
-	$(a).find("input.required,input[data-callback],textarea.required,select.required,div.required").each(function() {
-		var b = $(this).prop("tagName");
-		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
-		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
-	});
-	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
-		type: c.type,
-		cache: !1,
-		url: c.url,
-		data: c.data,
-		dataType: "json",
-		success: function(b) {
-			var c = $("[onclick*='change_captcha']", a);
-			c && c.click();
-			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=\"" + b.input + "\"]").each(function() {
-				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-				validErrorShow(this)
-			}) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
-				scrollTop: $(".nv-info", a).offset().top
-			}, 800)), (($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha())) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
-				$(".nv-info", a).fadeOut();
-				$("input,button,select,textarea", a).prop("disabled", !1);
-				$("[onclick*=validReset]", a).click()
-			}, 6E3) : $("html, body").animate({
-				scrollTop: $(".nv-info", a).offset().top
-			}, 800, function() {
-				$(".form-detail", a).hide();
-				setTimeout(function() {
-					window.location.href = "" != b.input ? b.input : window.location.href
-				}, 6E3)
-			})))
-		},
-		error: function(xhr, opt, err) {
-			if (window.console.log) {
-				console.log(xhr.status + ': ' + err);
-			} else {
-				alert(xhr.status + ': ' + err);
-			}
-		}
-	}));
-	return !1
+    // Xử lý các trình soạn thảo
+    if ("undefined" != typeof CKEDITOR)
+        for (var c in CKEDITOR.instances) $("#" + c).val(CKEDITOR.instances[c].getData());
+    $(".has-error", a).removeClass("has-error");
+    var e = 0;
+    c = [];
+    $(a).find("input.required,input[data-callback],textarea.required,select.required,div.required").each(function() {
+        var b = $(this).prop("tagName");
+        "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+        if (!validCheck(this)) return e++,
+            $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+    });
+    e || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+        type: c.type,
+        cache: !1,
+        url: c.url,
+        data: c.data,
+        dataType: "json",
+        success: function(b) {
+            var d = $("[onclick*='change_captcha']", a);
+            d && d.click();
+            "error" == b.status ? ($("input,button,select,textarea",
+                a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find('[name="' + b.input + '"]').each(function() {
+                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                validErrorShow(this)
+            }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
+                scrollTop: $(".nv-info", a).offset().top
+            }, 800)), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
+                "ok" == b.input ? setTimeout(function() {
+                    $(".nv-info", a).fadeOut();
+                    $("input,button,select,textarea", a).prop("disabled", !1);
+                    $("[onclick*=validReset]", a).click()
+                }, 6E3) : ($("html, body").animate({
+                    scrollTop: $(".nv-info", a).offset().top
+                }, 800), $(".form-detail", a).hide(), setTimeout(function() {
+                    window.location.href = "" != b.input ? b.input : window.location.href
+                }, 6E3)))
+        },
+        error: function(b, d, f) {
+            window.console.log ? console.log(b.status + ": " + f) : alert(b.status + ": " + f)
+        }
+    }));
+    return !1
 }
 
 function lostpass_validForm(a) {
@@ -379,39 +372,33 @@ function lostpass_validForm(a) {
 }
 
 function changemail_validForm(a) {
-	$(".has-error", a).removeClass("has-error");
-	var d = 0,
-		c = [];
-	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
-		var b = $(this).prop("tagName");
-		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
-		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
-	});
-	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
-		type: c.type,
-		cache: !1,
-		url: c.url,
-		data: c.data,
-		dataType: "json",
-		success: function(b) {
-			$("[name=vsend]", a).val("0");
-			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
-				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-				validErrorShow(this)
-			}), (($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha())) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.status ? setTimeout(function() {
-				$(".nv-info", a).fadeOut();
-				$("input,button,select,textarea", a).prop("disabled", !1)
-			}, 6E3) : $("html, body").animate({
-				scrollTop: $(".nv-info", a).offset().top
-			}, 800, function() {
-				$(".form-detail", a).hide();
-				setTimeout(function() {
-					window.location.href = "" != b.input ? b.input : window.location.href
-				}, 6E3)
-			})))
-		}
-	}));
-	return !1
+    $(".has-error", a).removeClass("has-error");
+    var d = 0,
+        c = [];
+    $(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+        var b = $(this).prop("tagName");
+        "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+        if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess",
+            $(this).attr("data-mess")), validErrorShow(this), !1
+    });
+    d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+        type: c.type,
+        cache: !1,
+        url: c.url,
+        data: c.data,
+        dataType: "json",
+        success: function(b) {
+            $("[name=vsend]", a).val("0");
+            "error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
+                $(this).addClass("tooltip-current").attr("data-current-mess",
+                    b.mess);
+                validErrorShow(this)
+            }), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
+                window.location.href = "" != b.input ? b.input : window.location.href
+            }, 6E3))
+        }
+    }));
+    return !1
 }
 
 function bt_logout(a) {
