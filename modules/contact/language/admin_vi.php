@@ -119,3 +119,4 @@ $lang_module['captcha_type_'] = 'Không sử dụng';
 $lang_module['captcha_type_captcha'] = 'Captcha hình';
 $lang_module['captcha_type_recaptcha'] = 'reCaptcha';
 $lang_module['captcha_type_recaptcha_note'] = 'Captcha sẽ không chạy cho đến khi bạn <a href="%s">định cấu hình reCaptcha</a>';
+$lang_module['row_new'] = 'Thư mới';

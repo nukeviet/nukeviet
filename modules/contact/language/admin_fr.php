@@ -117,3 +117,4 @@ $lang_module['captcha_type_'] = 'Ne pas utiliser';
 $lang_module['captcha_type_captcha'] = 'Captcha-image';
 $lang_module['captcha_type_recaptcha'] = 'reCaptcha';
 $lang_module['captcha_type_recaptcha_note'] = 'Captcha ne fonctionnera pas tant que vous n\'aurez pas <a href="%s">configuré reCaptcha</a>';
+$lang_module['row_new'] = 'Nouveau courrier';

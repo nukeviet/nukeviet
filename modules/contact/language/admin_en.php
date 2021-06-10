@@ -117,3 +117,4 @@ $lang_module['captcha_type_'] = 'Do not use';
 $lang_module['captcha_type_captcha'] = 'Captcha-image';
 $lang_module['captcha_type_recaptcha'] = 'reCaptcha';
 $lang_module['captcha_type_recaptcha_note'] = 'Captcha won\'t run until you <a href="%s">configure reCaptcha</a>';
+$lang_module['row_new'] = 'New mail';
