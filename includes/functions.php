@@ -1830,6 +1830,37 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 }
 
 /**
+ * getCanonicalUrl()
+ * 
+ * $page_url: Đường dẫn tuyệt đối từ thư mục gốc đến trang
+ * $request_uri_check: Có so sánh đường dẫn này với request_uri hay không
+ * $abs_comp: So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
+ * @param string $page_url
+ * @param bool $request_uri_check
+ * @param bool $abs_comp
+ * @return
+ */
+function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false) {
+    $url_rewrite = nv_url_rewrite($page_url, true);
+
+    if ($request_uri_check) {
+        $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+        if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
+            $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+        }
+    
+        if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
+            nv_redirect_location($url_rewrite_check);
+        } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
+            nv_redirect_location($url_rewrite_check);
+        }
+    }
+
+    return NV_MAIN_DOMAIN . $url_rewrite;
+}
+
+/**
  * nv_check_domain()
  *
  * @param string $domain

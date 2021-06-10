@@ -16,15 +16,7 @@ $page_title = $lang_module['country'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['country'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
-$base_url_rewrite = nv_url_rewrite($page_url, true);
-$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-    nv_redirect_location($base_url_rewrite_location);
-} else {
-    $canonicalUrl = $base_url_rewrite;
-}
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country' AND c_count!=0";
 $result = $db->query($sql);

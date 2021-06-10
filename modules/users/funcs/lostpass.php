@@ -329,7 +329,7 @@ if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config[
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = user_lostpass($data);
 

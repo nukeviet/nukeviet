@@ -43,7 +43,7 @@ if (defined('NV_EDITOR')) {
 $page_title = $lang_module['content'];
 $key_words = $module_info['keywords'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+$canonicalUrl = getCanonicalUrl($page_url);
 
 // check user post content
 $array_post_config = [];
@@ -154,7 +154,7 @@ $my_author_detail = defined('NV_IS_USER') ? my_author_detail($user_info['userid'
 // Chinh sua thong tin tac gia
 if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) {
     $page_url .= '&amp;author_info=1';
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     if ($nv_Request->isset_request('save', 'post')) {
         $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
@@ -236,7 +236,7 @@ $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     $page_url .= '&amp;author_info=1';
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     if ($contentid > 0) {
         if (!defined('NV_IS_USER')) {
@@ -757,7 +757,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $page = intval(substr($array_op[1], 5));
 
         $page_url .= '/page-' . $page;
-        $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+        $canonicalUrl = getCanonicalUrl($page_url);
     }
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);

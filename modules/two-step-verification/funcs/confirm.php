@@ -95,15 +95,7 @@ if ($tokend_confirm_password != $tokend) {
     }
 }
 
-$base_url_rewrite = nv_url_rewrite($page_url, true);
-$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-    nv_redirect_location($base_url_rewrite_location);
-} else {
-    $canonicalUrl = $base_url_rewrite;
-}
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

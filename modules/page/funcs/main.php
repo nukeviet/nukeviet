@@ -15,13 +15,7 @@ if (!defined('NV_IS_MOD_PAGE')) {
 $page_url = $base_url;
 
 if ($page_config['viewtype'] == 2) {
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
@@ -35,13 +29,7 @@ if ($page_config['viewtype'] == 2) {
 } elseif ($id) {
     // Xem theo bài viết
     $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'];
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     if (!empty($rowdetail['image'])) {
         if (!nv_is_url($rowdetail['image'])) {
@@ -147,13 +135,8 @@ if ($page_config['viewtype'] == 2) {
     if ($page > 1) {
         $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
     }
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_rewrite);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+
+    $canonicalUrl = getCanonicalUrl($page_url, true);
     
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];

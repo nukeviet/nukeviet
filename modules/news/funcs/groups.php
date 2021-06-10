@@ -33,15 +33,7 @@ if (isset($array_op[1])) {
         $page_url .= '/page-' . $page;
     }
 
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-        nv_redirect_location($base_url_rewrite_location);
-    } else {
-        $canonicalUrl = $base_url_rewrite;
-    }
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
     $array_mod_title[] = array(
         'catid' => 0,
@@ -125,15 +117,7 @@ if (isset($array_op[1])) {
     $page_title = $module_info['funcs']['groups']['func_site_title'];
     $key_words = $module_info['keywords'];
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-        nv_redirect_location($base_url_rewrite_location);
-    } else {
-        $canonicalUrl = $base_url_rewrite;
-    }
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
     
     $array_cat = array();
     $key = 0;

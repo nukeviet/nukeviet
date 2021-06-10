@@ -35,15 +35,7 @@ if ($page > 1) {
     $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
 }
 
-$base_url_rewrite = nv_url_rewrite($page_url, true);
-$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-    nv_redirect_location($base_url_rewrite_location);
-} else {
-    $canonicalUrl = $base_url_rewrite;
-}
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';

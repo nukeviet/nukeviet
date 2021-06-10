@@ -75,13 +75,7 @@ if ($nv_Request->isset_request('pdf', 'get')) {
 
 // Kiểm tra URL, không cho đánh tùy ý phần alias
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'];
-$base_url_rewrite = nv_url_rewrite($page_url, true);
-$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-$request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-    nv_redirect_location($base_url_rewrite);
-}
-$news_contents['link'] = $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+$news_contents['link'] = $canonicalUrl = getCanonicalUrl($page_url, true);
 
 /*
  * Không có quyền xem bài viết thì dừng
