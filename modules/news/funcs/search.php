@@ -299,8 +299,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         }
         $numRecord = $response['hits']['total'];
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        $total = ceil($numRecord / $per_page);
-        betweenURLs($page, $total, $base_url, '&page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page-', $prevPage, $nextPage);
 
         foreach ($response['hits']['hits'] as $key => $value) {
             $homeimgthumb = $value['_source']['homeimgthumb'];
@@ -418,8 +417,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $numRecord = $db_slave->query($db_slave->sql())
             ->fetchColumn();
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        $total = ceil($numRecord / $per_page);
-        betweenURLs($page, $total, $base_url, '&page=', $prevPage, $nextPage);
+        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page=', $prevPage, $nextPage);
 
         $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.' . $order_articles_by . ' DESC')
