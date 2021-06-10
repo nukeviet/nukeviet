@@ -19,15 +19,7 @@ $vid = $nv_Request->get_int('vid', 'get', 0);
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 if (empty($vid)) {
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-        nv_redirect_location($base_url_rewrite_location);
-    } else {
-        $canonicalUrl = $base_url_rewrite;
-    }
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
@@ -243,7 +235,7 @@ if (empty($vid)) {
 
     $page_title = $row['question'];
     $page_url .= '&amp;vid=' . $vid;
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');

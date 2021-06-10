@@ -55,14 +55,7 @@ if ($id > 0 and $catid > 0) {
 
         if ($content['allowed_save'] == 1 and (defined('NV_IS_MODADMIN') or ($content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ($content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME)))) {
             $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'];
-            $base_url_rewrite = nv_url_rewrite($page_url, true);
-            $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-            if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-                nv_redirect_location($base_url_rewrite);
-            }
-
-            $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-            $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+            $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
             $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];
             $result = $db_slave->query($sql);
@@ -86,7 +79,7 @@ if ($id > 0 and $catid > 0) {
                 'bodytext' => $content['bodytext'],
                 'copyright' => $content['copyright'],
                 'copyvalue' => $module_config[$module_name]['copyright'],
-                'link' => "<a href=\"" . NV_MY_DOMAIN . $base_url_rewrite . "\" title=\"" . $content['title'] . "\">" . NV_MY_DOMAIN . $base_url_rewrite . "</a>\n",
+                'link' => "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n",
                 'contact' => $global_config['site_email'],
                 'author' => $content['author'],
                 'source' => $sourcetext

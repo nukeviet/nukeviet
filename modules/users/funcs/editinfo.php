@@ -1088,7 +1088,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+$canonicalUrl = getCanonicalUrl($page_url);
 
 if (!defined('NV_EDITOR')) {
     define('NV_EDITOR', 'ckeditor');

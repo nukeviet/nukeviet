@@ -71,15 +71,7 @@ if ($nv_Request->isset_request('showcode_' . $module_data, 'session')) {
     $nv_Request->unset_request('showcode_' . $module_data, 'session');
 }
 
-$base_url_rewrite = nv_url_rewrite($page_url, true);
-$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-    nv_redirect_location($base_url_rewrite_location);
-} else {
-    $canonicalUrl = $base_url_rewrite;
-}
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $contents = nv_theme_info_2step($backupcodes, $autoshowcode);
 

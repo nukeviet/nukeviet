@@ -68,13 +68,8 @@ if ($nv_Request->isset_request('q', 'get')) {
     if ($search['page'] > 1) {
         $page_url .= '&page=' . $search['page'];
     }
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = $_SERVER['REQUEST_URI'];
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
@@ -122,13 +117,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
     }
 } else {
-    $base_url_rewrite = nv_url_rewrite($page_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 }
 
 $contents = search_main_theme($is_search, $search, $array_mod);

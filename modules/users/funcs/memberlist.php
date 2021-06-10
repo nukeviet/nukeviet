@@ -38,7 +38,7 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
     }
 
     $page_url .= '/' . $array_op[1];
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     if (!empty($md5)) {
         $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5' . (defined('NV_IS_ADMIN') ? '' : ' AND active=1'));
@@ -192,7 +192,7 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
     $contents = nv_memberslist_theme($users_array, $array_order_new, $generate_page);
 
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

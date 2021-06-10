@@ -16,15 +16,7 @@ $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-$base_url_rewrite = nv_url_rewrite($page_url, true);
-$base_url_rewrite_location = str_replace('&amp;', '&', $base_url_rewrite);
-if ($_SERVER['REQUEST_URI'] == $base_url_rewrite_location) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite_location) {
-    nv_redirect_location($base_url_rewrite_location);
-} else {
-    $canonicalUrl = $base_url_rewrite;
-}
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $current_month_num = date('n', NV_CURRENTTIME);
 $current_year = date('Y', NV_CURRENTTIME);
