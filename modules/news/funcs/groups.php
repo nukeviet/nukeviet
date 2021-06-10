@@ -54,8 +54,7 @@ if (isset($array_op[1])) {
         ->fetchColumn();
 
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-    $total = ceil($num_items / $per_page);
-    betweenURLs($page, $total, $base_url, '/page-', $prevPage, $nextPage);
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight')
         ->order('t2.weight ASC')

@@ -108,8 +108,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
 
         if ($is_generate_page) {
-            $total = ceil($num_items/$limit);
-            betweenURLs($page, $total, $base_url, '&page=', $prevPage, $nextPage);
+            betweenURLs($page, ceil($num_items/$limit), $base_url, '&page=', $prevPage, $nextPage);
         }
 
         if (empty($search['content'])) {
