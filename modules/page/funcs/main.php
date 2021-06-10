@@ -15,17 +15,12 @@ if (!defined('NV_IS_MOD_PAGE')) {
 $page_url = $base_url;
 
 if ($page_config['viewtype'] == 2) {
-    $canonicalUrl = getCanonicalUrl($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
     $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $contents = '';
-
-    // Không cho đánh op khi không hiển thị nội dung
-    if (isset($array_op[0])) {
-        nv_redirect_location($page_url);
-    }
 } elseif ($id) {
     // Xem theo bài viết
     $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'];
@@ -136,17 +131,12 @@ if ($page_config['viewtype'] == 2) {
         $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
     }
 
-    $canonicalUrl = getCanonicalUrl($page_url, true);
-    
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
     $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $per_page = $page_config['per_page'];
-
-    // Không tùy ý đánh op
-    if (isset($array_op[1])) {
-        nv_redirect_location($base_url);
-    }
 
     $array_data = [];
     $db_slave->sqlreset()

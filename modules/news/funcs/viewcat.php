@@ -30,16 +30,19 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
     }
 }
 
-// Kiểm tra và chặn đánh tùy ý các op
-if (($page < 2 and isset($array_op[1])) or isset($array_op[2]) or ($page > 1 and in_array($viewcat, $no_generate))) {
-    nv_redirect_location($page_url);
-}
-
 if ($page > 1) {
     $page_url .= '/page-' . $page;
+
+    /**
+     * @link https://github.com/nukeviet/nukeviet/issues/2990
+     * Một số kiểu hiển thị không được đánh page
+     */
+    if (in_array($viewcat, $no_generate)) {
+        nv_redirect_location($base_url);
+    }
 }
 
-$canonicalUrl = getCanonicalUrl($page_url, true);
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $page_title = (!empty($global_array_cat[$catid]['titlesite'])) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
