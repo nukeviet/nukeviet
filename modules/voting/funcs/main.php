@@ -134,18 +134,24 @@ if (empty($vid)) {
         nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
-    $difftimeout = 3600;
-    $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
-    $log_fileext = preg_match('/[a-z]+/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
-    $pattern = '/^(.*)\.' . $log_fileext . '$/i';
-    $logs = nv_scandir($dir, $pattern);
+    if ($row['groups_view'] == '5' or $row['groups_view'] == '6') {
+        $row['vote_one'] = '0';
+    }
 
-    if (!empty($logs)) {
-        foreach ($logs as $file) {
-            $vtime = filemtime($dir . '/' . $file);
+    if (empty($row['vote_one'])) {
+        $difftimeout = !empty($module_config[$module_name]['difftimeout']) ? $module_config[$module_name]['difftimeout'] : 3600;
+        $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
+        $log_fileext = preg_match('/[a-z]+/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
+        $pattern = '/^(.*)\.' . $log_fileext . '$/i';
+        $logs = nv_scandir($dir, $pattern);
 
-            if (!$vtime or $vtime <= NV_CURRENTTIME - $difftimeout) {
-                @unlink($dir . '/' . $file);
+        if (!empty($logs)) {
+            foreach ($logs as $file) {
+                $vtime = filemtime($dir . '/' . $file);
+
+                if (!$vtime or $vtime <= NV_CURRENTTIME - $difftimeout) {
+                    @unlink($dir . '/' . $file);
+                }
             }
         }
     }
@@ -174,33 +180,45 @@ if (empty($vid)) {
         }
 
         $acceptcm = (int) $row['acceptcm'];
-        $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
-        if (defined('NV_IS_USER') and !empty($row['vote_one'])) {
-            $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $user_info['userid'] . $vid) . '.' . $log_fileext;
-            if (file_exists($dir . '/' . $logfile)) {
+        if (!empty($row['vote_one'])) {
+            $is_voted = false;
+            $userlist = $db->query('SELECT voted FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid=' . $vid)->fetchColumn();
+            if (!empty($userlist)) {
+                if (preg_match('/\,\s*' . $user_info['userid'] . '\s*\,/', ',' . $userlist . ',')) {
+                    $is_voted = true;
+                }
+            }
+
+            if ($is_voted) {
                 $note = $lang_module['limit_vote_msg'];
-            } elseif ($count <= $acceptcm) {
+            } elseif ($count > $acceptcm) {
+                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+            } else {
                 $in = implode(',', $array_id);
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
                 $db->query($sql);
-                file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
+
+                $userlist .= !empty($userlist) ? ',' . $user_info['userid'] : $user_info['userid'];
+                $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_voted (vid, voted) VALUES (" . $vid . ", '" . $userlist . "') ON DUPLICATE KEY UPDATE voted = VALUES(voted)";
+                $db->query($sql);
+
                 $note = $lang_module['okmsg'];
-            } else {
-                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
             }
         } else {
+            $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
             if (file_exists($dir . '/' . $logfile)) {
                 $timeout = filemtime($dir . '/' . $logfile);
                 $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
                 $note = sprintf($lang_module['timeoutmsg'], $timeout);
-            } elseif ($count <= $acceptcm) {
+            } elseif ($count > $acceptcm) {
+                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+            } else {
                 $in = implode(',', $array_id);
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
                 $db->query($sql);
+
                 file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
                 $note = $lang_module['okmsg'];
-            } else {
-                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
             }
         }
     }

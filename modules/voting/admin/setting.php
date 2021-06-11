@@ -15,7 +15,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $lang_module['setting'];
 $array_config = [];
 if ($nv_Request->isset_request('submit', 'post')) {
+    $array_config['difftimeout'] = $nv_Request->get_int('difftimeout', 'post', 0);
     $array_config['captcha_type'] = $nv_Request->get_string('captcha_type', 'post', '');
+
+    empty($array_config['difftimeout']) && $array_config['difftimeout'] = 1;
+    $array_config['difftimeout'] = $array_config['difftimeout'] * 3600;
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = '" . $module_name . "' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
@@ -30,6 +34,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 }
 
 $array_config = $module_config[$module_name];
+$array_config['difftimeout'] = round($array_config['difftimeout'] / 3600);
 
 $xtpl = new XTemplate('setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
