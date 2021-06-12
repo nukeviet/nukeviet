@@ -336,9 +336,14 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if ($nv_Request->isset_request('contentid', 'post')) {
         $rowcontent['id'] = $contentid;
+        
+        unset($fcode);
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
             $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        } elseif ($module_config[$module_name]['ucaptcha_type'] == 'captcha') {
+        }
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+        elseif ($module_config[$module_name]['ucaptcha_type'] == 'captcha') {
             $fcode = $nv_Request->get_title('fcode', 'post', '');
         }
         $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
@@ -395,7 +400,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $error = $lang_module['error_cat'];
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
-        } elseif (($module_config[$module_name]['ucaptcha_type'] == 'captcha' or ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($fcode, $module_config[$module_name]['ucaptcha_type'])) {
+        }
+        // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+        elseif (isset($fcode) and !nv_capcha_txt($fcode, $module_config[$module_name]['ucaptcha_type'])) {
             $error = ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {

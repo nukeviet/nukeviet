@@ -66,8 +66,18 @@ if ($captcha == 0) {
 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-$code = ($module_config[$module]['captcha_type_comm'] == 'recaptcha') ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('code', 'post', '');
-if ($show_captcha and ($module_config[$module]['captcha_type_comm'] == 'captcha' or ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($code, $module_config[$module]['captcha_type_comm'])) {
+unset($code);
+// Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+if ($show_captcha and $reCaptchaPass and $module_config[$module]['captcha_type_comm'] == 'recaptcha') {
+    $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+}
+// Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+elseif ($show_captcha and $module_config[$module]['captcha_type_comm'] == 'captcha') {
+    $code = $nv_Request->get_title('code', 'post', '');
+}
+
+// Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+if (isset($code) and !nv_capcha_txt($code, $module_config[$module]['captcha_type_comm'])) {
     _loadContents('ERR_code_' . $lang_global['securitycodeincorrect']);
 }
 

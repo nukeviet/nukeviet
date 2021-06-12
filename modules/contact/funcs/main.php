@@ -112,13 +112,19 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
         exit($form);
     }
-    
+
+    unset($fcaptcha);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
         $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
     }
-    if (($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
+
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? '' : 'fcode',

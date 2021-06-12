@@ -302,16 +302,18 @@ if ($checkss == $array_register['checkss']) {
     $custom_fields['question'] = $array_register['question'];
     $custom_fields['answer'] = $array_register['answer'];
 
+    unset($nv_seccode);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
-    $check_seccode = true;
-    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-        $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
-    }
+    // Kiểm tra tính hợp lệ của captcha nhập vào
+    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
 
     if (!$check_seccode) {
         reg_result(array(
