@@ -1,5 +1,80 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.00
+- Update Browser class to v1.9.6
+- Update Chart.js to v3.3.2, jquery.js to v3.6, jQuery Validation Plugin to v1.19.3, clipboard.js to v2.0.8, Select2.js to v.4.1.0-rc.0, jquery.timeago.js to version 1.6.7, CKeditor to v4.16.1
+- System package updates: polyfill-mbstring (v1.3.0 => v1.23.0), gregwar/cache (v1.0.12 => v1.0.13), gregwar/image (v2.0.21 => v2.0.28), and/oauth (dev-master 48fa6e7 => dev-master 700b769), symfony/options-resolver (v3.2.6 => v3.4.47), endroid/qrcode (1.9.1 => 1.9.3), phpmailer/phpmailer (v6.1.6 => v6.4.1)
+- System: Disable email engines from automatically hyperlinking a URL
+- Module News: Redesigned "Recommend article to your friend" tool
+- Module Users: Fix error "Email Hyperlink Injection". Thanks mcsoon at WhiteHub#1610
+- System: Hide file composer.json
+- System: Fix potential Cross-site Scripting (XSS) Errors
+- Module News: Add module-level on/off button for article rating function
+- System: Block Google FLoC
+- System: Add SameSite attribute to cookie
+- System: Add Link header (preload)
+- System: Add link-tag settings
+- System: Add Referrer-Policy
+- System: Add rel=noreferrer to external links
+- System: Add default image configuration for Open Graph tags
+- System: Add Content-Security-Policy
+- Module Upload: Add image mode for mobile
+- System: Interface, Does not use passive listeners to improve scrolling performance
+- System: Added ability to add DKIM to sendmail
+- System: Added ability to add S/MIME certificates to sendmail
+- System: Change method of displaying website suspension notice (#3092)
+- System: Add a pop-up informing about the use of cookies when the user first visits the website
+- Module Users: Fix error checking password when configuring 2-step authentication for accounts without password
+- System: Support for php 8, add functions str_contains, str_starts_with, str_ends_with
+- Sytem: Move captcha management to each function
+- Module Banners: Fix error of reinstalling the Banners module (#3015)
+- Module Users: Improve group registration and management
+- System: Change the management of social buttons, add Zalo share button (#2806)
+- Modules Seek, News: Optimize search for Vietnamese keywords without diacritics in MySQL (#1727)
+- Modules Seek, News: Optimized BoldKeywordInStr function (#2826 #2760)
+- Module News: Add author management (#3078 #2951 #1880 #416)
+- System: Determine the user's country by $_SERVER['HTTP_CF_IPCOUNTRY']
+- System: Add response header "Retry-After" when site is closed (#3092)
+- System: Add files with webp extension to the list of allowed images (#3089)
+- Module Users: Fix messy display of custom fields (#3080)
+- Module News: Add mode: "Home page plan in Mobile theme"
+- System: Integrate Google Analytics 4 (#2981)
+- System: Add configuration: "Host of static files" (NV_STATIC_URL) (#3072)
+- System: Integrate reCaptcha v3 (#2974)
+- Module News: Add pagination to tag management area
+- Module News: Fix rating not working in theme mobile_default
+- Module Users: Fix login with Oauth when integrating SSO
+- System:  Move pagination design to site interface area
+- System: Redefine canonical URLs, Manage page numbering, Add link rel="next", link rel="prev" at pagination locations (#3064)
+- System: Cross-Site, add a configuration to allow post request with null origin
+- System: Add API manager
+- Module News: Fix bug in search function
+- Module Seek: Change Google Custom Search Engine to Programmable Search Engine
+- System: Remove compression for caches
+- System: Show post images while viewing rss-feeds
+- Module comment: Correct the data reload section
+- System: fix isRobot function in Class Roboot
+- Module Users: Fix bug where custom fields are not displayed
+- Module voting: Add a feature that allows each user to vote only once (#3193)
+- Module Menu: Add logging for Menu module
+- Module contact: Add the function to mark incoming emails as processed (#3040)
+- All modules: Block indexing of robots in some areas, regardless of site configuration (ACP, users, banners (click func), comment, freecontent, menu, statistics, two-step-verification)
+- Module Users: Fix security bugs for group management
+- Module Users: Don't check max width, max height of avatar
+- MOdule Users: Add the configuration to automatically assign Oauth to an existing account
+- Module Users: Fix login facebook (#3013)
+- System: Fix XML encoding (#3006)
+- Module Users: Fix error when retrieving activation link (#2989)
+- All modules: Fix error of not censoring page numbers (#2990,#2998)
+- Module Seotools: Hide Seotools module for non-GOD-admins (#2994)
+- Module News: Accept quick view for attached image and pdf files only (#2995)
+- Module Users: Fix logging error when users login with OpenID (x#2996)
+- System: Fix error in nv_is_url function (#2979)
+- System: Add plugin area-5 - before run the module (only user area)
+- System: Fix error of not recognizing the Edge browser
+- Module Users: Update Users module with SSO integration
+- Module Menu: Allows adding menu with same name, with empty links
+- System: Request class, Allow request with NULL Origin
 
 NUKEVIET 4.4.02
 
