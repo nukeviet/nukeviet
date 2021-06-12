@@ -12,24 +12,24 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'News', // Tieu de module
     'modfuncs' => 'main,viewcat,topic,groups,author,detail,search,content,tag,rss', // Cac function co block
     'change_alias' => 'topic,groups,content,rss',
     'submenu' => 'content,rss,search',
     'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong
     'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
-    'version' => '4.4.02', // Phien ban cua modle
-    'date' => 'Monday, June 22, 2020 16:00:00 GMT+07:00', // Ngay phat hanh phien ban
+    'version' => '4.5.00', // Phien ban cua modle
+    'date' => 'Tuesday, June 22, 2021 16:00:00 GMT+07:00', // Ngay phat hanh phien ban
     'author' => 'VINADES <contact@vinades.vn>', // Tac gia
     'note' => '', // Ghi chu
-    'uploads_dir' => array(
+    'uploads_dir' => [
         $module_upload,
         $module_upload . '/source',
         $module_upload . '/temp_pic',
         $module_upload . '/topics'
-    ),
-    'files_dir' => array(
+    ],
+    'files_dir' => [
         $module_upload . '/topics'
-    )
-);
+    ]
+];

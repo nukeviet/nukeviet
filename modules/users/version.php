@@ -12,14 +12,14 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'Users',
     'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,memberlist,groups',
     'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,groups,memberlist',
     'is_sysmod' => 1,
     'virtual' => 1,
-    'version' => '4.4.02',
-    'date' => 'Monday, June 22, 2020 16:00:00 GMT+07:00',
+    'version' => '4.5.00',
+    'date' => 'Tuesday, June 22, 2021 16:00:00 GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => ''
-);
+];

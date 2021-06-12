@@ -12,15 +12,17 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'Comment',
     'modfuncs' => '',
     'submenu' => '',
     'is_sysmod' => 0,
     'virtual' => 0,
-    'version' => '4.4.02',
-    'date' => 'Monday, June 22, 2020 16:00:00 GMT+07:00',
+    'version' => '4.5.00',
+    'date' => 'Tuesday, June 22, 2021 16:00:00 GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
-    'uploads_dir' => array($module_upload),
+    'uploads_dir' => [
+        $module_upload
+    ],
     'note' => ''
-);
+];

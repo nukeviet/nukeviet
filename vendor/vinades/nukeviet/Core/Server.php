@@ -4,7 +4,7 @@ namespace NukeViet\Core;
 
 /**
  * @author VINADES.,JSC
- * @since 4.4.02
+ * @since 4.5.00
  *
  */
 class Server
