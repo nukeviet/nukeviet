@@ -25,7 +25,6 @@ var myTimerPage = "",
 	brcb = $('.breadcrumbs-wrap'),
     siteMenu = $("#menu-site-default"),
 	NVIsMobileMenu = false,
-	isRecaptcha = false,
 	reCapIDs = [];
 
 function winResize() {
