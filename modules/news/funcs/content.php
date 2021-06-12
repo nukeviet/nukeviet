@@ -666,9 +666,12 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $xtpl->parse('main.if_user');
     }
 
+    // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
-    } elseif ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');

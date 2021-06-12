@@ -311,12 +311,16 @@ function user_login($is_ajax = false)
 
     $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
     $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk)) ? 1 : 0;
+    // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
     if ($gfx_chk) {
+        // Nếu dùng reCaptcha v3
         if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
-        } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        }
+        // Nếu dùng reCaptcha v2
+        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->parse('main.recaptcha.default');
             $xtpl->parse('main.recaptcha');
@@ -420,11 +424,15 @@ function user_openid_login($gfx_chk, $attribs)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
+    // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
     if ($gfx_chk) {
+        // Nếu dùng reCaptcha v3
         if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
-        } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        }
+        // Nếu dùng reCaptcha v2
+        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
@@ -479,12 +487,16 @@ function user_lostpass($data)
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
 
     $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+    // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
     if (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk)) {
+        // Nếu dùng reCaptcha v3
         if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
-        } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        }
+        // Nếu dùng reCaptcha v2
+        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
@@ -1227,10 +1239,14 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
 
     if ($gfx_chk) {
+        // Xác định có áp dụng reCaptcha hay không
         $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+        // Nếu dùng reCaptcha v3
         if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
-        } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        }
+        // Nếu dùng reCaptcha v2
+        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
