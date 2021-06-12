@@ -235,9 +235,13 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
-    if ($global_config['ucaptcha_type'] == 'recaptcha') {
+    unset($nv_seccode);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } else {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
@@ -247,7 +251,9 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
-    } elseif ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type'])) {
+    }
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type'])) {
         $error = ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } else {
         // Đăng nhập khi kích hoạt diễn đàn

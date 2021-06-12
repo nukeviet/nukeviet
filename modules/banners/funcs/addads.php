@@ -41,9 +41,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
     $array['url'] = $nv_Request->get_title('url', 'post', '', 0);
 
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $array['captcha'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
         $array['captcha'] = $nv_Request->get_title('captcha', 'post', '');
     }
 
@@ -51,7 +54,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $array['url'] = '';
     }
 
-    if (($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($array['captcha'], $module_config[$module_name]['captcha_type'])) {
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    if (isset($array['captcha']) and !nv_capcha_txt($array['captcha'], $module_config[$module_name]['captcha_type'])) {
         $error[] = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['title'])) {
         $error[] = $lang_module['title_empty'];
@@ -151,9 +155,12 @@ foreach ($global_array_uplans as $row) {
 
 $xtpl->assign('DATA', $array);
 if (!empty($module_config[$module_name]['captcha_type'])) {
+    // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');

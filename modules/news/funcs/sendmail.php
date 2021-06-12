@@ -43,13 +43,18 @@ if ($id > 0 and $catid > 0) {
                     $your_email = $user_info['email'];
                 }
                 if ($nv_Request->isset_request('send', 'post')) {
+                    unset($nv_seccode);
+                    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
                     if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
                         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-                    } elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
+                    }
+                    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+                    elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
                         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
                     }
-                    
-                    if (($module_config[$module_name]['scaptcha_type'] == 'captcha' or ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($nv_seccode, $module_config[$module_name]['scaptcha_type'])) {
+
+                    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+                    if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_config[$module_name]['scaptcha_type'])) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => 'nv_seccode',

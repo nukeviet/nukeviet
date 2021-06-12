@@ -53,10 +53,7 @@ $step = 1;
 $error = $question = '';
 
 if ($checkss == $data['checkss']) {
-    $check_seccode = true;
-    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-        $check_seccode = ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type']));
-    }
+    $check_seccode = ($gfx_chk and isset($data['nv_seccode'])) ? ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type'])) : true;
     if ($check_seccode) {
         if (!empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField'], true);

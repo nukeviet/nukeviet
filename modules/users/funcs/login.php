@@ -269,16 +269,18 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                 $password = $nv_Request->get_string('password', 'post', '');
 
+                unset($nv_seccode);
+                // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
                 if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-                } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+                }
+                // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+                elseif ($global_config['ucaptcha_type'] == 'captcha') {
                     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
                 }
 
-                $check_seccode = true;
-                if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-                    $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
-                }
+                // Kiểm tra tính hợp lệ của captcha nhập vào
+                $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
 
                 $nv_Request->unset_request('openid_attribs', 'session');
                 if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php')) {
@@ -345,16 +347,19 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if ($nv_Request->isset_request('nv_login', 'post')) {
         $nv_username = $nv_Request->get_title('login', 'post', '', 1);
         $nv_password = $nv_Request->get_title('password', 'post', '');
+
+        unset($nv_seccode);
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        }
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+        elseif ($global_config['ucaptcha_type'] == 'captcha') {
             $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
         }
 
-        $check_seccode = true;
-        if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-            $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
-        }
+        // Kiểm tra tính hợp lệ của captcha nhập vào
+        $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
 
         if (!$check_seccode) {
             opidr_login([
@@ -663,17 +668,19 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
+    unset($nv_seccode);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
-    $check_seccode = true;
     $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
-    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-        $check_seccode = nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']);
-    }
+    // Kiểm tra tính hợp lệ của captcha nhập vào
+    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
 
     if (!$check_seccode) {
         signin_result([

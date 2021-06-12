@@ -33,7 +33,6 @@ var gEInterval,
 	subbreadcrumbs = $(".sub-breadcrumbs"),
 	tempbreadcrumbs = $(".temp-breadcrumbs"),
 	isSafari = /^((?!chrome).)*safari/i.test(navigator.userAgent),
-	isRecaptcha = !1,
 	reCapIDs = [];
 
 function winResize() {

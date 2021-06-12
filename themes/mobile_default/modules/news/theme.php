@@ -965,10 +965,14 @@ function sendmail_themme($sendmail)
         $xtpl->parse('main.sender_is_user');
     }
 
+    // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+    // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
-    } elseif ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
