@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $table_caption = $lang_module['list_module_title'];
 
 if (empty($access_admin['access_viewlist'][$admin_info['level']])) {
-    $contents = nv_theme_alert($lang_global['site_info'] , $lang_module['viewlist_error_permission'], 'warning');
+    $contents = nv_theme_alert($lang_global['site_info'], $lang_module['viewlist_error_permission'], 'warning');
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -31,7 +31,7 @@ if ($usactive_old != $usactive) {
 }
 $_arr_where = [];
 if ($global_config['idsite'] > 0) {
-    $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+    $_arr_where[] = '(idsite=' . $global_config['idsite'] . ' OR userid = ' . $admin_info['admin_id'] . ')';
 }
 if ($usactive == -3) {
     $_arr_where[] = 'group_id!=7';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
@@ -32,7 +33,7 @@ if (!empty($alias)) {
     $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
     $sth->execute();
 
-    list ($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
+    list($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
 
     if (!$topicid) {
         nv_redirect_location($base_url);
@@ -61,7 +62,7 @@ if (!empty($alias)) {
     $num_items = $db_slave->query($db_slave->sql())
         ->fetchColumn();
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-    betweenURLs($page, ceil($num_items/$per_page), $base_url, '/page-', $prevPage, $nextPage);
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')

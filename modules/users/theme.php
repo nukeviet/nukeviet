@@ -663,7 +663,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
-    
+
     $xtpl->assign('DATA', $data);
     if ($pass_empty) {
         $xtpl->assign('FORM_HIDDEN', ' hidden');

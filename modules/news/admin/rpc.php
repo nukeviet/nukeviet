@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -31,9 +31,9 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         $nv_redirect2 = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&rand=' . nv_genpass();
 
         $prcservice = (isset($module_config['seotools']['prcservice'])) ? $module_config['seotools']['prcservice'] : '';
-        $prcservice = (! empty($prcservice)) ? explode(',', $prcservice) : array();
+        $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : array();
 
-        if ($news_contents['id'] > 0 and ! empty($prcservice)) {
+        if ($news_contents['id'] > 0 and !empty($prcservice)) {
             if ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME + 1 and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME + 1)) {
                 if ($nv_Request->get_string('checkss', 'post,get', '') == md5($id . NV_CHECK_SESSION)) {
                     $services_active = array();
@@ -64,7 +64,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                                 'icon' => (isset($service[3]) ? $service[3] : '')
                             ));
 
-                            if (isset($service[3]) and ! empty($service[3])) {
+                            if (isset($service[3]) and !empty($service[3])) {
                                 $xtpl->parse('main.service.icon');
                             } else {
                                 $xtpl->parse('main.service.noticon');

@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 

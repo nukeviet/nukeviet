@@ -54,7 +54,7 @@ $array_config['alias_lower'] = 1;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query($sql);
-while (list ($c_config_name, $c_config_value) = $result->fetch(3)) {
+while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -98,7 +98,7 @@ for ($i = 0; $i <= 30; ++$i) {
 
 // Social_buttons
 $my_socialbuttons = !empty($array_config['socialbutton']) ? array_map('trim', explode(',', $array_config['socialbutton'])) : [];
-foreach($socialbuttons as $socialbutton) {
+foreach ($socialbuttons as $socialbutton) {
     $array = [
         'key' => $socialbutton,
         'title' => ucfirst($socialbutton),

@@ -108,7 +108,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
 
     $array_where = [];
     if ($global_config['idsite'] > 0) {
-        $array_where[] = '(idsite=' . $global_config['idsite'] .' OR userid=' . $admin_info['admin_id'] . ')';
+        $array_where[] = '(idsite=' . $global_config['idsite'] . ' OR userid=' . $admin_info['admin_id'] . ')';
     }
 
     if (!empty($array['username'])) {

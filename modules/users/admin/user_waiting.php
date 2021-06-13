@@ -284,7 +284,7 @@ foreach ($orders as $order) {
 if (defined('NV_IS_USER_FORUM')) {
     $lang_module['warning'] = $lang_module['modforum'];
 } else {
-    $register_active_time = isset($global_users_config['register_active_time']) ? round($global_users_config['register_active_time']/3600) : 24;
+    $register_active_time = isset($global_users_config['register_active_time']) ? round($global_users_config['register_active_time'] / 3600) : 24;
     $lang_module['warning'] = sprintf($lang_module['userwait_note'], $register_active_time);
 }
 

@@ -14,16 +14,17 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 
 // Lay Alias
-function getAlias($alias, $id, $num = 0) {
+function getAlias($alias, $id, $num = 0)
+{
     global $db, $global_config;
 
     $_alias = $num ? $alias . '-' . $num : $alias;
-    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id!= ' . intval($id) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))');            
+    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id!= ' . intval($id) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))');
     $stmt->bindParam(':alias', $_alias, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-         $num++;
-         return getAlias($alias, $id, $num);
+        $num++;
+        return getAlias($alias, $id, $num);
     } else {
         return $_alias;
     }
@@ -32,7 +33,7 @@ function getAlias($alias, $id, $num = 0) {
 if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
     $id = $nv_Request->get_title('id', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
-    
+
     $alias = '';
     if (!empty($title)) {
         $alias = getAlias(change_alias($title), $id);
@@ -575,7 +576,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         if (defined('NV_EDITOR')) {
-            require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
+            require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
@@ -639,7 +640,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['email'] = '';
             }
 
-            if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 ) {
+            if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3) {
                 //lấy thông tin cấu hình phân quyền
                 $post['config']['access_groups_add'] = $nv_Request->get_int('access_groups_add', 'post', 0);
                 $post['config']['access_groups_del'] = $nv_Request->get_int('access_groups_del', 'post', 0);
@@ -728,7 +729,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                             description = :description,
                             content = :content
                         WHERE group_id = " . $post['id'] . " AND lang='" . NV_LANG_DATA . "'");
-    
+
                         $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
                         $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
                         $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
@@ -770,11 +771,10 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $post['siteus'] = $post['siteus'] ? ' checked="checked"' : '';
             $post['id'] = $post['group_id'];
 
-            if(empty($post['config'])){
+            if (empty($post['config'])) {
                 $post['config']['access_groups_add'] = $post['config']['access_groups_del'] = 1;
                 $post['config']['access_addus'] = $post['config']['access_waiting'] = $post['config']['access_editus'] = $post['config']['access_delus'] = $post['config']['access_passus'] = $post['config']['access_passus'] = 0;
-            }
-            else {
+            } else {
                 $post['config'] = unserialize($post['config']);
             }
         } else {
@@ -817,7 +817,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $_cont = '<textarea style="width:100%;height:300px" name="content" id="content">' . $post['content'] . '</textarea>';
         }
 
-        for ($i = 0; $i <= 2; $i ++) {
+        for ($i = 0; $i <= 2; $i++) {
             $group_type = [
                 'key' => $i,
                 'title' => $lang_module['group_type_' . $i],
@@ -842,7 +842,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $xtpl->parse('add.email');
         }
 
-        if ($post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 ) {
+        if ($post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3) {
             $xtpl->parse('add.config');
         }
 
@@ -880,7 +880,7 @@ $xtpl->assign('START_WEIGHT', empty($global_config['idsite']) ? 1 : ($weight_sit
 
 foreach ($groupsList as $group_id => $values) {
     if ($group_id < 4 or $group_id > 9) {
-        $link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op .'&amp;userlist=' . $group_id;
+        $link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;userlist=' . $group_id;
     } elseif ($group_id == 4) {
         $link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;usactive=-3';
     } elseif ($group_id == 7) {

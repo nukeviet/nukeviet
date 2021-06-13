@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -32,7 +33,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
         foreach ($rows['subitem'] as $subid) {
             $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
 
-            list ($parentid) = $db->query($sql)->fetch(3);
+            list($parentid) = $db->query($sql)->fetch(3);
             nv_menu_del_sub($subid, $parentid);
         }
     }
@@ -40,7 +41,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php')) {
         include NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php';
 
-        list ($sort, $weight) = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3);
+        list($sort, $weight) = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3);
 
         // Nap lai menu moi
         foreach ($array_item as $key => $item) {

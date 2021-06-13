@@ -204,7 +204,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
 
-    list ($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
+    list($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
 
     if ($user_id) {
         if ($safemode == 1) {

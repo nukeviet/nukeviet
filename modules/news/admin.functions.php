@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -293,9 +293,9 @@ function nv_show_cat_list($parentid = 0)
             $check_show = array_intersect($array_cat, $array_cat_check_content);
         }
 
-        if (! empty($check_show)) {
+        if (!empty($check_show)) {
             $array_viewcat = ($numsubcat > 0) ? $array_viewcat_full : $array_viewcat_nosub;
-            if (! array_key_exists($viewcat, $array_viewcat)) {
+            if (!array_key_exists($viewcat, $array_viewcat)) {
                 $viewcat = 'viewcat_page_new';
                 $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . intval($catid));
                 $stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
@@ -412,7 +412,7 @@ function nv_show_topics_list($page = 1)
     $per_page = $module_config[$module_name]['per_page'];
     $db_slave->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics' );
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics');
 
     $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
     $max_height = $page * $per_page;
@@ -444,7 +444,7 @@ function nv_show_topics_list($page = 1)
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics&amp;topicid=' . $row['topicid'] . '#edit'
             ));
 
-            for ($i = (($page-1)* $per_page) + 1; $i <= $max_height; ++$i) {
+            for ($i = (($page - 1) * $per_page) + 1; $i <= $max_height; ++$i) {
                 $xtpl->assign('WEIGHT', array(
                     'key' => $i,
                     'title' => $i,
@@ -589,7 +589,7 @@ function nv_show_sources_list()
         $result->closeCursor();
 
         $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.generate_page');
         }
@@ -623,7 +623,7 @@ function nv_show_block_list($bid)
     $xtpl->assign('OP', $op);
     $xtpl->assign('BID', $bid);
 
-    $global_array_cat[0] = array( 'alias' => 'Other' );
+    $global_array_cat[0] = array('alias' => 'Other');
 
     $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t1.publtime, t1.status, t1.hitstotal, t1.hitscm, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
     $array_block = $db_slave->query($sql)->fetchAll();
@@ -652,8 +652,7 @@ function nv_show_block_list($bid)
             $xtpl->parse('main.loop');
         }
 
-        if(defined('NV_IS_SPADMIN'))
-        {
+        if (defined('NV_IS_SPADMIN')) {
             $xtpl->assign('ORDER_PUBLTIME', md5($bid . NV_CHECK_SESSION));
             $xtpl->parse('main.order_publtime');
         }
@@ -678,7 +677,7 @@ function GetCatidInParent($catid)
     $array_cat = array();
     $array_cat[] = $catid;
     $subcatid = explode(',', $global_array_cat[$catid]['subcatid']);
-    if (! empty($subcatid)) {
+    if (!empty($subcatid)) {
         foreach ($subcatid as $id) {
             if ($id > 0) {
                 if ($global_array_cat[$id]['numsubcat'] == 0) {
@@ -716,7 +715,7 @@ function redriect($msg1, $msg2, $nv_redirect, $autoSaveKey = '', $go_back = '')
     $xtpl->assign('MSG1', $msg1);
     $xtpl->assign('MSG2', $msg2);
 
-    if (! empty($autoSaveKey)) {
+    if (!empty($autoSaveKey)) {
         $xtpl->assign('AUTOSAVEKEY', $autoSaveKey);
         $xtpl->parse('main.removelocalstorage');
     }
@@ -771,7 +770,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
-        if (! empty($nb)) {
+        if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
 
             $alias .= '-' . (intval($nb) + 1);
@@ -782,7 +781,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
-        if (! empty($nb)) {
+        if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
 
             $alias .= '-' . (intval($nb) + 1);
@@ -793,7 +792,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
-        if (! empty($nb)) {
+        if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
 
             $alias .= '-' . (intval($nb) + 1);

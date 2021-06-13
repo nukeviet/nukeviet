@@ -8,7 +8,7 @@
 
 var LANG = [];
 
-if( typeof( CFG ) == 'undefined' ){
+if (typeof (CFG) == 'undefined') {
     var CFG = [];
     CFG.id = 0;
     CFG.string_data = '';
@@ -16,14 +16,14 @@ if( typeof( CFG ) == 'undefined' ){
 
 var player_width = $(window).width();
 var player_height = $(window).height();
-if( player_width > 1060 ){
+if (player_width > 1060) {
     player_width = 1000;
-}else{
+} else {
     player_width = player_width - 60;
 }
-if( player_height > 660 ){
+if (player_height > 660) {
     player_height = 600;
-}else{
+} else {
     player_height = player_height - 60;
 }
 
@@ -32,8 +32,8 @@ var nv_loading = '<div class="text-center"><em class="fa fa-spin fa-spinner fa-2
 var EXT = {
     tid: CFG.id,
     isDownloaded: false,
-    startDownload: function(){
-        if( ! EXT.isDownloaded ){
+    startDownload: function() {
+        if (!EXT.isDownloaded) {
             EXT.isDownloaded = true;
 
             $('#warnning').hide();
@@ -44,36 +44,36 @@ var EXT = {
                 type: 'POST',
                 url: script_name,
                 data: nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&data=' + CFG.string_data,
-                success: function(e){
+                success: function(e) {
                     $('#file-download .waiting').hide();
                     e = e.split('|');
-                    if( e[0] == 'OK' ){
+                    if (e[0] == 'OK') {
                         EXT.handleOk(e[1]);
-                    }else{
+                    } else {
                         EXT.handleError(e[1]);
                     }
                 }
             });
         }
     },
-    cancel: function(){
+    cancel: function() {
         window.location = CFG.cancel_link;
     },
-    handleOk: function(f){
+    handleOk: function(f) {
         $('#file-download').addClass('text-success');
         $('#file-download .status').removeClass('fa-meh-o').addClass('fa-smile-o');
         $('#file-download .complete').show();
 
         $('#file-download-response').html('<div class="alert alert-success">' + LANG.download_ok + '</div>');
 
-        setTimeout( "EXT.redirect()", 3000 );
+        setTimeout("EXT.redirect()", 3000);
     },
-    handleError: function(m){
+    handleError: function(m) {
         $('#file-download').addClass('text-danger');
         $('#file-download .status').removeClass('fa-meh-o').addClass('fa-frown-o');
         $('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
     },
-    redirect: function(){
+    redirect: function() {
         var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
         window.location = url;
     }
@@ -84,36 +84,36 @@ function checkext(myArray, myValue) {
     return type;
 }
 
-function checkform(){
+function checkform() {
     var zipfile = $("input[name=extfile]").val();
-    if( zipfile == "" ){
+    if (zipfile == "") {
         alert(LANG.install_error_nofile);
         return false;
     }
     var filezip = zipfile.slice(-3);
     var filegzip = zipfile.slice(-2);
     var allowext = new Array("zip", "gz");
-    if (! checkext(allowext, filezip) || ! checkext(allowext, filegzip)) {
+    if (!checkext(allowext, filezip) || !checkext(allowext, filegzip)) {
         alert(LANG.install_error_filetype);
         return false;
     }
     return true;
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     // Login
-    $('#login-form').submit(function(e){
+    $('#login-form').submit(function(e) {
         e.preventDefault();
         var username = $('#username').val();
         var password = $('#password').val();
         var checksess = $('[name="checksess"]').val();
         $('#login-result').html('');
 
-        if( username == '' ){
+        if (username == '') {
             $('#login-result').html('<div class="alert alert-danger">' + LANG.username_empty + '</div>');
-        }else if( password == '' ){
+        } else if (password == '') {
             $('#login-result').html('<div class="alert alert-danger">' + LANG.password_empty + '</div>');
-        }else{
+        } else {
             $('#login-form input, #login-form button').attr('disabled', 'disabled');
             $('#login-result').html('<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>');
 
@@ -122,7 +122,7 @@ $(document).ready(function(){
                 'username=' + username + '&password=' + password + '&checksess=' + checksess + '&redirect=' + $('[name="redirect"]').val(),
                 function(res) {
                     $('#login-form input, #login-form button').removeAttr('disabled');
-                    $('#login-result').html( res );
+                    $('#login-result').html(res);
                 }
             );
         }
@@ -130,16 +130,16 @@ $(document).ready(function(){
 
     // Manage
     $('[data-toggle="tooltip"]').tooltip();
-    $('.package-ext').click(function(e){
+    $('.package-ext').click(function(e) {
         window.location = $(this).data('href');
     });
-    $('.delete-ext').click(function(){
-        if( confirm(LANG.delele_ext_confirm) ){
+    $('.delete-ext').click(function() {
+        if (confirm(LANG.delele_ext_confirm)) {
             $.post($(this).data('href') + '&nocache=' + new Date().getTime(), '', function(res) {
                 res = res.split('_');
                 alert(res[1]);
 
-                if( res[0] == 'OK' ){
+                if (res[0] == 'OK') {
                     window.location.href = window.location.href;
                 }
             });

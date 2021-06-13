@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -58,7 +59,7 @@ while ($row = $query2->fetch()) {
     $arr_items = array();
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $row['id'] . ' ORDER BY sort ASC';
     $result = $db->query($sql);
-    while (list ($title_i) = $result->fetch(3)) {
+    while (list($title_i) = $result->fetch(3)) {
         $arr_items[] = $title_i;
     }
 

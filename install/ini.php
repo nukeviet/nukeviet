@@ -34,7 +34,7 @@ if ($sys_info['ini_set_support']) {
     ini_set('user_agent', 'NV4');
     ini_set('default_charset', $global_config['site_charset']);
 
-    $memoryLimitMB = ( integer )ini_get('memory_limit');
+    $memoryLimitMB = (int)ini_get('memory_limit');
 
     if ($memoryLimitMB < 64) {
         ini_set('memory_limit', '64M');

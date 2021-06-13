@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -349,7 +349,7 @@ $lang_module['csp_default_src'] = 'Default policy, used in any case except if ov
 $lang_module['csp_script_src'] = 'Policy dedicated to scripts';
 $lang_module['csp_object_src'] = 'Policy dedicated to plugins (object, embed or applet)';
 $lang_module['csp_style_src'] = 'Policy dedicated to styles (CSS)';
-$lang_module['csp_img_src'] = 'Policy dedicated to images (img, but also url() or image() from CSS, or link element related to an image type (ex: rel=”icon”)';
+$lang_module['csp_img_src'] = 'Policy dedicated to images (img, but also url() or image() from CSS, or link element related to an image type (ex: rel=ï¿½iconï¿½)';
 $lang_module['csp_media_src'] = 'Policy dedicated to media (video, audio, source or track)';
 $lang_module['csp_frame_src'] = 'Policy dedicated to frames (iframe or frame)';
 $lang_module['csp_font_src'] = 'Policy dedicated to fonts';

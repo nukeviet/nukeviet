@@ -76,7 +76,7 @@ function nv_check_email_change(&$email, $edit_userid)
         return sprintf($lang_module['email_deny_name'], $email);
     }
 
-    list ($left, $right) = explode('@', $email);
+    list($left, $right) = explode('@', $email);
     $left = preg_replace('/[\.]+/', '', $left);
     $pattern = str_split($left);
     $pattern = implode('.?', $pattern);
@@ -133,7 +133,7 @@ function get_field_config()
                 $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
             }
             $result = $db->query($query);
-            while (list ($key, $val) = $result->fetch(3)) {
+            while (list($key, $val) = $result->fetch(3)) {
                 $row_field['field_choices'][$key] = $val;
             }
         }
@@ -925,7 +925,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                     // Danh sách email trưởng nhóm
                     $array_leader = [];
                     $result = $db->query('SELECT t2.email FROM ' . NV_MOD_TABLE . '_groups_users t1 INNER JOIN ' . NV_MOD_TABLE . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
-                    while (list ($email) = $result->fetch(3)) {
+                    while (list($email) = $result->fetch(3)) {
                         $array_leader[] = $email;
                     }
                     if (!empty($array_leader)) {

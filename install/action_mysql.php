@@ -9,14 +9,14 @@
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+  die('Stop!!!');
 }
 
 // Ten cac table cua CSDL dung chung cho he thong
 
 $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
 while ($item = $result->fetch()) {
-    $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
+  $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (

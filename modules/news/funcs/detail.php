@@ -218,7 +218,7 @@ $news_contents['source'] = '';
 if ($news_contents['sourceid']) {
     $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
     $result = $db_slave->query($sql);
-    list ($sourcetext, $source_link, $source_logo) = $result->fetch(3);
+    list($sourcetext, $source_link, $source_logo) = $result->fetch(3);
     unset($sql, $result);
     if ($module_config[$module_name]['config_source'] == 0) {
         $news_contents['source'] = $sourcetext; // Hiển thị tiêu đề nguồn tin
@@ -335,7 +335,7 @@ if ($st_links > 0) {
 
 $topic_array = [];
 if ($news_contents['topicid'] > 0 & $st_links > 0) {
-    list ($topic_title, $topic_alias) = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
+    list($topic_title, $topic_alias) = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
 
     $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
@@ -422,7 +422,7 @@ if ($news_contents['allowed_rating']) {
     ];
 }
 
-list ($post_username, $post_first_name, $post_last_name) = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
+list($post_username, $post_first_name, $post_last_name) = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
 $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
 
 $array_keyword = [];
@@ -438,7 +438,7 @@ while ($row = $_query->fetch()) {
 if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
     define('NV_COMM_ID', $id); // ID bài viết hoặc
     define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']); // để đáp ứng comment ở bất cứ đâu không cứ là bài viết
-                                                                   // check allow comemnt
+    // check allow comemnt
     $allowed = $module_config[$module_name]['allowed_comm']; // tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
     if ($allowed == '-1') {
         $allowed = $news_contents['allowed_comm'];

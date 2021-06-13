@@ -54,7 +54,7 @@ function nv_get_users_field_config()
             }
             $result = $db->query($query);
             $weight = 0;
-            while (list ($key, $val) = $result->fetch(3)) {
+            while (list($key, $val) = $result->fetch(3)) {
                 $row_field['field_choices'][$key] = $val;
             }
         }
