@@ -349,7 +349,7 @@ $lang_module['csp_default_src'] = 'Default policy, used in any case except if ov
 $lang_module['csp_script_src'] = 'Policy dedicated to scripts';
 $lang_module['csp_object_src'] = 'Policy dedicated to plugins (object, embed or applet)';
 $lang_module['csp_style_src'] = 'Policy dedicated to styles (CSS)';
-$lang_module['csp_img_src'] = 'Policy dedicated to images (img, but also url() or image() from CSS, or link element related to an image type (ex: rel=�icon�)';
+$lang_module['csp_img_src'] = 'Policy dedicated to images (img, but also url() or image() from CSS, or link element related to an image type (ex: rel=&quot;icon&quot;)';
 $lang_module['csp_media_src'] = 'Policy dedicated to media (video, audio, source or track)';
 $lang_module['csp_frame_src'] = 'Policy dedicated to frames (iframe or frame)';
 $lang_module['csp_font_src'] = 'Policy dedicated to fonts';
