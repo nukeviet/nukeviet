@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
+
 if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
@@ -26,7 +27,7 @@ if (isset($array_op[1])) {
 $stmt = $db_slave->prepare('SELECT tid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
 $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 $stmt->execute();
-list ($tid, $page_title, $image_tag, $description, $key_words) = $stmt->fetch(3);
+list($tid, $page_title, $image_tag, $description, $key_words) = $stmt->fetch(3);
 
 if ($tid > 0) {
     if (empty($page_title)) {

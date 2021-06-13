@@ -9,7 +9,7 @@
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+  die('Stop!!!');
 }
 
 $sql_drop_module = [];
@@ -18,11 +18,11 @@ $sql_drop_module = [];
 $_sql = "SELECT * FROM " . $db_config['prefix'] . "_setup_language WHERE setup=1";
 $_result = $db->query($_sql);
 while ($_row = $_result->fetch()) {
-    $bids = $db->query("SELECT GROUP_CONCAT(bid) FROM " . $db_config['prefix'] . "_" . $_row['lang'] . "_blocks_groups WHERE module = 'banners'")->fetchColumn();
-    if (!empty($bids)) {
-        $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $_row['lang'] . "_blocks_weight WHERE bid IN (" . $bids . ")";
-        $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $_row['lang'] . "_blocks_groups WHERE bid IN (" . $bids . ")";
-    }
+  $bids = $db->query("SELECT GROUP_CONCAT(bid) FROM " . $db_config['prefix'] . "_" . $_row['lang'] . "_blocks_groups WHERE module = 'banners'")->fetchColumn();
+  if (!empty($bids)) {
+    $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $_row['lang'] . "_blocks_weight WHERE bid IN (" . $bids . ")";
+    $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $_row['lang'] . "_blocks_groups WHERE bid IN (" . $bids . ")";
+  }
 }
 
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_banners_click;";

@@ -24,7 +24,7 @@ function nv_admin_checkip()
     if ($global_config['block_admin_ip']) {
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php')) {
             $array_adminip = [];
-            include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
+            include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php';
 
             if (empty($array_adminip)) {
                 return true;
@@ -36,8 +36,7 @@ function nv_admin_checkip()
                 if (
                     $array_ip['begintime'] < NV_CURRENTTIME and ($array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME) and (
                         (empty($array_ip['ip6']) and preg_replace($array_ip['mask'], '', NV_CLIENT_IP) == preg_replace($array_ip['mask'], '', $ip_i)) or
-                        (!empty($array_ip['ip6']) and $ips->checkIp6(NV_CLIENT_IP, $array_ip['mask']) === true)
-                    )
+                        (!empty($array_ip['ip6']) and $ips->checkIp6(NV_CLIENT_IP, $array_ip['mask']) === true))
                 ) {
                     return true;
                 }
@@ -62,7 +61,7 @@ function nv_admin_checkfirewall()
     if ($global_config['admfirewall']) {
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php')) {
             $adv_admins = [];
-            include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
+            include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php';
 
             if (empty($adv_admins)) {
                 return true;

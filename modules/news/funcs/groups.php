@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
@@ -6,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
+
 if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
@@ -20,7 +22,7 @@ if (isset($array_op[1])) {
     $stmt = $db_slave->prepare('SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
-    list ($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
+    list($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
     if (!$bid) {
         nv_redirect_location($page_url);
     }
@@ -117,13 +119,13 @@ if (isset($array_op[1])) {
     $key_words = $module_info['keywords'];
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
     $canonicalUrl = getCanonicalUrl($page_url, true, true);
-    
+
     $array_cat = array();
     $key = 0;
 
     $query_cat = $db_slave->query('SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
 
-    while (list ($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
+    while (list($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
         $array_cat[$key] = array(
             'catid' => $bid,
             'alias' => '',

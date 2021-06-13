@@ -40,7 +40,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     } elseif (nv_is_url($row['image'])) {
         $xtpl->assign('SCHEMA_IMAGE', $row['image']);
     } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL. 'themes/' . $module_info['template'] . '/images/no_image.gif');
+        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
     }
 
     if (!empty($row['description'])) {

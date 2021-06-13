@@ -124,7 +124,7 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'chang_block_cat';
     $allow_func[] = 'change_block';
     $allow_func[] = 'list_block';
-    
+
     $allow_func[] = 'authors';
 
     $allow_func[] = 'tags';

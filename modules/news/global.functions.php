@@ -515,7 +515,7 @@ function get_pseudonym_alias($pseudonym, $aid)
 function my_author_detail($userid)
 {
     global $db, $module_data;
-    
+
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE uid =' . $userid;
     $result = $db->query($sql);
     $detail = $result->fetch();
@@ -533,12 +533,12 @@ function my_author_detail($userid)
         if (empty($pseudonym)) {
             $pseudonym = $row['username'];
         }
-        
+
         $alias = get_pseudonym_alias($pseudonym, 0);
         if (!$alias) {
             $alias = change_alias($pseudonym) . '-' . $userid;
         }
-        
+
         $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_author (uid, alias, pseudonym, image, description, add_time) VALUES ( " . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ")";
         $data_insert = [];
         $data_insert['alias'] = $alias;
@@ -558,6 +558,6 @@ function my_author_detail($userid)
             'numnews' => 0
         ];
     }
-    
+
     return $detail;
 }

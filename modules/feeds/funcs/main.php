@@ -8,7 +8,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_IS_MOD_RSS')) {
+if (!defined('NV_IS_MOD_RSS')) {
     die('Stop!!!');
 }
 
@@ -30,7 +30,7 @@ function nv_get_rss_link()
             $contentrss .= "<li><span><i class=\"fa fa-rss text-warning\"></i> <a rel=\"nofollow\" title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></a></span>";
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
                 $rssarray = array();
-                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
+                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
 
                 $contentrss .= "<ul>";
                 foreach ($rssarray as $key => $value) {

@@ -8,15 +8,15 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 
 $contents = '';
-$array_point = array( 1, 2, 3, 4, 5 );
+$array_point = array(1, 2, 3, 4, 5);
 
 $id = $nv_Request->get_int('id', 'post', 0);
 $point = $nv_Request->get_int('point', 'post', 0);
@@ -25,7 +25,7 @@ $checkss = $nv_Request->get_title('checkss', 'post');
 $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session', 0);
 
 if (!empty($module_config[$module_name]['allowed_rating']) and $id > 0 and in_array($point, $array_point) and $checkss == md5($id . NV_CHECK_SESSION)) {
-    if (! empty($time_set)) {
+    if (!empty($time_set)) {
         die($lang_module['rating_error2'] . '|0|0');
     }
 

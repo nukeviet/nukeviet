@@ -24,13 +24,13 @@ function user_validForm(a) {
         success: function(b) {
             $('[type="submit"] .fa', $(a)).toggleClass('hidden');
             $('[type="submit"]', $(a)).prop('disabled', false);
-            if( b.status == "error" ) {
+            if (b.status == "error") {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
-                location_href = typeof(b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
-                if( b.admin_add == "yes" ) {
-                    if (confirm( b.mess )) {
+                location_href = typeof (b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
+                if (b.admin_add == "yes") {
+                    if (confirm(b.mess)) {
                         location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
                     }
                 }
@@ -57,7 +57,7 @@ function user_editcensor_validForm(a) {
         dataType: "json",
         success: function(b) {
             $('[type="submit"]', $(a)).prop('disabled', false);
-            if( b.status == "error" ) {
+            if (b.status == "error") {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
@@ -151,7 +151,7 @@ function nv_add_question() {
 
 function nv_row_del(vid) {
     if (confirm(nv_is_del_confirm[0])) {
-        var checkss =  $("input[name='checkss']").val();
+        var checkss = $("input[name='checkss']").val();
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
@@ -181,7 +181,7 @@ function nv_set_official(vid) {
     return false;
 }
 
-function nv_waiting_row_del(uid,checkss) {
+function nv_waiting_row_del(uid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
@@ -208,7 +208,7 @@ function nv_editcensor_row_accept(uid, msg) {
     if (confirm(msg)) {
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
             if (res.status != 'SUCCESS') {
-                 alert(res.mess);
+                alert(res.mess);
             } else {
                 location.reload();
             }
@@ -218,7 +218,7 @@ function nv_editcensor_row_accept(uid, msg) {
 
 function nv_chang_status(vid) {
     var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
-    var checkss =  $("input[name='checkss']").val();
+    var checkss = $("input[name='checkss']").val();
     $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -235,7 +235,7 @@ function nv_group_change_status(group_id) {
         var sl = document.getElementById('select_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true){sl.checked = false;} else {sl.checked = true;}
+            if (sl.checked == true) { sl.checked = false; } else { sl.checked = true; }
             clearTimeout(nv_timer);
             sl.disabled = true;
             return;
@@ -358,7 +358,7 @@ function nv_check_form(OForm) {
     return false;
 }
 
-$.toggleShowPassword = function (options) {
+$.toggleShowPassword = function(options) {
     var settings = $.extend({
         field: "#password",
         control: "#toggle_show_password"
@@ -367,7 +367,7 @@ $.toggleShowPassword = function (options) {
     var control = $(settings.control);
     var field = $(settings.field);
 
-    control.bind('click', function () {
+    control.bind('click', function() {
         if (control.is(':checked')) {
             field.attr('type', 'text');
         } else {
@@ -378,10 +378,10 @@ $.toggleShowPassword = function (options) {
 
 function nv_data_export(set_export) {
     $.ajax({
-        type : "POST",
-        url : "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
-        data : "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
-        success : function(response) {
+        type: "POST",
+        url: "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
+        data: "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
+        success: function(response) {
             if (response == "OK_GETFILE") {
                 nv_data_export(0);
             } else if (response == "OK_COMPLETE") {
@@ -451,13 +451,13 @@ function nv_load_current_date() {
         $("input[name=default_date]").datepicker("destroy");
     } else {
         $("input[name=default_date]").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true
+            showOn: "both",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
+            buttonImageOnly: true
         });
         $("input[name=default_date]").removeAttr("disabled");
         $("input[name=default_date]").focus();
@@ -533,7 +533,7 @@ function nv_main_action(btn) {
 
     if (listid != '') {
         var action = $('#mainuseropt').val();
-        var checkss =  $("input[name='checkss']").val();
+        var checkss = $("input[name='checkss']").val();
         if (action == 'del') {
             if (confirm(nv_is_del_confirm[0])) {
                 $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid + '&checkss=' + checkss, function(res) {
@@ -581,7 +581,7 @@ $(document).ready(function() {
 
     // Edit user
     $("#btn_upload").click(function() {
-        nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+        nv_open_browse(nv_base_siteurl + "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
         return false;
     });
     $('#current-photo-btn').click(function() {
@@ -594,48 +594,48 @@ $(document).ready(function() {
         $("#btn_upload").click();
     });
 
-    if ($.fn.validate){
+    if ($.fn.validate) {
         $('#form_user').validate({
-            rules : {
-                username : {
-                    minlength : 5
+            rules: {
+                username: {
+                    minlength: 5
                 }
             }
         });
 
     }
-    if ($.fn.datepicker){
+    if ($.fn.datepicker) {
         $(".datepicker").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true,
+            showOn: "both",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
+            buttonImageOnly: true,
             yearRange: "-90:+90"
         });
         $("#birthday").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true,
+            showOn: "both",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
+            buttonImageOnly: true,
             yearRange: "-99:+0",
             beforeShow: function() {
-                setTimeout(function(){
+                setTimeout(function() {
                     $('.ui-datepicker').css('z-index', 999999999);
                 }, 0);
             }
         });
     }
 
-    $('[name="group[]"]').change(function(){
+    $('[name="group[]"]').change(function() {
         control_theme_groups();
     });
-    $('[name="is_official"]').change(function(){
+    $('[name="is_official"]').change(function() {
         control_theme_groups();
     });
 
@@ -651,15 +651,15 @@ $(document).ready(function() {
         e.preventDefault()
         $("#resultdata").load($(this).attr("href"))
     });
-    if ($.fn.datepicker){
+    if ($.fn.datepicker) {
         $("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-            dateFormat : "dd.mm.yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonText : '',
-            showButtonPanel : true,
-            showOn : 'focus'
+            dateFormat: "dd.mm.yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonText: '',
+            showButtonPanel: true,
+            showOn: 'focus'
         });
     }
     $("#formgetuid").submit(function() {
@@ -668,9 +668,9 @@ $(document).ready(function() {
         a = a + "&" + b + "&submit";
         $("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
         $.ajax({
-            type : "GET",
-            url : a,
-            success : function(c) {
+            type: "GET",
+            url: a,
+            success: function(c) {
                 $("#resultdata").html(c);
                 $("#formgetuid input, #formgetuid select").removeAttr("disabled")
             }
@@ -746,7 +746,7 @@ $(document).ready(function() {
     });
 
     // Group
-     $("[name='browse-image']").click(function(e) {
+    $("[name='browse-image']").click(function(e) {
         e.preventDefault();
         var area = $(this).data('area'),
             path = $(this).data('path'),

@@ -171,7 +171,7 @@ if (!empty($submit)) {
         $sql = 'SELECT id, title, url FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid . ' ORDER BY id ASC';
         $result = $db->query($sql);
 
-        while (list ($id, $title, $url) = $result->fetch(3)) {
+        while (list($id, $title, $url) = $result->fetch(3)) {
             $array_answervote[$id] = $title;
             $array_urlvote[$id] = $url;
             ++$maxoption;
@@ -214,12 +214,12 @@ if ($error != '') {
 }
 
 $tdate = date('d|m|Y|H|i');
-list ($pday, $pmonth, $pyear, $phour, $pmin) = explode('|', $tdate);
+list($pday, $pmonth, $pyear, $phour, $pmin) = explode('|', $tdate);
 $emonth = $eday = $eyear = $emin = $ehour = 0;
 
 $tdate = date('H|i', $rowvote['publ_time']);
 $publ_date = date('d/m/Y', $rowvote['publ_time']);
-list ($phour, $pmin) = explode('|', $tdate);
+list($phour, $pmin) = explode('|', $tdate);
 
 // Thoi gian dang
 $xtpl->assign('PUBL_DATE', $publ_date);
@@ -244,7 +244,7 @@ for ($i = 0; $i < 60; ++$i) {
 if ($rowvote['exp_time'] > 0) {
     $tdate = date('H|i', $rowvote['exp_time']);
     $exp_date = date('d/m/Y', $rowvote['exp_time']);
-    list ($ehour, $emin) = explode('|', $tdate);
+    list($ehour, $emin) = explode('|', $tdate);
 } else {
     $emin = $ehour = 0;
     $exp_date = '';

@@ -69,7 +69,7 @@ if (empty($contents)) {
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items/$per_page), $base_url, '/page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
@@ -161,7 +161,7 @@ if (empty($contents)) {
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items/$per_page), $base_url, '/page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
@@ -457,7 +457,7 @@ if (empty($contents)) {
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items/$per_page), $base_url, '/page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
@@ -504,7 +504,7 @@ if (empty($contents)) {
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items/$per_page), $base_url, '/page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {

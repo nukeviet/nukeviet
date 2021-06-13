@@ -22,7 +22,7 @@ $page = (isset($array_op[2]) and preg_match('/^page\-([0-9]+)$/', $array_op[2], 
 $stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
 $stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);
 $stmt->execute();
-list ($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
+list($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
 if (!$author_info['id']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 }

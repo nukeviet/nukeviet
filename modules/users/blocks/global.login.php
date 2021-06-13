@@ -302,7 +302,7 @@ if (!nv_function_exists('nv_block_login')) {
                                     $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
                                 }
                                 $result = $db->query($query);
-                                while (list ($key, $val) = $result->fetch(3)) {
+                                while (list($key, $val) = $result->fetch(3)) {
                                     $row_field['field_choices'][$key] = $val;
                                 }
                             }

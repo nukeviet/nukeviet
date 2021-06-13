@@ -480,7 +480,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             $value['_source']['admin_id'],
             $value['_source']['author']
         ];
-        list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $array_list_elastic_search;
+        list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $array_list_elastic_search;
         $publtime = nv_date('H:i d/m/y', $publtime);
         $title = nv_clean60($title);
         if ($catid > 0) {
@@ -670,7 +670,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     $result = $db_slave->query($db_slave->sql());
 
     $data = $array_ids = $array_userid = [];
-    while (list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $result->fetch(3)) {
+    while (list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $result->fetch(3)) {
         $publtime = nv_date('H:i d/m/y', $publtime);
 
         if ($catid > 0) {
@@ -811,7 +811,7 @@ if (!empty($array_ids)) {
         ->where('id IN( ' . implode(',', $array_ids) . ' )')
         ->group('id');
     $result = $db_slave->query($db_slave->sql());
-    while (list ($numtags, $id) = $result->fetch(3)) {
+    while (list($numtags, $id) = $result->fetch(3)) {
         $data[$id]['numtags'] = $numtags;
     }
 
@@ -825,20 +825,20 @@ if (!empty($array_ids)) {
         $array_editdata[$_row['id']] = $_row;
         $array_userid[$_row['admin_id']] = $_row['admin_id'];
     }
-    
+
     // Tim cac author noi bo
     $db_slave->sqlreset()
         ->select('*')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
         ->where("id IN (" . implode(',', $array_ids) . ")");
-        $result = $db_slave->query($db_slave->sql());
-        while ($_row = $result->fetch()) {
-            !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];
-            $internal_authors[$_row['id']][] = [
-                'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
-                'pseudonym' => $_row['pseudonym']
-            ];
-        }
+    $result = $db_slave->query($db_slave->sql());
+    while ($_row = $result->fetch()) {
+        !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];
+        $internal_authors[$_row['id']][] = [
+            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
+            'pseudonym' => $_row['pseudonym']
+        ];
+    }
 }
 
 if (!empty($array_userid)) {
@@ -849,7 +849,7 @@ if (!empty($array_userid)) {
         ->where('tb1.userid IN( ' . implode(',', $array_userid) . ' )');
     $array_userid = [];
     $result = $db_slave->query($db_slave->sql());
-    while (list ($_userid, $_username, $admin_lev) = $result->fetch(3)) {
+    while (list($_userid, $_username, $admin_lev) = $result->fetch(3)) {
         $array_userid[$_userid] = [
             'username' => $_username,
             'admin_lev' => $admin_lev
@@ -944,10 +944,10 @@ foreach ($data as $row) {
         $row['title'] = $lang_module['no_name'];
     }
     $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']]['username'] : '';
-    
+
     $authors = [];
     if (isset($internal_authors[$row['id']]) and !empty($internal_authors[$row['id']])) {
-        foreach($internal_authors[$row['id']] as $internal_author) {
+        foreach ($internal_authors[$row['id']] as $internal_author) {
             $authors[] = '<a href="' . $internal_author['href'] . '">' . $internal_author['pseudonym'] . '</a>';
         }
     }
@@ -955,7 +955,7 @@ foreach ($data as $row) {
         $authors[] = $row['author'];
     }
     $row['author'] = !empty($authors) ? implode(', ', $authors) : '';
-            
+
     $xtpl->assign('ROW', $row);
 
     if ($is_excdata) {

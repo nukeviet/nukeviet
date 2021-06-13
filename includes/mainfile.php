@@ -95,7 +95,7 @@ if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
 } elseif (isset($_SERVER['HTTP_GEOIP_COUNTRY_CODE'])) {
     // proxy_set_header GEOIP_COUNTRY_CODE
     $client_info['country'] = $_SERVER['HTTP_GEOIP_COUNTRY_CODE'];
-}  elseif (isset($_SERVER['COUNTRY_CODE'])) {
+} elseif (isset($_SERVER['COUNTRY_CODE'])) {
     // fastcgi_param COUNTRY_CODE
     $client_info['country'] = $_SERVER['COUNTRY_CODE'];
 } else {
@@ -247,8 +247,10 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 // Ket noi voi class chong flood
-if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
-(!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
+if (
+    $global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
+    (!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))
+) {
     require NV_ROOTDIR . '/includes/core/flood_blocker.php';
 }
 

@@ -50,19 +50,19 @@ function nv_groups_list($mod_data = 'users')
 function nv_groups_post($groups_view)
 {
     if (in_array(6, $groups_view)) {
-        return array( 6 );
+        return array(6);
     }
     if (in_array(4, $groups_view)) {
-        return array_intersect($groups_view, array( 4, 5, 7 ));
+        return array_intersect($groups_view, array(4, 5, 7));
     }
     if (in_array(3, $groups_view)) {
-        return array_diff($groups_view, array( 1, 2 ));
+        return array_diff($groups_view, array(1, 2));
     }
     if (in_array(2, $groups_view)) {
-        return array_diff($groups_view, array( 1 ));
+        return array_diff($groups_view, array(1));
     }
     if (empty($groups_view)) {
-        return array( 1 );
+        return array(1);
     }
     return array_map('intval', $groups_view);
 }
@@ -316,7 +316,7 @@ function nv_version_compare($version1, $version2)
     }
 
     if ($v1[0] < $v2[0]) {
-        return - 1;
+        return -1;
     }
 
     if ($v1[1] > $v2[1]) {
@@ -324,7 +324,7 @@ function nv_version_compare($version1, $version2)
     }
 
     if ($v1[1] < $v2[1]) {
-        return - 1;
+        return -1;
     }
 
     if ($v1[2] > $v2[2]) {
@@ -332,7 +332,7 @@ function nv_version_compare($version1, $version2)
     }
 
     if ($v1[2] < $v2[2]) {
-        return - 1;
+        return -1;
     }
 
     return 0;
@@ -348,8 +348,7 @@ function nv_check_rewrite_file()
     global $sys_info;
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return true;
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
@@ -357,8 +356,7 @@ function nv_check_rewrite_file()
         $htaccess = @file_get_contents(NV_ROOTDIR . '/.htaccess');
 
         return (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess));
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
@@ -431,12 +429,12 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
+        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
+        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/\" />\n";
         $rewrite_rule .= " </rule>\n";

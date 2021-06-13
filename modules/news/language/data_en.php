@@ -153,13 +153,13 @@ $copyright = 'Note: The above article reprinted at the website or other media so
 $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($copyright) . " WHERE module = " . $db->quote($module_name) . " AND config_name = 'copyright' AND lang=" . $db->quote($lang));
 
 $result = $db->query('SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC');
-while (list ($catid_i) = $result->fetch(3)) {
+while (list($catid_i) = $result->fetch(3)) {
     $db->exec('CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid_i . ' LIKE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows');
 }
 
 $result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows ORDER BY id ASC');
 
-while (list ($id, $listcatid) = $result->fetch(3)) {
+while (list($id, $listcatid) = $result->fetch(3)) {
     $arr_catid = explode(',', $listcatid);
     foreach ($arr_catid as $catid) {
         $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows WHERE id=' . $id);

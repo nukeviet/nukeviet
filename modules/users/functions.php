@@ -207,20 +207,20 @@ if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($
                 define('ACCESS_ADDUS', $group['config']['access_addus']);
             } else
                 if ($group['config']['access_editus'] and $array_op[0] == 'editinfo') { // sửa thông tin
-                    $group_id = $row['group_id'];
+                $group_id = $row['group_id'];
 
-                    $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
+                $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
                         WHERE group_id = ' . $group_id . ' and userid = ' . $array_op[2] . ' and is_leader = 0');
 
-                    if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
-                        $userid = $array_op[2];
+                if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
+                    $userid = $array_op[2];
 
-                        if ($group['config']['access_passus']) {
-                            define('ACCESS_PASSUS', $group['config']['access_passus']);
-                        }
-                        define('ACCESS_EDITUS', $group['config']['access_editus']);
+                    if ($group['config']['access_passus']) {
+                        define('ACCESS_PASSUS', $group['config']['access_passus']);
                     }
+                    define('ACCESS_EDITUS', $group['config']['access_editus']);
                 }
+            }
         }
     }
 }

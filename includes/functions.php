@@ -541,7 +541,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
         }
         return false;
     } else {
-        mt_srand((double) microtime() * 1000000);
+        mt_srand((float) microtime() * 1000000);
         $maxran = 1000000;
         $random = mt_rand(0, $maxran);
 
@@ -1171,7 +1171,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
     $content = ' ' . $content . ' ';
     $keywords_return = [];
 
-    $memoryLimitMB = (integer) ini_get('memory_limit');
+    $memoryLimitMB = (int) ini_get('memory_limit');
 
     if ($memoryLimitMB > 60 and file_exists(NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php')) {
         require NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php';
@@ -1840,7 +1840,8 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
  * @param bool $abs_comp
  * @return
  */
-function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false) {
+function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false)
+{
     $url_rewrite = nv_url_rewrite($page_url, true);
 
     if ($request_uri_check) {
@@ -1849,7 +1850,7 @@ function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = fals
         if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
             $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
         }
-    
+
         if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
             nv_redirect_location($url_rewrite_check);
         } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
@@ -2556,7 +2557,7 @@ function nv_set_authorization()
     if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
         $usr_pass = base64_decode(substr($auth_user, 6));
         if (!empty($usr_pass) and str_contains($usr_pass, ':')) {
-            list ($auth_user, $auth_pw) = explode(':', $usr_pass);
+            list($auth_user, $auth_pw) = explode(':', $usr_pass);
         }
         unset($usr_pass);
     }
@@ -2706,7 +2707,7 @@ function DKIM_verify($domain, $selector)
 
     $els = array_map('trim', explode(';', $result[0]['txt']));
     $els2 = [];
-    foreach($els as $el) {
+    foreach ($els as $el) {
         $el = array_map('trim', explode('=', $el, 2));
         $els2[$el[0]] = $el[1];
     }
@@ -2728,7 +2729,8 @@ function DKIM_verify($domain, $selector)
  * @param string $text
  * @return string
  */
-function nv_autoLinkDisable($text) {
+function nv_autoLinkDisable($text)
+{
     $text = str_replace('&#x3A;', '<span>&#58;</span>', $text);
-    return str_replace(['@','.',':'], ['<span>&#64;</span>','<span>&#46;</span>','<span>&#58;</span>'], $text);
+    return str_replace(['@', '.', ':'], ['<span>&#64;</span>', '<span>&#46;</span>', '<span>&#58;</span>'], $text);
 }

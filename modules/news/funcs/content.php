@@ -49,7 +49,7 @@ $canonicalUrl = getCanonicalUrl($page_url);
 $array_post_config = [];
 $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post';
 $result = $db->query($sql);
-while (list ($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
+while (list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
     $array_post_config[$group_id] = [
         'addcontent' => $addcontent,
         'postcontent' => $postcontent,
@@ -315,7 +315,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
     $result_cat = $db->query($sql);
 
-    while (list ($catid_i, $title_i, $lev_i) = $result_cat->fetch(3)) {
+    while (list($catid_i, $title_i, $lev_i) = $result_cat->fetch(3)) {
         $array_catid_module[] = [
             'catid' => $catid_i,
             'title' => $title_i,
@@ -328,7 +328,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $array_topic_module = [];
     $array_topic_module[0] = $lang_module['topic_sl'];
 
-    while (list ($topicid_i, $title_i) = $result->fetch(3)) {
+    while (list($topicid_i, $title_i) = $result->fetch(3)) {
         $array_topic_module[$topicid_i] = $title_i;
     }
 
@@ -336,7 +336,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if ($nv_Request->isset_request('contentid', 'post')) {
         $rowcontent['id'] = $contentid;
-        
+
         unset($fcode);
         // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {

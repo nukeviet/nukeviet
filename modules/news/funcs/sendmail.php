@@ -28,7 +28,7 @@ $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global
 if ($id > 0 and $catid > 0) {
     $sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
     $result = $db_slave->query($sql);
-    list ($id, $title, $alias, $hometext) = $result->fetch(3);
+    list($id, $title, $alias, $hometext) = $result->fetch(3);
     if ($id > 0) {
         $checkss = $nv_Request->get_string('checkss', 'post', '');
         if ($checkss == md5($id . NV_CHECK_SESSION)) {
@@ -61,7 +61,7 @@ if ($id > 0 and $catid > 0) {
                             'mess' => $lang_global['securitycodeincorrect']
                         ]);
                     }
-                    
+
                     $friend_email = $nv_Request->get_title('friend_email', 'post', '');
                     if (($friend_email_error = nv_check_valid_email($friend_email)) != '') {
                         nv_jsonOutput([
@@ -80,17 +80,17 @@ if ($id > 0 and $catid > 0) {
                             'mess' => $lang_module['sendmail_err_name']
                         ]);
                     }
-                    
+
                     $difftimeout = 3600;
                     $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/news_logs';
                     $log_fileext = preg_match('/^[a-z]+$/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
                     $pattern = '/^(.*)\.' . $log_fileext . '$/i';
                     $logs = nv_scandir($dir, $pattern);
-                
+
                     if (!empty($logs)) {
                         foreach ($logs as $file) {
                             $vtime = filemtime($dir . '/' . $file);
-                
+
                             if (!$vtime or $vtime <= NV_CURRENTTIME - $difftimeout) {
                                 @unlink($dir . '/' . $file);
                             }
@@ -121,7 +121,7 @@ if ($id > 0 and $catid > 0) {
                         $hometext = $db_slave->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id =' . $id)->fetchColumn();
                         $hometext = nv_clean60(strip_tags(str_replace(["\r\n", "\r", "\n"], " ", $hometext)), 300);
                     }
-                    
+
                     $subject = sprintf($lang_module['sendmail_subject'], $your_name);
                     $message = !empty($your_message) ? sprintf($lang_module['sendmail_welcome1'], $your_name, $title, $global_config['site_name'], $your_message) : sprintf($lang_module['sendmail_welcome'], $your_name, $title, $global_config['site_name']);
                     $message .= '<br/>----------<br/><strong>' . $title . '</strong><br/>' . $hometext . '<br/><br/>';
@@ -138,7 +138,7 @@ if ($id > 0 and $catid > 0) {
                             $global_config['site_email']
                         ];
                     }
-                    
+
                     $check = nv_sendmail($from, $friend_email, $subject, $message);
                     if ($check) {
                         file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
@@ -160,7 +160,7 @@ if ($id > 0 and $catid > 0) {
                     'your_email' => $your_email,
                     'action' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true) //
                 ];
-    
+
                 $contents = sendmail_themme($sendmail);
                 nv_htmlOutput($contents);
             }

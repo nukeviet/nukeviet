@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('q', 'get')) {
     if ($search['logic'] != 1) {
         $page_url .= '&l=' . $search['logic'];
     }
-    
+
     $base_url = $page_url;
     if ($search['page'] > 1) {
         $page_url .= '&page=' . $search['page'];
@@ -108,7 +108,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
 
         if ($is_generate_page) {
-            betweenURLs($page, ceil($num_items/$limit), $base_url, '&page=', $prevPage, $nextPage);
+            betweenURLs($page, ceil($num_items / $limit), $base_url, '&page=', $prevPage, $nextPage);
         }
 
         if (empty($search['content'])) {

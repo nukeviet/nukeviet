@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -66,7 +66,7 @@ if ($id > 0 and $catid > 0) {
             'author' => $content['author'],
             'source' => $sourcetext
         );
-        
+
         $authors = [];
         $db->sqlreset()
             ->select('l.alias,l.pseudonym')
@@ -81,7 +81,7 @@ if ($id > 0 and $catid > 0) {
         }
         $result['author'] = !empty($authors) ? implode(', ', $authors) : '';
 
-        if (! empty($content['homeimgfile']) and $content['imgposition'] > 0) {
+        if (!empty($content['homeimgfile']) and $content['imgposition'] > 0) {
             $src = $alt = $note = '';
             $width = $height = 0;
             if ($content['homeimgthumb'] == 1 and $content['imgposition'] == 1) {

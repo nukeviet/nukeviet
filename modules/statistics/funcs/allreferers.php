@@ -8,7 +8,7 @@
  * @Createdate 16/6/2010, 10:23
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
+if (!defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
@@ -38,14 +38,14 @@ if ($num_items) {
 
     $host_list = array();
     while (list($host, $count, $last_visit) = $result->fetch(3)) {
-        $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+        $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
         $bymonth = '<a href="' . NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $lang_module['statbymoth2'] . '</a>';
-        $host_list[$host] = array( $count, $last_visit, $bymonth );
+        $host_list[$host] = array($count, $last_visit, $bymonth);
     }
 
-    if (! empty($host_list)) {
+    if (!empty($host_list)) {
         $cts = array();
-        $cts['thead'] = array( $lang_module['referer'], $lang_module['hits'], $lang_module['last_visit'] );
+        $cts['thead'] = array($lang_module['referer'], $lang_module['hits'], $lang_module['last_visit']);
         $cts['rows'] = $host_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);

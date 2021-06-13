@@ -225,13 +225,10 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 if (
                     (
                         // Giao diện mobile tự động nhận diện dựa vào client
-                        (
-                            $client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'])
-                            and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des']))
-                        )
+                        ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'])
+                            and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des'])))
                         // Giao diện mobile lấy từ chuyển đổi giao diện
-                        or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))
-                    )
+                        or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des'])))
                     and !empty($_theme_mobile) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme.php')
                 ) {
                     $global_config['module_theme'] = $_theme_mobile;

@@ -8,11 +8,11 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_counter')) {
+if (!nv_function_exists('nv_block_counter')) {
     function nv_block_counter()
     {
         global $global_config, $db, $lang_global;

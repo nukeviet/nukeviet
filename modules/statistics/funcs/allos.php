@@ -8,7 +8,7 @@
  * @Createdate 16/6/2010, 10:23
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
+if (!defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
@@ -39,13 +39,13 @@ if ($num_items) {
 
     $os_list = array();
     while (list($os, $count, $last_visit) = $result->fetch(3)) {
-        $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-        $os_list[$os] = array( $count, $last_visit );
+        $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+        $os_list[$os] = array($count, $last_visit);
     }
 
-    if (! empty($os_list)) {
+    if (!empty($os_list)) {
         $cts = array();
-        $cts['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
+        $cts['thead'] = array($lang_module['os'], $lang_module['hits'], $lang_module['last_visit']);
         $cts['rows'] = $os_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);

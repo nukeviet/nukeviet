@@ -27,7 +27,7 @@ if (defined('NV_IS_ADMIN')) {
     } else {
         define('NV_IS_USER', true);
     }
-} elseif (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+} elseif (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/is_user.php';
 } else {
     if ($nv_Request->get_bool('nvloginhash', 'cookie', false)) {

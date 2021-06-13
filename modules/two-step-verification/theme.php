@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_MOD_2STEP_VERIFICATION')) {
+if (!defined('NV_MOD_2STEP_VERIFICATION')) {
     die('Stop!!!');
 }
 
@@ -105,9 +105,9 @@ function nv_theme_confirm_password($is_pass_valid)
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('GLANG', $lang_global);
         $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
-    
+
         $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-    
+
         $xtpl->parse('main');
         return $xtpl->text('main');
     } else {

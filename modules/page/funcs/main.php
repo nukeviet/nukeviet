@@ -147,7 +147,7 @@ if ($page_config['viewtype'] == 2) {
         ->fetchColumn();
 
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-    betweenURLs($page, ceil($num_items/$per_page), $base_url, '/page-', $prevPage, $nextPage);
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('*')
         ->order('weight')

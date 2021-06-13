@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
     $sth->execute();
 
     $array_data = [];
-    while (list ($topicid, $title) = $sth->fetch(3)) {
+    while (list($topicid, $title) = $sth->fetch(3)) {
         $array_data[] = [
             'id' => $topicid,
             'title' => $title
@@ -125,7 +125,7 @@ $array_block_cat_module = [];
 $id_block_content = [];
 $sql = 'SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list ($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
+while (list($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
     $array_block_cat_module[$bid_i] = $title_i;
     if ($adddefault_i) {
         $id_block_content[] = $bid_i;
@@ -298,7 +298,7 @@ if ($rowcontent['id'] == 0) {
     $id_block_content = [];
     $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
-    while (list ($bid_i) = $result->fetch(3)) {
+    while (list($bid_i) = $result->fetch(3)) {
         $id_block_content[] = $bid_i;
     }
 
@@ -1052,7 +1052,7 @@ if ($is_submit_form) {
                         $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                         $sth->execute();
 
-                        list ($tid, $alias, $tag_i) = $sth->fetch(3);
+                        list($tid, $alias, $tag_i) = $sth->fetch(3);
                         if (empty($tid)) {
                             $array_insert = [];
                             $array_insert['alias'] = $alias_i;
@@ -1177,7 +1177,7 @@ if (!empty($rowcontent['topicid'])) {
         ->where('topicid=' . $rowcontent['topicid']);
     $result = $db->query($db->sql());
 
-    while (list ($topicid_i, $title_i) = $result->fetch(3)) {
+    while (list($topicid_i, $title_i) = $result->fetch(3)) {
         $array_topic_module[$topicid_i] = $title_i;
     }
 }
@@ -1186,20 +1186,20 @@ $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_s
 $result = $db->query($sql);
 $array_source_module = [];
 $array_source_module[0] = $lang_module['sources_sl'];
-while (list ($sourceid_i, $title_i) = $result->fetch(3)) {
+while (list($sourceid_i, $title_i) = $result->fetch(3)) {
     $array_source_module[$sourceid_i] = $title_i;
 }
 
 $tdate = date('H|i', $rowcontent['publtime']);
 $publ_date = date('d/m/Y', $rowcontent['publtime']);
-list ($phour, $pmin) = explode('|', $tdate);
+list($phour, $pmin) = explode('|', $tdate);
 if ($rowcontent['exptime'] == 0) {
     $emin = $ehour = 0;
     $exp_date = '';
 } else {
     $exp_date = date('d/m/Y', $rowcontent['exptime']);
     $tdate = date('H|i', $rowcontent['exptime']);
-    list ($ehour, $emin) = explode('|', $tdate);
+    list($ehour, $emin) = explode('|', $tdate);
 }
 
 if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {

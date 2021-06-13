@@ -8,7 +8,7 @@
  * @Createdate Sun, 26 Oct 2014 08:34:25 GMT
  */
 
-if (! defined('NV_IS_MOD_USER')) {
+if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
@@ -52,7 +52,7 @@ if (!empty($_GET['code'])) {
             'current_mode' => 3
         );
     } else {
-        $attribs = array( 'result' => 'notlogin' );
+        $attribs = array('result' => 'notlogin');
     }
     $nv_Request->set_Session('openid_attribs', serialize($attribs));
 

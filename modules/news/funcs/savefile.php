@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -20,7 +20,7 @@ if (! defined('NV_IS_MOD_NEWS')) {
  */
 function nv_src_href_callback($matches)
 {
-    if (! empty($matches[2]) and ! preg_match("/^http\:\/\//", $matches[2]) and ! preg_match("/^https\:\/\//", $matches[2]) and ! preg_match("/^mailto\:/", $matches[2]) and ! preg_match("/^tel\:/", $matches[2]) and ! preg_match("/^javascript/", $matches[2])) {
+    if (!empty($matches[2]) and !preg_match("/^http\:\/\//", $matches[2]) and !preg_match("/^https\:\/\//", $matches[2]) and !preg_match("/^mailto\:/", $matches[2]) and !preg_match("/^tel\:/", $matches[2]) and !preg_match("/^javascript/", $matches[2])) {
         if (preg_match("/^\//", $matches[2])) {
             $_url = NV_MY_DOMAIN;
         } else {
@@ -84,7 +84,7 @@ if ($id > 0 and $catid > 0) {
                 'author' => $content['author'],
                 'source' => $sourcetext
             );
-            
+
             $authors = [];
             $db->sqlreset()
                 ->select('l.alias,l.pseudonym')
@@ -101,7 +101,7 @@ if ($id > 0 and $catid > 0) {
 
             $page_title = $result['title'];
 
-            if (! empty($content['homeimgfile']) and $content['imgposition'] > 0) {
+            if (!empty($content['homeimgfile']) and $content['imgposition'] > 0) {
                 $src = $alt = $note = '';
                 $width = $height = 0;
                 if ($content['homeimgthumb'] == 1 and $content['imgposition'] == 1 and file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $content['homeimgfile'])) {
